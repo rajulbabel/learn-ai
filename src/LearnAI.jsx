@@ -105,7 +105,7 @@ const SubBtn = ({ onClick, rippleKey }) => (
       background: "radial-gradient(circle, rgba(167,139,250,0.45) 0%, transparent 70%)",
       animation: "navRipple 0.5s ease-out forwards", pointerEvents: "none",
     }} />}
-    <span style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>Continue <span style={{ fontSize: 14, lineHeight: 1 }}>{"\u2193"}</span></span>
+    <span style={{ display: "inline-flex", alignItems: "center", gap: 5 }}>Continue <svg width="12" height="12" viewBox="0 0 12 12" style={{ display: "block" }}><path d="M6 1v8.5M2.5 6.5L6 10l3.5-3.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none"/></svg></span>
   </button>
 );
 

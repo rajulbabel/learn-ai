@@ -89,13 +89,7 @@ export default function LearnAI() {
   const [ch, setCh] = useState(0);
   const [fade, setFade] = useState(true);
   const [sub, setSub] = useState(0);
-  const [subFade, setSubFade] = useState(true);
   const [maxSubs, setMaxSubs] = useState({});
-
-  const animateSub = (newSubFn) => {
-    setSubFade(false);
-    setTimeout(() => { newSubFn(); setSubFade(true); }, 250);
-  };
 
   useEffect(() => {
     if (sub > 0) {
@@ -118,14 +112,14 @@ export default function LearnAI() {
       if (e.key === "ArrowRight") {
         const hasSubBtn = document.querySelector("[data-subbtn]");
         if (hasSubBtn) {
-          animateSub(() => setSub(s => s + 1));
+          setSub(s => s + 1);
         } else if (ch < chapters.length - 1) {
           goTo(ch + 1);
         }
       }
       if (e.key === "ArrowLeft") {
         if (sub > 0) {
-          animateSub(() => setSub(s => s - 1));
+          setSub(s => s - 1);
         } else if (ch > 0) {
           const prevMax = maxSubs[ch - 1];
           goTo(ch - 1, prevMax != null ? prevMax : 0);
@@ -3624,8 +3618,8 @@ export default function LearnAI() {
 
       <div style={{
         width: "100%", maxWidth: 840,
-        opacity: (fade && subFade) ? 1 : 0,
-        transform: fade ? (subFade ? "translateY(0)" : "translateY(4px)") : "translateY(12px)",
+        opacity: fade ? 1 : 0,
+        transform: fade ? "translateY(0)" : "translateY(12px)",
         transition: "opacity 0.35s cubic-bezier(0.4, 0, 0.2, 1), transform 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
       }}>
         <Current />

@@ -3460,12 +3460,12 @@ export default function LearnAI() {
   const ChTOC = () => {
     const parts = [
       { num: 1, name: "Neural Network Foundations", color: C.red, desc: "What neural networks are, how they learn, forward/backward pass" },
-      { num: 2, name: "How LLMs Actually Train", color: C.yellow, desc: "Tokenization, self-supervised learning, cross-entropy, SFT, RLHF, batches" },
-      { num: 3, name: "Scaling & Modern Techniques", color: C.pink, desc: "Scaling laws, parameters at scale, distillation, contrastive learning" },
-      { num: 4, name: "The Road to Transformers", color: C.orange, desc: "CNN → RNN → why RNN fails → the Transformer arrives" },
-      { num: 5, name: "Transformer Input Pipeline", color: C.cyan, desc: "Architecture overview, embeddings, positional encoding" },
-      { num: 6, name: "Attention — Understanding Q, K, V", color: C.purple, desc: "Why attention works, Query/Key/Value concepts, analogies" },
-      { num: 7, name: "Attention — The Full Computation", color: C.green, desc: "Step-by-step math, multi-head, W_O, the complete picture" },
+      { num: 2, name: "How LLMs Actually Train", color: C.cyan, desc: "Tokenization, self-supervised learning, cross-entropy, SFT, RLHF, batches" },
+      { num: 3, name: "Scaling & Modern Techniques", color: C.yellow, desc: "Scaling laws, parameters at scale, distillation, contrastive learning" },
+      { num: 4, name: "The Road to Transformers", color: C.purple, desc: "CNN → RNN → why RNN fails → the Transformer arrives" },
+      { num: 5, name: "Transformer Input Pipeline", color: C.orange, desc: "Architecture overview, embeddings, positional encoding" },
+      { num: 6, name: "Attention — Understanding Q, K, V", color: C.green, desc: "Why attention works, Query/Key/Value concepts, analogies" },
+      { num: 7, name: "Attention — The Full Computation", color: C.pink, desc: "Step-by-step math, multi-head, W_O, the complete picture" },
     ];
     const partStart = { 1: 1, 2: 11, 3: 17, 4: 22, 5: 26, 6: 34, 7: 45 };
     const partChapters = {};
@@ -4685,28 +4685,34 @@ export default function LearnAI() {
       }}>Learn AI</h1>
       <T color={C.dim} size={14} center>The complete visual guide to understanding AI — from scratch</T>
 
-      {/* Progress */}
-      <div style={{ display: "flex", gap: 1.5, margin: "14px 0 6px", width: "100%", maxWidth: 800 }}>
-        {chapters.map((_, i) => (
-          <div key={i} onClick={() => goTo(i)} style={{
-            flex: 1, height: 4, borderRadius: 2, cursor: "pointer",
-            background: i === ch ? "linear-gradient(90deg, #a78bfa, #00e676)"
-              : i < ch ? `${C.purple}45` : "rgba(255,255,255,0.05)",
-            transition: "all 0.3s",
-          }} />
-        ))}
-      </div>
+      {/* Per-part progress */}
+      {ch > 0 && (() => {
+        const partColors = { 1: C.red, 2: C.cyan, 3: C.yellow, 4: C.purple, 5: C.orange, 6: C.green, 7: C.pink };
+        const curPart = chapters[ch].part;
+        const partChs = chapters.filter(c => c.part === curPart);
+        const idxInPart = partChs.findIndex(c => c.id === chapters[ch].id);
+        const pct = Math.round(((idxInPart + 1) / partChs.length) * 100);
+        const pc = partColors[curPart] || C.purple;
+        return (
+          <div style={{ width: "100%", maxWidth: 800, margin: "14px 0 6px" }}>
+            <T color={pc} size={12} bold center style={{ marginBottom: 6 }}>Part {curPart}: {partNames[curPart]}  ·  {idxInPart + 1}/{partChs.length} — {pct}%</T>
+            <div style={{ width: "100%", height: 4, borderRadius: 2, background: "rgba(255,255,255,0.05)" }}>
+              <div style={{ width: `${pct}%`, height: "100%", borderRadius: 2, background: pc, transition: "width 0.4s ease", opacity: 0.7 }} />
+            </div>
+          </div>
+        );
+      })()}
       {ch > 0 ? (
         <>
           <T color={C.dim} size={12} center>
-            Chapter {chapters[ch].id} — Part {chapters[ch].part}: {partNames[chapters[ch].part]}
+            Chapter {chapters[ch].id}
           </T>
           <h2 style={{ fontSize: 22, fontWeight: 700, margin: "10px 0 14px", color: C.bright, textAlign: "center" }}>
             {chapters[ch].title}
           </h2>
         </>
       ) : (
-        <T color={C.dim} size={14} center style={{ margin: "6px 0 10px" }}>{Object.keys(partNames).length - 1} parts · {chapters.length - 1} chapters · tap to begin</T>
+        <T color={C.dim} size={14} center style={{ margin: "6px 0 10px" }}>{Object.keys(partNames).length - 1} Parts · {chapters.length - 1} Chapters</T>
       )}
 
       <div style={{

@@ -70,19 +70,19 @@ const C = {
 const Box = ({ children, color = C.cyan, style = {} }) => (
   <div style={{ background: `${color}09`, border: `1px solid ${color}22`, borderRadius: 10, padding: "16px 22px", width: "100%", ...style }}>{children}</div>
 );
-const T = ({ children, color = C.mid, size = 19, bold = false, center = false, style = {} }) => (
+const T = ({ children, color = C.mid, size = 17, bold = false, center = false, style = {} }) => (
   <div style={{ color, fontSize: size, fontWeight: bold ? 700 : 400, textAlign: center ? "center" : "left", lineHeight: 1.75, ...style }}>{children}</div>
 );
 const SubBtn = ({ onClick }) => (
   <button data-subbtn="true" onClick={onClick} style={{
     alignSelf: "center", padding: "8px 20px", borderRadius: 8, border: "none",
     background: "rgba(167,139,250,0.15)", color: C.purple,
-    cursor: "pointer", fontSize: 18, fontWeight: 600, marginTop: 4,
+    cursor: "pointer", fontSize: 16, fontWeight: 600, marginTop: 4,
   }}>Continue ↓</button>
 );
 
 const Tag = ({ children, color }) => (
-  <span style={{ display: "inline-block", padding: "2px 8px", borderRadius: 5, background: `${color}15`, border: `1px solid ${color}30`, color, fontSize: 16, fontWeight: 600, margin: "1px" }}>{children}</span>
+  <span style={{ display: "inline-block", padding: "2px 8px", borderRadius: 5, background: `${color}15`, border: `1px solid ${color}30`, color, fontSize: 14, fontWeight: 600, margin: "1px" }}>{children}</span>
 );
 
 export default function LearnAI() {
@@ -3643,13 +3643,13 @@ export default function LearnAI() {
           border: `1px solid ${ch === 0 ? "rgba(255,255,255,0.05)" : "rgba(255,255,255,0.12)"}`,
           background: ch === 0 ? "rgba(255,255,255,0.02)" : "rgba(255,255,255,0.06)",
           color: ch === 0 ? "rgba(255,255,255,0.12)" : "#fff",
-          cursor: ch === 0 ? "default" : "pointer", fontSize: 18, fontWeight: 600,
+          cursor: ch === 0 ? "default" : "pointer", fontSize: 16, fontWeight: 600,
         }}>← Prev Chapter</button>
         <button onClick={() => goTo(ch + 1)} disabled={ch === chapters.length - 1} style={{
           padding: "9px 18px", borderRadius: 10, border: "none",
           background: ch === chapters.length - 1 ? "rgba(255,255,255,0.03)" : "linear-gradient(135deg, #6c5ce7, #a855f7)",
           color: ch === chapters.length - 1 ? "rgba(255,255,255,0.12)" : "#fff",
-          cursor: ch === chapters.length - 1 ? "default" : "pointer", fontSize: 18, fontWeight: 600,
+          cursor: ch === chapters.length - 1 ? "default" : "pointer", fontSize: 16, fontWeight: 600,
           boxShadow: ch < chapters.length - 1 ? "0 4px 14px rgba(108,92,231,0.3)" : "none",
         }}>Next Chapter →</button>
       </div>

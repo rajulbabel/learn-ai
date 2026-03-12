@@ -90,12 +90,13 @@ export default function LearnAI() {
   const [fade, setFade] = useState(true);
   const [sub, setSub] = useState(0);
   const [maxSubs, setMaxSubs] = useState({});
+  const [transitioning, setTransitioning] = useState(false);
 
   useEffect(() => {
     if (sub > 0) {
       setTimeout(() => {
         window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
-      }, 50);
+      }, 80);
     }
   }, [sub]);
 
@@ -107,33 +108,44 @@ export default function LearnAI() {
     }
   }, [sub, ch]);
 
+  // Unified navigation: handles both sub-steps and chapter changes
+  const navigate = (direction) => {
+    if (transitioning) return;
+    if (direction === "forward") {
+      const hasSubBtn = document.querySelector("[data-subbtn]");
+      if (hasSubBtn) {
+        setTransitioning(true);
+        setFade(false);
+        setTimeout(() => { setSub(s => s + 1); setFade(true); setTransitioning(false); }, 180);
+      } else if (ch < chapters.length - 1) {
+        goTo(ch + 1);
+      }
+    } else {
+      if (sub > 0) {
+        setTransitioning(true);
+        setFade(false);
+        setTimeout(() => { setSub(s => s - 1); setFade(true); setTransitioning(false); }, 180);
+      } else if (ch > 0) {
+        const prevMax = maxSubs[ch - 1];
+        goTo(ch - 1, prevMax != null ? prevMax : 0);
+      }
+    }
+  };
+
   useEffect(() => {
     const handleKey = (e) => {
-      if (e.key === "ArrowRight") {
-        const hasSubBtn = document.querySelector("[data-subbtn]");
-        if (hasSubBtn) {
-          setSub(s => s + 1);
-        } else if (ch < chapters.length - 1) {
-          goTo(ch + 1);
-        }
-      }
-      if (e.key === "ArrowLeft") {
-        if (sub > 0) {
-          setSub(s => s - 1);
-        } else if (ch > 0) {
-          const prevMax = maxSubs[ch - 1];
-          goTo(ch - 1, prevMax != null ? prevMax : 0);
-        }
-      }
+      if (e.key === "ArrowRight") navigate("forward");
+      if (e.key === "ArrowLeft") navigate("back");
     };
     window.addEventListener("keydown", handleKey);
     return () => window.removeEventListener("keydown", handleKey);
   });
 
   const goTo = (n, startSub = 0) => {
-    if (n < 0 || n >= chapters.length) return;
+    if (n < 0 || n >= chapters.length || transitioning) return;
+    setTransitioning(true);
     setFade(false);
-    setTimeout(() => { setCh(n); setSub(startSub); setFade(true); window.scrollTo({ top: 0, behavior: "smooth" }); }, 350);
+    setTimeout(() => { setCh(n); setSub(startSub); setFade(true); setTransitioning(false); window.scrollTo({ top: 0, behavior: "smooth" }); }, 300);
   };
 
   // ═══════ 1.1 What is a NN ═══════
@@ -199,7 +211,7 @@ export default function LearnAI() {
       )}
       {sub >= 2 && <Box color={C.yellow}><T color={C.yellow} bold center>Each connection has a "weight" (a number).</T><T>Training = finding the right weights so predictions become accurate. That's ALL learning is.</T></Box>}
       {sub >= 3 && <Box color={C.purple}><T color={C.purple} bold center>At each neuron:</T><T><code style={{ background: "rgba(255,255,255,0.05)", padding: "2px 6px", borderRadius: 3, fontSize: 18 }}>output = activation( Σ(input × weight) + bias )</code><br /><br /><span style={{ display: "block", paddingLeft: 8, marginTop: 4 }}>1. Multiply each input by its weight<br />2. Sum them all up<br />3. Add a bias (a shift)<br />4. Pass through activation function (e.g. ReLU: if negative → 0, if positive → keep)</span></T></Box>}
-      {sub < 3 && <SubBtn onClick={() => setSub(s => s + 1)} />}
+      {sub < 3 && <SubBtn onClick={() => navigate("forward")} />}
     </div>
   );
 
@@ -237,7 +249,7 @@ export default function LearnAI() {
         </div>
       )}
       {sub >= 2 && <><Box color={C.green}><T color="#80cbc4" bold center>✅ Good for:</T><T color="#80cbc4">Simple classification — spam/not spam, cat/dog, approve/reject.</T></Box><Box color={C.red}><T color="#ff8a80" bold center>❌ Fatal limitations:</T><T color="#ff8a80"><strong>Fixed input size</strong> — sentences have variable length. Can't handle that.<br /><strong>No order</strong> — "dog bites man" = "man bites dog" to this network.</T></Box></>}
-      {sub < 2 && <SubBtn onClick={() => setSub(s => s + 1)} />}
+      {sub < 2 && <SubBtn onClick={() => navigate("forward")} />}
     </div>
   );
 
@@ -270,7 +282,7 @@ export default function LearnAI() {
         </Box>
       )}
       {sub >= 2 && <Box color={C.green}><T color="#80e8a5" bold center>This whole process is called "Backpropagation + Gradient Descent".</T><T color="#80e8a5">But what are weights and biases? Let's understand them first →</T></Box>}
-      {sub < 2 && <SubBtn onClick={() => setSub(s => s + 1)} />}
+      {sub < 2 && <SubBtn onClick={() => navigate("forward")} />}
     </div>
   );
 
@@ -348,7 +360,7 @@ export default function LearnAI() {
         </Box>
       )}
       {sub >= 4 && <Box color={C.green}><T color="#80e8a5" bold center>So a neuron is just: multiply, sum, add bias, activate.</T><T color="#80e8a5" center size={18}>The <strong>weights</strong> and <strong>bias</strong> are what the network LEARNS. Everything else is fixed math. Now let's see the forward pass →</T></Box>}
-      {sub < 4 && <SubBtn onClick={() => setSub(s => s + 1)} />}
+      {sub < 4 && <SubBtn onClick={() => navigate("forward")} />}
     </div>
   );
 
@@ -523,7 +535,7 @@ export default function LearnAI() {
           </Box>
         )}
 
-        {sub < 6 && <SubBtn onClick={() => setSub(s => s + 1)} />}
+        {sub < 6 && <SubBtn onClick={() => navigate("forward")} />}
       </div>
     );
   };
@@ -569,7 +581,7 @@ export default function LearnAI() {
         </Box>
       )}
       {sub >= 3 && <Box color={C.red}><T color="#ff8a80" bold center>But the actual price was $900k.</T><T color="#ff8a80">We're off by $100k. How do we measure this error precisely? That's what the <strong>loss function</strong> does →</T></Box>}
-      {sub < 3 && <SubBtn onClick={() => setSub(s => s + 1)} />}
+      {sub < 3 && <SubBtn onClick={() => navigate("forward")} />}
     </div>
   );
 
@@ -619,7 +631,7 @@ export default function LearnAI() {
           <T color="#b8a9ff" style={{ marginTop: 8 }}>But how do we know which direction to change them? We need to understand <strong>derivatives</strong> first →</T>
         </Box>
       )}
-      {sub < 2 && <SubBtn onClick={() => setSub(s => s + 1)} />}
+      {sub < 2 && <SubBtn onClick={() => navigate("forward")} />}
     </div>
   );
 
@@ -709,7 +721,7 @@ export default function LearnAI() {
           </Box>
         )}
         {sub >= 4 && <Box color={C.purple}><T color="#b8a9ff" bold center>The derivative is our COMPASS — it tells us which direction to adjust each weight.</T><T color="#b8a9ff" center size={18} style={{ marginTop: 4 }}>But in a network with many steps, how do we compute this derivative? That's the <strong>chain rule</strong> →</T></Box>}
-        {sub < 4 && <SubBtn onClick={() => setSub(s => s + 1)} />}
+        {sub < 4 && <SubBtn onClick={() => navigate("forward")} />}
       </div>
     );
   };
@@ -827,7 +839,7 @@ export default function LearnAI() {
           <T color="#80deea" size={18} style={{ marginTop: 6 }}>Now we have a gradient for <strong>every learnable parameter</strong>: weight and bias. Time to update them →</T>
         </Box>
       )}
-      {sub < 3 && <SubBtn onClick={() => setSub(s => s + 1)} />}
+      {sub < 3 && <SubBtn onClick={() => navigate("forward")} />}
     </div>
   );
 
@@ -920,7 +932,7 @@ export default function LearnAI() {
           </T>
         </Box>
       )}
-      {sub < 4 && <SubBtn onClick={() => setSub(s => s + 1)} />}
+      {sub < 4 && <SubBtn onClick={() => navigate("forward")} />}
     </div>
   );
 
@@ -946,7 +958,7 @@ export default function LearnAI() {
       )}
       {sub >= 2 && <Box color={C.purple}><T color="#b8a9ff" bold center>Layers build on each other:</T><T color="#b8a9ff">Layer 1: <strong>edges</strong> → Layer 2: <strong>shapes</strong> → Layer 3: <strong>parts</strong> (eyes) → Layer 4: <strong>objects</strong> (face)</T></Box>}
       {sub >= 3 && <Box color={C.red}><T color="#ff8a80" bold center>❌ Not great for language:</T><T color="#ff8a80">Related words can be far apart: "The cat <em>that I saw yesterday</em> <strong>was</strong> sleeping." — "cat" and "was" are 6 words apart but grammatically linked. CNN only looks at local windows.</T></Box>}
-      {sub < 3 && <SubBtn onClick={() => setSub(s => s + 1)} />}
+      {sub < 3 && <SubBtn onClick={() => navigate("forward")} />}
     </div>
   );
 
@@ -969,7 +981,7 @@ export default function LearnAI() {
           </div>
         )}
         {sub >= 2 && <Box color={C.green}><T color="#80cbc4" bold center>✅ Understands order!</T><T color="#80cbc4">"Dog bites man" ≠ "Man bites dog" because the memory builds differently.</T></Box>}
-        {sub < 2 && <SubBtn onClick={() => setSub(s => s + 1)} />}
+        {sub < 2 && <SubBtn onClick={() => navigate("forward")} />}
       </div>
     );
   };
@@ -1004,7 +1016,7 @@ export default function LearnAI() {
         </Box>
       )}
       {sub >= 2 && <Box color={C.green}><T color="#80e8a5" bold center>We need: ⚡ parallel processing + 🧠 perfect memory + 📍 order awareness</T><T color={C.yellow} center bold size={21} style={{ marginTop: 6 }}>Enter: The Transformer →</T></Box>}
-      {sub < 2 && <SubBtn onClick={() => setSub(s => s + 1)} />}
+      {sub < 2 && <SubBtn onClick={() => navigate("forward")} />}
     </div>
   );
 
@@ -1035,7 +1047,7 @@ export default function LearnAI() {
           </div>
         )}
         {sub >= 3 && <Box color={C.yellow}><T color={C.yellow} bold center>Powers GPT, Claude, LLaMA, Gemini — ALL modern AI.</T><T center size={18} style={{ marginTop: 4 }}>Now let's see the full architecture →</T></Box>}
-        {sub < 3 && <SubBtn onClick={() => setSub(s => s + 1)} />}
+        {sub < 3 && <SubBtn onClick={() => navigate("forward")} />}
       </div>
     );
   };
@@ -1212,7 +1224,7 @@ export default function LearnAI() {
           </div>
         )}
         {sub >= 1 && <Box color={C.green}><T color="#80e8a5" bold center>🔍 Let's zoom into the bottom first — the green "Embedding" boxes.</T><T color="#80e8a5">This is where words enter the Transformer as numbers.</T></Box>}
-        {sub < 1 && <SubBtn onClick={() => setSub(s => s + 1)} />}
+        {sub < 1 && <SubBtn onClick={() => navigate("forward")} />}
       </div>
     );
   };
@@ -1264,7 +1276,7 @@ export default function LearnAI() {
         </Box>
       )}
       {sub >= 4 && <Box color={C.green}><T color="#80e8a5" bold center>✅ Words are now 512-number vectors!</T><T color="#80e8a5" center size={18}>But still no position info. "I love cats" = "cats love I". Next: Positional Encoding →</T></Box>}
-      {sub < 4 && <SubBtn onClick={() => setSub(s => s + 1)} />}
+      {sub < 4 && <SubBtn onClick={() => navigate("forward")} />}
     </div>
   );
 
@@ -1302,7 +1314,7 @@ export default function LearnAI() {
         </Box>
       )}
       {sub >= 2 && <Box color={C.green}><T color="#80e8a5" bold center>We need: bounded values, unique per position, relative distances learnable.</T><T color="#80e8a5" center size={18} style={{ marginTop: 4 }}>Solution: Sine & Cosine waves →</T></Box>}
-      {sub < 2 && <SubBtn onClick={() => setSub(s => s + 1)} />}
+      {sub < 2 && <SubBtn onClick={() => navigate("forward")} />}
     </div>
   );
 
@@ -1335,7 +1347,7 @@ export default function LearnAI() {
         </div>
       )}
       {sub >= 2 && <Box color={C.yellow}><T color={C.yellow} bold center>The KEY insight: 10000^(i/d_model)</T><T color="#ffe082">When i=0, divisor=1 → pos/1 = pos → wave oscillates FAST.<br />When i=510, divisor≈10000 → pos/10000 ≈ tiny → wave changes BARELY.<br /><br />Like a clock: <strong style={{ color: C.cyan }}>seconds hand</strong> (fast) + <strong style={{ color: C.purple }}>hours hand</strong> (slow) = exact time.</T></Box>}
-      {sub < 2 && <SubBtn onClick={() => setSub(s => s + 1)} />}
+      {sub < 2 && <SubBtn onClick={() => navigate("forward")} />}
     </div>
   );
 
@@ -1389,7 +1401,7 @@ export default function LearnAI() {
             <T color="#80e8a5" style={{ marginTop: 4 }}>Position 2: d0 goes 0.841→0.909, d6 goes 0.001→0.002</T>
           </Box>
         )}
-        {sub < 2 && <SubBtn onClick={() => setSub(s => s + 1)} />}
+        {sub < 2 && <SubBtn onClick={() => navigate("forward")} />}
       </div>
     );
   };
@@ -1633,7 +1645,7 @@ export default function LearnAI() {
           </Box>
         )}
 
-        {sub < 5 && <SubBtn onClick={() => setSub(s => s + 1)} />}
+        {sub < 5 && <SubBtn onClick={() => navigate("forward")} />}
       </div>
     );
   };
@@ -1694,7 +1706,7 @@ export default function LearnAI() {
           </Box>
         )}
         {sub >= 3 && <Box color={C.green}><T color="#80e8a5" bold center>✅ This is what enters the Transformer layers.</T><T color="#80e8a5" center size={18} style={{ marginTop: 4 }}>Next up: <strong>Part 3 — Attention</strong>, the heart of the Transformer!</T></Box>}
-        {sub < 3 && <SubBtn onClick={() => setSub(s => s + 1)} />}
+        {sub < 3 && <SubBtn onClick={() => navigate("forward")} />}
       </div>
     );
   };
@@ -1720,7 +1732,7 @@ export default function LearnAI() {
           <T color="#80deea" style={{ marginTop: 6 }}>The model has a big dictionary (learned during training) that maps every word to a fixed list of numbers. These numbers capture the word's meaning in isolation.</T>
         </Box>
       )}
-      {sub < 1 && <SubBtn onClick={() => setSub(s => s + 1)} />}
+      {sub < 1 && <SubBtn onClick={() => navigate("forward")} />}
     </div>
   );
 
@@ -1767,7 +1779,7 @@ export default function LearnAI() {
           </Box>
         )}
         {sub >= 3 && <Box color={C.green} style={{ width: "100%" }}><T color="#80e8a5" bold center>This is what Attention solves.</T><T color="#80e8a5" style={{ marginTop: 6 }}>It lets each word <strong>look around</strong> at the other words and ask <strong>"which other words are relevant to me?"</strong> and then absorb context — absorbing information from the relevant ones. After attention: "love" in "I love cats" absorbs info from "I" and "cats" → now represents <strong>"affection from me toward cats"</strong>. Same input vector, different output vector depending on context.</T></Box>}
-        {sub < 3 && <SubBtn onClick={() => setSub(s => s + 1)} />}
+        {sub < 3 && <SubBtn onClick={() => navigate("forward")} />}
       </div>
     );
   };
@@ -1815,7 +1827,7 @@ export default function LearnAI() {
           </div>
         )}
         {sub >= 2 && <Box color={C.cyan}><T color="#80deea" bold center>But how do we compute these scores mathematically?</T><T color="#80deea">We need a tool for measuring "relevance" between two vectors. Enter: the <strong>dot product</strong> →</T></Box>}
-        {sub < 2 && <SubBtn onClick={() => setSub(s => s + 1)} />}
+        {sub < 2 && <SubBtn onClick={() => navigate("forward")} />}
       </div>
     );
   };
@@ -1877,7 +1889,7 @@ export default function LearnAI() {
         </Box>
       )}
       {sub >= 3 && <Box color={C.purple}><T color="#b8a9ff" bold center>But we can't just dot product the raw word numbers directly.</T><T color="#b8a9ff">"I" = pronoun, "love" = verb — their raw meanings aren't similar, but they ARE related (I is the one who loves). We need to compare them on a different basis.</T></Box>}
-      {sub < 3 && <SubBtn onClick={() => setSub(s => s + 1)} />}
+      {sub < 3 && <SubBtn onClick={() => navigate("forward")} />}
     </div>
   );
 
@@ -1918,7 +1930,7 @@ export default function LearnAI() {
         </Box>
       )}
       {sub >= 2 && <Box color={C.green}><T color="#80e8a5" bold center>That's why we need three separate views of each word →</T></Box>}
-      {sub < 2 && <SubBtn onClick={() => setSub(s => s + 1)} />}
+      {sub < 2 && <SubBtn onClick={() => navigate("forward")} />}
     </div>
   );
 
@@ -2003,7 +2015,7 @@ export default function LearnAI() {
           </div>
         </Box>
       )}
-      {sub < 2 && <SubBtn onClick={() => setSub(s => s + 1)} />}
+      {sub < 2 && <SubBtn onClick={() => navigate("forward")} />}
     </div>
   );
 
@@ -2052,7 +2064,7 @@ export default function LearnAI() {
         </Box>
       )}
       {sub >= 3 && <Box color={C.green}><T color="#80e8a5" bold center>Each student — and each word — simultaneously asks a question AND advertises itself AND carries information.</T><T color="#80e8a5" size={18}>But why do we need Key and Value to be <strong>separate</strong>? Why can't they be the same thing?</T></Box>}
-      {sub < 3 && <SubBtn onClick={() => setSub(s => s + 1)} />}
+      {sub < 3 && <SubBtn onClick={() => navigate("forward")} />}
     </div>
   );
 
@@ -2115,7 +2127,7 @@ export default function LearnAI() {
           <T color="#80deea" size={18} bold center style={{ marginTop: 10 }}>Key helped "it" FIND "cat" (menu description). Value is what "it" actually GOT from "cat" (the actual food).</T>
         </Box>
       )}
-      {sub < 2 && <SubBtn onClick={() => setSub(s => s + 1)} />}
+      {sub < 2 && <SubBtn onClick={() => navigate("forward")} />}
     </div>
   );
 
@@ -2234,7 +2246,7 @@ export default function LearnAI() {
         </div>
       )}
       {sub >= 5 && <Box color={C.yellow}><T color="#ffe082" bold center>Same input (embedding), three different outputs depending on which grid you use.</T><T color="#ffe082" size={18}>Each grid is 512×64 = 32,768 numbers. But where do these numbers come from?</T></Box>}
-      {sub < 5 && <SubBtn onClick={() => setSub(s => s + 1)} />}
+      {sub < 5 && <SubBtn onClick={() => navigate("forward")} />}
     </div>
   );
 
@@ -2265,7 +2277,7 @@ export default function LearnAI() {
           <T color="#80e8a5" bold center style={{ marginTop: 8 }}>Nobody programmed these numbers. They emerged from the nudging process (backpropagation) over billions of examples.</T>
         </Box>
       )}
-      {sub < 3 && <SubBtn onClick={() => setSub(s => s + 1)} />}
+      {sub < 3 && <SubBtn onClick={() => navigate("forward")} />}
     </div>
   );
 
@@ -2319,7 +2331,7 @@ export default function LearnAI() {
           <T color="#80deea" size={18} style={{ marginTop: 6 }}>After this, "sat" knows: <strong>"I'm an action being performed by a cat."</strong></T>
         </Box>
       )}
-      {sub < 2 && <SubBtn onClick={() => setSub(s => s + 1)} />}
+      {sub < 2 && <SubBtn onClick={() => navigate("forward")} />}
     </div>
   );
 
@@ -2346,7 +2358,7 @@ export default function LearnAI() {
         </Box>
       )}
       {sub >= 1 && <Box color={C.green}><T color="#80e8a5" bold center>Three analogies, same concept:</T><T color="#80e8a5" style={{ marginTop: 4 }}>🎓 Classroom: question / label / notes<br />🍛 Restaurant: craving / menu description / actual food<br />🔍 Google: search query / page keywords / page content<br /><br />Now let's compute the full attention step by step with real numbers →</T></Box>}
-      {sub < 1 && <SubBtn onClick={() => setSub(s => s + 1)} />}
+      {sub < 1 && <SubBtn onClick={() => navigate("forward")} />}
     </div>
   );
 
@@ -2394,7 +2406,7 @@ export default function LearnAI() {
           <T color={C.dim} size={16} style={{ marginTop: 6 }}>Q and K are 2D (compressed from 4D). In real models: 64D from 512D.</T>
         </Box>
       )}
-      {sub < 1 && <SubBtn onClick={() => setSub(s => s + 1)} />}
+      {sub < 1 && <SubBtn onClick={() => navigate("forward")} />}
     </div>
   );
 
@@ -2472,7 +2484,7 @@ export default function LearnAI() {
           <T color={C.dim} size={16} style={{ marginTop: 6 }}>Each row = one word asking "how relevant is each word to me?" Yellow = highest in that row.</T>
         </Box>
       )}
-      {sub < 1 && <SubBtn onClick={() => setSub(s => s + 1)} />}
+      {sub < 1 && <SubBtn onClick={() => navigate("forward")} />}
     </div>
   );
 
@@ -2635,7 +2647,7 @@ export default function LearnAI() {
         </Box>
       )}
 
-      {sub < 4 && <SubBtn onClick={() => setSub(s => s + 1)} />}
+      {sub < 4 && <SubBtn onClick={() => navigate("forward")} />}
     </div>
   );
 
@@ -2838,7 +2850,7 @@ export default function LearnAI() {
         </Box>
       )}
 
-      {sub < 6 && <SubBtn onClick={() => setSub(s => s + 1)} />}
+      {sub < 6 && <SubBtn onClick={() => navigate("forward")} />}
     </div>
   );
 
@@ -2885,7 +2897,7 @@ export default function LearnAI() {
           <T color={C.dim} size={16} style={{ marginTop: 6 }}>Each row sums to 1.0. "I" pays 37% attention to "cats", 33% to "love", 29% to itself.</T>
         </Box>
       )}
-      {sub < 1 && <SubBtn onClick={() => setSub(s => s + 1)} />}
+      {sub < 1 && <SubBtn onClick={() => navigate("forward")} />}
     </div>
   );
 
@@ -2917,7 +2929,7 @@ export default function LearnAI() {
         </Box>
       )}
       {sub >= 1 && <Box color={C.yellow}><T color={C.yellow} bold center>This [0.315, 0.452] is the NEW vector for "I".</T><T color="#ffe082" style={{ marginTop: 4 }}>It's no longer just about "I". It has absorbed context from "love" (33%) and "cats" (37%). It's now a <strong>context-aware representation</strong>. Same happens for every word.</T></Box>}
-      {sub < 1 && <SubBtn onClick={() => setSub(s => s + 1)} />}
+      {sub < 1 && <SubBtn onClick={() => navigate("forward")} />}
     </div>
   );
 
@@ -2944,7 +2956,7 @@ export default function LearnAI() {
           ))}
         </div>
       )}
-      {sub < 1 && <SubBtn onClick={() => setSub(s => s + 1)} />}
+      {sub < 1 && <SubBtn onClick={() => navigate("forward")} />}
     </div>
   );
 
@@ -3015,7 +3027,7 @@ export default function LearnAI() {
           <T color="#80e8a5" size={18} style={{ marginTop: 8 }}>Now NO info is lost. Each head specializes in one relationship and captures it fully.</T>
         </Box>
       )}
-      {sub < 2 && <SubBtn onClick={() => setSub(s => s + 1)} />}
+      {sub < 2 && <SubBtn onClick={() => navigate("forward")} />}
     </div>
   );
 
@@ -3082,7 +3094,7 @@ export default function LearnAI() {
           <T color="#ffe082" size={18} style={{ marginTop: 8 }}>Same input, 8 perspectives. The W matrices create these "tunings" — learned during training.</T>
         </Box>
       )}
-      {sub < 2 && <SubBtn onClick={() => setSub(s => s + 1)} />}
+      {sub < 2 && <SubBtn onClick={() => navigate("forward")} />}
     </div>
   );
 
@@ -3136,7 +3148,7 @@ export default function LearnAI() {
           <T color={C.dim} size={16} style={{ marginTop: 8 }}>Each head found what the single head missed. Head 3 got "last week" at 55% — single head only gave it 5%.</T>
         </Box>
       )}
-      {sub < 1 && <SubBtn onClick={() => setSub(s => s + 1)} />}
+      {sub < 1 && <SubBtn onClick={() => navigate("forward")} />}
     </div>
   );
 
@@ -3286,7 +3298,7 @@ export default function LearnAI() {
         </Box>
       )}
 
-      {sub < 5 && <SubBtn onClick={() => setSub(s => s + 1)} />}
+      {sub < 5 && <SubBtn onClick={() => navigate("forward")} />}
     </div>
   );
 
@@ -3368,7 +3380,7 @@ export default function LearnAI() {
           <T color="#80deea" size={18} style={{ marginTop: 8 }}>More layers = deeper understanding. Each layer's attention asks different questions about the same words, building increasingly rich representations. Same mechanism we learned — just stacked.</T>
         </Box>
       )}
-      {sub < 3 && <SubBtn onClick={() => setSub(s => s + 1)} />}
+      {sub < 3 && <SubBtn onClick={() => navigate("forward")} />}
     </div>
   );
 
@@ -3444,7 +3456,7 @@ export default function LearnAI() {
           <T color={C.blue} style={{ marginTop: 8 }}>The grids don't need to change. They've already learned the GENERAL SKILL of "how to blend heads" or "how to extract queries." That skill works on ANY input. Just like a coffee machine doesn't need to be rebuilt for each type of bean — it already knows how to grind and brew.</T>
         </Box>
       )}
-      {sub < 4 && <SubBtn onClick={() => setSub(s => s + 1)} />}
+      {sub < 4 && <SubBtn onClick={() => navigate("forward")} />}
     </div>
   );
 
@@ -3501,7 +3513,7 @@ export default function LearnAI() {
           <T color="#80deea" center style={{ marginTop: 6 }}>Same machine, different raw material, different product — every single time.</T>
         </Box>
       )}
-      {sub < 2 && <SubBtn onClick={() => setSub(s => s + 1)} />}
+      {sub < 2 && <SubBtn onClick={() => navigate("forward")} />}
     </div>
   );
 
@@ -3619,8 +3631,8 @@ export default function LearnAI() {
       <div style={{
         width: "100%", maxWidth: 840,
         opacity: fade ? 1 : 0,
-        transform: fade ? "translateY(0)" : "translateY(12px)",
-        transition: "opacity 0.35s cubic-bezier(0.4, 0, 0.2, 1), transform 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
+        transform: fade ? "translateY(0)" : "translateY(8px)",
+        transition: "opacity 0.25s cubic-bezier(0.4, 0, 0.2, 1), transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
       }}>
         <Current />
       </div>

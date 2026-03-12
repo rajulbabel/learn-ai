@@ -4695,7 +4695,11 @@ export default function LearnAI() {
         const pc = partColors[curPart] || C.purple;
         return (
           <div style={{ width: "100%", maxWidth: 800, margin: "14px 0 6px" }}>
-            <T color={pc} size={12} bold center style={{ marginBottom: 6 }}>Part {curPart}: {partNames[curPart]}  ·  {idxInPart + 1}/{partChs.length} — {pct}%</T>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
+              <span onClick={() => goTo(0)} style={{ fontSize: 12, color: C.dim, cursor: "pointer", fontWeight: 600, flexShrink: 0 }}>Table of Contents</span>
+              <T color={pc} size={12} bold center>Part {curPart}: {partNames[curPart]}</T>
+              <span style={{ fontSize: 12, color: `${pc}99`, flexShrink: 0 }}>{idxInPart + 1}/{partChs.length} — {pct}%</span>
+            </div>
             <div style={{ width: "100%", height: 4, borderRadius: 2, background: "rgba(255,255,255,0.05)" }}>
               <div style={{ width: `${pct}%`, height: "100%", borderRadius: 2, background: pc, transition: "width 0.4s ease", opacity: 0.7 }} />
             </div>
@@ -4730,7 +4734,7 @@ export default function LearnAI() {
         onMouseLeave={() => setNavHint(n => n === "left" ? null : n)}
         onClick={(e) => handleNavClick(e, "left")}
         style={{
-          position: "fixed", top: 0, left: 0, bottom: 0, width: "25%",
+          position: "fixed", top: 0, left: 0, bottom: 0, width: "12.5%",
           cursor: "pointer", zIndex: 10, overflow: "hidden",
           display: "flex", alignItems: "center", justifyContent: "flex-start",
           background: navHint === "left" ? "linear-gradient(to right, rgba(167,139,250,0.06), transparent)" : "transparent",
@@ -4760,7 +4764,7 @@ export default function LearnAI() {
         onMouseLeave={() => setNavHint(n => n === "right" ? null : n)}
         onClick={(e) => handleNavClick(e, "right")}
         style={{
-          position: "fixed", top: 0, right: 0, bottom: 0, width: "25%",
+          position: "fixed", top: 0, right: 0, bottom: 0, width: "12.5%",
           cursor: "pointer", zIndex: 10, overflow: "hidden",
           display: "flex", alignItems: "center", justifyContent: "flex-end",
           background: navHint === "right" ? "linear-gradient(to left, rgba(167,139,250,0.06), transparent)" : "transparent",

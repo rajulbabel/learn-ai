@@ -3531,7 +3531,7 @@ export default function LearnAI() {
       <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
         <Box color={C.purple} style={{ width: "100%" }}>
           <T color="#b8a9ff" bold size={21} center>Your roadmap to understanding AI from scratch.</T>
-          <T color="#b8a9ff" center style={{ marginTop: 6 }}>47 chapters. Zero prerequisites. Every concept built on the one before it.</T>
+          <T color="#b8a9ff" center style={{ marginTop: 6 }}>{chapters.length - 1} chapters. Zero prerequisites. Every concept built on the one before it.</T>
         </Box>
         <div style={{ display: "flex", flexDirection: "column", gap: 6, width: "100%" }}>
           {parts.map(p => {
@@ -3551,7 +3551,7 @@ export default function LearnAI() {
                     </div>
                   </div>
                   <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                    <T color={C.dim} size={12}>{chs.length} ch</T>
+                    <T color={C.dim} size={12}>{chs.length} {chs.length === 1 ? "Chapter" : "Chapters"}</T>
                     <span style={{ color: C.dim, fontSize: 14, transition: "transform 0.3s", transform: isOpen ? "rotate(180deg)" : "rotate(0)" }}>▼</span>
                   </div>
                 </div>
@@ -3619,7 +3619,7 @@ export default function LearnAI() {
           </h2>
         </>
       ) : (
-        <T color={C.dim} size={14} center style={{ margin: "6px 0 10px" }}>5 parts · 47 chapters · tap to begin</T>
+        <T color={C.dim} size={14} center style={{ margin: "6px 0 10px" }}>{Object.keys(partNames).length - 1} parts · {chapters.length - 1} chapters · tap to begin</T>
       )}
 
       <div style={{

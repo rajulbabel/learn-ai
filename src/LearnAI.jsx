@@ -4968,9 +4968,9 @@ export default function LearnAI() {
 
       {/* Nav */}
       <div style={{
-        position: "fixed", bottom: 0, left: 0, right: 0,
+        position: "fixed", bottom: 12, left: 0, right: 0,
         display: "flex", justifyContent: "center", gap: 8,
-        padding: "4px 14px 6px",
+        padding: "4px 14px 0px",
         background: "linear-gradient(transparent, #08080d 40%)",
       }}>
         <button onClick={() => goTo(ch - 1)} disabled={ch === 0} style={{

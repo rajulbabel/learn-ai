@@ -317,8 +317,8 @@ export default function LearnAI() {
                 <circle cx="50" cy={y} r="24" fill={`${C.cyan}15`} stroke={C.cyan} strokeWidth="1.2" />
                 <text x="50" y={y - 4} fill={C.cyan} fontSize="8" textAnchor="middle" fontWeight="700">{label}</text>
                 <text x="50" y={y + 8} fill={C.dim} fontSize="7" textAnchor="middle">{sublabel}</text>
-                <line x1="76" y1={y} x2="162" y2={y < 60 ? 57 : 93} stroke={C.yellow} strokeWidth="1.5" />
-                <text x={118} y={y < 60 ? 42 : 98} fill={C.yellow} fontSize="9" textAnchor="middle">×w{i + 1}={i === 0 ? "0.5" : "50"}</text>
+                <line x1={y < 60 ? 73 : 74} y1={y < 60 ? 41 : 92} x2={y < 60 ? 165 : 164} y2={y < 60 ? 66 : 80} stroke={C.yellow} strokeWidth="1.5" />
+                <text x={119} y={y < 60 ? 43 : 98} fill={C.yellow} fontSize="9" textAnchor="middle">×w{i + 1}={i === 0 ? "0.5" : "50"}</text>
               </g>
             ))}
             {/* Neuron */}
@@ -327,11 +327,11 @@ export default function LearnAI() {
             <text x="200" y="78" fill={C.purple} fontSize="9" textAnchor="middle" fontWeight="700">then</text>
             <text x="200" y="91" fill={C.purple} fontSize="8" textAnchor="middle">activate</text>
             {/* Bias arrow */}
-            <line x1="200" y1="126" x2="200" y2="114" stroke={C.orange} strokeWidth="1.5" />
+            <line x1="200" y1="126" x2="200" y2="111" stroke={C.orange} strokeWidth="1.5" />
             <text x="200" y="140" fill={C.orange} fontSize="9" textAnchor="middle" fontWeight="700">bias = 50</text>
             <text x="200" y="153" fill={C.dim} fontSize="8" textAnchor="middle">(base land value)</text>
             {/* Output */}
-            <line x1="238" y1="75" x2="299" y2="75" stroke={C.green} strokeWidth="1.5" />
+            <line x1="236" y1="75" x2="301" y2="75" stroke={C.green} strokeWidth="1.5" />
             <circle cx="325" cy="75" r="24" fill={`${C.green}12`} stroke={C.green} strokeWidth="1.2" />
             <text x="325" y="72" fill={C.green} fontSize="8" textAnchor="middle">output</text>
             <text x="325" y="84" fill={C.green} fontSize="9" textAnchor="middle" fontWeight="700">950</text>

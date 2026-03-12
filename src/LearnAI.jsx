@@ -81,17 +81,23 @@ const C = {
 
 // Reusable components
 const Box = ({ children, color = C.cyan, style = {} }) => (
-  <div style={{ background: `${color}09`, border: `1px solid ${color}22`, borderRadius: 10, padding: "16px 22px", width: "100%", animation: "fadeSlideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1) both", ...style }}>{children}</div>
+  <div style={{ background: `${color}09`, border: `1px solid ${color}22`, borderRadius: 10, padding: "16px 22px", width: "100%", ...style }}>{children}</div>
 );
 const T = ({ children, color = C.mid, size = 19, bold = false, center = false, style = {} }) => (
   <div style={{ color, fontSize: size, fontWeight: bold ? 700 : 400, textAlign: center ? "center" : "left", lineHeight: 1.75, ...style }}>{children}</div>
 );
+const Reveal = ({ when, children }) => {
+  if (!when) return null;
+  return <div data-reveal="true" style={{ width: "100%", animation: "fadeSlideIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) both" }}>{children}</div>;
+};
+
 const SubBtn = ({ onClick, rippleKey }) => (
   <button data-subbtn="true" onClick={onClick} style={{
     alignSelf: "center", padding: "8px 20px", borderRadius: 8, border: "none",
     background: "rgba(167,139,250,0.15)", color: C.purple,
     cursor: "pointer", fontSize: 18, fontWeight: 600, marginTop: 4,
     position: "relative", overflow: "hidden",
+    animation: "fadeSlideIn 0.45s cubic-bezier(0.16, 1, 0.3, 1) 0.3s both",
   }}>
     {rippleKey > 0 && <span key={rippleKey} style={{
       position: "absolute", left: "50%", top: "50%",
@@ -135,8 +141,10 @@ export default function LearnAI() {
   useEffect(() => {
     if (sub > 0) {
       setTimeout(() => {
-        window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
-      }, 80);
+        const btn = document.querySelector("[data-subbtn]");
+        const target = btn || document.querySelector("[data-reveal]:last-child");
+        if (target) target.scrollIntoView({ behavior: "smooth", block: "center" });
+      }, 200);
     }
   }, [sub]);
 
@@ -177,7 +185,8 @@ export default function LearnAI() {
         } else if (ch < chapters.length - 1) {
           setNavHint("right");
           setRipple({ side: "right", id: Date.now() });
-          setTimeout(() => { setNavHint(null); setRipple(null); }, 800);
+          setTimeout(() => { setNavHint(null); }, 150);
+          setTimeout(() => setRipple(null), 500);
         }
         navigate("forward");
       }
@@ -185,7 +194,8 @@ export default function LearnAI() {
         if (sub === 0 && ch > 0) {
           setNavHint("left");
           setRipple({ side: "left", id: Date.now() });
-          setTimeout(() => { setNavHint(null); setRipple(null); }, 800);
+          setTimeout(() => { setNavHint(null); }, 150);
+          setTimeout(() => setRipple(null), 500);
         }
         navigate("back");
       }
@@ -198,15 +208,14 @@ export default function LearnAI() {
     if (n < 0 || n >= chapters.length || transitioning) return;
     setTransitioning(true);
     setFade(false);
-    setTimeout(() => { setCh(n); setSub(startSub); setFade(true); setTransitioning(false); window.scrollTo({ top: 0, behavior: "smooth" }); }, 300);
+    setTimeout(() => { window.scrollTo({ top: 0 }); setCh(n); setSub(startSub); setFade(true); setTransitioning(false); }, 60);
   };
 
   // ═══════ 1.1 What is a NN ═══════
   const Ch1_1 = () => (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
       {sub >= 0 && <Box color={C.red}><T color={C.red} bold center>Think of it like a factory assembly line:</T><T>Raw material (input) → processing stations (layers) → finished product (output).</T></Box>}
-      {sub >= 1 && (
-        <div style={{ background: C.card, borderRadius: 14, padding: "18px 12px", border: `1px solid ${C.border}`, width: "100%", display: "flex", justifyContent: "center" }}>
+      <Reveal when={sub >= 1}><div style={{ background: C.card, borderRadius: 14, padding: "18px 12px", border: `1px solid ${C.border}`, width: "100%", display: "flex", justifyContent: "center" }}>
           <svg width="380" height="200" viewBox="0 0 380 200" style={{ maxWidth: "100%", overflow: "visible" }}>
 
             {/* Positions — input: x=55, hidden: x=190, output: x=325 */}
@@ -260,11 +269,10 @@ export default function LearnAI() {
             <text x="190" y="185" fill={C.yellow} fontSize="10" textAnchor="middle" fontWeight="600">Hidden Layer</text>
             <text x="325" y="185" fill={C.green} fontSize="10" textAnchor="middle" fontWeight="600">Output</text>
           </svg>
-        </div>
-      )}
-      {sub >= 2 && <Box color={C.yellow}><T color={C.yellow} bold center>Each connection has a "weight" (a number).</T><T>Training = finding the right weights so predictions become accurate. That's ALL learning is.</T></Box>}
-      {sub >= 3 && <Box color={C.purple}><T color={C.purple} bold center>At each neuron:</T><T><code style={{ background: "rgba(255,255,255,0.05)", padding: "2px 6px", borderRadius: 3, fontSize: 18 }}>output = activation( Σ(input × weight) + bias )</code><br /><br /><span style={{ display: "block", paddingLeft: 8, marginTop: 4 }}>1. Multiply each input by its weight<br />2. Sum them all up<br />3. Add a bias (a shift)<br />4. Pass through activation function (e.g. ReLU: if negative → 0, if positive → keep)</span></T></Box>}
-      {sub < 3 && <SubBtn onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
+        </div></Reveal>
+      <Reveal when={sub >= 2}><Box color={C.yellow}><T color={C.yellow} bold center>Each connection has a "weight" (a number).</T><T>Training = finding the right weights so predictions become accurate. That's ALL learning is.</T></Box></Reveal>
+      <Reveal when={sub >= 3}><Box color={C.purple}><T color={C.purple} bold center>At each neuron:</T><T><code style={{ background: "rgba(255,255,255,0.05)", padding: "2px 6px", borderRadius: 3, fontSize: 18 }}>output = activation( Σ(input × weight) + bias )</code><br /><br /><span style={{ display: "block", paddingLeft: 8, marginTop: 4 }}>1. Multiply each input by its weight<br />2. Sum them all up<br />3. Add a bias (a shift)<br />4. Pass through activation function (e.g. ReLU: if negative → 0, if positive → keep)</span></T></Box></Reveal>
+      {sub < 3 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
     </div>
   );
 
@@ -272,8 +280,7 @@ export default function LearnAI() {
   const Ch1_2 = () => (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
       {sub >= 0 && <Box color={C.yellow}><T color={C.yellow} bold center>The simplest neural network — data flows in ONE direction.</T><T>Input → Hidden layers → Output. No loops, no memory.</T></Box>}
-      {sub >= 1 && (
-        <div style={{ background: C.card, borderRadius: 12, padding: "14px", border: `1px solid ${C.border}`, width: "100%", display: "flex", flexDirection: "column", alignItems: "center", animation: "fadeSlideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1) both" }}>
+      <Reveal when={sub >= 1}><div style={{ background: C.card, borderRadius: 12, padding: "14px", border: `1px solid ${C.border}`, width: "100%", display: "flex", flexDirection: "column", alignItems: "center", animation: "fadeSlideIn 0.55s cubic-bezier(0.16, 1, 0.3, 1) both" }}>
           <T color={C.dim} size={16} center style={{ marginBottom: 10 }}>EXAMPLE: Is this email spam?</T>
           <div style={{ display: "flex", alignItems: "flex-start", gap: 10, justifyContent: "center", flexWrap: "wrap" }}>
             {[{ l: "word count", v: "152" }, { l: "has 'free'?", v: "1" }, { l: "# links", v: "12" }].map(({ l, v }, i) => (
@@ -299,10 +306,9 @@ export default function LearnAI() {
               <T color={C.dim} size={12} center>&nbsp;</T>
             </div>
           </div>
-        </div>
-      )}
-      {sub >= 2 && <><Box color={C.green}><T color="#80cbc4" bold center>✅ Good for:</T><T color="#80cbc4">Simple classification — spam/not spam, cat/dog, approve/reject.</T></Box><Box color={C.red}><T color="#ff8a80" bold center>❌ Fatal limitations:</T><T color="#ff8a80"><strong>Fixed input size</strong> — sentences have variable length. Can't handle that.<br /><strong>No order</strong> — "dog bites man" = "man bites dog" to this network.</T></Box></>}
-      {sub < 2 && <SubBtn onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
+        </div></Reveal>
+      <Reveal when={sub >= 2}><><Box color={C.green}><T color="#80cbc4" bold center>✅ Good for:</T><T color="#80cbc4">Simple classification — spam/not spam, cat/dog, approve/reject.</T></Box><Box color={C.red}><T color="#ff8a80" bold center>❌ Fatal limitations:</T><T color="#ff8a80"><strong>Fixed input size</strong> — sentences have variable length. Can't handle that.<br /><strong>No order</strong> — "dog bites man" = "man bites dog" to this network.</T></Box></></Reveal>
+      {sub < 2 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
     </div>
   );
 
@@ -310,9 +316,8 @@ export default function LearnAI() {
   const Ch1_3 = () => (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
       {sub >= 0 && <Box color={C.cyan}><T color="#80deea" bold center>Imagine predicting sales from marketing budget: <strong>y = mx + c</strong>.</T><T color="#80deea"><strong>m</strong> = weight (how much budget affects sales), <strong>c</strong> = bias (baseline sales). Learning = finding the best m and c.</T></Box>}
-      {sub >= 1 && <Box color={C.purple}><T color={C.purple} bold center size={20}>A neural network starts DUMB.</T><T>When you first create a network, all its internal numbers (called <strong>weights</strong> and <strong>biases</strong>) are set to <strong>random values</strong>. It knows nothing. It makes garbage predictions.</T></Box>}
-      {sub >= 2 && (
-        <Box color={C.yellow} style={{ width: "100%" }}>
+      <Reveal when={sub >= 1}><Box color={C.purple}><T color={C.purple} bold center size={20}>A neural network starts DUMB.</T><T>When you first create a network, all its internal numbers (called <strong>weights</strong> and <strong>biases</strong>) are set to <strong>random values</strong>. It knows nothing. It makes garbage predictions.</T></Box></Reveal>
+      <Reveal when={sub >= 2}><Box color={C.yellow} style={{ width: "100%" }}>
           <T color={C.yellow} bold center>"Learning" = adjusting weights & biases until predictions get good.</T>
           <T color="#ffe082" style={{ marginTop: 6 }}>This happens in a loop that repeats <strong>thousands to millions</strong> of times:</T>
           <div style={{ marginTop: 10, display: "flex", flexDirection: "column", gap: 6 }}>
@@ -333,10 +338,9 @@ export default function LearnAI() {
               <T color={C.yellow} size={16} bold center>↻ Repeat until loss is small enough</T>
             </div>
           </div>
-        </Box>
-      )}
-      {sub >= 3 && <Box color={C.green}><T color="#80e8a5" bold center>This whole process is called "Backpropagation + Gradient Descent".</T><T color="#80e8a5">But what are weights and biases? Let's understand them first →</T></Box>}
-      {sub < 3 && <SubBtn onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
+        </Box></Reveal>
+      <Reveal when={sub >= 3}><Box color={C.green}><T color="#80e8a5" bold center>This whole process is called "Backpropagation + Gradient Descent".</T><T color="#80e8a5">But what are weights and biases? Let's understand them first →</T></Box></Reveal>
+      {sub < 3 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
     </div>
   );
 
@@ -355,8 +359,7 @@ export default function LearnAI() {
           <T color="#ffe082" style={{ marginTop: 6 }}>A weight is a number that says <strong>"how much should I care about this input?"</strong> The network learns the right weights during training.</T>
         </Box>
       )}
-      {sub >= 1 && (
-        <Box color={C.cyan} style={{ width: "100%" }}>
+      <Reveal when={sub >= 1}><Box color={C.cyan} style={{ width: "100%" }}>
           <T color="#80deea" bold center size={20}>Bias = a baseline shift</T>
           <T color="#80deea" style={{ marginTop: 6 }}>
             Imagine you're predicting house price from square footage.<br /><br />
@@ -365,16 +368,12 @@ export default function LearnAI() {
             With bias: <code style={{ background: "rgba(255,255,255,0.06)", padding: "2px 6px", borderRadius: 3 }}>price = sqft × weight + bias</code><br />
             The bias adds a <strong>base amount</strong> (like land value) regardless of input.
           </T>
-        </Box>
-      )}
-      {sub >= 2 && (
-        <Box color={C.green} style={{ width: "100%" }}>
+        </Box></Reveal>
+      <Reveal when={sub >= 2}><Box color={C.green} style={{ width: "100%" }}>
           <T color="#80e8a5" bold center>In <code style={{ background: "rgba(255,255,255,0.06)", padding: "1px 4px", borderRadius: 2 }}>y = mx + c</code>: weight (m) = the slope, bias (c) = the y-intercept.</T>
           <T color="#80e8a5" style={{ marginTop: 6 }}>Weight controls the angle, bias shifts the line up/down.</T>
-        </Box>
-      )}
-      {sub >= 3 && (
-        <div style={{ background: C.card, borderRadius: 12, padding: "14px", border: `1px solid ${C.border}`, width: "100%", display: "flex", flexDirection: "column", alignItems: "center", animation: "fadeSlideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1) both" }}>
+        </Box></Reveal>
+      <Reveal when={sub >= 3}><div style={{ background: C.card, borderRadius: 12, padding: "14px", border: `1px solid ${C.border}`, width: "100%", display: "flex", flexDirection: "column", alignItems: "center", animation: "fadeSlideIn 0.55s cubic-bezier(0.16, 1, 0.3, 1) both" }}>
           <T color={C.dim} size={14} center style={{ marginBottom: 10, width: "100%" }}>INSIDE A SINGLE NEURON</T>
           <svg width="420" height="170" viewBox="0 0 420 170" style={{ maxWidth: "100%", overflow: "visible" }}>
             {/* Inputs */}
@@ -402,10 +401,8 @@ export default function LearnAI() {
             <text x="325" y="72" fill={C.green} fontSize="8" textAnchor="middle">output</text>
             <text x="325" y="84" fill={C.green} fontSize="9" textAnchor="middle" fontWeight="700">950</text>
           </svg>
-        </div>
-      )}
-      {sub >= 4 && (
-        <Box color={C.purple} style={{ width: "100%" }}>
+        </div></Reveal>
+      <Reveal when={sub >= 4}><Box color={C.purple} style={{ width: "100%" }}>
           <T color="#b8a9ff" bold center>The math at this neuron, step by step:</T>
           <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 4, padding: "10px", background: "rgba(0,0,0,0.2)", borderRadius: 8 }}>
             <T color={C.dim} size={18}>① <strong style={{ color: C.yellow }}>Multiply</strong> each input by its weight:</T>
@@ -417,10 +414,9 @@ export default function LearnAI() {
             <T color={C.dim} size={18} style={{ marginTop: 4 }}>④ <strong style={{ color: C.green }}>Activation</strong> (ReLU: if negative→0, if positive→keep):</T>
             <T color={C.green} size={18} style={{ paddingLeft: 18 }}>ReLU(950) = <strong>950</strong> → this is the output ($950k)</T>
           </div>
-        </Box>
-      )}
-      {sub >= 5 && <Box color={C.green}><T color="#80e8a5" bold center>So a neuron is just: multiply, sum, add bias, activate.</T><T color="#80e8a5" center size={18}>The <strong>weights</strong> and <strong>bias</strong> are what the network LEARNS. Everything else is fixed math. Now let's see the forward pass →</T></Box>}
-      {sub < 5 && <SubBtn onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
+        </Box></Reveal>
+      <Reveal when={sub >= 5}><Box color={C.green}><T color="#80e8a5" bold center>So a neuron is just: multiply, sum, add bias, activate.</T><T color="#80e8a5" center size={18}>The <strong>weights</strong> and <strong>bias</strong> are what the network LEARNS. Everything else is fixed math. Now let's see the forward pass →</T></Box></Reveal>
+      {sub < 5 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
     </div>
   );
 
@@ -492,18 +488,15 @@ export default function LearnAI() {
           </Box>
         )}
 
-        {sub >= 1 && (
-          <div style={{ background: C.card, borderRadius: 10, padding: "10px", border: `1px solid ${C.border}`, width: "100%" }}>
+        <Reveal when={sub >= 1}><div style={{ background: C.card, borderRadius: 10, padding: "10px", border: `1px solid ${C.border}`, width: "100%" }}>
             <div style={{ display: "flex", justifyContent: "center" }}>
               <Graph points={straightLine} color={C.red} title="100 layers without activation = still one straight line" xLabel="input" yLabel="output" />
             </div>
             <T color="#ff8a80" size={16} center style={{ marginTop: 4 }}>No matter how many layers you stack, it always simplifies to y = mx + b. A straight line cannot learn curves. <strong>100 layers = 1 layer.</strong></T>
-          </div>
-        )}
+          </div></Reveal>
 
         {/* Step 2: ReLU rule */}
-        {sub >= 2 && (
-          <Box color={C.green} style={{ width: "100%" }}>
+        <Reveal when={sub >= 2}><Box color={C.green} style={{ width: "100%" }}>
             <T color="#80e8a5" bold center size={20}>ReLU: the simplest possible fix.</T>
             <T color="#80e8a5" style={{ marginTop: 6 }}>After each neuron's math, apply ONE rule:</T>
             <div style={{ display: "flex", justifyContent: "center", margin: "10px 0" }}>
@@ -519,36 +512,30 @@ export default function LearnAI() {
               ))}
             </div>
             <T color="#80e8a5" size={16} center style={{ marginTop: 6 }}>That's the entire thing. No complex math.</T>
-          </Box>
-        )}
+          </Box></Reveal>
 
         {/* Step 3: One neuron with ReLU — bent line */}
-        {sub >= 3 && (
-          <Box color={C.cyan} style={{ width: "100%" }}>
+        <Reveal when={sub >= 3}><Box color={C.cyan} style={{ width: "100%" }}>
             <T color="#80deea" bold center>Neuron 1: output = ReLU(input × 1 − 3)</T>
             <div style={{ display: "flex", justifyContent: "center", margin: "8px 0" }}>
               <Graph points={neuron1} color={C.cyan} title="Neuron 1: flat, then rises (bend at input=3)" xLabel="input" yLabel="output"
                 annotations={[{ x: 3, y: 0, text: "bend!", color: C.yellow }]} />
             </div>
             <T color="#80deea" size={16}>Flat at 0 from input 0→3 (ReLU kills the negatives), then rises. That's a <strong>bent line</strong> — NOT straight anymore! The bend happens where the neuron's math crosses zero.</T>
-          </Box>
-        )}
+          </Box></Reveal>
 
         {/* Step 4: Second neuron — different bend */}
-        {sub >= 4 && (
-          <Box color={C.purple} style={{ width: "100%" }}>
+        <Reveal when={sub >= 4}><Box color={C.purple} style={{ width: "100%" }}>
             <T color="#b8a9ff" bold center>Neuron 2: output = ReLU(input × (−1) + 5)</T>
             <div style={{ display: "flex", justifyContent: "center", margin: "8px 0" }}>
               <Graph points={neuron2} color={C.purple} title="Neuron 2: slopes down, then flat (bend at input=5)" xLabel="input" yLabel="output"
                 annotations={[{ x: 5, y: 0, text: "bend!", color: C.yellow }]} />
             </div>
             <T color="#b8a9ff" size={16}>Different weight and bias = different bend point. This one slopes downward and goes flat. Each neuron's weight & bias control <strong>where</strong> and <strong>how</strong> it bends.</T>
-          </Box>
-        )}
+          </Box></Reveal>
 
         {/* Step 5: ADD them — curve appears! */}
-        {sub >= 5 && (
-          <Box color={C.yellow} style={{ width: "100%" }}>
+        <Reveal when={sub >= 5}><Box color={C.yellow} style={{ width: "100%" }}>
             <T color={C.yellow} bold center size={20}>Now ADD both neurons' outputs together:</T>
             <div style={{ display: "flex", justifyContent: "center", margin: "8px 0" }}>
               <Graph points={combined} color={C.yellow} title="Combined: a VALLEY shape — a curve!" xLabel="input" yLabel="output"
@@ -567,12 +554,10 @@ export default function LearnAI() {
               </T>
             </div>
             <T color="#ffe082" size={18} style={{ marginTop: 6 }}>Down, then flat, then up. A <strong>valley shape</strong> — a curve — made from just two bent lines added together. <strong>No single straight line can do this.</strong></T>
-          </Box>
-        )}
+          </Box></Reveal>
 
         {/* Step 6: Scale up — the big picture */}
-        {sub >= 6 && (
-          <Box color={C.green} style={{ width: "100%" }}>
+        <Reveal when={sub >= 6}><Box color={C.green} style={{ width: "100%" }}>
             <T color="#80e8a5" bold center size={20}>Scale this up:</T>
             <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 6 }}>
               {[
@@ -592,17 +577,14 @@ export default function LearnAI() {
               <T color="#80e8a5" bold center>Without ReLU: 100 layers = 1 layer (straight line)</T>
               <T color="#80e8a5" center size={18}>With ReLU: each neuron adds a bend → millions of bends → can learn ANY pattern</T>
             </div>
-          </Box>
-        )}
+          </Box></Reveal>
 
-        {sub >= 7 && (
-          <Box color={C.blue} style={{ width: "100%" }}>
+        <Reveal when={sub >= 7}><Box color={C.blue} style={{ width: "100%" }}>
             <T color="#42a5f5" bold center>A brief history of activation functions:</T>
             <T color="#42a5f5" style={{ marginTop: 6 }}>Sigmoid → vanishing gradients in deep networks → ReLU (max(0,x)) → Modern: SWIGLU in GPT-4/LLaMA. The function changes; the purpose stays: add non-linearity so stacking layers isn't just y = big_mx + big_c.</T>
-          </Box>
-        )}
+          </Box></Reveal>
 
-        {sub < 7 && <SubBtn onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
+        {sub < 7 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
       </div>
     );
   };
@@ -611,8 +593,7 @@ export default function LearnAI() {
   const Ch1_5 = () => (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
       {sub >= 0 && <Box color={C.cyan}><T color="#80deea" bold center size={20}>Forward Pass = feeding input through the network to get a prediction.</T><T color="#80deea">Let's use a super simple network: 1 input → 1 neuron → 1 output. We're predicting house price from square footage.</T></Box>}
-      {sub >= 1 && (
-        <div style={{ background: C.card, borderRadius: 12, padding: "14px", border: `1px solid ${C.border}`, width: "100%", display: "flex", flexDirection: "column", alignItems: "center", animation: "fadeSlideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1) both" }}>
+      <Reveal when={sub >= 1}><div style={{ background: C.card, borderRadius: 12, padding: "14px", border: `1px solid ${C.border}`, width: "100%", display: "flex", flexDirection: "column", alignItems: "center", animation: "fadeSlideIn 0.55s cubic-bezier(0.16, 1, 0.3, 1) both" }}>
           <T color={C.dim} size={14} center style={{ marginBottom: 8, width: "100%" }}>OUR SIMPLE NETWORK</T>
           <svg width="360" height="90" viewBox="0 0 360 90" style={{ maxWidth: "100%", overflow: "visible" }}>
             {/* Input */}
@@ -634,10 +615,8 @@ export default function LearnAI() {
             <text x="300" y="40" fill={C.green} fontSize="8" textAnchor="middle">pred</text>
             <text x="300" y="53" fill={C.green} fontSize="12" textAnchor="middle" fontWeight="700">800</text>
           </svg>
-        </div>
-      )}
-      {sub >= 2 && (
-        <Box color={C.yellow} style={{ width: "100%" }}>
+        </div></Reveal>
+      <Reveal when={sub >= 2}><Box color={C.yellow} style={{ width: "100%" }}>
           <T color={C.yellow} bold center>The computation:</T>
           <div style={{ marginTop: 8, padding: "10px", background: "rgba(0,0,0,0.2)", borderRadius: 8 }}>
             <T color={C.dim} size={18}>① Multiply: 1500 × 0.5 = <strong style={{ color: C.yellow }}>750</strong></T>
@@ -645,10 +624,9 @@ export default function LearnAI() {
             <T color={C.dim} size={18}>③ ReLU(800) = <strong style={{ color: C.green }}>800</strong> (positive, so unchanged)</T>
           </div>
           <T color="#ffe082" size={18} style={{ marginTop: 6 }}>Our network predicts the house costs <strong>$800k</strong>.</T>
-        </Box>
-      )}
-      {sub >= 3 && <Box color={C.red}><T color="#ff8a80" bold center>But the actual price was $900k.</T><T color="#ff8a80">We're off by $100k. How do we measure this error precisely? That's what the <strong>loss function</strong> does →</T></Box>}
-      {sub < 3 && <SubBtn onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
+        </Box></Reveal>
+      <Reveal when={sub >= 3}><Box color={C.red}><T color="#ff8a80" bold center>But the actual price was $900k.</T><T color="#ff8a80">We're off by $100k. How do we measure this error precisely? That's what the <strong>loss function</strong> does →</T></Box></Reveal>
+      {sub < 3 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
     </div>
   );
 
@@ -667,8 +645,7 @@ export default function LearnAI() {
           <T color="#ff8a80" size={18}>Why squared? Two reasons: it makes all errors positive (so they don't cancel out), and it punishes big errors much more than small ones.</T>
         </Box>
       )}
-      {sub >= 1 && (
-        <Box color={C.yellow} style={{ width: "100%" }}>
+      <Reveal when={sub >= 1}><Box color={C.yellow} style={{ width: "100%" }}>
           <T color={C.yellow} bold center>Our example:</T>
           <div style={{ marginTop: 8, padding: "12px", background: "rgba(0,0,0,0.2)", borderRadius: 8 }}>
             <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 8, flexWrap: "wrap", justifyContent: "center" }}>
@@ -685,10 +662,8 @@ export default function LearnAI() {
               Loss = <strong style={{ fontSize: 26 }}>10,000</strong>
             </T>
           </div>
-        </Box>
-      )}
-      {sub >= 2 && (
-        <Box color={C.purple} style={{ width: "100%" }}>
+        </Box></Reveal>
+      <Reveal when={sub >= 2}><Box color={C.purple} style={{ width: "100%" }}>
           <T color="#b8a9ff" bold center size={20}>The KEY insight:</T>
           <T color="#b8a9ff" style={{ marginTop: 6 }}>
             The loss depends on the prediction. The prediction depends on <strong>weight</strong> and <strong>bias</strong>. So:<br /><br />
@@ -696,10 +671,8 @@ export default function LearnAI() {
             There exists some perfect value of weight and bias that makes the loss as small as possible. Our job: <strong>find those values</strong>.
           </T>
           <T color="#b8a9ff" style={{ marginTop: 8 }}>But how do we know which direction to change them? We need to understand <strong>derivatives</strong> first →</T>
-        </Box>
-      )}
-      {sub >= 3 && (
-        <Box color={C.orange} style={{ width: "100%" }}>
+        </Box></Reveal>
+      <Reveal when={sub >= 3}><Box color={C.orange} style={{ width: "100%" }}>
           <T color="#ffb74d" bold center size={20}>But wait — why SQUARE the error?</T>
           <T color={C.dim} size={16} style={{ marginTop: 4 }}>Why not just use |actual − predicted| (absolute error)? Three killer reasons:</T>
           <div style={{ marginTop: 10, display: "flex", flexDirection: "column", gap: 8 }}>
@@ -738,9 +711,8 @@ export default function LearnAI() {
               </div>
             </div>
           </div>
-        </Box>
-      )}
-      {sub < 3 && <SubBtn onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
+        </Box></Reveal>
+      {sub < 3 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
     </div>
   );
 
@@ -766,8 +738,7 @@ export default function LearnAI() {
             </T>
           </Box>
         )}
-        {sub >= 1 && (
-          <Box color={C.yellow} style={{ width: "100%" }}>
+        <Reveal when={sub >= 1}><Box color={C.yellow} style={{ width: "100%" }}>
             <T color={C.yellow} bold center>Concrete example with our network:</T>
             <T color="#ffe082" style={{ marginTop: 6 }}>Currently: weight = 0.5, prediction = 800, loss = 10,000.</T>
             <T color="#ffe082" style={{ marginTop: 6 }}>What if we nudge weight from 0.5 to <strong>0.6</strong>?</T>
@@ -779,10 +750,8 @@ export default function LearnAI() {
               Weight changed by <strong>+0.1</strong> → Loss changed by <strong>−7,500</strong><br />
               Increasing the weight made the loss go <strong>down</strong>. Good direction!
             </T>
-          </Box>
-        )}
-        {sub >= 2 && (
-          <Box color={C.pink} style={{ width: "100%" }}>
+          </Box></Reveal>
+        <Reveal when={sub >= 2}><Box color={C.pink} style={{ width: "100%" }}>
             <T color="#ce93d8" bold center>The derivative is this ratio, written as a fraction:</T>
             <div style={{ display: "flex", justifyContent: "center", margin: "16px 0", gap: 16, alignItems: "center", flexWrap: "wrap" }}>
               <div style={{ background: "rgba(0,0,0,0.3)", borderRadius: 12, padding: "16px 22px", border: `1px solid ${C.pink}30` }}>
@@ -806,10 +775,8 @@ export default function LearnAI() {
             <T color="#ce93d8" size={18}>
               The ∂ symbol (partial derivative) just means "tiny change in". Read it as: "the tiny change in loss caused by a tiny change in weight."
             </T>
-          </Box>
-        )}
-        {sub >= 3 && (
-          <Box color={C.green} style={{ width: "100%" }}>
+          </Box></Reveal>
+        <Reveal when={sub >= 3}><Box color={C.green} style={{ width: "100%" }}>
             <T color="#80e8a5" bold center>What the derivative TELLS us:</T>
             <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 6 }}>
               {[
@@ -827,16 +794,13 @@ export default function LearnAI() {
                 </div>
               ))}
             </div>
-          </Box>
-        )}
-        {sub >= 4 && <Box color={C.purple}><T color="#b8a9ff" bold center>The derivative is our COMPASS — it tells us which direction to adjust each weight.</T><T color="#b8a9ff" center size={18} style={{ marginTop: 4 }}>But in a network with many steps, how do we compute this derivative? That's the <strong>chain rule</strong> →</T></Box>}
-        {sub >= 5 && (
-          <Box color={C.cyan} style={{ width: "100%" }}>
+          </Box></Reveal>
+        <Reveal when={sub >= 4}><Box color={C.purple}><T color="#b8a9ff" bold center>The derivative is our COMPASS — it tells us which direction to adjust each weight.</T><T color="#b8a9ff" center size={18} style={{ marginTop: 4 }}>But in a network with many steps, how do we compute this derivative? That's the <strong>chain rule</strong> →</T></Box></Reveal>
+        <Reveal when={sub >= 5}><Box color={C.cyan} style={{ width: "100%" }}>
             <T color="#80deea" bold center>With 2 knobs (w, b), we turn ONE knob at a time.</T>
             <T color="#80deea" style={{ marginTop: 6 }}>∂L/∂w = 'how loss changes when I nudge only w.' This is a <strong>PARTIAL derivative</strong> — partial because we're holding everything else constant.</T>
-          </Box>
-        )}
-        {sub < 5 && <SubBtn onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
+          </Box></Reveal>
+        {sub < 5 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
       </div>
     );
   };
@@ -866,8 +830,7 @@ export default function LearnAI() {
           </div>
         </Box>
       )}
-      {sub >= 1 && (
-        <Box color={C.yellow} style={{ width: "100%" }}>
+      <Reveal when={sub >= 1}><Box color={C.yellow} style={{ width: "100%" }}>
           <T color={C.yellow} bold center>The Chain Rule: work backwards, one step at a time.</T>
           <T color="#ffe082" style={{ marginTop: 6 }}>Start from the loss and trace back. At each step, ask: "how does this step's input affect its output?"</T>
           <div style={{ marginTop: 10, display: "flex", flexDirection: "column", gap: 8, padding: "10px", background: "rgba(0,0,0,0.2)", borderRadius: 8 }}>
@@ -902,10 +865,8 @@ export default function LearnAI() {
               </div>
             </div>
           </div>
-        </Box>
-      )}
-      {sub >= 2 && (
-        <Box color={C.pink} style={{ width: "100%" }}>
+        </Box></Reveal>
+      <Reveal when={sub >= 2}><Box color={C.pink} style={{ width: "100%" }}>
           <T color="#ce93d8" bold center>Now MULTIPLY them all together (that's the chain rule!):</T>
           <div style={{ display: "flex", justifyContent: "center", margin: "14px 0" }}>
             <div style={{ background: "rgba(0,0,0,0.3)", borderRadius: 12, padding: "16px 20px", border: `1px solid ${C.pink}30` }}>
@@ -928,10 +889,8 @@ export default function LearnAI() {
             </div>
           </div>
           <T color="#ce93d8" size={18}>This is negative → increasing weight will <strong>decrease</strong> loss. Good! The magnitude (300,000) tells us the loss is very sensitive to this weight.</T>
-        </Box>
-      )}
-      {sub >= 3 && (
-        <Box color={C.cyan} style={{ width: "100%" }}>
+        </Box></Reveal>
+      <Reveal when={sub >= 3}><Box color={C.cyan} style={{ width: "100%" }}>
           <T color="#80deea" bold center>Same thing for bias:</T>
           <div style={{ marginTop: 6, padding: "10px", background: "rgba(0,0,0,0.2)", borderRadius: 8 }}>
             <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
@@ -952,9 +911,8 @@ export default function LearnAI() {
             <T color={C.dim} size={16} style={{ marginTop: 4 }}>pred = 1500w + bias → derivative of pred w.r.t. bias = 1 (bias is directly added)</T>
           </div>
           <T color="#80deea" size={18} style={{ marginTop: 6 }}>Now we have a gradient for <strong>every learnable parameter</strong>: weight and bias. Time to update them →</T>
-        </Box>
-      )}
-      {sub < 3 && <SubBtn onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
+        </Box></Reveal>
+      {sub < 3 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
     </div>
   );
 
@@ -973,8 +931,7 @@ export default function LearnAI() {
           <T color="#80e8a5" size={18}>We move in the <strong>opposite</strong> direction of the gradient (that's the minus sign). If gradient says "loss increases when you go right," we go left.</T>
         </Box>
       )}
-      {sub >= 1 && (
-        <Box color={C.yellow} style={{ width: "100%" }}>
+      <Reveal when={sub >= 1}><Box color={C.yellow} style={{ width: "100%" }}>
           <T color={C.yellow} bold center size={19}>Learning Rate (α) — How Big a Step?</T>
           <T color="#ffe082" style={{ marginTop: 6 }}>Our gradient is −300,000. If we applied it directly: new_w = 0.5 − (−300,000) = 300,000.5. That's insane! The weight would jump wildly.</T>
           <T color="#ffe082" style={{ marginTop: 8 }}>The <strong>learning rate</strong> is a tiny number (like 0.0000001) that scales the step down:</T>
@@ -988,20 +945,16 @@ export default function LearnAI() {
               <T color={C.cyan} size={18}>new_b = 50 − (−0.00002) = <strong style={{ color: C.green, fontSize: 22 }}>50.00002</strong></T>
             </div>
           </div>
-        </Box>
-      )}
-      {sub >= 2 && (
-        <Box color={C.orange} style={{ width: "100%" }}>
+        </Box></Reveal>
+      <Reveal when={sub >= 2}><Box color={C.orange} style={{ width: "100%" }}>
           <T color={C.orange} bold center>Let's verify — did we improve?</T>
           <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 4, padding: "10px", background: "rgba(0,0,0,0.2)", borderRadius: 8 }}>
             <T color={C.dim} size={18}><strong>Before:</strong> w=0.5, b=50 → pred = 1500×0.5+50 = <strong style={{ color: C.red }}>800</strong> → loss = <strong style={{ color: C.red }}>10,000</strong></T>
             <T color={C.dim} size={18}><strong>After:</strong> w=0.53, b≈50 → pred = 1500×0.53+50 = <strong style={{ color: C.green }}>845</strong> → loss = <strong style={{ color: C.green }}>3,025</strong></T>
           </div>
           <T color={C.orange} size={18} style={{ marginTop: 6 }}>Loss dropped from 10,000 → 3,025! We're getting closer to the actual price of $900k. Repeat this loop thousands of times and the loss approaches zero.</T>
-        </Box>
-      )}
-      {sub >= 3 && (
-        <Box color={C.purple} style={{ width: "100%" }}>
+        </Box></Reveal>
+      <Reveal when={sub >= 3}><Box color={C.purple} style={{ width: "100%" }}>
           <T color="#b8a9ff" bold center>The Landscape Analogy</T>
           <T color="#b8a9ff" style={{ marginTop: 6 }}>Imagine you're blindfolded on a hilly landscape. Height = loss. You want to find the lowest valley.</T>
           <div style={{ display: "flex", justifyContent: "center", margin: "10px 0" }}>
@@ -1036,24 +989,19 @@ export default function LearnAI() {
               </div>
             ))}
           </div>
-        </Box>
-      )}
-      {sub >= 4 && (
-        <Box color={C.blue} style={{ width: "100%" }}>
+        </Box></Reveal>
+      <Reveal when={sub >= 4}><Box color={C.blue} style={{ width: "100%" }}>
           <T color="#42a5f5" bold center>Advanced: Momentum</T>
           <T color="#42a5f5" style={{ marginTop: 6 }}>A ball rolling downhill keeps rolling past small bumps instead of getting stuck. Momentum does the same: accumulate velocity in the descent direction, so updates are smoother and faster.</T>
-        </Box>
-      )}
-      {sub >= 5 && (
-        <Box color={C.green}>
+        </Box></Reveal>
+      <Reveal when={sub >= 5}><Box color={C.green}>
           <T color="#80e8a5" bold center size={20}>✅ That's backpropagation + gradient descent!</T>
           <T color="#80e8a5" center size={18} style={{ marginTop: 6 }}>
             In real networks with <strong>millions of weights and biases</strong>, the exact same process happens — just with longer chains and more derivatives. The math scales, the idea stays identical.<br /><br />
             Forward → Loss → Backward (chain rule) → Update → Repeat.
           </T>
-        </Box>
-      )}
-      {sub < 5 && <SubBtn onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
+        </Box></Reveal>
+      {sub < 5 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
     </div>
   );
 
@@ -1061,8 +1009,7 @@ export default function LearnAI() {
   const Ch1_10 = () => (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
       {sub >= 0 && <Box color={C.cyan}><T color="#80deea" bold center>Built for images. A small "filter" slides across the image detecting patterns.</T></Box>}
-      {sub >= 1 && (
-        <div style={{ background: C.card, borderRadius: 12, padding: "14px", border: `1px solid ${C.border}`, width: "100%", display: "flex", flexDirection: "column", alignItems: "center", animation: "fadeSlideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1) both" }}>
+      <Reveal when={sub >= 1}><div style={{ background: C.card, borderRadius: 12, padding: "14px", border: `1px solid ${C.border}`, width: "100%", display: "flex", flexDirection: "column", alignItems: "center", animation: "fadeSlideIn 0.55s cubic-bezier(0.16, 1, 0.3, 1) both" }}>
           <svg width="320" height="120">
             {Array.from({ length: 5 }).map((_, r) => Array.from({ length: 5 }).map((_, c2) => (<rect key={`${r}${c2}`} x={10 + c2 * 20} y={8 + r * 20} width={18} height={18} rx={2} fill={`${C.cyan}${Math.random() > 0.5 ? '22' : '10'}`} stroke={`${C.cyan}25`} strokeWidth={0.5} />)))}
             <rect x="12" y="10" width="56" height="56" rx={3} fill="none" stroke={C.red} strokeWidth="2" strokeDasharray="5,3" />
@@ -1075,11 +1022,10 @@ export default function LearnAI() {
             <text x="55" y="115" fill={C.dim} fontSize="9" textAnchor="middle">image</text>
             <text x="192" y="95" fill={C.dim} fontSize="9" textAnchor="middle">features</text>
           </svg>
-        </div>
-      )}
-      {sub >= 2 && <Box color={C.purple}><T color="#b8a9ff" bold center>Layers build on each other:</T><T color="#b8a9ff">Layer 1: <strong>edges</strong> → Layer 2: <strong>shapes</strong> → Layer 3: <strong>parts</strong> (eyes) → Layer 4: <strong>objects</strong> (face)</T></Box>}
-      {sub >= 3 && <Box color={C.red}><T color="#ff8a80" bold center>❌ Not great for language:</T><T color="#ff8a80">Related words can be far apart: "The cat <em>that I saw yesterday</em> <strong>was</strong> sleeping." — "cat" and "was" are 6 words apart but grammatically linked. CNN only looks at local windows.</T></Box>}
-      {sub < 3 && <SubBtn onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
+        </div></Reveal>
+      <Reveal when={sub >= 2}><Box color={C.purple}><T color="#b8a9ff" bold center>Layers build on each other:</T><T color="#b8a9ff">Layer 1: <strong>edges</strong> → Layer 2: <strong>shapes</strong> → Layer 3: <strong>parts</strong> (eyes) → Layer 4: <strong>objects</strong> (face)</T></Box></Reveal>
+      <Reveal when={sub >= 3}><Box color={C.red}><T color="#ff8a80" bold center>❌ Not great for language:</T><T color="#ff8a80">Related words can be far apart: "The cat <em>that I saw yesterday</em> <strong>was</strong> sleeping." — "cat" and "was" are 6 words apart but grammatically linked. CNN only looks at local windows.</T></Box></Reveal>
+      {sub < 3 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
     </div>
   );
 
@@ -1089,8 +1035,7 @@ export default function LearnAI() {
     return (
       <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
         {sub >= 0 && <Box color={C.pink}><T color="#ce93d8" bold center>Built for sequences. Reads one word at a time, passing "memory" forward.</T><T>Like reading a book left-to-right, remembering what you read.</T></Box>}
-        {sub >= 1 && (
-          <div style={{ background: C.card, borderRadius: 12, padding: "14px 6px", border: `1px solid ${C.border}`, overflowX: "auto", width: "100%", display: "flex", justifyContent: "center" }}>
+        <Reveal when={sub >= 1}><div style={{ background: C.card, borderRadius: 12, padding: "14px 6px", border: `1px solid ${C.border}`, overflowX: "auto", width: "100%", display: "flex", justifyContent: "center" }}>
             <svg width="370" height="110">
               {words.map((w, i) => {
                 const x = 15 + i * 72;
@@ -1099,10 +1044,9 @@ export default function LearnAI() {
               })}
               <text x="185" y="14" fill={C.dim} fontSize="9" textAnchor="middle">→ must finish word 1 before starting word 2 →</text>
             </svg>
-          </div>
-        )}
-        {sub >= 2 && <Box color={C.green}><T color="#80cbc4" bold center>✅ Understands order!</T><T color="#80cbc4">"Dog bites man" ≠ "Man bites dog" because the memory builds differently.</T></Box>}
-        {sub < 2 && <SubBtn onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
+          </div></Reveal>
+        <Reveal when={sub >= 2}><Box color={C.green}><T color="#80cbc4" bold center>✅ Understands order!</T><T color="#80cbc4">"Dog bites man" ≠ "Man bites dog" because the memory builds differently.</T></Box></Reveal>
+        {sub < 2 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
       </div>
     );
   };
@@ -1121,8 +1065,7 @@ export default function LearnAI() {
           </div>
         </Box>
       )}
-      {sub >= 1 && (
-        <Box color={C.yellow} style={{ width: "100%" }}>
+      <Reveal when={sub >= 1}><Box color={C.yellow} style={{ width: "100%" }}>
           <T color={C.yellow} bold center size={21}>Flaw #2: It FORGETS</T>
           <T color="#ffe082" style={{ marginTop: 6 }}>Memory passes through every step. By word 100, word 1's information is essentially lost.</T>
           <div style={{ display: "flex", alignItems: "center", gap: 3, marginTop: 8, padding: "6px 10px", background: "rgba(0,0,0,0.2)", borderRadius: 8 }}>
@@ -1134,10 +1077,9 @@ export default function LearnAI() {
             <T color={C.dim} size={12} style={{ marginLeft: 4 }}>← memory fading</T>
           </div>
           <T color="#ffe082" size={16} style={{ marginTop: 6 }}>This is the <strong>"vanishing gradient"</strong> problem.</T>
-        </Box>
-      )}
-      {sub >= 2 && <Box color={C.green}><T color="#80e8a5" bold center>We need: ⚡ parallel processing + 🧠 perfect memory + 📍 order awareness</T><T color={C.yellow} center bold size={21} style={{ marginTop: 6 }}>Enter: The Transformer →</T></Box>}
-      {sub < 2 && <SubBtn onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
+        </Box></Reveal>
+      <Reveal when={sub >= 2}><Box color={C.green}><T color="#80e8a5" bold center>We need: ⚡ parallel processing + 🧠 perfect memory + 📍 order awareness</T><T color={C.yellow} center bold size={21} style={{ marginTop: 6 }}>Enter: The Transformer →</T></Box></Reveal>
+      {sub < 2 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
     </div>
   );
 
@@ -1147,8 +1089,7 @@ export default function LearnAI() {
     return (
       <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
         {sub >= 0 && <Box color={C.green}><T color="#80e8a5" bold center size={20}>2017 — "Attention Is All You Need"</T><T color="#80e8a5">The key idea: let every word look at every other word <strong>simultaneously</strong>.</T></Box>}
-        {sub >= 1 && (
-          <div style={{ background: C.card, borderRadius: 12, padding: "14px 6px", border: `1px solid ${C.border}`, width: "100%", display: "flex", justifyContent: "center" }}>
+        <Reveal when={sub >= 1}><div style={{ background: C.card, borderRadius: 12, padding: "14px 6px", border: `1px solid ${C.border}`, width: "100%", display: "flex", justifyContent: "center" }}>
             <svg width="360" height="130">
               {words.map((w, i) => {
                 const x = 20 + i * 68;
@@ -1159,16 +1100,13 @@ export default function LearnAI() {
               <text x="180" y="120" fill={C.dim} fontSize="9" textAnchor="middle">"cat" attends most to "The" and "sat" (bright lines)</text>
               <text x="180" y="15" fill={`${C.green}60`} fontSize="10" textAnchor="middle">⚡ ALL processed in parallel</text>
             </svg>
-          </div>
-        )}
-        {sub >= 2 && (
-          <div style={{ display: "flex", gap: 8, width: "100%", alignItems: "stretch" }}>
+          </div></Reveal>
+        <Reveal when={sub >= 2}><div style={{ display: "flex", gap: 8, width: "100%", alignItems: "stretch" }}>
             <Box color={C.red} style={{ flex: 1 }}><T color="#ff8a80" bold center size={16}>RNN</T><T color={C.dim} size={14} center>Sequential, slow<br />Forgets distant words</T></Box>
             <Box color={C.green} style={{ flex: 1 }}><T color="#80e8a5" bold center size={16}>Transformer</T><T color={C.mid} size={14} center>Parallel, blazing fast<br />Every word sees every word</T></Box>
-          </div>
-        )}
-        {sub >= 3 && <Box color={C.yellow}><T color={C.yellow} bold center>Powers GPT, Claude, LLaMA, Gemini — ALL modern AI.</T><T center size={18} style={{ marginTop: 4 }}>Now let's see the full architecture →</T></Box>}
-        {sub < 3 && <SubBtn onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
+          </div></Reveal>
+        <Reveal when={sub >= 3}><Box color={C.yellow}><T color={C.yellow} bold center>Powers GPT, Claude, LLaMA, Gemini — ALL modern AI.</T><T center size={18} style={{ marginTop: 4 }}>Now let's see the full architecture →</T></Box></Reveal>
+        {sub < 3 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
       </div>
     );
   };
@@ -1344,8 +1282,8 @@ export default function LearnAI() {
             <ArchDiagram />
           </div>
         )}
-        {sub >= 1 && <Box color={C.green}><T color="#80e8a5" bold center>🔍 Let's zoom into the bottom first — the green "Embedding" boxes.</T><T color="#80e8a5">This is where words enter the Transformer as numbers.</T></Box>}
-        {sub < 1 && <SubBtn onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
+        <Reveal when={sub >= 1}><Box color={C.green}><T color="#80e8a5" bold center>🔍 Let's zoom into the bottom first — the green "Embedding" boxes.</T><T color="#80e8a5">This is where words enter the Transformer as numbers.</T></Box></Reveal>
+        {sub < 1 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
       </div>
     );
   };
@@ -1354,8 +1292,7 @@ export default function LearnAI() {
   const Ch2_2 = () => (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
       {sub >= 0 && <Box color={C.red}><T color="#ff8a80" bold center>Problem: Neural networks only do math on numbers, not words.</T><T color="#ff8a80">We need 3 stages to convert words → numbers the network can use:</T></Box>}
-      {sub >= 1 && (
-        <Box color={C.purple} style={{ width: "100%" }}>
+      <Reveal when={sub >= 1}><Box color={C.purple} style={{ width: "100%" }}>
           <T color={C.purple} bold center>Stage 1: Tokenization</T>
           <div style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 8, flexWrap: "wrap", justifyContent: "center" }}>
             <div style={{ padding: "5px 12px", borderRadius: 6, background: `${C.red}12`, border: `1px solid ${C.red}25` }}><T color={C.red} size={19} bold center>"I love cats"</T></div>
@@ -1363,10 +1300,8 @@ export default function LearnAI() {
             {["I", "love", "cats"].map((t, i) => (<div key={i} style={{ padding: "5px 10px", borderRadius: 6, background: `${C.purple}12`, border: `1px solid ${C.purple}25` }}><T color={C.purple} size={18} bold center>"{t}"</T></div>))}
           </div>
           <T color={C.dim} size={16} style={{ marginTop: 4 }}>Real LLMs: "unbelievable" → ["un", "believ", "able"]</T>
-        </Box>
-      )}
-      {sub >= 2 && (
-        <Box color={C.cyan} style={{ width: "100%" }}>
+        </Box></Reveal>
+      <Reveal when={sub >= 2}><Box color={C.cyan} style={{ width: "100%" }}>
           <T color="#80deea" bold center>Stage 2: Token → ID (vocabulary lookup)</T>
           <div style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 8 }}>
             {[{ t: '"I"', id: 4 }, { t: '"love"', id: 6 }, { t: '"cats"', id: 2 }].map(({ t, id }, i) => (
@@ -1378,10 +1313,8 @@ export default function LearnAI() {
             ))}
           </div>
           <T color={C.dim} size={16} style={{ marginTop: 4 }}>These IDs are arbitrary — the number 6 doesn't "mean" love yet.</T>
-        </Box>
-      )}
-      {sub >= 3 && (
-        <Box color={C.yellow} style={{ width: "100%" }}>
+        </Box></Reveal>
+      <Reveal when={sub >= 3}><Box color={C.yellow} style={{ width: "100%" }}>
           <T color={C.yellow} bold center>Stage 3: ID → Embedding (the KEY step)</T>
           <T color="#ffe082" style={{ marginTop: 6 }}>Each ID looks up a row in a learned matrix. Each row = 512 numbers representing that word's meaning.</T>
           <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 3 }}>
@@ -1394,10 +1327,9 @@ export default function LearnAI() {
             ))}
           </div>
           <T color="#ffe082" size={16} style={{ marginTop: 6 }}>Similar words (cat/dog) get similar vectors. Learned during training.</T>
-        </Box>
-      )}
-      {sub >= 4 && <Box color={C.green}><T color="#80e8a5" bold center>✅ Words are now 512-number vectors!</T><T color="#80e8a5" center size={18}>But still no position info. "I love cats" = "cats love I". Next: Positional Encoding →</T></Box>}
-      {sub < 4 && <SubBtn onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
+        </Box></Reveal>
+      <Reveal when={sub >= 4}><Box color={C.green}><T color="#80e8a5" bold center>✅ Words are now 512-number vectors!</T><T color="#80e8a5" center size={18}>But still no position info. "I love cats" = "cats love I". Next: Positional Encoding →</T></Box></Reveal>
+      {sub < 4 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
     </div>
   );
 
@@ -1415,8 +1347,7 @@ export default function LearnAI() {
           </div>
         </Box>
       )}
-      {sub >= 1 && (
-        <Box color={C.yellow} style={{ width: "100%" }}>
+      <Reveal when={sub >= 1}><Box color={C.yellow} style={{ width: "100%" }}>
           <T color={C.yellow} bold center>Why simple solutions fail:</T>
           <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 6 }}>
             <div style={{ padding: "8px 10px", borderRadius: 6, background: `${C.red}06` }}>
@@ -1432,10 +1363,9 @@ export default function LearnAI() {
               <T color={C.dim} size={16}>No relationship between positions. Can't learn "pos 5 is near pos 6".</T>
             </div>
           </div>
-        </Box>
-      )}
-      {sub >= 2 && <Box color={C.green}><T color="#80e8a5" bold center>We need: bounded values, unique per position, relative distances learnable.</T><T color="#80e8a5" center size={18} style={{ marginTop: 4 }}>Solution: Sine & Cosine waves →</T></Box>}
-      {sub < 2 && <SubBtn onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
+        </Box></Reveal>
+      <Reveal when={sub >= 2}><Box color={C.green}><T color="#80e8a5" bold center>We need: bounded values, unique per position, relative distances learnable.</T><T color="#80e8a5" center size={18} style={{ marginTop: 4 }}>Solution: Sine & Cosine waves →</T></Box></Reveal>
+      {sub < 2 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
     </div>
   );
 
@@ -1451,8 +1381,7 @@ export default function LearnAI() {
           </div>
         </div>
       )}
-      {sub >= 1 && (
-        <div style={{ display: "flex", flexDirection: "column", gap: 6, width: "100%" }}>
+      <Reveal when={sub >= 1}><div style={{ display: "flex", flexDirection: "column", gap: 6, width: "100%" }}>
           {[
             { term: "pos", desc: "Position of word in sentence (0, 1, 2...)", c: C.red },
             { term: "i", desc: "Which of the 512 dimensions we're computing", c: C.purple },
@@ -1465,10 +1394,9 @@ export default function LearnAI() {
               <T color={C.mid} size={16}>{desc}</T>
             </div>
           ))}
-        </div>
-      )}
-      {sub >= 2 && <Box color={C.yellow}><T color={C.yellow} bold center>The KEY insight: 10000^(i/d_model)</T><T color="#ffe082">When i=0, divisor=1 → pos/1 = pos → wave oscillates FAST.<br />When i=510, divisor≈10000 → pos/10000 ≈ tiny → wave changes BARELY.<br /><br />Like a clock: <strong style={{ color: C.cyan }}>seconds hand</strong> (fast) + <strong style={{ color: C.purple }}>hours hand</strong> (slow) = exact time.</T></Box>}
-      {sub < 2 && <SubBtn onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
+        </div></Reveal>
+      <Reveal when={sub >= 2}><Box color={C.yellow}><T color={C.yellow} bold center>The KEY insight: 10000^(i/d_model)</T><T color="#ffe082">When i=0, divisor=1 → pos/1 = pos → wave oscillates FAST.<br />When i=510, divisor≈10000 → pos/10000 ≈ tiny → wave changes BARELY.<br /><br />Like a clock: <strong style={{ color: C.cyan }}>seconds hand</strong> (fast) + <strong style={{ color: C.purple }}>hours hand</strong> (slow) = exact time.</T></Box></Reveal>
+      {sub < 2 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
     </div>
   );
 
@@ -1514,15 +1442,13 @@ export default function LearnAI() {
             ))}
           </div>
         )}
-        {sub >= 1 && <Box color={C.yellow}><T color={C.yellow} bold center>Yellow values = big change between positions.</T><T color="#ffe082">Left columns (d0, d1) change dramatically. Right columns (d6, d7) barely move. Each position has a unique fingerprint.</T></Box>}
-        {sub >= 2 && (
-          <Box color={C.green}>
+        <Reveal when={sub >= 1}><Box color={C.yellow}><T color={C.yellow} bold center>Yellow values = big change between positions.</T><T color="#ffe082">Left columns (d0, d1) change dramatically. Right columns (d6, d7) barely move. Each position has a unique fingerprint.</T></Box></Reveal>
+        <Reveal when={sub >= 2}><Box color={C.green}>
             <T color="#80e8a5" bold center>Position 0: all sin(0)=0, cos(0)=1 → clean [0, 1, 0, 1, 0, 1, 0, 1]</T>
             <T color="#80e8a5" style={{ marginTop: 4 }}>Position 1: d0 jumps 0→0.841 (fast!), d6 barely moves 0→0.001 (slow!)</T>
             <T color="#80e8a5" style={{ marginTop: 4 }}>Position 2: d0 goes 0.841→0.909, d6 goes 0.001→0.002</T>
-          </Box>
-        )}
-        {sub < 2 && <SubBtn onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
+          </Box></Reveal>
+        {sub < 2 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
       </div>
     );
   };
@@ -1607,8 +1533,7 @@ export default function LearnAI() {
         )}
 
         {/* Step 1: What if ONLY ones? */}
-        {sub >= 1 && (
-          <Box color={C.red} style={{ width: "100%" }}>
+        <Reveal when={sub >= 1}><Box color={C.red} style={{ width: "100%" }}>
             <T color="#ff8a80" bold center>❌ What if you ONLY had the ones column?</T>
             <div style={{ display: "flex", flexDirection: "column", gap: 3, marginTop: 8, padding: "10px", background: "rgba(0,0,0,0.2)", borderRadius: 8 }}>
               {[
@@ -1642,12 +1567,10 @@ export default function LearnAI() {
             <T color="#ff8a80" size={18} style={{ marginTop: 8 }}>
               After 10 positions, the ones column <strong>repeats</strong>. Position 0 and position 10 look identical. You can only count to 9. <strong>Stuck.</strong>
             </T>
-          </Box>
-        )}
+          </Box></Reveal>
 
         {/* Step 2: What if ONLY hundreds? */}
-        {sub >= 2 && (
-          <Box color={C.red} style={{ width: "100%" }}>
+        <Reveal when={sub >= 2}><Box color={C.red} style={{ width: "100%" }}>
             <T color="#ff8a80" bold center>❌ What if you ONLY had the hundreds column?</T>
             <div style={{ display: "flex", flexDirection: "column", gap: 3, marginTop: 8, padding: "10px", background: "rgba(0,0,0,0.2)", borderRadius: 8 }}>
               {[
@@ -1682,12 +1605,10 @@ export default function LearnAI() {
             <T color="#ff8a80" size={18} style={{ marginTop: 8 }}>
               Positions 0 through 99 <strong>all look identical</strong> — the hundreds column just shows 0 for all of them. You can't tell neighboring words apart at all.
             </T>
-          </Box>
-        )}
+          </Box></Reveal>
 
         {/* Step 3: Combine = magic */}
-        {sub >= 3 && (
-          <Box color={C.green} style={{ width: "100%" }}>
+        <Reveal when={sub >= 3}><Box color={C.green} style={{ width: "100%" }}>
             <T color="#80e8a5" bold center size={20}>✅ But COMBINE all three columns?</T>
             <T color="#80e8a5" style={{ marginTop: 6 }}>
               Every position from <strong>000 to 999</strong> has a unique combination.
@@ -1713,12 +1634,10 @@ export default function LearnAI() {
               The slow column (hundreds) tells distant positions apart (0 vs 100).<br />
               <strong>Together, every position is unique.</strong>
             </T>
-          </Box>
-        )}
+          </Box></Reveal>
 
         {/* Step 4: Connect back to positional encoding */}
-        {sub >= 4 && (
-          <Box color={C.cyan} style={{ width: "100%" }}>
+        <Reveal when={sub >= 4}><Box color={C.cyan} style={{ width: "100%" }}>
             <T color="#80deea" bold center size={20}>This is EXACTLY what positional encoding does.</T>
             <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 6 }}>
               {[
@@ -1754,19 +1673,16 @@ export default function LearnAI() {
               <T color="#80e8a5" center size={18}>Positional encoding uses 512 dimensions (sine waves -1 to +1)</T>
               <T color="#80e8a5" center size={18}>→ practically <strong>unlimited</strong> unique positions</T>
             </div>
-          </Box>
-        )}
+          </Box></Reveal>
 
-        {sub >= 5 && (
-          <Box color={C.green}>
+        <Reveal when={sub >= 5}><Box color={C.green}>
             <T color="#80e8a5" bold center>
               That's the entire point of fast vs slow. Nothing more, nothing less.<br />
               Different speeds exist so the combination is always unique, no matter how long the sentence is.
             </T>
-          </Box>
-        )}
+          </Box></Reveal>
 
-        {sub < 5 && <SubBtn onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
+        {sub < 5 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
       </div>
     );
   };
@@ -1813,9 +1729,8 @@ export default function LearnAI() {
             </div>
           </Box>
         )}
-        {sub >= 1 && <Box color={C.green}><T color="#80e8a5" bold center>This vector now carries BOTH:</T><T color="#80e8a5">✅ <strong style={{ color: C.purple }}>Meaning</strong> — it mostly represents "love" (embedding dominates)<br />✅ <strong style={{ color: C.green }}>Position</strong> — nudged slightly to encode "I'm at position 1"</T></Box>}
-        {sub >= 2 && (
-          <Box color={C.purple} style={{ width: "100%" }}>
+        <Reveal when={sub >= 1}><Box color={C.green}><T color="#80e8a5" bold center>This vector now carries BOTH:</T><T color="#80e8a5">✅ <strong style={{ color: C.purple }}>Meaning</strong> — it mostly represents "love" (embedding dominates)<br />✅ <strong style={{ color: C.green }}>Position</strong> — nudged slightly to encode "I'm at position 1"</T></Box></Reveal>
+        <Reveal when={sub >= 2}><Box color={C.purple} style={{ width: "100%" }}>
             <T color="#b8a9ff" bold center>4 reasons this design is genius:</T>
             <div style={{ marginTop: 6, display: "flex", flexDirection: "column", gap: 4 }}>
               {[
@@ -1830,10 +1745,9 @@ export default function LearnAI() {
                 </div>
               ))}
             </div>
-          </Box>
-        )}
-        {sub >= 3 && <Box color={C.green}><T color="#80e8a5" bold center>✅ This is what enters the Transformer layers.</T><T color="#80e8a5" center size={18} style={{ marginTop: 4 }}>Next up: <strong>Part 3 — Attention</strong>, the heart of the Transformer!</T></Box>}
-        {sub < 3 && <SubBtn onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
+          </Box></Reveal>
+        <Reveal when={sub >= 3}><Box color={C.green}><T color="#80e8a5" bold center>✅ This is what enters the Transformer layers.</T><T color="#80e8a5" center size={18} style={{ marginTop: 4 }}>Next up: <strong>Part 3 — Attention</strong>, the heart of the Transformer!</T></Box></Reveal>
+        {sub < 3 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
       </div>
     );
   };
@@ -1853,13 +1767,11 @@ export default function LearnAI() {
           <T color="#b8a9ff" style={{ marginTop: 6 }}>It needs to understand what each word means <strong>in context</strong>. The word "love" alone could mean many things. But "love" in "I love cats" specifically means "I have affection for cats." The Transformer needs to figure this out.</T>
         </Box>
       )}
-      {sub >= 1 && (
-        <Box color={C.cyan} style={{ width: "100%" }}>
+      <Reveal when={sub >= 1}><Box color={C.cyan} style={{ width: "100%" }}>
           <T color="#80deea" bold center size={20}>Step 1: Each word starts as a list of numbers.</T>
           <T color="#80deea" style={{ marginTop: 6 }}>The model has a big dictionary (learned during training) that maps every word to a fixed list of numbers. These numbers capture the word's meaning in isolation.</T>
-        </Box>
-      )}
-      {sub < 1 && <SubBtn onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
+        </Box></Reveal>
+      {sub < 1 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
     </div>
   );
 
@@ -1873,8 +1785,7 @@ export default function LearnAI() {
     return (
       <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
         {sub >= 0 && <Box color={C.red} style={{ width: "100%" }}><T color="#ff8a80" bold center size={20}>Words alone are meaningless. Context is everything.</T><T color="#ff8a80" style={{ marginTop: 6 }}>After embedding, every instance of the same word gets the <strong>exact same vector</strong>. But the same word can mean completely different things depending on surrounding words.</T></Box>}
-        {sub >= 1 && (
-          <div style={{ width: "100%" }}>
+        <Reveal when={sub >= 1}><div style={{ width: "100%" }}>
             <div style={{ display: "flex", gap: 8, justifyContent: "center", marginBottom: 10 }}>
               {[0, 1].map(i => (<button key={i} onClick={() => setBankIdx(i)} style={{ padding: "6px 14px", borderRadius: 8, border: `1px solid ${sentences[i].color}${bankIdx === i ? '60' : '20'}`, background: bankIdx === i ? `${sentences[i].color}15` : "transparent", color: sentences[i].color, fontSize: 18, fontWeight: 600, cursor: "pointer" }}>Sentence {i + 1}</button>))}
             </div>
@@ -1894,18 +1805,15 @@ export default function LearnAI() {
                 <T color={s.color} bold center size={21}>"{s.meaning}"</T>
               </div>
             </div>
-          </div>
-        )}
-        {sub >= 2 && (
-          <Box color={C.yellow} style={{ width: "100%" }}>
+          </div></Reveal>
+        <Reveal when={sub >= 2}><Box color={C.yellow} style={{ width: "100%" }}>
             <T color={C.yellow} bold center>This isn't just about "bank" — it's about EVERY word.</T>
             <T color="#ffe082" style={{ marginTop: 6 }}>The model has a big dictionary (learned during training) that maps every word to a fixed list of numbers. Take "love": after embedding, "love" always gets the same numbers, no matter what sentence it's in. But "love" in "I love cats" is different from "love" in "love is blind."</T>
             <T color="#ffe082" style={{ marginTop: 6 }}>These numbers capture the word's meaning <strong>in isolation</strong>. It has no idea what words are around it. That's a problem — because we need context.</T>
             <T color="#ffe082" style={{ marginTop: 6 }}>The <strong>goal</strong>: take "love" = [0.2, 0.9, 0.4, -0.1] and transform it into a <strong>NEW</strong> list of numbers that represents "love in the context of I and cats."</T>
-          </Box>
-        )}
-        {sub >= 3 && <Box color={C.green} style={{ width: "100%" }}><T color="#80e8a5" bold center>This is what Attention solves.</T><T color="#80e8a5" style={{ marginTop: 6 }}>It lets each word <strong>look around</strong> at the other words and ask <strong>"which other words are relevant to me?"</strong> and then absorb context — absorbing information from the relevant ones. After attention: "love" in "I love cats" absorbs info from "I" and "cats" → now represents <strong>"affection from me toward cats"</strong>. Same input vector, different output vector depending on context.</T></Box>}
-        {sub < 3 && <SubBtn onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
+          </Box></Reveal>
+        <Reveal when={sub >= 3}><Box color={C.green} style={{ width: "100%" }}><T color="#80e8a5" bold center>This is what Attention solves.</T><T color="#80e8a5" style={{ marginTop: 6 }}>It lets each word <strong>look around</strong> at the other words and ask <strong>"which other words are relevant to me?"</strong> and then absorb context — absorbing information from the relevant ones. After attention: "love" in "I love cats" absorbs info from "I" and "cats" → now represents <strong>"affection from me toward cats"</strong>. Same input vector, different output vector depending on context.</T></Box></Reveal>
+        {sub < 3 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
       </div>
     );
   };
@@ -1927,8 +1835,7 @@ export default function LearnAI() {
     return (
       <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
         {sub >= 0 && <Box color={C.purple} style={{ width: "100%" }}><T color="#b8a9ff" bold center>Think about how YOU read.</T><T color="#b8a9ff" style={{ marginTop: 6 }}>When you see "it" in a sentence, your brain scans for what "it" refers to. You focus on <strong>nouns</strong>, not every word equally. Attention does the same thing — computes a <strong>relevance score</strong> for every other word.</T></Box>}
-        {sub >= 1 && (
-          <div style={{ background: C.card, borderRadius: 10, padding: "14px", border: `1px solid ${C.border}`, width: "100%" }}>
+        <Reveal when={sub >= 1}><div style={{ background: C.card, borderRadius: 10, padding: "14px", border: `1px solid ${C.border}`, width: "100%" }}>
             <T color={C.dim} size={14} center style={{ marginBottom: 8 }}>Click any word to see what it attends to:</T>
             <div style={{ display: "flex", gap: 6, flexWrap: "wrap", justifyContent: "center", marginBottom: 12 }}>
               {words.map((w, i) => (<span key={i} onClick={() => setHovered(i)} style={{ padding: "8px 12px", borderRadius: 8, cursor: "pointer", transition: "all 0.2s", background: i === hovered ? `${C.purple}20` : "rgba(255,255,255,0.03)", border: `1.5px solid ${i === hovered ? C.purple : "rgba(255,255,255,0.06)"}`, color: i === hovered ? C.purple : C.mid, fontSize: 21, fontWeight: i === hovered ? 700 : 500 }}>{w}</span>))}
@@ -1949,10 +1856,9 @@ export default function LearnAI() {
               })}
             </div>
             <T color={C.dim} size={14} center style={{ marginTop: 8 }}>When "it" is selected → "cat" gets 55%. The model figures out "it" = "cat".</T>
-          </div>
-        )}
-        {sub >= 2 && <Box color={C.cyan}><T color="#80deea" bold center>But how do we compute these scores mathematically?</T><T color="#80deea">We need a tool for measuring "relevance" between two vectors. Enter: the <strong>dot product</strong> →</T></Box>}
-        {sub < 2 && <SubBtn onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
+          </div></Reveal>
+        <Reveal when={sub >= 2}><Box color={C.cyan}><T color="#80deea" bold center>But how do we compute these scores mathematically?</T><T color="#80deea">We need a tool for measuring "relevance" between two vectors. Enter: the <strong>dot product</strong> →</T></Box></Reveal>
+        {sub < 2 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
       </div>
     );
   };
@@ -1967,8 +1873,7 @@ export default function LearnAI() {
           <T color={C.orange} style={{ marginTop: 6 }}>The tool is the <strong>dot product</strong> — multiply pairs, add them up. Big result = related. Small result = unrelated.</T>
         </Box>
       )}
-      {sub >= 1 && (
-        <Box color={C.yellow} style={{ width: "100%" }}>
+      <Reveal when={sub >= 1}><Box color={C.yellow} style={{ width: "100%" }}>
           <T color={C.yellow} bold center size={20}>Given two vectors, multiply pairs and sum:</T>
           <div style={{ margin: "12px 0", padding: "12px", background: "rgba(0,0,0,0.3)", borderRadius: 10 }}>
             <div style={{ display: "flex", gap: 8, alignItems: "center", justifyContent: "center", flexWrap: "wrap" }}>
@@ -1990,10 +1895,8 @@ export default function LearnAI() {
             </div>
           </div>
           <T color="#ffe082" size={18}>That's it. Multiply pairs, add them up, get one number.</T>
-        </Box>
-      )}
-      {sub >= 2 && (
-        <Box color={C.green} style={{ width: "100%" }}>
+        </Box></Reveal>
+      <Reveal when={sub >= 2}><Box color={C.green} style={{ width: "100%" }}>
           <T color="#80e8a5" bold center>What does this number mean?</T>
           <T color="#80e8a5" style={{ marginTop: 6 }}>It measures <strong>how similar two vectors are in direction</strong>. Think of you and a friend both pointing somewhere:</T>
           <div style={{ marginTop: 10, display: "flex", flexDirection: "column", gap: 6 }}>
@@ -2011,10 +1914,9 @@ export default function LearnAI() {
               </div>
             ))}
           </div>
-        </Box>
-      )}
-      {sub >= 3 && <Box color={C.purple}><T color="#b8a9ff" bold center>But we can't just dot product the raw word numbers directly.</T><T color="#b8a9ff">"I" = pronoun, "love" = verb — their raw meanings aren't similar, but they ARE related (I is the one who loves). We need to compare them on a different basis.</T></Box>}
-      {sub < 3 && <SubBtn onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
+        </Box></Reveal>
+      <Reveal when={sub >= 3}><Box color={C.purple}><T color="#b8a9ff" bold center>But we can't just dot product the raw word numbers directly.</T><T color="#b8a9ff">"I" = pronoun, "love" = verb — their raw meanings aren't similar, but they ARE related (I is the one who loves). We need to compare them on a different basis.</T></Box></Reveal>
+      {sub < 3 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
     </div>
   );
 
@@ -2032,8 +1934,7 @@ export default function LearnAI() {
           <T color="#ff8a80" style={{ marginTop: 10 }}>But they ARE related — "I" is the one who loves! Their <strong>meanings</strong> are different, but their <strong>relationship</strong> is strong. Raw dot product can't capture this.</T>
         </Box>
       )}
-      {sub >= 1 && (
-        <Box color={C.yellow} style={{ width: "100%" }}>
+      <Reveal when={sub >= 1}><Box color={C.yellow} style={{ width: "100%" }}>
           <T color={C.yellow} bold center>We need to compare on a DIFFERENT basis:</T>
           <T color="#ffe082" style={{ marginTop: 6 }}>Instead of comparing what words mean, compare what one is <strong>looking for</strong> vs what the other <strong>offers</strong>:</T>
           <div style={{ marginTop: 10 }}>
@@ -2052,10 +1953,9 @@ export default function LearnAI() {
             </div>
           </div>
           <T color="#ffe082" style={{ marginTop: 10 }}>Not "what do these words mean?" but "what is one <strong>looking for</strong> vs what does the other <strong>offer</strong>?"</T>
-        </Box>
-      )}
-      {sub >= 2 && <Box color={C.green}><T color="#80e8a5" bold center>That's why we need three separate views of each word →</T></Box>}
-      {sub < 2 && <SubBtn onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
+        </Box></Reveal>
+      <Reveal when={sub >= 2}><Box color={C.green}><T color="#80e8a5" bold center>That's why we need three separate views of each word →</T></Box></Reveal>
+      {sub < 2 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
     </div>
   );
 
@@ -2068,8 +1968,7 @@ export default function LearnAI() {
           <T color="#b8a9ff" style={{ marginTop: 6 }}>Student <strong>Riya</strong> has a question: "who has yesterday's notes?"<br />She looks around at everyone.</T>
         </Box>
       )}
-      {sub >= 1 && (
-        <div style={{ background: C.card, borderRadius: 12, padding: "14px", border: `1px solid ${C.border}`, width: "100%", display: "flex", flexDirection: "column", alignItems: "center", animation: "fadeSlideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1) both" }}>
+      <Reveal when={sub >= 1}><div style={{ background: C.card, borderRadius: 12, padding: "14px", border: `1px solid ${C.border}`, width: "100%", display: "flex", flexDirection: "column", alignItems: "center", animation: "fadeSlideIn 0.55s cubic-bezier(0.16, 1, 0.3, 1) both" }}>
           <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
             {/* Riya */}
             <div style={{ display: "flex", gap: 10, alignItems: "center", padding: "10px", borderRadius: 8, background: `${C.blue}10`, border: `1px solid ${C.blue}25` }}>
@@ -2105,10 +2004,8 @@ export default function LearnAI() {
               </div>
             </div>
           </div>
-        </div>
-      )}
-      {sub >= 2 && (
-        <Box color={C.yellow} style={{ width: "100%" }}>
+        </div></Reveal>
+      <Reveal when={sub >= 2}><Box color={C.yellow} style={{ width: "100%" }}>
           <T color={C.yellow} bold center>Mapping to attention:</T>
           <div style={{ marginTop: 10, display: "flex", flexDirection: "column", gap: 6 }}>
             {[
@@ -2138,9 +2035,8 @@ export default function LearnAI() {
               </div>
             ))}
           </div>
-        </Box>
-      )}
-      {sub < 2 && <SubBtn onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
+        </Box></Reveal>
+      {sub < 2 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
     </div>
   );
 
@@ -2154,8 +2050,7 @@ export default function LearnAI() {
           <T color="#ce93d8" style={{ marginTop: 6 }}>Riya has a Query (her question), but she ALSO has a Key (what she can offer others) and a Value (her actual info). Aman has a Key and Value, but ALSO has his own Query (maybe he's looking for homework help).</T>
         </Box>
       )}
-      {sub >= 1 && (
-        <div style={{ background: C.card, borderRadius: 10, padding: "14px", border: `1px solid ${C.border}`, width: "100%" }}>
+      <Reveal when={sub >= 1}><div style={{ background: C.card, borderRadius: 10, padding: "14px", border: `1px solid ${C.border}`, width: "100%" }}>
           <T color={C.dim} size={14} center style={{ marginBottom: 6 }}>EVERY student produces ALL THREE:</T>
           <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
             {[
@@ -2180,16 +2075,13 @@ export default function LearnAI() {
               </div>
             ))}
           </div>
-        </div>
-      )}
-      {sub >= 2 && (
-        <Box color={C.yellow} style={{ width: "100%" }}>
+        </div></Reveal>
+      <Reveal when={sub >= 2}><Box color={C.yellow} style={{ width: "100%" }}>
           <T color={C.yellow} bold center>Same thing happens with words in a Transformer.</T>
           <T color="#ffe082" style={{ marginTop: 6 }}>In the sentence "The cat sat because it was tired", every word simultaneously produces a Query, Key, and Value. "cat" asks its own question while also advertising itself and carrying its own information.</T>
-        </Box>
-      )}
-      {sub >= 3 && <Box color={C.green}><T color="#80e8a5" bold center>Each student — and each word — simultaneously asks a question AND advertises itself AND carries information.</T><T color="#80e8a5" size={18}>But why do we need Key and Value to be <strong>separate</strong>? Why can't they be the same thing?</T></Box>}
-      {sub < 3 && <SubBtn onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
+        </Box></Reveal>
+      <Reveal when={sub >= 3}><Box color={C.green}><T color="#80e8a5" bold center>Each student — and each word — simultaneously asks a question AND advertises itself AND carries information.</T><T color="#80e8a5" size={18}>But why do we need Key and Value to be <strong>separate</strong>? Why can't they be the same thing?</T></Box></Reveal>
+      {sub < 3 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
     </div>
   );
 
@@ -2219,18 +2111,15 @@ export default function LearnAI() {
           </div>
         </Box>
       )}
-      {sub >= 1 && (
-        <Box color={C.red} style={{ width: "100%" }}>
+      <Reveal when={sub >= 1}><Box color={C.red} style={{ width: "100%" }}>
           <T color="#ff8a80" bold center>If Key and Value were the same thing:</T>
           <div style={{ marginTop: 8, padding: "12px", background: "rgba(0,0,0,0.3)", borderRadius: 8, textAlign: "center" }}>
             <span style={{ fontSize: 34 }}>🍽️</span>
             <T color="#ff8a80" style={{ marginTop: 6 }}>The waiter brings a plate with the words:<br /><em style={{ color: C.dim }}>"rich tomato-based gravy, smoky grilled paneer, mildly spiced, served with naan"</em><br />printed on it.</T>
             <T color={C.red} bold center style={{ marginTop: 6 }}>That's useless! You wanted the ACTUAL FOOD, not the description.</T>
           </div>
-        </Box>
-      )}
-      {sub >= 2 && (
-        <Box color={C.cyan} style={{ width: "100%" }}>
+        </Box></Reveal>
+      <Reveal when={sub >= 2}><Box color={C.cyan} style={{ width: "100%" }}>
           <T color="#80deea" bold center>Now let's connect this back to the Transformer.</T>
           <T color="#80deea" style={{ marginTop: 6 }}>Take the sentence: "The cat sat because <strong>it</strong> was tired." The word "it" needs to find what it refers to. It finds "cat". Now:</T>
           <div style={{ marginTop: 10, display: "flex", flexDirection: "column", gap: 8 }}>
@@ -2250,9 +2139,8 @@ export default function LearnAI() {
             </div>
           </div>
           <T color="#80deea" size={18} bold center style={{ marginTop: 10 }}>Key helped "it" FIND "cat" (menu description). Value is what "it" actually GOT from "cat" (the actual food).</T>
-        </Box>
-      )}
-      {sub < 2 && <SubBtn onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
+        </Box></Reveal>
+      {sub < 2 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
     </div>
   );
 
@@ -2276,8 +2164,7 @@ export default function LearnAI() {
           <T color="#b8a9ff" bold center style={{ marginTop: 6 }}>You <strong>transform</strong> it three different ways. And the tool for each transformation is: a <strong>grid of numbers</strong>.</T>
         </Box>
       )}
-      {sub >= 1 && (
-        <Box color={C.yellow} style={{ width: "100%" }}>
+      <Reveal when={sub >= 1}><Box color={C.yellow} style={{ width: "100%" }}>
           <T color={C.yellow} bold center size={20}>What IS this "grid of numbers"?</T>
           <T color="#ffe082" style={{ marginTop: 6 }}>It's called a <strong>W matrix</strong> (W = "weights"). But don't let the name scare you. It's just a <strong>table of numbers</strong>. Like a spreadsheet. Rows and columns filled with numbers:</T>
           <div style={{ marginTop: 10, padding: "10px", background: "rgba(0,0,0,0.3)", borderRadius: 8, overflowX: "auto" }}>
@@ -2290,10 +2177,8 @@ export default function LearnAI() {
           </div>
           <T color="#ffe082" size={18} style={{ marginTop: 8 }}>That's it. Just numbers in a grid. When you multiply a word's embedding by this grid, you get a new, smaller list of numbers — the Query (or Key, or Value, depending on which grid).</T>
           <T color="#ffe082" size={18} style={{ marginTop: 6 }}><strong>Multiply input by a table → get an output.</strong> Nothing more complicated than that.</T>
-        </Box>
-      )}
-      {sub >= 2 && (
-        <Box color={C.cyan} style={{ width: "100%" }}>
+        </Box></Reveal>
+      <Reveal when={sub >= 2}><Box color={C.cyan} style={{ width: "100%" }}>
           <T color="#80deea" bold center size={20}>Think of it like a photo with three filters.</T>
           <T color="#80deea" style={{ marginTop: 6 }}>You have a photo of a person. You want three different views:</T>
           <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 6 }}>
@@ -2331,16 +2216,12 @@ export default function LearnAI() {
           <T color="#80deea" style={{ marginTop: 4 }}>When you multiply the SAME embedding by Grid 2, you get the <strong>Key</strong> — a 2-number list representing "what this word can be found for."</T>
           <T color="#80deea" style={{ marginTop: 4 }}>When you multiply the SAME embedding by Grid 3, you get the <strong>Value</strong> — a 2-number list representing "what actual info this word carries."</T>
           <T color="#80deea" style={{ marginTop: 6 }}><strong>The grids are just tables of numbers. Nothing magical.</strong> Multiply input by a table → get an output.</T>
-        </Box>
-      )}
-      {sub >= 3 && (
-        <Box color={C.purple} style={{ width: "100%" }}>
+        </Box></Reveal>
+      <Reveal when={sub >= 3}><Box color={C.purple} style={{ width: "100%" }}>
           <T color="#b8a9ff" bold center size={20}>Now let's see the actual three grids in action:</T>
           <T color="#b8a9ff" style={{ marginTop: 6 }}>Same word embedding goes through three different grids — each produces a different output:</T>
-        </Box>
-      )}
-      {sub >= 4 && (
-        <div style={{ background: C.card, borderRadius: 12, padding: "14px", border: `1px solid ${C.border}`, width: "100%", display: "flex", flexDirection: "column", alignItems: "center", animation: "fadeSlideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1) both" }}>
+        </Box></Reveal>
+      <Reveal when={sub >= 4}><div style={{ background: C.card, borderRadius: 12, padding: "14px", border: `1px solid ${C.border}`, width: "100%", display: "flex", flexDirection: "column", alignItems: "center", animation: "fadeSlideIn 0.55s cubic-bezier(0.16, 1, 0.3, 1) both" }}>
           <div style={{ textAlign: "center", marginBottom: 10 }}>
             <Tag color={C.bright}>"love" embedding = [0.2, 0.9, 0.4, -0.1, ..., 0.3]</Tag>
             <T color={C.dim} size={14} center style={{ marginTop: 4 }}>512 numbers representing "love" (we'll use this exact word in our full computation later)</T>
@@ -2368,10 +2249,9 @@ export default function LearnAI() {
               </div>
             ))}
           </div>
-        </div>
-      )}
-      {sub >= 5 && <Box color={C.yellow}><T color="#ffe082" bold center>Same input (embedding), three different outputs depending on which grid you use.</T><T color="#ffe082" size={18}>Each grid is 512×64 = 32,768 numbers. But where do these numbers come from?</T></Box>}
-      {sub < 5 && <SubBtn onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
+        </div></Reveal>
+      <Reveal when={sub >= 5}><Box color={C.yellow}><T color="#ffe082" bold center>Same input (embedding), three different outputs depending on which grid you use.</T><T color="#ffe082" size={18}>Each grid is 512×64 = 32,768 numbers. But where do these numbers come from?</T></Box></Reveal>
+      {sub < 5 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
     </div>
   );
 
@@ -2384,25 +2264,19 @@ export default function LearnAI() {
           <T color={C.orange} style={{ marginTop: 6 }}>This is training.</T>
         </Box>
       )}
-      {sub >= 1 && (
-        <Box color={C.red} style={{ width: "100%" }}>
+      <Reveal when={sub >= 1}><Box color={C.red} style={{ width: "100%" }}>
           <T color="#ff8a80" bold center>Day 1:</T>
           <T color="#ff8a80" style={{ marginTop: 4 }}>The grids are filled with <strong>random numbers</strong>. The model is terrible. It computes garbage Q, K, V → garbage attention → garbage predictions.</T>
-        </Box>
-      )}
-      {sub >= 2 && (
-        <Box color={C.yellow} style={{ width: "100%" }}>
+        </Box></Reveal>
+      <Reveal when={sub >= 2}><Box color={C.yellow} style={{ width: "100%" }}>
           <T color="#ffe082">The model tries to predict the next word in millions of sentences. Every time it gets it wrong, the error signal flows backward and nudges every number in every grid slightly.</T>
           <T color="#ffe082" style={{ marginTop: 6 }}>"If this number were 0.3 instead of 0.2, the prediction would have been a little better. OK, change it to 0.3."</T>
-        </Box>
-      )}
-      {sub >= 3 && (
-        <Box color={C.green} style={{ width: "100%" }}>
+        </Box></Reveal>
+      <Reveal when={sub >= 3}><Box color={C.green} style={{ width: "100%" }}>
           <T color="#80e8a5">After seeing billions of words, the numbers in Grid 1 (W_Q) have been nudged millions of times and have settled into values that produce useful "what am I looking for?" vectors. Grid 2 (W_K) has settled into values that produce useful "what do I offer?" vectors.</T>
           <T color="#80e8a5" bold center style={{ marginTop: 8 }}>Nobody programmed these numbers. They emerged from the nudging process (backpropagation) over billions of examples.</T>
-        </Box>
-      )}
-      {sub < 3 && <SubBtn onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
+        </Box></Reveal>
+      {sub < 3 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
     </div>
   );
 
@@ -2422,8 +2296,7 @@ export default function LearnAI() {
           </div>
         </Box>
       )}
-      {sub >= 1 && (
-        <Box color={C.purple} style={{ width: "100%" }}>
+      <Reveal when={sub >= 1}><Box color={C.purple} style={{ width: "100%" }}>
           <T color="#b8a9ff" bold center>Creating Q, K, V for "cat" (via matrix multiplication):</T>
           <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 6 }}>
             <div style={{ padding: "8px 10px", borderRadius: 6, background: `${C.blue}06` }}>
@@ -2439,10 +2312,8 @@ export default function LearnAI() {
               <T color={C.dim} size={16}>Rich semantic content about "cat" — the actual information</T>
             </div>
           </div>
-        </Box>
-      )}
-      {sub >= 2 && (
-        <Box color={C.cyan} style={{ width: "100%" }}>
+        </Box></Reveal>
+      <Reveal when={sub >= 2}><Box color={C.cyan} style={{ width: "100%" }}>
           <T color="#80deea" bold center>"sat" makes its Query:</T>
           <div style={{ marginTop: 6, padding: "8px 10px", borderRadius: 6, background: `${C.blue}06` }}>
             <T color={C.blue} bold center size={18}>Q_sat = embedding × W_Q = [0.2, 0.7]</T>
@@ -2454,9 +2325,8 @@ export default function LearnAI() {
           </div>
           <T color="#80deea" size={18} style={{ marginTop: 8 }}>"sat"'s question (<em>"who is my subject?"</em>) matched with "cat"'s ad (<em>"I'm a subject noun"</em>). So "sat" pays high attention to "cat" and absorbs cat's <strong>Value</strong> — the actual semantic content.</T>
           <T color="#80deea" size={18} style={{ marginTop: 6 }}>After this, "sat" knows: <strong>"I'm an action being performed by a cat."</strong></T>
-        </Box>
-      )}
-      {sub < 2 && <SubBtn onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
+        </Box></Reveal>
+      {sub < 2 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
     </div>
   );
 
@@ -2482,8 +2352,8 @@ export default function LearnAI() {
           </div>
         </Box>
       )}
-      {sub >= 1 && <Box color={C.green}><T color="#80e8a5" bold center>Three analogies, same concept:</T><T color="#80e8a5" style={{ marginTop: 4 }}>🎓 Classroom: question / label / notes<br />🍛 Restaurant: craving / menu description / actual food<br />🔍 Google: search query / page keywords / page content<br /><br />Now let's compute the full attention step by step with real numbers →</T></Box>}
-      {sub < 1 && <SubBtn onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
+      <Reveal when={sub >= 1}><Box color={C.green}><T color="#80e8a5" bold center>Three analogies, same concept:</T><T color="#80e8a5" style={{ marginTop: 4 }}>🎓 Classroom: question / label / notes<br />🍛 Restaurant: craving / menu description / actual food<br />🔍 Google: search query / page keywords / page content<br /><br />Now let's compute the full attention step by step with real numbers →</T></Box></Reveal>
+      {sub < 1 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
     </div>
   );
 
@@ -2505,8 +2375,7 @@ export default function LearnAI() {
           </div>
         </Box>
       )}
-      {sub >= 1 && (
-        <Box color={C.yellow} style={{ width: "100%" }}>
+      <Reveal when={sub >= 1}><Box color={C.yellow} style={{ width: "100%" }}>
           <T color={C.yellow} bold center>After multiplying by W_Q, W_K, W_V:</T>
           <div style={{ marginTop: 10, overflowX: "auto" }}>
             <div style={{ display: "grid", gridTemplateColumns: "50px 1fr 1fr 1fr", gap: 6 }}>
@@ -2529,9 +2398,8 @@ export default function LearnAI() {
             </div>
           </div>
           <T color={C.dim} size={16} style={{ marginTop: 6 }}>Q and K are 2D (compressed from 4D). In real models: 64D from 512D.</T>
-        </Box>
-      )}
-      {sub < 1 && <SubBtn onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
+        </Box></Reveal>
+      {sub < 1 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
     </div>
   );
 
@@ -2583,8 +2451,7 @@ export default function LearnAI() {
           <T color={C.dim} size={18} style={{ marginTop: 8 }}>From "I"'s perspective: <strong style={{ color: C.yellow }}>"cats"</strong> is most relevant, <strong style={{ color: C.orange }}>"love"</strong> is medium, <strong style={{ color: C.cyan }}>"I" itself</strong> is lowest.</T>
         </Box>
       )}
-      {sub >= 1 && (
-        <Box color={C.purple} style={{ width: "100%" }}>
+      <Reveal when={sub >= 1}><Box color={C.purple} style={{ width: "100%" }}>
           <T color="#b8a9ff" bold center>Full score matrix (every word asks every word):</T>
           <div style={{ marginTop: 10, overflowX: "auto" }}>
             <div style={{ display: "grid", gridTemplateColumns: "55px repeat(3, 1fr)", gap: 4 }}>
@@ -2607,9 +2474,8 @@ export default function LearnAI() {
             </div>
           </div>
           <T color={C.dim} size={16} style={{ marginTop: 6 }}>Each row = one word asking "how relevant is each word to me?" Yellow = highest in that row.</T>
-        </Box>
-      )}
-      {sub < 1 && <SubBtn onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
+        </Box></Reveal>
+      {sub < 1 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
     </div>
   );
 
@@ -2673,8 +2539,7 @@ export default function LearnAI() {
       )}
 
       {/* Sub 1: Why big scores are bad — softmax comparison */}
-      {sub >= 1 && (
-        <Box color={C.red} style={{ width: "100%" }}>
+      <Reveal when={sub >= 1}><Box color={C.red} style={{ width: "100%" }}>
           <T color="#ff8a80" bold center size={20}>Why are big scores a problem?</T>
           <T color="#ff8a80" style={{ marginTop: 6 }}>Remember from the last chapter: softmax converts scores to probabilities using e^score. When scores are big, e^big_number becomes ASTRONOMICALLY big. Watch:</T>
           <div style={{ marginTop: 10, display: "flex", gap: 8 }}>
@@ -2711,12 +2576,10 @@ export default function LearnAI() {
               <T color={C.red} size={12} center style={{ marginTop: 4 }}>❌ 99.6% on ONE word. Others invisible. Can't blend info.</T>
             </div>
           </div>
-        </Box>
-      )}
+        </Box></Reveal>
 
       {/* Sub 2: The fix */}
-      {sub >= 2 && (
-        <Box color={C.green} style={{ width: "100%" }}>
+      <Reveal when={sub >= 2}><Box color={C.green} style={{ width: "100%" }}>
           <T color="#80e8a5" bold center size={20}>The fix: divide by √d_k</T>
           <T color="#80e8a5" style={{ marginTop: 6 }}>If d_k = 64, then √64 = 8. Dividing brings scores back to a manageable range:</T>
           <div style={{ marginTop: 10, padding: "10px", background: "rgba(0,0,0,0.3)", borderRadius: 8 }}>
@@ -2739,21 +2602,17 @@ export default function LearnAI() {
             </div>
           </div>
           <T color="#80e8a5" size={18} style={{ marginTop: 6 }}>✅ <strong>Focuses on the most relevant word (58%)</strong> but still gathers info from others (14%, 28%). That's exactly what you want.</T>
-        </Box>
-      )}
+        </Box></Reveal>
 
       {/* Sub 3: Why sqrt specifically */}
-      {sub >= 3 && (
-        <Box color={C.purple} style={{ width: "100%" }}>
+      <Reveal when={sub >= 3}><Box color={C.purple} style={{ width: "100%" }}>
           <T color="#b8a9ff" bold center>Why √d_k specifically? Why not ÷2 or ÷100?</T>
           <T color="#b8a9ff" style={{ marginTop: 6 }}>There's a mathematical reason. When Q and K have random values, the dot product's <strong>variance grows proportionally to d_k</strong>. The standard deviation = √d_k. So dividing by √d_k brings the variance back to 1 — normalizing scores to a consistent range no matter the dimension.</T>
           <T color="#b8a9ff" style={{ marginTop: 8 }}>In simple terms: √d_k is the <strong>exact right amount</strong> to undo the growth caused by summing d_k terms. Not too much (all scores become equal), not too little (problem remains).</T>
-        </Box>
-      )}
+        </Box></Reveal>
 
       {/* Sub 4: Our example scaled */}
-      {sub >= 4 && (
-        <Box color={C.yellow} style={{ width: "100%" }}>
+      <Reveal when={sub >= 4}><Box color={C.yellow} style={{ width: "100%" }}>
           <T color={C.yellow} bold center>Back to our example (d_k = 2, √2 ≈ 1.41):</T>
           <div style={{ marginTop: 10, overflowX: "auto" }}>
             <div style={{ display: "grid", gridTemplateColumns: "55px repeat(3, 1fr)", gap: 4 }}>
@@ -2769,10 +2628,9 @@ export default function LearnAI() {
           </div>
           <T color={C.dim} size={16} style={{ marginTop: 6 }}>Our scores were already small (2-dim), so scaling barely changes them. In a real 64-dim model, scaling is the difference between a useful model and a broken one.</T>
           <T color={C.yellow} size={18} bold center style={{ marginTop: 6 }}>Now let's apply softmax to these scaled scores →</T>
-        </Box>
-      )}
+        </Box></Reveal>
 
-      {sub < 4 && <SubBtn onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
+      {sub < 4 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
     </div>
   );
 
@@ -2800,8 +2658,7 @@ export default function LearnAI() {
       )}
 
       {/* Sub 1: Budget analogy */}
-      {sub >= 1 && (
-        <Box color={C.yellow} style={{ width: "100%" }}>
+      <Reveal when={sub >= 1}><Box color={C.yellow} style={{ width: "100%" }}>
           <T color={C.yellow} bold center size={20}>Think of it like a budget.</T>
           <T color="#ffe082" style={{ marginTop: 6 }}>You have <strong>₹100</strong> to distribute among three friends based on how helpful they were.</T>
           <T color="#ffe082" style={{ marginTop: 6 }}>Helpfulness scores: Riya=38, Aman=56, Priya=74</T>
@@ -2828,12 +2685,10 @@ export default function LearnAI() {
             </div>
           </div>
           <T color="#ffe082" size={18} style={{ marginTop: 8 }}>That's basically what softmax does — convert raw scores into shares that add up to 100%. But with one extra trick...</T>
-        </Box>
-      )}
+        </Box></Reveal>
 
       {/* Sub 2: The problem — negative scores */}
-      {sub >= 2 && (
-        <Box color={C.red} style={{ width: "100%" }}>
+      <Reveal when={sub >= 2}><Box color={C.red} style={{ width: "100%" }}>
           <T color="#ff8a80" bold center size={20}>The problem: dot products CAN be negative.</T>
           <T color="#ff8a80" style={{ marginTop: 6 }}>Our example had positive scores. But what if they were:</T>
           <div style={{ marginTop: 8, display: "flex", gap: 8, justifyContent: "center" }}>
@@ -2859,12 +2714,10 @@ export default function LearnAI() {
             ))}
           </div>
           <T color="#ff8a80" bold center size={18} style={{ marginTop: 8 }}>Simple division is broken. We need something better.</T>
-        </Box>
-      )}
+        </Box></Reveal>
 
       {/* Sub 3: Softmax trick — e^x */}
-      {sub >= 3 && (
-        <Box color={C.green} style={{ width: "100%" }}>
+      <Reveal when={sub >= 3}><Box color={C.green} style={{ width: "100%" }}>
           <T color="#80e8a5" bold center size={20}>Softmax's trick: make everything positive FIRST.</T>
           <T color="#80e8a5" style={{ marginTop: 6 }}>Before dividing, put each score through <strong>e^score</strong> (e ≈ 2.718).</T>
           <T color="#80e8a5" style={{ marginTop: 6 }}>The magic property: <strong>no matter what the input is, e^x is ALWAYS positive.</strong></T>
@@ -2884,12 +2737,10 @@ export default function LearnAI() {
             ))}
           </div>
           <T color="#80e8a5" size={18} style={{ marginTop: 8 }}>Even e^(-1000) is positive. Never negative. Never zero. <strong>Problem solved.</strong></T>
-        </Box>
-      )}
+        </Box></Reveal>
 
       {/* Sub 4: Full softmax with negative scores */}
-      {sub >= 4 && (
-        <Box color={C.purple} style={{ width: "100%" }}>
+      <Reveal when={sub >= 4}><Box color={C.purple} style={{ width: "100%" }}>
           <T color="#b8a9ff" bold center>Now apply this to our problematic scores [-3, 1, 5]:</T>
           <div style={{ marginTop: 10 }}>
             <T color={C.dim} size={16}>Step 1: e^score for each:</T>
@@ -2926,12 +2777,10 @@ export default function LearnAI() {
             <div style={{ padding: "6px 10px", borderRadius: 6, background: `${C.green}08` }}><T color={C.green} size={16} bold center>Sum to 100% ✓</T></div>
             <div style={{ padding: "6px 10px", borderRadius: 6, background: `${C.green}08` }}><T color={C.green} size={16} bold center>Ranking preserved ✓</T></div>
           </div>
-        </Box>
-      )}
+        </Box></Reveal>
 
       {/* Sub 5: Bonus — amplification, connect to scaling */}
-      {sub >= 5 && (
-        <Box color={C.yellow} style={{ width: "100%" }}>
+      <Reveal when={sub >= 5}><Box color={C.yellow} style={{ width: "100%" }}>
           <T color={C.yellow} bold center>Bonus: softmax naturally amplifies differences.</T>
           <div style={{ marginTop: 8, display: "flex", gap: 8 }}>
             <div style={{ flex: 1, padding: "8px", borderRadius: 6, background: "rgba(255,255,255,0.02)" }}>
@@ -2948,12 +2797,10 @@ export default function LearnAI() {
           </div>
           <T color="#ffe082" size={18} style={{ marginTop: 8 }}>The highest score doesn't just win — it <strong>dominates</strong>. This is good: you WANT the most relevant word to stand out.</T>
           <T color="#ffe082" size={18} style={{ marginTop: 8 }}><strong>But</strong> — if scores are too huge (like 12, 18, 25), softmax amplifies TOO aggressively → 99.99% on one word. That's why we <strong>scale first</strong> (previous chapter) to keep scores in a range where softmax amplifies usefully but doesn't go extreme.</T>
-        </Box>
-      )}
+        </Box></Reveal>
 
       {/* Sub 6: Summary */}
-      {sub >= 6 && (
-        <Box color={C.green} style={{ width: "100%" }}>
+      <Reveal when={sub >= 6}><Box color={C.green} style={{ width: "100%" }}>
           <T color="#80e8a5" bold center size={20}>So softmax is just two steps:</T>
           <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 8 }}>
             <div style={{ display: "flex", gap: 10, alignItems: "center", padding: "10px 12px", borderRadius: 8, background: `${C.purple}08`, border: `1px solid ${C.purple}15` }}>
@@ -2972,10 +2819,9 @@ export default function LearnAI() {
             </div>
           </div>
           <T color="#80e8a5" size={18} style={{ marginTop: 10 }}>Output: valid percentages (all positive, sum to 100%) that respect the original ranking. But there's one problem we need to solve first — the raw scores can be TOO BIG for softmax to handle well →</T>
-        </Box>
-      )}
+        </Box></Reveal>
 
-      {sub < 6 && <SubBtn onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
+      {sub < 6 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
     </div>
   );
 
@@ -3000,8 +2846,7 @@ export default function LearnAI() {
           </div>
         </Box>
       )}
-      {sub >= 1 && (
-        <Box color={C.yellow} style={{ width: "100%" }}>
+      <Reveal when={sub >= 1}><Box color={C.yellow} style={{ width: "100%" }}>
           <T color={C.yellow} bold center>Full attention weights:</T>
           <div style={{ marginTop: 10, overflowX: "auto" }}>
             <div style={{ display: "grid", gridTemplateColumns: "70px repeat(3, 1fr)", gap: 4 }}>
@@ -3020,9 +2865,8 @@ export default function LearnAI() {
             </div>
           </div>
           <T color={C.dim} size={16} style={{ marginTop: 6 }}>Each row sums to 1.0. "I" pays 37% attention to "cats", 33% to "love", 29% to itself.</T>
-        </Box>
-      )}
-      {sub < 1 && <SubBtn onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
+        </Box></Reveal>
+      {sub < 1 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
     </div>
   );
 
@@ -3053,8 +2897,8 @@ export default function LearnAI() {
           </div>
         </Box>
       )}
-      {sub >= 1 && <Box color={C.yellow}><T color={C.yellow} bold center>This [0.315, 0.452] is the NEW vector for "I".</T><T color="#ffe082" style={{ marginTop: 4 }}>It's no longer just about "I". It has absorbed context from "love" (33%) and "cats" (37%). It's now a <strong>context-aware representation</strong>. Same happens for every word.</T></Box>}
-      {sub < 1 && <SubBtn onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
+      <Reveal when={sub >= 1}><Box color={C.yellow}><T color={C.yellow} bold center>This [0.315, 0.452] is the NEW vector for "I".</T><T color="#ffe082" style={{ marginTop: 4 }}>It's no longer just about "I". It has absorbed context from "love" (33%) and "cats" (37%). It's now a <strong>context-aware representation</strong>. Same happens for every word.</T></Box></Reveal>
+      {sub < 1 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
     </div>
   );
 
@@ -3066,8 +2910,7 @@ export default function LearnAI() {
           <T color={C.yellow} bold size={24} center>Attention(Q, K, V) = softmax( Q×K<sup>T</sup> / √d<sub>k</sub> ) × V</T>
         </div>
       )}
-      {sub >= 1 && (
-        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 0, width: "100%" }}>
+      <Reveal when={sub >= 1}><div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 0, width: "100%" }}>
           {[
             { f: "Q × Kᵀ", m: "Dot product of every query with every key", r: "score matrix", c: C.blue },
             { f: "/ √d_k", m: "Scale down to prevent extreme softmax", r: "manageable scores", c: C.orange },
@@ -3085,9 +2928,8 @@ export default function LearnAI() {
               </div>
             </div>
           ))}
-        </div>
-      )}
-      {sub < 1 && <SubBtn onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
+        </div></Reveal>
+      {sub < 1 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
     </div>
   );
 
@@ -3115,8 +2957,7 @@ export default function LearnAI() {
           </div>
         </Box>
       )}
-      {sub >= 1 && (
-        <Box color={C.yellow} style={{ width: "100%" }}>
+      <Reveal when={sub >= 1}><Box color={C.yellow} style={{ width: "100%" }}>
           <T color={C.yellow} bold center>But one head produces ONE set of weights — forced to compromise:</T>
           <div style={{ marginTop: 8 }}>
             {[
@@ -3136,10 +2977,8 @@ export default function LearnAI() {
             ))}
           </div>
           <T color="#ff8a80" bold center size={18} style={{ marginTop: 8 }}>Temporal info ("last week") got only 5% — almost lost! One head can't focus on all relationships.</T>
-        </Box>
-      )}
-      {sub >= 2 && (
-        <Box color={C.green} style={{ width: "100%" }}>
+        </Box></Reveal>
+      <Reveal when={sub >= 2}><Box color={C.green} style={{ width: "100%" }}>
           <T color="#80e8a5" bold center size={20}>Solution: give it MULTIPLE heads — like multiple ears.</T>
           <T color="#80e8a5" style={{ marginTop: 6 }}>Each head has its OWN W_Q, W_K, W_V, so each asks a DIFFERENT question:</T>
           <div style={{ marginTop: 10, display: "flex", flexDirection: "column", gap: 6 }}>
@@ -3156,9 +2995,8 @@ export default function LearnAI() {
             ))}
           </div>
           <T color="#80e8a5" size={18} style={{ marginTop: 8 }}>Now NO info is lost. Each head specializes in one relationship and captures it fully.</T>
-        </Box>
-      )}
-      {sub < 2 && <SubBtn onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
+        </Box></Reveal>
+      {sub < 2 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
     </div>
   );
 
@@ -3181,8 +3019,7 @@ export default function LearnAI() {
           </div>
         </Box>
       )}
-      {sub >= 1 && (
-        <Box color={C.cyan} style={{ width: "100%" }}>
+      <Reveal when={sub >= 1}><Box color={C.cyan} style={{ width: "100%" }}>
           <T color="#80deea" bold center>We create 8 sets of three grids.</T>
           <T color="#80deea" style={{ marginTop: 6 }}>Each set has its own W_Q, W_K, W_V — all starting with different random numbers, all trained independently:</T>
           <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 6, padding: "10px", background: "rgba(0,0,0,0.2)", borderRadius: 8 }}>
@@ -3202,10 +3039,8 @@ export default function LearnAI() {
             <T color={C.dim} size={16} center>... same for sets 4, 5, 6, 7, 8</T>
           </div>
           <T color="#80deea" size={18} style={{ marginTop: 8 }}>Same input embedding goes into ALL 8 sets. Each set's different grids extract different aspects — 8 different Q, K, V outputs, 8 different attention patterns. Each head produces its own output — a list of numbers per word.</T>
-        </Box>
-      )}
-      {sub >= 2 && (
-        <Box color={C.yellow} style={{ width: "100%" }}>
+        </Box></Reveal>
+      <Reveal when={sub >= 2}><Box color={C.yellow} style={{ width: "100%" }}>
           <T color={C.yellow} bold center>Think of 8 different X-ray machines.</T>
           <T color="#ffe082" style={{ marginTop: 6 }}>Same patient (embedding) goes into all 8. Each tuned to see something different:</T>
           <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 4 }}>
@@ -3223,9 +3058,8 @@ export default function LearnAI() {
             <T color={C.dim} size={14} center>...and 4 more, each with a different "tuning"</T>
           </div>
           <T color="#ffe082" size={18} style={{ marginTop: 8 }}>Same input, 8 perspectives. The W matrices create these "tunings" — learned during training.</T>
-        </Box>
-      )}
-      {sub < 2 && <SubBtn onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
+        </Box></Reveal>
+      {sub < 2 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
     </div>
   );
 
@@ -3250,8 +3084,7 @@ export default function LearnAI() {
           <T color={C.dim} size={16} style={{ marginTop: 6 }}>Same runs for all 8 heads. Each produces [3 words × 64 dims].</T>
         </Box>
       )}
-      {sub >= 1 && (
-        <Box color={C.orange} style={{ width: "100%" }}>
+      <Reveal when={sub >= 1}><Box color={C.orange} style={{ width: "100%" }}>
           <T color={C.orange} bold center>The KEY: each head's attention weights are DIFFERENT.</T>
           <T color={C.dim} size={18} style={{ marginTop: 4 }}>Because their W_Q, W_K, W_V are different. Here's what "sat" sees in each head:</T>
           <div style={{ marginTop: 10, display: "flex", flexDirection: "column", gap: 10 }}>
@@ -3277,9 +3110,8 @@ export default function LearnAI() {
             ))}
           </div>
           <T color={C.dim} size={16} style={{ marginTop: 8 }}>Each head found what the single head missed. Head 3 got "last week" at 55% — single head only gave it 5%.</T>
-        </Box>
-      )}
-      {sub < 1 && <SubBtn onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
+        </Box></Reveal>
+      {sub < 1 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
     </div>
   );
 
@@ -3314,8 +3146,7 @@ export default function LearnAI() {
       )}
 
       {/* Sub 1: Step 8 — Sealed envelopes */}
-      {sub >= 1 && (
-        <Box color={C.red} style={{ width: "100%" }}>
+      <Reveal when={sub >= 1}><Box color={C.red} style={{ width: "100%" }}>
           <T color="#ff8a80" bold center size={20}>The problem — these results are like 8 sealed envelopes.</T>
           <T color="#ff8a80" style={{ marginTop: 6 }}>Imagine 8 detectives investigated the same crime. Each wrote their findings on a piece of paper and sealed it in an envelope.</T>
           <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 4 }}>
@@ -3336,12 +3167,10 @@ export default function LearnAI() {
           <T color="#ff8a80" style={{ marginTop: 6 }}>If your boss asks: "Give me a one-line summary of this case" — you can't answer from any single envelope. Envelope 1 only knows about the suspect. Envelope 2 only knows about the location. Nobody has the full picture.</T>
           <T color="#ff8a80" style={{ marginTop: 6 }}>That's exactly the problem with just concatenating. The numbers in positions 1-2 (from Head 1) only know about subject-verb. The numbers in positions 3-4 (from Head 2) only know about verb-object. They're taped together but not talking.</T>
           <T color="#ff8a80" bold center size={18} style={{ marginTop: 6 }}>We need someone to open ALL the envelopes, read everything, and write one combined summary.</T>
-        </Box>
-      )}
+        </Box></Reveal>
 
       {/* Sub 2: Step 9 — W_O */}
-      {sub >= 2 && (
-        <Box color={C.green} style={{ width: "100%" }}>
+      <Reveal when={sub >= 2}><Box color={C.green} style={{ width: "100%" }}>
           <T color="#80e8a5" bold center size={20}>W_O — the person who opens all the envelopes.</T>
           <T color="#80e8a5" style={{ marginTop: 6 }}>W_O is one more grid of numbers. Just like W_Q, W_K, W_V — it's a table of numbers. Nothing new or special about what it IS. It works the same way: multiply input by a grid → get an output.</T>
           <T color="#80e8a5" style={{ marginTop: 6 }}>But what it <strong>DOES</strong> is special. When you multiply the concatenated list by W_O, every number in the output is computed by reading ALL numbers in the input.</T>
@@ -3359,12 +3188,10 @@ export default function LearnAI() {
           </div>
           <T color="#80e8a5" size={18} style={{ marginTop: 8 }}>It's like the combined summary: <em>"A male suspect in his 30s used a knife at the park on Tuesday evening."</em> One sentence that contains information from ALL envelopes.</T>
           <T color="#80e8a5" size={18} style={{ marginTop: 6 }}>After W_O, every single position in the output carries a mix of what all 8 heads found. The envelopes have been opened, read, and combined.</T>
-        </Box>
-      )}
+        </Box></Reveal>
 
       {/* Sub 3: Step 10 — W_O training */}
-      {sub >= 3 && (
-        <Box color={C.orange} style={{ width: "100%" }}>
+      <Reveal when={sub >= 3}><Box color={C.orange} style={{ width: "100%" }}>
           <T color={C.orange} bold center size={20}>Where did W_O's numbers come from?</T>
           <T color={C.orange} style={{ marginTop: 6 }}>Same exact process as all other grids:</T>
           <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 4 }}>
@@ -3383,12 +3210,10 @@ export default function LearnAI() {
             ))}
           </div>
           <T color={C.orange} style={{ marginTop: 8 }}>The training discovers the best way to combine the 8 heads' findings into one useful output. Nobody programs this — it emerges from training.</T>
-        </Box>
-      )}
+        </Box></Reveal>
 
       {/* Sub 4: Connect back to I love cats */}
-      {sub >= 4 && (
-        <Box color={C.orange} style={{ width: "100%" }}>
+      <Reveal when={sub >= 4}><Box color={C.orange} style={{ width: "100%" }}>
           <T color={C.orange} bold center size={20}>Back to "I love cats" — what W_O does for "love":</T>
           <T color={C.orange} style={{ marginTop: 6 }}>After 8 heads run, "love"'s concatenated vector has:</T>
           <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 3 }}>
@@ -3406,12 +3231,10 @@ export default function LearnAI() {
           <T color={C.orange} style={{ marginTop: 8 }}>Without W_O: each section is isolated. Dim 1 has no idea "cats" is involved.</T>
           <T color={C.orange} style={{ marginTop: 6 }}>After W_O: <strong>every dimension</strong> of "love"'s output encodes the combined meaning: "affection from 'I' directed at 'cats', with positive sentiment." One rich, integrated vector.</T>
           <T color={C.orange} size={18} style={{ marginTop: 6 }}>This is what we set out to do in Chapter 1 — transform "love" from an isolated word into a context-aware representation.</T>
-        </Box>
-      )}
+        </Box></Reveal>
 
       {/* Sub 5: Why W_O is learned, not hardcoded */}
-      {sub >= 5 && (
-        <Box color={C.cyan} style={{ width: "100%" }}>
+      <Reveal when={sub >= 5}><Box color={C.cyan} style={{ width: "100%" }}>
           <T color="#80deea" bold center>W_O is LEARNED — not hardcoded.</T>
           <T color="#80deea" style={{ marginTop: 6 }}>The model discovers during training which combinations of head outputs are useful. Different layers learn different W_O matrices:</T>
           <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 4 }}>
@@ -3426,10 +3249,9 @@ export default function LearnAI() {
             ))}
           </div>
           <T color="#80deea" size={18} style={{ marginTop: 8 }}>Nobody programs what to combine. W_O's 512×512 = 262,144 weights are all learned through backpropagation — the same process from chapters 1.3–1.9.</T>
-        </Box>
-      )}
+        </Box></Reveal>
 
-      {sub < 5 && <SubBtn onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
+      {sub < 5 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
     </div>
   );
 
@@ -3462,8 +3284,7 @@ export default function LearnAI() {
           </div>
         </Box>
       )}
-      {sub >= 1 && (
-        <Box color={C.green} style={{ width: "100%" }}>
+      <Reveal when={sub >= 1}><Box color={C.green} style={{ width: "100%" }}>
           <T color="#80e8a5" bold center size={20}>Parameter count:</T>
           <T color={C.dim} size={16} style={{ marginTop: 4 }}>Per head: W_Q (512×64) + W_K (512×64) + W_V (512×64) = 3 × 32,768 = <strong style={{ color: C.mid }}>98,304</strong></T>
           <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 3 }}>
@@ -3483,16 +3304,12 @@ export default function LearnAI() {
           <div style={{ marginTop: 8, padding: "8px 12px", background: `${C.yellow}10`, borderRadius: 8, border: `1px solid ${C.yellow}20` }}>
             <T color={C.yellow} bold center size={20}>Total: 1,048,576 ≈ 1 million per layer</T>
           </div>
-        </Box>
-      )}
-      {sub >= 2 && (
-        <Box color={C.purple} style={{ width: "100%" }}>
+        </Box></Reveal>
+      <Reveal when={sub >= 2}><Box color={C.purple} style={{ width: "100%" }}>
           <T color="#b8a9ff" bold center>Surprising: same count as single-head!</T>
           <T color="#b8a9ff" style={{ marginTop: 6 }}>Single-head with 512-dim Q, K, V needs 512×512 per matrix = same total. Multi-head doesn't add parameters — it <strong>reorganizes them into 8 independent groups</strong>. Same budget, much better results.</T>
-        </Box>
-      )}
-      {sub >= 3 && (
-        <Box color={C.cyan} style={{ width: "100%" }}>
+        </Box></Reveal>
+      <Reveal when={sub >= 3}><Box color={C.cyan} style={{ width: "100%" }}>
           <T color="#80deea" bold center>How does this scale in a full model?</T>
           <T color="#80deea" style={{ marginTop: 6 }}>We learned that one attention layer has ~1 million parameters. A Transformer stacks <strong>multiple layers</strong> on top of each other — each layer refines the context further:</T>
           <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 4 }}>
@@ -3509,9 +3326,8 @@ export default function LearnAI() {
             ))}
           </div>
           <T color="#80deea" size={18} style={{ marginTop: 8 }}>More layers = deeper understanding. Each layer's attention asks different questions about the same words, building increasingly rich representations. Same mechanism we learned — just stacked.</T>
-        </Box>
-      )}
-      {sub < 3 && <SubBtn onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
+        </Box></Reveal>
+      {sub < 3 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
     </div>
   );
 
@@ -3524,8 +3340,7 @@ export default function LearnAI() {
           <T color="#b8a9ff" style={{ marginTop: 8 }}>There are two phases in a model's life: <strong>training</strong> and <strong>usage</strong>. The answer depends on which phase you're asking about.</T>
         </Box>
       )}
-      {sub >= 1 && (
-        <div style={{ display: "flex", gap: 8, width: "100%", alignItems: "stretch" }}>
+      <Reveal when={sub >= 1}><div style={{ display: "flex", gap: 8, width: "100%", alignItems: "stretch" }}>
           <Box color={C.orange} style={{ flex: 1 }}>
             <T color={C.orange} bold center size={18}>During training: W_O changes.</T>
             <T color={C.orange} size={16} style={{ marginTop: 6 }}>Every time the model sees a new batch of sentences and makes prediction errors, every number in W_O gets nudged slightly. Over billions of examples, W_O gradually improves. It changes millions of times during training — getting better and better at blending heads.</T>
@@ -3534,10 +3349,8 @@ export default function LearnAI() {
             <T color="#80e8a5" bold center size={18}>After training is done: W_O is FROZEN. Completely constant.</T>
             <T color="#80e8a5" size={16} style={{ marginTop: 6 }}>Once training is complete, the model is saved to a file. W_O's numbers are written to disk and they NEVER change again. When you use the model (send it a sentence), W_O is loaded from disk and used as-is.</T>
           </Box>
-        </div>
-      )}
-      {sub >= 2 && (
-        <Box color={C.cyan} style={{ width: "100%" }}>
+        </div></Reveal>
+      <Reveal when={sub >= 2}><Box color={C.cyan} style={{ width: "100%" }}>
           <div style={{ padding: "10px", background: "rgba(0,0,0,0.3)", borderRadius: 8 }}>
             <T color={C.mid} size={18} style={{ lineHeight: 2.2 }}>
               You type "I love cats" &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;→ model uses the <strong style={{ color: C.green }}>SAME</strong> W_O<br />
@@ -3547,10 +3360,8 @@ export default function LearnAI() {
             </T>
           </div>
           <T color="#80deea" style={{ marginTop: 8 }}>The SAME grid of numbers. Every input. Every user. Every sentence. Forever (until someone retrains the model).</T>
-        </Box>
-      )}
-      {sub >= 3 && (
-        <Box color={C.yellow} style={{ width: "100%" }}>
+        </Box></Reveal>
+      <Reveal when={sub >= 3}><Box color={C.yellow} style={{ width: "100%" }}>
           <T color={C.yellow} bold center>This is true for ALL grids, not just W_O:</T>
           <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 6 }}>
             <div style={{ padding: "10px", borderRadius: 8, background: `${C.green}06`, border: `1px solid ${C.green}12` }}>
@@ -3574,10 +3385,8 @@ export default function LearnAI() {
               </div>
             </div>
           </div>
-        </Box>
-      )}
-      {sub >= 4 && (
-        <Box color={C.blue} style={{ width: "100%" }}>
+        </Box></Reveal>
+      <Reveal when={sub >= 4}><Box color={C.blue} style={{ width: "100%" }}>
           <T color={C.blue} bold center size={20}>Why do different sentences get different results if the grids are constant?</T>
           <T color={C.blue} style={{ marginTop: 6 }}>Because the grids are like a <strong>coffee machine</strong>. The machine (W_O) is always the same. But the coffee beans you put in (your sentence) are different each time. Same machine + different beans = different coffee.</T>
           <div style={{ marginTop: 10, display: "flex", flexDirection: "column", gap: 4 }}>
@@ -3585,9 +3394,8 @@ export default function LearnAI() {
             <div style={{ padding: "6px 10px", borderRadius: 5, background: `${C.purple}06` }}><T color={C.mid} size={16}>Same W_O × "dogs are great" embeddings <strong style={{ color: C.purple }}>= completely different output</strong></T></div>
           </div>
           <T color={C.blue} style={{ marginTop: 8 }}>The grids don't need to change. They've already learned the GENERAL SKILL of "how to blend heads" or "how to extract queries." That skill works on ANY input. Just like a coffee machine doesn't need to be rebuilt for each type of bean — it already knows how to grind and brew.</T>
-        </Box>
-      )}
-      {sub < 4 && <SubBtn onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
+        </Box></Reveal>
+      {sub < 4 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
     </div>
   );
 
@@ -3620,8 +3428,7 @@ export default function LearnAI() {
           </div>
         </Box>
       )}
-      {sub >= 1 && (
-        <Box color={C.purple} style={{ width: "100%" }}>
+      <Reveal when={sub >= 1}><Box color={C.purple} style={{ width: "100%" }}>
           <T color="#b8a9ff">Every single "grid" in this process (W_Q, W_K, W_V, W_O) is just a table of numbers that started random, got nudged into useful values during training, and then <strong>stays frozen forever after</strong>. They all work the same way — multiply input by grid, get output. The only difference is WHAT each grid was trained to do:</T>
           <div style={{ marginTop: 10, display: "flex", flexDirection: "column", gap: 4 }}>
             {[
@@ -3636,15 +3443,12 @@ export default function LearnAI() {
               </div>
             ))}
           </div>
-        </Box>
-      )}
-      {sub >= 2 && (
-        <Box color={C.cyan} style={{ width: "100%" }}>
+        </Box></Reveal>
+      <Reveal when={sub >= 2}><Box color={C.cyan} style={{ width: "100%" }}>
           <T color="#80deea" bold size={21} center>The grids are the machine. Your sentence is the raw material.</T>
           <T color="#80deea" center style={{ marginTop: 6 }}>Same machine, different raw material, different product — every single time.</T>
-        </Box>
-      )}
-      {sub < 2 && <SubBtn onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
+        </Box></Reveal>
+      {sub < 2 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
     </div>
   );
 
@@ -3723,8 +3527,7 @@ export default function LearnAI() {
   const Ch6_1 = () => (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
       {sub >= 0 && <Box color={C.cyan}><T color="#80deea" bold center size={20}>Computers only understand numbers.</T><T color="#80deea">Text is useless to an AI — no matter how eloquent. First step: convert "Hello world" into [1, 2, 3, 4, 5].</T></Box>}
-      {sub >= 1 && (
-        <Box color={C.yellow} style={{ width: "100%" }}>
+      <Reveal when={sub >= 1}><Box color={C.yellow} style={{ width: "100%" }}>
           <T color="#ffe082" bold center>Three tokenization approaches:</T>
           <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 6 }}>
             {[
@@ -3740,10 +3543,8 @@ export default function LearnAI() {
               </div>
             ))}
           </div>
-        </Box>
-      )}
-      {sub >= 2 && (
-        <Box color={C.purple} style={{ width: "100%" }}>
+        </Box></Reveal>
+      <Reveal when={sub >= 2}><Box color={C.purple} style={{ width: "100%" }}>
           <T color="#b8a9ff" bold center size={19}>BPE — Counting real pairs from real text</T>
           <T color={C.dim} size={13} center style={{ marginTop: 2 }}>Training text: "the cat sat on the mat the cat ate"</T>
           <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 5 }}>
@@ -3761,19 +3562,15 @@ export default function LearnAI() {
             ))}
           </div>
           <T color="#b8a9ff" size={13} style={{ marginTop: 6 }}>Above, "5×" means we counted a+t appearing 5 times in our 9-word sentence. GPT does the same thing — but on billions of words, so counts become millions. Same process, bigger numbers.</T>
-        </Box>
-      )}
-      {sub >= 3 && (
-        <Box color={C.cyan} style={{ width: "100%" }}>
+        </Box></Reveal>
+      <Reveal when={sub >= 3}><Box color={C.cyan} style={{ width: "100%" }}>
           <T color="#80deea" bold center>Real example:</T>
           <T color="#80deea" size={16} style={{ marginTop: 6 }}>Word: "unhappiness"</T>
           <T color="#80deea" size={14}>Tokenizes to: ['un', 'hap', 'pi', 'ness']</T>
           <T color="#80deea" size={14}>Token IDs: [782, 14553, 3920, 2494]</T>
           <T color="#80deea" style={{ marginTop: 8 }}>The model NEVER saw "unhappiness" in training, but it knows each piece. Combine them → understands the word.</T>
-        </Box>
-      )}
-      {sub >= 4 && (
-        <Box color={C.green} style={{ width: "100%" }}>
+        </Box></Reveal>
+      <Reveal when={sub >= 4}><Box color={C.green} style={{ width: "100%" }}>
           <T color="#80e8a5" bold center size={19}>The complete pipeline:</T>
           <div style={{ marginTop: 8, display: "flex", flexDirection: "column", alignItems: "stretch", gap: 3 }}>
             {[
@@ -3788,10 +3585,9 @@ export default function LearnAI() {
               <T key={i} color={color} size={15} center bold={text.includes("↓") ? false : true}>{text}</T>
             ))}
           </div>
-        </Box>
-      )}
-      {sub >= 5 && <Box color={C.yellow}><T color="#ffe082" bold center>GPT has ~50,000 tokens. Some are common ('the', 'is'), some are rare. 'cryptocurrency' = 3 tokens. 'the' = 1 token.</T><T color="#ffe082" style={{ marginTop: 6 }}>This is why token limits matter: 1 paragraph ≈ 100 tokens. Your 4K context window ≈ 40 paragraphs.</T></Box>}
-      {sub < 5 && <SubBtn onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
+        </Box></Reveal>
+      <Reveal when={sub >= 5}><Box color={C.yellow}><T color="#ffe082" bold center>GPT has ~50,000 tokens. Some are common ('the', 'is'), some are rare. 'cryptocurrency' = 3 tokens. 'the' = 1 token.</T><T color="#ffe082" style={{ marginTop: 6 }}>This is why token limits matter: 1 paragraph ≈ 100 tokens. Your 4K context window ≈ 40 paragraphs.</T></Box></Reveal>
+      {sub < 5 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
     </div>
   );
 
@@ -3804,16 +3600,13 @@ export default function LearnAI() {
           <T color="#b8a9ff" style={{ marginTop: 6 }}>Supervised learning needs millions of labeled examples: <strong>input → label</strong>. For language, that means billions of humans writing ideal responses. Impossible.</T>
         </Box>
       )}
-      {sub >= 1 && (
-        <Box color={C.cyan} style={{ width: "100%" }}>
+      <Reveal when={sub >= 1}><Box color={C.cyan} style={{ width: "100%" }}>
           <T color="#80deea" bold center size={20}>The Genius Trick: Use the text itself as the label.</T>
           <T color="#80deea" style={{ marginTop: 6 }}>Given: "The capital of France is"</T>
           <T color="#80deea" style={{ marginTop: 4, padding: "10px", background: "rgba(0,0,0,0.2)", borderRadius: 6 }}>Model predicts the next token: <strong>"Paris"</strong></T>
           <T color="#80deea" style={{ marginTop: 6 }}>Correct answer is RIGHT THERE in the original text. No humans needed.</T>
-        </Box>
-      )}
-      {sub >= 2 && (
-        <Box color={C.yellow} style={{ width: "100%" }}>
+        </Box></Reveal>
+      <Reveal when={sub >= 2}><Box color={C.yellow} style={{ width: "100%" }}>
           <T color="#ffe082" bold center size={20}>Scaling without limit:</T>
           <T color="#ffe082" style={{ marginTop: 8 }}>Every sentence in:</T>
           <div style={{ marginTop: 6, display: "flex", flexDirection: "column", gap: 4, paddingLeft: 12 }}>
@@ -3827,10 +3620,8 @@ export default function LearnAI() {
             ))}
           </div>
           <T color="#ffe082" style={{ marginTop: 8 }}>= <strong>Billions of examples</strong> (GPT-3: trained on ~300 billion tokens)</T>
-        </Box>
-      )}
-      {sub >= 3 && (
-        <Box color={C.green} style={{ width: "100%" }}>
+        </Box></Reveal>
+      <Reveal when={sub >= 3}><Box color={C.green} style={{ width: "100%" }}>
           <T color="#80e8a5" bold center size={20}>What does next-token prediction actually teach?</T>
           <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 6 }}>
             {[
@@ -3846,10 +3637,8 @@ export default function LearnAI() {
               </div>
             ))}
           </div>
-        </Box>
-      )}
-      {sub >= 4 && (
-        <Box color={C.purple} style={{ width: "100%" }}>
+        </Box></Reveal>
+      <Reveal when={sub >= 4}><Box color={C.purple} style={{ width: "100%" }}>
           <T color="#b8a9ff" bold center size={19}>Three training paradigms:</T>
           <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 6 }}>
             {[
@@ -3862,10 +3651,8 @@ export default function LearnAI() {
               </div>
             ))}
           </div>
-        </Box>
-      )}
-      {sub >= 5 && (
-        <Box color={C.cyan} style={{ width: "100%" }}>
+        </Box></Reveal>
+      <Reveal when={sub >= 5}><Box color={C.cyan} style={{ width: "100%" }}>
           <T color="#80deea" bold center size={19}>The training loop:</T>
           <div style={{ marginTop: 10, display: "flex", flexWrap: "wrap", justifyContent: "center", alignItems: "center", gap: 6 }}>
             {["Pick sentence", "Mask last word", "Predict", "Check", "Update weights"].map((step, i) => (
@@ -3879,9 +3666,8 @@ export default function LearnAI() {
             ))}
           </div>
           <T color={C.cyan} bold center size={15} style={{ marginTop: 6 }}>↻ Repeat this 10 trillion times</T>
-        </Box>
-      )}
-      {sub < 5 && <SubBtn onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
+        </Box></Reveal>
+      {sub < 5 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
     </div>
   );
 
@@ -3912,8 +3698,7 @@ export default function LearnAI() {
           </div>
         </Box>
       )}
-      {sub >= 1 && (
-        <Box color={C.cyan} style={{ width: "100%" }}>
+      <Reveal when={sub >= 1}><Box color={C.cyan} style={{ width: "100%" }}>
           <T color="#80deea" bold center size={20}>So how do we score this?</T>
           <T color={C.dim} size={15} style={{ marginTop: 8 }}>The correct answer is "Paris". The model gave Paris 85% confidence.</T>
           <T color={C.dim} size={15} style={{ marginTop: 6 }}>Cross-entropy says: <strong style={{ color: "#80deea" }}>just look at the confidence on the correct answer.</strong></T>
@@ -3922,10 +3707,8 @@ export default function LearnAI() {
             <T color="#80deea" bold size={22}>How confident were you on the RIGHT answer?</T>
           </div>
           <T color={C.dim} size={14} style={{ marginTop: 8 }}>High confidence on correct answer = low loss = good. Low confidence on correct answer = high loss = bad. That's the whole idea.</T>
-        </Box>
-      )}
-      {sub >= 2 && (
-        <Box color={C.yellow} style={{ width: "100%" }}>
+        </Box></Reveal>
+      <Reveal when={sub >= 2}><Box color={C.yellow} style={{ width: "100%" }}>
           <T color="#ffe082" bold center size={20}>The formula (simpler than it looks)</T>
           <div style={{ marginTop: 10, padding: "12px", background: "rgba(0,0,0,0.3)", borderRadius: 8, textAlign: "center" }}>
             <T color="#ffe082" bold size={24}>Loss = −log( confidence on correct answer )</T>
@@ -3942,10 +3725,8 @@ export default function LearnAI() {
             </div>
           </div>
           <T color={C.dim} size={14} style={{ marginTop: 6 }}>Everything in between falls on a smooth curve from 0 to infinity. The −log function does all this naturally.</T>
-        </Box>
-      )}
-      {sub >= 3 && (
-        <Box color={C.orange} style={{ width: "100%" }}>
+        </Box></Reveal>
+      <Reveal when={sub >= 3}><Box color={C.orange} style={{ width: "100%" }}>
           <T color="#ffb74d" bold center size={19}>Let's calculate real examples:</T>
           <T color={C.dim} size={14} center style={{ marginTop: 4 }}>Input: "The capital of France is ___" (correct: Paris)</T>
           <div style={{ marginTop: 10, display: "flex", flexDirection: "column", gap: 8 }}>
@@ -3966,10 +3747,8 @@ export default function LearnAI() {
             </div>
           </div>
           <T color="#ffb74d" size={13} style={{ marginTop: 6 }}>Notice: 90% → 0.1 loss, 40% → 0.9 loss, 1% → 4.6 loss. Being confidently wrong is punished 46× more than being right.</T>
-        </Box>
-      )}
-      {sub >= 4 && (
-        <Box color={C.purple} style={{ width: "100%" }}>
+        </Box></Reveal>
+      <Reveal when={sub >= 4}><Box color={C.purple} style={{ width: "100%" }}>
           <T color="#b8a9ff" bold center size={20}>Why not just use (predicted − actual)² like Part 1?</T>
           <div style={{ marginTop: 10, display: "flex", flexDirection: "column", gap: 6 }}>
             <div style={{ padding: "8px 12px", borderRadius: 6, background: `${C.green}08`, border: `1px solid ${C.green}15` }}>
@@ -3984,10 +3763,8 @@ export default function LearnAI() {
               <T color={C.dim} size={14}>So instead: "how confident were you on the right one?" → cross-entropy.</T>
             </div>
           </div>
-        </Box>
-      )}
-      {sub >= 5 && (
-        <Box color={C.blue} style={{ width: "100%" }}>
+        </Box></Reveal>
+      <Reveal when={sub >= 5}><Box color={C.blue} style={{ width: "100%" }}>
           <T color="#42a5f5" bold center size={20}>Perplexity — a multiple choice test</T>
           <T color={C.dim} size={15} style={{ marginTop: 8 }}>Think of every prediction as a multiple choice question with 50,000 options. Perplexity = <strong style={{ color: "#42a5f5" }}>how many options the model was torn between.</strong></T>
           <div style={{ marginTop: 10, display: "flex", flexDirection: "column", gap: 8 }}>
@@ -4005,9 +3782,8 @@ export default function LearnAI() {
             </div>
           </div>
           <T color={C.dim} size={14} style={{ marginTop: 8 }}>GPT-4's perplexity ≈ 5. For most predictions, it narrows 50,000 options down to ~5 plausible words. Lower = smarter.</T>
-        </Box>
-      )}
-      {sub < 5 && <SubBtn onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
+        </Box></Reveal>
+      {sub < 5 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
     </div>
   );
 
@@ -4027,8 +3803,7 @@ export default function LearnAI() {
           <T color="#b8a9ff" style={{ marginTop: 4 }}>This is exactly what a pretrained LLM does. It has all the knowledge, but doesn't know HOW to have a conversation.</T>
         </Box>
       )}
-      {sub >= 1 && (
-        <Box color={C.cyan} style={{ width: "100%" }}>
+      <Reveal when={sub >= 1}><Box color={C.cyan} style={{ width: "100%" }}>
           <T color="#80deea" bold center size={20}>The fix: Show it examples</T>
           <T color="#80deea" style={{ marginTop: 8 }}>Just like you'd train a new employee — show them examples of good work.</T>
           <T color="#80deea" style={{ marginTop: 6 }}>Humans write thousands of perfect question-answer pairs:</T>
@@ -4046,10 +3821,8 @@ export default function LearnAI() {
           </div>
           <T color="#80deea" style={{ marginTop: 8 }}>Feed these to the model. It learns: "Oh! When someone asks a question, I should give a direct, helpful answer."</T>
           <T color="#80deea" style={{ marginTop: 4 }}>This is <strong>Supervised Fine-Tuning (SFT)</strong> — supervised because humans wrote the correct answers.</T>
-        </Box>
-      )}
-      {sub >= 2 && (
-        <Box color={C.yellow} style={{ width: "100%" }}>
+        </Box></Reveal>
+      <Reveal when={sub >= 2}><Box color={C.yellow} style={{ width: "100%" }}>
           <T color="#ffe082" bold center size={20}>Before vs After — same model, same knowledge</T>
           <div style={{ marginTop: 10, display: "flex", flexDirection: "column", gap: 10 }}>
             <div style={{ padding: "10px", borderRadius: 8, background: `${C.red}10`, border: `1px solid ${C.red}20` }}>
@@ -4069,10 +3842,8 @@ export default function LearnAI() {
               <T color={C.dim} size={13} style={{ marginTop: 4 }}>Same knowledge inside. Just learned HOW to answer.</T>
             </div>
           </div>
-        </Box>
-      )}
-      {sub >= 3 && (
-        <Box color={C.orange} style={{ width: "100%" }}>
+        </Box></Reveal>
+      <Reveal when={sub >= 3}><Box color={C.orange} style={{ width: "100%" }}>
           <T color="#ffb74d" bold center size={20}>How much does SFT cost?</T>
           <T color="#ffb74d" style={{ marginTop: 8 }}>Surprisingly little — compared to pretraining:</T>
           <div style={{ marginTop: 10, display: "flex", flexDirection: "column", gap: 8 }}>
@@ -4093,10 +3864,8 @@ export default function LearnAI() {
             </div>
           </div>
           <T color="#ffb74d" style={{ marginTop: 10 }}>Think of it this way: pretraining is like getting a university degree (years, expensive). SFT is like a one-day job orientation — quick, cheap, but makes all the difference.</T>
-        </Box>
-      )}
-      {sub >= 4 && (
-        <Box color={C.green} style={{ width: "100%" }}>
+        </Box></Reveal>
+      <Reveal when={sub >= 4}><Box color={C.green} style={{ width: "100%" }}>
           <T color="#80e8a5" bold center size={20}>The big insight</T>
           <T color="#80e8a5" style={{ marginTop: 8 }}>SFT doesn't teach new facts. The model already knows everything from pretraining.</T>
           <T color="#80e8a5" style={{ marginTop: 6 }}>SFT teaches BEHAVIOR:</T>
@@ -4108,9 +3877,8 @@ export default function LearnAI() {
             ))}
           </div>
           <T color="#80e8a5" style={{ marginTop: 10 }}>But there's a problem... SFT makes the model follow instructions, but it doesn't guarantee the answers are GOOD. The model might still be rude, wrong, or harmful. That's where the next chapter comes in.</T>
-        </Box>
-      )}
-      {sub < 4 && <SubBtn onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
+        </Box></Reveal>
+      {sub < 4 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
     </div>
   );
 
@@ -4136,8 +3904,7 @@ export default function LearnAI() {
           <T color="#ce93d8" style={{ marginTop: 8 }}>The model follows the Q&A format, but nobody taught it WHAT MAKES a good answer vs a bad answer. That's the RLHF problem.</T>
         </Box>
       )}
-      {sub >= 1 && (
-        <Box color={C.cyan} style={{ width: "100%" }}>
+      <Reveal when={sub >= 1}><Box color={C.cyan} style={{ width: "100%" }}>
           <T color="#80deea" bold center size={20}>Step 1: Ask humans "which is better?"</T>
           <T color="#80deea" style={{ marginTop: 8 }}>Give the model a question. It generates two different answers. A human picks the better one.</T>
           <div style={{ marginTop: 10, padding: "10px", background: "rgba(0,0,0,0.15)", borderRadius: 8 }}>
@@ -4158,10 +3925,8 @@ export default function LearnAI() {
             </div>
           </div>
           <T color="#80deea" style={{ marginTop: 8 }}>Do this thousands of times for different questions. Now you have a huge dataset of "humans prefer THIS over THAT."</T>
-        </Box>
-      )}
-      {sub >= 2 && (
-        <Box color={C.yellow} style={{ width: "100%" }}>
+        </Box></Reveal>
+      <Reveal when={sub >= 2}><Box color={C.yellow} style={{ width: "100%" }}>
           <T color="#ffe082" bold center size={20}>Step 2: Train a "judge" model</T>
           <T color="#ffe082" style={{ marginTop: 8 }}>You can't have humans rate every single response forever — too slow, too expensive.</T>
           <T color="#ffe082" style={{ marginTop: 6 }}>So you train a separate AI to be the judge. This is the <strong>Reward Model</strong>.</T>
@@ -4181,10 +3946,8 @@ export default function LearnAI() {
             </div>
           </div>
           <T color="#ffe082" style={{ marginTop: 8 }}>Now this judge can score ANY response instantly — no human needed. It learned what humans value.</T>
-        </Box>
-      )}
-      {sub >= 3 && (
-        <Box color={C.purple} style={{ width: "100%" }}>
+        </Box></Reveal>
+      <Reveal when={sub >= 3}><Box color={C.purple} style={{ width: "100%" }}>
           <T color="#b8a9ff" bold center size={20}>Step 3: Improve the model using the judge</T>
           <T color="#b8a9ff" style={{ marginTop: 8 }}>Now the loop:</T>
           <div style={{ marginTop: 10, display: "flex", flexDirection: "column", gap: 4 }}>
@@ -4203,10 +3966,8 @@ export default function LearnAI() {
             ))}
           </div>
           <T color="#b8a9ff" style={{ marginTop: 10 }}>This is called <strong>RLHF</strong> — Reinforcement Learning from Human Feedback. The model learns to write answers that humans would prefer.</T>
-        </Box>
-      )}
-      {sub >= 4 && (
-        <Box color={C.green} style={{ width: "100%" }}>
+        </Box></Reveal>
+      <Reveal when={sub >= 4}><Box color={C.green} style={{ width: "100%" }}>
           <T color="#80e8a5" bold center size={20}>But there's a danger...</T>
           <T color="#80e8a5" style={{ marginTop: 8 }}>What if the model finds a "cheat code" to get high scores?</T>
           <div style={{ marginTop: 10, padding: "10px", background: "rgba(0,0,0,0.15)", borderRadius: 8 }}>
@@ -4231,10 +3992,8 @@ export default function LearnAI() {
               <T color={C.green} size={13}>Gets genuinely better</T>
             </div>
           </div>
-        </Box>
-      )}
-      {sub >= 5 && (
-        <Box color={C.orange} style={{ width: "100%" }}>
+        </Box></Reveal>
+      <Reveal when={sub >= 5}><Box color={C.orange} style={{ width: "100%" }}>
           <T color="#ffb74d" bold center size={20}>The full journey — how ChatGPT/Claude are made</T>
           <div style={{ marginTop: 10, display: "flex", flexDirection: "column", gap: 6 }}>
             <div style={{ padding: "10px 14px", borderRadius: 8, background: `${C.red}10`, border: `1px solid ${C.red}20` }}>
@@ -4260,9 +4019,8 @@ export default function LearnAI() {
               <T color={C.dim} size={13} center>Ready to chat with you</T>
             </div>
           </div>
-        </Box>
-      )}
-      {sub < 5 && <SubBtn onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
+        </Box></Reveal>
+      {sub < 5 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
     </div>
   );
 
@@ -4294,8 +4052,7 @@ export default function LearnAI() {
           <T color="#ffb74d" style={{ marginTop: 8 }}>Sounds reasonable, right? But there's a big problem...</T>
         </Box>
       )}
-      {sub >= 1 && (
-        <Box color={C.red} style={{ width: "100%" }}>
+      <Reveal when={sub >= 1}><Box color={C.red} style={{ width: "100%" }}>
           <T color="#ff8a80" bold center size={20}>The problem: one example = bad advice</T>
           <T color="#ff8a80" style={{ marginTop: 8 }}>Imagine you're lost in a new city. You ask ONE stranger for directions.</T>
           <div style={{ marginTop: 10, display: "flex", flexDirection: "column", gap: 8 }}>
@@ -4309,10 +4066,8 @@ export default function LearnAI() {
             </div>
           </div>
           <T color="#ff8a80" style={{ marginTop: 8 }}>Same thing happens to the model. One weird training example makes the weights jump in the wrong direction. Then the next example pulls them back. Zigzag, zigzag, zigzag.</T>
-        </Box>
-      )}
-      {sub >= 2 && (
-        <Box color={C.green} style={{ width: "100%" }}>
+        </Box></Reveal>
+      <Reveal when={sub >= 2}><Box color={C.green} style={{ width: "100%" }}>
           <T color="#80e8a5" bold center size={20}>The fix: ask 32 people at once</T>
           <T color="#80e8a5" style={{ marginTop: 8 }}>Instead of asking 1 stranger, ask 32 people: "Which way to the train station?"</T>
           <div style={{ marginTop: 10, padding: "10px", background: "rgba(0,0,0,0.15)", borderRadius: 8 }}>
@@ -4331,10 +4086,8 @@ export default function LearnAI() {
             <T color="#80e8a5" size={14}>• Make ONE smooth update</T>
           </div>
           <T color="#80e8a5" style={{ marginTop: 6 }}>The 32 is called the <strong>batch size</strong>.</T>
-        </Box>
-      )}
-      {sub >= 3 && (
-        <Box color={C.purple} style={{ width: "100%" }}>
+        </Box></Reveal>
+      <Reveal when={sub >= 3}><Box color={C.purple} style={{ width: "100%" }}>
           <T color="#b8a9ff" bold center size={20}>Bigger batch = smoother, but slower</T>
           <T color="#b8a9ff" style={{ marginTop: 8 }}>What batch size should you pick? It's a tradeoff:</T>
           <div style={{ marginTop: 10, display: "flex", flexDirection: "column", gap: 8 }}>
@@ -4363,10 +4116,8 @@ export default function LearnAI() {
             </div>
           </div>
           <T color="#b8a9ff" style={{ marginTop: 10 }}>Think of it like a survey. Asking 1 person is fast but unreliable. Asking 1,000 people is very reliable but takes forever to collect. The sweet spot is usually somewhere in between (32-256 for most models).</T>
-        </Box>
-      )}
-      {sub >= 4 && (
-        <Box color={C.cyan} style={{ width: "100%" }}>
+        </Box></Reveal>
+      <Reveal when={sub >= 4}><Box color={C.cyan} style={{ width: "100%" }}>
           <T color="#80deea" bold center size={20}>Why this matters for GPT/Claude</T>
           <T color="#80deea" style={{ marginTop: 8 }}>Training GPT-4 means processing trillions of tokens. Even with batch size 32, that's billions of updates. This is why:</T>
           <div style={{ marginTop: 10, display: "flex", flexDirection: "column", gap: 6 }}>
@@ -4382,9 +4133,8 @@ export default function LearnAI() {
             ))}
           </div>
           <T color="#80deea" style={{ marginTop: 10 }}>The key insight: after a certain batch size (often 32-64), making batches bigger barely helps — you get slightly smoother updates but training takes much longer per step. Finding the sweet spot is an art.</T>
-        </Box>
-      )}
-      {sub < 4 && <SubBtn onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
+        </Box></Reveal>
+      {sub < 4 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
     </div>
   );
 
@@ -4397,8 +4147,7 @@ export default function LearnAI() {
           <T color="#80deea" style={{ marginTop: 6 }}>OpenAI found that language model performance follows <strong>predictable mathematical patterns</strong> as you scale three things:</T>
         </Box>
       )}
-      {sub >= 1 && (
-        <Box color={C.yellow} style={{ width: "100%" }}>
+      <Reveal when={sub >= 1}><Box color={C.yellow} style={{ width: "100%" }}>
           <T color="#ffe082" bold center size={20}>The three scaling axes:</T>
           <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 6 }}>
             {[
@@ -4413,10 +4162,8 @@ export default function LearnAI() {
               </div>
             ))}
           </div>
-        </Box>
-      )}
-      {sub >= 2 && (
-        <Box color={C.orange} style={{ width: "100%" }}>
+        </Box></Reveal>
+      <Reveal when={sub >= 2}><Box color={C.orange} style={{ width: "100%" }}>
           <T color="#ffb74d" bold center size={20}>The key scaling law:</T>
           <T color="#ffb74d" style={{ marginTop: 8 }}>Scale all three together → smooth, predictable improvement</T>
           <T color="#ffb74d" style={{ marginTop: 6 }}>Scale one alone → diminishing returns</T>
@@ -4425,10 +4172,8 @@ export default function LearnAI() {
             <T color={C.dim} size={12} style={{ marginTop: 4 }}>Performance improves as a power law with size.</T>
           </div>
           <T color="#ffb74d" style={{ marginTop: 8 }}>Like a recipe: more flour alone doesn't make more cake without more eggs and butter.</T>
-        </Box>
-      )}
-      {sub >= 3 && (
-        <Box color={C.green} style={{ width: "100%" }}>
+        </Box></Reveal>
+      <Reveal when={sub >= 3}><Box color={C.green} style={{ width: "100%" }}>
           <T color="#80e8a5" bold center size={20}>Real examples:</T>
           <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 6 }}>
             {[
@@ -4443,25 +4188,20 @@ export default function LearnAI() {
             ))}
           </div>
           <T color="#80e8a5" style={{ marginTop: 8 }}>Each jump in scale = major capability leap.</T>
-        </Box>
-      )}
-      {sub >= 4 && (
-        <Box color={C.purple} style={{ width: "100%" }}>
+        </Box></Reveal>
+      <Reveal when={sub >= 4}><Box color={C.purple} style={{ width: "100%" }}>
           <T color="#b8a9ff" bold center size={20}>The practical impact:</T>
           <T color="#b8a9ff" style={{ marginTop: 8 }}>Train a small model (1B params). Measure performance.</T>
           <T color="#b8a9ff">Use the scaling law to <strong>predict</strong> how a 175B model will perform.</T>
           <T color="#b8a9ff" style={{ marginTop: 6 }}>This <strong>saves millions in compute</strong>. You don't need to actually train the giant model to forecast results.</T>
-        </Box>
-      )}
-      {sub >= 5 && (
-        <Box color={C.pink} style={{ width: "100%" }}>
+        </Box></Reveal>
+      <Reveal when={sub >= 5}><Box color={C.pink} style={{ width: "100%" }}>
           <T color="#ce93d8" bold center size={20}>Chinchilla Scaling (DeepMind 2022):</T>
           <T color="#ce93d8" style={{ marginTop: 8 }}>People were training models with way too few tokens relative to size.</T>
           <T color="#ce93d8" style={{ marginTop: 6 }}><strong>Most models are under-trained, not too small.</strong></T>
           <T color="#ce93d8" style={{ marginTop: 6 }}>Optimal: match data tokens to parameters. 200B params = 20T tokens (rough rule).</T>
-        </Box>
-      )}
-      {sub < 5 && <SubBtn onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
+        </Box></Reveal>
+      {sub < 5 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
     </div>
   );
 
@@ -4475,8 +4215,7 @@ export default function LearnAI() {
           <T color="#ffe082" style={{ marginTop: 6 }}>When people say "LLaMA-7B", they mean 7 billion parameters. 7,000,000,000 floating-point numbers.</T>
         </Box>
       )}
-      {sub >= 1 && (
-        <Box color={C.cyan} style={{ width: "100%" }}>
+      <Reveal when={sub >= 1}><Box color={C.cyan} style={{ width: "100%" }}>
           <T color="#80deea" bold center size={20}>Counting parameters in a simple layer:</T>
           <div style={{ marginTop: 8, padding: "10px", background: "rgba(0,0,0,0.2)", borderRadius: 6 }}>
             <T color="#80deea" size={14}>Input layer: 4 neurons</T>
@@ -4485,10 +4224,8 @@ export default function LearnAI() {
             <T color="#80deea" size={14} bold>Bias vector b: <strong>3 biases</strong></T>
             <T color={C.green} size={14} bold style={{ marginTop: 4 }}>Total: 12 + 3 = <strong>15 parameters</strong></T>
           </div>
-        </Box>
-      )}
-      {sub >= 2 && (
-        <Box color={C.orange} style={{ width: "100%" }}>
+        </Box></Reveal>
+      <Reveal when={sub >= 2}><Box color={C.orange} style={{ width: "100%" }}>
           <T color="#ffb74d" bold center size={20}>Scaling up to real models:</T>
           <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 6 }}>
             {[
@@ -4502,10 +4239,8 @@ export default function LearnAI() {
               </div>
             ))}
           </div>
-        </Box>
-      )}
-      {sub >= 3 && (
-        <Box color={C.green} style={{ width: "100%" }}>
+        </Box></Reveal>
+      <Reveal when={sub >= 3}><Box color={C.green} style={{ width: "100%" }}>
           <T color="#80e8a5" bold center size={20}>Where do the parameters live?</T>
           <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 5 }}>
             {[
@@ -4520,10 +4255,8 @@ export default function LearnAI() {
               </div>
             ))}
           </div>
-        </Box>
-      )}
-      {sub >= 4 && (
-        <Box color={C.blue} style={{ width: "100%" }}>
+        </Box></Reveal>
+      <Reveal when={sub >= 4}><Box color={C.blue} style={{ width: "100%" }}>
           <T color="#42a5f5" bold center size={20}>The critical insight:</T>
           <T color="#42a5f5" style={{ marginTop: 8 }}>More parameters ≠ smarter.</T>
           <T color="#42a5f5" style={{ marginTop: 6 }}>Parameters are <strong>capacity</strong>. Like a student with a big brain but no education. Still needs:</T>
@@ -4533,9 +4266,8 @@ export default function LearnAI() {
             ))}
           </div>
           <T color="#42a5f5" style={{ marginTop: 6 }}>You can have 1 trillion parameters trained poorly (worse than 7B parameters trained well).</T>
-        </Box>
-      )}
-      {sub < 4 && <SubBtn onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
+        </Box></Reveal>
+      {sub < 4 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
     </div>
   );
 
@@ -4551,8 +4283,7 @@ export default function LearnAI() {
           <T color="#ce93d8" style={{ marginTop: 4 }}>Yes. The trick is called <strong>knowledge distillation</strong> — and it works like a teacher and student.</T>
         </Box>
       )}
-      {sub >= 1 && (
-        <Box color={C.cyan} style={{ width: "100%" }}>
+      <Reveal when={sub >= 1}><Box color={C.cyan} style={{ width: "100%" }}>
           <T color="#80deea" bold center size={20}>Teacher teaches Student</T>
           <T color="#80deea" style={{ marginTop: 8 }}>Instead of training the small model from scratch (expensive!), let the big model teach it.</T>
           <div style={{ marginTop: 10, display: "flex", gap: 8, alignItems: "center" }}>
@@ -4573,10 +4304,8 @@ export default function LearnAI() {
             </div>
           </div>
           <T color="#80deea" style={{ marginTop: 10 }}>How? Show both models the same questions. The student tries to copy the teacher's answers — not just the final answer, but HOW the teacher thinks.</T>
-        </Box>
-      )}
-      {sub >= 2 && (
-        <Box color={C.yellow} style={{ width: "100%" }}>
+        </Box></Reveal>
+      <Reveal when={sub >= 2}><Box color={C.yellow} style={{ width: "100%" }}>
           <T color="#ffe082" bold center size={20}>What does "copy how the teacher thinks" mean?</T>
           <T color="#ffe082" style={{ marginTop: 8 }}>Question: "What is the capital of France?"</T>
           <T color="#ffe082" style={{ marginTop: 8 }}>A lazy teacher just says the answer:</T>
@@ -4605,10 +4334,8 @@ export default function LearnAI() {
             ))}
           </div>
           <T color="#ffe082" style={{ marginTop: 8 }}>This full set of confidences is called <strong>"soft probabilities"</strong> — and it's the key to distillation.</T>
-        </Box>
-      )}
-      {sub >= 3 && (
-        <Box color={C.purple} style={{ width: "100%" }}>
+        </Box></Reveal>
+      <Reveal when={sub >= 3}><Box color={C.purple} style={{ width: "100%" }}>
           <T color="#b8a9ff" bold center size={20}>Why soft probabilities are magic</T>
           <T color="#b8a9ff" style={{ marginTop: 8 }}>Look at the teacher's confidences again. The "wrong" answers tell a story:</T>
           <div style={{ marginTop: 10, display: "flex", flexDirection: "column", gap: 6 }}>
@@ -4631,10 +4358,8 @@ export default function LearnAI() {
           </div>
           <T color="#b8a9ff" style={{ marginTop: 10 }}>If you only said "Paris = right, everything else = wrong" — the student would think London and Pizza are equally wrong.</T>
           <T color="#b8a9ff" style={{ marginTop: 4 }}>But the soft probabilities teach: "London is close (it's a capital). Lyon is related (it's French). Pizza is nonsense." The student absorbs how concepts relate — for free.</T>
-        </Box>
-      )}
-      {sub >= 4 && (
-        <Box color={C.green} style={{ width: "100%" }}>
+        </Box></Reveal>
+      <Reveal when={sub >= 4}><Box color={C.green} style={{ width: "100%" }}>
           <T color="#80e8a5" bold center size={20}>This is everywhere</T>
           <T color="#80e8a5" style={{ marginTop: 8 }}>Most AI models you actually use daily are distilled students:</T>
           <div style={{ marginTop: 10, display: "flex", flexDirection: "column", gap: 6 }}>
@@ -4656,9 +4381,8 @@ export default function LearnAI() {
             ))}
           </div>
           <T color="#80e8a5" style={{ marginTop: 10 }}>The big expensive model trains once. Then it teaches smaller, faster models. That's why you can chat with AI instantly on your phone — you're talking to a student who learned from a genius.</T>
-        </Box>
-      )}
-      {sub < 4 && <SubBtn onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
+        </Box></Reveal>
+      {sub < 4 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
     </div>
   );
 
@@ -4685,8 +4409,7 @@ export default function LearnAI() {
           <T color="#b8a9ff" style={{ marginTop: 4 }}>But how do you teach a computer to do this? Images are pixels. Text is words. They're completely different things. How do you even compare them?</T>
         </Box>
       )}
-      {sub >= 1 && (
-        <Box color={C.cyan} style={{ width: "100%" }}>
+      <Reveal when={sub >= 1}><Box color={C.cyan} style={{ width: "100%" }}>
           <T color="#80deea" bold center size={20}>The idea: translate both into the same language</T>
           <T color="#80deea" style={{ marginTop: 8 }}>You can't directly compare a photo to a sentence. But what if you could convert BOTH into numbers?</T>
           <div style={{ marginTop: 10, display: "flex", flexDirection: "column", gap: 4 }}>
@@ -4722,10 +4445,8 @@ export default function LearnAI() {
           <T color="#80deea" style={{ marginTop: 10 }}>Two separate translators (encoders) convert images and text into lists of numbers (vectors).</T>
           <T color="#80deea" style={{ marginTop: 4 }}>If the image and text describe the same thing, their numbers end up <strong>almost identical</strong>. Notice how close the two rows of numbers are above!</T>
           <T color="#80deea" style={{ marginTop: 4 }}>This system is called <strong>CLIP</strong> (Contrastive Language-Image Pretraining), built by OpenAI.</T>
-        </Box>
-      )}
-      {sub >= 2 && (
-        <Box color={C.yellow} style={{ width: "100%" }}>
+        </Box></Reveal>
+      <Reveal when={sub >= 2}><Box color={C.yellow} style={{ width: "100%" }}>
           <T color="#ffe082" bold center size={20}>How does CLIP learn? The matching game</T>
           <T color="#ffe082" style={{ marginTop: 8 }}>Collect millions of image + caption pairs from the internet. Then play a matching game:</T>
           <T color="#ffe082" style={{ marginTop: 6 }}>Here are 4 images and 4 captions. Which goes with which?</T>
@@ -4764,10 +4485,8 @@ export default function LearnAI() {
           </div>
           <T color="#ffe082" style={{ marginTop: 8 }}>The green diagonal = correct matches. Everything else = wrong.</T>
           <T color="#ffe082" style={{ marginTop: 4 }}>The model adjusts until matching pairs produce similar numbers and non-matching pairs produce very different numbers. This is called <strong>contrastive learning</strong> — learning by contrast (what matches vs what doesn't).</T>
-        </Box>
-      )}
-      {sub >= 3 && (
-        <Box color={C.orange} style={{ width: "100%" }}>
+        </Box></Reveal>
+      <Reveal when={sub >= 3}><Box color={C.orange} style={{ width: "100%" }}>
           <T color="#ffb74d" bold center size={20}>How "similar" are two vectors?</T>
           <T color="#ffb74d" style={{ marginTop: 8 }}>After encoding, we get two lists of numbers. We need a way to check: are they similar?</T>
           <T color="#ffb74d" style={{ marginTop: 6 }}>The method is called <strong>cosine similarity</strong> — it gives a score from -1 to 1:</T>
@@ -4790,10 +4509,8 @@ export default function LearnAI() {
             ))}
           </div>
           <T color="#ffb74d" style={{ marginTop: 8 }}>During training, the model is rewarded for making correct pairs score HIGH and wrong pairs score LOW. Millions of image-caption pairs later, it becomes incredibly good at understanding what images and text mean.</T>
-        </Box>
-      )}
-      {sub >= 4 && (
-        <Box color={C.green} style={{ width: "100%" }}>
+        </Box></Reveal>
+      <Reveal when={sub >= 4}><Box color={C.green} style={{ width: "100%" }}>
           <T color="#80e8a5" bold center size={20}>Why this changes everything</T>
           <T color="#80e8a5" style={{ marginTop: 8 }}>Once images and text live in the same number space, you can do magical things:</T>
           <div style={{ marginTop: 10, display: "flex", flexDirection: "column", gap: 8 }}>
@@ -4811,9 +4528,8 @@ export default function LearnAI() {
             </div>
           </div>
           <T color="#80e8a5" style={{ marginTop: 10 }}>Every time AI "sees" an image, contrastive learning is behind it. It's the reason AI can understand photos, generate art, and search billions of images by typing words.</T>
-        </Box>
-      )}
-      {sub < 4 && <SubBtn onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
+        </Box></Reveal>
+      {sub < 4 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
     </div>
   );
 
@@ -4827,8 +4543,7 @@ export default function LearnAI() {
           <T color="#80deea" style={{ marginTop: 6 }}>Here's the full journey from "pile of internet text" to "ChatGPT answering your questions."</T>
         </Box>
       )}
-      {sub >= 1 && (
-        <Box color={C.red} style={{ width: "100%" }}>
+      <Reveal when={sub >= 1}><Box color={C.red} style={{ width: "100%" }}>
           <T color="#ff8a80" bold center size={20}>Phase 1: Pretraining</T>
           <T color={C.dim} center size={13}>2-3 months · $10-100 million</T>
           <div style={{ marginTop: 10, padding: "10px", background: "rgba(0,0,0,0.15)", borderRadius: 8 }}>
@@ -4849,10 +4564,8 @@ export default function LearnAI() {
               <T color={C.dim} size={12}>Can't answer questions — just autocompletes</T>
             </div>
           </div>
-        </Box>
-      )}
-      {sub >= 2 && (
-        <Box color={C.yellow} style={{ width: "100%" }}>
+        </Box></Reveal>
+      <Reveal when={sub >= 2}><Box color={C.yellow} style={{ width: "100%" }}>
           <T color="#ffe082" bold center size={20}>Phase 2: SFT (Supervised Fine-Tuning)</T>
           <T color={C.dim} center size={13}>1-2 weeks · $1,000-10,000</T>
           <div style={{ marginTop: 10, padding: "10px", background: "rgba(0,0,0,0.15)", borderRadius: 8 }}>
@@ -4872,10 +4585,8 @@ export default function LearnAI() {
               <T color={C.dim} size={12}>Might still be rude, harmful, or confidently wrong</T>
             </div>
           </div>
-        </Box>
-      )}
-      {sub >= 3 && (
-        <Box color={C.pink} style={{ width: "100%" }}>
+        </Box></Reveal>
+      <Reveal when={sub >= 3}><Box color={C.pink} style={{ width: "100%" }}>
           <T color="#ce93d8" bold center size={20}>Phase 3: RLHF (Human Feedback)</T>
           <T color={C.dim} center size={13}>1-2 weeks · $1,000-10,000</T>
           <div style={{ marginTop: 10, padding: "10px", background: "rgba(0,0,0,0.15)", borderRadius: 8 }}>
@@ -4889,10 +4600,8 @@ export default function LearnAI() {
             <T color={C.green} bold size={14}>Result: Helpful, harmless, honest assistant</T>
             <T color={C.dim} size={12}>This is what becomes ChatGPT, Claude, Gemini</T>
           </div>
-        </Box>
-      )}
-      {sub >= 4 && (
-        <Box color={C.orange} style={{ width: "100%" }}>
+        </Box></Reveal>
+      <Reveal when={sub >= 4}><Box color={C.orange} style={{ width: "100%" }}>
           <T color="#ffb74d" bold center size={20}>After launch — Optional upgrades</T>
           <T color="#ffb74d" style={{ marginTop: 6 }}>The 3 phases above create the base model. But companies often add extra capabilities:</T>
           <div style={{ marginTop: 10, display: "flex", flexDirection: "column", gap: 8 }}>
@@ -4913,10 +4622,8 @@ export default function LearnAI() {
               <T color={C.dim} size={13} style={{ marginTop: 3 }}>Want an AI that's amazing at medicine? Law? Finance? Take the general model and train it further on domain-specific data. A hospital might fine-tune on millions of medical records. The model keeps its general intelligence but becomes an expert in that field.</T>
             </div>
           </div>
-        </Box>
-      )}
-      {sub >= 5 && (
-        <Box color={C.green} style={{ width: "100%" }}>
+        </Box></Reveal>
+      <Reveal when={sub >= 5}><Box color={C.green} style={{ width: "100%" }}>
           <T color="#80e8a5" bold center size={22}>Parts 2 & 3 — Complete</T>
           <T color="#80e8a5" style={{ marginTop: 8 }}>You now understand the full lifecycle of an LLM:</T>
           <div style={{ marginTop: 10, display: "flex", flexDirection: "column", gap: 4 }}>
@@ -4941,9 +4648,8 @@ export default function LearnAI() {
           <div style={{ marginTop: 12, padding: "12px", background: `${C.purple}12`, borderRadius: 8, border: `2px solid ${C.purple}35` }}>
             <T color={C.purple} size={15} center bold>Next up: the architecture that makes all of this possible — Transformers and Attention.</T>
           </div>
-        </Box>
-      )}
-      {sub < 5 && <SubBtn onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
+        </Box></Reveal>
+      {sub < 5 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
     </div>
   );
 
@@ -4962,7 +4668,7 @@ export default function LearnAI() {
     <>
     <style>{`
       @keyframes navRipple { 0% { transform: scale(0); opacity: 0.5; } 100% { transform: scale(1); opacity: 0; } }
-      @keyframes fadeSlideIn { 0% { opacity: 0; transform: translateY(18px); } 100% { opacity: 1; transform: translateY(0); } }
+      @keyframes fadeSlideIn { 0% { opacity: 0; transform: translateY(24px); } 100% { opacity: 1; transform: translateY(0); } }
     `}</style>
     <div style={{
       minHeight: "100vh", background: C.bg, color: "#fff",
@@ -5005,7 +4711,7 @@ export default function LearnAI() {
         width: "100%", maxWidth: 840,
         opacity: fade ? 1 : 0,
         transform: fade ? "translateY(0)" : "translateY(8px)",
-        transition: "opacity 0.25s cubic-bezier(0.4, 0, 0.2, 1), transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+        transition: "opacity 0.05s ease-out, transform 0.06s ease-out",
       }}>
         {allCh[ch]()}
       </div>
@@ -5032,7 +4738,7 @@ export default function LearnAI() {
         <div style={{
           opacity: navHint === "left" ? 1 : 0,
           transform: navHint === "left" ? "translateX(0)" : "translateX(-10px)",
-          transition: "all 0.25s ease",
+          transition: "all 0.12s ease",
           padding: "16px 20px 16px 14px",
           display: "flex", flexDirection: "column", alignItems: "flex-start", gap: 4,
         }}>
@@ -5062,7 +4768,7 @@ export default function LearnAI() {
         <div style={{
           opacity: navHint === "right" ? 1 : 0,
           transform: navHint === "right" ? "translateX(0)" : "translateX(10px)",
-          transition: "all 0.25s ease",
+          transition: "all 0.12s ease",
           padding: "16px 14px 16px 20px",
           display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 4,
         }}>

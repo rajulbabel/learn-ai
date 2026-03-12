@@ -93,10 +93,12 @@ const Reveal = ({ when, children }) => {
 
 const SubBtn = ({ onClick, rippleKey }) => (
   <button data-subbtn="true" onClick={onClick} style={{
-    alignSelf: "center", padding: "8px 20px", borderRadius: 8, border: "none",
+    alignSelf: "center", padding: "10px 28px", borderRadius: 8, border: "none",
     background: "rgba(167,139,250,0.15)", color: C.purple,
     cursor: "pointer", fontSize: 18, fontWeight: 600, marginTop: 4,
     position: "relative", overflow: "hidden",
+    display: "flex", alignItems: "center", justifyContent: "center",
+    lineHeight: 1, letterSpacing: 0.5,
     animation: "fadeSlideIn 0.45s cubic-bezier(0.16, 1, 0.3, 1) 0.3s both",
   }}>
     {rippleKey > 0 && <span key={rippleKey} style={{
@@ -105,7 +107,7 @@ const SubBtn = ({ onClick, rippleKey }) => (
       background: "radial-gradient(circle, rgba(167,139,250,0.45) 0%, transparent 70%)",
       animation: "navRipple 0.5s ease-out forwards", pointerEvents: "none",
     }} />}
-    <span style={{ display: "inline-flex", alignItems: "center", gap: 5 }}>Continue <svg width="12" height="12" viewBox="0 0 12 12" style={{ display: "block" }}><path d="M6 1v8.5M2.5 6.5L6 10l3.5-3.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none"/></svg></span>
+    Continue
   </button>
 );
 

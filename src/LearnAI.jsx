@@ -13,50 +13,63 @@ const chapters = [
   { id: "1.8", title: "Derivatives — The Core Intuition", part: 1 },
   { id: "1.9", title: "Backward Pass — The Chain Rule", part: 1 },
   { id: "1.10", title: "Gradient Descent — Fixing the Weights", part: 1 },
-  // Part 2: The Road to Transformers
-  { id: "2.1", title: "CNN", part: 2 },
-  { id: "2.2", title: "RNN", part: 2 },
-  { id: "2.3", title: "RNN's Fatal Flaws", part: 2 },
-  { id: "2.4", title: "The Transformer Arrives", part: 2 },
-  // Part 3: Transformer Input Pipeline
-  { id: "3.1", title: "The Full Architecture", part: 3 },
-  { id: "3.2", title: "Zoom: Embeddings", part: 3 },
-  { id: "3.3", title: "Positional Encoding — The Problem", part: 3 },
-  { id: "3.4", title: "Positional Encoding — The Formula", part: 3 },
-  { id: "3.5", title: "Positional Encoding — Computing Positions", part: 3 },
-  { id: "3.6", title: "Positional Encoding — Fast vs Slow", part: 3 },
-  { id: "3.7", title: "Positional Encoding — Final Addition", part: 3 },
-  { id: "3.8", title: "What is a Transformer Actually Doing?", part: 3 },
-  // Part 4: Attention — Understanding Q, K, V
-  { id: "4.1", title: "The Problem — Context is Everything", part: 4 },
-  { id: "4.2", title: "How Does a Word Look At Others?", part: 4 },
-  { id: "4.3", title: "The Dot Product — Measuring Similarity", part: 4 },
-  { id: "4.4", title: "Why Not Dot Product Embeddings Directly?", part: 4 },
-  { id: "4.5", title: "Q, K, V — The Classroom Analogy", part: 4 },
-  { id: "4.6", title: "Every Word is BOTH Asker and Answerer", part: 4 },
-  { id: "4.7", title: "Why Can\'t Key and Value Be the Same?", part: 4 },
-  { id: "4.8", title: "The Google Search Analogy", part: 4 },
-  { id: "4.9", title: "How Are Q, K, V Created?", part: 4 },
-  { id: "4.10", title: "W Matrices — Learned During Training", part: 4 },
-  { id: "4.11", title: "Tracing a Complete Example", part: 4 },
-  // Part 5: Attention — The Full Computation
-  { id: "5.1", title: "Step 1 — Compute Q, K, V for Every Word", part: 5 },
-  { id: "5.2", title: "Step 2 — Attention Scores (Dot Products)", part: 5 },
-  { id: "5.3", title: "Why Do We Need Softmax?", part: 5 },
-  { id: "5.4", title: "Step 3 — Scale by √d_k", part: 5 },
-  { id: "5.5", title: "Step 4 — Softmax → Probabilities", part: 5 },
-  { id: "5.6", title: "Step 5 — Weighted Sum of Values", part: 5 },
-  { id: "5.7", title: "The Full Formula", part: 5 },
-  { id: "5.8", title: "Why Multi-Head? — The Compromise Problem", part: 5 },
-  { id: "5.9", title: "The Split — How 8 Heads Work", part: 5 },
-  { id: "5.10", title: "Inside Each Head — Full Attention in 64 Dims", part: 5 },
-  { id: "5.11", title: "Concat + W_O — Blending All Heads", part: 5 },
-  { id: "5.12", title: "Why 8 Heads? Parameter Count & Big Picture", part: 5 },
-  { id: "5.13", title: "Is W_O Constant? Does It Change?", part: 5 },
-  { id: "5.14", title: "The Complete Picture — In Plain English", part: 5 },
+  // Part 2: How LLMs Actually Train (was Part 6)
+  { id: "2.1", title: "Tokenization — From Words to Numbers", part: 2 },
+  { id: "2.2", title: "Self-Supervised Learning — How GPT Trains", part: 2 },
+  { id: "2.3", title: "Cross-Entropy Loss — The LLM Score", part: 2 },
+  { id: "2.4", title: "Supervised Fine-Tuning (SFT)", part: 2 },
+  { id: "2.5", title: "RLHF — Making AI Helpful & Safe", part: 2 },
+  { id: "2.6", title: "Batch Training — Why Not One Example at a Time?", part: 2 },
+  // Part 3: Scaling & Modern Techniques (was Part 7)
+  { id: "3.1", title: "Scaling Laws — Why Bigger Models Win", part: 3 },
+  { id: "3.2", title: "Parameters at Scale", part: 3 },
+  { id: "3.3", title: "Knowledge Distillation — Teacher to Student", part: 3 },
+  { id: "3.4", title: "Contrastive Learning — Connecting Images & Text (CLIP)", part: 3 },
+  { id: "3.5", title: "The Complete Training Pipeline", part: 3 },
+  // Part 4: The Road to Transformers (was Part 2)
+  { id: "4.1", title: "CNN", part: 4 },
+  { id: "4.2", title: "RNN", part: 4 },
+  { id: "4.3", title: "RNN's Fatal Flaws", part: 4 },
+  { id: "4.4", title: "The Transformer Arrives", part: 4 },
+  // Part 5: Transformer Input Pipeline (was Part 3)
+  { id: "5.1", title: "The Full Architecture", part: 5 },
+  { id: "5.2", title: "Zoom: Embeddings", part: 5 },
+  { id: "5.3", title: "Positional Encoding — The Problem", part: 5 },
+  { id: "5.4", title: "Positional Encoding — The Formula", part: 5 },
+  { id: "5.5", title: "Positional Encoding — Computing Positions", part: 5 },
+  { id: "5.6", title: "Positional Encoding — Fast vs Slow", part: 5 },
+  { id: "5.7", title: "Positional Encoding — Final Addition", part: 5 },
+  { id: "5.8", title: "What is a Transformer Actually Doing?", part: 5 },
+  // Part 6: Attention — Understanding Q, K, V (was Part 4)
+  { id: "6.1", title: "The Problem — Context is Everything", part: 6 },
+  { id: "6.2", title: "How Does a Word Look At Others?", part: 6 },
+  { id: "6.3", title: "The Dot Product — Measuring Similarity", part: 6 },
+  { id: "6.4", title: "Why Not Dot Product Embeddings Directly?", part: 6 },
+  { id: "6.5", title: "Q, K, V — The Classroom Analogy", part: 6 },
+  { id: "6.6", title: "Every Word is BOTH Asker and Answerer", part: 6 },
+  { id: "6.7", title: "Why Can\'t Key and Value Be the Same?", part: 6 },
+  { id: "6.8", title: "The Google Search Analogy", part: 6 },
+  { id: "6.9", title: "How Are Q, K, V Created?", part: 6 },
+  { id: "6.10", title: "W Matrices — Learned During Training", part: 6 },
+  { id: "6.11", title: "Tracing a Complete Example", part: 6 },
+  // Part 7: Attention — The Full Computation (was Part 5)
+  { id: "7.1", title: "Step 1 — Compute Q, K, V for Every Word", part: 7 },
+  { id: "7.2", title: "Step 2 — Attention Scores (Dot Products)", part: 7 },
+  { id: "7.3", title: "Why Do We Need Softmax?", part: 7 },
+  { id: "7.4", title: "Step 3 — Scale by √d_k", part: 7 },
+  { id: "7.5", title: "Step 4 — Softmax → Probabilities", part: 7 },
+  { id: "7.6", title: "Step 5 — Weighted Sum of Values", part: 7 },
+  { id: "7.7", title: "The Full Formula", part: 7 },
+  { id: "7.8", title: "Why Multi-Head? — The Compromise Problem", part: 7 },
+  { id: "7.9", title: "The Split — How 8 Heads Work", part: 7 },
+  { id: "7.10", title: "Inside Each Head — Full Attention in 64 Dims", part: 7 },
+  { id: "7.11", title: "Concat + W_O — Blending All Heads", part: 7 },
+  { id: "7.12", title: "Why 8 Heads? Parameter Count & Big Picture", part: 7 },
+  { id: "7.13", title: "Is W_O Constant? Does It Change?", part: 7 },
+  { id: "7.14", title: "The Complete Picture — In Plain English", part: 7 },
 ];
 
-const partNames = { 0: "Overview", 1: "Neural Network Foundations", 2: "The Road to Transformers", 3: "Transformer Input Pipeline", 4: "Attention — Understanding Q, K, V", 5: "Attention — The Full Computation" };
+const partNames = { 0: "Overview", 1: "Neural Network Foundations", 2: "How LLMs Actually Train", 3: "Scaling & Modern Techniques", 4: "The Road to Transformers", 5: "Transformer Input Pipeline", 6: "Attention — Understanding Q, K, V", 7: "Attention — The Full Computation" };
 
 // Colors
 const C = {
@@ -266,8 +279,9 @@ export default function LearnAI() {
   // ═══════ 1.3 What is Learning ═══════
   const Ch1_3 = () => (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
-      {sub >= 0 && <Box color={C.purple}><T color={C.purple} bold center size={20}>A neural network starts DUMB.</T><T>When you first create a network, all its internal numbers (called <strong>weights</strong> and <strong>biases</strong>) are set to <strong>random values</strong>. It knows nothing. It makes garbage predictions.</T></Box>}
-      {sub >= 1 && (
+      {sub >= 0 && <Box color={C.cyan}><T color="#80deea" bold center>Imagine predicting sales from marketing budget: <strong>y = mx + c</strong>.</T><T color="#80deea"><strong>m</strong> = weight (how much budget affects sales), <strong>c</strong> = bias (baseline sales). Learning = finding the best m and c.</T></Box>}
+      {sub >= 1 && <Box color={C.purple}><T color={C.purple} bold center size={20}>A neural network starts DUMB.</T><T>When you first create a network, all its internal numbers (called <strong>weights</strong> and <strong>biases</strong>) are set to <strong>random values</strong>. It knows nothing. It makes garbage predictions.</T></Box>}
+      {sub >= 2 && (
         <Box color={C.yellow} style={{ width: "100%" }}>
           <T color={C.yellow} bold center>"Learning" = adjusting weights & biases until predictions get good.</T>
           <T color="#ffe082" style={{ marginTop: 6 }}>This happens in a loop that repeats <strong>thousands to millions</strong> of times:</T>
@@ -291,8 +305,8 @@ export default function LearnAI() {
           </div>
         </Box>
       )}
-      {sub >= 2 && <Box color={C.green}><T color="#80e8a5" bold center>This whole process is called "Backpropagation + Gradient Descent".</T><T color="#80e8a5">But what are weights and biases? Let's understand them first →</T></Box>}
-      {sub < 2 && <SubBtn onClick={() => navigate("forward")} />}
+      {sub >= 3 && <Box color={C.green}><T color="#80e8a5" bold center>This whole process is called "Backpropagation + Gradient Descent".</T><T color="#80e8a5">But what are weights and biases? Let's understand them first →</T></Box>}
+      {sub < 3 && <SubBtn onClick={() => navigate("forward")} />}
     </div>
   );
 
@@ -324,6 +338,12 @@ export default function LearnAI() {
         </Box>
       )}
       {sub >= 2 && (
+        <Box color={C.green} style={{ width: "100%" }}>
+          <T color="#80e8a5" bold center>In <code style={{ background: "rgba(255,255,255,0.06)", padding: "1px 4px", borderRadius: 2 }}>y = mx + c</code>: weight (m) = the slope, bias (c) = the y-intercept.</T>
+          <T color="#80e8a5" style={{ marginTop: 6 }}>Weight controls the angle, bias shifts the line up/down.</T>
+        </Box>
+      )}
+      {sub >= 3 && (
         <div style={{ background: C.card, borderRadius: 12, padding: "14px", border: `1px solid ${C.border}`, width: "100%", display: "flex", flexDirection: "column", alignItems: "center", animation: "fadeSlideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1) both" }}>
           <T color={C.dim} size={14} center style={{ marginBottom: 10, width: "100%" }}>INSIDE A SINGLE NEURON</T>
           <svg width="420" height="170" viewBox="0 0 420 170" style={{ maxWidth: "100%", overflow: "visible" }}>
@@ -354,7 +374,7 @@ export default function LearnAI() {
           </svg>
         </div>
       )}
-      {sub >= 3 && (
+      {sub >= 4 && (
         <Box color={C.purple} style={{ width: "100%" }}>
           <T color="#b8a9ff" bold center>The math at this neuron, step by step:</T>
           <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 4, padding: "10px", background: "rgba(0,0,0,0.2)", borderRadius: 8 }}>
@@ -369,8 +389,8 @@ export default function LearnAI() {
           </div>
         </Box>
       )}
-      {sub >= 4 && <Box color={C.green}><T color="#80e8a5" bold center>So a neuron is just: multiply, sum, add bias, activate.</T><T color="#80e8a5" center size={18}>The <strong>weights</strong> and <strong>bias</strong> are what the network LEARNS. Everything else is fixed math. Now let's see the forward pass →</T></Box>}
-      {sub < 4 && <SubBtn onClick={() => navigate("forward")} />}
+      {sub >= 5 && <Box color={C.green}><T color="#80e8a5" bold center>So a neuron is just: multiply, sum, add bias, activate.</T><T color="#80e8a5" center size={18}>The <strong>weights</strong> and <strong>bias</strong> are what the network LEARNS. Everything else is fixed math. Now let's see the forward pass →</T></Box>}
+      {sub < 5 && <SubBtn onClick={() => navigate("forward")} />}
     </div>
   );
 
@@ -545,7 +565,14 @@ export default function LearnAI() {
           </Box>
         )}
 
-        {sub < 6 && <SubBtn onClick={() => navigate("forward")} />}
+        {sub >= 7 && (
+          <Box color={C.blue} style={{ width: "100%" }}>
+            <T color="#42a5f5" bold center>A brief history of activation functions:</T>
+            <T color="#42a5f5" style={{ marginTop: 6 }}>Sigmoid → vanishing gradients in deep networks → ReLU (max(0,x)) → Modern: SWIGLU in GPT-4/LLaMA. The function changes; the purpose stays: add non-linearity so stacking layers isn't just y = big_mx + big_c.</T>
+          </Box>
+        )}
+
+        {sub < 7 && <SubBtn onClick={() => navigate("forward")} />}
       </div>
     );
   };
@@ -641,7 +668,49 @@ export default function LearnAI() {
           <T color="#b8a9ff" style={{ marginTop: 8 }}>But how do we know which direction to change them? We need to understand <strong>derivatives</strong> first →</T>
         </Box>
       )}
-      {sub < 2 && <SubBtn onClick={() => navigate("forward")} />}
+      {sub >= 3 && (
+        <Box color={C.orange} style={{ width: "100%" }}>
+          <T color="#ffb74d" bold center size={20}>But wait — why SQUARE the error?</T>
+          <T color={C.dim} size={16} style={{ marginTop: 4 }}>Why not just use |actual − predicted| (absolute error)? Three killer reasons:</T>
+          <div style={{ marginTop: 10, display: "flex", flexDirection: "column", gap: 8 }}>
+            <div style={{ padding: "10px 14px", borderRadius: 8, background: `${C.red}08`, border: `1px solid ${C.red}15` }}>
+              <T color={C.red} bold size={18}>① Big errors get punished WAY more</T>
+              <div style={{ display: "flex", gap: 12, marginTop: 6, flexWrap: "wrap", justifyContent: "center" }}>
+                <div style={{ padding: "6px 12px", borderRadius: 6, background: "rgba(0,0,0,0.3)" }}>
+                  <T color={C.dim} size={15}>Small error = <strong style={{ color: C.yellow }}>2</strong></T>
+                  <T color={C.dim} size={15}>|2| = 2 &nbsp;vs&nbsp; 2² = <strong style={{ color: C.red }}>4</strong></T>
+                </div>
+                <div style={{ padding: "6px 12px", borderRadius: 6, background: "rgba(0,0,0,0.3)" }}>
+                  <T color={C.dim} size={15}>Big error = <strong style={{ color: C.yellow }}>10</strong></T>
+                  <T color={C.dim} size={15}>|10| = 10 &nbsp;vs&nbsp; 10² = <strong style={{ color: C.red }}>100</strong></T>
+                </div>
+              </div>
+              <T color="#ff8a80" size={15} style={{ marginTop: 6 }}>Squaring forces the model to fix big mistakes first — a 10x error becomes 100x loss, not just 10x.</T>
+            </div>
+            <div style={{ padding: "10px 14px", borderRadius: 8, background: `${C.cyan}08`, border: `1px solid ${C.cyan}15` }}>
+              <T color={C.cyan} bold size={18}>② Smooth curve — derivatives work cleanly</T>
+              <T color="#80deea" size={15} style={{ marginTop: 4 }}>Derivative of x² = <strong>2x</strong> — simple, works at every point including zero.</T>
+              <T color="#80deea" size={15}>Derivative of |x| = <strong>undefined at 0</strong> (sharp corner). At zero, is the slope +1 or −1? Nobody knows.</T>
+              <div style={{ marginTop: 8, padding: "8px 12px", borderRadius: 6, background: "rgba(0,0,0,0.3)" }}>
+                <T color={C.yellow} bold size={15}>Why does this matter?</T>
+                <T color={C.dim} size={14} style={{ marginTop: 3 }}>Backpropagation calculates derivatives at every step to know <strong style={{ color: "#80deea" }}>which direction to adjust weights</strong>. If the derivative is undefined (like |x| at 0), the model gets STUCK — it has no signal telling it which way to go. With x², the derivative 2x always gives a clear answer: "move left" or "move right" and "by how much."</T>
+                <T color={C.dim} size={14} style={{ marginTop: 3 }}>Think of it like driving with GPS. Smooth curve = GPS always works, always knows the next turn. Sharp corner = GPS loses signal exactly when you need it most.</T>
+              </div>
+            </div>
+            <div style={{ padding: "10px 14px", borderRadius: 8, background: `${C.green}08`, border: `1px solid ${C.green}15` }}>
+              <T color={C.green} bold size={18}>③ Parabolic bowl — one clear minimum</T>
+              <T color="#80e8a5" size={15} style={{ marginTop: 4 }}>Plot loss vs weight → x² makes a smooth U-shaped bowl. |x| makes a V-shaped valley with a sharp point at the bottom.</T>
+              <div style={{ marginTop: 8, padding: "8px 12px", borderRadius: 6, background: "rgba(0,0,0,0.3)" }}>
+                <T color={C.yellow} bold size={15}>Why does this matter?</T>
+                <T color={C.dim} size={14} style={{ marginTop: 3 }}>Gradient descent works by rolling a ball downhill. In a <strong style={{ color: "#80e8a5" }}>smooth U-bowl</strong>, the ball gently slows down as it approaches the bottom — it naturally settles at the perfect spot (the minimum loss).</T>
+                <T color={C.dim} size={14} style={{ marginTop: 3 }}>In a <strong style={{ color: C.red }}>V-shape</strong>, the ball races full speed to the bottom and <strong style={{ color: C.red }}>overshoots</strong> — bouncing back and forth across the sharp point, never settling. The model's weights keep jumping around the answer instead of converging to it.</T>
+                <T color={C.dim} size={14} style={{ marginTop: 3 }}>The U-bowl also has a unique property: the <strong style={{ color: "#80e8a5" }}>steeper you are from the bottom, the bigger the gradient</strong>. Far away = big steps (fast progress). Close to bottom = tiny steps (precise landing). It's a built-in speed control.</T>
+              </div>
+            </div>
+          </div>
+        </Box>
+      )}
+      {sub < 3 && <SubBtn onClick={() => navigate("forward")} />}
     </div>
   );
 
@@ -731,7 +800,13 @@ export default function LearnAI() {
           </Box>
         )}
         {sub >= 4 && <Box color={C.purple}><T color="#b8a9ff" bold center>The derivative is our COMPASS — it tells us which direction to adjust each weight.</T><T color="#b8a9ff" center size={18} style={{ marginTop: 4 }}>But in a network with many steps, how do we compute this derivative? That's the <strong>chain rule</strong> →</T></Box>}
-        {sub < 4 && <SubBtn onClick={() => navigate("forward")} />}
+        {sub >= 5 && (
+          <Box color={C.cyan} style={{ width: "100%" }}>
+            <T color="#80deea" bold center>With 2 knobs (w, b), we turn ONE knob at a time.</T>
+            <T color="#80deea" style={{ marginTop: 6 }}>∂L/∂w = 'how loss changes when I nudge only w.' This is a <strong>PARTIAL derivative</strong> — partial because we're holding everything else constant.</T>
+          </Box>
+        )}
+        {sub < 5 && <SubBtn onClick={() => navigate("forward")} />}
       </div>
     );
   };
@@ -934,6 +1009,12 @@ export default function LearnAI() {
         </Box>
       )}
       {sub >= 4 && (
+        <Box color={C.blue} style={{ width: "100%" }}>
+          <T color="#42a5f5" bold center>Advanced: Momentum</T>
+          <T color="#42a5f5" style={{ marginTop: 6 }}>A ball rolling downhill keeps rolling past small bumps instead of getting stuck. Momentum does the same: accumulate velocity in the descent direction, so updates are smoother and faster.</T>
+        </Box>
+      )}
+      {sub >= 5 && (
         <Box color={C.green}>
           <T color="#80e8a5" bold center size={20}>✅ That's backpropagation + gradient descent!</T>
           <T color="#80e8a5" center size={18} style={{ marginTop: 6 }}>
@@ -942,7 +1023,7 @@ export default function LearnAI() {
           </T>
         </Box>
       )}
-      {sub < 4 && <SubBtn onClick={() => navigate("forward")} />}
+      {sub < 5 && <SubBtn onClick={() => navigate("forward")} />}
     </div>
   );
 
@@ -3543,12 +3624,14 @@ export default function LearnAI() {
   const ChTOC = () => {
     const parts = [
       { num: 1, name: "Neural Network Foundations", color: C.red, desc: "What neural networks are, how they learn, forward/backward pass" },
-      { num: 2, name: "The Road to Transformers", color: C.orange, desc: "CNN → RNN → why RNN fails → the Transformer arrives" },
-      { num: 3, name: "Transformer Input Pipeline", color: C.cyan, desc: "Architecture overview, embeddings, positional encoding" },
-      { num: 4, name: "Attention — Understanding Q, K, V", color: C.purple, desc: "Why attention works, Query/Key/Value concepts, analogies" },
-      { num: 5, name: "Attention — The Full Computation", color: C.green, desc: "Step-by-step math, multi-head, W_O, the complete picture" },
+      { num: 2, name: "How LLMs Actually Train", color: C.yellow, desc: "Tokenization, self-supervised learning, cross-entropy, SFT, RLHF, batches" },
+      { num: 3, name: "Scaling & Modern Techniques", color: C.pink, desc: "Scaling laws, parameters at scale, distillation, contrastive learning" },
+      { num: 4, name: "The Road to Transformers", color: C.orange, desc: "CNN → RNN → why RNN fails → the Transformer arrives" },
+      { num: 5, name: "Transformer Input Pipeline", color: C.cyan, desc: "Architecture overview, embeddings, positional encoding" },
+      { num: 6, name: "Attention — Understanding Q, K, V", color: C.purple, desc: "Why attention works, Query/Key/Value concepts, analogies" },
+      { num: 7, name: "Attention — The Full Computation", color: C.green, desc: "Step-by-step math, multi-head, W_O, the complete picture" },
     ];
-    const partStart = { 1: 1, 2: 11, 3: 15, 4: 23, 5: 34 };
+    const partStart = { 1: 1, 2: 11, 3: 17, 4: 22, 5: 26, 6: 34, 7: 45 };
     const partChapters = {};
     chapters.forEach((c, i) => { if (c.part > 0) { if (!partChapters[c.part]) partChapters[c.part] = []; partChapters[c.part].push({ ...c, idx: i }); } });
 
@@ -3606,7 +3689,891 @@ export default function LearnAI() {
     );
   };
 
-  const allCh = [ChTOC, Ch1_1, Ch1_2, Ch1_3, Ch1_4, Ch1_ReLU, Ch1_5, Ch1_6, Ch1_7, Ch1_8, Ch1_9, Ch1_10, Ch1_11, Ch1_12, Ch1_13, Ch2_1, Ch2_2, Ch2_3, Ch2_4, Ch2_5, Ch2_6, Ch2_7, Ch3_1, Ch3_2, Ch3_3, Ch3_4, Ch3_5, Ch3_6, Ch3_7, Ch3_8, Ch3_12, Ch3_9, Ch3_10, Ch3_11, Ch3_13, Ch3_14, Ch3_15, Ch3_16, Ch3_17, Ch3_18, Ch3_19, Ch3_20, Ch3_21, Ch3_22, Ch3_23, Ch3_24, Ch3_25, Ch3_26];
+  // ═══════ 2.1 Tokenization ═══════
+  const Ch6_1 = () => (
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
+      {sub >= 0 && <Box color={C.cyan}><T color="#80deea" bold center size={20}>Computers only understand numbers.</T><T color="#80deea">Text is useless to an AI — no matter how eloquent. First step: convert "Hello world" into [1, 2, 3, 4, 5].</T></Box>}
+      {sub >= 1 && (
+        <Box color={C.yellow} style={{ width: "100%" }}>
+          <T color="#ffe082" bold center>Three tokenization approaches:</T>
+          <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 6 }}>
+            {[
+              { name: "Character-level", ex: "'hi' → ['h', 'i']", pros: "Works for any word", cons: "Way too granular, sequences too long", color: C.red },
+              { name: "Word-level", ex: "'unhappy' → ['unhappy']", pros: "Natural", cons: "50K+ tokens needed. New words = failure", color: C.orange },
+              { name: "Sub-word (Byte-Pair Encoding)", ex: "'unhappy' → ['un', 'hap', 'py']", pros: "Sweet spot. ~50K tokens covers everything", cons: "Need to learn the splits first", color: C.green },
+            ].map(({ name, ex, pros, cons, color }) => (
+              <div key={name} style={{ padding: "8px 12px", borderRadius: 8, background: `${color}08`, border: `1px solid ${color}12` }}>
+                <T color={color} bold size={16}>{name}</T>
+                <T color={C.dim} size={14}>{ex}</T>
+                <T color={C.dim} size={13}>✓ {pros}</T>
+                <T color={C.dim} size={13}>✗ {cons}</T>
+              </div>
+            ))}
+          </div>
+        </Box>
+      )}
+      {sub >= 2 && (
+        <Box color={C.purple} style={{ width: "100%" }}>
+          <T color="#b8a9ff" bold center size={19}>Byte-Pair Encoding (BPE) — How it works:</T>
+          <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 5 }}>
+            {[
+              { step: "1. Start", desc: "Every character is a token: h, e, l, l, o = [104, 101, 108, 108, 111]" },
+              { step: "2. Scan", desc: "Find the most frequent pair: 'll' appears 1000 times" },
+              { step: "3. Merge", desc: "Combine: 'l' + 'l' → merge as token 256. Now 'hello' = [104, 101, 256, 111]" },
+              { step: "4. Repeat", desc: "Next pair: 'e' + '256' → token 257. Keep going until you have ~50K tokens" },
+            ].map(({ step, desc }) => (
+              <div key={step} style={{ padding: "6px 10px", borderRadius: 6, background: `${C.purple}08`, border: `1px solid ${C.purple}12` }}>
+                <T color={C.purple} bold size={15}>{step}:</T>
+                <T color={C.dim} size={14}>{desc}</T>
+              </div>
+            ))}
+          </div>
+        </Box>
+      )}
+      {sub >= 3 && (
+        <Box color={C.cyan} style={{ width: "100%" }}>
+          <T color="#80deea" bold center>Real example:</T>
+          <T color="#80deea" size={16} style={{ marginTop: 6 }}>Word: "unhappiness"</T>
+          <T color="#80deea" size={14}>Tokenizes to: ['un', 'hap', 'pi', 'ness']</T>
+          <T color="#80deea" size={14}>Token IDs: [782, 14553, 3920, 2494]</T>
+          <T color="#80deea" style={{ marginTop: 8 }}>The model NEVER saw "unhappiness" in training, but it knows each piece. Combine them → understands the word.</T>
+        </Box>
+      )}
+      {sub >= 4 && (
+        <Box color={C.green} style={{ width: "100%" }}>
+          <T color="#80e8a5" bold center size={19}>The complete pipeline:</T>
+          <div style={{ marginTop: 8, display: "flex", flexDirection: "column", alignItems: "stretch", gap: 3 }}>
+            {[
+              { text: "Raw Text", color: C.red },
+              { text: "↓ Tokenizer ↓", color: C.dim },
+              { text: "Token IDs: [782, 14553, 2494, ...]", color: C.yellow },
+              { text: "↓ Embedding Layer ↓", color: C.dim },
+              { text: "Embedding Vectors: [[-0.2, 0.5, 0.1], [0.3, -0.4, 0.7], ...]", color: C.cyan },
+              { text: "↓ Into Transformer ↓", color: C.dim },
+              { text: "Attention, prediction, generation", color: C.green },
+            ].map(({ text, color }, i) => (
+              <T key={i} color={color} size={15} center bold={text.includes("↓") ? false : true}>{text}</T>
+            ))}
+          </div>
+        </Box>
+      )}
+      {sub >= 5 && <Box color={C.yellow}><T color="#ffe082" bold center>GPT has ~50,000 tokens. Some are common ('the', 'is'), some are rare. 'cryptocurrency' = 3 tokens. 'the' = 1 token.</T><T color="#ffe082" style={{ marginTop: 6 }}>This is why token limits matter: 1 paragraph ≈ 100 tokens. Your 4K context window ≈ 40 paragraphs.</T></Box>}
+      {sub < 5 && <SubBtn onClick={() => navigate("forward")} />}
+    </div>
+  );
+
+  // ═══════ 2.2 Self-Supervised Learning ═══════
+  const Ch6_2 = () => (
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
+      {sub >= 0 && (
+        <Box color={C.purple} style={{ width: "100%" }}>
+          <T color="#b8a9ff" bold center size={20}>The Labeling Problem:</T>
+          <T color="#b8a9ff" style={{ marginTop: 6 }}>Supervised learning needs millions of labeled examples: <strong>input → label</strong>. For language, that means billions of humans writing ideal responses. Impossible.</T>
+        </Box>
+      )}
+      {sub >= 1 && (
+        <Box color={C.cyan} style={{ width: "100%" }}>
+          <T color="#80deea" bold center size={20}>The Genius Trick: Use the text itself as the label.</T>
+          <T color="#80deea" style={{ marginTop: 6 }}>Given: "The capital of France is"</T>
+          <T color="#80deea" style={{ marginTop: 4, padding: "10px", background: "rgba(0,0,0,0.2)", borderRadius: 6 }}>Model predicts the next token: <strong>"Paris"</strong></T>
+          <T color="#80deea" style={{ marginTop: 6 }}>Correct answer is RIGHT THERE in the original text. No humans needed.</T>
+        </Box>
+      )}
+      {sub >= 2 && (
+        <Box color={C.yellow} style={{ width: "100%" }}>
+          <T color="#ffe082" bold center size={20}>Scaling without limit:</T>
+          <T color="#ffe082" style={{ marginTop: 8 }}>Every sentence in:</T>
+          <div style={{ marginTop: 6, display: "flex", flexDirection: "column", gap: 4, paddingLeft: 12 }}>
+            {[
+              "Wikipedia (6 million articles)",
+              "All books ever digitized (millions)",
+              "Internet text (trillions of pages)",
+              "Scientific papers, code, forums, tweets",
+            ].map((item, i) => (
+              <T key={i} color="#ffe082" size={15}>→ {item}</T>
+            ))}
+          </div>
+          <T color="#ffe082" style={{ marginTop: 8 }}>= <strong>Billions of examples</strong> (GPT-3: trained on ~300 billion tokens)</T>
+        </Box>
+      )}
+      {sub >= 3 && (
+        <Box color={C.green} style={{ width: "100%" }}>
+          <T color="#80e8a5" bold center size={20}>What does next-token prediction actually teach?</T>
+          <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 6 }}>
+            {[
+              { task: "Grammar", example: "Given 'I is', predict errors" },
+              { task: "Facts", example: "Given 'The capital of France', predict 'Paris'" },
+              { task: "Reasoning", example: "Given '2 + 2 =', predict '4'" },
+              { task: "World knowledge", example: "Given 'Einstein discovered', predict 'relativity'" },
+              { task: "Style & tone", example: "Given 'Dear Sir', predict formal language ahead" },
+            ].map(({ task, example }) => (
+              <div key={task} style={{ padding: "6px 10px", borderRadius: 6, background: `${C.green}08`, border: `1px solid ${C.green}12` }}>
+                <T color={C.green} bold size={15}>{task}:</T>
+                <T color={C.dim} size={14}>{example}</T>
+              </div>
+            ))}
+          </div>
+        </Box>
+      )}
+      {sub >= 4 && (
+        <Box color={C.purple} style={{ width: "100%" }}>
+          <T color="#b8a9ff" bold center size={19}>Three training paradigms:</T>
+          <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 6 }}>
+            {[
+              { name: "Supervised", data: "Humans: Q&A pairs, labeled examples", icon: "👤👤👤" },
+              { name: "Unsupervised", data: "Raw data, no labels", icon: "📄📄📄" },
+              { name: "Self-Supervised", data: "Data labels itself. Predict next word", icon: "📄→📄" },
+            ].map(({ name, data, icon }) => (
+              <div key={name} style={{ padding: "8px 10px", borderRadius: 6, background: `${C.purple}08`, border: `1px solid ${C.purple}12` }}>
+                <T color={C.purple} bold size={15}>{icon} {name}: {data}</T>
+              </div>
+            ))}
+          </div>
+        </Box>
+      )}
+      {sub >= 5 && (
+        <Box color={C.cyan} style={{ width: "100%" }}>
+          <T color="#80deea" bold center size={19}>The training loop:</T>
+          <div style={{ marginTop: 10, display: "flex", flexDirection: "column", alignItems: "center", gap: 4 }}>
+            {["Pick random sentence", "Mask last word", "Predict it", "Check if right", "Update weights", "Repeat 10 trillion times"].map((step, i) => (
+              <div key={i} style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                <div style={{ background: `${C.cyan}20`, color: C.cyan, fontWeight: 700, fontSize: 16, width: 32, height: 32, borderRadius: 6, display: "flex", alignItems: "center", justifyContent: "center" }}>{i + 1}</div>
+                <T color={C.mid} size={15}>{step}</T>
+                {i < 5 && <T color={C.dim} size={18}>→</T>}
+              </div>
+            ))}
+          </div>
+        </Box>
+      )}
+      {sub < 5 && <SubBtn onClick={() => navigate("forward")} />}
+    </div>
+  );
+
+  // ═══════ 2.3 Cross-Entropy Loss ═══════
+  const Ch6_3 = () => (
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
+      {sub >= 0 && (
+        <Box color={C.red} style={{ width: "100%" }}>
+          <T color="#ff8a80" bold center size={20}>The new loss problem:</T>
+          <T color="#ff8a80" style={{ marginTop: 6 }}>In Part 1, loss = (prediction − correct) squared. That worked for predicting ONE number.</T>
+          <T color="#ff8a80" style={{ marginTop: 6 }}>Now, the model predicts probabilities over <strong>50,000 tokens</strong>. Can't use MSE. Need a different loss.</T>
+        </Box>
+      )}
+      {sub >= 1 && (
+        <Box color={C.cyan} style={{ width: "100%" }}>
+          <T color="#80deea" bold center size={20}>What the model outputs:</T>
+          <T color="#80deea" style={{ marginTop: 8 }}>For input "The capital of France is", model predicts:</T>
+          <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 4, paddingLeft: 12 }}>
+            {[
+              { token: "'Paris'", p: 0.85 },
+              { token: "'London'", p: 0.05 },
+              { token: "'Berlin'", p: 0.03 },
+              { token: "'Rome'", p: 0.02 },
+              { token: "[other 49,996 tokens]", p: 0.05 },
+            ].map(({ token, p }) => (
+              <T key={token} color="#80deea" size={15}>P({token}) = {p}</T>
+            ))}
+          </div>
+          <T color="#80deea" style={{ marginTop: 6 }}>These sum to 1.0 (proper probability distribution).</T>
+        </Box>
+      )}
+      {sub >= 2 && (
+        <Box color={C.yellow} style={{ width: "100%" }}>
+          <T color="#ffe082" bold center size={20}>Cross-Entropy: Loss = −log(P_correct)</T>
+          <T color="#ffe082" style={{ marginTop: 8 }}>If correct answer is 'Paris' and P('Paris') = 0.85:</T>
+          <div style={{ marginTop: 8, padding: "10px", background: "rgba(0,0,0,0.2)", borderRadius: 6 }}>
+            <T color="#ffe082" size={18} center bold>Loss = −log(0.85) = 0.16</T>
+          </div>
+          <T color="#ffe082" style={{ marginTop: 8 }}>The model is quite confident and correct. Low loss. Good!</T>
+        </Box>
+      )}
+      {sub >= 3 && (
+        <Box color={C.orange} style={{ width: "100%" }}>
+          <T color="#ffb74d" bold center size={19}>Three scenarios:</T>
+          <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 6 }}>
+            {[
+              { case: "Confident + Correct", p: "P=0.90", loss: "Loss = 0.11", color: C.green, mood: "🟢 Great!" },
+              { case: "Unsure (hedging)", p: "P=0.40", loss: "Loss = 0.92", color: C.yellow, mood: "🟡 Okay" },
+              { case: "Confident + Wrong", p: "P=0.01", loss: "Loss = 4.61", color: C.red, mood: "🔴 Terrible!" },
+            ].map(({ case: c, p, loss, color, mood }) => (
+              <div key={c} style={{ padding: "8px 12px", borderRadius: 6, background: `${color}08`, border: `1px solid ${color}12` }}>
+                <T color={color} bold size={15}>{c}</T>
+                <T color={C.dim} size={14}>{p} → {loss} {mood}</T>
+              </div>
+            ))}
+          </div>
+        </Box>
+      )}
+      {sub >= 4 && (
+        <Box color={C.blue} style={{ width: "100%" }}>
+          <T color="#42a5f5" bold center size={20}>Perplexity: the intuitive measure</T>
+          <T color="#42a5f5" style={{ marginTop: 8 }}>Perplexity = e^(average loss)</T>
+          <T color="#42a5f5" style={{ marginTop: 8 }}>It means: "The model is confused between this many equally likely tokens"</T>
+          <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 4 }}>
+            {[
+              { case: "GPT-4", perp: "~5", meaning: "Usually very sure (picks from ~5 likely tokens)" },
+              { case: "Random guess (50K tokens)", perp: "~50,000", meaning: "Completely lost" },
+              { case: "Good model", perp: "10-20", meaning: "Confident but has some uncertainty" },
+            ].map(({ case: c, perp, meaning }) => (
+              <div key={c} style={{ padding: "6px 10px", borderRadius: 6, background: `${C.blue}08`, border: `1px solid ${C.blue}12` }}>
+                <T color={C.blue} bold size={14}>{c}: Perplexity = {perp}</T>
+                <T color={C.dim} size={13}>{meaning}</T>
+              </div>
+            ))}
+          </div>
+        </Box>
+      )}
+      {sub >= 5 && <Box color={C.green}><T color="#80e8a5" bold center>Why cross-entropy and not MSE? Because these are <strong>probability distributions</strong>, not single numbers. Comparing distributions needs entropy. MSE would punish wrong answers equally — entropy punishes confident mistakes more.</T></Box>}
+      {sub < 5 && <SubBtn onClick={() => navigate("forward")} />}
+    </div>
+  );
+
+  // ═══════ 2.4 Supervised Fine-Tuning (SFT) ═══════
+  const Ch6_4 = () => (
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
+      {sub >= 0 && (
+        <Box color={C.purple} style={{ width: "100%" }}>
+          <T color="#b8a9ff" bold center size={20}>The raw model problem:</T>
+          <T color="#b8a9ff" style={{ marginTop: 6 }}>After pretraining on trillions of tokens, the model can write. But ask it a question?</T>
+          <div style={{ marginTop: 8, padding: "10px", background: "rgba(0,0,0,0.2)", borderRadius: 6 }}>
+            <T color="#ff8a80" size={15} bold>Q: What is 2+2?</T>
+            <T color="#ffb74d" size={15} style={{ marginTop: 4 }}>A: 2+2 appears in many contexts. In 1832, the mathematician Charles Babbage... [continues writing an article]</T>
+          </div>
+          <T color="#b8a9ff" style={{ marginTop: 6 }}>It doesn't understand how to ANSWER. Just continues writing. It has knowledge but zero instruction-following.</T>
+        </Box>
+      )}
+      {sub >= 1 && (
+        <Box color={C.cyan} style={{ width: "100%" }}>
+          <T color="#80deea" bold center size={20}>SFT: Supervised Fine-Tuning</T>
+          <T color="#80deea" style={{ marginTop: 8 }}>Humans write thousands of ideal Q&A pairs:</T>
+          <div style={{ marginTop: 8, padding: "10px", background: "rgba(0,0,0,0.2)", borderRadius: 6, fontFamily: "monospace", fontSize: 13 }}>
+            <T color={C.green} size={13}>{"{"}</T>
+            <T color={C.dim} size={13} style={{ paddingLeft: 16 }}>prompt: "What is 2+2?",</T>
+            <T color={C.dim} size={13} style={{ paddingLeft: 16 }}>response: "2 plus 2 equals 4."</T>
+            <T color={C.green} size={13}>{"}"}</T>
+          </div>
+          <T color="#80deea" style={{ marginTop: 6 }}>Train the model on these pairs. Now it learns: question → short direct answer.</T>
+        </Box>
+      )}
+      {sub >= 2 && (
+        <Box color={C.yellow} style={{ width: "100%" }}>
+          <T color="#ffe082" bold center size={19}>Before SFT vs After SFT:</T>
+          <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 8 }}>
+            {[
+              { phase: "Before", inp: "Why is sky blue?", out: "The sky appears blue because... [writes a 500-word essay]", color: C.red },
+              { phase: "After", inp: "Why is sky blue?", out: "Rayleigh scattering scatters shorter blue wavelengths more.", color: C.green },
+            ].map(({ phase, inp, out, color }) => (
+              <div key={phase} style={{ padding: "10px", borderRadius: 6, background: `${color}08`, border: `1px solid ${color}12` }}>
+                <T color={color} bold size={15}>{phase} SFT</T>
+                <T color={C.dim} size={13} style={{ marginTop: 4 }}>Q: {inp}</T>
+                <T color={color} size={13} style={{ marginTop: 2 }}>A: {out}</T>
+              </div>
+            ))}
+          </div>
+        </Box>
+      )}
+      {sub >= 3 && (
+        <Box color={C.orange} style={{ width: "100%" }}>
+          <T color="#ffb74d" bold center size={19}>The key insight:</T>
+          <T color="#ffb74d" style={{ marginTop: 8 }}>SFT is CHEAP and FAST.</T>
+          <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 4 }}>
+            {[
+              { metric: "Data needed", pre: "Trillions of tokens", sft: "10K-100K examples" },
+              { metric: "Training time", pre: "Months of GPU clusters", sft: "Hours to days" },
+              { metric: "Cost", pre: "Millions of dollars", sft: "Thousands of dollars" },
+            ].map(({ metric, pre, sft }) => (
+              <div key={metric} style={{ display: "grid", gridTemplateColumns: "100px 1fr 1fr", gap: 8, alignItems: "center", padding: "6px", borderRadius: 6, background: `${C.orange}06`, border: `1px solid ${C.orange}12` }}>
+                <T color={C.orange} bold size={13}>{metric}</T>
+                <T color={C.dim} size={13}>{pre}</T>
+                <T color={C.orange} size={13}>{sft}</T>
+              </div>
+            ))}
+          </div>
+        </Box>
+      )}
+      {sub >= 4 && <Box color={C.green}><T color="#80e8a5" bold center size={18}>SFT doesn't teach <strong>new knowledge</strong>. It shapes <strong>behavior</strong>.</T><T color="#80e8a5" style={{ marginTop: 6 }}>The model learned everything during pretraining. SFT just teaches it: "When you see a question, answer directly and helpfully." Format, tone, structure.</T></Box>}
+      {sub < 4 && <SubBtn onClick={() => navigate("forward")} />}
+    </div>
+  );
+
+  // ═══════ 2.5 RLHF — Making AI Helpful & Safe ═══════
+  const Ch6_5 = () => (
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
+      {sub >= 0 && (
+        <Box color={C.pink} style={{ width: "100%" }}>
+          <T color="#ce93d8" bold center size={20}>The SFT problem:</T>
+          <T color="#ce93d8" style={{ marginTop: 6 }}>SFT makes models follow instructions. But it doesn't guarantee they're HELPFUL, HARMLESS, HONEST.</T>
+          <T color="#ce93d8" style={{ marginTop: 6 }}>The model might be toxic, sarcastic, unhelpful, or just wrong in ways humans care about.</T>
+        </Box>
+      )}
+      {sub >= 1 && (
+        <Box color={C.cyan} style={{ width: "100%" }}>
+          <T color="#80deea" bold center size={20}>Step 1: Collect Human Preferences</T>
+          <T color="#80deea" style={{ marginTop: 8 }}>For each prompt, the model generates 2-4 responses.</T>
+          <T color="#80deea" style={{ marginTop: 6 }}>Humans rank them:</T>
+          <div style={{ marginTop: 8, padding: "10px", background: "rgba(0,0,0,0.2)", borderRadius: 6 }}>
+            <T color="#80deea" size={14}><strong>Q: How do I learn to code?</strong></T>
+            <T color={C.green} size={14} style={{ marginTop: 4 }}>Response A: "Start with Python. Build projects..."</T>
+            <T color={C.red} size={14}>Response B: "You probably can't. Coding is hard."</T>
+            <T color="#80deea" size={14} style={{ marginTop: 4 }}>👤 Human: "A is better. More helpful."</T>
+          </div>
+        </Box>
+      )}
+      {sub >= 2 && (
+        <Box color={C.yellow} style={{ width: "100%" }}>
+          <T color="#ffe082" bold center size={20}>Step 2: Train a Reward Model</T>
+          <T color="#ffe082" style={{ marginTop: 8 }}>A separate neural network learns to predict human preferences.</T>
+          <T color="#ffe082" style={{ marginTop: 6 }}>Given any response, it outputs a score:</T>
+          <div style={{ marginTop: 8, padding: "10px", background: "rgba(0,0,0,0.2)", borderRadius: 6 }}>
+            <T color="#80e8a5" size={14}>"Start with Python..." → Score: <strong>8.2</strong></T>
+            <T color="#ff8a80" size={14}>"You probably can't..." → Score: <strong>2.1</strong></T>
+          </div>
+          <T color="#ffe082" style={{ marginTop: 6 }}>The reward model learns what humans like without needing humans for every single choice.</T>
+        </Box>
+      )}
+      {sub >= 3 && (
+        <Box color={C.purple} style={{ width: "100%" }}>
+          <T color="#b8a9ff" bold center size={20}>Step 3: PPO — Optimize for Reward</T>
+          <T color="#b8a9ff" style={{ marginTop: 8 }}>PPO = Proximal Policy Optimization. Update the model to maximize reward.</T>
+          <T color="#b8a9ff" style={{ marginTop: 6 }}>But with a safety mechanism: the <strong>KL penalty</strong>.</T>
+          <div style={{ marginTop: 8, padding: "10px", background: "rgba(0,0,0,0.2)", borderRadius: 6 }}>
+            <T color="#b8a9ff" size={14} bold>Goal: Maximize Reward − λ × KL_penalty</T>
+            <T color={C.dim} size={13} style={{ marginTop: 4 }}>In English: "Get higher rewards, but don't change the model too much"</T>
+          </div>
+        </Box>
+      )}
+      {sub >= 4 && (
+        <Box color={C.green} style={{ width: "100%" }}>
+          <T color="#80e8a5" bold center size={20}>Why the KL penalty matters:</T>
+          <T color="#80e8a5" style={{ marginTop: 8 }}>Without it, the model "hacks" the reward. Like a student gaming a test:</T>
+          <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 5 }}>
+            {[
+              { scenario: "Without KL penalty", outcome: "Model learns to say 'yes' to everything. Maximizes reward but becomes useless.", color: C.red },
+              { scenario: "With KL penalty", outcome: "Model gradually improves. Stays sensible. Careful downhill roll, not freefall.", color: C.green },
+            ].map(({ scenario, outcome, color }) => (
+              <div key={scenario} style={{ padding: "8px 10px", borderRadius: 6, background: `${color}08`, border: `1px solid ${color}12` }}>
+                <T color={color} bold size={14}>{scenario}</T>
+                <T color={C.dim} size={13}>{outcome}</T>
+              </div>
+            ))}
+          </div>
+        </Box>
+      )}
+      {sub >= 5 && (
+        <Box color={C.orange} style={{ width: "100%" }}>
+          <T color="#ffb74d" bold center size={20}>The complete pipeline:</T>
+          <div style={{ marginTop: 10, display: "flex", flexDirection: "column", alignItems: "center", gap: 4 }}>
+            {[
+              { phase: "1. Pretraining", desc: "Raw ability — knows facts, patterns, language", color: C.red, icon: "🧠" },
+              { phase: "2. SFT", desc: "Behavior — learns to answer questions", color: C.yellow, icon: "📚" },
+              { phase: "3. RLHF", desc: "Alignment — learns human values", color: C.green, icon: "👥" },
+            ].map(({ phase, desc, color, icon }) => (
+              <div key={phase} style={{ padding: "10px 16px", borderRadius: 8, background: `${color}12`, border: `1px solid ${color}25`, width: "100%" }}>
+                <T color={color} bold size={16}>{icon} {phase}</T>
+                <T color={C.dim} size={14}>{desc}</T>
+              </div>
+            ))}
+          </div>
+          <T color="#ffb74d" style={{ marginTop: 12, textAlign: "center" }}>↓</T>
+          <div style={{ marginTop: 8, padding: "12px", borderRadius: 8, background: `${C.purple}15`, border: `2px solid ${C.purple}35` }}>
+            <T color={C.purple} bold size={18} center>ChatGPT / Claude / Assistants</T>
+          </div>
+        </Box>
+      )}
+      {sub < 5 && <SubBtn onClick={() => navigate("forward")} />}
+    </div>
+  );
+
+  // ═══════ 2.6 Batch Training ═══════
+  const Ch6_6 = () => (
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
+      {sub >= 0 && (
+        <Box color={C.orange} style={{ width: "100%" }}>
+          <T color="#ffb74d" bold center size={20}>The naive approach:</T>
+          <T color="#ffb74d" style={{ marginTop: 6 }}>Train on one example. Compute loss. Compute gradients. Update weights. Next example.</T>
+          <T color="#ffb74d" style={{ marginTop: 6 }}>Problem: One outlier, one weird example → weights jump in a terrible direction.</T>
+          <div style={{ marginTop: 8, padding: "10px", background: "rgba(0,0,0,0.2)", borderRadius: 6 }}>
+            <T color="#ffb74d" size={14}>Example 1 says: "move left!" → move left</T>
+            <T color="#ffb74d" size={14}>Example 2 (outlier) says: "move right!" → move right</T>
+            <T color="#ffb74d" size={14}>Example 3 says: "move left!" → move left again</T>
+            <T color="#ff8a80" size={14} bold>Result: zigzag noisy path. Slow progress.</T>
+          </div>
+        </Box>
+      )}
+      {sub >= 1 && (
+        <Box color={C.yellow} style={{ width: "100%" }}>
+          <T color="#ffe082" bold center size={20}>Batching: Ask consensus</T>
+          <T color="#ffe082" style={{ marginTop: 8 }}>Process 32 examples. Compute 32 gradients. Average them. Update once.</T>
+          <div style={{ marginTop: 8, padding: "10px", background: "rgba(0,0,0,0.2)", borderRadius: 6 }}>
+            <T color="#ffe082" size={14}>Example 1: "left" + Example 2: "right" + ... + Example 32: "left"</T>
+            <T color="#ffe082" size={14}>Average: "left" (the consensus)</T>
+            <T color="#80e8a5" size={14} bold>Update based on majority. Smooth path.</T>
+          </div>
+        </Box>
+      )}
+      {sub >= 2 && (
+        <Box color={C.cyan} style={{ width: "100%" }}>
+          <T color="#80deea" bold center size={20}>Analogy: Asking for directions</T>
+          <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 6 }}>
+            {[
+              { scenario: "Ask 1 person", issue: "Might be lost or wrong", result: "Walk in wrong direction" },
+              { scenario: "Ask 32 people", issue: "One is still wrong", result: "Take consensus. Reliable direction" },
+            ].map(({ scenario, issue, result }) => (
+              <div key={scenario} style={{ padding: "8px 10px", borderRadius: 6, background: `${C.cyan}08`, border: `1px solid ${C.cyan}12` }}>
+                <T color={C.cyan} bold size={14}>{scenario}</T>
+                <T color={C.dim} size={13}>Issue: {issue} → Result: {result}</T>
+              </div>
+            ))}
+          </div>
+        </Box>
+      )}
+      {sub >= 3 && (
+        <Box color={C.purple} style={{ width: "100%" }}>
+          <T color="#b8a9ff" bold center size={20}>Batch size tradeoffs:</T>
+          <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 6 }}>
+            {[
+              { size: "Size = 1", smooth: "Very noisy", fast: "Fastest", memory: "Least memory" },
+              { size: "Size = 32", smooth: "Smooth", fast: "Fast", memory: "Moderate" },
+              { size: "Size = 128", smooth: "Very smooth", fast: "Slower", memory: "More RAM needed" },
+              { size: "Size > 1000", smooth: "Extremely smooth", fast: "Much slower", memory: "Huge RAM needed" },
+            ].map(({ size, smooth, fast, memory }) => (
+              <div key={size} style={{ display: "grid", gridTemplateColumns: "80px 1fr 1fr 1fr", gap: 8, alignItems: "center", padding: "6px", borderRadius: 6, background: `${C.purple}06`, border: `1px solid ${C.purple}12` }}>
+                <T color={C.purple} bold size={13}>{size}</T>
+                <T color={C.dim} size={12}>{smooth}</T>
+                <T color={C.dim} size={12}>{fast}</T>
+                <T color={C.dim} size={12}>{memory}</T>
+              </div>
+            ))}
+          </div>
+        </Box>
+      )}
+      {sub >= 4 && (
+        <Box color={C.green} style={{ width: "100%" }}>
+          <T color="#80e8a5" bold center size={20}>The critical insight:</T>
+          <T color="#80e8a5" style={{ marginTop: 8 }}>Beyond a certain batch size (often 32-64), diminishing returns.</T>
+          <T color="#80e8a5" style={{ marginTop: 6 }}>You get barely smoother gradients but 2x slower training.</T>
+          <T color="#80e8a5" style={{ marginTop: 6 }}>GPT-4 uses massive batches across thousands of GPUs, but even there: bigger batches don't guarantee better models.</T>
+        </Box>
+      )}
+      {sub < 4 && <SubBtn onClick={() => navigate("forward")} />}
+    </div>
+  );
+
+  // ═══════ 3.1 Scaling Laws ═══════
+  const Ch7_1 = () => (
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
+      {sub >= 0 && (
+        <Box color={C.cyan} style={{ width: "100%" }}>
+          <T color="#80deea" bold center size={20}>The discovery (2020):</T>
+          <T color="#80deea" style={{ marginTop: 6 }}>OpenAI found that language model performance follows <strong>predictable mathematical patterns</strong> as you scale three things:</T>
+        </Box>
+      )}
+      {sub >= 1 && (
+        <Box color={C.yellow} style={{ width: "100%" }}>
+          <T color="#ffe082" bold center size={20}>The three scaling axes:</T>
+          <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 6 }}>
+            {[
+              { axis: "Parameters", symbol: "N", example: "1B → 7B → 70B → 175B", desc: "Model size (weights)" },
+              { axis: "Data (Tokens)", symbol: "D", example: "100B tokens → 1T tokens", desc: "Total training data" },
+              { axis: "Compute", symbol: "C", example: "1 GPU → 1000 GPUs", desc: "GPU hours, FLOPs" },
+            ].map(({ axis, symbol, example, desc }) => (
+              <div key={axis} style={{ padding: "8px 12px", borderRadius: 6, background: `${C.yellow}08`, border: `1px solid ${C.yellow}12` }}>
+                <T color={C.yellow} bold size={15}>{symbol}. {axis}</T>
+                <T color={C.dim} size={13}>{desc}</T>
+                <T color={C.dim} size={12}>Examples: {example}</T>
+              </div>
+            ))}
+          </div>
+        </Box>
+      )}
+      {sub >= 2 && (
+        <Box color={C.orange} style={{ width: "100%" }}>
+          <T color="#ffb74d" bold center size={20}>The key scaling law:</T>
+          <T color="#ffb74d" style={{ marginTop: 8 }}>Scale all three together → smooth, predictable improvement</T>
+          <T color="#ffb74d" style={{ marginTop: 6 }}>Scale one alone → diminishing returns</T>
+          <div style={{ marginTop: 8, padding: "10px", background: "rgba(0,0,0,0.2)", borderRadius: 6 }}>
+            <T color="#ffb74d" size={14} bold>Loss ∝ N^(-α) × D^(-β) × C^(-γ)</T>
+            <T color={C.dim} size={12} style={{ marginTop: 4 }}>Performance improves as a power law with size.</T>
+          </div>
+          <T color="#ffb74d" style={{ marginTop: 8 }}>Like a recipe: more flour alone doesn't make more cake without more eggs and butter.</T>
+        </Box>
+      )}
+      {sub >= 3 && (
+        <Box color={C.green} style={{ width: "100%" }}>
+          <T color="#80e8a5" bold center size={20}>Real examples:</T>
+          <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 6 }}>
+            {[
+              { model: "GPT-2", params: "1.5B", capabilities: "Can complete text decently" },
+              { model: "GPT-3", params: "175B", capabilities: "Can do in-context learning, few-shot prompting" },
+              { model: "GPT-4", params: "~1.8T (estimated)", capabilities: "Can reason, code, multimodal, passes LSAT" },
+            ].map(({ model, params, capabilities }) => (
+              <div key={model} style={{ padding: "8px 10px", borderRadius: 6, background: `${C.green}08`, border: `1px solid ${C.green}12` }}>
+                <T color={C.green} bold size={14}>{model}: {params}</T>
+                <T color={C.dim} size={13}>{capabilities}</T>
+              </div>
+            ))}
+          </div>
+          <T color="#80e8a5" style={{ marginTop: 8 }}>Each jump in scale = major capability leap.</T>
+        </Box>
+      )}
+      {sub >= 4 && (
+        <Box color={C.purple} style={{ width: "100%" }}>
+          <T color="#b8a9ff" bold center size={20}>The practical impact:</T>
+          <T color="#b8a9ff" style={{ marginTop: 8 }}>Train a small model (1B params). Measure performance.</T>
+          <T color="#b8a9ff">Use the scaling law to <strong>predict</strong> how a 175B model will perform.</T>
+          <T color="#b8a9ff" style={{ marginTop: 6 }}>This <strong>saves millions in compute</strong>. You don't need to actually train the giant model to forecast results.</T>
+        </Box>
+      )}
+      {sub >= 5 && (
+        <Box color={C.pink} style={{ width: "100%" }}>
+          <T color="#ce93d8" bold center size={20}>Chinchilla Scaling (DeepMind 2022):</T>
+          <T color="#ce93d8" style={{ marginTop: 8 }}>People were training models with way too few tokens relative to size.</T>
+          <T color="#ce93d8" style={{ marginTop: 6 }}><strong>Most models are under-trained, not too small.</strong></T>
+          <T color="#ce93d8" style={{ marginTop: 6 }}>Optimal: match data tokens to parameters. 200B params = 20T tokens (rough rule).</T>
+        </Box>
+      )}
+      {sub < 5 && <SubBtn onClick={() => navigate("forward")} />}
+    </div>
+  );
+
+  // ═══════ 3.2 Parameters at Scale ═══════
+  const Ch7_2 = () => (
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
+      {sub >= 0 && (
+        <Box color={C.yellow} style={{ width: "100%" }}>
+          <T color="#ffe082" bold center size={20}>What is a parameter?</T>
+          <T color="#ffe082" style={{ marginTop: 6 }}>Every weight. Every bias. One number = one parameter.</T>
+          <T color="#ffe082" style={{ marginTop: 6 }}>When people say "LLaMA-7B", they mean 7 billion parameters. 7,000,000,000 floating-point numbers.</T>
+        </Box>
+      )}
+      {sub >= 1 && (
+        <Box color={C.cyan} style={{ width: "100%" }}>
+          <T color="#80deea" bold center size={20}>Counting parameters in a simple layer:</T>
+          <div style={{ marginTop: 8, padding: "10px", background: "rgba(0,0,0,0.2)", borderRadius: 6 }}>
+            <T color="#80deea" size={14}>Input layer: 4 neurons</T>
+            <T color="#80deea" size={14}>Output layer: 3 neurons</T>
+            <T color="#80deea" size={14} bold style={{ marginTop: 6 }}>Weight matrix W: 4 × 3 = <strong>12 weights</strong></T>
+            <T color="#80deea" size={14} bold>Bias vector b: <strong>3 biases</strong></T>
+            <T color={C.green} size={14} bold style={{ marginTop: 4 }}>Total: 12 + 3 = <strong>15 parameters</strong></T>
+          </div>
+        </Box>
+      )}
+      {sub >= 2 && (
+        <Box color={C.orange} style={{ width: "100%" }}>
+          <T color="#ffb74d" bold center size={20}>Scaling up to real models:</T>
+          <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 6 }}>
+            {[
+              { model: "LLaMA-7B", params: "7 billion", scale: "Like a notebook of facts" },
+              { model: "GPT-3", params: "175 billion", scale: "Like a library" },
+              { model: "GPT-4 (estimated)", params: "~1.8 trillion", scale: "Like all of human knowledge" },
+            ].map(({ model, params, scale }) => (
+              <div key={model} style={{ padding: "8px 10px", borderRadius: 6, background: `${C.orange}08`, border: `1px solid ${C.orange}12` }}>
+                <T color={C.orange} bold size={14}>{model}</T>
+                <T color={C.dim} size={13}>{params} — {scale}</T>
+              </div>
+            ))}
+          </div>
+        </Box>
+      )}
+      {sub >= 3 && (
+        <Box color={C.green} style={{ width: "100%" }}>
+          <T color="#80e8a5" bold center size={20}>Where do the parameters live?</T>
+          <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 5 }}>
+            {[
+              { component: "Embedding matrix", role: "Token → vector", fraction: "~20%" },
+              { component: "Attention (Q, K, V, O)", role: "Query/Key/Value computation", fraction: "~20%" },
+              { component: "FFN layers", role: "Feed-forward networks", fraction: "~50%" },
+              { component: "Output projection", role: "Vector → logits (token probabilities)", fraction: "~10%" },
+            ].map(({ component, role, fraction }) => (
+              <div key={component} style={{ padding: "6px 10px", borderRadius: 6, background: `${C.green}08`, border: `1px solid ${C.green}12` }}>
+                <T color={C.green} bold size={13}>{component}: {fraction}</T>
+                <T color={C.dim} size={12}>{role}</T>
+              </div>
+            ))}
+          </div>
+        </Box>
+      )}
+      {sub >= 4 && (
+        <Box color={C.blue} style={{ width: "100%" }}>
+          <T color="#42a5f5" bold center size={20}>The critical insight:</T>
+          <T color="#42a5f5" style={{ marginTop: 8 }}>More parameters ≠ smarter.</T>
+          <T color="#42a5f5" style={{ marginTop: 6 }}>Parameters are <strong>capacity</strong>. Like a student with a big brain but no education. Still needs:</T>
+          <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 3, paddingLeft: 12 }}>
+            {["Quality training data (not just volume)", "Proper training time", "Good optimization"].map((item, i) => (
+              <T key={i} color="#42a5f5" size={14}>• {item}</T>
+            ))}
+          </div>
+          <T color="#42a5f5" style={{ marginTop: 6 }}>You can have 1 trillion parameters trained poorly (worse than 7B parameters trained well).</T>
+        </Box>
+      )}
+      {sub < 4 && <SubBtn onClick={() => navigate("forward")} />}
+    </div>
+  );
+
+  // ═══════ 3.3 Knowledge Distillation ═══════
+  const Ch7_3 = () => (
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
+      {sub >= 0 && (
+        <Box color={C.pink} style={{ width: "100%" }}>
+          <T color="#ce93d8" bold center size={20}>The problem:</T>
+          <T color="#ce93d8" style={{ marginTop: 6 }}>GPT-4 is amazing. But huge. Costs millions to run. Slow. Can we make something smaller that's still good?</T>
+        </Box>
+      )}
+      {sub >= 1 && (
+        <Box color={C.cyan} style={{ width: "100%" }}>
+          <T color="#80deea" bold center size={20}>Knowledge Distillation — The Teacher-Student Analogy:</T>
+          <T color="#80deea" style={{ marginTop: 8 }}>A brilliant professor (GPT-4) doesn't teach a student by telling them to read all textbooks.</T>
+          <T color="#80deea" style={{ marginTop: 6 }}>Instead, the professor explains concepts directly. The student learns more efficiently.</T>
+          <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 5 }}>
+            {[
+              { role: "Teacher (GPT-4)", desc: "Large, expensive, brilliant" },
+              { role: "Student (Claude Haiku)", desc: "Small, fast, learns from teacher" },
+            ].map(({ role, desc }) => (
+              <div key={role} style={{ padding: "6px 10px", borderRadius: 6, background: `${C.cyan}08`, border: `1px solid ${C.cyan}12` }}>
+                <T color={C.cyan} bold size={14}>{role}</T>
+                <T color={C.dim} size={13}>{desc}</T>
+              </div>
+            ))}
+          </div>
+        </Box>
+      )}
+      {sub >= 2 && (
+        <Box color={C.yellow} style={{ width: "100%" }}>
+          <T color="#ffe082" bold center size={20}>The key: probability distributions</T>
+          <T color="#ffe082" style={{ marginTop: 8 }}>Naive approach: student learns the top answer only.</T>
+          <div style={{ marginTop: 8, padding: "10px", background: "rgba(0,0,0,0.2)", borderRadius: 6 }}>
+            <T color={C.green} size={13} bold>Teacher says: "The answer is Paris (100%)"</T>
+            <T color="#ffb74d" size={13}>Student learns: "Output Paris"</T>
+          </div>
+          <T color="#ffe082" style={{ marginTop: 8, marginBottom: 8 }}>But that throws away information!</T>
+          <T color="#ffe082" bold>Better approach:</T>
+          <div style={{ marginTop: 8, padding: "10px", background: "rgba(0,0,0,0.2)", borderRadius: 6 }}>
+            <T color={C.green} size={13} bold>Teacher's full distribution:</T>
+            <T color={C.green} size={12}>Paris: 0.85, London: 0.08, Berlin: 0.04, Rome: 0.03</T>
+            <T color="#ffe082" size={12} bold>Student learns the whole distribution!</T>
+          </div>
+        </Box>
+      )}
+      {sub >= 3 && (
+        <Box color={C.purple} style={{ width: "100%" }}>
+          <T color="#b8a9ff" bold center size={20}>Why soft probabilities matter:</T>
+          <T color="#b8a9ff" style={{ marginTop: 8 }}>The relationships between wrong answers contain information.</T>
+          <T color="#b8a9ff" style={{ marginTop: 6 }}>If asked "What's the capital of France?":</T>
+          <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 6 }}>
+            {[
+              { hard: "Paris is right. Everything else is wrong.", issue: "Harsh. Tells student nothing about other cities." },
+              { soft: "Paris: 0.85, London: 0.08, Lyon: 0.05, Berlin: 0.02", insight: "Ah! London is similar but not quite. Lyon is plausible. Berlin is way off." },
+            ].map(({ hard, issue, soft, insight }) => (
+              <div key={hard} style={{ padding: "8px 10px", borderRadius: 6, background: `${C.purple}08`, border: `1px solid ${C.purple}12` }}>
+                <T color={C.purple} bold size={13}>{hard || soft}</T>
+                <T color={C.dim} size={12}>{issue || insight}</T>
+              </div>
+            ))}
+          </div>
+        </Box>
+      )}
+      {sub >= 4 && (
+        <Box color={C.green} style={{ width: "100%" }}>
+          <T color="#80e8a5" bold center size={20}>Real examples:</T>
+          <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 5 }}>
+            {[
+              { small: "Claude Haiku", large: "Claude Opus", use: "Fast inference for mobile apps" },
+              { small: "GPT-4 Mini", large: "GPT-4", use: "Cheaper API calls, good for most tasks" },
+              { small: "LLaMA-2 7B", large: "LLaMA-2 70B", use: "Run on personal computers" },
+            ].map(({ small, large, use }) => (
+              <div key={small} style={{ padding: "6px 10px", borderRadius: 6, background: `${C.green}08`, border: `1px solid ${C.green}12` }}>
+                <T color={C.green} bold size={13}>{small} ← distilled from {large}</T>
+                <T color={C.dim} size={12}>{use}</T>
+              </div>
+            ))}
+          </div>
+          <T color="#80e8a5" style={{ marginTop: 8 }}>Most models you use daily are distilled. It's the secret to fast, affordable AI.</T>
+        </Box>
+      )}
+      {sub < 4 && <SubBtn onClick={() => navigate("forward")} />}
+    </div>
+  );
+
+  // ═══════ 3.4 Contrastive Learning — Connecting Images & Text (CLIP) ═══════
+  const Ch7_4 = () => (
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
+      {sub >= 0 && (
+        <Box color={C.purple} style={{ width: "100%" }}>
+          <T color="#b8a9ff" bold center size={20}>The challenge:</T>
+          <T color="#b8a9ff" style={{ marginTop: 6 }}>How do you teach AI to understand BOTH images and text? They're different modalities — different inputs.</T>
+          <T color="#b8a9ff" style={{ marginTop: 6 }}>Need a shared understanding space where images and text can "talk" to each other.</T>
+        </Box>
+      )}
+      {sub >= 1 && (
+        <Box color={C.cyan} style={{ width: "100%" }}>
+          <T color="#80deea" bold center size={20}>CLIP's Solution: Two encoders in a shared space</T>
+          <div style={{ marginTop: 10, display: "flex", flexDirection: "column", alignItems: "center", gap: 4 }}>
+            {[
+              { item: "Image", desc: "Photo of a cat on sofa", icon: "🖼️" },
+              { item: "↓ Image Encoder ↓", desc: "Transforms to vector", icon: "→" },
+              { item: "Vector", desc: "[0.2, -0.5, 0.8, ...]", icon: "🔢" },
+              { item: "Text", desc: "'A cat on a sofa'", icon: "📝" },
+              { item: "↓ Text Encoder ↓", desc: "Transforms to vector", icon: "→" },
+              { item: "Vector", desc: "[0.19, -0.51, 0.79, ...]", icon: "🔢" },
+            ].map(({ item, desc, icon }, i) => (
+              <div key={i} style={{ textAlign: "center" }}>
+                <T color={i % 3 === 0 ? C.cyan : C.dim} size={15} center bold={i % 3 === 0}>{icon} {item}</T>
+                <T color={C.dim} size={13}>{desc}</T>
+              </div>
+            ))}
+          </div>
+          <T color="#80deea" style={{ marginTop: 8 }}>Both vectors end up in the same space. If they describe the same thing, they're close.</T>
+        </Box>
+      )}
+      {sub >= 2 && (
+        <Box color={C.yellow} style={{ width: "100%" }}>
+          <T color="#ffe082" bold center size={20}>Training: Pick the correct match</T>
+          <T color="#ffe082" style={{ marginTop: 8 }}>Batch of 32 (image, caption) pairs.</T>
+          <div style={{ marginTop: 8, padding: "10px", background: "rgba(0,0,0,0.2)", borderRadius: 6 }}>
+            <T color="#ffe082" size={14} bold>The matching grid (32×32):</T>
+            <T color={C.green} size={13} style={{ marginTop: 4 }}>Image 1 + Caption 1 ✓ (correct)</T>
+            <T color={C.red} size={13}>Image 1 + Caption 2 ✗ (wrong)</T>
+            <T color={C.red} size={13}>Image 1 + Caption 3 ✗ (wrong)</T>
+          </div>
+          <T color="#ffe082" style={{ marginTop: 8 }}>Model learns: push matching pairs close, push non-matching pairs far apart.</T>
+        </Box>
+      )}
+      {sub >= 3 && (
+        <Box color={C.orange} style={{ width: "100%" }}>
+          <T color="#ffb74d" bold center size={20}>The loss: Contrastive loss</T>
+          <T color="#ffb74d" style={{ marginTop: 8 }}>Goal: correct pair should have high similarity, wrong pairs should have low similarity.</T>
+          <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 5 }}>
+            {[
+              { scenario: "Matching pair", sim: "similarity = 0.9", goal: "Keep it high" },
+              { scenario: "Wrong pair", sim: "similarity = 0.1", goal: "Push it lower" },
+            ].map(({ scenario, sim, goal }) => (
+              <div key={scenario} style={{ padding: "6px 10px", borderRadius: 6, background: `${C.orange}08`, border: `1px solid ${C.orange}12` }}>
+                <T color={C.orange} bold size={13}>{scenario}</T>
+                <T color={C.dim} size={12}>{sim} → {goal}</T>
+              </div>
+            ))}
+          </div>
+        </Box>
+      )}
+      {sub >= 4 && (
+        <Box color={C.green} style={{ width: "100%" }}>
+          <T color="#80e8a5" bold center size={20}>Why this matters:</T>
+          <T color="#80e8a5" style={{ marginTop: 8 }}>Once trained, this shared space enables amazing applications:</T>
+          <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 5 }}>
+            {[
+              { app: "Image search", desc: "Search images using text: 'fluffy cat'" },
+              { app: "Image generation", desc: "Generate images from text: DALL-E, Midjourney" },
+              { app: "Multimodal AI", desc: "GPT-4V, Claude can understand images because text+image share space" },
+              { app: "Zero-shot classification", desc: "Classify images without training on them" },
+            ].map(({ app, desc }) => (
+              <div key={app} style={{ padding: "6px 10px", borderRadius: 6, background: `${C.green}08`, border: `1px solid ${C.green}12` }}>
+                <T color={C.green} bold size={13}>{app}</T>
+                <T color={C.dim} size={12}>{desc}</T>
+              </div>
+            ))}
+          </div>
+        </Box>
+      )}
+      {sub < 4 && <SubBtn onClick={() => navigate("forward")} />}
+    </div>
+  );
+
+  // ═══════ 3.5 The Complete Training Pipeline ═══════
+  const Ch7_5 = () => (
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
+      {sub >= 0 && (
+        <Box color={C.cyan} style={{ width: "100%" }}>
+          <T color="#80deea" bold center size={22}>Everything connects.</T>
+          <T color="#80deea" style={{ marginTop: 8 }}>You've learned neural networks, Transformers, attention. Now see how it all comes together to create ChatGPT, Claude, GPT-4.</T>
+        </Box>
+      )}
+      {sub >= 1 && (
+        <Box color={C.red} style={{ width: "100%" }}>
+          <T color="#ff8a80" bold center size={20}>Phase 1: Pretraining (2-3 months)</T>
+          <T color="#ff8a80" style={{ marginTop: 8 }}>Self-supervised learning on trillions of tokens from the internet.</T>
+          <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 3 }}>
+            {["Goal: Raw ability (knowledge, reasoning, patterns)", "Data: Books, websites, code, articles, trillions of words", "Compute: Months on thousands of GPUs", "Cost: Millions of dollars"].map((item, i) => (
+              <T key={i} color="#ff8a80" size={14}>• {item}</T>
+            ))}
+          </div>
+          <div style={{ marginTop: 8, padding: "8px", background: "rgba(0,0,0,0.2)", borderRadius: 6 }}>
+            <T color={C.green} size={15} center bold>Result: Raw language model. Can write, but doesn't follow instructions.</T>
+          </div>
+        </Box>
+      )}
+      {sub >= 2 && (
+        <Box color={C.yellow} style={{ width: "100%" }}>
+          <T color="#ffe082" bold center size={20}>Phase 2: SFT (1-2 weeks)</T>
+          <T color="#ffe082" style={{ marginTop: 8 }}>Supervised Fine-Tuning on human-written examples.</T>
+          <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 3 }}>
+            {["Goal: Instruction-following behavior", "Data: 10K-100K human Q&A pairs", "Compute: Hours on single GPU", "Cost: Thousands of dollars"].map((item, i) => (
+              <T key={i} color="#ffe082" size={14}>• {item}</T>
+            ))}
+          </div>
+          <div style={{ marginTop: 8, padding: "8px", background: "rgba(0,0,0,0.2)", borderRadius: 6 }}>
+            <T color={C.green} size={15} center bold>Result: Helpful assistant. Answers questions directly. But might be unsafe/unhelpful in ways.</T>
+          </div>
+        </Box>
+      )}
+      {sub >= 3 && (
+        <Box color={C.pink} style={{ width: "100%" }}>
+          <T color="#ce93d8" bold center size={20}>Phase 3: RLHF (1-2 weeks)</T>
+          <T color="#ce93d8" style={{ marginTop: 8 }}>Reinforcement Learning from Human Feedback. Align with human values.</T>
+          <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 3 }}>
+            {["Goal: Safe, helpful, aligned model", "Data: Human preference comparisons", "Method: Reward model + PPO", "Compute: Hours on single GPU", "Cost: Thousands of dollars"].map((item, i) => (
+              <T key={i} color="#ce93d8" size={14}>• {item}</T>
+            ))}
+          </div>
+          <div style={{ marginTop: 8, padding: "8px", background: "rgba(0,0,0,0.2)", borderRadius: 6 }}>
+            <T color={C.green} size={15} center bold>Result: ChatGPT / Claude. Helpful, harmless, honest.</T>
+          </div>
+        </Box>
+      )}
+      {sub >= 4 && (
+        <Box color={C.orange} style={{ width: "100%" }}>
+          <T color="#ffb74d" bold center size={20}>Optional Enhancements:</T>
+          <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 6 }}>
+            {[
+              { name: "Distillation", icon: "👨‍🎓", desc: "Shrink to smaller model. GPT-4 → GPT-4 Mini" },
+              { name: "Multimodal CLIP", icon: "🖼️📝", desc: "Add image understanding. GPT-4V" },
+              { name: "Retrieval Augmentation", icon: "📚", desc: "Add access to external knowledge" },
+              { name: "Continued Pretraining", icon: "🔄", desc: "Retrain on new domain-specific data" },
+            ].map(({ name, icon, desc }) => (
+              <div key={name} style={{ padding: "8px 10px", borderRadius: 6, background: `${C.orange}08`, border: `1px solid ${C.orange}12` }}>
+                <T color={C.orange} bold size={14}>{icon} {name}</T>
+                <T color={C.dim} size={13}>{desc}</T>
+              </div>
+            ))}
+          </div>
+        </Box>
+      )}
+      {sub >= 5 && (
+        <Box color={C.green} style={{ width: "100%" }}>
+          <T color="#80e8a5" bold center size={22}>You now understand:</T>
+          <div style={{ marginTop: 10, display: "flex", flexDirection: "column", gap: 6 }}>
+            {[
+              { emoji: "🧠", topic: "Neural networks", concept: "How to compute, learn, backprop" },
+              { emoji: "🏗️", topic: "Transformers", concept: "The architecture that changed everything" },
+              { emoji: "👀", topic: "Attention", concept: "How models focus on relevant information" },
+              { emoji: "📊", topic: "Training", concept: "From tokenization to RLHF alignment" },
+              { emoji: "📈", topic: "Scaling", concept: "Why bigger models are predictably better" },
+            ].map(({ emoji, topic, concept }) => (
+              <div key={topic} style={{ padding: "8px 10px", borderRadius: 6, background: `${C.green}08`, border: `1px solid ${C.green}12` }}>
+                <T color={C.green} bold size={14}>{emoji} {topic}</T>
+                <T color={C.dim} size={13}>{concept}</T>
+              </div>
+            ))}
+          </div>
+          <div style={{ marginTop: 12, padding: "12px", background: `${C.purple}12`, borderRadius: 8, border: `2px solid ${C.purple}35` }}>
+            <T color={C.purple} size={16} center bold>This is how modern AI works. From first principles to deployed systems.</T>
+          </div>
+        </Box>
+      )}
+      {sub < 5 && <SubBtn onClick={() => navigate("forward")} />}
+    </div>
+  );
+
+  const allCh = [ChTOC, Ch1_1, Ch1_2, Ch1_3, Ch1_4, Ch1_ReLU, Ch1_5, Ch1_6, Ch1_7, Ch1_8, Ch1_9, Ch6_1, Ch6_2, Ch6_3, Ch6_4, Ch6_5, Ch6_6, Ch7_1, Ch7_2, Ch7_3, Ch7_4, Ch7_5, Ch1_10, Ch1_11, Ch1_12, Ch1_13, Ch2_1, Ch2_2, Ch2_3, Ch2_4, Ch2_5, Ch2_6, Ch2_7, Ch3_1, Ch3_2, Ch3_3, Ch3_4, Ch3_5, Ch3_6, Ch3_7, Ch3_8, Ch3_12, Ch3_9, Ch3_10, Ch3_11, Ch3_13, Ch3_14, Ch3_15, Ch3_16, Ch3_17, Ch3_18, Ch3_19, Ch3_20, Ch3_21, Ch3_22, Ch3_23, Ch3_24, Ch3_25, Ch3_26];
 
   return (
     <div style={{

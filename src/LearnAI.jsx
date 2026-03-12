@@ -94,7 +94,7 @@ export default function LearnAI() {
 
   const animateSub = (newSubFn) => {
     setSubFade(false);
-    setTimeout(() => { newSubFn(); setSubFade(true); }, 100);
+    setTimeout(() => { newSubFn(); setSubFade(true); }, 250);
   };
 
   useEffect(() => {
@@ -139,7 +139,7 @@ export default function LearnAI() {
   const goTo = (n, startSub = 0) => {
     if (n < 0 || n >= chapters.length) return;
     setFade(false);
-    setTimeout(() => { setCh(n); setSub(startSub); setFade(true); window.scrollTo({ top: 0, behavior: "smooth" }); }, 200);
+    setTimeout(() => { setCh(n); setSub(startSub); setFade(true); window.scrollTo({ top: 0, behavior: "smooth" }); }, 350);
   };
 
   // ═══════ 1.1 What is a NN ═══════
@@ -3625,8 +3625,8 @@ export default function LearnAI() {
       <div style={{
         width: "100%", maxWidth: 840,
         opacity: (fade && subFade) ? 1 : 0,
-        transform: fade ? "translateY(0)" : "translateY(8px)",
-        transition: "all 0.15s ease",
+        transform: fade ? (subFade ? "translateY(0)" : "translateY(4px)") : "translateY(12px)",
+        transition: "opacity 0.35s cubic-bezier(0.4, 0, 0.2, 1), transform 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
       }}>
         <Current />
       </div>

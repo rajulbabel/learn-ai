@@ -105,7 +105,7 @@ const SubBtn = ({ onClick, rippleKey }) => (
       background: "radial-gradient(circle, rgba(167,139,250,0.45) 0%, transparent 70%)",
       animation: "navRipple 0.5s ease-out forwards", pointerEvents: "none",
     }} />}
-    Continue ↓
+    <span style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>Continue <span style={{ fontSize: 14, lineHeight: 1 }}>{"\u2193"}</span></span>
   </button>
 );
 

@@ -1589,7 +1589,7 @@ export default function LearnAI() {
                 { pos: 100, d: [1, 0, 0] }, { pos: 101, d: [1, 0, 1] },
               ].map(({ pos, d }, i) => (
                 <div key={i} style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                  <span style={{ fontFamily: "monospace", fontSize: 16, color: C.dim, minWidth: 44, textAlign: "right" }}>pos {pos}</span>
+                  <span style={{ fontFamily: "monospace", fontSize: 16, color: C.dim, minWidth: 68, textAlign: "right" }}>pos {String(pos).padStart(3, "\u2007")}</span>
                   <div style={{ display: "flex", gap: 4 }}>
                     {d.map((v, ci) => <Digit key={ci} value={v} colIdx={ci} />)}
                   </div>
@@ -1671,28 +1671,34 @@ export default function LearnAI() {
         {sub >= 0 && (
           <Box color={C.yellow} style={{ width: "100%" }}>
             <T color={C.yellow} bold center>The addition for "love" at position 1:</T>
-            <div style={{ marginTop: 10, display: "flex", flexDirection: "column", gap: 4 }}>
+            <div style={{ marginTop: 12, display: "flex", flexDirection: "column", alignItems: "center", gap: 0 }}>
               {[
                 { label: "Embedding", color: C.purple, vals: emb.map(v => v.toFixed(3)) },
-                null,
-                { label: "Pos Enc (1)", color: C.green, vals: pe.map(v => v.toFixed(3)) },
-              ].map((row, i) => row === null ? (
-                <T key={i} color={C.green} bold center size={26}>+</T>
+                { op: "+" },
+                { label: "Pos Enc (pos=1)", color: C.green, vals: pe.map(v => v.toFixed(3)) },
+                { op: "=" },
+                { label: "Final Vector", color: C.yellow, vals: final_, bold: true },
+              ].map((row, i) => row.op ? (
+                <div key={i} style={{ padding: "4px 0", display: "flex", justifyContent: "center" }}>
+                  <span style={{ color: row.op === "+" ? C.green : C.yellow, fontWeight: 800, fontSize: 22 }}>{row.op}</span>
+                </div>
               ) : (
-                <div key={i} style={{ display: "flex", alignItems: "center", gap: 4 }}>
-                  <span style={{ color: row.color, fontSize: 12, fontWeight: 600, minWidth: 62 }}>{row.label}</span>
-                  <div style={{ display: "flex", gap: 3 }}>
-                    {row.vals.map((v, j) => <span key={j} style={{ fontFamily: "monospace", fontSize: 14, color: `${row.color}bb`, width: 40, textAlign: "center" }}>{v}</span>)}
+                <div key={i} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4, width: "100%", padding: "6px 0" }}>
+                  <span style={{ fontSize: 11, fontWeight: 700, color: row.color, textTransform: "uppercase", letterSpacing: 1.5 }}>{row.label}</span>
+                  <div style={{ display: "flex", gap: 2, flexWrap: "wrap", justifyContent: "center" }}>
+                    {row.vals.map((v, j) => (
+                      <span key={j} style={{
+                        fontFamily: "monospace", fontSize: 13, textAlign: "center",
+                        padding: "4px 6px", borderRadius: 5, minWidth: 48,
+                        color: row.bold ? row.color : `${row.color}cc`,
+                        fontWeight: row.bold ? 700 : 500,
+                        background: row.bold ? `${row.color}18` : `${row.color}08`,
+                        border: `1px solid ${row.bold ? `${row.color}30` : `${row.color}12`}`,
+                      }}>{v}</span>
+                    ))}
                   </div>
                 </div>
               ))}
-              <T color={C.yellow} bold center size={26}>=</T>
-              <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
-                <span style={{ color: C.yellow, fontSize: 12, fontWeight: 700, minWidth: 62 }}>Final</span>
-                <div style={{ display: "flex", gap: 3 }}>
-                  {final_.map((v, j) => <span key={j} style={{ fontFamily: "monospace", fontSize: 14, color: C.yellow, fontWeight: 700, width: 40, textAlign: "center", background: `${C.yellow}10`, borderRadius: 3, padding: "2px 0" }}>{v}</span>)}
-                </div>
-              </div>
             </div>
           </Box>
         )}
@@ -2950,16 +2956,22 @@ export default function LearnAI() {
         </div>
       )}
       {sub >= 1 && (
-        <div style={{ display: "flex", flexDirection: "column", gap: 6, width: "100%" }}>
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 0, width: "100%" }}>
           {[
-            { f: "Q × Kᵀ", m: "Dot product of every query with every key", r: "= score matrix", c: C.blue },
-            { f: "/ √d_k", m: "Scale down to prevent extreme softmax", r: "= manageable scores", c: C.orange },
-            { f: "softmax", m: "Convert to probabilities (rows sum to 1)", r: "= attention weights", c: C.pink },
-            { f: "× V", m: "Weighted sum of values", r: "= context-aware output", c: C.green },
-          ].map(({ f, m, r, c }) => (
-            <div key={f} style={{ display: "grid", gridTemplateColumns: "68px 1fr", gap: 10, padding: "8px 12px", borderRadius: 8, background: `${c}06`, border: `1px solid ${c}12`, alignItems: "center" }}>
-              <code style={{ color: c, fontWeight: 700, fontSize: 18 }}>{f}</code>
-              <div style={{ flex: 1 }}><T color={C.mid} size={18}>{m}</T><T color={c} size={16} bold center>{r}</T></div>
+            { f: "Q × Kᵀ", m: "Dot product of every query with every key", r: "score matrix", c: C.blue },
+            { f: "/ √d_k", m: "Scale down to prevent extreme softmax", r: "manageable scores", c: C.orange },
+            { f: "softmax", m: "Convert to probabilities (rows sum to 1)", r: "attention weights", c: C.pink },
+            { f: "× V", m: "Weighted sum of values", r: "context-aware output", c: C.green },
+          ].map(({ f, m, r, c }, idx) => (
+            <div key={f} style={{ display: "flex", flexDirection: "column", alignItems: "center", width: "100%" }}>
+              {idx > 0 && <div style={{ width: 2, height: 16, background: "rgba(255,255,255,0.1)" }} />}
+              <div style={{ padding: "10px 14px", borderRadius: 10, background: `${c}08`, border: `1px solid ${c}18`, width: "100%", display: "flex", alignItems: "center", gap: 12 }}>
+                <code style={{ color: c, fontWeight: 800, fontSize: 18, minWidth: 76, textAlign: "center", padding: "4px 8px", background: `${c}12`, borderRadius: 6, flexShrink: 0 }}>{f}</code>
+                <div>
+                  <T color={C.mid} size={16}>{m}</T>
+                  <T color={c} size={14} bold>→ {r}</T>
+                </div>
+              </div>
             </div>
           ))}
         </div>

@@ -1,45 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Learn AI</title>
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    html, body, #root { height: 100%; width: 100%; }
-    body { background: #08080d; }
-  </style>
-  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-</head>
-<body>
-  <div id="root"></div>
-  <script>
-    // Fetch the JSX, adapt module syntax for browser, and run via Babel
-    fetch("LearnAI.jsx")
-      .then(r => r.text())
-      .then(code => {
-        // Replace the ES module import with destructuring from global React
-        code = code.replace(
-          /import\s*\{([^}]+)\}\s*from\s*["']react["']\s*;?/,
-          "const {$1} = React;"
-        );
-        // Replace export default with a global assignment
-        code = code.replace(
-          /export\s+default\s+function\s+(\w+)/,
-          "function $1"
-        );
-        // Append the render call
-        code += `\nReactDOM.createRoot(document.getElementById("root")).render(React.createElement(LearnAI));`;
-        // Transpile and execute
-        const output = Babel.transform(code, { presets: ["react"] }).code;
-        new Function(output)();
-      })
-      .catch(err => {
-        document.getElementById("root").innerHTML =
-          '<p style="color:red;padding:20px">Failed to load: ' + err.message + '</p>';
-      });
-  </script>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Learn AI</title>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body, #root { height: 100%; width: 100%; }
+      body { background: #08080d; }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
 </html>

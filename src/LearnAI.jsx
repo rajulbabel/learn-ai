@@ -68,7 +68,7 @@ const C = {
 
 // Reusable components
 const Box = ({ children, color = C.cyan, style = {} }) => (
-  <div style={{ background: `${color}09`, border: `1px solid ${color}22`, borderRadius: 10, padding: "16px 22px", width: "100%", ...style }}>{children}</div>
+  <div style={{ background: `${color}09`, border: `1px solid ${color}22`, borderRadius: 10, padding: "16px 22px", width: "100%", animation: "fadeSlideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1) both", ...style }}>{children}</div>
 );
 const T = ({ children, color = C.mid, size = 19, bold = false, center = false, style = {} }) => (
   <div style={{ color, fontSize: size, fontWeight: bold ? 700 : 400, textAlign: center ? "center" : "left", lineHeight: 1.75, ...style }}>{children}</div>
@@ -114,17 +114,13 @@ export default function LearnAI() {
     if (direction === "forward") {
       const hasSubBtn = document.querySelector("[data-subbtn]");
       if (hasSubBtn) {
-        setTransitioning(true);
-        setFade(false);
-        setTimeout(() => { setSub(s => s + 1); setFade(true); setTransitioning(false); }, 180);
+        setSub(s => s + 1);
       } else if (ch < chapters.length - 1) {
         goTo(ch + 1);
       }
     } else {
       if (sub > 0) {
-        setTransitioning(true);
-        setFade(false);
-        setTimeout(() => { setSub(s => s - 1); setFade(true); setTransitioning(false); }, 180);
+        setSub(s => s - 1);
       } else if (ch > 0) {
         const prevMax = maxSubs[ch - 1];
         goTo(ch - 1, prevMax != null ? prevMax : 0);
@@ -220,7 +216,7 @@ export default function LearnAI() {
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
       {sub >= 0 && <Box color={C.yellow}><T color={C.yellow} bold center>The simplest neural network — data flows in ONE direction.</T><T>Input → Hidden layers → Output. No loops, no memory.</T></Box>}
       {sub >= 1 && (
-        <div style={{ background: C.card, borderRadius: 12, padding: "14px", border: `1px solid ${C.border}`, width: "100%", display: "flex", flexDirection: "column", alignItems: "center" }}>
+        <div style={{ background: C.card, borderRadius: 12, padding: "14px", border: `1px solid ${C.border}`, width: "100%", display: "flex", flexDirection: "column", alignItems: "center", animation: "fadeSlideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1) both" }}>
           <T color={C.dim} size={16} center style={{ marginBottom: 10 }}>EXAMPLE: Is this email spam?</T>
           <div style={{ display: "flex", alignItems: "flex-start", gap: 10, justifyContent: "center", flexWrap: "wrap" }}>
             {[{ l: "word count", v: "152" }, { l: "has 'free'?", v: "1" }, { l: "# links", v: "12" }].map(({ l, v }, i) => (
@@ -314,7 +310,7 @@ export default function LearnAI() {
         </Box>
       )}
       {sub >= 2 && (
-        <div style={{ background: C.card, borderRadius: 12, padding: "14px", border: `1px solid ${C.border}`, width: "100%", display: "flex", flexDirection: "column", alignItems: "center" }}>
+        <div style={{ background: C.card, borderRadius: 12, padding: "14px", border: `1px solid ${C.border}`, width: "100%", display: "flex", flexDirection: "column", alignItems: "center", animation: "fadeSlideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1) both" }}>
           <T color={C.dim} size={14} center style={{ marginBottom: 10, width: "100%" }}>INSIDE A SINGLE NEURON</T>
           <svg width="420" height="170" viewBox="0 0 420 170" style={{ maxWidth: "100%", overflow: "visible" }}>
             {/* Inputs */}
@@ -545,7 +541,7 @@ export default function LearnAI() {
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
       {sub >= 0 && <Box color={C.cyan}><T color="#80deea" bold center size={20}>Forward Pass = feeding input through the network to get a prediction.</T><T color="#80deea">Let's use a super simple network: 1 input → 1 neuron → 1 output. We're predicting house price from square footage.</T></Box>}
       {sub >= 1 && (
-        <div style={{ background: C.card, borderRadius: 12, padding: "14px", border: `1px solid ${C.border}`, width: "100%", display: "flex", flexDirection: "column", alignItems: "center" }}>
+        <div style={{ background: C.card, borderRadius: 12, padding: "14px", border: `1px solid ${C.border}`, width: "100%", display: "flex", flexDirection: "column", alignItems: "center", animation: "fadeSlideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1) both" }}>
           <T color={C.dim} size={14} center style={{ marginBottom: 8, width: "100%" }}>OUR SIMPLE NETWORK</T>
           <svg width="360" height="90" viewBox="0 0 360 90" style={{ maxWidth: "100%", overflow: "visible" }}>
             {/* Input */}
@@ -941,7 +937,7 @@ export default function LearnAI() {
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
       {sub >= 0 && <Box color={C.cyan}><T color="#80deea" bold center>Built for images. A small "filter" slides across the image detecting patterns.</T></Box>}
       {sub >= 1 && (
-        <div style={{ background: C.card, borderRadius: 12, padding: "14px", border: `1px solid ${C.border}`, width: "100%", display: "flex", flexDirection: "column", alignItems: "center" }}>
+        <div style={{ background: C.card, borderRadius: 12, padding: "14px", border: `1px solid ${C.border}`, width: "100%", display: "flex", flexDirection: "column", alignItems: "center", animation: "fadeSlideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1) both" }}>
           <svg width="320" height="120">
             {Array.from({ length: 5 }).map((_, r) => Array.from({ length: 5 }).map((_, c2) => (<rect key={`${r}${c2}`} x={10 + c2 * 20} y={8 + r * 20} width={18} height={18} rx={2} fill={`${C.cyan}${Math.random() > 0.5 ? '22' : '10'}`} stroke={`${C.cyan}25`} strokeWidth={0.5} />)))}
             <rect x="12" y="10" width="56" height="56" rx={3} fill="none" stroke={C.red} strokeWidth="2" strokeDasharray="5,3" />
@@ -1944,7 +1940,7 @@ export default function LearnAI() {
         </Box>
       )}
       {sub >= 1 && (
-        <div style={{ background: C.card, borderRadius: 12, padding: "14px", border: `1px solid ${C.border}`, width: "100%", display: "flex", flexDirection: "column", alignItems: "center" }}>
+        <div style={{ background: C.card, borderRadius: 12, padding: "14px", border: `1px solid ${C.border}`, width: "100%", display: "flex", flexDirection: "column", alignItems: "center", animation: "fadeSlideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1) both" }}>
           <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
             {/* Riya */}
             <div style={{ display: "flex", gap: 10, alignItems: "center", padding: "10px", borderRadius: 8, background: `${C.blue}10`, border: `1px solid ${C.blue}25` }}>
@@ -2215,7 +2211,7 @@ export default function LearnAI() {
         </Box>
       )}
       {sub >= 4 && (
-        <div style={{ background: C.card, borderRadius: 12, padding: "14px", border: `1px solid ${C.border}`, width: "100%", display: "flex", flexDirection: "column", alignItems: "center" }}>
+        <div style={{ background: C.card, borderRadius: 12, padding: "14px", border: `1px solid ${C.border}`, width: "100%", display: "flex", flexDirection: "column", alignItems: "center", animation: "fadeSlideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1) both" }}>
           <div style={{ textAlign: "center", marginBottom: 10 }}>
             <Tag color={C.bright}>"love" embedding = [0.2, 0.9, 0.4, -0.1, ..., 0.3]</Tag>
             <T color={C.dim} size={14} center style={{ marginTop: 4 }}>512 numbers representing "love" (we'll use this exact word in our full computation later)</T>

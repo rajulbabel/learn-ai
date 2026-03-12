@@ -3630,7 +3630,7 @@ export default function LearnAI() {
         transform: fade ? "translateY(0)" : "translateY(8px)",
         transition: "opacity 0.25s cubic-bezier(0.4, 0, 0.2, 1), transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
       }}>
-        <Current />
+        {Current()}
       </div>
 
       {/* Nav */}

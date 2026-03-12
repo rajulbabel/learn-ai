@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 const chapters = [
   { id: "0", title: "Table of Contents", part: 0 },
@@ -91,6 +91,20 @@ export default function LearnAI() {
   const [sub, setSub] = useState(0);
   const [maxSubs, setMaxSubs] = useState({});
   const [transitioning, setTransitioning] = useState(false);
+
+  // Lifted state from chapters (so chapter functions have no hooks → can be called as plain functions)
+  const [bankIdx, setBankIdx] = useState(0);
+  const [hovered, setHovered] = useState(4);
+  const [expanded, setExpanded] = useState(null);
+  const prevChRef = useRef(ch);
+  useEffect(() => {
+    if (prevChRef.current !== ch) {
+      setBankIdx(0);
+      setHovered(4);
+      setExpanded(null);
+      prevChRef.current = ch;
+    }
+  }, [ch]);
 
   useEffect(() => {
     if (sub > 0) {
@@ -1734,7 +1748,6 @@ export default function LearnAI() {
 
   // ═══════ CH 1: The Problem ═══════
   const Ch3_2 = () => {
-    const [bankIdx, setBankIdx] = useState(0);
     const sentences = [
       { words: ["I", "sat", "by", "the", "river", "bank"], highlight: 5, context: [1, 2, 4], meaning: "edge of a river", color: C.cyan },
       { words: ["I", "deposited", "money", "in", "the", "bank"], highlight: 5, context: [1, 2], meaning: "financial institution", color: C.yellow },
@@ -1783,7 +1796,6 @@ export default function LearnAI() {
   // ═══════ CH 2: How does a word look at others ═══════
   const Ch3_3 = () => {
     const words = ["The", "cat", "sat", "because", "it", "was", "tired"];
-    const [hovered, setHovered] = useState(4);
     const scores = {
       0: [0.1, 0.3, 0.2, 0.1, 0.05, 0.15, 0.1],
       1: [0.15, 0.1, 0.35, 0.05, 0.1, 0.15, 0.1],
@@ -3517,7 +3529,6 @@ export default function LearnAI() {
 
   // ═══════ TABLE OF CONTENTS ═══════
   const ChTOC = () => {
-    const [expanded, setExpanded] = useState(null);
     const parts = [
       { num: 1, name: "Neural Network Foundations", color: C.red, desc: "What neural networks are, how they learn, forward/backward pass" },
       { num: 2, name: "The Road to Transformers", color: C.orange, desc: "CNN → RNN → why RNN fails → the Transformer arrives" },
@@ -3584,7 +3595,6 @@ export default function LearnAI() {
   };
 
   const allCh = [ChTOC, Ch1_1, Ch1_2, Ch1_3, Ch1_4, Ch1_ReLU, Ch1_5, Ch1_6, Ch1_7, Ch1_8, Ch1_9, Ch1_10, Ch1_11, Ch1_12, Ch1_13, Ch2_1, Ch2_2, Ch2_3, Ch2_4, Ch2_5, Ch2_6, Ch2_7, Ch3_1, Ch3_2, Ch3_3, Ch3_4, Ch3_5, Ch3_6, Ch3_7, Ch3_8, Ch3_12, Ch3_9, Ch3_10, Ch3_11, Ch3_13, Ch3_14, Ch3_15, Ch3_16, Ch3_17, Ch3_18, Ch3_19, Ch3_20, Ch3_21, Ch3_22, Ch3_23, Ch3_24, Ch3_25, Ch3_26];
-  const Current = allCh[ch];
 
   return (
     <div style={{
@@ -3630,7 +3640,7 @@ export default function LearnAI() {
         transform: fade ? "translateY(0)" : "translateY(8px)",
         transition: "opacity 0.25s cubic-bezier(0.4, 0, 0.2, 1), transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
       }}>
-        {Current()}
+        {allCh[ch]()}
       </div>
 
       {/* Nav */}

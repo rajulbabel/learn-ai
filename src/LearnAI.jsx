@@ -3599,7 +3599,7 @@ export default function LearnAI() {
       <T color={C.dim} size={14} center>The complete visual guide to understanding AI — from scratch</T>
 
       {/* Progress */}
-      <div style={{ display: "flex", gap: 1.5, margin: "14px 0 6px", width: "100%", maxWidth: 600 }}>
+      <div style={{ display: "flex", gap: 1.5, margin: "14px 0 6px", width: "100%", maxWidth: 800 }}>
         {chapters.map((_, i) => (
           <div key={i} onClick={() => goTo(i)} style={{
             flex: 1, height: 4, borderRadius: 2, cursor: "pointer",
@@ -3623,7 +3623,7 @@ export default function LearnAI() {
       )}
 
       <div style={{
-        width: "100%", maxWidth: 640,
+        width: "100%", maxWidth: 840,
         opacity: (fade && subFade) ? 1 : 0,
         transform: fade ? "translateY(0)" : "translateY(8px)",
         transition: "all 0.15s ease",

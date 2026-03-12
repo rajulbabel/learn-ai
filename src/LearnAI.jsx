@@ -310,31 +310,31 @@ export default function LearnAI() {
       {sub >= 2 && (
         <div style={{ background: C.card, borderRadius: 12, padding: "14px", border: `1px solid ${C.border}`, width: "100%", display: "flex", flexDirection: "column", alignItems: "center" }}>
           <T color={C.dim} size={14} center style={{ marginBottom: 10, width: "100%" }}>INSIDE A SINGLE NEURON</T>
-          <svg width="340" height="160" viewBox="0 0 340 160" style={{ maxWidth: "100%", overflow: "visible" }}>
+          <svg width="420" height="170" viewBox="0 0 420 170" style={{ maxWidth: "100%", overflow: "visible" }}>
             {/* Inputs */}
-            {[{ y: 30, label: "x₁ = 1500", sublabel: "(sqft)" }, { y: 80, label: "x₂ = 3", sublabel: "(bedrooms)" }].map(({ y, label, sublabel }, i) => (
+            {[{ y: 35, label: "x₁ = 1500", sublabel: "(sqft)" }, { y: 95, label: "x₂ = 3", sublabel: "(bedrooms)" }].map(({ y, label, sublabel }, i) => (
               <g key={i}>
-                <circle cx="40" cy={y} r="16" fill={`${C.cyan}15`} stroke={C.cyan} strokeWidth="1.2" />
-                <text x="40" y={y - 3} fill={C.cyan} fontSize="7" textAnchor="middle" fontWeight="700">{label}</text>
-                <text x="40" y={y + 8} fill={C.dim} fontSize="6" textAnchor="middle">{sublabel}</text>
-                <line x1="58" y1={y} x2="130" y2="70" stroke={C.yellow} strokeWidth="1.5" />
-                <text x={88} y={y < 50 ? 40 : 82} fill={C.yellow} fontSize="8" textAnchor="middle">×w{i + 1}={i === 0 ? "0.5" : "50"}</text>
+                <circle cx="50" cy={y} r="24" fill={`${C.cyan}15`} stroke={C.cyan} strokeWidth="1.2" />
+                <text x="50" y={y - 4} fill={C.cyan} fontSize="8" textAnchor="middle" fontWeight="700">{label}</text>
+                <text x="50" y={y + 8} fill={C.dim} fontSize="7" textAnchor="middle">{sublabel}</text>
+                <line x1="76" y1={y} x2="168" y2="75" stroke={C.yellow} strokeWidth="1.5" />
+                <text x={118} y={y < 60 ? 42 : 98} fill={C.yellow} fontSize="9" textAnchor="middle">×w{i + 1}={i === 0 ? "0.5" : "50"}</text>
               </g>
             ))}
             {/* Neuron */}
-            <circle cx="150" cy="70" r="30" fill={`${C.purple}12`} stroke={C.purple} strokeWidth="1.5" />
-            <text x="150" y="60" fill={C.purple} fontSize="7" textAnchor="middle">Σ + bias</text>
-            <text x="150" y="73" fill={C.purple} fontSize="8" textAnchor="middle" fontWeight="700">then</text>
-            <text x="150" y="85" fill={C.purple} fontSize="7" textAnchor="middle">activate</text>
+            <circle cx="200" cy="75" r="36" fill={`${C.purple}12`} stroke={C.purple} strokeWidth="1.5" />
+            <text x="200" y="65" fill={C.purple} fontSize="8" textAnchor="middle">Σ + bias</text>
+            <text x="200" y="78" fill={C.purple} fontSize="9" textAnchor="middle" fontWeight="700">then</text>
+            <text x="200" y="91" fill={C.purple} fontSize="8" textAnchor="middle">activate</text>
             {/* Bias arrow */}
-            <line x1="150" y1="115" x2="150" y2="102" stroke={C.orange} strokeWidth="1.5" />
-            <text x="150" y="128" fill={C.orange} fontSize="8" textAnchor="middle" fontWeight="700">bias = 50</text>
-            <text x="150" y="140" fill={C.dim} fontSize="7" textAnchor="middle">(base land value)</text>
+            <line x1="200" y1="126" x2="200" y2="113" stroke={C.orange} strokeWidth="1.5" />
+            <text x="200" y="140" fill={C.orange} fontSize="9" textAnchor="middle" fontWeight="700">bias = 50</text>
+            <text x="200" y="153" fill={C.dim} fontSize="8" textAnchor="middle">(base land value)</text>
             {/* Output */}
-            <line x1="182" y1="70" x2="240" y2="70" stroke={C.green} strokeWidth="1.5" />
-            <circle cx="260" cy="70" r="18" fill={`${C.green}12`} stroke={C.green} strokeWidth="1.2" />
-            <text x="260" y="67" fill={C.green} fontSize="7" textAnchor="middle">output</text>
-            <text x="260" y="78" fill={C.green} fontSize="8" textAnchor="middle" fontWeight="700">950</text>
+            <line x1="238" y1="75" x2="300" y2="75" stroke={C.green} strokeWidth="1.5" />
+            <circle cx="325" cy="75" r="24" fill={`${C.green}12`} stroke={C.green} strokeWidth="1.2" />
+            <text x="325" y="72" fill={C.green} fontSize="8" textAnchor="middle">output</text>
+            <text x="325" y="84" fill={C.green} fontSize="9" textAnchor="middle" fontWeight="700">950</text>
           </svg>
         </div>
       )}

@@ -4676,7 +4676,7 @@ export default function LearnAI() {
       minHeight: "100vh", background: C.bg, color: "#fff",
       fontFamily: "'Segoe UI', system-ui, sans-serif",
       display: "flex", flexDirection: "column", alignItems: "center",
-      padding: "14px 18px 30px",
+      padding: "14px 8% 30px",
     }}>
       <h1 style={{
         fontSize: 29, fontWeight: 800, margin: "0 0 2px", textAlign: "center",
@@ -4734,13 +4734,20 @@ export default function LearnAI() {
         onMouseLeave={() => setNavHint(n => n === "left" ? null : n)}
         onClick={(e) => handleNavClick(e, "left")}
         style={{
-          position: "fixed", top: 0, left: 0, bottom: 0, width: "12.5%",
-          cursor: "pointer", zIndex: 10, overflow: "hidden",
+          position: "fixed", top: 0, left: 0, bottom: 0, width: "7%",
+          cursor: "pointer", zIndex: 10,
           display: "flex", alignItems: "center", justifyContent: "flex-start",
-          background: navHint === "left" ? "linear-gradient(to right, rgba(167,139,250,0.06), transparent)" : "transparent",
           transition: "background 0.3s ease",
         }}
       >
+        <div style={{
+          position: "absolute", top: "-10%", bottom: "-10%", left: "-300%", right: "10%",
+          borderRadius: "50%",
+          background: navHint === "left"
+            ? "linear-gradient(to right, transparent 94%, rgba(167,139,250,0.08) 100%)"
+            : "linear-gradient(to right, transparent 94%, rgba(167,139,250,0.03) 100%)",
+          transition: "background 0.3s ease", pointerEvents: "none",
+        }} />
         {ripple && ripple.side === "left" && <div key={ripple.id} style={{
           position: "absolute", left: -200, top: "50%",
           width: 400, height: 400, marginTop: -200, borderRadius: "50%",
@@ -4748,15 +4755,15 @@ export default function LearnAI() {
           animation: "navRipple 0.6s ease-out forwards", pointerEvents: "none",
         }} />}
         <div style={{
-          opacity: navHint === "left" ? 1 : 0,
-          transform: navHint === "left" ? "translateX(0)" : "translateX(-10px)",
-          transition: "all 0.12s ease",
-          padding: "16px 20px 16px 14px",
+          position: "relative", zIndex: 1,
+          opacity: navHint === "left" ? 1 : 0.5,
+          transition: "opacity 0.2s ease",
+          padding: "16px 6px 16px 6px",
           display: "flex", flexDirection: "column", alignItems: "flex-start", gap: 4,
         }}>
-          <span style={{ fontSize: 22, color: "rgba(167,139,250,0.7)" }}>{"\u2190"}</span>
-          <span style={{ fontSize: 10, fontWeight: 600, color: "rgba(255,255,255,0.5)", letterSpacing: 0.5, textTransform: "uppercase" }}>Last Chapter</span>
-          <span style={{ fontSize: 12, fontWeight: 500, color: "rgba(167,139,250,0.7)", maxWidth: 120, lineHeight: 1.3 }}>{chapters[ch - 1]?.title}</span>
+          <span style={{ fontSize: 18, color: "rgba(167,139,250,0.7)" }}>{"\u2190"}</span>
+          <span style={{ fontSize: 9, fontWeight: 600, color: "rgba(255,255,255,0.5)", letterSpacing: 0.5, textTransform: "uppercase" }}>Previous</span>
+          <span style={{ fontSize: 10, fontWeight: 500, color: "rgba(167,139,250,0.7)", lineHeight: 1.3, wordBreak: "break-word" }}>{chapters[ch - 1]?.title}</span>
         </div>
       </div>}
       {ch < chapters.length - 1 && <div
@@ -4764,13 +4771,20 @@ export default function LearnAI() {
         onMouseLeave={() => setNavHint(n => n === "right" ? null : n)}
         onClick={(e) => handleNavClick(e, "right")}
         style={{
-          position: "fixed", top: 0, right: 0, bottom: 0, width: "12.5%",
-          cursor: "pointer", zIndex: 10, overflow: "hidden",
+          position: "fixed", top: 0, right: 0, bottom: 0, width: "7%",
+          cursor: "pointer", zIndex: 10,
           display: "flex", alignItems: "center", justifyContent: "flex-end",
-          background: navHint === "right" ? "linear-gradient(to left, rgba(167,139,250,0.06), transparent)" : "transparent",
           transition: "background 0.3s ease",
         }}
       >
+        <div style={{
+          position: "absolute", top: "-10%", bottom: "-10%", left: "10%", right: "-300%",
+          borderRadius: "50%",
+          background: navHint === "right"
+            ? "linear-gradient(to left, transparent 94%, rgba(167,139,250,0.08) 100%)"
+            : "linear-gradient(to left, transparent 94%, rgba(167,139,250,0.03) 100%)",
+          transition: "background 0.3s ease", pointerEvents: "none",
+        }} />
         {ripple && ripple.side === "right" && <div key={ripple.id} style={{
           position: "absolute", right: -200, top: "50%",
           width: 400, height: 400, marginTop: -200, borderRadius: "50%",
@@ -4778,15 +4792,15 @@ export default function LearnAI() {
           animation: "navRipple 0.6s ease-out forwards", pointerEvents: "none",
         }} />}
         <div style={{
-          opacity: navHint === "right" ? 1 : 0,
-          transform: navHint === "right" ? "translateX(0)" : "translateX(10px)",
-          transition: "all 0.12s ease",
-          padding: "16px 14px 16px 20px",
+          position: "relative", zIndex: 1,
+          opacity: navHint === "right" ? 1 : 0.5,
+          transition: "opacity 0.2s ease",
+          padding: "16px 6px 16px 6px",
           display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 4,
         }}>
-          <span style={{ fontSize: 22, color: "rgba(167,139,250,0.7)" }}>{"\u2192"}</span>
-          <span style={{ fontSize: 10, fontWeight: 600, color: "rgba(255,255,255,0.5)", letterSpacing: 0.5, textTransform: "uppercase" }}>Next Chapter</span>
-          <span style={{ fontSize: 12, fontWeight: 500, color: "rgba(167,139,250,0.7)", maxWidth: 120, lineHeight: 1.3, textAlign: "right" }}>{chapters[ch + 1]?.title}</span>
+          <span style={{ fontSize: 18, color: "rgba(167,139,250,0.7)" }}>{"\u2192"}</span>
+          <span style={{ fontSize: 9, fontWeight: 600, color: "rgba(255,255,255,0.5)", letterSpacing: 0.5, textTransform: "uppercase" }}>Next</span>
+          <span style={{ fontSize: 10, fontWeight: 500, color: "rgba(167,139,250,0.7)", lineHeight: 1.3, textAlign: "right", wordBreak: "break-word" }}>{chapters[ch + 1]?.title}</span>
         </div>
       </div>}
     </div>

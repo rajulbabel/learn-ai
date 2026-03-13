@@ -180,7 +180,8 @@ export default function LearnAI() {
 
   useEffect(() => {
     const handleKey = (e) => {
-      if (e.key === "ArrowRight" || e.key === "ArrowDown") {
+      if (e.key === "ArrowRight" || e.key === "ArrowDown" || e.key === " ") {
+        if (e.key === " ") e.preventDefault();
         const hasSubBtn = document.querySelector("[data-subbtn]");
         if (hasSubBtn) {
           setSubBtnRipple(Date.now());

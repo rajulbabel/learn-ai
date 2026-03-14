@@ -11,15 +11,15 @@ lives in a single component file (`src/LearnAI.jsx`).
 - **React 18** with hooks (`useState`, `useEffect`)
 - **Vite** for build toolchain
 - **GitHub Actions** for CI/CD to GitHub Pages
-- No external UI libraries — all styling is inline
+- No external UI libraries - all styling is inline
 
 ## Architecture Rules
 
-- **Single-component app** — all UI logic lives in `src/LearnAI.jsx`. The chapter
+- **Single-component app** - all UI logic lives in `src/LearnAI.jsx`. The chapter
   content, navigation, styling, and animations are co-located in one file.
-- **No external dependencies beyond React** — no UI frameworks, CSS libraries, or
+- **No external dependencies beyond React** - no UI frameworks, CSS libraries, or
   animation packages. Everything is built with inline styles and React hooks.
-- **Chapter-based structure** — content is organized as an array of chapter objects.
+- **Chapter-based structure** - content is organized as an array of chapter objects.
   Each chapter has an `id`, `title`, and `part` number. New chapters should follow
   the existing numbering convention.
 
@@ -31,7 +31,7 @@ learn-ai/
 ├── vite.config.js          # Vite config (base path: /learn-ai/)
 ├── package.json            # Dependencies and scripts
 ├── src/
-│   ├── main.jsx            # React entry point — renders <LearnAI />
+│   ├── main.jsx            # React entry point - renders <LearnAI />
 │   └── LearnAI.jsx         # The entire app (chapters, UI, navigation)
 ├── .github/
 │   └── workflows/
@@ -52,14 +52,14 @@ npm run preview      # Preview production build locally
 
 ## Key Design Decisions
 
-- **Inline styles everywhere** — no CSS files or CSS-in-JS libraries. Styles are
+- **Inline styles everywhere** - no CSS files or CSS-in-JS libraries. Styles are
   passed as `style={{}}` props directly on elements. This keeps everything in one
   file and avoids build-time CSS processing.
-- **Dark theme** — background `#08080d`, light text. All colors are defined as
+- **Dark theme** - background `#08080d`, light text. All colors are defined as
   constants at the top of the file (the `C` object).
-- **Mobile-first** — the layout uses responsive sizing and the viewport meta tag
+- **Mobile-first** - the layout uses responsive sizing and the viewport meta tag
   is set for mobile devices.
-- **Navigation** — Prev/Next chapter buttons fixed at the bottom of the viewport.
+- **Navigation** - Prev/Next chapter buttons fixed at the bottom of the viewport.
   Chapter state is managed via `useState` with URL hash sync.
 
 ## Adding Content
@@ -80,6 +80,13 @@ Pushes to `main` trigger the GitHub Actions workflow which:
 3. Deploys the `dist/` folder to GitHub Pages
 
 No manual deployment steps needed.
+
+## Style Rules
+
+- **No em-dashes** - never use the em-dash character anywhere in the codebase.
+  Use `-` (hyphen) or rewrite the sentence instead.
+- **Dot product notation** - use `·` (middle dot) not `×` (multiplication sign)
+  when referring to dot products (e.g., `Q·Kᵀ` not `Q×Kᵀ`).
 
 ## Commit Conventions
 

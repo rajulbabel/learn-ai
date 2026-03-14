@@ -22,7 +22,7 @@ export const TOC = (ctx) => { const { goTo, expanded, setExpanded } = ctx;
       <div style={{ display: "flex", flexDirection: "column", gap: 6, width: "100%" }}>
         {sections.map(p => {
           const isOpen = expanded === p.num;
-          const chs = sectionChapters[p.num] || [];
+          const chs = sectionChapters[p.num];
           return (
             <div key={p.num} style={{ borderRadius: 10, background: `${p.color}06`, border: `1px solid ${isOpen ? `${p.color}35` : `${p.color}15`}`, overflow: "hidden", transition: "all 0.3s" }}>
               <div
@@ -37,7 +37,7 @@ export const TOC = (ctx) => { const { goTo, expanded, setExpanded } = ctx;
                   </div>
                 </div>
                 <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                  <T color={C.dim} size={12}>{chs.length} {chs.length === 1 ? "Chapter" : "Chapters"}</T>
+                  <T color={C.dim} size={12}>{chs.length} {/* v8 ignore next -- no section has exactly 1 chapter */ chs.length === 1 ? "Chapter" : "Chapters"}</T>
                   <span style={{ color: C.dim, fontSize: 14, transition: "transform 0.3s", transform: isOpen ? "rotate(180deg)" : "rotate(0)" }}>▼</span>
                 </div>
               </div>

@@ -13,4 +13,17 @@ export default defineConfig({
       },
     },
   },
+  test: {
+    environment: "jsdom",
+    globals: true,
+    coverage: {
+      provider: "v8",
+      include: ["src/config.js", "src/components.jsx", "src/sections/**/*.jsx"],
+      exclude: ["src/main.jsx", "src/LearnAI.jsx"],
+      thresholds: {
+        lines: 100,
+        branches: 100,
+      },
+    },
+  },
 });

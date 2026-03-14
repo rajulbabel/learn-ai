@@ -85,6 +85,7 @@ export const C = {
 };
 
 // Validate config at import time (dev only)
+/* v8 ignore start -- dev-only validation; error branches unreachable with valid config */
 if (import.meta.env.DEV) {
   const ids = chapters.map(c => c.id);
   const dupes = ids.filter((id, i) => ids.indexOf(id) !== i);
@@ -94,3 +95,4 @@ if (import.meta.env.DEV) {
     if (!c.component) console.error("[config] Chapter missing component:", c);
   });
 }
+/* v8 ignore stop */

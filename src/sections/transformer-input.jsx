@@ -1,7 +1,6 @@
 import { C } from "../config.js";
 import { Box, T, Reveal, SubBtn } from "../components.jsx";
-
-export const Ch2_1 = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, navigate } = ctx;
+export const FullArchitecture = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx;
   const ArchDiagram = () => (
     <svg width="420" height="580" viewBox="0 0 420 580" style={{ maxWidth: "100%", overflow: "visible" }}>
       <defs>
@@ -172,13 +171,14 @@ export const Ch2_1 = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, navi
         </div>
       )}
       <Reveal when={sub >= 1}><Box color={C.green}><T color="#80e8a5" bold center>🔍 Let's zoom into the bottom first - the green "Embedding" boxes.</T><T color="#80e8a5">This is where words enter the Transformer as numbers.</T></Box></Reveal>
-      {sub < 1 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
+      {sub < 1 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
     </div>
   );
 };
 
 // ═══════ 2.2 Embeddings ═══════
-export const Ch2_2 = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, navigate } = ctx; return (
+
+export const Embeddings = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx; return (
   <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
     {sub >= 0 && <Box color={C.red}><T color="#ff8a80" bold center>Problem: Neural networks only do math on numbers, not words.</T><T color="#ff8a80">We need 3 stages to convert words → numbers the network can use:</T></Box>}
     <Reveal when={sub >= 1}><Box color={C.purple} style={{ width: "100%" }}>
@@ -218,12 +218,13 @@ export const Ch2_2 = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, navi
         <T color="#ffe082" size={16} style={{ marginTop: 6 }}>Similar words (cat/dog) get similar vectors. Learned during training.</T>
       </Box></Reveal>
     <Reveal when={sub >= 4}><Box color={C.green}><T color="#80e8a5" bold center>✅ Words are now 512-number vectors!</T><T color="#80e8a5" center size={18}>But still no position info. "I love cats" = "cats love I". Next: Positional Encoding →</T></Box></Reveal>
-    {sub < 4 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
+    {sub < 4 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
   </div>
 ); }
 
 // ═══════ 2.3 Pos Enc - Problem ═══════
-export const Ch2_3 = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, navigate } = ctx; return (
+
+export const PosEncodingProblem = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx; return (
   <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
     {sub >= 0 && (
       <Box color={C.red} style={{ width: "100%" }}>
@@ -254,12 +255,13 @@ export const Ch2_3 = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, navi
         </div>
       </Box></Reveal>
     <Reveal when={sub >= 2}><Box color={C.green}><T color="#80e8a5" bold center>We need: bounded values, unique per position, relative distances learnable.</T><T color="#80e8a5" center size={18} style={{ marginTop: 4 }}>Solution: Sine & Cosine waves →</T></Box></Reveal>
-    {sub < 2 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
+    {sub < 2 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
   </div>
 ); }
 
 // ═══════ 2.4 Pos Enc - Formula ═══════
-export const Ch2_4 = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, navigate } = ctx; return (
+
+export const PosEncodingFormula = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx; return (
   <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
     {sub >= 0 && (
       <div style={{ background: "rgba(0,0,0,0.3)", border: `1px solid ${C.cyan}20`, borderRadius: 10, padding: "16px", width: "100%" }}>
@@ -285,12 +287,13 @@ export const Ch2_4 = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, navi
         ))}
       </div></Reveal>
     <Reveal when={sub >= 2}><Box color={C.yellow}><T color={C.yellow} bold center>The KEY insight: 10000^(i/d_model)</T><T color="#ffe082">When i=0, divisor=1 → pos/1 = pos → wave oscillates FAST.<br />When i=510, divisor≈10000 → pos/10000 ≈ tiny → wave changes BARELY.<br /><br />Like a clock: <strong style={{ color: C.cyan }}>seconds hand</strong> (fast) + <strong style={{ color: C.purple }}>hours hand</strong> (slow) = exact time.</T></Box></Reveal>
-    {sub < 2 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
+    {sub < 2 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
   </div>
 ); }
 
 // ═══════ 2.5 Pos Enc - Computing ═══════
-export const Ch2_5 = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, navigate } = ctx;
+
+export const PosEncodingCompute = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx;
   const d = 8;
   const computeRow = (pos) => {
     const vals = [];
@@ -337,13 +340,14 @@ export const Ch2_5 = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, navi
           <T color="#80e8a5" style={{ marginTop: 4 }}>Position 1: d0 jumps 0→0.841 (fast!), d6 barely moves 0→0.001 (slow!)</T>
           <T color="#80e8a5" style={{ marginTop: 4 }}>Position 2: d0 goes 0.841→0.909, d6 goes 0.001→0.002</T>
         </Box></Reveal>
-      {sub < 2 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
+      {sub < 2 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
     </div>
   );
 };
 
 // ═══════ 2.6 Fast vs Slow ═══════
-export const Ch2_6 = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, navigate } = ctx;
+
+export const PosEncodingFastSlow = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx;
   // Counting grid data
   const countingRows = [
     { pos: 0, digits: [0, 0, 0] }, { pos: 1, digits: [0, 0, 1] }, { pos: 2, digits: [0, 0, 2] },
@@ -571,13 +575,14 @@ export const Ch2_6 = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, navi
           </T>
         </Box></Reveal>
 
-      {sub < 5 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
+      {sub < 5 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
     </div>
   );
 };
 
 // ═══════ 2.7 Final Addition ═══════
-export const Ch2_7 = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, navigate } = ctx;
+
+export const PosEncodingFinal = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx;
   const emb = [0.56, 0.23, -0.11, 0.42, 0.88, -0.33, 0.71, 0.53];
   const pe = [0.841, 0.540, 0.100, 0.995, 0.010, 1.000, 0.001, 1.000];
   const final_ = emb.map((e, i) => (e + pe[i]).toFixed(2));
@@ -635,8 +640,8 @@ export const Ch2_7 = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, navi
             ))}
           </div>
         </Box></Reveal>
-      <Reveal when={sub >= 3}><Box color={C.green}><T color="#80e8a5" bold center>✅ This is what enters the Transformer layers.</T><T color="#80e8a5" center size={18} style={{ marginTop: 4 }}>Next up: <strong>Part 3 - Attention</strong>, the heart of the Transformer!</T></Box></Reveal>
-      {sub < 3 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
+      <Reveal when={sub >= 3}><Box color={C.green}><T color="#80e8a5" bold center>✅ This is what enters the Transformer layers.</T><T color="#80e8a5" center size={18} style={{ marginTop: 4 }}>Next up: <strong>Section 6 - Attention</strong>, the heart of the Transformer!</T></Box></Reveal>
+      {sub < 3 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
     </div>
   );
 };
@@ -644,6 +649,24 @@ export const Ch2_7 = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, navi
 // ═══════ CHAPTER ROUTER ═══════
 
 // ═══════════════════════════════════════
-// PART 3: ATTENTION - THE HEART
+// SECTION 6: ATTENTION - THE HEART
 // ═══════════════════════════════════════
 
+export const WhatTransformerDoes = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate, bankIdx, setBankIdx, hovered, setHovered } = ctx; return (
+  <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
+    {sub >= 0 && (
+      <Box color={C.purple} style={{ width: "100%" }}>
+        <T color="#b8a9ff" bold center size={21}>What is a Transformer actually doing?</T>
+        <T color="#b8a9ff" style={{ marginTop: 8 }}>You give it a sentence: <strong>"I love cats"</strong></T>
+        <T color="#b8a9ff" style={{ marginTop: 6 }}>It needs to understand what each word means <strong>in context</strong>. The word "love" alone could mean many things. But "love" in "I love cats" specifically means "I have affection for cats." The Transformer needs to figure this out.</T>
+      </Box>
+    )}
+    <Reveal when={sub >= 1}><Box color={C.cyan} style={{ width: "100%" }}>
+        <T color="#80deea" bold center size={20}>Step 1: Each word starts as a list of numbers.</T>
+        <T color="#80deea" style={{ marginTop: 6 }}>The model has a big dictionary (learned during training) that maps every word to a fixed list of numbers. These numbers capture the word's meaning in isolation.</T>
+      </Box></Reveal>
+    {sub < 1 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
+  </div>
+); }
+
+// ═══════ CH 1: The Problem ═══════

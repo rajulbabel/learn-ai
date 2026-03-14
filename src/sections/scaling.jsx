@@ -1,7 +1,6 @@
 import { C } from "../config.js";
 import { Box, T, Reveal, SubBtn } from "../components.jsx";
-
-export const Ch7_1 = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, navigate } = ctx; return (
+export const ScalingLaws = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx; return (
   <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
     {sub >= 0 && (
       <Box color={C.cyan} style={{ width: "100%" }}>
@@ -63,12 +62,13 @@ export const Ch7_1 = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, navi
         <T color="#ce93d8" style={{ marginTop: 6 }}><strong>Most models are under-trained, not too small.</strong></T>
         <T color="#ce93d8" style={{ marginTop: 6 }}>Optimal: match data tokens to parameters. 200B params = 20T tokens (rough rule).</T>
       </Box></Reveal>
-    {sub < 5 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
+    {sub < 5 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
   </div>
 ); }
 
 // ═══════ 3.2 Parameters at Scale ═══════
-export const Ch7_2 = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, navigate } = ctx; return (
+
+export const ParametersAtScale = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx; return (
   <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
     {sub >= 0 && (
       <Box color={C.yellow} style={{ width: "100%" }}>
@@ -129,12 +129,13 @@ export const Ch7_2 = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, navi
         </div>
         <T color="#42a5f5" style={{ marginTop: 6 }}>You can have 1 trillion parameters trained poorly (worse than 7B parameters trained well).</T>
       </Box></Reveal>
-    {sub < 4 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
+    {sub < 4 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
   </div>
 ); }
 
 // ═══════ 3.3 Knowledge Distillation ═══════
-export const Ch7_3 = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, navigate } = ctx; return (
+
+export const Distillation = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx; return (
   <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
     {sub >= 0 && (
       <Box color={C.pink} style={{ width: "100%" }}>
@@ -244,12 +245,13 @@ export const Ch7_3 = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, navi
         </div>
         <T color="#80e8a5" style={{ marginTop: 10 }}>The big expensive model trains once. Then it teaches smaller, faster models. That's why you can chat with AI instantly on your phone - you're talking to a student who learned from a genius.</T>
       </Box></Reveal>
-    {sub < 4 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
+    {sub < 4 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
   </div>
 ); }
 
 // ═══════ 3.4 Contrastive Learning - Connecting Images & Text (CLIP) ═══════
-export const Ch7_4 = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, navigate } = ctx; return (
+
+export const CLIP = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx; return (
   <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
     {sub >= 0 && (
       <Box color={C.purple} style={{ width: "100%" }}>
@@ -391,12 +393,13 @@ export const Ch7_4 = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, navi
         </div>
         <T color="#80e8a5" style={{ marginTop: 10 }}>Every time AI "sees" an image, contrastive learning is behind it. It's the reason AI can understand photos, generate art, and search billions of images by typing words.</T>
       </Box></Reveal>
-    {sub < 4 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
+    {sub < 4 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
   </div>
 ); }
 
 // ═══════ 3.5 The Complete Training Pipeline ═══════
-export const Ch7_5 = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, navigate } = ctx; return (
+
+export const TrainingPipeline = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx; return (
   <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
     {sub >= 0 && (
       <Box color={C.cyan} style={{ width: "100%" }}>
@@ -511,7 +514,6 @@ export const Ch7_5 = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, navi
           <T color={C.purple} size={15} center bold>Next up: the architecture that makes all of this possible - Transformers and Attention.</T>
         </div>
       </Box></Reveal>
-    {sub < 5 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
+    {sub < 5 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
   </div>
 ); }
-

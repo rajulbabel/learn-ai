@@ -1,8 +1,7 @@
 import { C, chapters } from "../config.js";
 import { Box, T } from "../components.jsx";
-
-export const ChTOC = (ctx) => { const { goTo, expanded, setExpanded } = ctx;
-  const parts = [
+export const TOC = (ctx) => { const { goTo, expanded, setExpanded } = ctx;
+  const sections = [
     { num: 1, name: "Neural Network Foundations", color: C.red, desc: "What neural networks are, how they learn, forward/backward pass" },
     { num: 2, name: "How LLMs Actually Train", color: C.cyan, desc: "Tokenization, self-supervised learning, cross-entropy, SFT, RLHF, batches" },
     { num: 3, name: "Scaling & Modern Techniques", color: C.yellow, desc: "Scaling laws, parameters at scale, distillation, contrastive learning" },
@@ -11,9 +10,8 @@ export const ChTOC = (ctx) => { const { goTo, expanded, setExpanded } = ctx;
     { num: 6, name: "Attention - Understanding Q, K, V", color: C.green, desc: "Why attention works, Query/Key/Value concepts, analogies" },
     { num: 7, name: "Attention - The Full Computation", color: C.pink, desc: "Step-by-step math, multi-head, W_O, the complete picture" },
   ];
-  const partStart = { 1: 1, 2: 11, 3: 17, 4: 22, 5: 26, 6: 34, 7: 45 };
-  const partChapters = {};
-  chapters.forEach((c, i) => { if (c.part > 0) { if (!partChapters[c.part]) partChapters[c.part] = []; partChapters[c.part].push({ ...c, idx: i }); } });
+  const sectionChapters = {};
+  chapters.forEach((c, i) => { if (c.section > 0) { if (!sectionChapters[c.section]) sectionChapters[c.section] = []; sectionChapters[c.section].push({ ...c, idx: i }); } });
 
   return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
@@ -22,9 +20,9 @@ export const ChTOC = (ctx) => { const { goTo, expanded, setExpanded } = ctx;
         <T color="#b8a9ff" center style={{ marginTop: 6 }}>{chapters.length - 1} chapters. Zero prerequisites. Every concept built on the one before it.</T>
       </Box>
       <div style={{ display: "flex", flexDirection: "column", gap: 6, width: "100%" }}>
-        {parts.map(p => {
+        {sections.map(p => {
           const isOpen = expanded === p.num;
-          const chs = partChapters[p.num] || [];
+          const chs = sectionChapters[p.num] || [];
           return (
             <div key={p.num} style={{ borderRadius: 10, background: `${p.color}06`, border: `1px solid ${isOpen ? `${p.color}35` : `${p.color}15`}`, overflow: "hidden", transition: "all 0.3s" }}>
               <div
@@ -64,9 +62,7 @@ export const ChTOC = (ctx) => { const { goTo, expanded, setExpanded } = ctx;
           );
         })}
       </div>
-      <T color={C.dim} size={16} center style={{ marginTop: 4 }}>Tap any part to expand, tap a chapter to jump there.</T>
+      <T color={C.dim} size={16} center style={{ marginTop: 4 }}>Tap any section to expand, tap a chapter to jump there.</T>
     </div>
   );
 };
-
-// ═══════ 2.1 Tokenization ═══════

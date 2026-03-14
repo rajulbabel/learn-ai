@@ -1,7 +1,6 @@
 import { C } from "../config.js";
 import { Box, T, Reveal, SubBtn } from "../components.jsx";
-
-export const Ch6_1 = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, navigate } = ctx; return (
+export const Tokenization = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx; return (
   <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
     {sub >= 0 && <Box color={C.cyan}><T color="#80deea" bold center size={20}>Computers only understand numbers.</T><T color="#80deea">Text is useless to an AI - no matter how eloquent. First step: convert "Hello world" into [1, 2, 3, 4, 5].</T></Box>}
     <Reveal when={sub >= 1}><Box color={C.yellow} style={{ width: "100%" }}>
@@ -64,12 +63,13 @@ export const Ch6_1 = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, navi
         </div>
       </Box></Reveal>
     <Reveal when={sub >= 5}><Box color={C.yellow}><T color="#ffe082" bold center>GPT has ~50,000 tokens. Some are common ('the', 'is'), some are rare. 'cryptocurrency' = 3 tokens. 'the' = 1 token.</T><T color="#ffe082" style={{ marginTop: 6 }}>This is why token limits matter: 1 paragraph ≈ 100 tokens. Your 4K context window ≈ 40 paragraphs.</T></Box></Reveal>
-    {sub < 5 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
+    {sub < 5 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
   </div>
 ); }
 
 // ═══════ 2.2 Self-Supervised Learning ═══════
-export const Ch6_2 = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, navigate } = ctx; return (
+
+export const SelfSupervised = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx; return (
   <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
     {sub >= 0 && (
       <Box color={C.purple} style={{ width: "100%" }}>
@@ -144,12 +144,13 @@ export const Ch6_2 = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, navi
         </div>
         <T color={C.cyan} bold center size={15} style={{ marginTop: 6 }}>↻ Repeat this 10 trillion times</T>
       </Box></Reveal>
-    {sub < 5 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
+    {sub < 5 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
   </div>
 ); }
 
 // ═══════ 2.3 Cross-Entropy Loss ═══════
-export const Ch6_3 = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, navigate } = ctx; return (
+
+export const CrossEntropy = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx; return (
   <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
     {sub >= 0 && (
       <Box color={C.red} style={{ width: "100%" }}>
@@ -226,10 +227,10 @@ export const Ch6_3 = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, navi
         <T color="#ffb74d" size={13} style={{ marginTop: 6 }}>Notice: 90% → 0.1 loss, 40% → 0.9 loss, 1% → 4.6 loss. Being confidently wrong is punished 46× more than being right.</T>
       </Box></Reveal>
     <Reveal when={sub >= 4}><Box color={C.purple} style={{ width: "100%" }}>
-        <T color="#b8a9ff" bold center size={20}>Why not just use (predicted − actual)² like Part 1?</T>
+        <T color="#b8a9ff" bold center size={20}>Why not just use (predicted - actual)² like Section 1?</T>
         <div style={{ marginTop: 10, display: "flex", flexDirection: "column", gap: 6 }}>
           <div style={{ padding: "8px 12px", borderRadius: 6, background: `${C.green}08`, border: `1px solid ${C.green}15` }}>
-            <T color={C.green} bold size={15}>Part 1: Predicting a single number</T>
+            <T color={C.green} bold size={15}>Section 1: Predicting a single number</T>
             <T color={C.dim} size={14}>"Predict house price" → model says 300K, actual is 350K</T>
             <T color={C.dim} size={14}>Loss = (300K − 350K)² → one number minus another. Simple.</T>
           </div>
@@ -260,12 +261,13 @@ export const Ch6_3 = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, navi
         </div>
         <T color={C.dim} size={14} style={{ marginTop: 8 }}>GPT-4's perplexity ≈ 5. For most predictions, it narrows 50,000 options down to ~5 plausible words. Lower = smarter.</T>
       </Box></Reveal>
-    {sub < 5 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
+    {sub < 5 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
   </div>
 ); }
 
 // ═══════ 2.4 Supervised Fine-Tuning (SFT) ═══════
-export const Ch6_4 = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, navigate } = ctx; return (
+
+export const SFT = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx; return (
   <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
     {sub >= 0 && (
       <Box color={C.purple} style={{ width: "100%" }}>
@@ -355,12 +357,13 @@ export const Ch6_4 = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, navi
         </div>
         <T color="#80e8a5" style={{ marginTop: 10 }}>But there's a problem... SFT makes the model follow instructions, but it doesn't guarantee the answers are GOOD. The model might still be rude, wrong, or harmful. That's where the next chapter comes in.</T>
       </Box></Reveal>
-    {sub < 4 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
+    {sub < 4 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
   </div>
 ); }
 
 // ═══════ 2.5 RLHF - Making AI Helpful & Safe ═══════
-export const Ch6_5 = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, navigate } = ctx; return (
+
+export const RLHF = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx; return (
   <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
     {sub >= 0 && (
       <Box color={C.pink} style={{ width: "100%" }}>
@@ -497,12 +500,13 @@ export const Ch6_5 = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, navi
           </div>
         </div>
       </Box></Reveal>
-    {sub < 5 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
+    {sub < 5 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
   </div>
 ); }
 
 // ═══════ 2.6 Batch Training ═══════
-export const Ch6_6 = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, navigate } = ctx; return (
+
+export const BatchTraining = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx; return (
   <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
     {sub >= 0 && (
       <Box color={C.orange} style={{ width: "100%" }}>
@@ -611,7 +615,7 @@ export const Ch6_6 = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, navi
         </div>
         <T color="#80deea" style={{ marginTop: 10 }}>The key insight: after a certain batch size (often 32-64), making batches bigger barely helps - you get slightly smoother updates but training takes much longer per step. Finding the sweet spot is an art.</T>
       </Box></Reveal>
-    {sub < 4 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} />}
+    {sub < 4 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
   </div>
 ); }
 

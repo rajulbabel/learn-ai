@@ -1,4 +1,30 @@
+import { Component, useEffect } from "react";
 import { C } from "./config.js";
+
+// Error boundary - catches chapter render crashes
+export class ErrorBoundary extends Component {
+  constructor(props) { super(props); this.state = { error: null }; }
+  static getDerivedStateFromError(error) { return { error }; }
+  componentDidUpdate(prevProps) {
+    if (prevProps.resetKey !== this.props.resetKey) this.setState({ error: null });
+  }
+  render() {
+    if (this.state.error) {
+      return (
+        <div style={{ padding: 32, textAlign: "center" }}>
+          <div style={{ fontSize: 20, fontWeight: 700, color: C.red, marginBottom: 12 }}>Something went wrong</div>
+          <div style={{ fontSize: 15, color: C.dim, marginBottom: 16 }}>{this.state.error.message}</div>
+          <button onClick={() => this.setState({ error: null })} style={{
+            padding: "8px 20px", borderRadius: 8, border: "none",
+            background: "rgba(167,139,250,0.15)", color: C.purple,
+            cursor: "pointer", fontSize: 15, fontWeight: 600,
+          }}>Try Again</button>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
 
 // Reusable components
 export const Box = ({ children, color = C.cyan, style = {} }) => (
@@ -12,8 +38,14 @@ export const Reveal = ({ when, children }) => {
   return <div data-reveal="true" style={{ width: "100%", animation: "fadeSlideIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) both" }}>{children}</div>;
 };
 
-export const SubBtn = ({ onClick, rippleKey }) => (
-  <button data-subbtn="true" onClick={onClick} style={{
+export const SubBtn = ({ onClick, rippleKey, registerSubBtn }) => {
+  // Notify parent that a SubBtn is mounted (used for keyboard nav instead of DOM queries)
+  useEffect(() => {
+    if (registerSubBtn) registerSubBtn(true);
+    return () => { if (registerSubBtn) registerSubBtn(false); };
+  }, [registerSubBtn]);
+  return (
+  <button data-subbtn="true" onClick={onClick} aria-label="Continue to next step" style={{
     alignSelf: "center", padding: "10px 28px", borderRadius: 8, border: "none",
     background: "rgba(167,139,250,0.15)", color: C.purple,
     cursor: "pointer", fontSize: 18, fontWeight: 600, marginTop: 4,
@@ -30,7 +62,8 @@ export const SubBtn = ({ onClick, rippleKey }) => (
     }} />}
     Continue
   </button>
-);
+  );
+};
 
 
 export const Tag = ({ children, color }) => (

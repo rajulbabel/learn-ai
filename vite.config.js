@@ -19,7 +19,7 @@ export default defineConfig({
     coverage: {
       provider: "v8",
       include: ["src/config.js", "src/components.jsx", "src/sections/**/*.jsx"],
-      exclude: ["src/main.jsx", "src/LearnAI.jsx"],
+      exclude: ["src/main.jsx", "src/learn-ai.jsx"],
       thresholds: {
         lines: 100,
         branches: 97,

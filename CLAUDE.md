@@ -33,7 +33,7 @@ in the corresponding section file.
 { id: "7.4", title: "Why Do We Need Softmax?", section: 7, component: "WhySoftmax" }
 ```
 
-**LearnAI.jsx** builds a lookup object from all section imports and resolves the
+**learn-ai.jsx** builds a lookup object from all section imports and resolves the
 active chapter at render time - there is no manually maintained chapter array.
 
 ```jsx
@@ -46,9 +46,15 @@ const renderChapter = lookup[chapters[ch].component];
 
 | Concept | Where | Naming rule | Example |
 |---------|-------|-------------|---------|
+| Component file (default export) | `src/` | kebab-case | `learn-ai.jsx` |
+| Multi-export module file | `src/` | lowercase | `components.jsx`, `config.js` |
 | Section file | `src/sections/` | kebab-case, topic name | `attention-computation.jsx` |
 | Chapter function | named export in section file | PascalCase, topic name | `WhySoftmax` |
 | Chapter ID | `chapters` array in config.js | `section.chapter` number | `"7.4"` |
+| Entry point | `src/` | lowercase | `main.jsx` |
+
+**All filenames are lowercase or kebab-case.** Only function/component names inside
+files use PascalCase. This keeps the filesystem consistent across all operating systems.
 
 Function names and file names describe **what the content is about**. They never
 contain numbers and never need to be renamed when chapters are reordered or inserted.
@@ -161,7 +167,7 @@ learn-ai/
 ├── package.json
 ├── src/
 │   ├── main.jsx                          # React entry point
-│   ├── LearnAI.jsx                       # Shell: state, navigation, layout
+│   ├── learn-ai.jsx                       # Shell: state, navigation, layout
 │   ├── components.jsx                    # Shared components (Box, T, Reveal, SubBtn, Tag, ErrorBoundary)
 │   ├── config.js                         # chapters array, sectionNames, sectionColors, colors (C)
 │   ├── __tests__/                        # Unit tests (vitest)
@@ -197,14 +203,14 @@ Example: insert a new chapter between 7.2 and 7.3.
    { id: "7.4", ..., component: "KTranspose" },  // was 7.3
    ```
 3. **Update the mapping table in this file** (CLAUDE.md) for the affected section.
-4. **No other files change.** LearnAI.jsx auto-resolves from config.
+4. **No other files change.** learn-ai.jsx auto-resolves from config.
 
 ## How To: Add a New Section
 
 Example: insert a new Section 5 between current Sections 4 and 5.
 
 1. **Create the file** (e.g., `src/sections/layer-norm.jsx`) with exported functions.
-2. **Add one import + spread** in LearnAI.jsx's lookup object:
+2. **Add one import + spread** in learn-ai.jsx's lookup object:
    ```jsx
    import * as LayerNorm from "./sections/layer-norm.jsx";
    const lookup = { ..., ...LayerNorm, ... };

@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { chapters } from "../config.js";
 
-// Import all section modules the same way LearnAI.jsx does
+// Import all section modules the same way learn-ai.jsx does
 import { TOC } from "../sections/toc.jsx";
 import * as NeuralFoundations from "../sections/neural-foundations.jsx";
 import * as LLMTraining from "../sections/llm-training.jsx";

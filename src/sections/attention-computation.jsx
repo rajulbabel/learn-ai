@@ -496,7 +496,7 @@ export const WhySoftmax = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple,
               </div>
               {/* Mini bar */}
               <div style={{ flex: 1, height: 8, background: "rgba(255,255,255,0.04)", borderRadius: 4, overflow: "hidden", minWidth: 40 }}>
-                <div style={{ width: `${Math.min(output / 148.4 * 100, 100)}%`, height: "100%", borderRadius: 4, background: C.green, minWidth: output > 0 ? 2 : /* v8 ignore next */ 0 }} />
+                <div style={{ width: `${Math.min(output / 148.4 * 100, 100)}%`, height: "100%", borderRadius: 4, background: C.green, minWidth: output > 0 ? 2 : 0 }} />
               </div>
               <T color={C.dim} size={13}>{note}</T>
             </div>

@@ -223,7 +223,6 @@ export const ReLU = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, regis
     const ys = points.map(p => p[1]);
     const minX = Math.min(...xs), maxX = Math.max(...xs);
     const minY = Math.min(...ys), maxY = Math.max(...ys);
-    /* v8 ignore start -- Graph helper has defensive branches for edge-case data */
     const scaleX = (x) => pad.l + ((x - minX) / (maxX - minX || 1)) * w;
     const scaleY = (y) => pad.t + h - ((y - minY) / (maxY - minY || 1)) * h;
     const polyline = points.map(p => `${scaleX(p[0])},${scaleY(p[1])}`).join(" ");
@@ -255,7 +254,6 @@ export const ReLU = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, regis
         ))}
       </svg>
     );
-    /* v8 ignore stop */
   };
 
   // Data

@@ -37,7 +37,7 @@ export const TOC = (ctx) => { const { goTo, expanded, setExpanded } = ctx;
                   </div>
                 </div>
                 <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                  <T color={C.dim} size={12}>{chs.length} {/* v8 ignore next -- no section has exactly 1 chapter */ chs.length === 1 ? "Chapter" : "Chapters"}</T>
+                  <T color={C.dim} size={12}>{chs.length} {chs.length === 1 ? "Chapter" : "Chapters"}</T>
                   <span style={{ color: C.dim, fontSize: 14, transition: "transform 0.3s", transform: isOpen ? "rotate(180deg)" : "rotate(0)" }}>▼</span>
                 </div>
               </div>

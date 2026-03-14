@@ -166,7 +166,9 @@ learn-ai/
 │   ├── config.js                         # chapters array, sectionNames, sectionColors, colors (C)
 │   ├── __tests__/                        # Unit tests (vitest)
 │   │   ├── config.test.js               # Config validation tests
-│   │   └── lookup.test.js               # Component lookup tests
+│   │   ├── lookup.test.js               # Component lookup tests
+│   │   ├── components.test.jsx          # Shared component tests
+│   │   └── sections.test.jsx            # All 60 chapter function tests
 │   └── sections/
 │       ├── toc.jsx                       # Table of Contents
 │       ├── neural-foundations.jsx         # Section 1
@@ -240,6 +242,40 @@ npm run test         # Run unit tests
 npm run lint         # Lint source files
 npm run format       # Format source files with Prettier
 ```
+
+## Test-Driven Development (TDD) - MANDATORY
+
+**Every code change MUST follow TDD.** No exceptions, no matter how small the change.
+
+The workflow for any addition, deletion, or update is:
+
+1. **Write the test first** - add or update tests in `src/__tests__/` that describe
+   the expected behavior of the change. The test should fail at this point.
+2. **Write the code** - implement the minimum code to make the test pass.
+3. **Run tests** - `npm run test` must pass. Run `npx vitest run --coverage` to
+   verify coverage.
+4. **Refactor** - clean up while keeping tests green.
+
+This applies to everything: new chapters, config changes, component updates, bug
+fixes, style changes. If it touches source code, it gets a test first.
+
+### Coverage targets
+
+Current real coverage (no v8 ignore exclusions):
+- **Lines: 100%** across all files
+- **Branches: 97.7%** (remaining 2.3% are structurally unreachable defensive
+  branches in config validation, Graph helper, and demo data ternaries)
+
+Coverage must not decrease. Any new code must have corresponding tests.
+
+### Test file organization
+
+| Test file | What it covers |
+|-----------|---------------|
+| `config.test.js` | Config data integrity (unique IDs, required fields, section names) |
+| `lookup.test.js` | Every config component exists as an exported function |
+| `components.test.jsx` | ErrorBoundary, Box, T, Reveal, SubBtn, Tag |
+| `sections.test.jsx` | All 60 chapter functions at every sub level with interaction coverage |
 
 ## Key Design Decisions
 

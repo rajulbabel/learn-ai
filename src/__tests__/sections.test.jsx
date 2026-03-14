@@ -217,6 +217,69 @@ describe("AttentionScores hovered", () => {
   }
 });
 
+// ─── WhyMultiHead label width fix ───
+describe("WhyMultiHead compromise bar labels", () => {
+  const fn = AttentionComputation.WhyMultiHead;
+
+  it("label minWidth accommodates 'last week' without wrapping", () => {
+    const ctx = makeCtx({ sub: 1 });
+    const { container } = render(fn(ctx));
+    // Find the bar label spans (minWidth on the word labels)
+    const labels = container.querySelectorAll("span[style*='text-align: right']");
+    const lastWeekLabel = Array.from(labels).find((el) => el.textContent === "last week");
+    expect(lastWeekLabel).toBeTruthy();
+    // minWidth should be at least 70px to fit "last week"
+    const minWidth = parseInt(lastWeekLabel.style.minWidth, 10);
+    expect(minWidth).toBeGreaterThanOrEqual(70);
+  });
+});
+
+// ─── WhyMultiHead sub 2 head boxes alignment ───
+describe("WhyMultiHead head boxes alignment", () => {
+  const fn = AttentionComputation.WhyMultiHead;
+
+  it("head boxes use consistent grid with aligned columns", () => {
+    const ctx = makeCtx({ sub: 2 });
+    const { container } = render(fn(ctx));
+    // Find the three head row grids by matching their gridTemplateColumns pattern (Npx 1fr Npx)
+    const allGrids = container.querySelectorAll("[style*='display: grid']");
+    const headRows = Array.from(allGrids).filter((el) => {
+      const tpl = el.style.gridTemplateColumns;
+      return tpl && /^\d+px 1fr \d+px$/.test(tpl);
+    });
+    expect(headRows.length).toBe(3);
+    // All should have identical grid templates
+    headRows.forEach((row) => expect(row.style.gridTemplateColumns).toBe(headRows[0].style.gridTemplateColumns));
+  });
+
+  it("head sublabels are center-aligned", () => {
+    const ctx = makeCtx({ sub: 2 });
+    const { container } = render(fn(ctx));
+    // T renders as <div>, find sublabel divs by text content
+    const sublabels = ["subject-verb", "verb-location", "temporal"];
+    sublabels.forEach((label) => {
+      const el = Array.from(container.querySelectorAll("div")).find((d) => d.textContent === label);
+      expect(el).toBeTruthy();
+      expect(el.style.textAlign).toBe("center");
+    });
+  });
+
+  it("first column width accommodates longest sublabel", () => {
+    const ctx = makeCtx({ sub: 2 });
+    const { container } = render(fn(ctx));
+    const allGrids = container.querySelectorAll("[style*='display: grid']");
+    const headRows = Array.from(allGrids).filter((el) => {
+      const tpl = el.style.gridTemplateColumns;
+      return tpl && /^\d+px 1fr \d+px$/.test(tpl);
+    });
+    // First column should be at least 80px to fit "subject-verb"
+    headRows.forEach((row) => {
+      const firstColWidth = parseInt(row.style.gridTemplateColumns.split(" ")[0], 10);
+      expect(firstColWidth).toBeGreaterThanOrEqual(80);
+    });
+  });
+});
+
 // ─── Derivatives Frac helper coverage ───
 describe("Derivatives with high sub to invoke Frac", () => {
   const fn = NeuralFoundations.Derivatives;

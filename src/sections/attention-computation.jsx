@@ -962,7 +962,7 @@ export const WhyMultiHead = (ctx) => { const { sub, subBtnRipple, setSubBtnRippl
             { w: "others", pct: 25, c: C.dim, note: "scattered" },
           ].map(({ w, pct, c, note }) => (
             <div key={w} style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 4 }}>
-              <span style={{ fontSize: 16, color: C.dim, minWidth: 54, textAlign: "right" }}>{w}</span>
+              <span style={{ fontSize: 16, color: C.dim, minWidth: 70, textAlign: "right" }}>{w}</span>
               <div style={{ flex: 1, height: 10, background: "rgba(255,255,255,0.04)", borderRadius: 5, overflow: "hidden" }}>
                 <div style={{ width: `${pct}%`, height: "100%", borderRadius: 5, background: c }} />
               </div>
@@ -982,8 +982,8 @@ export const WhyMultiHead = (ctx) => { const { sub, subBtnRipple, setSubBtnRippl
             { head: 2, label: "verb-location", q: "\"where am I happening?\"", finds: "mat (65%)", color: C.orange },
             { head: 3, label: "temporal", q: "\"when am I happening?\"", finds: "week (55%)", color: C.purple },
           ].map(({ head, label, q, finds, color }) => (
-            <div key={head} style={{ display: "grid", gridTemplateColumns: "62px 1fr 74px", gap: 8, alignItems: "center", padding: "8px 10px", borderRadius: 6, background: `${color}06`, border: `1px solid ${color}12` }}>
-              <div style={{ flex: 1 }}><T color={color} bold center size={16}>Head {head}</T><T color={C.dim} size={12}>{label}</T></div>
+            <div key={head} style={{ display: "grid", gridTemplateColumns: "84px 1fr 74px", gap: 8, alignItems: "center", padding: "8px 10px", borderRadius: 6, background: `${color}06`, border: `1px solid ${color}12` }}>
+              <div><T color={color} bold center size={16}>Head {head}</T><T color={C.dim} center size={12}>{label}</T></div>
               <T color={C.dim} size={16}>sat asks: {q}</T>
               <T color={color} bold center size={16} style={{ textAlign: "right" }}>→ {finds}</T>
             </div>

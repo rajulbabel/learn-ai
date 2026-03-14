@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { chapters, sectionNames, sectionColors, C } from "./config.js";
 import { T, ErrorBoundary } from "./components.jsx";
+import { saveNav, loadNav } from "./nav-persistence.js";
 
 // Section imports
 import { TOC } from "./sections/toc.jsx";
@@ -84,9 +85,9 @@ function NavZone({ side, hint, ripple, chapter, onClick, onHover }) {
 }
 
 export default function LearnAI() {
-  const [ch, setCh] = useState(0);
+  const [ch, setCh] = useState(() => { const s = loadNav(chapters); return s ? s.ch : 0; });
   const [fade, setFade] = useState(true);
-  const [sub, setSub] = useState(0);
+  const [sub, setSub] = useState(() => { const s = loadNav(chapters); return s ? s.sub : 0; });
   const [maxSubs, setMaxSubs] = useState({});
   const [transitioning, setTransitioning] = useState(false);
 
@@ -101,6 +102,9 @@ export default function LearnAI() {
   // Ref to track whether a SubBtn is currently rendered (avoids DOM queries)
   const subBtnRef = useRef(false);
   const registerSubBtn = useCallback((present) => { subBtnRef.current = present; }, []);
+
+  // Persist navigation to localStorage on every change
+  useEffect(() => { saveNav(ch, sub, chapters); }, [ch, sub]);
 
   const prevChRef = useRef(ch);
   useEffect(() => {

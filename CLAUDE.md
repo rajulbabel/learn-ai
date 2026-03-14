@@ -170,10 +170,12 @@ learn-ai/
 │   ├── learn-ai.jsx                       # Shell: state, navigation, layout
 │   ├── components.jsx                    # Shared components (Box, T, Reveal, SubBtn, Tag, ErrorBoundary)
 │   ├── config.js                         # chapters array, sectionNames, sectionColors, colors (C)
+│   ├── nav-persistence.js               # saveNav/loadNav - localStorage persistence with config fingerprint
 │   ├── __tests__/                        # Unit tests (vitest)
 │   │   ├── config.test.js               # Config validation tests
 │   │   ├── lookup.test.js               # Component lookup tests
 │   │   ├── components.test.jsx          # Shared component tests
+│   │   ├── nav-persistence.test.js      # Nav persistence tests (save, load, edge cases)
 │   │   └── sections.test.jsx            # All 60 chapter function tests
 │   └── sections/
 │       ├── toc.jsx                       # Table of Contents
@@ -265,6 +267,9 @@ The workflow for any addition, deletion, or update is:
 This applies to everything: new chapters, config changes, component updates, bug
 fixes, style changes. If it touches source code, it gets a test first.
 
+**NEVER skip this. Not for "just a style fix". Not for "one line". Not for a single
+character change. ALWAYS: test first, code second. No exceptions.**
+
 ### Coverage targets
 
 Current real coverage (no v8 ignore exclusions):
@@ -281,6 +286,7 @@ Coverage must not decrease. Any new code must have corresponding tests.
 | `config.test.js` | Config data integrity (unique IDs, required fields, section names) |
 | `lookup.test.js` | Every config component exists as an exported function |
 | `components.test.jsx` | ErrorBoundary, Box, T, Reveal, SubBtn, Tag |
+| `nav-persistence.test.js` | saveNav/loadNav: config match, config change, corrupted data, localStorage errors |
 | `sections.test.jsx` | All 60 chapter functions at every sub level with interaction coverage |
 
 ## Key Design Decisions

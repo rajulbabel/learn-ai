@@ -18,7 +18,7 @@ export default defineConfig({
     globals: true,
     coverage: {
       provider: "v8",
-      include: ["src/config.js", "src/components.jsx", "src/sections/**/*.jsx"],
+      include: ["src/config.js", "src/components.jsx", "src/nav-persistence.js", "src/sections/**/*.jsx"],
       exclude: ["src/main.jsx", "src/learn-ai.jsx"],
       thresholds: {
         lines: 100,

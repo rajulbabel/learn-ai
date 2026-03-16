@@ -210,6 +210,44 @@ describe("ComputeQKV interactive", () => {
   it("bankIdx=2", () => renderAndInteract(fn, 7, { bankIdx: 2 }));
 });
 
+// ─── ComputeQKV W matrix sub-steps ───
+describe("ComputeQKV W matrix sub-steps", () => {
+  const fn = AttentionComputation.ComputeQKV;
+
+  it("sub 1 shows all three W matrices (W_Q, W_K, W_V)", () => {
+    const ctx = makeCtx({ sub: 1 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("W_Q");
+    expect(text).toContain("W_K");
+    expect(text).toContain("W_V");
+    // Should show matrix values
+    expect(text).toContain("0.15");
+    expect(text).toContain("0.59");
+  });
+
+  it("sub 2 shows detailed multiplication for 'I'", () => {
+    const ctx = makeCtx({ sub: 2 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    // Should show the step-by-step multiplication
+    expect(text).toContain("1.0");
+    expect(text).toContain("0.59");
+    // Should show the result
+    expect(text).toContain("[1.0, -0.5]");
+  });
+
+  it("sub 3 shows the final Q, K, V results table", () => {
+    const ctx = makeCtx({ sub: 3 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("Query");
+    expect(text).toContain("Key");
+    expect(text).toContain("Value");
+    expect(text).toContain("[0.8, 0.2]");
+  });
+});
+
 describe("AttentionScores hovered", () => {
   const fn = AttentionComputation.AttentionScores;
   for (let h = 0; h <= 4; h++) {

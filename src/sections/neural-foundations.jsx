@@ -647,21 +647,46 @@ export const WeightsBiases = (ctx) => {
             <T color={C.yellow} bold center size={20} style={{ marginBottom: 16 }}>Step by Step: Multiply, Sum, Add Bias, Activate</T>
             <div style={{ padding: "12px 14px", borderRadius: 8, background: `${C.orange}06`, border: `1px solid ${C.orange}12` }}>
               <T color={C.orange} bold size={16}>Step 1: Multiply each input by its weight</T>
-              <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 3, paddingLeft: 8 }}>
-                <T color={C.dim} size={14}>x₁: <span style={{ color: "#ef9a9a" }}>1500</span> x <span style={{ color: "#ef9a9a" }}>0.5</span> = <strong style={{ color: C.red }}>750</strong></T>
-                <T color={C.dim} size={14}>x₂: <span style={{ color: "#ffe082" }}>3</span> x <span style={{ color: "#ffe082" }}>50</span> = <strong style={{ color: C.yellow }}>150</strong></T>
+              <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 6, paddingLeft: 0 }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                  <span style={{ color: C.dim, fontSize: 13, minWidth: 24 }}>x₁:</span>
+                  <span style={{ padding: "2px 8px", background: `${C.red}15`, borderRadius: 4, color: "#ef9a9a", fontSize: 15, fontWeight: 600 }}>1500</span>
+                  <span style={{ color: C.dim, fontSize: 14 }}>×</span>
+                  <span style={{ padding: "2px 8px", background: `${C.red}15`, borderRadius: 4, color: "#ef9a9a", fontSize: 15, fontWeight: 600 }}>0.5</span>
+                  <span style={{ color: C.dim, fontSize: 14 }}>=</span>
+                  <span style={{ padding: "2px 8px", background: `${C.red}15`, borderRadius: 4, color: C.red, fontSize: 15, fontWeight: 700 }}>750</span>
+                </div>
+                <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                  <span style={{ color: C.dim, fontSize: 13, minWidth: 24 }}>x₂:</span>
+                  <span style={{ padding: "2px 8px", background: `${C.yellow}15`, borderRadius: 4, color: "#ffe082", fontSize: 15, fontWeight: 600 }}>3</span>
+                  <span style={{ color: C.dim, fontSize: 14 }}>×</span>
+                  <span style={{ padding: "2px 8px", background: `${C.yellow}15`, borderRadius: 4, color: "#ffe082", fontSize: 15, fontWeight: 600 }}>50</span>
+                  <span style={{ color: C.dim, fontSize: 14 }}>=</span>
+                  <span style={{ padding: "2px 8px", background: `${C.yellow}15`, borderRadius: 4, color: C.yellow, fontSize: 15, fontWeight: 700 }}>150</span>
+                </div>
               </div>
             </div>
             <div style={{ marginTop: 8, padding: "12px 14px", borderRadius: 8, background: `${C.cyan}06`, border: `1px solid ${C.cyan}12` }}>
               <T color={C.cyan} bold size={16}>Step 2: Sum</T>
-              <div style={{ marginTop: 6, paddingLeft: 8 }}>
-                <T color={C.dim} size={14}><strong style={{ color: C.cyan }}>750 + 150 = 900</strong></T>
+              <div style={{ marginTop: 6, display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap" }}>
+                {["750", "150"].map((v, i) => (
+                  <span key={i} style={{ display: "contents" }}>
+                    {i > 0 && <span style={{ color: C.dim, fontSize: 14 }}>+</span>}
+                    <span style={{ padding: "2px 8px", background: `${C.cyan}15`, borderRadius: 4, color: C.cyan, fontSize: 15, fontWeight: 600 }}>{v}</span>
+                  </span>
+                ))}
+                <span style={{ color: C.dim, fontSize: 14 }}>=</span>
+                <span style={{ padding: "3px 10px", background: `${C.cyan}20`, borderRadius: 4, color: C.cyan, fontSize: 16, fontWeight: 700 }}>900</span>
               </div>
             </div>
             <div style={{ marginTop: 8, padding: "12px 14px", borderRadius: 8, background: `${C.purple}06`, border: `1px solid ${C.purple}12` }}>
               <T color="#b8a9ff" bold size={16}>Step 3: Add bias</T>
-              <div style={{ marginTop: 6, paddingLeft: 8 }}>
-                <T color={C.dim} size={14}><strong style={{ color: "#b8a9ff" }}>900 + 50 = 950</strong></T>
+              <div style={{ marginTop: 6, display: "flex", alignItems: "center", gap: 6 }}>
+                <span style={{ padding: "2px 8px", background: `${C.cyan}15`, borderRadius: 4, color: "#80deea", fontSize: 15, fontWeight: 600 }}>900</span>
+                <span style={{ color: C.dim, fontSize: 14 }}>+</span>
+                <span style={{ padding: "2px 8px", background: `${C.purple}15`, borderRadius: 4, color: "#b8a9ff", fontSize: 15, fontWeight: 600 }}>50</span>
+                <span style={{ color: C.dim, fontSize: 14 }}>=</span>
+                <span style={{ padding: "3px 10px", background: `${C.purple}20`, borderRadius: 4, color: "#b8a9ff", fontSize: 16, fontWeight: 700 }}>950</span>
               </div>
             </div>
             <div style={{ marginTop: 8, padding: "12px 14px", borderRadius: 8, background: `${C.green}06`, border: `1px solid ${C.green}12` }}>
@@ -2250,15 +2275,57 @@ export const Matrices = (ctx) => {
           <T color="#ef9a9a" bold center size={19}>The Math Step-by-Step</T>
           <div style={{ padding: "12px 14px", background: `${C.red}08`, border: `1px solid ${C.red}20`, borderRadius: 8, marginTop: 12 }}>
             <T size={14} color="#ef9a9a" style={{ marginBottom: 8 }}>Row 1 [1, 2] · [2, 3]:</T>
-            <T size={14} color={C.dim}>1 × 2 + 2 × 3 = 2 + 6 = 8</T>
+            <div style={{ display: "flex", gap: 6, justifyContent: "center", alignItems: "center", flexWrap: "wrap" }}>
+              <span style={{ padding: "2px 8px", background: `${C.red}15`, borderRadius: 4, color: "#ef9a9a", fontSize: 13, fontWeight: 600 }}>1</span>
+              <span style={{ color: C.dim, fontSize: 12 }}>×</span>
+              <span style={{ padding: "2px 8px", background: `${C.red}15`, borderRadius: 4, color: "#ef9a9a", fontSize: 13, fontWeight: 600 }}>2</span>
+              <span style={{ color: C.dim, fontSize: 12 }}>+</span>
+              <span style={{ padding: "2px 8px", background: `${C.red}15`, borderRadius: 4, color: "#ef9a9a", fontSize: 13, fontWeight: 600 }}>2</span>
+              <span style={{ color: C.dim, fontSize: 12 }}>×</span>
+              <span style={{ padding: "2px 8px", background: `${C.red}15`, borderRadius: 4, color: "#ef9a9a", fontSize: 13, fontWeight: 600 }}>3</span>
+              <span style={{ color: C.dim, fontSize: 12 }}>=</span>
+              <span style={{ padding: "2px 8px", background: `${C.green}15`, borderRadius: 4, color: "#80e8a5", fontSize: 13, fontWeight: 600 }}>2</span>
+              <span style={{ color: C.dim, fontSize: 12 }}>+</span>
+              <span style={{ padding: "2px 8px", background: `${C.green}15`, borderRadius: 4, color: "#80e8a5", fontSize: 13, fontWeight: 600 }}>6</span>
+              <span style={{ color: C.dim, fontSize: 12 }}>=</span>
+              <span style={{ padding: "2px 8px", background: `${C.orange}15`, borderRadius: 4, color: "#ffb74d", fontSize: 13, fontWeight: 600 }}>8</span>
+            </div>
           </div>
           <div style={{ padding: "12px 14px", background: `${C.red}08`, border: `1px solid ${C.red}20`, borderRadius: 8, marginTop: 10 }}>
             <T size={14} color="#ef9a9a" style={{ marginBottom: 8 }}>Row 2 [3, 4] · [2, 3]:</T>
-            <T size={14} color={C.dim}>3 × 2 + 4 × 3 = 6 + 12 = 18</T>
+            <div style={{ display: "flex", gap: 6, justifyContent: "center", alignItems: "center", flexWrap: "wrap" }}>
+              <span style={{ padding: "2px 8px", background: `${C.red}15`, borderRadius: 4, color: "#ef9a9a", fontSize: 13, fontWeight: 600 }}>3</span>
+              <span style={{ color: C.dim, fontSize: 12 }}>×</span>
+              <span style={{ padding: "2px 8px", background: `${C.red}15`, borderRadius: 4, color: "#ef9a9a", fontSize: 13, fontWeight: 600 }}>2</span>
+              <span style={{ color: C.dim, fontSize: 12 }}>+</span>
+              <span style={{ padding: "2px 8px", background: `${C.red}15`, borderRadius: 4, color: "#ef9a9a", fontSize: 13, fontWeight: 600 }}>4</span>
+              <span style={{ color: C.dim, fontSize: 12 }}>×</span>
+              <span style={{ padding: "2px 8px", background: `${C.red}15`, borderRadius: 4, color: "#ef9a9a", fontSize: 13, fontWeight: 600 }}>3</span>
+              <span style={{ color: C.dim, fontSize: 12 }}>=</span>
+              <span style={{ padding: "2px 8px", background: `${C.green}15`, borderRadius: 4, color: "#80e8a5", fontSize: 13, fontWeight: 600 }}>6</span>
+              <span style={{ color: C.dim, fontSize: 12 }}>+</span>
+              <span style={{ padding: "2px 8px", background: `${C.green}15`, borderRadius: 4, color: "#80e8a5", fontSize: 13, fontWeight: 600 }}>12</span>
+              <span style={{ color: C.dim, fontSize: 12 }}>=</span>
+              <span style={{ padding: "2px 8px", background: `${C.orange}15`, borderRadius: 4, color: "#ffb74d", fontSize: 13, fontWeight: 600 }}>18</span>
+            </div>
           </div>
           <div style={{ padding: "12px 14px", background: `${C.red}08`, border: `1px solid ${C.red}20`, borderRadius: 8, marginTop: 10 }}>
             <T size={14} color="#ef9a9a" style={{ marginBottom: 8 }}>Row 3 [5, 6] · [2, 3]:</T>
-            <T size={14} color={C.dim}>5 × 2 + 6 × 3 = 10 + 18 = 28</T>
+            <div style={{ display: "flex", gap: 6, justifyContent: "center", alignItems: "center", flexWrap: "wrap" }}>
+              <span style={{ padding: "2px 8px", background: `${C.red}15`, borderRadius: 4, color: "#ef9a9a", fontSize: 13, fontWeight: 600 }}>5</span>
+              <span style={{ color: C.dim, fontSize: 12 }}>×</span>
+              <span style={{ padding: "2px 8px", background: `${C.red}15`, borderRadius: 4, color: "#ef9a9a", fontSize: 13, fontWeight: 600 }}>2</span>
+              <span style={{ color: C.dim, fontSize: 12 }}>+</span>
+              <span style={{ padding: "2px 8px", background: `${C.red}15`, borderRadius: 4, color: "#ef9a9a", fontSize: 13, fontWeight: 600 }}>6</span>
+              <span style={{ color: C.dim, fontSize: 12 }}>×</span>
+              <span style={{ padding: "2px 8px", background: `${C.red}15`, borderRadius: 4, color: "#ef9a9a", fontSize: 13, fontWeight: 600 }}>3</span>
+              <span style={{ color: C.dim, fontSize: 12 }}>=</span>
+              <span style={{ padding: "2px 8px", background: `${C.green}15`, borderRadius: 4, color: "#80e8a5", fontSize: 13, fontWeight: 600 }}>10</span>
+              <span style={{ color: C.dim, fontSize: 12 }}>+</span>
+              <span style={{ padding: "2px 8px", background: `${C.green}15`, borderRadius: 4, color: "#80e8a5", fontSize: 13, fontWeight: 600 }}>18</span>
+              <span style={{ color: C.dim, fontSize: 12 }}>=</span>
+              <span style={{ padding: "2px 8px", background: `${C.orange}15`, borderRadius: 4, color: "#ffb74d", fontSize: 13, fontWeight: 600 }}>28</span>
+            </div>
           </div>
           <T size={15} color="#ef9a9a" style={{ marginTop: 14 }}>Result: [8, 18, 28]</T>
         </Box>

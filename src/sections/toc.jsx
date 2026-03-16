@@ -2,13 +2,14 @@ import { C, chapters } from "../config.js";
 import { Box, T } from "../components.jsx";
 export const TOC = (ctx) => { const { goTo, expanded, setExpanded } = ctx;
   const sections = [
-    { num: 1, name: "Neural Network Foundations", color: C.red, desc: "What neural networks are, how they learn, forward/backward pass" },
+    { num: 1, name: "Neural Network Foundations", color: C.red, desc: "How neural networks actually work" },
     { num: 2, name: "How LLMs Actually Train", color: C.cyan, desc: "Tokenization, self-supervised learning, cross-entropy, SFT, RLHF, batches" },
     { num: 3, name: "Scaling & Modern Techniques", color: C.yellow, desc: "Scaling laws, parameters at scale, distillation, contrastive learning" },
     { num: 4, name: "The Road to Transformers", color: C.purple, desc: "CNN → RNN → why RNN fails → the Transformer arrives" },
     { num: 5, name: "Transformer Input Pipeline", color: C.orange, desc: "Architecture overview, embeddings, positional encoding" },
     { num: 6, name: "Attention - Understanding Q, K, V", color: C.green, desc: "Why attention works, Query/Key/Value concepts, analogies" },
     { num: 7, name: "Attention - The Full Computation", color: C.pink, desc: "Step-by-step math, multi-head, W_O, the complete picture" },
+    { num: 8, name: "Beyond Attention", color: C.blue, desc: "Add & Norm, FFN, layer stacking, residual connections" },
   ];
   const sectionChapters = {};
   chapters.forEach((c, i) => { if (c.section > 0) { if (!sectionChapters[c.section]) sectionChapters[c.section] = []; sectionChapters[c.section].push({ ...c, idx: i }); } });

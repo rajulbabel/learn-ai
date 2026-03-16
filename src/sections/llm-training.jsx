@@ -472,6 +472,11 @@ export const RLHF = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, regis
             <T color={C.green} size={13}>Gets genuinely better</T>
           </div>
         </div>
+        <div style={{ marginTop: 10, padding: "10px 12px", borderRadius: 8, background: `${C.purple}08`, border: `1px solid ${C.purple}15` }}>
+          <T color={C.purple} bold size={14}>The actual algorithm: PPO (Proximal Policy Optimization)</T>
+          <T color={C.dim} size={13} style={{ marginTop: 4 }}>PPO updates the model in small, controlled steps - "proximal" means "nearby." Each update is clipped so the model can't change too dramatically. The KL penalty + PPO clipping together keep the model stable.</T>
+          <T color={C.dim} size={13} style={{ marginTop: 4 }}>A newer alternative is <strong style={{ color: C.cyan }}>DPO (Direct Preference Optimization)</strong> - it skips the reward model entirely and trains directly on human preferences. Simpler, cheaper, and often works just as well.</T>
+        </div>
       </Box></Reveal>
     <Reveal when={sub >= 5}><Box color={C.orange} style={{ width: "100%" }}>
         <T color="#ffb74d" bold center size={20}>The full journey - how ChatGPT/Claude are made</T>
@@ -619,4 +624,219 @@ export const BatchTraining = (ctx) => { const { sub, subBtnRipple, setSubBtnRipp
   </div>
 ); }
 
-// ═══════ 3.1 Scaling Laws ═══════
+// ═══════ 2.7 The Output Layer - From Hidden State to Words ═══════
+
+export const OutputLayer = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx; return (
+  <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
+    {sub >= 0 && (
+      <Box color={C.cyan} style={{ width: "100%" }}>
+        <T color="#80deea" bold center size={20}>We know the model "predicts the next word" - but HOW?</T>
+        <T color="#80deea" style={{ marginTop: 8 }}>After all the Transformer layers process "The capital of France is ___", the last position holds a <strong>hidden state</strong> - a vector of 512 numbers (in small models) or 12,288 numbers (GPT-3).</T>
+        <div style={{ marginTop: 12, padding: "12px 16px", borderRadius: 10, background: "rgba(0,0,0,0.3)", border: `1px solid ${C.cyan}20` }}>
+          <T color={C.dim} size={13} center style={{ textTransform: "uppercase", letterSpacing: 2 }}>Hidden state (512 dims)</T>
+          <div style={{ marginTop: 6, display: "flex", gap: 4, justifyContent: "center", flexWrap: "wrap" }}>
+            {[0.72, -0.31, 1.05, 0.18, -0.64, 0.93, -0.12, 0.55].map((v, i) => (
+              <div key={i} style={{ padding: "4px 8px", borderRadius: 4, background: `${C.cyan}12`, border: `1px solid ${C.cyan}20` }}>
+                <code style={{ color: C.cyan, fontSize: 14 }}>{v.toFixed(2)}</code>
+              </div>
+            ))}
+            <T color={C.dim} size={14} style={{ alignSelf: "center" }}>...504 more</T>
+          </div>
+        </div>
+        <T color="#80deea" style={{ marginTop: 10 }}>This vector captures everything the model understood about the input. But it's 512 numbers - and we need to choose from <strong>50,257 possible tokens</strong>. How do we go from 512 numbers to a word?</T>
+      </Box>
+    )}
+    <Reveal when={sub >= 1}><Box color={C.yellow} style={{ width: "100%" }}>
+      <T color="#ffe082" bold center size={20}>Step 1: The Linear Layer (512 to 50,257)</T>
+      <T color="#ffe082" style={{ marginTop: 8 }}>We use a weight matrix - exactly like chapter 1.14 (a layer IS matrix multiplication). This one is massive:</T>
+      <div style={{ marginTop: 12, display: "flex", alignItems: "center", justifyContent: "center", gap: 10, flexWrap: "wrap" }}>
+        <div style={{ textAlign: "center" }}>
+          <T color={C.cyan} bold center size={16}>Hidden state</T>
+          <div style={{ padding: "8px 14px", borderRadius: 8, background: `${C.cyan}12`, border: `1px solid ${C.cyan}25` }}>
+            <T color={C.cyan} bold center size={18}>512 x 1</T>
+          </div>
+        </div>
+        <T color={C.dim} size={22}>x</T>
+        <div style={{ textAlign: "center" }}>
+          <T color={C.yellow} bold center size={16}>W (Linear layer)</T>
+          <div style={{ padding: "8px 14px", borderRadius: 8, background: `${C.yellow}12`, border: `1px solid ${C.yellow}25` }}>
+            <T color={C.yellow} bold center size={18}>50,257 x 512</T>
+          </div>
+        </div>
+        <T color={C.dim} size={22}>=</T>
+        <div style={{ textAlign: "center" }}>
+          <T color={C.orange} bold center size={16}>Logits</T>
+          <div style={{ padding: "8px 14px", borderRadius: 8, background: `${C.orange}12`, border: `1px solid ${C.orange}25` }}>
+            <T color={C.orange} bold center size={18}>50,257 x 1</T>
+          </div>
+        </div>
+      </div>
+      <T color="#ffe082" style={{ marginTop: 12 }}>Each of the 50,257 rows in the weight matrix does a dot product with the 512-dim hidden state, producing one raw score per token. This matrix alone has <strong>50,257 x 512 = 25.7 million parameters</strong> - roughly 10% of a small model's total.</T>
+      <T color="#ffe082" style={{ marginTop: 6 }}>The output is called <strong>logits</strong> - 50,257 raw scores, one per token in the vocabulary. These are NOT probabilities yet.</T>
+    </Box></Reveal>
+    <Reveal when={sub >= 2}><Box color={C.orange} style={{ width: "100%" }}>
+      <T color="#ffb74d" bold center size={20}>Step 2: Softmax Converts Logits to Probabilities</T>
+      <T color="#ffb74d" style={{ marginTop: 8 }}>The logits are raw scores that can be any number - positive, negative, huge, tiny. We need probabilities (0 to 1, summing to 100%). This is exactly what softmax does (chapter 1.15):</T>
+      <div style={{ marginTop: 12, padding: "14px", borderRadius: 10, background: "rgba(0,0,0,0.3)", border: `1px solid ${C.orange}20` }}>
+        <T color={C.dim} size={13} center style={{ textTransform: "uppercase", letterSpacing: 2, marginBottom: 8 }}>softmax(z_i) = e^(z_i) / sum of e^(z_j) for all j</T>
+        <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+          {[
+            { token: "Paris", logit: 4.2, prob: "85%", color: C.green, width: 85 },
+            { token: "London", logit: 1.1, prob: "5%", color: C.yellow, width: 25 },
+            { token: "Lyon", logit: 0.5, prob: "3%", color: C.orange, width: 15 },
+            { token: "the", logit: -1.2, prob: "0.5%", color: C.red, width: 3 },
+            { token: "pizza", logit: -5.0, prob: "0.001%", color: C.red, width: 1 },
+          ].map(({ token, logit, prob, color, width }) => (
+            <div key={token} style={{ display: "flex", alignItems: "center", gap: 8 }}>
+              <T color={C.dim} size={14} style={{ minWidth: 55, textAlign: "right" }}>{token}</T>
+              <code style={{ color: C.dim, fontSize: 13, minWidth: 40, textAlign: "right" }}>{logit > 0 ? "+" : ""}{logit}</code>
+              <T color={C.dim} size={14}>→</T>
+              <div style={{ flex: 1, height: 16, background: "rgba(255,255,255,0.04)", borderRadius: 4, overflow: "hidden" }}>
+                <div style={{ width: `${Math.max(width, 1)}%`, height: "100%", background: color, borderRadius: 4, opacity: 0.7 }} />
+              </div>
+              <T color={color} bold size={14} style={{ minWidth: 50 }}>{prob}</T>
+            </div>
+          ))}
+          <T color={C.dim} size={12} style={{ marginTop: 2 }}>...and 50,252 more tokens with tiny probabilities. All 50,257 sum to 100%.</T>
+        </div>
+      </div>
+      <T color="#ffb74d" style={{ marginTop: 10 }}>The term <strong>"logit"</strong> means "the raw score before softmax." You'll see this word everywhere in ML. Higher logit = higher probability after softmax. The logit for "Paris" (4.2) is much bigger than "pizza" (-5.0), so softmax gives Paris a massive share.</T>
+    </Box></Reveal>
+    <Reveal when={sub >= 3}><Box color={C.green} style={{ width: "100%" }}>
+      <T color="#80e8a5" bold center size={20}>The Complete Output Pipeline</T>
+      <div style={{ marginTop: 12, display: "flex", flexDirection: "column", alignItems: "center", gap: 0 }}>
+        {[
+          { step: "Hidden State", detail: "512 numbers encoding everything the model understood", color: C.cyan, tag: "Hidden" },
+          { step: "arrow", label: "Linear layer (512 x 50,257 matrix)" },
+          { step: "Logits", detail: "50,257 raw scores - one per token in vocabulary", color: C.orange, tag: "Logits" },
+          { step: "arrow", label: "Softmax (e^z / sum)" },
+          { step: "Probabilities", detail: "50,257 values from 0 to 1, summing to 100%", color: C.green, tag: "Probs" },
+          { step: "arrow", label: "Pick the highest (or sample)" },
+          { step: "Output Token", detail: '"Paris" - the model\'s prediction', color: C.yellow, tag: "Token" },
+        ].map((item, i) =>
+          item.step === "arrow" ? (
+            <div key={i} style={{ display: "flex", flexDirection: "column", alignItems: "center", padding: "2px 0" }}>
+              <span style={{ fontSize: 14, color: C.dim }}>{item.label}</span>
+              <span style={{ fontSize: 16, color: C.dim }}>↓</span>
+            </div>
+          ) : (
+            <div key={i} style={{ display: "flex", alignItems: "center", gap: 10, padding: "8px 14px", borderRadius: 8, width: "90%", background: `${item.color}08`, border: `1px solid ${item.color}20` }}>
+              <div style={{ padding: "2px 8px", borderRadius: 4, background: `${item.color}15`, flexShrink: 0 }}>
+                <T color={item.color} bold size={12}>{item.tag}</T>
+              </div>
+              <div>
+                <T color={item.color} bold size={15}>{item.step}</T>
+                <T color={C.dim} size={13}>{item.detail}</T>
+              </div>
+            </div>
+          )
+        )}
+      </div>
+      <div style={{ marginTop: 14, padding: "10px 14px", borderRadius: 8, background: `${C.green}08`, border: `1px solid ${C.green}20` }}>
+        <T color="#80e8a5" bold center size={16}>This is the "Linear & Softmax" you'll see at the top of the Transformer diagram in Section 5.</T>
+        <T color={C.dim} center size={14} style={{ marginTop: 4 }}>During training, cross-entropy loss (chapter 2.3) compares these probabilities against the correct answer. During inference, the model picks a token from these probabilities and outputs it.</T>
+      </div>
+    </Box></Reveal>
+    {sub < 3 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
+  </div>
+); }
+
+// ═══════ 2.8 Autoregressive Generation - One Token at a Time ═══════
+
+export const AutoregressiveGeneration = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx;
+  const steps = [
+    { input: '"I love"', output: '"cats"', tokens: ["I", "love", "cats"], newIdx: 2 },
+    { input: '"I love cats"', output: '"because"', tokens: ["I", "love", "cats", "because"], newIdx: 3 },
+    { input: '"I love cats because"', output: '"they"', tokens: ["I", "love", "cats", "because", "they"], newIdx: 4 },
+    { input: '"I love cats because they"', output: '"purr"', tokens: ["I", "love", "cats", "because", "they", "purr"], newIdx: 5 },
+  ];
+  return (
+  <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
+    {sub >= 0 && (
+      <Box color={C.purple} style={{ width: "100%" }}>
+        <T color="#b8a9ff" bold center size={20}>Training vs Inference - Two Different Modes</T>
+        <div style={{ marginTop: 12, display: "flex", gap: 12 }}>
+          <div style={{ flex: 1, padding: "12px", borderRadius: 10, background: `${C.cyan}08`, border: `1px solid ${C.cyan}20` }}>
+            <T color={C.cyan} bold center size={16}>Training</T>
+            <T color={C.dim} size={14} style={{ marginTop: 6 }}>The model sees the COMPLETE text upfront: "The capital of France is Paris"</T>
+            <T color={C.dim} size={14} style={{ marginTop: 4 }}>It tries to predict each word given the words before it. The correct answer is right there for comparison.</T>
+            <T color={C.cyan} size={14} style={{ marginTop: 4 }}><strong>All words processed in parallel</strong> - fast!</T>
+          </div>
+          <div style={{ flex: 1, padding: "12px", borderRadius: 10, background: `${C.purple}08`, border: `1px solid ${C.purple}20` }}>
+            <T color={C.purple} bold center size={16}>Inference</T>
+            <T color={C.dim} size={14} style={{ marginTop: 6 }}>You type "The capital of France is ___" and the model must GENERATE the answer.</T>
+            <T color={C.dim} size={14} style={{ marginTop: 4 }}>There is no complete text to peek at. The model must produce one token at a time.</T>
+            <T color={C.purple} size={14} style={{ marginTop: 4 }}><strong>Tokens generated one by one</strong> - sequential!</T>
+          </div>
+        </div>
+        <T color="#b8a9ff" style={{ marginTop: 10 }}>Chapter 2.7 showed how the model picks ONE token. But a conversation needs hundreds. How does the model generate a full response?</T>
+      </Box>
+    )}
+    <Reveal when={sub >= 1}><Box color={C.yellow} style={{ width: "100%" }}>
+      <T color="#ffe082" bold center size={20}>The Loop: Predict one token, feed it back, repeat</T>
+      <T color="#ffe082" style={{ marginTop: 8 }}>This is called <strong>autoregressive generation</strong> - "auto" (self) + "regressive" (feeding back). The model's own output becomes its next input.</T>
+      <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 8 }}>
+        {steps.map(({ input, output, tokens, newIdx }, i) => (
+          <div key={i} style={{ padding: "10px 12px", borderRadius: 8, background: `${C.yellow}06`, border: `1px solid ${C.yellow}15` }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 6 }}>
+              <div style={{ width: 24, height: 24, borderRadius: "50%", background: `${C.yellow}20`, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                <T color={C.yellow} bold size={13}>{i + 1}</T>
+              </div>
+              <T color={C.dim} size={14}>Input: {input}</T>
+              <T color={C.dim} size={14}>→</T>
+              <T color={C.yellow} bold size={14}>Predicts: {output}</T>
+            </div>
+            <div style={{ display: "flex", gap: 3, flexWrap: "wrap" }}>
+              {tokens.map((t, j) => (
+                <div key={j} style={{ padding: "3px 8px", borderRadius: 4, fontSize: 14, background: j === newIdx ? `${C.green}20` : "rgba(255,255,255,0.04)", border: `1px solid ${j === newIdx ? `${C.green}40` : "rgba(255,255,255,0.06)"}`, color: j === newIdx ? C.green : C.dim, fontWeight: j === newIdx ? 700 : 400 }}>{t}{j === newIdx && " (NEW)"}</div>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+      <T color="#ffe082" style={{ marginTop: 8 }}>Each step: the new token is appended to the input, and the whole thing goes back through the model. The context window grows by one token each time.</T>
+    </Box></Reveal>
+    <Reveal when={sub >= 2}><Box color={C.green} style={{ width: "100%" }}>
+      <T color="#80e8a5" bold center size={20}>Watch the context grow - append and repeat</T>
+      <div style={{ marginTop: 12, padding: "14px", borderRadius: 10, background: "rgba(0,0,0,0.3)", border: `1px solid ${C.green}20` }}>
+        {[
+          { ctx: ["I", "love"], pred: "cats", step: 1 },
+          { ctx: ["I", "love", "cats"], pred: "because", step: 2 },
+          { ctx: ["I", "love", "cats", "because"], pred: "they", step: 3 },
+          { ctx: ["I", "love", "cats", "because", "they"], pred: "purr", step: 4 },
+          { ctx: ["I", "love", "cats", "because", "they", "purr"], pred: "[END]", step: 5 },
+        ].map(({ ctx: toks, pred, step }) => (
+          <div key={step} style={{ display: "flex", alignItems: "center", gap: 6, padding: "6px 0", borderBottom: step < 5 ? "1px solid rgba(255,255,255,0.04)" : "none" }}>
+            <T color={C.dim} size={13} style={{ minWidth: 45 }}>Step {step}:</T>
+            <div style={{ display: "flex", gap: 2, flexWrap: "wrap", flex: 1 }}>
+              {toks.map((t, j) => (
+                <span key={j} style={{ padding: "2px 6px", borderRadius: 3, fontSize: 14, background: "rgba(255,255,255,0.04)", color: C.mid }}>{t}</span>
+              ))}
+            </div>
+            <T color={C.dim} size={14}>→</T>
+            <span style={{ padding: "2px 8px", borderRadius: 4, fontSize: 14, fontWeight: 700, background: pred === "[END]" ? `${C.red}15` : `${C.green}15`, color: pred === "[END]" ? C.red : C.green }}>{pred}</span>
+          </div>
+        ))}
+      </div>
+      <T color="#80e8a5" style={{ marginTop: 10 }}>Each time, the model runs the full forward pass (chapters 1.6, 5-7) on the ENTIRE context so far, then uses the output layer (chapter 2.7) to pick the next token, then that token is appended and the cycle repeats.</T>
+    </Box></Reveal>
+    <Reveal when={sub >= 3}><Box color={C.red} style={{ width: "100%" }}>
+      <T color="#ef9a9a" bold center size={20}>When Does Generation Stop?</T>
+      <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 8 }}>
+        <div style={{ padding: "10px 12px", borderRadius: 8, background: `${C.red}08`, border: `1px solid ${C.red}20` }}>
+          <T color={C.red} bold size={16}>1. EOS token (End of Sequence)</T>
+          <T color={C.dim} size={14} style={{ marginTop: 4 }}>The vocabulary includes a special stop token. When the model predicts it, generation ends. It's how the model says "I'm done talking."</T>
+        </div>
+        <div style={{ padding: "10px 12px", borderRadius: 8, background: `${C.orange}08`, border: `1px solid ${C.orange}20` }}>
+          <T color={C.orange} bold size={16}>2. Max length reached</T>
+          <T color={C.dim} size={14} style={{ marginTop: 4 }}>GPT-4 can handle ~128K tokens. If the context window fills up, generation stops regardless.</T>
+        </div>
+      </div>
+      <div style={{ marginTop: 14, padding: "12px 16px", borderRadius: 10, background: `${C.purple}08`, border: `1px solid ${C.purple}20` }}>
+        <T color={C.purple} bold center size={16}>Why this matters for what comes next:</T>
+        <T color={C.dim} size={14} style={{ marginTop: 6 }}>Since the model generates left-to-right, it can only use PAST tokens to predict the NEXT one. It must never peek at future tokens. This is why the Transformer decoder uses a <strong style={{ color: C.purple }}>mask</strong> - it blocks each position from seeing tokens that come after it. You'll see this "Masked Multi-Head Attention" in the architecture diagram (Section 5).</T>
+      </div>
+    </Box></Reveal>
+    {sub < 3 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
+  </div>
+); }

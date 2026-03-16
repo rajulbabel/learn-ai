@@ -406,41 +406,40 @@ export const WhatIsLayer = (ctx) => {
               Each neuron gets ALL 3 inputs but has its own weights. The weights determine what each neuron "cares about."
             </T>
             <div style={{ display: "flex", justifyContent: "center" }}>
-              <svg viewBox="0 0 520 310" style={{ display: "block", width: "100%", maxWidth: 520 }}>
+              <svg viewBox="0 0 380 320" style={{ display: "block", width: "100%", maxWidth: 380 }}>
                 {/* Column labels */}
                 <text x={65} y={16} fill="rgba(255,255,255,0.4)" fontSize={11} textAnchor="middle" fontWeight={600}>Inputs</text>
-                <text x={280} y={16} fill="rgba(255,255,255,0.4)" fontSize={11} textAnchor="middle" fontWeight={600}>Neurons</text>
+                <text x={290} y={16} fill="rgba(255,255,255,0.4)" fontSize={11} textAnchor="middle" fontWeight={600}>Neurons</text>
 
-                {/* Edges with weight labels - 9 connections */}
-                {/* Edges with weight labels 25% from source node */}
+                {/* 9 edges with weight labels near destination (t=0.8) */}
                 {[
-                  { x1: 93, y1: 60, x2: 248, y2: 55, c: C.red, w: "0.6", oy: -9 },
-                  { x1: 93, y1: 60, x2: 248, y2: 150, c: C.red, w: "0.1", oy: -8 },
-                  { x1: 93, y1: 60, x2: 248, y2: 245, c: C.red, w: "0", oy: -8 },
-                  { x1: 93, y1: 150, x2: 248, y2: 55, c: C.yellow, w: "0.3", oy: 12 },
-                  { x1: 93, y1: 150, x2: 248, y2: 150, c: C.yellow, w: "0.5", oy: -9 },
-                  { x1: 93, y1: 150, x2: 248, y2: 245, c: C.yellow, w: "0.2", oy: -8 },
-                  { x1: 93, y1: 240, x2: 248, y2: 55, c: C.green, w: "0.1", oy: 12 },
-                  { x1: 93, y1: 240, x2: 248, y2: 150, c: C.green, w: "0.2", oy: 12 },
-                  { x1: 93, y1: 240, x2: 248, y2: 245, c: C.green, w: "0.7", oy: -9 },
-                ].map(({ x1, y1, x2, y2, c, w, oy = 0 }, i) => {
-                  const t = 0.25;
+                  { sy: 50, dy: 50, w: "0.6", c: C.red },
+                  { sy: 160, dy: 50, w: "0.3", c: C.yellow },
+                  { sy: 270, dy: 50, w: "0.1", c: C.green },
+                  { sy: 50, dy: 160, w: "0.1", c: C.red },
+                  { sy: 160, dy: 160, w: "0.5", c: C.yellow },
+                  { sy: 270, dy: 160, w: "0.2", c: C.green },
+                  { sy: 50, dy: 270, w: "0.0", c: C.red },
+                  { sy: 160, dy: 270, w: "0.2", c: C.yellow },
+                  { sy: 270, dy: 270, w: "0.7", c: C.green },
+                ].map(({ sy, dy, w, c }, i) => {
+                  const x1 = 91, x2 = 262, t = 0.8;
                   const lx = x1 + (x2 - x1) * t;
-                  const ly = y1 + (y2 - y1) * t + oy;
+                  const ly = sy + (dy - sy) * t;
                   return (
                     <g key={i}>
-                      <line x1={x1} y1={y1} x2={x2} y2={y2} stroke={`${c}25`} strokeWidth={1.2} />
-                      <rect x={lx - 14} y={ly - 9} width={28} height={16} rx={3} fill="#08080dee" />
-                      <text x={lx} y={ly + 4} fill={c} fontSize={10} textAnchor="middle" fontWeight={700}>{w}</text>
+                      <line x1={x1} y1={sy} x2={x2} y2={dy} stroke={`${c}30`} strokeWidth={1.2} />
+                      <rect x={lx - 14} y={ly - 8} width={28} height={15} rx={3} fill="#08080dee" stroke={`${c}30`} strokeWidth={0.5} />
+                      <text x={lx} y={ly + 4} fill={c} fontSize={10} textAnchor="middle" fontWeight={600}>{w}</text>
                     </g>
                   );
                 })}
 
                 {/* Input nodes */}
                 {[
-                  { y: 60, label: "fever", val: "38.5", c: C.red },
-                  { y: 150, label: "cough", val: "1", c: C.yellow },
-                  { y: 240, label: "fatigue", val: "0.8", c: C.green },
+                  { y: 50, label: "fever", val: "38.5", c: C.red },
+                  { y: 160, label: "cough", val: "1", c: C.yellow },
+                  { y: 270, label: "fatigue", val: "0.8", c: C.green },
                 ].map(({ y, label, val, c }) => (
                   <g key={label}>
                     <circle cx={65} cy={y} r={26} fill={`${c}12`} stroke={c} strokeWidth={2} />
@@ -449,27 +448,22 @@ export const WhatIsLayer = (ctx) => {
                   </g>
                 ))}
 
-                {/* Neuron nodes with bias and output */}
+                {/* Neuron nodes with bias */}
                 {[
-                  { y: 55, label: "Flu", bias: "-14", out: "9.48", c: C.red, ct: "#ef9a9a" },
-                  { y: 150, label: "Cold", bias: "-1", out: "3.51", c: C.orange, ct: "#ffb74d" },
-                  { y: 245, label: "Allergy", bias: "-0.5", out: "0.26", c: C.purple, ct: "#b8a9ff" },
+                  { y: 50, label: "Flu", bias: "-14", out: "9.48", c: C.red, ct: "#ef9a9a" },
+                  { y: 160, label: "Cold", bias: "-1", out: "3.51", c: C.orange, ct: "#ffb74d" },
+                  { y: 270, label: "Allergy", bias: "-0.5", out: "0.26", c: C.purple, ct: "#b8a9ff" },
                 ].map(({ y, label, bias, out, c, ct }) => (
                   <g key={label}>
-                    <circle cx={280} cy={y} r={30} fill={`${c}12`} stroke={c} strokeWidth={2} />
-                    <text x={280} y={y - 8} fill={c} fontSize={12} textAnchor="middle" fontWeight={700}>{label}</text>
-                    <text x={280} y={y + 7} fill="rgba(255,255,255,0.45)" fontSize={10} textAnchor="middle">b={bias}</text>
-                    {/* Output arrow */}
-                    <line x1={310} y1={y} x2={380} y2={y} stroke={`${c}50`} strokeWidth={1.5} />
-                    <polygon points={`380,${y - 4} 388,${y} 380,${y + 4}`} fill={c} />
-                    {/* Output value */}
-                    <rect x={392} y={y - 14} width={68} height={28} rx={6} fill={`${c}12`} stroke={`${c}30`} strokeWidth={1} />
-                    <text x={426} y={y + 4} fill={ct} fontSize={14} textAnchor="middle" fontWeight={700}>{out}</text>
+                    <circle cx={290} cy={y} r={28} fill={`${c}12`} stroke={c} strokeWidth={2} />
+                    <text x={290} y={y - 8} fill={c} fontSize={11} textAnchor="middle" fontWeight={700}>{label}</text>
+                    <text x={290} y={y + 7} fill="rgba(255,255,255,0.45)" fontSize={9} textAnchor="middle">b={bias}</text>
+                    <text x={332} y={y + 4} fill={ct} fontSize={11} textAnchor="start" fontWeight={700}>→ {out}</text>
                   </g>
                 ))}
 
                 {/* Bottom insight */}
-                <text x={260} y={295} fill="rgba(255,255,255,0.4)" fontSize={11} textAnchor="middle">Flu cares about fever (0.6) | Allergy ignores fever (0) but focuses on fatigue (0.7)</text>
+                <text x={190} y={308} fill="rgba(255,255,255,0.4)" fontSize={11} textAnchor="middle">Flu cares about fever (0.6) | Allergy focuses on fatigue (0.7)</text>
               </svg>
             </div>
           </Box>
@@ -905,32 +899,32 @@ export const ReLU = (ctx) => {
           </div>
           <T color="rgba(255,255,255,0.5)" size={14} style={{ marginTop: 16, textAlign: "center", fontStyle: "italic", fontFamily: "monospace" }}>Formally: ReLU(x) = max(0, x)</T>
           <div style={{ marginTop: 16, display: "flex", flexDirection: "column", gap: 10 }}>
-            <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+            <div style={{ display: "flex", gap: 16, justifyContent: "center", flexWrap: "wrap" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 6, width: 170 }}>
                 <span style={{ color: C.dim, fontSize: 14 }}>ReLU(</span>
-                <span style={{ padding: "2px 8px", background: `${C.red}15`, borderRadius: 4, color: "#ef9a9a", fontSize: 15, fontWeight: 600 }}>-5</span>
+                <span style={{ padding: "2px 8px", background: `${C.red}15`, borderRadius: 4, color: "#ef9a9a", fontSize: 15, fontWeight: 600, display: "inline-block", minWidth: 40, textAlign: "center" }}>-5</span>
                 <span style={{ color: C.dim, fontSize: 14 }}>) =</span>
-                <span style={{ padding: "2px 8px", background: `${C.red}15`, borderRadius: 4, color: C.red, fontSize: 15, fontWeight: 700 }}>0</span>
+                <span style={{ padding: "2px 8px", background: `${C.red}15`, borderRadius: 4, color: C.red, fontSize: 15, fontWeight: 700, display: "inline-block", minWidth: 40, textAlign: "center" }}>0</span>
               </div>
-              <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 6, width: 170 }}>
                 <span style={{ color: C.dim, fontSize: 14 }}>ReLU(</span>
-                <span style={{ padding: "2px 8px", background: `${C.red}15`, borderRadius: 4, color: "#ef9a9a", fontSize: 15, fontWeight: 600 }}>-100</span>
+                <span style={{ padding: "2px 8px", background: `${C.red}15`, borderRadius: 4, color: "#ef9a9a", fontSize: 15, fontWeight: 600, display: "inline-block", minWidth: 40, textAlign: "center" }}>-100</span>
                 <span style={{ color: C.dim, fontSize: 14 }}>) =</span>
-                <span style={{ padding: "2px 8px", background: `${C.red}15`, borderRadius: 4, color: C.red, fontSize: 15, fontWeight: 700 }}>0</span>
+                <span style={{ padding: "2px 8px", background: `${C.red}15`, borderRadius: 4, color: C.red, fontSize: 15, fontWeight: 700, display: "inline-block", minWidth: 40, textAlign: "center" }}>0</span>
               </div>
             </div>
-            <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+            <div style={{ display: "flex", gap: 16, justifyContent: "center", flexWrap: "wrap" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 6, width: 170 }}>
                 <span style={{ color: C.dim, fontSize: 14 }}>ReLU(</span>
-                <span style={{ padding: "2px 8px", background: `${C.green}15`, borderRadius: 4, color: "#81c784", fontSize: 15, fontWeight: 600 }}>3</span>
+                <span style={{ padding: "2px 8px", background: `${C.green}15`, borderRadius: 4, color: "#81c784", fontSize: 15, fontWeight: 600, display: "inline-block", minWidth: 40, textAlign: "center" }}>3</span>
                 <span style={{ color: C.dim, fontSize: 14 }}>) =</span>
-                <span style={{ padding: "2px 8px", background: `${C.green}15`, borderRadius: 4, color: "#81c784", fontSize: 15, fontWeight: 700 }}>3</span>
+                <span style={{ padding: "2px 8px", background: `${C.green}15`, borderRadius: 4, color: "#81c784", fontSize: 15, fontWeight: 700, display: "inline-block", minWidth: 40, textAlign: "center" }}>3</span>
               </div>
-              <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 6, width: 170 }}>
                 <span style={{ color: C.dim, fontSize: 14 }}>ReLU(</span>
-                <span style={{ padding: "2px 8px", background: `${C.green}15`, borderRadius: 4, color: "#81c784", fontSize: 15, fontWeight: 600 }}>950</span>
+                <span style={{ padding: "2px 8px", background: `${C.green}15`, borderRadius: 4, color: "#81c784", fontSize: 15, fontWeight: 600, display: "inline-block", minWidth: 40, textAlign: "center" }}>950</span>
                 <span style={{ color: C.dim, fontSize: 14 }}>) =</span>
-                <span style={{ padding: "2px 8px", background: `${C.green}15`, borderRadius: 4, color: "#81c784", fontSize: 15, fontWeight: 700 }}>950</span>
+                <span style={{ padding: "2px 8px", background: `${C.green}15`, borderRadius: 4, color: "#81c784", fontSize: 15, fontWeight: 700, display: "inline-block", minWidth: 40, textAlign: "center" }}>950</span>
               </div>
             </div>
           </div>
@@ -1032,61 +1026,83 @@ export const ForwardPass = (ctx) => {
           <T color="#ffe082" bold center size={20}>The Network We Will Trace</T>
           <T color={C.bright} size={17} style={{ marginTop: 10, lineHeight: 1.6 }}>Let's trace EVERY number through a real network - no skipping, no hand-waving. Weights are on the edges, biases inside each neuron.</T>
           <div style={{ display: "flex", justifyContent: "center", marginTop: 12 }}>
-            <svg viewBox="0 0 520 270" style={{ display: "block", width: "100%", maxWidth: 520 }}>
+            <svg viewBox="0 0 440 260" style={{ display: "block", width: "100%", maxWidth: 440 }}>
               {/* Column labels */}
-              <text x={65} y={18} fill="rgba(255,255,255,0.4)" fontSize={12} textAnchor="middle" fontWeight={600}>Input</text>
-              <text x={260} y={18} fill="rgba(255,255,255,0.4)" fontSize={12} textAnchor="middle" fontWeight={600}>Hidden</text>
-              <text x={455} y={18} fill="rgba(255,255,255,0.4)" fontSize={12} textAnchor="middle" fontWeight={600}>Output</text>
+              <text x={55} y={18} fill="rgba(255,255,255,0.4)" fontSize={12} textAnchor="middle" fontWeight={600}>Input</text>
+              <text x={210} y={18} fill="rgba(255,255,255,0.4)" fontSize={12} textAnchor="middle" fontWeight={600}>Hidden</text>
+              <text x={380} y={18} fill="rgba(255,255,255,0.4)" fontSize={12} textAnchor="middle" fontWeight={600}>Output</text>
 
-              {/* Edges with weight labels 25% from source node */}
+              {/* Input→Hidden edges with weight labels near destination (t=0.8) */}
               {[
-                { x1: 93, y1: 70, x2: 232, y2: 80, c: C.red, w: "0.5", oy: -9 },
-                { x1: 93, y1: 80, x2: 232, y2: 175, c: C.red, w: "0.1", oy: -8 },
-                { x1: 93, y1: 185, x2: 232, y2: 90, c: C.yellow, w: "50", oy: 12 },
-                { x1: 93, y1: 190, x2: 232, y2: 180, c: C.yellow, w: "10", oy: -9 },
-                { x1: 288, y1: 90, x2: 427, y2: 125, c: C.cyan, w: "0.8", oy: -9 },
-                { x1: 288, y1: 180, x2: 427, y2: 140, c: C.orange, w: "0.2", oy: 12 },
-              ].map(({ x1, y1, x2, y2, c, w, oy = 0 }, i) => {
-                const t = 0.25;
+                { sy: 75, dy: 75, w: "0.5", c: C.red },
+                { sy: 75, dy: 195, w: "0.1", c: C.red },
+                { sy: 195, dy: 75, w: "50", c: C.yellow },
+                { sy: 195, dy: 195, w: "10", c: C.yellow },
+              ].map(({ sy, dy, w, c }, i) => {
+                const x1 = 81, x2 = 184, t = 0.8;
                 const lx = x1 + (x2 - x1) * t;
-                const ly = y1 + (y2 - y1) * t + oy;
+                const ly = sy + (dy - sy) * t;
                 return (
-                  <g key={i}>
-                    <line x1={x1} y1={y1} x2={x2} y2={y2} stroke={`${c}45`} strokeWidth={1.5} />
-                    <rect x={lx - 14} y={ly - 9} width={28} height={16} rx={3} fill="#08080dee" />
-                    <text x={lx} y={ly + 4} fill={c} fontSize={11} textAnchor="middle" fontWeight={700}>{w}</text>
+                  <g key={`h${i}`}>
+                    <line x1={x1} y1={sy} x2={x2} y2={dy} stroke={`${c}30`} strokeWidth={1.2} />
+                    <rect x={lx - 14} y={ly - 8} width={28} height={15} rx={3} fill="#08080dee" stroke={`${c}30`} strokeWidth={0.5} />
+                    <text x={lx} y={ly + 4} fill={c} fontSize={10} textAnchor="middle" fontWeight={600}>{w}</text>
+                  </g>
+                );
+              })}
+
+              {/* Hidden→Output edges with weight labels near destination (t=0.8) */}
+              {[
+                { sy: 75, w: "0.8", c: C.cyan },
+                { sy: 195, w: "0.2", c: C.orange },
+              ].map(({ sy, w, c }, i) => {
+                const x1 = 236, x2 = 354, dy = 135, t = 0.8;
+                const lx = x1 + (x2 - x1) * t;
+                const ly = sy + (dy - sy) * t;
+                return (
+                  <g key={`o${i}`}>
+                    <line x1={x1} y1={sy} x2={x2} y2={dy} stroke={`${c}30`} strokeWidth={1.2} />
+                    <rect x={lx - 14} y={ly - 8} width={28} height={15} rx={3} fill="#08080dee" stroke={`${c}30`} strokeWidth={0.5} />
+                    <text x={lx} y={ly + 4} fill={c} fontSize={10} textAnchor="middle" fontWeight={600}>{w}</text>
                   </g>
                 );
               })}
 
               {/* Input nodes */}
-              <circle cx={65} cy={78} r={28} fill={`${C.red}12`} stroke={C.red} strokeWidth={2} />
-              <text x={65} y={73} fill={C.red} fontSize={15} textAnchor="middle" fontWeight={700}>x₁</text>
-              <text x={65} y={91} fill="rgba(255,255,255,0.5)" fontSize={12} textAnchor="middle">1500</text>
+              {[
+                { y: 75, label: "x₁", val: "1500", c: C.red },
+                { y: 195, label: "x₂", val: "3", c: C.yellow },
+              ].map(({ y, label, val, c }) => (
+                <g key={label}>
+                  <circle cx={55} cy={y} r={26} fill={`${c}12`} stroke={c} strokeWidth={2} />
+                  <text x={55} y={y - 5} fill={c} fontSize={14} textAnchor="middle" fontWeight={700}>{label}</text>
+                  <text x={55} y={y + 12} fill="rgba(255,255,255,0.5)" fontSize={11} textAnchor="middle">{val}</text>
+                </g>
+              ))}
 
-              <circle cx={65} cy={190} r={28} fill={`${C.yellow}12`} stroke={C.yellow} strokeWidth={2} />
-              <text x={65} y={185} fill={C.yellow} fontSize={15} textAnchor="middle" fontWeight={700}>x₂</text>
-              <text x={65} y={203} fill="rgba(255,255,255,0.5)" fontSize={12} textAnchor="middle">3</text>
+              {/* Hidden nodes */}
+              {[
+                { y: 75, label: "h₁", bias: "50", out: "950", c: C.cyan },
+                { y: 195, label: "h₂", bias: "5", out: "185", c: C.orange },
+              ].map(({ y, label, bias, out, c }) => (
+                <g key={label}>
+                  <circle cx={210} cy={y} r={26} fill={`${c}12`} stroke={c} strokeWidth={2} />
+                  <text x={210} y={y - 8} fill={c} fontSize={13} textAnchor="middle" fontWeight={700}>{label}</text>
+                  <text x={210} y={y + 6} fill="rgba(255,255,255,0.45)" fontSize={9} textAnchor="middle">b={bias}</text>
+                  <text x={210} y={y + 18} fill="rgba(255,255,255,0.35)" fontSize={9} textAnchor="middle">out={out}</text>
+                </g>
+              ))}
 
-              {/* Hidden nodes with bias */}
-              <circle cx={260} cy={85} r={28} fill={`${C.cyan}12`} stroke={C.cyan} strokeWidth={2} />
-              <text x={260} y={80} fill={C.cyan} fontSize={14} textAnchor="middle" fontWeight={700}>h₁</text>
-              <text x={260} y={96} fill="rgba(255,255,255,0.5)" fontSize={11} textAnchor="middle">950</text>
-              <text x={260} y={122} fill={C.cyan} fontSize={10} textAnchor="middle" fontWeight={600}>b=50</text>
-
-              <circle cx={260} cy={185} r={28} fill={`${C.orange}12`} stroke={C.orange} strokeWidth={2} />
-              <text x={260} y={180} fill={C.orange} fontSize={14} textAnchor="middle" fontWeight={700}>h₂</text>
-              <text x={260} y={196} fill="rgba(255,255,255,0.5)" fontSize={11} textAnchor="middle">185</text>
-              <text x={260} y={222} fill={C.orange} fontSize={10} textAnchor="middle" fontWeight={600}>b=5</text>
-
-              {/* Output node with bias */}
-              <circle cx={455} cy={135} r={28} fill={`${C.green}15`} stroke={C.green} strokeWidth={2} />
-              <text x={455} y={130} fill={C.green} fontSize={14} textAnchor="middle" fontWeight={700}>y</text>
-              <text x={455} y={146} fill="rgba(255,255,255,0.5)" fontSize={11} textAnchor="middle">807</text>
-              <text x={455} y={172} fill={C.green} fontSize={10} textAnchor="middle" fontWeight={600}>b=10</text>
+              {/* Output node */}
+              <g>
+                <circle cx={380} cy={135} r={26} fill={`${C.green}15`} stroke={C.green} strokeWidth={2} />
+                <text x={380} y={130} fill={C.green} fontSize={13} textAnchor="middle" fontWeight={700}>y</text>
+                <text x={380} y={143} fill="rgba(255,255,255,0.45)" fontSize={9} textAnchor="middle">b=10</text>
+                <text x={380} y={155} fill="rgba(255,255,255,0.35)" fontSize={9} textAnchor="middle">out=807</text>
+              </g>
 
               {/* Bottom label */}
-              <text x={260} y={256} fill="rgba(255,255,255,0.4)" fontSize={13} textAnchor="middle" fontWeight={600}>2 inputs → 2 hidden neurons → 1 output</text>
+              <text x={220} y={245} fill="rgba(255,255,255,0.4)" fontSize={13} textAnchor="middle" fontWeight={600}>2 inputs → 2 hidden neurons → 1 output</text>
             </svg>
           </div>
         </Box>
@@ -1257,13 +1273,10 @@ export const LossFunction = (ctx) => {
           <T color={C.cyan} bold center size={20}>Measuring Our Mistakes</T>
           <T color="#80deea" size={16} style={{ marginTop: 14 }}>Loss is a single number that measures how wrong our prediction was.</T>
           <div style={{ margin: "16px 0", padding: "16px", background: `${C.cyan}06`, borderRadius: 12, border: `1px solid ${C.cyan}12`, textAlign: "center" }}>
-            <div style={{ display: "flex", gap: 6, justifyContent: "center", alignItems: "center", flexWrap: "wrap" }}>
+            <div style={{ display: "flex", gap: 8, justifyContent: "center", alignItems: "center", flexWrap: "wrap" }}>
               <T color={C.cyan} bold size={16}>Loss</T>
-              <span style={{ color: C.dim, fontSize: 14 }}>=</span>
-              <span style={{ padding: "2px 8px", background: `${C.red}15`, borderRadius: 4, color: "#ef9a9a", fontSize: 15, fontWeight: 600 }}>(actual</span>
-              <span style={{ color: C.dim, fontSize: 14 }}>−</span>
-              <span style={{ padding: "2px 8px", background: `${C.cyan}15`, borderRadius: 4, color: "#80deea", fontSize: 15, fontWeight: 600 }}>predicted)</span>
-              <span style={{ color: C.dim, fontSize: 14 }}>²</span>
+              <span style={{ color: C.dim, fontSize: 16 }}>=</span>
+              <span style={{ padding: "4px 12px", background: `${C.cyan}12`, borderRadius: 6, border: `1px solid ${C.cyan}25`, color: "#80deea", fontSize: 16, fontWeight: 600 }}>(<span style={{ color: "#ef9a9a" }}>actual</span> − <span style={{ color: "#80deea" }}>predicted</span>)²</span>
             </div>
           </div>
           <T color={C.dim} size={14} style={{ marginTop: 12 }}>We square the error to make all errors positive (so they don't cancel out), and big errors get punished much more than small ones.</T>
@@ -2364,7 +2377,21 @@ export const LayerIsMatMul = (ctx) => {
         <Box color={C.purple} style={{ width: "100%" }}>
           <T color="#b8a9ff" bold center size={19}>From Chapter 1.2: A Neuron Sums Weighted Inputs</T>
           <div style={{ padding: "14px", background: "rgba(0,0,0,0.4)", borderRadius: 10, border: `1px solid ${C.purple}25`, marginTop: 12, textAlign: "center" }}>
-            <T size={15} color={C.purple} bold style={{ fontFamily: "monospace" }}>neuron_output = 38.5×0.6 + 1.0×0.3 + 0.8×0.1</T>
+            <div style={{ display: "flex", gap: 6, justifyContent: "center", alignItems: "center", flexWrap: "wrap" }}>
+              <T color={C.purple} bold size={14}>neuron_output</T>
+              <span style={{ color: C.dim, fontSize: 13 }}>=</span>
+              <span style={{ padding: "2px 8px", background: `${C.orange}15`, borderRadius: 4, color: "#ffb74d", fontSize: 13, fontWeight: 600 }}>38.5</span>
+              <span style={{ color: C.dim, fontSize: 13 }}>×</span>
+              <span style={{ padding: "2px 8px", background: `${C.red}15`, borderRadius: 4, color: "#ef9a9a", fontSize: 13, fontWeight: 600 }}>0.6</span>
+              <span style={{ color: C.dim, fontSize: 13 }}>+</span>
+              <span style={{ padding: "2px 8px", background: `${C.yellow}15`, borderRadius: 4, color: "#ffe082", fontSize: 13, fontWeight: 600 }}>1.0</span>
+              <span style={{ color: C.dim, fontSize: 13 }}>×</span>
+              <span style={{ padding: "2px 8px", background: `${C.red}15`, borderRadius: 4, color: "#ef9a9a", fontSize: 13, fontWeight: 600 }}>0.3</span>
+              <span style={{ color: C.dim, fontSize: 13 }}>+</span>
+              <span style={{ padding: "2px 8px", background: `${C.purple}15`, borderRadius: 4, color: "#b8a9ff", fontSize: 13, fontWeight: 600 }}>0.8</span>
+              <span style={{ color: C.dim, fontSize: 13 }}>×</span>
+              <span style={{ padding: "2px 8px", background: `${C.red}15`, borderRadius: 4, color: "#ef9a9a", fontSize: 13, fontWeight: 600 }}>0.1</span>
+            </div>
           </div>
           <T size={15} color="#b8a9ff" style={{ marginTop: 12 }}>This IS a dot product of inputs and weights.</T>
         </Box>
@@ -2375,67 +2402,64 @@ export const LayerIsMatMul = (ctx) => {
           <T color="#ef9a9a" bold center size={19}>A Layer Has Many Neurons</T>
           <T color="#ef9a9a" size={15} style={{ marginTop: 10 }}>If a layer has 3 neurons, you compute 3 separate dot products. Each neuron has its own weights. Stack them as matrix rows - now you have a matrix.</T>
           <div style={{ display: "flex", justifyContent: "center", marginTop: 14 }}>
-            <svg viewBox="0 0 480 280" style={{ display: "block", width: "100%", maxWidth: 480 }}>
+            <svg viewBox="0 0 380 320" style={{ display: "block", width: "100%", maxWidth: 380 }}>
               {/* Column labels */}
-              <text x={60} y={16} fill="rgba(255,255,255,0.4)" fontSize={11} textAnchor="middle" fontWeight={600}>Inputs</text>
-              <text x={340} y={16} fill="rgba(255,255,255,0.4)" fontSize={11} textAnchor="middle" fontWeight={600}>Neurons (Layer)</text>
+              <text x={65} y={16} fill="rgba(255,255,255,0.4)" fontSize={11} textAnchor="middle" fontWeight={600}>Inputs</text>
+              <text x={290} y={16} fill="rgba(255,255,255,0.4)" fontSize={11} textAnchor="middle" fontWeight={600}>Neurons (Layer)</text>
 
-              {/* Edges with weight labels placed 25% from source node */}
+              {/* 9 edges with weight labels near destination (t=0.8) */}
               {[
-                { x1: 88, y1: 60, x2: 312, y2: 60, c: C.red, w: "0.6", oy: -9 },
-                { x1: 88, y1: 60, x2: 312, y2: 140, c: C.red, w: "0.2", oy: -8 },
-                { x1: 88, y1: 60, x2: 312, y2: 220, c: C.red, w: "0.4", oy: -8 },
-                { x1: 88, y1: 140, x2: 312, y2: 60, c: C.yellow, w: "0.3", oy: 12 },
-                { x1: 88, y1: 140, x2: 312, y2: 140, c: C.yellow, w: "0.8", oy: -9 },
-                { x1: 88, y1: 140, x2: 312, y2: 220, c: C.yellow, w: "0.1", oy: -8 },
-                { x1: 88, y1: 220, x2: 312, y2: 60, c: C.green, w: "0.1", oy: 12 },
-                { x1: 88, y1: 220, x2: 312, y2: 140, c: C.green, w: "0.5", oy: 12 },
-                { x1: 88, y1: 220, x2: 312, y2: 220, c: C.green, w: "0.9", oy: -9 },
-              ].map(({ x1, y1, x2, y2, c, w, oy = 0 }, i) => {
-                const t = 0.25;
+                { sy: 50, dy: 50, w: "0.6", c: C.red },
+                { sy: 160, dy: 50, w: "0.3", c: C.yellow },
+                { sy: 270, dy: 50, w: "0.1", c: C.green },
+                { sy: 50, dy: 160, w: "0.2", c: C.red },
+                { sy: 160, dy: 160, w: "0.8", c: C.yellow },
+                { sy: 270, dy: 160, w: "0.5", c: C.green },
+                { sy: 50, dy: 270, w: "0.4", c: C.red },
+                { sy: 160, dy: 270, w: "0.1", c: C.yellow },
+                { sy: 270, dy: 270, w: "0.9", c: C.green },
+              ].map(({ sy, dy, w, c }, i) => {
+                const x1 = 91, x2 = 262, t = 0.8;
                 const lx = x1 + (x2 - x1) * t;
-                const ly = y1 + (y2 - y1) * t + oy;
+                const ly = sy + (dy - sy) * t;
                 return (
                   <g key={i}>
-                    <line x1={x1} y1={y1} x2={x2} y2={y2} stroke={`${c}30`} strokeWidth={1.2} />
-                    <rect x={lx - 14} y={ly - 9} width={28} height={16} rx={3} fill="#08080dee" />
-                    <text x={lx} y={ly + 4} fill={c} fontSize={10} textAnchor="middle" fontWeight={700}>{w}</text>
+                    <line x1={x1} y1={sy} x2={x2} y2={dy} stroke={`${c}30`} strokeWidth={1.2} />
+                    <rect x={lx - 14} y={ly - 8} width={28} height={15} rx={3} fill="#08080dee" stroke={`${c}30`} strokeWidth={0.5} />
+                    <text x={lx} y={ly + 4} fill={c} fontSize={10} textAnchor="middle" fontWeight={600}>{w}</text>
                   </g>
                 );
               })}
 
               {/* Input nodes */}
               {[
-                { y: 60, label: "fever", val: "38.5", c: C.red },
-                { y: 140, label: "cough", val: "1", c: C.yellow },
-                { y: 220, label: "fatigue", val: "0.8", c: C.green },
+                { y: 50, label: "fever", val: "38.5", c: C.red },
+                { y: 160, label: "cough", val: "1", c: C.yellow },
+                { y: 270, label: "fatigue", val: "0.8", c: C.green },
               ].map(({ y, label, val, c }) => (
                 <g key={label}>
-                  <circle cx={60} cy={y} r={24} fill={`${c}12`} stroke={c} strokeWidth={2} />
-                  <text x={60} y={y - 6} fill={c} fontSize={10} textAnchor="middle" fontWeight={700}>{label}</text>
-                  <text x={60} y={y + 10} fill="rgba(255,255,255,0.5)" fontSize={11} textAnchor="middle">{val}</text>
+                  <circle cx={65} cy={y} r={26} fill={`${c}12`} stroke={c} strokeWidth={2} />
+                  <text x={65} y={y - 6} fill={c} fontSize={10} textAnchor="middle" fontWeight={700}>{label}</text>
+                  <text x={65} y={y + 10} fill="rgba(255,255,255,0.5)" fontSize={12} textAnchor="middle">{val}</text>
                 </g>
               ))}
 
-              {/* Neuron nodes with outputs */}
+              {/* Neuron nodes */}
               {[
-                { y: 60, label: "Flu", val: "23.5", c: C.red, ct: "#ef9a9a" },
-                { y: 140, label: "Cold", val: "31.3", c: C.orange, ct: "#ffb74d" },
-                { y: 220, label: "Allergy", val: "32.1", c: C.purple, ct: "#b8a9ff" },
-              ].map(({ y, label, val, c, ct }) => (
+                { y: 50, label: "Flu", out: "23.5", c: C.red, ct: "#ef9a9a" },
+                { y: 160, label: "Cold", out: "31.3", c: C.orange, ct: "#ffb74d" },
+                { y: 270, label: "Allergy", out: "32.1", c: C.purple, ct: "#b8a9ff" },
+              ].map(({ y, label, out, c, ct }) => (
                 <g key={label}>
-                  <circle cx={340} cy={y} r={28} fill={`${c}12`} stroke={c} strokeWidth={2} />
-                  <text x={340} y={y - 6} fill={c} fontSize={11} textAnchor="middle" fontWeight={700}>{label}</text>
-                  <text x={340} y={y + 10} fill="rgba(255,255,255,0.5)" fontSize={11} textAnchor="middle">{val}</text>
-                  {/* Output arrow */}
-                  <line x1={368} y1={y} x2={420} y2={y} stroke={`${c}50`} strokeWidth={1.5} />
-                  <polygon points={`420,${y - 4} 428,${y} 420,${y + 4}`} fill={c} />
-                  <text x={448} y={y + 4} fill={ct} fontSize={13} textAnchor="middle" fontWeight={700}>{val}</text>
+                  <circle cx={290} cy={y} r={28} fill={`${c}12`} stroke={c} strokeWidth={2} />
+                  <text x={290} y={y - 4} fill={c} fontSize={11} textAnchor="middle" fontWeight={700}>{label}</text>
+                  <text x={290} y={y + 10} fill="rgba(255,255,255,0.5)" fontSize={10} textAnchor="middle">{out}</text>
+                  <text x={332} y={y + 4} fill={ct} fontSize={11} textAnchor="start" fontWeight={700}>→ {out}</text>
                 </g>
               ))}
 
               {/* Bottom label */}
-              <text x={240} y={270} fill="rgba(255,255,255,0.4)" fontSize={12} textAnchor="middle" fontWeight={600}>3 inputs × 3 neurons = matrix multiplication</text>
+              <text x={190} y={308} fill="rgba(255,255,255,0.4)" fontSize={12} textAnchor="middle" fontWeight={600}>3 inputs × 3 neurons = matrix multiplication</text>
             </svg>
           </div>
         </Box>

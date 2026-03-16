@@ -11,6 +11,7 @@ import * as RoadToTransformers from "../sections/road-to-transformers.jsx";
 import * as TransformerInput from "../sections/transformer-input.jsx";
 import * as AttentionQKV from "../sections/attention-qkv.jsx";
 import * as AttentionComputation from "../sections/attention-computation.jsx";
+import * as TransformerBlock from "../sections/transformer-block.jsx";
 
 const lookup = {
   TOC,
@@ -21,6 +22,7 @@ const lookup = {
   ...TransformerInput,
   ...AttentionQKV,
   ...AttentionComputation,
+  ...TransformerBlock,
 };
 
 afterEach(() => cleanup());
@@ -129,8 +131,8 @@ describe("TOC", () => {
     }
   });
 
-  // Test all 7 sections expanded to cover each one
-  for (let secNum = 1; secNum <= 7; secNum++) {
+  // Test all 8 sections expanded to cover each one
+  for (let secNum = 1; secNum <= 8; secNum++) {
     it(`shows chapters for section ${secNum}`, () => {
       const { container } = render(TOC(makeCtx({ expanded: secNum })));
       expect(container.innerHTML).toBeTruthy();
@@ -414,6 +416,90 @@ describe("ConcatWO envelope visual", () => {
   });
 });
 
+// ─── TOC section 8 ───
+describe("TOC section 8", () => {
+  it("shows section 8 when expanded", () => {
+    const { container } = render(TOC(makeCtx({ expanded: 8 })));
+    expect(container.innerHTML).toBeTruthy();
+    expect(container.textContent).toContain("Beyond Attention");
+  });
+});
+
+// ─── AddNorm chapter sub-steps ───
+describe("AddNorm sub-steps", () => {
+  const fn = TransformerBlock.AddNorm;
+
+  it("sub 0 shows the Transformer block overview with Add & Norm highlighted", () => {
+    const ctx = makeCtx({ sub: 0 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    // Should show the block diagram with attention, add & norm, FFN flow
+    expect(text).toContain("Attention");
+    expect(text).toContain("Add & Norm");
+    expect(text).toContain("FFN");
+  });
+
+  it("sub 1 shows the value drift problem with both shrink and explode scenarios", () => {
+    const ctx = makeCtx({ sub: 1 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    // Should show the problem with concrete numbers from "cats" embedding
+    expect(text).toContain("0.7");
+    // Should show both directions of drift
+    expect(text).toContain("shrink");
+    expect(text).toContain("explode");
+    // Should mention layers
+    expect(text).toContain("layer");
+  });
+
+  it("sub 2 shows the Add step with concrete math and explains residual meaning", () => {
+    const ctx = makeCtx({ sub: 2 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    // Should explain what "residual" means in plain language
+    expect(text).toContain("residual");
+    expect(text).toContain("leftover");
+    // Should show original input + attention output = combined
+    expect(text).toContain("original");
+    expect(text).toContain("+");
+    // Should have the visual
+    expect(container.querySelector("[data-residual]")).toBeTruthy();
+  });
+
+  it("sub 3 shows layer normalization step-by-step computation", () => {
+    const ctx = makeCtx({ sub: 3 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    // Should show the normalization steps: mean, subtract, divide
+    expect(text).toContain("mean");
+    expect(text).toContain("subtract");
+    // Should show concrete numbers being normalized
+    expect(text).toContain("0");
+  });
+
+  it("sub 4 shows full Add & Norm pipeline with numbers flowing through", () => {
+    const ctx = makeCtx({ sub: 4 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    // Should show the complete pipeline
+    expect(text).toContain("Input");
+    expect(text).toContain("Attention");
+    // Should have the pipeline visualization
+    expect(container.querySelector("[data-pipeline]")).toBeTruthy();
+  });
+
+  it("sub 5 shows why it matters - with vs without comparison", () => {
+    const ctx = makeCtx({ sub: 5 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    // Should show the comparison
+    expect(text).toContain("Without");
+    expect(text).toContain("With");
+    // Should mention stability or training
+    expect(text).toContain("stable");
+  });
+});
+
 describe("Derivatives with high sub to invoke Frac", () => {
   const fn = NeuralFoundations.Derivatives;
   // Render at every sub to ensure the internal Frac component is used
@@ -422,4 +508,457 @@ describe("Derivatives with high sub to invoke Frac", () => {
       renderAndInteract(fn, s);
     });
   }
+});
+
+// ─── Chapter 1.11: Vectors ───
+describe("Vectors sub-steps", () => {
+  const fn = NeuralFoundations.Vectors;
+
+  it("sub 0 introduces what a vector is with concrete example", () => {
+    const ctx = makeCtx({ sub: 0 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("list");
+    expect(text).toContain("number");
+  });
+
+  it("sub 1 connects vectors to neural networks", () => {
+    const ctx = makeCtx({ sub: 1 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("Everything");
+    expect(text).toContain("vector");
+  });
+
+  it("sub 2 shows words become vectors", () => {
+    const ctx = makeCtx({ sub: 2 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("cat");
+    expect(text).toContain("vector");
+  });
+
+  it("sub 3 shows similar words have similar vectors", () => {
+    const ctx = makeCtx({ sub: 3 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("similar");
+  });
+});
+
+// ─── Chapter 1.12: Dot Product ───
+describe("DotProductIntro sub-steps", () => {
+  const fn = NeuralFoundations.DotProductIntro;
+
+  it("sub 0 introduces how to compare vectors", () => {
+    const ctx = makeCtx({ sub: 0 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("compare");
+  });
+
+  it("sub 1 shows step-by-step dot product computation", () => {
+    const ctx = makeCtx({ sub: 1 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("Multiply");
+    expect(text).toContain("Add");
+  });
+
+  it("sub 2 explains what the result number means - similarity", () => {
+    const ctx = makeCtx({ sub: 2 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("similar");
+  });
+
+  it("sub 3 connects to word vectors and attention", () => {
+    const ctx = makeCtx({ sub: 3 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("neuron");
+  });
+});
+
+// ─── Chapter 1.13: Matrices ───
+describe("Matrices sub-steps", () => {
+  const fn = NeuralFoundations.Matrices;
+
+  it("sub 0 introduces what a matrix is - a grid of numbers", () => {
+    const ctx = makeCtx({ sub: 0 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("grid");
+  });
+
+  it("sub 1 shows matrix-vector multiplication step by step", () => {
+    const ctx = makeCtx({ sub: 1 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("row");
+    expect(text).toContain("dot product");
+  });
+
+  it("sub 2 shows a concrete computation with real numbers", () => {
+    const ctx = makeCtx({ sub: 2 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    // Should show actual numbers being multiplied
+    expect(text).toMatch(/\d/);
+  });
+
+  it("sub 3 connects matrices to neural network weights", () => {
+    const ctx = makeCtx({ sub: 3 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("weight");
+    expect(text).toContain("transform");
+  });
+});
+
+// ─── Chapter 1.14: Layer = Matrix Multiplication ───
+describe("LayerIsMatMul sub-steps", () => {
+  const fn = NeuralFoundations.LayerIsMatMul;
+
+  it("sub 0 recalls single neuron from chapter 1.4", () => {
+    const ctx = makeCtx({ sub: 0 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("layer");
+  });
+
+  it("sub 1 shows multiple neurons side by side", () => {
+    const ctx = makeCtx({ sub: 1 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    // Should show neuron weights
+    expect(text).toContain("neuron");
+    expect(text).toContain("weights");
+  });
+
+  it("sub 2 reveals that multiple neurons = matrix multiplication", () => {
+    const ctx = makeCtx({ sub: 2 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("matrix");
+  });
+
+  it("sub 3 shows the visual: one neuron = one row of the weight matrix", () => {
+    const ctx = makeCtx({ sub: 3 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("row");
+    expect(text).toContain("layer");
+  });
+
+  it("sub 4 scales up to real Transformer dimensions", () => {
+    const ctx = makeCtx({ sub: 3 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("heartbeat");
+  });
+});
+
+// ─── Chapter 1.15: Activation Functions Full Picture ───
+describe("ActivationFunctions sub-steps", () => {
+  const fn = NeuralFoundations.ActivationFunctions;
+
+  it("sub 0 recalls ReLU from chapter 1.5", () => {
+    const ctx = makeCtx({ sub: 1 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("ReLU");
+  });
+
+  it("sub 1 introduces sigmoid - squashes to 0-1 range", () => {
+    const ctx = makeCtx({ sub: 3 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("Sigmoid");
+    expect(text).toContain("0");
+    expect(text).toContain("1");
+  });
+
+  it("sub 2 introduces tanh - squashes to -1 to 1", () => {
+    const ctx = makeCtx({ sub: 3 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("Tanh");
+  });
+
+  it("sub 3 introduces softmax - turns list into probabilities", () => {
+    const ctx = makeCtx({ sub: 3 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("Softmax");
+  });
+
+  it("sub 4 shows summary comparing all activation functions", () => {
+    const ctx = makeCtx({ sub: 4 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("ReLU");
+    expect(text).toContain("Sigmoid");
+    expect(text).toContain("Softmax");
+  });
+});
+
+// ─── Chapter 1.16: What Deep Really Means ───
+describe("WhatDeepMeans sub-steps", () => {
+  const fn = NeuralFoundations.WhatDeepMeans;
+
+  it("sub 0 explains deep = many layers stacked", () => {
+    const ctx = makeCtx({ sub: 0 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("layer");
+    expect(text).toContain("deep");
+  });
+
+  it("sub 1 shows why depth helps - building abstractions", () => {
+    const ctx = makeCtx({ sub: 1 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("simple");
+    expect(text).toContain("abstract");
+  });
+
+  it("sub 2 shows the depth problem - vanishing/exploding values", () => {
+    const ctx = makeCtx({ sub: 2 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("low-level");
+    expect(text).toContain("high-level");
+  });
+
+  it("sub 3 explains training vs inference", () => {
+    const ctx = makeCtx({ sub: 4 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("Training");
+    expect(text).toContain("Inference");
+    expect(text).toContain("FROZEN");
+  });
+
+  it("sub 4 shows GPT-3 scale - 96 layers, 175 billion parameters", () => {
+    const ctx = makeCtx({ sub: 4 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("Training");
+    expect(text).toContain("Inference");
+  });
+});
+
+// ─── Chapter 1.17: Same Building Blocks ───
+describe("SameBuildingBlocks sub-steps", () => {
+  const fn = NeuralFoundations.SameBuildingBlocks;
+
+  it("sub 0 states everything in AI uses these building blocks", () => {
+    const ctx = makeCtx({ sub: 0 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("pieces");
+  });
+
+  it("sub 1 lists the building blocks", () => {
+    const ctx = makeCtx({ sub: 1 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("Matrix multiplication");
+    expect(text).toContain("Activation");
+    expect(text).toContain("Loss");
+    expect(text).toContain("Backpropagation");
+  });
+
+  it("sub 2 previews how Transformers use these exact pieces", () => {
+    const ctx = makeCtx({ sub: 2 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("Simple");
+    expect(text).toContain("Deep network");
+    expect(text).toContain("GPT");
+  });
+
+  it("sub 3 gives the confidence-building summary", () => {
+    const ctx = makeCtx({ sub: 3 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("understand");
+  });
+});
+
+// ─── Chapter 2.7: Output Layer ───
+describe("OutputLayer sub-steps", () => {
+  const fn = LLMTraining.OutputLayer;
+
+  it("sub 0 asks how the model produces probabilities", () => {
+    const ctx = makeCtx({ sub: 0 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("hidden");
+    expect(text).toContain("512");
+  });
+
+  it("sub 1 shows the linear layer projecting to vocabulary size", () => {
+    const ctx = makeCtx({ sub: 1 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("50,257");
+    expect(text).toContain("Linear");
+  });
+
+  it("sub 2 introduces logits and softmax conversion", () => {
+    const ctx = makeCtx({ sub: 2 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("logit");
+    expect(text).toContain("softmax");
+  });
+
+  it("sub 3 shows the full pipeline end to end", () => {
+    const ctx = makeCtx({ sub: 3 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("Hidden");
+    expect(text).toContain("Probabilities");
+  });
+});
+
+// ─── Chapter 2.8: Autoregressive Generation ───
+describe("AutoregressiveGeneration sub-steps", () => {
+  const fn = LLMTraining.AutoregressiveGeneration;
+
+  it("sub 0 introduces training vs inference distinction", () => {
+    const ctx = makeCtx({ sub: 0 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("Training");
+    expect(text).toContain("Inference");
+  });
+
+  it("sub 1 shows the token-by-token loop", () => {
+    const ctx = makeCtx({ sub: 1 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("one token");
+  });
+
+  it("sub 2 shows growing context window step by step", () => {
+    const ctx = makeCtx({ sub: 2 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("append");
+  });
+
+  it("sub 3 explains stop conditions and connects to masking", () => {
+    const ctx = makeCtx({ sub: 3 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("stop");
+    expect(text).toContain("mask");
+  });
+});
+
+// ─── Chapter 2.5 RLHF fix: must mention PPO ───
+describe("RLHF names real algorithms", () => {
+  const fn = LLMTraining.RLHF;
+
+  it("sub 3 or later mentions PPO", () => {
+    const ctx = makeCtx({ sub: 4 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("PPO");
+  });
+});
+
+// ─── Chapter 3.4 CLIP fix: must show cosine formula ───
+describe("CLIP cosine similarity formula", () => {
+  const fn = Scaling.CLIP;
+
+  it("sub 3 shows the actual cosine similarity formula", () => {
+    const ctx = makeCtx({ sub: 3 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("||A||");
+  });
+});
+
+// ─── Chapter 3.3 Distillation fix: must mention temperature ───
+describe("Distillation temperature mechanism", () => {
+  const fn = Scaling.Distillation;
+
+  it("sub 2 or 3 mentions temperature", () => {
+    const ctx = makeCtx({ sub: 3 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("temperature");
+  });
+});
+
+// ─── Chapter 4.5: Encoder & Decoder ───
+describe("EncoderDecoder sub-steps", () => {
+  const fn = RoadToTransformers.EncoderDecoder;
+
+  it("sub 0 introduces the translation problem", () => {
+    const ctx = makeCtx({ sub: 0 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("translat");
+  });
+
+  it("sub 1 explains encoder reads and decoder writes", () => {
+    const ctx = makeCtx({ sub: 1 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("Encoder");
+    expect(text).toContain("Decoder");
+  });
+
+  it("sub 2 shows cross-attention connection between encoder and decoder", () => {
+    const ctx = makeCtx({ sub: 2 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("cross");
+  });
+
+  it("sub 3 references the 2017 paper architecture", () => {
+    const ctx = makeCtx({ sub: 3 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("2017");
+  });
+});
+
+// ─── Chapter 4.6: Decoder-Only ───
+describe("DecoderOnly sub-steps", () => {
+  const fn = RoadToTransformers.DecoderOnly;
+
+  it("sub 0 states GPT/Claude are decoder-only", () => {
+    const ctx = makeCtx({ sub: 0 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("decoder-only");
+  });
+
+  it("sub 1 explains why no encoder is needed for text-to-text", () => {
+    const ctx = makeCtx({ sub: 1 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("same language");
+  });
+
+  it("sub 2 shows visual comparison of architectures", () => {
+    const ctx = makeCtx({ sub: 2 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("Encoder");
+    expect(text).toContain("Decoder");
+  });
+
+  it("sub 3 sets expectations for Section 5", () => {
+    const ctx = makeCtx({ sub: 3 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("Section 5");
+  });
 });

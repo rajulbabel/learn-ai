@@ -67,15 +67,24 @@ Only config.js IDs change.
 | Chapter | Component | Title |
 |---------|-----------|-------|
 | 1.1 | WhatIsNN | What is a Neural Network? |
-| 1.2 | FeedForward | Feed-Forward Neural Network |
-| 1.3 | WhatIsLearning | Learning - What Does it Mean? |
+| 1.2 | InsideNeuron | Inside a Single Neuron |
+| 1.3 | WhatIsLayer | What is a Layer? |
 | 1.4 | WeightsBiases | Weights & Biases - The Knobs |
-| 1.5 | ReLU | Activation (ReLU) - Why Layers Need a Bend |
-| 1.6 | ForwardPass | Forward Pass - Making a Prediction |
-| 1.7 | LossFunction | Loss - How Wrong Were We? |
-| 1.8 | Derivatives | Derivatives - The Core Intuition |
-| 1.9 | BackwardPass | Backward Pass - The Chain Rule |
-| 1.10 | GradientDescent | Gradient Descent - Fixing the Weights |
+| 1.5 | WhyLinear | Why Linear Isn't Enough |
+| 1.6 | ReLU | Activation (ReLU) - Why Layers Need a Bend |
+| 1.7 | ForwardPass | The Forward Pass - Full Example |
+| 1.8 | LossFunction | Loss - How Wrong Were We? |
+| 1.9 | WhatIsLearning | Learning - What Does It Mean? |
+| 1.10 | Derivatives | Derivatives - The Core Intuition |
+| 1.11 | BackwardPass | The Backward Pass - The Chain Rule |
+| 1.12 | GradientDescent | Gradient Descent - Fixing the Weights |
+| 1.13 | Vectors | Vectors - Numbers That Travel Together |
+| 1.14 | DotProductIntro | The Dot Product - How Vectors Compare |
+| 1.15 | Matrices | Matrices - Grids That Transform Vectors |
+| 1.16 | LayerIsMatMul | A Layer IS Matrix Multiplication |
+| 1.17 | ActivationFunctions | Activation Functions - The Full Picture |
+| 1.18 | WhatDeepMeans | What "Deep" Really Means |
+| 1.19 | SameBuildingBlocks | Same Building Blocks, Different Shapes |
 
 **Section 2: How LLMs Actually Train** (`llm-training.jsx`)
 
@@ -87,6 +96,8 @@ Only config.js IDs change.
 | 2.4 | SFT | Supervised Fine-Tuning (SFT) |
 | 2.5 | RLHF | RLHF - Making AI Helpful & Safe |
 | 2.6 | BatchTraining | Batch Training - Why Not One Example at a Time? |
+| 2.7 | OutputLayer | The Output Layer - From Hidden State to Words |
+| 2.8 | AutoregressiveGeneration | Autoregressive Generation - One Token at a Time |
 
 **Section 3: Scaling & Modern Techniques** (`scaling.jsx`)
 
@@ -106,6 +117,8 @@ Only config.js IDs change.
 | 4.2 | RNN | RNN |
 | 4.3 | RNNFlaws | RNN's Fatal Flaws |
 | 4.4 | TransformerArrives | The Transformer Arrives |
+| 4.5 | EncoderDecoder | Encoder & Decoder - The Two Halves |
+| 4.6 | DecoderOnly | Decoder-Only - How Modern LLMs Work |
 
 **Section 5: Transformer Input Pipeline** (`transformer-input.jsx`)
 
@@ -156,6 +169,12 @@ Only config.js IDs change.
 | 7.14 | IsWOConstant | Is W_O Constant? Does It Change? |
 | 7.15 | CompletePicture | The Complete Picture - In Plain English |
 
+**Section 8: Beyond Attention** (`transformer-block.jsx`)
+
+| Chapter | Component | Title |
+|---------|-----------|-------|
+| 8.1 | AddNorm | Add & Norm - The Stabilizer |
+
 ## Project Structure
 
 ```
@@ -176,7 +195,7 @@ learn-ai/
 │   │   ├── lookup.test.js               # Component lookup tests
 │   │   ├── components.test.jsx          # Shared component tests
 │   │   ├── nav-persistence.test.js      # Nav persistence tests (save, load, edge cases)
-│   │   └── sections.test.jsx            # All 60 chapter function tests
+│   │   └── sections.test.jsx            # All chapter function tests
 │   └── sections/
 │       ├── toc.jsx                       # Table of Contents
 │       ├── neural-foundations.jsx         # Section 1
@@ -185,7 +204,8 @@ learn-ai/
 │       ├── road-to-transformers.jsx      # Section 4
 │       ├── transformer-input.jsx         # Section 5
 │       ├── attention-qkv.jsx             # Section 6
-│       └── attention-computation.jsx     # Section 7
+│       ├── attention-computation.jsx     # Section 7
+│       └── transformer-block.jsx        # Section 8
 ├── .github/workflows/deploy.yml
 └── CLAUDE.md
 ```
@@ -251,6 +271,7 @@ npm run lint         # Lint source files
 npm run format       # Format source files with Prettier
 ```
 
+
 ## Test-Driven Development (TDD) - MANDATORY
 
 **Every code change MUST follow TDD.** No exceptions, no matter how small the change.
@@ -287,7 +308,7 @@ Coverage must not decrease. Any new code must have corresponding tests.
 | `lookup.test.js` | Every config component exists as an exported function |
 | `components.test.jsx` | ErrorBoundary, Box, T, Reveal, SubBtn, Tag |
 | `nav-persistence.test.js` | saveNav/loadNav: config match, config change, corrupted data, localStorage errors |
-| `sections.test.jsx` | All 60 chapter functions at every sub level with interaction coverage |
+| `sections.test.jsx` | All chapter functions at every sub level with interaction coverage |
 
 ## Key Design Decisions
 
@@ -326,9 +347,16 @@ user to remind you.
 - **Illustrative first** - every concept must be shown visually, not just
   described in text. Use colored bars, grids, split diagrams, progress bars,
   side-by-side comparisons, and inline calculations. Text alone is never enough.
-- **Beginner-friendly, advanced-depth** - write for someone seeing the concept
-  for the first time, but go deep enough that they walk away with real
-  understanding. Simple language, concrete examples, no hand-waving.
+- **Simple language, advanced content** - explain in plain language that a
+  first-time learner can follow, but NEVER simplify the actual concept. Always
+  show the real formula, the real math, the real mechanism. The goal is advanced
+  understanding delivered through simple explanations - NOT watered-down
+  versions of the truth. If a formula has gamma, beta, epsilon - show them all
+  and explain what each does. If a step has edge cases - mention them. Never
+  leave a concept incomplete because "it's too advanced." Instead, make the
+  advanced content accessible through clear language, concrete numbers, and
+  step-by-step breakdowns. The learner should walk away with knowledge they
+  could use in a technical interview or research paper, not a vague intuition.
 - **Build up piece by piece** - use progressive sub-steps (Reveal). Each click
   should add one clear idea. Never dump everything on screen at once.
 - **Concrete over abstract** - always use real numbers, real words, real
@@ -340,14 +368,35 @@ user to remind you.
 - **Consistent example sentences** - use "I love cats" and "The cat sat on the
   mat last week" as running examples throughout. Reuse the same numbers so the
   learner sees how concepts connect across chapters.
+- **Titles always center-aligned** - every Box title, sub-step title, or section
+  heading inside a Box MUST use `center` (the T component's center prop). No
+  exceptions. This applies to the first bold T element inside every Box.
+- **Colored boxes, not invisible ones** - always use actual colors for Box
+  (`C.cyan`, `C.purple`, `C.red`, `C.yellow`, `C.green`, `C.orange`, `C.blue`).
+  NEVER use `Box color={C.card}` - it makes the box invisible against the dark
+  background. Text inside a Box should use a matching lighter shade of the box
+  color (e.g., `#80deea` for cyan, `#b8a9ff` for purple, `#ef9a9a` for red).
+- **No next-chapter hints** - never reference upcoming chapters inside content
+  (no "Next chapter:", "Coming up:", or "Preview:" text). Navigation is handled
+  by the app shell.
+- **Font sizes 16-20 for content** - body text should be 16-19px, titles 20-24px.
+  Never use sizes below 14px except for tiny annotations. The attention sections
+  are the gold standard for sizing.
+- **Inner element pattern** - for highlighted sub-elements inside a Box, use
+  tinted backgrounds: `background: \`\${color}06\``, `border: \`1px solid \${color}12\``,
+  `borderRadius: 8`. Never use `opacity` on elements to create transparency -
+  use hex alpha instead.
 
-**The goal of every visual is to take a complete beginner and give them
-advanced-level understanding by the time they finish clicking through the
-sub-steps.** A beginner should be able to follow every step, and walk away
-understanding the concept deeply enough to explain it to someone else. If a
-visual only describes something in words when it could show it with a diagram,
-colored bars, a side-by-side comparison, or a step-by-step calculation - it
-is not done yet. Always ask: "Can I SHOW this instead of just TELLING it?"
+**The goal is advanced-level understanding through the most illustrative,
+visual, and clear explanations possible.** Every formula must be the real
+formula. Every computation must use the actual math. Every concept must be
+complete - no "simplified versions" that leave out parameters, edge cases, or
+nuance. The learner should walk away with knowledge accurate enough for a
+research paper or technical interview. If a visual only describes something
+in words when it could show it with a diagram, colored bars, a side-by-side
+comparison, or a step-by-step calculation - it is not done yet. Always ask:
+"Can I SHOW this instead of just TELLING it?" and "Is this the REAL formula
+or a dumbed-down version?"
 
 ## Deployment
 

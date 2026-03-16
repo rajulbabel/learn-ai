@@ -2,15 +2,24 @@ export const chapters = [
   { id: "0", title: "Table of Contents", section: 0, component: "TOC" },
   // Section 1: Neural Network Foundations
   { id: "1.1", title: "What is a Neural Network?", section: 1, component: "WhatIsNN" },
-  { id: "1.2", title: "Feed-Forward Neural Network", section: 1, component: "FeedForward" },
-  { id: "1.3", title: "Learning - What Does it Mean?", section: 1, component: "WhatIsLearning" },
+  { id: "1.2", title: "Inside a Single Neuron", section: 1, component: "InsideNeuron" },
+  { id: "1.3", title: "What is a Layer?", section: 1, component: "WhatIsLayer" },
   { id: "1.4", title: "Weights & Biases - The Knobs", section: 1, component: "WeightsBiases" },
-  { id: "1.5", title: "Activation (ReLU) - Why Layers Need a Bend", section: 1, component: "ReLU" },
-  { id: "1.6", title: "Forward Pass - Making a Prediction", section: 1, component: "ForwardPass" },
-  { id: "1.7", title: "Loss - How Wrong Were We?", section: 1, component: "LossFunction" },
-  { id: "1.8", title: "Derivatives - The Core Intuition", section: 1, component: "Derivatives" },
-  { id: "1.9", title: "Backward Pass - The Chain Rule", section: 1, component: "BackwardPass" },
-  { id: "1.10", title: "Gradient Descent - Fixing the Weights", section: 1, component: "GradientDescent" },
+  { id: "1.5", title: "Why Linear Isn't Enough", section: 1, component: "WhyLinear" },
+  { id: "1.6", title: "Activation (ReLU) - Why Layers Need a Bend", section: 1, component: "ReLU" },
+  { id: "1.7", title: "The Forward Pass - Full Example", section: 1, component: "ForwardPass" },
+  { id: "1.8", title: "Loss - How Wrong Were We?", section: 1, component: "LossFunction" },
+  { id: "1.9", title: "Learning - What Does It Mean?", section: 1, component: "WhatIsLearning" },
+  { id: "1.10", title: "Derivatives - The Core Intuition", section: 1, component: "Derivatives" },
+  { id: "1.11", title: "The Backward Pass - The Chain Rule", section: 1, component: "BackwardPass" },
+  { id: "1.12", title: "Gradient Descent - Fixing the Weights", section: 1, component: "GradientDescent" },
+  { id: "1.13", title: "Vectors - Numbers That Travel Together", section: 1, component: "Vectors" },
+  { id: "1.14", title: "The Dot Product - How Vectors Compare", section: 1, component: "DotProductIntro" },
+  { id: "1.15", title: "Matrices - Grids That Transform Vectors", section: 1, component: "Matrices" },
+  { id: "1.16", title: "A Layer IS Matrix Multiplication", section: 1, component: "LayerIsMatMul" },
+  { id: "1.17", title: "Activation Functions - The Full Picture", section: 1, component: "ActivationFunctions" },
+  { id: "1.18", title: 'What "Deep" Really Means', section: 1, component: "WhatDeepMeans" },
+  { id: "1.19", title: "Same Building Blocks, Different Shapes", section: 1, component: "SameBuildingBlocks" },
   // Section 2: How LLMs Actually Train
   { id: "2.1", title: "Tokenization - From Words to Numbers", section: 2, component: "Tokenization" },
   { id: "2.2", title: "Self-Supervised Learning - How GPT Trains", section: 2, component: "SelfSupervised" },
@@ -18,6 +27,8 @@ export const chapters = [
   { id: "2.4", title: "Supervised Fine-Tuning (SFT)", section: 2, component: "SFT" },
   { id: "2.5", title: "RLHF - Making AI Helpful & Safe", section: 2, component: "RLHF" },
   { id: "2.6", title: "Batch Training - Why Not One Example at a Time?", section: 2, component: "BatchTraining" },
+  { id: "2.7", title: "The Output Layer - From Hidden State to Words", section: 2, component: "OutputLayer" },
+  { id: "2.8", title: "Autoregressive Generation - One Token at a Time", section: 2, component: "AutoregressiveGeneration" },
   // Section 3: Scaling & Modern Techniques
   { id: "3.1", title: "Scaling Laws - Why Bigger Models Win", section: 3, component: "ScalingLaws" },
   { id: "3.2", title: "Parameters at Scale", section: 3, component: "ParametersAtScale" },
@@ -29,6 +40,8 @@ export const chapters = [
   { id: "4.2", title: "RNN", section: 4, component: "RNN" },
   { id: "4.3", title: "RNN's Fatal Flaws", section: 4, component: "RNNFlaws" },
   { id: "4.4", title: "The Transformer Arrives", section: 4, component: "TransformerArrives" },
+  { id: "4.5", title: "Encoder & Decoder - The Two Halves", section: 4, component: "EncoderDecoder" },
+  { id: "4.6", title: "Decoder-Only - How Modern LLMs Work", section: 4, component: "DecoderOnly" },
   // Section 5: Transformer Input Pipeline
   { id: "5.1", title: "The Full Architecture", section: 5, component: "FullArchitecture" },
   { id: "5.2", title: "Zoom: Embeddings", section: 5, component: "Embeddings" },
@@ -66,14 +79,16 @@ export const chapters = [
   { id: "7.13", title: "Why 8 Heads? Parameter Count & Big Picture", section: 7, component: "WhyEightHeads" },
   { id: "7.14", title: "Is W_O Constant? Does It Change?", section: 7, component: "IsWOConstant" },
   { id: "7.15", title: "The Complete Picture - In Plain English", section: 7, component: "CompletePicture" },
+  // Section 8: Beyond Attention
+  { id: "8.1", title: "Add & Norm - The Stabilizer", section: 8, component: "AddNorm" },
 ];
 
-export const sectionNames = { 0: "Overview", 1: "Neural Network Foundations", 2: "How LLMs Actually Train", 3: "Scaling & Modern Techniques", 4: "The Road to Transformers", 5: "Transformer Input Pipeline", 6: "Attention - Understanding Q, K, V", 7: "Attention - The Full Computation" };
+export const sectionNames = { 0: "Overview", 1: "Neural Network Foundations", 2: "How LLMs Actually Train", 3: "Scaling & Modern Techniques", 4: "The Road to Transformers", 5: "Transformer Input Pipeline", 6: "Attention - Understanding Q, K, V", 7: "Attention - The Full Computation", 8: "Beyond Attention" };
 
 // Section colors (one per section, used in progress bar, TOC, etc.)
 export const sectionColors = {
   1: "#ff6b6b", 2: "#00b8d4", 3: "#ffd740", 4: "#a78bfa",
-  5: "#ffab40", 6: "#00e676", 7: "#e040fb",
+  5: "#ffab40", 6: "#00e676", 7: "#e040fb", 8: "#42a5f5",
 };
 
 // Colors

@@ -12,6 +12,7 @@ import * as RoadToTransformers from "./sections/road-to-transformers.jsx";
 import * as TransformerInput from "./sections/transformer-input.jsx";
 import * as AttentionQKV from "./sections/attention-qkv.jsx";
 import * as AttentionComputation from "./sections/attention-computation.jsx";
+import * as TransformerBlock from "./sections/transformer-block.jsx";
 
 // Lookup: component name -> function (derived from config, not manually maintained)
 const lookup = {
@@ -23,6 +24,7 @@ const lookup = {
   ...TransformerInput,
   ...AttentionQKV,
   ...AttentionComputation,
+  ...TransformerBlock,
 };
 
 // Validate lookup matches config (dev only)

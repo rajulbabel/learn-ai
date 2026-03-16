@@ -28,8 +28,8 @@ describe("config.js", () => {
     });
   });
 
-  it("every section (1-7) has a color", () => {
-    for (let i = 1; i <= 7; i++) {
+  it("every section (1-8) has a color", () => {
+    for (let i = 1; i <= 8; i++) {
       expect(sectionColors[i]).toBeDefined();
     }
   });

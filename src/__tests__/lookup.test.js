@@ -10,6 +10,7 @@ import * as RoadToTransformers from "../sections/road-to-transformers.jsx";
 import * as TransformerInput from "../sections/transformer-input.jsx";
 import * as AttentionQKV from "../sections/attention-qkv.jsx";
 import * as AttentionComputation from "../sections/attention-computation.jsx";
+import * as TransformerBlock from "../sections/transformer-block.jsx";
 
 const lookup = {
   TOC,
@@ -20,6 +21,7 @@ const lookup = {
   ...TransformerInput,
   ...AttentionQKV,
   ...AttentionComputation,
+  ...TransformerBlock,
 };
 
 describe("lookup", () => {

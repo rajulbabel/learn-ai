@@ -108,4 +108,201 @@ export const TransformerArrives = (ctx) => { const { sub, subBtnRipple, setSubBt
   );
 };
 
-// ═══════ 2.1 Full Architecture (faithful SVG diagram) ═══════
+// ═══════ 4.5 Encoder & Decoder - The Two Halves ═══════
+
+export const EncoderDecoder = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx; return (
+  <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
+    {sub >= 0 && (
+      <Box color={C.cyan} style={{ width: "100%" }}>
+        <T color="#80deea" bold center size={20}>The original problem: translation</T>
+        <T color="#80deea" style={{ marginTop: 8 }}>The 2017 paper "Attention Is All You Need" was built for translating between languages:</T>
+        <div style={{ marginTop: 12, padding: "14px", borderRadius: 10, background: "rgba(0,0,0,0.3)", border: `1px solid ${C.cyan}20`, display: "flex", alignItems: "center", justifyContent: "center", gap: 10, flexWrap: "wrap" }}>
+          <div style={{ padding: "10px 16px", borderRadius: 8, background: `${C.cyan}12`, border: `1px solid ${C.cyan}25` }}>
+            <T color={C.cyan} bold center size={16}>"I love cats"</T>
+            <T color={C.dim} center size={12}>English input</T>
+          </div>
+          <T color={C.yellow} bold size={28}>→</T>
+          <div style={{ padding: "6px 12px", borderRadius: 6, background: `${C.yellow}10` }}>
+            <T color={C.yellow} bold center size={14}>Transformer</T>
+          </div>
+          <T color={C.yellow} bold size={28}>→</T>
+          <div style={{ padding: "10px 16px", borderRadius: 8, background: `${C.green}12`, border: `1px solid ${C.green}25` }}>
+            <T color={C.green} bold center size={16}>"J'aime les chats"</T>
+            <T color={C.dim} center size={12}>French output</T>
+          </div>
+        </div>
+        <T color="#80deea" style={{ marginTop: 10 }}>This task has two distinct phases: first you need to <strong>read and understand</strong> the input sentence, then you need to <strong>generate</strong> the output sentence in a different language. Reading and writing are fundamentally different operations - so the Transformer has two separate halves.</T>
+      </Box>
+    )}
+    <Reveal when={sub >= 1}><Box color={C.yellow} style={{ width: "100%" }}>
+      <T color="#ffe082" bold center size={20}>Encoder = Reads. Decoder = Writes.</T>
+      <div style={{ marginTop: 12, display: "flex", gap: 12 }}>
+        <div style={{ flex: 1, padding: "14px", borderRadius: 10, background: `${C.blue}08`, border: `2px solid ${C.blue}25` }}>
+          <T color={C.blue} bold center size={18}>Encoder</T>
+          <T color={C.dim} size={14} style={{ marginTop: 8 }}>Reads the ENTIRE input at once. "I love cats" - all three words processed in parallel.</T>
+          <T color={C.dim} size={14} style={{ marginTop: 6 }}>Every word attends to every other word (Section 6-7). The Encoder builds a rich understanding of the complete input.</T>
+          <T color={C.blue} size={14} style={{ marginTop: 6 }}><strong>Output:</strong> a set of vectors - one per input word - each enriched with context from all other words.</T>
+        </div>
+        <div style={{ flex: 1, padding: "14px", borderRadius: 10, background: `${C.green}08`, border: `2px solid ${C.green}25` }}>
+          <T color={C.green} bold center size={18}>Decoder</T>
+          <T color={C.dim} size={14} style={{ marginTop: 8 }}>Generates the output ONE word at a time. First "J'aime", then "les", then "chats" - autoregressively (chapter 2.8).</T>
+          <T color={C.dim} size={14} style={{ marginTop: 6 }}>At each step, the Decoder looks at: (1) what it has generated so far, and (2) the Encoder's understanding of the input.</T>
+          <T color={C.green} size={14} style={{ marginTop: 6 }}><strong>Output:</strong> one token at a time until the translation is complete.</T>
+        </div>
+      </div>
+      <T color="#ffe082" style={{ marginTop: 10 }}>Think of it like a human translator: first you read the entire English sentence (Encoder), then you write the French translation word by word (Decoder), constantly referring back to what you read.</T>
+    </Box></Reveal>
+    <Reveal when={sub >= 2}><Box color={C.purple} style={{ width: "100%" }}>
+      <T color="#b8a9ff" bold center size={20}>The Bridge: Cross-Attention</T>
+      <T color="#b8a9ff" style={{ marginTop: 8 }}>How does the Decoder know what the Encoder understood? Through a special connection called <strong>cross-attention</strong>:</T>
+      <div style={{ marginTop: 12, display: "flex", flexDirection: "column", alignItems: "center", gap: 0 }}>
+        <div style={{ padding: "10px 20px", borderRadius: 8, background: `${C.blue}12`, border: `1px solid ${C.blue}25`, width: "80%", textAlign: "center" }}>
+          <T color={C.blue} bold center>Encoder output: "I love cats" (understood)</T>
+        </div>
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", padding: "4px 0" }}>
+          <T color={C.purple} size={13}>sends K and V vectors</T>
+          <T color={C.purple} size={16}>↓</T>
+        </div>
+        <div style={{ padding: "10px 20px", borderRadius: 8, background: `${C.purple}12`, border: `2px solid ${C.purple}30`, width: "80%", textAlign: "center" }}>
+          <T color={C.purple} bold center>Cross-Attention</T>
+          <T color={C.dim} center size={13}>Decoder's Q asks: "What in the input is relevant to the word I'm generating next?"</T>
+          <T color={C.dim} center size={13}>Encoder's K and V answer with the input's meaning.</T>
+        </div>
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", padding: "4px 0" }}>
+          <T color={C.dim} size={16}>↓</T>
+        </div>
+        <div style={{ padding: "10px 20px", borderRadius: 8, background: `${C.green}12`, border: `1px solid ${C.green}25`, width: "80%", textAlign: "center" }}>
+          <T color={C.green} bold center>Decoder generates: "J'aime" → "les" → "chats"</T>
+        </div>
+      </div>
+      <T color="#b8a9ff" style={{ marginTop: 10 }}>Cross-attention uses the same Q/K/V mechanism from Sections 6-7, but the Q comes from the Decoder (asking) while K and V come from the Encoder (answering). This is how the Decoder "reads" the input at every step.</T>
+    </Box></Reveal>
+    <Reveal when={sub >= 3}><Box color={C.green} style={{ width: "100%" }}>
+      <T color="#80e8a5" bold center size={20}>The 2017 Architecture - What You'll See Next</T>
+      <T color="#80e8a5" style={{ marginTop: 8 }}>The complete Transformer from the original 2017 paper has both halves stacked together:</T>
+      <div style={{ marginTop: 12, display: "flex", gap: 8, alignItems: "stretch" }}>
+        <div style={{ flex: 1, padding: "12px", borderRadius: 10, background: `${C.blue}06`, border: `1px solid ${C.blue}20`, display: "flex", flexDirection: "column", gap: 6 }}>
+          <T color={C.blue} bold center size={16}>Encoder Stack</T>
+          {["Multi-Head Attention", "Add & Norm", "Feed-Forward", "Add & Norm"].map((s, i) => (
+            <div key={i} style={{ padding: "4px 8px", borderRadius: 4, background: `${C.blue}10`, textAlign: "center" }}>
+              <T color={C.dim} center size={12}>{s}</T>
+            </div>
+          ))}
+          <T color={C.dim} center size={11}>x 6 layers</T>
+        </div>
+        <div style={{ display: "flex", alignItems: "center" }}>
+          <T color={C.purple} bold size={20}>→</T>
+        </div>
+        <div style={{ flex: 1, padding: "12px", borderRadius: 10, background: `${C.green}06`, border: `1px solid ${C.green}20`, display: "flex", flexDirection: "column", gap: 6 }}>
+          <T color={C.green} bold center size={16}>Decoder Stack</T>
+          {["Masked Self-Attention", "Add & Norm", "Cross-Attention", "Add & Norm", "Feed-Forward", "Add & Norm"].map((s, i) => (
+            <div key={i} style={{ padding: "4px 8px", borderRadius: 4, background: `${C.green}10`, textAlign: "center" }}>
+              <T color={C.dim} center size={12}>{s}</T>
+            </div>
+          ))}
+          <T color={C.dim} center size={11}>x 6 layers</T>
+        </div>
+      </div>
+      <T color="#80e8a5" style={{ marginTop: 10 }}>Section 5 will show this complete diagram in detail. But before that - there's something important about the models you actually use every day...</T>
+    </Box></Reveal>
+    {sub < 3 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
+  </div>
+); }
+
+// ═══════ 4.6 Decoder-Only - How Modern LLMs Work ═══════
+
+export const DecoderOnly = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx; return (
+  <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
+    {sub >= 0 && (
+      <Box color={C.red} style={{ width: "100%" }}>
+        <T color="#ef9a9a" bold center size={20}>Plot twist: GPT, Claude, and LLaMA are decoder-only.</T>
+        <T color="#ef9a9a" style={{ marginTop: 8 }}>The original 2017 Transformer has both Encoder and Decoder. But the models you actually use every day - ChatGPT, Claude, LLaMA, Gemini - <strong>only have the Decoder half</strong>. No Encoder at all.</T>
+        <div style={{ marginTop: 12, display: "flex", gap: 12, alignItems: "stretch" }}>
+          <div style={{ flex: 1, padding: "12px", borderRadius: 10, background: `${C.blue}06`, border: `1px solid ${C.blue}20`, opacity: 0.4 }}>
+            <T color={C.blue} bold center size={16}>Encoder</T>
+            <T color={C.dim} center size={14} style={{ marginTop: 4 }}>Reads input</T>
+            <div style={{ marginTop: 8, textAlign: "center" }}>
+              <T color={C.red} bold center size={28}>X</T>
+              <T color={C.red} center size={13}>Not used</T>
+            </div>
+          </div>
+          <div style={{ flex: 1, padding: "12px", borderRadius: 10, background: `${C.green}08`, border: `2px solid ${C.green}30` }}>
+            <T color={C.green} bold center size={16}>Decoder</T>
+            <T color={C.dim} center size={14} style={{ marginTop: 4 }}>Generates output</T>
+            <div style={{ marginTop: 8, textAlign: "center" }}>
+              <T color={C.green} bold center size={28}>✓</T>
+              <T color={C.green} center size={13}>This is all you need</T>
+            </div>
+          </div>
+        </div>
+        <T color="#ef9a9a" style={{ marginTop: 10 }}>Why throw away half the architecture? Because translation and chatting are fundamentally different tasks.</T>
+      </Box>
+    )}
+    <Reveal when={sub >= 1}><Box color={C.yellow} style={{ width: "100%" }}>
+      <T color="#ffe082" bold center size={20}>When input and output are the same language, you don't need two halves.</T>
+      <T color="#ffe082" style={{ marginTop: 8 }}>Translation needs an Encoder because the input (English) and output (French) are <strong>different languages</strong> - you must fully understand one before generating the other.</T>
+      <T color="#ffe082" style={{ marginTop: 6 }}>But chatting? The input is text and the output is text - the <strong>same language</strong>. There's no "foreign" input to encode separately. The model can just read your prompt and continue writing:</T>
+      <div style={{ marginTop: 12, padding: "12px 16px", borderRadius: 10, background: "rgba(0,0,0,0.3)", border: `1px solid ${C.yellow}20` }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+          <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+            <div style={{ padding: "4px 10px", borderRadius: 4, background: `${C.cyan}12` }}>
+              <T color={C.cyan} bold size={13}>Your prompt</T>
+            </div>
+            <T color={C.mid} size={15}>"What is the capital of France?"</T>
+          </div>
+          <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+            <div style={{ padding: "4px 10px", borderRadius: 4, background: `${C.green}12` }}>
+              <T color={C.green} bold size={13}>Model continues</T>
+            </div>
+            <T color={C.mid} size={15}>"The capital of France is Paris."</T>
+          </div>
+        </div>
+        <T color={C.dim} size={14} style={{ marginTop: 8 }}>Both prompt and response are just a continuous stream of tokens. The Decoder processes the prompt tokens AND generates response tokens in one unified flow.</T>
+      </div>
+    </Box></Reveal>
+    <Reveal when={sub >= 2}><Box color={C.purple} style={{ width: "100%" }}>
+      <T color="#b8a9ff" bold center size={20}>Three Transformer variants - side by side</T>
+      <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 10 }}>
+        {[
+          { name: "Encoder-Decoder", task: "Translation (read one language, write another)", models: "T5, BART, original Transformer", parts: ["Encoder", "Decoder"], color: C.blue },
+          { name: "Encoder-Only", task: "Understanding (classify, extract, compare)", models: "BERT, RoBERTa", parts: ["Encoder"], color: C.orange },
+          { name: "Decoder-Only", task: "Generation (chat, write, code, reason)", models: "GPT, Claude, LLaMA, Gemini", parts: ["Decoder"], color: C.green },
+        ].map(({ name, task, models, parts, color }) => (
+          <div key={name} style={{ padding: "12px 14px", borderRadius: 10, background: `${color}06`, border: `1px solid ${color}20` }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+              <T color={color} bold size={16}>{name}</T>
+              <div style={{ display: "flex", gap: 4 }}>
+                {parts.map(p => (
+                  <div key={p} style={{ padding: "2px 8px", borderRadius: 4, background: `${color}15` }}>
+                    <T color={color} size={12}>{p}</T>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <T color={C.dim} size={14} style={{ marginTop: 4 }}><strong>Task:</strong> {task}</T>
+            <T color={C.dim} size={13}><strong>Models:</strong> {models}</T>
+          </div>
+        ))}
+      </div>
+      <T color="#b8a9ff" style={{ marginTop: 10 }}>Almost all modern AI assistants (ChatGPT, Claude, Gemini) are <strong>decoder-only</strong>. This is the dominant architecture because it turns out that a decoder alone - trained on enough data - can handle reading, understanding, AND generating.</T>
+    </Box></Reveal>
+    <Reveal when={sub >= 3}><Box color={C.green} style={{ width: "100%" }}>
+      <T color="#80e8a5" bold center size={20}>What to expect in Section 5</T>
+      <T color="#80e8a5" style={{ marginTop: 8 }}>Section 5 will show the complete original encoder-decoder architecture diagram from the 2017 paper. This is important because:</T>
+      <div style={{ marginTop: 10, display: "flex", flexDirection: "column", gap: 6 }}>
+        {[
+          { point: "The decoder-only model uses the SAME building blocks (attention, FFN, Add & Norm)", color: C.yellow },
+          { point: "Understanding the full architecture helps you see what was kept vs removed", color: C.cyan },
+          { point: "Cross-attention still appears in some models (e.g., image understanding in multimodal AI)", color: C.purple },
+        ].map(({ point, color }, i) => (
+          <div key={i} style={{ display: "flex", gap: 8, alignItems: "flex-start", padding: "8px 10px", borderRadius: 6, background: `${color}06`, border: `1px solid ${color}12` }}>
+            <span style={{ color, fontWeight: 700, fontSize: 15, flexShrink: 0 }}>{i + 1}.</span>
+            <T color={C.dim} size={14}>{point}</T>
+          </div>
+        ))}
+      </div>
+      <T color="#80e8a5" style={{ marginTop: 10 }}>Keep in mind as you go through Section 5: the models you use daily (GPT, Claude) only use the <strong>right half</strong> (decoder). But learning the full picture gives you the complete foundation.</T>
+    </Box></Reveal>
+    {sub < 3 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
+  </div>
+); }

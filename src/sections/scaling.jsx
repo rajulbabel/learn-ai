@@ -221,6 +221,27 @@ export const Distillation = (ctx) => { const { sub, subBtnRipple, setSubBtnRippl
         </div>
         <T color="#b8a9ff" style={{ marginTop: 10 }}>If you only said "Paris = right, everything else = wrong" - the student would think London and Pizza are equally wrong.</T>
         <T color="#b8a9ff" style={{ marginTop: 4 }}>But the soft probabilities teach: "London is close (it's a capital). Lyon is related (it's French). Pizza is nonsense." The student absorbs how concepts relate - for free.</T>
+        <div style={{ marginTop: 12, padding: "12px 14px", borderRadius: 10, background: "rgba(0,0,0,0.3)", border: `1px solid ${C.purple}25` }}>
+          <T color={C.purple} bold center size={16}>The temperature trick</T>
+          <T color={C.dim} size={14} style={{ marginTop: 6 }}>To get even softer probabilities, we divide the logits by a <strong style={{ color: C.purple }}>temperature T</strong> before softmax: softmax(z_i / T)</T>
+          <div style={{ marginTop: 8, display: "flex", gap: 8 }}>
+            <div style={{ flex: 1, padding: "8px", borderRadius: 6, background: `${C.cyan}08` }}>
+              <T color={C.cyan} bold center size={13}>T = 1 (normal)</T>
+              <T color={C.dim} size={12}>Paris: 85%</T>
+              <T color={C.dim} size={12}>London: 8%</T>
+              <T color={C.dim} size={12}>Lyon: 5%</T>
+              <T color={C.dim} size={12}>Berlin: 2%</T>
+            </div>
+            <div style={{ flex: 1, padding: "8px", borderRadius: 6, background: `${C.purple}08` }}>
+              <T color={C.purple} bold center size={13}>T = 3 (soft)</T>
+              <T color={C.dim} size={12}>Paris: 45%</T>
+              <T color={C.dim} size={12}>London: 20%</T>
+              <T color={C.dim} size={12}>Lyon: 18%</T>
+              <T color={C.dim} size={12}>Berlin: 17%</T>
+            </div>
+          </div>
+          <T color={C.dim} size={13} style={{ marginTop: 6 }}>Higher temperature = softer distribution = more information about the relationships between tokens. This is also the same "temperature" slider you see in ChatGPT settings - higher T = more creative (spread out), lower T = more focused (peaked).</T>
+        </div>
       </Box></Reveal>
     <Reveal when={sub >= 4}><Box color={C.green} style={{ width: "100%" }}>
         <T color="#80e8a5" bold center size={20}>This is everywhere</T>
@@ -353,7 +374,30 @@ export const CLIP = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, regis
     <Reveal when={sub >= 3}><Box color={C.orange} style={{ width: "100%" }}>
         <T color="#ffb74d" bold center size={20}>How "similar" are two vectors?</T>
         <T color="#ffb74d" style={{ marginTop: 8 }}>After encoding, we get two lists of numbers. We need a way to check: are they similar?</T>
-        <T color="#ffb74d" style={{ marginTop: 6 }}>The method is called <strong>cosine similarity</strong> - it gives a score from -1 to 1:</T>
+        <T color="#ffb74d" style={{ marginTop: 6 }}>The method is called <strong>cosine similarity</strong>. Here is the actual formula:</T>
+        <div style={{ margin: "12px 0", padding: "14px 16px", borderRadius: 10, background: "rgba(0,0,0,0.3)", border: `1px solid ${C.orange}25`, textAlign: "center" }}>
+          <T color={C.orange} bold size={18} center>cos(A, B) = (A · B) / (||A|| x ||B||)</T>
+          <div style={{ marginTop: 8, display: "flex", flexWrap: "wrap", gap: 8, justifyContent: "center" }}>
+            {[
+              { sym: "A · B", desc: "dot product (chapter 1.12)", color: C.blue },
+              { sym: "||A||", desc: "magnitude of A = sqrt(sum of a_i squared)", color: C.cyan },
+              { sym: "||B||", desc: "magnitude of B = sqrt(sum of b_i squared)", color: C.purple },
+            ].map((p, i) => (
+              <div key={i} style={{ background: `${p.color}08`, borderRadius: 6, padding: "3px 8px", border: `1px solid ${p.color}15` }}>
+                <T color={p.color} bold size={12}>{p.sym}</T>
+                <T color={C.dim} size={11}> = {p.desc}</T>
+              </div>
+            ))}
+          </div>
+          <T color={C.dim} size={13} style={{ marginTop: 8 }}>Dividing by the magnitudes removes the effect of vector length - only the DIRECTION matters. Result is always between -1 (opposite) and +1 (identical direction).</T>
+        </div>
+        <T color="#ffb74d" size={15} style={{ marginTop: 4 }}>Quick example: A = [0.8, 0.3] and B = [0.79, 0.31]</T>
+        <div style={{ marginTop: 6, padding: "8px 12px", borderRadius: 8, background: `${C.orange}06` }}>
+          <T color={C.dim} size={13}>A · B = (0.8 x 0.79) + (0.3 x 0.31) = 0.632 + 0.093 = 0.725</T>
+          <T color={C.dim} size={13}>||A|| = sqrt(0.64 + 0.09) = 0.854</T>
+          <T color={C.dim} size={13}>||B|| = sqrt(0.624 + 0.096) = 0.849</T>
+          <T color={C.orange} bold size={14}>cos(A, B) = 0.725 / (0.854 x 0.849) = <strong>0.9998</strong> - nearly identical!</T>
+        </div>
         <div style={{ marginTop: 10, display: "flex", flexDirection: "column", gap: 6 }}>
           {[
             { score: "0.95", pair: "dog photo + \"dog on beach\"", verdict: "Almost identical!", color: C.green, width: "95%" },

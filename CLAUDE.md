@@ -317,6 +317,38 @@ Coverage must not decrease. Any new code must have corresponding tests.
 - **Always refer to chapters by their visible IDs** (e.g., "chapter 7.4"), never
   by internal function names in conversation with the user.
 
+## Visual Design Rules - MANDATORY
+
+Every chapter, sub-step, and visual in the app MUST follow these rules - whether
+being added, updated, redesigned, or fixed. No exceptions. Do not wait for the
+user to remind you.
+
+- **Illustrative first** - every concept must be shown visually, not just
+  described in text. Use colored bars, grids, split diagrams, progress bars,
+  side-by-side comparisons, and inline calculations. Text alone is never enough.
+- **Beginner-friendly, advanced-depth** - write for someone seeing the concept
+  for the first time, but go deep enough that they walk away with real
+  understanding. Simple language, concrete examples, no hand-waving.
+- **Build up piece by piece** - use progressive sub-steps (Reveal). Each click
+  should add one clear idea. Never dump everything on screen at once.
+- **Concrete over abstract** - always use real numbers, real words, real
+  sentences. Never say "some value" or "a vector" when you can say "[0.8, 0.2]"
+  or "cat's Query."
+- **Show the WHY, not just the WHAT** - if something is split, scaled, or
+  chosen, explain the tradeoff. Why 8 heads and not 16? Why split instead of
+  duplicate? The reasoning matters as much as the mechanics.
+- **Consistent example sentences** - use "I love cats" and "The cat sat on the
+  mat last week" as running examples throughout. Reuse the same numbers so the
+  learner sees how concepts connect across chapters.
+
+**The goal of every visual is to take a complete beginner and give them
+advanced-level understanding by the time they finish clicking through the
+sub-steps.** A beginner should be able to follow every step, and walk away
+understanding the concept deeply enough to explain it to someone else. If a
+visual only describes something in words when it could show it with a diagram,
+colored bars, a side-by-side comparison, or a step-by-step calculation - it
+is not done yet. Always ask: "Can I SHOW this instead of just TELLING it?"
+
 ## Deployment
 
 Pushes to `main` trigger the GitHub Actions workflow which:

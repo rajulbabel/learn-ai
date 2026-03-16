@@ -1052,65 +1052,173 @@ export const WhyMultiHead = (ctx) => { const { sub, subBtnRipple, setSubBtnRippl
 
 // ═══════ CH 19: The Split ═══════
 
-export const HeadSplit = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate, bankIdx, setBankIdx, hovered, setHovered } = ctx; return (
+export const HeadSplit = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate, bankIdx, setBankIdx, hovered, setHovered } = ctx;
+  const headColors = [C.cyan, C.orange, C.purple, C.yellow, C.green, C.pink, C.red, C.blue];
+  return (
   <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
+
+    {/* Sub 0: The problem recap */}
     {sub >= 0 && (
-      <Box color={C.purple} style={{ width: "100%" }}>
-        <T color="#b8a9ff" bold center size={20}>One set of three grids can only ask ONE type of question.</T>
-        <T color="#b8a9ff" style={{ marginTop: 6 }}>"love"'s Query can point in only one direction. So we create 8 sets of three grids. Each set starts with different random numbers → gets nudged differently during training → ends up asking a different type of question.</T>
-        <T color="#b8a9ff" style={{ marginTop: 6 }}>We DON'T run the full thing 8 times - that would be 8× the computation. Instead, we <strong>split the dimensions</strong>:</T>
-        <div style={{ marginTop: 10, padding: "12px", background: "rgba(0,0,0,0.3)", borderRadius: 8 }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-            {[{ l: "Total dimensions:", v: "512" }, { l: "Number of heads:", v: "8" }, { l: "Dims per head:", v: "512 ÷ 8 = 64" }].map(({ l, v }) => (
-              <div key={l} style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                <T color={C.mid} size={18}>{l}</T><T color={C.yellow} bold center size={20}>{v}</T>
+      <Box color={C.red} style={{ width: "100%" }}>
+        <T color="#ff8a80" bold center size={20}>One head = one Query arrow = one direction.</T>
+        <T color="#ff8a80" style={{ marginTop: 6 }}>Each word's 512-dim embedding produces ONE Query vector through W_Q. That single arrow can only point one way, so it can only ask one type of question.</T>
+        <div style={{ marginTop: 10, padding: "10px", background: "rgba(0,0,0,0.3)", borderRadius: 8, textAlign: "center" }}>
+          <T color={C.dim} size={16}>512-dim embedding → W_Q (512×512) → ONE 512-dim Query</T>
+          <T color={C.red} bold center size={16} style={{ marginTop: 4 }}>One arrow. One question. Information lost.</T>
+        </div>
+        <T color="#ff8a80" style={{ marginTop: 8 }}>Solution: don't make one big arrow. Make <strong>8 smaller arrows</strong>, each pointing in its own direction.</T>
+      </Box>
+    )}
+
+    {/* Sub 1: The visual split */}
+    <Reveal when={sub >= 1}><Box color={C.purple} style={{ width: "100%" }}>
+        <T color="#b8a9ff" bold center size={20}>Split the 512 dimensions into 8 chunks of 64.</T>
+        <T color="#b8a9ff" size={16} style={{ marginTop: 4 }}>Imagine the embedding as a long bar. We slice it into 8 equal pieces:</T>
+        {/* Full 512-dim bar */}
+        <div style={{ marginTop: 12, padding: "0 4px" }}>
+          <T color={C.dim} size={12} center>512 dimensions</T>
+          <div style={{ height: 28, borderRadius: 6, background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.15)", display: "flex", overflow: "hidden", marginTop: 4 }}>
+            {headColors.map((c, i) => (
+              <div key={i} style={{ flex: 1, background: `${c}25`, borderRight: i < 7 ? "2px solid rgba(0,0,0,0.5)" : "none", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                <span style={{ fontSize: 11, fontWeight: 700, color: c }}>H{i + 1}</span>
+              </div>
+            ))}
+          </div>
+          <div style={{ display: "flex", marginTop: 2 }}>
+            {headColors.map((c, i) => (
+              <div key={i} style={{ flex: 1, textAlign: "center" }}>
+                <span style={{ fontSize: 9, color: C.dim }}>64</span>
               </div>
             ))}
           </div>
         </div>
-      </Box>
-    )}
-    <Reveal when={sub >= 1}><Box color={C.cyan} style={{ width: "100%" }}>
-        <T color="#80deea" bold center>We create 8 sets of three grids.</T>
-        <T color="#80deea" style={{ marginTop: 6 }}>Each set has its own W_Q, W_K, W_V - all starting with different random numbers, all trained independently:</T>
-        <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 6, padding: "10px", background: "rgba(0,0,0,0.2)", borderRadius: 8 }}>
-          {[1, 2, 3].map(n => {
-            const c = [C.cyan, C.purple, C.orange][n - 1];
-            const learns = ["who does the action?", "action done to what?", "what kind of action?"][n - 1];
-            return (
-              <div key={n} style={{ padding: "8px 10px", borderRadius: 6, background: `${c}06`, border: `1px solid ${c}12` }}>
-                <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                  <T color={c} bold center size={19} style={{ whiteSpace: "nowrap" }}>Set {n}</T>
-                  <T color={c} size={16}>→ learns "{learns}"</T>
+        <div style={{ marginTop: 12, padding: "10px", background: "rgba(0,0,0,0.3)", borderRadius: 8 }}>
+          {[{ l: "Total dimensions:", v: "512" }, { l: "Number of heads:", v: "8" }, { l: "Dims per head:", v: "512 / 8 = 64" }].map(({ l, v }) => (
+            <div key={l} style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 2 }}>
+              <T color={C.mid} size={16}>{l}</T><T color={C.yellow} bold size={18}>{v}</T>
+            </div>
+          ))}
+        </div>
+        <T color="#b8a9ff" size={16} style={{ marginTop: 8 }}>We don't run the full 512-dim attention 8 times. We split it - same total computation, but 8 independent perspectives.</T>
+      </Box></Reveal>
+
+    {/* Sub 2: Why the split works - cost vs quality */}
+    <Reveal when={sub >= 2}><Box color={C.yellow} style={{ width: "100%" }}>
+        <T color={C.yellow} bold center size={20}>But wait - doesn't splitting lose precision?</T>
+        <T color="#ffe082" size={16} style={{ marginTop: 4 }}>Why not give each head the full 512 dims? Let's compare:</T>
+        <div style={{ marginTop: 10, display: "flex", flexDirection: "column", gap: 8 }}>
+          {/* Option A: 8 x 512 */}
+          <div style={{ padding: "10px", borderRadius: 8, background: `${C.red}06`, border: `1px solid ${C.red}12` }}>
+            <T color={C.red} bold size={16}>Option A: 8 heads × 512 dims each</T>
+            <div style={{ marginTop: 6, display: "flex", gap: 4 }}>
+              {[1,2,3,4,5,6,7,8].map(i => (
+                <div key={i} style={{ flex: 1, height: 20, borderRadius: 3, background: `${C.red}30`, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                  <span style={{ fontSize: 8, color: C.red }}>512</span>
                 </div>
-                <T color={C.dim} size={14} style={{ marginTop: 4 }}>W_Q{n} [512×64], W_K{n} [512×64], W_V{n} [512×64]</T>
+              ))}
+            </div>
+            <T color={C.dim} size={14} style={{ marginTop: 4 }}>Cost: 8 × 512 = <strong style={{ color: C.red }}>4,096 dims total</strong> (8x the compute!)</T>
+            <T color={C.dim} size={14}>Quality per head: very high, but diminishing returns past ~64 dims</T>
+          </div>
+          {/* Option B: 8 x 64 (the split) */}
+          <div style={{ padding: "10px", borderRadius: 8, background: `${C.green}06`, border: `1px solid ${C.green}12` }}>
+            <T color={C.green} bold size={16}>Option B: 8 heads × 64 dims each (the split)</T>
+            <div style={{ marginTop: 6, display: "flex", gap: 4 }}>
+              {headColors.map((c, i) => (
+                <div key={i} style={{ flex: 1, height: 20, borderRadius: 3, background: `${c}30`, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                  <span style={{ fontSize: 8, color: c }}>64</span>
+                </div>
+              ))}
+            </div>
+            <T color={C.dim} size={14} style={{ marginTop: 4 }}>Cost: 8 × 64 = <strong style={{ color: C.green }}>512 dims total</strong> (same budget as one head!)</T>
+            <T color={C.dim} size={14}>Quality per head: 64 dims is plenty - "is this the subject?" doesn't need 512 numbers to answer</T>
+          </div>
+        </div>
+        <div style={{ marginTop: 10, padding: "8px 10px", borderRadius: 8, background: "rgba(0,0,0,0.3)" }}>
+          <T color={C.yellow} bold center size={16}>The insight: more dims per head = diminishing returns.</T>
+          <T color={C.dim} size={14} center style={{ marginTop: 2 }}>Going from 64 to 512 dims per head barely improves quality, but costs 8x more. The split gives you 8 different perspectives for the price of 1 large one.</T>
+        </div>
+      </Box></Reveal>
+
+    {/* Sub 3: Each chunk gets its own W matrices */}
+    <Reveal when={sub >= 3}><Box color={C.cyan} style={{ width: "100%" }}>
+        <T color="#80deea" bold center size={20}>Each head gets its own W_Q, W_K, W_V.</T>
+        <T color="#80deea" size={16} style={{ marginTop: 4 }}>8 heads = 8 independent sets of weight matrices. Each set is smaller (512×64 instead of 512×512):</T>
+        <div style={{ marginTop: 10, display: "flex", flexWrap: "wrap", gap: 6, justifyContent: "center" }}>
+          {[1, 2, 3, 4, 5, 6, 7, 8].map(n => {
+            const c = headColors[n - 1];
+            return (
+              <div key={n} style={{ padding: "6px 8px", borderRadius: 6, background: `${c}08`, border: `1px solid ${c}15`, minWidth: 80, textAlign: "center" }}>
+                <T color={c} bold center size={14}>Head {n}</T>
+                <div style={{ marginTop: 2 }}>
+                  <T color={C.dim} size={10}>W_Q  W_K  W_V</T>
+                  <T color={C.dim} size={9}>512×64 each</T>
+                </div>
               </div>
             );
           })}
-          <T color={C.dim} size={16} center>... same for sets 4, 5, 6, 7, 8</T>
         </div>
-        <T color="#80deea" size={18} style={{ marginTop: 8 }}>Same input embedding goes into ALL 8 sets. Each set's different grids extract different aspects - 8 different Q, K, V outputs, 8 different attention patterns. Each head produces its own output - a list of numbers per word.</T>
+        <T color="#80deea" size={16} style={{ marginTop: 10 }}>Same embedding goes into ALL 8 heads. Each head's different W matrices produce a different Query arrow - pointing in a different direction, asking a different question.</T>
       </Box></Reveal>
-    <Reveal when={sub >= 2}><Box color={C.yellow} style={{ width: "100%" }}>
-        <T color={C.yellow} bold center>Think of 8 different X-ray machines.</T>
-        <T color="#ffe082" style={{ marginTop: 6 }}>Same patient (embedding) goes into all 8. Each tuned to see something different:</T>
+
+    {/* Sub 4: 8 heads, 8 different questions */}
+    <Reveal when={sub >= 4}><Box color={C.yellow} style={{ width: "100%" }}>
+        <T color={C.yellow} bold center size={20}>8 arrows, 8 questions, nothing lost.</T>
+        <T color="#ffe082" size={16} style={{ marginTop: 4 }}>"sat" in "The cat sat on the mat last week" - each head's Query arrow points differently:</T>
         <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 4 }}>
           {[
-            { h: 1, sees: "bones (subject-verb structures)", c: C.cyan },
-            { h: 2, sees: "muscles (location relationships)", c: C.orange },
-            { h: 3, sees: "blood flow (temporal patterns)", c: C.purple },
-            { h: 4, sees: "nerves (nearby word connections)", c: C.yellow },
-          ].map(({ h, sees, c }) => (
-            <div key={h} style={{ display: "flex", alignItems: "center", gap: 8, padding: "5px 10px", borderRadius: 5, background: `${c}06` }}>
-              <T color={c} bold center size={16}>Head {h}</T>
-              <T color={C.dim} size={16}>→ sees {sees}</T>
+            { h: 1, q: "who did the action?", finds: "cat", pct: 70, c: C.cyan },
+            { h: 2, q: "where?", finds: "mat", pct: 65, c: C.orange },
+            { h: 3, q: "when?", finds: "week", pct: 55, c: C.purple },
+            { h: 4, q: "what comes next?", finds: "on", pct: 60, c: C.yellow },
+          ].map(({ h, q, finds, pct, c }) => (
+            <div key={h} style={{ display: "grid", gridTemplateColumns: "60px 1fr 70px", gap: 6, alignItems: "center", padding: "5px 8px", borderRadius: 5, background: `${c}06`, border: `1px solid ${c}10` }}>
+              <T color={c} bold center size={14}>Head {h}</T>
+              <div>
+                <T color={C.dim} size={13}>asks: "{q}"</T>
+                <div style={{ height: 5, background: "rgba(255,255,255,0.04)", borderRadius: 3, overflow: "hidden", marginTop: 2 }}>
+                  <div style={{ width: `${pct}%`, height: "100%", borderRadius: 3, background: c }} />
+                </div>
+              </div>
+              <T color={c} bold size={13} style={{ textAlign: "right" }}>→ {finds} {pct}%</T>
             </div>
           ))}
-          <T color={C.dim} size={14} center>...and 4 more, each with a different "tuning"</T>
+          <T color={C.dim} size={12} center>...and heads 5-8 ask about grammar, coreference, proximity, etc.</T>
         </div>
-        <T color="#ffe082" size={18} style={{ marginTop: 8 }}>Same input, 8 perspectives. The W matrices create these "tunings" - learned during training.</T>
+        <T color="#ffe082" size={16} style={{ marginTop: 8 }}>Each head specializes. Together they capture everything - no information lost.</T>
       </Box></Reveal>
-    {sub < 2 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
+
+    {/* Sub 5: Layers stacking - the big picture */}
+    <Reveal when={sub >= 5}><Box color={C.green} style={{ width: "100%" }}>
+        <T color="#80e8a5" bold center size={20}>Now zoom out: layers.</T>
+        <T color="#80e8a5" size={16} style={{ marginTop: 4 }}>A Transformer doesn't have just one set of 8 heads. It stacks multiple layers, each with its own 8 heads:</T>
+        <div style={{ marginTop: 10, display: "flex", flexDirection: "column", gap: 4, padding: "10px", background: "rgba(0,0,0,0.3)", borderRadius: 8 }}>
+          {[
+            { layer: "Layer 96", desc: "reasoning, generation", opacity: 1.0 },
+            { layer: "...", desc: "", opacity: 0.4 },
+            { layer: "Layer 3", desc: "meaning, sentiment", opacity: 0.7 },
+            { layer: "Layer 2", desc: "syntax, clause structure", opacity: 0.8 },
+            { layer: "Layer 1", desc: "word proximity, basic grammar", opacity: 0.9 },
+          ].map(({ layer, desc, opacity }) => (
+            <div key={layer} style={{ display: "flex", alignItems: "center", gap: 6, opacity }}>
+              <T color={C.green} bold size={14} style={{ minWidth: 65 }}>{layer}</T>
+              <div style={{ display: "flex", gap: 2, flex: 1 }}>
+                {layer === "..." ? <T color={C.dim} size={14}>...</T> : headColors.map((c, i) => (
+                  <div key={i} style={{ flex: 1, height: 14, borderRadius: 3, background: `${c}30` }} />
+                ))}
+              </div>
+              {desc && <T color={C.dim} size={11} style={{ minWidth: 80 }}>{desc}</T>}
+            </div>
+          ))}
+        </div>
+        <div style={{ marginTop: 10, padding: "10px", background: "rgba(0,0,0,0.3)", borderRadius: 8 }}>
+          <T color={C.green} bold center size={18}>96 layers × 8 heads = 768 attention patterns</T>
+          <T color={C.dim} size={14} center style={{ marginTop: 4 }}>Each layer reads the previous layer's output. Early layers see raw words. Later layers see increasingly abstract, context-rich representations.</T>
+        </div>
+        <T color="#80e8a5" size={16} style={{ marginTop: 8 }}>Nobody told the model which layer should handle grammar or reasoning. It organized itself this way during training.</T>
+      </Box></Reveal>
+
+    {sub < 5 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
   </div>
 ); }
 
@@ -1201,32 +1309,47 @@ export const ConcatWO = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, r
     {/* Sub 1: Step 8 - Sealed envelopes */}
     <Reveal when={sub >= 1}><Box color={C.red} style={{ width: "100%" }}>
         <T color="#ff8a80" bold center size={20}>The problem - these results are like 8 sealed envelopes.</T>
-        <T color="#ff8a80" style={{ marginTop: 6 }}>Imagine 8 detectives investigated the same crime. Each wrote their findings on a piece of paper and sealed it in an envelope.</T>
-        <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 4 }}>
+        <T color="#ff8a80" style={{ marginTop: 6 }}>8 detectives investigated the same crime. Each wrote findings and sealed them:</T>
+        <div style={{ marginTop: 10, display: "flex", flexWrap: "wrap", gap: 6, justifyContent: "center" }}>
           {[
-            { env: "✉️ Envelope 1:", finding: "\"The suspect is male, 30s\"", c: C.cyan },
-            { env: "✉️ Envelope 2:", finding: "\"It happened at the park\"", c: C.orange },
-            { env: "✉️ Envelope 3:", finding: "\"It was Tuesday evening\"", c: C.purple },
-            { env: "✉️ Envelope 4:", finding: "\"The weapon was a knife\"", c: C.yellow },
-          ].map(({ env, finding, c }) => (
-            <div key={env} style={{ display: "flex", alignItems: "center", gap: 8, padding: "6px 10px", borderRadius: 5, background: `${c}06` }}>
-              <T color={c} bold center size={16} style={{ whiteSpace: "nowrap" }}>{env}</T>
-              <T color={C.mid} size={16}>{finding}</T>
+            { head: 1, finding: "suspect is male, 30s", c: C.cyan },
+            { head: 2, finding: "happened at the park", c: C.orange },
+            { head: 3, finding: "Tuesday evening", c: C.purple },
+            { head: 4, finding: "weapon was a knife", c: C.yellow },
+          ].map(({ head, finding, c }) => (
+            <div key={head} data-envelope="true" style={{ width: "calc(50% - 6px)", padding: "8px", borderRadius: 8, background: `${c}08`, border: `2px solid ${c}20`, position: "relative" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 4, marginBottom: 4 }}>
+                <span style={{ fontSize: 16 }}>✉️</span>
+                <T color={c} bold size={14}>Head {head}</T>
+              </div>
+              <div style={{ padding: "4px 6px", borderRadius: 4, background: "rgba(0,0,0,0.3)", border: "1px dashed rgba(255,255,255,0.1)" }}>
+                <T color={C.dim} size={12}>"{finding}"</T>
+              </div>
+              <div style={{ position: "absolute", top: 4, right: 6 }}>
+                <span style={{ fontSize: 10, color: C.red }}>sealed</span>
+              </div>
             </div>
           ))}
-          <T color={C.dim} size={14} center>...</T>
         </div>
-        <T color="#ff8a80" style={{ marginTop: 8 }}>Now someone tapes all 8 envelopes together in a row. That's concatenation - they're physically together, but each envelope is still <strong>sealed</strong>. The information inside Envelope 1 has NO idea what Envelope 2 says.</T>
-        <T color="#ff8a80" style={{ marginTop: 6 }}>If your boss asks: "Give me a one-line summary of this case" - you can't answer from any single envelope. Envelope 1 only knows about the suspect. Envelope 2 only knows about the location. Nobody has the full picture.</T>
-        <T color="#ff8a80" style={{ marginTop: 6 }}>That's exactly the problem with just concatenating. The numbers in positions 1-2 (from Head 1) only know about subject-verb. The numbers in positions 3-4 (from Head 2) only know about verb-object. They're taped together but not talking.</T>
+        <T color="#ff8a80" size={16} style={{ marginTop: 10 }}>Tape them together (concatenation):</T>
+        <div data-concat-bar="true" style={{ marginTop: 6, display: "flex", height: 36, borderRadius: 6, overflow: "hidden", border: "1px solid rgba(255,255,255,0.1)" }}>
+          {[C.cyan, C.orange, C.purple, C.yellow, C.green, C.pink, C.red, C.blue].map((c, i) => (
+            <div key={i} style={{ flex: 1, background: `${c}20`, display: "flex", alignItems: "center", justifyContent: "center", borderRight: i < 7 ? "3px solid rgba(0,0,0,0.8)" : "none" }}>
+              <span style={{ fontSize: 9, fontWeight: 700, color: c }}>H{i + 1}</span>
+            </div>
+          ))}
+        </div>
+        <T color={C.dim} size={12} center style={{ marginTop: 2 }}>thick black walls between each section - they can't see each other</T>
+        <T color="#ff8a80" style={{ marginTop: 8 }}>They're physically side by side, but each section is still <strong>sealed</strong>. H1's numbers have no idea what H2 found. H3 can't see H4. They're taped together but not talking.</T>
+        <T color="#ff8a80" style={{ marginTop: 6 }}>Boss asks: "one-line summary?" No envelope has the full picture. H1 only knows the suspect. H2 only knows the location. Nobody can combine them.</T>
         <T color="#ff8a80" bold center size={18} style={{ marginTop: 6 }}>We need someone to open ALL the envelopes, read everything, and write one combined summary.</T>
       </Box></Reveal>
 
     {/* Sub 2: Step 9 - W_O */}
     <Reveal when={sub >= 2}><Box color={C.green} style={{ width: "100%" }}>
         <T color="#80e8a5" bold center size={20}>W_O - the person who opens all the envelopes.</T>
-        <T color="#80e8a5" style={{ marginTop: 6 }}>W_O is one more grid of numbers. Just like W_Q, W_K, W_V - it's a table of numbers. Nothing new or special about what it IS. It works the same way: multiply input by a grid → get an output.</T>
-        <T color="#80e8a5" style={{ marginTop: 6 }}>But what it <strong>DOES</strong> is special. When you multiply the concatenated list by W_O, every number in the output is computed by reading ALL numbers in the input.</T>
+        <T color="#80e8a5" style={{ marginTop: 6 }}>W_O is just another weight matrix - a grid of numbers, same as W_Q, W_K, W_V. Multiply input by grid, get output. Nothing new in how it works.</T>
+        <T color="#80e8a5" style={{ marginTop: 6 }}>But what it <strong>does</strong> is special. When you multiply the concatenated list by W_O, every number in the output is computed from ALL numbers in the input.</T>
         <div style={{ marginTop: 8, display: "flex", gap: 8 }}>
           <div style={{ flex: 1, padding: "8px", borderRadius: 8, background: `${C.red}06`, border: `1px solid ${C.red}12` }}>
             <T color="#ff8a80" bold size={16} center>Before W_O</T>

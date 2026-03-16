@@ -318,7 +318,102 @@ describe("WhyMultiHead head boxes alignment", () => {
   });
 });
 
+// ─── HeadSplit redesigned sub-steps ───
+describe("HeadSplit redesigned visuals", () => {
+  const fn = AttentionComputation.HeadSplit;
+
+  it("sub 0 shows the problem recap with single arrow concept", () => {
+    const ctx = makeCtx({ sub: 0 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("512");
+  });
+
+  it("sub 1 shows the dimension split visual with 8 chunks", () => {
+    const ctx = makeCtx({ sub: 1 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("64");
+    // Should show chunk labels for all 8 heads
+    expect(text).toContain("H1");
+    expect(text).toContain("H8");
+  });
+
+  it("sub 2 shows cost vs quality tradeoff", () => {
+    const ctx = makeCtx({ sub: 2 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    // Should show both approaches compared
+    expect(text).toContain("512");
+    expect(text).toContain("64");
+    // Should show the cost comparison
+    expect(text).toContain("8");
+    // Should mention diminishing returns or similar concept
+    expect(text).toContain("same budget");
+  });
+
+  it("sub 3 shows each chunk gets its own W matrices", () => {
+    const ctx = makeCtx({ sub: 3 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("W_Q");
+    expect(text).toContain("W_K");
+    expect(text).toContain("W_V");
+    expect(text).toContain("512");
+    expect(text).toContain("64");
+  });
+
+  it("sub 4 shows 8 heads asking different questions", () => {
+    const ctx = makeCtx({ sub: 4 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("Head 1");
+    expect(text).toContain("Head 3");
+  });
+
+  it("sub 5 shows layers stacking concept", () => {
+    const ctx = makeCtx({ sub: 5 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("96");
+    expect(text).toContain("768");
+  });
+});
+
 // ─── Derivatives Frac helper coverage ───
+// ─── ConcatWO envelope visual ───
+describe("ConcatWO envelope visual", () => {
+  const fn = AttentionComputation.ConcatWO;
+
+  it("sub 1 shows sealed envelopes as visual blocks with barriers", () => {
+    const ctx = makeCtx({ sub: 1 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    // Should show envelope content
+    expect(text).toContain("suspect");
+    expect(text).toContain("park");
+    expect(text).toContain("Tuesday");
+    // Should show the sealed/barrier concept visually
+    expect(text).toContain("sealed");
+  });
+
+  it("sub 1 shows visual envelope blocks for each head", () => {
+    const ctx = makeCtx({ sub: 1 });
+    const { container } = render(fn(ctx));
+    // Should have distinct envelope blocks with head-specific colors
+    const headBlocks = container.querySelectorAll("[data-envelope]");
+    expect(headBlocks.length).toBeGreaterThanOrEqual(4);
+  });
+
+  it("sub 1 shows concatenation bar with visible barriers between segments", () => {
+    const ctx = makeCtx({ sub: 1 });
+    const { container } = render(fn(ctx));
+    // Should have a concatenated bar visualization
+    const concatBar = container.querySelector("[data-concat-bar]");
+    expect(concatBar).toBeTruthy();
+  });
+});
+
 describe("Derivatives with high sub to invoke Frac", () => {
   const fn = NeuralFoundations.Derivatives;
   // Render at every sub to ensure the internal Frac component is used

@@ -53,7 +53,7 @@ export const RNNFlaws = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, r
     {sub >= 0 && (
       <Box color={C.red} style={{ width: "100%" }}>
         <T color="#ff8a80" bold center size={21}>Flaw #1: It's SLOW</T>
-        <T color="#ff8a80" style={{ marginTop: 6 }}>Must process word 1, then word 2, then word 3... sequentially. On a GPU with thousands of cores, only ONE core works at a time.</T>
+        <T color="#ff8a80" style={{ marginTop: 6 }}>Must process word 1, then word 2, then word 3... sequentially. On a GPU with thousands of cores, only one core works at a time.</T>
         <div style={{ display: "flex", gap: 4, marginTop: 8, flexWrap: "wrap", justifyContent: "center" }}>
           {["The", "cat", "sat", "on", "the", "mat"].map((w, i) => (
             <div key={i} style={{ padding: "3px 7px", borderRadius: 4, fontSize: 14, background: i === 0 ? `${C.green}18` : `${C.red}08`, border: `1px solid ${i === 0 ? `${C.green}35` : `${C.red}12`}`, color: i === 0 ? C.green : C.dim }}>{w} {i === 0 ? "⬅ processing" : "⏳"}</div>
@@ -62,7 +62,7 @@ export const RNNFlaws = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, r
       </Box>
     )}
     <Reveal when={sub >= 1}><Box color={C.yellow} style={{ width: "100%" }}>
-        <T color={C.yellow} bold center size={21}>Flaw #2: It FORGETS</T>
+        <T color={C.yellow} bold center size={21}>Flaw #2: It forgets</T>
         <T color="#ffe082" style={{ marginTop: 6 }}>Memory passes through every step. By word 100, word 1's information is essentially lost.</T>
         <div style={{ display: "flex", alignItems: "center", gap: 3, marginTop: 8, padding: "6px 10px", background: "rgba(0,0,0,0.2)", borderRadius: 8 }}>
           {[1, 0.8, 0.6, 0.4, 0.2, 0.08, 0.02].map((op, i) => (
@@ -95,14 +95,14 @@ export const TransformerArrives = (ctx) => { const { sub, subBtnRipple, setSubBt
               </g>);
             })}
             <text x="180" y="120" fill={C.dim} fontSize="9" textAnchor="middle">"cat" attends most to "The" and "sat" (bright lines)</text>
-            <text x="180" y="15" fill={`${C.green}60`} fontSize="10" textAnchor="middle">⚡ ALL processed in parallel</text>
+            <text x="180" y="15" fill={`${C.green}60`} fontSize="10" textAnchor="middle">⚡ All processed in parallel</text>
           </svg>
         </div></Reveal>
       <Reveal when={sub >= 2}><div style={{ display: "flex", gap: 8, width: "100%", alignItems: "stretch" }}>
           <Box color={C.red} style={{ flex: 1 }}><T color="#ff8a80" bold center size={16}>RNN</T><T color={C.dim} size={14} center>Sequential, slow<br />Forgets distant words</T></Box>
           <Box color={C.green} style={{ flex: 1 }}><T color="#80e8a5" bold center size={16}>Transformer</T><T color={C.mid} size={14} center>Parallel, blazing fast<br />Every word sees every word</T></Box>
         </div></Reveal>
-      <Reveal when={sub >= 3}><Box color={C.yellow}><T color={C.yellow} bold center>Powers GPT, Claude, LLaMA, Gemini - ALL modern AI.</T><T center size={18} style={{ marginTop: 4 }}>Now let's see the full architecture →</T></Box></Reveal>
+      <Reveal when={sub >= 3}><Box color={C.yellow}><T color={C.yellow} bold center>Powers GPT, Claude, LLaMA, Gemini - all modern AI.</T><T center size={18} style={{ marginTop: 4 }}>Now let's see the full architecture →</T></Box></Reveal>
       {sub < 3 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
     </div>
   );
@@ -140,12 +140,12 @@ export const EncoderDecoder = (ctx) => { const { sub, subBtnRipple, setSubBtnRip
         <div style={{ flex: 1, padding: "14px", borderRadius: 10, background: `${C.blue}08`, border: `2px solid ${C.blue}25` }}>
           <T color={C.blue} bold center size={18}>Encoder</T>
           <T color={C.dim} size={14} style={{ marginTop: 8 }}>Reads the ENTIRE input at once. "I love cats" - all three words processed in parallel.</T>
-          <T color={C.dim} size={14} style={{ marginTop: 6 }}>Every word attends to every other word (Section 6-7). The Encoder builds a rich understanding of the complete input.</T>
+          <T color={C.dim} size={14} style={{ marginTop: 6 }}>Every word attends to every other word simultaneously. The Encoder builds a rich understanding of the complete input.</T>
           <T color={C.blue} size={14} style={{ marginTop: 6 }}><strong>Output:</strong> a set of vectors - one per input word - each enriched with context from all other words.</T>
         </div>
         <div style={{ flex: 1, padding: "14px", borderRadius: 10, background: `${C.green}08`, border: `2px solid ${C.green}25` }}>
           <T color={C.green} bold center size={18}>Decoder</T>
-          <T color={C.dim} size={14} style={{ marginTop: 8 }}>Generates the output ONE word at a time. First "J'aime", then "les", then "chats" - autoregressively (chapter 2.8).</T>
+          <T color={C.dim} size={14} style={{ marginTop: 8 }}>Generates the output one word at a time. First "J'aime", then "les", then "chats" - autoregressively.</T>
           <T color={C.dim} size={14} style={{ marginTop: 6 }}>At each step, the Decoder looks at: (1) what it has generated so far, and (2) the Encoder's understanding of the input.</T>
           <T color={C.green} size={14} style={{ marginTop: 6 }}><strong>Output:</strong> one token at a time until the translation is complete.</T>
         </div>
@@ -175,7 +175,7 @@ export const EncoderDecoder = (ctx) => { const { sub, subBtnRipple, setSubBtnRip
           <T color={C.green} bold center>Decoder generates: "J'aime" → "les" → "chats"</T>
         </div>
       </div>
-      <T color="#b8a9ff" style={{ marginTop: 10 }}>Cross-attention uses the same Q/K/V mechanism from Sections 6-7, but the Q comes from the Decoder (asking) while K and V come from the Encoder (answering). This is how the Decoder "reads" the input at every step.</T>
+      <T color="#b8a9ff" style={{ marginTop: 10 }}>Cross-attention uses the same Q/K/V mechanism as self-attention, but the Q comes from the Decoder (asking) while K and V come from the Encoder (answering). This is how the Decoder "reads" the input at every step.</T>
     </Box></Reveal>
     <Reveal when={sub >= 3}><Box color={C.green} style={{ width: "100%" }}>
       <T color="#80e8a5" bold center size={20}>The 2017 Architecture - What You'll See Next</T>
@@ -203,7 +203,7 @@ export const EncoderDecoder = (ctx) => { const { sub, subBtnRipple, setSubBtnRip
           <T color={C.dim} center size={11}>x 6 layers</T>
         </div>
       </div>
-      <T color="#80e8a5" style={{ marginTop: 10 }}>Section 5 will show this complete diagram in detail. But before that - there's something important about the models you actually use every day...</T>
+      <T color="#80e8a5" style={{ marginTop: 10 }}>This is the complete architecture from the 2017 paper. But there's something important about the models you actually use every day...</T>
     </Box></Reveal>
     {sub < 3 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
   </div>
@@ -257,7 +257,7 @@ export const DecoderOnly = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple
             <T color={C.mid} size={15}>"The capital of France is Paris."</T>
           </div>
         </div>
-        <T color={C.dim} size={14} style={{ marginTop: 8 }}>Both prompt and response are just a continuous stream of tokens. The Decoder processes the prompt tokens AND generates response tokens in one unified flow.</T>
+        <T color={C.dim} size={14} style={{ marginTop: 8 }}>Both prompt and response are just a continuous stream of tokens. The Decoder processes the prompt tokens and generates response tokens in one unified flow.</T>
       </div>
     </Box></Reveal>
     <Reveal when={sub >= 2}><Box color={C.purple} style={{ width: "100%" }}>
@@ -287,11 +287,11 @@ export const DecoderOnly = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple
       <T color="#b8a9ff" style={{ marginTop: 10 }}>Almost all modern AI assistants (ChatGPT, Claude, Gemini) are <strong>decoder-only</strong>. This is the dominant architecture because it turns out that a decoder alone - trained on enough data - can handle reading, understanding, AND generating.</T>
     </Box></Reveal>
     <Reveal when={sub >= 3}><Box color={C.green} style={{ width: "100%" }}>
-      <T color="#80e8a5" bold center size={20}>What to expect in Section 5</T>
-      <T color="#80e8a5" style={{ marginTop: 8 }}>Section 5 will show the complete original encoder-decoder architecture diagram from the 2017 paper. This is important because:</T>
+      <T color="#80e8a5" bold center size={20}>Why the Full Architecture Matters</T>
+      <T color="#80e8a5" style={{ marginTop: 8 }}>Even though modern LLMs are decoder-only, the full encoder-decoder architecture is worth understanding because:</T>
       <div style={{ marginTop: 10, display: "flex", flexDirection: "column", gap: 6 }}>
         {[
-          { point: "The decoder-only model uses the SAME building blocks (attention, FFN, Add & Norm)", color: C.yellow },
+          { point: "The decoder-only model uses the same building blocks (attention, FFN, Add & Norm)", color: C.yellow },
           { point: "Understanding the full architecture helps you see what was kept vs removed", color: C.cyan },
           { point: "Cross-attention still appears in some models (e.g., image understanding in multimodal AI)", color: C.purple },
         ].map(({ point, color }, i) => (
@@ -301,7 +301,7 @@ export const DecoderOnly = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple
           </div>
         ))}
       </div>
-      <T color="#80e8a5" style={{ marginTop: 10 }}>Keep in mind as you go through Section 5: the models you use daily (GPT, Claude) only use the <strong>right half</strong> (decoder). But learning the full picture gives you the complete foundation.</T>
+      <T color="#80e8a5" style={{ marginTop: 10 }}>The models you use daily (GPT, Claude) only use the <strong>right half</strong> (decoder). But learning the full picture gives you the complete foundation.</T>
     </Box></Reveal>
     {sub < 3 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
   </div>

@@ -217,7 +217,7 @@ export const Embeddings = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple,
         </div>
         <T color="#ffe082" size={16} style={{ marginTop: 6 }}>Similar words (cat/dog) get similar vectors. Learned during training.</T>
       </Box></Reveal>
-    <Reveal when={sub >= 4}><Box color={C.green}><T color="#80e8a5" bold center>✅ Words are now 512-number vectors!</T><T color="#80e8a5" center size={18}>But still no position info. "I love cats" = "cats love I". Next: Positional Encoding →</T></Box></Reveal>
+    <Reveal when={sub >= 4}><Box color={C.green}><T color="#80e8a5" bold center>✅ Words are now 512-number vectors!</T><T color="#80e8a5" center size={18}>But still no position info. "I love cats" = "cats love I". That's a problem.</T></Box></Reveal>
     {sub < 4 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
   </div>
 ); }
@@ -228,12 +228,12 @@ export const PosEncodingProblem = (ctx) => { const { sub, subBtnRipple, setSubBt
   <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
     {sub >= 0 && (
       <Box color={C.red} style={{ width: "100%" }}>
-        <T color="#ff8a80" bold center>The Transformer sees all words at the SAME TIME.</T>
+        <T color="#ff8a80" bold center>The Transformer sees all words at the same time.</T>
         <T color="#ff8a80" style={{ marginTop: 6 }}>It receives three embedding vectors simultaneously. Nothing tells it which is first, second, or third.</T>
         <div style={{ marginTop: 10, padding: "10px", background: "rgba(0,0,0,0.2)", borderRadius: 8 }}>
           <T color={C.dim} size={18}>"I love cats" → [vec_I, vec_love, vec_cats]</T>
           <T color={C.dim} size={18}>"cats love I" → [vec_cats, vec_love, vec_I]</T>
-          <T color={C.red} size={18} bold center style={{ marginTop: 4 }}>Same vectors, different order - but model CAN'T SEE ORDER!</T>
+          <T color={C.red} size={18} bold center style={{ marginTop: 4 }}>Same vectors, different order - but model can't see order!</T>
         </div>
       </Box>
     )}
@@ -286,7 +286,7 @@ export const PosEncodingFormula = (ctx) => { const { sub, subBtnRipple, setSubBt
           </div>
         ))}
       </div></Reveal>
-    <Reveal when={sub >= 2}><Box color={C.yellow}><T color={C.yellow} bold center>The KEY insight: 10000^(i/d_model)</T><T color="#ffe082">When i=0, divisor=1 → pos/1 = pos → wave oscillates FAST.<br />When i=510, divisor≈10000 → pos/10000 ≈ tiny → wave changes BARELY.<br /><br />Like a clock: <strong style={{ color: C.cyan }}>seconds hand</strong> (fast) + <strong style={{ color: C.purple }}>hours hand</strong> (slow) = exact time.</T></Box></Reveal>
+    <Reveal when={sub >= 2}><Box color={C.yellow}><T color={C.yellow} bold center>The KEY insight: 10000^(i/d_model)</T><T color="#ffe082">When i=0, divisor=1 → pos/1 = pos → wave oscillates fast.<br />When i=510, divisor≈10000 → pos/10000 ≈ tiny → wave changes barely.<br /><br />Like a clock: <strong style={{ color: C.cyan }}>seconds hand</strong> (fast) + <strong style={{ color: C.purple }}>hours hand</strong> (slow) = exact time.</T></Box></Reveal>
     {sub < 2 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
   </div>
 ); }
@@ -413,7 +413,7 @@ export const PosEncodingFastSlow = (ctx) => { const { sub, subBtnRipple, setSubB
       {sub >= 0 && (
         <div style={{ display: "flex", gap: 6, width: "100%" }}>
           {[
-            { label: "Ones", color: C.yellow, desc: "Changes EVERY step" },
+            { label: "Ones", color: C.yellow, desc: "Changes every step" },
             { label: "Tens", color: C.orange, desc: "Changes every 10 steps" },
             { label: "Hundreds", color: C.purple, desc: "Changes every 100 steps" },
           ].map(({ label, color, desc }) => (
@@ -433,8 +433,8 @@ export const PosEncodingFastSlow = (ctx) => { const { sub, subBtnRipple, setSubB
               { pos: 0, d: 0 }, { pos: 1, d: 1 }, { pos: 2, d: 2 },
               { pos: "...", d: "..." },
               { pos: 9, d: 9 },
-              { pos: 10, d: 0, dup: "SAME as pos 0!" },
-              { pos: 11, d: 1, dup: "SAME as pos 1!" },
+              { pos: 10, d: 0, dup: "Same as pos 0!" },
+              { pos: 11, d: 1, dup: "Same as pos 1!" },
             ].map(({ pos, d, dup }, i) => (
               <div key={i} style={{ display: "grid", gridTemplateColumns: "52px 36px 1fr", gap: 10, alignItems: "center" }}>
                 <span style={{ fontFamily: "monospace", fontSize: 16, color: C.dim, textAlign: "right" }}>
@@ -468,10 +468,10 @@ export const PosEncodingFastSlow = (ctx) => { const { sub, subBtnRipple, setSubB
           <div style={{ display: "flex", flexDirection: "column", gap: 3, marginTop: 8, padding: "10px", background: "rgba(0,0,0,0.2)", borderRadius: 8 }}>
             {[
               { pos: 0, d: 0, dup: null },
-              { pos: 1, d: 0, dup: "SAME!" },
-              { pos: 2, d: 0, dup: "SAME!" },
+              { pos: 1, d: 0, dup: "Same!" },
+              { pos: 2, d: 0, dup: "Same!" },
               { pos: "...", d: "..." },
-              { pos: 99, d: 0, dup: "still SAME!" },
+              { pos: 99, d: 0, dup: "still same!" },
               { pos: 100, d: 1, dup: "finally changes" },
             ].map(({ pos, d, dup }, i) => (
               <div key={i} style={{ display: "grid", gridTemplateColumns: "52px 36px 1fr", gap: 10, alignItems: "center" }}>
@@ -640,7 +640,7 @@ export const PosEncodingFinal = (ctx) => { const { sub, subBtnRipple, setSubBtnR
             ))}
           </div>
         </Box></Reveal>
-      <Reveal when={sub >= 3}><Box color={C.green}><T color="#80e8a5" bold center>✅ This is what enters the Transformer layers.</T><T color="#80e8a5" center size={18} style={{ marginTop: 4 }}>Next up: <strong>Section 6 - Attention</strong>, the heart of the Transformer!</T></Box></Reveal>
+      <Reveal when={sub >= 3}><Box color={C.green}><T color="#80e8a5" bold center>✅ This is what enters the Transformer layers.</T><T color="#80e8a5" center size={18} style={{ marginTop: 4 }}>Each word now carries both <strong>meaning</strong> and <strong>position</strong>. Ready for attention.</T></Box></Reveal>
       {sub < 3 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
     </div>
   );

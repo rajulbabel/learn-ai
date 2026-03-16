@@ -31,7 +31,7 @@ export const ContextProblem = (ctx) => { const { sub, subBtnRipple, setSubBtnRip
           </div>
         </div></Reveal>
       <Reveal when={sub >= 2}><Box color={C.yellow} style={{ width: "100%" }}>
-          <T color={C.yellow} bold center>This isn't just about "bank" - it's about EVERY word.</T>
+          <T color={C.yellow} bold center>This isn't just about "bank" - it's about every word.</T>
           <T color="#ffe082" style={{ marginTop: 6 }}>The model has a big dictionary (learned during training) that maps every word to a fixed list of numbers. Take "love": after embedding, "love" always gets the same numbers, no matter what sentence it's in. But "love" in "I love cats" is different from "love" in "love is blind."</T>
           <T color="#ffe082" style={{ marginTop: 6 }}>These numbers capture the word's meaning <strong>in isolation</strong>. It has no idea what words are around it. That's a problem - because we need context.</T>
           <T color="#ffe082" style={{ marginTop: 6 }}>The <strong>goal</strong>: take "love" = [0.2, 0.9, 0.4, -0.1] and transform it into a <strong>NEW</strong> list of numbers that represents "love in the context of I and cats."</T>
@@ -141,7 +141,7 @@ export const DotProduct = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple,
           ))}
         </div>
       </Box></Reveal>
-    <Reveal when={sub >= 3}><Box color={C.purple}><T color="#b8a9ff" bold center>But we can't just dot product the raw word numbers directly.</T><T color="#b8a9ff">"I" = pronoun, "love" = verb - their raw meanings aren't similar, but they ARE related (I is the one who loves). We need to compare them on a different basis.</T></Box></Reveal>
+    <Reveal when={sub >= 3}><Box color={C.purple}><T color="#b8a9ff" bold center>But we can't just dot product the raw word numbers directly.</T><T color="#b8a9ff">"I" = pronoun, "love" = verb - their raw meanings aren't similar, but they are related (I is the one who loves). We need to compare them on a different basis.</T></Box></Reveal>
     {sub < 3 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
   </div>
 ); }
@@ -158,16 +158,16 @@ export const WhyNotDirectDot = (ctx) => { const { sub, subBtnRipple, setSubBtnRi
           <Tag color={C.red}>"I" = pronoun, self-reference</Tag>
           <Tag color={C.purple}>"love" = verb, emotion</Tag>
         </div>
-        <T color="#ff8a80" style={{ marginTop: 10 }}>But they ARE related - "I" is the one who loves! Their <strong>meanings</strong> are different, but their <strong>relationship</strong> is strong. Raw dot product can't capture this.</T>
+        <T color="#ff8a80" style={{ marginTop: 10 }}>But they are related - "I" is the one who loves! Their <strong>meanings</strong> are different, but their <strong>relationship</strong> is strong. Raw dot product can't capture this.</T>
       </Box>
     )}
     <Reveal when={sub >= 1}><Box color={C.yellow} style={{ width: "100%" }}>
-      <T color={C.yellow} bold center>We need to compare on a DIFFERENT basis:</T>
+      <T color={C.yellow} bold center>We need to compare on a different basis:</T>
       <T color="#ffe082" style={{ marginTop: 6 }}>Instead of comparing what words mean, compare what one is <strong>looking for</strong> vs what the other <strong>offers</strong>:</T>
       <div style={{ marginTop: 10 }}>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 24px 1fr", alignItems: "center", gap: 6 }}>
           <div style={{ textAlign: "right", padding: "10px", borderRadius: 8, background: `${C.blue}10`, border: `1px solid ${C.blue}20` }}>
-            <T color={C.blue} bold size={18} style={{ textAlign: "right" }}>"love" is LOOKING FOR</T>
+            <T color={C.blue} bold size={18} style={{ textAlign: "right" }}>"love" is looking for</T>
             <T color={C.dim} size={16} style={{ textAlign: "right" }}>"who is doing the loving?"</T>
             <T color={C.dim} size={14} style={{ textAlign: "right" }}>(a subject, a person)</T>
           </div>
@@ -275,12 +275,12 @@ export const AskerAnswerer = (ctx) => { const { sub, subBtnRipple, setSubBtnRipp
     {sub >= 0 && (
       <Box color={C.pink} style={{ width: "100%" }}>
         <T color="#ce93d8" bold center size={20}>Here's what confuses people:</T>
-        <T color="#ce93d8" style={{ marginTop: 6 }}>In our classroom, every student is BOTH an asker AND an answerer, <strong>simultaneously</strong>.</T>
-        <T color="#ce93d8" style={{ marginTop: 6 }}>Riya has a Query (her question), but she ALSO has a Key (what she can offer others) and a Value (her actual info). Aman has a Key and Value, but ALSO has his own Query (maybe he's looking for homework help).</T>
+        <T color="#ce93d8" style={{ marginTop: 6 }}>In our classroom, every student is both an asker and an answerer, <strong>simultaneously</strong>.</T>
+        <T color="#ce93d8" style={{ marginTop: 6 }}>Riya has a Query (her question), but she also has a Key (what she can offer others) and a Value (her actual info). Aman has a Key and Value, but also has his own Query (maybe he's looking for homework help).</T>
       </Box>
     )}
     <Reveal when={sub >= 1}><div style={{ background: C.card, borderRadius: 10, padding: "14px", border: `1px solid ${C.border}`, width: "100%" }}>
-        <T color={C.dim} size={14} center style={{ marginBottom: 6 }}>EVERY student produces ALL THREE:</T>
+        <T color={C.dim} size={14} center style={{ marginBottom: 6 }}>Every student produces all three:</T>
         <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
           {[
             { name: "Riya", q: "\"who has notes?\"", k: "\"I know Hindi grammar\"", v: "her Hindi grammar knowledge" },
@@ -309,7 +309,7 @@ export const AskerAnswerer = (ctx) => { const { sub, subBtnRipple, setSubBtnRipp
         <T color={C.yellow} bold center>Same thing happens with words in a Transformer.</T>
         <T color="#ffe082" style={{ marginTop: 6 }}>In the sentence "The cat sat because it was tired", every word simultaneously produces a Query, Key, and Value. "cat" asks its own question while also advertising itself and carrying its own information.</T>
       </Box></Reveal>
-    <Reveal when={sub >= 3}><Box color={C.green}><T color="#80e8a5" bold center>Each student - and each word - simultaneously asks a question AND advertises itself AND carries information.</T><T color="#80e8a5" size={18}>But why do we need Key and Value to be <strong>separate</strong>? Why can't they be the same thing?</T></Box></Reveal>
+    <Reveal when={sub >= 3}><Box color={C.green}><T color="#80e8a5" bold center>Each student - and each word - simultaneously asks a question and advertises itself and carries information.</T><T color="#80e8a5" size={18}>But why do we need Key and Value to be <strong>separate</strong>? Why can't they be the same thing?</T></Box></Reveal>
     {sub < 3 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
   </div>
 ); }
@@ -419,12 +419,12 @@ export const HowQKVCreated = (ctx) => { const { sub, subBtnRipple, setSubBtnRipp
         <div style={{ marginTop: 6, padding: "6px 10px", borderRadius: 6, background: "rgba(0,0,0,0.3)" }}>
           <T color={C.mid} size={18} mono>"love" = [0.2, 0.9, 0.4, -0.1]</T>
         </div>
-        <T color="#b8a9ff" style={{ marginTop: 8 }}>That's ONE list. We need THREE different lists from it (Query, Key, Value). How do you get three different things from one thing?</T>
+        <T color="#b8a9ff" style={{ marginTop: 8 }}>That's one list. We need three different lists from it (Query, Key, Value). How do you get three different things from one thing?</T>
         <T color="#b8a9ff" bold center style={{ marginTop: 6 }}>You <strong>transform</strong> it three different ways. And the tool for each transformation is: a <strong>grid of numbers</strong>.</T>
       </Box>
     )}
     <Reveal when={sub >= 1}><Box color={C.yellow} style={{ width: "100%" }}>
-        <T color={C.yellow} bold center size={20}>What IS this "grid of numbers"?</T>
+        <T color={C.yellow} bold center size={20}>What is this "grid of numbers"?</T>
         <T color="#ffe082" style={{ marginTop: 6 }}>It's called a <strong>W matrix</strong> (W = "weights"). But don't let the name scare you. It's just a <strong>table of numbers</strong>. Like a spreadsheet. Rows and columns filled with numbers:</T>
         <div style={{ marginTop: 10, padding: "10px", background: "rgba(0,0,0,0.3)", borderRadius: 8, overflowX: "auto" }}>
           <T color={C.dim} size={14} center style={{ marginBottom: 4 }}>Example: a W grid might look like this (tiny version):</T>
@@ -472,8 +472,8 @@ export const HowQKVCreated = (ctx) => { const { sub, subBtnRipple, setSubBtnRipp
           </div>
         </div>
         <T color="#80deea" style={{ marginTop: 8 }}>When you multiply the embedding by Grid 1, you get the <strong>Query</strong> - a 2-number list representing "what this word is looking for."</T>
-        <T color="#80deea" style={{ marginTop: 4 }}>When you multiply the SAME embedding by Grid 2, you get the <strong>Key</strong> - a 2-number list representing "what this word can be found for."</T>
-        <T color="#80deea" style={{ marginTop: 4 }}>When you multiply the SAME embedding by Grid 3, you get the <strong>Value</strong> - a 2-number list representing "what actual info this word carries."</T>
+        <T color="#80deea" style={{ marginTop: 4 }}>When you multiply the same embedding by Grid 2, you get the <strong>Key</strong> - a 2-number list representing "what this word can be found for."</T>
+        <T color="#80deea" style={{ marginTop: 4 }}>When you multiply the same embedding by Grid 3, you get the <strong>Value</strong> - a 2-number list representing "what actual info this word carries."</T>
         <T color="#80deea" style={{ marginTop: 6 }}><strong>The grids are just tables of numbers. Nothing magical.</strong> Multiply input by a table → get an output.</T>
       </Box></Reveal>
     <Reveal when={sub >= 3}><Box color={C.purple} style={{ width: "100%" }}>

@@ -19,7 +19,7 @@ export const ComputeQKV = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple,
     )}
     <Reveal when={sub >= 1}><Box color={C.purple} style={{ width: "100%" }}>
         <T color="#b8a9ff" bold center>The three weight matrices (learned during training):</T>
-        <T color="#b8a9ff" size={16} style={{ marginTop: 4 }}>Each is a 4×2 grid. Same matrix is used for ALL words. The different outputs come from different input embeddings.</T>
+        <T color="#b8a9ff" size={16} style={{ marginTop: 4 }}>Each is a 4×2 grid. Same matrix is used for all words. The different outputs come from different input embeddings.</T>
         <div style={{ marginTop: 10, display: "flex", flexDirection: "column", gap: 12 }}>
           {[
             { name: "W_Q", c: C.blue, rows: [[0.15, -0.03], [0.12, 0.78], [0.10, 0.51], [0.78, -0.01]] },
@@ -479,7 +479,7 @@ export const WhySoftmax = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple,
           {[
             { w: "A", calc: "-3/3 = -100%", problem: "NEGATIVE? Can't pay minus attention!", color: C.red },
             { w: "B", calc: "1/3 = 33%", problem: "", color: C.mid },
-            { w: "C", calc: "5/3 = 167%", problem: "MORE THAN 100%? Nonsense!", color: C.red },
+            { w: "C", calc: "5/3 = 167%", problem: "More than 100%? Nonsense!", color: C.red },
           ].map(({ w, calc, problem, color }) => (
             <div key={w} style={{ display: "flex", alignItems: "center", gap: 8, padding: "6px 10px", borderRadius: 6, background: problem ? `${C.red}06` : "rgba(255,255,255,0.02)" }}>
               <span style={{ color: C.dim, fontSize: 16, minWidth: 14 }}>{w}:</span>
@@ -523,7 +523,7 @@ export const WhySoftmax = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple,
             <text x="214" y="84" fill={C.purple} fontSize="12" fontFamily="serif" fontStyle="italic">j</text>
             {/* Labels */}
             <text x="320" y="34" fill={C.green} fontSize="11" fontFamily="sans-serif">← this word's e^score</text>
-            <text x="320" y="90" fill={C.yellow} fontSize="11" fontFamily="sans-serif">← sum of ALL e^scores</text>
+            <text x="320" y="90" fill={C.yellow} fontSize="11" fontFamily="sans-serif">← sum of all e^scores</text>
           </svg>
         </div>
         <T color="#80e8a5" size={18}>In plain English: <strong>take e to the power of this score, then divide by the sum of e to the power of every score.</strong></T>
@@ -747,7 +747,7 @@ export const ScaleByRootDk = (ctx) => { const { sub, subBtnRipple, setSubBtnRipp
                 </div>
               ))}
             </div>
-            <T color={C.green} size={12} center style={{ marginTop: 4 }}>✅ Looks at ALL words. Can blend info from multiple sources.</T>
+            <T color={C.green} size={12} center style={{ marginTop: 4 }}>✅ Looks at all words. Can blend info from multiple sources.</T>
           </div>
           <div style={{ flex: 1, padding: "10px", borderRadius: 8, background: `${C.red}06`, border: `1px solid ${C.red}15` }}>
             <T color={C.red} bold size={16} center>Huge scores (64-dim)</T>
@@ -763,7 +763,7 @@ export const ScaleByRootDk = (ctx) => { const { sub, subBtnRipple, setSubBtnRipp
                 </div>
               ))}
             </div>
-            <T color={C.red} size={12} center style={{ marginTop: 4 }}>❌ 99.6% on ONE word. Others invisible. Can't blend info.</T>
+            <T color={C.red} size={12} center style={{ marginTop: 4 }}>❌ 99.6% on one word. Others invisible. Can't blend info.</T>
           </div>
         </div>
       </Box></Reveal>
@@ -989,7 +989,7 @@ export const WhyMultiHead = (ctx) => { const { sub, subBtnRipple, setSubBtnRippl
     {sub >= 0 && (
       <Box color={C.red} style={{ width: "100%" }}>
         <T color="#ff8a80" bold center size={20}>Single-head attention has a problem.</T>
-        <T color="#ff8a80" style={{ marginTop: 6 }}>Our "I love cats" example has only 3 words with 2 main relationships (who loves? what's loved?). To really see why one head isn't enough, we need a longer sentence with MORE relationships.</T>
+        <T color="#ff8a80" style={{ marginTop: 6 }}>Our "I love cats" example has only 3 words with 2 main relationships (who loves? what's loved?). To really see why one head isn't enough, we need a longer sentence with more relationships.</T>
         <T color="#ff8a80" style={{ marginTop: 6 }}>Consider: "The cat that I adopted last week <strong>sat</strong> on the mat."</T>
         <T color="#ff8a80" style={{ marginTop: 6 }}>"sat" needs answers to MULTIPLE questions at once:</T>
         <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 6 }}>
@@ -1008,12 +1008,12 @@ export const WhyMultiHead = (ctx) => { const { sub, subBtnRipple, setSubBtnRippl
       </Box>
     )}
     <Reveal when={sub >= 1}><Box color={C.yellow} style={{ width: "100%" }}>
-        <T color={C.yellow} bold center>But one head produces ONE set of weights - forced to compromise:</T>
+        <T color={C.yellow} bold center>But one head produces one set of weights - forced to compromise:</T>
         <div style={{ marginTop: 8 }}>
           {[
             { w: "cat", pct: 40, c: C.cyan, note: "got some" },
             { w: "mat", pct: 30, c: C.orange, note: "got some" },
-            { w: "last week", pct: 5, c: C.purple, note: "almost NOTHING!" },
+            { w: "last week", pct: 5, c: C.purple, note: "almost nothing!" },
             { w: "others", pct: 25, c: C.dim, note: "scattered" },
           ].map(({ w, pct, c, note }) => (
             <div key={w} style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 4 }}>
@@ -1030,7 +1030,7 @@ export const WhyMultiHead = (ctx) => { const { sub, subBtnRipple, setSubBtnRippl
       </Box></Reveal>
     <Reveal when={sub >= 2}><Box color={C.green} style={{ width: "100%" }}>
         <T color="#80e8a5" bold center size={20}>Solution: give it MULTIPLE heads - like multiple ears.</T>
-        <T color="#80e8a5" style={{ marginTop: 6 }}>Each head has its OWN W_Q, W_K, W_V, so each asks a DIFFERENT question:</T>
+        <T color="#80e8a5" style={{ marginTop: 6 }}>Each head has its own W_Q, W_K, W_V, so each asks a different question:</T>
         <div style={{ marginTop: 10, display: "flex", flexDirection: "column", gap: 6 }}>
           {[
             { head: 1, label: "subject-verb", q: "\"who is my subject?\"", finds: "cat (70%)", color: C.cyan },
@@ -1063,7 +1063,7 @@ export const HeadSplit = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, 
         <T color="#ff8a80" bold center size={20}>One head = one Query arrow = one direction.</T>
         <T color="#ff8a80" style={{ marginTop: 6 }}>Each word's 512-dim embedding produces ONE Query vector through W_Q. That single arrow can only point one way, so it can only ask one type of question.</T>
         <div style={{ marginTop: 10, padding: "10px", background: "rgba(0,0,0,0.3)", borderRadius: 8, textAlign: "center" }}>
-          <T color={C.dim} size={16}>512-dim embedding → W_Q (512×512) → ONE 512-dim Query</T>
+          <T color={C.dim} size={16}>512-dim embedding → W_Q (512×512) → One 512-dim Query</T>
           <T color={C.red} bold center size={16} style={{ marginTop: 4 }}>One arrow. One question. Information lost.</T>
         </div>
         <T color="#ff8a80" style={{ marginTop: 8 }}>Solution: don't make one big arrow. Make <strong>8 smaller arrows</strong>, each pointing in its own direction.</T>
@@ -1158,7 +1158,7 @@ export const HeadSplit = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, 
             );
           })}
         </div>
-        <T color="#80deea" size={16} style={{ marginTop: 10 }}>Same embedding goes into ALL 8 heads. Each head's different W matrices produce a different Query arrow - pointing in a different direction, asking a different question.</T>
+        <T color="#80deea" size={16} style={{ marginTop: 10 }}>Same embedding goes into all 8 heads. Each head's different W matrices produce a different Query arrow - pointing in a different direction, asking a different question.</T>
       </Box></Reveal>
 
     {/* Sub 4: 8 heads, 8 different questions */}
@@ -1245,7 +1245,7 @@ export const InsideEachHead = (ctx) => { const { sub, subBtnRipple, setSubBtnRip
       </Box>
     )}
     <Reveal when={sub >= 1}><Box color={C.orange} style={{ width: "100%" }}>
-        <T color={C.orange} bold center>The KEY: each head's attention weights are DIFFERENT.</T>
+        <T color={C.orange} bold center>The KEY: each head's attention weights are different.</T>
         <T color={C.dim} size={18} style={{ marginTop: 4 }}>Because their W_Q, W_K, W_V are different. Here's what "sat" sees in each head:</T>
         <div style={{ marginTop: 10, display: "flex", flexDirection: "column", gap: 10 }}>
           {[
@@ -1342,14 +1342,14 @@ export const ConcatWO = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, r
         <T color={C.dim} size={12} center style={{ marginTop: 2 }}>thick black walls between each section - they can't see each other</T>
         <T color="#ff8a80" style={{ marginTop: 8 }}>They're physically side by side, but each section is still <strong>sealed</strong>. H1's numbers have no idea what H2 found. H3 can't see H4. They're taped together but not talking.</T>
         <T color="#ff8a80" style={{ marginTop: 6 }}>Boss asks: "one-line summary?" No envelope has the full picture. H1 only knows the suspect. H2 only knows the location. Nobody can combine them.</T>
-        <T color="#ff8a80" bold center size={18} style={{ marginTop: 6 }}>We need someone to open ALL the envelopes, read everything, and write one combined summary.</T>
+        <T color="#ff8a80" bold center size={18} style={{ marginTop: 6 }}>We need someone to open all the envelopes, read everything, and write one combined summary.</T>
       </Box></Reveal>
 
     {/* Sub 2: Step 9 - W_O */}
     <Reveal when={sub >= 2}><Box color={C.green} style={{ width: "100%" }}>
         <T color="#80e8a5" bold center size={20}>W_O - the person who opens all the envelopes.</T>
         <T color="#80e8a5" style={{ marginTop: 6 }}>W_O is just another weight matrix - a grid of numbers, same as W_Q, W_K, W_V. Multiply input by grid, get output. Nothing new in how it works.</T>
-        <T color="#80e8a5" style={{ marginTop: 6 }}>But what it <strong>does</strong> is special. When you multiply the concatenated list by W_O, every number in the output is computed from ALL numbers in the input.</T>
+        <T color="#80e8a5" style={{ marginTop: 6 }}>But what it <strong>does</strong> is special. When you multiply the concatenated list by W_O, every number in the output is computed from all numbers in the input.</T>
         <div style={{ marginTop: 8, display: "flex", gap: 8 }}>
           <div style={{ flex: 1, padding: "8px", borderRadius: 8, background: `${C.red}06`, border: `1px solid ${C.red}12` }}>
             <T color="#ff8a80" bold size={16} center>Before W_O</T>
@@ -1362,7 +1362,7 @@ export const ConcatWO = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, r
             <T color={C.dim} size={12} center>= knows Head 1 + Head 2 + Head 3 + ... everything</T>
           </div>
         </div>
-        <T color="#80e8a5" size={18} style={{ marginTop: 8 }}>It's like the combined summary: <em>"A male suspect in his 30s used a knife at the park on Tuesday evening."</em> One sentence that contains information from ALL envelopes.</T>
+        <T color="#80e8a5" size={18} style={{ marginTop: 8 }}>It's like the combined summary: <em>"A male suspect in his 30s used a knife at the park on Tuesday evening."</em> One sentence that contains information from all envelopes.</T>
         <T color="#80e8a5" size={18} style={{ marginTop: 6 }}>After W_O, every single position in the output carries a mix of what all 8 heads found. The envelopes have been opened, read, and combined.</T>
       </Box></Reveal>
 
@@ -1531,16 +1531,16 @@ export const IsWOConstant = (ctx) => { const { sub, subBtnRipple, setSubBtnRippl
     <Reveal when={sub >= 2}><Box color={C.cyan} style={{ width: "100%" }}>
         <div style={{ padding: "10px", background: "rgba(0,0,0,0.3)", borderRadius: 8 }}>
           <T color={C.mid} size={18} style={{ lineHeight: 2.2 }}>
-            You type "I love cats" &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;→ model uses the <strong style={{ color: C.green }}>SAME</strong> W_O<br />
-            You type "dogs are great" &nbsp;&nbsp;&nbsp;→ model uses the <strong style={{ color: C.green }}>SAME</strong> W_O<br />
-            You type "the weather is nice" → model uses the <strong style={{ color: C.green }}>SAME</strong> W_O<br />
-            Someone else types anything &nbsp;→ model uses the <strong style={{ color: C.green }}>SAME</strong> W_O
+            You type "I love cats" &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;→ model uses the <strong style={{ color: C.green }}>same</strong> W_O<br />
+            You type "dogs are great" &nbsp;&nbsp;&nbsp;→ model uses the <strong style={{ color: C.green }}>same</strong> W_O<br />
+            You type "the weather is nice" → model uses the <strong style={{ color: C.green }}>same</strong> W_O<br />
+            Someone else types anything &nbsp;→ model uses the <strong style={{ color: C.green }}>same</strong> W_O
           </T>
         </div>
-        <T color="#80deea" style={{ marginTop: 8 }}>The SAME grid of numbers. Every input. Every user. Every sentence. Forever (until someone retrains the model).</T>
+        <T color="#80deea" style={{ marginTop: 8 }}>The same grid of numbers. Every input. Every user. Every sentence. Forever (until someone retrains the model).</T>
       </Box></Reveal>
     <Reveal when={sub >= 3}><Box color={C.yellow} style={{ width: "100%" }}>
-        <T color={C.yellow} bold center>This is true for ALL grids, not just W_O:</T>
+        <T color={C.yellow} bold center>This is true for all grids, not just W_O:</T>
         <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 6 }}>
           <div style={{ padding: "10px", borderRadius: 8, background: `${C.green}06`, border: `1px solid ${C.green}12` }}>
             <T color={C.green} bold center size={18}>CONSTANT after training (stored on disk, never changes):</T>
@@ -1553,7 +1553,7 @@ export const IsWOConstant = (ctx) => { const { sub, subBtnRipple, setSubBtnRippl
             </div>
           </div>
           <div style={{ padding: "10px", borderRadius: 8, background: `${C.yellow}06`, border: `1px solid ${C.yellow}12` }}>
-            <T color={C.yellow} bold center size={18}>DIFFERENT for every input (computed live, then thrown away):</T>
+            <T color={C.yellow} bold center size={18}>Different for every input (computed live, then thrown away):</T>
             <div style={{ marginTop: 6, display: "flex", flexDirection: "column", gap: 2 }}>
               {["Q, K, V vectors ← different because the words are different", "Attention scores ← different because Q, K are different", "Softmax weights ← different because scores are different", "Blended outputs ← different because weights and V are different", "Final output ← different because everything above is different"].map(item => (
                 <div key={item} style={{ padding: "3px 8px", borderRadius: 3, background: `${C.yellow}06` }}>
@@ -1608,7 +1608,7 @@ export const CompletePicture = (ctx) => { const { sub, subBtnRipple, setSubBtnRi
       </Box>
     )}
     <Reveal when={sub >= 1}><Box color={C.purple} style={{ width: "100%" }}>
-        <T color="#b8a9ff">Every single "grid" in this process (W_Q, W_K, W_V, W_O) is just a table of numbers that started random, got nudged into useful values during training, and then <strong>stays frozen forever after</strong>. They all work the same way - multiply input by grid, get output. The only difference is WHAT each grid was trained to do:</T>
+        <T color="#b8a9ff">Every single "grid" in this process (W_Q, W_K, W_V, W_O) is just a table of numbers that started random, got nudged into useful values during training, and then <strong>stays frozen forever after</strong>. They all work the same way - multiply input by grid, get output. The only difference is what each grid was trained to do:</T>
         <div style={{ marginTop: 10, display: "flex", flexDirection: "column", gap: 4 }}>
           {[
             { grid: "W_Q grids", learned: "learned to extract \"what a word is looking for\"", c: C.blue },

@@ -142,7 +142,7 @@ export const Distillation = (ctx) => { const { sub, subBtnRipple, setSubBtnRippl
         <T color="#ce93d8" bold center size={20}>The problem: big models are expensive</T>
         <T color="#ce93d8" style={{ marginTop: 8 }}>GPT-4 has 1.8 trillion parameters. Running it costs a fortune. It's slow.</T>
         <T color="#ce93d8" style={{ marginTop: 6 }}>But your phone app needs instant replies. You can't run GPT-4 on a phone.</T>
-        <T color="#ce93d8" style={{ marginTop: 8 }}>Question: Can we make a SMALL model that's almost as smart as the big one?</T>
+        <T color="#ce93d8" style={{ marginTop: 8 }}>Question: Can we make a small model that's almost as smart as the big one?</T>
         <T color="#ce93d8" style={{ marginTop: 4 }}>Yes. The trick is called <strong>knowledge distillation</strong> - and it works like a teacher and student.</T>
       </Box>
     )}
@@ -166,7 +166,7 @@ export const Distillation = (ctx) => { const { sub, subBtnRipple, setSubBtnRippl
             <T color={C.dim} size={12}>Learns from teacher</T>
           </div>
         </div>
-        <T color="#80deea" style={{ marginTop: 10 }}>How? Show both models the same questions. The student tries to copy the teacher's answers - not just the final answer, but HOW the teacher thinks.</T>
+        <T color="#80deea" style={{ marginTop: 10 }}>How? Show both models the same questions. The student tries to copy the teacher's answers - not just the final answer, but how the teacher thinks.</T>
       </Box></Reveal>
     <Reveal when={sub >= 2}><Box color={C.yellow} style={{ width: "100%" }}>
         <T color="#ffe082" bold center size={20}>What does "copy how the teacher thinks" mean?</T>
@@ -208,11 +208,11 @@ export const Distillation = (ctx) => { const { sub, subBtnRipple, setSubBtnRippl
           </div>
           <div style={{ padding: "8px 10px", borderRadius: 6, background: `${C.yellow}08`, display: "flex", alignItems: "center", gap: 8 }}>
             <div style={{ width: 60, height: 30, background: C.yellow, borderRadius: 4, display: "flex", alignItems: "center", justifyContent: "center" }}><T color="#000" bold size={12}>8%</T></div>
-            <div><T color={C.yellow} bold size={14}>London</T><T color={C.dim} size={12}>Wrong - but it IS a European capital</T></div>
+            <div><T color={C.yellow} bold size={14}>London</T><T color={C.dim} size={12}>Wrong - but it is a European capital</T></div>
           </div>
           <div style={{ padding: "8px 10px", borderRadius: 6, background: `${C.orange}08`, display: "flex", alignItems: "center", gap: 8 }}>
             <div style={{ width: 60, height: 30, background: C.orange, borderRadius: 4, display: "flex", alignItems: "center", justifyContent: "center" }}><T color="#000" bold size={12}>5%</T></div>
-            <div><T color={C.orange} bold size={14}>Lyon</T><T color={C.dim} size={12}>Wrong - but it IS a French city</T></div>
+            <div><T color={C.orange} bold size={14}>Lyon</T><T color={C.dim} size={12}>Wrong - but it is a French city</T></div>
           </div>
           <div style={{ padding: "8px 10px", borderRadius: 6, background: `${C.red}06`, display: "flex", alignItems: "center", gap: 8 }}>
             <div style={{ width: 60, height: 30, background: C.red, borderRadius: 4, display: "flex", alignItems: "center", justifyContent: "center" }}><T color="#000" bold size={12}>0%</T></div>
@@ -296,7 +296,7 @@ export const CLIP = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, regis
     )}
     <Reveal when={sub >= 1}><Box color={C.cyan} style={{ width: "100%" }}>
         <T color="#80deea" bold center size={20}>The idea: translate both into the same language</T>
-        <T color="#80deea" style={{ marginTop: 8 }}>You can't directly compare a photo to a sentence. But what if you could convert BOTH into numbers?</T>
+        <T color="#80deea" style={{ marginTop: 8 }}>You can't directly compare a photo to a sentence. But what if you could convert both into numbers?</T>
         <div style={{ marginTop: 10, display: "flex", flexDirection: "column", gap: 4 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
             <div style={{ width: 80, padding: "8px", borderRadius: 6, background: `${C.cyan}12`, textAlign: "center" }}>
@@ -379,7 +379,7 @@ export const CLIP = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, regis
           <T color={C.orange} bold size={18} center>cos(A, B) = (A · B) / (||A|| x ||B||)</T>
           <div style={{ marginTop: 8, display: "flex", flexWrap: "wrap", gap: 8, justifyContent: "center" }}>
             {[
-              { sym: "A · B", desc: "dot product (chapter 1.12)", color: C.blue },
+              { sym: "A · B", desc: "dot product (chapter 1.14)", color: C.blue },
               { sym: "||A||", desc: "magnitude of A = sqrt(sum of a_i squared)", color: C.cyan },
               { sym: "||B||", desc: "magnitude of B = sqrt(sum of b_i squared)", color: C.purple },
             ].map((p, i) => (
@@ -428,7 +428,7 @@ export const CLIP = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, regis
           </div>
           <div style={{ padding: "10px", borderRadius: 8, background: `${C.purple}08`, border: `1px solid ${C.purple}15` }}>
             <T color={C.purple} bold size={15}>DALL-E / Midjourney</T>
-            <T color={C.dim} size={13}>You type "astronaut riding a horse on Mars" → text becomes numbers → image generator creates pixels that produce those same numbers. The shared space IS the bridge.</T>
+            <T color={C.dim} size={13}>You type "astronaut riding a horse on Mars" → text becomes numbers → image generator creates pixels that produce those same numbers. The shared space is the bridge.</T>
           </div>
           <div style={{ padding: "10px", borderRadius: 8, background: `${C.yellow}08`, border: `1px solid ${C.yellow}15` }}>
             <T color={C.yellow} bold size={15}>ChatGPT / Claude understanding photos</T>
@@ -516,11 +516,11 @@ export const TrainingPipeline = (ctx) => { const { sub, subBtnRipple, setSubBtnR
         <div style={{ marginTop: 10, display: "flex", flexDirection: "column", gap: 8 }}>
           <div style={{ padding: "10px", borderRadius: 8, background: `${C.cyan}08`, border: `1px solid ${C.cyan}15` }}>
             <T color={C.cyan} bold size={15}>Distillation - make it smaller & cheaper</T>
-            <T color={C.dim} size={13} style={{ marginTop: 3 }}>GPT-4 is brilliant but expensive. So the big model "teaches" a smaller one (chapter 3.3). The student learns 90% of the teacher's ability at 1/100th the cost. That's how GPT-4 Mini and Claude Haiku exist - fast, cheap, and still smart.</T>
+            <T color={C.dim} size={13} style={{ marginTop: 3 }}>GPT-4 is brilliant but expensive. So the big model "teaches" a smaller one. The student learns 90% of the teacher's ability at 1/100th the cost. That's how GPT-4 Mini and Claude Haiku exist - fast, cheap, and still smart.</T>
           </div>
           <div style={{ padding: "10px", borderRadius: 8, background: `${C.purple}08`, border: `1px solid ${C.purple}15` }}>
             <T color={C.purple} bold size={15}>CLIP - make it understand images</T>
-            <T color={C.dim} size={13} style={{ marginTop: 3 }}>The base model only understands text. To make it "see" photos, you plug in a CLIP-style image encoder (chapter 3.4). The image gets converted into the same number space as text, so the model can "read" the photo. That's how ChatGPT and Claude understand screenshots, diagrams, and photos you upload.</T>
+            <T color={C.dim} size={13} style={{ marginTop: 3 }}>The base model only understands text. To make it "see" photos, you plug in a CLIP-style image encoder. The image gets converted into the same number space as text, so the model can "read" the photo. That's how ChatGPT and Claude understand screenshots, diagrams, and photos you upload.</T>
           </div>
           <div style={{ padding: "10px", borderRadius: 8, background: `${C.yellow}08`, border: `1px solid ${C.yellow}15` }}>
             <T color={C.yellow} bold size={15}>RAG - give it access to fresh info</T>

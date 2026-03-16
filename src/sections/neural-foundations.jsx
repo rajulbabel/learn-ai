@@ -57,11 +57,11 @@ export const WhatIsNN = (ctx) => {
             <div style={{ display: "flex", gap: 16, marginTop: 0 }}>
               <div style={{ flex: 1, padding: 16, background: `${C.orange}06`, borderRadius: 8, border: `1px solid ${C.orange}20` }}>
                 <T color={C.orange} bold size={16}>Traditional Programming</T>
-                <T color="#ffe082" size={15} style={{ marginTop: 12, lineHeight: 1.6 }}>Human writes rules: if email contains 'free' AND has more than 5 links then mark as spam.</T>
+                <T color="#ffe082" size={15} style={{ marginTop: 12, lineHeight: 1.6 }}>Human writes rules: if email contains 'free' and has more than 5 links then mark as spam.</T>
               </div>
               <div style={{ flex: 1, padding: 16, background: `${C.green}06`, borderRadius: 8, border: `1px solid ${C.green}20` }}>
                 <T color={C.green} bold size={16}>Neural Network</T>
-                <T color="#80e8a5" size={15} style={{ marginTop: 12, lineHeight: 1.6 }}>Human provides examples (thousands of emails labeled spam/not-spam), the network DISCOVERS the rules itself.</T>
+                <T color="#80e8a5" size={15} style={{ marginTop: 12, lineHeight: 1.6 }}>Human provides examples (thousands of emails labeled spam/not-spam), the network discovers the rules itself.</T>
               </div>
             </div>
           </Box>
@@ -142,7 +142,7 @@ export const InsideNeuron = (ctx) => {
           <T color={C.blue} bold center size={20} style={{ marginBottom: 16 }}>One Neuron, Three Steps</T>
           <T color={C.bright} bold size={18}>A neuron is the basic building block.</T>
           <T color={C.bright} size={17} style={{ marginTop: 12, marginBottom: 16, lineHeight: 1.6 }}>
-            It takes a few numbers in and produces ONE number out. Think of it as a tiny decision-maker that weighs different pieces of evidence.
+            It takes a few numbers in and produces one number out. Think of it as a tiny decision-maker that weighs different pieces of evidence.
           </T>
           <div style={{ display: "flex", justifyContent: "center", marginTop: 12 }}>
             <svg viewBox="0 0 480 220" style={{ display: "block", width: "100%", maxWidth: 480 }}>
@@ -151,7 +151,25 @@ export const InsideNeuron = (ctx) => {
               <text x={240} y={18} fill="rgba(255,255,255,0.4)" fontSize={11} textAnchor="middle" fontWeight={600}>Neuron</text>
               <text x={410} y={18} fill="rgba(255,255,255,0.4)" fontSize={11} textAnchor="middle" fontWeight={600}>Output</text>
 
-              {/* Input nodes - r=22, spaced at y=45, 110, 175 (65px apart, well clear of r=22) */}
+              {/* Edges with weight labels (t=0.8 near destination) */}
+              {[
+                { sy: 45, w: "0.6", c: C.red },
+                { sy: 110, w: "0.3", c: C.yellow },
+                { sy: 175, w: "0.1", c: C.green },
+              ].map(({ sy, w, c }, i) => {
+                const x1 = 92, x2 = 210, dy = 110, t = 0.8;
+                const lx = x1 + (x2 - x1) * t;
+                const ly = sy + (dy - sy) * t;
+                return (
+                  <g key={i}>
+                    <line x1={x1} y1={sy} x2={x2} y2={dy} stroke={`${c}40`} strokeWidth={1.5} />
+                    <rect x={lx - 14} y={ly - 8} width={28} height={15} rx={3} fill="#08080dee" stroke={`${c}30`} strokeWidth={0.5} />
+                    <text x={lx} y={ly + 4} fill={c} fontSize={10} textAnchor="middle" fontWeight={600}>{w}</text>
+                  </g>
+                );
+              })}
+
+              {/* Input nodes - r=22, spaced at y=45, 110, 175 (65px apart) */}
               <circle cx={70} cy={45} r={22} fill={`${C.red}12`} stroke={C.red} strokeWidth={2} />
               <text x={70} y={50} fill={C.red} fontSize={14} textAnchor="middle" fontWeight={700}>i₁</text>
 
@@ -161,18 +179,13 @@ export const InsideNeuron = (ctx) => {
               <circle cx={70} cy={175} r={22} fill={`${C.green}12`} stroke={C.green} strokeWidth={2} />
               <text x={70} y={180} fill={C.green} fontSize={14} textAnchor="middle" fontWeight={700}>i₃</text>
 
-              {/* Edges to neuron */}
-              <line x1={92} y1={45} x2={207} y2={98} stroke={`${C.red}50`} strokeWidth={1.5} />
-              <line x1={92} y1={110} x2={207} y2={110} stroke={`${C.yellow}50`} strokeWidth={1.5} />
-              <line x1={92} y1={175} x2={207} y2={122} stroke={`${C.green}50`} strokeWidth={1.5} />
-
               {/* Central neuron - centered at y=110 */}
               <circle cx={240} cy={110} r={30} fill={`${C.cyan}12`} stroke={C.cyan} strokeWidth={2} />
               <text x={240} y={115} fill={C.cyan} fontSize={13} textAnchor="middle" fontWeight={700}>Neuron</text>
 
               {/* Edge to output */}
-              <line x1={270} y1={110} x2={383} y2={110} stroke={`${C.cyan}50`} strokeWidth={1.5} />
-              <polygon points="383,110 377,106 377,114" fill={`${C.cyan}50`} />
+              <line x1={270} y1={110} x2={384} y2={110} stroke={`${C.cyan}50`} strokeWidth={1.5} />
+              <polygon points="384,110 378,106 378,114" fill={`${C.cyan}50`} />
 
               {/* Output node - centered at y=110 */}
               <circle cx={410} cy={110} r={26} fill={`${C.green}12`} stroke={C.green} strokeWidth={2} />
@@ -310,7 +323,7 @@ export const InsideNeuron = (ctx) => {
       {sub >= 4 && (
         <Reveal when={sub >= 4}>
           <Box color={C.green} style={{ width: "100%" }}>
-            <T color={C.green} bold center size={20} style={{ marginBottom: 16 }}>That's ALL a Neuron Does</T>
+            <T color={C.green} bold center size={20} style={{ marginBottom: 16 }}>That's All a Neuron Does</T>
             <T color={C.bright} size={17} style={{ lineHeight: 1.6 }}>
               Every neuron in every AI - from ChatGPT to image generators - does this exact same thing: multiply, sum, add bias, activate.
             </T>
@@ -332,9 +345,9 @@ export const WhatIsLayer = (ctx) => {
       {sub >= 0 && (
         <Box color={C.purple} style={{ width: "100%" }}>
           <T color={C.purple} bold center size={20} style={{ marginBottom: 16 }}>A Group of Neurons Working Together</T>
-          <T color={C.bright} bold size={18}>One neuron finds ONE pattern.</T>
+          <T color={C.bright} bold size={18}>One neuron finds one pattern.</T>
           <T color={C.bright} size={17} style={{ marginTop: 12, marginBottom: 16, lineHeight: 1.6 }}>
-            But to understand something complex, you need to detect MANY patterns at the same time. A layer is a group of neurons working side by side.
+            But to understand something complex, you need to detect many patterns at the same time. A layer is a group of neurons working side by side.
           </T>
           <div style={{ display: "flex", justifyContent: "center", marginTop: 12 }}>
             <svg viewBox="0 0 520 260" style={{ display: "block", width: "100%", maxWidth: 520 }}>
@@ -393,7 +406,7 @@ export const WhatIsLayer = (ctx) => {
               <text x={450} y={195} fill="#d8a9ff" fontSize={13} textAnchor="middle" fontWeight={700}>0.26</text>
 
               {/* Bottom label */}
-              <text x={260} y={248} fill="rgba(255,255,255,0.4)" fontSize={11} textAnchor="middle">Each neuron looks at ALL inputs but with different weights</text>
+              <text x={260} y={248} fill="rgba(255,255,255,0.4)" fontSize={11} textAnchor="middle">Each neuron looks at all inputs but with different weights</text>
             </svg>
           </div>
         </Box>
@@ -403,7 +416,7 @@ export const WhatIsLayer = (ctx) => {
           <Box color={C.purple} style={{ width: "100%" }}>
             <T color="#b8a9ff" bold center size={20} style={{ marginBottom: 8 }}>Three Neurons, Same Inputs, Different Weights</T>
             <T color="#b8a9ff" size={16} style={{ marginBottom: 12, lineHeight: 1.6 }}>
-              Each neuron gets ALL 3 inputs but has its own weights. The weights determine what each neuron "cares about."
+              Each neuron gets all 3 inputs but has its own weights. The weights determine what each neuron "cares about."
             </T>
             <div style={{ display: "flex", justifyContent: "center" }}>
               <svg viewBox="0 0 380 320" style={{ display: "block", width: "100%", maxWidth: 380 }}>
@@ -437,14 +450,14 @@ export const WhatIsLayer = (ctx) => {
 
                 {/* Input nodes */}
                 {[
-                  { y: 50, label: "fever", val: "38.5", c: C.red },
-                  { y: 160, label: "cough", val: "1", c: C.yellow },
-                  { y: 270, label: "fatigue", val: "0.8", c: C.green },
+                  { y: 50, label: "Fever", val: "38.5", c: C.red },
+                  { y: 160, label: "Cough", val: "1", c: C.yellow },
+                  { y: 270, label: "Fatigue", val: "0.8", c: C.green },
                 ].map(({ y, label, val, c }) => (
                   <g key={label}>
                     <circle cx={65} cy={y} r={26} fill={`${c}12`} stroke={c} strokeWidth={2} />
-                    <text x={65} y={y - 6} fill={c} fontSize={10} textAnchor="middle" fontWeight={700}>{label}</text>
-                    <text x={65} y={y + 10} fill="rgba(255,255,255,0.5)" fontSize={12} textAnchor="middle">{val}</text>
+                    <text x={65} y={y - 2} fill={c} fontSize={10} textAnchor="middle" fontWeight={700}>{label}</text>
+                    <text x={65} y={y + 13} fill="rgba(255,255,255,0.5)" fontSize={12} textAnchor="middle">{val}</text>
                   </g>
                 ))}
 
@@ -456,8 +469,8 @@ export const WhatIsLayer = (ctx) => {
                 ].map(({ y, label, bias, out, c, ct }) => (
                   <g key={label}>
                     <circle cx={290} cy={y} r={28} fill={`${c}12`} stroke={c} strokeWidth={2} />
-                    <text x={290} y={y - 8} fill={c} fontSize={11} textAnchor="middle" fontWeight={700}>{label}</text>
-                    <text x={290} y={y + 7} fill="rgba(255,255,255,0.45)" fontSize={9} textAnchor="middle">b={bias}</text>
+                    <text x={290} y={y - 3} fill={c} fontSize={11} textAnchor="middle" fontWeight={700}>{label}</text>
+                    <text x={290} y={y + 11} fill="rgba(255,255,255,0.45)" fontSize={9} textAnchor="middle">b={bias}</text>
                     <text x={332} y={y + 4} fill={ct} fontSize={11} textAnchor="start" fontWeight={700}>→ {out}</text>
                   </g>
                 ))}
@@ -472,7 +485,7 @@ export const WhatIsLayer = (ctx) => {
       {sub >= 2 && (
         <Reveal when={sub >= 2}>
           <Box color={C.yellow} style={{ width: "100%" }}>
-            <T color={C.yellow} bold center size={20} style={{ marginBottom: 16 }}>The Output of a Layer is a LIST</T>
+            <T color={C.yellow} bold center size={20} style={{ marginBottom: 16 }}>The Output of a Layer is a List</T>
             <T color="#ffe082" size={17} style={{ lineHeight: 1.6 }}>
               One number from each neuron. The input is a list. The output is also a list. A layer transforms one list of numbers into a different list of numbers.
             </T>
@@ -492,6 +505,9 @@ export const WhatIsLayer = (ctx) => {
                 <T color="#80e8a5" size={16} style={{ fontFamily: "monospace", marginTop: 4 }}>[9.48, 3.51, 0.26]</T>
               </div>
             </div>
+            <T color="#ffe082" size={16} style={{ marginTop: 14, textAlign: "center", lineHeight: 1.6 }}>
+              The highest number wins - <span style={{ color: "#ef9a9a", fontWeight: 700 }}>Flu (9.48)</span> scores highest, so the network predicts <span style={{ color: "#ef9a9a", fontWeight: 700 }}>Flu</span>.
+            </T>
           </Box>
         </Reveal>
       )}
@@ -524,7 +540,7 @@ export const WhatIsLayer = (ctx) => {
       {sub >= 4 && (
         <Reveal when={sub >= 4}>
           <Box color={C.cyan} style={{ width: "100%" }}>
-            <T color={C.cyan} bold center size={20} style={{ marginBottom: 16 }}>What is a Layer PHYSICALLY?</T>
+            <T color={C.cyan} bold center size={20} style={{ marginBottom: 16 }}>What is a Layer Physically?</T>
             <T color="#80deea" size={17} style={{ lineHeight: 1.6 }}>
               It's not something you can touch. It's a group of math operations that happen at the same time. On modern GPUs, thousands of neurons compute simultaneously. A layer is just how we organize and think about these parallel computations.
             </T>
@@ -826,7 +842,7 @@ export const WhyLinear = (ctx) => {
             </div>
             <div style={{ marginTop: 14, padding: 14, background: `${C.yellow}06`, border: `1px solid ${C.yellow}20`, borderRadius: 8 }}>
               <T color={C.yellow} bold size={16}>Still just y = 6x + 7. A straight line!</T>
-              <T color="#ffe082" size={15} style={{ marginTop: 10 }}>No matter how many layers: 2 layers, 10 layers, 100 layers - without activation they ALL collapse into one straight line. 100 layers = 1 layer.</T>
+              <T color="#ffe082" size={15} style={{ marginTop: 10 }}>No matter how many layers: 2 layers, 10 layers, 100 layers - without activation they all collapse into one straight line. 100 layers = 1 layer.</T>
             </div>
           </Box>
         </Reveal>
@@ -893,7 +909,7 @@ export const ReLU = (ctx) => {
         <Box color={C.green} style={{ width: "100%" }}>
           <T color={C.green} bold center size={20} style={{ marginBottom: 16 }}>Activation (ReLU)</T>
           <T color={C.bright} bold size={18}>The ReLU Rule</T>
-          <T color={C.bright} size={16} style={{ marginTop: 12, marginBottom: 16 }}>After each neuron's math, apply ONE simple rule:</T>
+          <T color={C.bright} size={16} style={{ marginTop: 12, marginBottom: 16 }}>After each neuron's math, apply one simple rule:</T>
           <div style={{ padding: 16, background: "rgba(0,0,0,0.3)", borderRadius: 8, border: `2px solid ${C.yellow}`, textAlign: "center" }}>
             <T color={C.yellow} bold size={17}>If negative → 0    |    If positive → keep</T>
           </div>
@@ -951,7 +967,7 @@ export const ReLU = (ctx) => {
       {sub >= 3 && (
         <Reveal when={sub >= 3}>
           <Box color={C.purple} style={{ width: "100%" }}>
-            <T color={C.purple} bold center size={20} style={{ marginBottom: 16 }}>Add Both Neurons Together: a VALLEY Curve</T>
+            <T color={C.purple} bold center size={20} style={{ marginBottom: 16 }}>Add Both Neurons Together: a Valley Curve</T>
             <T color="#b8a9ff" size={16} style={{ marginBottom: 14 }}>Two bent lines create a valley shape - a curve. No straight line can do this.</T>
             <div style={{ display: "flex", justifyContent: "center" }}>{Graph({ points: combined, color: C.purple, title: "Combined: a valley shape", annotations: [{ x: 3, y: 2, text: "1st bend", color: C.cyan }, { x: 5, y: 2, text: "2nd bend", color: C.purple }] })}</div>
             <div style={{ marginTop: 14, fontSize: 15, textAlign: "center", display: "flex", justifyContent: "center", flexWrap: "wrap", gap: 12 }}>
@@ -1024,22 +1040,22 @@ export const ForwardPass = (ctx) => {
       {sub >= 0 && (
         <Box color={C.yellow} style={{ width: "100%" }}>
           <T color="#ffe082" bold center size={20}>The Network We Will Trace</T>
-          <T color={C.bright} size={17} style={{ marginTop: 10, lineHeight: 1.6 }}>Let's trace EVERY number through a real network - no skipping, no hand-waving. Weights are on the edges, biases inside each neuron.</T>
+          <T color={C.bright} size={17} style={{ marginTop: 10, lineHeight: 1.6 }}>Let's trace every number through a real network - no skipping, no hand-waving. Weights are on the edges, biases inside each neuron.</T>
           <div style={{ display: "flex", justifyContent: "center", marginTop: 12 }}>
-            <svg viewBox="0 0 440 260" style={{ display: "block", width: "100%", maxWidth: 440 }}>
+            <svg viewBox="0 0 480 270" style={{ display: "block", width: "100%", maxWidth: 480 }}>
               {/* Column labels */}
-              <text x={55} y={18} fill="rgba(255,255,255,0.4)" fontSize={12} textAnchor="middle" fontWeight={600}>Input</text>
-              <text x={210} y={18} fill="rgba(255,255,255,0.4)" fontSize={12} textAnchor="middle" fontWeight={600}>Hidden</text>
-              <text x={380} y={18} fill="rgba(255,255,255,0.4)" fontSize={12} textAnchor="middle" fontWeight={600}>Output</text>
+              <text x={60} y={18} fill="rgba(255,255,255,0.4)" fontSize={12} textAnchor="middle" fontWeight={600}>Input</text>
+              <text x={220} y={18} fill="rgba(255,255,255,0.4)" fontSize={12} textAnchor="middle" fontWeight={600}>Hidden</text>
+              <text x={390} y={18} fill="rgba(255,255,255,0.4)" fontSize={12} textAnchor="middle" fontWeight={600}>Output</text>
 
               {/* Input→Hidden edges with weight labels near destination (t=0.8) */}
               {[
-                { sy: 75, dy: 75, w: "0.5", c: C.red },
-                { sy: 75, dy: 195, w: "0.1", c: C.red },
-                { sy: 195, dy: 75, w: "50", c: C.yellow },
-                { sy: 195, dy: 195, w: "10", c: C.yellow },
+                { sy: 80, dy: 80, w: "0.5", c: C.red },
+                { sy: 80, dy: 200, w: "0.1", c: C.red },
+                { sy: 200, dy: 80, w: "50", c: C.yellow },
+                { sy: 200, dy: 200, w: "10", c: C.yellow },
               ].map(({ sy, dy, w, c }, i) => {
-                const x1 = 81, x2 = 184, t = 0.8;
+                const x1 = 86, x2 = 188, t = 0.8;
                 const lx = x1 + (x2 - x1) * t;
                 const ly = sy + (dy - sy) * t;
                 return (
@@ -1053,10 +1069,10 @@ export const ForwardPass = (ctx) => {
 
               {/* Hidden→Output edges with weight labels near destination (t=0.8) */}
               {[
-                { sy: 75, w: "0.8", c: C.cyan },
-                { sy: 195, w: "0.2", c: C.orange },
+                { sy: 80, w: "0.8", c: C.cyan },
+                { sy: 200, w: "0.2", c: C.orange },
               ].map(({ sy, w, c }, i) => {
-                const x1 = 236, x2 = 354, dy = 135, t = 0.8;
+                const x1 = 252, x2 = 358, dy = 140, t = 0.8;
                 const lx = x1 + (x2 - x1) * t;
                 const ly = sy + (dy - sy) * t;
                 return (
@@ -1068,41 +1084,41 @@ export const ForwardPass = (ctx) => {
                 );
               })}
 
-              {/* Input nodes */}
+              {/* Input nodes (r=26) */}
               {[
-                { y: 75, label: "x₁", val: "1500", c: C.red },
-                { y: 195, label: "x₂", val: "3", c: C.yellow },
+                { y: 80, label: "x₁", val: "1500", c: C.red },
+                { y: 200, label: "x₂", val: "3", c: C.yellow },
               ].map(({ y, label, val, c }) => (
                 <g key={label}>
-                  <circle cx={55} cy={y} r={26} fill={`${c}12`} stroke={c} strokeWidth={2} />
-                  <text x={55} y={y - 5} fill={c} fontSize={14} textAnchor="middle" fontWeight={700}>{label}</text>
-                  <text x={55} y={y + 12} fill="rgba(255,255,255,0.5)" fontSize={11} textAnchor="middle">{val}</text>
+                  <circle cx={60} cy={y} r={26} fill={`${c}12`} stroke={c} strokeWidth={2} />
+                  <text x={60} y={y - 2} fill={c} fontSize={14} textAnchor="middle" fontWeight={700}>{label}</text>
+                  <text x={60} y={y + 13} fill="rgba(255,255,255,0.5)" fontSize={11} textAnchor="middle">{val}</text>
                 </g>
               ))}
 
-              {/* Hidden nodes */}
+              {/* Hidden nodes (r=32, label + bias inside, output outside as arrow) */}
               {[
-                { y: 75, label: "h₁", bias: "50", out: "950", c: C.cyan },
-                { y: 195, label: "h₂", bias: "5", out: "185", c: C.orange },
-              ].map(({ y, label, bias, out, c }) => (
+                { y: 80, label: "h₁", bias: "50", out: "950", c: C.cyan, ct: "#80deea" },
+                { y: 200, label: "h₂", bias: "5", out: "185", c: C.orange, ct: "#ffb74d" },
+              ].map(({ y, label, bias, out, c, ct }) => (
                 <g key={label}>
-                  <circle cx={210} cy={y} r={26} fill={`${c}12`} stroke={c} strokeWidth={2} />
-                  <text x={210} y={y - 8} fill={c} fontSize={13} textAnchor="middle" fontWeight={700}>{label}</text>
-                  <text x={210} y={y + 6} fill="rgba(255,255,255,0.45)" fontSize={9} textAnchor="middle">b={bias}</text>
-                  <text x={210} y={y + 18} fill="rgba(255,255,255,0.35)" fontSize={9} textAnchor="middle">out={out}</text>
+                  <circle cx={220} cy={y} r={32} fill={`${c}12`} stroke={c} strokeWidth={2} />
+                  <text x={220} y={y - 3} fill={c} fontSize={14} textAnchor="middle" fontWeight={700}>{label}</text>
+                  <text x={220} y={y + 12} fill="rgba(255,255,255,0.45)" fontSize={10} textAnchor="middle">b={bias}</text>
+                  <text x={266} y={y + 4} fill={ct} fontSize={11} textAnchor="start" fontWeight={700}>→ {out}</text>
                 </g>
               ))}
 
-              {/* Output node */}
+              {/* Output node (r=32, label + bias inside, output outside as arrow) */}
               <g>
-                <circle cx={380} cy={135} r={26} fill={`${C.green}15`} stroke={C.green} strokeWidth={2} />
-                <text x={380} y={130} fill={C.green} fontSize={13} textAnchor="middle" fontWeight={700}>y</text>
-                <text x={380} y={143} fill="rgba(255,255,255,0.45)" fontSize={9} textAnchor="middle">b=10</text>
-                <text x={380} y={155} fill="rgba(255,255,255,0.35)" fontSize={9} textAnchor="middle">out=807</text>
+                <circle cx={390} cy={140} r={32} fill={`${C.green}15`} stroke={C.green} strokeWidth={2} />
+                <text x={390} y={137} fill={C.green} fontSize={14} textAnchor="middle" fontWeight={700}>y</text>
+                <text x={390} y={152} fill="rgba(255,255,255,0.45)" fontSize={10} textAnchor="middle">b=10</text>
+                <text x={434} y={144} fill="#80e8a5" fontSize={11} textAnchor="start" fontWeight={700}>→ 807</text>
               </g>
 
               {/* Bottom label */}
-              <text x={220} y={245} fill="rgba(255,255,255,0.4)" fontSize={13} textAnchor="middle" fontWeight={600}>2 inputs → 2 hidden neurons → 1 output</text>
+              <text x={240} y={258} fill="rgba(255,255,255,0.4)" fontSize={13} textAnchor="middle" fontWeight={600}>2 inputs → 2 hidden neurons → 1 output</text>
             </svg>
           </div>
         </Box>
@@ -1447,7 +1463,7 @@ export const WhatIsLearning = (ctx) => {
             <T color={C.green} bold size={16}>Gradient Descent</T>
             <T color={C.dim} size={14} style={{ marginTop: 6 }}>Step 4 - actually updating the weights</T>
           </div>
-          <T color={C.dim} size={16} style={{ marginTop: 16 }}>Together, they ARE "training." When someone says "training a model," they mean running this loop millions of times.</T>
+          <T color={C.dim} size={16} style={{ marginTop: 16 }}>Together, they are "training." When someone says "training a model," they mean running this loop millions of times.</T>
         </Box>
       </Reveal>
 
@@ -1455,7 +1471,7 @@ export const WhatIsLearning = (ctx) => {
         <Box color={C.pink} style={{ width: "100%" }}>
           <T color={C.pink} bold center size={20}>After Millions of Loops</T>
           <T color="#ffb3e6" size={16} style={{ marginTop: 12 }}>After running this loop millions of times, the weights converge to values that make good predictions. The network has "learned."</T>
-          <T color={C.bright} size={16} style={{ marginTop: 12 }}>Those final weight values ARE the model. When you download GPT-3, you are downloading 175 billion carefully-tuned weight values that have been optimized through this exact process.</T>
+          <T color={C.bright} size={16} style={{ marginTop: 12 }}>Those final weight values are the model. When you download GPT-3, you are downloading 175 billion carefully-tuned weight values that have been optimized through this exact process.</T>
         </Box>
       </Reveal>
 
@@ -1480,7 +1496,30 @@ export const Derivatives = (ctx) => {
       <Reveal when={sub >= 1}>
         <Box color={C.purple} style={{ width: "100%" }}>
           <T color={C.purple} bold center size={20}>Concrete Example</T>
-          <T color={C.dim} size={16} style={{ marginBottom: 12 }}>Our network: weight = 0.5, input = 1500, bias = 50</T>
+          <T color={C.dim} size={16} style={{ marginBottom: 8 }}>Our network: weight = 0.5, input = 1500, bias = 50</T>
+          <div style={{ display: "flex", justifyContent: "center", marginBottom: 12 }}>
+            <svg viewBox="0 0 380 100" style={{ display: "block", width: "100%", maxWidth: 380 }}>
+              {/* Edge: input → neuron */}
+              <line x1={82} y1={50} x2={158} y2={50} stroke={`${C.red}40`} strokeWidth={1.5} />
+              <rect x={108} y={35} width={28} height={15} rx={3} fill="#08080dee" stroke={`${C.red}30`} strokeWidth={0.5} />
+              <text x={122} y={46} fill={C.red} fontSize={10} textAnchor="middle" fontWeight={600}>0.5</text>
+              {/* Edge: neuron → output */}
+              <line x1={222} y1={50} x2={298} y2={50} stroke={`${C.cyan}40`} strokeWidth={1.5} />
+              <polygon points="298,50 292,46 292,54" fill={`${C.cyan}40`} />
+              {/* Input node */}
+              <circle cx={56} cy={50} r={26} fill={`${C.orange}12`} stroke={C.orange} strokeWidth={2} />
+              <text x={56} y={47} fill={C.orange} fontSize={11} textAnchor="middle" fontWeight={700}>input</text>
+              <text x={56} y={62} fill="rgba(255,255,255,0.5)" fontSize={12} textAnchor="middle">1500</text>
+              {/* Neuron node */}
+              <circle cx={190} cy={50} r={32} fill={`${C.purple}12`} stroke={C.purple} strokeWidth={2} />
+              <text x={190} y={46} fill={C.purple} fontSize={12} textAnchor="middle" fontWeight={700}>Neuron</text>
+              <text x={190} y={61} fill="rgba(255,255,255,0.45)" fontSize={10} textAnchor="middle">b=50</text>
+              {/* Output node */}
+              <circle cx={324} cy={50} r={26} fill={`${C.cyan}12`} stroke={C.cyan} strokeWidth={2} />
+              <text x={324} y={47} fill={C.cyan} fontSize={11} textAnchor="middle" fontWeight={700}>output</text>
+              <text x={324} y={62} fill="rgba(255,255,255,0.5)" fontSize={12} textAnchor="middle">800</text>
+            </svg>
+          </div>
           <div style={{ padding: "12px", background: `${C.cyan}06`, borderRadius: 8, marginBottom: 12, border: `1px solid ${C.cyan}12` }}>
             <div style={{ display: "flex", gap: 6, justifyContent: "center", alignItems: "center", flexWrap: "wrap", marginBottom: 8 }}>
               <T color={C.cyan} bold size={14}>Prediction</T>
@@ -1543,7 +1582,28 @@ export const Derivatives = (ctx) => {
           <T color="#ff8a80" size={16} style={{ marginBottom: 16, marginTop: 12 }}>The derivative is this ratio:</T>
           <div style={{ padding: "16px", background: "rgba(0,0,0,0.4)", borderRadius: 12, border: `1px solid ${C.purple}25`, textAlign: "center" }}>
             <T color={C.purple} bold size={18} style={{ fontFamily: "monospace", marginBottom: 12 }}>∂ Loss / ∂ weight</T>
-            <T color={C.dim} size={14} style={{ marginBottom: 8 }}>how much loss changed / how much weight changed</T>
+            <T color={C.dim} size={14}>how much loss changed / how much weight changed</T>
+          </div>
+          <div style={{ marginTop: 14, padding: "14px", background: `${C.yellow}06`, borderRadius: 10, border: `1px solid ${C.yellow}12` }}>
+            <T color={C.yellow} bold center size={15} style={{ marginBottom: 10 }}>Plugging in our numbers:</T>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, alignItems: "center" }}>
+              <div style={{ display: "flex", gap: 6, alignItems: "center", flexWrap: "wrap", justifyContent: "center" }}>
+                <T color={C.purple} bold size={15}>∂Loss / ∂weight</T>
+                <span style={{ color: C.dim, fontSize: 14 }}>=</span>
+                <span style={{ padding: "2px 8px", background: `${C.cyan}15`, borderRadius: 4, color: "#80deea", fontSize: 15, fontWeight: 600 }}>(2,500 - 10,000)</span>
+                <span style={{ color: C.dim, fontSize: 14 }}>/</span>
+                <span style={{ padding: "2px 8px", background: `${C.red}15`, borderRadius: 4, color: "#ef9a9a", fontSize: 15, fontWeight: 600 }}>(0.6 - 0.5)</span>
+              </div>
+              <div style={{ display: "flex", gap: 6, alignItems: "center", flexWrap: "wrap", justifyContent: "center" }}>
+                <span style={{ color: C.dim, fontSize: 14 }}>=</span>
+                <span style={{ padding: "2px 8px", background: `${C.cyan}15`, borderRadius: 4, color: "#80deea", fontSize: 15, fontWeight: 600 }}>-7,500</span>
+                <span style={{ color: C.dim, fontSize: 14 }}>/</span>
+                <span style={{ padding: "2px 8px", background: `${C.red}15`, borderRadius: 4, color: "#ef9a9a", fontSize: 15, fontWeight: 600 }}>0.1</span>
+                <span style={{ color: C.dim, fontSize: 14 }}>=</span>
+                <span style={{ padding: "3px 10px", background: `${C.green}20`, borderRadius: 4, color: C.green, fontSize: 16, fontWeight: 700 }}>-75,000</span>
+              </div>
+            </div>
+            <T color={C.dim} size={14} style={{ marginTop: 10, textAlign: "center" }}>Negative = increasing weight decreases loss. The magnitude (75,000) tells us it's very sensitive.</T>
           </div>
           <T color={C.dim} size={16} style={{ marginTop: 16 }}>The ∂ symbol (read "partial") just means "tiny change in." So ∂Loss/∂weight means "the tiny change in loss caused by a tiny change in weight."</T>
         </Box>
@@ -1653,7 +1713,35 @@ export const BackwardPass = (ctx) => {
       <Reveal when={sub >= 1}>
         <Box color={C.purple} style={{ width: "100%" }}>
           <T color={C.purple} bold center size={20}>The Chain Rule: Work Backwards</T>
-          <T color="#b8a9ff" size={16} style={{ marginBottom: 16, marginTop: 12 }}>Work backwards, one step at a time. Multiply all the derivatives together.</T>
+          <T color="#b8a9ff" size={16} style={{ marginTop: 12 }}>Work backwards, one step at a time. Multiply all the derivatives together.</T>
+          {/* Chain rule formula SVG */}
+          <div style={{ margin: "14px 0", padding: "16px 12px", background: "rgba(0,0,0,0.4)", borderRadius: 12, border: `1px solid ${C.purple}25`, display: "flex", flexDirection: "column", alignItems: "center" }}>
+            <T color={C.dim} size={12} center style={{ textTransform: "uppercase", letterSpacing: 2, marginBottom: 8 }}>The Chain Rule Formula</T>
+            <svg viewBox="0 0 460 70" style={{ width: "100%", maxWidth: 440, height: "auto" }}>
+              {/* ∂Loss/∂weight = */}
+              <line x1={8} y1={32} x2={68} y2={32} stroke={C.bright} strokeWidth={1.2} />
+              <text x={38} y={24} fill={C.purple} fontSize={14} fontFamily="serif" textAnchor="middle" fontWeight={700}>∂Loss</text>
+              <text x={38} y={48} fill={C.purple} fontSize={14} fontFamily="serif" textAnchor="middle" fontWeight={700}>∂weight</text>
+              <text x={84} y={37} fill={C.dim} fontSize={18} fontFamily="serif">=</text>
+              {/* ∂Loss/∂error */}
+              <line x1={102} y1={32} x2={162} y2={32} stroke={C.bright} strokeWidth={1.2} />
+              <text x={132} y={24} fill={C.red} fontSize={14} fontFamily="serif" textAnchor="middle" fontWeight={700}>∂Loss</text>
+              <text x={132} y={48} fill={C.red} fontSize={14} fontFamily="serif" textAnchor="middle" fontWeight={700}>∂error</text>
+              {/* × */}
+              <text x={178} y={37} fill={C.dim} fontSize={16} fontFamily="serif" textAnchor="middle">×</text>
+              {/* ∂error/∂pred */}
+              <line x1={194} y1={32} x2={268} y2={32} stroke={C.bright} strokeWidth={1.2} />
+              <text x={231} y={24} fill={C.orange} fontSize={14} fontFamily="serif" textAnchor="middle" fontWeight={700}>∂error</text>
+              <text x={231} y={48} fill={C.orange} fontSize={14} fontFamily="serif" textAnchor="middle" fontWeight={700}>∂pred</text>
+              {/* × */}
+              <text x={284} y={37} fill={C.dim} fontSize={16} fontFamily="serif" textAnchor="middle">×</text>
+              {/* ∂pred/∂weight */}
+              <line x1={300} y1={32} x2={380} y2={32} stroke={C.bright} strokeWidth={1.2} />
+              <text x={340} y={24} fill={C.yellow} fontSize={14} fontFamily="serif" textAnchor="middle" fontWeight={700}>∂pred</text>
+              <text x={340} y={48} fill={C.yellow} fontSize={14} fontFamily="serif" textAnchor="middle" fontWeight={700}>∂weight</text>
+            </svg>
+            <T color={C.dim} size={13} center style={{ marginTop: 6 }}>Each fraction is one step. Multiply them all to get the final answer.</T>
+          </div>
           <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
             <div style={{ padding: "12px", background: `${C.red}06`, borderRadius: 8, border: `1px solid ${C.red}12` }}>
               <T color={C.red} bold size={16}>Step 1: Loss with respect to Error</T>
@@ -1731,58 +1819,54 @@ export const GradientDescent = (ctx) => {
           <div style={{ padding: "16px", background: "rgba(0,0,0,0.4)", borderRadius: 12, border: `1px solid ${C.green}25`, textAlign: "center" }}>
             <T color={C.green} bold size={18} style={{ fontFamily: "monospace" }}>new_weight = old_weight - learning_rate × gradient</T>
           </div>
-          <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 6 }}>
+          <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 8, paddingLeft: 12 }}>
             {[
               { label: "old_weight", desc: "the weight's current value (before this update)", c: C.red },
               { label: "gradient", desc: "how much loss changes when this weight changes (from backward pass)", c: C.yellow },
               { label: "learning_rate", desc: "a small number (like 0.001) that controls step size", c: C.purple },
               { label: "new_weight", desc: "the updated value we'll use going forward", c: C.green },
             ].map(({ label, desc, c }) => (
-              <div key={label} style={{ display: "flex", gap: 8, alignItems: "center" }}>
-                <div style={{ padding: "4px 8px", background: `${c}10`, borderRadius: 6, border: `1px solid ${c}20`, minWidth: 110, textAlign: "center" }}>
-                  <code style={{ color: c, fontSize: 13, fontWeight: 700 }}>{label}</code>
+              <div key={label} style={{ display: "flex", gap: 12, alignItems: "flex-start" }}>
+                <div style={{ padding: "4px 10px", background: `${c}10`, borderRadius: 6, border: `1px solid ${c}20`, minWidth: 130, textAlign: "center", flexShrink: 0 }}>
+                  <code style={{ color: c, fontSize: 14, fontWeight: 700 }}>{label}</code>
                 </div>
-                <T color={C.dim} size={14}>{desc}</T>
+                <T color={C.dim} size={15} style={{ paddingTop: 3 }}>{desc}</T>
               </div>
             ))}
           </div>
           <T color="#80deea" size={16} style={{ marginTop: 14 }}>We move in the OPPOSITE direction of the gradient. If the gradient says "loss increases when you go right," we go left.</T>
           <div style={{ display: "flex", justifyContent: "center", marginTop: 18 }}>
-            <svg viewBox="0 0 320 180" maxWidth="100%" style={{ maxWidth: 320 }}>
+            <svg viewBox="0 0 340 195" style={{ display: "block", width: "100%", maxWidth: 340 }}>
               {/* Axes */}
-              <line x1={40} y1={140} x2={280} y2={140} stroke="rgba(255,255,255,0.3)" strokeWidth={1.5} />
-              <line x1={40} y1={140} x2={40} y2={20} stroke="rgba(255,255,255,0.3)" strokeWidth={1.5} />
+              <line x1={45} y1={168} x2={310} y2={168} stroke="rgba(255,255,255,0.3)" strokeWidth={1.5} />
+              <line x1={45} y1={168} x2={45} y2={15} stroke="rgba(255,255,255,0.3)" strokeWidth={1.5} />
+              <text x={290} y={183} fill="rgba(255,255,255,0.4)" fontSize={11} fontWeight={600}>weight</text>
+              <text x={18} y={18} fill="rgba(255,255,255,0.4)" fontSize={11} fontWeight={600}>loss</text>
 
-              {/* Axis labels */}
-              <text x={260} y={155} fill="rgba(255,255,255,0.4)" fontSize={11} fontWeight={600}>weight</text>
-              <text x={15} y={20} fill="rgba(255,255,255,0.4)" fontSize={11} fontWeight={600}>loss</text>
+              {/* Loss curve - parabola y=160-0.005*(x-195)^2, many points for smooth shape */}
+              <path d={`M 55,62 L 65,76 L 75,88 L 85,100 L 95,110 L 105,120 L 115,128 L 125,136 L 135,142 L 145,148 L 155,152 L 165,156 L 175,158 L 185,160 L 195,160 L 205,160 L 215,158 L 225,156 L 235,152 L 245,148 L 255,142 L 265,136 L 275,128 L 285,120 L 295,110 L 305,100`} fill="none" stroke={C.cyan} strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round" />
 
-              {/* Loss curve (parabola) */}
-              <path d="M 50 110 Q 80 60 110 50 Q 140 45 160 50 Q 190 60 220 110" fill="none" stroke={C.cyan} strokeWidth={2.5} />
+              {/* Curved arrows between steps */}
+              <path d="M 88,98 Q 112,130 133,143" stroke={`${C.red}90`} strokeWidth={1.5} fill="none" />
+              <polygon points="133,143 127,136 135,137" fill={C.red} />
+              <path d="M 148,150 Q 165,158 178,160" stroke={`${C.red}90`} strokeWidth={1.5} fill="none" />
+              <polygon points="178,160 172,154 173,162" fill={C.red} />
 
-              {/* Ball at starting position (high loss) */}
-              <circle cx={80} cy={70} r={8} fill={C.orange} stroke={C.bright} strokeWidth={2} />
-              <text x={80} y={95} fill={C.orange} fontSize={11} textAnchor="middle" fontWeight={700}>step 1</text>
+              {/* Step 1 ball ON curve at x=80, y=94 */}
+              <circle cx={80} cy={94} r={8} fill={C.orange} stroke={C.bright} strokeWidth={2} />
+              <text x={80} y={84} fill={C.orange} fontSize={11} textAnchor="middle" fontWeight={700}>step 1</text>
 
-              {/* Ball after one update */}
-              <circle cx={115} cy={52} r={8} fill={C.yellow} stroke={C.bright} strokeWidth={2} opacity={0.7} />
-              <text x={115} y={77} fill={C.yellow} fontSize={11} textAnchor="middle">step 2</text>
+              {/* Step 2 ball ON curve at x=140, y=145 */}
+              <circle cx={140} cy={145} r={8} fill={C.yellow} stroke={C.bright} strokeWidth={2} />
+              <text x={140} y={135} fill={C.yellow} fontSize={11} textAnchor="middle">step 2</text>
 
-              {/* Ball near minimum */}
-              <circle cx={150} cy={48} r={8} fill={C.green} stroke={C.bright} strokeWidth={2} opacity={0.5} />
-              <text x={150} y={73} fill={C.green} fontSize={11} textAnchor="middle">step N</text>
-
-              {/* Arrows showing descent */}
-              <path d="M 85 62 L 108 56" stroke={C.red} strokeWidth={2} fill="none" markerEnd="url(#arrowhead)" />
-              <path d="M 120 50 L 143 48" stroke={C.red} strokeWidth={2} fill="none" markerEnd="url(#arrowhead)" />
-
-              {/* Gradient vectors at each step */}
-              <line x1={80} y1={70} x2={92} y2={58} stroke={`${C.red}70`} strokeWidth={2} strokeDasharray="3,2" />
-              <line x1={115} y1={52} x2={130} y2={48} stroke={`${C.red}70`} strokeWidth={2} strokeDasharray="3,2" />
+              {/* Step N ball ON curve at x=185, y=160 (near minimum) */}
+              <circle cx={185} cy={160} r={8} fill={C.green} stroke={C.bright} strokeWidth={2} />
+              <text x={185} y={150} fill={C.green} fontSize={11} textAnchor="middle">step N</text>
 
               {/* Minimum annotation */}
-              <text x={160} y={30} fill={C.cyan} fontSize={11} fontWeight={600}>minimum</text>
-              <line x1={160} y1={35} x2={160} y2={45} stroke={C.cyan} strokeWidth={1.5} />
+              <line x1={195} y1={160} x2={195} y2={140} stroke={`${C.cyan}60`} strokeWidth={1} strokeDasharray="3,2" />
+              <text x={195} y={135} fill={C.cyan} fontSize={11} fontWeight={600} textAnchor="middle">minimum</text>
             </svg>
           </div>
         </Box>
@@ -1957,21 +2041,16 @@ export const Vectors = (ctx) => {
         <Box color={C.cyan} style={{ width: "100%" }}>
           <T color="#80deea" bold center size={20}>From One Number to Many</T>
           <T color="#80deea" size={18} style={{ marginTop: 12 }}>A vector is just a list of numbers.</T>
-          <div style={{ marginTop: 20 }}>
-            <div style={{ display: "flex", gap: 24, justifyContent: "center" }}>
-              <div style={{ textAlign: "center", width: 100 }}>
-                <T size={14} color={C.mid}>Scalar (one number)</T>
-              </div>
-              <div style={{ width: 32 }} />
-              <div style={{ textAlign: "center" }}>
-                <T size={14} color={C.mid}>Vector (list)</T>
-              </div>
-            </div>
-            <div style={{ display: "flex", gap: 24, alignItems: "center", justifyContent: "center", marginTop: 10 }}>
+          <div style={{ marginTop: 20, display: "flex", gap: 24, alignItems: "center", justifyContent: "center" }}>
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8 }}>
+              <T size={14} color={C.mid}>Scalar (one number)</T>
               <div style={{ width: 100, height: 100, background: `${C.cyan}15`, border: `1px solid ${C.cyan}30`, display: "flex", alignItems: "center", justifyContent: "center", borderRadius: 8 }}>
                 <T size={24} bold color={C.cyan}>42</T>
               </div>
-              <div style={{ fontSize: 32, color: C.mid, lineHeight: 1 }}>→</div>
+            </div>
+            <div style={{ fontSize: 32, color: C.mid, lineHeight: 1 }}>→</div>
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8 }}>
+              <T size={14} color={C.mid}>Vector (list)</T>
               <div style={{ display: "flex", gap: 8 }}>
                 {[3, 7, 2, 5].map((num, i) => (
                   <div key={i} style={{ width: 90, height: 90, background: `${[C.cyan, C.green, C.yellow, C.orange][i]}15`, border: `1px solid ${[C.cyan, C.green, C.yellow, C.orange][i]}30`, display: "flex", alignItems: "center", justifyContent: "center", borderRadius: 8 }}>
@@ -1989,17 +2068,9 @@ export const Vectors = (ctx) => {
         <Box color={C.purple} style={{ width: "100%" }}>
           <T color="#b8a9ff" bold center size={19}>In Neural Networks, Everything is Vectors</T>
           <T color="#b8a9ff" size={15} style={{ marginTop: 12 }}>Inputs? A vector. Hidden layer outputs? Vectors. Every layer takes a vector in and produces a vector out.</T>
-          <div style={{ marginTop: 18 }}>
-            <div style={{ display: "flex", gap: 16, justifyContent: "center" }}>
-              <div style={{ textAlign: "center", width: 152 }}>
-                <T size={14} color={C.mid}>Input Vector</T>
-              </div>
-              <div style={{ width: 24 }} />
-              <div style={{ textAlign: "center", width: 152 }}>
-                <T size={14} color={C.mid}>Output Vector</T>
-              </div>
-            </div>
-            <div style={{ display: "flex", gap: 16, alignItems: "center", justifyContent: "center", marginTop: 8 }}>
+          <div style={{ marginTop: 18, display: "flex", gap: 16, alignItems: "center", justifyContent: "center" }}>
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8 }}>
+              <T size={14} color={C.mid}>Input Vector</T>
               <div style={{ display: "flex", gap: 6 }}>
                 {[1500, 3].map((n, i) => (
                   <div key={i} style={{ width: 70, height: 50, background: `${C.green}20`, border: `1px solid ${C.green}40`, display: "flex", alignItems: "center", justifyContent: "center", borderRadius: 4, fontSize: 14, color: C.green, fontFamily: "monospace", fontWeight: "bold" }}>
@@ -2007,7 +2078,10 @@ export const Vectors = (ctx) => {
                   </div>
                 ))}
               </div>
-              <div style={{ fontSize: 24, color: C.mid, lineHeight: 1 }}>→</div>
+            </div>
+            <div style={{ fontSize: 24, color: C.mid, lineHeight: 1, paddingTop: 20 }}>→</div>
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8 }}>
+              <T size={14} color={C.mid}>Output Vector</T>
               <div style={{ display: "flex", gap: 6 }}>
                 {[950, 185].map((n, i) => (
                   <div key={i} style={{ width: 70, height: 50, background: `${C.orange}20`, border: `1px solid ${C.orange}40`, display: "flex", alignItems: "center", justifyContent: "center", borderRadius: 4, fontSize: 14, color: C.orange, fontFamily: "monospace", fontWeight: "bold" }}>
@@ -2169,7 +2243,7 @@ export const DotProductIntro = (ctx) => {
 
       <Reveal when={sub >= 3}>
         <Box color={C.yellow} style={{ width: "100%" }}>
-          <T color="#ffe082" bold center size={19}>Wait - THIS is What a Neuron Does!</T>
+          <T color="#ffe082" bold center size={19}>Wait - This is What a Neuron Does!</T>
           <T color="#ffe082" size={15} style={{ marginTop: 12 }}>A neuron takes inputs [38.5, 1.0, 0.8] and weights [0.6, 0.3, 0.1] and computes:</T>
           <div style={{ padding: "14px", background: "rgba(0,0,0,0.4)", borderRadius: 10, border: `1px solid ${C.yellow}25`, textAlign: "center", marginTop: 12 }}>
             <div style={{ display: "flex", gap: 6, justifyContent: "center", alignItems: "center", flexWrap: "wrap" }}>
@@ -2188,7 +2262,7 @@ export const DotProductIntro = (ctx) => {
               <span style={{ padding: "2px 8px", background: `${C.cyan}15`, borderRadius: 4, color: "#80deea", fontSize: 14, fontWeight: 600 }}>23.48</span>
             </div>
           </div>
-          <T size={15} color="#ffe082" style={{ marginTop: 12 }}>That is a dot product! A neuron IS a dot product machine.</T>
+          <T size={15} color="#ffe082" style={{ marginTop: 12 }}>That is a dot product! A neuron is a dot product machine.</T>
         </Box>
       </Reveal>
 
@@ -2206,27 +2280,26 @@ export const Matrices = (ctx) => {
         <Box color={C.cyan} style={{ width: "100%" }}>
           <T color="#80deea" bold center size={20}>From 1D to 2D: The Grid</T>
           <T color="#80deea" size={18} style={{ marginTop: 12 }}>A matrix is a grid of numbers arranged in rows and columns.</T>
-          <div style={{ marginTop: 18 }}>
-            <div style={{ display: "flex", gap: 24, justifyContent: "center" }}>
-              <div style={{ textAlign: "center", width: 54 }}><T size={14} color={C.mid}>A vector is 1D</T></div>
-              <div style={{ width: 32 }} />
-              <div style={{ textAlign: "center", width: 170 }}><T size={14} color={C.mid}>A matrix is 2D</T></div>
-            </div>
-            <div style={{ display: "flex", gap: 24, alignItems: "center", justifyContent: "center", marginTop: 10 }}>
+          <div style={{ display: "flex", gap: 24, alignItems: "center", justifyContent: "center", marginTop: 18 }}>
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8 }}>
+              <T size={14} color={C.mid}>A vector is 1D</T>
               <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
-                {[10, 20, 30].map((n, i) => (
+                {[38.5, 1.0, 0.8].map((n, i) => (
                   <div key={i} style={{ width: 54, height: 54, background: `${C.cyan}15`, border: `1px solid ${C.cyan}30`, display: "flex", alignItems: "center", justifyContent: "center", borderRadius: 6 }}>
-                    <span style={{ color: C.cyan, fontSize: 18, fontWeight: 700, fontFamily: "monospace" }}>{n}</span>
+                    <span style={{ color: C.cyan, fontSize: 16, fontWeight: 700, fontFamily: "monospace" }}>{n}</span>
                   </div>
                 ))}
               </div>
-              <div style={{ fontSize: 32, color: C.mid }}>→</div>
+            </div>
+            <div style={{ fontSize: 32, color: C.mid, paddingTop: 20 }}>→</div>
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8 }}>
+              <T size={14} color={C.mid}>A matrix is 2D</T>
               <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
-                {[[1, 2, 3], [4, 5, 6]].map((row, i) => (
+                {[[0.6, 0.3, 0.1], [0.1, 0.5, 0.2], [0.0, 0.2, 0.7]].map((row, i) => (
                   <div key={i} style={{ display: "flex", gap: 4 }}>
                     {row.map((n, j) => (
                       <div key={j} style={{ width: 54, height: 54, background: `${C.cyan}15`, border: `1px solid ${C.cyan}30`, display: "flex", alignItems: "center", justifyContent: "center", borderRadius: 6 }}>
-                        <span style={{ color: C.cyan, fontSize: 18, fontWeight: 700, fontFamily: "monospace" }}>{n}</span>
+                        <span style={{ color: C.cyan, fontSize: 16, fontWeight: 700, fontFamily: "monospace" }}>{n}</span>
                       </div>
                     ))}
                   </div>
@@ -2234,7 +2307,7 @@ export const Matrices = (ctx) => {
               </div>
             </div>
           </div>
-          <T size={15} color="#80deea" style={{ marginTop: 18, textAlign: "center" }}>The matrix on the right is 2 rows × 3 columns. We write this as a 2×3 matrix.</T>
+          <T size={15} color="#80deea" style={{ marginTop: 18, textAlign: "center" }}>The matrix on the right is 3 rows × 3 columns. We write this as a 3×3 matrix.</T>
         </Box>
       )}
 
@@ -2242,38 +2315,38 @@ export const Matrices = (ctx) => {
         <Box color={C.purple} style={{ width: "100%" }}>
           <T color="#b8a9ff" bold center size={19}>A Matrix Transforms a Vector Into a New Vector</T>
           <T color="#b8a9ff" size={15} style={{ marginTop: 10 }}>Each ROW does a dot product with the input vector.</T>
-          <div style={{ marginTop: 16 }}>
-            <div style={{ display: "flex", gap: 16, justifyContent: "center" }}>
-              <div style={{ textAlign: "center", width: 112 }}><T size={14} color={C.mid}>Matrix (3 rows)</T></div>
-              <div style={{ width: 20 }} />
-              <div style={{ textAlign: "center", width: 54 }}><T size={14} color={C.mid}>Vector</T></div>
-              <div style={{ width: 20 }} />
-              <div style={{ textAlign: "center", width: 54 }}><T size={14} color={C.mid}>Result</T></div>
-            </div>
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 16, marginTop: 8 }}>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 12, marginTop: 16 }}>
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8 }}>
+              <T size={14} color={C.mid}>Weights (3 neurons)</T>
               <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
-                {[[1, 2], [3, 4], [5, 6]].map((row, i) => (
+                {[[0.6, 0.3, 0.1], [0.1, 0.5, 0.2], [0.0, 0.2, 0.7]].map((row, i) => (
                   <div key={i} style={{ display: "flex", gap: 4 }}>
                     {row.map((n, j) => (
-                      <div key={j} style={{ width: 54, height: 54, background: `${C.purple}15`, border: `1px solid ${C.purple}30`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14, fontFamily: "monospace", fontWeight: "bold", color: C.purple, borderRadius: 6 }}>
+                      <div key={j} style={{ width: 48, height: 48, background: `${C.purple}15`, border: `1px solid ${C.purple}30`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontFamily: "monospace", fontWeight: "bold", color: C.purple, borderRadius: 6 }}>
                         {n}
                       </div>
                     ))}
                   </div>
                 ))}
               </div>
-              <T size={20} color={C.mid}>×</T>
+            </div>
+            <T size={20} color={C.mid} style={{ paddingTop: 20 }}>×</T>
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8 }}>
+              <T size={14} color={C.mid}>Inputs</T>
               <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
-                {[2, 3].map((n, i) => (
-                  <div key={i} style={{ width: 54, height: 54, background: `${C.purple}25`, border: `1px solid ${C.purple}40`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14, fontFamily: "monospace", fontWeight: "bold", color: C.purple, borderRadius: 6 }}>
+                {[38.5, 1.0, 0.8].map((n, i) => (
+                  <div key={i} style={{ width: 48, height: 48, background: `${C.purple}25`, border: `1px solid ${C.purple}40`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontFamily: "monospace", fontWeight: "bold", color: C.purple, borderRadius: 6 }}>
                     {n}
                   </div>
                 ))}
               </div>
-              <T size={20} color={C.mid}>=</T>
+            </div>
+            <T size={20} color={C.mid} style={{ paddingTop: 20 }}>=</T>
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8 }}>
+              <T size={14} color={C.mid}>Outputs</T>
               <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
-                {[8, 20, 32].map((n, i) => (
-                  <div key={i} style={{ width: 54, height: 54, background: `${C.orange}15`, border: `1px solid ${C.orange}30`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14, fontFamily: "monospace", fontWeight: "bold", color: C.orange, borderRadius: 6 }}>
+                {[23.48, 4.51, 0.76].map((n, i) => (
+                  <div key={i} style={{ width: 54, height: 48, background: `${C.orange}15`, border: `1px solid ${C.orange}30`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontFamily: "monospace", fontWeight: "bold", color: C.orange, borderRadius: 6 }}>
                     {n}
                   </div>
                 ))}
@@ -2287,70 +2360,88 @@ export const Matrices = (ctx) => {
         <Box color={C.red} style={{ width: "100%" }}>
           <T color="#ef9a9a" bold center size={19}>The Math Step-by-Step</T>
           <div style={{ padding: "12px 14px", background: `${C.red}08`, border: `1px solid ${C.red}20`, borderRadius: 8, marginTop: 12 }}>
-            <T size={14} color="#ef9a9a" style={{ marginBottom: 8 }}>Row 1 [1, 2] · [2, 3]:</T>
+            <T size={14} color="#ef9a9a" style={{ marginBottom: 8 }}>Flu neuron [0.6, 0.3, 0.1] · [38.5, 1.0, 0.8]:</T>
             <div style={{ display: "flex", gap: 6, justifyContent: "center", alignItems: "center", flexWrap: "wrap" }}>
-              <span style={{ padding: "2px 8px", background: `${C.red}15`, borderRadius: 4, color: "#ef9a9a", fontSize: 13, fontWeight: 600 }}>1</span>
+              <span style={{ padding: "2px 8px", background: `${C.red}15`, borderRadius: 4, color: "#ef9a9a", fontSize: 13, fontWeight: 600 }}>0.6</span>
               <span style={{ color: C.dim, fontSize: 12 }}>×</span>
-              <span style={{ padding: "2px 8px", background: `${C.red}15`, borderRadius: 4, color: "#ef9a9a", fontSize: 13, fontWeight: 600 }}>2</span>
+              <span style={{ padding: "2px 8px", background: `${C.red}15`, borderRadius: 4, color: "#ef9a9a", fontSize: 13, fontWeight: 600 }}>38.5</span>
               <span style={{ color: C.dim, fontSize: 12 }}>+</span>
-              <span style={{ padding: "2px 8px", background: `${C.red}15`, borderRadius: 4, color: "#ef9a9a", fontSize: 13, fontWeight: 600 }}>2</span>
+              <span style={{ padding: "2px 8px", background: `${C.red}15`, borderRadius: 4, color: "#ef9a9a", fontSize: 13, fontWeight: 600 }}>0.3</span>
               <span style={{ color: C.dim, fontSize: 12 }}>×</span>
-              <span style={{ padding: "2px 8px", background: `${C.red}15`, borderRadius: 4, color: "#ef9a9a", fontSize: 13, fontWeight: 600 }}>3</span>
-              <span style={{ color: C.dim, fontSize: 12 }}>=</span>
-              <span style={{ padding: "2px 8px", background: `${C.green}15`, borderRadius: 4, color: "#80e8a5", fontSize: 13, fontWeight: 600 }}>2</span>
+              <span style={{ padding: "2px 8px", background: `${C.red}15`, borderRadius: 4, color: "#ef9a9a", fontSize: 13, fontWeight: 600 }}>1.0</span>
               <span style={{ color: C.dim, fontSize: 12 }}>+</span>
-              <span style={{ padding: "2px 8px", background: `${C.green}15`, borderRadius: 4, color: "#80e8a5", fontSize: 13, fontWeight: 600 }}>6</span>
+              <span style={{ padding: "2px 8px", background: `${C.red}15`, borderRadius: 4, color: "#ef9a9a", fontSize: 13, fontWeight: 600 }}>0.1</span>
+              <span style={{ color: C.dim, fontSize: 12 }}>×</span>
+              <span style={{ padding: "2px 8px", background: `${C.red}15`, borderRadius: 4, color: "#ef9a9a", fontSize: 13, fontWeight: 600 }}>0.8</span>
               <span style={{ color: C.dim, fontSize: 12 }}>=</span>
-              <span style={{ padding: "2px 8px", background: `${C.orange}15`, borderRadius: 4, color: "#ffb74d", fontSize: 13, fontWeight: 600 }}>8</span>
+              <span style={{ padding: "2px 8px", background: `${C.green}15`, borderRadius: 4, color: "#80e8a5", fontSize: 13, fontWeight: 600 }}>23.1</span>
+              <span style={{ color: C.dim, fontSize: 12 }}>+</span>
+              <span style={{ padding: "2px 8px", background: `${C.green}15`, borderRadius: 4, color: "#80e8a5", fontSize: 13, fontWeight: 600 }}>0.3</span>
+              <span style={{ color: C.dim, fontSize: 12 }}>+</span>
+              <span style={{ padding: "2px 8px", background: `${C.green}15`, borderRadius: 4, color: "#80e8a5", fontSize: 13, fontWeight: 600 }}>0.08</span>
+              <span style={{ color: C.dim, fontSize: 12 }}>=</span>
+              <span style={{ padding: "2px 8px", background: `${C.orange}15`, borderRadius: 4, color: "#ffb74d", fontSize: 13, fontWeight: 600 }}>23.48</span>
             </div>
           </div>
           <div style={{ padding: "12px 14px", background: `${C.red}08`, border: `1px solid ${C.red}20`, borderRadius: 8, marginTop: 10 }}>
-            <T size={14} color="#ef9a9a" style={{ marginBottom: 8 }}>Row 2 [3, 4] · [2, 3]:</T>
+            <T size={14} color="#ef9a9a" style={{ marginBottom: 8 }}>Cold neuron [0.1, 0.5, 0.2] · [38.5, 1.0, 0.8]:</T>
             <div style={{ display: "flex", gap: 6, justifyContent: "center", alignItems: "center", flexWrap: "wrap" }}>
-              <span style={{ padding: "2px 8px", background: `${C.red}15`, borderRadius: 4, color: "#ef9a9a", fontSize: 13, fontWeight: 600 }}>3</span>
+              <span style={{ padding: "2px 8px", background: `${C.red}15`, borderRadius: 4, color: "#ef9a9a", fontSize: 13, fontWeight: 600 }}>0.1</span>
               <span style={{ color: C.dim, fontSize: 12 }}>×</span>
-              <span style={{ padding: "2px 8px", background: `${C.red}15`, borderRadius: 4, color: "#ef9a9a", fontSize: 13, fontWeight: 600 }}>2</span>
+              <span style={{ padding: "2px 8px", background: `${C.red}15`, borderRadius: 4, color: "#ef9a9a", fontSize: 13, fontWeight: 600 }}>38.5</span>
               <span style={{ color: C.dim, fontSize: 12 }}>+</span>
-              <span style={{ padding: "2px 8px", background: `${C.red}15`, borderRadius: 4, color: "#ef9a9a", fontSize: 13, fontWeight: 600 }}>4</span>
+              <span style={{ padding: "2px 8px", background: `${C.red}15`, borderRadius: 4, color: "#ef9a9a", fontSize: 13, fontWeight: 600 }}>0.5</span>
               <span style={{ color: C.dim, fontSize: 12 }}>×</span>
-              <span style={{ padding: "2px 8px", background: `${C.red}15`, borderRadius: 4, color: "#ef9a9a", fontSize: 13, fontWeight: 600 }}>3</span>
-              <span style={{ color: C.dim, fontSize: 12 }}>=</span>
-              <span style={{ padding: "2px 8px", background: `${C.green}15`, borderRadius: 4, color: "#80e8a5", fontSize: 13, fontWeight: 600 }}>6</span>
+              <span style={{ padding: "2px 8px", background: `${C.red}15`, borderRadius: 4, color: "#ef9a9a", fontSize: 13, fontWeight: 600 }}>1.0</span>
               <span style={{ color: C.dim, fontSize: 12 }}>+</span>
-              <span style={{ padding: "2px 8px", background: `${C.green}15`, borderRadius: 4, color: "#80e8a5", fontSize: 13, fontWeight: 600 }}>12</span>
+              <span style={{ padding: "2px 8px", background: `${C.red}15`, borderRadius: 4, color: "#ef9a9a", fontSize: 13, fontWeight: 600 }}>0.2</span>
+              <span style={{ color: C.dim, fontSize: 12 }}>×</span>
+              <span style={{ padding: "2px 8px", background: `${C.red}15`, borderRadius: 4, color: "#ef9a9a", fontSize: 13, fontWeight: 600 }}>0.8</span>
               <span style={{ color: C.dim, fontSize: 12 }}>=</span>
-              <span style={{ padding: "2px 8px", background: `${C.orange}15`, borderRadius: 4, color: "#ffb74d", fontSize: 13, fontWeight: 600 }}>18</span>
+              <span style={{ padding: "2px 8px", background: `${C.green}15`, borderRadius: 4, color: "#80e8a5", fontSize: 13, fontWeight: 600 }}>3.85</span>
+              <span style={{ color: C.dim, fontSize: 12 }}>+</span>
+              <span style={{ padding: "2px 8px", background: `${C.green}15`, borderRadius: 4, color: "#80e8a5", fontSize: 13, fontWeight: 600 }}>0.5</span>
+              <span style={{ color: C.dim, fontSize: 12 }}>+</span>
+              <span style={{ padding: "2px 8px", background: `${C.green}15`, borderRadius: 4, color: "#80e8a5", fontSize: 13, fontWeight: 600 }}>0.16</span>
+              <span style={{ color: C.dim, fontSize: 12 }}>=</span>
+              <span style={{ padding: "2px 8px", background: `${C.orange}15`, borderRadius: 4, color: "#ffb74d", fontSize: 13, fontWeight: 600 }}>4.51</span>
             </div>
           </div>
           <div style={{ padding: "12px 14px", background: `${C.red}08`, border: `1px solid ${C.red}20`, borderRadius: 8, marginTop: 10 }}>
-            <T size={14} color="#ef9a9a" style={{ marginBottom: 8 }}>Row 3 [5, 6] · [2, 3]:</T>
+            <T size={14} color="#ef9a9a" style={{ marginBottom: 8 }}>Allergy neuron [0.0, 0.2, 0.7] · [38.5, 1.0, 0.8]:</T>
             <div style={{ display: "flex", gap: 6, justifyContent: "center", alignItems: "center", flexWrap: "wrap" }}>
-              <span style={{ padding: "2px 8px", background: `${C.red}15`, borderRadius: 4, color: "#ef9a9a", fontSize: 13, fontWeight: 600 }}>5</span>
+              <span style={{ padding: "2px 8px", background: `${C.red}15`, borderRadius: 4, color: "#ef9a9a", fontSize: 13, fontWeight: 600 }}>0.0</span>
               <span style={{ color: C.dim, fontSize: 12 }}>×</span>
-              <span style={{ padding: "2px 8px", background: `${C.red}15`, borderRadius: 4, color: "#ef9a9a", fontSize: 13, fontWeight: 600 }}>2</span>
+              <span style={{ padding: "2px 8px", background: `${C.red}15`, borderRadius: 4, color: "#ef9a9a", fontSize: 13, fontWeight: 600 }}>38.5</span>
               <span style={{ color: C.dim, fontSize: 12 }}>+</span>
-              <span style={{ padding: "2px 8px", background: `${C.red}15`, borderRadius: 4, color: "#ef9a9a", fontSize: 13, fontWeight: 600 }}>6</span>
+              <span style={{ padding: "2px 8px", background: `${C.red}15`, borderRadius: 4, color: "#ef9a9a", fontSize: 13, fontWeight: 600 }}>0.2</span>
               <span style={{ color: C.dim, fontSize: 12 }}>×</span>
-              <span style={{ padding: "2px 8px", background: `${C.red}15`, borderRadius: 4, color: "#ef9a9a", fontSize: 13, fontWeight: 600 }}>3</span>
-              <span style={{ color: C.dim, fontSize: 12 }}>=</span>
-              <span style={{ padding: "2px 8px", background: `${C.green}15`, borderRadius: 4, color: "#80e8a5", fontSize: 13, fontWeight: 600 }}>10</span>
+              <span style={{ padding: "2px 8px", background: `${C.red}15`, borderRadius: 4, color: "#ef9a9a", fontSize: 13, fontWeight: 600 }}>1.0</span>
               <span style={{ color: C.dim, fontSize: 12 }}>+</span>
-              <span style={{ padding: "2px 8px", background: `${C.green}15`, borderRadius: 4, color: "#80e8a5", fontSize: 13, fontWeight: 600 }}>18</span>
+              <span style={{ padding: "2px 8px", background: `${C.red}15`, borderRadius: 4, color: "#ef9a9a", fontSize: 13, fontWeight: 600 }}>0.7</span>
+              <span style={{ color: C.dim, fontSize: 12 }}>×</span>
+              <span style={{ padding: "2px 8px", background: `${C.red}15`, borderRadius: 4, color: "#ef9a9a", fontSize: 13, fontWeight: 600 }}>0.8</span>
               <span style={{ color: C.dim, fontSize: 12 }}>=</span>
-              <span style={{ padding: "2px 8px", background: `${C.orange}15`, borderRadius: 4, color: "#ffb74d", fontSize: 13, fontWeight: 600 }}>28</span>
+              <span style={{ padding: "2px 8px", background: `${C.green}15`, borderRadius: 4, color: "#80e8a5", fontSize: 13, fontWeight: 600 }}>0.0</span>
+              <span style={{ color: C.dim, fontSize: 12 }}>+</span>
+              <span style={{ padding: "2px 8px", background: `${C.green}15`, borderRadius: 4, color: "#80e8a5", fontSize: 13, fontWeight: 600 }}>0.2</span>
+              <span style={{ color: C.dim, fontSize: 12 }}>+</span>
+              <span style={{ padding: "2px 8px", background: `${C.green}15`, borderRadius: 4, color: "#80e8a5", fontSize: 13, fontWeight: 600 }}>0.56</span>
+              <span style={{ color: C.dim, fontSize: 12 }}>=</span>
+              <span style={{ padding: "2px 8px", background: `${C.orange}15`, borderRadius: 4, color: "#ffb74d", fontSize: 13, fontWeight: 600 }}>0.76</span>
             </div>
           </div>
-          <T size={15} color="#ef9a9a" style={{ marginTop: 14 }}>Result: [8, 18, 28]</T>
+          <T size={15} color="#ef9a9a" style={{ marginTop: 14 }}>Result: [23.48, 4.51, 0.76] - the raw scores before bias and activation.</T>
         </Box>
       </Reveal>
 
       <Reveal when={sub >= 3}>
         <Box color={C.yellow} style={{ width: "100%" }}>
           <T color="#ffe082" bold center size={19}>This is What a Layer Does!</T>
-          <T color="#ffe082" size={15} style={{ marginTop: 10 }}>In chapter 1.2, a layer with weights [[0.6, 0.3, 0.1], [0.2, 0.8, 0.5]] transforming input [10, 20, 30] is matrix multiplication.</T>
+          <T color="#ffe082" size={15} style={{ marginTop: 10 }}>In chapter 1.3, a layer with weights [[0.6, 0.3, 0.1], [0.1, 0.5, 0.2], [0.0, 0.2, 0.7]] transforming input [38.5, 1.0, 0.8] is matrix multiplication.</T>
           <div style={{ padding: "14px", background: "rgba(0,0,0,0.4)", borderRadius: 10, border: `1px solid ${C.yellow}25`, marginTop: 12, textAlign: "center" }}>
             <T size={16} color={C.yellow} bold style={{ fontFamily: "monospace", marginBottom: 8 }}>Layer weights are a matrix.</T>
-            <T size={14} color={C.dim}>Passing input through a layer IS matrix multiplication.</T>
+            <T size={14} color={C.dim}>Passing input through a layer is matrix multiplication.</T>
           </div>
         </Box>
       </Reveal>
@@ -2374,35 +2465,11 @@ export const LayerIsMatMul = (ctx) => {
       )}
 
       <Reveal when={sub >= 1}>
-        <Box color={C.purple} style={{ width: "100%" }}>
-          <T color="#b8a9ff" bold center size={19}>From Chapter 1.2: A Neuron Sums Weighted Inputs</T>
-          <div style={{ padding: "14px", background: "rgba(0,0,0,0.4)", borderRadius: 10, border: `1px solid ${C.purple}25`, marginTop: 12, textAlign: "center" }}>
-            <div style={{ display: "flex", gap: 6, justifyContent: "center", alignItems: "center", flexWrap: "wrap" }}>
-              <T color={C.purple} bold size={14}>neuron_output</T>
-              <span style={{ color: C.dim, fontSize: 13 }}>=</span>
-              <span style={{ padding: "2px 8px", background: `${C.orange}15`, borderRadius: 4, color: "#ffb74d", fontSize: 13, fontWeight: 600 }}>38.5</span>
-              <span style={{ color: C.dim, fontSize: 13 }}>×</span>
-              <span style={{ padding: "2px 8px", background: `${C.red}15`, borderRadius: 4, color: "#ef9a9a", fontSize: 13, fontWeight: 600 }}>0.6</span>
-              <span style={{ color: C.dim, fontSize: 13 }}>+</span>
-              <span style={{ padding: "2px 8px", background: `${C.yellow}15`, borderRadius: 4, color: "#ffe082", fontSize: 13, fontWeight: 600 }}>1.0</span>
-              <span style={{ color: C.dim, fontSize: 13 }}>×</span>
-              <span style={{ padding: "2px 8px", background: `${C.red}15`, borderRadius: 4, color: "#ef9a9a", fontSize: 13, fontWeight: 600 }}>0.3</span>
-              <span style={{ color: C.dim, fontSize: 13 }}>+</span>
-              <span style={{ padding: "2px 8px", background: `${C.purple}15`, borderRadius: 4, color: "#b8a9ff", fontSize: 13, fontWeight: 600 }}>0.8</span>
-              <span style={{ color: C.dim, fontSize: 13 }}>×</span>
-              <span style={{ padding: "2px 8px", background: `${C.red}15`, borderRadius: 4, color: "#ef9a9a", fontSize: 13, fontWeight: 600 }}>0.1</span>
-            </div>
-          </div>
-          <T size={15} color="#b8a9ff" style={{ marginTop: 12 }}>This IS a dot product of inputs and weights.</T>
-        </Box>
-      </Reveal>
-
-      <Reveal when={sub >= 2}>
         <Box color={C.red} style={{ width: "100%" }}>
           <T color="#ef9a9a" bold center size={19}>A Layer Has Many Neurons</T>
           <T color="#ef9a9a" size={15} style={{ marginTop: 10 }}>If a layer has 3 neurons, you compute 3 separate dot products. Each neuron has its own weights. Stack them as matrix rows - now you have a matrix.</T>
           <div style={{ display: "flex", justifyContent: "center", marginTop: 14 }}>
-            <svg viewBox="0 0 380 320" style={{ display: "block", width: "100%", maxWidth: 380 }}>
+            <svg viewBox="0 0 380 340" style={{ display: "block", width: "100%", maxWidth: 380 }}>
               {/* Column labels */}
               <text x={65} y={16} fill="rgba(255,255,255,0.4)" fontSize={11} textAnchor="middle" fontWeight={600}>Inputs</text>
               <text x={290} y={16} fill="rgba(255,255,255,0.4)" fontSize={11} textAnchor="middle" fontWeight={600}>Neurons (Layer)</text>
@@ -2459,9 +2526,33 @@ export const LayerIsMatMul = (ctx) => {
               ))}
 
               {/* Bottom label */}
-              <text x={190} y={308} fill="rgba(255,255,255,0.4)" fontSize={12} textAnchor="middle" fontWeight={600}>3 inputs × 3 neurons = matrix multiplication</text>
+              <text x={190} y={328} fill="rgba(255,255,255,0.4)" fontSize={12} textAnchor="middle" fontWeight={600}>3 inputs × 3 neurons = matrix multiplication</text>
             </svg>
           </div>
+        </Box>
+      </Reveal>
+
+      <Reveal when={sub >= 2}>
+        <Box color={C.purple} style={{ width: "100%" }}>
+          <T color="#b8a9ff" bold center size={19}>From Chapter 1.2: A Neuron Sums Weighted Inputs</T>
+          <div style={{ padding: "14px", background: "rgba(0,0,0,0.4)", borderRadius: 10, border: `1px solid ${C.purple}25`, marginTop: 12, textAlign: "center" }}>
+            <div style={{ display: "flex", gap: 6, justifyContent: "center", alignItems: "center", flexWrap: "wrap" }}>
+              <T color={C.purple} bold size={14}>neuron_output</T>
+              <span style={{ color: C.dim, fontSize: 13 }}>=</span>
+              <span style={{ padding: "2px 8px", background: `${C.orange}15`, borderRadius: 4, color: "#ffb74d", fontSize: 13, fontWeight: 600 }}>38.5</span>
+              <span style={{ color: C.dim, fontSize: 13 }}>×</span>
+              <span style={{ padding: "2px 8px", background: `${C.red}15`, borderRadius: 4, color: "#ef9a9a", fontSize: 13, fontWeight: 600 }}>0.6</span>
+              <span style={{ color: C.dim, fontSize: 13 }}>+</span>
+              <span style={{ padding: "2px 8px", background: `${C.yellow}15`, borderRadius: 4, color: "#ffe082", fontSize: 13, fontWeight: 600 }}>1.0</span>
+              <span style={{ color: C.dim, fontSize: 13 }}>×</span>
+              <span style={{ padding: "2px 8px", background: `${C.red}15`, borderRadius: 4, color: "#ef9a9a", fontSize: 13, fontWeight: 600 }}>0.3</span>
+              <span style={{ color: C.dim, fontSize: 13 }}>+</span>
+              <span style={{ padding: "2px 8px", background: `${C.purple}15`, borderRadius: 4, color: "#b8a9ff", fontSize: 13, fontWeight: 600 }}>0.8</span>
+              <span style={{ color: C.dim, fontSize: 13 }}>×</span>
+              <span style={{ padding: "2px 8px", background: `${C.red}15`, borderRadius: 4, color: "#ef9a9a", fontSize: 13, fontWeight: 600 }}>0.1</span>
+            </div>
+          </div>
+          <T size={15} color="#b8a9ff" style={{ marginTop: 12 }}>This is a dot product of inputs and weights.</T>
         </Box>
       </Reveal>
 

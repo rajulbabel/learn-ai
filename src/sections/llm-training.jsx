@@ -81,7 +81,7 @@ export const SelfSupervised = (ctx) => { const { sub, subBtnRipple, setSubBtnRip
         <T color="#80deea" bold center size={20}>The Genius Trick: Use the text itself as the label.</T>
         <T color="#80deea" style={{ marginTop: 6 }}>Given: "The capital of France is"</T>
         <T color="#80deea" style={{ marginTop: 4, padding: "10px", background: "rgba(0,0,0,0.2)", borderRadius: 6 }}>Model predicts the next token: <strong>"Paris"</strong></T>
-        <T color="#80deea" style={{ marginTop: 6 }}>Correct answer is RIGHT THERE in the original text. No humans needed.</T>
+        <T color="#80deea" style={{ marginTop: 6 }}>Correct answer is right there in the original text. No humans needed.</T>
       </Box></Reveal>
     <Reveal when={sub >= 2}><Box color={C.yellow} style={{ width: "100%" }}>
         <T color="#ffe082" bold center size={20}>Scaling without limit:</T>
@@ -279,7 +279,7 @@ export const SFT = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, regist
           <T color={C.red} size={15} style={{ marginTop: 6 }}>Them: "2+2 is a common arithmetic expression. In 1847, George Boole proposed that mathematical logic could be..."</T>
         </div>
         <T color="#b8a9ff" style={{ marginTop: 8 }}>They didn't answer your question. They just... kept writing. Like autocomplete.</T>
-        <T color="#b8a9ff" style={{ marginTop: 4 }}>This is exactly what a pretrained LLM does. It has all the knowledge, but doesn't know HOW to have a conversation.</T>
+        <T color="#b8a9ff" style={{ marginTop: 4 }}>This is exactly what a pretrained LLM does. It has all the knowledge, but doesn't know how to have a conversation.</T>
       </Box>
     )}
     <Reveal when={sub >= 1}><Box color={C.cyan} style={{ width: "100%" }}>
@@ -318,7 +318,7 @@ export const SFT = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, regist
               <T color={C.bright} size={14}>You: "How do I boil an egg?"</T>
               <T color={C.green} size={14} style={{ marginTop: 4 }}>Model: "Put the egg in a pot of water. Bring to a boil. For soft-boiled: 6 min. For hard-boiled: 12 min. Run under cold water after."</T>
             </div>
-            <T color={C.dim} size={13} style={{ marginTop: 4 }}>Same knowledge inside. Just learned HOW to answer.</T>
+            <T color={C.dim} size={13} style={{ marginTop: 4 }}>Same knowledge inside. Just learned how to answer.</T>
           </div>
         </div>
       </Box></Reveal>
@@ -347,7 +347,7 @@ export const SFT = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, regist
     <Reveal when={sub >= 4}><Box color={C.green} style={{ width: "100%" }}>
         <T color="#80e8a5" bold center size={20}>The big insight</T>
         <T color="#80e8a5" style={{ marginTop: 8 }}>SFT doesn't teach new facts. The model already knows everything from pretraining.</T>
-        <T color="#80e8a5" style={{ marginTop: 6 }}>SFT teaches BEHAVIOR:</T>
+        <T color="#80e8a5" style={{ marginTop: 6 }}>SFT teaches behavior:</T>
         <div style={{ marginTop: 8, display: "flex", flexWrap: "wrap", gap: 6, justifyContent: "center" }}>
           {["When asked a question → answer it", "Be concise, not rambling", "Be helpful, not vague", "Follow instructions", "Match the right tone"].map((b, i) => (
             <div key={i} style={{ padding: "6px 12px", borderRadius: 20, background: `${C.green}15`, border: `1px solid ${C.green}25` }}>
@@ -381,7 +381,7 @@ export const RLHF = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, regis
             </div>
           ))}
         </div>
-        <T color="#ce93d8" style={{ marginTop: 8 }}>The model follows the Q&A format, but nobody taught it WHAT MAKES a good answer vs a bad answer. That's the RLHF problem.</T>
+        <T color="#ce93d8" style={{ marginTop: 8 }}>The model follows the Q&A format, but nobody taught it what makes a good answer vs a bad answer. That's the RLHF problem.</T>
       </Box>
     )}
     <Reveal when={sub >= 1}><Box color={C.cyan} style={{ width: "100%" }}>
@@ -404,7 +404,7 @@ export const RLHF = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, regis
             <T color={C.dim} size={13}>More helpful, encouraging, gives concrete steps</T>
           </div>
         </div>
-        <T color="#80deea" style={{ marginTop: 8 }}>Do this thousands of times for different questions. Now you have a huge dataset of "humans prefer THIS over THAT."</T>
+        <T color="#80deea" style={{ marginTop: 8 }}>Do this thousands of times for different questions. Now you have a huge dataset of "humans prefer this over that."</T>
       </Box></Reveal>
     <Reveal when={sub >= 2}><Box color={C.yellow} style={{ width: "100%" }}>
         <T color="#ffe082" bold center size={20}>Step 2: Train a "judge" model</T>
@@ -519,7 +519,7 @@ export const BatchTraining = (ctx) => { const { sub, subBtnRipple, setSubBtnRipp
         <T color="#ffb74d" style={{ marginTop: 8 }}>Let's say you're training the model. The simplest approach:</T>
         <div style={{ marginTop: 10, display: "flex", flexDirection: "column", gap: 4 }}>
           {[
-            { step: "Show it ONE example", detail: '"What is 2+2?" → "4"' },
+            { step: "Show it one example", detail: '"What is 2+2?" → "4"' },
             { step: "Check how wrong it was", detail: "Compute the loss (chapter 2.3)" },
             { step: "Nudge the weights", detail: "Adjust slightly to do better" },
             { step: "Next example", detail: "Repeat with a new question" },
@@ -540,7 +540,7 @@ export const BatchTraining = (ctx) => { const { sub, subBtnRipple, setSubBtnRipp
     )}
     <Reveal when={sub >= 1}><Box color={C.red} style={{ width: "100%" }}>
         <T color="#ff8a80" bold center size={20}>The problem: one example = bad advice</T>
-        <T color="#ff8a80" style={{ marginTop: 8 }}>Imagine you're lost in a new city. You ask ONE stranger for directions.</T>
+        <T color="#ff8a80" style={{ marginTop: 8 }}>Imagine you're lost in a new city. You ask one stranger for directions.</T>
         <div style={{ marginTop: 10, display: "flex", flexDirection: "column", gap: 8 }}>
           <div style={{ padding: "10px", background: "rgba(0,0,0,0.2)", borderRadius: 8 }}>
             <T color={C.bright} size={14}>Person 1: "Go LEFT" → you go left</T>
@@ -569,7 +569,7 @@ export const BatchTraining = (ctx) => { const { sub, subBtnRipple, setSubBtnRipp
           <T color="#80e8a5" size={14}>• Show the model 32 examples at once</T>
           <T color="#80e8a5" size={14}>• Compute 32 separate "which direction to adjust"</T>
           <T color="#80e8a5" size={14}>• Average them all together</T>
-          <T color="#80e8a5" size={14}>• Make ONE smooth update</T>
+          <T color="#80e8a5" size={14}>• Make one smooth update</T>
         </div>
         <T color="#80e8a5" style={{ marginTop: 6 }}>The 32 is called the <strong>batch size</strong>.</T>
       </Box></Reveal>
@@ -630,7 +630,7 @@ export const OutputLayer = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple
   <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
     {sub >= 0 && (
       <Box color={C.cyan} style={{ width: "100%" }}>
-        <T color="#80deea" bold center size={20}>We know the model "predicts the next word" - but HOW?</T>
+        <T color="#80deea" bold center size={20}>We know the model "predicts the next word" - but how?</T>
         <T color="#80deea" style={{ marginTop: 8 }}>After all the Transformer layers process "The capital of France is ___", the last position holds a <strong>hidden state</strong> - a vector of 512 numbers (in small models) or 12,288 numbers (GPT-3).</T>
         <div style={{ marginTop: 12, padding: "12px 16px", borderRadius: 10, background: "rgba(0,0,0,0.3)", border: `1px solid ${C.cyan}20` }}>
           <T color={C.dim} size={13} center style={{ textTransform: "uppercase", letterSpacing: 2 }}>Hidden state (512 dims)</T>
@@ -648,7 +648,7 @@ export const OutputLayer = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple
     )}
     <Reveal when={sub >= 1}><Box color={C.yellow} style={{ width: "100%" }}>
       <T color="#ffe082" bold center size={20}>Step 1: The Linear Layer (512 to 50,257)</T>
-      <T color="#ffe082" style={{ marginTop: 8 }}>We use a weight matrix - exactly like chapter 1.14 (a layer IS matrix multiplication). This one is massive:</T>
+      <T color="#ffe082" style={{ marginTop: 8 }}>We use a weight matrix - exactly like chapter 1.14 (a layer is matrix multiplication). This one is massive:</T>
       <div style={{ marginTop: 12, display: "flex", alignItems: "center", justifyContent: "center", gap: 10, flexWrap: "wrap" }}>
         <div style={{ textAlign: "center" }}>
           <T color={C.cyan} bold center size={16}>Hidden state</T>
@@ -672,7 +672,7 @@ export const OutputLayer = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple
         </div>
       </div>
       <T color="#ffe082" style={{ marginTop: 12 }}>Each of the 50,257 rows in the weight matrix does a dot product with the 512-dim hidden state, producing one raw score per token. This matrix alone has <strong>50,257 x 512 = 25.7 million parameters</strong> - roughly 10% of a small model's total.</T>
-      <T color="#ffe082" style={{ marginTop: 6 }}>The output is called <strong>logits</strong> - 50,257 raw scores, one per token in the vocabulary. These are NOT probabilities yet.</T>
+      <T color="#ffe082" style={{ marginTop: 6 }}>The output is called <strong>logits</strong> - 50,257 raw scores, one per token in the vocabulary. These are not probabilities yet.</T>
     </Box></Reveal>
     <Reveal when={sub >= 2}><Box color={C.orange} style={{ width: "100%" }}>
       <T color="#ffb74d" bold center size={20}>Step 2: Softmax Converts Logits to Probabilities</T>
@@ -769,7 +769,7 @@ export const AutoregressiveGeneration = (ctx) => { const { sub, subBtnRipple, se
             <T color={C.purple} size={14} style={{ marginTop: 4 }}><strong>Tokens generated one by one</strong> - sequential!</T>
           </div>
         </div>
-        <T color="#b8a9ff" style={{ marginTop: 10 }}>Chapter 2.7 showed how the model picks ONE token. But a conversation needs hundreds. How does the model generate a full response?</T>
+        <T color="#b8a9ff" style={{ marginTop: 10 }}>Chapter 2.7 showed how the model picks one token. But a conversation needs hundreds. How does the model generate a full response?</T>
       </Box>
     )}
     <Reveal when={sub >= 1}><Box color={C.yellow} style={{ width: "100%" }}>

@@ -955,10 +955,10 @@ describe("DecoderOnly sub-steps", () => {
     expect(text).toContain("Decoder");
   });
 
-  it("sub 3 sets expectations for Section 5", () => {
+  it("sub 3 explains why full architecture matters", () => {
     const ctx = makeCtx({ sub: 3 });
     const { container } = render(fn(ctx));
     const text = container.textContent;
-    expect(text).toContain("Section 5");
+    expect(text).toContain("Full Architecture Matters");
   });
 });

@@ -78,13 +78,16 @@ Only config.js IDs change.
 | 1.10 | Derivatives | Derivatives - The Core Intuition |
 | 1.11 | BackwardPass | The Backward Pass - The Chain Rule |
 | 1.12 | GradientDescent | Gradient Descent - Fixing the Weights |
-| 1.13 | Vectors | Vectors - Numbers That Travel Together |
-| 1.14 | DotProductIntro | The Dot Product - How Vectors Compare |
-| 1.15 | Matrices | Matrices - Grids That Transform Vectors |
-| 1.16 | LayerIsMatMul | A Layer IS Matrix Multiplication |
-| 1.17 | ActivationFunctions | Activation Functions - The Full Picture |
-| 1.18 | WhatDeepMeans | What "Deep" Really Means |
-| 1.19 | SameBuildingBlocks | Same Building Blocks, Different Shapes |
+| 1.13 | BackpropRealNetwork | Backprop Through the Real Network |
+| 1.14 | GradientsInAction | Gradients in Action - The Full Training Loop |
+| 1.15 | WhyBackpropHard | Why Deep Backprop Gets Hard |
+| 1.16 | Vectors | Vectors - Numbers That Travel Together |
+| 1.17 | DotProductIntro | The Dot Product - How Vectors Compare |
+| 1.18 | Matrices | Matrices - Grids That Transform Vectors |
+| 1.19 | LayerIsMatMul | A Layer is Matrix Multiplication |
+| 1.20 | ActivationFunctions | Activation Functions - The Full Picture |
+| 1.21 | WhatDeepMeans | What "Deep" Really Means |
+| 1.22 | SameBuildingBlocks | Same Building Blocks, Different Shapes |
 
 **Section 2: How LLMs Actually Train** (`llm-training.jsx`)
 

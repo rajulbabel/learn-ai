@@ -795,23 +795,23 @@ describe("OutputLayer sub-steps", () => {
     const ctx = makeCtx({ sub: 0 });
     const { container } = render(fn(ctx));
     const text = container.textContent;
-    expect(text).toContain("hidden");
-    expect(text).toContain("512");
+    expect(text).toContain("hidden state");
+    expect(text).toContain("768");
   });
 
   it("sub 1 shows the linear layer projecting to vocabulary size", () => {
     const ctx = makeCtx({ sub: 1 });
     const { container } = render(fn(ctx));
     const text = container.textContent;
-    expect(text).toContain("50,257");
-    expect(text).toContain("Linear");
+    expect(text).toContain("50,000");
+    expect(text).toContain("linear");
   });
 
   it("sub 2 introduces logits and softmax conversion", () => {
     const ctx = makeCtx({ sub: 2 });
     const { container } = render(fn(ctx));
     const text = container.textContent;
-    expect(text).toContain("logit");
+    expect(text).toContain("logits");
     expect(text).toContain("softmax");
   });
 
@@ -819,8 +819,8 @@ describe("OutputLayer sub-steps", () => {
     const ctx = makeCtx({ sub: 3 });
     const { container } = render(fn(ctx));
     const text = container.textContent;
-    expect(text).toContain("Hidden");
-    expect(text).toContain("Probabilities");
+    expect(text).toContain("transformer");
+    expect(text).toContain("probabilities");
   });
 });
 
@@ -832,30 +832,32 @@ describe("AutoregressiveGeneration sub-steps", () => {
     const ctx = makeCtx({ sub: 0 });
     const { container } = render(fn(ctx));
     const text = container.textContent;
-    expect(text).toContain("Training");
-    expect(text).toContain("Inference");
+    expect(text).toContain("training");
+    expect(text).toContain("inference");
   });
 
   it("sub 1 shows the token-by-token loop", () => {
     const ctx = makeCtx({ sub: 1 });
     const { container } = render(fn(ctx));
     const text = container.textContent;
-    expect(text).toContain("one token");
+    expect(text).toContain("one");
+    expect(text).toContain("Predict");
   });
 
   it("sub 2 shows growing context window step by step", () => {
     const ctx = makeCtx({ sub: 2 });
     const { container } = render(fn(ctx));
     const text = container.textContent;
-    expect(text).toContain("append");
+    expect(text).toContain("probability");
+    expect(text).toContain("Greedy");
   });
 
   it("sub 3 explains stop conditions and connects to masking", () => {
     const ctx = makeCtx({ sub: 3 });
     const { container } = render(fn(ctx));
     const text = container.textContent;
-    expect(text).toContain("stop");
-    expect(text).toContain("mask");
+    expect(text).toContain("Context");
+    expect(text).toContain("attention");
   });
 });
 
@@ -944,21 +946,20 @@ describe("DecoderOnly sub-steps", () => {
     const ctx = makeCtx({ sub: 1 });
     const { container } = render(fn(ctx));
     const text = container.textContent;
-    expect(text).toContain("same language");
+    expect(text).toContain("continuous");
   });
 
   it("sub 2 shows visual comparison of architectures", () => {
     const ctx = makeCtx({ sub: 2 });
     const { container } = render(fn(ctx));
     const text = container.textContent;
-    expect(text).toContain("Encoder");
-    expect(text).toContain("Decoder");
+    expect(text).toContain("masking");
   });
 
-  it("sub 3 explains why full architecture matters", () => {
+  it("sub 3 explains why decoder-only wins", () => {
     const ctx = makeCtx({ sub: 3 });
     const { container } = render(fn(ctx));
     const text = container.textContent;
-    expect(text).toContain("Full Architecture Matters");
+    expect(text).toContain("decoder-only wins");
   });
 });

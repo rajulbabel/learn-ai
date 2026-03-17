@@ -28,9 +28,9 @@ export const ScalingLaws = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple
         <T color="#ffb74d" bold center size={20}>The key scaling law:</T>
         <T color="#ffb74d" style={{ marginTop: 8 }}>Scale all three together → smooth, predictable improvement</T>
         <T color="#ffb74d" style={{ marginTop: 6 }}>Scale one alone → diminishing returns</T>
-        <div style={{ marginTop: 8, padding: "10px", background: "rgba(0,0,0,0.2)", borderRadius: 6 }}>
-          <T color="#ffb74d" size={14} bold>Loss ∝ N^(-α) × D^(-β) × C^(-γ)</T>
-          <T color={C.dim} size={12} style={{ marginTop: 4 }}>Performance improves as a power law with size.</T>
+        <div style={{ margin: "14px 0", padding: "16px", background: "rgba(0,0,0,0.4)", borderRadius: 12, border: `1px solid ${C.orange}25`, textAlign: "center" }}>
+          <T color={C.orange} bold size={24} center>Loss ∝ N<sup style={{ fontSize: 16 }}>-α</sup> × D<sup style={{ fontSize: 16 }}>-β</sup> × C<sup style={{ fontSize: 16 }}>-γ</sup></T>
+          <T color={C.dim} size={14} style={{ marginTop: 6 }}>Performance improves as a power law with size.</T>
         </div>
         <T color="#ffb74d" style={{ marginTop: 8 }}>Like a recipe: more flour alone doesn't make more cake without more eggs and butter.</T>
       </Box></Reveal>

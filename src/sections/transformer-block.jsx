@@ -157,7 +157,7 @@ export const AddNorm = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, re
             <span style={{ color: C.dim, fontWeight: 800, fontSize: 20 }}>&middot;</span>
             <span style={{ display: "inline-flex", flexDirection: "column", alignItems: "center", lineHeight: 1.1 }}>
               <span style={{ color: C.cyan, fontWeight: 700, fontSize: 17, borderBottom: `2px solid ${C.dim}`, paddingBottom: 3 }}>x<sub>i</sub> - <span style={{ color: C.blue }}>&mu;</span></span>
-              <span style={{ color: C.orange, fontWeight: 700, fontSize: 17, paddingTop: 3 }}>&radic;(<span style={{ color: C.orange }}>&sigma;</span><sup>2</sup> + <span style={{ color: C.dim }}>&epsilon;</span>)</span>
+              <span style={{ color: C.orange, fontWeight: 700, fontSize: 17, paddingTop: 3 }}>&radic;(<span style={{ color: C.orange }}>&sigma;</span><sup>2</sup> + <span style={{ color: C.red }}>&epsilon;</span>)</span>
             </span>
             <span style={{ color: C.dim, fontWeight: 800, fontSize: 20 }}>+</span>
             <span style={{ color: C.yellow, fontWeight: 800, fontSize: 20 }}>&beta;</span>
@@ -166,16 +166,17 @@ export const AddNorm = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, re
         <div style={{ padding: "12px 16px", background: "rgba(0,0,0,0.2)" }}>
           <div style={{ display: "flex", flexWrap: "wrap", gap: 8, justifyContent: "center" }}>
             {[
-              { sym: "x_i", desc: "each value in the vector", color: C.cyan },
-              { sym: "\u03BC (mu)", desc: "average of all values", color: C.blue },
-              { sym: "\u03C3\u00B2 (sigma squared)", desc: "how spread out values are", color: C.orange },
-              { sym: "\u03B5 (epsilon)", desc: "tiny number (1e-5) prevents div by zero", color: C.dim },
-              { sym: "\u03B3 (gamma)", desc: "learnable scale (starts at 1.0)", color: C.green },
-              { sym: "\u03B2 (beta)", desc: "learnable shift (starts at 0.0)", color: C.yellow },
+              { sym: "x_i", desc: "each value in the vector", why: "the raw input we want to normalize", color: C.cyan },
+              { sym: "\u03BC (mu)", desc: "average of all values", why: "centers the data around zero", color: C.blue },
+              { sym: "\u03C3\u00B2 (sigma squared)", desc: "variance of all values", why: "measures how spread out values are", color: C.orange },
+              { sym: "\u03B5 (epsilon)", desc: "tiny number (1e-5)", why: "prevents division by zero if all values are identical", color: C.red },
+              { sym: "\u03B3 (gamma)", desc: "learnable scale (starts at 1.0)", why: "lets the model stretch or shrink the range", color: C.green },
+              { sym: "\u03B2 (beta)", desc: "learnable shift (starts at 0.0)", why: "lets the model move the center up or down", color: C.yellow },
             ].map((p, i) => (
-              <div key={i} style={{ background: `${p.color}08`, borderRadius: 6, padding: "3px 8px", border: `1px solid ${p.color}15` }}>
-                <T color={p.color} bold size={12}>{p.sym}</T>
-                <T color={C.dim} size={11}> = {p.desc}</T>
+              <div key={i} style={{ background: `${p.color}08`, borderRadius: 6, padding: "6px 10px", border: `1px solid ${p.color}15` }}>
+                <T color={p.color} bold size={13}>{p.sym}</T>
+                <T color={C.dim} size={12}> = {p.desc}</T>
+                <div><T color={p.color} size={11} style={{ opacity: 0.7 }}>{p.why}</T></div>
               </div>
             ))}
           </div>
@@ -199,16 +200,17 @@ export const AddNorm = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, re
         {/* Step 2: Subtract mean */}
         <div style={{ marginTop: 8, padding: 10, borderRadius: 8, background: `${C.orange}08` }}>
           <T color={C.orange} bold size={15}>Step 2: subtract the mean from each value (x_i - mu)</T>
-          <div style={{ marginTop: 6, display: "flex", flexDirection: "column", gap: 3 }}>
+          <div style={{ marginTop: 6, display: "flex", flexDirection: "column", gap: 3, alignItems: "center" }}>
             {[
-              { v: -0.2, r: -0.675, label: "-0.2" },
-              { v: 0.2, r: -0.275, label: "0.2" },
-              { v: 0.9, r: 0.425, label: "0.9" },
-              { v: 1.0, r: 0.525, label: "1.0" },
+              { label: "-0.2", r: "-0.675" },
+              { label: " 0.2", r: "-0.275" },
+              { label: " 0.9", r: " 0.425" },
+              { label: " 1.0", r: " 0.525" },
             ].map(({ label, r }) => (
-              <div key={label} style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 14 }}>
-                <code style={{ color: C.dim }}>{label} - 0.475 =</code>
-                <code style={{ color: C.orange, fontWeight: 600 }}>{r.toFixed(3)}</code>
+              <div key={label} style={{ display: "flex", alignItems: "center", fontFamily: "monospace", fontSize: 14 }}>
+                <span style={{ color: C.dim, width: 120, textAlign: "right" }}>{label} - 0.475</span>
+                <span style={{ color: C.dim, width: 24, textAlign: "center" }}>=</span>
+                <span style={{ color: C.orange, fontWeight: 600, width: 60 }}>{r}</span>
               </div>
             ))}
           </div>
@@ -217,19 +219,20 @@ export const AddNorm = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, re
 
         {/* Step 3: Variance and divide by sqrt(variance + epsilon) */}
         <div style={{ marginTop: 8, padding: 10, borderRadius: 8, background: `${C.green}08` }}>
-          <T color={C.green} bold size={15}>Step 3: Compute variance, then divide by sqrt(variance + epsilon)</T>
+          <T color={C.green} bold size={15}>Step 3: Compute variance, then divide by sqrt({"\u03C3\u00B2"} + {"\u03B5"})</T>
           <T color={C.dim} size={13} style={{ marginTop: 4 }}>variance = mean of squared deviations: (0.675 squared + 0.275 squared + 0.425 squared + 0.525 squared) / 4 = 0.2856</T>
           <T color={C.dim} size={13}>sqrt(0.2856 + 0.00001) = 0.5344 (epsilon = 1e-5 prevents division by zero if all values were identical)</T>
-          <div style={{ marginTop: 6, display: "flex", flexDirection: "column", gap: 3 }}>
+          <div style={{ marginTop: 6, display: "flex", flexDirection: "column", gap: 3, alignItems: "center" }}>
             {[
-              { v: -0.675, r: -1.26 },
-              { v: -0.275, r: -0.51 },
-              { v: 0.425, r: 0.80 },
-              { v: 0.525, r: 0.98 },
+              { v: "-0.675", r: "-1.26" },
+              { v: "-0.275", r: "-0.51" },
+              { v: " 0.425", r: " 0.80" },
+              { v: " 0.525", r: " 0.98" },
             ].map(({ v, r }) => (
-              <div key={v} style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 14 }}>
-                <code style={{ color: C.dim }}>{v.toFixed(3)} / 0.5344 =</code>
-                <code style={{ color: C.green, fontWeight: 600 }}>{r.toFixed(2)}</code>
+              <div key={v} style={{ display: "flex", alignItems: "center", fontFamily: "monospace", fontSize: 14 }}>
+                <span style={{ color: C.dim, width: 140, textAlign: "right" }}>{v} / 0.5344</span>
+                <span style={{ color: C.dim, width: 24, textAlign: "center" }}>=</span>
+                <span style={{ color: C.green, fontWeight: 600, width: 50 }}>{r}</span>
               </div>
             ))}
           </div>
@@ -241,16 +244,17 @@ export const AddNorm = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, re
           <T color={C.yellow} bold size={15}>Step 4: Scale by gamma, shift by beta</T>
           <T color={C.dim} size={13} style={{ marginTop: 4 }}>gamma and beta are <strong>per-dimension learnable parameters</strong>. Initially gamma=1.0 and beta=0.0, so at first this step does nothing. During training, the model learns optimal values.</T>
           <T color={C.dim} size={13} style={{ marginTop: 4 }}>With initial gamma=1.0, beta=0.0:</T>
-          <div style={{ marginTop: 4, display: "flex", flexDirection: "column", gap: 3 }}>
+          <div style={{ marginTop: 4, display: "flex", flexDirection: "column", gap: 3, alignItems: "center" }}>
             {[
-              { normalized: -1.26, final: -1.26 },
-              { normalized: -0.51, final: -0.51 },
-              { normalized: 0.80, final: 0.80 },
-              { normalized: 0.98, final: 0.98 },
-            ].map(({ normalized, final }) => (
-              <div key={normalized} style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 14 }}>
-                <code style={{ color: C.dim }}>1.0 x {normalized.toFixed(2)} + 0.0 =</code>
-                <code style={{ color: C.yellow, fontWeight: 600 }}>{final.toFixed(2)}</code>
+              { n: "-1.26", f: "-1.26" },
+              { n: "-0.51", f: "-0.51" },
+              { n: " 0.80", f: " 0.80" },
+              { n: " 0.98", f: " 0.98" },
+            ].map(({ n, f }) => (
+              <div key={n} style={{ display: "flex", alignItems: "center", fontFamily: "monospace", fontSize: 14 }}>
+                <span style={{ color: C.dim, width: 170, textAlign: "right" }}>1.0 x {n} + 0.0</span>
+                <span style={{ color: C.dim, width: 24, textAlign: "center" }}>=</span>
+                <span style={{ color: C.yellow, fontWeight: 600, width: 50 }}>{f}</span>
               </div>
             ))}
           </div>

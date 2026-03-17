@@ -71,14 +71,14 @@ export const FullArchitecture = (ctx) => { const { sub, subBtnRipple, setSubBtnR
 
 
       {/* ═══ DECODER (right) ═══ */}
-      <text x="312" y="16" fill={C.red} fontSize="12" textAnchor="middle" fontWeight="700">DECODER</text>
+      <text x="380" y="6" fill={C.red} fontSize="12" textAnchor="middle" fontWeight="700">DECODER</text>
 
       {/* Output head: Linear & SoftMax */}
       <rect x="252" y="34" width="120" height="36" rx="8" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.3)" strokeWidth="1.5" />
       <text x="312" y="49" fill={C.bright} fontSize="10" textAnchor="middle" fontWeight="700">Linear &</text>
       <text x="312" y="62" fill={C.bright} fontSize="10" textAnchor="middle" fontWeight="700">SoftMax</text>
-      <text x="312" y="26" fill={C.dim} fontSize="9" textAnchor="middle">Output Probabilities</text>
-      <line x1="312" y1="26" x2="312" y2="16" stroke="rgba(255,255,255,0.3)" strokeWidth="1.2" markerEnd="url(#arrowW)" />
+      <text x="312" y="27" fill={C.dim} fontSize="9" textAnchor="middle">Output Probabilities</text>
+      <line x1="312" y1="34" x2="312" y2="8" stroke="rgba(255,255,255,0.3)" strokeWidth="1.2" markerEnd="url(#arrowW)" />
 
       {/* Decoder outer stack box */}
       <rect x="228" y="86" width="170" height="340" rx="12" fill="rgba(255,255,255,0.02)" stroke="rgba(255,255,255,0.1)" strokeWidth="1.5" strokeDasharray="6,3" />

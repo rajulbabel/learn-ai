@@ -150,9 +150,7 @@ export const AddNorm = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, re
         <div style={{ padding: "18px 20px", textAlign: "center" }}>
           <T color={C.dim} size={14} center style={{ textTransform: "uppercase", letterSpacing: 2, marginBottom: 10 }}>The Layer Normalization Formula</T>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 4, flexWrap: "wrap" }}>
-            <span style={{ color: C.purple, fontWeight: 800, fontSize: 20 }}>LayerNorm(x</span>
-            <sub style={{ color: C.purple, fontWeight: 800, fontSize: 14 }}>i</sub>
-            <span style={{ color: C.purple, fontWeight: 800, fontSize: 20 }}>) =</span>
+            <span style={{ color: C.purple, fontWeight: 800, fontSize: 20 }}>LayerNorm(x<sub style={{ fontSize: 14 }}>i</sub>) =</span>
             <span style={{ color: C.green, fontWeight: 800, fontSize: 20 }}>&gamma;</span>
             <span style={{ color: C.dim, fontWeight: 800, fontSize: 20 }}>&middot;</span>
             <span style={{ display: "inline-flex", flexDirection: "column", alignItems: "center", lineHeight: 1.1 }}>
@@ -166,7 +164,7 @@ export const AddNorm = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, re
         <div style={{ padding: "12px 16px", background: "rgba(0,0,0,0.2)" }}>
           <div style={{ display: "flex", flexWrap: "wrap", gap: 8, justifyContent: "center" }}>
             {[
-              { sym: "x_i", desc: "each value in the vector", why: "the raw input we want to normalize", color: C.cyan },
+              { sym: <span>x<sub>i</sub></span>, desc: "each value in the vector", why: "the raw input we want to normalize", color: C.cyan },
               { sym: "\u03BC (mu)", desc: "average of all values", why: "centers the data around zero", color: C.blue },
               { sym: "\u03C3\u00B2 (sigma squared)", desc: "variance of all values", why: "measures how spread out values are", color: C.orange },
               { sym: "\u03B5 (epsilon)", desc: "tiny number (1e-5)", why: "prevents division by zero if all values are identical", color: C.red },
@@ -199,21 +197,15 @@ export const AddNorm = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, re
 
         {/* Step 2: Subtract mean */}
         <div style={{ marginTop: 8, padding: 10, borderRadius: 8, background: `${C.orange}08` }}>
-          <T color={C.orange} bold size={15}>Step 2: subtract the mean from each value (x_i - mu)</T>
-          <div style={{ marginTop: 6, display: "flex", flexDirection: "column", gap: 3, alignItems: "center" }}>
-            {[
-              { label: "-0.2", r: "-0.675" },
-              { label: " 0.2", r: "-0.275" },
-              { label: " 0.9", r: " 0.425" },
-              { label: " 1.0", r: " 0.525" },
-            ].map(({ label, r }) => (
-              <div key={label} style={{ display: "flex", alignItems: "center", fontFamily: "monospace", fontSize: 14 }}>
-                <span style={{ color: C.dim, width: 120, textAlign: "right" }}>{label} - 0.475</span>
-                <span style={{ color: C.dim, width: 24, textAlign: "center" }}>=</span>
-                <span style={{ color: C.orange, fontWeight: 600, width: 60 }}>{r}</span>
-              </div>
-            ))}
-          </div>
+          <T color={C.orange} bold size={15}>Step 2: subtract the mean from each value (x<sub>i</sub> - mu)</T>
+          <pre style={{ marginTop: 6, fontFamily: "monospace", fontSize: 14, lineHeight: 1.7, textAlign: "center", margin: "6px 0 0 0", padding: 0, background: "none", border: "none", overflow: "visible" }}>{
+[
+  ["-0.2 - 0.475", "-0.675"],
+  [" 0.2 - 0.475", "-0.275"],
+  [" 0.9 - 0.475", " 0.425"],
+  [" 1.0 - 0.475", " 0.525"],
+].map(([l, r]) => <span key={l}><span style={{ color: C.dim }}>{l}</span><span style={{ color: C.dim }}> = </span><span style={{ color: C.orange, fontWeight: 600 }}>{r}</span>{"\n"}</span>)
+          }</pre>
           <T color={C.dim} size={13} style={{ marginTop: 4 }}>Centered: [-0.675, -0.275, 0.425, 0.525]</T>
         </div>
 
@@ -222,20 +214,14 @@ export const AddNorm = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, re
           <T color={C.green} bold size={15}>Step 3: Compute variance, then divide by sqrt({"\u03C3\u00B2"} + {"\u03B5"})</T>
           <T color={C.dim} size={13} style={{ marginTop: 4 }}>variance = mean of squared deviations: (0.675 squared + 0.275 squared + 0.425 squared + 0.525 squared) / 4 = 0.2856</T>
           <T color={C.dim} size={13}>sqrt(0.2856 + 0.00001) = 0.5344 (epsilon = 1e-5 prevents division by zero if all values were identical)</T>
-          <div style={{ marginTop: 6, display: "flex", flexDirection: "column", gap: 3, alignItems: "center" }}>
-            {[
-              { v: "-0.675", r: "-1.26" },
-              { v: "-0.275", r: "-0.51" },
-              { v: " 0.425", r: " 0.80" },
-              { v: " 0.525", r: " 0.98" },
-            ].map(({ v, r }) => (
-              <div key={v} style={{ display: "flex", alignItems: "center", fontFamily: "monospace", fontSize: 14 }}>
-                <span style={{ color: C.dim, width: 140, textAlign: "right" }}>{v} / 0.5344</span>
-                <span style={{ color: C.dim, width: 24, textAlign: "center" }}>=</span>
-                <span style={{ color: C.green, fontWeight: 600, width: 50 }}>{r}</span>
-              </div>
-            ))}
-          </div>
+          <pre style={{ marginTop: 6, fontFamily: "monospace", fontSize: 14, lineHeight: 1.7, textAlign: "center", margin: "6px 0 0 0", padding: 0, background: "none", border: "none", overflow: "visible" }}>{
+[
+  ["-0.675 / 0.5344", "-1.26"],
+  ["-0.275 / 0.5344", "-0.51"],
+  [" 0.425 / 0.5344", " 0.80"],
+  [" 0.525 / 0.5344", " 0.98"],
+].map(([l, r]) => <span key={l}><span style={{ color: C.dim }}>{l}</span><span style={{ color: C.dim }}> = </span><span style={{ color: C.green, fontWeight: 600 }}>{r}</span>{"\n"}</span>)
+          }</pre>
           <T color={C.dim} size={13} style={{ marginTop: 4 }}>After this step: [-1.26, -0.51, 0.80, 0.98] - centered at 0, unit variance.</T>
         </div>
 
@@ -244,20 +230,14 @@ export const AddNorm = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, re
           <T color={C.yellow} bold size={15}>Step 4: Scale by gamma, shift by beta</T>
           <T color={C.dim} size={13} style={{ marginTop: 4 }}>gamma and beta are <strong>per-dimension learnable parameters</strong>. Initially gamma=1.0 and beta=0.0, so at first this step does nothing. During training, the model learns optimal values.</T>
           <T color={C.dim} size={13} style={{ marginTop: 4 }}>With initial gamma=1.0, beta=0.0:</T>
-          <div style={{ marginTop: 4, display: "flex", flexDirection: "column", gap: 3, alignItems: "center" }}>
-            {[
-              { n: "-1.26", f: "-1.26" },
-              { n: "-0.51", f: "-0.51" },
-              { n: " 0.80", f: " 0.80" },
-              { n: " 0.98", f: " 0.98" },
-            ].map(({ n, f }) => (
-              <div key={n} style={{ display: "flex", alignItems: "center", fontFamily: "monospace", fontSize: 14 }}>
-                <span style={{ color: C.dim, width: 170, textAlign: "right" }}>1.0 x {n} + 0.0</span>
-                <span style={{ color: C.dim, width: 24, textAlign: "center" }}>=</span>
-                <span style={{ color: C.yellow, fontWeight: 600, width: 50 }}>{f}</span>
-              </div>
-            ))}
-          </div>
+          <pre style={{ marginTop: 4, fontFamily: "monospace", fontSize: 14, lineHeight: 1.7, textAlign: "center", margin: "4px 0 0 0", padding: 0, background: "none", border: "none", overflow: "visible" }}>{
+[
+  ["1.0", "-1.26", "0.0", "-1.26"],
+  ["1.0", "-0.51", "0.0", "-0.51"],
+  ["1.0", " 0.80", "0.0", " 0.80"],
+  ["1.0", " 0.98", "0.0", " 0.98"],
+].map(([g, n, b, f]) => <span key={n}><span style={{ color: C.dim }}>{g} x {n} + {b}</span><span style={{ color: C.dim }}> = </span><span style={{ color: C.yellow, fontWeight: 600 }}>{f}</span>{"\n"}</span>)
+          }</pre>
           <T color={C.dim} size={13} style={{ marginTop: 6 }}>Why have gamma and beta if they start as identity? Because during training, the model may learn that some dimensions need more spread (gamma {'>'} 1) or a non-zero center (beta != 0). Without them, normalization would be too rigid.</T>
         </div>
 

@@ -188,11 +188,9 @@ export const Distillation = (ctx) => { const { sub, subBtnRipple, setSubBtnRippl
             <div key={word} style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 4 }}>
               <T color={C.dim} size={13} style={{ width: 55, textAlign: "right" }}>{word}</T>
               <div style={{ flex: 1, height: 18, background: "rgba(255,255,255,0.05)", borderRadius: 4, overflow: "hidden" }}>
-                <div style={{ width: `${pct}%`, height: "100%", background: color, borderRadius: 4, display: "flex", alignItems: "center", paddingLeft: 6 }}>
-                  {pct > 10 && <T color="#000" bold size={11}>{pct}%</T>}
-                </div>
+                <div style={{ width: `${pct}%`, height: "100%", background: color, borderRadius: 4 }} />
               </div>
-              {pct <= 10 && <T color={C.dim} size={11}>{pct}%</T>}
+              <T color={color} bold size={11} style={{ minWidth: 30, textAlign: "right" }}>{pct}%</T>
             </div>
           ))}
         </div>

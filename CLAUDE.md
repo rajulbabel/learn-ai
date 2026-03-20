@@ -178,6 +178,9 @@ Only config.js IDs change.
 | Chapter | Component | Title |
 |---------|-----------|-------|
 | 8.1 | AddNorm | Add & Norm - The Stabilizer |
+| 8.2 | FeedForwardNetwork | FFN - The Feed-Forward Network |
+| 8.3 | AddNormTwo | Add & Norm (Again) - The Second Stabilizer |
+| 8.4 | TransformerBlockRepeats | Nx - The Transformer Block Repeats |
 
 ## Project Structure
 

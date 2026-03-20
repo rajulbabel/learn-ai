@@ -343,3 +343,995 @@ export const AddNorm = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, re
     </Box></Reveal>
   </div>
 ); };
+
+// ── 8.2 FFN - The Feed-Forward Network ──
+export const FeedForwardNetwork = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx; return (
+  <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
+
+    {/* Sub 0: Where FFN sits in the block */}
+    {sub >= 0 && (
+      <Box color={C.orange} style={{ width: "100%" }}>
+        <T color="#ffcc80" bold center size={20}>Where Does the Feed-Forward Network Sit?</T>
+        <T color="#ffcc80" size={16} center style={{ marginTop: 4 }}>In chapter 8.1 we covered Add & Norm after Attention. Now let's zoom into the next step.</T>
+        <div style={{ marginTop: 16, display: "flex", flexDirection: "column", alignItems: "center", gap: 0 }}>
+          {[
+            { label: "Input Embeddings", color: C.dim, bg: "rgba(255,255,255,0.03)", highlight: false },
+            { label: "arrow" },
+            { label: "Multi-Head Attention", color: C.pink, bg: `${C.pink}10`, highlight: false },
+            { label: "arrow" },
+            { label: "Add & Norm", color: C.blue, bg: `${C.blue}10`, highlight: false },
+            { label: "arrow" },
+            { label: "FFN (Feed-Forward Network)", color: C.orange, bg: `${C.orange}18`, highlight: true },
+            { label: "arrow" },
+            { label: "Add & Norm", color: C.blue, bg: `${C.blue}10`, highlight: false },
+            { label: "arrow" },
+            { label: "Output", color: C.dim, bg: "rgba(255,255,255,0.03)", highlight: false },
+          ].map((item, i) =>
+            item.label === "arrow" ? (
+              <div key={i} style={{ fontSize: 18, color: C.dim, lineHeight: 1 }}>↓</div>
+            ) : (
+              <div key={i} style={{
+                padding: "8px 24px", borderRadius: 8, width: "80%", textAlign: "center",
+                background: item.bg,
+                border: item.highlight ? `2px solid ${item.color}55` : `1px solid ${item.color}20`,
+                boxShadow: item.highlight ? `0 0 12px ${item.color}20` : "none",
+              }}>
+                <T color={item.color} bold={item.highlight} center size={item.highlight ? 17 : 15}>{item.label}</T>
+              </div>
+            )
+          )}
+        </div>
+        <T color="#ffcc80" size={15} center style={{ marginTop: 12 }}>The FFN sits between the two Add & Norm layers. It processes each token <strong>independently</strong> - no communication between words here. That's what makes it different from Attention.</T>
+      </Box>
+    )}
+    {sub === 0 && <SubBtn onClick={() => navigate("forward")} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
+
+    {/* Sub 1: What FFN actually is - a 2-layer NN */}
+    <Reveal when={sub >= 1}><Box color={C.cyan} style={{ width: "100%" }}>
+      <T color="#80deea" bold center size={20}>FFN = Two Linear Layers with Activation</T>
+      <T color="#80deea" size={16} style={{ marginTop: 6 }}>You already know what a layer does (chapter 1.19): multiply by a weight matrix W, add bias b. The FFN is just <strong>two</strong> of those layers stacked, with an activation function in between.</T>
+
+      {/* The formula */}
+      <div style={{ margin: "14px 0", borderRadius: 14, background: "rgba(0,0,0,0.4)", border: `1px solid ${C.cyan}25`, width: "100%", overflow: "hidden" }}>
+        <div style={{ padding: "18px 20px", textAlign: "center" }}>
+          <T color={C.dim} size={14} center style={{ textTransform: "uppercase", letterSpacing: 2, marginBottom: 10 }}>The FFN Formula</T>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 6, flexWrap: "wrap" }}>
+            <span style={{ color: C.orange, fontWeight: 800, fontSize: 20 }}>FFN(x)</span>
+            <span style={{ color: C.dim, fontWeight: 800, fontSize: 20 }}>=</span>
+            <span style={{ color: C.green, fontWeight: 800, fontSize: 18 }}>W<sub>2</sub></span>
+            <span style={{ color: C.dim, fontWeight: 800, fontSize: 20 }}>&middot;</span>
+            <span style={{ color: C.yellow, fontWeight: 700, fontSize: 18 }}>GELU(</span>
+            <span style={{ color: C.pink, fontWeight: 800, fontSize: 18 }}>W<sub>1</sub></span>
+            <span style={{ color: C.dim, fontWeight: 800, fontSize: 20 }}>&middot;</span>
+            <span style={{ color: C.cyan, fontWeight: 800, fontSize: 18 }}>x</span>
+            <span style={{ color: C.dim, fontWeight: 800, fontSize: 20 }}>+</span>
+            <span style={{ color: C.pink, fontWeight: 800, fontSize: 18 }}>b<sub>1</sub></span>
+            <span style={{ color: C.yellow, fontWeight: 700, fontSize: 18 }}>)</span>
+            <span style={{ color: C.dim, fontWeight: 800, fontSize: 20 }}>+</span>
+            <span style={{ color: C.green, fontWeight: 800, fontSize: 18 }}>b<sub>2</sub></span>
+          </div>
+        </div>
+        <div style={{ padding: "12px 16px", background: "rgba(0,0,0,0.2)" }}>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 8, justifyContent: "center" }}>
+            {[
+              { sym: "x", desc: "input from Add & Norm", color: C.cyan },
+              { sym: <span>W<sub>1</sub>, b<sub>1</sub></span>, desc: "first layer weights & bias", color: C.pink },
+              { sym: "GELU", desc: "activation function", color: C.yellow },
+              { sym: <span>W<sub>2</sub>, b<sub>2</sub></span>, desc: "second layer weights & bias", color: C.green },
+            ].map((p, i) => (
+              <div key={i} style={{ background: `${p.color}08`, borderRadius: 6, padding: "6px 10px", border: `1px solid ${p.color}15` }}>
+                <T color={p.color} bold size={13}>{p.sym}</T>
+                <T color={C.dim} size={12}> = {p.desc}</T>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <T color="#80deea" size={15} style={{ marginTop: 4 }}>That's it. No attention, no softmax, no multi-head anything. Just two matrix multiplies with an activation in between - the same building blocks from Section 1.</T>
+    </Box></Reveal>
+    {sub === 1 && <SubBtn onClick={() => navigate("forward")} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
+
+    {/* Sub 2: The expand-then-compress shape */}
+    <Reveal when={sub >= 2}><Box color={C.purple} style={{ width: "100%" }}>
+      <T color="#b8a9ff" bold center size={20}>The Expand-Then-Compress Shape</T>
+      <T color="#b8a9ff" size={16} style={{ marginTop: 6 }}>Here's the interesting part: the first layer <strong>expands</strong> the dimension, and the second layer <strong>compresses</strong> it back. In GPT-2 (d_model = 512):</T>
+
+      {/* NN Diagram - same pattern as Chapter 2.8
+           Layout math (all verified, no collisions):
+           - viewBox: 500 wide, 240 tall
+           - Top labels: y=15 (title), y=27 (subtitle)
+           - Node zone: y=55 to y=195 (140px)
+           - 3 input nodes at y=55,125,195 (70px apart, R=15, diameter=30, gap=40px - safe)
+           - 4 hidden nodes at y=55,100,150,195 (not uniform - shows "more" with gap)
+           - 3 output nodes at y=55,125,195
+           - Bottom label: y=225 (30px below last node)
+           - W boxes: centered vertically at y=100, well between node connections */}
+      <div style={{ marginTop: 16, padding: "10px 0", overflowX: "auto" }}>
+        {(() => {
+          const XI = 70, XH = 250, XO = 430, R = 15;
+          const iY = [55, 125, 195];
+          const hY = [55, 102, 148, 195];
+          const oY = [55, 125, 195];
+          return (
+          <svg viewBox="0 0 500 240" style={{ width: "100%", maxWidth: 500, display: "block", margin: "0 auto" }}>
+
+            {/* === Edges first (behind everything) === */}
+            {iY.map(a => hY.map(b => <line key={`ih${a}${b}`} x1={XI+R+2} y1={a} x2={XH-R-2} y2={b} stroke={`${C.pink}12`} strokeWidth={1} />))}
+            {hY.map(a => oY.map(b => <line key={`ho${a}${b}`} x1={XH+R+2} y1={a} x2={XO-R-2} y2={b} stroke={`${C.green}12`} strokeWidth={1} />))}
+
+            {/* === Column labels (top, 30px above first node) === */}
+            <text x={XI} y={18} fill={C.cyan} fontSize={11} textAnchor="middle" fontWeight={700}>Input (512)</text>
+            <text x={XH} y={18} fill={C.yellow} fontSize={11} textAnchor="middle" fontWeight={700}>Hidden (2048)</text>
+            <text x={XO} y={18} fill={C.orange} fontSize={11} textAnchor="middle" fontWeight={700}>Output (512)</text>
+
+            {/* === W1 box (centered between Input and Hidden columns, vertically at midpoint) === */}
+            <rect x={(XI+XH)/2-28} y={105} width={56} height={36} rx={8} fill={`${C.pink}12`} stroke={C.pink} strokeWidth={1.5} />
+            <text x={(XI+XH)/2} y={121} fill={C.pink} fontSize={10} fontWeight={700} textAnchor="middle">W&#x2081;</text>
+            <text x={(XI+XH)/2} y={134} fill={C.dim} fontSize={8} textAnchor="middle">512 x 2048</text>
+
+            {/* === W2 box (centered between Hidden and Output columns) === */}
+            <rect x={(XH+XO)/2-28} y={105} width={56} height={36} rx={8} fill={`${C.green}12`} stroke={C.green} strokeWidth={1.5} />
+            <text x={(XH+XO)/2} y={121} fill={C.green} fontSize={10} fontWeight={700} textAnchor="middle">W&#x2082;</text>
+            <text x={(XH+XO)/2} y={134} fill={C.dim} fontSize={8} textAnchor="middle">2048 x 512</text>
+
+            {/* === Input neurons === */}
+            {iY.map((y,i) => <g key={`i${i}`}><circle cx={XI} cy={y} r={R} fill={`${C.cyan}12`} stroke={C.cyan} strokeWidth={2} /><text x={XI} y={y+4} fill={C.cyan} fontSize={10} fontWeight={700} textAnchor="middle">{["x\u2081","x\u2082","x\u2083"][i]}</text></g>)}
+
+            {/* === Hidden neurons (4 shown: h1, h2, h3, h2048) === */}
+            {hY.map((y,i) => <g key={`h${i}`}><circle cx={XH} cy={y} r={R} fill={`${C.yellow}12`} stroke={C.yellow} strokeWidth={2} /><text x={XH} y={y+4} fill={C.yellow} fontSize={i===3?7:10} fontWeight={700} textAnchor="middle">{["h\u2081","h\u2082","h\u2083","h\u2082\u2080\u2084\u2088"][i]}</text></g>)}
+
+            {/* === Output neurons === */}
+            {oY.map((y,i) => <g key={`o${i}`}><circle cx={XO} cy={y} r={R} fill={`${C.orange}12`} stroke={C.orange} strokeWidth={2} /><text x={XO} y={y+4} fill={C.orange} fontSize={10} fontWeight={700} textAnchor="middle">{["y\u2081","y\u2082","y\u2083"][i]}</text></g>)}
+
+            {/* === GELU + bottom note (well below last node at y=195) === */}
+            <text x={XH} y={222} fill={C.green} fontSize={10} fontWeight={700} textAnchor="middle">+ GELU</text>
+            <text x={250} y={236} fill="rgba(255,255,255,0.2)" fontSize={8} textAnchor="middle">3 of 512 input, 4 of 2048 hidden, 3 of 512 output shown</text>
+          </svg>
+          );
+        })()}
+      </div>
+
+      <T color="#b8a9ff" size={15} style={{ marginTop: 6 }}>The hidden layer has <strong>4x more neurons</strong> than the input or output. Every input neuron connects to every hidden neuron (W<sub>1</sub>), GELU activates each hidden neuron, then every hidden neuron connects to every output neuron (W<sub>2</sub>). The data expands into a wider "thinking space" (512 → 2048), then compresses back (2048 → 512).</T>
+
+      <div style={{ marginTop: 12, padding: 12, borderRadius: 8, background: `${C.purple}08`, border: `1px solid ${C.purple}20` }}>
+        <T color="#b8a9ff" bold center size={16}>Why 4x?</T>
+        <T color="#b8a9ff" size={15} style={{ marginTop: 4 }}>Imagine solving a complex problem: you spread your notes across a big desk (expand to 2048), work things out, then summarize your answer on a small card (compress back to 512). The 4x ratio was found in the original "Attention is All You Need" paper and has become standard across GPT-2, GPT-3, and most Transformers.</T>
+      </div>
+    </Box></Reveal>
+    {sub === 2 && <SubBtn onClick={() => navigate("forward")} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
+
+    {/* Sub 3: Step-by-step computation with real numbers */}
+    <Reveal when={sub >= 3}><Box color={C.green} style={{ width: "100%" }}>
+      <T color="#a5d6a7" bold center size={20}>Step-by-Step: FFN on "cats"</T>
+      <T color="#a5d6a7" size={16} style={{ marginTop: 6 }}>Let's trace "cats" through the FFN. In chapter 8.1, Add & Norm output [-1.26, -0.51, 0.80, 0.98] for "cats". We'll use a tiny 4-dim version to show the real math (real models use 512 dims but the process is identical).</T>
+
+      {/* Step 1: First linear layer */}
+      <div style={{ marginTop: 12, padding: 12, borderRadius: 8, background: `${C.pink}08`, border: `1px solid ${C.pink}20` }}>
+        <T color={C.pink} bold size={16}>Step 1: Multiply by W<sub>1</sub> + b<sub>1</sub> (expand 4 → 8 dims)</T>
+        <div style={{ marginTop: 8, display: "flex", flexDirection: "column", alignItems: "center", gap: 6 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap", justifyContent: "center" }}>
+            <code style={{ color: C.cyan, fontSize: 14 }}>[-1.26, -0.51, 0.80, 0.98]</code>
+            <span style={{ color: C.dim, fontSize: 16, fontWeight: 700 }}>&middot;</span>
+            <span style={{ color: C.pink, fontSize: 14 }}>W<sub>1</sub></span>
+            <span style={{ color: C.dim, fontSize: 16, fontWeight: 700 }}>+</span>
+            <span style={{ color: C.pink, fontSize: 14 }}>b<sub>1</sub></span>
+          </div>
+          <T color={C.dim} size={13}>Each of the 8 output values is a dot product of the input with one column of W<sub>1</sub>, plus a bias - exactly like chapter 1.19.</T>
+          <div style={{ marginTop: 4, padding: 8, borderRadius: 6, background: `${C.pink}06`, width: "100%" }}>
+            <T color={C.pink} bold center size={14}>Result (8 dims):</T>
+            <code style={{ display: "block", textAlign: "center", color: C.pink, fontSize: 14, marginTop: 4 }}>[0.42, -1.80, 0.95, 2.10, -0.33, 1.47, -0.88, 0.61]</code>
+          </div>
+        </div>
+      </div>
+
+      {/* Step 2: GELU activation */}
+      <div style={{ marginTop: 10, padding: 12, borderRadius: 8, background: `${C.yellow}08`, border: `1px solid ${C.yellow}20` }}>
+        <T color={C.yellow} bold size={16}>Step 2: Apply GELU activation</T>
+        <T color={C.dim} size={13} style={{ marginTop: 4 }}>GELU applies to each value independently - similar to ReLU (chapter 1.6) but smoother.</T>
+        <div style={{ marginTop: 8, display: "flex", flexWrap: "wrap", gap: 4, justifyContent: "center" }}>
+          {[
+            { inp: "0.42", out: "0.28", clr: C.green },
+            { inp: "-1.80", out: "-0.04", clr: C.red },
+            { inp: "0.95", out: "0.77", clr: C.green },
+            { inp: "2.10", out: "2.07", clr: C.green },
+            { inp: "-0.33", out: "-0.12", clr: C.red },
+            { inp: "1.47", out: "1.37", clr: C.green },
+            { inp: "-0.88", out: "-0.17", clr: C.red },
+            { inp: "0.61", out: "0.44", clr: C.green },
+          ].map(({ inp, out, clr }) => (
+            <div key={inp} style={{ padding: "4px 8px", borderRadius: 4, background: `${clr}08`, border: `1px solid ${clr}15`, textAlign: "center" }}>
+              <T color={C.dim} size={11}>{inp} →</T>
+              <T color={clr} bold size={12}> {out}</T>
+            </div>
+          ))}
+        </div>
+        <div style={{ marginTop: 6, padding: 6, borderRadius: 6, background: `${C.yellow}06` }}>
+          <code style={{ display: "block", textAlign: "center", color: C.yellow, fontSize: 14 }}>[0.28, -0.04, 0.77, 2.07, -0.12, 1.37, -0.17, 0.44]</code>
+        </div>
+      </div>
+
+      {/* Step 3: Second linear layer */}
+      <div style={{ marginTop: 10, padding: 12, borderRadius: 8, background: `${C.green}08`, border: `1px solid ${C.green}20` }}>
+        <T color={C.green} bold size={16}>Step 3: Multiply by W<sub>2</sub> + b<sub>2</sub> (compress 8 → 4 dims)</T>
+        <T color={C.dim} size={13} style={{ marginTop: 4 }}>The 8-dim expanded vector gets compressed back to the original 4 dims.</T>
+        <div style={{ marginTop: 8, display: "flex", flexDirection: "column", alignItems: "center", gap: 6 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap", justifyContent: "center" }}>
+            <code style={{ color: C.yellow, fontSize: 14 }}>[0.28, -0.04, ..., 0.44]</code>
+            <span style={{ color: C.dim, fontSize: 16, fontWeight: 700 }}>&middot;</span>
+            <span style={{ color: C.green, fontSize: 14 }}>W<sub>2</sub></span>
+            <span style={{ color: C.dim, fontSize: 16, fontWeight: 700 }}>+</span>
+            <span style={{ color: C.green, fontSize: 14 }}>b<sub>2</sub></span>
+          </div>
+          <div style={{ padding: 8, borderRadius: 6, background: `${C.green}06`, width: "100%" }}>
+            <T color={C.green} bold center size={14}>FFN output for "cats" (4 dims):</T>
+            <code style={{ display: "block", textAlign: "center", color: C.green, fontSize: 15, fontWeight: 700, marginTop: 4 }}>[0.51, -0.73, 1.14, 0.22]</code>
+          </div>
+        </div>
+      </div>
+
+      <T color="#a5d6a7" size={15} center style={{ marginTop: 10 }}>Same size in, same size out - but the values have been transformed through a "thinking space" 4x wider. This output now goes to the second Add & Norm.</T>
+    </Box></Reveal>
+    {sub === 3 && <SubBtn onClick={() => navigate("forward")} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
+
+    {/* Sub 4: GELU - the real formula, then vs ReLU */}
+    <Reveal when={sub >= 4}><Box color={C.yellow} style={{ width: "100%" }}>
+      <T color="#fff176" bold center size={20}>GELU - The Activation Function</T>
+      <T color="#fff176" size={16} style={{ marginTop: 6 }}>In chapter 1.6 we learned ReLU. Modern Transformers use a smoother alternative called GELU (Gaussian Error Linear Unit). Here is the real formula:</T>
+
+      {/* The GELU formula - styled like the attention formula in 7.8 */}
+      <div style={{ margin: "14px 0", borderRadius: 14, background: "rgba(0,0,0,0.4)", border: `1px solid ${C.yellow}25`, width: "100%", overflow: "hidden" }}>
+        <div style={{ padding: "18px 20px", textAlign: "center" }}>
+          <T color={C.dim} size={14} center style={{ textTransform: "uppercase", letterSpacing: 2, marginBottom: 10 }}>The GELU Formula</T>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 6, flexWrap: "wrap" }}>
+            <span style={{ color: C.yellow, fontWeight: 800, fontSize: 20 }}>GELU(x)</span>
+            <span style={{ color: C.dim, fontWeight: 800, fontSize: 20 }}>=</span>
+            <span style={{ color: C.cyan, fontWeight: 800, fontSize: 20 }}>x</span>
+            <span style={{ color: C.dim, fontWeight: 800, fontSize: 20 }}>&middot;</span>
+            <span style={{ color: C.green, fontWeight: 800, fontSize: 20 }}>&Phi;(x)</span>
+          </div>
+          <T color={C.dim} size={14} center style={{ marginTop: 8 }}>where &Phi;(x) is the cumulative distribution function of the standard normal distribution:</T>
+          <div style={{ marginTop: 8, display: "flex", alignItems: "center", justifyContent: "center", gap: 6, flexWrap: "wrap" }}>
+            <span style={{ color: C.green, fontWeight: 800, fontSize: 18 }}>&Phi;(x)</span>
+            <span style={{ color: C.dim, fontWeight: 800, fontSize: 18 }}>=</span>
+            <span style={{ display: "inline-flex", flexDirection: "column", alignItems: "center", lineHeight: 1.1 }}>
+              <span style={{ color: C.dim, fontWeight: 700, fontSize: 16, borderBottom: `2px solid ${C.dim}`, paddingBottom: 3 }}>1</span>
+              <span style={{ color: C.dim, fontWeight: 700, fontSize: 16, paddingTop: 3 }}>2</span>
+            </span>
+            <span style={{ color: C.dim, fontWeight: 700, fontSize: 18 }}>[</span>
+            <span style={{ color: C.dim, fontWeight: 700, fontSize: 18 }}>1 + erf(</span>
+            <span style={{ display: "inline-flex", flexDirection: "column", alignItems: "center", lineHeight: 1.1 }}>
+              <span style={{ color: C.cyan, fontWeight: 700, fontSize: 16, borderBottom: `2px solid ${C.dim}`, paddingBottom: 3 }}>x</span>
+              <span style={{ color: C.dim, fontWeight: 700, fontSize: 16, paddingTop: 3 }}>&radic;2</span>
+            </span>
+            <span style={{ color: C.dim, fontWeight: 700, fontSize: 18 }}>)</span>
+            <span style={{ color: C.dim, fontWeight: 700, fontSize: 18 }}>]</span>
+          </div>
+        </div>
+        <div style={{ padding: "12px 16px", background: "rgba(0,0,0,0.2)" }}>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 8, justifyContent: "center" }}>
+            {[
+              { sym: "x", desc: "the input value", why: "the raw number coming from the linear layer", color: C.cyan },
+              { sym: "\u03A6(x)", desc: "probability x is \"kept\"", why: "ranges from 0 (fully blocked) to 1 (fully passed)", color: C.green },
+              { sym: "erf", desc: "Gauss error function", why: "a smooth S-curve that maps any number to [-1, 1]", color: C.orange },
+            ].map((p, i) => (
+              <div key={i} style={{ background: `${p.color}08`, borderRadius: 6, padding: "6px 10px", border: `1px solid ${p.color}15` }}>
+                <T color={p.color} bold size={13}>{p.sym}</T>
+                <T color={C.dim} size={12}> = {p.desc}</T>
+                <div><T color={p.color} size={11} style={{ opacity: 0.7 }}>{p.why}</T></div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <T color="#fff176" size={15} style={{ marginTop: 4 }}>In plain English: GELU multiplies x by the <strong>probability</strong> that x would be considered "large" under a standard normal bell curve. Large positive numbers get through almost fully (&Phi; near 1). Large negative numbers get almost fully blocked (&Phi; near 0). Values near zero get <strong>partially</strong> passed - that's the smooth part.</T>
+
+      {/* Worked example */}
+      <div style={{ marginTop: 14, padding: 14, borderRadius: 10, background: `${C.yellow}08`, border: `1px solid ${C.yellow}20` }}>
+        <T color="#fff176" bold center size={16}>Worked Examples</T>
+        <div style={{ marginTop: 10, display: "flex", flexDirection: "column", gap: 6 }}>
+          {[
+            { x: "2.0", phi: "0.977", result: "1.95", note: "Large positive: almost fully passed", clr: C.green },
+            { x: "0.5", phi: "0.691", result: "0.35", note: "Small positive: 69% passed through", clr: C.green },
+            { x: "0.0", phi: "0.500", result: "0.00", note: "Zero: exactly half of zero is zero", clr: C.dim },
+            { x: "-0.5", phi: "0.309", result: "-0.15", note: "Small negative: 31% leaked through", clr: C.orange },
+            { x: "-2.0", phi: "0.023", result: "-0.05", note: "Large negative: almost fully blocked", clr: C.red },
+          ].map(({ x, phi, result, note, clr }) => (
+            <div key={x} style={{ display: "flex", alignItems: "center", gap: 6, padding: "6px 10px", borderRadius: 6, background: `${clr}06`, border: `1px solid ${clr}12` }}>
+              <code style={{ color: C.cyan, fontSize: 14, minWidth: 35, textAlign: "right" }}>{x}</code>
+              <span style={{ color: C.dim, fontSize: 13 }}>&middot;</span>
+              <code style={{ color: C.green, fontSize: 14, minWidth: 40 }}>{phi}</code>
+              <span style={{ color: C.dim, fontSize: 13 }}>=</span>
+              <code style={{ color: clr, fontSize: 14, fontWeight: 700, minWidth: 40 }}>{result}</code>
+              <T color={C.dim} size={12} style={{ marginLeft: 4 }}>{note}</T>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* ReLU vs GELU comparison */}
+      <div style={{ marginTop: 14, display: "flex", gap: 12 }}>
+        <div style={{ flex: 1, padding: 12, borderRadius: 10, background: `${C.red}08`, border: `1px solid ${C.red}25` }}>
+          <T color={C.red} bold center size={15}>ReLU (chapter 1.6)</T>
+          <div style={{ marginTop: 6, fontFamily: "monospace", fontSize: 13, textAlign: "center" }}>
+            <div style={{ color: C.dim }}>if x {'<'} 0: output = <span style={{ color: C.red, fontWeight: 700 }}>0</span></div>
+            <div style={{ color: C.dim }}>if x {'>'} 0: output = <span style={{ color: C.green, fontWeight: 700 }}>x</span></div>
+          </div>
+          <T color={C.dim} center size={12} style={{ marginTop: 6 }}>Hard cutoff. Negative = dead. Gradient = 0 forever.</T>
+        </div>
+        <div style={{ flex: 1, padding: 12, borderRadius: 10, background: `${C.green}08`, border: `1px solid ${C.green}25` }}>
+          <T color={C.green} bold center size={15}>GELU (smooth)</T>
+          <div style={{ marginTop: 6, fontFamily: "monospace", fontSize: 13, textAlign: "center" }}>
+            <div style={{ color: C.dim }}>if x {'<'} 0: output = <span style={{ color: C.orange, fontWeight: 700 }}>small leak</span></div>
+            <div style={{ color: C.dim }}>if x {'>'} 0: output = <span style={{ color: C.green, fontWeight: 700 }}>~x</span></div>
+          </div>
+          <T color={C.dim} center size={12} style={{ marginTop: 6 }}>Smooth transition. Small negatives leak through. Gradient never fully dies.</T>
+        </div>
+      </div>
+
+      <T color="#fff176" size={14} style={{ marginTop: 10 }}>Why does the smooth curve matter? During backpropagation (chapter 1.15), ReLU's gradient is exactly 0 for all negative inputs - the neuron is "dead" and can never recover. GELU's smooth curve means even slightly negative values get a small gradient, so neurons can recover. GPT-2 and GPT-3 both use GELU.</T>
+    </Box></Reveal>
+    {sub === 4 && <SubBtn onClick={() => navigate("forward")} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
+
+    {/* Sub 5: Knowledge vs Routing intro + Example 1 */}
+    <Reveal when={sub >= 5}><Box color={C.blue} style={{ width: "100%" }}>
+      <T color="#90caf9" bold center size={20}>What FFN Stores - Knowledge vs Routing</T>
+      <T color="#90caf9" size={16} style={{ marginTop: 6 }}>Attention and FFN play completely different roles. Think of it this way: attention decides <strong>which words to listen to</strong>, FFN decides <strong>what to do with what it heard</strong>.</T>
+
+      <div style={{ marginTop: 10, padding: 10, borderRadius: 8, background: `${C.yellow}06`, border: `1px solid ${C.yellow}15` }}>
+        <T color={C.yellow} bold center size={13}>Remember: inside every block, Attention runs first, then FFN</T>
+        <T color={C.dim} center size={12}>FFN never sees the raw input - it always receives attention's output. Attention gathers context from other words. Then FFN transforms that context-enriched vector.</T>
+      </div>
+
+      <T color="#90caf9" bold center size={16} style={{ marginTop: 14 }}>Example: "The capital of France is ___"</T>
+      <T color={C.dim} center size={12} style={{ marginTop: 2 }}>Tracing what happens inside one critical block</T>
+      <div style={{ marginTop: 12, display: "flex", gap: 12 }}>
+        <div style={{ flex: 1, padding: 12, borderRadius: 10, background: `${C.pink}06`, border: `1px solid ${C.pink}20` }}>
+          <T color={C.pink} bold center size={15}>Attention Runs First</T>
+          <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 6 }}>
+            <div style={{ padding: "6px 10px", borderRadius: 6, background: `${C.pink}08` }}>
+              <T color={C.pink} bold size={13}>Q &middot; K scores for "___" position</T>
+              <T color={C.dim} size={12}>"___"'s Query asks "what country am I about?" "France"'s Key scores highest (0.72 after softmax), "capital" gets 0.18, rest get scraps.</T>
+            </div>
+            <div style={{ padding: "6px 10px", borderRadius: 6, background: `${C.pink}08` }}>
+              <T color={C.pink} bold size={13}>Weighted sum of Values</T>
+              <T color={C.dim} size={12}>Output = 0.72 &middot; V<sub>France</sub> + 0.18 &middot; V<sub>capital</sub> + ... This is a <strong>blend</strong> - a weighted average. It mixes "France" info into the "___" position.</T>
+            </div>
+            <div style={{ padding: "6px 10px", borderRadius: 6, background: `${C.pink}08` }}>
+              <T color={C.pink} bold size={13}>Result: context assembled, but no answer</T>
+              <T color={C.dim} size={12}>The "___" vector now encodes "I need the capital of France." But attention can only average existing vectors - it cannot look up a fact. It doesn't know the answer is "Paris."</T>
+            </div>
+          </div>
+        </div>
+        <div style={{ flex: 1, padding: 12, borderRadius: 10, background: `${C.orange}06`, border: `1px solid ${C.orange}20` }}>
+          <T color={C.orange} bold center size={15}>Then FFN Processes That Output</T>
+          <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 6 }}>
+            <div style={{ padding: "6px 10px", borderRadius: 6, background: `${C.orange}08` }}>
+              <T color={C.orange} bold size={13}>W<sub>1</sub>: 2048 pattern detectors fire</T>
+              <T color={C.dim} size={12}>Each row of W<sub>1</sub> is a learned detector. Row 847 detects the "capital-of-France" pattern in the vector that attention assembled. Its dot product is high: <code style={{ color: C.orange }}>W<sub>1</sub>[847] &middot; x = 4.2</code></T>
+            </div>
+            <div style={{ padding: "6px 10px", borderRadius: 6, background: `${C.orange}08` }}>
+              <T color={C.orange} bold size={13}>GELU: only relevant knowledge survives</T>
+              <T color={C.dim} size={12}>GELU(4.2) = 4.19 → neuron 847 fires. GELU(-1.3) = -0.05 → neuron 200 ("capital-of-Germany") is suppressed. Of 2048 neurons, maybe 100-300 fire meaningfully.</T>
+            </div>
+            <div style={{ padding: "6px 10px", borderRadius: 6, background: `${C.orange}08` }}>
+              <T color={C.orange} bold size={13}>W<sub>2</sub>: writes "Paris" into the vector</T>
+              <T color={C.dim} size={12}>Column 847 of W<sub>2</sub> was trained to shift vectors toward "Paris." Since neuron 847 fired at 4.19, its column dominates the output: <code style={{ color: C.orange }}>output += 4.19 &middot; W<sub>2</sub>[:,847]</code></T>
+            </div>
+          </div>
+          <div style={{ marginTop: 8, padding: "6px 8px", borderRadius: 6, background: `${C.orange}10` }}>
+            <T color={C.orange} bold size={12}>Key insight: W<sub>1</sub> rows = "what to detect", W<sub>2</sub> columns = "what to output"</T>
+            <T color={C.dim} size={11}>This is the key-value memory interpretation from research. The FFN is a lookup table: 2048 entries, each asking "does this pattern match?" and outputting the corresponding knowledge.</T>
+          </div>
+        </div>
+      </div>
+    </Box></Reveal>
+    {sub === 5 && <SubBtn onClick={() => navigate("forward")} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
+
+    {/* Sub 6: Example 2 - multi-block collaboration */}
+    <Reveal when={sub >= 6}><Box color={C.purple} style={{ width: "100%" }}>
+      <T color="#b8a9ff" bold center size={20}>Attention + FFN Across Multiple Blocks</T>
+      <T color="#b8a9ff" bold center size={16} style={{ marginTop: 6 }}>Example: "She sat by the river bank"</T>
+      <T color={C.dim} center size={13} style={{ marginTop: 2 }}>Does "bank" mean money or riverbed? Watch attention and FFN collaborate across blocks.</T>
+
+      <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 8 }}>
+        <div style={{ padding: 12, borderRadius: 10, background: `${C.green}06`, border: `1px solid ${C.green}20` }}>
+          <T color={C.green} bold size={14}>Block 1: Basic context gathering</T>
+          <div style={{ marginTop: 6, display: "flex", gap: 10 }}>
+            <div style={{ flex: 1, padding: "6px 8px", borderRadius: 6, background: `${C.pink}06` }}>
+              <T color={C.pink} bold size={12}>Attention</T>
+              <T color={C.dim} size={11}>"bank"'s Query matches "river"'s Key (adjacent, high score). After softmax, "bank" absorbs ~40% of "river"'s Value vector. Result: "bank" now carries "I'm next to the word river."</T>
+            </div>
+            <div style={{ flex: 1, padding: "6px 8px", borderRadius: 6, background: `${C.orange}06` }}>
+              <T color={C.orange} bold size={12}>FFN (receives attention's output)</T>
+              <T color={C.dim} size={11}>Sees "bank + some river context." The "river-location" detector in W<sub>1</sub> fires weakly (1.2) - the signal is there but faint. The "financial" detector also fires weakly (0.8). GELU passes both. <strong>Ambiguity not yet resolved.</strong></T>
+            </div>
+          </div>
+        </div>
+
+        <div style={{ padding: 12, borderRadius: 10, background: `${C.yellow}06`, border: `1px solid ${C.yellow}20` }}>
+          <T color={C.yellow} bold size={14}>Block 5: Deeper semantic understanding</T>
+          <div style={{ marginTop: 6, display: "flex", gap: 10 }}>
+            <div style={{ flex: 1, padding: "6px 8px", borderRadius: 6, background: `${C.pink}06` }}>
+              <T color={C.pink} bold size={12}>Attention</T>
+              <T color={C.dim} size={11}>"bank" now attends to "sat" (physical action, not financial), "by" (location preposition), and "river" with a much higher score than Block 1. Why higher? Because Block 1-4 FFNs already strengthened the "nature/location" features in both "sat" and "river." Richer vectors = sharper attention.</T>
+            </div>
+            <div style={{ flex: 1, padding: "6px 8px", borderRadius: 6, background: `${C.orange}06` }}>
+              <T color={C.orange} bold size={12}>FFN (receives attention's output)</T>
+              <T color={C.dim} size={11}>Now the "river-location" detector in W<sub>1</sub> fires at 3.8 (strong match). The "financial" detector fires at -1.1 (GELU suppresses to -0.03, effectively dead). W<sub>2</sub> column for "river-location" shifts the vector hard toward geography/nature features. <strong>"Bank" now means "riverbank."</strong></T>
+            </div>
+          </div>
+        </div>
+
+        <div style={{ padding: 10, borderRadius: 6, background: `${C.purple}08`, border: `1px solid ${C.purple}15` }}>
+          <T color="#b8a9ff" bold center size={13}>Why this takes multiple blocks</T>
+          <T color={C.dim} size={12} style={{ marginTop: 4 }}>Each round, attention provides <strong>better context</strong> because FFN improved the vectors, and FFN makes <strong>better decisions</strong> because attention gathered more context. They bootstrap each other across 96 blocks.</T>
+        </div>
+      </div>
+
+      <div style={{ marginTop: 10, padding: 10, borderRadius: 8, background: `${C.yellow}08`, border: `1px solid ${C.yellow}20` }}>
+        <T color="#fff176" bold center size={15}>In one sentence:</T>
+        <T color="#fff176" center size={14} style={{ marginTop: 4 }}>Attention is the ears (listens to context). FFN is the brain (knows things and thinks about what it heard).</T>
+      </div>
+    </Box></Reveal>
+    {sub === 6 && <SubBtn onClick={() => navigate("forward")} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
+
+    {/* Sub 7: Deep Q&A */}
+    <Reveal when={sub >= 7}><Box color={C.cyan} style={{ width: "100%" }}>
+      <T color="#80deea" bold center size={20}>Deep Questions You Should Be Able to Answer</T>
+      <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 8 }}>
+        {[
+          { q: "Why can't attention replace FFN?", a: "Attention computes weighted averages of Value vectors - a linear operation. It can mix information from different tokens, but it can never create new features. \"If river AND bank are both present, output riverbank\" requires non-linearity (GELU). Only FFN has that.", color: C.pink },
+          { q: "Why can't FFN replace attention?", a: "FFN processes each token in complete isolation. It never sees any other word. Without attention first injecting \"river\" into \"bank\"'s vector, FFN would process \"bank\" identically in \"river bank\" and \"investment bank\" - same input, same output, unable to disambiguate.", color: C.orange },
+          { q: "What exactly does \"FFN stores knowledge\" mean?", a: "Each row of W\u2081 is a pattern detector trained during pre-training. Row 847 learned to fire when the input looks like \"capital-of-France.\" The corresponding column of W\u2082 learned to output a vector that shifts toward \"Paris.\" This row-column pair is literally one stored fact. GPT-3 has 2048-49152 such detectors per block across 96 blocks.", color: C.green },
+          { q: "How do researchers prove this isn't just a metaphor?", a: "Ablation studies: zero out specific FFN neurons and watch \"The capital of France is\" stop producing \"Paris\" while grammar stays intact. Activate those same neurons artificially and watch \"Paris\" appear in unrelated contexts. The knowledge is localized to specific neurons - not distributed across the whole network.", color: C.blue },
+        ].map(({ q, a, color }, i) => (
+          <div key={i} style={{ padding: "8px 12px", borderRadius: 8, background: `${color}06`, border: `1px solid ${color}15` }}>
+            <T color={color} bold size={13}>{q}</T>
+            <T color={C.dim} size={12} style={{ marginTop: 3 }}>{a}</T>
+          </div>
+        ))}
+      </div>
+    </Box></Reveal>
+    {sub === 7 && <SubBtn onClick={() => navigate("forward")} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
+
+    {/* Sub 8: Where do the parameters live? */}
+    <Reveal when={sub >= 8}><Box color={C.purple} style={{ width: "100%" }}>
+      <T color="#b8a9ff" bold center size={20}>Where Do the Parameters Live?</T>
+      <T color="#b8a9ff" size={16} style={{ marginTop: 6 }}>Parameters are all the learnable numbers in the model - every weight and bias that got tuned during training (chapter 1.4). They are the model's "memory." More parameters = more capacity to store knowledge.</T>
+
+      <T color="#b8a9ff" size={15} style={{ marginTop: 10 }}>Here's how they split between Attention and FFN in one Transformer block:</T>
+
+      {/* Visual: stacked bar */}
+      <div style={{ marginTop: 12, padding: 10, borderRadius: 8, background: "rgba(0,0,0,0.25)" }}>
+        <T color={C.dim} bold center size={13} style={{ marginBottom: 8 }}>One Transformer Block (~3.15M parameters total)</T>
+        <div style={{ height: 32, borderRadius: 6, overflow: "hidden", display: "flex" }}>
+          <div style={{ width: "33%", background: `${C.pink}60`, display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <T color="white" bold size={12}>Attention (1/3)</T>
+          </div>
+          <div style={{ width: "67%", background: `${C.orange}60`, display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <T color="white" bold size={12}>FFN (2/3)</T>
+          </div>
+        </div>
+
+        <div style={{ marginTop: 10, display: "flex", gap: 10 }}>
+          <div style={{ flex: 1, padding: 8, borderRadius: 6, background: `${C.pink}06`, border: `1px solid ${C.pink}15` }}>
+            <T color={C.pink} bold center size={12}>Attention: ~1.05M</T>
+            <T color={C.dim} size={11} style={{ marginTop: 4 }}>W_Q, W_K, W_V = 3 matrices that create the Queries, Keys, and Values (chapter 6.9)</T>
+            <T color={C.dim} size={11} style={{ marginTop: 2 }}>W_O = the matrix that blends multi-head outputs (chapter 7.12)</T>
+            <T color={C.pink} size={11} style={{ marginTop: 4 }}>These learn <strong>how to find relationships</strong> between words</T>
+          </div>
+          <div style={{ flex: 1, padding: 8, borderRadius: 6, background: `${C.orange}06`, border: `1px solid ${C.orange}15` }}>
+            <T color={C.orange} bold center size={12}>FFN: ~2.1M</T>
+            <T color={C.dim} size={11} style={{ marginTop: 4 }}>W<sub>1</sub> (512 x 2048) = expands to thinking space</T>
+            <T color={C.dim} size={11} style={{ marginTop: 2 }}>W<sub>2</sub> (2048 x 512) = compresses back to model size</T>
+            <T color={C.orange} size={11} style={{ marginTop: 4 }}>These learn <strong>facts and transformations</strong> - the actual knowledge</T>
+          </div>
+        </div>
+      </div>
+
+      <T color={C.dim} size={13} style={{ marginTop: 8 }}>GPT-3 has 96 blocks. That's 96 copies of this structure = 96 x 3.15M = ~302M parameters just in one layer type - and GPT-3's total is 175 <strong>billion</strong> because d_model is 12,288 (not 512), making each matrix vastly larger.</T>
+    </Box></Reveal>
+  </div>
+); };
+
+// ── 8.3 Add & Norm (Again) - The Second Stabilizer ──
+export const AddNormTwo = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx; return (
+  <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
+
+    {/* Sub 0: Where we are - just after FFN */}
+    {sub >= 0 && (
+      <Box color={C.blue} style={{ width: "100%" }}>
+        <T color="#90caf9" bold center size={20}>The Second Add & Norm</T>
+        <T color="#90caf9" size={16} center style={{ marginTop: 4 }}>The FFN just transformed each token's representation. But remember the problem from chapter 8.1 - values drift in deep networks. We need to stabilize again.</T>
+        <div style={{ marginTop: 16, display: "flex", flexDirection: "column", alignItems: "center", gap: 0 }}>
+          {[
+            { label: "Multi-Head Attention", color: C.pink, bg: `${C.pink}10`, highlight: false },
+            { label: "arrow" },
+            { label: "Add & Norm (first)", color: C.blue, bg: `${C.blue}10`, highlight: false },
+            { label: "arrow" },
+            { label: "FFN", color: C.orange, bg: `${C.orange}10`, highlight: false },
+            { label: "arrow" },
+            { label: "Add & Norm (second)", color: C.blue, bg: `${C.blue}18`, highlight: true },
+            { label: "arrow" },
+            { label: "Block Output", color: C.green, bg: `${C.green}10`, highlight: false },
+          ].map((item, i) =>
+            item.label === "arrow" ? (
+              <div key={i} style={{ fontSize: 18, color: C.dim, lineHeight: 1 }}>↓</div>
+            ) : (
+              <div key={i} style={{
+                padding: "8px 24px", borderRadius: 8, width: "80%", textAlign: "center",
+                background: item.bg,
+                border: item.highlight ? `2px solid ${item.color}55` : `1px solid ${item.color}20`,
+                boxShadow: item.highlight ? `0 0 12px ${item.color}20` : "none",
+              }}>
+                <T color={item.color} bold={item.highlight} center size={item.highlight ? 17 : 15}>{item.label}</T>
+              </div>
+            )
+          )}
+        </div>
+        <T color="#90caf9" size={15} center style={{ marginTop: 12 }}>This second Add & Norm works exactly the same way as the first - but its input is the FFN output instead of the Attention output.</T>
+      </Box>
+    )}
+    {sub === 0 && <SubBtn onClick={() => navigate("forward")} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
+
+    {/* Sub 1: The Add step - FFN input + FFN output */}
+    <Reveal when={sub >= 1}><Box color={C.green} style={{ width: "100%" }}>
+      <T color="#a5d6a7" bold center size={20}>The Add - Residual Around FFN</T>
+      <T color="#a5d6a7" size={16} style={{ marginTop: 6 }}>Same idea as chapter 8.1: keep the original input by adding it back. The input to FFN was the first Add & Norm's output.</T>
+
+      <div style={{ marginTop: 14, padding: 14, borderRadius: 10, background: "rgba(0,230,118,0.04)", border: `1px solid ${C.green}20` }}>
+        <T color="#a5d6a7" bold center size={16}>Continuing with "cats":</T>
+        <div style={{ marginTop: 10, display: "flex", flexDirection: "column", gap: 8 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
+            <Tag color={C.purple}>FFN input</Tag>
+            <code style={{ color: C.purple, fontSize: 15 }}>[-1.26, -0.51, 0.80, 0.98]</code>
+          </div>
+          <div style={{ textAlign: "center", color: C.dim, fontSize: 14 }}>↓ goes through FFN (chapter 8.2) ↓</div>
+          <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
+            <Tag color={C.orange}>FFN output</Tag>
+            <code style={{ color: C.orange, fontSize: 15 }}>[0.51, -0.73, 1.14, 0.22]</code>
+          </div>
+          <div style={{ marginTop: 6, padding: 10, borderRadius: 8, background: `${C.green}10`, border: `1px dashed ${C.green}30` }}>
+            <T color="#a5d6a7" bold center size={16}>The Add Step: FFN input + FFN output</T>
+            <div style={{ marginTop: 6, display: "flex", justifyContent: "center", alignItems: "center", gap: 6, flexWrap: "wrap" }}>
+              <code style={{ color: C.purple, fontSize: 15 }}>[-1.26, -0.51, 0.80, 0.98]</code>
+              <span style={{ color: C.green, fontSize: 20, fontWeight: 700 }}>+</span>
+              <code style={{ color: C.orange, fontSize: 15 }}>[0.51, -0.73, 1.14, 0.22]</code>
+              <span style={{ color: C.green, fontSize: 20, fontWeight: 700 }}>=</span>
+              <code style={{ color: C.green, fontSize: 15, fontWeight: 700 }}>[-0.75, -1.24, 1.94, 1.20]</code>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <T color="#a5d6a7" size={15} style={{ marginTop: 10 }}>The residual connection ensures that even if the FFN distorts values, the original signal from Add & Norm #1 survives by being added back.</T>
+    </Box></Reveal>
+    {sub === 1 && <SubBtn onClick={() => navigate("forward")} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
+
+    {/* Sub 2: The Norm step with concrete numbers */}
+    <Reveal when={sub >= 2}><Box color={C.purple} style={{ width: "100%" }}>
+      <T color="#b8a9ff" bold center size={20}>The Norm - Stabilize Again</T>
+      <T color="#b8a9ff" size={16} style={{ marginTop: 6 }}>Same Layer Normalization formula from chapter 8.1 - compute mean, subtract, divide by standard deviation, scale by gamma, shift by beta.</T>
+
+      <div style={{ marginTop: 12, padding: 14, borderRadius: 10, background: "rgba(167,139,250,0.04)", border: `1px solid ${C.purple}20` }}>
+        <T color="#b8a9ff" bold center size={16}>Normalizing [-0.75, -1.24, 1.94, 1.20]</T>
+
+        <div style={{ marginTop: 10, display: "flex", flexDirection: "column", gap: 6 }}>
+          <div style={{ padding: 8, borderRadius: 6, background: `${C.blue}08` }}>
+            <T color={C.blue} bold size={14}>mu = (-0.75 + -1.24 + 1.94 + 1.20) / 4 = <strong>0.2875</strong></T>
+          </div>
+          <div style={{ padding: 8, borderRadius: 6, background: `${C.orange}08` }}>
+            <T color={C.orange} bold size={14}>variance = 1.5252, sqrt(variance + epsilon) = <strong>1.235</strong></T>
+          </div>
+          <div style={{ padding: 8, borderRadius: 6, background: `${C.green}08` }}>
+            <T color={C.green} bold size={14}>Normalize each: (x - mu) / 1.235</T>
+            <div style={{ marginTop: 6, display: "flex", flexWrap: "wrap", gap: 6, justifyContent: "center" }}>
+              {[
+                { from: "-0.75", to: "-0.84" },
+                { from: "-1.24", to: "-1.24" },
+                { from: "1.94", to: "1.34" },
+                { from: "1.20", to: "0.74" },
+              ].map(({ from, to }) => (
+                <div key={from} style={{ padding: "4px 10px", borderRadius: 4, background: `${C.green}08`, border: `1px solid ${C.green}15` }}>
+                  <code style={{ color: C.dim, fontSize: 13 }}>{from}</code>
+                  <span style={{ color: C.dim }}> → </span>
+                  <code style={{ color: C.green, fontSize: 13, fontWeight: 700 }}>{to}</code>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <div style={{ marginTop: 10, padding: 8, borderRadius: 6, background: `${C.purple}10`, border: `1px dashed ${C.purple}30` }}>
+          <T color="#b8a9ff" bold center size={15}>Block output for "cats": [-0.84, -1.24, 1.34, 0.74]</T>
+          <T color={C.dim} center size={13} style={{ marginTop: 2 }}>With gamma=1.0 and beta=0.0 (initial values). The model will learn optimal gamma and beta during training.</T>
+        </div>
+      </div>
+    </Box></Reveal>
+    {sub === 2 && <SubBtn onClick={() => navigate("forward")} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
+
+    {/* Sub 3: Complete single-block pipeline */}
+    <Reveal when={sub >= 3}><Box color={C.cyan} style={{ width: "100%" }}>
+      <T color="#80deea" bold center size={20}>The Complete Single Block - All 4 Steps</T>
+      <T color="#80deea" size={16} center style={{ marginTop: 4 }}>Here's "cats" flowing through one entire Transformer block, start to finish:</T>
+
+      <div data-full-block="true" style={{ marginTop: 14, display: "flex", flexDirection: "column", alignItems: "center", gap: 0 }}>
+        {[
+          { step: "Input (cats)", val: "[-0.5, 0.3, 0.7, 0.6]", color: C.dim, tag: "Input" },
+          { step: "arrow", label: "Multi-Head Attention" },
+          { step: "Attention Output", val: "[0.3, -0.1, 0.2, 0.4]", color: C.pink, tag: "Attn" },
+          { step: "arrow", label: "Add & Norm #1" },
+          { step: "After 1st Add & Norm", val: "[-1.26, -0.51, 0.80, 0.98]", color: C.blue, tag: "A&N 1" },
+          { step: "arrow", label: "Feed-Forward Network" },
+          { step: "FFN Output", val: "[0.51, -0.73, 1.14, 0.22]", color: C.orange, tag: "FFN" },
+          { step: "arrow", label: "Add & Norm #2" },
+          { step: "Block Output", val: "[-0.84, -1.24, 1.34, 0.74]", color: C.green, tag: "A&N 2" },
+        ].map((item, i) =>
+          item.step === "arrow" ? (
+            <div key={i} style={{ display: "flex", flexDirection: "column", alignItems: "center", padding: "2px 0" }}>
+              <span style={{ fontSize: 14, color: C.dim }}>{item.label}</span>
+              <span style={{ fontSize: 16, color: C.dim }}>↓</span>
+            </div>
+          ) : (
+            <div key={i} style={{
+              display: "flex", alignItems: "center", gap: 10, padding: "8px 12px",
+              borderRadius: 8, width: "95%", background: `${item.color}08`, border: `1px solid ${item.color}20`,
+            }}>
+              <Tag color={item.color}>{item.tag}</Tag>
+              <T color={item.color} size={13} bold>{item.step}</T>
+              <code style={{ color: `${item.color}bb`, fontSize: 13, marginLeft: "auto" }}>{item.val}</code>
+            </div>
+          )
+        )}
+      </div>
+
+      <T color="#80deea" size={15} center style={{ marginTop: 12 }}>One block: Attention moves information between tokens, Add & Norm stabilizes, FFN processes each token's knowledge, Add & Norm stabilizes again. This is the heartbeat of every Transformer.</T>
+    </Box></Reveal>
+    {sub === 3 && <SubBtn onClick={() => navigate("forward")} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
+
+    {/* Sub 4: Why Add & Norm appears twice */}
+    <Reveal when={sub >= 4}><Box color={C.yellow} style={{ width: "100%" }}>
+      <T color="#fff176" bold center size={20}>Why Twice? - One Per Sub-Layer</T>
+      <T color="#fff176" size={16} style={{ marginTop: 6 }}>Add & Norm appears <strong>twice</strong> because each Transformer block has two sub-layers: Attention and FFN. Each sub-layer gets its own Add & Norm because each one can independently cause value drift.</T>
+
+      <div style={{ marginTop: 14, display: "flex", gap: 12 }}>
+        <div style={{ flex: 1, padding: 12, borderRadius: 10, background: `${C.pink}08`, border: `1px solid ${C.pink}25` }}>
+          <T color={C.pink} bold center size={15}>Sub-layer 1: Attention</T>
+          <div style={{ marginTop: 6, display: "flex", flexDirection: "column", gap: 2, alignItems: "center" }}>
+            <T color={C.dim} size={12}>Input x</T>
+            <T color={C.dim} size={12}>↓</T>
+            <T color={C.pink} size={12}>Attention(x)</T>
+            <T color={C.dim} size={12}>↓</T>
+            <T color={C.blue} bold size={12}>Add & Norm #1</T>
+            <T color={C.dim} size={11} style={{ marginTop: 4 }}>Stabilizes after attention changes</T>
+          </div>
+        </div>
+
+        <div style={{ flex: 1, padding: 12, borderRadius: 10, background: `${C.orange}08`, border: `1px solid ${C.orange}25` }}>
+          <T color={C.orange} bold center size={15}>Sub-layer 2: FFN</T>
+          <div style={{ marginTop: 6, display: "flex", flexDirection: "column", gap: 2, alignItems: "center" }}>
+            <T color={C.dim} size={12}>From A&N #1</T>
+            <T color={C.dim} size={12}>↓</T>
+            <T color={C.orange} size={12}>FFN(x)</T>
+            <T color={C.dim} size={12}>↓</T>
+            <T color={C.blue} bold size={12}>Add & Norm #2</T>
+            <T color={C.dim} size={11} style={{ marginTop: 4 }}>Stabilizes after FFN changes</T>
+          </div>
+        </div>
+      </div>
+
+      <div style={{ marginTop: 14, padding: 12, borderRadius: 8, background: `${C.yellow}08`, border: `1px solid ${C.yellow}20` }}>
+        <T color="#fff176" bold center size={15}>The Rule</T>
+        <T color="#fff176" size={15} style={{ marginTop: 4 }}>In Transformers, every sub-layer that transforms values gets wrapped with its own residual connection and layer norm. This is what makes it possible to stack 96 blocks deep without the signal degrading. If you only normalized once at the end of the block, the FFN's output could already be in a bad range before it gets stabilized.</T>
+      </div>
+    </Box></Reveal>
+  </div>
+); };
+
+// ── 8.4 Nx - The Transformer Block Repeats ──
+export const TransformerBlockRepeats = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx; return (
+  <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
+
+    {/* Sub 0: One block isn't enough */}
+    {sub >= 0 && (
+      <Box color={C.orange} style={{ width: "100%" }}>
+        <T color="#ffcc80" bold center size={20}>One Block Does Not Repeat Enough</T>
+        <T color="#ffcc80" size={16} style={{ marginTop: 6 }}>We've now seen all 4 steps inside one Transformer block: Attention, Add & Norm, FFN, Add & Norm. But one block can only learn simple patterns. To understand language, the model needs to <strong>repeat</strong> this entire block many times.</T>
+
+        <div style={{ marginTop: 14, padding: 14, borderRadius: 10, background: `${C.orange}08`, border: `1px solid ${C.orange}20` }}>
+          <T color="#ffcc80" bold center size={16}>Think of it like this:</T>
+          <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 6 }}>
+            {[
+              { block: "1 block", learns: "basic word associations (\"cat\" relates to \"sat\")", color: C.dim },
+              { block: "4 blocks", learns: "grammar structure (subject-verb agreement)", color: C.yellow },
+              { block: "12 blocks", learns: "context and nuance (sarcasm, tone)", color: C.orange },
+              { block: "96 blocks", learns: "deep reasoning, world knowledge, complex inference", color: C.red },
+            ].map(({ block, learns, color }) => (
+              <div key={block} style={{ display: "flex", gap: 10, alignItems: "flex-start", padding: "6px 10px", borderRadius: 6, background: `${color}08`, border: `1px solid ${color}15` }}>
+                <Tag color={color}>{block}</Tag>
+                <T color={C.dim} size={14}>{learns}</T>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <T color="#ffcc80" size={15} center style={{ marginTop: 12 }}>Each repeat of the block refines the token representations further. The output of block 1 becomes the input of block 2, and so on.</T>
+      </Box>
+    )}
+    {sub === 0 && <SubBtn onClick={() => navigate("forward")} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
+
+    {/* Sub 1: The stack with real model sizes */}
+    <Reveal when={sub >= 1}><Box color={C.cyan} style={{ width: "100%" }}>
+      <T color="#80deea" bold center size={20}>The Stack - How Many Blocks?</T>
+      <T color="#80deea" size={16} style={{ marginTop: 6 }}>Different models use different numbers of blocks. In the original paper and in practice, this number is called N (hence "Nx" in architecture diagrams).</T>
+
+      <div style={{ marginTop: 14, display: "flex", flexDirection: "column", gap: 8 }}>
+        {[
+          { model: "GPT-2 Small", blocks: 12, dModel: 768, color: C.green, pct: 12.5 },
+          { model: "GPT-2 Medium", blocks: 24, dModel: 1024, color: C.yellow, pct: 25 },
+          { model: "GPT-2 Large", blocks: 36, dModel: 1280, color: C.orange, pct: 37.5 },
+          { model: "GPT-3", blocks: 96, dModel: 12288, color: C.red, pct: 100 },
+        ].map(({ model, blocks, dModel, color, pct }) => (
+          <div key={model} style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            <span style={{ color, fontSize: 13, fontWeight: 700, minWidth: 110 }}>{model}</span>
+            <div style={{ flex: 1, height: 20, borderRadius: 4, background: "rgba(255,255,255,0.04)", overflow: "hidden", position: "relative" }}>
+              <div style={{ width: `${pct}%`, height: "100%", borderRadius: 4, background: color, opacity: 0.4 }} />
+              <span style={{ position: "absolute", left: 8, top: 2, fontSize: 12, color: "white", fontWeight: 600 }}>{blocks} blocks</span>
+            </div>
+            <code style={{ color: C.dim, fontSize: 12, minWidth: 80 }}>d={dModel}</code>
+          </div>
+        ))}
+      </div>
+
+      <div style={{ marginTop: 14, padding: 12, borderRadius: 8, background: `${C.cyan}08`, border: `1px solid ${C.cyan}20` }}>
+        <T color="#80deea" bold center size={15}>What This Means</T>
+        <T color="#80deea" size={14} style={{ marginTop: 4 }}>In GPT-3, every single token in your prompt passes through 96 identical blocks in sequence. Each block runs the full Attention → Add & Norm → FFN → Add & Norm pipeline. That's 96 rounds of attention, 96 rounds of FFN, and 192 Add & Norm operations per token.</T>
+      </div>
+    </Box></Reveal>
+    {sub === 1 && <SubBtn onClick={() => navigate("forward")} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
+
+    {/* Sub 2: Same structure, different weights */}
+    <Reveal when={sub >= 2}><Box color={C.purple} style={{ width: "100%" }}>
+      <T color="#b8a9ff" bold center size={20}>Same Structure, Different Weights</T>
+      <T color="#b8a9ff" size={16} style={{ marginTop: 6 }}>Every block has the same structure: Attention → Add & Norm → FFN → Add & Norm. But every learnable weight inside each block is unique - learned separately during training. Here's every weight and where it lives:</T>
+
+      {/* Weight map: which step owns which weights */}
+      <div style={{ marginTop: 14, display: "flex", flexDirection: "column", gap: 6 }}>
+        {/* Attention weights */}
+        <div style={{ padding: 12, borderRadius: 10, background: `${C.pink}06`, border: `1px solid ${C.pink}20` }}>
+          <T color={C.pink} bold size={15}>Multi-Head Attention</T>
+          <div style={{ marginTop: 8, display: "flex", flexWrap: "wrap", gap: 6 }}>
+            {[
+              { name: "W_Q", role: "Creates Queries - \"what am I looking for?\"", ref: "ch 6.9" },
+              { name: "W_K", role: "Creates Keys - \"what do I contain?\"", ref: "ch 6.9" },
+              { name: "W_V", role: "Creates Values - \"what info do I pass along?\"", ref: "ch 6.9" },
+              { name: "W_O", role: "Blends all 8 heads back together", ref: "ch 7.12" },
+            ].map(({ name, role, ref }) => (
+              <div key={name} style={{ flex: "1 1 45%", padding: "6px 10px", borderRadius: 6, background: `${C.pink}08`, border: `1px solid ${C.pink}15` }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                  <code style={{ color: C.pink, fontSize: 14, fontWeight: 700 }}>{name}</code>
+                  <span style={{ color: C.dim, fontSize: 11 }}>({ref})</span>
+                </div>
+                <T color={C.dim} size={12}>{role}</T>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Add & Norm #1 weights */}
+        <div style={{ padding: 12, borderRadius: 10, background: `${C.blue}06`, border: `1px solid ${C.blue}20` }}>
+          <T color={C.blue} bold size={15}>Add & Norm #1 (after Attention)</T>
+          <div style={{ marginTop: 8, display: "flex", flexWrap: "wrap", gap: 6 }}>
+            {[
+              { name: "\u03B3\u2081 (gamma)", role: "Learnable scale per dimension - stretches or shrinks normalized values", ref: "ch 8.1" },
+              { name: "\u03B2\u2081 (beta)", role: "Learnable shift per dimension - moves the center up or down", ref: "ch 8.1" },
+            ].map(({ name, role, ref }) => (
+              <div key={name} style={{ flex: "1 1 45%", padding: "6px 10px", borderRadius: 6, background: `${C.blue}08`, border: `1px solid ${C.blue}15` }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                  <code style={{ color: C.blue, fontSize: 14, fontWeight: 700 }}>{name}</code>
+                  <span style={{ color: C.dim, fontSize: 11 }}>({ref})</span>
+                </div>
+                <T color={C.dim} size={12}>{role}</T>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* FFN weights */}
+        <div style={{ padding: 12, borderRadius: 10, background: `${C.orange}06`, border: `1px solid ${C.orange}20` }}>
+          <T color={C.orange} bold size={15}>Feed-Forward Network</T>
+          <div style={{ marginTop: 8, display: "flex", flexWrap: "wrap", gap: 6 }}>
+            {[
+              { name: "W\u2081, b\u2081", role: "First layer - expands from 512 to 2048 dims (the thinking space)", ref: "ch 8.2" },
+              { name: "W\u2082, b\u2082", role: "Second layer - compresses from 2048 back to 512 dims", ref: "ch 8.2" },
+            ].map(({ name, role, ref }) => (
+              <div key={name} style={{ flex: "1 1 45%", padding: "6px 10px", borderRadius: 6, background: `${C.orange}08`, border: `1px solid ${C.orange}15` }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                  <code style={{ color: C.orange, fontSize: 14, fontWeight: 700 }}>{name}</code>
+                  <span style={{ color: C.dim, fontSize: 11 }}>({ref})</span>
+                </div>
+                <T color={C.dim} size={12}>{role}</T>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Add & Norm #2 weights */}
+        <div style={{ padding: 12, borderRadius: 10, background: `${C.blue}06`, border: `1px solid ${C.blue}20` }}>
+          <T color={C.blue} bold size={15}>Add & Norm #2 (after FFN)</T>
+          <div style={{ marginTop: 8, display: "flex", flexWrap: "wrap", gap: 6 }}>
+            {[
+              { name: "\u03B3\u2082 (gamma)", role: "Same role as gamma above, but a separate copy learned independently", ref: "ch 8.3" },
+              { name: "\u03B2\u2082 (beta)", role: "Same role as beta above, but a separate copy learned independently", ref: "ch 8.3" },
+            ].map(({ name, role, ref }) => (
+              <div key={name} style={{ flex: "1 1 45%", padding: "6px 10px", borderRadius: 6, background: `${C.blue}08`, border: `1px solid ${C.blue}15` }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                  <code style={{ color: C.blue, fontSize: 14, fontWeight: 700 }}>{name}</code>
+                  <span style={{ color: C.dim, fontSize: 11 }}>({ref})</span>
+                </div>
+                <T color={C.dim} size={12}>{role}</T>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* The key point */}
+      <div style={{ marginTop: 12, padding: 12, borderRadius: 8, background: `${C.yellow}08`, border: `1px solid ${C.yellow}20` }}>
+        <T color="#fff176" bold center size={15}>Every block has its own copy of ALL these weights</T>
+        <T color="#fff176" size={14} style={{ marginTop: 4 }}>Block 1 has its own W_Q, W_K, W_V, W_O, W<sub>1</sub>, W<sub>2</sub>, gammas, and betas. Block 2 has completely different weights. Block 96 has yet another set. If they shared the same weights, stacking 96 blocks would be no better than having one - you'd just repeat the same transformation. Each block's unique weights let it specialize: Block 1 learns different patterns than Block 50.</T>
+      </div>
+    </Box></Reveal>
+    {sub === 2 && <SubBtn onClick={() => navigate("forward")} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
+
+    {/* Sub 3: What each layer learns */}
+    <Reveal when={sub >= 3}><Box color={C.green} style={{ width: "100%" }}>
+      <T color="#a5d6a7" bold center size={20}>What Each Layer Learns - Shallow to Deep</T>
+      <T color="#a5d6a7" size={16} style={{ marginTop: 6 }}>Research on Transformer internals has revealed a clear pattern: early blocks learn simple things, deep blocks learn abstract things.</T>
+
+      <div style={{ marginTop: 14, display: "flex", flexDirection: "column", gap: 0 }}>
+        {[
+          { range: "Blocks 1-4", title: "Surface Patterns", items: ["Part-of-speech (noun, verb, adjective)", "Basic grammar and word order", "Simple co-occurrence (\"New\" near \"York\")"], color: C.green, barW: 20 },
+          { range: "Blocks 5-12", title: "Syntax & Structure", items: ["Subject-verb agreement across distance", "Clause boundaries and nesting", "Pronoun resolution (\"she\" refers to \"Alice\")"], color: C.yellow, barW: 50 },
+          { range: "Blocks 13-24", title: "Semantics & Meaning", items: ["Word sense disambiguation (\"bank\" = river vs money)", "Sentiment and tone detection", "Entity relationships and facts"], color: C.orange, barW: 75 },
+          { range: "Blocks 25-96", title: "Abstract Reasoning", items: ["Multi-step inference and logic", "World knowledge and common sense", "Task-specific meaning and generation"], color: C.red, barW: 100 },
+        ].map(({ range, title, items, color, barW }, idx) => (
+          <div key={range}>
+            <div style={{ display: "flex", gap: 10, padding: "10px 12px", borderRadius: 8, background: `${color}06`, border: `1px solid ${color}15` }}>
+              <div style={{ minWidth: 80 }}>
+                <T color={color} bold size={13}>{range}</T>
+                <div style={{ marginTop: 4, height: 6, borderRadius: 3, background: "rgba(255,255,255,0.04)", width: 80 }}>
+                  <div style={{ width: `${barW}%`, height: "100%", borderRadius: 3, background: color, opacity: 0.5 }} />
+                </div>
+              </div>
+              <div>
+                <T color={color} bold size={14}>{title}</T>
+                {items.map((item, i) => (
+                  <div key={i} style={{ display: "flex", gap: 4, alignItems: "flex-start", marginTop: 2 }}>
+                    <span style={{ color, fontSize: 10, marginTop: 3 }}>&#9679;</span>
+                    <T color={C.dim} size={12}>{item}</T>
+                  </div>
+                ))}
+              </div>
+            </div>
+            {idx < 3 && <div style={{ textAlign: "center", color: C.dim, fontSize: 14 }}>↓</div>}
+          </div>
+        ))}
+      </div>
+
+      <T color="#a5d6a7" size={14} center style={{ marginTop: 10 }}>This is why depth matters - you need many blocks to build from grammar all the way up to meaning and reasoning. It's the same principle as "deep" networks from chapter 1.21, but now each block has both attention (for context) and FFN (for knowledge).</T>
+    </Box></Reveal>
+    {sub === 3 && <SubBtn onClick={() => navigate("forward")} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
+
+    {/* Sub 4: Complete picture - clean SVG pipeline */}
+    <Reveal when={sub >= 4}><Box color={C.red} style={{ width: "100%" }}>
+      <T color="#ef9a9a" bold center size={20}>The Complete Picture - Token to Output Through N Blocks</T>
+      <T color="#ef9a9a" size={16} style={{ marginTop: 6 }}>Here's the full journey of a single token from input to output:</T>
+
+      {/* SVG pipeline diagram
+           Layout (all y positions verified):
+           embedTop=10  h=40  → bottom=50
+           arrow 50→68
+           b1Top=70     h=50  → bottom=120
+           arrow 120→138
+           b2Top=140    h=50  → bottom=190
+           arrow 190→210
+           dotsY=220 (text centered here)
+           arrow 230→248
+           bNTop=250    h=50  → bottom=300
+           arrow 300→318
+           outTop=320   h=40  → bottom=360
+           svgH=370
+      */}
+      {(() => {
+        const w = 580, cx = w / 2, boxW = 420;
+        const stepW = 88, stepH = 20;
+        const embedTop = 10, embedH = 44;
+        const b1Top = 76, blockH = 56;
+        const b2Top = 154;
+        const dotsY = 238;
+        const bNTop = 268;
+        const outTop = 346, outH = 44;
+        const svgH = 400;
+        const stepClr = [C.pink, C.blue, C.orange, C.blue];
+        const stepLbl = ["Attention", "Add & Norm", "FFN", "Add & Norm"];
+        const bracketX = cx + boxW / 2 + 18;
+        const renderBlock = (top, label, color) => {
+          const bx = cx - boxW / 2;
+          const totalSW = 4 * stepW + 3 * 8;
+          return (
+            <g>
+              <rect x={bx} y={top} width={boxW} height={blockH} rx={10} fill={`${color}08`} stroke={`${color}40`} strokeWidth={1.5} />
+              <text x={cx} y={top + 18} fill={color} fontSize={14} fontWeight={700} textAnchor="middle">{label}</text>
+              {stepLbl.map((sl, si) => {
+                const sx = cx - totalSW / 2 + si * (stepW + 8);
+                return (
+                  <g key={si}>
+                    <rect x={sx} y={top + 28} width={stepW} height={stepH} rx={5} fill={`${stepClr[si]}15`} stroke={`${stepClr[si]}30`} strokeWidth={1} />
+                    <text x={sx + stepW / 2} y={top + 28 + stepH / 2 + 4} fill={stepClr[si]} fontSize={10} fontWeight={600} textAnchor="middle">{sl}</text>
+                  </g>
+                );
+              })}
+            </g>
+          );
+        };
+        const arrow = (fromY, toY) =>
+          <line x1={cx} y1={fromY + 2} x2={cx} y2={toY - 3} stroke="rgba(255,255,255,0.18)" strokeWidth={1.5} markerEnd="url(#arr2)" />;
+        return (
+        <svg viewBox={`0 0 ${w} ${svgH}`} style={{ display: "block", width: "100%", maxWidth: 650, margin: "14px auto 0" }}>
+          <defs><marker id="arr2" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="rgba(255,255,255,0.25)" /></marker></defs>
+
+          {/* Token Embedding box */}
+          <rect x={cx - boxW / 2} y={embedTop} width={boxW} height={embedH} rx={10} fill={`${C.cyan}08`} stroke={`${C.cyan}40`} strokeWidth={1.5} />
+          <text x={cx} y={embedTop + 22} fill={C.cyan} fontSize={14} fontWeight={700} textAnchor="middle">Token Embedding + Positional Encoding</text>
+          <text x={cx} y={embedTop + 37} fill={C.dim} fontSize={10} textAnchor="middle">(Sections 5.2-5.7)</text>
+
+          {/* Arrows: each starts 2px below box bottom, ends 3px above next box top */}
+          {arrow(embedTop + embedH, b1Top)}
+          {arrow(b1Top + blockH, b2Top)}
+          {arrow(b2Top + blockH, dotsY - 10)}
+          {arrow(dotsY + 10, bNTop)}
+          {arrow(bNTop + blockH, outTop)}
+
+          {/* Blocks */}
+          {renderBlock(b1Top, "Block 1", C.green)}
+          {renderBlock(b2Top, "Block 2", C.yellow)}
+          {renderBlock(bNTop, "Block N", C.red)}
+
+          {/* Dots - centered between Block 2 bottom and Block N top */}
+          <text x={cx} y={dotsY + 5} fill={C.dim} fontSize={20} textAnchor="middle" letterSpacing={10}>...</text>
+
+          {/* Output Layer box */}
+          <rect x={cx - boxW / 2} y={outTop} width={boxW} height={outH} rx={10} fill={`${C.orange}08`} stroke={`${C.orange}40`} strokeWidth={1.5} />
+          <text x={cx} y={outTop + 22} fill={C.orange} fontSize={14} fontWeight={700} textAnchor="middle">Output Layer</text>
+          <text x={cx} y={outTop + 37} fill={C.dim} fontSize={10} textAnchor="middle">logits → softmax → next token</text>
+
+          {/* N x bracket - right side, spanning Block 1 top to Block N bottom */}
+          <line x1={bracketX} y1={b1Top} x2={bracketX} y2={bNTop + blockH} stroke={C.dim} strokeWidth={1.5} />
+          <line x1={bracketX - 7} y1={b1Top} x2={bracketX + 7} y2={b1Top} stroke={C.dim} strokeWidth={1.5} />
+          <line x1={bracketX - 7} y1={bNTop + blockH} x2={bracketX + 7} y2={bNTop + blockH} stroke={C.dim} strokeWidth={1.5} />
+          <text x={bracketX + 14} y={(b1Top + bNTop + blockH) / 2 + 5} fill={C.dim} fontSize={16} fontWeight={700} textAnchor="start">Nx</text>
+        </svg>
+        );
+      })()}
+
+      <div style={{ marginTop: 14, display: "flex", gap: 10 }}>
+        <div style={{ flex: 1, padding: 10, borderRadius: 8, background: `${C.blue}08`, border: `1px solid ${C.blue}20` }}>
+          <T color={C.blue} bold center size={14}>GPT-2 Small</T>
+          <T color={C.dim} center size={12}>N = 12 blocks, 117M parameters</T>
+        </div>
+        <div style={{ flex: 1, padding: 10, borderRadius: 8, background: `${C.purple}08`, border: `1px solid ${C.purple}20` }}>
+          <T color={C.purple} bold center size={14}>GPT-3</T>
+          <T color={C.dim} center size={12}>N = 96 blocks, 175B parameters</T>
+        </div>
+      </div>
+
+      <div style={{ marginTop: 12, padding: 10, borderRadius: 8, background: `${C.red}08`, border: `1px solid ${C.red}20` }}>
+        <T color="#ef9a9a" bold center size={15}>The full recipe of a Transformer decoder:</T>
+        <T color="#ef9a9a" center size={14} style={{ marginTop: 4 }}>Tokenize → Embed → Add positions → Pass through N blocks (each: Attention → Add & Norm → FFN → Add & Norm) → Output layer → Next token probability. Everything we've covered from Section 5 through Section 8 happens inside each of those N blocks.</T>
+      </div>
+    </Box></Reveal>
+  </div>
+); };

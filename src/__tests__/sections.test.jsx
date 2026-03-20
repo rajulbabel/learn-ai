@@ -1329,6 +1329,217 @@ describe("DecoderOnly sub-steps", () => {
   });
 });
 
+// ─── Chapter 8.2: FeedForwardNetwork ───
+describe("FeedForwardNetwork sub-steps", () => {
+  const fn = TransformerBlock.FeedForwardNetwork;
+
+  it("sub 0 shows where FFN sits in the Transformer block", () => {
+    const ctx = makeCtx({ sub: 0 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("Attention");
+    expect(text).toContain("Add & Norm");
+    expect(text).toContain("FFN");
+    // FFN should be highlighted
+    expect(text).toContain("Feed-Forward");
+  });
+
+  it("sub 1 explains FFN is a simple 2-layer neural network", () => {
+    const ctx = makeCtx({ sub: 1 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    // Should reference what learner already knows about layers
+    expect(text).toContain("two");
+    expect(text).toContain("layer");
+    // Should show the formula
+    expect(text).toContain("W");
+    expect(text).toContain("b");
+  });
+
+  it("sub 2 shows the expand-then-compress shape with dimensions", () => {
+    const ctx = makeCtx({ sub: 2 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    // Should show the 512 -> 2048 -> 512 shape
+    expect(text).toContain("512");
+    expect(text).toContain("2048");
+    // Should explain the 4x expansion
+    expect(text).toContain("4x");
+  });
+
+  it("sub 3 shows step-by-step computation with real numbers", () => {
+    const ctx = makeCtx({ sub: 3 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    // Should use the cats embedding from Add & Norm output
+    expect(text).toContain("cats");
+    // Should show matrix multiply
+    expect(text).toContain("W");
+    // Should have concrete numbers
+    expect(text).toMatch(/\d+\.\d+/);
+  });
+
+  it("sub 4 shows the GELU formula with Phi and erf, then compares to ReLU", () => {
+    const ctx = makeCtx({ sub: 4 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    // Must show the real formula
+    expect(text).toContain("GELU");
+    expect(text).toContain("(x)");
+    expect(text).toContain("erf");
+    // Must show worked examples with concrete numbers
+    expect(text).toContain("0.977");
+    expect(text).toContain("1.95");
+    // Must compare to ReLU
+    expect(text).toContain("ReLU");
+    // Must explain the smooth difference
+    expect(text).toContain("smooth");
+  });
+
+  it("sub 5 shows France/Paris example of attention vs FFN", () => {
+    const ctx = makeCtx({ sub: 5 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("France");
+    expect(text).toContain("Paris");
+    expect(text).toContain("knowledge");
+    expect(text).toContain("attention");
+  });
+
+  it("sub 6 shows bank/river multi-block example", () => {
+    const ctx = makeCtx({ sub: 6 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("bank");
+    expect(text).toContain("river");
+  });
+
+  it("sub 7 shows deep Q&A", () => {
+    const ctx = makeCtx({ sub: 7 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("attention replace FFN");
+    expect(text).toContain("FFN replace attention");
+  });
+
+  it("sub 8 shows parameter breakdown in its own box", () => {
+    const ctx = makeCtx({ sub: 8 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("parameter");
+    expect(text).toContain("2/3");
+    expect(text).toContain("1/3");
+  });
+});
+
+// ─── Chapter 8.3: AddNormTwo ───
+describe("AddNormTwo sub-steps", () => {
+  const fn = TransformerBlock.AddNormTwo;
+
+  it("sub 0 shows where we are - just after FFN, second Add & Norm", () => {
+    const ctx = makeCtx({ sub: 0 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("FFN");
+    expect(text).toContain("second");
+  });
+
+  it("sub 1 shows the Add step with FFN input + FFN output", () => {
+    const ctx = makeCtx({ sub: 1 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("FFN");
+    expect(text).toContain("+");
+    // Should have concrete vectors
+    expect(text).toMatch(/\[.*\d.*\]/);
+  });
+
+  it("sub 2 shows the Norm step with concrete numbers", () => {
+    const ctx = makeCtx({ sub: 2 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("Norm");
+    // Should show actual normalized values
+    expect(text).toMatch(/\d+\.\d+/);
+  });
+
+  it("sub 3 shows the complete single-block pipeline from input to output", () => {
+    const ctx = makeCtx({ sub: 3 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    // Should show all 4 stages
+    expect(text).toContain("Attention");
+    expect(text).toContain("Add & Norm");
+    expect(text).toContain("FFN");
+    // Should have the full pipeline visual
+    expect(container.querySelector("[data-full-block]")).toBeTruthy();
+  });
+
+  it("sub 4 explains why Add & Norm appears twice", () => {
+    const ctx = makeCtx({ sub: 4 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("twice");
+    // Should explain each sub-layer needs its own stabilization
+    expect(text).toContain("sub-layer");
+  });
+});
+
+// ─── Chapter 8.4: TransformerBlockRepeats ───
+describe("TransformerBlockRepeats sub-steps", () => {
+  const fn = TransformerBlock.TransformerBlockRepeats;
+
+  it("sub 0 explains one block is not enough", () => {
+    const ctx = makeCtx({ sub: 0 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("one");
+    expect(text).toContain("block");
+    // Should motivate why repetition is needed
+    expect(text).toContain("repeat");
+  });
+
+  it("sub 1 shows the stack with real model sizes", () => {
+    const ctx = makeCtx({ sub: 1 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    // Should show GPT-2 and GPT-3 block counts
+    expect(text).toContain("GPT-2");
+    expect(text).toContain("12");
+    expect(text).toContain("GPT-3");
+    expect(text).toContain("96");
+  });
+
+  it("sub 2 explains same structure different weights per block", () => {
+    const ctx = makeCtx({ sub: 2 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("same structure");
+    expect(text).toContain("different weights");
+  });
+
+  it("sub 3 shows what each layer learns - shallow to deep", () => {
+    const ctx = makeCtx({ sub: 3 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    // Should show progression from basic to abstract
+    expect(text).toContain("grammar");
+    expect(text).toContain("meaning");
+  });
+
+  it("sub 4 shows complete picture from tokens through N blocks to output", () => {
+    const ctx = makeCtx({ sub: 4 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    // Full pipeline
+    expect(text).toContain("Token");
+    expect(text).toContain("Block");
+    expect(text).toContain("Output");
+    // The Nx notation
+    expect(text).toContain("N");
+  });
+});
+
 describe("source files have no standalone uppercase IS", () => {
   const sectionFiles = [
     "llm-training.jsx",

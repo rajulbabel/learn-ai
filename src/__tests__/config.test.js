@@ -86,4 +86,10 @@ describe("config.js", () => {
       expect(typeof color).toBe("string");
     });
   });
+
+  it("no chapter title contains standalone uppercase IS", () => {
+    chapters.forEach((c) => {
+      expect(c.title).not.toMatch(/\bIS\b/);
+    });
+  });
 });

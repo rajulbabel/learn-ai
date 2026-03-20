@@ -96,11 +96,12 @@ Only config.js IDs change.
 | 2.1 | Tokenization | Tokenization - From Words to Numbers |
 | 2.2 | SelfSupervised | Self-Supervised Learning - How GPT Trains |
 | 2.3 | CrossEntropy | Cross-Entropy Loss - The LLM Score |
-| 2.4 | SFT | Supervised Fine-Tuning (SFT) |
-| 2.5 | RLHF | RLHF - Making AI Helpful & Safe |
-| 2.6 | BatchTraining | Batch Training - Why Not One Example at a Time? |
-| 2.7 | OutputLayer | The Output Layer - From Hidden State to Words |
-| 2.8 | AutoregressiveGeneration | Autoregressive Generation - One Token at a Time |
+| 2.4 | NNInAction | The Neural Network in Action |
+| 2.5 | SFT | Supervised Fine-Tuning (SFT) |
+| 2.6 | RLHF | RLHF - Making AI Helpful & Safe |
+| 2.7 | BatchTraining | Batch Training - Why Not One Example at a Time? |
+| 2.8 | OutputLayer | The Output Layer - From Hidden State to Words |
+| 2.9 | AutoregressiveGeneration | Autoregressive Generation - One Token at a Time |
 
 **Section 3: Scaling & Modern Techniques** (`scaling.jsx`)
 

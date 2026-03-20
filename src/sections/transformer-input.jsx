@@ -140,7 +140,7 @@ export const FullArchitecture = (ctx) => { const { sub, subBtnRipple, setSubBtnR
       {/* --- CROSS-ATTENTION: Encoder output → Decoder cross-attention --- */}
       {/* Encoder top output goes right to decoder cross-attention */}
       <path d="M107,185 L107,172 L210,172 L210,272 L250,272" fill="none" stroke={`${C.green}55`} strokeWidth="2" markerEnd="url(#arrowG)" />
-      <text x="210" y="166" fill={`${C.green}70`} fontSize="8" textAnchor="middle">K, V from encoder</text>
+      <text x="160" y="166" fill={`${C.green}70`} fontSize="8" textAnchor="middle">K, V from encoder</text>
 
       {/* --- Decoder bottom: Positional Encoding + Embedding --- */}
       <circle cx="314" cy="448" r="14" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.25)" strokeWidth="1.2" />

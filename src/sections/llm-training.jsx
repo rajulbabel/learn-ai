@@ -186,7 +186,7 @@ export const SelfSupervised = (ctx) => { const { sub, subBtnRipple, setSubBtnRip
           </div>
         ))}
       </div>
-      <T color="#ef9a9a" style={{ marginTop: 8 }}>The model predicted "the" with 35% confidence. The correct answer IS "the". Good! But not perfect - 35% is not 100%.</T>
+      <T color="#ef9a9a" style={{ marginTop: 8 }}>The model predicted "the" with 35% confidence. The correct answer is "the". Good! But not perfect - 35% is not 100%.</T>
     </Box></Reveal>
 
     <Reveal when={sub >= 3}><Box color={C.yellow} style={{ width: "100%" }}>
@@ -269,14 +269,138 @@ export const CrossEntropy = (ctx) => { const { sub, subBtnRipple, setSubBtnRippl
   <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
     {sub >= 0 && (
       <Box color={C.cyan} style={{ width: "100%" }}>
-        <T color="#80deea" bold center size={20}>Cross-Entropy Loss: The LLM Score</T>
-        <T color="#80deea" style={{ marginTop: 6 }}>We need one number to grade the model: "How good are your predictions?" This is cross-entropy loss.</T>
-        <T color="#80deea" style={{ marginTop: 8 }}><strong>The formula:</strong> Loss = -log(P_correct)</T>
-        <T color={C.dim} size={14} style={{ marginTop: 6 }}>where P_correct is the probability the model assigned to the actual next token.</T>
+        <T color="#80deea" bold center size={20}>How do we grade the model?</T>
+        <T color="#80deea" style={{ marginTop: 6 }}>The model predicts probabilities for every word in the vocabulary. But how do we turn that into one number that says "how good are your predictions?"</T>
+        <T color="#80deea" style={{ marginTop: 8 }}>We need a <strong>loss function</strong> - a single score that tells us how wrong the model was. Lower loss = better predictions. The loss function used by every LLM is called <strong>cross-entropy loss</strong>.</T>
       </Box>
     )}
 
-    <Reveal when={sub >= 1}><Box color={C.orange} style={{ width: "100%" }}>
+    {/* ── Sub 1: The formula (SVG) + the -log(P) graph + explanation ── */}
+    <Reveal when={sub >= 1}><Box color={C.green} style={{ width: "100%" }}>
+      <T color="#80e8a5" bold center size={20}>The formula: Loss = -log(P)</T>
+
+      {/* ── SVG Formula ── */}
+      <div style={{ margin: "16px 0", padding: "18px 12px", background: "rgba(0,0,0,0.4)", borderRadius: 12, border: `1px solid ${C.green}25`, display: "flex", flexDirection: "column", alignItems: "center" }}>
+        <T color={C.dim} size={13} center style={{ textTransform: "uppercase", letterSpacing: 2, marginBottom: 8 }}>The Cross-Entropy Loss Formula</T>
+        <svg viewBox="0 0 440 100" style={{ width: "100%", maxWidth: 400, height: "auto" }}>
+          {/* Loss = */}
+          <text x="10" y="55" fill={C.bright} fontSize="24" fontFamily="serif" fontWeight="700">Loss</text>
+          <text x="80" y="55" fill={C.dim} fontSize="24" fontFamily="serif">=</text>
+          {/* - */}
+          <text x="108" y="55" fill={C.red} fontSize="28" fontFamily="serif" fontWeight="700">-</text>
+          {/* log with subscript e */}
+          <text x="128" y="55" fill={C.green} fontSize="24" fontFamily="serif" fontWeight="700">log</text>
+          <text x="172" y="64" fill={C.green} fontSize="13" fontFamily="serif" fontStyle="italic">e</text>
+          {/* ( */}
+          <text x="185" y="55" fill={C.dim} fontSize="28" fontFamily="serif">(</text>
+          {/* P_correct */}
+          <text x="200" y="55" fill={C.cyan} fontSize="24" fontFamily="serif" fontStyle="italic" fontWeight="700">P</text>
+          <text x="220" y="68" fill={C.purple} fontSize="13" fontFamily="serif" fontStyle="italic">correct</text>
+          {/* ) */}
+          <text x="275" y="55" fill={C.dim} fontSize="28" fontFamily="serif">)</text>
+          {/* Annotations */}
+          <text x="300" y="42" fill={C.cyan} fontSize="11" fontFamily="sans-serif">← the probability the model</text>
+          <text x="308" y="56" fill={C.cyan} fontSize="11" fontFamily="sans-serif">assigned to the actual</text>
+          <text x="308" y="70" fill={C.cyan} fontSize="11" fontFamily="sans-serif">next word</text>
+          <text x="108" y="85" fill={C.red} fontSize="11" fontFamily="sans-serif">↑ negative sign flips it</text>
+        </svg>
+      </div>
+
+      <T color="#80e8a5" style={{ marginTop: 4 }}>In plain English: <strong>take the natural log of how confident the model was in the right answer, then flip the sign.</strong></T>
+
+      {/* ── The -log(P) Graph ── */}
+      <T color="#80e8a5" bold size={16} style={{ marginTop: 16 }}>The graph of -log(P): why this shape matters</T>
+      <div style={{ marginTop: 8, padding: "16px 12px", background: "rgba(0,0,0,0.35)", borderRadius: 12, border: `1px solid ${C.green}20` }}>
+        <svg viewBox="0 0 400 240" style={{ width: "100%", maxWidth: 420, height: "auto", display: "block", margin: "0 auto" }}>
+          {/* Axes */}
+          <line x1="50" y1="200" x2="380" y2="200" stroke="rgba(255,255,255,0.3)" strokeWidth="1.5" />
+          <line x1="50" y1="20" x2="50" y2="200" stroke="rgba(255,255,255,0.3)" strokeWidth="1.5" />
+          {/* Y axis label */}
+          <text x="15" y="115" fill={C.red} fontSize="13" fontFamily="sans-serif" transform="rotate(-90,15,115)" textAnchor="middle" fontWeight="700">Loss (-log P)</text>
+          {/* X axis label */}
+          <text x="215" y="232" fill={C.cyan} fontSize="13" fontFamily="sans-serif" textAnchor="middle" fontWeight="700">probability assigned to correct word</text>
+          {/* Y axis ticks */}
+          {[0, 1, 2, 3, 4].map(v => {
+            const y = 200 - (v / 4.6) * 180;
+            return <g key={v}>
+              <line x1="45" y1={y} x2="50" y2={y} stroke="rgba(255,255,255,0.3)" strokeWidth="1" />
+              <text x="40" y={y + 4} fill={C.dim} fontSize="11" fontFamily="sans-serif" textAnchor="end">{v.toFixed(1)}</text>
+              <line x1="50" y1={y} x2="380" y2={y} stroke="rgba(255,255,255,0.05)" strokeWidth="0.5" />
+            </g>;
+          })}
+          {/* X axis ticks */}
+          {[0.0, 0.2, 0.4, 0.6, 0.8, 1.0].map(v => {
+            const x = 50 + v * 330;
+            return <g key={v}>
+              <line x1={x} y1="200" x2={x} y2="205" stroke="rgba(255,255,255,0.3)" strokeWidth="1" />
+              <text x={x} y="216" fill={C.dim} fontSize="11" fontFamily="sans-serif" textAnchor="middle">{v.toFixed(1)}</text>
+            </g>;
+          })}
+          {/* The -log(P) curve */}
+          <path d={(() => {
+            const pts = [];
+            for (let i = 1; i <= 100; i++) {
+              const p = i / 100;
+              const loss = -Math.log(p);
+              const x = 50 + p * 330;
+              const y = 200 - (loss / 4.6) * 180;
+              pts.push(`${i === 1 ? "M" : "L"}${x.toFixed(1)},${Math.max(20, y).toFixed(1)}`);
+            }
+            return pts.join(" ");
+          })()} fill="none" stroke={C.green} strokeWidth="2.5" />
+          {/* Annotated points */}
+          {[
+            { p: 0.95, label: "P=0.95", sublabel: "confident & right", loss: -Math.log(0.95), color: C.green },
+            { p: 0.50, label: "P=0.50", sublabel: "coin flip", loss: -Math.log(0.50), color: C.yellow },
+            { p: 0.10, label: "P=0.10", sublabel: "wrong guess", loss: -Math.log(0.10), color: C.orange },
+            { p: 0.01, label: "P=0.01", sublabel: "very wrong", loss: -Math.log(0.01), color: C.red },
+          ].map(({ p, label, sublabel, loss, color }) => {
+            const x = 50 + p * 330;
+            const y = Math.max(20, 200 - (loss / 4.6) * 180);
+            return <g key={p}>
+              <circle cx={x} cy={y} r="5" fill={color} opacity="0.9" />
+              <line x1={x} y1={y} x2={x} y2="200" stroke={color} strokeWidth="0.8" strokeDasharray="3,3" opacity="0.4" />
+              <text x={Math.min(x + 8, 350)} y={y - 8} fill={color} fontSize="10" fontFamily="sans-serif" fontWeight="700">{label}</text>
+              <text x={Math.min(x + 8, 350)} y={y + 4} fill={color} fontSize="9" fontFamily="sans-serif" opacity="0.8">{sublabel}</text>
+            </g>;
+          })}
+        </svg>
+      </div>
+
+      {/* ── Where does "correct" come from? ── */}
+      <div style={{ marginTop: 14, padding: 14, borderRadius: 8, background: `${C.cyan}06`, border: `1px solid ${C.cyan}12` }}>
+        <T color="#80deea" bold size={15}>But wait - how does the formula know what the right answer is?</T>
+        <T color="#80deea" size={14} style={{ marginTop: 6 }}>The formula is Loss = -ln(P<sub>correct</sub>). But where does "correct" come from? It is NOT inside the formula. It comes from the <strong>training data</strong>.</T>
+        <T color="#80deea" size={14} style={{ marginTop: 6 }}>During training, the model sees real text like "The cat sat on the <strong>mat</strong>". We already know the next word is "mat" because it is right there in the sentence. The model outputs 50,000 probabilities (one per word). We reach into that list, pull out the one probability the model assigned to "mat", and plug THAT number into the formula.</T>
+        <div style={{ marginTop: 10, padding: "10px 12px", borderRadius: 8, background: "rgba(0,0,0,0.3)" }}>
+          <T color={C.bright} size={14}>Model output: {"{"}the: 2%, cat: 5%, mat: <strong style={{ color: C.green }}>62%</strong>, dog: 1%, ...{"}"}</T>
+          <T color={C.bright} size={14} style={{ marginTop: 4 }}>Correct answer (from training data): <strong style={{ color: C.green }}>"mat"</strong></T>
+          <T color={C.bright} size={14} style={{ marginTop: 4 }}>So P<sub>correct</sub> = P("mat") = <strong style={{ color: C.green }}>0.62</strong></T>
+          <T color={C.bright} size={14} style={{ marginTop: 4 }}>Loss = -ln(0.62) = <strong style={{ color: C.yellow }}>0.48</strong></T>
+        </div>
+        <T color="#80deea" size={14} style={{ marginTop: 8 }}>The "comparison" between actual and expected is implicit: we only look at the probability the model gave to the <strong>known correct word</strong>. If that probability is high, loss is low. If that probability is low, loss is high. There is no subtraction (actual - expected). The entire comparison is: "how confident were you in the right answer?"</T>
+      </div>
+
+      {/* ── Graph explanation tied to LLM context ── */}
+      <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 8 }}>
+        <T color="#80e8a5" bold size={15}>What does this graph mean for our model?</T>
+        {[
+          { scenario: "Model gives \"mat\" P=0.95 (the correct answer from training data)", loss: "0.05", reaction: "Almost zero loss. The model was confident and correct. Barely any weight adjustment needed.", color: C.green },
+          { scenario: "Model gives \"mat\" P=0.50 (correct answer, but model wasn't sure)", loss: "0.69", reaction: "Medium loss. Right word, but not confident enough. Weights get nudged to be more confident next time.", color: C.yellow },
+          { scenario: "Model gives \"mat\" P=0.01 (correct answer, but model almost ignored it)", loss: "4.60", reaction: "Massive loss. The model was almost certain \"mat\" was wrong - but it was right. Weights get a huge correction.", color: C.red },
+        ].map(({ scenario, loss, reaction, color }) => (
+          <div key={loss} style={{ padding: "10px 12px", borderRadius: 8, background: `${color}06`, border: `1px solid ${color}12` }}>
+            <T color={color} size={14}>{scenario}</T>
+            <T color={C.bright} bold size={14} style={{ marginTop: 4 }}>Loss = {loss}</T>
+            <T color={C.dim} size={13} style={{ marginTop: 2 }}>{reaction}</T>
+          </div>
+        ))}
+      </div>
+
+      <T color="#80e8a5" style={{ marginTop: 10 }}>The curve is steep on the left (low probability = massive penalty) and flat on the right (high probability = tiny penalty). This is exactly what we want: the model gets <strong>punished harshly for being confidently wrong</strong>, but barely punished when it's already doing well.</T>
+    </Box></Reveal>
+
+    <Reveal when={sub >= 2}><Box color={C.orange} style={{ width: "100%" }}>
       <T color="#ffb74d" bold center size={20}>Why -log? The intuition</T>
       <T color="#ffb74d" style={{ marginTop: 6 }}>Imagine you're a weather forecaster. You say "70% chance of rain". If it does rain, you did well (70% ≠ 100%, but decent). If it doesn't rain, you were wrong (you said 70%!).</T>
       <T color="#ffb74d" style={{ marginTop: 6 }}>Loss measures your mistake: <strong>Loss = -log(your prediction for what actually happened)</strong></T>
@@ -295,7 +419,7 @@ export const CrossEntropy = (ctx) => { const { sub, subBtnRipple, setSubBtnRippl
       </div>
     </Box></Reveal>
 
-    <Reveal when={sub >= 2}><Box color={C.yellow} style={{ width: "100%" }}>
+    <Reveal when={sub >= 3}><Box color={C.yellow} style={{ width: "100%" }}>
       <T color="#ffe082" bold center size={20}>Cross-entropy formula in detail</T>
       <T color="#ffe082" style={{ marginTop: 6 }}>When predicting one token from a 50K vocabulary:</T>
       <div style={{ marginTop: 12, padding: "16px", borderRadius: 8, background: "rgba(0,0,0,0.4)", border: `1px solid ${C.yellow}25` }}>
@@ -322,7 +446,7 @@ export const CrossEntropy = (ctx) => { const { sub, subBtnRipple, setSubBtnRippl
       <T color="#ffe082" style={{ marginTop: 8 }}>As probability increases, loss approaches zero. As probability drops, loss explodes. This penalizes confident wrong answers.</T>
     </Box></Reveal>
 
-    <Reveal when={sub >= 3}><Box color={C.green} style={{ width: "100%" }}>
+    <Reveal when={sub >= 4}><Box color={C.green} style={{ width: "100%" }}>
       <T color="#80e8a5" bold center size={20}>Why cross-entropy, not MSE?</T>
       <T color="#80e8a5" style={{ marginTop: 6 }}>Mean Squared Error (MSE) is common for regression. Why use cross-entropy for language models?</T>
       <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 8 }}>
@@ -352,7 +476,7 @@ export const CrossEntropy = (ctx) => { const { sub, subBtnRipple, setSubBtnRippl
       </div>
     </Box></Reveal>
 
-    <Reveal when={sub >= 4}><Box color={C.purple} style={{ width: "100%" }}>
+    <Reveal when={sub >= 5}><Box color={C.purple} style={{ width: "100%" }}>
       <T color="#b8a9ff" bold center size={20}>Batch loss: averaging across examples</T>
       <T color="#b8a9ff" style={{ marginTop: 6 }}>During training, we compute loss on a BATCH of examples, then take the mean:</T>
       <div style={{ marginTop: 12, fontFamily: "monospace", padding: "12px", borderRadius: 8, background: "rgba(0,0,0,0.3)" }}>
@@ -371,153 +495,433 @@ export const CrossEntropy = (ctx) => { const { sub, subBtnRipple, setSubBtnRippl
       <T color="#b8a9ff" style={{ marginTop: 8 }}>The model updates weights to reduce this batch loss. Then the next batch is loaded and loss is recomputed.</T>
     </Box></Reveal>
 
-    {sub < 4 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
+    {sub < 5 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
   </div>
 ); }
 
 // ============================================================================
-// 2.4: SUPERVISED FINE-TUNING (SFT)
+// 2.4: THE NEURAL NETWORK IN ACTION
 // ============================================================================
-export const SFT = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx; return (
+const VOCAB = [
+  "the","cat","sat","on","mat","a","dog","ran","is","was",
+  "big","small","red","blue","and","in","it","my","to","with"
+];
+const SCORES = {
+  the: 4.2, cat: 1.1, sat: 0.3, on: -0.5, mat: 3.8,
+  a: 2.1, dog: 0.8, ran: -0.2, is: 0.5, was: 1.4,
+  big: -1.5, small: -2.1, red: -1.8, blue: -2.3, and: 0.9,
+  in: 1.6, it: 0.2, my: -3.1, to: 0.7, with: -0.9
+};
+const EXP_SCORES = {};
+let EXP_SUM = 0;
+Object.entries(SCORES).forEach(([w, s]) => { EXP_SCORES[w] = Math.exp(s); EXP_SUM += Math.exp(s); });
+const SORTED_SCORES = Object.entries(SCORES).sort((a, b) => b[1] - a[1]);
+const SORTED_PROBS = Object.entries(SCORES).map(([w, s]) => [w, Math.exp(s) / EXP_SUM]).sort((a, b) => b[1] - a[1]);
+
+export const NNInAction = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx; return (
   <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
+
+    {/* ── Sub 0: Vocabulary grid ── */}
     {sub >= 0 && (
       <Box color={C.cyan} style={{ width: "100%" }}>
-        <T color="#80deea" bold center size={20}>SFT: Teaching the model to follow instructions</T>
-        <T color="#80deea" style={{ marginTop: 6 }}>After pretraining on raw text, the model is a prediction machine - not a helpful assistant. It might output toxic, unhelpful, or rambling text.</T>
-        <T color="#80deea" style={{ marginTop: 8 }}>Supervised Fine-Tuning (SFT) teaches the model to behave by showing it examples of good responses.</T>
+        <T color="#80deea" bold center size={20}>Our tiny world: only 20 words exist</T>
+        <T color="#80deea" style={{ marginTop: 6 }}>Forget 50,000 words. Our model only knows these 20 words. Every word gets a number (its ID). The model never sees letters - only these numbers.</T>
+        <div style={{ marginTop: 12, display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: 6 }}>
+          {VOCAB.map((w, i) => (
+            <div key={w} style={{ padding: "6px 8px", borderRadius: 6, textAlign: "center", background: `${C.cyan}10`, border: `1px solid ${C.cyan}20` }}>
+              <T color="#80deea" size={13} bold><span style={{ opacity: 0.5, fontSize: 11 }}>[{i}]</span> {w}</T>
+            </div>
+          ))}
+        </div>
       </Box>
     )}
 
+    {/* ── Sub 1: Input sentence ── */}
     <Reveal when={sub >= 1}><Box color={C.orange} style={{ width: "100%" }}>
-      <T color="#ffb74d" bold center size={20}>SFT data format: (instruction, response)</T>
-      <T color="#ffb74d" style={{ marginTop: 6 }}>Humans write high-quality (question, answer) pairs. The model learns to match this pattern.</T>
+      <T color="#ffb74d" bold center size={20}>The input: "The cat sat on" - predict what?</T>
+      <T color="#ffb74d" style={{ marginTop: 6 }}>We feed in four words. The model's job: figure out what word #5 should be.</T>
+      <div style={{ marginTop: 12, display: "flex", alignItems: "center", gap: 4, flexWrap: "wrap", justifyContent: "center" }}>
+        {["The", "cat", "sat", "on"].map((w, i) => (
+          <div key={w} style={{ display: "flex", alignItems: "center", gap: 4 }}>
+            <div style={{ padding: "8px 14px", borderRadius: 8, background: `${C.orange}20`, }}>
+              <T color="#ffb74d" bold size={16}>{w} <span style={{ fontSize: 11, opacity: 0.6 }}>[{i}]</span></T>
+            </div>
+            {i < 3 && <T color={C.dim} size={20}>→</T>}
+          </div>
+        ))}
+        <T color={C.dim} size={20}>→</T>
+        <div style={{ padding: "8px 14px", borderRadius: 8, border: `2px dashed ${C.red}`, background: `${C.red}10` }}>
+          <T color={C.red} bold size={16}>???</T>
+        </div>
+      </div>
+    </Box></Reveal>
+
+    {/* ── Sub 2: Neural network diagram ── */}
+    <Reveal when={sub >= 2}><Box color={C.purple} style={{ width: "100%" }}>
+      <T color="#b8a9ff" bold center size={20}>The neural network: what it actually looks like</T>
+      <T color="#b8a9ff" style={{ marginTop: 6 }}>The last input word ("on") gets converted to numbers, flows through hidden layers where every circle does: <strong>multiply inputs by weights → add up → apply activation</strong>. Then the output layer has <strong>one circle for every word in our vocabulary (all 20)</strong>.</T>
+
+      <div style={{ marginTop: 16, display: "flex", alignItems: "center", justifyContent: "center", gap: 0, overflowX: "auto", padding: "10px 0" }}>
+        {[
+          { label: "Input", sublabel: "(word: 'on')", nodes: [{ l: "0", active: false }, { l: "0", active: false }, { l: "0", active: false }, { l: "1", active: true }], color: "#ffb74d", bg: "rgba(255,171,64,0.15)" },
+          { label: "Hidden 1", sublabel: "(8 circles)", nodes: Array(6).fill(null).map(() => ({ l: "", active: false })), color: "#b8a9ff", bg: "rgba(167,139,250,0.12)" },
+          { label: "Hidden 2", sublabel: "(8 circles)", nodes: Array(6).fill(null).map(() => ({ l: "", active: false })), color: "#b8a9ff", bg: "rgba(167,139,250,0.12)" },
+          { label: "Output", sublabel: "(20 words)", nodes: [{ l: "the", active: true }, { l: "cat", active: false }, { l: "sat", active: false }, { l: "on", active: false }, { l: "mat", active: true }, { l: "...", active: false }, { l: "with", active: false }], color: "#80e8a5", bg: "rgba(0,230,118,0.12)" },
+        ].map((layer, li) => (
+          <div key={layer.label} style={{ display: "flex", alignItems: "center" }}>
+            {li > 0 && (
+              <div style={{ display: "flex", flexDirection: "column", alignItems: "center", minWidth: 40, padding: "0 2px" }}>
+                <T color={C.dim} size={16}>→</T>
+                <T color={C.dim} size={10}>weights</T>
+              </div>
+            )}
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6, minWidth: 70 }}>
+              <T color={layer.color} bold size={12}>{layer.label}</T>
+              <T color={C.dim} size={10} style={{ marginTop: -4 }}>{layer.sublabel}</T>
+              {layer.nodes.map((n, ni) => (
+                <div key={ni} style={{ width: 40, height: 40, borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", background: n.active ? layer.bg.replace("0.12", "0.35").replace("0.15", "0.35") : layer.bg, border: `2px solid ${n.active ? layer.color : "rgba(255,255,255,0.1)"}`, fontSize: li === 3 ? 9 : 11, fontWeight: 600, color: layer.color }}>
+                  {n.l}
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <T color="#b8a9ff" style={{ marginTop: 10 }}><strong>Every line is a weight</strong> - a number that was learned during training. The input (4 numbers representing "on") gets multiplied by weights, transformed, multiplied by more weights, transformed again, until it reaches the 20 output circles. Each output circle produces one score for one word.</T>
+    </Box></Reveal>
+
+    {/* ── Sub 3: Output node computation ── */}
+    <Reveal when={sub >= 3}><Box color={C.green} style={{ width: "100%" }}>
+      <T color="#80e8a5" bold center size={20}>Each output circle computes a score (called a "logit")</T>
+      <T color="#80e8a5" style={{ marginTop: 6 }}>After the input flows through all the hidden layers, the final layer has 20 circles. Each circle collects numbers from the layer before it, multiplies each by its own weight, and adds them up. That sum is the score for that word.</T>
+
+      <div style={{ marginTop: 12, padding: 16, borderRadius: 10, background: "rgba(0,0,0,0.3)" }}>
+        <T color="#80e8a5" bold center size={15}>Example: How the "mat" circle computes its score</T>
+        <div style={{ marginTop: 10, display: "flex", flexDirection: "column", gap: 4, fontFamily: "'SF Mono', Consolas, monospace", fontSize: 14 }}>
+          <T color={C.mid} size={14}>Values arriving from previous layer: [2.1, -0.8, 1.5, 0.3, -1.2, 0.9, 1.7, -0.4]</T>
+          <T color={C.mid} size={14}>Weights for "mat" circle: [0.6, 0.3, 0.8, 0.1, -0.5, 0.2, 0.9, 0.4]</T>
+          <T color="#80e8a5" style={{ marginTop: 8 }} size={14}>Score = (2.1 x 0.6) + (-0.8 x 0.3) + (1.5 x 0.8) + (0.3 x 0.1) + (-1.2 x -0.5) + (0.9 x 0.2) + (1.7 x 0.9) + (-0.4 x 0.4)</T>
+          <T color="#80e8a5" size={14}>= 1.26 + (-0.24) + 1.20 + 0.03 + 0.60 + 0.18 + 1.53 + (-0.16)</T>
+          <T color={C.green} bold center size={18} style={{ marginTop: 8 }}>Score for "mat" = 4.40</T>
+        </div>
+      </div>
+
+      <T color="#80e8a5" style={{ marginTop: 10 }}>The same thing happens for all 20 output circles, each with its <strong>own set of weights</strong>. So "the" circle has different weights, "cat" circle has different weights, etc. That's why they produce different scores.</T>
+    </Box></Reveal>
+
+    {/* ── Sub 4: Raw scores for all 20 words ── */}
+    <Reveal when={sub >= 4}><Box color={C.red} style={{ width: "100%" }}>
+      <T color="#ef9a9a" bold center size={20}>Raw scores for all 20 words</T>
+      <T color="#ef9a9a" style={{ marginTop: 6 }}>Each output circle has computed its score. Here is what the model produced for input "The cat sat on":</T>
+      <div style={{ marginTop: 12, display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 4 }}>
+        {SORTED_SCORES.map(([word, score]) => {
+          const isHigh = score >= 3;
+          const isLow = score <= -1.5;
+          const color = isHigh ? C.green : isLow ? C.red : C.mid;
+          const bg = isHigh ? `${C.green}08` : isLow ? `${C.red}08` : "rgba(255,255,255,0.02)";
+          return (
+            <div key={word} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "6px 12px", borderRadius: 6, background: bg }}>
+              <T color={color} bold size={14}>{word}</T>
+              <T color={color} bold size={14} style={{ fontFamily: "monospace" }}>{score >= 0 ? "+" : ""}{score.toFixed(1)}</T>
+            </div>
+          );
+        })}
+      </div>
+      <T color="#ef9a9a" style={{ marginTop: 10 }}>Notice: "the" and "mat" have the highest scores. "my" is deeply negative. But these are not probabilities yet - they are just raw numbers. We need to convert them.</T>
+    </Box></Reveal>
+
+    {/* ── Sub 5: Softmax conversion ── */}
+    <Reveal when={sub >= 5}><Box color={C.yellow} style={{ width: "100%" }}>
+      <T color="#ffe082" bold center size={20}>Convert scores to probabilities (softmax)</T>
+      <T color="#ffe082" style={{ marginTop: 6 }}>Two simple steps: raise e (2.718) to the power of each score, then divide each result by the total. This makes everything positive and add up to 100%.</T>
+      <div style={{ marginTop: 12, overflowX: "auto" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "80px 70px 30px 80px 30px 70px", gap: 2, fontSize: 13, fontFamily: "monospace" }}>
+          {["Word", "Score", "", "e^score", "", "Prob"].map((h, i) => (
+            <div key={i} style={{ color: "#ffe082", fontWeight: 700, padding: "6px 4px" }}>{h}</div>
+          ))}
+          {[...SORTED_SCORES.slice(0, 8), null, ...SORTED_SCORES.slice(-2)].map((item, idx) => {
+            if (item === null) return <div key="sep" style={{ gridColumn: "1 / -1", textAlign: "center", color: C.dim, padding: 2 }}>...</div>;
+            const [word, score] = item;
+            const eScore = EXP_SCORES[word];
+            const prob = eScore / EXP_SUM;
+            const isHigh = score >= 3;
+            const color = isHigh ? "#ffe082" : C.mid;
+            return [
+              <div key={`${word}-w`} style={{ color, padding: 4, fontWeight: isHigh ? 700 : 400 }}>{word}</div>,
+              <div key={`${word}-s`} style={{ color, padding: 4 }}>{score >= 0 ? "+" : ""}{score.toFixed(1)}</div>,
+              <div key={`${word}-a1`} style={{ color: C.dim, padding: 4, textAlign: "center" }}>→</div>,
+              <div key={`${word}-e`} style={{ color, padding: 4 }}>{eScore.toFixed(2)}</div>,
+              <div key={`${word}-a2`} style={{ color: C.dim, padding: 4, textAlign: "center" }}>→</div>,
+              <div key={`${word}-p`} style={{ color, padding: 4, fontWeight: 700 }}>{(prob * 100).toFixed(1)}%</div>,
+            ];
+          })}
+        </div>
+        <T color={C.dim} size={13} center style={{ marginTop: 10 }}>Sum of all e^score = {EXP_SUM.toFixed(2)} → each probability = e^score / {EXP_SUM.toFixed(2)}</T>
+      </div>
+    </Box></Reveal>
+
+    {/* ── Sub 6: Probability bars ── */}
+    <Reveal when={sub >= 6}><Box color={C.blue} style={{ width: "100%" }}>
+      <T color="#90caf9" bold center size={20}>The final answer: probability for each word</T>
+      <T color="#90caf9" style={{ marginTop: 6 }}>This is what the model outputs. A probability for <strong>every single one</strong> of the 20 words. The highest probability is the model's best guess for the next word.</T>
+      <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 6 }}>
+        {SORTED_PROBS.slice(0, 10).map(([word, prob], i) => {
+          const maxP = SORTED_PROBS[0][1];
+          const widthPct = (prob / maxP) * 100;
+          const isTop = i === 0;
+          const barColor = isTop ? C.blue : i < 3 ? `${C.blue}99` : `${C.blue}4d`;
+          const textColor = isTop ? "#90caf9" : C.mid;
+          return (
+            <div key={word} style={{ display: "flex", alignItems: "center", gap: 8 }}>
+              <T color={textColor} bold size={14} style={{ minWidth: 60 }}>{word}</T>
+              <div style={{ flex: 1, height: 24, background: "rgba(255,255,255,0.04)", borderRadius: 6, overflow: "hidden" }}>
+                <div style={{ width: `${widthPct}%`, height: "100%", background: barColor, borderRadius: 6 }} />
+              </div>
+              <T color={textColor} bold size={14} style={{ minWidth: 50, textAlign: "right" }}>{(prob * 100).toFixed(1)}%</T>
+            </div>
+          );
+        })}
+        <T color={C.dim} size={13} center>...plus 10 more words with less than 1% each</T>
+      </div>
+
+      <div style={{ marginTop: 12, padding: 14, borderRadius: 8, background: `${C.blue}10`, border: `1px solid ${C.blue}20` }}>
+        <T color="#90caf9" bold center size={16}>Model's prediction: "the" (38.3%) → "The cat sat on <u>the</u>"</T>
+        <T color={C.mid} size={14} center style={{ marginTop: 6 }}>The actual next word in training was "the" → loss = -log(0.383) = 0.96</T>
+        <T color={C.mid} size={14} center style={{ marginTop: 2 }}>Not bad! But not 100% confident. Backprop will nudge the weights to make it more confident next time.</T>
+      </div>
+    </Box></Reveal>
+
+    {/* ── Sub 7: Key insight ── */}
+    <Reveal when={sub >= 7}><Box color={C.green} style={{ width: "100%" }}>
+      <T color="#80e8a5" bold center size={20}>The key insight: it is ALL just multiply and add</T>
+      <T color="#80e8a5" style={{ marginTop: 6 }}>The entire process - from input word to 20 probabilities - is nothing but:</T>
+      <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 10 }}>
+        {[
+          { step: "1. Take numbers in", detail: "the word \"on\" becomes [0, 0, 0, 1, 0, ...] or an embedding vector" },
+          { step: "2. Multiply by weights, add up, apply activation", detail: "each circle in each hidden layer does this" },
+          { step: "3. Repeat through every layer", detail: "GPT-2 has 12 layers, GPT-4 has ~100+ layers" },
+          { step: "4. Last layer: one circle per vocabulary word", detail: "20 circles for us, 50,000 for real GPT" },
+          { step: "5. Softmax to get probabilities", detail: "exponentiate and divide. Now they sum to 100%" },
+        ].map(({ step, detail }) => (
+          <div key={step} style={{ padding: 12, borderRadius: 8, background: `${C.green}08`, border: `1px solid ${C.green}15` }}>
+            <T color="#80e8a5" bold size={15}>{step}</T>
+            <T color={C.mid} size={14}> - {detail}</T>
+          </div>
+        ))}
+      </div>
+      <T color="#80e8a5" style={{ marginTop: 10 }}>That's it. No magic. <strong>The only "smart" part is the weights - the numbers on each connection line.</strong> Training (gradient descent) adjusts those weights trillions of times until the multiply-and-add chain produces good predictions.</T>
+    </Box></Reveal>
+
+    {sub < 7 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
+  </div>
+); }
+
+// ============================================================================
+// 2.5: SUPERVISED FINE-TUNING (SFT)
+// ============================================================================
+export const SFT = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx; return (
+  <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
+
+    {/* ── Sub 0: The problem ── */}
+    {sub >= 0 && (
+      <Box color={C.cyan} style={{ width: "100%" }}>
+        <T color="#80deea" bold center size={20}>The problem: the model just predicts internet text</T>
+        <T color="#80deea" style={{ marginTop: 8 }}>After pretraining, the model has read trillions of words from the internet. It can predict the next word really well. But it has no idea that it should be <strong>helpful</strong>.</T>
+        <T color="#80deea" style={{ marginTop: 8 }}>If you type "What is photosynthesis?", the model does not think "I should answer this question." It thinks: <strong>"what text would typically follow this on the internet?"</strong></T>
+        <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 6 }}>
+          <T color={C.dim} size={14} style={{ textAlign: "center", fontStyle: "italic" }}>You type: "What is photosynthesis?"</T>
+          <T color={C.dim} size={14} style={{ textAlign: "center" }}>On the internet, this could be followed by...</T>
+          {[
+            { text: "A Wikipedia-style answer", prob: "15%", color: C.green },
+            { text: "Another question: \"What about cellular respiration?\"", prob: "12%", color: C.orange },
+            { text: "A Reddit comment: \"just Google it lol\"", prob: "10%", color: C.red },
+            { text: "A spam link or ad", prob: "8%", color: C.red },
+            { text: "A sarcastic reply", prob: "6%", color: C.red },
+          ].map(({ text, prob, color }) => (
+            <div key={text} style={{ display: "flex", alignItems: "center", gap: 8, padding: "6px 10px", borderRadius: 6, background: `${color}06`, border: `1px solid ${color}12` }}>
+              <T color={color} size={14} style={{ flex: 1 }}>{text}</T>
+              <T color={C.dim} size={14} bold>{prob}</T>
+            </div>
+          ))}
+        </div>
+        <T color="#80deea" style={{ marginTop: 10 }}>The model gives probability to ALL of these because it saw all of them during pretraining. We need to change this.</T>
+      </Box>
+    )}
+
+    {/* ── Sub 1: SFT training data ── */}
+    <Reveal when={sub >= 1}><Box color={C.orange} style={{ width: "100%" }}>
+      <T color="#ffb74d" bold center size={20}>The fix: show it what a good assistant says</T>
+      <T color="#ffb74d" style={{ marginTop: 8 }}>Humans sit down and write ~100,000 example conversations. Each one has the exact format the model will see when deployed:</T>
       <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 10 }}>
         {[
           {
             q: "What is photosynthesis?",
-            a: "Photosynthesis is the process where plants convert light energy into chemical energy. It happens in two stages: light-dependent reactions in the thylakoid, and the Calvin cycle in the stroma. Chlorophyll absorbs photons, exciting electrons that travel through the electron transport chain.",
+            a: "Photosynthesis is the process where plants convert light energy into chemical energy. It happens in two stages: light-dependent reactions in the thylakoid, and the Calvin cycle in the stroma.",
             color: C.green,
           },
           {
-            q: "The cat sat on the mat. Rewrite in past perfect.",
-            a: "The cat had sat on the mat.",
-            color: C.blue,
-          },
-          {
-            q: "Code a function to reverse a list in Python.",
-            a: "def reverse_list(lst):\n    return lst[::-1]\n\n# Or manually:\ndef reverse_manual(lst):\n    for i in range(len(lst)//2):\n        lst[i], lst[-i-1] = lst[-i-1], lst[i]\n    return lst",
+            q: "Write a Python function to reverse a list.",
+            a: "def reverse_list(lst):\n    return lst[::-1]",
             color: C.purple,
           },
         ].map(({ q, a, color }, idx) => (
           <div key={idx} style={{ padding: "12px", borderRadius: 8, background: `${color}06`, border: `1px solid ${color}12` }}>
-            <div style={{ display: "flex", gap: 8, alignItems: "flex-start", marginBottom: 8 }}>
-              <span style={{ fontSize: 20, flexShrink: 0 }}>❓</span>
-              <div style={{ flex: 1 }}>
-                <T color={C.dim} size={13} bold style={{ textTransform: "uppercase" }}>User input</T>
-                <T color={color} size={16} style={{ marginTop: 4 }}>{q}</T>
-              </div>
+            <div style={{ padding: "8px 10px", borderRadius: 6, background: "rgba(255,255,255,0.03)", marginBottom: 6 }}>
+              <T color={C.dim} size={13} bold>User:</T>
+              <T color={C.mid} size={15} style={{ marginTop: 2 }}>{q}</T>
             </div>
-            <div style={{ display: "flex", gap: 8, alignItems: "flex-start" }}>
-              <span style={{ fontSize: 20, flexShrink: 0 }}>✅</span>
-              <div style={{ flex: 1 }}>
-                <T color={C.dim} size={13} bold style={{ textTransform: "uppercase" }}>Ideal assistant response</T>
-                <T color={color} size={15} style={{ marginTop: 4, fontFamily: q.includes("Code") ? "monospace" : "inherit", whiteSpace: "pre-wrap" }}>{a}</T>
-              </div>
+            <div style={{ padding: "8px 10px", borderRadius: 6, background: `${color}08` }}>
+              <T color={C.dim} size={13} bold>Assistant:</T>
+              <T color={color} size={15} style={{ marginTop: 2, whiteSpace: "pre-wrap", fontFamily: q.includes("Python") ? "monospace" : "inherit" }}>{a}</T>
             </div>
           </div>
         ))}
       </div>
+      <T color="#ffb74d" style={{ marginTop: 10 }}>Each example says: "When a user asks this, <strong>this</strong> is what you should say." The model will now train on these conversations instead of random internet text.</T>
     </Box></Reveal>
 
-    <Reveal when={sub >= 2}><Box color={C.yellow} style={{ width: "100%" }}>
-      <T color="#ffe082" bold center size={20}>How SFT differs from pretraining</T>
-      <T color="#ffe082" style={{ marginTop: 6 }}>The loss computation is identical (cross-entropy), but the training data changes.</T>
-      <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 10 }}>
+    {/* ── Sub 2: Loss only on assistant tokens ── */}
+    <Reveal when={sub >= 2}><Box color={C.red} style={{ width: "100%" }}>
+      <T color="#ef9a9a" bold center size={20}>The key trick: loss only on the assistant's words</T>
+      <T color="#ef9a9a" style={{ marginTop: 8 }}>The model reads the full conversation and predicts the next word at every position - same as pretraining. But the loss is <strong>only calculated on the assistant's words</strong>. The user's question is just context.</T>
+      <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 4 }}>
         {[
-          {
-            phase: "Pretraining",
-            data: "1 trillion random tokens from the internet",
-            task: "Predict next token given previous tokens",
-            loss: "Loss = -log(P_next_token)",
-            goal: "Learn language statistics, facts, reasoning",
-            color: C.orange,
-          },
-          {
-            phase: "SFT",
-            data: "~100K human-curated (question, answer) pairs",
-            task: "Continue from instruction, predict assistant's ideal response",
-            loss: "Loss = -log(P_correct_response_token)",
-            goal: "Learn to follow instructions & be helpful",
-            color: C.green,
-          },
-        ].map(({ phase, data, task, loss, goal, color }) => (
-          <div key={phase} style={{ padding: "12px", borderRadius: 8, background: `${color}06`, border: `1px solid ${color}12` }}>
-            <T color={color} bold size={18}>{phase}</T>
-            <div style={{ marginTop: 6, display: "flex", flexDirection: "column", gap: 4 }}>
-              <div><T color={C.dim} size={14}><strong>Data:</strong> {data}</T></div>
-              <div><T color={C.dim} size={14}><strong>Task:</strong> {task}</T></div>
-              <div><T color={C.dim} size={14}><strong>Loss formula:</strong> {loss}</T></div>
-              <div><T color={C.mid} size={14}><strong>Goal:</strong> {goal}</T></div>
-            </div>
+          { position: "User:", next: "What", loss: false },
+          { position: "User: What", next: "is", loss: false },
+          { position: "User: What is", next: "photosynthesis?", loss: false },
+          { position: "...photosynthesis?", next: "Assistant:", loss: false },
+          { position: "Assistant:", next: "Photosynthesis", loss: true, pred: "What", predProb: "12%", correctProb: "8%" },
+          { position: "...Photosynthesis", next: "is", loss: true, pred: "is", predProb: "25%", correctProb: "25%" },
+          { position: "...Photosynthesis is", next: "the", loss: true, pred: "a", predProb: "18%", correctProb: "15%" },
+          { position: "...is the", next: "process", loss: true, pred: "study", predProb: "11%", correctProb: "9%" },
+        ].map(({ position, next, loss, pred, predProb, correctProb }) => (
+          <div key={position} style={{ display: "flex", alignItems: "center", gap: 8, padding: "6px 10px", borderRadius: 6, background: loss ? "rgba(255,107,107,0.06)" : "rgba(255,255,255,0.02)", border: `1px solid ${loss ? "rgba(255,107,107,0.12)" : "rgba(255,255,255,0.04)"}` }}>
+            <T color={C.dim} size={13} style={{ minWidth: 160, fontFamily: "monospace" }}>{position}</T>
+            <T color={C.mid} size={13}>next: <strong style={{ color: loss ? C.green : C.dim }}>{next}</strong></T>
+            {loss
+              ? <T color={C.red} size={12} bold style={{ marginLeft: "auto" }}>LOSS (model guessed "{pred}" at {predProb}, correct was {correctProb})</T>
+              : <T color={C.dim} size={12} style={{ marginLeft: "auto" }}>no loss - just reading</T>
+            }
           </div>
         ))}
       </div>
+      <T color="#ef9a9a" style={{ marginTop: 10 }}>The model is never graded on predicting the user's question. It is <strong>only graded on how well it predicts the ideal assistant response</strong>. Backpropagation then nudges the weights to make the correct response words more likely next time.</T>
     </Box></Reveal>
 
+    {/* ── Sub 3: Before vs After probability shift ── */}
     <Reveal when={sub >= 3}><Box color={C.green} style={{ width: "100%" }}>
-      <T color="#80e8a5" bold center size={20}>Real example: Before vs After SFT</T>
-      <T color="#80e8a5" style={{ marginTop: 6 }}>Same model, same input. Different behavior after SFT:</T>
-      <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 10 }}>
+      <T color="#80e8a5" bold center size={20}>Before vs After SFT: what changes in the output</T>
+      <T color="#80e8a5" style={{ marginTop: 8 }}>After 100,000 training conversations, the weights have shifted. The model now strongly favors helpful assistant text after "Assistant:". Here is the same input, same model, different probabilities for the first word:</T>
+      <div style={{ marginTop: 12, display: "flex", gap: 12, flexWrap: "wrap" }}>
         {[
           {
-            label: "BEFORE SFT (pretrained model)",
-            prompt: "User: What is photosynthesis?\nAssistant:",
-            output: "What is photosynthesis? photosynthesis is the process of converting light energy into chemical energy in the form of glucose. In plants, photosynthesis occurs in the leaves. The rate of photosynthesis is affected by many factors. Some of these factors are light intensity, temperature, the concentration of carbon dioxide, and the amount of chlorophyll present.",
-            problem: "Rambles. Doesn't structure answer. Incomplete. Not conversational.",
+            label: "Before SFT",
+            sublabel: "predicts generic internet text",
             color: C.red,
+            probs: [
+              { word: "What", pct: 12 },
+              { word: "The", pct: 10 },
+              { word: "Photosynthesis", pct: 8 },
+              { word: "I", pct: 6 },
+              { word: "So", pct: 5 },
+              { word: "It", pct: 4 },
+            ],
           },
           {
-            label: "AFTER SFT (instruction-following)",
-            prompt: "User: What is photosynthesis?\nAssistant:",
-            output: "Photosynthesis is the biological process by which plants and some microorganisms convert light energy (usually from the sun) into chemical energy stored in glucose. It occurs primarily in leaves through two stages: (1) Light-dependent reactions in the thylakoid membranes, where light energy excites electrons and produces ATP and NADPH, and (2) the Calvin cycle in the stroma, where ATP and NADPH drive the synthesis of glucose from CO2.",
-            problem: "Clear. Structured. Accurate. Conversational. Well-paced.",
+            label: "After SFT",
+            sublabel: "predicts helpful assistant response",
             color: C.green,
+            probs: [
+              { word: "Photosynthesis", pct: 35 },
+              { word: "The", pct: 8 },
+              { word: "It", pct: 5 },
+              { word: "What", pct: 2 },
+              { word: "I", pct: 2 },
+              { word: "So", pct: 1 },
+            ],
           },
-        ].map(({ label, prompt, output, problem, color }) => (
-          <div key={label} style={{ padding: "12px", borderRadius: 8, background: `${color}06`, border: `1px solid ${color}12` }}>
-            <T color={color} bold size={16}>{label}</T>
-            <T color={C.dim} size={13} style={{ marginTop: 6, fontStyle: "italic" }}>Input: {prompt}</T>
-            <div style={{ marginTop: 8, padding: "10px", borderRadius: 6, background: `${color}12`, border: `1px solid ${color}15` }}>
-              <T color={color} size={14}>{output}</T>
-            </div>
-            <T color={C.dim} size={13} style={{ marginTop: 6 }}>← {problem}</T>
+        ].map(({ label, sublabel, color, probs }) => (
+          <div key={label} style={{ flex: 1, minWidth: 250, padding: "12px", borderRadius: 8, background: `${color}06`, border: `1px solid ${color}12` }}>
+            <T color={color} bold size={16} center>{label}</T>
+            <T color={C.dim} size={12} style={{ textAlign: "center", marginBottom: 8 }}>{sublabel}</T>
+            {probs.map(({ word, pct }) => (
+              <div key={word} style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 4 }}>
+                <T color={C.mid} size={13} style={{ width: 105, flexShrink: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{word}</T>
+                <div style={{ flex: 1, height: 14, background: "rgba(255,255,255,0.04)", borderRadius: 4, overflow: "hidden" }}>
+                  <div style={{ width: `${pct * 2.5}%`, height: "100%", background: color, borderRadius: 4, opacity: 0.7 }} />
+                </div>
+                <T color={C.dim} size={12} bold style={{ minWidth: 30, textAlign: "right" }}>{pct}%</T>
+              </div>
+            ))}
           </div>
         ))}
       </div>
+      <T color="#80e8a5" style={{ marginTop: 10 }}>"Photosynthesis" jumped from 8% to 35% because in the SFT data, answers to "What is X?" almost always start with "X is..." The weights got nudged thousands of times in that direction. "What" dropped from 12% to 2% because good assistants don't repeat the question back.</T>
     </Box></Reveal>
 
+    {/* ── Sub 4: The hidden prompt template ── */}
     <Reveal when={sub >= 4}><Box color={C.purple} style={{ width: "100%" }}>
-      <T color="#b8a9ff" bold center size={20}>Why SFT works despite small datasets</T>
-      <T color="#b8a9ff" style={{ marginTop: 6 }}>Pretraining teaches the model language. SFT just teaches it HOW to apply that knowledge - like muscle memory.</T>
+      <T color="#b8a9ff" bold center size={20}>The hidden template: what you never see</T>
+      <T color="#b8a9ff" style={{ marginTop: 8 }}>When you type a message to ChatGPT or Claude, you never see the full text that goes to the model. Behind the scenes, your message gets wrapped in a template:</T>
+      <div style={{ marginTop: 12, padding: "14px", borderRadius: 8, background: "rgba(0,0,0,0.3)", fontFamily: "monospace" }}>
+        <T color={C.dim} size={14}>What you type:</T>
+        <T color={C.bright} size={15} style={{ marginTop: 4 }}>"What is photosynthesis?"</T>
+        <div style={{ margin: "12px 0", borderTop: "1px solid rgba(255,255,255,0.08)", paddingTop: 12 }}>
+          <T color={C.dim} size={14}>What actually goes to the model:</T>
+          <div style={{ marginTop: 6, display: "flex", flexDirection: "column", gap: 2 }}>
+            <T color={C.purple} size={15}><strong>User:</strong> What is photosynthesis?</T>
+            <T color={C.green} size={15}><strong>Assistant:</strong></T>
+          </div>
+        </div>
+      </div>
+      <T color="#b8a9ff" style={{ marginTop: 10 }}>The model then starts predicting what comes after "Assistant:" one word at a time. Because SFT trained it on thousands of examples where helpful text followed "Assistant:", it now strongly favors producing that kind of text.</T>
+      <div style={{ marginTop: 12, padding: "14px", borderRadius: 8, background: "rgba(0,0,0,0.3)", fontFamily: "monospace" }}>
+        <T color={C.dim} size={13}>Different models use different template formats. ChatGPT uses special tokens:</T>
+        <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 2 }}>
+          <T color={C.orange} size={14}>{"<|im_start|>"}system</T>
+          <T color={C.mid} size={14}>You are a helpful assistant.</T>
+          <T color={C.orange} size={14}>{"<|im_end|>"}</T>
+          <T color={C.orange} size={14}>{"<|im_start|>"}user</T>
+          <T color={C.mid} size={14}>What is photosynthesis?</T>
+          <T color={C.orange} size={14}>{"<|im_end|>"}</T>
+          <T color={C.orange} size={14}>{"<|im_start|>"}assistant</T>
+          <T color={C.green} size={14} style={{ fontStyle: "italic" }}>Photosynthesis is the process by which plants...</T>
+          <T color={C.orange} size={14}>{"<|im_end|>"} <span style={{ color: "rgba(255,255,255,0.35)", fontSize: 12, fontStyle: "italic" }}>← model generates this token to signal "I am done"</span></T>
+        </div>
+        <T color={C.dim} size={13} style={{ marginTop: 8 }}>Everything above {"<|im_start|>"}assistant is the template - sent to the model as input. The response text and the final {"<|im_end|>"} are generated by the model. It learns during SFT that after producing a complete answer, it should output {"<|im_end|>"} to stop.</T>
+      </div>
+      <T color="#b8a9ff" style={{ marginTop: 10 }}>This is also why <strong>system prompts</strong> work. The "You are a helpful assistant" text sits before the user's message. The model sees all of it as context and adjusts its style accordingly. Change it to "You are a pirate" and the model changes how it speaks.</T>
+    </Box></Reveal>
+
+    {/* ── Sub 5: Why 100K is enough ── */}
+    <Reveal when={sub >= 5}><Box color={C.yellow} style={{ width: "100%" }}>
+      <T color="#ffe082" bold center size={20}>Why 100K examples is enough</T>
+      <T color="#ffe082" style={{ marginTop: 8 }}>Pretraining needed trillions of words. SFT needs only ~100K conversations. That feels wrong. Why is so little data enough?</T>
+      <T color="#ffe082" style={{ marginTop: 8 }}>Because SFT is not teaching new knowledge. The model already knows what photosynthesis is, already knows Python, already knows grammar. All of that was learned during pretraining and is stored deep in the weights.</T>
+      <T color="#ffe082" style={{ marginTop: 8 }}>SFT only changes the <strong>surface behavior</strong> - the pattern of "when you see User: followed by a question, respond with a clear, helpful answer." That is a much simpler pattern than all of human language.</T>
       <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 8 }}>
         {[
-          { icon: "🧠", what: "Model already knows:", details: "What photosynthesis IS (from pretraining on Wikipedia, textbooks, etc.)" },
-          { icon: "📚", what: "SFT teaches:", details: "How to STRUCTURE an answer to a question in a helpful, clear way" },
-          { icon: "⚡", what: "Result:", details: "With just ~100K examples, the model learns the instruction-following pattern" },
-        ].map(({ icon, what, details }) => (
-          <div key={what} style={{ padding: "10px 12px", borderRadius: 8, background: "rgba(255,255,255,0.02)" }}>
-            <T color={C.dim} size={14}><span style={{ fontSize: 20, marginRight: 8 }}>{icon}</span>{what} {details}</T>
+          { phase: "Pretraining", data: "Trillions of words", learns: "All of language: grammar, facts, code, reasoning, style", change: "Builds the entire brain from scratch", color: C.orange },
+          { phase: "SFT", data: "~100K conversations", learns: "One pattern: question goes in, helpful answer comes out", change: "Nudges the surface weights slightly", color: C.green },
+        ].map(({ phase, data, learns, change, color }) => (
+          <div key={phase} style={{ padding: "10px 12px", borderRadius: 8, background: `${color}06`, border: `1px solid ${color}12` }}>
+            <T color={color} bold size={16}>{phase}</T>
+            <T color={C.dim} size={14} style={{ marginTop: 4 }}><strong>Data:</strong> {data}</T>
+            <T color={C.dim} size={14} style={{ marginTop: 2 }}><strong>What it learns:</strong> {learns}</T>
+            <T color={C.dim} size={14} style={{ marginTop: 2 }}><strong>What changes:</strong> {change}</T>
           </div>
         ))}
       </div>
+      <T color="#ffe082" style={{ marginTop: 10 }}>SFT uses a very small learning rate (tiny nudges per step). The deep weights that store facts barely move. Only the surface-level behavior changes - the "style" of what follows "Assistant:". Same knowledge, expressed as a helpful conversation instead of random internet text.</T>
     </Box></Reveal>
 
-    {sub < 4 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
+    {sub < 5 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
   </div>
 ); }
 
 // ============================================================================
-// 2.5: RLHF - Making AI Helpful & Safe
+// 2.6: RLHF - Making AI Helpful & Safe
 // ============================================================================
 export const RLHF = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx; return (
   <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
@@ -587,89 +991,249 @@ export const RLHF = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, regis
       <T color="#ffe082" style={{ marginTop: 8 }}>From tens of thousands of such comparisons, we build training data for a reward model.</T>
     </Box></Reveal>
 
+    {/* ── Sub 3: Reward model - what it is + how it learns ── */}
     <Reveal when={sub >= 3}><Box color={C.green} style={{ width: "100%" }}>
       <T color="#80e8a5" bold center size={20}>Step 3: Train a reward model</T>
-      <T color="#80e8a5" style={{ marginTop: 6 }}>A reward model is a neural network trained to predict: "Given a prompt and response, how good is this response?"</T>
-      <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 8 }}>
-        <div style={{ padding: "12px", borderRadius: 8, background: "rgba(0,0,0,0.3)" }}>
-          <T color={C.bright} size={15}><strong>Reward Model Input:</strong> prompt + response</T>
-          <T color={C.mid} size={14} style={{ marginTop: 4 }}>e.g., "What's best for beginners?" + "Python is simple..."</T>
-        </div>
-        <div style={{ padding: "12px", borderRadius: 8, background: "rgba(0,0,0,0.3)" }}>
-          <T color={C.bright} size={15}><strong>Reward Model Output:</strong> single score</T>
-          <T color={C.mid} size={14} style={{ marginTop: 4 }}>e.g., 8.3/10 (good response), or 2.1/10 (bad response)</T>
-        </div>
-      </div>
+      <T color="#80e8a5" style={{ marginTop: 8 }}>The reward model is a separate neural network. Its job is simple: take a prompt and a response, and output a single number - how good is this response? Higher number = more helpful, safer, better.</T>
+
+      {/* What it is */}
       <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 6 }}>
-        {[
-          { prompt: "Best for beginners?", resp: "Python - simple, huge community.", score: 8.5 },
-          { prompt: "Best for beginners?", resp: "Depends... Python vs Go...", score: 7.2 },
-          { prompt: "Best for beginners?", resp: "Rust is safest.", score: 2.1 },
-          { prompt: "Best for beginners?", resp: "I cannot answer.", score: 1.0 },
-        ].map(({ prompt, resp, score }) => (
-          <div key={resp.substring(0, 15)} style={{ display: "flex", alignItems: "center", gap: 10, padding: "6px 10px", borderRadius: 6, background: score > 7 ? `${C.green}06` : score > 4 ? "rgba(255,255,255,0.02)" : `${C.red}06` }}>
-            <div style={{ flex: 1 }}>
-              <T color={C.dim} size={13}>{resp}</T>
-            </div>
-            <div style={{ width: 60, height: 8, background: "rgba(255,255,255,0.04)", borderRadius: 4, overflow: "hidden" }}>
-              <div style={{ width: `${score * 10}%`, height: "100%", background: score > 7 ? C.green : score > 4 ? C.mid : C.red }} />
-            </div>
-            <T color={C.mid} bold size={15} style={{ minWidth: 35 }}>{score.toFixed(1)}</T>
-          </div>
-        ))}
-      </div>
-    </Box></Reveal>
-
-    <Reveal when={sub >= 4}><Box color={C.red} style={{ width: "100%" }}>
-      <T color="#ef9a9a" bold center size={20}>Step 4: PPO - Optimize using the reward</T>
-      <T color="#ef9a9a" style={{ marginTop: 6 }}>Now we have a reward function. We use Proximal Policy Optimization (PPO) to fine-tune the LLM to maximize this reward.</T>
-      <T color="#ef9a9a" style={{ marginTop: 6 }}>But there's a catch: if we optimize TOO hard, the LLM will diverge from the original SFT model and start gibberish.</T>
-      <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 8 }}>
-        <div style={{ padding: "12px", borderRadius: 8, background: "rgba(0,0,0,0.3)" }}>
-          <T color={C.bright} size={15}><strong>PPO Loss = Reward - β · KL_Divergence</strong></T>
-          <T color={C.dim} size={13} style={{ marginTop: 4 }}>β controls the tradeoff. Usually β ≈ 0.1 - 0.5</T>
+        <div style={{ padding: "10px 12px", borderRadius: 8, background: "rgba(0,0,0,0.3)" }}>
+          <T color={C.bright} size={15}><strong>Input:</strong> a prompt + a complete response (as one block of text)</T>
+        </div>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+          <T color={C.dim} size={20}>↓</T>
+        </div>
+        <div style={{ padding: "10px 12px", borderRadius: 8, background: "rgba(0,0,0,0.3)" }}>
+          <T color={C.bright} size={15}><strong>Output:</strong> one single number (e.g., 8.5)</T>
         </div>
       </div>
-      <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 8 }}>
+
+      {/* How it trains */}
+      <T color="#80e8a5" bold size={16} style={{ marginTop: 14 }}>How does it learn to score?</T>
+      <T color="#80e8a5" style={{ marginTop: 4 }}>From the human comparisons in Step 2. Each comparison is a training example: a winner response and a loser response for the same prompt.</T>
+      <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 6 }}>
         {[
-          { comp: "Maximize Reward", desc: "Update weights toward high-scoring responses", benefit: "Model becomes helpful", danger: "Might collapse into junk" },
-          { comp: "KL Divergence penalty", desc: "Measure: how far is new model from SFT model?", benefit: "Prevents crazy divergence", danger: "Slows optimization if β too high" },
-        ].map(({ comp, desc, benefit, danger }) => (
-          <div key={comp} style={{ padding: "10px 12px", borderRadius: 8, background: "rgba(255,255,255,0.02)" }}>
-            <T color={C.red} bold size={16}>{comp}</T>
-            <T color={C.dim} size={14} style={{ marginTop: 4 }}>{desc}</T>
-            <div style={{ marginTop: 4, display: "flex", gap: 8 }}>
-              <T color={C.green} size={13}>✓ {benefit}</T>
-              <T color={C.orange} size={13}>⚠ {danger}</T>
+          {
+            prompt: "Best language for beginners?",
+            winner: "Python - simple syntax, huge community, tons of tutorials.",
+            loser: "Rust. Memory safety. Compile-time errors catch bugs early.",
+            why: "Python is actually beginner-friendly. Rust is not.",
+          },
+          {
+            prompt: "Is the earth flat?",
+            winner: "No, the Earth is roughly spherical. Here is the evidence...",
+            loser: "There are many perspectives on this topic...",
+            why: "Direct and accurate. Does not treat misinformation as legitimate.",
+          },
+        ].map(({ prompt, winner, loser, why }, idx) => (
+          <div key={idx} style={{ padding: "10px 12px", borderRadius: 8, background: `${C.green}06`, border: `1px solid ${C.green}10` }}>
+            <T color={C.dim} size={13} style={{ fontStyle: "italic" }}>Prompt: "{prompt}"</T>
+            <div style={{ marginTop: 6, display: "flex", gap: 8, flexWrap: "wrap" }}>
+              <div style={{ flex: 1, minWidth: 180, padding: "6px 8px", borderRadius: 6, background: `${C.green}10` }}>
+                <T color={C.green} size={12} bold>WINNER</T>
+                <T color={C.mid} size={13} style={{ marginTop: 2 }}>{winner}</T>
+              </div>
+              <div style={{ flex: 1, minWidth: 180, padding: "6px 8px", borderRadius: 6, background: `${C.red}08` }}>
+                <T color={C.red} size={12} bold>LOSER</T>
+                <T color={C.mid} size={13} style={{ marginTop: 2 }}>{loser}</T>
+              </div>
             </div>
+            <T color={C.dim} size={12} style={{ marginTop: 4 }}>{why}</T>
           </div>
         ))}
       </div>
+
+      <T color="#80e8a5" style={{ marginTop: 8 }}>The reward model is trained with one rule: <strong>the winner must get a higher score than the loser</strong>. After seeing tens of thousands of these pairs, it learns to detect what makes a response helpful, accurate, and safe.</T>
     </Box></Reveal>
 
-    <Reveal when={sub >= 5}><Box color={C.blue} style={{ width: "100%" }}>
-      <T color="#5eb3ff" bold center size={20}>Why RLHF is hard but powerful</T>
-      <T color="#5eb3ff" style={{ marginTop: 6 }}>RLHF involves 4 different neural networks and multiple training loops. Here's why it matters:</T>
+    {/* ── Sub 4: Reward model - scored responses after training ── */}
+    <Reveal when={sub >= 4}><Box color={C.green} style={{ width: "100%" }}>
+      <T color="#80e8a5" bold center size={20}>After training: the reward model can score any response</T>
+      <div style={{ marginTop: 10, display: "flex", flexDirection: "column", gap: 4 }}>
+        {[
+          { resp: "Python - simple, huge community.", score: 8.5, color: C.green },
+          { resp: "Depends... Python vs Go...", score: 7.2, color: C.green },
+          { resp: "Rust is safest.", score: 2.1, color: C.red },
+          { resp: "I cannot answer.", score: 1.0, color: C.red },
+        ].map(({ resp, score, color }) => (
+          <div key={resp.substring(0, 15)} style={{ display: "flex", alignItems: "center", gap: 10, padding: "6px 10px", borderRadius: 6, background: `${color}06` }}>
+            <T color={C.mid} size={13} style={{ flex: 1 }}>{resp}</T>
+            <div style={{ width: 80, height: 10, background: "rgba(255,255,255,0.04)", borderRadius: 4, overflow: "hidden" }}>
+              <div style={{ width: `${score * 10}%`, height: "100%", background: color, borderRadius: 4, opacity: 0.7 }} />
+            </div>
+            <T color={color} bold size={15} style={{ minWidth: 35 }}>{score.toFixed(1)}</T>
+          </div>
+        ))}
+      </div>
+      <T color="#80e8a5" style={{ marginTop: 8 }}>Now we have a machine that can grade any response automatically. This is what PPO will use in Step 4 - instead of asking a human to grade every response (too slow and expensive), we ask the reward model (instant and free).</T>
+    </Box></Reveal>
+
+    {/* ── Sub 5: PPO - The 4-step loop ── */}
+    <Reveal when={sub >= 5}><Box color={C.red} style={{ width: "100%" }}>
+      <T color="#ef9a9a" bold center size={20}>Step 4: PPO - How the model actually improves</T>
+      <T color="#ef9a9a" style={{ marginTop: 8 }}>PPO (Proximal Policy Optimization) is the training loop that uses the reward model to make the LLM better. Here is exactly what happens, step by step, for one training round:</T>
+
+      <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 10 }}>
+        {[
+          {
+            num: "1",
+            label: "Generate",
+            detail: "Give the model a prompt like \"Best language for beginners?\" and let it write a full response. It produces: \"Python is great for beginners because of its simple syntax and large community.\"",
+            color: C.cyan,
+          },
+          {
+            num: "2",
+            label: "Score",
+            detail: "Feed the prompt + response into the reward model. It outputs a single number: 8.5 out of 10. This means the response is helpful, clear, and accurate.",
+            color: C.green,
+          },
+          {
+            num: "3",
+            label: "Compare",
+            detail: "The original SFT model (before PPO training started) also looks at the same prompt. We measure: how different is the PPO model's response from what the SFT model would have said? This difference is called the KL divergence. If the PPO model has drifted too far from the SFT model, we penalize it.",
+            color: C.orange,
+          },
+          {
+            num: "4",
+            label: "Nudge",
+            detail: "If reward was high and the model hasn't drifted too far: nudge the weights to make this kind of response MORE likely. If reward was low: nudge the weights to make this kind of response LESS likely. If the model drifted too far from SFT: pull it back, even if the reward was high.",
+            color: C.purple,
+          },
+        ].map(({ num, label, detail, color }) => (
+          <div key={num} style={{ padding: "12px 14px", borderRadius: 8, background: `${color}06`, border: `1px solid ${color}12` }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 6 }}>
+              <div style={{ width: 28, height: 28, borderRadius: "50%", background: `${color}20`, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                <T color={color} bold size={14}>{num}</T>
+              </div>
+              <T color={color} bold size={17}>{label}</T>
+            </div>
+            <T color={C.dim} size={14} style={{ paddingLeft: 38 }}>{detail}</T>
+          </div>
+        ))}
+      </div>
+
+      <T color="#ef9a9a" style={{ marginTop: 10 }}>This loop repeats thousands of times. Generate, score, compare, nudge. Over time, the model learns to produce responses that get high reward scores while staying close to the well-behaved SFT model.</T>
+    </Box></Reveal>
+
+    {/* ── Sub 6: KL divergence - concrete example ── */}
+    <Reveal when={sub >= 6}><Box color={C.purple} style={{ width: "100%" }}>
+      <T color="#b8a9ff" bold size={20} center>What is KL (Kullback-Leibler) divergence? A concrete example</T>
+      <T color="#b8a9ff" style={{ marginTop: 8 }}>KL divergence just measures: how different are the PPO model's word predictions from the original SFT model's predictions? Here is a real comparison for the first word after "Best language for beginners?":</T>
+      <div style={{ marginTop: 10, display: "flex", gap: 10, flexWrap: "wrap" }}>
+        {[
+          {
+            label: "SFT model (original)",
+            probs: [{ w: "Python", p: 40 }, { w: "I", p: 15 }, { w: "The", p: 12 }, { w: "others", p: 33 }],
+            color: C.cyan,
+          },
+          {
+            label: "PPO model (after 500 rounds)",
+            probs: [{ w: "Python", p: 85 }, { w: "I", p: 3 }, { w: "The", p: 2 }, { w: "others", p: 10 }],
+            color: C.purple,
+          },
+        ].map(({ label, probs, color }) => (
+          <div key={label} style={{ flex: 1, minWidth: 180, padding: "8px 10px", borderRadius: 6, background: "rgba(0,0,0,0.2)" }}>
+            <T color={color} bold size={13} center>{label}</T>
+            {probs.map(({ w, p }) => (
+              <div key={w} style={{ display: "flex", alignItems: "center", gap: 4, marginTop: 4 }}>
+                <T color={C.dim} size={12} style={{ width: 50, flexShrink: 0 }}>{w}</T>
+                <div style={{ flex: 1, height: 10, background: "rgba(255,255,255,0.04)", borderRadius: 3, overflow: "hidden" }}>
+                  <div style={{ width: `${p}%`, height: "100%", background: color, borderRadius: 3, opacity: 0.6 }} />
+                </div>
+                <T color={C.dim} size={11} style={{ minWidth: 28, textAlign: "right" }}>{p}%</T>
+              </div>
+            ))}
+          </div>
+        ))}
+      </div>
+      <T color="#b8a9ff" style={{ marginTop: 8 }}>The SFT model was spread out (40%, 15%, 12%...). The PPO model is concentrated (85% on one word). These distributions look very different, so the KL divergence is high: <strong>1.8</strong>.</T>
+    </Box></Reveal>
+
+    {/* ── Sub 7: Formula + worked examples + why KL needed ── */}
+    <Reveal when={sub >= 7}><Box color={C.orange} style={{ width: "100%" }}>
+      <T color="#ffb74d" bold size={20} center>The formula: Final Score = Reward - (β x KL)</T>
+      <div style={{ marginTop: 10, display: "flex", flexDirection: "column", gap: 6 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "6px 10px", borderRadius: 6, background: `${C.green}06` }}>
+          <T color={C.green} bold size={14} style={{ minWidth: 70 }}>Reward</T>
+          <T color={C.dim} size={14}>How good is this response? (from the reward model). Higher = better.</T>
+        </div>
+        <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "6px 10px", borderRadius: 6, background: `${C.orange}06` }}>
+          <T color={C.orange} bold size={14} style={{ minWidth: 70 }}>KL</T>
+          <T color={C.dim} size={14}>How far has the model drifted from the SFT model? Higher = more different.</T>
+        </div>
+        <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "6px 10px", borderRadius: 6, background: `${C.purple}06` }}>
+          <T color={C.purple} bold size={14} style={{ minWidth: 70 }}>β (beta)</T>
+          <T color={C.dim} size={14}>A dial engineers set (0.1 to 0.5). Higher β = stricter penalty for drifting.</T>
+        </div>
+      </div>
+
+      {/* Worked examples */}
+      <T color="#ffb74d" bold size={14} style={{ marginTop: 12 }}>Three examples with β = 0.2:</T>
+      <div style={{ marginTop: 6, display: "flex", flexDirection: "column", gap: 6 }}>
+        {[
+          { resp: "Python - simple syntax, huge community, tons of tutorials.", reward: 8.5, kl: 0.02, color: C.green, verdict: "Good response, barely drifted. Almost full reward kept." },
+          { resp: "Just learn Python I guess, whatever works, who cares.", reward: 3.1, kl: 0.15, color: C.orange, verdict: "Lazy response. Low reward, small nudge." },
+          { resp: "PYTHON PYTHON PYTHON PYTHON BEST BEST BEST!!!", reward: 9.2, kl: 24.0, color: C.red, verdict: "Reward hacking! High score but model went crazy. KL penalty wipes out the reward entirely." },
+        ].map(({ resp, reward, kl, color, verdict }) => {
+          const penalty = 0.2 * kl;
+          const final_score = reward - penalty;
+          return (
+          <div key={resp.substring(0, 15)} style={{ padding: "8px 10px", borderRadius: 6, background: `${color}06`, border: `1px solid ${color}10` }}>
+            <T color={C.mid} size={13} style={{ fontStyle: "italic" }}>"{resp}"</T>
+            <div style={{ marginTop: 6, padding: "6px 8px", borderRadius: 4, background: "rgba(0,0,0,0.3)", fontFamily: "monospace" }}>
+              <T color={C.dim} size={13}>Final = <strong style={{ color: C.green }}>{reward.toFixed(1)}</strong> - (0.2 x <strong style={{ color: C.orange }}>{kl.toFixed(2)}</strong>) = {reward.toFixed(1)} - {penalty.toFixed(2)} = <strong style={{ color }}>{final_score.toFixed(2)}</strong></T>
+            </div>
+            <T color={color} size={12} style={{ marginTop: 4 }}>{verdict}</T>
+          </div>
+        ); })}
+      </div>
+
+      {/* Why KL is needed */}
+      <div style={{ marginTop: 12, padding: "12px", borderRadius: 8, background: "rgba(255,107,107,0.06)", border: "1px solid rgba(255,107,107,0.10)" }}>
+        <T color="#ef9a9a" bold size={15}>Why is the KL penalty necessary?</T>
+        <T color="#ef9a9a" style={{ marginTop: 6 }}>Without it, the model finds shortcuts. The reward model is not perfect - it has blind spots. The PPO model can discover responses that <strong>trick</strong> the reward model into giving high scores even though a human would hate them. Repeating keywords, using an overly confident tone, or stuffing filler words that the reward model likes. The KL penalty prevents this by saying: <strong>"you can improve, but you cannot become a completely different model."</strong></T>
+      </div>
+    </Box></Reveal>
+
+    {/* ── Sub 8: Why RLHF matters ── */}
+    <Reveal when={sub >= 8}><Box color={C.blue} style={{ width: "100%" }}>
+      <T color="#5eb3ff" bold center size={20}>Why RLHF matters: what it fixes that SFT cannot</T>
+      <T color="#5eb3ff" style={{ marginTop: 8 }}>SFT teaches the model to follow instructions by showing it good examples. But it has a fundamental limit: it can only learn from the exact examples humans wrote. RLHF goes further.</T>
       <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 8 }}>
         {[
-          { problem: "SFT learns from small datasets", sol: "RLHF leverages human preference at scale through a learned reward model - one model judges 1000s of comparisons" },
-          { problem: "Can't write loss for 'helpful' directly", sol: "Reward model learns it from examples, then PPO optimizes for it" },
-          { problem: "Helps against harmful outputs", sol: "Humans rate responses as unsafe/safe, reward model penalizes unsafe ones" },
-        ].map(({ problem, sol }) => (
-          <div key={problem} style={{ padding: "10px 12px", borderRadius: 8, background: "rgba(255,255,255,0.02)" }}>
-            <T color={C.orange} size={14}><strong>Problem:</strong> {problem}</T>
-            <T color={C.cyan} size={14} style={{ marginTop: 4 }}><strong>RLHF Solution:</strong> {sol}</T>
+          {
+            problem: "SFT can only copy the style of examples it saw",
+            fix: "The reward model can score any new response the model invents, even ones no human ever wrote. So the model can discover better responses than exist in the SFT training data.",
+            color: C.cyan,
+          },
+          {
+            problem: "You cannot write a formula for 'helpful'",
+            fix: "Cross-entropy measures prediction accuracy. But 'helpful', 'safe', 'honest' are fuzzy human judgments. The reward model learns these from human comparisons, then PPO optimizes for them.",
+            color: C.green,
+          },
+          {
+            problem: "SFT model can still produce harmful responses",
+            fix: "Humans rate unsafe responses low. The reward model learns to give low scores to harmful content. PPO then nudges the weights away from generating such content.",
+            color: C.red,
+          },
+        ].map(({ problem, fix, color }) => (
+          <div key={problem.substring(0, 20)} style={{ padding: "10px 12px", borderRadius: 8, background: `${color}06`, border: `1px solid ${color}12` }}>
+            <T color={C.orange} size={14} bold>The problem</T>
+            <T color={C.dim} size={14}>{problem}</T>
+            <T color={color} size={14} bold style={{ marginTop: 6 }}>How RLHF fixes it</T>
+            <T color={C.dim} size={14}>{fix}</T>
           </div>
         ))}
       </div>
     </Box></Reveal>
 
-    {sub < 5 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
+    {sub < 8 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
   </div>
 ); }
 
 // ============================================================================
-// 2.6: BATCH TRAINING - Why Not One Example at a Time?
+// 2.7: BATCH TRAINING - Why Not One Example at a Time?
 // ============================================================================
 export const BatchTraining = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx; return (
   <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
@@ -779,237 +1343,616 @@ export const BatchTraining = (ctx) => { const { sub, subBtnRipple, setSubBtnRipp
 ); }
 
 // ============================================================================
-// 2.7: THE OUTPUT LAYER - From Hidden State to Words
+// 2.8: THE OUTPUT LAYER - From Hidden State to Words
 // ============================================================================
 export const OutputLayer = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx; return (
   <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
+
+    {/* ── Sub 0: What is a hidden state? Explained from scratch ── */}
     {sub >= 0 && (
       <Box color={C.cyan} style={{ width: "100%" }}>
-        <T color="#80deea" bold center size={20}>From hidden state to probabilities</T>
-        <T color="#80deea" style={{ marginTop: 6 }}>After the transformer processes "The cat sat", the last token produces a <strong>hidden state</strong> - a 768-dimensional vector.</T>
-        <T color="#80deea" style={{ marginTop: 8 }}>But we need probabilities over 50,000 vocabulary tokens. How do we get from one vector to 50K numbers?</T>
+        <T color="#80deea" bold center size={20}>What is a hidden state?</T>
+        <T color="#80deea" style={{ marginTop: 6 }}>We keep saying the neural network "processes" the input. But what does that actually produce? The answer is a <strong>hidden state</strong> - and understanding it is the key to understanding this entire chapter.</T>
+
+        <div style={{ marginTop: 14, display: "flex", flexDirection: "column", gap: 10 }}>
+          {/* Step 1: Input */}
+          <div style={{ padding: 12, borderRadius: 8, background: `${C.purple}06`, border: `1px solid ${C.purple}12` }}>
+            <T color={C.purple} bold size={16}>Step 1: Input sentence enters the model</T>
+            <div style={{ marginTop: 8, display: "flex", gap: 4, flexWrap: "wrap" }}>
+              {["The", "cat", "sat", "on", "the"].map((w, i) => (
+                <div key={i} style={{ padding: "4px 10px", borderRadius: 6, background: `${C.purple}15`, border: `1px solid ${C.purple}25` }}>
+                  <T color={C.purple} bold size={14}>{w}</T>
+                </div>
+              ))}
+            </div>
+            <T color={C.dim} size={14} style={{ marginTop: 6 }}>Each word gets converted to a vector of 768 numbers (the embedding from chapter 2.1). So "the" becomes [-0.14, 0.62, -0.38, ...]</T>
+          </div>
+
+          {/* Step 2: Layers process it */}
+          <div style={{ padding: 12, borderRadius: 8, background: `${C.orange}06`, border: `1px solid ${C.orange}12` }}>
+            <T color={C.orange} bold size={16}>Step 2: Hidden layers transform these vectors, one layer at a time</T>
+            <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 4 }}>
+              {[
+                { layer: "Layer 1", desc: "Learns basic patterns: \"the\" is an article, \"cat\" is a noun", color: "#ffcc80" },
+                { layer: "Layer 2", desc: "Learns combinations: \"the cat\" is a noun phrase", color: "#ffb74d" },
+                { layer: "Layer 6", desc: "Learns grammar: \"sat on the\" expects a location next", color: "#ffa726" },
+                { layer: "Layer 12 (final)", desc: "Encodes the full understanding: what word should come next", color: "#ff9800" },
+              ].map(({ layer, desc, color }) => (
+                <div key={layer} style={{ display: "flex", alignItems: "center", gap: 8, padding: "4px 8px", borderRadius: 6, background: "rgba(0,0,0,0.2)" }}>
+                  <T color={color} bold size={14} style={{ minWidth: 90 }}>{layer}</T>
+                  <T color={C.dim} size={13}>{desc}</T>
+                </div>
+              ))}
+            </div>
+            <T color={C.dim} size={14} style={{ marginTop: 6 }}>Each layer takes in 768 numbers and outputs 768 new numbers. The vector gets refined and enriched at every step.</T>
+          </div>
+
+          {/* Step 3: The result */}
+          <div style={{ padding: 12, borderRadius: 8, background: `${C.green}06`, border: `1px solid ${C.green}12` }}>
+            <T color={C.green} bold size={16}>Step 3: The final layer's output = the hidden state</T>
+            <T color={C.dim} size={14} style={{ marginTop: 6 }}>After ALL layers have processed the input, the last layer outputs a vector of 768 numbers for the last token ("the"). This final vector is called the <strong style={{ color: C.green }}>hidden state</strong>.</T>
+            <div style={{ marginTop: 8, padding: "8px 12px", borderRadius: 8, background: "rgba(0,0,0,0.3)" }}>
+              <T color={C.bright} bold size={14}>Hidden state for "the" (768 numbers):</T>
+              <T color={C.green} size={14} style={{ marginTop: 4, fontFamily: "monospace" }}>[-0.14, 0.62, -0.38, 1.05, -0.72, 0.91, ..., 0.21]</T>
+            </div>
+            <T color={C.dim} size={14} style={{ marginTop: 6 }}>It is called "hidden" because you never see it - it lives inside the model between layers. It is called a "state" because it represents the model's current understanding. These 768 numbers encode everything: the meaning of "the cat sat on the", the grammar, the context, and a prediction of what word should come next.</T>
+          </div>
+        </div>
+
+        <T color="#80deea" style={{ marginTop: 10 }}>Now we have this hidden state - 768 numbers that encode the model's understanding. But we need a <strong>word</strong>, not 768 numbers. The vocabulary has 50,000 tokens. How do we go from 768 numbers to a prediction?</T>
       </Box>
     )}
 
+    {/* ── Sub 1: What are logits? ── */}
     <Reveal when={sub >= 1}><Box color={C.orange} style={{ width: "100%" }}>
-      <T color="#ffb74d" bold center size={20}>The output layer: a single linear transformation</T>
-      <T color="#ffb74d" style={{ marginTop: 6 }}>The output layer is just ONE matrix: W_output, shape 768 × 50000.</T>
-      <div style={{ marginTop: 12, padding: "12px", borderRadius: 8, background: "rgba(0,0,0,0.3)", textAlign: "center" }}>
-        <T color={C.bright} size={16}><strong>logits = hidden_state · W_output</strong></T>
-        <T color={C.dim} size={13} style={{ marginTop: 4 }}>768-dim vector times 768×50000 matrix = 50000-dim output vector</T>
-      </div>
-      <T color="#ffb74d" style={{ marginTop: 8 }}>Each output dimension corresponds to one vocabulary token. Higher value = model thinks that token is more likely.</T>
-    </Box></Reveal>
+      <T color="#ffb74d" bold center size={20}>From hidden state to scores: what is a logit?</T>
+      <T color="#ffb74d" style={{ marginTop: 6 }}>We have the hidden state: 768 numbers. The model needs to decide which word comes next. There are 50,000 words in the vocabulary. So the model computes a <strong>score</strong> for every single word. Higher score = "I think this word is more likely to come next".</T>
 
-    <Reveal when={sub >= 2}><Box color={C.yellow} style={{ width: "100%" }}>
-      <T color="#ffe082" bold center size={20}>Example: "The cat sat" step-by-step</T>
-      <T color="#ffe082" style={{ marginTop: 6 }}>Token "sat" at position 3. Transformer processes it and outputs a hidden state:</T>
-      <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 8 }}>
-        <div style={{ padding: "10px", borderRadius: 6, background: "rgba(0,0,0,0.3)" }}>
-          <T color={C.bright} size={15}><strong>hidden_state (after token 'sat')</strong></T>
-          <T color={C.mid} size={14} style={{ marginTop: 4 }}>[-0.14, 0.62, -0.38, ..., 0.21] (768 values, all learned)</T>
-        </div>
-        <div style={{ padding: "10px", borderRadius: 6, background: "rgba(0,0,0,0.3)" }}>
-          <T color={C.bright} size={15}><strong>Multiply by W_output</strong></T>
-          <T color={C.mid} size={14} style={{ marginTop: 4 }}>hidden_state · W_output → 50000-dim logits vector</T>
-        </div>
-        <div style={{ padding: "10px", borderRadius: 6, background: "rgba(0,0,0,0.3)" }}>
-          <T color={C.bright} size={15}><strong>First few logits (sampled)</strong></T>
-          <T color={C.mid} size={14} style={{ marginTop: 4 }}>logits[262] (token "the") = 8.5</T>
-          <T color={C.mid} size={14}>logits[464] (token "The") = 7.2</T>
-          <T color={C.mid} size={14}>logits[319] (token "on") = 0.3</T>
-          <T color={C.mid} size={14}>logits[3797] (token "cat") = -1.2</T>
-        </div>
-        <div style={{ padding: "10px", borderRadius: 6, background: `${C.yellow}12`, border: `1px solid ${C.yellow}25` }}>
-          <T color={C.yellow} size={15}><strong>Apply softmax to get probabilities</strong></T>
-          <T color={C.mid} size={14} style={{ marginTop: 4 }}>prob[262] ("the") = 0.72 (highest - makes sense!)</T>
-          <T color={C.mid} size={14}>prob[464] ("The") = 0.18</T>
-          <T color={C.mid} size={14}>prob[319] ("on") = 0.07</T>
-          <T color={C.mid} size={14}>prob[3797] ("cat") = 0.03</T>
+      <div style={{ marginTop: 14, padding: 14, borderRadius: 8, background: "rgba(0,0,0,0.3)" }}>
+        <T color={C.bright} bold size={15}>Example: scores for "The cat sat on the ___"</T>
+        <T color={C.dim} size={13} style={{ marginTop: 4 }}>The model computes one score for each of its 50,000 vocabulary words:</T>
+        <div style={{ marginTop: 10, display: "flex", flexDirection: "column", gap: 4 }}>
+          {[
+            { w: "mat", s: 8.2, c: C.green },
+            { w: "floor", s: 7.5, c: C.green },
+            { w: "sofa", s: 6.1, c: C.green },
+            { w: "the", s: 0.3, c: C.yellow },
+            { w: "because", s: -3.7, c: C.red },
+            { w: "photosynthesis", s: -8.9, c: C.red },
+          ].map(({ w, s, c }) => (
+            <div key={w} style={{ display: "flex", alignItems: "center", gap: 8, padding: "5px 10px", borderRadius: 6, background: `${c}06` }}>
+              <T color={c} bold size={14} style={{ minWidth: 110 }}>"{w}"</T>
+              <div style={{ flex: 1, height: 10, background: "rgba(255,255,255,0.04)", borderRadius: 4, overflow: "hidden" }}>
+                <div style={{ width: `${Math.max(0, ((s + 10) / 20) * 100)}%`, height: "100%", background: c, borderRadius: 4, opacity: 0.6 }} />
+              </div>
+              <T color={c} bold size={14} style={{ minWidth: 45, textAlign: "right", fontFamily: "monospace" }}>{s >= 0 ? "+" : ""}{s.toFixed(1)}</T>
+            </div>
+          ))}
+          <T color={C.dim} size={12} center style={{ marginTop: 2 }}>...and 49,994 more words, each with a score</T>
         </div>
       </div>
+
+      <div style={{ marginTop: 12, padding: 14, borderRadius: 8, background: `${C.yellow}06`, border: `1px solid ${C.yellow}12` }}>
+        <T color={C.yellow} bold size={15}>These scores are called "logits"</T>
+        <T color={C.dim} size={14} style={{ marginTop: 6 }}>That is all a logit is - <strong>the raw score the model gives to a word</strong>. Nothing more. The name comes from mathematics ("log-odds"), but for our purposes: logit = score.</T>
+        <div style={{ marginTop: 10, display: "flex", flexDirection: "column", gap: 6 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+            <div style={{ width: 12, height: 12, borderRadius: 3, background: C.green }} />
+            <T color={C.dim} size={14}><strong style={{ color: C.green }}>Positive logit</strong> (+8.2) = the model thinks this word is a good fit</T>
+          </div>
+          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+            <div style={{ width: 12, height: 12, borderRadius: 3, background: C.yellow }} />
+            <T color={C.dim} size={14}><strong style={{ color: C.yellow }}>Near-zero logit</strong> (+0.3) = the model has no strong opinion</T>
+          </div>
+          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+            <div style={{ width: 12, height: 12, borderRadius: 3, background: C.red }} />
+            <T color={C.dim} size={14}><strong style={{ color: C.red }}>Negative logit</strong> (-8.9) = the model thinks this word is a terrible fit</T>
+          </div>
+        </div>
+      </div>
+
+      <div style={{ marginTop: 12, padding: 14, borderRadius: 8, background: `${C.purple}06`, border: `1px solid ${C.purple}12` }}>
+        <T color={C.purple} bold size={15}>Logits are NOT probabilities</T>
+        <T color={C.dim} size={14} style={{ marginTop: 6 }}>Logits are raw numbers. They can be -100 or +100 or anything. They do not add up to 100%. They are not percentages. To turn them into actual probabilities (where everything adds to 100%), we need one more step called <strong>softmax</strong> - which we will see in a later step of this chapter.</T>
+      </div>
+
+      <T color="#ffb74d" style={{ marginTop: 12 }}>So the pipeline so far: hidden state (768 numbers) → <strong>???</strong> → 50,000 logits → softmax → probabilities. The missing piece: how does the model go from 768 numbers to 50,000 logits? That is what the <strong>unembedding layer</strong> does.</T>
     </Box></Reveal>
 
-    <Reveal when={sub >= 3}><Box color={C.green} style={{ width: "100%" }}>
-      <T color="#80e8a5" bold center size={20}>Why one linear layer works</T>
-      <T color="#80e8a5" style={{ marginTop: 6 }}>The transformer already did all the hard work - understanding context. The output layer just needs to map that understanding to vocab.</T>
+    {/* ── Sub 2: NN diagram - hidden layers → hidden state → unembedding → vocab ── */}
+    <Reveal when={sub >= 2}><Box color={C.purple} style={{ width: "100%" }}>
+      <T color="#b8a9ff" bold center size={20}>The Unembedding Layer: from 768 numbers to 50,000 scores</T>
+      <T color="#b8a9ff" style={{ marginTop: 6 }}>There is one more layer after all the hidden layers. It is called the <strong>unembedding layer</strong> (or output projection). Here is what the full pipeline looks like:</T>
+
+      {/* NN Diagram - proper deep network: L1 neurons → L2 neurons → ... → Ln neurons (= hidden state) → W → output */}
+      <div style={{ marginTop: 16, padding: "10px 0", overflowX: "auto" }}>
+        {(() => {
+          /* Layer x-centers: L1, L2, dots, Ln(=hidden state), W, Output */
+          const XL1 = 50, XL2 = 130, XDOT = 200, XLN = 270, XW = 370, XOUT = 470;
+          /* 3 neurons per layer */
+          const ly = [65, 120, 175];
+          /* Output column: 4 neurons */
+          const ouy = [45, 95, 145, 195];
+          const R = 16;
+          return (
+          <svg viewBox="0 0 540 260" style={{ width: "100%", maxWidth: 540, display: "block", margin: "0 auto" }}>
+
+            {/* === Edges (drawn first, behind nodes) === */}
+
+            {/* L1 → L2: fully connected */}
+            {ly.map(sy => ly.map(dy => (
+              <line key={`l1${sy}l2${dy}`} x1={XL1 + R + 2} y1={sy} x2={XL2 - R - 2} y2={dy} stroke={`${C.cyan}${Math.abs(sy - dy) < 10 ? '35' : '15'}`} strokeWidth={1.5} />
+            )))}
+
+            {/* L2 → dots (fading lines) */}
+            {ly.map(sy => ly.map(dy => (
+              <line key={`l2${sy}dot${dy}`} x1={XL2 + R + 2} y1={sy} x2={XDOT - 8} y2={dy} stroke={`${C.cyan}${Math.abs(sy - dy) < 10 ? '20' : '08'}`} strokeWidth={1} strokeDasharray="3,4" />
+            )))}
+
+            {/* dots → Ln (fading lines) */}
+            {ly.map(sy => ly.map(dy => (
+              <line key={`dot${sy}ln${dy}`} x1={XDOT + 8} y1={sy} x2={XLN - R - 2} y2={dy} stroke={`${C.purple}${Math.abs(sy - dy) < 10 ? '20' : '08'}`} strokeWidth={1} strokeDasharray="3,4" />
+            )))}
+
+            {/* Ln (hidden state) → Output (through unembedding) */}
+            {ly.map(sy => ouy.map(dy => (
+              <line key={`ln${sy}out${dy}`} x1={XLN + R + 2} y1={sy} x2={XOUT - R - 2} y2={dy} stroke={`${C.orange}${Math.abs(sy - dy) < 20 ? '20' : '08'}`} strokeWidth={1} />
+            )))}
+
+            {/* === Column labels === */}
+            <text x={XL1} y={18} fill={C.cyan} fontSize={10} textAnchor="middle" fontWeight={700}>Layer 1</text>
+            <text x={XL2} y={18} fill={C.cyan} fontSize={10} textAnchor="middle" fontWeight={700}>Layer 2</text>
+            <text x={XLN} y={10} fill={C.purple} fontSize={10} textAnchor="middle" fontWeight={700}>Layer N</text>
+            <text x={XLN} y={22} fill={C.purple} fontSize={8} textAnchor="middle" opacity="0.7">(= Hidden State)</text>
+            <text x={XW} y={18} fill="#ffb74d" fontSize={10} textAnchor="middle" fontWeight={700}>Unembedding</text>
+            <text x={XOUT} y={18} fill="rgba(255,255,255,0.4)" fontSize={10} textAnchor="middle" fontWeight={600}>Output</text>
+            <text x={XOUT} y={248} fill="rgba(255,255,255,0.25)" fontSize={8} textAnchor="middle">(50K logits)</text>
+
+            {/* === Dashed box around Ln to highlight it as hidden state === */}
+            <rect x={XLN - 24} y={40} width={48} height={160} fill="none" stroke={`${C.purple}30`} strokeWidth={1.5} strokeDasharray="5,5" rx={8} />
+
+            {/* === Unembedding W matrix box === */}
+            <rect x={XW - 26} y={35} width={52} height={175} rx={10} fill="rgba(255,171,64,0.12)" stroke="#ffb74d" strokeWidth={2} />
+            <text x={XW} y={133} fill="#ffb74d" fontSize={16} fontWeight="700" textAnchor="middle" dominantBaseline="central">W</text>
+
+            {/* === Layer 1 neurons === */}
+            {ly.map((y, i) => (
+              <g key={`l1n${i}`}>
+                <circle cx={XL1} cy={y} r={R} fill={`${C.cyan}12`} stroke={C.cyan} strokeWidth={2} />
+                <text x={XL1} y={y + 4} fill={C.cyan} fontSize={10} fontWeight={700} textAnchor="middle">{["n\u2081", "n\u2082", "n\u2083"][i]}</text>
+              </g>
+            ))}
+
+            {/* === Layer 2 neurons === */}
+            {ly.map((y, i) => (
+              <g key={`l2n${i}`}>
+                <circle cx={XL2} cy={y} r={R} fill={`${C.cyan}12`} stroke={C.cyan} strokeWidth={2} />
+                <text x={XL2} y={y + 4} fill={C.cyan} fontSize={10} fontWeight={700} textAnchor="middle">{["n\u2081", "n\u2082", "n\u2083"][i]}</text>
+              </g>
+            ))}
+
+            {/* === Dots column (just 3 dots) === */}
+            {ly.map((y, i) => (
+              <text key={`dot${i}`} x={XDOT} y={y + 4} fill="rgba(255,255,255,0.35)" fontSize={16} fontWeight={700} textAnchor="middle">...</text>
+            ))}
+
+            {/* === Layer N neurons (= hidden state) === */}
+            {ly.map((y, i) => (
+              <g key={`lnn${i}`}>
+                <circle cx={XLN} cy={y} r={R} fill={`${C.purple}12`} stroke={C.purple} strokeWidth={2} />
+                <text x={XLN} y={y + 4} fill="#b8a9ff" fontSize={10} fontWeight={700} textAnchor="middle">{["h\u2081", "h\u2082", "h\u2087\u2086\u2088"][i]}</text>
+              </g>
+            ))}
+
+            {/* === Output neurons === */}
+            {[{ y: ouy[0], l: "the", a: false }, { y: ouy[1], l: "mat", a: true }, { y: ouy[2], l: "...", a: false }, { y: ouy[3], l: "dog", a: false }].map(({ y, l, a }) => (
+              <g key={`out${l}`}>
+                <circle cx={XOUT} cy={y} r={R} fill={a ? `${C.green}25` : `${C.green}08`} stroke={a ? C.green : `${C.green}40`} strokeWidth={2} />
+                <text x={XOUT} y={y + 4} fill={a ? C.green : "#80e8a5"} fontSize={10} fontWeight={700} textAnchor="middle">{l}</text>
+              </g>
+            ))}
+
+            {/* Bottom label */}
+            <text x={270} y={250} fill="rgba(255,255,255,0.3)" fontSize={10} textAnchor="middle">each layer has 768 neurons - only 3 shown for clarity</text>
+          </svg>
+          );
+        })()}
+      </div>
+
+      <T color="#b8a9ff" style={{ marginTop: 10 }}>The hidden state (768 numbers) gets multiplied by the <strong>unembedding matrix</strong> (768 x 50,000). The result: one logit for every word in the vocabulary.</T>
+    </Box></Reveal>
+
+    {/* ── Sub 3: How the unembedding matrix works - concrete dot product ── */}
+    <Reveal when={sub >= 3}><Box color={C.orange} style={{ width: "100%" }}>
+      <T color="#ffb74d" bold center size={20}>How does it actually work? One dot product per word</T>
+      <T color="#ffb74d" style={{ marginTop: 6 }}>The unembedding matrix has 50,000 rows. Each row is a 768-dimensional vector that represents one vocabulary word. To get the logit for a word, we take the dot product of the hidden state with that word's row.</T>
+
+      <div style={{ marginTop: 12, padding: 14, borderRadius: 8, background: "rgba(0,0,0,0.3)" }}>
+        <T color="#ffb74d" bold center size={15}>Example: computing the logit for "mat"</T>
+        <div style={{ marginTop: 10, display: "flex", flexDirection: "column", gap: 6 }}>
+          <T color={C.mid} size={14}>Hidden state (768 values): [-0.14, 0.62, -0.38, 1.05, ...]</T>
+          <T color={C.mid} size={14}>Row for "mat" in unembedding matrix: [0.45, 0.82, -0.21, 0.67, ...]</T>
+          <div style={{ marginTop: 6, padding: "8px 10px", borderRadius: 6, background: `${C.orange}08` }}>
+            <T color="#ffb74d" size={14}>logit = dot product = (-0.14 x 0.45) + (0.62 x 0.82) + (-0.38 x -0.21) + (1.05 x 0.67) + ...</T>
+            <T color="#ffb74d" size={14} style={{ marginTop: 4 }}>= -0.063 + 0.508 + 0.080 + 0.704 + ... (768 terms added up)</T>
+            <T color={C.green} bold size={16} center style={{ marginTop: 6 }}>logit for "mat" = 8.2</T>
+          </div>
+        </div>
+      </div>
+
+      <T color="#ffb74d" style={{ marginTop: 10 }}>This happens for ALL 50,000 words in parallel. Each word has its own row, its own dot product, its own logit. Words whose rows are "similar" to the hidden state get high scores. Words whose rows point in a different direction get low scores.</T>
+    </Box></Reveal>
+
+    {/* ── Sub 4: Raw logits for sample tokens ── */}
+    <Reveal when={sub >= 4}><Box color={C.red} style={{ width: "100%" }}>
+      <T color="#ef9a9a" bold center size={20}>The result: logits for every word in the vocabulary</T>
+      <T color="#ef9a9a" style={{ marginTop: 6 }}>After computing all 50,000 dot products for "The cat sat on the", we get raw scores (logits):</T>
+
+      <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 4 }}>
+        {[
+          { token: "mat", logit: 8.2, color: C.green },
+          { token: "floor", logit: 7.5, color: C.green },
+          { token: "sofa", logit: 6.1, color: C.green },
+          { token: "table", logit: 5.8, color: C.yellow },
+          { token: "bed", logit: 5.2, color: C.yellow },
+          { token: "she", logit: -1.4, color: C.red },
+          { token: "because", logit: -3.7, color: C.red },
+          { token: "photosynthesis", logit: -8.9, color: C.red },
+        ].map(({ token, logit, color }) => (
+          <div key={token} style={{ display: "flex", alignItems: "center", gap: 10, padding: "6px 10px", borderRadius: 6, background: `${color}06` }}>
+            <T color={color} bold size={14} style={{ minWidth: 110 }}>{token}</T>
+            <div style={{ flex: 1, height: 10, background: "rgba(255,255,255,0.04)", borderRadius: 4, overflow: "hidden" }}>
+              <div style={{ width: `${Math.max(0, ((logit + 10) / 20) * 100)}%`, height: "100%", background: color, borderRadius: 4, opacity: 0.6 }} />
+            </div>
+            <T color={color} bold size={14} style={{ minWidth: 45, textAlign: "right", fontFamily: "monospace" }}>{logit >= 0 ? "+" : ""}{logit.toFixed(1)}</T>
+          </div>
+        ))}
+        <T color={C.dim} size={13} center style={{ marginTop: 4 }}>...plus 49,992 more tokens with their own scores</T>
+      </div>
+
+      <T color="#ef9a9a" style={{ marginTop: 10 }}>These are just raw numbers - they can be negative, large, or small. They are not probabilities yet. We need softmax to convert them.</T>
+    </Box></Reveal>
+
+    {/* ── Sub 5: Softmax conversion ── */}
+    <Reveal when={sub >= 5}><Box color={C.yellow} style={{ width: "100%" }}>
+      <T color="#ffe082" bold center size={20}>Softmax: from raw logits to probability distribution</T>
+      <T color="#ffe082" style={{ marginTop: 6 }}>Softmax does two things: makes every number positive (using e^score), then divides by the total so everything adds up to 100%.</T>
+
+      <div style={{ marginTop: 12, padding: 14, borderRadius: 8, background: "rgba(0,0,0,0.3)" }}>
+        <T color="#ffe082" bold center size={15}>Worked example for the top 5 tokens:</T>
+        <div style={{ marginTop: 10, display: "flex", flexDirection: "column", gap: 6 }}>
+          {[
+            { token: "mat", logit: 8.2, exp: 3641, prob: 62.1 },
+            { token: "floor", logit: 7.5, exp: 1808, prob: 30.8 },
+            { token: "sofa", logit: 6.1, exp: 446, prob: 7.6 },
+            { token: "table", logit: 5.8, exp: 330, prob: 5.6 },
+            { token: "bed", logit: 5.2, exp: 181, prob: 3.1 },
+          ].map(({ token, logit, exp, prob }) => (
+            <div key={token} style={{ display: "flex", alignItems: "center", gap: 6, padding: "4px 8px", borderRadius: 4, background: `${C.yellow}06` }}>
+              <T color="#ffe082" bold size={13} style={{ minWidth: 55 }}>{token}</T>
+              <T color={C.dim} size={13}>logit={logit.toFixed(1)}</T>
+              <T color={C.dim} size={13}>→ e^{logit.toFixed(1)} = {exp}</T>
+              <T color={C.dim} size={13}>→</T>
+              <T color="#ffe082" bold size={13}>{prob}%</T>
+            </div>
+          ))}
+        </div>
+        <T color={C.dim} size={13} style={{ marginTop: 8 }}>probability = e^logit / sum of ALL e^logits across 50,000 tokens</T>
+      </div>
+
+      <T color="#ffe082" style={{ marginTop: 10 }}>The model predicts "mat" with 62.1% confidence. This is the final output - a probability distribution over the entire vocabulary. During training, we compare this to the actual next word and compute the loss.</T>
+    </Box></Reveal>
+
+    {/* ── Sub 6: Why one linear layer works + parameter count ── */}
+    <Reveal when={sub >= 6}><Box color={C.green} style={{ width: "100%" }}>
+      <T color="#80e8a5" bold center size={20}>Why does one simple layer work? The hidden layers did the hard part</T>
+      <T color="#80e8a5" style={{ marginTop: 6 }}>The output layer is just a matrix multiply - no activation function, no non-linearity. It seems too simple. But the hidden layers already did all the hard work.</T>
+
       <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 8 }}>
         {[
-          { layer: "Transformer blocks (90% of parameters)", job: "Extract meaning from context", ex: "Understand that 'sat' needs a location following it" },
-          { layer: "Output layer (tiny!)", job: "Convert to vocab probabilities", ex: "Map meaning to words like 'on', 'in', 'at'" },
-        ].map(({ layer, job, ex }) => (
-          <div key={layer} style={{ padding: "10px 12px", borderRadius: 8, background: "rgba(255,255,255,0.02)" }}>
-            <T color={C.green} bold size={15}>{layer}</T>
-            <T color={C.dim} size={14} style={{ marginTop: 4 }}>Task: {job}</T>
-            <T color={C.mid} size={13} style={{ marginTop: 2 }}>Example: {ex}</T>
+          { layer: "All hidden layers (many layers deep)", job: "Understand context, grammar, meaning. Encode 'what should come next' into the 768-dim hidden state.", params: "billions of parameters", color: C.cyan },
+          { layer: "Output layer (1 matrix)", job: "Translate the hidden state into a logit for each vocabulary word. Just one dot product per word.", params: "768 x 50K = 38.4M parameters", color: C.orange },
+        ].map(({ layer, job, params, color }) => (
+          <div key={layer} style={{ padding: "10px 12px", borderRadius: 8, background: `${color}06`, border: `1px solid ${color}12` }}>
+            <T color={color} bold size={15}>{layer}</T>
+            <T color={C.dim} size={14} style={{ marginTop: 4 }}>{job}</T>
+            <T color={color} size={13} style={{ marginTop: 4 }}>parameter count: {params}</T>
           </div>
         ))}
       </div>
+
+      <T color="#80e8a5" style={{ marginTop: 10 }}>The output layer has less than 0.02% of the total parameters. It is tiny. All the intelligence lives in the hidden layers.</T>
     </Box></Reveal>
 
-    <Reveal when={sub >= 4}><Box color={C.purple} style={{ width: "100%" }}>
-      <T color="#b8a9ff" bold center size={20}>Parameter count: output layer is surprisingly small</T>
-      <T color="#b8a9ff" style={{ marginTop: 6 }}>You'd think a matrix from 768 → 50K requires huge computation. But:</T>
-      <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 8, fontFamily: "monospace" }}>
-        {[
-          { name: "Transformer parameters (GPT-2)", params: "124M", pct: "~99.4%" },
-          { name: "Output layer W_output", params: "768 × 50K = 38.4M", pct: "~0.6%" },
-        ].map(({ name, params, pct }) => (
-          <div key={name} style={{ padding: "8px 10px", borderRadius: 6, background: "rgba(255,255,255,0.02)", display: "flex", alignItems: "center", gap: 10 }}>
-            <T color={C.mid} size={14} style={{ flex: 1 }}>{name}</T>
-            <T color={C.purple} bold size={14} style={{ minWidth: 120 }}>{params}</T>
-            <T color={C.dim} size={13}>{pct}</T>
-          </div>
-        ))}
+    {/* ── Sub 7: Weight tying with visual similarity example ── */}
+    <Reveal when={sub >= 7}><Box color={C.blue} style={{ width: "100%" }}>
+      <T color="#5eb3ff" bold center size={20}>The clever trick: weight tying</T>
+      <T color="#5eb3ff" style={{ marginTop: 6 }}>Remember the embedding layer from chapter 2.1? It converts tokens to vectors. The embedding matrix has shape 50,000 x 768 - one 768-dim row per word.</T>
+
+      <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 8 }}>
+        <div style={{ padding: "10px 12px", borderRadius: 8, background: `${C.cyan}06`, border: `1px solid ${C.cyan}12` }}>
+          <T color="#80deea" bold size={15}>Embedding matrix (input side)</T>
+          <T color={C.mid} size={14} style={{ marginTop: 4 }}>Shape: 50,000 x 768. Converts word → vector.</T>
+          <T color={C.mid} size={14}>Row for "mat" = [0.45, 0.82, -0.21, 0.67, ...]</T>
+        </div>
+        <div style={{ padding: "10px 12px", borderRadius: 8, background: `${C.orange}06`, border: `1px solid ${C.orange}12` }}>
+          <T color="#ffb74d" bold size={15}>Unembedding matrix (output side)</T>
+          <T color={C.mid} size={14} style={{ marginTop: 4 }}>Shape: 768 x 50,000. Converts hidden state → one logit per word.</T>
+          <T color={C.mid} size={14}>This is just the embedding matrix <strong>transposed</strong>!</T>
+        </div>
       </div>
-      <T color="#b8a9ff" style={{ marginTop: 8 }}>The output layer is <strong>not the bottleneck</strong>. The transformer is where all the computation happens.</T>
+
+      <T color="#5eb3ff" style={{ marginTop: 10 }}>This is called <strong>weight tying</strong>. The same matrix is used for both embedding and unembedding (just transposed). The model only needs to learn one set of word vectors, not two.</T>
+
+      {/* Visual: why weight tying works */}
+      <div style={{ marginTop: 14, padding: 14, borderRadius: 8, background: "rgba(0,0,0,0.3)" }}>
+        <T color={C.bright} bold center size={15}>Why does this work? A visual example</T>
+        <T color={C.dim} size={14} style={{ marginTop: 8 }}>Imagine the hidden state encodes: "something you sit on, on the floor". During embedding, similar words were placed near each other in the 768-dim space:</T>
+
+        <div style={{ marginTop: 10, display: "flex", flexDirection: "column", gap: 6 }}>
+          {[
+            { w: "mat", v: "[0.45, 0.82, -0.21, ...]", sim: 0.92, c: C.green },
+            { w: "rug", v: "[0.43, 0.79, -0.19, ...]", sim: 0.89, c: C.green },
+            { w: "carpet", v: "[0.41, 0.80, -0.23, ...]", sim: 0.87, c: C.green },
+            { w: "table", v: "[0.30, 0.55, 0.12, ...]", sim: 0.58, c: C.yellow },
+            { w: "sky", v: "[-0.60, 0.10, 0.85, ...]", sim: 0.05, c: C.red },
+          ].map(({ w, v, sim, c }) => (
+            <div key={w} style={{ display: "flex", alignItems: "center", gap: 8, padding: "6px 10px", borderRadius: 6, background: `${c}06` }}>
+              <T color={c} bold size={14} style={{ minWidth: 60 }}>"{w}"</T>
+              <T color={C.dim} size={12} style={{ flex: 1, fontFamily: "monospace" }}>{v}</T>
+              <div style={{ width: 60, height: 8, background: "rgba(255,255,255,0.04)", borderRadius: 4, overflow: "hidden" }}>
+                <div style={{ width: `${sim * 100}%`, height: "100%", background: c, borderRadius: 4, opacity: 0.7 }} />
+              </div>
+              <T color={c} bold size={13} style={{ minWidth: 35 }}>{(sim * 100).toFixed(0)}%</T>
+            </div>
+          ))}
+        </div>
+
+        <T color={C.dim} size={14} style={{ marginTop: 10 }}>The dot product between the hidden state and each word's embedding measures similarity. "mat", "rug", and "carpet" have embeddings pointing in a similar direction to the hidden state, so their dot products (logits) are high. "sky" points in a completely different direction, so its logit is near zero.</T>
+        <T color="#5eb3ff" size={14} style={{ marginTop: 6 }}>Weight tying enforces this: if "mat" and "rug" were learned as similar meanings at input, they will automatically get similar logits at output. The model only learns one definition per word, and it works in both directions.</T>
+      </div>
     </Box></Reveal>
 
-    {sub < 4 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
+    {sub < 7 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
   </div>
 ); }
 
 // ============================================================================
-// 2.8: AUTOREGRESSIVE GENERATION - One Token at a Time
+// 2.9: AUTOREGRESSIVE GENERATION - One Token at a Time
 // ============================================================================
 export const AutoregressiveGeneration = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx; return (
   <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
+
+    {/* ── Sub 0: Training sees everything at once, but generation builds one word at a time ── */}
     {sub >= 0 && (
       <Box color={C.cyan} style={{ width: "100%" }}>
-        <T color="#80deea" bold center size={20}>Autoregressive generation: predict one word, feed it back</T>
-        <T color="#80deea" style={{ marginTop: 6 }}>During training, we see all tokens at once and predict the next. But during inference (using the model), we generate token by token.</T>
-        <T color="#80deea" style={{ marginTop: 8 }}>Each generated token becomes input for the next prediction. "Autoregressive" = using output as input.</T>
+        <T color="#80deea" bold center size={20}>Two very different modes</T>
+        <T color="#80deea" style={{ marginTop: 6 }}>The model has two lives. During <strong>training</strong>, it sees entire sentences and learns to predict the next word at every position. But when you actually <strong>use</strong> it (generation), it has to build the answer one word at a time.</T>
+
+        <div style={{ marginTop: 14, display: "flex", flexDirection: "column", gap: 10 }}>
+          <div style={{ padding: 12, borderRadius: 8, background: `${C.green}06`, border: `1px solid ${C.green}12` }}>
+            <T color={C.green} bold size={16}>Training (learning phase)</T>
+            <div style={{ marginTop: 8, display: "flex", gap: 4, flexWrap: "wrap" }}>
+              {["The", "cat", "sat", "on", "the", "mat"].map((w, i) => (
+                <div key={i} style={{ padding: "4px 10px", borderRadius: 6, background: `${C.green}15`, border: `1px solid ${C.green}25` }}>
+                  <T color={C.green} bold size={14}>{w}</T>
+                </div>
+              ))}
+            </div>
+            <T color={C.dim} size={14} style={{ marginTop: 6 }}>The model sees ALL words at once. At each position, it predicts the next word and checks if it was right. Fast - one pass through the whole sentence.</T>
+          </div>
+
+          <div style={{ padding: 12, borderRadius: 8, background: `${C.orange}06`, border: `1px solid ${C.orange}12` }}>
+            <T color={C.orange} bold size={16}>Generation (using the model)</T>
+            <div style={{ marginTop: 8, display: "flex", gap: 4, flexWrap: "wrap", alignItems: "center" }}>
+              {["The", "cat", "sat", "on"].map((w, i) => (
+                <div key={i} style={{ padding: "4px 10px", borderRadius: 6, background: `${C.orange}15`, border: `1px solid ${C.orange}25` }}>
+                  <T color={C.orange} bold size={14}>{w}</T>
+                </div>
+              ))}
+              <div style={{ padding: "4px 10px", borderRadius: 6, background: `${C.yellow}20`, border: `2px dashed ${C.yellow}50` }}>
+                <T color={C.yellow} bold size={14}>???</T>
+              </div>
+            </div>
+            <T color={C.dim} size={14} style={{ marginTop: 6 }}>The model only has the prompt. It must predict the next word, add it, then predict the next, add it... one word at a time. This is called <strong>autoregressive generation</strong>.</T>
+          </div>
+        </div>
       </Box>
     )}
 
+    {/* ── Sub 1: Step-by-step generation with full pipeline visible ── */}
     <Reveal when={sub >= 1}><Box color={C.orange} style={{ width: "100%" }}>
-      <T color="#ffb74d" bold center size={20}>Example: complete the sentence</T>
-      <T color="#ffb74d" style={{ marginTop: 6 }}><strong>Prompt:</strong> "The cat sat on"</T>
-      <T color="#ffb74d" style={{ marginTop: 8 }}>Model generates the next word one at a time:</T>
-      <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 8 }}>
+      <T color="#ffb74d" bold center size={20}>Watch it build the sentence, word by word</T>
+      <T color="#ffb74d" style={{ marginTop: 6 }}>Prompt: <strong>"The cat sat on"</strong>. At each step, the full pipeline runs: tokens go in, hidden layers process them, output layer produces 50,000 probabilities via softmax, and the model picks one word.</T>
+
+      <div style={{ marginTop: 14, display: "flex", flexDirection: "column", gap: 12 }}>
         {[
-          {
-            step: "Step 1",
-            input: ["The", "cat", "sat", "on"],
-            pred: "the",
-            prob: 0.72,
-            output: ["The", "cat", "sat", "on", "the"],
-          },
-          {
-            step: "Step 2",
-            input: ["The", "cat", "sat", "on", "the"],
-            pred: "mat",
-            prob: 0.68,
-            output: ["The", "cat", "sat", "on", "the", "mat"],
-          },
-          {
-            step: "Step 3",
-            input: ["The", "cat", "sat", "on", "the", "mat"],
-            pred: "last",
-            prob: 0.45,
-            output: ["The", "cat", "sat", "on", "the", "mat", "last"],
-          },
-          {
-            step: "Step 4",
-            input: ["The", "cat", "sat", "on", "the", "mat", "last"],
-            pred: "week",
-            prob: 0.91,
-            output: ["The", "cat", "sat", "on", "the", "mat", "last", "week"],
-          },
-          {
-            step: "Step 5",
-            input: ["The", "cat", "sat", "on", "the", "mat", "last", "week"],
-            pred: "<END>",
-            prob: 0.85,
-            output: "DONE",
-          },
-        ].map(({ step, input, pred, prob, output }) => (
-          <div key={step} style={{ padding: "10px 12px", borderRadius: 8, background: "rgba(255,255,255,0.02)" }}>
-            <T color={C.orange} bold size={15}>{step}</T>
-            <T color={C.dim} size={13} style={{ marginTop: 4 }}>Input tokens: {input.join(" ")}</T>
-            <T color={C.yellow} size={15} style={{ marginTop: 4 }}><strong>Predict:</strong> "{pred}" (P={prob.toFixed(2)})</T>
-            <T color={C.mid} size={13} style={{ marginTop: 4 }}>→ Sequence becomes: {Array.isArray(output) ? output.join(" ") : output}</T>
+          { step: 1, input: ["The", "cat", "sat", "on"], pred: "the", prob: 72, topAlt: [{ w: "a", p: 15 }, { w: "that", p: 8 }] },
+          { step: 2, input: ["The", "cat", "sat", "on", "the"], pred: "mat", prob: 68, topAlt: [{ w: "floor", p: 18 }, { w: "sofa", p: 7 }] },
+          { step: 3, input: ["The", "cat", "sat", "on", "the", "mat"], pred: "last", prob: 45, topAlt: [{ w: "all", p: 22 }, { w: "and", p: 15 }] },
+          { step: 4, input: ["The", "cat", "sat", "on", "the", "mat", "last"], pred: "week", prob: 91, topAlt: [{ w: "night", p: 5 }, { w: "time", p: 2 }] },
+        ].map(({ step, input, pred, prob, topAlt }) => (
+          <div key={step} style={{ padding: 12, borderRadius: 8, background: "rgba(0,0,0,0.3)" }}>
+            <T color={C.orange} bold size={16}>Step {step}</T>
+            <div style={{ marginTop: 6, display: "flex", gap: 4, flexWrap: "wrap", alignItems: "center" }}>
+              {input.map((w, i) => (
+                <div key={i} style={{ padding: "3px 8px", borderRadius: 5, background: `${C.cyan}12` }}>
+                  <T color={C.mid} size={13}>{w}</T>
+                </div>
+              ))}
+              <T color={C.dim} size={16} style={{ margin: "0 4px" }}>→</T>
+              <T color={C.dim} size={13}>hidden layers → output layer → softmax →</T>
+            </div>
+            {/* Probability bars */}
+            <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 3 }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                <T color={C.green} bold size={14} style={{ minWidth: 50 }}>"{pred}"</T>
+                <div style={{ flex: 1, height: 12, background: "rgba(255,255,255,0.04)", borderRadius: 4, overflow: "hidden" }}>
+                  <div style={{ width: `${prob}%`, height: "100%", background: C.green, borderRadius: 4, opacity: 0.7 }} />
+                </div>
+                <T color={C.green} bold size={13} style={{ minWidth: 35 }}>{prob}%</T>
+              </div>
+              {topAlt.map(({ w, p }) => (
+                <div key={w} style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                  <T color={C.dim} size={13} style={{ minWidth: 50 }}>"{w}"</T>
+                  <div style={{ flex: 1, height: 8, background: "rgba(255,255,255,0.04)", borderRadius: 4, overflow: "hidden" }}>
+                    <div style={{ width: `${p}%`, height: "100%", background: C.dim, borderRadius: 4, opacity: 0.4 }} />
+                  </div>
+                  <T color={C.dim} size={12} style={{ minWidth: 35 }}>{p}%</T>
+                </div>
+              ))}
+            </div>
+            <T color={C.bright} size={14} style={{ marginTop: 6 }}>Pick <strong style={{ color: C.green }}>"{pred}"</strong> → append it to the input for the next step</T>
           </div>
         ))}
+
+        <div style={{ padding: 12, borderRadius: 8, background: `${C.green}06`, border: `1px solid ${C.green}12` }}>
+          <T color={C.green} bold size={16}>Final result</T>
+          <div style={{ marginTop: 6, display: "flex", gap: 4, flexWrap: "wrap" }}>
+            {["The", "cat", "sat", "on", "the", "mat", "last", "week"].map((w, i) => (
+              <div key={i} style={{ padding: "4px 10px", borderRadius: 6, background: i < 4 ? `${C.cyan}12` : `${C.green}15`, border: `1px solid ${i < 4 ? C.cyan : C.green}25` }}>
+                <T color={i < 4 ? C.mid : C.green} bold size={14}>{w}</T>
+              </div>
+            ))}
+          </div>
+          <T color={C.dim} size={13} style={{ marginTop: 6 }}>Cyan = original prompt. Green = generated by the model, one at a time.</T>
+        </div>
       </div>
     </Box></Reveal>
 
+    {/* ── Sub 2: How the model picks - greedy vs sampling vs top-k ── */}
     <Reveal when={sub >= 2}><Box color={C.yellow} style={{ width: "100%" }}>
-      <T color="#ffe082" bold center size={20}>How probabilities guide choices</T>
-      <T color="#ffe082" style={{ marginTop: 6 }}>At each step, the model outputs probabilities. We can sample or take the highest (greedy).</T>
-      <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 8 }}>
+      <T color="#ffe082" bold center size={20}>How does the model pick a word?</T>
+      <T color="#ffe082" style={{ marginTop: 6 }}>The model outputs a probability for every word. But how do we choose one? There are three strategies:</T>
+
+      <div style={{ marginTop: 14, display: "flex", flexDirection: "column", gap: 10 }}>
+        <div style={{ padding: 12, borderRadius: 8, background: `${C.green}06`, border: `1px solid ${C.green}12` }}>
+          <T color={C.green} bold size={16}>Greedy: always pick the highest probability</T>
+          <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 3 }}>
+            {[{ w: "the", p: 72 }, { w: "a", p: 15 }, { w: "that", p: 8 }, { w: "his", p: 3 }].map(({ w, p }) => (
+              <div key={w} style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                <T color={w === "the" ? C.green : C.dim} bold={w === "the"} size={14} style={{ minWidth: 50 }}>"{w}"</T>
+                <div style={{ flex: 1, height: 10, background: "rgba(255,255,255,0.04)", borderRadius: 4, overflow: "hidden" }}>
+                  <div style={{ width: `${p}%`, height: "100%", background: w === "the" ? C.green : C.dim, borderRadius: 4, opacity: w === "the" ? 0.7 : 0.3 }} />
+                </div>
+                <T color={w === "the" ? C.green : C.dim} size={13} style={{ minWidth: 35 }}>{p}%</T>
+                {w === "the" && <T color={C.green} bold size={13}>← always this one</T>}
+              </div>
+            ))}
+          </div>
+          <T color={C.dim} size={13} style={{ marginTop: 6 }}>Same input always gives same output. Safe and consistent, but can get repetitive - the model might loop the same phrase.</T>
+        </div>
+
+        <div style={{ padding: 12, borderRadius: 8, background: `${C.purple}06`, border: `1px solid ${C.purple}12` }}>
+          <T color={C.purple} bold size={16}>Sampling: roll the dice (weighted by probability)</T>
+          <T color={C.dim} size={14} style={{ marginTop: 6 }}>Imagine spinning a wheel where "the" takes up 72% of the wheel, "a" takes 15%, and so on. Wherever the wheel lands, that is the word we pick.</T>
+          <div style={{ marginTop: 8, display: "flex", gap: 4, flexWrap: "wrap" }}>
+            {[{ w: "the", p: "72%", c: C.cyan }, { w: "a", p: "15%", c: C.purple }, { w: "that", p: "8%", c: C.orange }, { w: "his", p: "3%", c: C.red }, { w: "...", p: "2%", c: C.dim }].map(({ w, p, c }) => (
+              <div key={w} style={{ padding: "4px 10px", borderRadius: 6, background: `${c}10`, border: `1px solid ${c}25` }}>
+                <T color={c} size={13}>{w}: {p}</T>
+              </div>
+            ))}
+          </div>
+          <T color={C.dim} size={13} style={{ marginTop: 6 }}>More creative and diverse. But sometimes picks low-probability words that make no sense.</T>
+        </div>
+
+        <div style={{ padding: 12, borderRadius: 8, background: `${C.orange}06`, border: `1px solid ${C.orange}12` }}>
+          <T color={C.orange} bold size={16}>Top-K: sample, but only from the best K options</T>
+          <T color={C.dim} size={14} style={{ marginTop: 6 }}>Keep only the top 10 (or 40, or 100) most likely words. Throw out the rest. Then sample from those.</T>
+          <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 3 }}>
+            {[{ w: "the", p: "72%", keep: true }, { w: "a", p: "15%", keep: true }, { w: "that", p: "8%", keep: true }, { w: "photosynthesis", p: "0.001%", keep: false }].map(({ w, p, keep }) => (
+              <div key={w} style={{ display: "flex", alignItems: "center", gap: 8, opacity: keep ? 1 : 0.4 }}>
+                <T color={keep ? C.orange : C.dim} size={14} style={{ minWidth: 120 }}>"{w}"</T>
+                <T color={keep ? C.orange : C.dim} size={13}>{p}</T>
+                <T color={keep ? C.green : C.red} size={13}>{keep ? "kept" : "removed"}</T>
+              </div>
+            ))}
+          </div>
+          <T color={C.dim} size={13} style={{ marginTop: 6 }}>The sweet spot: creative enough to surprise you, but never picks something completely absurd.</T>
+        </div>
+      </div>
+    </Box></Reveal>
+
+    {/* ── Sub 3: Temperature - the creativity dial ── */}
+    <Reveal when={sub >= 3}><Box color={C.red} style={{ width: "100%" }}>
+      <T color="#ef9a9a" bold center size={20}>Temperature: the creativity dial</T>
+      <T color="#ef9a9a" style={{ marginTop: 6 }}>Before softmax, we divide each logit by a number called <strong>temperature</strong>. This controls how "spread out" the probabilities are.</T>
+
+      <div style={{ marginTop: 12, padding: 12, borderRadius: 8, background: "rgba(0,0,0,0.3)" }}>
+        <T color={C.bright} bold center size={15}>Same logits, different temperatures</T>
+        <T color={C.dim} size={13} center style={{ marginTop: 4 }}>Raw logits: "the"=4.2, "a"=2.8, "that"=1.5</T>
+      </div>
+
+      <div style={{ marginTop: 10, display: "flex", flexDirection: "column", gap: 10 }}>
         {[
-          {
-            method: "Greedy (always pick highest)",
-            desc: "Take the word with max probability.",
-            ex: "If P(the)=0.72, P(a)=0.15, P(that)=0.08 → pick 'the'",
-            pro: "Deterministic, fast",
-            con: "Sometimes boring (repeats)",
-          },
-          {
-            method: "Sampling (pick randomly by probability)",
-            desc: "Roll a die weighted by probabilities.",
-            ex: "72% chance pick 'the', 15% pick 'a', 8% pick 'that'",
-            pro: "Diverse, creative",
-            con: "Can be incoherent (low prob words)",
-          },
-          {
-            method: "Top-K sampling (sample from top-K words)",
-            desc: "Only consider the K most likely words.",
-            ex: "Take top 10 words, ignore the rest, sample from those",
-            pro: "Balanced: diverse but coherent",
-            con: "Requires tuning K",
-          },
-        ].map(({ method, desc, ex, pro, con }) => (
-          <div key={method} style={{ padding: "10px 12px", borderRadius: 8, background: "rgba(255,255,255,0.02)" }}>
-            <T color={C.yellow} bold size={15}>{method}</T>
+          { temp: "0.2 (cold)", label: "Nearly greedy", probs: [{ w: "the", p: 99 }, { w: "a", p: 1 }, { w: "that", p: 0 }], color: C.blue, desc: "Dividing by 0.2 makes logits huge (21, 14, 7.5). Softmax crushes everything onto the winner." },
+          { temp: "1.0 (default)", label: "Balanced", probs: [{ w: "the", p: 72 }, { w: "a", p: 18 }, { w: "that", p: 10 }], color: C.green, desc: "Logits stay the same. Probabilities reflect the model's true confidence." },
+          { temp: "2.0 (hot)", label: "Creative", probs: [{ w: "the", p: 45 }, { w: "a", p: 30 }, { w: "that", p: 25 }], color: C.red, desc: "Dividing by 2.0 makes logits small (2.1, 1.4, 0.75). Softmax spreads probability more evenly." },
+        ].map(({ temp, label, probs, color, desc }) => (
+          <div key={temp} style={{ padding: 12, borderRadius: 8, background: `${color}06`, border: `1px solid ${color}12` }}>
+            <T color={color} bold size={16}>Temperature = {temp}</T>
             <T color={C.dim} size={13} style={{ marginTop: 4 }}>{desc}</T>
-            <T color={C.mid} size={12} style={{ marginTop: 3 }}>Example: {ex}</T>
-            <T color={C.green} size={12} style={{ marginTop: 3 }}>Pro: {pro}</T>
-            <T color={C.orange} size={12}>Con: {con}</T>
+            <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 3 }}>
+              {probs.map(({ w, p }) => (
+                <div key={w} style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                  <T color={color} size={14} style={{ minWidth: 50 }}>"{w}"</T>
+                  <div style={{ flex: 1, height: 10, background: "rgba(255,255,255,0.04)", borderRadius: 4, overflow: "hidden" }}>
+                    <div style={{ width: `${p}%`, height: "100%", background: color, borderRadius: 4, opacity: 0.6 }} />
+                  </div>
+                  <T color={color} bold size={13} style={{ minWidth: 30 }}>{p}%</T>
+                </div>
+              ))}
+            </div>
           </div>
         ))}
+      </div>
+
+      <div style={{ marginTop: 12, padding: 12, borderRadius: 8, background: "rgba(0,0,0,0.3)" }}>
+        <T color={C.bright} bold center size={15}>The formula</T>
+        <T color={C.bright} size={16} center style={{ marginTop: 6, fontFamily: "monospace" }}>softmax( logit / temperature )</T>
+        <T color={C.dim} size={13} center style={{ marginTop: 6 }}>Low temperature → winner takes all. High temperature → more even distribution. Temperature = 0 would be pure greedy (but we use 0.2 in practice).</T>
       </div>
     </Box></Reveal>
 
-    <Reveal when={sub >= 3}><Box color={C.green} style={{ width: "100%" }}>
-      <T color="#80e8a5" bold center size={20}>Why autoregressive works despite one-at-a-time prediction</T>
-      <T color="#80e8a5" style={{ marginTop: 6 }}>You might think: "Predict each word separately? Errors will compound!" But in practice:</T>
-      <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 8 }}>
-        {[
-          { factor: "Context window", why: "Each new token sees ALL previous tokens (full context from start), not just the last word. Errors don't cascade." },
-          { factor: "Self-attention", why: "The model can pay attention to distant tokens, not just recent ones. Long-range dependencies preserved." },
-          { factor: "Training matches inference", why: "Model trained on next-token prediction (like it does at inference), so it's learned to handle this" },
-          { factor: "Probability collapse", why: "Even if model assigns 60% to the wrong word, 40% to right word, it usually recovers in the next step" },
-        ].map(({ factor, why }) => (
-          <div key={factor} style={{ padding: "10px 12px", borderRadius: 8, background: "rgba(255,255,255,0.02)" }}>
-            <T color={C.green} bold size={15}>{factor}</T>
-            <T color={C.dim} size={13} style={{ marginTop: 4 }}>{why}</T>
-          </div>
-        ))}
-      </div>
-    </Box></Reveal>
+    {/* ── Sub 4: Why it works + when it stops ── */}
+    <Reveal when={sub >= 4}><Box color={C.green} style={{ width: "100%" }}>
+      <T color="#80e8a5" bold center size={20}>Why does this work? And when does it stop?</T>
+      <T color="#80e8a5" style={{ marginTop: 6 }}>Predicting one word at a time sounds fragile. But it works because of two key facts:</T>
 
-    <Reveal when={sub >= 4}><Box color={C.purple} style={{ width: "100%" }}>
-      <T color="#b8a9ff" bold center size={20}>Speed: why longer sequences are slower</T>
-      <T color="#b8a9ff" style={{ marginTop: 6 }}>Generating 100 tokens takes ~100x longer than a single token (quadratic with sequence length):</T>
-      <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 6 }}>
-        {[
-          { step: "Step 1", seq_len: 5, attn_pairs: 25, time: "1x" },
-          { step: "Step 2", seq_len: 6, attn_pairs: 36, time: "1.4x" },
-          { step: "Step 3", seq_len: 7, attn_pairs: 49, time: "2x" },
-          { step: "...", seq_len: "...", attn_pairs: "...", time: "..." },
-          { step: "Step 100", seq_len: 104, attn_pairs: 10816, time: "~432x" },
-        ].map(({ step, seq_len, attn_pairs, time }) => (
-          <div key={step} style={{ display: "flex", alignItems: "center", gap: 10, padding: "6px 10px", borderRadius: 6, background: "rgba(255,255,255,0.02)" }}>
-            <T color={C.dim} size={14} style={{ minWidth: 70 }}>{step}</T>
-            <T color={C.mid} size={13} style={{ minWidth: 60 }}>Seq len: {seq_len}</T>
-            <T color={C.mid} size={13} style={{ minWidth: 100 }}>Attn pairs: {attn_pairs}</T>
-            <T color={C.purple} bold size={14} style={{ minWidth: 40 }}>{time}</T>
+      <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 10 }}>
+        <div style={{ padding: 12, borderRadius: 8, background: `${C.cyan}06`, border: `1px solid ${C.cyan}12` }}>
+          <T color={C.cyan} bold size={16}>Full context at every step</T>
+          <T color={C.dim} size={14} style={{ marginTop: 4 }}>At step 4, the model does not just see "last". It sees ALL previous words: "The cat sat on the mat last". Every generated word gets the benefit of the entire history. The hidden layers process all of these words together, so the model never "forgets" what came before.</T>
+          <div style={{ marginTop: 8, display: "flex", gap: 4, flexWrap: "wrap" }}>
+            {["The", "cat", "sat", "on", "the", "mat", "last"].map((w, i) => (
+              <div key={i} style={{ padding: "3px 8px", borderRadius: 5, background: `${C.cyan}12`, border: `1px solid ${C.cyan}20` }}>
+                <T color={C.cyan} size={13}>{w}</T>
+              </div>
+            ))}
+            <T color={C.yellow} bold size={14} style={{ alignSelf: "center" }}>→ all visible at step 4</T>
           </div>
-        ))}
+        </div>
+
+        <div style={{ padding: 12, borderRadius: 8, background: `${C.purple}06`, border: `1px solid ${C.purple}12` }}>
+          <T color={C.purple} bold size={16}>Training matches generation</T>
+          <T color={C.dim} size={14} style={{ marginTop: 4 }}>The model was trained on exactly this task: given the words so far, predict the next one. So generation is not some new challenge - it is the exact thing the model practiced trillions of times during training.</T>
+        </div>
+
+        <div style={{ padding: 12, borderRadius: 8, background: `${C.orange}06`, border: `1px solid ${C.orange}12` }}>
+          <T color={C.orange} bold size={16}>Self-correction is built in</T>
+          <T color={C.dim} size={14} style={{ marginTop: 4 }}>Even if the model picks a slightly unexpected word at step 2, it adjusts at step 3. The full context includes the "mistake", and the model learned during training how to continue coherently from any plausible word. Errors rarely compound.</T>
+        </div>
       </div>
-      <T color="#b8a9ff" style={{ marginTop: 8 }}>This is why <strong>caching</strong> helps: store previous hidden states so you don't recompute attention for old tokens.</T>
+
+      <div style={{ marginTop: 14, padding: 12, borderRadius: 8, background: `${C.yellow}06`, border: `1px solid ${C.yellow}12` }}>
+        <T color={C.yellow} bold size={16}>When does it stop?</T>
+        <T color={C.dim} size={14} style={{ marginTop: 4 }}>The vocabulary includes a special stop token (like {"<END>"} or {"<|endoftext|>"}). When the model assigns the highest probability to this token, generation stops. It is a learned behavior - the model saw thousands of sentences ending during training and learned to predict the stop token at natural endpoints.</T>
+        <div style={{ marginTop: 8, padding: "8px 12px", borderRadius: 6, background: "rgba(0,0,0,0.3)" }}>
+          <T color={C.mid} size={14}>Step 5 input: "The cat sat on the mat last week"</T>
+          <T color={C.mid} size={14} style={{ marginTop: 2 }}>Model predicts: {"<END>"} with 85% confidence → <strong style={{ color: C.green }}>generation complete</strong></T>
+        </div>
+        <T color={C.dim} size={14} style={{ marginTop: 6 }}>In practice, there is also a <strong>max length limit</strong> (like 4096 tokens). If the model has not produced a stop token by then, generation is cut off.</T>
+      </div>
     </Box></Reveal>
 
     {sub < 4 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}

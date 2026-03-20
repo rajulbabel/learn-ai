@@ -144,7 +144,7 @@ export const CNN = (ctx) => {
               "The cat <em style={{ fontStyle: "italic", color: "#ffcdd2" }}>that I saw yesterday in the park</em> was sleeping."
             </T>
             <T color={C.dim} size={13} style={{ marginTop: 6 }}>
-              "cat" and "was" are grammatically linked (cat IS sleeping), but they're 9 words apart. A 3×3 filter on tokens cannot see from word 1 to word 10. A 5×5 filter struggles too.
+              "cat" and "was" are grammatically linked (cat is sleeping), but they're 9 words apart. A 3×3 filter on tokens cannot see from word 1 to word 10. A 5×5 filter struggles too.
             </T>
           </div>
           <T color="#ef9a9a" style={{ marginTop: 10 }}>

@@ -787,89 +787,454 @@ describe("SameBuildingBlocks sub-steps", () => {
   });
 });
 
-// ─── Chapter 2.7: Output Layer ───
+// ─── Chapter 2.8: Output Layer (rewritten with NN diagram) ───
 describe("OutputLayer sub-steps", () => {
   const fn = LLMTraining.OutputLayer;
 
-  it("sub 0 asks how the model produces probabilities", () => {
+  it("sub 0 explains hidden state from scratch with layer-by-layer visual", () => {
     const ctx = makeCtx({ sub: 0 });
     const { container } = render(fn(ctx));
     const text = container.textContent;
     expect(text).toContain("hidden state");
     expect(text).toContain("768");
+    expect(text).toContain("layer");
+    expect(text).toContain("vector");
   });
 
-  it("sub 1 shows the linear layer projecting to vocabulary size", () => {
+  it("sub 1 explains what logits are before using them", () => {
     const ctx = makeCtx({ sub: 1 });
     const { container } = render(fn(ctx));
     const text = container.textContent;
+    expect(text).toContain("logit");
+    expect(text).toContain("score");
     expect(text).toContain("50,000");
-    expect(text).toContain("linear");
   });
 
-  it("sub 2 introduces logits and softmax conversion", () => {
+  it("sub 2 shows the NN diagram from layers to output via unembedding", () => {
     const ctx = makeCtx({ sub: 2 });
     const { container } = render(fn(ctx));
     const text = container.textContent;
-    expect(text).toContain("logits");
-    expect(text).toContain("softmax");
+    expect(text).toContain("Unembedding");
+    expect(text).toContain("hidden state");
+    expect(text).toContain("unembedding matrix");
+    expect(text).not.toContain("Transformer");
   });
 
-  it("sub 3 shows the full pipeline end to end", () => {
+  it("sub 3 shows the unembedding matrix with concrete dot product example", () => {
     const ctx = makeCtx({ sub: 3 });
     const { container } = render(fn(ctx));
     const text = container.textContent;
-    expect(text).toContain("transformer");
-    expect(text).toContain("probabilities");
+    expect(text).toContain("dot product");
+    expect(text).toContain("row");
+    expect(text).toContain("logit");
+  });
+
+  it("sub 4 shows raw logits for sample tokens", () => {
+    const ctx = makeCtx({ sub: 4 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("logits");
+    expect(text).toContain("the");
+    expect(text).toContain("softmax");
+  });
+
+  it("sub 5 shows softmax conversion with concrete probabilities", () => {
+    const ctx = makeCtx({ sub: 5 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("probability");
+    expect(text).toContain("e^");
+  });
+
+  it("sub 6 explains why one linear layer works and parameter count", () => {
+    const ctx = makeCtx({ sub: 6 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("hidden layers");
+    expect(text).toContain("parameter");
+  });
+
+  it("sub 7 explains weight tying with visual similarity example", () => {
+    const ctx = makeCtx({ sub: 7 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("weight tying");
+    expect(text).toContain("embedding");
+    expect(text).toContain("mat");
+    expect(text).toContain("rug");
   });
 });
 
-// ─── Chapter 2.8: Autoregressive Generation ───
+// ─── Chapter 2.9: Autoregressive Generation ───
 describe("AutoregressiveGeneration sub-steps", () => {
   const fn = LLMTraining.AutoregressiveGeneration;
 
-  it("sub 0 introduces training vs inference distinction", () => {
+  it("sub 0 introduces training vs generation distinction with visual contrast", () => {
     const ctx = makeCtx({ sub: 0 });
     const { container } = render(fn(ctx));
     const text = container.textContent;
     expect(text).toContain("training");
-    expect(text).toContain("inference");
+    expect(text).toContain("one word at a time");
   });
 
-  it("sub 1 shows the token-by-token loop", () => {
+  it("sub 1 shows step-by-step generation with full pipeline per step", () => {
     const ctx = makeCtx({ sub: 1 });
     const { container } = render(fn(ctx));
     const text = container.textContent;
-    expect(text).toContain("one");
-    expect(text).toContain("Predict");
+    expect(text).toContain("The");
+    expect(text).toContain("cat");
+    expect(text).toContain("mat");
+    expect(text).toContain("softmax");
   });
 
-  it("sub 2 shows growing context window step by step", () => {
+  it("sub 2 explains greedy vs sampling vs top-k with probability bars", () => {
     const ctx = makeCtx({ sub: 2 });
     const { container } = render(fn(ctx));
     const text = container.textContent;
-    expect(text).toContain("probability");
     expect(text).toContain("Greedy");
+    expect(text).toContain("probability");
+    expect(text).toContain("Top");
   });
 
-  it("sub 3 explains stop conditions and connects to masking", () => {
+  it("sub 3 explains temperature as the creativity dial with concrete examples", () => {
     const ctx = makeCtx({ sub: 3 });
     const { container } = render(fn(ctx));
     const text = container.textContent;
-    expect(text).toContain("Context");
-    expect(text).toContain("attention");
+    expect(text).toContain("Temperature");
+    expect(text).toContain("logit");
+  });
+
+  it("sub 4 explains why generation works and when it stops", () => {
+    const ctx = makeCtx({ sub: 4 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("context");
+    expect(text).toContain("stop");
+    // Must NOT reference attention - learner hasn't seen it yet
+    expect(text.toLowerCase()).not.toContain("self-attention");
+    expect(text.toLowerCase()).not.toContain("attention pairs");
+  });
+
+  it("does not reference attention concepts anywhere (not yet taught)", () => {
+    const ctx = makeCtx({ sub: 4 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent.toLowerCase();
+    expect(text).not.toContain("self-attention");
+    expect(text).not.toContain("attention pairs");
+    expect(text).not.toContain("attn pairs");
+    expect(text).not.toContain("quadratic");
   });
 });
 
-// ─── Chapter 2.5 RLHF fix: must mention PPO ───
-describe("RLHF names real algorithms", () => {
+// ─── Chapter 2.5 RLHF: split reward model and PPO into multiple boxes ───
+describe("RLHF split boxes", () => {
   const fn = LLMTraining.RLHF;
 
-  it("sub 3 or later mentions PPO", () => {
+  // Sub 3: Reward model - what it is + how it learns
+  it("sub 3 shows the reward model as a neural network that scores responses", () => {
+    const ctx = makeCtx({ sub: 3 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("neural network");
+    expect(text).toContain("score");
+  });
+
+  it("sub 3 shows concrete training data for the reward model with winner/loser pairs", () => {
+    const ctx = makeCtx({ sub: 3 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("winner");
+    expect(text).toContain("loser");
+  });
+
+  it("sub 3 explains what the reward model learns to detect", () => {
+    const ctx = makeCtx({ sub: 3 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("helpful");
+  });
+
+  it("sub 3 does NOT show scored responses - those are in sub 4", () => {
+    const ctx = makeCtx({ sub: 3 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).not.toContain("score any response");
+  });
+
+  // Sub 4: Reward model - after training, scored responses
+  it("sub 4 shows scored responses after training", () => {
+    const ctx = makeCtx({ sub: 4 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("score any response");
+    expect(text).toContain("8.5");
+  });
+
+  it("sub 4 transitions to PPO by explaining why reward model replaces humans", () => {
     const ctx = makeCtx({ sub: 4 });
     const { container } = render(fn(ctx));
     const text = container.textContent;
     expect(text).toContain("PPO");
+    expect(text).toContain("instant");
+  });
+
+  it("sub 4 does NOT show PPO loop - that is in sub 5", () => {
+    const ctx = makeCtx({ sub: 4 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).not.toContain("Proximal Policy Optimization");
+  });
+
+  // Sub 5: PPO 4-step loop
+  it("sub 5 mentions PPO and shows the training loop", () => {
+    const ctx = makeCtx({ sub: 5 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("PPO");
+    expect(text).toContain("Generate");
+    expect(text).toContain("Score");
+    expect(text).toContain("Compare");
+    expect(text).toContain("Nudge");
+  });
+
+  it("sub 5 does NOT show KL divergence details - that is in sub 6", () => {
+    const ctx = makeCtx({ sub: 5 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).not.toContain("Kullback-Leibler");
+  });
+
+  // Sub 6: KL divergence concrete example
+  it("sub 6 explains KL divergence with concrete bar chart comparison", () => {
+    const ctx = makeCtx({ sub: 6 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("KL");
+    expect(text).toContain("Kullback-Leibler");
+    expect(text).toContain("SFT");
+    expect(text).toContain("40%");
+    expect(text).toContain("85%");
+  });
+
+  it("sub 6 does NOT show formula worked examples - that is in sub 7", () => {
+    const ctx = makeCtx({ sub: 6 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).not.toContain("Reward hacking");
+  });
+
+  // Sub 7: Formula + worked examples + why KL needed
+  it("sub 7 shows the formula with reward, KL, and beta", () => {
+    const ctx = makeCtx({ sub: 7 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("Reward");
+    expect(text).toContain("beta");
+    expect(text).toContain("8.5");
+  });
+
+  it("sub 7 shows worked examples with concrete math", () => {
+    const ctx = makeCtx({ sub: 7 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("0.2");
+    expect(text).toContain("Reward hacking");
+  });
+
+  it("sub 7 explains why KL penalty is necessary", () => {
+    const ctx = makeCtx({ sub: 7 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("KL penalty");
+    expect(text).toContain("shortcuts");
+  });
+
+  // Sub 8: Why RLHF matters (was sub 5)
+  it("sub 8 explains why RLHF matters with concrete problems it solves", () => {
+    const ctx = makeCtx({ sub: 8 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("reward");
+    expect(text).toContain("SFT");
+  });
+});
+
+// ─── Chapter 2.3: CrossEntropy - graph and formula ───
+describe("CrossEntropy graph and formula", () => {
+  const fn = LLMTraining.CrossEntropy;
+
+  it("sub 1 shows the -log(P) formula as an SVG visual", () => {
+    const ctx = makeCtx({ sub: 1 });
+    const { container } = render(fn(ctx));
+    const svg = container.querySelector("svg");
+    expect(svg).toBeTruthy();
+    const text = container.textContent;
+    expect(text).toContain("log");
+  });
+
+  it("sub 1 shows the -log(P) graph curve", () => {
+    const ctx = makeCtx({ sub: 1 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("0.0");
+    expect(text).toContain("1.0");
+    // Graph has axis labels
+    expect(text).toContain("probability");
+  });
+
+  it("sub 1 explains the graph with concrete LLM examples", () => {
+    const ctx = makeCtx({ sub: 1 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("mat");
+    expect(text).toContain("confident");
+  });
+
+  it("sub 1 does NOT contain the weather forecaster example (that is sub 2)", () => {
+    const ctx = makeCtx({ sub: 1 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).not.toContain("weather");
+  });
+});
+
+// ─── Chapter 2.4: NNInAction - The Neural Network in Action ───
+describe("NNInAction sub-steps", () => {
+  const fn = LLMTraining.NNInAction;
+
+  it("sub 0 shows the 20-word vocabulary grid", () => {
+    const ctx = makeCtx({ sub: 0 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("20 words");
+    expect(text).toContain("the");
+    expect(text).toContain("cat");
+    expect(text).toContain("with");
+  });
+
+  it("sub 0 shows word IDs in the vocabulary", () => {
+    const ctx = makeCtx({ sub: 0 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("[0]");
+    expect(text).toContain("[19]");
+  });
+
+  it("sub 1 shows the input sentence The cat sat on with predict question", () => {
+    const ctx = makeCtx({ sub: 1 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("The");
+    expect(text).toContain("cat");
+    expect(text).toContain("sat");
+    expect(text).toContain("on");
+    expect(text).toContain("???");
+  });
+
+  it("sub 2 shows the neural network diagram with layers", () => {
+    const ctx = makeCtx({ sub: 2 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("Input");
+    expect(text).toContain("Hidden");
+    expect(text).toContain("Output");
+    expect(text).toContain("weight");
+  });
+
+  it("sub 3 shows how the mat output circle computes its score", () => {
+    const ctx = makeCtx({ sub: 3 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("mat");
+    expect(text).toContain("logit");
+    expect(text).toContain("4.40");
+  });
+
+  it("sub 4 shows raw scores for all 20 words", () => {
+    const ctx = makeCtx({ sub: 4 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("Raw scores");
+    expect(text).toContain("the");
+    expect(text).toContain("4.2");
+    expect(text).toContain("mat");
+    expect(text).toContain("3.8");
+  });
+
+  it("sub 5 shows softmax conversion with e^score", () => {
+    const ctx = makeCtx({ sub: 5 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("softmax");
+    expect(text).toContain("2.718");
+  });
+
+  it("sub 6 shows final probability bars with the as highest", () => {
+    const ctx = makeCtx({ sub: 6 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("probability");
+    expect(text).toContain("the");
+    expect(text).toContain("38.3%");
+  });
+
+  it("sub 7 shows the key insight that it is all multiply and add", () => {
+    const ctx = makeCtx({ sub: 7 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("multiply");
+    expect(text).toContain("add");
+    expect(text).toContain("weight");
+  });
+});
+
+// ─── Chapter 2.5: SFT in depth ───
+describe("SFT sub-steps", () => {
+  const fn = LLMTraining.SFT;
+
+  it("sub 0 explains the problem - model predicts generic internet text", () => {
+    const ctx = makeCtx({ sub: 0 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("internet");
+    expect(text).toContain("predict");
+  });
+
+  it("sub 1 shows SFT training data format with User/Assistant pairs", () => {
+    const ctx = makeCtx({ sub: 1 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("User:");
+    expect(text).toContain("Assistant:");
+  });
+
+  it("sub 2 shows loss computed only on assistant tokens position by position", () => {
+    const ctx = makeCtx({ sub: 2 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("no loss");
+  });
+
+  it("sub 3 shows before vs after SFT probability shift", () => {
+    const ctx = makeCtx({ sub: 3 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("Before");
+    expect(text).toContain("After");
+  });
+
+  it("sub 4 reveals the hidden prompt template wrapping", () => {
+    const ctx = makeCtx({ sub: 4 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("template");
+  });
+
+  it("sub 5 explains why 100K examples is enough", () => {
+    const ctx = makeCtx({ sub: 5 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("100K");
   });
 });
 
@@ -961,5 +1326,40 @@ describe("DecoderOnly sub-steps", () => {
     const { container } = render(fn(ctx));
     const text = container.textContent;
     expect(text).toContain("decoder-only wins");
+  });
+});
+
+describe("source files have no standalone uppercase IS", () => {
+  const sectionFiles = [
+    "llm-training.jsx",
+    "road-to-transformers.jsx",
+    "neural-foundations.jsx",
+    "scaling.jsx",
+    "transformer-input.jsx",
+    "attention-qkv.jsx",
+    "attention-computation.jsx",
+    "transformer-block.jsx",
+    "toc.jsx",
+  ];
+
+  sectionFiles.forEach((file) => {
+    it(`${file} has no standalone uppercase IS in string literals`, async () => {
+      const fs = await import("fs");
+      const path = await import("path");
+      const filePath = path.resolve(__dirname, "..", "sections", file);
+      const content = fs.readFileSync(filePath, "utf-8");
+      // Match standalone IS (word boundary) inside JSX string content
+      // Exclude CLIP, THIS, RLHF and other valid acronyms - only match standalone IS
+      const lines = content.split("\n");
+      const violations = [];
+      lines.forEach((line, i) => {
+        // Skip import lines and comment-only lines
+        if (line.trim().startsWith("import ") || line.trim().startsWith("//")) return;
+        // Find standalone IS (surrounded by word boundaries, not part of larger word)
+        const matches = line.match(/\bIS\b/g);
+        if (matches) violations.push({ line: i + 1, text: line.trim() });
+      });
+      expect(violations).toEqual([]);
+    });
   });
 });

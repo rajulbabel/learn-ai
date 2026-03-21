@@ -684,10 +684,59 @@ export const FeedForwardNetwork = (ctx) => { const { sub, subBtnRipple, setSubBt
         <T color={C.dim} center size={12}>FFN never sees the raw input - it always receives attention's output. Attention gathers context from other words. Then FFN transforms that context-enriched vector.</T>
       </div>
 
-      <T color="#90caf9" bold center size={16} style={{ marginTop: 14 }}>Example: "The capital of France is ___"</T>
-      <T color={C.dim} center size={12} style={{ marginTop: 2 }}>Tracing what happens inside one critical block</T>
-      <div style={{ marginTop: 12, display: "flex", gap: 12 }}>
-        <div style={{ flex: 1, padding: 12, borderRadius: 10, background: `${C.pink}06`, border: `1px solid ${C.pink}20` }}>
+      {/* Example 1: Area/Length/Breadth - implicit knowledge */}
+      <T color="#90caf9" bold center size={16} style={{ marginTop: 14 }}>Example 1: "The area of this rectangle depends on its length"</T>
+      <T color={C.dim} center size={12} style={{ marginTop: 2 }}>Notice: "breadth" is never mentioned - but the model knows it matters</T>
+      <div style={{ marginTop: 12, display: "flex", gap: 12, flexWrap: "wrap" }}>
+        <div style={{ flex: "1 1 200px", padding: 12, borderRadius: 10, background: `${C.pink}06`, border: `1px solid ${C.pink}20` }}>
+          <T color={C.pink} bold center size={15}>Attention Runs First</T>
+          <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 6 }}>
+            <div style={{ padding: "6px 10px", borderRadius: 6, background: `${C.pink}08` }}>
+              <T color={C.pink} bold size={13}>Q &middot; K scores for "area"</T>
+              <T color={C.dim} size={12}>"area"'s Query asks "what determines me?" "length"'s Key scores high (0.55 after softmax) - they're clearly related. "rectangle"'s Key also matches (0.30) - it tells area what shape we're talking about.</T>
+            </div>
+            <div style={{ padding: "6px 10px", borderRadius: 6, background: `${C.pink}08` }}>
+              <T color={C.pink} bold size={13}>Weighted sum of Values</T>
+              <T color={C.dim} size={12}>Output = 0.55 &middot; V<sub>length</sub> + 0.30 &middot; V<sub>rectangle</sub> + ... The "area" vector now carries: "I'm the area of a rectangle and length is involved."</T>
+            </div>
+            <div style={{ padding: "6px 10px", borderRadius: 6, background: `${C.pink}08` }}>
+              <T color={C.pink} bold size={13}>Result: context assembled, but incomplete</T>
+              <T color={C.dim} size={12}>Attention found real connections between words <strong>that exist in the input</strong>. But "breadth" is not in the sentence. Attention can only mix what's there - it cannot add knowledge that's missing from the text.</T>
+            </div>
+          </div>
+        </div>
+        <div style={{ flex: "1 1 200px", padding: 12, borderRadius: 10, background: `${C.orange}06`, border: `1px solid ${C.orange}20` }}>
+          <T color={C.orange} bold center size={15}>Then FFN Adds Stored Knowledge</T>
+          <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 6 }}>
+            <div style={{ padding: "6px 10px", borderRadius: 6, background: `${C.orange}08` }}>
+              <T color={C.orange} bold size={13}>W<sub>1</sub>: "rectangle-area" detector fires</T>
+              <T color={C.dim} size={12}>FFN receives the attention-enriched "area" vector (which already encodes "rectangle + length"). Row 1203 of W<sub>1</sub> was trained on millions of math texts - it detects "area of a rectangle with length mentioned." Dot product: <code style={{ color: C.orange }}>W<sub>1</sub>[1203] &middot; x = 3.9</code></T>
+            </div>
+            <div style={{ padding: "6px 10px", borderRadius: 6, background: `${C.orange}08` }}>
+              <T color={C.orange} bold size={13}>GELU activates the right knowledge</T>
+              <T color={C.dim} size={12}>GELU(3.9) = 3.89 → neuron 1203 fires strongly. Meanwhile, neuron 502 ("circle-area-pi") got -0.8 → GELU suppresses it. The network knows this is a rectangle, not a circle.</T>
+            </div>
+            <div style={{ padding: "6px 10px", borderRadius: 6, background: `${C.orange}08` }}>
+              <T color={C.orange} bold size={13}>W<sub>2</sub>: pushes "area" toward breadth-aware region</T>
+              <T color={C.dim} size={12}>Column 1203 of W<sub>2</sub> shifts the vector into a region of embedding space that encodes "area = length x breadth, breadth is the missing factor." The model now <strong>implicitly knows breadth matters</strong> - even though the word never appeared in the input.</T>
+            </div>
+          </div>
+          <div style={{ marginTop: 8, padding: "6px 8px", borderRadius: 6, background: `${C.orange}10` }}>
+            <T color={C.orange} bold size={12}>This is what "stored knowledge" means</T>
+            <T color={C.dim} size={11}>During training, the FFN saw "area = length x breadth" thousands of times. That relationship got baked into W<sub>1</sub> row 1203 (detector) and W<sub>2</sub> column 1203 (output). Attention found the words in the sentence. FFN added what it knows from training.</T>
+          </div>
+        </div>
+      </div>
+
+    </Box></Reveal>
+    {sub === 5 && <SubBtn onClick={() => navigate("forward")} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
+
+    {/* Sub 6: Example 2 - factual recall */}
+    <Reveal when={sub >= 6}><Box color={C.green} style={{ width: "100%" }}>
+      <T color="#80e8a5" bold center size={20}>Example 2: "The capital of France is ___"</T>
+      <T color={C.dim} center size={13} style={{ marginTop: 2 }}>Attention gathers context, FFN recalls the fact</T>
+      <div style={{ marginTop: 12, display: "flex", gap: 12, flexWrap: "wrap" }}>
+        <div style={{ flex: "1 1 200px", padding: 12, borderRadius: 10, background: `${C.pink}06`, border: `1px solid ${C.pink}20` }}>
           <T color={C.pink} bold center size={15}>Attention Runs First</T>
           <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 6 }}>
             <div style={{ padding: "6px 10px", borderRadius: 6, background: `${C.pink}08` }}>
@@ -699,25 +748,25 @@ export const FeedForwardNetwork = (ctx) => { const { sub, subBtnRipple, setSubBt
               <T color={C.dim} size={12}>Output = 0.72 &middot; V<sub>France</sub> + 0.18 &middot; V<sub>capital</sub> + ... This is a <strong>blend</strong> - a weighted average. It mixes "France" info into the "___" position.</T>
             </div>
             <div style={{ padding: "6px 10px", borderRadius: 6, background: `${C.pink}08` }}>
-              <T color={C.pink} bold size={13}>Result: context assembled, but no answer</T>
-              <T color={C.dim} size={12}>The "___" vector now encodes "I need the capital of France." But attention can only average existing vectors - it cannot look up a fact. It doesn't know the answer is "Paris."</T>
+              <T color={C.pink} bold size={13}>Result: context assembled, but no answer yet</T>
+              <T color={C.dim} size={12}>The "___" vector now encodes "I need the capital of France." But attention can only average existing vectors - it cannot look up a fact. It assembled the question, not the answer.</T>
             </div>
           </div>
         </div>
-        <div style={{ flex: 1, padding: 12, borderRadius: 10, background: `${C.orange}06`, border: `1px solid ${C.orange}20` }}>
-          <T color={C.orange} bold center size={15}>Then FFN Processes That Output</T>
+        <div style={{ flex: "1 1 200px", padding: 12, borderRadius: 10, background: `${C.orange}06`, border: `1px solid ${C.orange}20` }}>
+          <T color={C.orange} bold center size={15}>Then FFN Recalls the Fact</T>
           <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 6 }}>
             <div style={{ padding: "6px 10px", borderRadius: 6, background: `${C.orange}08` }}>
-              <T color={C.orange} bold size={13}>W<sub>1</sub>: 2048 pattern detectors fire</T>
-              <T color={C.dim} size={12}>Each row of W<sub>1</sub> is a learned detector. Row 847 detects the "capital-of-France" pattern in the vector that attention assembled. Its dot product is high: <code style={{ color: C.orange }}>W<sub>1</sub>[847] &middot; x = 4.2</code></T>
+              <T color={C.orange} bold size={13}>W<sub>1</sub>: "capital-of-France" detector fires</T>
+              <T color={C.dim} size={12}>Row 847 of W<sub>1</sub> was trained on millions of geography texts. It detects the "capital-of-France" pattern in the vector that attention assembled. Dot product: <code style={{ color: C.orange }}>W<sub>1</sub>[847] &middot; x = 4.2</code></T>
             </div>
             <div style={{ padding: "6px 10px", borderRadius: 6, background: `${C.orange}08` }}>
               <T color={C.orange} bold size={13}>GELU: only relevant knowledge survives</T>
-              <T color={C.dim} size={12}>GELU(4.2) = 4.19 → neuron 847 fires. GELU(-1.3) = -0.05 → neuron 200 ("capital-of-Germany") is suppressed. Of 2048 neurons, maybe 100-300 fire meaningfully.</T>
+              <T color={C.dim} size={12}>GELU(4.2) = 4.19 → neuron 847 fires. GELU(-1.3) = -0.05 → neuron 200 ("capital-of-Germany") is suppressed. Of 2048 neurons, maybe 100-300 fire meaningfully for any given input.</T>
             </div>
             <div style={{ padding: "6px 10px", borderRadius: 6, background: `${C.orange}08` }}>
               <T color={C.orange} bold size={13}>W<sub>2</sub>: writes "Paris" into the vector</T>
-              <T color={C.dim} size={12}>Column 847 of W<sub>2</sub> was trained to shift vectors toward "Paris." Since neuron 847 fired at 4.19, its column dominates the output: <code style={{ color: C.orange }}>output += 4.19 &middot; W<sub>2</sub>[:,847]</code></T>
+              <T color={C.dim} size={12}>Column 847 of W<sub>2</sub> was trained to shift vectors toward "Paris." Since neuron 847 fired at 4.19, its column dominates the output: <code style={{ color: C.orange }}>output += 4.19 &middot; W<sub>2</sub>[:,847]</code>. The answer is now in the vector.</T>
             </div>
           </div>
           <div style={{ marginTop: 8, padding: "6px 8px", borderRadius: 6, background: `${C.orange}10` }}>
@@ -727,58 +776,62 @@ export const FeedForwardNetwork = (ctx) => { const { sub, subBtnRipple, setSubBt
         </div>
       </div>
     </Box></Reveal>
-    {sub === 5 && <SubBtn onClick={() => navigate("forward")} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
+    {sub === 6 && <SubBtn onClick={() => navigate("forward")} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
 
-    {/* Sub 6: Example 2 - multi-block collaboration */}
-    <Reveal when={sub >= 6}><Box color={C.purple} style={{ width: "100%" }}>
+    {/* Sub 7: Example 3 - multi-block collaboration */}
+    <Reveal when={sub >= 7}><Box color={C.purple} style={{ width: "100%" }}>
       <T color="#b8a9ff" bold center size={20}>Attention + FFN Across Multiple Blocks</T>
-      <T color="#b8a9ff" bold center size={16} style={{ marginTop: 6 }}>Example: "She sat by the river bank"</T>
-      <T color={C.dim} center size={13} style={{ marginTop: 2 }}>Does "bank" mean money or riverbed? Watch attention and FFN collaborate across blocks.</T>
+      <T color="#b8a9ff" bold center size={16} style={{ marginTop: 6 }}>Example 3: "She sat by the river bank"</T>
+      <T color={C.dim} center size={13} style={{ marginTop: 2 }}>Does "bank" mean money or riverbed? Watch attention and FFN collaborate across blocks to resolve the ambiguity.</T>
 
       <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 8 }}>
         <div style={{ padding: 12, borderRadius: 10, background: `${C.green}06`, border: `1px solid ${C.green}20` }}>
           <T color={C.green} bold size={14}>Block 1: Basic context gathering</T>
-          <div style={{ marginTop: 6, display: "flex", gap: 10 }}>
-            <div style={{ flex: 1, padding: "6px 8px", borderRadius: 6, background: `${C.pink}06` }}>
+          <div style={{ marginTop: 6, display: "flex", gap: 10, flexWrap: "wrap" }}>
+            <div style={{ flex: "1 1 180px", padding: "6px 8px", borderRadius: 6, background: `${C.pink}06` }}>
               <T color={C.pink} bold size={12}>Attention</T>
-              <T color={C.dim} size={11}>"bank"'s Query matches "river"'s Key (adjacent, high score). After softmax, "bank" absorbs ~40% of "river"'s Value vector. Result: "bank" now carries "I'm next to the word river."</T>
+              <T color={C.dim} size={11}>"bank"'s Query matches "river"'s Key (adjacent words, high positional score). After softmax, "bank" absorbs ~40% of "river"'s Value vector. "sat" gets ~20% (nearby verb). Result: "bank" now carries "I'm next to the word river and someone sat."</T>
             </div>
-            <div style={{ flex: 1, padding: "6px 8px", borderRadius: 6, background: `${C.orange}06` }}>
+            <div style={{ flex: "1 1 180px", padding: "6px 8px", borderRadius: 6, background: `${C.orange}06` }}>
               <T color={C.orange} bold size={12}>FFN (receives attention's output)</T>
-              <T color={C.dim} size={11}>Sees "bank + some river context." The "river-location" detector in W<sub>1</sub> fires weakly (1.2) - the signal is there but faint. The "financial" detector also fires weakly (0.8). GELU passes both. <strong>Ambiguity not yet resolved.</strong></T>
+              <T color={C.dim} size={11}>Sees "bank + some river context." W<sub>1</sub> row 310 ("river-location" detector) fires weakly: <code style={{ color: C.orange }}>1.2</code>. W<sub>1</sub> row 744 ("financial-institution" detector) also fires weakly: <code style={{ color: C.orange }}>0.8</code>. GELU passes both through. W<sub>2</sub> nudges the vector slightly toward both meanings. <strong>Ambiguity not yet resolved.</strong></T>
             </div>
           </div>
         </div>
 
         <div style={{ padding: 12, borderRadius: 10, background: `${C.yellow}06`, border: `1px solid ${C.yellow}20` }}>
           <T color={C.yellow} bold size={14}>Block 5: Deeper semantic understanding</T>
-          <div style={{ marginTop: 6, display: "flex", gap: 10 }}>
-            <div style={{ flex: 1, padding: "6px 8px", borderRadius: 6, background: `${C.pink}06` }}>
+          <div style={{ marginTop: 6, display: "flex", gap: 10, flexWrap: "wrap" }}>
+            <div style={{ flex: "1 1 180px", padding: "6px 8px", borderRadius: 6, background: `${C.pink}06` }}>
               <T color={C.pink} bold size={12}>Attention</T>
-              <T color={C.dim} size={11}>"bank" now attends to "sat" (physical action, not financial), "by" (location preposition), and "river" with a much higher score than Block 1. Why higher? Because Block 1-4 FFNs already strengthened the "nature/location" features in both "sat" and "river." Richer vectors = sharper attention.</T>
+              <T color={C.dim} size={11}>"bank" now attends to "sat" (physical action, not financial), "by" (location preposition), and "river" with much higher scores than Block 1. Why higher? Because Blocks 1-4 FFNs already strengthened the "nature/location" features in "sat" and "river." Their Value vectors are now richer, so the weighted sum gives "bank" a much stronger location signal.</T>
             </div>
-            <div style={{ flex: 1, padding: "6px 8px", borderRadius: 6, background: `${C.orange}06` }}>
+            <div style={{ flex: "1 1 180px", padding: "6px 8px", borderRadius: 6, background: `${C.orange}06` }}>
               <T color={C.orange} bold size={12}>FFN (receives attention's output)</T>
-              <T color={C.dim} size={11}>Now the "river-location" detector in W<sub>1</sub> fires at 3.8 (strong match). The "financial" detector fires at -1.1 (GELU suppresses to -0.03, effectively dead). W<sub>2</sub> column for "river-location" shifts the vector hard toward geography/nature features. <strong>"Bank" now means "riverbank."</strong></T>
+              <T color={C.dim} size={11}>Now row 310 ("river-location") fires at <code style={{ color: C.orange }}>3.8</code> (strong match). Row 744 ("financial") fires at <code style={{ color: C.orange }}>-1.1</code> → GELU(-1.1) = -0.03, effectively dead. W<sub>2</sub> column 310 shifts the vector hard toward geography/nature features, column 744 contributes almost nothing. <strong>"Bank" now means "riverbank" - ambiguity resolved.</strong></T>
             </div>
           </div>
         </div>
 
         <div style={{ padding: 10, borderRadius: 6, background: `${C.purple}08`, border: `1px solid ${C.purple}15` }}>
           <T color="#b8a9ff" bold center size={13}>Why this takes multiple blocks</T>
-          <T color={C.dim} size={12} style={{ marginTop: 4 }}>Each round, attention provides <strong>better context</strong> because FFN improved the vectors, and FFN makes <strong>better decisions</strong> because attention gathered more context. They bootstrap each other across 96 blocks.</T>
+          <T color={C.dim} size={12} style={{ marginTop: 4 }}>Each round, attention provides <strong>better context</strong> because FFN improved the vectors, and FFN makes <strong>better decisions</strong> because attention gathered more context. They bootstrap each other. Block 1 FFN nudges slightly, Block 2 attention uses that nudge to focus better, Block 2 FFN nudges harder, and so on across all 96 blocks.</T>
         </div>
       </div>
 
       <div style={{ marginTop: 10, padding: 10, borderRadius: 8, background: `${C.yellow}08`, border: `1px solid ${C.yellow}20` }}>
-        <T color="#fff176" bold center size={15}>In one sentence:</T>
-        <T color="#fff176" center size={14} style={{ marginTop: 4 }}>Attention is the ears (listens to context). FFN is the brain (knows things and thinks about what it heard).</T>
+        <T color="#fff176" bold center size={15}>Three examples, three types of FFN knowledge:</T>
+        <div style={{ marginTop: 6, display: "flex", flexDirection: "column", gap: 4 }}>
+          <T color="#fff176" size={13}><strong>1. Implicit knowledge</strong> (area/breadth) - FFN adds concepts that aren't in the input but are related by training data</T>
+          <T color="#fff176" size={13}><strong>2. Factual recall</strong> (France/Paris) - FFN looks up a stored fact and writes the answer into the vector</T>
+          <T color="#fff176" size={13}><strong>3. Disambiguation</strong> (bank/river) - FFN resolves ambiguity by suppressing wrong meanings and boosting the right one</T>
+        </div>
       </div>
     </Box></Reveal>
-    {sub === 6 && <SubBtn onClick={() => navigate("forward")} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
+    {sub === 7 && <SubBtn onClick={() => navigate("forward")} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
 
-    {/* Sub 7: Deep Q&A */}
-    <Reveal when={sub >= 7}><Box color={C.cyan} style={{ width: "100%" }}>
+    {/* Sub 8: Deep Q&A */}
+    <Reveal when={sub >= 8}><Box color={C.cyan} style={{ width: "100%" }}>
       <T color="#80deea" bold center size={20}>Deep Questions You Should Be Able to Answer</T>
       <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 8 }}>
         {[
@@ -794,10 +847,10 @@ export const FeedForwardNetwork = (ctx) => { const { sub, subBtnRipple, setSubBt
         ))}
       </div>
     </Box></Reveal>
-    {sub === 7 && <SubBtn onClick={() => navigate("forward")} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
+    {sub === 8 && <SubBtn onClick={() => navigate("forward")} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
 
-    {/* Sub 8: Where do the parameters live? */}
-    <Reveal when={sub >= 8}><Box color={C.purple} style={{ width: "100%" }}>
+    {/* Sub 9: Where do the parameters live? */}
+    <Reveal when={sub >= 9}><Box color={C.purple} style={{ width: "100%" }}>
       <T color="#b8a9ff" bold center size={20}>Where Do the Parameters Live?</T>
       <T color="#b8a9ff" size={16} style={{ marginTop: 6 }}>Parameters are all the learnable numbers in the model - every weight and bias that got tuned during training (chapter 1.4). They are the model's "memory." More parameters = more capacity to store knowledge.</T>
 

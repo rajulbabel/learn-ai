@@ -1531,34 +1531,45 @@ describe("FeedForwardNetwork sub-steps", () => {
     expect(text).toContain("smooth");
   });
 
-  it("sub 5 shows France/Paris example of attention vs FFN", () => {
+  it("sub 5 shows area/length/breadth example", () => {
     const ctx = makeCtx({ sub: 5 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("area");
+    expect(text).toContain("length");
+    expect(text).toContain("breadth");
+    expect(text).toContain("knowledge");
+  });
+
+  it("sub 6 shows France/Paris factual recall example", () => {
+    const ctx = makeCtx({ sub: 6 });
     const { container } = render(fn(ctx));
     const text = container.textContent;
     expect(text).toContain("France");
     expect(text).toContain("Paris");
-    expect(text).toContain("knowledge");
-    expect(text).toContain("attention");
+    expect(text).toContain("847");
   });
 
-  it("sub 6 shows bank/river multi-block example", () => {
-    const ctx = makeCtx({ sub: 6 });
+  it("sub 7 shows bank/river multi-block example with detector details", () => {
+    const ctx = makeCtx({ sub: 7 });
     const { container } = render(fn(ctx));
     const text = container.textContent;
     expect(text).toContain("bank");
     expect(text).toContain("river");
+    expect(text).toContain("Block 1");
+    expect(text).toContain("Block 5");
   });
 
-  it("sub 7 shows deep Q&A", () => {
-    const ctx = makeCtx({ sub: 7 });
+  it("sub 8 shows deep Q&A", () => {
+    const ctx = makeCtx({ sub: 8 });
     const { container } = render(fn(ctx));
     const text = container.textContent;
     expect(text).toContain("attention replace FFN");
     expect(text).toContain("FFN replace attention");
   });
 
-  it("sub 8 shows parameter breakdown in its own box", () => {
-    const ctx = makeCtx({ sub: 8 });
+  it("sub 9 shows parameter breakdown in its own box", () => {
+    const ctx = makeCtx({ sub: 9 });
     const { container } = render(fn(ctx));
     const text = container.textContent;
     expect(text).toContain("parameter");

@@ -257,6 +257,65 @@ describe("AttentionScores hovered", () => {
   }
 });
 
+// ─── Chapter 7.9: Causal Masking - Hiding the Future ───
+describe("CausalMask sub-steps", () => {
+  const fn = AttentionComputation.CausalMask;
+
+  it("sub 0 shows the problem - future words shouldn't be visible during generation", () => {
+    const ctx = makeCtx({ sub: 0 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("generat");
+    expect(text).toContain("future");
+  });
+
+  it("sub 1 shows who-can-look-at-whom grid and unmasked score matrix", () => {
+    const ctx = makeCtx({ sub: 1 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("score");
+    expect(text).toMatch(/The|cat|sat|on/);
+    expect(text).toContain("diagonal");
+    expect(text).toContain("future");
+  });
+
+  it("sub 2 shows the mask matrix with -infinity for future positions", () => {
+    const ctx = makeCtx({ sub: 2 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toMatch(/-inf|infinity|\u221E/i);
+    expect(text).toContain("mask");
+  });
+
+  it("sub 3 shows masked scores and softmax turning -inf to 0", () => {
+    const ctx = makeCtx({ sub: 3 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("softmax");
+    expect(text).toContain("0.00");
+  });
+
+  it("sub 4 shows bidirectional vs causal visual comparison", () => {
+    const ctx = makeCtx({ sub: 4 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toMatch(/[Bb]idirectional/);
+    expect(text).toMatch(/[Cc]ausal/);
+  });
+
+  it("sub 5 shows three architectures with encoder/decoder context and why", () => {
+    const ctx = makeCtx({ sub: 5 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("ENCODER-ONLY");
+    expect(text).toContain("DECODER-ONLY");
+    expect(text).toContain("ENCODER-DECODER");
+    expect(text).toContain("BERT");
+    expect(text).toContain("GPT");
+    expect(text).toContain("generate");
+  });
+});
+
 // ─── WhyMultiHead label width fix ───
 describe("WhyMultiHead compromise bar labels", () => {
   const fn = AttentionComputation.WhyMultiHead;

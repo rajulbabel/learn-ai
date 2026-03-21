@@ -165,13 +165,14 @@ Only config.js IDs change.
 | 7.6 | SoftmaxProbs | Step 4 - Softmax to Probabilities |
 | 7.7 | WeightedSum | Step 5 - Weighted Sum of Values |
 | 7.8 | FullFormula | The Full Formula |
-| 7.9 | WhyMultiHead | Why Multi-Head? - The Compromise Problem |
-| 7.10 | HeadSplit | The Split - How 8 Heads Work |
-| 7.11 | InsideEachHead | Inside Each Head - Full Attention in 64 Dims |
-| 7.12 | ConcatWO | Concat + W_O - Blending All Heads |
-| 7.13 | WhyEightHeads | Why 8 Heads? Parameter Count & Big Picture |
-| 7.14 | IsWOConstant | Is W_O Constant? Does It Change? |
-| 7.15 | CompletePicture | The Complete Picture - In Plain English |
+| 7.9 | CausalMask | Causal Masking - Hiding the Future |
+| 7.10 | WhyMultiHead | Why Multi-Head? - The Compromise Problem |
+| 7.11 | HeadSplit | The Split - How 8 Heads Work |
+| 7.12 | InsideEachHead | Inside Each Head - Full Attention in 64 Dims |
+| 7.13 | ConcatWO | Concat + W_O - Blending All Heads |
+| 7.14 | WhyEightHeads | Why 8 Heads? Parameter Count & Big Picture |
+| 7.15 | IsWOConstant | Is W_O Constant? Does It Change? |
+| 7.16 | CompletePicture | The Complete Picture - In Plain English |
 
 **Section 8: Beyond Attention** (`transformer-block.jsx`)
 

@@ -15,14 +15,13 @@
     "search:embed": "node scripts/generate-embeddings.mjs",
     "search:build": "npm run search:extract && npm run search:embed",
     "search:check": "node scripts/check-embeddings.mjs",
-    "prepare": "node scripts/install-hooks.mjs"
+    "prepare": "git config core.hooksPath .githooks"
   },
   "dependencies": {
     "@huggingface/transformers": "^3.8.1",
     "minisearch": "^7.2.0",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "sharp": "^0.34.5"
+    "react-dom": "^18.3.1"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^6.9.1",

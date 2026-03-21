@@ -1,38 +1,64 @@
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef, useCallback, lazy, Suspense } from "react";
 import { chapters, sectionNames, sectionColors, C } from "./config.js";
 import { T, ErrorBoundary } from "./components.jsx";
 import { saveNav, loadNav } from "./nav-persistence.js";
 
-// Section imports
-import { TOC } from "./sections/toc.jsx";
-import * as NeuralFoundations from "./sections/neural-foundations.jsx";
-import * as LLMTraining from "./sections/llm-training.jsx";
-import * as Scaling from "./sections/scaling.jsx";
-import * as RoadToTransformers from "./sections/road-to-transformers.jsx";
-import * as TransformerInput from "./sections/transformer-input.jsx";
-import * as AttentionQKV from "./sections/attention-qkv.jsx";
-import * as AttentionComputation from "./sections/attention-computation.jsx";
-import * as TransformerBlock from "./sections/transformer-block.jsx";
-
-// Lookup: component name -> function (derived from config, not manually maintained)
-const lookup = {
-  TOC,
-  ...NeuralFoundations,
-  ...LLMTraining,
-  ...Scaling,
-  ...RoadToTransformers,
-  ...TransformerInput,
-  ...AttentionQKV,
-  ...AttentionComputation,
-  ...TransformerBlock,
+// ── Lazy-loaded sections: only the current section is fetched ──
+// Each import() becomes a separate Vite chunk, downloaded on demand.
+const sectionLoaders = {
+  0: () => import("./sections/toc.jsx"),
+  1: () => import("./sections/neural-foundations.jsx"),
+  2: () => import("./sections/llm-training.jsx"),
+  3: () => import("./sections/scaling.jsx"),
+  4: () => import("./sections/road-to-transformers.jsx"),
+  5: () => import("./sections/transformer-input.jsx"),
+  6: () => import("./sections/attention-qkv.jsx"),
+  7: () => import("./sections/attention-computation.jsx"),
+  8: () => import("./sections/transformer-block.jsx"),
 };
 
-// Validate lookup matches config (dev only)
+// ── Lazy-loaded search: not loaded until search is opened ──
+const SearchOverlay = lazy(() => import("./search-overlay.jsx"));
+
+// Cache for loaded section modules (avoids re-importing on every chapter change within same section)
+const sectionCache = {};
+
+async function loadComponent(sectionNum, componentName) {
+  if (!sectionCache[sectionNum]) {
+    const loader = sectionLoaders[sectionNum];
+    if (!loader) return null;
+    sectionCache[sectionNum] = await loader();
+  }
+  return sectionCache[sectionNum][componentName] || null;
+}
+
+// ── Search module: lazy-loaded, cached ──
+let searchModule = null;
+async function getSearchModule() {
+  if (!searchModule) {
+    searchModule = await import("./search.js");
+  }
+  return searchModule;
+}
+
+// Validate chapter/component mapping in dev mode
 if (import.meta.env.DEV) {
-  chapters.forEach(c => {
-    if (c.component && !lookup[c.component]) {
-      console.error(`[lookup] Chapter "${c.id}" references component "${c.component}" which is not exported by any section file.`);
+  Promise.all(
+    Object.entries(sectionLoaders).map(([sec, loader]) =>
+      loader().then((mod) => ({ sec: Number(sec), mod })),
+    ),
+  ).then((sections) => {
+    const allExports = {};
+    for (const { mod } of sections) {
+      Object.assign(allExports, mod);
     }
+    chapters.forEach((c) => {
+      if (c.component && !allExports[c.component]) {
+        console.error(
+          `[lookup] Chapter "${c.id}" references component "${c.component}" which is not exported by any section file.`,
+        );
+      }
+    });
   });
 }
 
@@ -100,10 +126,53 @@ export default function LearnAI() {
   const [navHint, setNavHint] = useState(null);
   const [ripple, setRipple] = useState(null);
   const [subBtnRipple, setSubBtnRipple] = useState(0);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [semanticProgress, setSemanticProgress] = useState(0);
+  const [semanticMode, setSemanticMode] = useState("off");
+
+  // Lazy-loaded chapter render function
+  const [renderChapter, setRenderChapter] = useState(null);
 
   // Ref to track whether a SubBtn is currently rendered (avoids DOM queries)
   const subBtnRef = useRef(false);
   const registerSubBtn = useCallback((present) => { subBtnRef.current = present; }, []);
+
+  // Poll for semantic search progress
+  const pollRef = useRef(null);
+  const startSemanticPoll = useCallback(() => {
+    if (pollRef.current) return;
+    pollRef.current = setInterval(async () => {
+      const mod = await getSearchModule();
+      const status = mod.getSearchStatus();
+      setSemanticMode(status.mode);
+      setSemanticProgress(status.progress);
+      if (status.mode === "semantic") {
+        clearInterval(pollRef.current);
+        pollRef.current = null;
+      }
+    }, 500);
+  }, []);
+  useEffect(() => () => { if (pollRef.current) clearInterval(pollRef.current); }, []);
+
+  // Load the chapter component when ch changes
+  const firstLoadDone = useRef(false);
+  useEffect(() => {
+    const entry = chapters[ch];
+    if (!entry) return;
+    const sectionNum = entry.section;
+    const compName = entry.component;
+    loadComponent(sectionNum, compName).then((fn) => {
+      if (fn) setRenderChapter(() => fn);
+      // After the first chapter loads, start downloading semantic search in background
+      if (!firstLoadDone.current) {
+        firstLoadDone.current = true;
+        getSearchModule().then((mod) => {
+          mod.initSearch().catch(() => {});
+          startSemanticPoll();
+        });
+      }
+    });
+  }, [ch, startSemanticPoll]);
 
   // Persist navigation to localStorage on every change
   useEffect(() => { saveNav(ch, sub, chapters); }, [ch, sub]);
@@ -162,9 +231,22 @@ export default function LearnAI() {
     }
   }, [transitioning, ch, sub, maxSubs, goTo]);
 
+  // Cmd/Ctrl+K to open search
+  useEffect(() => {
+    const handleSearchKey = (e) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === "k") {
+        e.preventDefault();
+        setSearchOpen(s => !s);
+      }
+    };
+    window.addEventListener("keydown", handleSearchKey);
+    return () => window.removeEventListener("keydown", handleSearchKey);
+  }, []);
+
   // Keyboard navigation
   useEffect(() => {
     const handleKey = (e) => {
+      if (searchOpen) return; // Don't navigate while search is open
       if (e.key === "ArrowRight" || e.key === "ArrowDown" || e.key === " ") {
         if (e.key === " ") e.preventDefault();
         if (subBtnRef.current) {
@@ -191,11 +273,17 @@ export default function LearnAI() {
     return () => window.removeEventListener("keydown", handleKey);
   }, [navigate, ch, sub]);
 
+  // Handle search open: just open the overlay (search init already started after first chapter load)
+  const handleSearchOpen = useCallback(() => {
+    setSearchOpen(true);
+    // In case search hasn't initialized yet (e.g., opened very fast), ensure it starts
+    getSearchModule().then((mod) => {
+      mod.initSearch().catch(() => {});
+    });
+  }, []);
+
   // Context object passed to all chapter functions
   const ctx = { sub, setSub, subBtnRipple, setSubBtnRipple, navigate, goTo, bankIdx, setBankIdx, hovered, setHovered, expanded, setExpanded, registerSubBtn };
-
-  // Resolve the current chapter's render function from the lookup
-  const renderChapter = lookup[chapters[ch].component];
 
   const handleNavClick = (e, side) => {
     setRipple({ side, id: Date.now() });
@@ -208,6 +296,10 @@ export default function LearnAI() {
     <style>{`
       @keyframes navRipple { 0% { transform: scale(0); opacity: 0.5; } 100% { transform: scale(1); opacity: 0; } }
       @keyframes fadeSlideIn { 0% { opacity: 0; transform: translateY(24px); } 100% { opacity: 1; transform: translateY(0); } }
+      @keyframes searchRainbowFade {
+        0% { opacity: 0; }
+        100% { opacity: 1; }
+      }
     `}</style>
     <div style={{
       minHeight: "100vh", background: C.bg, color: "#fff",
@@ -222,7 +314,85 @@ export default function LearnAI() {
           WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
         }}>Learn AI</h1>
         <T color={C.dim} size={14} center>The complete visual guide to understanding AI - from scratch</T>
+        {/* Search bar - rainbow fades in when semantic ready, stays permanently */}
+        {(() => {
+          const isReady = semanticMode === "semantic";
+          const isLoading = semanticMode === "loading";
+          const pct = semanticProgress;
+          const isMobile = typeof navigator !== "undefined" && /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+          const isMac = typeof navigator !== "undefined" && /Mac/i.test(navigator.userAgent) && !isMobile;
+          const shortcutLabel = isMobile ? null : isMac ? "\u2318K" : "Ctrl+K";
+          const rainbow = "linear-gradient(90deg, #ff6b6b, #ffa726, #ffee58, #66bb6a, #00b8d4, #a78bfa, #e040fb, #ff6b6b)";
+          return (
+            <div style={{ marginTop: 12, width: "100%" }}>
+              {/* Outer = gradient border via padding trick */}
+              <div
+                onClick={handleSearchOpen}
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => { if (e.key === "Enter") handleSearchOpen(); }}
+                aria-label="Search"
+                data-search-outer="true"
+                style={{
+                  position: "relative", overflow: "hidden",
+                  borderRadius: 9, cursor: "pointer",
+                  padding: 1.5,
+                  background: isLoading
+                    ? `linear-gradient(90deg, #a78bfa ${pct}%, rgba(167,139,250,0.25) ${pct}%)`
+                    : "rgba(167, 139, 250, 0.25)",
+                }}
+              >
+                {/* Rainbow overlay - fades in and stays */}
+                {isReady && <div
+                  data-search-rainbow="true"
+                  style={{
+                    position: "absolute", top: 0, left: 0, right: 0, bottom: 0,
+                    background: rainbow,
+                    animation: "searchRainbowFade 1.2s ease-out forwards",
+                    pointerEvents: "none",
+                  }}
+                />}
+                {/* Inner = dark content */}
+                <div
+                  data-search-inner="true"
+                  style={{
+                    position: "relative",
+                    borderRadius: 7.5,
+                    backgroundColor: "#0d0b14",
+                    display: "flex", alignItems: "center", gap: 10,
+                    padding: "10px 16px",
+                  }}
+                >
+                  <svg width={16} height={16} viewBox="0 0 24 24" fill="none"
+                    stroke={isReady ? "#e0d4ff" : "rgba(167, 139, 250, 0.8)"}
+                    strokeWidth="2.5" strokeLinecap="round"
+                    style={{ flexShrink: 0, transition: "stroke 0.6s ease" }}>
+                    <circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" />
+                  </svg>
+                  <span style={{
+                    flex: 1, fontSize: 14,
+                    color: isReady ? "rgba(224, 212, 255, 0.5)" : "rgba(255,255,255,0.3)",
+                    fontFamily: "'Segoe UI', system-ui, sans-serif",
+                    transition: "color 0.6s ease",
+                  }}>Search chapters, concepts, formulas...</span>
+                  {shortcutLabel && <span style={{
+                    fontSize: 11, fontFamily: "'Segoe UI', system-ui, sans-serif",
+                    color: isReady ? "#e0d4ff" : "rgba(167, 139, 250, 0.8)",
+                    opacity: isReady ? 0.9 : 0.7, transition: "color 0.6s ease, opacity 0.6s ease",
+                  }}>{shortcutLabel}</span>}
+                </div>
+              </div>
+            </div>
+          );
+        })()}
       </header>
+
+      {/* Search overlay - lazy loaded, only fetched when opened */}
+      {searchOpen && (
+        <Suspense fallback={null}>
+          <SearchOverlay open={searchOpen} onClose={() => setSearchOpen(false)} onGoTo={(idx, startSub) => goTo(idx, startSub)} />
+        </Suspense>
+      )}
 
       {/* Per-section progress */}
       {ch > 0 && (() => {
@@ -264,7 +434,7 @@ export default function LearnAI() {
         transition: "opacity 0.05s ease-out, transform 0.06s ease-out",
       }}>
         <ErrorBoundary resetKey={ch}>
-          {renderChapter(ctx)}
+          {renderChapter ? renderChapter(ctx) : null}
         </ErrorBoundary>
       </main>
 

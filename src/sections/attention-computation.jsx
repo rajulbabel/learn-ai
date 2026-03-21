@@ -1249,8 +1249,112 @@ export const CausalMask = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple,
       <T color="#ffe082" style={{ marginTop: 10 }}>Same Q, K, V matrices. Same formula. Same softmax. The mask is a single triangle of -∞ values - and it completely changes what the model can do.</T>
     </Box></Reveal>
 
-    {/* Sub 5: Three architectures - who uses what and WHY */}
-    <Reveal when={sub >= 5}><Box color={C.green} style={{ width: "100%" }}>
+    {/* Sub 5: The training insight - why causal mask gives you N valid predictions */}
+    <Reveal when={sub >= 5}><Box color={C.blue} style={{ width: "100%" }}>
+      <T color="#90caf9" bold center size={20}>The Training Insight: Every Position Makes a Prediction</T>
+      <T color="#90caf9" style={{ marginTop: 6 }}>4 tokens go in, 4 output vectors come out - <strong>always</strong>, regardless of masking. Each output vector passes through Linear + Softmax to predict the next token. The mask determines whether those predictions are <strong>honest</strong>.</T>
+
+      {/* Flow diagram: tokens → transformer → outputs → predictions */}
+      <div style={{ marginTop: 14, padding: 14, borderRadius: 10, background: "rgba(0,0,0,0.3)", border: `1px solid ${C.blue}15` }}>
+        <T color={C.dim} size={12} center style={{ letterSpacing: 1.5, textTransform: "uppercase", marginBottom: 10 }}>one forward pass through the transformer</T>
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6 }}>
+          {/* Input tokens */}
+          <div style={{ display: "flex", gap: 8, justifyContent: "center" }}>
+            {words.map((w, i) => (
+              <div key={i} style={{ padding: "6px 16px", borderRadius: 6, background: `${wColors[i]}15`, border: `1px solid ${wColors[i]}30` }}>
+                <T color={wColors[i]} bold size={16} center>{w}</T>
+              </div>
+            ))}
+          </div>
+          <T color={C.dim} size={16}>{"↓  ".repeat(4).trim()}</T>
+          {/* Transformer block */}
+          <div style={{ padding: "8px 30px", borderRadius: 8, background: `${C.pink}10`, border: `1px solid ${C.pink}25` }}>
+            <T color={C.pink} bold size={14} center>Transformer Blocks (N layers)</T>
+          </div>
+          <T color={C.dim} size={16}>{"↓  ".repeat(4).trim()}</T>
+          {/* Output vectors */}
+          <div style={{ display: "flex", gap: 8, justifyContent: "center" }}>
+            {words.map((w, i) => (
+              <div key={i} style={{ padding: "6px 12px", borderRadius: 6, background: `${wColors[i]}08`, border: `1px dashed ${wColors[i]}25` }}>
+                <T color={wColors[i]} size={14} center>v<sub>{i + 1}</sub></T>
+              </div>
+            ))}
+          </div>
+          <T color={C.dim} size={16}>{"↓  ".repeat(4).trim()}</T>
+          <div style={{ padding: "6px 20px", borderRadius: 6, background: "rgba(255,255,255,0.03)" }}>
+            <T color={C.dim} size={14} center>Linear + Softmax → 4 next-token predictions</T>
+          </div>
+        </div>
+      </div>
+
+      {/* Side by side: what each position saw and predicted */}
+      <div style={{ marginTop: 14, display: "flex", gap: 12, flexWrap: "wrap" }}>
+        {/* Without mask */}
+        <div style={{ flex: 1, minWidth: 200, padding: 12, borderRadius: 10, background: `${C.red}06`, border: `1px solid ${C.red}20` }}>
+          <T color={C.red} bold center size={16}>No Mask (Bidirectional)</T>
+          <T color={C.dim} center size={13} style={{ marginTop: 2 }}>Every position sees the full sequence</T>
+          <div style={{ marginTop: 10, display: "flex", flexDirection: "column", gap: 6 }}>
+            {words.map((w, i) => (
+              <div key={i} style={{ padding: "6px 8px", borderRadius: 6, background: `${C.red}08` }}>
+                <div style={{ display: "flex", gap: 3, flexWrap: "wrap", alignItems: "center" }}>
+                  <T color={wColors[i]} bold size={14}>"{w}"</T>
+                  <T color={C.dim} size={12}>saw:</T>
+                  {words.map((sw, si) => (
+                    <span key={si} style={{ padding: "1px 5px", borderRadius: 3, background: `${C.green}15`, color: C.green, fontSize: 12 }}>{sw}</span>
+                  ))}
+                </div>
+                <T color={C.red} size={12} style={{ marginTop: 3 }}>→ saw the answer before predicting</T>
+              </div>
+            ))}
+          </div>
+          <div style={{ marginTop: 10, padding: 8, borderRadius: 6, background: `${C.red}12`, textAlign: "center" }}>
+            <T color={C.red} bold size={16}>0 usable training examples</T>
+            <T color={C.dim} size={13}>Every prediction "saw the answer"</T>
+          </div>
+        </div>
+
+        {/* With causal mask */}
+        <div style={{ flex: 1, minWidth: 200, padding: 12, borderRadius: 10, background: `${C.green}06`, border: `1px solid ${C.green}20` }}>
+          <T color={C.green} bold center size={16}>Causal Mask</T>
+          <T color={C.dim} center size={13} style={{ marginTop: 2 }}>Each position sees only past + self</T>
+          <div style={{ marginTop: 10, display: "flex", flexDirection: "column", gap: 6 }}>
+            {[
+              { sees: ["The"], pred: "cat" },
+              { sees: ["The", "cat"], pred: "sat" },
+              { sees: ["The", "cat", "sat"], pred: "on" },
+              { sees: ["The", "cat", "sat", "on"], pred: "the" },
+            ].map(({ sees, pred }, i) => (
+              <div key={i} style={{ padding: "6px 8px", borderRadius: 6, background: `${C.green}08` }}>
+                <div style={{ display: "flex", gap: 3, flexWrap: "wrap", alignItems: "center" }}>
+                  <T color={wColors[i]} bold size={14}>"{words[i]}"</T>
+                  <T color={C.dim} size={12}>saw:</T>
+                  {sees.map((sw, si) => (
+                    <span key={si} style={{ padding: "1px 5px", borderRadius: 3, background: `${wColors[si]}15`, color: wColors[si], fontSize: 12 }}>{sw}</span>
+                  ))}
+                </div>
+                <div style={{ display: "flex", alignItems: "center", gap: 4, marginTop: 3 }}>
+                  <T color={C.dim} size={12}>→ predicts</T>
+                  <span style={{ padding: "1px 6px", borderRadius: 3, background: `${C.green}20`, color: C.green, fontSize: 13, fontWeight: 700 }}>"{pred}"</span>
+                  <span style={{ padding: "1px 5px", borderRadius: 3, background: `${C.green}15`, color: C.green, fontSize: 11, fontWeight: 600 }}>HONEST</span>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div style={{ marginTop: 10, padding: 8, borderRadius: 6, background: `${C.green}12`, textAlign: "center" }}>
+            <T color={C.green} bold size={16}>4 usable training examples!</T>
+            <T color={C.dim} size={13}>Each prediction was made without peeking</T>
+          </div>
+        </div>
+      </div>
+
+      <div style={{ marginTop: 12, padding: "10px 14px", borderRadius: 8, background: `${C.blue}08`, border: `1px solid ${C.blue}20` }}>
+        <T color="#90caf9" bold center>This is why causal masking exists during training</T>
+        <T color="#90caf9" center size={15} style={{ marginTop: 4 }}>From one forward pass with N tokens, you get <strong>N honest next-token predictions</strong> to learn from. Without the mask, you'd get zero - the model would "cheat" at every position, then completely fail at actual generation.</T>
+      </div>
+    </Box></Reveal>
+
+    {/* Sub 6: Three architectures - who uses what and WHY */}
+    <Reveal when={sub >= 6}><Box color={C.green} style={{ width: "100%" }}>
       <T color="#80e8a5" bold center size={20}>Three architectures - who uses what mask and why</T>
 
       <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 10 }}>
@@ -1337,7 +1441,7 @@ export const CausalMask = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple,
       </div>
     </Box></Reveal>
 
-    {sub < 5 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
+    {sub < 6 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
   </div>
   );
 };

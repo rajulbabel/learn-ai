@@ -303,8 +303,20 @@ describe("CausalMask sub-steps", () => {
     expect(text).toMatch(/[Cc]ausal/);
   });
 
-  it("sub 5 shows three architectures with encoder/decoder context and why", () => {
+  it("sub 5 shows training insight - every position makes a prediction", () => {
     const ctx = makeCtx({ sub: 5 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("Training Insight");
+    expect(text).toContain("prediction");
+    expect(text).toContain("Causal Mask");
+    expect(text).toContain("HONEST");
+    expect(text).toContain("0 usable training examples");
+    expect(text).toContain("4 usable training examples");
+  });
+
+  it("sub 6 shows three architectures with encoder/decoder context and why", () => {
+    const ctx = makeCtx({ sub: 6 });
     const { container } = render(fn(ctx));
     const text = container.textContent;
     expect(text).toContain("ENCODER-ONLY");
@@ -601,8 +613,19 @@ describe("AddNorm sub-steps", () => {
     expect(container.querySelector("[data-residual]")).toBeTruthy();
   });
 
-  it("sub 3 shows layer normalization step-by-step computation", () => {
+  it("sub 3 shows layer normalization formula and parameter explanations", () => {
     const ctx = makeCtx({ sub: 3 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    // Should show the formula and parameter explanations
+    expect(text).toContain("Layer Normalization");
+    expect(text).toContain("gamma");
+    expect(text).toContain("beta");
+    expect(text).toContain("variance");
+  });
+
+  it("sub 4 shows layer normalization step-by-step computation", () => {
+    const ctx = makeCtx({ sub: 4 });
     const { container } = render(fn(ctx));
     const text = container.textContent;
     // Should show the normalization steps: mean, subtract, divide
@@ -612,8 +635,8 @@ describe("AddNorm sub-steps", () => {
     expect(text).toContain("0");
   });
 
-  it("sub 4 shows full Add & Norm pipeline with numbers flowing through", () => {
-    const ctx = makeCtx({ sub: 4 });
+  it("sub 5 shows full Add & Norm pipeline with numbers flowing through", () => {
+    const ctx = makeCtx({ sub: 5 });
     const { container } = render(fn(ctx));
     const text = container.textContent;
     // Should show the complete pipeline
@@ -623,8 +646,8 @@ describe("AddNorm sub-steps", () => {
     expect(container.querySelector("[data-pipeline]")).toBeTruthy();
   });
 
-  it("sub 5 shows why it matters - with vs without comparison", () => {
-    const ctx = makeCtx({ sub: 5 });
+  it("sub 6 shows why it matters - with vs without comparison", () => {
+    const ctx = makeCtx({ sub: 6 });
     const { container } = render(fn(ctx));
     const text = container.textContent;
     // Should show the comparison

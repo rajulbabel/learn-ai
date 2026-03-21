@@ -181,7 +181,14 @@ export const AddNorm = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, re
         </div>
       </div>
 
-      <T color="#b8a9ff" size={15} style={{ marginTop: 4 }}>gamma and beta are <strong>learned during training</strong> - they let the model undo the normalization if needed. Let's compute it step by step with real numbers:</T>
+      <T color="#b8a9ff" size={15} style={{ marginTop: 4 }}>gamma and beta are <strong>learned during training</strong> - they let the model undo the normalization if needed. They let the model stretch, shrink, or shift the normalized values to whatever range works best for each dimension.</T>
+    </Box></Reveal>
+    {sub === 3 && <SubBtn onClick={() => navigate("forward")} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
+
+    {/* Sub 4: The Norm computation - step by step with real numbers */}
+    <Reveal when={sub >= 4}><Box color={C.purple} style={{ width: "100%" }}>
+      <T color="#b8a9ff" bold center size={20}>Computing Layer Norm - Step by Step</T>
+      <T color="#b8a9ff" size={16} style={{ marginTop: 6 }}>Let's apply the formula to real numbers. We're normalizing the result from the Add step:</T>
 
       <div style={{ marginTop: 14, padding: 14, borderRadius: 10, background: "rgba(167,139,250,0.04)", border: `1px solid ${C.purple}20` }}>
         <T color="#b8a9ff" bold center size={16}>Normalizing [-0.2, 0.2, 0.9, 1.0] (the result from Add)</T>
@@ -247,10 +254,10 @@ export const AddNorm = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, re
         </div>
       </div>
     </Box></Reveal>
-    {sub === 3 && <SubBtn onClick={() => navigate("forward")} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
+    {sub === 4 && <SubBtn onClick={() => navigate("forward")} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
 
-    {/* Sub 4: Full pipeline visualization with numbers flowing through */}
-    <Reveal when={sub >= 4}><Box color={C.cyan} style={{ width: "100%" }}>
+    {/* Sub 5: Full pipeline visualization with numbers flowing through */}
+    <Reveal when={sub >= 5}><Box color={C.cyan} style={{ width: "100%" }}>
       <T color="#80deea" bold center size={20}>The Complete Add & Norm Pipeline</T>
       <T color="#80deea" size={16} center style={{ marginTop: 4 }}>Watch "cats" flow through the entire Add & Norm after Attention:</T>
 
@@ -286,10 +293,10 @@ export const AddNorm = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, re
 
       <T color="#80deea" size={15} center style={{ marginTop: 12 }}>This exact same Add & Norm happens again after FFN. Every Transformer block does this twice - once after Attention, once after FFN.</T>
     </Box></Reveal>
-    {sub === 4 && <SubBtn onClick={() => navigate("forward")} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
+    {sub === 5 && <SubBtn onClick={() => navigate("forward")} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
 
-    {/* Sub 5: Why it matters - with vs without */}
-    <Reveal when={sub >= 5}><Box color={C.yellow} style={{ width: "100%" }}>
+    {/* Sub 6: Why it matters - with vs without */}
+    <Reveal when={sub >= 6}><Box color={C.yellow} style={{ width: "100%" }}>
       <T color="#fff176" bold center size={20}>Why It Matters - The Big Picture</T>
 
       <div style={{ marginTop: 12, display: "flex", gap: 12 }}>

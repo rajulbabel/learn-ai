@@ -5,6 +5,7 @@ import { chapters } from "../config.js";
 // Import all sections
 import { TOC } from "../sections/toc.jsx";
 import * as NeuralFoundations from "../sections/neural-foundations.jsx";
+import { Graph } from "../sections/neural-foundations.jsx";
 import * as LLMTraining from "../sections/llm-training.jsx";
 import * as Scaling from "../sections/scaling.jsx";
 import * as RoadToTransformers from "../sections/road-to-transformers.jsx";
@@ -1741,5 +1742,93 @@ describe("source files have no standalone uppercase IS", () => {
       });
       expect(violations).toEqual([]);
     });
+  });
+});
+
+// ─── Graph helper edge-case branches ───
+describe("Graph helper", () => {
+  it("renders with xLabel and yLabel", () => {
+    const { container } = render(Graph({
+      points: [[0, 0], [1, 2], [2, 4]],
+      color: "#ff0000",
+      xLabel: "X Axis",
+      yLabel: "Y Axis",
+    }));
+    expect(container.querySelector("svg")).toBeTruthy();
+    expect(container.textContent).toContain("X Axis");
+    expect(container.textContent).toContain("Y Axis");
+  });
+
+  it("renders without title (falsy title branch)", () => {
+    const { container } = render(Graph({
+      points: [[0, 1], [1, 2]],
+      color: "#ff0000",
+    }));
+    // Default title is "" so no title text element
+    const texts = container.querySelectorAll("text");
+    const titleText = Array.from(texts).find(t => t.getAttribute("y") === "18" && t.getAttribute("font-weight") === "700");
+    expect(titleText).toBeFalsy();
+  });
+
+  it("handles single-x-value points (maxX === minX division-by-zero fallback)", () => {
+    const { container } = render(Graph({
+      points: [[5, 0], [5, 3], [5, 6]],
+      color: "#00ff00",
+    }));
+    expect(container.querySelector("svg")).toBeTruthy();
+  });
+
+  it("handles single-y-value points (maxY === minY division-by-zero fallback)", () => {
+    const { container } = render(Graph({
+      points: [[0, 3], [1, 3], [2, 3]],
+      color: "#0000ff",
+    }));
+    expect(container.querySelector("svg")).toBeTruthy();
+  });
+
+  it("renders zero line when minY < 0 and maxY > 0", () => {
+    const { container } = render(Graph({
+      points: [[0, -2], [1, 0], [2, 3]],
+      color: "#ff00ff",
+    }));
+    // Zero line has dashed stroke
+    const lines = container.querySelectorAll("line");
+    const dashed = Array.from(lines).find(l => l.getAttribute("stroke-dasharray") === "4,4");
+    expect(dashed).toBeTruthy();
+  });
+
+  it("skips zero line when all values are positive", () => {
+    const { container } = render(Graph({
+      points: [[0, 1], [1, 2]],
+      color: "#ff0000",
+    }));
+    const lines = container.querySelectorAll("line");
+    const dashed = Array.from(lines).find(l => l.getAttribute("stroke-dasharray") === "4,4");
+    expect(dashed).toBeFalsy();
+  });
+
+  it("renders every-other x-label when points.length > 10", () => {
+    const manyPoints = Array.from({ length: 12 }, (_, i) => [i, i * 2]);
+    const { container } = render(Graph({
+      points: manyPoints,
+      color: "#ff6600",
+    }));
+    expect(container.querySelector("svg")).toBeTruthy();
+    // With 12 points and modulo 2, only even-indexed x-labels appear (6 labels)
+    const xLabels = container.querySelectorAll("text[text-anchor='middle']");
+    expect(xLabels.length).toBeGreaterThan(0);
+  });
+
+  it("renders annotations without explicit color (ac || C.yellow fallback)", () => {
+    const { container } = render(Graph({
+      points: [[0, 0], [1, 2], [2, 4]],
+      color: "#ff0000",
+      annotations: [{ x: 1, y: 2, text: "peak" }],
+    }));
+    // Should use C.yellow as fallback
+    const circles = container.querySelectorAll("circle");
+    const annotationCircle = Array.from(circles).find(c => c.getAttribute("r") === "6");
+    expect(annotationCircle).toBeTruthy();
+    expect(annotationCircle.getAttribute("stroke")).toBe("#ffd740");
   });
 });

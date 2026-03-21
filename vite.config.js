@@ -22,7 +22,7 @@ export default defineConfig({
       exclude: ["src/main.jsx", "src/learn-ai.jsx"],
       thresholds: {
         lines: 100,
-        branches: 97,
+        branches: 100,
       },
     },
   },

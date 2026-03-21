@@ -942,6 +942,7 @@ export const RLHF = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, regis
           {[
             { resp: "Python is best - simple syntax, huge libraries, great community.", rank: 1, label: "Clear & actionable" },
             { resp: "Python or Go. Python for web, Go for systems. Depends on goals.", rank: 2, label: "Nuanced" },
+            { resp: "JavaScript. Runs everywhere, but quirky syntax can confuse newcomers.", rank: 3, label: "Decent but flawed reasoning" },
             { resp: "Rust. Memory safety. Compile-time errors catch bugs early.", rank: 4, label: "Incorrect - too hard for beginners" },
             { resp: "I am an AI and cannot learn programming.", rank: 5, label: "Nonsensical" },
           ].map(({ resp, rank, label }) => (
@@ -1472,7 +1473,7 @@ export const OutputLayer = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple
           /* 3 neurons per layer */
           const ly = [65, 120, 175];
           /* Output column: 4 neurons */
-          const ouy = [45, 95, 145, 195];
+          const ouy = [45, 95, 130, 195];
           const R = 16;
           return (
           <svg viewBox="0 0 540 260" style={{ width: "100%", maxWidth: 540, display: "block", margin: "0 auto" }}>

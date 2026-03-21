@@ -549,9 +549,9 @@ export const WhySoftmax = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple,
                 <span style={{ fontFamily: "monospace", color: C.dim, fontSize: 15 }}>e^({input}) =</span>
                 <span style={{ fontFamily: "monospace", color: C.green, fontWeight: 700, fontSize: 20, minWidth: 50 }}>{output}</span>
               </div>
-              {/* Mini bar */}
+              {/* Mini bar - e^x is always positive, so bar always has content */}
               <div style={{ flex: 1, height: 8, background: "rgba(255,255,255,0.04)", borderRadius: 4, overflow: "hidden", minWidth: 40 }}>
-                <div style={{ width: `${Math.min(output / 148.4 * 100, 100)}%`, height: "100%", borderRadius: 4, background: C.green, minWidth: output > 0 ? 2 : 0 }} />
+                <div style={{ width: `${Math.min(output / 148.4 * 100, 100)}%`, height: "100%", borderRadius: 4, background: C.green, minWidth: 2 }} />
               </div>
               <T color={C.dim} size={13}>{note}</T>
             </div>

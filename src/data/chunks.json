@@ -1446,7 +1446,7 @@
     "section": 2,
     "sectionName": "How LLMs Actually Train",
     "sub": 1,
-    "text": "Generate multiple responsesFor a given prompt, the SFT model generates MULTIPLE candidate responses. Temperature controls diversity.Prompt: \"What's the best programming language for beginners?\"Python is best - simple syntax, huge libraries, great community.← Rank #1: Clear & actionablePython or Go. Python for web, Go for systems. Depends on goals.← Rank #2: NuancedRust. Memory safety. Compile-time errors catch bugs early.← Rank #4: Incorrect - too hard for beginnersI am an AI and cannot learn programming.← Rank #5: NonsensicalContinue"
+    "text": "Generate multiple responsesFor a given prompt, the SFT model generates MULTIPLE candidate responses. Temperature controls diversity.Prompt: \"What's the best programming language for beginners?\"Python is best - simple syntax, huge libraries, great community.← Rank #1: Clear & actionablePython or Go. Python for web, Go for systems. Depends on goals.← Rank #2: NuancedJavaScript. Runs everywhere, but quirky syntax can confuse newcomers.← Rank #3: Decent but flawed reasoningRust. Memory safety. Compile-time errors catch bugs early.← Rank #4: Incorrect - too hard for beginnersI am an AI and cannot learn programming.← Rank #5: NonsensicalContinue"
   },
   {
     "id": 161,

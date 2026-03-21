@@ -317,8 +317,6 @@ export default function LearnAI() {
         {/* Search bar - rainbow fades in when semantic ready, stays permanently */}
         {(() => {
           const isReady = semanticMode === "semantic";
-          const isLoading = semanticMode === "loading";
-          const pct = semanticProgress;
           const isMobile = typeof navigator !== "undefined" && /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
           const isMac = typeof navigator !== "undefined" && /Mac/i.test(navigator.userAgent) && !isMobile;
           const shortcutLabel = isMobile ? null : isMac ? "\u2318K" : "Ctrl+K";
@@ -337,9 +335,7 @@ export default function LearnAI() {
                   position: "relative", overflow: "hidden",
                   borderRadius: 9, cursor: "pointer",
                   padding: 1.5,
-                  background: isLoading
-                    ? `linear-gradient(90deg, #a78bfa ${pct}%, rgba(167,139,250,0.25) ${pct}%)`
-                    : "rgba(167, 139, 250, 0.25)",
+                  background: "rgba(167, 139, 250, 0.25)",
                 }}
               >
                 {/* Rainbow overlay - fades in and stays */}

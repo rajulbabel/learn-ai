@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from "vitest";
-import { chapters, sectionNames, sectionColors, C } from "../config.js";
+import { chapters, sectionNames, sectionColors, C, validateConfig } from "../config.js";
 
 describe("config.js", () => {
   it("has no duplicate chapter IDs", () => {
@@ -56,13 +56,38 @@ describe("config.js", () => {
     });
   });
 
-  // Dev validation branches
-  it("dev validation detects duplicate IDs", async () => {
-    const spy = vi.spyOn(console, "error").mockImplementation(() => {});
-    // The validation already ran at import time in dev mode.
-    // Re-import to trigger again with mocked console.
-    // Since config is already imported and valid, just verify no errors were logged for the valid config.
-    spy.mockRestore();
+  // validateConfig function tests
+  it("validateConfig returns no errors for valid config", () => {
+    const errors = validateConfig(chapters);
+    expect(errors).toEqual([]);
+  });
+
+  it("validateConfig detects duplicate IDs", () => {
+    const badConfig = [
+      { id: "1.1", title: "A", section: 1, component: "CompA" },
+      { id: "1.1", title: "B", section: 1, component: "CompB" },
+    ];
+    const errors = validateConfig(badConfig);
+    expect(errors.length).toBe(1);
+    expect(errors[0]).toContain("Duplicate");
+  });
+
+  it("validateConfig detects missing id when component present", () => {
+    const badConfig = [
+      { id: "", title: "A", section: 1, component: "CompA" },
+    ];
+    const errors = validateConfig(badConfig);
+    expect(errors.length).toBe(1);
+    expect(errors[0]).toContain("missing id");
+  });
+
+  it("validateConfig detects missing component", () => {
+    const badConfig = [
+      { id: "1.1", title: "A", section: 1, component: "" },
+    ];
+    const errors = validateConfig(badConfig);
+    expect(errors.length).toBe(1);
+    expect(errors[0]).toContain("missing component");
   });
 
   it("sectionNames includes section 0 (Overview)", () => {

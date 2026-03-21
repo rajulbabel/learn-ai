@@ -78,7 +78,7 @@ describe("LearnAI search bar", () => {
     expect(btn.style.background).toContain("rgba(167, 139, 250, 0.25)");
   });
 
-  it("shows purple progress gradient when semantic is loading", async () => {
+  it("shows static purple background when semantic is loading (no progress indicator)", async () => {
     const searchMod = await import("../search.js");
     searchMod.getSearchStatus.mockReturnValue({ mode: "loading", progress: 50 });
 
@@ -88,8 +88,8 @@ describe("LearnAI search bar", () => {
     });
 
     const btn = screen.getByRole("button", { name: "Search" });
-    expect(btn.style.background).toContain("linear-gradient");
-    expect(btn.style.background).toContain("50%");
+    expect(btn.style.background).toBe("rgba(167, 139, 250, 0.25)");
+    expect(btn.style.background).not.toContain("linear-gradient");
   });
 
   it("shows rainbow sweep overlay when semantic is ready", async () => {

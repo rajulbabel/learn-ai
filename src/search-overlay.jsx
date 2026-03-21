@@ -201,7 +201,7 @@ export default function SearchOverlay({ open, onClose, onGoTo }) {
           const isSemantic = searchMode === "semantic";
           const isLoading = searchMode === "loading";
           const dotColor = isSemantic ? "#00e676" : isLoading ? "#ffab40" : "rgba(255,255,255,0.25)";
-          const label = isSemantic ? "Semantic search active" : isLoading ? "Loading semantic model..." : "Text search";
+          const label = isSemantic ? "Semantic Search Active" : isLoading ? "Loading semantic model..." : "Text search";
           const labelColor = isSemantic ? "rgba(0, 230, 118, 0.7)" : isLoading ? "rgba(255, 171, 64, 0.7)" : "rgba(255,255,255,0.3)";
           return (
             <div style={{ display: "flex", alignItems: "center", gap: 5 }}>

@@ -108,13 +108,17 @@ export const C = {
   yellow: "#ffd740", pink: "#e040fb", orange: "#ffab40", blue: "#42a5f5",
 };
 
-// Validate config at import time (dev only)
-if (import.meta.env.DEV) {
-  const ids = chapters.map(c => c.id);
+// Validate config - extracted for testability
+export function validateConfig(chapterList) {
+  const errors = [];
+  const ids = chapterList.map(c => c.id);
   const dupes = ids.filter((id, i) => ids.indexOf(id) !== i);
-  if (dupes.length) console.error("[config] Duplicate chapter IDs:", dupes);
-  chapters.forEach(c => {
-    if (c.component && !c.id) console.error("[config] Chapter missing id:", c);
-    if (!c.component) console.error("[config] Chapter missing component:", c);
+  if (dupes.length) errors.push(`Duplicate chapter IDs: ${dupes.join(", ")}`);
+  chapterList.forEach(c => {
+    if (c.component && !c.id) errors.push(`Chapter missing id: ${c.component}`);
+    if (!c.component) errors.push(`Chapter missing component: id=${c.id}`);
   });
+  return errors;
 }
+
+// Config validation runs via tests (see config.test.js) using validateConfig().

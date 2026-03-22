@@ -942,7 +942,7 @@
     "section": 1,
     "sectionName": "Neural Network Foundations",
     "sub": 1,
-    "text": "Has Many NeuronsIf a layer has 3 neurons, you compute 3 separate dot products. Each neuron has its own weights. Stack them as matrix rows - now you have a matrix.InputsNeurons (Layer)0.60.30.10.20.80.50.40.10.9fever38.5cough1fatigue0.8Flu23.5→ 23.5Cold31.3→ 31.3Allergy32.1→ 32.13 inputs × 3 neurons = matrix multiplicationContinue"
+    "text": "Has Many NeuronsIf a layer has 3 neurons, you compute 3 separate dot products. Each neuron has its own weights. Stack them as matrix rows - now you have a matrix.InputsNeurons (Layer)0.60.30.10.20.80.50.40.10.9fever38.5cough1fatigue0.8Flu23.5→ 23.5Cold8.9→ 8.9Allergy16.2→ 16.23 inputs × 3 neurons = matrix multiplicationContinue"
   },
   {
     "id": 105,
@@ -1707,7 +1707,7 @@
     "section": 3,
     "sectionName": "Scaling & Modern Techniques",
     "sub": 5,
-    "text": "la Scaling (DeepMind 2022):People were training models with way too few tokens relative to size.Most models are under-trained, not too small.Optimal: match data tokens to parameters. 200B params = 20T tokens (rough rule)."
+    "text": "la Scaling (DeepMind 2022):People were training models with way too few tokens relative to size.Most models are under-trained, not too small.Optimal: match data tokens to parameters. Roughly 20 tokens per parameter, so 200B params needs about 4T tokens."
   },
   {
     "id": 190,
@@ -2004,7 +2004,7 @@
     "section": 4,
     "sectionName": "The Road to Transformers",
     "sub": 1,
-    "text": "nvolution works: step by stepLet's convolve a 5×5 image with a 3×3 filter. The filter slides left-to-right, top-to-bottom, and at each position we multiply and sum.5×5 Image (pixel values)10210021011020101020110023×3 Filter0.1-0.20.3-0.10.5-0.20.2-0.30.1Convolution at position (0,0) - top-left cornerMultiply filter by the 3×3 corner, then sum:(1×0.1) + (0×-0.2) + (2×0.3) + (0×-0.1) + (2×0.5) + (1×-0.2) + (1×0.2) + (0×-0.3) + (2×0.1)= 0.1 + 0 + 0.6 + 0 + 1.0 - 0.2 + 0.2 + 0 + 0.2 = 1.9This single number (1.9) becomes the top-left pixel of the output \"feature map\".Filter slides to all 9 positions (5×5 - 3×3 + 1 = 3×3 output)1.91.20.80.52.11.40.30.91.6This 3×3 grid is the output \"feature map\". High values = strong pattern detected.Continue"
+    "text": "nvolution works: step by stepLet's convolve a 5×5 image with a 3×3 filter. The filter slides left-to-right, top-to-bottom, and at each position we multiply and sum.5×5 Image (pixel values)10210021011020101020110023×3 Filter0.1-0.20.3-0.10.5-0.20.2-0.30.1Convolution at position (0,0) - top-left cornerMultiply filter by the 3×3 corner, then sum:(1×0.1) + (0×-0.2) + (2×0.3) + (0×-0.1) + (2×0.5) + (1×-0.2) + (1×0.2) + (0×-0.3) + (2×0.1)= 0.1 + 0 + 0.6 + 0 + 1.0 - 0.2 + 0.2 + 0 + 0.2 = 1.9This single number (1.9) becomes the top-left pixel of the output \"feature map\".Filter slides to all 9 positions (5×5 - 3×3 + 1 = 3×3 output)1.9-0.40.2-0.91.4-0.61.1-0.71.7This 3×3 grid is the output \"feature map\". High values = strong pattern detected.Continue"
   },
   {
     "id": 223,
@@ -3039,7 +3039,7 @@
     "section": 7,
     "sectionName": "Attention - The Full Computation",
     "sub": 1,
-    "text": "re matrix (every word asks every word):K_IK_loveK_catsQ_I0.380.560.74Q_love0.690.540.53Q_cats0.570.540.70Each row = one word asking \"how relevant is each word to me?\" Yellow = highest in that row."
+    "text": "re matrix (every word asks every word):K_IK_loveK_catsQ_I0.380.560.74Q_love0.660.420.53Q_cats0.570.540.70Each row = one word asking \"how relevant is each word to me?\" Yellow = highest in that row."
   },
   {
     "id": 338,
@@ -3093,7 +3093,7 @@
     "section": 7,
     "sectionName": "Attention - The Full Computation",
     "sub": 4,
-    "text": "s Q · KT actually compute?Each cell in the 3×3 result = the dot product of one Query with one Key. That's the \"relevance score\".K_IK_loveK_catsQ_I0.380.560.74Q_love0.690.540.53Q_cats0.570.540.70Row = one word asking. Column = one word answering. Cell = how relevant the answer-word is to the asker.Continue"
+    "text": "s Q · KT actually compute?Each cell in the 3×3 result = the dot product of one Query with one Key. That's the \"relevance score\".K_IK_loveK_catsQ_I0.380.560.74Q_love0.660.420.53Q_cats0.570.540.70Row = one word asking. Column = one word answering. Cell = how relevant the answer-word is to the asker.Continue"
   },
   {
     "id": 344,
@@ -3255,7 +3255,7 @@
     "section": 7,
     "sectionName": "Attention - The Full Computation",
     "sub": 4,
-    "text": "our example (d_k = 2, √2 ≈ 1.41):K_IK_loveK_catsQ_I0.270.400.52Q_love0.490.380.38Q_cats0.400.380.50Our scores were already small (2-dim), so scaling barely changes them. In a real 64-dim model, scaling is the difference between a useful model and a broken one.Now let's apply softmax to these scaled scores →"
+    "text": "our example (d_k = 2, √2 ≈ 1.41):K_IK_loveK_catsQ_I0.270.400.52Q_love0.470.300.37Q_cats0.400.380.50Our scores were already small (2-dim), so scaling barely changes them. In a real 64-dim model, scaling is the difference between a useful model and a broken one.Now let's apply softmax to these scaled scores →"
   },
   {
     "id": 362,
@@ -3291,7 +3291,7 @@
     "section": 7,
     "sectionName": "Attention - The Full Computation",
     "sub": 2,
-    "text": "ention weight matrix (all rows softmax'd)Every word does the same process - softmax its own row of scores:Ilovecats\"I\":0.290.330.37\"love\":0.370.320.31\"cats\":0.320.320.36Each row sums to 1.0. These are the \"attention weights\" - they tell each word how much to borrow from every other word. Next: we'll use them to actually blend the Values →"
+    "text": "ention weight matrix (all rows softmax'd)Every word does the same process - softmax its own row of scores:Ilovecats\"I\":0.290.330.38\"love\":0.360.310.33\"cats\":0.320.320.36Each row sums to 1.0. These are the \"attention weights\" - they tell each word how much to borrow from every other word. Next: we'll use them to actually blend the Values →"
   },
   {
     "id": 366,
@@ -3309,7 +3309,7 @@
     "section": 7,
     "sectionName": "Attention - The Full Computation",
     "sub": 0,
-    "text": "Use attention weights to blend Values.For \"I\" (weights: 0.29, 0.33, 0.37):0.29×V_I = [1.0, -0.5]=[0.290, -0.145]0.33×V_love = [0.3, 0.8]=[0.099, 0.264]0.37×V_cats = [-0.2, 0.9]=[-0.074, 0.333]Sum:[0.29, -0.145] + [0.099, 0.264] + [-0.074, 0.333] = [0.315, 0.452]Continue"
+    "text": "Use attention weights to blend Values.For \"I\" (weights: 0.29, 0.33, 0.38):0.29×V_I = [1.0, -0.5]=[0.290, -0.145]0.33×V_love = [0.3, 0.8]=[0.099, 0.264]0.38×V_cats = [-0.2, 0.9]=[-0.076, 0.342]Sum:[0.290, -0.145] + [0.099, 0.264] + [-0.076, 0.342] = [0.313, 0.461]Continue"
   },
   {
     "id": 368,
@@ -3318,7 +3318,7 @@
     "section": 7,
     "sectionName": "Attention - The Full Computation",
     "sub": 1,
-    "text": "315, 0.452] is the NEW vector for \"I\".It's no longer just about \"I\". It has absorbed context from \"love\" (33%) and \"cats\" (37%). It's now a context-aware representation. Same happens for every word."
+    "text": "313, 0.461] is the NEW vector for \"I\".It's no longer just about \"I\". It has absorbed context from \"love\" (33%) and \"cats\" (38%). It's now a context-aware representation. Same happens for every word."
   },
   {
     "id": 369,
@@ -3777,7 +3777,7 @@
     "section": 8,
     "sectionName": "The Encoder",
     "sub": 4,
-    "text": "g Layer Norm - Step by StepLet's apply the formula to real numbers. We're normalizing the result from the Add step:Normalizing [-0.2, 0.2, 0.9, 1.0] (the result from Add)Step 1: Compute the mean (mu)mu = (-0.2 + 0.2 + 0.9 + 1.0) / 4 =0.475Step 2: subtract the mean from each value (xi - mu)-0.2 - 0.475 = -0.675 0.2 - 0.475 = -0.275 0.9 - 0.475 = 0.425 1.0 - 0.475 = 0.525 Centered: [-0.675, -0.275, 0.425, 0.525]Step 3: Compute variance, then divide by sqrt(σ² + ε)variance = mean of squared deviations: (0.675 squared + 0.275 squared + 0.425 squared + 0.525 squared) / 4 = 0.2856sqrt(0.2856 + 0.00001) = 0.5344 (epsilon = 1e-5 prevents division by zero if all values were identical)-0.675 / 0.5344 = -1.26 -0.275 / 0.5344 = -0.51 0.425 / 0.5344 = 0.80 0.525 / 0.5344 = 0.98 After this step: [-1.26, -0.51, 0.80, 0.98] - centered at 0, unit variance.Step 4: Scale by gamma, shift by betagamma and beta are per-dimension learnable parameters. Initially gamma=1.0 and beta=0.0, so at first this step does nothing. During training, the model learns optimal values.With initial gamma=1.0, beta=0.0:1.0 x -1.26 + 0.0 = -1.26 1.0 x -0.51 + 0.0 = -0.51 1.0 x 0.80 + 0.0 = 0.80 1.0 x 0.98 + 0.0 = 0.98 Why have gamma and beta if they start as identity? Because during training, the model may learn that some dimensions need more spread (gamma > 1) or a non-zero center (beta != 0). Without them, normalization would be too rigid.Final output: [-1.26, -0.51, 0.80, 0.98]Values centered around 0 with controlled spread. Gamma and beta will adjust these during training to whatever the model needs.Continue"
+    "text": "g Layer Norm - Step by StepLet's apply the formula to real numbers. We're normalizing the result from the Add step:Normalizing [-0.2, 0.2, 0.9, 1.0] (the result from Add)Step 1: Compute the mean (mu)mu = (-0.2 + 0.2 + 0.9 + 1.0) / 4 =0.475Step 2: subtract the mean from each value (xi - mu)-0.2 - 0.475 = -0.675 0.2 - 0.475 = -0.275 0.9 - 0.475 = 0.425 1.0 - 0.475 = 0.525 Centered: [-0.675, -0.275, 0.425, 0.525]Step 3: Compute variance, then divide by sqrt(σ² + ε)variance = mean of squared deviations: (0.675 squared + 0.275 squared + 0.425 squared + 0.525 squared) / 4 = 0.2469sqrt(0.2469 + 0.00001) = 0.4969 (epsilon = 1e-5 prevents division by zero if all values were identical)-0.675 / 0.4969 = -1.36 -0.275 / 0.4969 = -0.55 0.425 / 0.4969 = 0.86 0.525 / 0.4969 = 1.06 After this step: [-1.36, -0.55, 0.86, 1.06] - centered at 0, unit variance.Step 4: Scale by gamma, shift by betagamma and beta are per-dimension learnable parameters. Initially gamma=1.0 and beta=0.0, so at first this step does nothing. During training, the model learns optimal values.With initial gamma=1.0, beta=0.0:1.0 x -1.36 + 0.0 = -1.36 1.0 x -0.55 + 0.0 = -0.55 1.0 x 0.86 + 0.0 = 0.86 1.0 x 1.06 + 0.0 = 1.06 Why have gamma and beta if they start as identity? Because during training, the model may learn that some dimensions need more spread (gamma > 1) or a non-zero center (beta != 0). Without them, normalization would be too rigid.Final output: [-1.36, -0.55, 0.86, 1.06]Values centered around 0 with controlled spread. Gamma and beta will adjust these during training to whatever the model needs.Continue"
   },
   {
     "id": 420,
@@ -3786,7 +3786,7 @@
     "section": 8,
     "sectionName": "The Encoder",
     "sub": 5,
-    "text": "lete Add & Norm PipelineWatch \"cats\" flow through the entire Add & Norm after Attention:InputInput (cats embedding)[-0.5, 0.3, 0.7, 0.6]goes into Attention↓AttentionAttention Output[0.3, -0.1, 0.2, 0.4]Add: input + output↓AddAfter Add[-0.2, 0.2, 0.9, 1.0]Normalize↓NormAfter Norm[-1.26, -0.52, 0.80, 0.98]ready for FFN↓NextTo FFN[-1.26, -0.52, 0.80, 0.98]This exact same Add & Norm happens again after FFN. Every Transformer block does this twice - once after Attention, once after FFN.Continue"
+    "text": "lete Add & Norm PipelineWatch \"cats\" flow through the entire Add & Norm after Attention:InputInput (cats embedding)[-0.5, 0.3, 0.7, 0.6]goes into Attention↓AttentionAttention Output[0.3, -0.1, 0.2, 0.4]Add: input + output↓AddAfter Add[-0.2, 0.2, 0.9, 1.0]Normalize↓NormAfter Norm[-1.36, -0.55, 0.86, 1.06]ready for FFN↓NextTo FFN[-1.36, -0.55, 0.86, 1.06]This exact same Add & Norm happens again after FFN. Every Transformer block does this twice - once after Attention, once after FFN.Continue"
   },
   {
     "id": 421,
@@ -3840,7 +3840,7 @@
     "section": 8,
     "sectionName": "The Encoder",
     "sub": 3,
-    "text": "Step: FFN on \"cats\"Let's trace \"cats\" through the FFN. In chapter 8.2, Add & Norm output [-1.26, -0.51, 0.80, 0.98] for \"cats\". We'll use a tiny 4-dim version to show the real math (real models use 512 dims but the process is identical).Step 1: Multiply by W1 + b1 (expand 4 → 8 dims)[-1.26, -0.51, 0.80, 0.98]·W1+b1Each of the 8 output values is a dot product of the input with one column of W1, plus a bias - exactly like chapter 1.19.Result (8 dims):[0.42, -1.80, 0.95, 2.10, -0.33, 1.47, -0.88, 0.61]Continue"
+    "text": "Step: FFN on \"cats\"Let's trace \"cats\" through the FFN. In chapter 8.2, Add & Norm output [-1.36, -0.55, 0.86, 1.06] for \"cats\". We'll use a tiny 4-dim version to show the real math (real models use 512 dims but the process is identical).Step 1: Multiply by W1 + b1 (expand 4 → 8 dims)[-1.36, -0.55, 0.86, 1.06]·W1+b1Each of the 8 output values is a dot product of the input with one column of W1, plus a bias - exactly like chapter 1.19.Result (8 dims):[0.42, -1.80, 0.95, 2.10, -0.33, 1.47, -0.88, 0.61]Continue"
   },
   {
     "id": 427,
@@ -3993,7 +3993,7 @@
     "section": 8,
     "sectionName": "The Encoder",
     "sub": 1,
-    "text": "- Residual Around FFNSame idea as chapter 8.2: keep the original input by adding it back. The input to FFN was the first Add & Norm's output.Continuing with \"cats\":FFN input[-1.26, -0.51, 0.80, 0.98]↓ goes through FFN (chapter 8.3) ↓FFN output[0.51, -0.73, 1.14, 0.22]The Add Step: FFN input + FFN output[-1.26, -0.51, 0.80, 0.98]+[0.51, -0.73, 1.14, 0.22]=[-0.75, -1.24, 1.94, 1.20]The residual connection ensures that even if the FFN distorts values, the original signal from Add & Norm #1 survives by being added back.Continue"
+    "text": "- Residual Around FFNSame idea as chapter 8.2: keep the original input by adding it back. The input to FFN was the first Add & Norm's output.Continuing with \"cats\":FFN input[-1.36, -0.55, 0.86, 1.06]↓ goes through FFN (chapter 8.3) ↓FFN output[0.51, -0.73, 1.14, 0.22]The Add Step: FFN input + FFN output[-1.36, -0.55, 0.86, 1.06]+[0.51, -0.73, 1.14, 0.22]=[-0.85, -1.28, 2.00, 1.28]The residual connection ensures that even if the FFN distorts values, the original signal from Add & Norm #1 survives by being added back.Continue"
   },
   {
     "id": 444,
@@ -4002,7 +4002,7 @@
     "section": 8,
     "sectionName": "The Encoder",
     "sub": 2,
-    "text": "- Stabilize AgainSame Layer Normalization formula from chapter 8.2 - compute mean, subtract, divide by standard deviation, scale by gamma, shift by beta.Normalizing [-0.75, -1.24, 1.94, 1.20]mu = (-0.75 + -1.24 + 1.94 + 1.20) / 4 = 0.2875variance = 1.5252, sqrt(variance + epsilon) = 1.235Normalize each: (x - mu) / 1.235-0.75 → -0.84-1.24 → -1.241.94 → 1.341.20 → 0.74Block output for \"cats\": [-0.84, -1.24, 1.34, 0.74]With gamma=1.0 and beta=0.0 (initial values). The model will learn optimal gamma and beta during training.Continue"
+    "text": "- Stabilize AgainSame Layer Normalization formula from chapter 8.2 - compute mean, subtract, divide by standard deviation, scale by gamma, shift by beta.Normalizing [-0.85, -1.28, 2.00, 1.28]mu = (-0.85 + -1.28 + 2.00 + 1.28) / 4 = 0.2875variance = 1.9172, sqrt(variance + epsilon) = 1.3846Normalize each: (x - mu) / 1.3846-0.85 → -0.82-1.28 → -1.132.00 → 1.241.28 → 0.72Block output for \"cats\": [-0.82, -1.13, 1.24, 0.72]With gamma=1.0 and beta=0.0 (initial values). The model will learn optimal gamma and beta during training.Continue"
   },
   {
     "id": 445,
@@ -4011,7 +4011,7 @@
     "section": 8,
     "sectionName": "The Encoder",
     "sub": 3,
-    "text": "lete Single Block - All 4 StepsHere's \"cats\" flowing through one entire Transformer block, start to finish:InputInput (cats)[-0.5, 0.3, 0.7, 0.6]Multi-Head Attention↓AttnAttention Output[0.3, -0.1, 0.2, 0.4]Add & Norm #1↓A&N 1After 1st Add & Norm[-1.26, -0.51, 0.80, 0.98]Feed-Forward Network↓FFNFFN Output[0.51, -0.73, 1.14, 0.22]Add & Norm #2↓A&N 2Block Output[-0.84, -1.24, 1.34, 0.74]One block: Attention moves information between tokens, Add & Norm stabilizes, FFN processes each token's knowledge, Add & Norm stabilizes again. This is the heartbeat of every Transformer.Continue"
+    "text": "lete Single Block - All 4 StepsHere's \"cats\" flowing through one entire Transformer block, start to finish:InputInput (cats)[-0.5, 0.3, 0.7, 0.6]Multi-Head Attention↓AttnAttention Output[0.3, -0.1, 0.2, 0.4]Add & Norm #1↓A&N 1After 1st Add & Norm[-1.36, -0.55, 0.86, 1.06]Feed-Forward Network↓FFNFFN Output[0.51, -0.73, 1.14, 0.22]Add & Norm #2↓A&N 2Block Output[-0.82, -1.13, 1.24, 0.72]One block: Attention moves information between tokens, Add & Norm stabilizes, FFN processes each token's knowledge, Add & Norm stabilizes again. This is the heartbeat of every Transformer.Continue"
   },
   {
     "id": 446,

@@ -156,7 +156,7 @@ export const AttentionScores = (ctx) => { const { sub, subBtnRipple, setSubBtnRi
             {["K_I", "K_love", "K_cats"].map(h => <T key={h} color={C.orange} size={14} bold center>{h}</T>)}
             {[
               { q: "Q_I", s: [0.38, 0.56, 0.74], mx: 2 },
-              { q: "Q_love", s: [0.69, 0.54, 0.53], mx: 0 },
+              { q: "Q_love", s: [0.66, 0.42, 0.53], mx: 0 },
               { q: "Q_cats", s: [0.57, 0.54, 0.70], mx: 2 },
             ].map(({ q, s: sc, mx }) => (
               <div key={q} style={{ display: "contents" }}>
@@ -337,7 +337,7 @@ export const KTranspose = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple,
           ))}
           {[
             { q: "Q_I", scores: [0.38, 0.56, 0.74], best: 2 },
-            { q: "Q_love", scores: [0.69, 0.54, 0.53], best: 0 },
+            { q: "Q_love", scores: [0.66, 0.42, 0.53], best: 0 },
             { q: "Q_cats", scores: [0.57, 0.54, 0.70], best: 2 },
           ].map(({ q, scores, best }) => (
             <div key={q} style={{ display: "contents" }}>
@@ -813,7 +813,7 @@ export const ScaleByRootDk = (ctx) => { const { sub, subBtnRipple, setSubBtnRipp
           <div style={{ display: "grid", gridTemplateColumns: "55px repeat(3, 1fr)", gap: 4 }}>
             <div></div>
             {["K_I", "K_love", "K_cats"].map(h => <T key={h} color={C.orange} size={14} bold center>{h}</T>)}
-            {[{ q: "Q_I", s: [0.27, 0.40, 0.52] }, { q: "Q_love", s: [0.49, 0.38, 0.38] }, { q: "Q_cats", s: [0.40, 0.38, 0.50] }].map(({ q, s: sc }) => (
+            {[{ q: "Q_I", s: [0.27, 0.40, 0.52] }, { q: "Q_love", s: [0.47, 0.30, 0.37] }, { q: "Q_cats", s: [0.40, 0.38, 0.50] }].map(({ q, s: sc }) => (
               <div key={q} style={{ display: "contents" }}>
                 <T color={C.blue} size={16} bold center>{q}</T>
                 {sc.map((v, i) => (<div key={i} style={{ textAlign: "center", padding: "6px", borderRadius: 5, background: "rgba(255,255,255,0.02)" }}><span style={{ fontFamily: "monospace", fontSize: 19, color: C.mid }}>{v.toFixed(2)}</span></div>))}
@@ -907,8 +907,8 @@ export const SoftmaxProbs = (ctx) => { const { sub, subBtnRipple, setSubBtnRippl
             <div></div>
             {["I", "love", "cats"].map(h => <T key={h} color={C.mid} size={16} bold center>{h}</T>)}
             {[
-              { w: "\"I\":", s: [0.29, 0.33, 0.37], mx: 2 },
-              { w: "\"love\":", s: [0.37, 0.32, 0.31], mx: 0 },
+              { w: "\"I\":", s: [0.29, 0.33, 0.38], mx: 2 },
+              { w: "\"love\":", s: [0.36, 0.31, 0.33], mx: 0 },
               { w: "\"cats\":", s: [0.32, 0.32, 0.36], mx: 2 },
             ].map(({ w, s: sc, mx }) => (
               <div key={w} style={{ display: "contents" }}>
@@ -929,12 +929,12 @@ export const WeightedSum = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple
     {sub >= 0 && (
       <Box color={C.green} style={{ width: "100%" }}>
         <T color="#80e8a5" bold center size={20}>Use attention weights to blend Values.</T>
-        <T color="#80e8a5" style={{ marginTop: 4 }}>For "I" (weights: 0.29, 0.33, 0.37):</T>
+        <T color="#80e8a5" style={{ marginTop: 4 }}>For "I" (weights: 0.29, 0.33, 0.38):</T>
         <div style={{ marginTop: 10, padding: "12px", background: "rgba(0,0,0,0.3)", borderRadius: 8 }}>
           {[
             { w: "0.29", vl: "V_I = [1.0, -0.5]", r: "[0.290, -0.145]", c: C.red },
             { w: "0.33", vl: "V_love = [0.3, 0.8]", r: "[0.099, 0.264]", c: C.purple },
-            { w: "0.37", vl: "V_cats = [-0.2, 0.9]", r: "[-0.074, 0.333]", c: C.cyan },
+            { w: "0.38", vl: "V_cats = [-0.2, 0.9]", r: "[-0.076, 0.342]", c: C.cyan },
           ].map(({ w, vl, r, c }, i) => (
             <div key={i} style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 4, flexWrap: "wrap", justifyContent: "center" }}>
               <span style={{ color: C.yellow, fontSize: 18, fontWeight: 700 }}>{w}</span>
@@ -946,12 +946,12 @@ export const WeightedSum = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple
           ))}
           <div style={{ marginTop: 8, borderTop: "1px solid rgba(255,255,255,0.06)", paddingTop: 8 }}>
             <T color={C.dim} size={18}>Sum:</T>
-            <T color={C.yellow} bold center size={20}>[0.29, -0.145] + [0.099, 0.264] + [-0.074, 0.333] = <span style={{ color: C.green }}>[0.315, 0.452]</span></T>
+            <T color={C.yellow} bold center size={20}>[0.290, -0.145] + [0.099, 0.264] + [-0.076, 0.342] = <span style={{ color: C.green }}>[0.313, 0.461]</span></T>
           </div>
         </div>
       </Box>
     )}
-    <Reveal when={sub >= 1}><Box color={C.yellow}><T color={C.yellow} bold center>This [0.315, 0.452] is the NEW vector for "I".</T><T color="#ffe082" style={{ marginTop: 4 }}>It's no longer just about "I". It has absorbed context from "love" (33%) and "cats" (37%). It's now a <strong>context-aware representation</strong>. Same happens for every word.</T></Box></Reveal>
+    <Reveal when={sub >= 1}><Box color={C.yellow}><T color={C.yellow} bold center>This [0.313, 0.461] is the NEW vector for "I".</T><T color="#ffe082" style={{ marginTop: 4 }}>It's no longer just about "I". It has absorbed context from "love" (33%) and "cats" (38%). It's now a <strong>context-aware representation</strong>. Same happens for every word.</T></Box></Reveal>
     {sub < 1 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
   </div>
 ); }

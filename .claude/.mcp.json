@@ -1,0 +1,14 @@
+{
+  "mcpServers": {
+    "sympy": {
+      "type": "stdio",
+      "command": "uv",
+      "args": ["run", "--directory", "/Users/rajul/.mcp-servers/sympy-mcp", "server.py"]
+    },
+    "arxiv": {
+      "type": "stdio",
+      "command": "arxiv-mcp-server",
+      "args": ["--storage-path", "/tmp/arxiv-papers"]
+    }
+  }
+}

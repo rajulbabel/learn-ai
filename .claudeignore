@@ -1,0 +1,9 @@
+# Generated data files (large, not useful for Claude)
+src/data/embeddings.json
+src/data/chunks.json
+src/data/embeddings-checksum.json
+
+# Build artifacts
+dist/
+coverage/
+node_modules/

@@ -219,17 +219,17 @@ export const AddNorm = (ctx) => { const { sub, subBtnRipple, registerSubBtn, nav
         {/* Step 3: Variance and divide by sqrt(variance + epsilon) */}
         <div style={{ marginTop: 8, padding: 10, borderRadius: 8, background: `${C.green}08` }}>
           <T color={C.green} bold size={15}>Step 3: Compute variance, then divide by sqrt({"\u03C3\u00B2"} + {"\u03B5"})</T>
-          <T color={C.dim} size={13} style={{ marginTop: 4 }}>variance = mean of squared deviations: (0.675 squared + 0.275 squared + 0.425 squared + 0.525 squared) / 4 = 0.2856</T>
-          <T color={C.dim} size={13}>sqrt(0.2856 + 0.00001) = 0.5344 (epsilon = 1e-5 prevents division by zero if all values were identical)</T>
+          <T color={C.dim} size={13} style={{ marginTop: 4 }}>variance = mean of squared deviations: (0.675 squared + 0.275 squared + 0.425 squared + 0.525 squared) / 4 = 0.2469</T>
+          <T color={C.dim} size={13}>sqrt(0.2469 + 0.00001) = 0.4969 (epsilon = 1e-5 prevents division by zero if all values were identical)</T>
           <pre style={{ marginTop: 6, fontFamily: "monospace", fontSize: 14, lineHeight: 1.7, textAlign: "center", margin: "6px 0 0 0", padding: 0, background: "none", border: "none", overflow: "visible" }}>{
 [
-  ["-0.675 / 0.5344", "-1.26"],
-  ["-0.275 / 0.5344", "-0.51"],
-  [" 0.425 / 0.5344", " 0.80"],
-  [" 0.525 / 0.5344", " 0.98"],
+  ["-0.675 / 0.4969", "-1.36"],
+  ["-0.275 / 0.4969", "-0.55"],
+  [" 0.425 / 0.4969", " 0.86"],
+  [" 0.525 / 0.4969", " 1.06"],
 ].map(([l, r]) => <span key={l}><span style={{ color: C.dim }}>{l}</span><span style={{ color: C.dim }}> = </span><span style={{ color: C.green, fontWeight: 600 }}>{r}</span>{"\n"}</span>)
           }</pre>
-          <T color={C.dim} size={13} style={{ marginTop: 4 }}>After this step: [-1.26, -0.51, 0.80, 0.98] - centered at 0, unit variance.</T>
+          <T color={C.dim} size={13} style={{ marginTop: 4 }}>After this step: [-1.36, -0.55, 0.86, 1.06] - centered at 0, unit variance.</T>
         </div>
 
         {/* Step 4: Scale by gamma + shift by beta */}
@@ -239,17 +239,17 @@ export const AddNorm = (ctx) => { const { sub, subBtnRipple, registerSubBtn, nav
           <T color={C.dim} size={13} style={{ marginTop: 4 }}>With initial gamma=1.0, beta=0.0:</T>
           <pre style={{ marginTop: 4, fontFamily: "monospace", fontSize: 14, lineHeight: 1.7, textAlign: "center", margin: "4px 0 0 0", padding: 0, background: "none", border: "none", overflow: "visible" }}>{
 [
-  ["1.0", "-1.26", "0.0", "-1.26"],
-  ["1.0", "-0.51", "0.0", "-0.51"],
-  ["1.0", " 0.80", "0.0", " 0.80"],
-  ["1.0", " 0.98", "0.0", " 0.98"],
+  ["1.0", "-1.36", "0.0", "-1.36"],
+  ["1.0", "-0.55", "0.0", "-0.55"],
+  ["1.0", " 0.86", "0.0", " 0.86"],
+  ["1.0", " 1.06", "0.0", " 1.06"],
 ].map(([g, n, b, f]) => <span key={n}><span style={{ color: C.dim }}>{g} x {n} + {b}</span><span style={{ color: C.dim }}> = </span><span style={{ color: C.yellow, fontWeight: 600 }}>{f}</span>{"\n"}</span>)
           }</pre>
           <T color={C.dim} size={13} style={{ marginTop: 6 }}>Why have gamma and beta if they start as identity? Because during training, the model may learn that some dimensions need more spread (gamma {'>'} 1) or a non-zero center (beta != 0). Without them, normalization would be too rigid.</T>
         </div>
 
         <div style={{ marginTop: 8, padding: 8, borderRadius: 6, background: `${C.purple}10`, border: `1px dashed ${C.purple}30` }}>
-          <T color="#b8a9ff" bold center size={15}>Final output: [-1.26, -0.51, 0.80, 0.98]</T>
+          <T color="#b8a9ff" bold center size={15}>Final output: [-1.36, -0.55, 0.86, 1.06]</T>
           <T color={C.dim} center size={13} style={{ marginTop: 2 }}>Values centered around 0 with controlled spread. Gamma and beta will adjust these during training to whatever the model needs.</T>
         </div>
       </div>
@@ -269,9 +269,9 @@ export const AddNorm = (ctx) => { const { sub, subBtnRipple, registerSubBtn, nav
           { step: "arrow", label: "Add: input + output" },
           { step: "After Add", val: "[-0.2, 0.2, 0.9, 1.0]", color: C.green, tag: "Add" },
           { step: "arrow", label: "Normalize" },
-          { step: "After Norm", val: "[-1.26, -0.52, 0.80, 0.98]", color: C.purple, tag: "Norm" },
+          { step: "After Norm", val: "[-1.36, -0.55, 0.86, 1.06]", color: C.purple, tag: "Norm" },
           { step: "arrow", label: "ready for FFN" },
-          { step: "To FFN", val: "[-1.26, -0.52, 0.80, 0.98]", color: C.orange, tag: "Next" },
+          { step: "To FFN", val: "[-1.36, -0.55, 0.86, 1.06]", color: C.orange, tag: "Next" },
         ].map((item, i) =>
           item.step === "arrow" ? (
             <div key={i} style={{ display: "flex", flexDirection: "column", alignItems: "center", padding: "2px 0" }}>
@@ -511,14 +511,14 @@ export const FeedForwardNetwork = (ctx) => { const { sub, subBtnRipple, register
     {/* Sub 3: Step-by-step computation with real numbers */}
     <Reveal when={sub >= 3}><Box color={C.green} style={{ width: "100%" }}>
       <T color="#a5d6a7" bold center size={20}>Step-by-Step: FFN on "cats"</T>
-      <T color="#a5d6a7" size={16} style={{ marginTop: 6 }}>Let's trace "cats" through the FFN. In chapter 8.2, Add & Norm output [-1.26, -0.51, 0.80, 0.98] for "cats". We'll use a tiny 4-dim version to show the real math (real models use 512 dims but the process is identical).</T>
+      <T color="#a5d6a7" size={16} style={{ marginTop: 6 }}>Let's trace "cats" through the FFN. In chapter 8.2, Add & Norm output [-1.36, -0.55, 0.86, 1.06] for "cats". We'll use a tiny 4-dim version to show the real math (real models use 512 dims but the process is identical).</T>
 
       {/* Step 1: First linear layer */}
       <div style={{ marginTop: 12, padding: 12, borderRadius: 8, background: `${C.pink}08`, border: `1px solid ${C.pink}20` }}>
         <T color={C.pink} bold size={16}>Step 1: Multiply by W<sub>1</sub> + b<sub>1</sub> (expand 4 → 8 dims)</T>
         <div style={{ marginTop: 8, display: "flex", flexDirection: "column", alignItems: "center", gap: 6 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap", justifyContent: "center" }}>
-            <code style={{ color: C.cyan, fontSize: 14 }}>[-1.26, -0.51, 0.80, 0.98]</code>
+            <code style={{ color: C.cyan, fontSize: 14 }}>[-1.36, -0.55, 0.86, 1.06]</code>
             <span style={{ color: C.dim, fontSize: 16, fontWeight: 700 }}>&middot;</span>
             <span style={{ color: C.pink, fontSize: 14 }}>W<sub>1</sub></span>
             <span style={{ color: C.dim, fontSize: 16, fontWeight: 700 }}>+</span>
@@ -1205,7 +1205,7 @@ export const AddNormTwo = (ctx) => { const { sub, subBtnRipple, registerSubBtn, 
         <div style={{ marginTop: 10, display: "flex", flexDirection: "column", gap: 8 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
             <Tag color={C.purple}>FFN input</Tag>
-            <code style={{ color: C.purple, fontSize: 15 }}>[-1.26, -0.51, 0.80, 0.98]</code>
+            <code style={{ color: C.purple, fontSize: 15 }}>[-1.36, -0.55, 0.86, 1.06]</code>
           </div>
           <div style={{ textAlign: "center", color: C.dim, fontSize: 14 }}>↓ goes through FFN (chapter 8.3) ↓</div>
           <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
@@ -1215,11 +1215,11 @@ export const AddNormTwo = (ctx) => { const { sub, subBtnRipple, registerSubBtn, 
           <div style={{ marginTop: 6, padding: 10, borderRadius: 8, background: `${C.green}10`, border: `1px dashed ${C.green}30` }}>
             <T color="#a5d6a7" bold center size={16}>The Add Step: FFN input + FFN output</T>
             <div style={{ marginTop: 6, display: "flex", justifyContent: "center", alignItems: "center", gap: 6, flexWrap: "wrap" }}>
-              <code style={{ color: C.purple, fontSize: 15 }}>[-1.26, -0.51, 0.80, 0.98]</code>
+              <code style={{ color: C.purple, fontSize: 15 }}>[-1.36, -0.55, 0.86, 1.06]</code>
               <span style={{ color: C.green, fontSize: 20, fontWeight: 700 }}>+</span>
               <code style={{ color: C.orange, fontSize: 15 }}>[0.51, -0.73, 1.14, 0.22]</code>
               <span style={{ color: C.green, fontSize: 20, fontWeight: 700 }}>=</span>
-              <code style={{ color: C.green, fontSize: 15, fontWeight: 700 }}>[-0.75, -1.24, 1.94, 1.20]</code>
+              <code style={{ color: C.green, fontSize: 15, fontWeight: 700 }}>[-0.85, -1.28, 2.00, 1.28]</code>
             </div>
           </div>
         </div>
@@ -1235,23 +1235,23 @@ export const AddNormTwo = (ctx) => { const { sub, subBtnRipple, registerSubBtn, 
       <T color="#b8a9ff" size={16} style={{ marginTop: 6 }}>Same Layer Normalization formula from chapter 8.2 - compute mean, subtract, divide by standard deviation, scale by gamma, shift by beta.</T>
 
       <div style={{ marginTop: 12, padding: 14, borderRadius: 10, background: "rgba(167,139,250,0.04)", border: `1px solid ${C.purple}20` }}>
-        <T color="#b8a9ff" bold center size={16}>Normalizing [-0.75, -1.24, 1.94, 1.20]</T>
+        <T color="#b8a9ff" bold center size={16}>Normalizing [-0.85, -1.28, 2.00, 1.28]</T>
 
         <div style={{ marginTop: 10, display: "flex", flexDirection: "column", gap: 6 }}>
           <div style={{ padding: 8, borderRadius: 6, background: `${C.blue}08` }}>
-            <T color={C.blue} bold size={14}>mu = (-0.75 + -1.24 + 1.94 + 1.20) / 4 = <strong>0.2875</strong></T>
+            <T color={C.blue} bold size={14}>mu = (-0.85 + -1.28 + 2.00 + 1.28) / 4 = <strong>0.2875</strong></T>
           </div>
           <div style={{ padding: 8, borderRadius: 6, background: `${C.orange}08` }}>
-            <T color={C.orange} bold size={14}>variance = 1.5252, sqrt(variance + epsilon) = <strong>1.235</strong></T>
+            <T color={C.orange} bold size={14}>variance = 1.9172, sqrt(variance + epsilon) = <strong>1.3846</strong></T>
           </div>
           <div style={{ padding: 8, borderRadius: 6, background: `${C.green}08` }}>
-            <T color={C.green} bold size={14}>Normalize each: (x - mu) / 1.235</T>
+            <T color={C.green} bold size={14}>Normalize each: (x - mu) / 1.3846</T>
             <div style={{ marginTop: 6, display: "flex", flexWrap: "wrap", gap: 6, justifyContent: "center" }}>
               {[
-                { from: "-0.75", to: "-0.84" },
-                { from: "-1.24", to: "-1.24" },
-                { from: "1.94", to: "1.34" },
-                { from: "1.20", to: "0.74" },
+                { from: "-0.85", to: "-0.82" },
+                { from: "-1.28", to: "-1.13" },
+                { from: "2.00", to: "1.24" },
+                { from: "1.28", to: "0.72" },
               ].map(({ from, to }) => (
                 <div key={from} style={{ padding: "4px 10px", borderRadius: 4, background: `${C.green}08`, border: `1px solid ${C.green}15` }}>
                   <code style={{ color: C.dim, fontSize: 13 }}>{from}</code>
@@ -1264,7 +1264,7 @@ export const AddNormTwo = (ctx) => { const { sub, subBtnRipple, registerSubBtn, 
         </div>
 
         <div style={{ marginTop: 10, padding: 8, borderRadius: 6, background: `${C.purple}10`, border: `1px dashed ${C.purple}30` }}>
-          <T color="#b8a9ff" bold center size={15}>Block output for "cats": [-0.84, -1.24, 1.34, 0.74]</T>
+          <T color="#b8a9ff" bold center size={15}>Block output for "cats": [-0.82, -1.13, 1.24, 0.72]</T>
           <T color={C.dim} center size={13} style={{ marginTop: 2 }}>With gamma=1.0 and beta=0.0 (initial values). The model will learn optimal gamma and beta during training.</T>
         </div>
       </div>
@@ -1282,11 +1282,11 @@ export const AddNormTwo = (ctx) => { const { sub, subBtnRipple, registerSubBtn, 
           { step: "arrow", label: "Multi-Head Attention" },
           { step: "Attention Output", val: "[0.3, -0.1, 0.2, 0.4]", color: C.pink, tag: "Attn" },
           { step: "arrow", label: "Add & Norm #1" },
-          { step: "After 1st Add & Norm", val: "[-1.26, -0.51, 0.80, 0.98]", color: C.blue, tag: "A&N 1" },
+          { step: "After 1st Add & Norm", val: "[-1.36, -0.55, 0.86, 1.06]", color: C.blue, tag: "A&N 1" },
           { step: "arrow", label: "Feed-Forward Network" },
           { step: "FFN Output", val: "[0.51, -0.73, 1.14, 0.22]", color: C.orange, tag: "FFN" },
           { step: "arrow", label: "Add & Norm #2" },
-          { step: "Block Output", val: "[-0.84, -1.24, 1.34, 0.74]", color: C.green, tag: "A&N 2" },
+          { step: "Block Output", val: "[-0.82, -1.13, 1.24, 0.72]", color: C.green, tag: "A&N 2" },
         ].map((item, i) =>
           item.step === "arrow" ? (
             <div key={i} style={{ display: "flex", flexDirection: "column", alignItems: "center", padding: "2px 0" }}>

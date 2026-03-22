@@ -60,7 +60,7 @@ export const ScalingLaws = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple
         <T color="#ce93d8" bold center size={20}>Chinchilla Scaling (DeepMind 2022):</T>
         <T color="#ce93d8" style={{ marginTop: 8 }}>People were training models with way too few tokens relative to size.</T>
         <T color="#ce93d8" style={{ marginTop: 6 }}><strong>Most models are under-trained, not too small.</strong></T>
-        <T color="#ce93d8" style={{ marginTop: 6 }}>Optimal: match data tokens to parameters. 200B params = 20T tokens (rough rule).</T>
+        <T color="#ce93d8" style={{ marginTop: 6 }}>Optimal: match data tokens to parameters. Roughly 20 tokens per parameter, so 200B params needs about 4T tokens.</T>
       </Box></Reveal>
     {sub < 5 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
   </div>

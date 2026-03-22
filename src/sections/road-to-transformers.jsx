@@ -73,7 +73,7 @@ export const CNN = (ctx) => {
             <div style={{ padding: "14px 16px", borderRadius: 10, background: `${C.green}06`, border: `1px solid ${C.green}15`, width: "100%" }}>
               <T color={C.green} bold center size={16}>Filter slides to all 9 positions (5×5 - 3×3 + 1 = 3×3 output)</T>
               <div style={{ marginTop: 10, display: "grid", gridTemplateColumns: "repeat(3, 52px)", gap: 3, justifyContent: "center" }}>
-                {[[1.9, 1.2, 0.8], [0.5, 2.1, 1.4], [0.3, 0.9, 1.6]].map((row, r) =>
+                {[[1.9, -0.4, 0.2], [-0.9, 1.4, -0.6], [1.1, -0.7, 1.7]].map((row, r) =>
                   row.map((v, c) => (
                     <div key={`o${r}${c}`} style={{
                       width: 52, height: 40, display: "flex", alignItems: "center", justifyContent: "center",

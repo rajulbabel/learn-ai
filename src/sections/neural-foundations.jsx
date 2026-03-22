@@ -3155,8 +3155,8 @@ export const LayerIsMatMul = (ctx) => {
               {/* Neuron nodes */}
               {[
                 { y: 50, label: "Flu", out: "23.5", c: C.red, ct: "#ef9a9a" },
-                { y: 160, label: "Cold", out: "31.3", c: C.orange, ct: "#ffb74d" },
-                { y: 270, label: "Allergy", out: "32.1", c: C.purple, ct: "#b8a9ff" },
+                { y: 160, label: "Cold", out: "8.9", c: C.orange, ct: "#ffb74d" },
+                { y: 270, label: "Allergy", out: "16.2", c: C.purple, ct: "#b8a9ff" },
               ].map(({ y, label, out, c, ct }) => (
                 <g key={label}>
                   <circle cx={290} cy={y} r={28} fill={`${c}12`} stroke={c} strokeWidth={2} />

@@ -268,6 +268,7 @@ export async function search(query, { limit = 10 } = {}) {
       sectionName: r.sectionName,
       sub: r.sub,
       text: r.text,
+      score: r.textScore || 0,
       source: "text",
     }));
   }
@@ -290,6 +291,7 @@ export async function search(query, { limit = 10 } = {}) {
       sectionName: r.sectionName,
       sub: r.sub,
       text: r.text,
+      score: r.textScore || 0,
       source: "text",
     }));
   }
@@ -303,6 +305,7 @@ export async function search(query, { limit = 10 } = {}) {
     sectionName: r.sectionName,
     sub: r.sub,
     text: r.text,
+    score: r.fusedScore || r.textScore || 0,
     source: "hybrid",
   }));
 }
@@ -333,6 +336,7 @@ export function searchText(query, limit = 10) {
     sectionName: r.sectionName,
     sub: r.sub,
     text: r.text,
+    score: r.textScore || 0,
     source: "text",
   }));
 }

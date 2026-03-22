@@ -88,8 +88,9 @@ export const chapters = [
   // Section 8: Beyond Attention
   { id: "8.1", title: "Add & Norm - The Stabilizer", section: 8, component: "AddNorm" },
   { id: "8.2", title: "FFN - The Feed-Forward Network", section: 8, component: "FeedForwardNetwork" },
-  { id: "8.3", title: "Add & Norm (Again) - The Second Stabilizer", section: 8, component: "AddNormTwo" },
-  { id: "8.4", title: "Nx - The Transformer Block Repeats", section: 8, component: "TransformerBlockRepeats" },
+  { id: "8.3", title: "FFN - Why Word Count Doesn't Matter", section: 8, component: "FFNParallelTrick" },
+  { id: "8.4", title: "Add & Norm (Again) - The Second Stabilizer", section: 8, component: "AddNormTwo" },
+  { id: "8.5", title: "Nx - The Transformer Block Repeats", section: 8, component: "TransformerBlockRepeats" },
 ];
 
 export const sectionNames = { 0: "Overview", 1: "Neural Network Foundations", 2: "How LLMs Actually Train", 3: "Scaling & Modern Techniques", 4: "The Road to Transformers", 5: "Transformer Input Pipeline", 6: "Attention - Understanding Q, K, V", 7: "Attention - The Full Computation", 8: "Beyond Attention" };

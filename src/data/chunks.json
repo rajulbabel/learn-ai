@@ -4142,6 +4142,69 @@
   {
     "id": 460,
     "chapterId": "8.3",
+    "title": "FFN - Why Word Count Doesn't Matter",
+    "section": 8,
+    "sectionName": "Beyond Attention",
+    "sub": 0,
+    "text": "Recap: FFN With Just One WordIn chapter 8.2 we traced one word (\"cats\") through FFN. Let's make the matrix shapes explicit. Say \"cats\" is a 3-dimensional vector:\"cats\"0.5-0.30.91x3 (one word, 3 dims)×W1wwwwwwwwwwwwwwwwww3x6 (3 dims in, 6 dims out)=Hiddenhhhhhh1x6 (expanded)One word: 1x3 times 3x6 = 1x6. The weight matrix W1 has 3 x 6 = 18 weights. These 18 weights are the same for every single word that ever goes through this FFN.Continue"
+  },
+  {
+    "id": 461,
+    "chapterId": "8.3",
+    "title": "FFN - Why Word Count Doesn't Matter",
+    "section": 8,
+    "sectionName": "Beyond Attention",
+    "sub": 1,
+    "text": "k: Stack Words Into a MatrixWhat if we have 3 words? We don't run the FFN 3 times. We stack all 3 word vectors into a single matrix and multiply once:3 words stacked0.5-0.30.90.20.8-0.10.7-0.50.33x3 (\"I\", \"love\", \"cats\")×same W1wwwwwwwwwwwwwwwwww3x6 (unchanged!)=3 outputshhhhhhhhhhhhhhhhhh3x6 (one row per word)3x3 times 3x6 = 3x6. Still the same W1. Still 18 weights. Row 1 of the input only interacts with W to produce row 1 of the output. No mixing between words - that's how matrix multiplication works.Continue"
+  },
+  {
+    "id": 462,
+    "chapterId": "8.3",
+    "title": "FFN - Why Word Count Doesn't Matter",
+    "section": 8,
+    "sectionName": "Beyond Attention",
+    "sub": 2,
+    "text": "\"The cat sat on the mat\"Now let's use our full example sentence. 6 words, each a 3-dim vector. Stack them into a 6x3 matrix:6 words0.2-0.90.50.60.3-0.2-0.50.90.10.1-0.40.80.2-0.90.50.70.2-0.66x3×same W13x618 weights=6 outputs6x6one row per word6x3 times 3x6 = 6x6. The W1 matrix is still 3x6 = 18 weights. Doesn't matter that we went from 3 words to 6 - the weight matrix stays the same size.Think about it: row 1 (\"The\") hits W and produces its own output. Row 4 (\"on\") hits the exact same W and produces its own output. The rows never interact. Each word is independently transformed by the same 18 weights.Continue"
+  },
+  {
+    "id": 463,
+    "chapterId": "8.3",
+    "title": "FFN - Why Word Count Doesn't Matter",
+    "section": 8,
+    "sectionName": "Beyond Attention",
+    "sub": 3,
+    "text": "? 1000 Words? Same 18 Weights.This is the key insight. The number of words is just the number of rows in the input matrix. The weight matrix W never changes:1 word1x3×3x6=1x6W1 = 18 weights3 words3x3×3x6=3x6W1 = 18 weights6 words6x3×3x6=6x6W1 = 18 weights10 words10x3×3x6=10x6W1 = 18 weights1000 words1000x3×3x6=1000x6W1 = 18 weightsThe Pattern(num_words x d_model) × W1 (d_model x d_ff) = (num_words x d_ff)The \"num_words\" dimension is a free variable. It can be anything. W1 only cares about d_model (3 in our toy example, 512 in real transformers). That's why the model can accept any length input with the same 18 parameters.In GPT-2 (d_model=512, d_ff=2048): W1 has 512 x 2048 = 1,048,576 weights. That number stays the same whether you feed it 10 words or 100,000 words.Continue"
+  },
+  {
+    "id": 464,
+    "chapterId": "8.3",
+    "title": "FFN - Why Word Count Doesn't Matter",
+    "section": 8,
+    "sectionName": "Beyond Attention",
+    "sub": 4,
+    "text": "Back Down: W2 Has the Inverse ShapeAfter GELU activation, we need to compress back to the original dimension. W2 simply has the flipped shape:6 words: expand then compressInput6x3×W13x6=Expanded6x6→GELU'd6x6×W26x3=Output6x310 words: same W1, same W2Input10x3×W13x6=Expanded10x6→GELU'd10x6×W26x3=Output10x3The General PatternLayer 1: (words x d_model) × W1 (d_model x d_ff) = (words x d_ff)GELU: (words x d_ff) → (words x d_ff)Layer 2: (words x d_ff) × W2 (d_ff x d_model) = (words x d_model)Word count flows through as the row dimension. W1 and W2 only depend on d_model and d_ff. In, expand, compress back out - same size going in and coming out, regardless of how many words.Continue"
+  },
+  {
+    "id": 465,
+    "chapterId": "8.3",
+    "title": "FFN - Why Word Count Doesn't Matter",
+    "section": 8,
+    "sectionName": "Beyond Attention",
+    "sub": 5,
+    "text": "Matters: Massive GPU ParallelismThe reason we stack words into a matrix isn't just math elegance - it's about hardware speed.Without stacking (for loop)for word in words:output = word × W1000 words = 1000 sequential matrix multiplies. Each one waits for the previous to finish. The GPU sits mostly idle because each multiply is tiny (1x3 × 3x6).With stacking (one multiply)output = all_words × W1000 words = one massive parallel matrix multiply (1000x3 × 3x6). GPU processes all rows simultaneously across thousands of cores. One instruction, all words done.The Deep InsightThis parallel trick works because FFN treats each word independently. No word's output depends on any other word. That's the fundamental difference from Attention, which creates cross-word dependencies (Q · K). You can't parallelize Attention the same way because token 3's output depends on tokens 1 and 2.But FFN? Each row hits the same W, gets the same GELU, comes out independently. It's embarrassingly parallel - the GPU's dream workload.This is also why the KV cache during generation only caches attention K,V - not FFN outputs. FFN has no cross-word state to remember. Run it on the new word, get the answer. Previous words' FFN results are already baked into the K,V cache."
+  },
+  {
+    "id": 466,
+    "chapterId": "8.3",
+    "title": "FFN - Why Word Count Doesn't Matter",
+    "section": 8,
+    "sectionName": "Beyond Attention",
+    "sub": -1,
+    "text": "Beyond Attention: FFN - Why Word Count Doesn't Matter. This chapter covers ffn - why word count doesn't matter."
+  },
+  {
+    "id": 467,
+    "chapterId": "8.4",
     "title": "Add & Norm (Again) - The Second Stabilizer",
     "section": 8,
     "sectionName": "Beyond Attention",
@@ -4149,8 +4212,8 @@
     "text": "The Second Add & NormThe FFN just transformed each token's representation. But remember the problem from chapter 8.1 - values drift in deep networks. We need to stabilize again.Multi-Head Attention↓Add & Norm (first)↓FFN↓Add & Norm (second)↓Block OutputThis second Add & Norm works exactly the same way as the first - but its input is the FFN output instead of the Attention output.Continue"
   },
   {
-    "id": 461,
-    "chapterId": "8.3",
+    "id": 468,
+    "chapterId": "8.4",
     "title": "Add & Norm (Again) - The Second Stabilizer",
     "section": 8,
     "sectionName": "Beyond Attention",
@@ -4158,8 +4221,8 @@
     "text": "- Residual Around FFNSame idea as chapter 8.1: keep the original input by adding it back. The input to FFN was the first Add & Norm's output.Continuing with \"cats\":FFN input[-1.26, -0.51, 0.80, 0.98]↓ goes through FFN (chapter 8.2) ↓FFN output[0.51, -0.73, 1.14, 0.22]The Add Step: FFN input + FFN output[-1.26, -0.51, 0.80, 0.98]+[0.51, -0.73, 1.14, 0.22]=[-0.75, -1.24, 1.94, 1.20]The residual connection ensures that even if the FFN distorts values, the original signal from Add & Norm #1 survives by being added back.Continue"
   },
   {
-    "id": 462,
-    "chapterId": "8.3",
+    "id": 469,
+    "chapterId": "8.4",
     "title": "Add & Norm (Again) - The Second Stabilizer",
     "section": 8,
     "sectionName": "Beyond Attention",
@@ -4167,8 +4230,8 @@
     "text": "- Stabilize AgainSame Layer Normalization formula from chapter 8.1 - compute mean, subtract, divide by standard deviation, scale by gamma, shift by beta.Normalizing [-0.75, -1.24, 1.94, 1.20]mu = (-0.75 + -1.24 + 1.94 + 1.20) / 4 = 0.2875variance = 1.5252, sqrt(variance + epsilon) = 1.235Normalize each: (x - mu) / 1.235-0.75 → -0.84-1.24 → -1.241.94 → 1.341.20 → 0.74Block output for \"cats\": [-0.84, -1.24, 1.34, 0.74]With gamma=1.0 and beta=0.0 (initial values). The model will learn optimal gamma and beta during training.Continue"
   },
   {
-    "id": 463,
-    "chapterId": "8.3",
+    "id": 470,
+    "chapterId": "8.4",
     "title": "Add & Norm (Again) - The Second Stabilizer",
     "section": 8,
     "sectionName": "Beyond Attention",
@@ -4176,8 +4239,8 @@
     "text": "lete Single Block - All 4 StepsHere's \"cats\" flowing through one entire Transformer block, start to finish:InputInput (cats)[-0.5, 0.3, 0.7, 0.6]Multi-Head Attention↓AttnAttention Output[0.3, -0.1, 0.2, 0.4]Add & Norm #1↓A&N 1After 1st Add & Norm[-1.26, -0.51, 0.80, 0.98]Feed-Forward Network↓FFNFFN Output[0.51, -0.73, 1.14, 0.22]Add & Norm #2↓A&N 2Block Output[-0.84, -1.24, 1.34, 0.74]One block: Attention moves information between tokens, Add & Norm stabilizes, FFN processes each token's knowledge, Add & Norm stabilizes again. This is the heartbeat of every Transformer.Continue"
   },
   {
-    "id": 464,
-    "chapterId": "8.3",
+    "id": 471,
+    "chapterId": "8.4",
     "title": "Add & Norm (Again) - The Second Stabilizer",
     "section": 8,
     "sectionName": "Beyond Attention",
@@ -4185,8 +4248,8 @@
     "text": "e? - One Per Sub-LayerAdd & Norm appears twice because each Transformer block has two sub-layers: Attention and FFN. Each sub-layer gets its own Add & Norm because each one can independently cause value drift.Sub-layer 1: AttentionInput x↓Attention(x)↓Add & Norm #1Stabilizes after attention changesSub-layer 2: FFNFrom A&N #1↓FFN(x)↓Add & Norm #2Stabilizes after FFN changesThe RuleIn Transformers, every sub-layer that transforms values gets wrapped with its own residual connection and layer norm. This is what makes it possible to stack 96 blocks deep without the signal degrading. If you only normalized once at the end of the block, the FFN's output could already be in a bad range before it gets stabilized."
   },
   {
-    "id": 465,
-    "chapterId": "8.3",
+    "id": 472,
+    "chapterId": "8.4",
     "title": "Add & Norm (Again) - The Second Stabilizer",
     "section": 8,
     "sectionName": "Beyond Attention",
@@ -4194,8 +4257,8 @@
     "text": "Beyond Attention: Add & Norm (Again) - The Second Stabilizer. This chapter covers add & norm (again) - the second stabilizer."
   },
   {
-    "id": 466,
-    "chapterId": "8.4",
+    "id": 473,
+    "chapterId": "8.5",
     "title": "Nx - The Transformer Block Repeats",
     "section": 8,
     "sectionName": "Beyond Attention",
@@ -4203,8 +4266,8 @@
     "text": "One Block Does Not Repeat EnoughWe've now seen all 4 steps inside one Transformer block: Attention, Add & Norm, FFN, Add & Norm. But one block can only learn simple patterns. To understand language, the model needs to repeat this entire block many times.Think of it like this:1 blockbasic word associations (\"cat\" relates to \"sat\")4 blocksgrammar structure (subject-verb agreement)12 blockscontext and nuance (sarcasm, tone)96 blocksdeep reasoning, world knowledge, complex inferenceEach repeat of the block refines the token representations further. The output of block 1 becomes the input of block 2, and so on.Continue"
   },
   {
-    "id": 467,
-    "chapterId": "8.4",
+    "id": 474,
+    "chapterId": "8.5",
     "title": "Nx - The Transformer Block Repeats",
     "section": 8,
     "sectionName": "Beyond Attention",
@@ -4212,8 +4275,8 @@
     "text": "k - How Many Blocks?Different models use different numbers of blocks. In the original paper and in practice, this number is called N (hence \"Nx\" in architecture diagrams).GPT-2 Small12 blocksd=768GPT-2 Medium24 blocksd=1024GPT-2 Large36 blocksd=1280GPT-396 blocksd=12288What This MeansIn GPT-3, every single token in your prompt passes through 96 identical blocks in sequence. Each block runs the full Attention → Add & Norm → FFN → Add & Norm pipeline. That's 96 rounds of attention, 96 rounds of FFN, and 192 Add & Norm operations per token.Continue"
   },
   {
-    "id": 468,
-    "chapterId": "8.4",
+    "id": 475,
+    "chapterId": "8.5",
     "title": "Nx - The Transformer Block Repeats",
     "section": 8,
     "sectionName": "Beyond Attention",
@@ -4221,8 +4284,8 @@
     "text": "ucture, Different WeightsEvery block has the same structure: Attention → Add & Norm → FFN → Add & Norm. But every learnable weight inside each block is unique - learned separately during training. Here's every weight and where it lives:Multi-Head AttentionW_Q(ch 6.9)Creates Queries - \"what am I looking for?\"W_K(ch 6.9)Creates Keys - \"what do I contain?\"W_V(ch 6.9)Creates Values - \"what info do I pass along?\"W_O(ch 7.12)Blends all 8 heads back togetherAdd & Norm #1 (after Attention)γ₁ (gamma)(ch 8.1)Learnable scale per dimension - stretches or shrinks normalized valuesβ₁ (beta)(ch 8.1)Learnable shift per dimension - moves the center up or downFeed-Forward NetworkW₁, b₁(ch 8.2)First layer - expands from 512 to 2048 dims (the thinking space)W₂, b₂(ch 8.2)Second layer - compresses from 2048 back to 512 dimsAdd & Norm #2 (after FFN)γ₂ (gamma)(ch 8.3)Same role as gamma above, but a separate copy learned independentlyβ₂ (beta)(ch 8.3)Same role as beta above, but a separate copy learned independentlyEvery block has its own copy of ALL these weightsBlock 1 has its own W_Q, W_K, W_V, W_O, W1, W2, gammas, and betas. Block 2 has completely different weights. Block 96 has yet another set. If they shared the same weights, stacking 96 blocks would be no better than having one - you'd just repeat the same transformation. Each block's unique weights let it specialize: Block 1 learns different patterns than Block 50.Continue"
   },
   {
-    "id": 469,
-    "chapterId": "8.4",
+    "id": 476,
+    "chapterId": "8.5",
     "title": "Nx - The Transformer Block Repeats",
     "section": 8,
     "sectionName": "Beyond Attention",
@@ -4230,8 +4293,8 @@
     "text": "h Layer Learns - Shallow to DeepResearch on Transformer internals has revealed a clear pattern: early blocks learn simple things, deep blocks learn abstract things.Blocks 1-4Surface Patterns●Part-of-speech (noun, verb, adjective)●Basic grammar and word order●Simple co-occurrence (\"New\" near \"York\")↓Blocks 5-12Syntax & Structure●Subject-verb agreement across distance●Clause boundaries and nesting●Pronoun resolution (\"she\" refers to \"Alice\")↓Blocks 13-24Semantics & Meaning●Word sense disambiguation (\"bank\" = river vs money)●Sentiment and tone detection●Entity relationships and facts↓Blocks 25-96Abstract Reasoning●Multi-step inference and logic●World knowledge and common sense●Task-specific meaning and generationThis is why depth matters - you need many blocks to build from grammar all the way up to meaning and reasoning. It's the same principle as \"deep\" networks from chapter 1.21, but now each block has both attention (for context) and FFN (for knowledge).Continue"
   },
   {
-    "id": 470,
-    "chapterId": "8.4",
+    "id": 477,
+    "chapterId": "8.5",
     "title": "Nx - The Transformer Block Repeats",
     "section": 8,
     "sectionName": "Beyond Attention",
@@ -4239,8 +4302,8 @@
     "text": "lete Picture - Token to Output Through N BlocksHere's the full journey of a single token from input to output:Token Embedding + Positional Encoding(Sections 5.2-5.7)Block 1AttentionAdd & NormFFNAdd & NormBlock 2AttentionAdd & NormFFNAdd & NormBlock NAttentionAdd & NormFFNAdd & Norm...Output Layerlogits → softmax → next tokenNxGPT-2 SmallN = 12 blocks, 117M parametersGPT-3N = 96 blocks, 175B parametersThe full recipe of a Transformer decoder:Tokenize → Embed → Add positions → Pass through N blocks (each: Attention → Add & Norm → FFN → Add & Norm) → Output layer → Next token probability. Everything we've covered from Section 5 through Section 8 happens inside each of those N blocks."
   },
   {
-    "id": 471,
-    "chapterId": "8.4",
+    "id": 478,
+    "chapterId": "8.5",
     "title": "Nx - The Transformer Block Repeats",
     "section": 8,
     "sectionName": "Beyond Attention",

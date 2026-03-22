@@ -531,6 +531,12 @@ export const FeedForwardNetwork = (ctx) => { const { sub, subBtnRipple, register
           </div>
         </div>
       </div>
+    </Box></Reveal>
+    {sub === 3 && <SubBtn onClick={() => navigate("forward")} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
+
+    {/* Sub 4: Step-by-step computation continued - Step 2 (GELU) + Step 3 (W2) + summary */}
+    <Reveal when={sub >= 4}><Box color={C.green} style={{ width: "100%" }}>
+      <T color="#a5d6a7" bold center size={20}>Step-by-Step: FFN on "cats" (continued)</T>
 
       {/* Step 2: GELU activation */}
       <div style={{ marginTop: 10, padding: 12, borderRadius: 8, background: `${C.yellow}08`, border: `1px solid ${C.yellow}20` }}>
@@ -579,10 +585,10 @@ export const FeedForwardNetwork = (ctx) => { const { sub, subBtnRipple, register
 
       <T color="#a5d6a7" size={15} center style={{ marginTop: 10 }}>Same size in, same size out - but the values have been transformed through a "thinking space" 4x wider. This output now goes to the second Add & Norm.</T>
     </Box></Reveal>
-    {sub === 3 && <SubBtn onClick={() => navigate("forward")} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
+    {sub === 4 && <SubBtn onClick={() => navigate("forward")} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
 
-    {/* Sub 4: GELU - the real formula, then vs ReLU */}
-    <Reveal when={sub >= 4}><Box color={C.yellow} style={{ width: "100%" }}>
+    {/* Sub 5: GELU - the real formula, then vs ReLU */}
+    <Reveal when={sub >= 5}><Box color={C.yellow} style={{ width: "100%" }}>
       <T color="#fff176" bold center size={20}>GELU - The Activation Function</T>
       <T color="#fff176" size={16} style={{ marginTop: 6 }}>In chapter 1.6 we learned ReLU. Modern Transformers use a smoother alternative called GELU (Gaussian Error Linear Unit). Here is the real formula:</T>
 
@@ -679,10 +685,10 @@ export const FeedForwardNetwork = (ctx) => { const { sub, subBtnRipple, register
 
       <T color="#fff176" size={14} style={{ marginTop: 10 }}>Why does the smooth curve matter? During backpropagation (chapter 1.15), ReLU's gradient is exactly 0 for all negative inputs - the neuron is "dead" and can never recover. GELU's smooth curve means even slightly negative values get a small gradient, so neurons can recover. GPT-2 and GPT-3 both use GELU.</T>
     </Box></Reveal>
-    {sub === 4 && <SubBtn onClick={() => navigate("forward")} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
+    {sub === 5 && <SubBtn onClick={() => navigate("forward")} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
 
-    {/* Sub 5: Knowledge vs Routing intro + Example 1 */}
-    <Reveal when={sub >= 5}><Box color={C.blue} style={{ width: "100%" }}>
+    {/* Sub 6: Knowledge vs Routing intro + Example 1 */}
+    <Reveal when={sub >= 6}><Box color={C.blue} style={{ width: "100%" }}>
       <T color="#90caf9" bold center size={20}>What FFN Stores - Knowledge vs Routing</T>
       <T color="#90caf9" size={16} style={{ marginTop: 6 }}>Attention and FFN play completely different roles. Think of it this way: attention decides <strong>which words to listen to</strong>, FFN decides <strong>what to do with what it heard</strong>.</T>
 
@@ -736,10 +742,10 @@ export const FeedForwardNetwork = (ctx) => { const { sub, subBtnRipple, register
       </div>
 
     </Box></Reveal>
-    {sub === 5 && <SubBtn onClick={() => navigate("forward")} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
+    {sub === 6 && <SubBtn onClick={() => navigate("forward")} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
 
-    {/* Sub 6: Example 2 - factual recall */}
-    <Reveal when={sub >= 6}><Box color={C.green} style={{ width: "100%" }}>
+    {/* Sub 7: Example 2 - factual recall */}
+    <Reveal when={sub >= 7}><Box color={C.green} style={{ width: "100%" }}>
       <T color="#80e8a5" bold center size={20}>Example 2: "The capital of France is ___"</T>
       <T color={C.dim} center size={13} style={{ marginTop: 2 }}>Attention gathers context, FFN recalls the fact</T>
       <div style={{ marginTop: 12, display: "flex", gap: 12, flexWrap: "wrap" }}>
@@ -783,10 +789,10 @@ export const FeedForwardNetwork = (ctx) => { const { sub, subBtnRipple, register
         </div>
       </div>
     </Box></Reveal>
-    {sub === 6 && <SubBtn onClick={() => navigate("forward")} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
+    {sub === 7 && <SubBtn onClick={() => navigate("forward")} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
 
-    {/* Sub 7: Example 3 - multi-block collaboration */}
-    <Reveal when={sub >= 7}><Box color={C.purple} style={{ width: "100%" }}>
+    {/* Sub 8: Example 3 - multi-block collaboration */}
+    <Reveal when={sub >= 8}><Box color={C.purple} style={{ width: "100%" }}>
       <T color="#b8a9ff" bold center size={20}>Attention + FFN Across Multiple Blocks</T>
       <T color="#b8a9ff" bold center size={16} style={{ marginTop: 6 }}>Example 3: "She sat by the river bank"</T>
       <T color={C.dim} center size={13} style={{ marginTop: 2 }}>Does "bank" mean money or riverbed? Watch attention and FFN collaborate across blocks to resolve the ambiguity.</T>
@@ -835,10 +841,10 @@ export const FeedForwardNetwork = (ctx) => { const { sub, subBtnRipple, register
         </div>
       </div>
     </Box></Reveal>
-    {sub === 7 && <SubBtn onClick={() => navigate("forward")} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
+    {sub === 8 && <SubBtn onClick={() => navigate("forward")} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
 
-    {/* Sub 8: Deep Q&A */}
-    <Reveal when={sub >= 8}><Box color={C.cyan} style={{ width: "100%" }}>
+    {/* Sub 9: Deep Q&A */}
+    <Reveal when={sub >= 9}><Box color={C.cyan} style={{ width: "100%" }}>
       <T color="#80deea" bold center size={20}>Deep Questions You Should Be Able to Answer</T>
       <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 8 }}>
         {[
@@ -854,10 +860,10 @@ export const FeedForwardNetwork = (ctx) => { const { sub, subBtnRipple, register
         ))}
       </div>
     </Box></Reveal>
-    {sub === 8 && <SubBtn onClick={() => navigate("forward")} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
+    {sub === 9 && <SubBtn onClick={() => navigate("forward")} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
 
-    {/* Sub 9: Where do the parameters live? */}
-    <Reveal when={sub >= 9}><Box color={C.purple} style={{ width: "100%" }}>
+    {/* Sub 10: Where do the parameters live? */}
+    <Reveal when={sub >= 10}><Box color={C.purple} style={{ width: "100%" }}>
       <T color="#b8a9ff" bold center size={20}>Where Do the Parameters Live?</T>
       <T color="#b8a9ff" size={16} style={{ marginTop: 6 }}>Parameters are all the learnable numbers in the model - every weight and bias that got tuned during training (chapter 1.4). They are the model's "memory." More parameters = more capacity to store knowledge.</T>
 

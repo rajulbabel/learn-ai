@@ -3174,7 +3174,7 @@
     "section": 7,
     "sectionName": "Attention - The Full Computation",
     "sub": 5,
-    "text": "kthrough: scores [-3, 1, 5]Step 1: Apply e^score to each-3↓ e^(-3)0.051↓ e^(1)2.725↓ e^(5)148.4All negative numbers became positive!Step 2: Sum them all up (the denominator)0.05 + 2.72 + 148.4 = 151.17Step 3: Divide each e^score by the sumA (-3)0.05/151.17=0.03%B (1)2.72/151.17=1.8%C (5)148.4/151.17=98.2%All positive ✓Sum = 100% ✓Ranking preserved ✓Continue"
+    "text": "kthrough: scores [-3, 1, 5]Step 1: Apply e^score to each-3↓ e^(-3)0.051↓ e^(1)2.725↓ e^(5)148.4All negative numbers became positive!Step 2: Sum them all up (the denominator)0.05 + 2.72 + 148.4 = 151.17Continue"
   },
   {
     "id": 353,
@@ -3183,7 +3183,7 @@
     "section": 7,
     "sectionName": "Attention - The Full Computation",
     "sub": 6,
-    "text": "amplifies differences - by design.Raw scores-3, 1, 5Gap: 1 to 5 = just 4→After e^x0.05, 2.72, 148.4Gap: 2.72 to 148 = 145!The highest score doesn't just win - it dominates. This is good: the most relevant word SHOULD stand out.But - if scores are too huge (like 12, 18, 25), softmax amplifies TOO aggressively → 99.99% on one word. That's why we scale first (next chapter) to keep scores in a useful range.Continue"
+    "text": "kthrough: scores [-3, 1, 5]Step 3: Divide each e^score by the sumA (-3)0.05/151.17=0.03%B (1)2.72/151.17=1.8%C (5)148.4/151.17=98.2%All positive ✓Sum = 100% ✓Ranking preserved ✓Continue"
   },
   {
     "id": 354,
@@ -3192,10 +3192,19 @@
     "section": 7,
     "sectionName": "Attention - The Full Computation",
     "sub": 7,
-    "text": "the complete picture1e^score for each scoreMakes everything positive - even e^(-1000) is positive2Divide each by the total sumNow everything adds up to exactly 1.0 (100%)FORMULAsoftmax(zi) = ezi / Σ ezjOutput: valid percentages (all positive, sum to 100%) that respect the original ranking. But raw scores can be too big for softmax - that's the next problem to solve →"
+    "text": "amplifies differences - by design.Raw scores-3, 1, 5Gap: 1 to 5 = just 4→After e^x0.05, 2.72, 148.4Gap: 2.72 to 148 = 145!The highest score doesn't just win - it dominates. This is good: the most relevant word SHOULD stand out.But - if scores are too huge (like 12, 18, 25), softmax amplifies TOO aggressively → 99.99% on one word. That's why we scale first (next chapter) to keep scores in a useful range.Continue"
   },
   {
     "id": 355,
+    "chapterId": "7.4",
+    "title": "Why Do We Need Softmax?",
+    "section": 7,
+    "sectionName": "Attention - The Full Computation",
+    "sub": 8,
+    "text": "the complete picture1e^score for each scoreMakes everything positive - even e^(-1000) is positive2Divide each by the total sumNow everything adds up to exactly 1.0 (100%)FORMULAsoftmax(zi) = ezi / Σ ezjOutput: valid percentages (all positive, sum to 100%) that respect the original ranking. But raw scores can be too big for softmax - that's the next problem to solve →"
+  },
+  {
+    "id": 356,
     "chapterId": "7.4",
     "title": "Why Do We Need Softmax?",
     "section": 7,
@@ -3204,7 +3213,7 @@
     "text": "Attention - The Full Computation: Why Do We Need Softmax?. This chapter covers why do we need softmax?."
   },
   {
-    "id": 356,
+    "id": 357,
     "chapterId": "7.5",
     "title": "Step 3 - Scale by √d_k",
     "section": 7,
@@ -3213,7 +3222,7 @@
     "text": "The problem: dot products grow with dimensions.Remember, the dot product = multiply each pair, then sum all of them. More dimensions means more pairs being added up:2 dimensions → sum 2 terms0.24+0.14=0.3864 dimensions → sum 64 termsterm₁+term₂+term₃+... + term₆₄=~2564 small numbers added up → much bigger total512 dimensions → sum 512 termsterm₁+term₂+term₃+... + term₅₁₂=~180512 small numbers added up → huge totalEach individual term might be small (like 0.3 or 0.5). But when you add up 64 or 512 of them, the total becomes very large. The score grows just because of more dimensions - not because the words are more related.Continue"
   },
   {
-    "id": 357,
+    "id": 358,
     "chapterId": "7.5",
     "title": "Step 3 - Scale by √d_k",
     "section": 7,
@@ -3222,7 +3231,7 @@
     "text": "big scores a problem?Remember: softmax uses e^score. When scores are big, e^big_number becomes astronomically huge, and one word gets 99.99% of the attention - the model becomes blind to everything else.Small scores (2-dim)[0.38, 0.56, 0.74]I28%love33%cats39%✅ Looks at all words. Can blend info from multiple sources.Huge scores (64-dim)[12.1, 17.8, 25.6]I0.1%love0.4%cats99.6%❌ 99.6% on one word. Others invisible. Can't blend info.Continue"
   },
   {
-    "id": 358,
+    "id": 359,
     "chapterId": "7.5",
     "title": "Step 3 - Scale by √d_k",
     "section": 7,
@@ -3231,7 +3240,7 @@
     "text": "divide by √d_kIf d_k = 64, then √64 = 8. Dividing brings scores back to a manageable range:Before scaling: [12.1, 17.8, 25.6]Divide by √64 = 8:After scaling: [1.51, 2.23, 3.20]Softmax of [1.51, 2.23, 3.20]:I14%love28%cats58%✅ Focuses on the most relevant word (58%) but still gathers info from others (14%, 28%). That's exactly what you want.Continue"
   },
   {
-    "id": 359,
+    "id": 360,
     "chapterId": "7.5",
     "title": "Step 3 - Scale by √d_k",
     "section": 7,
@@ -3240,7 +3249,7 @@
     "text": "specifically? Why not ÷2 or ÷100?There's a mathematical reason. When Q and K have random values, the dot product's variance grows proportionally to d_k. The standard deviation = √d_k. So dividing by √d_k brings the variance back to 1 - normalizing scores to a consistent range no matter the dimension.In simple terms: √d_k is the exact right amount to undo the growth caused by summing d_k terms. Not too much (all scores become equal), not too little (problem remains).Continue"
   },
   {
-    "id": 360,
+    "id": 361,
     "chapterId": "7.5",
     "title": "Step 3 - Scale by √d_k",
     "section": 7,
@@ -3249,7 +3258,7 @@
     "text": "our example (d_k = 2, √2 ≈ 1.41):K_IK_loveK_catsQ_I0.270.400.52Q_love0.490.380.38Q_cats0.400.380.50Our scores were already small (2-dim), so scaling barely changes them. In a real 64-dim model, scaling is the difference between a useful model and a broken one.Now let's apply softmax to these scaled scores →"
   },
   {
-    "id": 361,
+    "id": 362,
     "chapterId": "7.5",
     "title": "Step 3 - Scale by √d_k",
     "section": 7,
@@ -3258,7 +3267,7 @@
     "text": "Attention - The Full Computation: Step 3 - Scale by √d_k. This chapter covers step 3 - scale by √d_k."
   },
   {
-    "id": 362,
+    "id": 363,
     "chapterId": "7.6",
     "title": "Step 4 - Softmax → Probabilities",
     "section": 7,
@@ -3267,7 +3276,7 @@
     "text": "Let's apply softmax step-by-stepWe have scaled scores for \"I\" looking at each word: [0.27, 0.40, 0.52]Step 1: e^score for eachIe^0.27↓1.31lovee^0.4↓1.49catse^0.52↓1.68Step 2: Sum all e^scores1.31 + 1.49 + 1.68 = 4.48Step 3: Divide each by sumI1.31 / 4.480.29love1.49 / 4.480.33cats1.68 / 4.480.370.29 + 0.33 + 0.37 = 1.0 ✓Continue"
   },
   {
-    "id": 363,
+    "id": 364,
     "chapterId": "7.6",
     "title": "Step 4 - Softmax → Probabilities",
     "section": 7,
@@ -3276,7 +3285,7 @@
     "text": "these numbers mean?When the word \"I\" looks at the sentence \"I love cats\":I → I29%29% attention to itselfI → love33%33% attention to \"love\"I → cats37%37% attention to \"cats\" (most relevant!)These scores are close because our 2-dim example is tiny. In a real 512-dim model, the differences would be much sharper.Continue"
   },
   {
-    "id": 364,
+    "id": 365,
     "chapterId": "7.6",
     "title": "Step 4 - Softmax → Probabilities",
     "section": 7,
@@ -3285,7 +3294,7 @@
     "text": "ention weight matrix (all rows softmax'd)Every word does the same process - softmax its own row of scores:Ilovecats\"I\":0.290.330.37\"love\":0.370.320.31\"cats\":0.320.320.36Each row sums to 1.0. These are the \"attention weights\" - they tell each word how much to borrow from every other word. Next: we'll use them to actually blend the Values →"
   },
   {
-    "id": 365,
+    "id": 366,
     "chapterId": "7.6",
     "title": "Step 4 - Softmax → Probabilities",
     "section": 7,
@@ -3294,7 +3303,7 @@
     "text": "Attention - The Full Computation: Step 4 - Softmax → Probabilities. This chapter covers step 4 - softmax → probabilities."
   },
   {
-    "id": 366,
+    "id": 367,
     "chapterId": "7.7",
     "title": "Step 5 - Weighted Sum of Values",
     "section": 7,
@@ -3303,7 +3312,7 @@
     "text": "Use attention weights to blend Values.For \"I\" (weights: 0.29, 0.33, 0.37):0.29×V_I = [1.0, -0.5]=[0.290, -0.145]0.33×V_love = [0.3, 0.8]=[0.099, 0.264]0.37×V_cats = [-0.2, 0.9]=[-0.074, 0.333]Sum:[0.29, -0.145] + [0.099, 0.264] + [-0.074, 0.333] = [0.315, 0.452]Continue"
   },
   {
-    "id": 367,
+    "id": 368,
     "chapterId": "7.7",
     "title": "Step 5 - Weighted Sum of Values",
     "section": 7,
@@ -3312,7 +3321,7 @@
     "text": "315, 0.452] is the NEW vector for \"I\".It's no longer just about \"I\". It has absorbed context from \"love\" (33%) and \"cats\" (37%). It's now a context-aware representation. Same happens for every word."
   },
   {
-    "id": 368,
+    "id": 369,
     "chapterId": "7.7",
     "title": "Step 5 - Weighted Sum of Values",
     "section": 7,
@@ -3321,7 +3330,7 @@
     "text": "Attention - The Full Computation: Step 5 - Weighted Sum of Values. This chapter covers step 5 - weighted sum of values."
   },
   {
-    "id": 369,
+    "id": 370,
     "chapterId": "7.8",
     "title": "The Full Formula",
     "section": 7,
@@ -3330,7 +3339,7 @@
     "text": "Everything above in one lineAttention(Q, K, V) = softmax( Q·KT / √dk ) · VContinue"
   },
   {
-    "id": 370,
+    "id": 371,
     "chapterId": "7.8",
     "title": "The Full Formula",
     "section": 7,
@@ -3339,7 +3348,7 @@
     "text": "t product of every query with every key→ score matrix/ √d_kScale down to prevent extreme softmax→ manageable scoressoftmaxConvert to probabilities (rows sum to 1)→ attention weights· VWeighted sum of values→ context-aware output"
   },
   {
-    "id": 371,
+    "id": 372,
     "chapterId": "7.8",
     "title": "The Full Formula",
     "section": 7,
@@ -3348,7 +3357,7 @@
     "text": "Attention - The Full Computation: The Full Formula. This chapter covers the full formula."
   },
   {
-    "id": 372,
+    "id": 373,
     "chapterId": "7.9",
     "title": "Why Multi-Head? - The Compromise Problem",
     "section": 7,
@@ -3357,7 +3366,7 @@
     "text": "Single-head attention has a problem.Our \"I love cats\" example has only 3 words with 2 main relationships (who loves? what's loved?). To really see why one head isn't enough, we need a longer sentence with more relationships.Consider: \"The cat that I adopted last week sat on the mat.\"\"sat\" needs answers to MULTIPLE questions at once:Who sat?catsubject ↔ verbSat where?matverb ↔ locationSat when?last weekverb ↔ timeContinue"
   },
   {
-    "id": 373,
+    "id": 374,
     "chapterId": "7.9",
     "title": "Why Multi-Head? - The Compromise Problem",
     "section": 7,
@@ -3366,7 +3375,7 @@
     "text": "head produces one set of weights - forced to compromise:cat40%got somemat30%got somelast week5%almost nothing!others25%scatteredTemporal info (\"last week\") got only 5% - almost lost! One head can't focus on all relationships.Continue"
   },
   {
-    "id": 374,
+    "id": 375,
     "chapterId": "7.9",
     "title": "Why Multi-Head? - The Compromise Problem",
     "section": 7,
@@ -3375,7 +3384,7 @@
     "text": ": give it MULTIPLE heads - like multiple ears.Each head has its own W_Q, W_K, W_V, so each asks a different question:Head 1subject-verbsat asks: \"who is my subject?\"→ cat (70%)Head 2verb-locationsat asks: \"where am I happening?\"→ mat (65%)Head 3temporalsat asks: \"when am I happening?\"→ week (55%)Now NO info is lost. Each head specializes in one relationship and captures it fully."
   },
   {
-    "id": 375,
+    "id": 376,
     "chapterId": "7.9",
     "title": "Why Multi-Head? - The Compromise Problem",
     "section": 7,
@@ -3384,7 +3393,7 @@
     "text": "Attention - The Full Computation: Why Multi-Head? - The Compromise Problem. This chapter covers why multi-head? - the compromise problem."
   },
   {
-    "id": 376,
+    "id": 377,
     "chapterId": "7.10",
     "title": "The Split - How 8 Heads Work",
     "section": 7,
@@ -3393,7 +3402,7 @@
     "text": "One head = one Query arrow = one direction.Each word's 512-dim embedding produces ONE Query vector through W_Q. That single arrow can only point one way, so it can only ask one type of question.512-dim embedding → W_Q (512×512) → One 512-dim QueryOne arrow. One question. Information lost.Solution: don't make one big arrow. Make 8 smaller arrows, each pointing in its own direction.Continue"
   },
   {
-    "id": 377,
+    "id": 378,
     "chapterId": "7.10",
     "title": "The Split - How 8 Heads Work",
     "section": 7,
@@ -3402,7 +3411,7 @@
     "text": "e 512 dimensions into 8 chunks of 64.Imagine the embedding as a long bar. We slice it into 8 equal pieces:512 dimensionsH1H2H3H4H5H6H7H86464646464646464Total dimensions:512Number of heads:8Dims per head:512 / 8 = 64We don't run the full 512-dim attention 8 times. We split it - same total computation, but 8 independent perspectives.Continue"
   },
   {
-    "id": 378,
+    "id": 379,
     "chapterId": "7.10",
     "title": "The Split - How 8 Heads Work",
     "section": 7,
@@ -3411,7 +3420,7 @@
     "text": "- doesn't splitting lose precision?Why not give each head the full 512 dims? Let's compare:Option A: 8 heads × 512 dims each512512512512512512512512Cost: 8 × 512 = 4,096 dims total (8x the compute!)Quality per head: very high, but diminishing returns past ~64 dimsOption B: 8 heads × 64 dims each (the split)6464646464646464Cost: 8 × 64 = 512 dims total (same budget as one head!)Quality per head: 64 dims is plenty - \"is this the subject?\" doesn't need 512 numbers to answerThe insight: more dims per head = diminishing returns.Going from 64 to 512 dims per head barely improves quality, but costs 8x more. The split gives you 8 different perspectives for the price of 1 large one.Continue"
   },
   {
-    "id": 379,
+    "id": 380,
     "chapterId": "7.10",
     "title": "The Split - How 8 Heads Work",
     "section": 7,
@@ -3420,7 +3429,7 @@
     "text": "d gets its own W_Q, W_K, W_V.8 heads = 8 independent sets of weight matrices. Each set is smaller (512×64 instead of 512×512):Head 1W_Q W_K W_V512×64 eachHead 2W_Q W_K W_V512×64 eachHead 3W_Q W_K W_V512×64 eachHead 4W_Q W_K W_V512×64 eachHead 5W_Q W_K W_V512×64 eachHead 6W_Q W_K W_V512×64 eachHead 7W_Q W_K W_V512×64 eachHead 8W_Q W_K W_V512×64 eachSame embedding goes into all 8 heads. Each head's different W matrices produce a different Query arrow - pointing in a different direction, asking a different question.Continue"
   },
   {
-    "id": 380,
+    "id": 381,
     "chapterId": "7.10",
     "title": "The Split - How 8 Heads Work",
     "section": 7,
@@ -3429,7 +3438,7 @@
     "text": ", 8 questions, nothing lost.\"sat\" in \"The cat sat on the mat last week\" - each head's Query arrow points differently:Head 1asks: \"who did the action?\"→ cat 70%Head 2asks: \"where?\"→ mat 65%Head 3asks: \"when?\"→ week 55%Head 4asks: \"what comes next?\"→ on 60%...and heads 5-8 ask about grammar, coreference, proximity, etc.Each head specializes. Together they capture everything - no information lost.Continue"
   },
   {
-    "id": 381,
+    "id": 382,
     "chapterId": "7.10",
     "title": "The Split - How 8 Heads Work",
     "section": 7,
@@ -3438,7 +3447,7 @@
     "text": "out: layers.A Transformer doesn't have just one set of 8 heads. It stacks multiple layers, each with its own 8 heads:Layer 96reasoning, generation......Layer 3meaning, sentimentLayer 2syntax, clause structureLayer 1word proximity, basic grammar96 layers × 8 heads = 768 attention patternsEach layer reads the previous layer's output. Early layers see raw words. Later layers see increasingly abstract, context-rich representations.Nobody told the model which layer should handle grammar or reasoning. It organized itself this way during training."
   },
   {
-    "id": 382,
+    "id": 383,
     "chapterId": "7.10",
     "title": "The Split - How 8 Heads Work",
     "section": 7,
@@ -3447,7 +3456,7 @@
     "text": "Attention - The Full Computation: The Split - How 8 Heads Work. This chapter covers the split - how 8 heads work."
   },
   {
-    "id": 383,
+    "id": 384,
     "chapterId": "7.11",
     "title": "Inside Each Head - Full Attention in 64 Dims",
     "section": 7,
@@ -3456,7 +3465,7 @@
     "text": "Each head runs the FULL attention algorithm.Exactly Steps 1–5 we learned, but in 64 dims instead of 512:For Head 1: Q₁ = embedding × W_Q₁ [3 words × 64 dims] K₁ = embedding × W_K₁ [3 words × 64 dims] V₁ = embedding × W_V₁ [3 words × 64 dims] scores₁ = Q₁ · K₁ᵀ / √64 [3×3 score matrix] weights₁ = softmax(scores₁) [3×3 attention weights] output₁ = weights₁ × V₁ [3 words × 64 dims]Same runs for all 8 heads. Each produces [3 words × 64 dims].Continue"
   },
   {
-    "id": 384,
+    "id": 385,
     "chapterId": "7.11",
     "title": "Inside Each Head - Full Attention in 64 Dims",
     "section": 7,
@@ -3465,7 +3474,7 @@
     "text": "each head's attention weights are different.Because their W_Q, W_K, W_V are different. Here's what \"sat\" sees in each head:Head 1 - \"sat\" attends to: (subject-verb)cat70%mat8%week5%others17%Head 2 - \"sat\" attends to: (verb-location)cat10%mat65%week8%others17%Head 3 - \"sat\" attends to: (temporal)cat8%mat7%week55%others30%Each head found what the single head missed. Head 3 got \"last week\" at 55% - single head only gave it 5%."
   },
   {
-    "id": 385,
+    "id": 386,
     "chapterId": "7.11",
     "title": "Inside Each Head - Full Attention in 64 Dims",
     "section": 7,
@@ -3474,7 +3483,7 @@
     "text": "Attention - The Full Computation: Inside Each Head - Full Attention in 64 Dims. This chapter covers inside each head - full attention in 64 dims."
   },
   {
-    "id": 386,
+    "id": 387,
     "chapterId": "7.12",
     "title": "Concat + W_O - Blending All Heads",
     "section": 7,
@@ -3483,7 +3492,7 @@
     "text": "The outputs are separate - we need to combine them.After the 8 heads finish, each word has 8 separate results. For \"love\":Head 1 gave:[0.3, 0.5]← figured out \"I\" is the one who lovesHead 2 gave:[-0.2, 0.8]← figured out \"cats\" is what's lovedHead 3 gave:[0.7, -0.1]← figured out the sentiment is positive... 8 results totalWe stick them end-to-end (concatenate):[0.3, 0.5, -0.2, 0.8, 0.7, -0.1, ..., 0.1, 0.4]One long list - 512 numbers. But there's a problem.Continue"
   },
   {
-    "id": 387,
+    "id": 388,
     "chapterId": "7.12",
     "title": "Concat + W_O - Blending All Heads",
     "section": 7,
@@ -3492,7 +3501,7 @@
     "text": "lem - these results are like 8 sealed envelopes.8 detectives investigated the same crime. Each wrote findings and sealed them:✉️Head 1\"suspect is male, 30s\"sealed✉️Head 2\"happened at the park\"sealed✉️Head 3\"Tuesday evening\"sealed✉️Head 4\"weapon was a knife\"sealedTape them together (concatenation):H1H2H3H4H5H6H7H8thick black walls between each section - they can't see each otherThey're physically side by side, but each section is still sealed. H1's numbers have no idea what H2 found. H3 can't see H4. They're taped together but not talking.Boss asks: \"one-line summary?\" No envelope has the full picture. H1 only knows the suspect. H2 only knows the location. Nobody can combine them.We need someone to open all the envelopes, read everything, and write one combined summary.Continue"
   },
   {
-    "id": 388,
+    "id": 389,
     "chapterId": "7.12",
     "title": "Concat + W_O - Blending All Heads",
     "section": 7,
@@ -3501,7 +3510,7 @@
     "text": "e person who opens all the envelopes.W_O is just another weight matrix - a grid of numbers, same as W_Q, W_K, W_V. Multiply input by grid, get output. Nothing new in how it works.But what it does is special. When you multiply the concatenated list by W_O, every number in the output is computed from all numbers in the input.Before W_OPosition 1 = 0.3(only knows Head 1's finding)After W_OPosition 1 = blend of 0.3 + (-0.2) + 0.7 + ... all positions= knows Head 1 + Head 2 + Head 3 + ... everythingIt's like the combined summary: \"A male suspect in his 30s used a knife at the park on Tuesday evening.\" One sentence that contains information from all envelopes.After W_O, every single position in the output carries a mix of what all 8 heads found. The envelopes have been opened, read, and combined.Continue"
   },
   {
-    "id": 389,
+    "id": 390,
     "chapterId": "7.12",
     "title": "Concat + W_O - Blending All Heads",
     "section": 7,
@@ -3510,7 +3519,7 @@
     "text": "d W_O's numbers come from?Same exact process as all other grids:1.Start with random numbers2.Model tries to predict next word, gets it wrong3.Error flows backward, nudges each number in W_O4.\"If this number were 0.31 instead of 0.30, the blending would have been better → change to 0.31\"5.Repeat billions of times6.W_O settles into numbers that produce good blendsThe training discovers the best way to combine the 8 heads' findings into one useful output. Nobody programs this - it emerges from training.Continue"
   },
   {
-    "id": 390,
+    "id": 391,
     "chapterId": "7.12",
     "title": "Concat + W_O - Blending All Heads",
     "section": 7,
@@ -3519,7 +3528,7 @@
     "text": "\"I love cats\" - what W_O does for \"love\":After 8 heads run, \"love\"'s concatenated vector has:Dims 1–64Head 1 found: \"I\" is the subject who lovesDims 65–128Head 2 found: \"cats\" is the object being lovedDims 129–192Head 3 found: this is a positive sentimentWithout W_O: each section is isolated. Dim 1 has no idea \"cats\" is involved.After W_O: every dimension of \"love\"'s output encodes the combined meaning: \"affection from 'I' directed at 'cats', with positive sentiment.\" One rich, integrated vector.This is what we set out to do in Chapter 1 - transform \"love\" from an isolated word into a context-aware representation.Continue"
   },
   {
-    "id": 391,
+    "id": 392,
     "chapterId": "7.12",
     "title": "Concat + W_O - Blending All Heads",
     "section": 7,
@@ -3528,7 +3537,7 @@
     "text": "EARNED - not hardcoded.The model discovers during training which combinations of head outputs are useful. Different layers learn different W_O matrices:Layer 1's W_O might focus on combining basic syntax patternsLayer 3's W_O might focus on combining semantic relationshipsLayer 6's W_O might focus on combining abstract reasoningNobody programs what to combine. W_O's 512×512 = 262,144 weights are all learned through backpropagation - the same process from chapters 1.3–1.9."
   },
   {
-    "id": 392,
+    "id": 393,
     "chapterId": "7.12",
     "title": "Concat + W_O - Blending All Heads",
     "section": 7,
@@ -3537,7 +3546,7 @@
     "text": "Attention - The Full Computation: Concat + W_O - Blending All Heads. This chapter covers concat + w_o - blending all heads."
   },
   {
-    "id": 393,
+    "id": 394,
     "chapterId": "7.13",
     "title": "Why 8 Heads? Parameter Count & Big Picture",
     "section": 7,
@@ -3546,7 +3555,7 @@
     "text": "Why 8 heads? Why not 4 or 16?There's a tradeoff - the total dims (512) get divided equally:16 heads512 ÷ 16 = 32 dims each✅ More pattern types❌ Each head weaker4 heads512 ÷ 4 = 128 dims each✅ Each head powerful❌ Fewer patterns8 heads × 64 dims = sweet spotEnough capacity per head (64 dims) + enough perspectives (8 types)Continue"
   },
   {
-    "id": 394,
+    "id": 395,
     "chapterId": "7.13",
     "title": "Why 8 Heads? Parameter Count & Big Picture",
     "section": 7,
@@ -3555,7 +3564,7 @@
     "text": "r count:Per head: W_Q (512×64) + W_K (512×64) + W_V (512×64) = 3 × 32,768 = 98,304W_Q32,768 × 8 heads262,144W_K32,768 × 8 heads262,144W_V32,768 × 8 heads262,144W_O512 × 512262,144Total: 1,048,576 ≈ 1 million per layerContinue"
   },
   {
-    "id": 395,
+    "id": 396,
     "chapterId": "7.13",
     "title": "Why 8 Heads? Parameter Count & Big Picture",
     "section": 7,
@@ -3564,7 +3573,7 @@
     "text": "ng: same count as single-head!Single-head with 512-dim Q, K, V needs 512×512 per matrix = same total. Multi-head doesn't add parameters - it reorganizes them into 8 independent groups. Same budget, much better results.Continue"
   },
   {
-    "id": 396,
+    "id": 397,
     "chapterId": "7.13",
     "title": "Why 8 Heads? Parameter Count & Big Picture",
     "section": 7,
@@ -3573,7 +3582,7 @@
     "text": "this scale in a full model?We learned that one attention layer has ~1 million parameters. A Transformer stacks multiple layers on top of each other - each layer refines the context further:Original Transformer (2017)6 layers~6M attention paramsGPT-2 (2019)48 layers~48M attention paramsGPT-3 (2020)96 layers175 BILLION total paramsMore layers = deeper understanding. Each layer's attention asks different questions about the same words, building increasingly rich representations. Same mechanism we learned - just stacked."
   },
   {
-    "id": 397,
+    "id": 398,
     "chapterId": "7.13",
     "title": "Why 8 Heads? Parameter Count & Big Picture",
     "section": 7,
@@ -3582,7 +3591,7 @@
     "text": "Attention - The Full Computation: Why 8 Heads? Parameter Count & Big Picture. This chapter covers why 8 heads? parameter count & big picture."
   },
   {
-    "id": 398,
+    "id": 399,
     "chapterId": "7.14",
     "title": "Is W_O Constant? Does It Change?",
     "section": 7,
@@ -3591,7 +3600,7 @@
     "text": "Is W_O constant? Does it change?There are two phases in a model's life: training and usage. The answer depends on which phase you're asking about.Continue"
   },
   {
-    "id": 399,
+    "id": 400,
     "chapterId": "7.14",
     "title": "Is W_O Constant? Does It Change?",
     "section": 7,
@@ -3600,7 +3609,7 @@
     "text": "raining: W_O changes.Every time the model sees a new batch of sentences and makes prediction errors, every number in W_O gets nudged slightly. Over billions of examples, W_O gradually improves. It changes millions of times during training - getting better and better at blending heads.After training is done: W_O is FROZEN. Completely constant.Once training is complete, the model is saved to a file. W_O's numbers are written to disk and they NEVER change again. When you use the model (send it a sentence), W_O is loaded from disk and used as-is.Continue"
   },
   {
-    "id": 400,
+    "id": 401,
     "chapterId": "7.14",
     "title": "Is W_O Constant? Does It Change?",
     "section": 7,
@@ -3609,7 +3618,7 @@
     "text": "\"I love cats\" → model uses the same W_OYou type \"dogs are great\" → model uses the same W_OYou type \"the weather is nice\" → model uses the same W_OSomeone else types anything → model uses the same W_OThe same grid of numbers. Every input. Every user. Every sentence. Forever (until someone retrains the model).Continue"
   },
   {
-    "id": 401,
+    "id": 402,
     "chapterId": "7.14",
     "title": "Is W_O Constant? Does It Change?",
     "section": 7,
@@ -3618,7 +3627,7 @@
     "text": "true for all grids, not just W_O:CONSTANT after training (stored on disk, never changes):├── Embedding dictionary├── W_Q₁ through W_Q₈ ← same grid for every input├── W_K₁ through W_K₈ ← same grid for every input├── W_V₁ through W_V₈ ← same grid for every input├── W_O ← same grid for every input├── All other layer weightsDifferent for every input (computed live, then thrown away):├── Q, K, V vectors ← different because the words are different├── Attention scores ← different because Q, K are different├── Softmax weights ← different because scores are different├── Blended outputs ← different because weights and V are different├── Final output ← different because everything above is differentContinue"
   },
   {
-    "id": 402,
+    "id": 403,
     "chapterId": "7.14",
     "title": "Is W_O Constant? Does It Change?",
     "section": 7,
@@ -3627,7 +3636,7 @@
     "text": "ifferent sentences get different results if the grids are constant?Because the grids are like a coffee machine. The machine (W_O) is always the same. But the coffee beans you put in (your sentence) are different each time. Same machine + different beans = different coffee.Same W_O × \"I love cats\" embeddings = one outputSame W_O × \"dogs are great\" embeddings = completely different outputThe grids don't need to change. They've already learned the GENERAL SKILL of \"how to blend heads\" or \"how to extract queries.\" That skill works on ANY input. Just like a coffee machine doesn't need to be rebuilt for each type of bean - it already knows how to grind and brew."
   },
   {
-    "id": 403,
+    "id": 404,
     "chapterId": "7.14",
     "title": "Is W_O Constant? Does It Change?",
     "section": 7,
@@ -3636,7 +3645,7 @@
     "text": "Attention - The Full Computation: Is W_O Constant? Does It Change?. This chapter covers is w_o constant? does it change?."
   },
   {
-    "id": 404,
+    "id": 405,
     "chapterId": "7.15",
     "title": "The Complete Picture - In Plain English",
     "section": 7,
@@ -3645,7 +3654,7 @@
     "text": "The complete picture in plain English:📖1. Words become numbers(embedding lookup)🔧2. Those numbers × three grids(W_Q, W_K, W_V → Query, Key, Value)🔍3. Queries dot-product with Keys(find \"who is relevant to whom\")📊4. Scores get normalized(scale + softmax → percentages)🎯5. Percentages blend the Values(weighted sum → context-aware output)🔀6. Steps 2-5 happen 8 times with different grids(multi-head → 8 separate results)📎7. Stick the 8 results end-to-end(concatenate → 8 sealed envelopes taped together)✉️8. That list × one more grid(W_O → open all envelopes, write combined summary)✅9. Output: one blended vector per word(ready for the next layer)Continue"
   },
   {
-    "id": 405,
+    "id": 406,
     "chapterId": "7.15",
     "title": "The Complete Picture - In Plain English",
     "section": 7,
@@ -3654,7 +3663,7 @@
     "text": "ngle \"grid\" in this process (W_Q, W_K, W_V, W_O) is just a table of numbers that started random, got nudged into useful values during training, and then stays frozen forever after. They all work the same way - multiply input by grid, get output. The only difference is what each grid was trained to do:W_Q gridslearned to extract \"what a word is looking for\"W_K gridslearned to extract \"what a word can be found for\"W_V gridslearned to extract \"what actual info a word carries\"W_O gridlearned to blend all heads' findings into one combined summaryContinue"
   },
   {
-    "id": 406,
+    "id": 407,
     "chapterId": "7.15",
     "title": "The Complete Picture - In Plain English",
     "section": 7,
@@ -3663,7 +3672,7 @@
     "text": "s are the machine. Your sentence is the raw material.Same machine, different raw material, different product - every single time."
   },
   {
-    "id": 407,
+    "id": 408,
     "chapterId": "7.15",
     "title": "The Complete Picture - In Plain English",
     "section": 7,
@@ -3672,7 +3681,7 @@
     "text": "Attention - The Full Computation: The Complete Picture - In Plain English. This chapter covers the complete picture - in plain english."
   },
   {
-    "id": 408,
+    "id": 409,
     "chapterId": "8.1",
     "title": "Encoder & Decoder - The Two Halves",
     "section": 8,
@@ -3681,7 +3690,7 @@
     "text": "The original Transformer: 2017 \"Attention Is All You Need\"The paper that introduced Transformers was solving machine translation. It needed two different operations:\"I love cats\"English input→Transformer→\"J'aime les chats\"French outputThe key problem: English and French are different languages. You must fully understand the English input before you can generate French output. These are two separate tasks.Continue"
   },
   {
-    "id": 409,
+    "id": 410,
     "chapterId": "8.1",
     "title": "Encoder & Decoder - The Two Halves",
     "section": 8,
@@ -3690,7 +3699,7 @@
     "text": ": Two separate componentsEncoder: reads the input, builds deep understanding → outputs compressed representationDecoder: reads the encoder's output, generates the translation one word at a timeEncoder✓ Process input in parallel✓ All words attend to all words✓ Build context for each wordEncoder output: rich representations of \"I\", \"love\", \"cats\"Decoder✓ Read encoder output✓ Generate translation token by token✓ Use attention to look back at inputDecoder: \"J'aime\" → \"les\" → \"chats\"Continue"
   },
   {
-    "id": 410,
+    "id": 411,
     "chapterId": "8.1",
     "title": "Encoder & Decoder - The Two Halves",
     "section": 8,
@@ -3699,7 +3708,7 @@
     "text": "tention: the bridgeThe decoder doesn't just generate from nothing. It looks back at the encoder's output using a special connection called cross-attention.Encoder output: [rich understanding of \"I\", \"love\", \"cats\"]↓ (Keys & Values)Cross-Attention LayerDecoder's Q asks encoder: \"What's relevant now?\"↓Decoder generates: \"J'aime les chats\"When generating \"les\", the decoder's Query asks \"what noun am I translating?\" The encoder's Keys/Values answer: \"you're translating the idea of 'love' and 'cats'\". The decoder uses that context to choose the right French word.Continue"
   },
   {
-    "id": 411,
+    "id": 412,
     "chapterId": "8.1",
     "title": "Encoder & Decoder - The Two Halves",
     "section": 8,
@@ -3708,7 +3717,7 @@
     "text": "encoder-decoder stackThe 2017 Transformer stacks both halves:Encoder Stack6 layersAttentionAdd & NormFeed-ForwardAdd & Norm→Decoder Stack6 layersMasked AttentionAdd & NormCross-AttentionAdd & NormFeed-ForwardAdd & Norm(Masked Attention = can only look at past tokens; Cross-Attention = looks at encoder output)Continue"
   },
   {
-    "id": 412,
+    "id": 413,
     "chapterId": "8.1",
     "title": "Encoder & Decoder - The Two Halves",
     "section": 8,
@@ -3717,7 +3726,7 @@
     "text": "halves? Different model types.The encoder-decoder design is great for translation, but there are other tasks:Encoder-DecoderTranslation (T5, BART)Input: English → Output: FrenchEncoder-OnlyClassification (BERT, RoBERTa)Input: Sentence → Output: Sentiment scoreDecoder-OnlyGeneration (GPT, Claude)Input: Prompt → Output: Continued text"
   },
   {
-    "id": 413,
+    "id": 414,
     "chapterId": "8.1",
     "title": "Encoder & Decoder - The Two Halves",
     "section": 8,
@@ -3726,7 +3735,7 @@
     "text": "The Encoder: Encoder & Decoder - The Two Halves. This chapter covers encoder & decoder - the two halves."
   },
   {
-    "id": 414,
+    "id": 415,
     "chapterId": "8.2",
     "title": "Add & Norm - The Stabilizer",
     "section": 8,
@@ -3735,7 +3744,7 @@
     "text": "Inside one Transformer block, there are 4 steps:Now let's zoom out and see what happens after attention inside a single Transformer block.Input Embeddings↓Multi-Head Attention↓Add & Norm↓FFN (Feed-Forward Network)↓Add & Norm↓OutputNotice: Add & Norm appears twice in every block - once after Attention, once after FFN. It's the stabilizer that keeps everything in check.Continue"
   },
   {
-    "id": 415,
+    "id": 416,
     "chapterId": "8.2",
     "title": "Add & Norm - The Stabilizer",
     "section": 8,
@@ -3744,7 +3753,7 @@
     "text": "lem: Values Drift in Deep NetworksGPT-3 has 96 layers. Each layer multiplies values by weights (we learned this in chapters 1.4-1.6). The result depends on the weights - if they're slightly below 1.0, values shrink. If slightly above, values explode. Keeping them perfectly balanced across 96 layers is nearly impossible.Take 0.7 from \"cats\" embedding. Two scenarios:If weights average 0.9 (shrink)Start0.7Layer 100.24Layer 500.004Layer 960.00003Value vanishes to nearly zeroIf weights average 1.1 (grow)Start0.7Layer 101.8Layer 5082Layer 964,838Value explodes to thousandsBoth are broken. Whether the value goes to 0.00003 or 4,838 - it's no longer a useful embedding. And gradients during backpropagation (chapter 1.9) drift the same way, so the model can't learn either.Continue"
   },
   {
-    "id": 416,
+    "id": 417,
     "chapterId": "8.2",
     "title": "Add & Norm - The Stabilizer",
     "section": 8,
@@ -3753,7 +3762,7 @@
     "text": "\" - Keep the OriginalThe fix is beautifully simple: add the original input back to the output. That's it. The fancy name for this is \"residual connection\" - \"residual\" just means \"leftover.\" You're keeping the leftover original so it never gets lost.How it works for \"cats\" (embedding = [-0.5, 0.3, 0.7, 0.6]):original input[-0.5, 0.3, 0.7, 0.6]↓ goes through Multi-Head Attention ↓attention output[0.3, -0.1, 0.2, 0.4]The Add Step: original + attention output[-0.5, 0.3, 0.7, 0.6]+[0.3, -0.1, 0.2, 0.4]=[-0.2, 0.2, 0.9, 1.0]Think of it as a highway: even if the attention layer learns nothing useful, the original embedding still passes through untouched. During backpropagation (chapter 1.9), the error can travel backward along this highway without shrinking to zero.Without the AddInput → Attention → OutputIf attention messes up, values are lostWith the AddInput → Attention → Output + InputOriginal values always surviveContinue"
   },
   {
-    "id": 417,
+    "id": 418,
     "chapterId": "8.2",
     "title": "Add & Norm - The Stabilizer",
     "section": 8,
@@ -3762,7 +3771,7 @@
     "text": "m\" - Layer NormalizationAfter adding, values can drift to unpredictable ranges. Layer Norm rescales them to a stable range. Here is the actual formula used in every Transformer:The Layer Normalization FormulaLayerNorm(xi) =γ·xi - μ√(σ2 + ε)+βxi = each value in the vectorthe raw input we want to normalizeμ (mu) = average of all valuescenters the data around zeroσ² (sigma squared) = variance of all valuesmeasures how spread out values areε (epsilon) = tiny number (1e-5)prevents division by zero if all values are identicalγ (gamma) = learnable scale (starts at 1.0)lets the model stretch or shrink the rangeβ (beta) = learnable shift (starts at 0.0)lets the model move the center up or downgamma and beta are learned during training - they let the model undo the normalization if needed. They let the model stretch, shrink, or shift the normalized values to whatever range works best for each dimension.Continue"
   },
   {
-    "id": 418,
+    "id": 419,
     "chapterId": "8.2",
     "title": "Add & Norm - The Stabilizer",
     "section": 8,
@@ -3771,7 +3780,7 @@
     "text": "g Layer Norm - Step by StepLet's apply the formula to real numbers. We're normalizing the result from the Add step:Normalizing [-0.2, 0.2, 0.9, 1.0] (the result from Add)Step 1: Compute the mean (mu)mu = (-0.2 + 0.2 + 0.9 + 1.0) / 4 =0.475Step 2: subtract the mean from each value (xi - mu)-0.2 - 0.475 = -0.675 0.2 - 0.475 = -0.275 0.9 - 0.475 = 0.425 1.0 - 0.475 = 0.525 Centered: [-0.675, -0.275, 0.425, 0.525]Step 3: Compute variance, then divide by sqrt(σ² + ε)variance = mean of squared deviations: (0.675 squared + 0.275 squared + 0.425 squared + 0.525 squared) / 4 = 0.2856sqrt(0.2856 + 0.00001) = 0.5344 (epsilon = 1e-5 prevents division by zero if all values were identical)-0.675 / 0.5344 = -1.26 -0.275 / 0.5344 = -0.51 0.425 / 0.5344 = 0.80 0.525 / 0.5344 = 0.98 After this step: [-1.26, -0.51, 0.80, 0.98] - centered at 0, unit variance.Step 4: Scale by gamma, shift by betagamma and beta are per-dimension learnable parameters. Initially gamma=1.0 and beta=0.0, so at first this step does nothing. During training, the model learns optimal values.With initial gamma=1.0, beta=0.0:1.0 x -1.26 + 0.0 = -1.26 1.0 x -0.51 + 0.0 = -0.51 1.0 x 0.80 + 0.0 = 0.80 1.0 x 0.98 + 0.0 = 0.98 Why have gamma and beta if they start as identity? Because during training, the model may learn that some dimensions need more spread (gamma > 1) or a non-zero center (beta != 0). Without them, normalization would be too rigid.Final output: [-1.26, -0.51, 0.80, 0.98]Values centered around 0 with controlled spread. Gamma and beta will adjust these during training to whatever the model needs.Continue"
   },
   {
-    "id": 419,
+    "id": 420,
     "chapterId": "8.2",
     "title": "Add & Norm - The Stabilizer",
     "section": 8,
@@ -3780,7 +3789,7 @@
     "text": "lete Add & Norm PipelineWatch \"cats\" flow through the entire Add & Norm after Attention:InputInput (cats embedding)[-0.5, 0.3, 0.7, 0.6]goes into Attention↓AttentionAttention Output[0.3, -0.1, 0.2, 0.4]Add: input + output↓AddAfter Add[-0.2, 0.2, 0.9, 1.0]Normalize↓NormAfter Norm[-1.26, -0.52, 0.80, 0.98]ready for FFN↓NextTo FFN[-1.26, -0.52, 0.80, 0.98]This exact same Add & Norm happens again after FFN. Every Transformer block does this twice - once after Attention, once after FFN.Continue"
   },
   {
-    "id": 420,
+    "id": 421,
     "chapterId": "8.2",
     "title": "Add & Norm - The Stabilizer",
     "section": 8,
@@ -3789,7 +3798,7 @@
     "text": "atters - The Big PictureWithout Add & NormLayer 10.7Layer 100.24Layer 500.004Layer 96~0Values drift to extremes. Model stops learning.With Add & NormLayer 10.7Layer 100.67Layer 500.62Layer 960.57Values stay stable. Gradients flow. Training works even at 96 layers deep.In one sentence:Add & Norm is the reason Transformers can be 96 layers deep without losing information. The \"Add\" preserves the original values, and the \"Norm\" keeps them in a stable range for the next layer."
   },
   {
-    "id": 421,
+    "id": 422,
     "chapterId": "8.2",
     "title": "Add & Norm - The Stabilizer",
     "section": 8,
@@ -3798,7 +3807,7 @@
     "text": "The Encoder: Add & Norm - The Stabilizer. This chapter covers add & norm - the stabilizer."
   },
   {
-    "id": 422,
+    "id": 423,
     "chapterId": "8.3",
     "title": "FFN - The Feed-Forward Network",
     "section": 8,
@@ -3807,7 +3816,7 @@
     "text": "Where Does the Feed-Forward Network Sit?In chapter 8.2 we covered Add & Norm after Attention. Now let's zoom into the next step.Input Embeddings↓Multi-Head Attention↓Add & Norm↓FFN (Feed-Forward Network)↓Add & Norm↓OutputThe FFN sits between the two Add & Norm layers. It processes each token independently - no communication between words here. That's what makes it different from Attention.Continue"
   },
   {
-    "id": 423,
+    "id": 424,
     "chapterId": "8.3",
     "title": "FFN - The Feed-Forward Network",
     "section": 8,
@@ -3816,7 +3825,7 @@
     "text": "o Linear Layers with ActivationYou already know what a layer does (chapter 1.19): multiply by a weight matrix W, add bias b. The FFN is just two of those layers stacked, with an activation function in between.The FFN FormulaFFN(x)=W2·GELU(W1·x+b1)+b2x = input from Add & NormW1, b1 = first layer weights & biasGELU = activation functionW2, b2 = second layer weights & biasThat's it. No attention, no softmax, no multi-head anything. Just two matrix multiplies with an activation in between - the same building blocks from Section 1.Continue"
   },
   {
-    "id": 424,
+    "id": 425,
     "chapterId": "8.3",
     "title": "FFN - The Feed-Forward Network",
     "section": 8,
@@ -3825,22 +3834,13 @@
     "text": "nd-Then-Compress ShapeHere's the interesting part: the first layer expands the dimension, and the second layer compresses it back. In GPT-2 (d_model = 512):Input (512)Hidden (2048)Output (512)W₁512 x 2048W₂2048 x 512x₁x₂x₃h₁h₂h₃h₂₀₄₈y₁y₂y₃+ GELU3 of 512 input, 4 of 2048 hidden, 3 of 512 output shownThe hidden layer has 4x more neurons than the input or output. Every input neuron connects to every hidden neuron (W1), GELU activates each hidden neuron, then every hidden neuron connects to every output neuron (W2). The data expands into a wider \"thinking space\" (512 → 2048), then compresses back (2048 → 512).Why 4x?Imagine solving a complex problem: you spread your notes across a big desk (expand to 2048), work things out, then summarize your answer on a small card (compress back to 512). The 4x ratio was found in the original \"Attention is All You Need\" paper and has become standard across GPT-2, GPT-3, and most Transformers.Continue"
   },
   {
-    "id": 425,
-    "chapterId": "8.3",
-    "title": "FFN - The Feed-Forward Network",
-    "section": 8,
-    "sectionName": "The Encoder",
-    "sub": 3,
-    "text": "Step: FFN on \"cats\"Let's trace \"cats\" through the FFN. In chapter 8.2, Add & Norm output [-1.26, -0.51, 0.80, 0.98] for \"cats\". We'll use a tiny 4-dim version to show the real math (real models use 512 dims but the process is identical).Step 1: Multiply by W1 + b1 (expand 4 → 8 dims)[-1.26, -0.51, 0.80, 0.98]·W1+b1Each of the 8 output values is a dot product of the input with one column of W1, plus a bias - exactly like chapter 1.19.Result (8 dims):[0.42, -1.80, 0.95, 2.10, -0.33, 1.47, -0.88, 0.61]Step 2: Apply GELU activationGELU applies to each value independently - similar to ReLU (chapter 1.6) but smoother.0.42 → 0.28-1.80 → -0.040.95 → 0.772.10 → 2.07-0.33 → -0.121.47 → 1.37-0.88 → -0.170.61 → 0.44[0.28, -0.04, 0.77, 2.07, -0.12, 1.37, -0.17, 0.44]Step 3: Multiply by W2 + b2 (compress 8 → 4 dims)The 8-dim expanded vector gets compressed back to the original 4 dims.[0.28, -0.04, ..., 0.44]·W2+b2FFN output for \"cats\" (4 dims):[0.51, -0.73, 1.14, 0.22]Same size in, same size out - but the values have been transformed through a \"thinking space\" 4x wider. This output now goes to the second Add & Norm.Continue"
-  },
-  {
     "id": 426,
     "chapterId": "8.3",
     "title": "FFN - The Feed-Forward Network",
     "section": 8,
     "sectionName": "The Encoder",
-    "sub": 4,
-    "text": "he Activation FunctionIn chapter 1.6 we learned ReLU. Modern Transformers use a smoother alternative called GELU (Gaussian Error Linear Unit). Here is the real formula:The GELU FormulaGELU(x)=x·Φ(x)where Φ(x) is the cumulative distribution function of the standard normal distribution:Φ(x)=12[1 + erf(x√2)]x = the input valuethe raw number coming from the linear layerΦ(x) = probability x is \"kept\"ranges from 0 (fully blocked) to 1 (fully passed)erf = Gauss error functiona smooth S-curve that maps any number to [-1, 1]In plain English: GELU multiplies x by the probability that x would be considered \"large\" under a standard normal bell curve. Large positive numbers get through almost fully (Φ near 1). Large negative numbers get almost fully blocked (Φ near 0). Values near zero get partially passed - that's the smooth part.Worked Examples2.0·0.977=1.95Large positive: almost fully passed0.5·0.691=0.35Small positive: 69% passed through0.0·0.500=0.00Zero: exactly half of zero is zero-0.5·0.309=-0.15Small negative: 31% leaked through-2.0·0.023=-0.05Large negative: almost fully blockedReLU (chapter 1.6)if x < 0: output = 0if x > 0: output = xHard cutoff. Negative = dead. Gradient = 0 forever.GELU (smooth)if x < 0: output = small leakif x > 0: output = ~xSmooth transition. Small negatives leak through. Gradient never fully dies.Why does the smooth curve matter? During backpropagation (chapter 1.15), ReLU's gradient is exactly 0 for all negative inputs - the neuron is \"dead\" and can never recover. GELU's smooth curve means even slightly negative values get a small gradient, so neurons can recover. GPT-2 and GPT-3 both use GELU.Continue"
+    "sub": 3,
+    "text": "Step: FFN on \"cats\"Let's trace \"cats\" through the FFN. In chapter 8.2, Add & Norm output [-1.26, -0.51, 0.80, 0.98] for \"cats\". We'll use a tiny 4-dim version to show the real math (real models use 512 dims but the process is identical).Step 1: Multiply by W1 + b1 (expand 4 → 8 dims)[-1.26, -0.51, 0.80, 0.98]·W1+b1Each of the 8 output values is a dot product of the input with one column of W1, plus a bias - exactly like chapter 1.19.Result (8 dims):[0.42, -1.80, 0.95, 2.10, -0.33, 1.47, -0.88, 0.61]Continue"
   },
   {
     "id": 427,
@@ -3848,8 +3848,8 @@
     "title": "FFN - The Feed-Forward Network",
     "section": 8,
     "sectionName": "The Encoder",
-    "sub": 5,
-    "text": "Stores - Knowledge vs RoutingAttention and FFN play completely different roles. Think of it this way: attention decides which words to listen to, FFN decides what to do with what it heard.Remember: inside every block, Attention runs first, then FFNFFN never sees the raw input - it always receives attention's output. Attention gathers context from other words. Then FFN transforms that context-enriched vector.Example 1: \"The area of this rectangle depends on its length\"Notice: \"breadth\" is never mentioned - but the model knows it mattersAttention Runs FirstQ · K scores for \"area\"\"area\"'s Query asks \"what determines me?\" \"length\"'s Key scores high (0.55 after softmax) - they're clearly related. \"rectangle\"'s Key also matches (0.30) - it tells area what shape we're talking about.Weighted sum of ValuesOutput = 0.55 · Vlength + 0.30 · Vrectangle + ... The \"area\" vector now carries: \"I'm the area of a rectangle and length is involved.\"Result: context assembled, but incompleteAttention found real connections between words that exist in the input. But \"breadth\" is not in the sentence. Attention can only mix what's there - it cannot add knowledge that's missing from the text.Then FFN Adds Stored KnowledgeW1: \"rectangle-area\" detector firesFFN receives the attention-enriched \"area\" vector (which already encodes \"rectangle + length\"). Row 1203 of W1 was trained on millions of math texts - it detects \"area of a rectangle with length mentioned.\" Dot product: W1[1203] · x = 3.9GELU activates the right knowledgeGELU(3.9) = 3.89 → neuron 1203 fires strongly. Meanwhile, neuron 502 (\"circle-area-pi\") got -0.8 → GELU suppresses it. The network knows this is a rectangle, not a circle.W2: pushes \"area\" toward breadth-aware regionColumn 1203 of W2 shifts the vector into a region of embedding space that encodes \"area = length x breadth, breadth is the missing factor.\" The model now implicitly knows breadth matters - even though the word never appeared in the input.This is what \"stored knowledge\" meansDuring training, the FFN saw \"area = length x breadth\" thousands of times. That relationship got baked into W1 row 1203 (detector) and W2 column 1203 (output). Attention found the words in the sentence. FFN added what it knows from training.Continue"
+    "sub": 4,
+    "text": "Step: FFN on \"cats\" (continued)Step 2: Apply GELU activationGELU applies to each value independently - similar to ReLU (chapter 1.6) but smoother.0.42 → 0.28-1.80 → -0.040.95 → 0.772.10 → 2.07-0.33 → -0.121.47 → 1.37-0.88 → -0.170.61 → 0.44[0.28, -0.04, 0.77, 2.07, -0.12, 1.37, -0.17, 0.44]Step 3: Multiply by W2 + b2 (compress 8 → 4 dims)The 8-dim expanded vector gets compressed back to the original 4 dims.[0.28, -0.04, ..., 0.44]·W2+b2FFN output for \"cats\" (4 dims):[0.51, -0.73, 1.14, 0.22]Same size in, same size out - but the values have been transformed through a \"thinking space\" 4x wider. This output now goes to the second Add & Norm.Continue"
   },
   {
     "id": 428,
@@ -3857,8 +3857,8 @@
     "title": "FFN - The Feed-Forward Network",
     "section": 8,
     "sectionName": "The Encoder",
-    "sub": 6,
-    "text": "2: \"The capital of France is ___\"Attention gathers context, FFN recalls the factAttention Runs FirstQ · K scores for \"___\" position\"___\"'s Query asks \"what country am I about?\" \"France\"'s Key scores highest (0.72 after softmax), \"capital\" gets 0.18, rest get scraps.Weighted sum of ValuesOutput = 0.72 · VFrance + 0.18 · Vcapital + ... This is a blend - a weighted average. It mixes \"France\" info into the \"___\" position.Result: context assembled, but no answer yetThe \"___\" vector now encodes \"I need the capital of France.\" But attention can only average existing vectors - it cannot look up a fact. It assembled the question, not the answer.Then FFN Recalls the FactW1: \"capital-of-France\" detector firesRow 847 of W1 was trained on millions of geography texts. It detects the \"capital-of-France\" pattern in the vector that attention assembled. Dot product: W1[847] · x = 4.2GELU: only relevant knowledge survivesGELU(4.2) = 4.19 → neuron 847 fires. GELU(-1.3) = -0.05 → neuron 200 (\"capital-of-Germany\") is suppressed. Of 2048 neurons, maybe 100-300 fire meaningfully for any given input.W2: writes \"Paris\" into the vectorColumn 847 of W2 was trained to shift vectors toward \"Paris.\" Since neuron 847 fired at 4.19, its column dominates the output: output += 4.19 · W2[:,847]. The answer is now in the vector.Key insight: W1 rows = \"what to detect\", W2 columns = \"what to output\"This is the key-value memory interpretation from research. The FFN is a lookup table: 2048 entries, each asking \"does this pattern match?\" and outputting the corresponding knowledge.Continue"
+    "sub": 5,
+    "text": "he Activation FunctionIn chapter 1.6 we learned ReLU. Modern Transformers use a smoother alternative called GELU (Gaussian Error Linear Unit). Here is the real formula:The GELU FormulaGELU(x)=x·Φ(x)where Φ(x) is the cumulative distribution function of the standard normal distribution:Φ(x)=12[1 + erf(x√2)]x = the input valuethe raw number coming from the linear layerΦ(x) = probability x is \"kept\"ranges from 0 (fully blocked) to 1 (fully passed)erf = Gauss error functiona smooth S-curve that maps any number to [-1, 1]In plain English: GELU multiplies x by the probability that x would be considered \"large\" under a standard normal bell curve. Large positive numbers get through almost fully (Φ near 1). Large negative numbers get almost fully blocked (Φ near 0). Values near zero get partially passed - that's the smooth part.Worked Examples2.0·0.977=1.95Large positive: almost fully passed0.5·0.691=0.35Small positive: 69% passed through0.0·0.500=0.00Zero: exactly half of zero is zero-0.5·0.309=-0.15Small negative: 31% leaked through-2.0·0.023=-0.05Large negative: almost fully blockedReLU (chapter 1.6)if x < 0: output = 0if x > 0: output = xHard cutoff. Negative = dead. Gradient = 0 forever.GELU (smooth)if x < 0: output = small leakif x > 0: output = ~xSmooth transition. Small negatives leak through. Gradient never fully dies.Why does the smooth curve matter? During backpropagation (chapter 1.15), ReLU's gradient is exactly 0 for all negative inputs - the neuron is \"dead\" and can never recover. GELU's smooth curve means even slightly negative values get a small gradient, so neurons can recover. GPT-2 and GPT-3 both use GELU.Continue"
   },
   {
     "id": 429,
@@ -3866,8 +3866,8 @@
     "title": "FFN - The Feed-Forward Network",
     "section": 8,
     "sectionName": "The Encoder",
-    "sub": 7,
-    "text": "n + FFN Across Multiple BlocksExample 3: \"She sat by the river bank\"Does \"bank\" mean money or riverbed? Watch attention and FFN collaborate across blocks to resolve the ambiguity.Block 1: Basic context gatheringAttention\"bank\"'s Query matches \"river\"'s Key (adjacent words, high positional score). After softmax, \"bank\" absorbs ~40% of \"river\"'s Value vector. \"sat\" gets ~20% (nearby verb). Result: \"bank\" now carries \"I'm next to the word river and someone sat.\"FFN (receives attention's output)Sees \"bank + some river context.\" W1 row 310 (\"river-location\" detector) fires weakly: 1.2. W1 row 744 (\"financial-institution\" detector) also fires weakly: 0.8. GELU passes both through. W2 nudges the vector slightly toward both meanings. Ambiguity not yet resolved.Block 5: Deeper semantic understandingAttention\"bank\" now attends to \"sat\" (physical action, not financial), \"by\" (location preposition), and \"river\" with much higher scores than Block 1. Why higher? Because Blocks 1-4 FFNs already strengthened the \"nature/location\" features in \"sat\" and \"river.\" Their Value vectors are now richer, so the weighted sum gives \"bank\" a much stronger location signal.FFN (receives attention's output)Now row 310 (\"river-location\") fires at 3.8 (strong match). Row 744 (\"financial\") fires at -1.1 → GELU(-1.1) = -0.03, effectively dead. W2 column 310 shifts the vector hard toward geography/nature features, column 744 contributes almost nothing. \"Bank\" now means \"riverbank\" - ambiguity resolved.Why this takes multiple blocksEach round, attention provides better context because FFN improved the vectors, and FFN makes better decisions because attention gathered more context. They bootstrap each other. Block 1 FFN nudges slightly, Block 2 attention uses that nudge to focus better, Block 2 FFN nudges harder, and so on across all 96 blocks.Three examples, three types of FFN knowledge:1. Implicit knowledge (area/breadth) - FFN adds concepts that aren't in the input but are related by training data2. Factual recall (France/Paris) - FFN looks up a stored fact and writes the answer into the vector3. Disambiguation (bank/river) - FFN resolves ambiguity by suppressing wrong meanings and boosting the right oneContinue"
+    "sub": 6,
+    "text": "Stores - Knowledge vs RoutingAttention and FFN play completely different roles. Think of it this way: attention decides which words to listen to, FFN decides what to do with what it heard.Remember: inside every block, Attention runs first, then FFNFFN never sees the raw input - it always receives attention's output. Attention gathers context from other words. Then FFN transforms that context-enriched vector.Example 1: \"The area of this rectangle depends on its length\"Notice: \"breadth\" is never mentioned - but the model knows it mattersAttention Runs FirstQ · K scores for \"area\"\"area\"'s Query asks \"what determines me?\" \"length\"'s Key scores high (0.55 after softmax) - they're clearly related. \"rectangle\"'s Key also matches (0.30) - it tells area what shape we're talking about.Weighted sum of ValuesOutput = 0.55 · Vlength + 0.30 · Vrectangle + ... The \"area\" vector now carries: \"I'm the area of a rectangle and length is involved.\"Result: context assembled, but incompleteAttention found real connections between words that exist in the input. But \"breadth\" is not in the sentence. Attention can only mix what's there - it cannot add knowledge that's missing from the text.Then FFN Adds Stored KnowledgeW1: \"rectangle-area\" detector firesFFN receives the attention-enriched \"area\" vector (which already encodes \"rectangle + length\"). Row 1203 of W1 was trained on millions of math texts - it detects \"area of a rectangle with length mentioned.\" Dot product: W1[1203] · x = 3.9GELU activates the right knowledgeGELU(3.9) = 3.89 → neuron 1203 fires strongly. Meanwhile, neuron 502 (\"circle-area-pi\") got -0.8 → GELU suppresses it. The network knows this is a rectangle, not a circle.W2: pushes \"area\" toward breadth-aware regionColumn 1203 of W2 shifts the vector into a region of embedding space that encodes \"area = length x breadth, breadth is the missing factor.\" The model now implicitly knows breadth matters - even though the word never appeared in the input.This is what \"stored knowledge\" meansDuring training, the FFN saw \"area = length x breadth\" thousands of times. That relationship got baked into W1 row 1203 (detector) and W2 column 1203 (output). Attention found the words in the sentence. FFN added what it knows from training.Continue"
   },
   {
     "id": 430,
@@ -3875,8 +3875,8 @@
     "title": "FFN - The Feed-Forward Network",
     "section": 8,
     "sectionName": "The Encoder",
-    "sub": 8,
-    "text": "stions You Should Be Able to AnswerWhy can't attention replace FFN?Attention computes weighted averages of Value vectors - a linear operation. It can mix information from different tokens, but it can never create new features. \"If river AND bank are both present, output riverbank\" requires non-linearity (GELU). Only FFN has that.Why can't FFN replace attention?FFN processes each token in complete isolation. It never sees any other word. Without attention first injecting \"river\" into \"bank\"'s vector, FFN would process \"bank\" identically in \"river bank\" and \"investment bank\" - same input, same output, unable to disambiguate.What exactly does \"FFN stores knowledge\" mean?Each row of W₁ is a pattern detector trained during pre-training. Row 847 learned to fire when the input looks like \"capital-of-France.\" The corresponding column of W₂ learned to output a vector that shifts toward \"Paris.\" This row-column pair is literally one stored fact. GPT-3 has 2048-49152 such detectors per block across 96 blocks.How do researchers prove this isn't just a metaphor?Ablation studies: zero out specific FFN neurons and watch \"The capital of France is\" stop producing \"Paris\" while grammar stays intact. Activate those same neurons artificially and watch \"Paris\" appear in unrelated contexts. The knowledge is localized to specific neurons - not distributed across the whole network.Continue"
+    "sub": 7,
+    "text": "2: \"The capital of France is ___\"Attention gathers context, FFN recalls the factAttention Runs FirstQ · K scores for \"___\" position\"___\"'s Query asks \"what country am I about?\" \"France\"'s Key scores highest (0.72 after softmax), \"capital\" gets 0.18, rest get scraps.Weighted sum of ValuesOutput = 0.72 · VFrance + 0.18 · Vcapital + ... This is a blend - a weighted average. It mixes \"France\" info into the \"___\" position.Result: context assembled, but no answer yetThe \"___\" vector now encodes \"I need the capital of France.\" But attention can only average existing vectors - it cannot look up a fact. It assembled the question, not the answer.Then FFN Recalls the FactW1: \"capital-of-France\" detector firesRow 847 of W1 was trained on millions of geography texts. It detects the \"capital-of-France\" pattern in the vector that attention assembled. Dot product: W1[847] · x = 4.2GELU: only relevant knowledge survivesGELU(4.2) = 4.19 → neuron 847 fires. GELU(-1.3) = -0.05 → neuron 200 (\"capital-of-Germany\") is suppressed. Of 2048 neurons, maybe 100-300 fire meaningfully for any given input.W2: writes \"Paris\" into the vectorColumn 847 of W2 was trained to shift vectors toward \"Paris.\" Since neuron 847 fired at 4.19, its column dominates the output: output += 4.19 · W2[:,847]. The answer is now in the vector.Key insight: W1 rows = \"what to detect\", W2 columns = \"what to output\"This is the key-value memory interpretation from research. The FFN is a lookup table: 2048 entries, each asking \"does this pattern match?\" and outputting the corresponding knowledge.Continue"
   },
   {
     "id": 431,
@@ -3884,11 +3884,29 @@
     "title": "FFN - The Feed-Forward Network",
     "section": 8,
     "sectionName": "The Encoder",
-    "sub": 9,
-    "text": "the Parameters Live?Parameters are all the learnable numbers in the model - every weight and bias that got tuned during training (chapter 1.4). They are the model's \"memory.\" More parameters = more capacity to store knowledge.Here's how they split between Attention and FFN in one Transformer block:One Transformer Block (~3.15M parameters total)Attention (1/3)FFN (2/3)Attention: ~1.05MW_Q, W_K, W_V = 3 matrices that create the Queries, Keys, and Values (chapter 6.9)W_O = the matrix that blends multi-head outputs (chapter 7.12)These learn how to find relationships between wordsFFN: ~2.1MW1 (512 x 2048) = expands to thinking spaceW2 (2048 x 512) = compresses back to model sizeThese learn facts and transformations - the actual knowledgeGPT-3 has 96 blocks. That's 96 copies of this structure = 96 x 3.15M = ~302M parameters just in one layer type - and GPT-3's total is 175 billion because d_model is 12,288 (not 512), making each matrix vastly larger."
+    "sub": 8,
+    "text": "n + FFN Across Multiple BlocksExample 3: \"She sat by the river bank\"Does \"bank\" mean money or riverbed? Watch attention and FFN collaborate across blocks to resolve the ambiguity.Block 1: Basic context gatheringAttention\"bank\"'s Query matches \"river\"'s Key (adjacent words, high positional score). After softmax, \"bank\" absorbs ~40% of \"river\"'s Value vector. \"sat\" gets ~20% (nearby verb). Result: \"bank\" now carries \"I'm next to the word river and someone sat.\"FFN (receives attention's output)Sees \"bank + some river context.\" W1 row 310 (\"river-location\" detector) fires weakly: 1.2. W1 row 744 (\"financial-institution\" detector) also fires weakly: 0.8. GELU passes both through. W2 nudges the vector slightly toward both meanings. Ambiguity not yet resolved.Block 5: Deeper semantic understandingAttention\"bank\" now attends to \"sat\" (physical action, not financial), \"by\" (location preposition), and \"river\" with much higher scores than Block 1. Why higher? Because Blocks 1-4 FFNs already strengthened the \"nature/location\" features in \"sat\" and \"river.\" Their Value vectors are now richer, so the weighted sum gives \"bank\" a much stronger location signal.FFN (receives attention's output)Now row 310 (\"river-location\") fires at 3.8 (strong match). Row 744 (\"financial\") fires at -1.1 → GELU(-1.1) = -0.03, effectively dead. W2 column 310 shifts the vector hard toward geography/nature features, column 744 contributes almost nothing. \"Bank\" now means \"riverbank\" - ambiguity resolved.Why this takes multiple blocksEach round, attention provides better context because FFN improved the vectors, and FFN makes better decisions because attention gathered more context. They bootstrap each other. Block 1 FFN nudges slightly, Block 2 attention uses that nudge to focus better, Block 2 FFN nudges harder, and so on across all 96 blocks.Three examples, three types of FFN knowledge:1. Implicit knowledge (area/breadth) - FFN adds concepts that aren't in the input but are related by training data2. Factual recall (France/Paris) - FFN looks up a stored fact and writes the answer into the vector3. Disambiguation (bank/river) - FFN resolves ambiguity by suppressing wrong meanings and boosting the right oneContinue"
   },
   {
     "id": 432,
+    "chapterId": "8.3",
+    "title": "FFN - The Feed-Forward Network",
+    "section": 8,
+    "sectionName": "The Encoder",
+    "sub": 9,
+    "text": "stions You Should Be Able to AnswerWhy can't attention replace FFN?Attention computes weighted averages of Value vectors - a linear operation. It can mix information from different tokens, but it can never create new features. \"If river AND bank are both present, output riverbank\" requires non-linearity (GELU). Only FFN has that.Why can't FFN replace attention?FFN processes each token in complete isolation. It never sees any other word. Without attention first injecting \"river\" into \"bank\"'s vector, FFN would process \"bank\" identically in \"river bank\" and \"investment bank\" - same input, same output, unable to disambiguate.What exactly does \"FFN stores knowledge\" mean?Each row of W₁ is a pattern detector trained during pre-training. Row 847 learned to fire when the input looks like \"capital-of-France.\" The corresponding column of W₂ learned to output a vector that shifts toward \"Paris.\" This row-column pair is literally one stored fact. GPT-3 has 2048-49152 such detectors per block across 96 blocks.How do researchers prove this isn't just a metaphor?Ablation studies: zero out specific FFN neurons and watch \"The capital of France is\" stop producing \"Paris\" while grammar stays intact. Activate those same neurons artificially and watch \"Paris\" appear in unrelated contexts. The knowledge is localized to specific neurons - not distributed across the whole network.Continue"
+  },
+  {
+    "id": 433,
+    "chapterId": "8.3",
+    "title": "FFN - The Feed-Forward Network",
+    "section": 8,
+    "sectionName": "The Encoder",
+    "sub": 10,
+    "text": "the Parameters Live?Parameters are all the learnable numbers in the model - every weight and bias that got tuned during training (chapter 1.4). They are the model's \"memory.\" More parameters = more capacity to store knowledge.Here's how they split between Attention and FFN in one Transformer block:One Transformer Block (~3.15M parameters total)Attention (1/3)FFN (2/3)Attention: ~1.05MW_Q, W_K, W_V = 3 matrices that create the Queries, Keys, and Values (chapter 6.9)W_O = the matrix that blends multi-head outputs (chapter 7.12)These learn how to find relationships between wordsFFN: ~2.1MW1 (512 x 2048) = expands to thinking spaceW2 (2048 x 512) = compresses back to model sizeThese learn facts and transformations - the actual knowledgeGPT-3 has 96 blocks. That's 96 copies of this structure = 96 x 3.15M = ~302M parameters just in one layer type - and GPT-3's total is 175 billion because d_model is 12,288 (not 512), making each matrix vastly larger."
+  },
+  {
+    "id": 434,
     "chapterId": "8.3",
     "title": "FFN - The Feed-Forward Network",
     "section": 8,
@@ -3897,7 +3915,7 @@
     "text": "The Encoder: FFN - The Feed-Forward Network. This chapter covers ffn - the feed-forward network."
   },
   {
-    "id": 433,
+    "id": 435,
     "chapterId": "8.4",
     "title": "FFN - Why Word Count Doesn't Matter",
     "section": 8,
@@ -3906,7 +3924,7 @@
     "text": "Recap: FFN With Just One WordIn chapter 8.3 we traced one word (\"cats\") through FFN. Let's make the matrix shapes explicit. Say \"cats\" is a 3-dimensional vector:\"cats\"0.5-0.30.91x3 (one word, 3 dims)×W1wwwwwwwwwwwwwwwwww3x6 (3 dims in, 6 dims out)=Hiddenhhhhhh1x6 (expanded)One word: 1x3 times 3x6 = 1x6. The weight matrix W1 has 3 x 6 = 18 weights. These 18 weights are the same for every single word that ever goes through this FFN.Continue"
   },
   {
-    "id": 434,
+    "id": 436,
     "chapterId": "8.4",
     "title": "FFN - Why Word Count Doesn't Matter",
     "section": 8,
@@ -3915,7 +3933,7 @@
     "text": "k: Stack Words Into a MatrixWhat if we have 3 words? We don't run the FFN 3 times. We stack all 3 word vectors into a single matrix and multiply once:3 words stacked0.5-0.30.90.20.8-0.10.7-0.50.33x3 (\"I\", \"love\", \"cats\")×same W1wwwwwwwwwwwwwwwwww3x6 (unchanged!)=3 outputshhhhhhhhhhhhhhhhhh3x6 (one row per word)3x3 times 3x6 = 3x6. Still the same W1. Still 18 weights. Row 1 of the input only interacts with W to produce row 1 of the output. No mixing between words - that's how matrix multiplication works.Continue"
   },
   {
-    "id": 435,
+    "id": 437,
     "chapterId": "8.4",
     "title": "FFN - Why Word Count Doesn't Matter",
     "section": 8,
@@ -3924,7 +3942,7 @@
     "text": "\"The cat sat on the mat\"Now let's use our full example sentence. 6 words, each a 3-dim vector. Stack them into a 6x3 matrix:6 words0.2-0.90.50.60.3-0.2-0.50.90.10.1-0.40.80.2-0.90.50.70.2-0.66x3×same W13x618 weights=6 outputs6x6one row per word6x3 times 3x6 = 6x6. The W1 matrix is still 3x6 = 18 weights. Doesn't matter that we went from 3 words to 6 - the weight matrix stays the same size.Think about it: row 1 (\"The\") hits W and produces its own output. Row 4 (\"on\") hits the exact same W and produces its own output. The rows never interact. Each word is independently transformed by the same 18 weights.Continue"
   },
   {
-    "id": 436,
+    "id": 438,
     "chapterId": "8.4",
     "title": "FFN - Why Word Count Doesn't Matter",
     "section": 8,
@@ -3933,7 +3951,7 @@
     "text": "? 1000 Words? Same 18 Weights.This is the key insight. The number of words is just the number of rows in the input matrix. The weight matrix W never changes:1 word1x3×3x6=1x6W1 = 18 weights3 words3x3×3x6=3x6W1 = 18 weights6 words6x3×3x6=6x6W1 = 18 weights10 words10x3×3x6=10x6W1 = 18 weights1000 words1000x3×3x6=1000x6W1 = 18 weightsThe Pattern(num_words x d_model) × W1 (d_model x d_ff) = (num_words x d_ff)The \"num_words\" dimension is a free variable. It can be anything. W1 only cares about d_model (3 in our toy example, 512 in real transformers). That's why the model can accept any length input with the same 18 parameters.In GPT-2 (d_model=512, d_ff=2048): W1 has 512 x 2048 = 1,048,576 weights. That number stays the same whether you feed it 10 words or 100,000 words.Continue"
   },
   {
-    "id": 437,
+    "id": 439,
     "chapterId": "8.4",
     "title": "FFN - Why Word Count Doesn't Matter",
     "section": 8,
@@ -3942,7 +3960,7 @@
     "text": "Back Down: W2 Has the Inverse ShapeAfter GELU activation, we need to compress back to the original dimension. W2 simply has the flipped shape:6 words: expand then compressInput6x3×W13x6=Expanded6x6→GELU'd6x6×W26x3=Output6x310 words: same W1, same W2Input10x3×W13x6=Expanded10x6→GELU'd10x6×W26x3=Output10x3The General PatternLayer 1: (words x d_model) × W1 (d_model x d_ff) = (words x d_ff)GELU: (words x d_ff) → (words x d_ff)Layer 2: (words x d_ff) × W2 (d_ff x d_model) = (words x d_model)Word count flows through as the row dimension. W1 and W2 only depend on d_model and d_ff. In, expand, compress back out - same size going in and coming out, regardless of how many words.Continue"
   },
   {
-    "id": 438,
+    "id": 440,
     "chapterId": "8.4",
     "title": "FFN - Why Word Count Doesn't Matter",
     "section": 8,
@@ -3951,7 +3969,7 @@
     "text": "Matters: Massive GPU ParallelismThe reason we stack words into a matrix isn't just math elegance - it's about hardware speed.Without stacking (for loop)for word in words:output = word × W1000 words = 1000 sequential matrix multiplies. Each one waits for the previous to finish. The GPU sits mostly idle because each multiply is tiny (1x3 × 3x6).With stacking (one multiply)output = all_words × W1000 words = one massive parallel matrix multiply (1000x3 × 3x6). GPU processes all rows simultaneously across thousands of cores. One instruction, all words done.The Deep InsightThis parallel trick works because FFN treats each word independently. No word's output depends on any other word. That's the fundamental difference from Attention, which creates cross-word dependencies (Q · K). You can't parallelize Attention the same way because token 3's output depends on tokens 1 and 2.But FFN? Each row hits the same W, gets the same GELU, comes out independently. It's embarrassingly parallel - the GPU's dream workload.This is also why the KV cache during generation only caches attention K,V - not FFN outputs. FFN has no cross-word state to remember. Run it on the new word, get the answer. Previous words' FFN results are already baked into the K,V cache."
   },
   {
-    "id": 439,
+    "id": 441,
     "chapterId": "8.4",
     "title": "FFN - Why Word Count Doesn't Matter",
     "section": 8,
@@ -3960,7 +3978,7 @@
     "text": "The Encoder: FFN - Why Word Count Doesn't Matter. This chapter covers ffn - why word count doesn't matter."
   },
   {
-    "id": 440,
+    "id": 442,
     "chapterId": "8.5",
     "title": "Add & Norm (Again) - The Second Stabilizer",
     "section": 8,
@@ -3969,7 +3987,7 @@
     "text": "The Second Add & NormThe FFN just transformed each token's representation. But remember the problem from chapter 8.2 - values drift in deep networks. We need to stabilize again.Multi-Head Attention↓Add & Norm (first)↓FFN↓Add & Norm (second)↓Block OutputThis second Add & Norm works exactly the same way as the first - but its input is the FFN output instead of the Attention output.Continue"
   },
   {
-    "id": 441,
+    "id": 443,
     "chapterId": "8.5",
     "title": "Add & Norm (Again) - The Second Stabilizer",
     "section": 8,
@@ -3978,7 +3996,7 @@
     "text": "- Residual Around FFNSame idea as chapter 8.2: keep the original input by adding it back. The input to FFN was the first Add & Norm's output.Continuing with \"cats\":FFN input[-1.26, -0.51, 0.80, 0.98]↓ goes through FFN (chapter 8.3) ↓FFN output[0.51, -0.73, 1.14, 0.22]The Add Step: FFN input + FFN output[-1.26, -0.51, 0.80, 0.98]+[0.51, -0.73, 1.14, 0.22]=[-0.75, -1.24, 1.94, 1.20]The residual connection ensures that even if the FFN distorts values, the original signal from Add & Norm #1 survives by being added back.Continue"
   },
   {
-    "id": 442,
+    "id": 444,
     "chapterId": "8.5",
     "title": "Add & Norm (Again) - The Second Stabilizer",
     "section": 8,
@@ -3987,7 +4005,7 @@
     "text": "- Stabilize AgainSame Layer Normalization formula from chapter 8.2 - compute mean, subtract, divide by standard deviation, scale by gamma, shift by beta.Normalizing [-0.75, -1.24, 1.94, 1.20]mu = (-0.75 + -1.24 + 1.94 + 1.20) / 4 = 0.2875variance = 1.5252, sqrt(variance + epsilon) = 1.235Normalize each: (x - mu) / 1.235-0.75 → -0.84-1.24 → -1.241.94 → 1.341.20 → 0.74Block output for \"cats\": [-0.84, -1.24, 1.34, 0.74]With gamma=1.0 and beta=0.0 (initial values). The model will learn optimal gamma and beta during training.Continue"
   },
   {
-    "id": 443,
+    "id": 445,
     "chapterId": "8.5",
     "title": "Add & Norm (Again) - The Second Stabilizer",
     "section": 8,
@@ -3996,7 +4014,7 @@
     "text": "lete Single Block - All 4 StepsHere's \"cats\" flowing through one entire Transformer block, start to finish:InputInput (cats)[-0.5, 0.3, 0.7, 0.6]Multi-Head Attention↓AttnAttention Output[0.3, -0.1, 0.2, 0.4]Add & Norm #1↓A&N 1After 1st Add & Norm[-1.26, -0.51, 0.80, 0.98]Feed-Forward Network↓FFNFFN Output[0.51, -0.73, 1.14, 0.22]Add & Norm #2↓A&N 2Block Output[-0.84, -1.24, 1.34, 0.74]One block: Attention moves information between tokens, Add & Norm stabilizes, FFN processes each token's knowledge, Add & Norm stabilizes again. This is the heartbeat of every Transformer.Continue"
   },
   {
-    "id": 444,
+    "id": 446,
     "chapterId": "8.5",
     "title": "Add & Norm (Again) - The Second Stabilizer",
     "section": 8,
@@ -4005,7 +4023,7 @@
     "text": "e? - One Per Sub-LayerAdd & Norm appears twice because each Transformer block has two sub-layers: Attention and FFN. Each sub-layer gets its own Add & Norm because each one can independently cause value drift.Sub-layer 1: AttentionInput x↓Attention(x)↓Add & Norm #1Stabilizes after attention changesSub-layer 2: FFNFrom A&N #1↓FFN(x)↓Add & Norm #2Stabilizes after FFN changesThe RuleIn Transformers, every sub-layer that transforms values gets wrapped with its own residual connection and layer norm. This is what makes it possible to stack 96 blocks deep without the signal degrading. If you only normalized once at the end of the block, the FFN's output could already be in a bad range before it gets stabilized."
   },
   {
-    "id": 445,
+    "id": 447,
     "chapterId": "8.5",
     "title": "Add & Norm (Again) - The Second Stabilizer",
     "section": 8,
@@ -4014,7 +4032,7 @@
     "text": "The Encoder: Add & Norm (Again) - The Second Stabilizer. This chapter covers add & norm (again) - the second stabilizer."
   },
   {
-    "id": 446,
+    "id": 448,
     "chapterId": "8.6",
     "title": "Nx - The Transformer Block Repeats",
     "section": 8,
@@ -4023,7 +4041,7 @@
     "text": "One Block Does Not Repeat EnoughWe've now seen all 4 steps inside one Transformer block: Attention, Add & Norm, FFN, Add & Norm. But one block can only learn simple patterns. To understand language, the model needs to repeat this entire block many times.Think of it like this:1 blockbasic word associations (\"cat\" relates to \"sat\")4 blocksgrammar structure (subject-verb agreement)12 blockscontext and nuance (sarcasm, tone)96 blocksdeep reasoning, world knowledge, complex inferenceEach repeat of the block refines the token representations further. The output of block 1 becomes the input of block 2, and so on.Continue"
   },
   {
-    "id": 447,
+    "id": 449,
     "chapterId": "8.6",
     "title": "Nx - The Transformer Block Repeats",
     "section": 8,
@@ -4032,7 +4050,7 @@
     "text": "k - How Many Blocks?Different models use different numbers of blocks. In the original paper and in practice, this number is called N (hence \"Nx\" in architecture diagrams).GPT-2 Small12 blocksd=768GPT-2 Medium24 blocksd=1024GPT-2 Large36 blocksd=1280GPT-396 blocksd=12288What This MeansIn GPT-3, every single token in your prompt passes through 96 identical blocks in sequence. Each block runs the full Attention → Add & Norm → FFN → Add & Norm pipeline. That's 96 rounds of attention, 96 rounds of FFN, and 192 Add & Norm operations per token.Continue"
   },
   {
-    "id": 448,
+    "id": 450,
     "chapterId": "8.6",
     "title": "Nx - The Transformer Block Repeats",
     "section": 8,
@@ -4041,7 +4059,7 @@
     "text": "ucture, Different WeightsEvery block has the same structure: Attention → Add & Norm → FFN → Add & Norm. But every learnable weight inside each block is unique - learned separately during training. Here's every weight and where it lives:Multi-Head AttentionW_Q(ch 6.9)Creates Queries - \"what am I looking for?\"W_K(ch 6.9)Creates Keys - \"what do I contain?\"W_V(ch 6.9)Creates Values - \"what info do I pass along?\"W_O(ch 7.12)Blends all 8 heads back togetherAdd & Norm #1 (after Attention)γ₁ (gamma)(ch 8.2)Learnable scale per dimension - stretches or shrinks normalized valuesβ₁ (beta)(ch 8.2)Learnable shift per dimension - moves the center up or downFeed-Forward NetworkW₁, b₁(ch 8.3)First layer - expands from 512 to 2048 dims (the thinking space)W₂, b₂(ch 8.3)Second layer - compresses from 2048 back to 512 dimsAdd & Norm #2 (after FFN)γ₂ (gamma)(ch 8.5)Same role as gamma above, but a separate copy learned independentlyβ₂ (beta)(ch 8.5)Same role as beta above, but a separate copy learned independentlyEvery block has its own copy of ALL these weightsBlock 1 has its own W_Q, W_K, W_V, W_O, W1, W2, gammas, and betas. Block 2 has completely different weights. Block 96 has yet another set. If they shared the same weights, stacking 96 blocks would be no better than having one - you'd just repeat the same transformation. Each block's unique weights let it specialize: Block 1 learns different patterns than Block 50.Continue"
   },
   {
-    "id": 449,
+    "id": 451,
     "chapterId": "8.6",
     "title": "Nx - The Transformer Block Repeats",
     "section": 8,
@@ -4050,7 +4068,7 @@
     "text": "h Layer Learns - Shallow to DeepResearch on Transformer internals has revealed a clear pattern: early blocks learn simple things, deep blocks learn abstract things.Blocks 1-4Surface Patterns●Part-of-speech (noun, verb, adjective)●Basic grammar and word order●Simple co-occurrence (\"New\" near \"York\")↓Blocks 5-12Syntax & Structure●Subject-verb agreement across distance●Clause boundaries and nesting●Pronoun resolution (\"she\" refers to \"Alice\")↓Blocks 13-24Semantics & Meaning●Word sense disambiguation (\"bank\" = river vs money)●Sentiment and tone detection●Entity relationships and facts↓Blocks 25-96Abstract Reasoning●Multi-step inference and logic●World knowledge and common sense●Task-specific meaning and generationThis is why depth matters - you need many blocks to build from grammar all the way up to meaning and reasoning. It's the same principle as \"deep\" networks from chapter 1.21, but now each block has both attention (for context) and FFN (for knowledge).Continue"
   },
   {
-    "id": 450,
+    "id": 452,
     "chapterId": "8.6",
     "title": "Nx - The Transformer Block Repeats",
     "section": 8,
@@ -4059,7 +4077,7 @@
     "text": "lete Picture - Token to Output Through N BlocksHere's the full journey of a single token from input to output:Token Embedding + Positional Encoding(Sections 5.2-5.7)Block 1AttentionAdd & NormFFNAdd & NormBlock 2AttentionAdd & NormFFNAdd & NormBlock NAttentionAdd & NormFFNAdd & Norm...Encoder Outputcontextual hidden states for each tokenNxGPT-2 SmallN = 12 blocks, 117M parametersGPT-3N = 96 blocks, 175B parametersThe full recipe of a Transformer encoder:Tokenize → Embed → Add positions → Pass through N blocks (each: Self-Attention → Add & Norm → FFN → Add & Norm) → Rich contextual hidden states. The encoder uses bidirectional attention - every word can see every other word, no masking. This gives the encoder a full understanding of the entire input."
   },
   {
-    "id": 451,
+    "id": 453,
     "chapterId": "8.6",
     "title": "Nx - The Transformer Block Repeats",
     "section": 8,
@@ -4068,7 +4086,7 @@
     "text": "The Encoder: Nx - The Transformer Block Repeats. This chapter covers nx - the transformer block repeats."
   },
   {
-    "id": 452,
+    "id": 454,
     "chapterId": "9.1",
     "title": "Decoder-Only - How Modern LLMs Work",
     "section": 9,
@@ -4077,7 +4095,7 @@
     "text": "Plot twist: Modern LLMs are decoder-onlyChatGPT, Claude, LLaMA, Gemini - they all use only the Decoder half. They threw away the Encoder.Why throw away half the architecture? Because translation and chatting are fundamentally different.Continue"
   },
   {
-    "id": 453,
+    "id": 455,
     "chapterId": "9.1",
     "title": "Decoder-Only - How Modern LLMs Work",
     "section": 9,
@@ -4086,7 +4104,7 @@
     "text": "ion vs Chatting: different tasksTranslation: input (English) and output (French) are different languages. You must fully process the input before generating output.Chatting: input (your prompt) and output (my response) are both English. They're part of one continuous conversation, not two separate things.TranslationEnglish input (complete)↓French output (generated)Two separate \"sides\"ChattingPrompt: \"What is 2+2?\"Response: \"The answer is 4.\"One continuous streamContinue"
   },
   {
-    "id": 454,
+    "id": 456,
     "chapterId": "9.1",
     "title": "Decoder-Only - How Modern LLMs Work",
     "section": 9,
@@ -4095,7 +4113,7 @@
     "text": "asking: the key differenceIn a decoder-only model, when generating token N, you can only look at tokens 0 through N-1 (the past and present). You cannot look at future tokens.This is called causal masking - causality: effect cannot precede cause.Processing \"What is 2+2?\" sequentially:Step 1:GenerateWhatby looking atnothingStep 2:Generateisby looking atWhatStep 3:Generate2+2by looking atWhat, isStep 4:Generate?by looking atWhat, is, 2+2This is the fundamental constraint of LLMs: they generate one token at a time, and each new token is based only on what came before.Continue"
   },
   {
-    "id": 455,
+    "id": 457,
     "chapterId": "9.1",
     "title": "Decoder-Only - How Modern LLMs Work",
     "section": 9,
@@ -4104,7 +4122,7 @@
     "text": "der-only winsDecoder-only is simpler (half the architecture) but it turns out that a large decoder trained on enough data can:1.Read and understand your prompt (implicit encoder task)2.Generate natural, coherent responses (explicit decoder task)3.Reason, code, translate, summarize (with prompting/fine-tuning)The result: decoder-only models are more general-purpose than any other architecture. They're simpler, faster, and more scalable.Continue"
   },
   {
-    "id": 456,
+    "id": 458,
     "chapterId": "9.1",
     "title": "Decoder-Only - How Modern LLMs Work",
     "section": 9,
@@ -4113,7 +4131,7 @@
     "text": "chitectures: the complete pictureEncoder-DecoderEDTask: TranslationModels: T5, BART, mT5Best for: When input and output are different languages or modesEncoder-OnlyETask: UnderstandingModels: BERT, RoBERTa, DistilBERTBest for: Classification, sentiment, similarity - no generationDecoder-OnlyDTask: GenerationModels: GPT-4, Claude, LLaMA, GeminiBest for: Chat, writing, reasoning, all modern LLMsContinue"
   },
   {
-    "id": 457,
+    "id": 459,
     "chapterId": "9.1",
     "title": "Decoder-Only - How Modern LLMs Work",
     "section": 9,
@@ -4122,7 +4140,7 @@
     "text": "understand the complete evolutionCNN (local patterns) → RNN (sequential memory, slow) → Transformer (attention, parallel) → Decoder-only (the architecture of modern AI).You now have the full history. The upcoming sections go deep into each piece of the Transformer: how input enters, how attention works, and how the complete encoder and decoder blocks are built."
   },
   {
-    "id": 458,
+    "id": 460,
     "chapterId": "9.1",
     "title": "Decoder-Only - How Modern LLMs Work",
     "section": 9,
@@ -4131,7 +4149,7 @@
     "text": "The Decoder: Decoder-Only - How Modern LLMs Work. This chapter covers decoder-only - how modern llms work."
   },
   {
-    "id": 459,
+    "id": 461,
     "chapterId": "9.2",
     "title": "Causal Masking - Hiding the Future",
     "section": 9,
@@ -4140,7 +4158,7 @@
     "text": "The problem: during generation, future words don't exist yetWhen the model generates text one token at a time, it has only produced the tokens so far. The next word hasn't been generated yet - it can't attend to something that doesn't exist.generating \"The cat sat on the mat\"1.The→cat?\"The\" can only see itself2.Thecat→sat?\"cat\" sees \"The\" and itself3.Thecatsat→on?\"sat\" sees \"The\", \"cat\", and itself4.Thecatsaton→the?\"on\" sees all 4 previous tokensBut during training, the model sees the entire sentence at once for efficiency. So we need to artificially hide future tokens - that's what the causal mask does.Continue"
   },
   {
-    "id": 460,
+    "id": 462,
     "chapterId": "9.2",
     "title": "Causal Masking - Hiding the Future",
     "section": 9,
@@ -4149,7 +4167,7 @@
     "text": "look at whom?Each row is a word asking \"who can I attend to?\" Each column is a word being looked at. A word can only see words generated before it (+ itself):row asks →col answers ↓Thecatsaton\"The\" asks →✓✗✗✗\"cat\" asks →✓✓✗✗\"sat\" asks →✓✓✓✗\"on\" asks →✓✓✓✓\"The\"1st word - only itself exists\"cat\"2nd word - sees \"The\" + itself\"sat\"3rd word - sees \"The\", \"cat\" + itself\"on\"4th word - sees everything before it + itselfThe diagonal = each word seeing itself (always allowed)Below diagonal = looking at earlier words (allowed - they already exist)Above diagonal = looking at future words (forbidden - not generated yet)Now here is the actual Q·KT / √dk score matrix:Thecatsaton\"The\" →2.10.50.30.8\"cat\" →1.22.40.70.4\"sat\" →0.61.82.01.1\"on\" →0.90.31.52.3allowed (past + self) - keep these scoresfuture - must be blocked!Continue"
   },
   {
-    "id": 461,
+    "id": 463,
     "chapterId": "9.2",
     "title": "Causal Masking - Hiding the Future",
     "section": 9,
@@ -4158,31 +4176,13 @@
     "text": ": a triangle of negative infinityWe add a mask matrix to the scores. The mask has 0 where a word is allowed to look, and -∞ where it's forbidden:Thecatsaton\"The\" →0-∞-∞-∞\"cat\" →00-∞-∞\"sat\" →000-∞\"on\" →0000Adding -∞ to a score makes it -∞. When softmax sees -∞, it outputs exactly 0 - zero attention, as if that word doesn't exist. The lower triangle (0s) keeps scores unchanged.masked_scores = scores + maskWhere mask[i][j] = 0 if j ≤ i, else -∞Continue"
   },
   {
-    "id": 462,
-    "chapterId": "9.2",
-    "title": "Causal Masking - Hiding the Future",
-    "section": 9,
-    "sectionName": "The Decoder",
-    "sub": 3,
-    "text": "sking → softmax only sees allowed tokensHere are the masked scores and the resulting attention weights:masked scoresThecatsaton\"The\" →2.1-∞-∞-∞\"cat\" →1.22.4-∞-∞\"sat\" →0.61.82.0-∞\"on\" →0.90.31.52.3↓ softmax (each row)attention weights (probabilities)Thecatsaton\"The\" →1.000.000.000.00\"cat\" →0.230.770.000.00\"sat\" →0.120.400.480.00\"on\" →0.130.070.250.55Every -∞ became exactly 0.00 after softmax!\"The\" puts 100% attention on itself. \"cat\" splits between \"The\" and itself. Each row still sums to 1.0 - but only across the visible tokens.Continue"
-  },
-  {
-    "id": 463,
-    "chapterId": "9.2",
-    "title": "Causal Masking - Hiding the Future",
-    "section": 9,
-    "sectionName": "The Decoder",
-    "sub": 4,
-    "text": "ional vs Causal - see the differenceThe attention formula is identical. The ONLY difference is whether the upper triangle is masked:No mask (bidirectional)every word sees every word0.610.120.100.170.190.620.110.080.100.330.400.160.130.070.250.55Full matrix - all cells activeCausal maskeach word sees only past + self1.000000.230.77000.120.400.4800.130.070.250.55Lower triangle only - upper triangle is darkSame Q, K, V matrices. Same formula. Same softmax. The mask is a single triangle of -∞ values - and it completely changes what the model can do.Continue"
-  },
-  {
     "id": 464,
     "chapterId": "9.2",
     "title": "Causal Masking - Hiding the Future",
     "section": 9,
     "sectionName": "The Decoder",
-    "sub": 5,
-    "text": "ning Insight: Every Position Makes a Prediction4 tokens go in, 4 output vectors come out - always, regardless of masking. Each output vector passes through Linear + Softmax to predict the next token. The mask determines whether those predictions are honest.one forward pass through the transformerThecatsaton↓ ↓ ↓ ↓Transformer Blocks (N layers)↓ ↓ ↓ ↓v1v2v3v4↓ ↓ ↓ ↓Linear + Softmax → 4 next-token predictionsNo Mask (Bidirectional)Every position sees the full sequence\"The\"saw:Thecatsaton→ saw the answer before predicting\"cat\"saw:Thecatsaton→ saw the answer before predicting\"sat\"saw:Thecatsaton→ saw the answer before predicting\"on\"saw:Thecatsaton→ saw the answer before predicting0 usable training examplesEvery prediction \"saw the answer\"Causal MaskEach position sees only past + self\"The\"saw:The→ predicts\"cat\"HONEST\"cat\"saw:Thecat→ predicts\"sat\"HONEST\"sat\"saw:Thecatsat→ predicts\"on\"HONEST\"on\"saw:Thecatsaton→ predicts\"the\"HONEST4 usable training examples!Each prediction was made without peekingThis is why causal masking exists during trainingFrom one forward pass with N tokens, you get N honest next-token predictions to learn from. Without the mask, you'd get zero - the model would \"cheat\" at every position, then completely fail at actual generation.Continue"
+    "sub": 3,
+    "text": "sking → softmax only sees allowed tokensHere are the masked scores - future positions are now -∞:masked scoresThecatsaton\"The\" →2.1-∞-∞-∞\"cat\" →1.22.4-∞-∞\"sat\" →0.61.82.0-∞\"on\" →0.90.31.52.3The green cells keep their original scores. The red -∞ cells will become exactly 0 after softmax - as if those future words don't exist.Continue"
   },
   {
     "id": 465,
@@ -4190,11 +4190,56 @@
     "title": "Causal Masking - Hiding the Future",
     "section": 9,
     "sectionName": "The Decoder",
-    "sub": 6,
-    "text": "chitectures - who uses what mask and whyENCODER-ONLYBERT, RoBERTaFull matrix - all cells activeNo mask - every word sees every other word (bidirectional).Why? The encoder's job is to understand the full input. When classifying \"The bank by the river\", \"bank\" NEEDS to see \"river\" (which comes after it) to know it means riverbank, not a financial bank. Hiding future words would cripple understanding.Used for: text classification, sentiment analysis, question answering, named entity recognition.DECODER-ONLYGPT, Claude, LLaMALower triangle only - upper triangle maskedCausal mask - each word only sees past words + itself.Why? The decoder generates text one token at a time. At generation step 3, token 4 doesn't exist yet - attending to it would be looking at something that isn't there. During training, the full sentence is fed at once for speed, so we use the mask to simulate the generation condition. Without it, the model would \"cheat\" by seeing the answer, then fail at actual generation.Used for: text generation, chatbots, code completion, reasoning - all modern LLMs.ENCODER-DECODEROriginal Transformer, T5, BARTencoder+decoderEncoder: full matrix + Decoder: lower triangleBoth - encoder uses no mask, decoder uses causal mask, plus cross-attention connecting them.Why? The input (e.g., English sentence) already exists fully - the encoder should see all of it. But the output (e.g., French translation) is generated word by word - the decoder must not peek ahead. Cross-attention lets the decoder look at the encoder's full understanding while still generating left-to-right.Used for: translation, summarization, any \"input → different output\" task.The core rule is simpleIf the text already exists (input you're reading) → no mask needed, let every word see everything for maximum understanding.If the text is being generated (output you're writing) → causal mask required, because future words don't exist yet."
+    "sub": 4,
+    "text": "turns masked scores into attention weights↓ softmax (each row)attention weights (probabilities)Thecatsaton\"The\" →1.000.000.000.00\"cat\" →0.230.770.000.00\"sat\" →0.120.400.480.00\"on\" →0.130.070.250.55Every -∞ became exactly 0.00 after softmax!\"The\" puts 100% attention on itself. \"cat\" splits between \"The\" and itself. Each row still sums to 1.0 - but only across the visible tokens.Continue"
   },
   {
     "id": 466,
+    "chapterId": "9.2",
+    "title": "Causal Masking - Hiding the Future",
+    "section": 9,
+    "sectionName": "The Decoder",
+    "sub": 5,
+    "text": "ional vs Causal - see the differenceThe attention formula is identical. The ONLY difference is whether the upper triangle is masked:No mask (bidirectional)every word sees every word0.610.120.100.170.190.620.110.080.100.330.400.160.130.070.250.55Full matrix - all cells activeCausal maskeach word sees only past + self1.000000.230.77000.120.400.4800.130.070.250.55Lower triangle only - upper triangle is darkSame Q, K, V matrices. Same formula. Same softmax. The mask is a single triangle of -∞ values - and it completely changes what the model can do.Continue"
+  },
+  {
+    "id": 467,
+    "chapterId": "9.2",
+    "title": "Causal Masking - Hiding the Future",
+    "section": 9,
+    "sectionName": "The Decoder",
+    "sub": 6,
+    "text": "ning Insight: Every Position Makes a Prediction4 tokens go in, 4 output vectors come out - always, regardless of masking. Each output vector passes through Linear + Softmax to predict the next token. The mask determines whether those predictions are honest.one forward pass through the transformerThecatsaton↓ ↓ ↓ ↓Transformer Blocks (N layers)↓ ↓ ↓ ↓v1v2v3v4↓ ↓ ↓ ↓Linear + Softmax → 4 next-token predictionsNo Mask (Bidirectional)Every position sees the full sequence\"The\"saw:Thecatsaton→ saw the answer before predicting\"cat\"saw:Thecatsaton→ saw the answer before predicting\"sat\"saw:Thecatsaton→ saw the answer before predicting\"on\"saw:Thecatsaton→ saw the answer before predicting0 usable training examplesEvery prediction \"saw the answer\"Causal MaskEach position sees only past + self\"The\"saw:The→ predicts\"cat\"HONEST\"cat\"saw:Thecat→ predicts\"sat\"HONEST\"sat\"saw:Thecatsat→ predicts\"on\"HONEST\"on\"saw:Thecatsaton→ predicts\"the\"HONEST4 usable training examples!Each prediction was made without peekingThis is why causal masking exists during trainingFrom one forward pass with N tokens, you get N honest next-token predictions to learn from. Without the mask, you'd get zero - the model would \"cheat\" at every position, then completely fail at actual generation.Continue"
+  },
+  {
+    "id": 468,
+    "chapterId": "9.2",
+    "title": "Causal Masking - Hiding the Future",
+    "section": 9,
+    "sectionName": "The Decoder",
+    "sub": 7,
+    "text": "chitectures - who uses what mask and whyENCODER-ONLYBERT, RoBERTaFull matrix - all cells activeNo mask - every word sees every other word (bidirectional).Why? The encoder's job is to understand the full input. When classifying \"The bank by the river\", \"bank\" NEEDS to see \"river\" (which comes after it) to know it means riverbank, not a financial bank. Hiding future words would cripple understanding.Used for: text classification, sentiment analysis, question answering, named entity recognition.ContinueContinue"
+  },
+  {
+    "id": 469,
+    "chapterId": "9.2",
+    "title": "Causal Masking - Hiding the Future",
+    "section": 9,
+    "sectionName": "The Decoder",
+    "sub": 8,
+    "text": "Claude, LLaMALower triangle only - upper triangle maskedCausal mask - each word only sees past words + itself.Why? The decoder generates text one token at a time. At generation step 3, token 4 doesn't exist yet - attending to it would be looking at something that isn't there. During training, the full sentence is fed at once for speed, so we use the mask to simulate the generation condition. Without it, the model would \"cheat\" by seeing the answer, then fail at actual generation.Used for: text generation, chatbots, code completion, reasoning - all modern LLMs.ContinueContinue"
+  },
+  {
+    "id": 470,
+    "chapterId": "9.2",
+    "title": "Causal Masking - Hiding the Future",
+    "section": 9,
+    "sectionName": "The Decoder",
+    "sub": 9,
+    "text": "riginal Transformer, T5, BARTencoder+decoderEncoder: full matrix + Decoder: lower triangleBoth - encoder uses no mask, decoder uses causal mask, plus cross-attention connecting them.Why? The input (e.g., English sentence) already exists fully - the encoder should see all of it. But the output (e.g., French translation) is generated word by word - the decoder must not peek ahead. Cross-attention lets the decoder look at the encoder's full understanding while still generating left-to-right.Used for: translation, summarization, any \"input → different output\" task.The core rule is simpleIf the text already exists (input you're reading) → no mask needed, let every word see everything for maximum understanding.If the text is being generated (output you're writing) → causal mask required, because future words don't exist yet."
+  },
+  {
+    "id": 471,
     "chapterId": "9.2",
     "title": "Causal Masking - Hiding the Future",
     "section": 9,
@@ -4203,7 +4248,7 @@
     "text": "The Decoder: Causal Masking - Hiding the Future. This chapter covers causal masking - hiding the future."
   },
   {
-    "id": 467,
+    "id": 472,
     "chapterId": "9.3",
     "title": "Cross-Attention - The Encoder-Decoder Bridge",
     "section": 9,
@@ -4212,7 +4257,7 @@
     "text": "The setup: translating \"I love cats\" to FrenchThe encoder has processed the English sentence. Each word is now a rich contextual vector - \"love\" doesn't just mean \"love\" anymore, it means \"love in the context of I-love-cats\".Encoder output (English - fully processed)I768 dimslove768 dimscats768 dimsThese vectors are the encoder's final output - rich with context↓ feeds into decoder's cross-attentionDecoder (French - generating word by word)J'generatedaimegeneratedlesgeneratedchatsnext?The decoder needs to look at the English to know what to generate nextThe decoder's self-attention lets French words look at other French words. But how does the decoder look at the English words? That's what cross-attention does.Continue"
   },
   {
-    "id": 468,
+    "id": 473,
     "chapterId": "9.3",
     "title": "Cross-Attention - The Encoder-Decoder Bridge",
     "section": 9,
@@ -4221,7 +4266,7 @@
     "text": "idea: Q from decoder, K and V from encoderIn self-attention, Q, K, and V all come from the same sentence. In cross-attention, they come from different sources:QQuery (Q) ← Decoder (French)The decoder is asking: \"what English word should I pay attention to right now?\"KKey (K) ← Encoder (English)The encoder's words offer their 'labels' for matching - \"I'm the subject\", \"I'm the verb\"VValue (V) ← Encoder (English)The encoder's words offer their actual content - the rich contextual meaning to borrow fromSame formula: Attention(Q, K, V) = softmax( Q·KT / √dk ) · VThe math is identical to self-attention. Only the source of Q, K, V changes.Continue"
   },
   {
-    "id": 469,
+    "id": 474,
     "chapterId": "9.3",
     "title": "Cross-Attention - The Encoder-Decoder Bridge",
     "section": 9,
@@ -4230,7 +4275,7 @@
     "text": "cross-attention: French Q meets English KEach French word's Query asks \"which English word is most relevant to me?\" The score matrix is not square - it's 4 French rows x 3 English columns:cross-attention scores (Q·KT / √dk)decoder Q ↓encoder K →Ilovecats\"J'\" →2.80.40.3\"aime\" →0.53.10.6\"les\" →0.20.32.5\"chats\" →0.30.73.4↓ softmax (each row)attention weightsIlovecats\"J'\" →0.850.080.07\"aime\" →0.060.860.07\"les\" →0.080.090.83\"chats\" →0.040.060.90\"J'\"→85% on \"I\"\"J'\" (I) focuses on \"I\" - direct translation\"aime\"→86% on \"love\"\"aime\" (love) focuses on \"love\" - the verb it's translating\"les\"→83% on \"cats\"\"les\" (the) focuses on \"cats\" - it's the article FOR cats\"chats\"→90% on \"cats\"\"chats\" (cats) focuses on \"cats\" - direct translationContinue"
   },
   {
-    "id": 470,
+    "id": 475,
     "chapterId": "9.3",
     "title": "Cross-Attention - The Encoder-Decoder Bridge",
     "section": 9,
@@ -4239,7 +4284,7 @@
     "text": "ention vs Cross-attentionSame formula, different wiring:SELF-ATTENTIONsame sentenceQKVQ, K, V all from the same sentence. Words attend to each other within one language.Score matrix is square (N x N)CROSS-ATTENTIONdecoderencoderQKVQ from decoder, K and V from encoder. Decoder attends to encoder's output.Score matrix is rectangular (M x N)Each decoder layer has BOTH types of attention:1. Masked self-attention - French words look at other French words (with causal mask)2. Cross-attention - French words look at English words (no mask - the full English sentence already exists)Continue"
   },
   {
-    "id": 471,
+    "id": 476,
     "chapterId": "9.3",
     "title": "Cross-Attention - The Encoder-Decoder Bridge",
     "section": 9,
@@ -4248,7 +4293,7 @@
     "text": "detail: the encoder runs ONCEA common misconception is that encoder layer 1 feeds decoder layer 1, encoder layer 2 feeds decoder layer 2, etc. That's not how it works.WRONGLayer-to-layer mappingE6→D6E5→D5E4→D4E3→D3E2→D2E1→D1✗CORRECTOnly the final layer mattersEncoder Layer 6 (final)↓K, V (computed once)↓↓↓↓↓↓Decoder Layer 1Decoder Layer 2Decoder Layer 3Decoder Layer 4Decoder Layer 5Decoder Layer 6Encoder: runs all 6 layers once on \"I love cats\". The output of layer 6 (the final layer) is the encoder's output - 3 contextual vectors, one per English word.K and V: computed once from the encoder's final output using WK and WV weight matrices. These are then cached and reused.Decoder layers 1-6: each layer computes its own Q (because the decoder's representation changes layer by layer as it gets refined). But K and V are always the same - the encoder's final output.Continue"
   },
   {
-    "id": 472,
+    "id": 477,
     "chapterId": "9.3",
     "title": "Cross-Attention - The Encoder-Decoder Bridge",
     "section": 9,
@@ -4257,7 +4302,7 @@
     "text": "data flow with dimensionsd_model = 512, d_k = 64, 8 headsENCODERLayer 6 (final)Layer 5Layer 4Layer 3Layer 2Layer 1\"I love cats\"[3 x 512]Projection (once)K = encoder_out · W_KV = encoder_out · W_V[3 x 512] · [512 x 64] = [3 x 64](per head)K, V CACHEK: [3 x 64] V: [3 x 64]DECODERLayer 6QchangesK,VsameLayer 5QchangesK,VsameLayer 4QchangesK,VsameLayer 3QchangesK,VsameLayer 2QchangesK,VsameLayer 1QchangesK,Vsame\"J' aime les chats\" [4 x 512]Continue"
   },
   {
-    "id": 473,
+    "id": 478,
     "chapterId": "9.3",
     "title": "Cross-Attention - The Encoder-Decoder Bridge",
     "section": 9,
@@ -4266,7 +4311,7 @@
     "text": "pens at each decoder layerEvery decoder layer performs cross-attention with the exact same K and V, but a different Q:Layer 1:Attn(Q1,K,V) = softmax(Q1 · KT / √64) · VLayer 2:Attn(Q2,K,V) = softmax(Q2 · KT / √64) · V... same K, V⋮Layer 6:Attn(Q6,K,V) = softmax(Q6 · KT / √64) · VQ1 comes from the decoder's layer 1 output. Q6 comes from layer 6's output. The decoder's representation evolves layer by layer - Q captures \"what I'm looking for\" at each stage of refinement. K and V capture \"what the encoder said\" - and that never changes.Dimension walkthrough (d_model = 512, heads = 8, d_k = 64)Encoder output[3 x 512]3 English tokens, each 512 dimsW_K projection[512 x 64]per head, learned during trainingK (cached)[3 x 64]3 keys, one per English tokenV (cached)[3 x 64]3 values, one per English tokenDecoder layer n[4 x 512]4 French tokens, each 512 dimsQ_n (per layer)[4 x 64]4 queries, changes each layerQ_n · K^T scores[4 x 3]every French word scores every English wordWhy is this efficient?The encoder runs once. K and V are computed once. Only Q changes per decoder layer. For a 1000-token input, this saves computing 1000-token K and V six times - a 6x reduction in encoder-side computation.6 weight matrices per layerEach decoder layer has 6 separate learned matrices: WQ, WK, WV for masked self-attention (Q, K, V all from French) + WQ, WK, WV for cross-attention (Q from French, K and V from English). All learned independently.Continue"
   },
   {
-    "id": 474,
+    "id": 479,
     "chapterId": "9.3",
     "title": "Cross-Attention - The Encoder-Decoder Bridge",
     "section": 9,
@@ -4275,7 +4320,7 @@
     "text": "es cross-attention live?decoder-onlyGPT, Claude, LLaMANo cross-attention at allThere's no encoder, so nothing to cross-attend to. The decoder handles everything with just self-attention. Your prompt and the response are one continuous sequence.encoder-decoderOriginal Transformer, T5, BARTCross-attention in every decoder layerEach decoder layer has three sub-layers in order:1.Masked self-attentionFrench looks at French (causal)2.Cross-attentionFrench looks at English (full)3.Feed-forward networkProcess each position independentlyThis is exactly what the architecture diagram in chapter 5.1 shows - the green arrow \"K, V from encoder\" connects to this cross-attention layer.Cross-attention is elegant but optionalModern LLMs prove you can get world-class results without it. But for tasks with clear input/output separation (translation, summarization), the encoder-decoder architecture with cross-attention remains powerful."
   },
   {
-    "id": 475,
+    "id": 480,
     "chapterId": "9.3",
     "title": "Cross-Attention - The Encoder-Decoder Bridge",
     "section": 9,
@@ -4284,7 +4329,7 @@
     "text": "The Decoder: Cross-Attention - The Encoder-Decoder Bridge. This chapter covers cross-attention - the encoder-decoder bridge."
   },
   {
-    "id": 476,
+    "id": 481,
     "chapterId": "9.4",
     "title": "What is a Transformer Actually Doing?",
     "section": 9,
@@ -4293,7 +4338,7 @@
     "text": "What is a Transformer actually doing?You give it a sentence: \"I love cats\"It needs to understand what each word means in context. The word \"love\" alone could mean many things. But \"love\" in \"I love cats\" specifically means \"I have affection for cats.\" The Transformer needs to figure this out.Continue"
   },
   {
-    "id": 477,
+    "id": 482,
     "chapterId": "9.4",
     "title": "What is a Transformer Actually Doing?",
     "section": 9,
@@ -4302,7 +4347,7 @@
     "text": "Each word starts as a list of numbers.The model has a big dictionary (learned during training) that maps every word to a fixed list of numbers. These numbers capture the word's meaning in isolation."
   },
   {
-    "id": 478,
+    "id": 483,
     "chapterId": "9.4",
     "title": "What is a Transformer Actually Doing?",
     "section": 9,

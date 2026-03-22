@@ -590,8 +590,13 @@ export const WhySoftmax = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple,
             <T color={C.dim} size={18} center>0.05 + 2.72 + 148.4 = <strong style={{ color: C.yellow, fontSize: 22 }}>151.17</strong></T>
           </div>
         </div>
+      </Box></Reveal>
+
+    {/* Sub 6: Step 3 - divide by sum + checkmarks */}
+    <Reveal when={sub >= 6}><Box color={C.orange} style={{ width: "100%" }}>
+        <T color={C.orange} bold center size={20}>Full Walkthrough: scores [-3, 1, 5]</T>
         {/* Step 3 */}
-        <div style={{ marginTop: 8, padding: "12px", borderRadius: 10, background: "rgba(0,0,0,0.3)", border: `1px solid ${C.green}20` }}>
+        <div style={{ marginTop: 12, padding: "12px", borderRadius: 10, background: "rgba(0,0,0,0.3)", border: `1px solid ${C.green}20` }}>
           <T color={C.green} bold size={16}>Step 3: Divide each e^score by the sum</T>
           <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 6 }}>
             {[
@@ -618,8 +623,8 @@ export const WhySoftmax = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple,
         </div>
       </Box></Reveal>
 
-    {/* Sub 6: Amplification + why scale first */}
-    <Reveal when={sub >= 6}><Box color={C.yellow} style={{ width: "100%" }}>
+    {/* Sub 7: Amplification + why scale first */}
+    <Reveal when={sub >= 7}><Box color={C.yellow} style={{ width: "100%" }}>
         <T color={C.yellow} bold center size={20}>Softmax amplifies differences - by design.</T>
         <div style={{ marginTop: 10, display: "flex", gap: 8 }}>
           <div style={{ flex: 1, padding: "10px", borderRadius: 8, background: "rgba(255,255,255,0.02)", textAlign: "center" }}>
@@ -638,8 +643,8 @@ export const WhySoftmax = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple,
         <T color="#ffe082" size={18} style={{ marginTop: 8 }}><strong>But</strong> - if scores are too huge (like 12, 18, 25), softmax amplifies TOO aggressively → 99.99% on one word. That's why we <strong>scale first</strong> (next chapter) to keep scores in a useful range.</T>
       </Box></Reveal>
 
-    {/* Sub 7: Formula recap with visual summary */}
-    <Reveal when={sub >= 7}><Box color={C.green} style={{ width: "100%" }}>
+    {/* Sub 8: Formula recap with visual summary */}
+    <Reveal when={sub >= 8}><Box color={C.green} style={{ width: "100%" }}>
         <T color="#80e8a5" bold center size={20}>Softmax: the complete picture</T>
         <div style={{ marginTop: 10, display: "flex", flexDirection: "column", gap: 8 }}>
           <div style={{ display: "flex", gap: 10, alignItems: "center", padding: "10px 12px", borderRadius: 8, background: `${C.purple}08`, border: `1px solid ${C.purple}15` }}>
@@ -665,7 +670,7 @@ export const WhySoftmax = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple,
         <T color="#80e8a5" size={18} style={{ marginTop: 10 }}>Output: valid percentages (all positive, sum to 100%) that respect the original ranking. But raw scores can be too big for softmax - that's the next problem to solve →</T>
       </Box></Reveal>
 
-    {sub < 7 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
+    {sub < 8 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
   </div>
 ); }
 
@@ -1161,10 +1166,10 @@ export const CausalMask = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple,
       </div>
     </Box></Reveal>
 
-    {/* Sub 3: Masked scores → softmax → attention weights */}
+    {/* Sub 3: Masked scores */}
     <Reveal when={sub >= 3}><Box color={C.orange} style={{ width: "100%" }}>
       <T color="#ffb74d" bold center size={20}>After masking → softmax only sees allowed tokens</T>
-      <T color="#ffb74d" style={{ marginTop: 6 }}>Here are the masked scores and the resulting attention weights:</T>
+      <T color="#ffb74d" style={{ marginTop: 6 }}>Here are the masked scores - future positions are now -∞:</T>
 
       {/* Masked scores grid */}
       <T color={C.dim} size={12} center style={{ marginTop: 12, letterSpacing: 1.5, textTransform: "uppercase" }}>masked scores</T>
@@ -1181,7 +1186,15 @@ export const CausalMask = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple,
         </div>
       </div>
 
-      {/* Arrow */}
+      <div style={{ marginTop: 10, padding: "10px", borderRadius: 8, background: `${C.orange}06`, border: `1px solid ${C.orange}15` }}>
+        <T color="#ffb74d" center size={16}>The green cells keep their original scores. The red -∞ cells will become exactly 0 after softmax - as if those future words don't exist.</T>
+      </div>
+    </Box></Reveal>
+
+    {/* Sub 4: Softmax → attention weights */}
+    <Reveal when={sub >= 4}><Box color={C.green} style={{ width: "100%" }}>
+      <T color="#80e8a5" bold center size={20}>Softmax turns masked scores into attention weights</T>
+
       <T color={C.dim} size={20} center style={{ margin: "6px 0" }}>↓ softmax (each row)</T>
 
       {/* Attention weights grid */}
@@ -1208,8 +1221,8 @@ export const CausalMask = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple,
       </div>
     </Box></Reveal>
 
-    {/* Sub 4: Side-by-side visual comparison */}
-    <Reveal when={sub >= 4}><Box color={C.yellow} style={{ width: "100%" }}>
+    {/* Sub 5: Side-by-side visual comparison */}
+    <Reveal when={sub >= 5}><Box color={C.yellow} style={{ width: "100%" }}>
       <T color={C.yellow} bold center size={20}>Bidirectional vs Causal - see the difference</T>
       <T color="#ffe082" style={{ marginTop: 6 }}>The attention formula is identical. The ONLY difference is whether the upper triangle is masked:</T>
 
@@ -1249,8 +1262,8 @@ export const CausalMask = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple,
       <T color="#ffe082" style={{ marginTop: 10 }}>Same Q, K, V matrices. Same formula. Same softmax. The mask is a single triangle of -∞ values - and it completely changes what the model can do.</T>
     </Box></Reveal>
 
-    {/* Sub 5: The training insight - why causal mask gives you N valid predictions */}
-    <Reveal when={sub >= 5}><Box color={C.blue} style={{ width: "100%" }}>
+    {/* Sub 6: The training insight - why causal mask gives you N valid predictions */}
+    <Reveal when={sub >= 6}><Box color={C.blue} style={{ width: "100%" }}>
       <T color="#90caf9" bold center size={20}>The Training Insight: Every Position Makes a Prediction</T>
       <T color="#90caf9" style={{ marginTop: 6 }}>4 tokens go in, 4 output vectors come out - <strong>always</strong>, regardless of masking. Each output vector passes through Linear + Softmax to predict the next token. The mask determines whether those predictions are <strong>honest</strong>.</T>
 
@@ -1353,8 +1366,8 @@ export const CausalMask = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple,
       </div>
     </Box></Reveal>
 
-    {/* Sub 6: Three architectures - who uses what and WHY */}
-    <Reveal when={sub >= 6}><Box color={C.green} style={{ width: "100%" }}>
+    {/* Sub 7: Encoder-only architecture */}
+    <Reveal when={sub >= 7}><Box color={C.green} style={{ width: "100%" }}>
       <T color="#80e8a5" bold center size={20}>Three architectures - who uses what mask and why</T>
 
       <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 10 }}>
@@ -1376,7 +1389,14 @@ export const CausalMask = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple,
             <T color={C.dim} size={14} style={{ marginTop: 4 }}>Used for: text classification, sentiment analysis, question answering, named entity recognition.</T>
           </div>
         </div>
+      </div>
+    </Box></Reveal>
 
+    {sub === 7 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
+
+    {/* Sub 8: Decoder-only architecture */}
+    <Reveal when={sub >= 8}><Box color={C.orange} style={{ width: "100%" }}>
+      <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
         {/* Decoder-only */}
         <div style={{ padding: "14px", borderRadius: 10, background: `${C.orange}06`, border: `1px solid ${C.orange}15`, display: "flex", flexDirection: "column", alignItems: "center" }}>
           <div style={{ padding: "3px 10px", borderRadius: 5, background: `${C.orange}20`, border: `1px solid ${C.orange}40` }}>
@@ -1397,7 +1417,14 @@ export const CausalMask = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple,
             <T color={C.dim} size={14} style={{ marginTop: 4 }}>Used for: text generation, chatbots, code completion, reasoning - all modern LLMs.</T>
           </div>
         </div>
+      </div>
+    </Box></Reveal>
 
+    {sub === 8 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
+
+    {/* Sub 9: Encoder-decoder architecture + core rule summary */}
+    <Reveal when={sub >= 9}><Box color={C.green} style={{ width: "100%" }}>
+      <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
         {/* Encoder-decoder */}
         <div style={{ padding: "14px", borderRadius: 10, background: `${C.purple}06`, border: `1px solid ${C.purple}15`, display: "flex", flexDirection: "column", alignItems: "center" }}>
           <div style={{ padding: "3px 10px", borderRadius: 5, background: `${C.purple}20`, border: `1px solid ${C.purple}40` }}>
@@ -1441,7 +1468,7 @@ export const CausalMask = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple,
       </div>
     </Box></Reveal>
 
-    {sub < 6 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
+    {sub < 9 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
   </div>
   );
 };

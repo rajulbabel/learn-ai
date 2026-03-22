@@ -258,6 +258,59 @@ describe("AttentionScores hovered", () => {
   }
 });
 
+// ─── Chapter 7.4: Why Do We Need Softmax? ───
+describe("WhySoftmax sub-steps", () => {
+  const fn = AttentionComputation.WhySoftmax;
+
+  it("sub 5 shows Steps 1-2 (e^score + sum) but not Step 3", () => {
+    const ctx = makeCtx({ sub: 5 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("Step 1");
+    expect(text).toContain("e^score");
+    expect(text).toContain("Step 2");
+    expect(text).toContain("151.17");
+    expect(text).not.toContain("Step 3");
+  });
+
+  it("sub 6 shows Step 3 (divide by sum) and checkmarks", () => {
+    const ctx = makeCtx({ sub: 6 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("Step 3");
+    expect(text).toContain("Divide");
+    expect(text).toContain("98.2%");
+    expect(text).toContain("All positive");
+    expect(text).toContain("Sum = 100%");
+  });
+
+  it("sub 7 shows amplification content (was sub 6)", () => {
+    const ctx = makeCtx({ sub: 7 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("amplif");
+    expect(text).toContain("dominates");
+  });
+
+  it("sub 8 shows the complete picture recap (was sub 7)", () => {
+    const ctx = makeCtx({ sub: 8 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("complete picture");
+    expect(text).toContain("FORMULA");
+  });
+
+  it("shows SubBtn when sub < 8 and hides at sub 8", () => {
+    const ctx7 = makeCtx({ sub: 7 });
+    const { container: c7 } = render(fn(ctx7));
+    expect(c7.querySelector("[data-subbtn]")).toBeTruthy();
+
+    const ctx8 = makeCtx({ sub: 8 });
+    const { container: c8 } = render(fn(ctx8));
+    expect(c8.querySelector("[data-subbtn]")).toBeFalsy();
+  });
+});
+
 // ─── Chapter 7.9: Causal Masking - Hiding the Future ───
 describe("CausalMask sub-steps", () => {
   const fn = AttentionComputation.CausalMask;
@@ -288,24 +341,32 @@ describe("CausalMask sub-steps", () => {
     expect(text).toContain("mask");
   });
 
-  it("sub 3 shows masked scores and softmax turning -inf to 0", () => {
+  it("sub 3 shows masked scores only", () => {
     const ctx = makeCtx({ sub: 3 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("masked");
+    expect(text).toContain("scores");
+  });
+
+  it("sub 4 shows softmax turning masked scores into attention weights", () => {
+    const ctx = makeCtx({ sub: 4 });
     const { container } = render(fn(ctx));
     const text = container.textContent;
     expect(text).toContain("softmax");
     expect(text).toContain("0.00");
   });
 
-  it("sub 4 shows bidirectional vs causal visual comparison", () => {
-    const ctx = makeCtx({ sub: 4 });
+  it("sub 5 shows bidirectional vs causal visual comparison", () => {
+    const ctx = makeCtx({ sub: 5 });
     const { container } = render(fn(ctx));
     const text = container.textContent;
     expect(text).toMatch(/[Bb]idirectional/);
     expect(text).toMatch(/[Cc]ausal/);
   });
 
-  it("sub 5 shows training insight - every position makes a prediction", () => {
-    const ctx = makeCtx({ sub: 5 });
+  it("sub 6 shows training insight - every position makes a prediction", () => {
+    const ctx = makeCtx({ sub: 6 });
     const { container } = render(fn(ctx));
     const text = container.textContent;
     expect(text).toContain("Training Insight");
@@ -316,16 +377,35 @@ describe("CausalMask sub-steps", () => {
     expect(text).toContain("4 usable training examples");
   });
 
-  it("sub 6 shows three architectures with encoder/decoder context and why", () => {
-    const ctx = makeCtx({ sub: 6 });
+  it("sub 7 shows encoder-only architecture (BERT, RoBERTa)", () => {
+    const ctx = makeCtx({ sub: 7 });
     const { container } = render(fn(ctx));
     const text = container.textContent;
     expect(text).toContain("ENCODER-ONLY");
-    expect(text).toContain("DECODER-ONLY");
-    expect(text).toContain("ENCODER-DECODER");
     expect(text).toContain("BERT");
+    expect(text).toContain("bidirectional");
+    expect(text).not.toContain("DECODER-ONLY");
+    expect(text).not.toContain("ENCODER-DECODER");
+  });
+
+  it("sub 8 shows decoder-only architecture (GPT, Claude, LLaMA)", () => {
+    const ctx = makeCtx({ sub: 8 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("DECODER-ONLY");
     expect(text).toContain("GPT");
     expect(text).toContain("generate");
+  });
+
+  it("sub 9 shows encoder-decoder architecture (T5, BART) and core rule summary", () => {
+    const ctx = makeCtx({ sub: 9 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("ENCODER-DECODER");
+    expect(text).toContain("T5");
+    expect(text).toContain("core rule");
+    expect(text).toContain("already exists");
+    expect(text).toContain("being generated");
   });
 });
 
@@ -1534,20 +1614,37 @@ describe("FeedForwardNetwork sub-steps", () => {
     expect(text).toContain("4x");
   });
 
-  it("sub 3 shows step-by-step computation with real numbers", () => {
+  it("sub 3 shows step-by-step computation Step 1 only (W1 expansion)", () => {
     const ctx = makeCtx({ sub: 3 });
     const { container } = render(fn(ctx));
     const text = container.textContent;
     // Should use the cats embedding from Add & Norm output
     expect(text).toContain("cats");
-    // Should show matrix multiply
+    // Should show matrix multiply for Step 1
     expect(text).toContain("W");
+    // Should have concrete numbers
+    expect(text).toMatch(/\d+\.\d+/);
+    // Should NOT contain Step 2 or Step 3 content (those moved to sub 4)
+    expect(text).not.toContain("Apply GELU");
+    expect(text).not.toContain("compress 8");
+  });
+
+  it("sub 4 shows step-by-step computation Steps 2-3 (GELU + W2 compression)", () => {
+    const ctx = makeCtx({ sub: 4 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    // Should show GELU activation step
+    expect(text).toContain("GELU");
+    // Should show W2 compression step
+    expect(text).toContain("compress 8");
+    // Should show the summary text
+    expect(text).toContain("thinking space");
     // Should have concrete numbers
     expect(text).toMatch(/\d+\.\d+/);
   });
 
-  it("sub 4 shows the GELU formula with Phi and erf, then compares to ReLU", () => {
-    const ctx = makeCtx({ sub: 4 });
+  it("sub 5 shows the GELU formula with Phi and erf, then compares to ReLU", () => {
+    const ctx = makeCtx({ sub: 5 });
     const { container } = render(fn(ctx));
     const text = container.textContent;
     // Must show the real formula
@@ -1563,8 +1660,8 @@ describe("FeedForwardNetwork sub-steps", () => {
     expect(text).toContain("smooth");
   });
 
-  it("sub 5 shows area/length/breadth example", () => {
-    const ctx = makeCtx({ sub: 5 });
+  it("sub 6 shows area/length/breadth example", () => {
+    const ctx = makeCtx({ sub: 6 });
     const { container } = render(fn(ctx));
     const text = container.textContent;
     expect(text).toContain("area");
@@ -1573,8 +1670,8 @@ describe("FeedForwardNetwork sub-steps", () => {
     expect(text).toContain("knowledge");
   });
 
-  it("sub 6 shows France/Paris factual recall example", () => {
-    const ctx = makeCtx({ sub: 6 });
+  it("sub 7 shows France/Paris factual recall example", () => {
+    const ctx = makeCtx({ sub: 7 });
     const { container } = render(fn(ctx));
     const text = container.textContent;
     expect(text).toContain("France");
@@ -1582,8 +1679,8 @@ describe("FeedForwardNetwork sub-steps", () => {
     expect(text).toContain("847");
   });
 
-  it("sub 7 shows bank/river multi-block example with detector details", () => {
-    const ctx = makeCtx({ sub: 7 });
+  it("sub 8 shows bank/river multi-block example with detector details", () => {
+    const ctx = makeCtx({ sub: 8 });
     const { container } = render(fn(ctx));
     const text = container.textContent;
     expect(text).toContain("bank");
@@ -1592,16 +1689,16 @@ describe("FeedForwardNetwork sub-steps", () => {
     expect(text).toContain("Block 5");
   });
 
-  it("sub 8 shows deep Q&A", () => {
-    const ctx = makeCtx({ sub: 8 });
+  it("sub 9 shows deep Q&A", () => {
+    const ctx = makeCtx({ sub: 9 });
     const { container } = render(fn(ctx));
     const text = container.textContent;
     expect(text).toContain("attention replace FFN");
     expect(text).toContain("FFN replace attention");
   });
 
-  it("sub 9 shows parameter breakdown in its own box", () => {
-    const ctx = makeCtx({ sub: 9 });
+  it("sub 10 shows parameter breakdown in its own box", () => {
+    const ctx = makeCtx({ sub: 10 });
     const { container } = render(fn(ctx));
     const text = container.textContent;
     expect(text).toContain("parameter");

@@ -135,7 +135,7 @@ export default function LearnAI() {
   const [ripple, setRipple] = useState(null);
   const [subBtnRipple, setSubBtnRipple] = useState(0);
   const [searchOpen, setSearchOpen] = useState(false);
-  const [semanticProgress, setSemanticProgress] = useState(0);
+  const [_semanticProgress, setSemanticProgress] = useState(0);
   const [semanticMode, setSemanticMode] = useState("off");
 
   // Lazy-loaded chapter render function

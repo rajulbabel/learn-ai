@@ -652,7 +652,7 @@ export const PosEncodingFinal = (ctx) => { const { sub, subBtnRipple, setSubBtnR
 // SECTION 6: ATTENTION - THE HEART
 // ═══════════════════════════════════════
 
-export const WhatTransformerDoes = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate, bankIdx, setBankIdx, hovered, setHovered } = ctx; return (
+export const WhatTransformerDoes = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx; return (
   <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
     {sub >= 0 && (
       <Box color={C.purple} style={{ width: "100%" }}>

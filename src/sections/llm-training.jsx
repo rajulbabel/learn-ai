@@ -640,7 +640,7 @@ export const NNInAction = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple,
           {["Word", "Score", "", "e^score", "", "Prob"].map((h, i) => (
             <div key={i} style={{ color: "#ffe082", fontWeight: 700, padding: "6px 4px" }}>{h}</div>
           ))}
-          {[...SORTED_SCORES.slice(0, 8), null, ...SORTED_SCORES.slice(-2)].map((item, idx) => {
+          {[...SORTED_SCORES.slice(0, 8), null, ...SORTED_SCORES.slice(-2)].map((item, _idx) => {
             if (item === null) return <div key="sep" style={{ gridColumn: "1 / -1", textAlign: "center", color: C.dim, padding: 2 }}>...</div>;
             const [word, score] = item;
             const eScore = EXP_SCORES[word];
@@ -1889,7 +1889,7 @@ export const AutoregressiveGeneration = (ctx) => { const { sub, subBtnRipple, se
           { temp: "0.2 (cold)", label: "Nearly greedy", probs: [{ w: "the", p: 99 }, { w: "a", p: 1 }, { w: "that", p: 0 }], color: C.blue, desc: "Dividing by 0.2 makes logits huge (21, 14, 7.5). Softmax crushes everything onto the winner." },
           { temp: "1.0 (default)", label: "Balanced", probs: [{ w: "the", p: 72 }, { w: "a", p: 18 }, { w: "that", p: 10 }], color: C.green, desc: "Logits stay the same. Probabilities reflect the model's true confidence." },
           { temp: "2.0 (hot)", label: "Creative", probs: [{ w: "the", p: 45 }, { w: "a", p: 30 }, { w: "that", p: 25 }], color: C.red, desc: "Dividing by 2.0 makes logits small (2.1, 1.4, 0.75). Softmax spreads probability more evenly." },
-        ].map(({ temp, label, probs, color, desc }) => (
+        ].map(({ temp, label: _label, probs, color, desc }) => (
           <div key={temp} style={{ padding: 12, borderRadius: 8, background: `${color}06`, border: `1px solid ${color}12` }}>
             <T color={color} bold size={16}>Temperature = {temp}</T>
             <T color={C.dim} size={13} style={{ marginTop: 4 }}>{desc}</T>

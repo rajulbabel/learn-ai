@@ -1,6 +1,6 @@
 import { C } from "../config.js";
 import { Box, T, Reveal, SubBtn, Tag } from "../components.jsx";
-export const ComputeQKV = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate, bankIdx, setBankIdx, hovered, setHovered } = ctx; return (
+export const ComputeQKV = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx; return (
   <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
     {sub >= 0 && (
       <Box color={C.cyan} style={{ width: "100%" }}>
@@ -100,7 +100,7 @@ export const ComputeQKV = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple,
   </div>
 ); }
 
-export const AttentionScores = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate, bankIdx, setBankIdx, hovered, setHovered } = ctx; return (
+export const AttentionScores = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx; return (
   <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
     {sub >= 0 && (
       <Box color={C.blue} style={{ width: "100%" }}>
@@ -410,7 +410,7 @@ export const KTranspose = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple,
   </div>
 ); }
 
-export const WhySoftmax = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate, bankIdx, setBankIdx, hovered, setHovered } = ctx; return (
+export const WhySoftmax = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx; return (
   <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
     {/* Sub 0: We have raw scores, need to fill in ???s */}
     {sub >= 0 && (
@@ -669,7 +669,7 @@ export const WhySoftmax = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple,
   </div>
 ); }
 
-export const ScaleByRootDk = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate, bankIdx, setBankIdx, hovered, setHovered } = ctx; return (
+export const ScaleByRootDk = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx; return (
   <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
     {/* Sub 0: The core problem */}
     {sub >= 0 && (
@@ -826,7 +826,7 @@ export const ScaleByRootDk = (ctx) => { const { sub, subBtnRipple, setSubBtnRipp
 
 // ═══════ CH: Why Do We Need Softmax? ═══════
 
-export const SoftmaxProbs = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate, bankIdx, setBankIdx, hovered, setHovered } = ctx; return (
+export const SoftmaxProbs = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx; return (
   <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
     {sub >= 0 && (
       <Box color={C.pink} style={{ width: "100%" }}>
@@ -919,7 +919,7 @@ export const SoftmaxProbs = (ctx) => { const { sub, subBtnRipple, setSubBtnRippl
   </div>
 ); }
 
-export const WeightedSum = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate, bankIdx, setBankIdx, hovered, setHovered } = ctx; return (
+export const WeightedSum = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx; return (
   <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
     {sub >= 0 && (
       <Box color={C.green} style={{ width: "100%" }}>
@@ -951,7 +951,7 @@ export const WeightedSum = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple
   </div>
 ); }
 
-export const FullFormula = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate, bankIdx, setBankIdx, hovered, setHovered } = ctx; return (
+export const FullFormula = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx; return (
   <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
     {sub >= 0 && (
       <div style={{ background: "rgba(0,0,0,0.4)", borderRadius: 14, padding: "20px", border: `1px solid ${C.yellow}25`, width: "100%" }}>
@@ -1927,7 +1927,7 @@ export const CrossAttention = (ctx) => { const { sub, subBtnRipple, setSubBtnRip
 
 // ═══════ CH 18: Why Multi-Head - The Compromise Problem ═══════
 
-export const WhyMultiHead = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate, bankIdx, setBankIdx, hovered, setHovered } = ctx; return (
+export const WhyMultiHead = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx; return (
   <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
     {sub >= 0 && (
       <Box color={C.red} style={{ width: "100%" }}>
@@ -1995,7 +1995,7 @@ export const WhyMultiHead = (ctx) => { const { sub, subBtnRipple, setSubBtnRippl
 
 // ═══════ CH 19: The Split ═══════
 
-export const HeadSplit = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate, bankIdx, setBankIdx, hovered, setHovered } = ctx;
+export const HeadSplit = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx;
   const headColors = [C.cyan, C.orange, C.purple, C.yellow, C.green, C.pink, C.red, C.blue];
   return (
   <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
@@ -2167,7 +2167,7 @@ export const HeadSplit = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, 
 
 // ═══════ CH 20: Inside Each Head ═══════
 
-export const InsideEachHead = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate, bankIdx, setBankIdx, hovered, setHovered } = ctx; return (
+export const InsideEachHead = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx; return (
   <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
     {sub >= 0 && (
       <Box color={C.blue} style={{ width: "100%" }}>
@@ -2220,7 +2220,7 @@ export const InsideEachHead = (ctx) => { const { sub, subBtnRipple, setSubBtnRip
 
 // ═══════ CH 21: Concat + W_O ═══════
 
-export const ConcatWO = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate, bankIdx, setBankIdx, hovered, setHovered } = ctx; return (
+export const ConcatWO = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx; return (
   <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
     {/* Sub 0: Step 7 - outputs are separate */}
     {sub >= 0 && (
@@ -2376,7 +2376,7 @@ export const ConcatWO = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, r
 
 // ═══════ CH 22: Why 8 + Params + Big Picture ═══════
 
-export const WhyEightHeads = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate, bankIdx, setBankIdx, hovered, setHovered } = ctx; return (
+export const WhyEightHeads = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx; return (
   <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
     {sub >= 0 && (
       <Box color={C.orange} style={{ width: "100%" }}>
@@ -2453,7 +2453,7 @@ export const WhyEightHeads = (ctx) => { const { sub, subBtnRipple, setSubBtnRipp
 
 // ═══════ CH 23: Is W_O constant? ═══════
 
-export const IsWOConstant = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate, bankIdx, setBankIdx, hovered, setHovered } = ctx; return (
+export const IsWOConstant = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx; return (
   <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
     {sub >= 0 && (
       <Box color={C.purple} style={{ width: "100%" }}>
@@ -2522,7 +2522,7 @@ export const IsWOConstant = (ctx) => { const { sub, subBtnRipple, setSubBtnRippl
 
 // ═══════ CH 24: The Complete Picture ═══════
 
-export const CompletePicture = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate, bankIdx, setBankIdx, hovered, setHovered } = ctx; return (
+export const CompletePicture = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx; return (
   <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
     {sub >= 0 && (
       <Box color={C.green} style={{ width: "100%" }}>

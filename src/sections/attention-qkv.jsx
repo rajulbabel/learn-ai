@@ -1,6 +1,6 @@
 import { C } from "../config.js";
 import { Box, T, Reveal, SubBtn, Tag } from "../components.jsx";
-export const ContextProblem = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate, bankIdx, setBankIdx, hovered, setHovered } = ctx;
+export const ContextProblem = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate, bankIdx, setBankIdx } = ctx;
   const sentences = [
     { words: ["I", "sat", "by", "the", "river", "bank"], highlight: 5, context: [1, 2, 4], meaning: "edge of a river", color: C.cyan },
     { words: ["I", "deposited", "money", "in", "the", "bank"], highlight: 5, context: [1, 2], meaning: "financial institution", color: C.yellow },
@@ -44,7 +44,7 @@ export const ContextProblem = (ctx) => { const { sub, subBtnRipple, setSubBtnRip
 
 // ═══════ CH 2: How does a word look at others ═══════
 
-export const WordLookup = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate, bankIdx, setBankIdx, hovered, setHovered } = ctx;
+export const WordLookup = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate, hovered, setHovered } = ctx;
   const words = ["The", "cat", "sat", "because", "it", "was", "tired"];
   const scores = {
     0: [0.1, 0.3, 0.2, 0.1, 0.05, 0.15, 0.1],
@@ -90,7 +90,7 @@ export const WordLookup = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple,
 
 // ═══════ CH 3: Dot Product ═══════
 
-export const DotProduct = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate, bankIdx, setBankIdx, hovered, setHovered } = ctx; return (
+export const DotProduct = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx; return (
   <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
     {sub >= 0 && (
       <Box color={C.orange} style={{ width: "100%" }}>
@@ -148,7 +148,7 @@ export const DotProduct = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple,
 
 // ═══════ CH 4: Why not embeddings directly ═══════
 
-export const WhyNotDirectDot = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate, bankIdx, setBankIdx, hovered, setHovered } = ctx; return (
+export const WhyNotDirectDot = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx; return (
   <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
     {sub >= 0 && (
       <Box color={C.red} style={{ width: "100%" }}>
@@ -188,7 +188,7 @@ export const WhyNotDirectDot = (ctx) => { const { sub, subBtnRipple, setSubBtnRi
 
 // ═══════ CH 5: Classroom Analogy ═══════
 
-export const QKVClassroom = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate, bankIdx, setBankIdx, hovered, setHovered } = ctx; return (
+export const QKVClassroom = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx; return (
   <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
     {sub >= 0 && (
       <Box color={C.purple} style={{ width: "100%" }}>
@@ -270,7 +270,7 @@ export const QKVClassroom = (ctx) => { const { sub, subBtnRipple, setSubBtnRippl
 
 // ═══════ CH 6: Every word is both ═══════
 
-export const AskerAnswerer = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate, bankIdx, setBankIdx, hovered, setHovered } = ctx; return (
+export const AskerAnswerer = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx; return (
   <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
     {sub >= 0 && (
       <Box color={C.pink} style={{ width: "100%" }}>
@@ -316,7 +316,7 @@ export const AskerAnswerer = (ctx) => { const { sub, subBtnRipple, setSubBtnRipp
 
 // ═══════ CH 7: Why K ≠ V (Restaurant analogy) ═══════
 
-export const WhyKVDifferent = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate, bankIdx, setBankIdx, hovered, setHovered } = ctx; return (
+export const WhyKVDifferent = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx; return (
   <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
     {sub >= 0 && (
       <Box color={C.orange} style={{ width: "100%" }}>
@@ -376,7 +376,7 @@ export const WhyKVDifferent = (ctx) => { const { sub, subBtnRipple, setSubBtnRip
 
 // ═══════ CH 8: How QKV are created ═══════
 
-export const GoogleAnalogy = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate, bankIdx, setBankIdx, hovered, setHovered } = ctx; return (
+export const GoogleAnalogy = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx; return (
   <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
     {sub >= 0 && (
       <Box color={C.orange} style={{ width: "100%" }}>
@@ -404,7 +404,7 @@ export const GoogleAnalogy = (ctx) => { const { sub, subBtnRipple, setSubBtnRipp
 
 // ═══════ CH 12–19: Computation steps (same as before but renumbered) ═══════
 
-export const HowQKVCreated = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate, bankIdx, setBankIdx, hovered, setHovered } = ctx; return (
+export const HowQKVCreated = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx; return (
   <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
     {sub >= 0 && (
       <Box color={C.purple} style={{ width: "100%" }}>
@@ -516,7 +516,7 @@ export const HowQKVCreated = (ctx) => { const { sub, subBtnRipple, setSubBtnRipp
 
 // ═══════ CH 9: Learned during training ═══════
 
-export const WMatrices = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate, bankIdx, setBankIdx, hovered, setHovered } = ctx;
+export const WMatrices = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx;
   const randomGrid = [0.47, -0.82, 0.15, -0.63, 0.91, -0.24, 0.38, -0.71, 0.56, -0.09, 0.77, -0.45, -0.33, 0.62, -0.88, 0.19];
   const trainedGrid = [0.02, -0.15, 0.31, 0.08, 0.41, 0.07, -0.22, -0.19, -0.09, 0.33, 0.14, 0.27, 0.18, -0.05, 0.42, 0.11];
   const GridViz = ({ numbers, label, labelColor, highlight = -1 }) => (
@@ -678,7 +678,7 @@ export const WMatrices = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, 
 
 // ═══════ CH 10: Trace complete example ═══════
 
-export const TracingExample = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate, bankIdx, setBankIdx, hovered, setHovered } = ctx; return (
+export const TracingExample = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx; return (
   <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
     {sub >= 0 && (
       <Box color={C.cyan} style={{ width: "100%" }}>

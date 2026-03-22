@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from "vitest";
+import { describe, it, expect } from "vitest";
 import { chapters, sectionNames, sectionColors, C, validateConfig } from "../config.js";
 
 describe("config.js", () => {

@@ -2,7 +2,7 @@ import { C } from "../config.js";
 import { Box, T, Reveal, SubBtn, Tag } from "../components.jsx";
 
 // ── 8.1 Add & Norm - The Stabilizer ──
-export const AddNorm = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx; return (
+export const AddNorm = (ctx) => { const { sub, subBtnRipple, registerSubBtn, navigate } = ctx; return (
   <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
 
     {/* Sub 0: Where does Add & Norm sit? - Block overview diagram */}
@@ -352,7 +352,7 @@ export const AddNorm = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, re
 ); };
 
 // ── 8.2 FFN - The Feed-Forward Network ──
-export const FeedForwardNetwork = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx; return (
+export const FeedForwardNetwork = (ctx) => { const { sub, subBtnRipple, registerSubBtn, navigate } = ctx; return (
   <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
 
     {/* Sub 0: Where FFN sits in the block */}
@@ -897,7 +897,7 @@ export const FeedForwardNetwork = (ctx) => { const { sub, subBtnRipple, setSubBt
 ); };
 
 // ── 8.3 FFN - Why Word Count Doesn't Matter ──
-export const FFNParallelTrick = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx;
+export const FFNParallelTrick = (ctx) => { const { sub, subBtnRipple, registerSubBtn, navigate } = ctx;
   // Helper: render a matrix as a colored grid
   const MatrixGrid = ({ rows, label, color, dimLabel, highlight = null }) => (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4 }}>
@@ -1150,7 +1150,7 @@ export const FFNParallelTrick = (ctx) => { const { sub, subBtnRipple, setSubBtnR
 ); };
 
 // ── 8.4 Add & Norm (Again) - The Second Stabilizer ──
-export const AddNormTwo = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx; return (
+export const AddNormTwo = (ctx) => { const { sub, subBtnRipple, registerSubBtn, navigate } = ctx; return (
   <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
 
     {/* Sub 0: Where we are - just after FFN */}
@@ -1344,7 +1344,7 @@ export const AddNormTwo = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple,
 ); };
 
 // ── 8.4 Nx - The Transformer Block Repeats ──
-export const TransformerBlockRepeats = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx; return (
+export const TransformerBlockRepeats = (ctx) => { const { sub, subBtnRipple, registerSubBtn, navigate } = ctx; return (
   <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
 
     {/* Sub 0: One block isn't enough */}

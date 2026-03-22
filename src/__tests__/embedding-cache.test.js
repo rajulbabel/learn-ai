@@ -8,7 +8,7 @@ import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 function createMockIDB() {
   const data = {}; // flat key-value store across all "object stores"
   const mockDB = {
-    transaction: (name, mode) => ({
+    transaction: (_name, _mode) => ({
       objectStore: () => ({
         get: (key) => {
           const storeKey = `${name}:${key}`;

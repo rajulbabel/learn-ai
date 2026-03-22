@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from "vitest";
+import { describe, it, expect, vi, afterEach, beforeEach } from "vitest";
 import { render, screen, fireEvent, cleanup } from "@testing-library/react";
 import { ErrorBoundary, Box, T, Reveal, SubBtn, Tag } from "../components.jsx";
 import { C } from "../config.js";
@@ -144,7 +144,7 @@ describe("ErrorBoundary", () => {
 
   it("resets error state when Try Again is clicked", () => {
     // First render with error, then the retry should attempt to render again
-    const { container } = render(
+    render(
       <ErrorBoundary resetKey={1}>
         <ThrowingComponent shouldThrow={true} />
       </ErrorBoundary>

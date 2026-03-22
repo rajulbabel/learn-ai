@@ -61,7 +61,7 @@ export default function SearchOverlay({ open, onClose, onGoTo }) {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [hybrid, setHybrid] = useState(false);
+  const [_hybrid, setHybrid] = useState(false);
   const [searchMode, setSearchMode] = useState("off");
   const [activeIdx, setActiveIdx] = useState(-1);
   const inputRef = useRef(null);

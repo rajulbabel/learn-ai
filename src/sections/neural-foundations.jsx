@@ -1135,7 +1135,7 @@ export const ForwardPass = (ctx) => {
                 { name: "Neuron h₂", c: C.orange, ct: "#ffb74d", label: "h₂",
                   muls: [{ input: "x₁", iv: "1500", wv: "0.1", r: "150" }, { input: "x₂", iv: "3", wv: "10", r: "30" }],
                   sumParts: "150 + 30", sumResult: "180", biasVal: "5", biasResult: "185", reluIn: "185", reluOut: "185", pos: true },
-              ].map(({ name, c, ct, label, muls, sumParts, sumResult, biasVal, biasResult, reluIn, reluOut, pos }) => (
+              ].map(({ name, c, ct: _ct, label, muls, sumParts, sumResult, biasVal, biasResult, reluIn, reluOut, pos: _pos }) => (
                 <div key={name} style={{ padding: "14px", borderRadius: 10, background: `${c}06`, border: `1px solid ${c}15` }}>
                   <T color={c} bold size={17} center>{name}</T>
                   <div style={{ marginTop: 10, display: "flex", flexDirection: "column", gap: 8 }}>
@@ -2088,7 +2088,7 @@ export const BackpropRealNetwork = (ctx) => {
                 { sy: 80, dy: 200, w: "0.1", wn: "w\u2081\u2082", c: C.red },
                 { sy: 200, dy: 80, w: "50", wn: "w\u2082\u2081", c: C.yellow },
                 { sy: 200, dy: 200, w: "10", wn: "w\u2082\u2082", c: C.yellow },
-              ].map(({ sy, dy, w, wn, c }, i) => {
+              ].map(({ sy, dy, w, wn: _wn, c }, i) => {
                 const x1 = 86, x2 = 188, t = 0.75;
                 const lx = x1 + (x2 - x1) * t;
                 const ly = sy + (dy - sy) * t;
@@ -2590,7 +2590,7 @@ export const WhyBackpropHard = (ctx) => {
               { layers: "5 layers", calc: "0.5\u2075", result: "0.031", bar: 3.1 },
               { layers: "10 layers", calc: "0.5\u00B9\u2070", result: "0.001", bar: 0.5 },
               { layers: "50 layers", calc: "0.5\u2075\u2070", result: "0.000000000000001", bar: 0 },
-            ].map(({ layers, calc, result, bar }) => (
+            ].map(({ layers, calc: _calc, result, bar }) => (
               <div key={layers} style={{ display: "flex", alignItems: "center", gap: 8, padding: "4px 8px" }}>
                 <T color={C.dim} size={13} style={{ minWidth: 75, textAlign: "right" }}>{layers}</T>
                 <div style={{ flex: 1, height: 12, background: "rgba(255,255,255,0.04)", borderRadius: 4, overflow: "hidden" }}>
@@ -2615,7 +2615,7 @@ export const WhyBackpropHard = (ctx) => {
               { layers: "5 layers", calc: "2\u2075", result: "32", bar: 3.2 },
               { layers: "10 layers", calc: "2\u00B9\u2070", result: "1,024", bar: 20 },
               { layers: "50 layers", calc: "2\u2075\u2070", result: "1,125,899,906,842,624", bar: 100 },
-            ].map(({ layers, calc, result, bar }) => (
+            ].map(({ layers, calc: _calc, result, bar }) => (
               <div key={layers} style={{ display: "flex", alignItems: "center", gap: 8, padding: "4px 8px" }}>
                 <T color={C.dim} size={13} style={{ minWidth: 75, textAlign: "right" }}>{layers}</T>
                 <div style={{ flex: 1, height: 12, background: "rgba(255,255,255,0.04)", borderRadius: 4, overflow: "hidden" }}>

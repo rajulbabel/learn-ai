@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from "vitest";
+import { describe, it, expect, vi, afterEach } from "vitest";
 import { render, fireEvent, cleanup } from "@testing-library/react";
 import { chapters } from "../config.js";
 
@@ -1799,7 +1799,8 @@ describe("source files have no standalone uppercase IS", () => {
     it(`${file} has no standalone uppercase IS in string literals`, async () => {
       const fs = await import("fs");
       const path = await import("path");
-      const filePath = path.resolve(__dirname, "..", "sections", file);
+      const { fileURLToPath } = await import("url");
+      const filePath = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..", "sections", file);
       const content = fs.readFileSync(filePath, "utf-8");
       // Match standalone IS (word boundary) inside JSX string content
       // Exclude CLIP, THIS, RLHF and other valid acronyms - only match standalone IS

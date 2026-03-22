@@ -1366,6 +1366,8 @@ export const CausalMask = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple,
       </div>
     </Box></Reveal>
 
+    {sub < 7 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
+
     {/* Sub 7: Encoder-only architecture */}
     <Reveal when={sub >= 7}><Box color={C.green} style={{ width: "100%" }}>
       <T color="#80e8a5" bold center size={20}>Three architectures - who uses what mask and why</T>
@@ -1468,7 +1470,6 @@ export const CausalMask = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple,
       </div>
     </Box></Reveal>
 
-    {sub < 9 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
   </div>
   );
 };

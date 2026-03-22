@@ -4218,7 +4218,7 @@
     "section": 9,
     "sectionName": "The Decoder",
     "sub": 7,
-    "text": "chitectures - who uses what mask and whyENCODER-ONLYBERT, RoBERTaFull matrix - all cells activeNo mask - every word sees every other word (bidirectional).Why? The encoder's job is to understand the full input. When classifying \"The bank by the river\", \"bank\" NEEDS to see \"river\" (which comes after it) to know it means riverbank, not a financial bank. Hiding future words would cripple understanding.Used for: text classification, sentiment analysis, question answering, named entity recognition.ContinueContinue"
+    "text": "chitectures - who uses what mask and whyENCODER-ONLYBERT, RoBERTaFull matrix - all cells activeNo mask - every word sees every other word (bidirectional).Why? The encoder's job is to understand the full input. When classifying \"The bank by the river\", \"bank\" NEEDS to see \"river\" (which comes after it) to know it means riverbank, not a financial bank. Hiding future words would cripple understanding.Used for: text classification, sentiment analysis, question answering, named entity recognition.Continue"
   },
   {
     "id": 469,
@@ -4227,7 +4227,7 @@
     "section": 9,
     "sectionName": "The Decoder",
     "sub": 8,
-    "text": "Claude, LLaMALower triangle only - upper triangle maskedCausal mask - each word only sees past words + itself.Why? The decoder generates text one token at a time. At generation step 3, token 4 doesn't exist yet - attending to it would be looking at something that isn't there. During training, the full sentence is fed at once for speed, so we use the mask to simulate the generation condition. Without it, the model would \"cheat\" by seeing the answer, then fail at actual generation.Used for: text generation, chatbots, code completion, reasoning - all modern LLMs.ContinueContinue"
+    "text": "ONLYGPT, Claude, LLaMALower triangle only - upper triangle maskedCausal mask - each word only sees past words + itself.Why? The decoder generates text one token at a time. At generation step 3, token 4 doesn't exist yet - attending to it would be looking at something that isn't there. During training, the full sentence is fed at once for speed, so we use the mask to simulate the generation condition. Without it, the model would \"cheat\" by seeing the answer, then fail at actual generation.Used for: text generation, chatbots, code completion, reasoning - all modern LLMs.Continue"
   },
   {
     "id": 470,
@@ -4236,7 +4236,7 @@
     "section": 9,
     "sectionName": "The Decoder",
     "sub": 9,
-    "text": "riginal Transformer, T5, BARTencoder+decoderEncoder: full matrix + Decoder: lower triangleBoth - encoder uses no mask, decoder uses causal mask, plus cross-attention connecting them.Why? The input (e.g., English sentence) already exists fully - the encoder should see all of it. But the output (e.g., French translation) is generated word by word - the decoder must not peek ahead. Cross-attention lets the decoder look at the encoder's full understanding while still generating left-to-right.Used for: translation, summarization, any \"input → different output\" task.The core rule is simpleIf the text already exists (input you're reading) → no mask needed, let every word see everything for maximum understanding.If the text is being generated (output you're writing) → causal mask required, because future words don't exist yet."
+    "text": "DECODEROriginal Transformer, T5, BARTencoder+decoderEncoder: full matrix + Decoder: lower triangleBoth - encoder uses no mask, decoder uses causal mask, plus cross-attention connecting them.Why? The input (e.g., English sentence) already exists fully - the encoder should see all of it. But the output (e.g., French translation) is generated word by word - the decoder must not peek ahead. Cross-attention lets the decoder look at the encoder's full understanding while still generating left-to-right.Used for: translation, summarization, any \"input → different output\" task.The core rule is simpleIf the text already exists (input you're reading) → no mask needed, let every word see everything for maximum understanding.If the text is being generated (output you're writing) → causal mask required, because future words don't exist yet."
   },
   {
     "id": 471,

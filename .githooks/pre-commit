@@ -10,7 +10,13 @@ if [ $? -ne 0 ]; then
     echo "\033[31m[pre-commit] search:build failed. Commit aborted.\033[0m"
     exit 1
   fi
-  # Stage the updated files so they're included in this commit
-  git add src/data/chunks.json src/data/embeddings.json src/data/embeddings-checksum.json
-  echo "\033[32m[pre-commit] Embeddings rebuilt and staged.\033[0m"
+  echo "\033[32m[pre-commit] Embeddings rebuilt.\033[0m"
 fi
+
+# Always stage embedding data files if they have modifications,
+# so they never get left behind as unstaged changes
+for f in src/data/chunks.json src/data/embeddings.json src/data/embeddings-checksum.json; do
+  if [ -n "$(git diff --name-only "$f" 2>/dev/null)" ]; then
+    git add "$f"
+  fi
+done

@@ -2,9 +2,9 @@
 # Auto-sync chunks and embeddings with source before committing
 
 # Step 1: Always re-extract chunks from source (fast - just runs vitest)
-CHUNKS_BEFORE=""
+HASH_BEFORE=""
 if [ -f src/data/chunks.json ]; then
-  CHUNKS_BEFORE=$(cat src/data/chunks.json)
+  HASH_BEFORE=$(shasum src/data/chunks.json | cut -d' ' -f1)
 fi
 
 npm run search:extract --silent 2>/dev/null
@@ -13,10 +13,10 @@ if [ $? -ne 0 ]; then
   exit 1
 fi
 
-CHUNKS_AFTER=$(cat src/data/chunks.json)
+HASH_AFTER=$(shasum src/data/chunks.json | cut -d' ' -f1)
 
 # Step 2: If chunks changed, or embeddings are out of sync, rebuild embeddings
-if [ "$CHUNKS_BEFORE" != "$CHUNKS_AFTER" ]; then
+if [ "$HASH_BEFORE" != "$HASH_AFTER" ]; then
   echo "\033[33m[pre-commit] Chunks changed. Regenerating embeddings...\033[0m"
   npm run search:embed
   if [ $? -ne 0 ]; then

@@ -1,17 +1,42 @@
 #!/bin/sh
-# Auto-sync embeddings with chunks before committing
+# Auto-sync chunks and embeddings with source before committing
 
-# First check if they're already in sync
-node scripts/check-embeddings.mjs 2>/dev/null
+# Step 1: Always re-extract chunks from source (fast - just runs vitest)
+CHUNKS_BEFORE=""
+if [ -f src/data/chunks.json ]; then
+  CHUNKS_BEFORE=$(cat src/data/chunks.json)
+fi
+
+npm run search:extract --silent 2>/dev/null
 if [ $? -ne 0 ]; then
-  echo "\033[33m[pre-commit] Embeddings out of sync. Rebuilding...\033[0m"
-  npm run search:build
+  echo "\033[31m[pre-commit] search:extract failed. Commit aborted.\033[0m"
+  exit 1
+fi
+
+CHUNKS_AFTER=$(cat src/data/chunks.json)
+
+# Step 2: If chunks changed, or embeddings are out of sync, rebuild embeddings
+if [ "$CHUNKS_BEFORE" != "$CHUNKS_AFTER" ]; then
+  echo "\033[33m[pre-commit] Chunks changed. Regenerating embeddings...\033[0m"
+  npm run search:embed
   if [ $? -ne 0 ]; then
-    echo "\033[31m[pre-commit] search:build failed. Commit aborted.\033[0m"
+    echo "\033[31m[pre-commit] search:embed failed. Commit aborted.\033[0m"
     exit 1
   fi
   echo "\033[32m[pre-commit] Embeddings rebuilt.\033[0m"
+else
+  # Chunks unchanged - just verify embeddings are consistent
+  node scripts/check-embeddings.mjs 2>/dev/null
+  if [ $? -ne 0 ]; then
+    echo "\033[33m[pre-commit] Embeddings out of sync. Rebuilding...\033[0m"
+    npm run search:embed
+    if [ $? -ne 0 ]; then
+      echo "\033[31m[pre-commit] search:embed failed. Commit aborted.\033[0m"
+      exit 1
+    fi
+    echo "\033[32m[pre-commit] Embeddings rebuilt.\033[0m"
+  fi
 fi
 
-# Always stage any modified files in src/data/ so they never get left behind
+# Always stage any modified files in src/data/
 git add src/data/ 2>/dev/null

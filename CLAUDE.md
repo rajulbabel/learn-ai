@@ -97,21 +97,21 @@ Only config.js IDs change.
 | 2.2 | SelfSupervised | Self-Supervised Learning - How GPT Trains |
 | 2.3 | CrossEntropy | Cross-Entropy Loss - The LLM Score |
 | 2.4 | NNInAction | The Neural Network in Action |
-| 2.5 | SFT | Supervised Fine-Tuning (SFT) |
-| 2.6 | RLHF | RLHF - Making AI Helpful & Safe |
-| 2.7 | BatchTraining | Batch Training - Why Not One Example at a Time? |
-| 2.8 | OutputLayer | The Output Layer - From Hidden State to Words |
-| 2.9 | AutoregressiveGeneration | Autoregressive Generation - One Token at a Time |
+| 2.5 | OutputLayer | The Output Layer - From Hidden State to Words |
+| 2.6 | AutoregressiveGeneration | Autoregressive Generation - One Token at a Time |
+| 2.7 | SFT | Supervised Fine-Tuning (SFT) |
+| 2.8 | RLHF | RLHF - Making AI Helpful & Safe |
 
-**Section 3: Scaling & Modern Techniques** (`scaling.jsx`)
+**Section 3: Scaling & Modern Techniques** (`scaling.jsx` + `llm-training.jsx`)
 
 | Chapter | Component | Title |
 |---------|-----------|-------|
 | 3.1 | ScalingLaws | Scaling Laws - Why Bigger Models Win |
 | 3.2 | ParametersAtScale | Parameters at Scale |
-| 3.3 | Distillation | Knowledge Distillation - Teacher to Student |
-| 3.4 | CLIP | CLIP - Teaching AI to See & Read |
-| 3.5 | TrainingPipeline | The Complete Training Pipeline |
+| 3.3 | BatchTraining | Batch Training - Why Not One Example at a Time? |
+| 3.4 | Distillation | Knowledge Distillation - Teacher to Student |
+| 3.5 | CLIP | CLIP - Teaching AI to See & Read |
+| 3.6 | TrainingPipeline | The Complete Training Pipeline |
 
 **Section 4: The Road to Transformers** (`road-to-transformers.jsx`)
 
@@ -121,8 +121,6 @@ Only config.js IDs change.
 | 4.2 | RNN | RNN |
 | 4.3 | RNNFlaws | RNN's Fatal Flaws |
 | 4.4 | TransformerArrives | The Transformer Arrives |
-| 4.5 | EncoderDecoder | Encoder & Decoder - The Two Halves |
-| 4.6 | DecoderOnly | Decoder-Only - How Modern LLMs Work |
 
 **Section 5: Transformer Input Pipeline** (`transformer-input.jsx`)
 
@@ -135,7 +133,6 @@ Only config.js IDs change.
 | 5.5 | PosEncodingCompute | Positional Encoding - Computing Positions |
 | 5.6 | PosEncodingFastSlow | Positional Encoding - Fast vs Slow |
 | 5.7 | PosEncodingFinal | Positional Encoding - Final Addition |
-| 5.8 | WhatTransformerDoes | What is a Transformer Actually Doing? |
 
 **Section 6: Attention - Understanding Q, K, V** (`attention-qkv.jsx`)
 
@@ -165,25 +162,33 @@ Only config.js IDs change.
 | 7.6 | SoftmaxProbs | Step 4 - Softmax to Probabilities |
 | 7.7 | WeightedSum | Step 5 - Weighted Sum of Values |
 | 7.8 | FullFormula | The Full Formula |
-| 7.9 | CausalMask | Causal Masking - Hiding the Future |
-| 7.10 | CrossAttention | Cross-Attention - The Encoder-Decoder Bridge |
-| 7.11 | WhyMultiHead | Why Multi-Head? - The Compromise Problem |
-| 7.12 | HeadSplit | The Split - How 8 Heads Work |
-| 7.13 | InsideEachHead | Inside Each Head - Full Attention in 64 Dims |
-| 7.14 | ConcatWO | Concat + W_O - Blending All Heads |
-| 7.15 | WhyEightHeads | Why 8 Heads? Parameter Count & Big Picture |
-| 7.16 | IsWOConstant | Is W_O Constant? Does It Change? |
-| 7.17 | CompletePicture | The Complete Picture - In Plain English |
+| 7.9 | WhyMultiHead | Why Multi-Head? - The Compromise Problem |
+| 7.10 | HeadSplit | The Split - How 8 Heads Work |
+| 7.11 | InsideEachHead | Inside Each Head - Full Attention in 64 Dims |
+| 7.12 | ConcatWO | Concat + W_O - Blending All Heads |
+| 7.13 | WhyEightHeads | Why 8 Heads? Parameter Count & Big Picture |
+| 7.14 | IsWOConstant | Is W_O Constant? Does It Change? |
+| 7.15 | CompletePicture | The Complete Picture - In Plain English |
 
-**Section 8: Beyond Attention** (`transformer-block.jsx`)
+**Section 8: The Encoder** (`road-to-transformers.jsx` + `transformer-block.jsx`)
 
 | Chapter | Component | Title |
 |---------|-----------|-------|
-| 8.1 | AddNorm | Add & Norm - The Stabilizer |
-| 8.2 | FeedForwardNetwork | FFN - The Feed-Forward Network |
-| 8.3 | FFNParallelTrick | FFN - Why Word Count Doesn't Matter |
-| 8.4 | AddNormTwo | Add & Norm (Again) - The Second Stabilizer |
-| 8.5 | TransformerBlockRepeats | Nx - The Transformer Block Repeats |
+| 8.1 | EncoderDecoder | Encoder & Decoder - The Two Halves |
+| 8.2 | AddNorm | Add & Norm - The Stabilizer |
+| 8.3 | FeedForwardNetwork | FFN - The Feed-Forward Network |
+| 8.4 | FFNParallelTrick | FFN - Why Word Count Doesn't Matter |
+| 8.5 | AddNormTwo | Add & Norm (Again) - The Second Stabilizer |
+| 8.6 | TransformerBlockRepeats | Nx - The Transformer Block Repeats |
+
+**Section 9: The Decoder** (`road-to-transformers.jsx` + `attention-computation.jsx` + `transformer-input.jsx`)
+
+| Chapter | Component | Title |
+|---------|-----------|-------|
+| 9.1 | DecoderOnly | Decoder-Only - How Modern LLMs Work |
+| 9.2 | CausalMask | Causal Masking - Hiding the Future |
+| 9.3 | CrossAttention | Cross-Attention - The Encoder-Decoder Bridge |
+| 9.4 | WhatTransformerDoes | What is a Transformer Actually Doing? |
 
 ## Project Structure
 
@@ -209,13 +214,13 @@ learn-ai/
 │   └── sections/
 │       ├── toc.jsx                       # Table of Contents
 │       ├── neural-foundations.jsx         # Section 1
-│       ├── llm-training.jsx              # Section 2
+│       ├── llm-training.jsx              # Section 2 (+ BatchTraining used in Section 3)
 │       ├── scaling.jsx                   # Section 3
-│       ├── road-to-transformers.jsx      # Section 4
-│       ├── transformer-input.jsx         # Section 5
+│       ├── road-to-transformers.jsx      # Section 4 (+ EncoderDecoder in 8, DecoderOnly in 9)
+│       ├── transformer-input.jsx         # Section 5 (+ WhatTransformerDoes in 9)
 │       ├── attention-qkv.jsx             # Section 6
-│       ├── attention-computation.jsx     # Section 7
-│       └── transformer-block.jsx        # Section 8
+│       ├── attention-computation.jsx     # Section 7 (+ CausalMask/CrossAttention in 9)
+│       └── transformer-block.jsx        # Section 8 (Add&Norm, FFN, block repeats)
 ├── .github/workflows/deploy.yml
 └── CLAUDE.md
 ```

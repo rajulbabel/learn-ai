@@ -359,7 +359,7 @@ export const FeedForwardNetwork = (ctx) => { const { sub, subBtnRipple, setSubBt
     {sub >= 0 && (
       <Box color={C.orange} style={{ width: "100%" }}>
         <T color="#ffcc80" bold center size={20}>Where Does the Feed-Forward Network Sit?</T>
-        <T color="#ffcc80" size={16} center style={{ marginTop: 4 }}>In chapter 8.1 we covered Add & Norm after Attention. Now let's zoom into the next step.</T>
+        <T color="#ffcc80" size={16} center style={{ marginTop: 4 }}>In chapter 8.2 we covered Add & Norm after Attention. Now let's zoom into the next step.</T>
         <div style={{ marginTop: 16, display: "flex", flexDirection: "column", alignItems: "center", gap: 0 }}>
           {[
             { label: "Input Embeddings", color: C.dim, bg: "rgba(255,255,255,0.03)", highlight: false },
@@ -511,7 +511,7 @@ export const FeedForwardNetwork = (ctx) => { const { sub, subBtnRipple, setSubBt
     {/* Sub 3: Step-by-step computation with real numbers */}
     <Reveal when={sub >= 3}><Box color={C.green} style={{ width: "100%" }}>
       <T color="#a5d6a7" bold center size={20}>Step-by-Step: FFN on "cats"</T>
-      <T color="#a5d6a7" size={16} style={{ marginTop: 6 }}>Let's trace "cats" through the FFN. In chapter 8.1, Add & Norm output [-1.26, -0.51, 0.80, 0.98] for "cats". We'll use a tiny 4-dim version to show the real math (real models use 512 dims but the process is identical).</T>
+      <T color="#a5d6a7" size={16} style={{ marginTop: 6 }}>Let's trace "cats" through the FFN. In chapter 8.2, Add & Norm output [-1.26, -0.51, 0.80, 0.98] for "cats". We'll use a tiny 4-dim version to show the real math (real models use 512 dims but the process is identical).</T>
 
       {/* Step 1: First linear layer */}
       <div style={{ marginTop: 12, padding: 12, borderRadius: 8, background: `${C.pink}08`, border: `1px solid ${C.pink}20` }}>
@@ -941,7 +941,7 @@ export const FFNParallelTrick = (ctx) => { const { sub, subBtnRipple, setSubBtnR
     {sub >= 0 && (
       <Box color={C.cyan} style={{ width: "100%" }}>
         <T color="#80deea" bold center size={20}>Recap: FFN With Just One Word</T>
-        <T color="#80deea" size={16} style={{ marginTop: 6 }}>In chapter 8.2 we traced one word ("cats") through FFN. Let's make the matrix shapes explicit. Say "cats" is a 3-dimensional vector:</T>
+        <T color="#80deea" size={16} style={{ marginTop: 6 }}>In chapter 8.3 we traced one word ("cats") through FFN. Let's make the matrix shapes explicit. Say "cats" is a 3-dimensional vector:</T>
 
         <div style={{ marginTop: 16, display: "flex", alignItems: "center", justifyContent: "center", gap: 8, flexWrap: "wrap" }}>
           <MatrixGrid rows={[["0.5", "-0.3", "0.9"]]} label={'"cats"'} color={C.cyan} dimLabel="1x3 (one word, 3 dims)" />
@@ -1157,7 +1157,7 @@ export const AddNormTwo = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple,
     {sub >= 0 && (
       <Box color={C.blue} style={{ width: "100%" }}>
         <T color="#90caf9" bold center size={20}>The Second Add & Norm</T>
-        <T color="#90caf9" size={16} center style={{ marginTop: 4 }}>The FFN just transformed each token's representation. But remember the problem from chapter 8.1 - values drift in deep networks. We need to stabilize again.</T>
+        <T color="#90caf9" size={16} center style={{ marginTop: 4 }}>The FFN just transformed each token's representation. But remember the problem from chapter 8.2 - values drift in deep networks. We need to stabilize again.</T>
         <div style={{ marginTop: 16, display: "flex", flexDirection: "column", alignItems: "center", gap: 0 }}>
           {[
             { label: "Multi-Head Attention", color: C.pink, bg: `${C.pink}10`, highlight: false },
@@ -1192,7 +1192,7 @@ export const AddNormTwo = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple,
     {/* Sub 1: The Add step - FFN input + FFN output */}
     <Reveal when={sub >= 1}><Box color={C.green} style={{ width: "100%" }}>
       <T color="#a5d6a7" bold center size={20}>The Add - Residual Around FFN</T>
-      <T color="#a5d6a7" size={16} style={{ marginTop: 6 }}>Same idea as chapter 8.1: keep the original input by adding it back. The input to FFN was the first Add & Norm's output.</T>
+      <T color="#a5d6a7" size={16} style={{ marginTop: 6 }}>Same idea as chapter 8.2: keep the original input by adding it back. The input to FFN was the first Add & Norm's output.</T>
 
       <div style={{ marginTop: 14, padding: 14, borderRadius: 10, background: "rgba(0,230,118,0.04)", border: `1px solid ${C.green}20` }}>
         <T color="#a5d6a7" bold center size={16}>Continuing with "cats":</T>
@@ -1201,7 +1201,7 @@ export const AddNormTwo = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple,
             <Tag color={C.purple}>FFN input</Tag>
             <code style={{ color: C.purple, fontSize: 15 }}>[-1.26, -0.51, 0.80, 0.98]</code>
           </div>
-          <div style={{ textAlign: "center", color: C.dim, fontSize: 14 }}>↓ goes through FFN (chapter 8.2) ↓</div>
+          <div style={{ textAlign: "center", color: C.dim, fontSize: 14 }}>↓ goes through FFN (chapter 8.3) ↓</div>
           <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
             <Tag color={C.orange}>FFN output</Tag>
             <code style={{ color: C.orange, fontSize: 15 }}>[0.51, -0.73, 1.14, 0.22]</code>
@@ -1226,7 +1226,7 @@ export const AddNormTwo = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple,
     {/* Sub 2: The Norm step with concrete numbers */}
     <Reveal when={sub >= 2}><Box color={C.purple} style={{ width: "100%" }}>
       <T color="#b8a9ff" bold center size={20}>The Norm - Stabilize Again</T>
-      <T color="#b8a9ff" size={16} style={{ marginTop: 6 }}>Same Layer Normalization formula from chapter 8.1 - compute mean, subtract, divide by standard deviation, scale by gamma, shift by beta.</T>
+      <T color="#b8a9ff" size={16} style={{ marginTop: 6 }}>Same Layer Normalization formula from chapter 8.2 - compute mean, subtract, divide by standard deviation, scale by gamma, shift by beta.</T>
 
       <div style={{ marginTop: 12, padding: 14, borderRadius: 10, background: "rgba(167,139,250,0.04)", border: `1px solid ${C.purple}20` }}>
         <T color="#b8a9ff" bold center size={16}>Normalizing [-0.75, -1.24, 1.94, 1.20]</T>
@@ -1438,8 +1438,8 @@ export const TransformerBlockRepeats = (ctx) => { const { sub, subBtnRipple, set
           <T color={C.blue} bold size={15}>Add & Norm #1 (after Attention)</T>
           <div style={{ marginTop: 8, display: "flex", flexWrap: "wrap", gap: 6 }}>
             {[
-              { name: "\u03B3\u2081 (gamma)", role: "Learnable scale per dimension - stretches or shrinks normalized values", ref: "ch 8.1" },
-              { name: "\u03B2\u2081 (beta)", role: "Learnable shift per dimension - moves the center up or down", ref: "ch 8.1" },
+              { name: "\u03B3\u2081 (gamma)", role: "Learnable scale per dimension - stretches or shrinks normalized values", ref: "ch 8.2" },
+              { name: "\u03B2\u2081 (beta)", role: "Learnable shift per dimension - moves the center up or down", ref: "ch 8.2" },
             ].map(({ name, role, ref }) => (
               <div key={name} style={{ flex: "1 1 45%", padding: "6px 10px", borderRadius: 6, background: `${C.blue}08`, border: `1px solid ${C.blue}15` }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
@@ -1457,8 +1457,8 @@ export const TransformerBlockRepeats = (ctx) => { const { sub, subBtnRipple, set
           <T color={C.orange} bold size={15}>Feed-Forward Network</T>
           <div style={{ marginTop: 8, display: "flex", flexWrap: "wrap", gap: 6 }}>
             {[
-              { name: "W\u2081, b\u2081", role: "First layer - expands from 512 to 2048 dims (the thinking space)", ref: "ch 8.2" },
-              { name: "W\u2082, b\u2082", role: "Second layer - compresses from 2048 back to 512 dims", ref: "ch 8.2" },
+              { name: "W\u2081, b\u2081", role: "First layer - expands from 512 to 2048 dims (the thinking space)", ref: "ch 8.3" },
+              { name: "W\u2082, b\u2082", role: "Second layer - compresses from 2048 back to 512 dims", ref: "ch 8.3" },
             ].map(({ name, role, ref }) => (
               <div key={name} style={{ flex: "1 1 45%", padding: "6px 10px", borderRadius: 6, background: `${C.orange}08`, border: `1px solid ${C.orange}15` }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
@@ -1476,8 +1476,8 @@ export const TransformerBlockRepeats = (ctx) => { const { sub, subBtnRipple, set
           <T color={C.blue} bold size={15}>Add & Norm #2 (after FFN)</T>
           <div style={{ marginTop: 8, display: "flex", flexWrap: "wrap", gap: 6 }}>
             {[
-              { name: "\u03B3\u2082 (gamma)", role: "Same role as gamma above, but a separate copy learned independently", ref: "ch 8.3" },
-              { name: "\u03B2\u2082 (beta)", role: "Same role as beta above, but a separate copy learned independently", ref: "ch 8.3" },
+              { name: "\u03B3\u2082 (gamma)", role: "Same role as gamma above, but a separate copy learned independently", ref: "ch 8.5" },
+              { name: "\u03B2\u2082 (beta)", role: "Same role as beta above, but a separate copy learned independently", ref: "ch 8.5" },
             ].map(({ name, role, ref }) => (
               <div key={name} style={{ flex: "1 1 45%", padding: "6px 10px", borderRadius: 6, background: `${C.blue}08`, border: `1px solid ${C.blue}15` }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
@@ -1616,10 +1616,10 @@ export const TransformerBlockRepeats = (ctx) => { const { sub, subBtnRipple, set
           {/* Dots - centered between Block 2 bottom and Block N top */}
           <text x={cx} y={dotsY + 5} fill={C.dim} fontSize={20} textAnchor="middle" letterSpacing={10}>...</text>
 
-          {/* Output Layer box */}
+          {/* Output box */}
           <rect x={cx - boxW / 2} y={outTop} width={boxW} height={outH} rx={10} fill={`${C.orange}08`} stroke={`${C.orange}40`} strokeWidth={1.5} />
-          <text x={cx} y={outTop + 22} fill={C.orange} fontSize={14} fontWeight={700} textAnchor="middle">Output Layer</text>
-          <text x={cx} y={outTop + 37} fill={C.dim} fontSize={10} textAnchor="middle">logits → softmax → next token</text>
+          <text x={cx} y={outTop + 22} fill={C.orange} fontSize={14} fontWeight={700} textAnchor="middle">Encoder Output</text>
+          <text x={cx} y={outTop + 37} fill={C.dim} fontSize={10} textAnchor="middle">contextual hidden states for each token</text>
 
           {/* N x bracket - right side, spanning Block 1 top to Block N bottom */}
           <line x1={bracketX} y1={b1Top} x2={bracketX} y2={bNTop + blockH} stroke={C.dim} strokeWidth={1.5} />
@@ -1642,8 +1642,8 @@ export const TransformerBlockRepeats = (ctx) => { const { sub, subBtnRipple, set
       </div>
 
       <div style={{ marginTop: 12, padding: 10, borderRadius: 8, background: `${C.red}08`, border: `1px solid ${C.red}20` }}>
-        <T color="#ef9a9a" bold center size={15}>The full recipe of a Transformer decoder:</T>
-        <T color="#ef9a9a" center size={14} style={{ marginTop: 4 }}>Tokenize → Embed → Add positions → Pass through N blocks (each: Attention → Add & Norm → FFN → Add & Norm) → Output layer → Next token probability. Everything we've covered from Section 5 through Section 8 happens inside each of those N blocks.</T>
+        <T color="#ef9a9a" bold center size={15}>The full recipe of a Transformer encoder:</T>
+        <T color="#ef9a9a" center size={14} style={{ marginTop: 4 }}>Tokenize → Embed → Add positions → Pass through N blocks (each: Self-Attention → Add & Norm → FFN → Add & Norm) → Rich contextual hidden states. The encoder uses bidirectional attention - every word can see every other word, no masking. This gives the encoder a full understanding of the entire input.</T>
       </div>
     </Box></Reveal>
   </div>

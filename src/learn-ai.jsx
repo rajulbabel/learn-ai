@@ -14,7 +14,15 @@ const sectionLoaders = {
   5: () => import("./sections/transformer-input.jsx"),
   6: () => import("./sections/attention-qkv.jsx"),
   7: () => import("./sections/attention-computation.jsx"),
-  8: () => import("./sections/transformer-block.jsx"),
+  8: () => Promise.all([
+    import("./sections/road-to-transformers.jsx"),
+    import("./sections/transformer-block.jsx"),
+  ]).then(mods => Object.assign({}, ...mods)),
+  9: () => Promise.all([
+    import("./sections/road-to-transformers.jsx"),
+    import("./sections/attention-computation.jsx"),
+    import("./sections/transformer-input.jsx"),
+  ]).then(mods => Object.assign({}, ...mods)),
 };
 
 // ── Lazy-loaded search: not loaded until search is opened ──

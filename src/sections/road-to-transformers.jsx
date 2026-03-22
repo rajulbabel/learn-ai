@@ -892,7 +892,7 @@ export const DecoderOnly = (ctx) => {
             CNN (local patterns) → RNN (sequential memory, slow) → Transformer (attention, parallel) → Decoder-only (the architecture of modern AI).
           </T>
           <T color="#80deea" style={{ marginTop: 6 }}>
-            The next section goes deep into the Transformer mechanics: what happens inside each layer, how it all fits together, and why each piece is there.
+            You now have the full history. The upcoming sections go deep into each piece of the Transformer: how input enters, how attention works, and how the complete encoder and decoder blocks are built.
           </T>
         </Box>
       </Reveal>

@@ -132,8 +132,8 @@ describe("TOC", () => {
     }
   });
 
-  // Test all 8 sections expanded to cover each one
-  for (let secNum = 1; secNum <= 8; secNum++) {
+  // Test all 9 sections expanded to cover each one
+  for (let secNum = 1; secNum <= 9; secNum++) {
     it(`shows chapters for section ${secNum}`, () => {
       const { container } = render(TOC(makeCtx({ expanded: secNum })));
       expect(container.innerHTML).toBeTruthy();
@@ -564,12 +564,20 @@ describe("ConcatWO envelope visual", () => {
   });
 });
 
-// ─── TOC section 8 ───
+// ─── TOC sections 8 and 9 ───
 describe("TOC section 8", () => {
   it("shows section 8 when expanded", () => {
     const { container } = render(TOC(makeCtx({ expanded: 8 })));
     expect(container.innerHTML).toBeTruthy();
-    expect(container.textContent).toContain("Beyond Attention");
+    expect(container.textContent).toContain("The Encoder");
+  });
+});
+
+describe("TOC section 9", () => {
+  it("shows section 9 when expanded", () => {
+    const { container } = render(TOC(makeCtx({ expanded: 9 })));
+    expect(container.innerHTML).toBeTruthy();
+    expect(container.textContent).toContain("The Decoder");
   });
 });
 

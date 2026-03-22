@@ -170,7 +170,7 @@ export const FullArchitecture = (ctx) => { const { sub, subBtnRipple, setSubBtnR
           <ArchDiagram />
         </div>
       )}
-      <Reveal when={sub >= 1}><Box color={C.green}><T color="#80e8a5" bold center>🔍 Let's zoom into the bottom first - the green "Embedding" boxes.</T><T color="#80e8a5">This is where words enter the Transformer as numbers.</T></Box></Reveal>
+      <Reveal when={sub >= 1}><Box color={C.green}><T color="#80e8a5" bold center>🔍 Let's zoom into the bottom first - the green "Embedding" boxes.</T><T color="#80e8a5">This is where words enter the Transformer as numbers.</T><T color={C.dim} size={14} style={{ marginTop: 8 }}>The diagram shows both an Encoder and a Decoder side - we will learn what these are and how they differ in Sections 8 and 9. For now, focus on the building blocks inside each block: Attention, Add & Norm, and FFN.</T></Box></Reveal>
       {sub < 1 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
     </div>
   );

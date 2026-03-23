@@ -96,9 +96,9 @@ function TrainingDiagram({ sub, setSub, subBtnRipple, setSubBtnRipple, registerS
     let Y = 30;
 
     // ═══ sub 0: Title + Raw Input + Tokenization ═══
-    el("rect", { x: 100, y: Y - 6, width: 700, height: 48, rx: 10, fill: "rgba(0,230,118,0.03)", stroke: "rgba(0,230,118,0.2)", "stroke-width": 1.5 });
-    label(CX,Y + 12, "TRAINING / PREFILL MODE", "rgba(0,230,118,0.7)", 19, "700");
-    label(CX,Y + 32, "All tokens flow as one matrix through every layer simultaneously.", "rgba(0,230,118,0.5)", 13, "600");
+    el("rect", { x: 100, y: Y - 4, width: 700, height: 44, rx: 10, fill: "rgba(0,230,118,0.03)", stroke: "rgba(0,230,118,0.2)", "stroke-width": 1.5 });
+    label(CX,Y + 14, "TRAINING / PREFILL MODE", "rgba(0,230,118,0.7)", 19, "700");
+    label(CX,Y + 34, "All tokens flow as one matrix through every layer simultaneously.", "rgba(0,230,118,0.5)", 13, "600");
 
     Y += 103;
     label(CX,Y, "Step 0: Raw Input String", "rgba(255,255,255,0.5)", 16, "700");
@@ -617,9 +617,9 @@ function InferenceDiagram({ sub, setSub, subBtnRipple, setSubBtnRipple, register
     let Y = 30;
 
     // ═══ sub 0: Title + Big Picture ═══
-    el("rect", { x: 80, y: Y - 6, width: 740, height: 48, rx: 10, fill: "rgba(255,152,0,0.04)", stroke: "rgba(255,152,0,0.3)", "stroke-width": 1.5 });
-    label(CX,Y + 12, "PRODUCTION / INFERENCE MODE (autoregressive generation)", "rgba(255,152,0,0.8)", 19, "700");
-    label(CX,Y + 32, "Only ONE new token flows through the decoder at each step. Previous K,V are cached.", "rgba(255,152,0,0.5)", 13, "600");
+    el("rect", { x: 80, y: Y - 4, width: 740, height: 44, rx: 10, fill: "rgba(255,152,0,0.04)", stroke: "rgba(255,152,0,0.3)", "stroke-width": 1.5 });
+    label(CX,Y + 14, "PRODUCTION / INFERENCE MODE (autoregressive generation)", "rgba(255,152,0,0.8)", 19, "700");
+    label(CX,Y + 34, "Only ONE new token flows through the decoder at each step. Previous K,V are cached.", "rgba(255,152,0,0.5)", 13, "600");
 
     Y += 111;
     explainBox(CX,Y, 960, [

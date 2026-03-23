@@ -23,6 +23,10 @@ export const chapters = [
   { id: "1.20", title: "Activation Functions - The Full Picture", section: 1, component: "ActivationFunctions" },
   { id: "1.21", title: 'What "Deep" Really Means', section: 1, component: "WhatDeepMeans" },
   { id: "1.22", title: "Same Building Blocks, Different Shapes", section: 1, component: "SameBuildingBlocks" },
+  { id: "1.23", title: "Dropout - The Regularization Trick", section: 1, component: "Dropout" },
+  { id: "1.24", title: "Adam - The Real Optimizer", section: 1, component: "AdamOptimizer" },
+  { id: "1.25", title: "Learning Rate Warmup & Decay", section: 1, component: "LRWarmupDecay" },
+  { id: "1.26", title: "Weight Initialization - How Random?", section: 1, component: "WeightInit" },
   // Section 2: How LLMs Actually Train (reordered: output/generation before fine-tuning)
   { id: "2.1", title: "Tokenization - From Words to Numbers", section: 2, component: "Tokenization" },
   { id: "2.2", title: "Self-Supervised Learning - How GPT Trains", section: 2, component: "SelfSupervised" },
@@ -32,6 +36,8 @@ export const chapters = [
   { id: "2.6", title: "Autoregressive Generation - One Token at a Time", section: 2, component: "AutoregressiveGeneration" },
   { id: "2.7", title: "Supervised Fine-Tuning (SFT)", section: 2, component: "SFT" },
   { id: "2.8", title: "RLHF - Making AI Helpful & Safe", section: 2, component: "RLHF" },
+  { id: "2.9", title: "DPO - Simpler Alignment", section: 2, component: "DPO" },
+  { id: "2.10", title: "Tokenizer Deep Dive - BPE, WordPiece, SentencePiece", section: 2, component: "TokenizerDeepDive" },
   // Section 3: Scaling & Modern Techniques (BatchTraining added)
   { id: "3.1", title: "Scaling Laws - Why Bigger Models Win", section: 3, component: "ScalingLaws" },
   { id: "3.2", title: "Parameters at Scale", section: 3, component: "ParametersAtScale" },
@@ -52,6 +58,7 @@ export const chapters = [
   { id: "5.5", title: "Positional Encoding - Computing Positions", section: 5, component: "PosEncodingCompute" },
   { id: "5.6", title: "Positional Encoding - Fast vs Slow", section: 5, component: "PosEncodingFastSlow" },
   { id: "5.7", title: "Positional Encoding - Final Addition", section: 5, component: "PosEncodingFinal" },
+  { id: "5.8", title: "RoPE - Rotary Position Embeddings", section: 5, component: "RoPE" },
   // Section 6: Attention - Understanding Q, K, V
   { id: "6.1", title: "The Problem - Context is Everything", section: 6, component: "ContextProblem" },
   { id: "6.2", title: "How Does a Word Look At Others?", section: 6, component: "WordLookup" },
@@ -80,6 +87,7 @@ export const chapters = [
   { id: "7.13", title: "Why 8 Heads? Parameter Count & Big Picture", section: 7, component: "WhyEightHeads" },
   { id: "7.14", title: "Is W_O Constant? Does It Change?", section: 7, component: "IsWOConstant" },
   { id: "7.15", title: "The Complete Picture - In Plain English", section: 7, component: "CompletePicture" },
+  { id: "7.16", title: "Grouped-Query Attention - Shrinking the KV Cache", section: 7, component: "GroupedQueryAttention" },
   // Section 8: The Encoder (EncoderDecoder opens, then Add&Norm/FFN/block repeats)
   { id: "8.1", title: "Encoder & Decoder - The Two Halves", section: 8, component: "EncoderDecoder" },
   { id: "8.2", title: "Add & Norm - The Stabilizer", section: 8, component: "AddNorm" },
@@ -87,11 +95,15 @@ export const chapters = [
   { id: "8.4", title: "FFN - Why Word Count Doesn't Matter", section: 8, component: "FFNParallelTrick" },
   { id: "8.5", title: "Add & Norm (Again) - The Second Stabilizer", section: 8, component: "AddNormTwo" },
   { id: "8.6", title: "Nx - The Transformer Block Repeats", section: 8, component: "TransformerBlockRepeats" },
+  { id: "8.7", title: "Residual Connections - The Gradient Highway", section: 8, component: "ResidualHighway" },
+  { id: "8.8", title: "Pre-Norm vs Post-Norm", section: 8, component: "PreNormVsPostNorm" },
+  { id: "8.9", title: "Batch Norm vs Layer Norm", section: 8, component: "BatchNormVsLayerNorm" },
   // Section 9: The Decoder (decoder-only, causal masking, cross-attention, capstone)
   { id: "9.1", title: "Decoder-Only - How Modern LLMs Work", section: 9, component: "DecoderOnly" },
   { id: "9.2", title: "Causal Masking - Hiding the Future", section: 9, component: "CausalMask" },
   { id: "9.3", title: "Cross-Attention - The Encoder-Decoder Bridge", section: 9, component: "CrossAttention" },
   { id: "9.4", title: "What is a Transformer Actually Doing?", section: 9, component: "WhatTransformerDoes" },
+  { id: "9.5", title: "KV Cache - Why Inference is Fast", section: 9, component: "KVCache" },
 ];
 
 export const sectionNames = { 0: "Overview", 1: "Neural Network Foundations", 2: "How LLMs Actually Train", 3: "Scaling & Modern Techniques", 4: "The Road to Transformers", 5: "Transformer Input Pipeline", 6: "Attention - Understanding Q, K, V", 7: "Attention - The Full Computation", 8: "The Encoder", 9: "The Decoder" };

@@ -88,6 +88,10 @@ Only config.js IDs change.
 | 1.20 | ActivationFunctions | Activation Functions - The Full Picture |
 | 1.21 | WhatDeepMeans | What "Deep" Really Means |
 | 1.22 | SameBuildingBlocks | Same Building Blocks, Different Shapes |
+| 1.23 | Dropout | Dropout - The Regularization Trick |
+| 1.24 | AdamOptimizer | Adam - The Real Optimizer |
+| 1.25 | LRWarmupDecay | Learning Rate Warmup & Decay |
+| 1.26 | WeightInit | Weight Initialization - How Random? |
 
 **Section 2: How LLMs Actually Train** (`llm-training.jsx`)
 
@@ -101,6 +105,8 @@ Only config.js IDs change.
 | 2.6 | AutoregressiveGeneration | Autoregressive Generation - One Token at a Time |
 | 2.7 | SFT | Supervised Fine-Tuning (SFT) |
 | 2.8 | RLHF | RLHF - Making AI Helpful & Safe |
+| 2.9 | DPO | DPO - Simpler Alignment |
+| 2.10 | TokenizerDeepDive | Tokenizer Deep Dive - BPE, WordPiece, SentencePiece |
 
 **Section 3: Scaling & Modern Techniques** (`scaling.jsx` + `llm-training.jsx`)
 
@@ -133,6 +139,7 @@ Only config.js IDs change.
 | 5.5 | PosEncodingCompute | Positional Encoding - Computing Positions |
 | 5.6 | PosEncodingFastSlow | Positional Encoding - Fast vs Slow |
 | 5.7 | PosEncodingFinal | Positional Encoding - Final Addition |
+| 5.8 | RoPE | RoPE - Rotary Position Embeddings |
 
 **Section 6: Attention - Understanding Q, K, V** (`attention-qkv.jsx`)
 
@@ -169,6 +176,7 @@ Only config.js IDs change.
 | 7.13 | WhyEightHeads | Why 8 Heads? Parameter Count & Big Picture |
 | 7.14 | IsWOConstant | Is W_O Constant? Does It Change? |
 | 7.15 | CompletePicture | The Complete Picture - In Plain English |
+| 7.16 | GroupedQueryAttention | Grouped-Query Attention - Shrinking the KV Cache |
 
 **Section 8: The Encoder** (`road-to-transformers.jsx` + `transformer-block.jsx`)
 
@@ -180,6 +188,9 @@ Only config.js IDs change.
 | 8.4 | FFNParallelTrick | FFN - Why Word Count Doesn't Matter |
 | 8.5 | AddNormTwo | Add & Norm (Again) - The Second Stabilizer |
 | 8.6 | TransformerBlockRepeats | Nx - The Transformer Block Repeats |
+| 8.7 | ResidualHighway | Residual Connections - The Gradient Highway |
+| 8.8 | PreNormVsPostNorm | Pre-Norm vs Post-Norm |
+| 8.9 | BatchNormVsLayerNorm | Batch Norm vs Layer Norm |
 
 **Section 9: The Decoder** (`road-to-transformers.jsx` + `attention-computation.jsx` + `transformer-input.jsx`)
 
@@ -189,6 +200,7 @@ Only config.js IDs change.
 | 9.2 | CausalMask | Causal Masking - Hiding the Future |
 | 9.3 | CrossAttention | Cross-Attention - The Encoder-Decoder Bridge |
 | 9.4 | WhatTransformerDoes | What is a Transformer Actually Doing? |
+| 9.5 | KVCache | KV Cache - Why Inference is Fast |
 
 ## Project Structure
 

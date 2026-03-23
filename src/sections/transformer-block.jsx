@@ -1654,3 +1654,714 @@ export const TransformerBlockRepeats = (ctx) => { const { sub, subBtnRipple, reg
     </Box></Reveal>
   </div>
 ); };
+
+// ── ResidualHighway - The Gradient Highway ──
+export const ResidualHighway = (ctx) => { const { sub, subBtnRipple, registerSubBtn, navigate } = ctx; return (
+  <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
+
+    {/* Sub 0: The problem - vanishing gradients in deep networks */}
+    {sub >= 0 && (
+      <Box color={C.red} style={{ width: "100%" }}>
+        <T color="#ef9a9a" bold center size={20}>The Problem: Gradients Vanish in Deep Networks</T>
+        <T color="#ef9a9a" size={16} style={{ marginTop: 6 }}>In chapter 1.15, we learned that gradients shrink as they travel backward through layers. During backpropagation, each layer multiplies the gradient by its derivative. If that derivative is even slightly below 1.0, the gradient shrinks exponentially.</T>
+
+        <div style={{ marginTop: 14, padding: 14, borderRadius: 10, background: `${C.red}08`, border: `1px solid ${C.red}20` }}>
+          <T color="#ef9a9a" bold center size={16}>Multiplying through 96 layers:</T>
+          <div style={{ marginTop: 10, display: "flex", flexDirection: "column", gap: 6 }}>
+            {[
+              { factor: "0.99", result: "0.99^96 = 0.38", pct: 38, clr: C.yellow, note: "Even near-perfect derivatives lose 62% of the gradient" },
+              { factor: "0.9", result: "0.9^96 = 0.0000396", pct: 1, clr: C.orange, note: "Gradient is effectively zero by layer 1" },
+              { factor: "0.5", result: "0.5^96 = 1.3 x 10^-29", pct: 0.3, clr: C.red, note: "Completely gone - no learning possible" },
+            ].map(({ factor, result, pct, clr, note }) => (
+              <div key={factor} style={{ padding: "8px 12px", borderRadius: 8, background: `${clr}06`, border: `1px solid ${clr}12` }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                  <Tag color={clr}>F'(x) = {factor}</Tag>
+                  <code style={{ color: clr, fontSize: 14, fontWeight: 700 }}>{result}</code>
+                </div>
+                <div style={{ marginTop: 6, height: 14, borderRadius: 3, background: "rgba(255,255,255,0.04)", overflow: "hidden" }}>
+                  <div style={{ width: `${Math.max(pct, 0.5)}%`, height: "100%", borderRadius: 3, background: clr }} />
+                </div>
+                <T color={C.dim} size={13} style={{ marginTop: 4 }}>{note}</T>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <T color="#ef9a9a" size={16} style={{ marginTop: 12 }}>GPT-3 has 96 layers. Without a fix, the gradient arriving at layer 1 from layer 96 would be <strong>essentially zero</strong>. Layer 1 would never learn. The model would be dead on arrival.</T>
+      </Box>
+    )}
+    {sub === 0 && <SubBtn onClick={() => navigate("forward")} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
+
+    {/* Sub 1: The residual connection: F(x) + x */}
+    <Reveal when={sub >= 1}><Box color={C.green} style={{ width: "100%" }}>
+      <T color="#a5d6a7" bold center size={20}>The Residual Connection: output = F(x) + x</T>
+      <T color="#a5d6a7" size={16} style={{ marginTop: 6 }}>The fix is deceptively simple: <strong>add the input directly to the output</strong>. The "+ x" creates a shortcut path that bypasses the entire layer.</T>
+
+      <div style={{ marginTop: 14, display: "flex", gap: 12, flexWrap: "wrap" }}>
+        <div style={{ flex: "1 1 200px", padding: 14, borderRadius: 10, background: `${C.red}06`, border: `1px solid ${C.red}20` }}>
+          <T color={C.red} bold center size={15}>Path A: Without Residual</T>
+          <div style={{ marginTop: 10, display: "flex", flexDirection: "column", alignItems: "center", gap: 0 }}>
+            {[
+              { label: "input x", color: C.cyan },
+              { label: "arrow" },
+              { label: "weight1", color: C.pink },
+              { label: "arrow" },
+              { label: "activation", color: C.yellow },
+              { label: "arrow" },
+              { label: "weight2", color: C.pink },
+              { label: "arrow" },
+              { label: "activation", color: C.yellow },
+              { label: "arrow" },
+              { label: "output", color: C.red },
+            ].map((item, i) =>
+              item.label === "arrow" ? (
+                <div key={i} style={{ fontSize: 14, color: C.dim, lineHeight: 1 }}>↓</div>
+              ) : (
+                <div key={i} style={{ padding: "4px 16px", borderRadius: 6, background: `${item.color}08`, border: `1px solid ${item.color}15`, textAlign: "center" }}>
+                  <T color={item.color} size={13}>{item.label}</T>
+                </div>
+              )
+            )}
+          </div>
+          <T color={C.dim} center size={12} style={{ marginTop: 6 }}>Gradient must travel through every layer. It shrinks at each step.</T>
+        </div>
+        <div style={{ flex: "1 1 200px", padding: 14, borderRadius: 10, background: `${C.green}06`, border: `1px solid ${C.green}20` }}>
+          <T color={C.green} bold center size={15}>Path B: With Residual</T>
+          <div style={{ marginTop: 10, position: "relative" }}>
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 0 }}>
+              {[
+                { label: "input x", color: C.cyan },
+                { label: "arrow" },
+                { label: "weight1", color: C.pink },
+                { label: "arrow" },
+                { label: "activation", color: C.yellow },
+                { label: "arrow" },
+                { label: "weight2", color: C.pink },
+                { label: "arrow" },
+                { label: "activation", color: C.yellow },
+                { label: "arrow" },
+                { label: "F(x) + x", color: C.green },
+              ].map((item, i) =>
+                item.label === "arrow" ? (
+                  <div key={i} style={{ fontSize: 14, color: C.dim, lineHeight: 1 }}>↓</div>
+                ) : (
+                  <div key={i} style={{ padding: "4px 16px", borderRadius: 6, background: `${item.color}08`, border: `1px solid ${item.color}15`, textAlign: "center" }}>
+                    <T color={item.color} size={13}>{item.label}</T>
+                  </div>
+                )
+              )}
+            </div>
+            {/* Skip connection arrow */}
+            <div style={{ position: "absolute", right: -8, top: 0, bottom: 0, width: 24, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
+              <div style={{ width: 2, height: "90%", background: C.green, borderRadius: 2 }} />
+              <div style={{ color: C.green, fontSize: 14, marginTop: -4 }}>↓</div>
+            </div>
+            <div style={{ position: "absolute", right: -30, top: "50%", transform: "translateY(-50%)" }}>
+              <T color={C.green} bold size={11}>skip!</T>
+            </div>
+          </div>
+          <T color={C.dim} center size={12} style={{ marginTop: 6 }}>The "+ x" adds a direct highway that bypasses all layers.</T>
+        </div>
+      </div>
+    </Box></Reveal>
+    {sub === 1 && <SubBtn onClick={() => navigate("forward")} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
+
+    {/* Sub 2: Why it solves vanishing gradients - the math */}
+    <Reveal when={sub >= 2}><Box color={C.yellow} style={{ width: "100%" }}>
+      <T color="#fff176" bold center size={20}>Why It Solves Vanishing Gradients</T>
+      <T color="#fff176" size={16} style={{ marginTop: 6 }}>The math is elegant. Take the derivative of the residual output:</T>
+
+      <div style={{ margin: "14px 0", borderRadius: 14, background: "rgba(0,0,0,0.4)", border: `1px solid ${C.yellow}25`, width: "100%", overflow: "hidden" }}>
+        <div style={{ padding: "18px 20px", textAlign: "center" }}>
+          <T color={C.dim} size={14} center style={{ textTransform: "uppercase", letterSpacing: 2, marginBottom: 10 }}>The Residual Gradient</T>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 6, flexWrap: "wrap" }}>
+            <span style={{ display: "inline-flex", flexDirection: "column", alignItems: "center", lineHeight: 1.1 }}>
+              <span style={{ color: C.yellow, fontWeight: 700, fontSize: 17, borderBottom: `2px solid ${C.dim}`, paddingBottom: 3 }}>d</span>
+              <span style={{ color: C.yellow, fontWeight: 700, fontSize: 17, paddingTop: 3 }}>dx</span>
+            </span>
+            <span style={{ color: C.dim, fontWeight: 800, fontSize: 20 }}>[</span>
+            <span style={{ color: C.orange, fontWeight: 800, fontSize: 20 }}>F(x)</span>
+            <span style={{ color: C.green, fontWeight: 800, fontSize: 20 }}>+ x</span>
+            <span style={{ color: C.dim, fontWeight: 800, fontSize: 20 }}>]</span>
+            <span style={{ color: C.dim, fontWeight: 800, fontSize: 20 }}>=</span>
+            <span style={{ color: C.orange, fontWeight: 800, fontSize: 20 }}>F'(x)</span>
+            <span style={{ color: C.green, fontWeight: 800, fontSize: 20 }}>+ 1</span>
+          </div>
+        </div>
+        <div style={{ padding: "12px 16px", background: "rgba(0,0,0,0.2)" }}>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 8, justifyContent: "center" }}>
+            {[
+              { sym: "F'(x)", desc: "gradient through the layer weights", why: "can shrink toward 0", color: C.orange },
+              { sym: "+ 1", desc: "gradient through the skip connection", why: "ALWAYS exactly 1, no matter what", color: C.green },
+            ].map((p, i) => (
+              <div key={i} style={{ background: `${p.color}08`, borderRadius: 6, padding: "6px 10px", border: `1px solid ${p.color}15` }}>
+                <T color={p.color} bold size={14}>{p.sym}</T>
+                <T color={C.dim} size={12}> = {p.desc}</T>
+                <div><T color={p.color} size={12}>{p.why}</T></div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <T color="#fff176" size={16} style={{ marginTop: 4 }}>That <strong style={{ color: C.green }}>+ 1</strong> is everything. Even if F'(x) approaches 0, the total gradient is at least 1. The gradient through the skip connection is <strong>always 1</strong>, regardless of what the layer weights do.</T>
+
+      <div style={{ marginTop: 12, display: "flex", gap: 10 }}>
+        <div style={{ flex: 1, padding: 10, borderRadius: 8, background: `${C.red}08`, border: `1px solid ${C.red}20` }}>
+          <T color={C.red} bold center size={14}>Without residual</T>
+          <T color={C.dim} center size={13} style={{ marginTop: 4 }}>Gradient = F'(x)</T>
+          <T color={C.dim} center size={13}>If F'(x) = 0.01, gradient = 0.01</T>
+        </div>
+        <div style={{ flex: 1, padding: 10, borderRadius: 8, background: `${C.green}08`, border: `1px solid ${C.green}20` }}>
+          <T color={C.green} bold center size={14}>With residual</T>
+          <T color={C.dim} center size={13} style={{ marginTop: 4 }}>Gradient = F'(x) + 1</T>
+          <T color={C.dim} center size={13}>If F'(x) = 0.01, gradient = <strong style={{ color: C.green }}>1.01</strong></T>
+        </div>
+      </div>
+    </Box></Reveal>
+    {sub === 2 && <SubBtn onClick={() => navigate("forward")} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
+
+    {/* Sub 3: Visual - the gradient highway */}
+    <Reveal when={sub >= 3}><Box color={C.cyan} style={{ width: "100%" }}>
+      <T color="#80deea" bold center size={20}>The Gradient Highway</T>
+      <T color="#80deea" size={16} style={{ marginTop: 6 }}>Visualize a 6-layer transformer. Gradients travel backward from Layer 6 to Layer 1 via two paths:</T>
+
+      <div style={{ marginTop: 14, display: "flex", flexDirection: "column", gap: 0 }}>
+        {[6, 5, 4, 3, 2, 1].map((layer, idx) => (
+          <div key={layer}>
+            <div style={{ display: "flex", alignItems: "center", gap: 10, padding: "8px 12px", borderRadius: 8, background: `${C.cyan}06`, border: `1px solid ${C.cyan}12` }}>
+              <Tag color={C.cyan}>Layer {layer}</Tag>
+              <div style={{ flex: 1, display: "flex", gap: 8 }}>
+                <div style={{ flex: 1, padding: "4px 8px", borderRadius: 4, background: `${C.orange}08`, border: `1px solid ${C.orange}15`, textAlign: "center" }}>
+                  <T color={C.orange} size={11}>Through weights</T>
+                  <div style={{ height: 6, borderRadius: 3, background: "rgba(255,255,255,0.04)", marginTop: 3 }}>
+                    <div style={{ width: `${Math.max(100 * Math.pow(0.7, idx), 1)}%`, height: "100%", borderRadius: 3, background: C.orange }} />
+                  </div>
+                  <T color={C.dim} size={10}>{(Math.pow(0.7, idx)).toFixed(2)}</T>
+                </div>
+                <div style={{ flex: 1, padding: "4px 8px", borderRadius: 4, background: `${C.green}08`, border: `1px solid ${C.green}15`, textAlign: "center" }}>
+                  <T color={C.green} size={11}>Through skip: always 1.0</T>
+                  <div style={{ height: 6, borderRadius: 3, background: "rgba(255,255,255,0.04)", marginTop: 3 }}>
+                    <div style={{ width: "100%", height: "100%", borderRadius: 3, background: C.green }} />
+                  </div>
+                  <T color={C.dim} size={10}>1.00</T>
+                </div>
+              </div>
+            </div>
+            {idx < 5 && <div style={{ textAlign: "center", color: C.dim, fontSize: 14 }}>↑ gradient flows backward ↑</div>}
+          </div>
+        ))}
+      </div>
+
+      <div style={{ marginTop: 12, padding: 10, borderRadius: 8, background: `${C.cyan}08`, border: `1px solid ${C.cyan}20` }}>
+        <T color="#80deea" size={15} center>Through weights: 0.7^5 = <strong style={{ color: C.orange }}>0.17</strong> (lost 83% of the signal). Through skip connections: <strong style={{ color: C.green }}>1.00</strong> (full signal preserved). The skip path delivers the gradient from layer 6 to layer 1 without any multiplication.</T>
+      </div>
+    </Box></Reveal>
+    {sub === 3 && <SubBtn onClick={() => navigate("forward")} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
+
+    {/* Sub 4: Why critical for transformers */}
+    <Reveal when={sub >= 4}><Box color={C.purple} style={{ width: "100%" }}>
+      <T color="#b8a9ff" bold center size={20}>Why This Is Critical for Transformers</T>
+      <T color="#b8a9ff" size={16} style={{ marginTop: 6 }}>Modern transformers are absurdly deep. Without residual connections, training them would be impossible.</T>
+
+      <div style={{ marginTop: 14, display: "flex", flexDirection: "column", gap: 8 }}>
+        {[
+          { model: "GPT-2", layers: 12, residuals: 24, color: C.green },
+          { model: "GPT-3", layers: 96, residuals: 192, color: C.orange },
+          { model: "GPT-4 (est.)", layers: 120, residuals: 240, color: C.red },
+        ].map(({ model, layers, residuals, color }) => (
+          <div key={model} style={{ display: "flex", alignItems: "center", gap: 10, padding: "8px 14px", borderRadius: 8, background: `${color}08`, border: `1px solid ${color}20` }}>
+            <T color={color} bold size={14} style={{ minWidth: 100 }}>{model}</T>
+            <T color={C.dim} size={13}>{layers} layers</T>
+            <T color={C.dim} size={13} bold style={{ marginLeft: "auto" }}>{residuals} gradient highways</T>
+          </div>
+        ))}
+      </div>
+
+      <div style={{ marginTop: 14, padding: 14, borderRadius: 10, background: `${C.purple}08`, border: `1px solid ${C.purple}25` }}>
+        <T color="#b8a9ff" bold center size={16}>TWO residual connections per block</T>
+        <T color="#b8a9ff" size={15} style={{ marginTop: 6 }}>Every transformer block has two sub-layers: Attention and FFN. Each gets its own residual connection (chapter 8.2). That means GPT-3's 96 blocks have <strong>192 gradient highways</strong> - one around every Attention layer and one around every FFN layer.</T>
+
+        <div style={{ marginTop: 10, display: "flex", flexDirection: "column", alignItems: "center", gap: 0 }}>
+          {[
+            { label: "Input", color: C.cyan },
+            { label: "arrow" },
+            { label: "Attention + Residual #1", color: C.pink },
+            { label: "arrow" },
+            { label: "FFN + Residual #2", color: C.orange },
+            { label: "arrow" },
+            { label: "Block Output", color: C.green },
+          ].map((item, i) =>
+            item.label === "arrow" ? (
+              <div key={i} style={{ fontSize: 14, color: C.dim, lineHeight: 1 }}>↓</div>
+            ) : (
+              <div key={i} style={{ padding: "6px 20px", borderRadius: 6, background: `${item.color}08`, border: `1px solid ${item.color}20`, textAlign: "center" }}>
+                <T color={item.color} size={13}>{item.label}</T>
+              </div>
+            )
+          )}
+        </div>
+      </div>
+
+      <T color="#b8a9ff" size={15} style={{ marginTop: 12 }}>Without residual connections, gradients would vanish by layer 3. With them, gradients flow freely through all 96 layers on the skip path, letting even the earliest layers learn from the loss signal. This is what makes deep transformers trainable.</T>
+    </Box></Reveal>
+  </div>
+); };
+
+// ── PreNormVsPostNorm - Pre-Norm vs Post-Norm ──
+export const PreNormVsPostNorm = (ctx) => { const { sub, subBtnRipple, registerSubBtn, navigate } = ctx; return (
+  <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
+
+    {/* Sub 0: Post-Norm (original 2017 paper) */}
+    {sub >= 0 && (
+      <Box color={C.blue} style={{ width: "100%" }}>
+        <T color="#90caf9" bold center size={20}>Post-Norm (Original 2017 Paper)</T>
+        <T color="#90caf9" size={16} style={{ marginTop: 6 }}>In the original "Attention Is All You Need" paper, LayerNorm comes <strong>after</strong> the residual Add. This is what we covered in chapter 8.2. Here is the exact order:</T>
+
+        <div style={{ marginTop: 14, display: "flex", flexDirection: "column", alignItems: "center", gap: 0 }}>
+          {[
+            { label: "Input x", color: C.cyan, highlight: false },
+            { label: "arrow" },
+            { label: "Attention(x)", color: C.pink, highlight: false },
+            { label: "arrow" },
+            { label: "Add: x + Attention(x)", color: C.green, highlight: false },
+            { label: "arrow" },
+            { label: "LayerNorm", color: C.blue, highlight: true },
+            { label: "arrow" },
+            { label: "FFN", color: C.orange, highlight: false },
+            { label: "arrow" },
+            { label: "Add: prev + FFN(prev)", color: C.green, highlight: false },
+            { label: "arrow" },
+            { label: "LayerNorm", color: C.blue, highlight: true },
+          ].map((item, i) =>
+            item.label === "arrow" ? (
+              <div key={i} style={{ fontSize: 14, color: C.dim, lineHeight: 1 }}>↓</div>
+            ) : (
+              <div key={i} style={{
+                padding: "6px 20px", borderRadius: 6, width: "80%", textAlign: "center",
+                background: item.highlight ? `${item.color}15` : `${item.color}08`,
+                border: item.highlight ? `2px solid ${item.color}50` : `1px solid ${item.color}20`,
+              }}>
+                <T color={item.color} bold={item.highlight} center size={14}>{item.label}</T>
+              </div>
+            )
+          )}
+        </div>
+
+        <T color="#90caf9" size={15} center style={{ marginTop: 12 }}>Key feature: LayerNorm sits <strong>after</strong> the residual add. The residual path passes through LayerNorm before reaching the next sub-layer.</T>
+      </Box>
+    )}
+    {sub === 0 && <SubBtn onClick={() => navigate("forward")} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
+
+    {/* Sub 1: Pre-Norm (modern approach) */}
+    <Reveal when={sub >= 1}><Box color={C.green} style={{ width: "100%" }}>
+      <T color="#a5d6a7" bold center size={20}>Pre-Norm (Modern Approach)</T>
+      <T color="#a5d6a7" size={16} style={{ marginTop: 6 }}>In pre-norm, LayerNorm comes <strong>before</strong> each sub-layer. The residual add gets the <strong>raw, unnormalized input</strong> - not the normalized version.</T>
+
+      <div style={{ marginTop: 14, display: "flex", flexDirection: "column", alignItems: "center", gap: 0 }}>
+        {[
+          { label: "Input x", color: C.cyan, highlight: false },
+          { label: "arrow" },
+          { label: "LayerNorm(x)", color: C.green, highlight: true },
+          { label: "arrow" },
+          { label: "Attention(LayerNorm(x))", color: C.pink, highlight: false },
+          { label: "arrow" },
+          { label: "Add: x + Attention(LayerNorm(x))", color: C.green, highlight: false },
+          { label: "arrow" },
+          { label: "LayerNorm(prev)", color: C.green, highlight: true },
+          { label: "arrow" },
+          { label: "FFN(LayerNorm(prev))", color: C.orange, highlight: false },
+          { label: "arrow" },
+          { label: "Add: prev + FFN(LayerNorm(prev))", color: C.green, highlight: false },
+        ].map((item, i) =>
+          item.label === "arrow" ? (
+            <div key={i} style={{ fontSize: 14, color: C.dim, lineHeight: 1 }}>↓</div>
+          ) : (
+            <div key={i} style={{
+              padding: "6px 20px", borderRadius: 6, width: "80%", textAlign: "center",
+              background: item.highlight ? `${item.color}15` : `${item.color}08`,
+              border: item.highlight ? `2px solid ${item.color}50` : `1px solid ${item.color}20`,
+            }}>
+              <T color={item.color} bold={item.highlight} center size={14}>{item.label}</T>
+            </div>
+          )
+        )}
+      </div>
+
+      <T color="#a5d6a7" size={15} center style={{ marginTop: 12 }}>Key difference: the Add step receives the <strong>raw input x</strong>, not the normalized version. LayerNorm only feeds into the sub-layer, not into the skip path.</T>
+    </Box></Reveal>
+    {sub === 1 && <SubBtn onClick={() => navigate("forward")} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
+
+    {/* Sub 2: Side-by-side comparison */}
+    <Reveal when={sub >= 2}><Box color={C.yellow} style={{ width: "100%" }}>
+      <T color="#fff176" bold center size={20}>Side-by-Side Comparison</T>
+      <T color="#fff176" size={16} style={{ marginTop: 6 }}>Let's trace input [-0.5, 0.3, 0.7, 0.6] ("cats" embedding) through the Attention sub-layer in both approaches:</T>
+
+      <div style={{ marginTop: 14, display: "flex", gap: 12, flexWrap: "wrap" }}>
+        <div style={{ flex: "1 1 200px", padding: 12, borderRadius: 10, background: `${C.blue}06`, border: `1px solid ${C.blue}20` }}>
+          <T color={C.blue} bold center size={15}>Post-Norm</T>
+          <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 4 }}>
+            {[
+              { step: "Input x", val: "[-0.5, 0.3, 0.7, 0.6]", color: C.cyan },
+              { step: "Attention(x)", val: "[0.3, -0.1, 0.2, 0.4]", color: C.pink },
+              { step: "Add: x + Attn", val: "[-0.2, 0.2, 0.9, 1.0]", color: C.green },
+              { step: "LayerNorm", val: "[-1.36, -0.55, 0.86, 1.06]", color: C.blue },
+            ].map(({ step, val, color }) => (
+              <div key={step} style={{ display: "flex", alignItems: "center", gap: 6, padding: "4px 8px", borderRadius: 4, background: `${color}06` }}>
+                <T color={color} size={11} bold style={{ minWidth: 80 }}>{step}</T>
+                <code style={{ color: `${color}bb`, fontSize: 12 }}>{val}</code>
+              </div>
+            ))}
+          </div>
+          <T color={C.dim} size={12} center style={{ marginTop: 6 }}>Norm is last. Skip path passes through Norm.</T>
+        </div>
+        <div style={{ flex: "1 1 200px", padding: 12, borderRadius: 10, background: `${C.green}06`, border: `1px solid ${C.green}20` }}>
+          <T color={C.green} bold center size={15}>Pre-Norm</T>
+          <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 4 }}>
+            {[
+              { step: "Input x", val: "[-0.5, 0.3, 0.7, 0.6]", color: C.cyan },
+              { step: "LayerNorm(x)", val: "[-1.36, -0.55, 0.86, 1.06]", color: C.green },
+              { step: "Attn(LN(x))", val: "[0.28, -0.12, 0.18, 0.38]", color: C.pink },
+              { step: "Add: x + Attn", val: "[-0.22, 0.18, 0.88, 0.98]", color: C.cyan },
+            ].map(({ step, val, color }) => (
+              <div key={step} style={{ display: "flex", alignItems: "center", gap: 6, padding: "4px 8px", borderRadius: 4, background: `${color}06` }}>
+                <T color={color} size={11} bold style={{ minWidth: 80 }}>{step}</T>
+                <code style={{ color: `${color}bb`, fontSize: 12 }}>{val}</code>
+              </div>
+            ))}
+          </div>
+          <T color={C.dim} size={12} center style={{ marginTop: 6 }}>Norm is first. Skip path is clean - just addition.</T>
+        </div>
+      </div>
+
+      <div style={{ marginTop: 10, padding: 10, borderRadius: 8, background: `${C.yellow}08`, border: `1px solid ${C.yellow}20` }}>
+        <T color="#fff176" size={14} center>Notice the critical difference: in post-norm, the skip path goes through LayerNorm. In pre-norm, the skip path is just pure addition - no transformations on the highway.</T>
+      </div>
+    </Box></Reveal>
+    {sub === 2 && <SubBtn onClick={() => navigate("forward")} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
+
+    {/* Sub 3: Why pre-norm wins */}
+    <Reveal when={sub >= 3}><Box color={C.purple} style={{ width: "100%" }}>
+      <T color="#b8a9ff" bold center size={20}>Why Pre-Norm Wins</T>
+      <T color="#b8a9ff" size={16} style={{ marginTop: 6 }}>Two key advantages make pre-norm the clear winner for deep models:</T>
+
+      <div style={{ marginTop: 14, display: "flex", flexDirection: "column", gap: 12 }}>
+        <div style={{ padding: 14, borderRadius: 10, background: `${C.green}06`, border: `1px solid ${C.green}20` }}>
+          <T color={C.green} bold size={16}>1. Cleaner Gradient Flow</T>
+          <T color={C.dim} size={15} style={{ marginTop: 6 }}>In <strong style={{ color: C.blue }}>post-norm</strong>, the gradient on the skip path must pass through LayerNorm at every block. LayerNorm has its own derivative that modifies the gradient - not as bad as vanishing, but it adds noise and makes optimization harder.</T>
+          <T color={C.dim} size={15} style={{ marginTop: 6 }}>In <strong style={{ color: C.green }}>pre-norm</strong>, the skip path is <strong>pure addition</strong>. The gradient flows from the last block to the first block on a clean highway with derivative = 1 at every step. No LayerNorm interference on the residual stream.</T>
+        </div>
+
+        <div style={{ padding: 14, borderRadius: 10, background: `${C.orange}06`, border: `1px solid ${C.orange}20` }}>
+          <T color={C.orange} bold size={16}>2. Training Stability</T>
+          <T color={C.dim} size={15} style={{ marginTop: 6 }}><strong style={{ color: C.blue }}>Post-norm</strong> requires very careful learning rate warmup - start with a tiny learning rate and slowly increase it over thousands of steps. Without warmup, gradients in early training are unstable and the model diverges (loss goes to infinity).</T>
+          <T color={C.dim} size={15} style={{ marginTop: 6 }}><strong style={{ color: C.green }}>Pre-norm</strong> is more forgiving. It works with larger learning rates from the start. The clean gradient highway stabilizes training even without careful warmup schedules. This makes training faster and less finicky.</T>
+        </div>
+      </div>
+    </Box></Reveal>
+    {sub === 3 && <SubBtn onClick={() => navigate("forward")} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
+
+    {/* Sub 4: Who uses what */}
+    <Reveal when={sub >= 4}><Box color={C.orange} style={{ width: "100%" }}>
+      <T color="#ffcc80" bold center size={20}>Who Uses What</T>
+
+      <div style={{ marginTop: 14, display: "flex", gap: 12, flexWrap: "wrap" }}>
+        <div style={{ flex: "1 1 200px", padding: 14, borderRadius: 10, background: `${C.blue}06`, border: `1px solid ${C.blue}20` }}>
+          <T color={C.blue} bold center size={16}>Post-Norm</T>
+          <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 4 }}>
+            {[
+              "\"Attention Is All You Need\" (2017)",
+              "Early BERT models",
+              "Some early translation models",
+            ].map((m, i) => (
+              <div key={i} style={{ display: "flex", gap: 6, alignItems: "flex-start", padding: "4px 8px", borderRadius: 4, background: `${C.blue}06` }}>
+                <span style={{ color: C.blue, fontSize: 10, marginTop: 4 }}>&#9679;</span>
+                <T color={C.dim} size={13}>{m}</T>
+              </div>
+            ))}
+          </div>
+          <T color={C.dim} center size={12} style={{ marginTop: 6 }}>Historical. Used mainly in the original paper.</T>
+        </div>
+        <div style={{ flex: "1 1 200px", padding: 14, borderRadius: 10, background: `${C.green}06`, border: `1px solid ${C.green}20` }}>
+          <T color={C.green} bold center size={16}>Pre-Norm</T>
+          <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 4 }}>
+            {[
+              "GPT-2, GPT-3, GPT-4",
+              "LLaMA, LLaMA 2, LLaMA 3",
+              "Mistral, Mixtral",
+              "Claude",
+              "Virtually all modern LLMs",
+            ].map((m, i) => (
+              <div key={i} style={{ display: "flex", gap: 6, alignItems: "flex-start", padding: "4px 8px", borderRadius: 4, background: `${C.green}06` }}>
+                <span style={{ color: C.green, fontSize: 10, marginTop: 4 }}>&#9679;</span>
+                <T color={C.dim} size={13}>{m}</T>
+              </div>
+            ))}
+          </div>
+          <T color={C.dim} center size={12} style={{ marginTop: 6 }}>The industry standard since ~2019.</T>
+        </div>
+      </div>
+
+      <div style={{ marginTop: 14, padding: 12, borderRadius: 10, background: `${C.orange}08`, border: `1px solid ${C.orange}25` }}>
+        <T color="#ffcc80" bold center size={16}>The Field Converged</T>
+        <T color="#ffcc80" size={15} style={{ marginTop: 6 }}>The shift happened because pre-norm trains faster, scales better to deep models, and is more robust. When you hear about a modern LLM with 96+ layers, it is almost certainly using pre-norm. The original paper used post-norm, but practice proved pre-norm superior for large-scale training.</T>
+      </div>
+    </Box></Reveal>
+  </div>
+); };
+
+// ── BatchNormVsLayerNorm - Batch Norm vs Layer Norm ──
+export const BatchNormVsLayerNorm = (ctx) => { const { sub, subBtnRipple, registerSubBtn, navigate } = ctx; return (
+  <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
+
+    {/* Sub 0: Batch Normalization */}
+    {sub >= 0 && (
+      <Box color={C.cyan} style={{ width: "100%" }}>
+        <T color="#80deea" bold center size={20}>Batch Normalization (Ioffe & Szegedy, 2015)</T>
+        <T color="#80deea" size={16} style={{ marginTop: 6 }}>Batch Norm normalizes across the <strong>batch dimension</strong>. Given a batch of examples, for each feature, compute the mean and variance <strong>across all examples in the batch</strong>.</T>
+
+        <div style={{ marginTop: 14, padding: 14, borderRadius: 10, background: `${C.cyan}08`, border: `1px solid ${C.cyan}20` }}>
+          <T color="#80deea" bold center size={16}>Batch of 4 examples, each with 3 features:</T>
+
+          {/* Grid visualization */}
+          <div style={{ marginTop: 12, display: "flex", flexDirection: "column", alignItems: "center", gap: 0 }}>
+            {/* Column headers */}
+            <div style={{ display: "flex", gap: 0, marginLeft: 70 }}>
+              {["Feature 1", "Feature 2", "Feature 3"].map((f, ci) => (
+                <div key={f} style={{ width: 80, textAlign: "center" }}>
+                  <T color={ci === 1 ? C.yellow : C.dim} bold={ci === 1} size={11}>{f}</T>
+                </div>
+              ))}
+            </div>
+            {/* Grid rows */}
+            {[
+              { label: "Example 1", vals: [0.5, 1.2, -0.3] },
+              { label: "Example 2", vals: [0.8, 0.9, 0.1] },
+              { label: "Example 3", vals: [0.3, 1.5, -0.5] },
+              { label: "Example 4", vals: [0.6, 0.6, 0.2] },
+            ].map(({ label, vals }) => (
+              <div key={label} style={{ display: "flex", alignItems: "center", gap: 0 }}>
+                <T color={C.dim} size={11} style={{ minWidth: 70, textAlign: "right", paddingRight: 6 }}>{label}</T>
+                {vals.map((v, ci) => (
+                  <div key={ci} style={{
+                    width: 80, height: 32, display: "flex", alignItems: "center", justifyContent: "center",
+                    background: ci === 1 ? `${C.yellow}18` : `${C.cyan}06`,
+                    border: ci === 1 ? `2px solid ${C.yellow}50` : `1px solid ${C.cyan}12`,
+                  }}>
+                    <code style={{ color: ci === 1 ? C.yellow : C.dim, fontSize: 13, fontWeight: ci === 1 ? 700 : 400 }}>{v.toFixed(1)}</code>
+                  </div>
+                ))}
+              </div>
+            ))}
+            {/* Batch Norm annotation */}
+            <div style={{ marginLeft: 70, display: "flex", gap: 0 }}>
+              {[0, 1, 2].map((ci) => (
+                <div key={ci} style={{ width: 80, textAlign: "center", paddingTop: 4 }}>
+                  {ci === 1 && <T color={C.yellow} bold size={11}>↑ Normalize this column ↑</T>}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <T color="#80deea" size={14} center style={{ marginTop: 10 }}>Batch Norm picks one feature (one column) and computes the mean and variance <strong>across the 4 examples</strong>. For Feature 2: mean = (1.2 + 0.9 + 1.5 + 0.6) / 4 = <strong>1.05</strong>. Then it normalizes each example's value for that feature.</T>
+        </div>
+      </Box>
+    )}
+    {sub === 0 && <SubBtn onClick={() => navigate("forward")} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
+
+    {/* Sub 1: Why BN works for CNNs */}
+    <Reveal when={sub >= 1}><Box color={C.yellow} style={{ width: "100%" }}>
+      <T color="#fff176" bold center size={20}>Why Batch Norm Works for Images and CNNs</T>
+      <T color="#fff176" size={16} style={{ marginTop: 6 }}>In a CNN processing images, batch normalization works beautifully. Here's why:</T>
+
+      <div style={{ marginTop: 14, display: "flex", flexDirection: "column", gap: 10 }}>
+        {[
+          { reason: "Shared statistics", detail: "Images in a batch share similar structure. The feature \"edge detector at position (3,5)\" has a meaningful distribution across a batch of cat photos - they all have edges in roughly similar places.", color: C.green },
+          { reason: "Fixed input size", detail: "Images are always the same dimensions (e.g., 224x224). Position (3,5) means the same thing in every image. Computing statistics across the batch at that position makes sense.", color: C.blue },
+          { reason: "Training speedup", detail: "BN reduced internal covariate shift (layer inputs changing distribution during training), letting CNNs train 10-14x faster. It also acted as a mild regularizer.", color: C.orange },
+        ].map(({ reason, detail, color }) => (
+          <div key={reason} style={{ padding: 12, borderRadius: 8, background: `${color}06`, border: `1px solid ${color}15` }}>
+            <T color={color} bold size={15}>{reason}</T>
+            <T color={C.dim} size={14} style={{ marginTop: 4 }}>{detail}</T>
+          </div>
+        ))}
+      </div>
+
+      <T color="#fff176" size={15} style={{ marginTop: 10 }}>Batch Norm revolutionized CNN training when it was introduced in 2015. It made training deep image models much faster and more stable. But language is a fundamentally different domain...</T>
+    </Box></Reveal>
+    {sub === 1 && <SubBtn onClick={() => navigate("forward")} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
+
+    {/* Sub 2: Why BN fails for language */}
+    <Reveal when={sub >= 2}><Box color={C.red} style={{ width: "100%" }}>
+      <T color="#ef9a9a" bold center size={20}>Why Batch Norm Fails for Language</T>
+      <T color="#ef9a9a" size={16} style={{ marginTop: 6 }}>Three fundamental problems make Batch Norm a poor fit for text:</T>
+
+      <div style={{ marginTop: 14, display: "flex", flexDirection: "column", gap: 10 }}>
+        <div style={{ padding: 12, borderRadius: 8, background: `${C.red}06`, border: `1px solid ${C.red}15` }}>
+          <T color={C.red} bold size={15}>1. Variable Sequence Lengths</T>
+          <T color={C.dim} size={14} style={{ marginTop: 4 }}>Sentences have different lengths. In a batch of 4 sentences:</T>
+          <div style={{ marginTop: 6, display: "flex", flexDirection: "column", gap: 3 }}>
+            {[
+              { s: '"I love cats"', len: 3 },
+              { s: '"The cat sat on the mat last week"', len: 8 },
+              { s: '"Hello"', len: 1 },
+              { s: '"Deep learning is fascinating"', len: 4 },
+            ].map(({ s, len }) => (
+              <div key={s} style={{ display: "flex", alignItems: "center", gap: 6, padding: "3px 8px", borderRadius: 4, background: `${C.red}06` }}>
+                <T color={C.dim} size={12}>{s}</T>
+                <Tag color={C.red}>{len} tokens</Tag>
+              </div>
+            ))}
+          </div>
+          <T color={C.dim} size={13} style={{ marginTop: 6 }}>What is "position 5" across this batch? Only one sentence even has a position 5. Normalizing across the batch at position 5 is meaningless - there's nothing to compare.</T>
+        </div>
+
+        <div style={{ padding: 12, borderRadius: 8, background: `${C.orange}06`, border: `1px solid ${C.orange}15` }}>
+          <T color={C.orange} bold size={15}>2. Batch Size 1 at Inference</T>
+          <T color={C.dim} size={14} style={{ marginTop: 4 }}>When you chat with an LLM, your prompt is batch size 1. There's no batch to compute statistics over. Batch Norm must fall back to running averages stored from training - a fragile approximation that can drift from the true distribution.</T>
+        </div>
+
+        <div style={{ padding: 12, borderRadius: 8, background: `${C.yellow}06`, border: `1px solid ${C.yellow}15` }}>
+          <T color={C.yellow} bold size={15}>3. Tokens Are Fundamentally Different</T>
+          <T color={C.dim} size={14} style={{ marginTop: 4 }}>Normalizing feature 42 across "the", "cat", "sat", and "love" from different sentences treats them as comparable. But they're completely different words with different roles. Unlike pixels at the same position in different images, tokens at position 3 across different sentences share nothing semantically.</T>
+        </div>
+      </div>
+    </Box></Reveal>
+    {sub === 2 && <SubBtn onClick={() => navigate("forward")} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
+
+    {/* Sub 3: Layer Normalization */}
+    <Reveal when={sub >= 3}><Box color={C.green} style={{ width: "100%" }}>
+      <T color="#a5d6a7" bold center size={20}>Layer Normalization (Ba et al., 2016)</T>
+      <T color="#a5d6a7" size={16} style={{ marginTop: 6 }}>Layer Norm normalizes across the <strong>feature dimension</strong>. For each token independently, compute the mean and variance across <strong>its own features</strong>.</T>
+
+      <div style={{ marginTop: 14, padding: 14, borderRadius: 10, background: `${C.green}08`, border: `1px solid ${C.green}20` }}>
+        <T color="#a5d6a7" bold center size={16}>Same 4x3 grid, different dimension:</T>
+
+        {/* Grid visualization */}
+        <div style={{ marginTop: 12, display: "flex", flexDirection: "column", alignItems: "center", gap: 0 }}>
+          {/* Column headers */}
+          <div style={{ display: "flex", gap: 0, marginLeft: 70 }}>
+            {["Feature 1", "Feature 2", "Feature 3"].map((f) => (
+              <div key={f} style={{ width: 80, textAlign: "center" }}>
+                <T color={C.dim} size={11}>{f}</T>
+              </div>
+            ))}
+          </div>
+          {/* Grid rows */}
+          {[
+            { label: "Example 1", vals: [0.5, 1.2, -0.3], highlight: false },
+            { label: "Example 2", vals: [0.8, 0.9, 0.1], highlight: true },
+            { label: "Example 3", vals: [0.3, 1.5, -0.5], highlight: false },
+            { label: "Example 4", vals: [0.6, 0.6, 0.2], highlight: false },
+          ].map(({ label, vals, highlight }) => (
+            <div key={label} style={{ display: "flex", alignItems: "center", gap: 0 }}>
+              <T color={highlight ? C.green : C.dim} bold={highlight} size={11} style={{ minWidth: 70, textAlign: "right", paddingRight: 6 }}>{label}</T>
+              {vals.map((v, ci) => (
+                <div key={ci} style={{
+                  width: 80, height: 32, display: "flex", alignItems: "center", justifyContent: "center",
+                  background: highlight ? `${C.green}18` : `${C.cyan}06`,
+                  border: highlight ? `2px solid ${C.green}50` : `1px solid ${C.cyan}12`,
+                }}>
+                  <code style={{ color: highlight ? C.green : C.dim, fontSize: 13, fontWeight: highlight ? 700 : 400 }}>{v.toFixed(1)}</code>
+                </div>
+              ))}
+            </div>
+          ))}
+          {/* Layer Norm annotation */}
+          <div style={{ display: "flex", alignItems: "center", gap: 4, marginTop: 4 }}>
+            <T color={C.green} bold size={11} style={{ minWidth: 70, textAlign: "right", paddingRight: 6 }}></T>
+            <div style={{ width: 240, textAlign: "center" }}>
+              <T color={C.green} bold size={11}>← Normalize this row →</T>
+            </div>
+          </div>
+        </div>
+
+        <T color="#a5d6a7" size={14} center style={{ marginTop: 10 }}>Layer Norm picks one example (one row) and computes mean and variance <strong>across its 3 features</strong>. For Example 2: mean = (0.8 + 0.9 + 0.1) / 3 = <strong>0.60</strong>. Each token normalizes itself independently.</T>
+      </div>
+
+      <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 4 }}>
+        {[
+          { point: "No batch dependency", detail: "Each token normalizes using only its own features. Works with batch size 1.", color: C.green },
+          { point: "Any sequence length", detail: "Token 5 normalizes itself the same way whether the sentence has 5 or 500 tokens.", color: C.green },
+          { point: "Semantically meaningful", detail: "Normalizing across a single token's features rescales its representation without mixing different words' statistics.", color: C.green },
+        ].map(({ point, detail, color }) => (
+          <div key={point} style={{ display: "flex", gap: 6, alignItems: "flex-start", padding: "4px 8px", borderRadius: 4, background: `${color}06` }}>
+            <span style={{ color, fontSize: 10, marginTop: 4 }}>&#9679;</span>
+            <T color={C.dim} size={13}><strong style={{ color }}>{point}:</strong> {detail}</T>
+          </div>
+        ))}
+      </div>
+    </Box></Reveal>
+    {sub === 3 && <SubBtn onClick={() => navigate("forward")} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
+
+    {/* Sub 4: Side-by-side summary */}
+    <Reveal when={sub >= 4}><Box color={C.purple} style={{ width: "100%" }}>
+      <T color="#b8a9ff" bold center size={20}>The Key Difference - Which Dimension?</T>
+
+      <div style={{ marginTop: 14, display: "flex", gap: 12, flexWrap: "wrap" }}>
+        <div style={{ flex: "1 1 200px", padding: 14, borderRadius: 10, background: `${C.yellow}06`, border: `1px solid ${C.yellow}20` }}>
+          <T color={C.yellow} bold center size={16}>Batch Norm</T>
+          <div style={{ marginTop: 8, padding: 10, borderRadius: 8, background: `${C.yellow}08` }}>
+            <T color={C.yellow} center size={13}>Normalizes <strong>down columns</strong></T>
+            <T color={C.dim} center size={12} style={{ marginTop: 4 }}>(across examples in the batch)</T>
+            <div style={{ marginTop: 8, display: "flex", justifyContent: "center" }}>
+              <div style={{ display: "flex", flexDirection: "column", gap: 1 }}>
+                {[0, 1, 2, 3].map((r) => (
+                  <div key={r} style={{ display: "flex", gap: 1 }}>
+                    {[0, 1, 2].map((c) => (
+                      <div key={c} style={{
+                        width: 24, height: 18,
+                        background: c === 1 ? `${C.yellow}40` : `${C.dim}15`,
+                        borderRadius: 2,
+                      }} />
+                    ))}
+                  </div>
+                ))}
+              </div>
+            </div>
+            <T color={C.dim} center size={11} style={{ marginTop: 6 }}>highlighted column = one BN operation</T>
+          </div>
+          <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 2 }}>
+            <T color={C.dim} size={12}>Needs a batch of examples</T>
+            <T color={C.dim} size={12}>Used in CNNs (image models)</T>
+            <T color={C.dim} size={12}>Fragile at batch size 1</T>
+          </div>
+        </div>
+
+        <div style={{ flex: "1 1 200px", padding: 14, borderRadius: 10, background: `${C.green}06`, border: `1px solid ${C.green}20` }}>
+          <T color={C.green} bold center size={16}>Layer Norm</T>
+          <div style={{ marginTop: 8, padding: 10, borderRadius: 8, background: `${C.green}08` }}>
+            <T color={C.green} center size={13}>Normalizes <strong>across rows</strong></T>
+            <T color={C.dim} center size={12} style={{ marginTop: 4 }}>(across features of one token)</T>
+            <div style={{ marginTop: 8, display: "flex", justifyContent: "center" }}>
+              <div style={{ display: "flex", flexDirection: "column", gap: 1 }}>
+                {[0, 1, 2, 3].map((r) => (
+                  <div key={r} style={{ display: "flex", gap: 1 }}>
+                    {[0, 1, 2].map((c) => (
+                      <div key={c} style={{
+                        width: 24, height: 18,
+                        background: r === 1 ? `${C.green}40` : `${C.dim}15`,
+                        borderRadius: 2,
+                      }} />
+                    ))}
+                  </div>
+                ))}
+              </div>
+            </div>
+            <T color={C.dim} center size={11} style={{ marginTop: 6 }}>highlighted row = one LN operation</T>
+          </div>
+          <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 2 }}>
+            <T color={C.dim} size={12}>Independent per token</T>
+            <T color={C.dim} size={12}>Used in Transformers (LLMs)</T>
+            <T color={C.dim} size={12}>Works with any batch size</T>
+          </div>
+        </div>
+      </div>
+
+      <div style={{ marginTop: 14, padding: 12, borderRadius: 10, background: `${C.purple}08`, border: `1px solid ${C.purple}25` }}>
+        <T color="#b8a9ff" bold center size={16}>The Key Insight</T>
+        <T color="#b8a9ff" size={15} style={{ marginTop: 6 }}>Layer Norm treats each token as its own universe. Its mean and variance depend only on that token's own feature values - not on what other sentences happen to be in the same batch, not on how long other sequences are, and not on what other tokens exist. This independence is exactly what Transformers need: each token's normalization should be a property of that token alone.</T>
+      </div>
+    </Box></Reveal>
+  </div>
+); };

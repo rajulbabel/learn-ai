@@ -3279,11 +3279,11 @@ export const ActivationFunctions = (ctx) => {
           <div style={{ display: "flex", flexDirection: "column", gap: 10, marginTop: 14 }}>
             <div style={{ padding: "10px 12px", background: `${C.yellow}08`, border: `1px solid ${C.yellow}20`, borderRadius: 8 }}>
               <T size={15} color="#ffe082" style={{ marginBottom: 4 }}>Sigmoid</T>
-              <T size={13} color={C.dim}>σ(x) = 1 / (1 + e^-x) — squashes output to [0, 1]</T>
+              <T size={13} color={C.dim}>σ(x) = 1 / (1 + e^-x) - squashes output to [0, 1]</T>
             </div>
             <div style={{ padding: "10px 12px", background: `${C.yellow}08`, border: `1px solid ${C.yellow}20`, borderRadius: 8 }}>
               <T size={15} color="#ffe082" style={{ marginBottom: 4 }}>Tanh</T>
-              <T size={13} color={C.dim}>tanh(x) = (e^x - e^-x) / (e^x + e^-x) — squashes to [-1, 1]</T>
+              <T size={13} color={C.dim}>tanh(x) = (e^x - e^-x) / (e^x + e^-x) - squashes to [-1, 1]</T>
             </div>
             <div style={{ padding: "10px 12px", background: `${C.yellow}08`, border: `1px solid ${C.yellow}20`, borderRadius: 8 }}>
               <T size={15} color="#ffe082" style={{ marginBottom: 4 }}>Softmax</T>
@@ -3486,6 +3486,789 @@ export const SameBuildingBlocks = (ctx) => {
       </Reveal>
 
       {sub < 3 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
+    </div>
+  );
+};
+
+export const Dropout = (ctx) => {
+  const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx;
+
+  return (
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
+      {sub >= 0 && (
+        <Box color={C.red} style={{ width: "100%" }}>
+          <T color={C.red} bold center size={20}>The Overfitting Problem</T>
+          <T color="#ef9a9a" size={17} style={{ marginTop: 12 }}>A network can memorize the training data instead of learning general patterns. Like a student who memorizes every answer but cannot solve a new problem.</T>
+          <div style={{ display: "flex", gap: 16, marginTop: 16 }}>
+            <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center" }}>
+              <T color="#ef9a9a" bold size={15} center style={{ marginBottom: 8 }}>Training Loss</T>
+              <Graph
+                points={[[0, 2.5], [2, 1.8], [4, 1.2], [6, 0.7], [8, 0.3], [10, 0.1], [12, 0.05], [14, 0.02]]}
+                color={C.green}
+                width={160}
+                height={120}
+                xLabel="Epoch"
+                yLabel="Loss"
+                title="Keeps dropping"
+              />
+              <div style={{ padding: "6px 12px", background: `${C.green}10`, borderRadius: 6, border: `1px solid ${C.green}20`, marginTop: 8 }}>
+                <T color={C.green} bold size={14}>Final: 0.02</T>
+              </div>
+            </div>
+            <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center" }}>
+              <T color="#ef9a9a" bold size={15} center style={{ marginBottom: 8 }}>Validation Loss</T>
+              <Graph
+                points={[[0, 2.6], [2, 1.9], [4, 1.4], [6, 1.1], [8, 1.3], [10, 1.8], [12, 2.3], [14, 2.8]]}
+                color={C.red}
+                width={160}
+                height={120}
+                xLabel="Epoch"
+                yLabel="Loss"
+                title="Goes UP!"
+                annotations={[{ x: 6, y: 1.1, text: "Best", color: C.yellow }]}
+              />
+              <div style={{ padding: "6px 12px", background: `${C.red}10`, borderRadius: 6, border: `1px solid ${C.red}20`, marginTop: 8 }}>
+                <T color={C.red} bold size={14}>Final: 2.8</T>
+              </div>
+            </div>
+          </div>
+          <T color="#ef9a9a" size={16} style={{ marginTop: 14, textAlign: "center" }}>The network scores perfectly on data it has seen, but fails on new data. The gap between 0.02 and 2.8 is the overfitting gap.</T>
+        </Box>
+      )}
+
+      <Reveal when={sub >= 1}>
+        <Box color={C.green} style={{ width: "100%" }}>
+          <T color={C.green} bold center size={20}>The Solution - Randomly Zero Out Neurons</T>
+          <T color="#80e8a5" size={17} style={{ marginTop: 12 }}>During training, randomly set some neurons to zero. Every forward pass uses a different random subset of the network.</T>
+          <div style={{ display: "flex", justifyContent: "center", marginTop: 16 }}>
+            <svg viewBox="0 0 360 120" style={{ display: "block", width: "100%", maxWidth: 360 }}>
+              <text x={180} y={14} fill="rgba(255,255,255,0.5)" fontSize={11} textAnchor="middle" fontWeight={600}>6-Neuron Layer with Dropout (p = 0.5)</text>
+              {[
+                { x: 30, active: true },
+                { x: 90, active: false },
+                { x: 150, active: true },
+                { x: 210, active: false },
+                { x: 270, active: true },
+                { x: 330, active: false },
+              ].map(({ x, active }, i) => (
+                <g key={i}>
+                  <circle cx={x} cy={65} r={22} fill={active ? `${C.green}20` : "rgba(255,255,255,0.03)"} stroke={active ? C.green : "rgba(255,255,255,0.15)"} strokeWidth={2} />
+                  {active ? (
+                    <text x={x} y={70} fill={C.green} fontSize={14} textAnchor="middle" fontWeight={700}>n{i + 1}</text>
+                  ) : (
+                    <g>
+                      <line x1={x - 10} y1={55} x2={x + 10} y2={75} stroke={C.red} strokeWidth={3} />
+                      <line x1={x + 10} y1={55} x2={x - 10} y2={75} stroke={C.red} strokeWidth={3} />
+                    </g>
+                  )}
+                  <text x={x} y={105} fill={active ? C.green : C.red} fontSize={10} textAnchor="middle" fontWeight={600}>{active ? "ACTIVE" : "DROPPED"}</text>
+                </g>
+              ))}
+            </svg>
+          </div>
+          <div style={{ padding: "10px 14px", background: `${C.green}08`, border: `1px solid ${C.green}20`, borderRadius: 8, marginTop: 12 }}>
+            <T color="#80e8a5" size={16}>Dropout rate p = 0.5 means each neuron has a 50% chance of being zeroed out on each forward pass. Every training step sees a different random subset of the network.</T>
+          </div>
+        </Box>
+      </Reveal>
+
+      <Reveal when={sub >= 2}>
+        <Box color={C.purple} style={{ width: "100%" }}>
+          <T color={C.purple} bold center size={20}>Why This Works - Forced Redundancy</T>
+          <T color="#b8a9ff" size={17} style={{ marginTop: 12 }}>No single neuron can become a "lone specialist" that the network depends on entirely. Every neuron must be useful even when its neighbors are missing.</T>
+          <div style={{ display: "flex", gap: 14, marginTop: 16 }}>
+            <div style={{ flex: 1, padding: "12px", background: `${C.purple}08`, border: `1px solid ${C.purple}20`, borderRadius: 8 }}>
+              <T color="#b8a9ff" bold size={16} center>Without Dropout</T>
+              <T color={C.dim} size={15} style={{ marginTop: 8 }}>Neuron 3 memorizes a specific pattern. If neuron 3 fails, the network breaks. Knowledge is fragile and concentrated.</T>
+            </div>
+            <div style={{ flex: 1, padding: "12px", background: `${C.purple}08`, border: `1px solid ${C.purple}20`, borderRadius: 8 }}>
+              <T color="#b8a9ff" bold size={16} center>With Dropout</T>
+              <T color={C.dim} size={15} style={{ marginTop: 8 }}>All neurons learn overlapping representations. Any 3 of 6 can carry the signal. Knowledge is distributed and robust.</T>
+            </div>
+          </div>
+          <div style={{ padding: "10px 14px", background: `${C.yellow}08`, border: `1px solid ${C.yellow}20`, borderRadius: 8, marginTop: 12 }}>
+            <T color="#ffe082" size={16}>Think of a team of 6 people where any 3 might be absent on any given day. Everyone must learn everyone else's job. The team becomes resilient - no single point of failure.</T>
+          </div>
+        </Box>
+      </Reveal>
+
+      <Reveal when={sub >= 3}>
+        <Box color={C.yellow} style={{ width: "100%" }}>
+          <T color={C.yellow} bold center size={20}>The Actual Math</T>
+          <T color="#ffe082" size={16} style={{ marginTop: 12 }}>Start with an input vector and apply a random binary mask, then scale up:</T>
+          <div style={{ display: "flex", flexDirection: "column", gap: 10, marginTop: 14 }}>
+            <div style={{ padding: "10px 14px", background: `${C.yellow}08`, border: `1px solid ${C.yellow}20`, borderRadius: 8 }}>
+              <T color="#ffe082" bold size={15}>Step 1: Input vector</T>
+              <div style={{ display: "flex", gap: 6, marginTop: 6, flexWrap: "wrap" }}>
+                {[0.8, 0.3, 0.5, 0.2, 0.7, 0.4].map((v, i) => (
+                  <span key={i} style={{ padding: "3px 8px", background: `${C.cyan}15`, borderRadius: 4, color: "#80deea", fontSize: 14, fontWeight: 600 }}>{v}</span>
+                ))}
+              </div>
+            </div>
+            <div style={{ padding: "10px 14px", background: `${C.yellow}08`, border: `1px solid ${C.yellow}20`, borderRadius: 8 }}>
+              <T color="#ffe082" bold size={15}>Step 2: Random Bernoulli mask (p = 0.5)</T>
+              <div style={{ display: "flex", gap: 6, marginTop: 6 }}>
+                {[1, 0, 1, 0, 1, 0].map((v, i) => (
+                  <span key={i} style={{ padding: "3px 8px", background: v ? `${C.green}15` : `${C.red}15`, borderRadius: 4, color: v ? C.green : C.red, fontSize: 14, fontWeight: 600 }}>{v}</span>
+                ))}
+              </div>
+            </div>
+            <div style={{ padding: "10px 14px", background: `${C.yellow}08`, border: `1px solid ${C.yellow}20`, borderRadius: 8 }}>
+              <T color="#ffe082" bold size={15}>Step 3: Multiply element-wise</T>
+              <div style={{ display: "flex", gap: 6, marginTop: 6 }}>
+                {[0.8, 0, 0.5, 0, 0.7, 0].map((v, i) => (
+                  <span key={i} style={{ padding: "3px 8px", background: v > 0 ? `${C.green}15` : `${C.red}15`, borderRadius: 4, color: v > 0 ? C.green : C.red, fontSize: 14, fontWeight: 600 }}>{v}</span>
+                ))}
+              </div>
+            </div>
+            <div style={{ padding: "10px 14px", background: `${C.orange}08`, border: `1px solid ${C.orange}20`, borderRadius: 8 }}>
+              <T color="#ffb74d" bold size={15}>Step 4: Scale by 1/(1 - p) = 1/0.5 = 2</T>
+              <div style={{ display: "flex", gap: 6, marginTop: 6 }}>
+                {[1.6, 0, 1.0, 0, 1.4, 0].map((v, i) => (
+                  <span key={i} style={{ padding: "3px 8px", background: v > 0 ? `${C.orange}15` : `${C.red}15`, borderRadius: 4, color: v > 0 ? "#ffb74d" : C.red, fontSize: 14, fontWeight: 600 }}>{v}</span>
+                ))}
+              </div>
+            </div>
+          </div>
+          <div style={{ padding: "10px 14px", background: "rgba(0,0,0,0.4)", borderRadius: 10, border: `1px solid ${C.yellow}25`, marginTop: 12 }}>
+            <T color="#ffe082" bold size={16}>Why scale?</T>
+            <T color="#ffe082" size={15} style={{ marginTop: 4 }}>Without scaling, the expected output is only 0.5 x original (half the neurons are zero). Scaling by 2 restores the expected value to match the original. This way, the network sees the same magnitude at training and inference.</T>
+          </div>
+        </Box>
+      </Reveal>
+
+      <Reveal when={sub >= 4}>
+        <Box color={C.cyan} style={{ width: "100%" }}>
+          <T color={C.cyan} bold center size={20}>At Inference - No Dropout</T>
+          <T color="#80deea" size={17} style={{ marginTop: 12 }}>When the model is deployed and making predictions, dropout is completely turned off. All neurons are active, no mask is applied, no scaling is needed.</T>
+          <div style={{ display: "flex", justifyContent: "center", marginTop: 16 }}>
+            <svg viewBox="0 0 360 100" style={{ display: "block", width: "100%", maxWidth: 360 }}>
+              <text x={180} y={14} fill="rgba(255,255,255,0.5)" fontSize={11} textAnchor="middle" fontWeight={600}>All 6 Neurons Active at Inference</text>
+              {[30, 90, 150, 210, 270, 330].map((x, i) => (
+                <g key={i}>
+                  <circle cx={x} cy={55} r={22} fill={`${C.cyan}20`} stroke={C.cyan} strokeWidth={2} />
+                  <text x={x} y={60} fill={C.cyan} fontSize={14} textAnchor="middle" fontWeight={700}>n{i + 1}</text>
+                  <text x={x} y={92} fill={C.green} fontSize={10} textAnchor="middle" fontWeight={600}>ACTIVE</text>
+                </g>
+              ))}
+            </svg>
+          </div>
+          <div style={{ padding: "10px 14px", background: `${C.cyan}08`, border: `1px solid ${C.cyan}20`, borderRadius: 8, marginTop: 12 }}>
+            <T color="#80deea" size={16}>The scaling during training (multiplying by 1/(1 - p)) already compensated for the missing neurons. So at inference, using all neurons with their original weights produces the correct expected output. This is called "inverted dropout."</T>
+          </div>
+        </Box>
+      </Reveal>
+
+      <Reveal when={sub >= 5}>
+        <Box color={C.orange} style={{ width: "100%" }}>
+          <T color={C.orange} bold center size={20}>Where Dropout Lives in a Transformer</T>
+          <T color="#ffb74d" size={17} style={{ marginTop: 12 }}>Dropout is applied at two key locations inside each transformer block:</T>
+          <div style={{ display: "flex", justifyContent: "center", marginTop: 16 }}>
+            <svg viewBox="0 0 280 320" style={{ display: "block", width: "100%", maxWidth: 280 }}>
+              {/* Input */}
+              <rect x={70} y={5} width={140} height={30} rx={6} fill={`${C.cyan}15`} stroke={C.cyan} strokeWidth={1.5} />
+              <text x={140} y={25} fill={C.cyan} fontSize={11} textAnchor="middle" fontWeight={600}>Input</text>
+
+              {/* Arrow */}
+              <line x1={140} y1={35} x2={140} y2={50} stroke="rgba(255,255,255,0.3)" strokeWidth={1.5} />
+
+              {/* Multi-Head Attention */}
+              <rect x={50} y={50} width={180} height={35} rx={6} fill={`${C.purple}15`} stroke={C.purple} strokeWidth={1.5} />
+              <text x={140} y={72} fill={C.purple} fontSize={11} textAnchor="middle" fontWeight={600}>Multi-Head Attention</text>
+
+              {/* Arrow */}
+              <line x1={140} y1={85} x2={140} y2={100} stroke="rgba(255,255,255,0.3)" strokeWidth={1.5} />
+
+              {/* DROPOUT 1 */}
+              <rect x={60} y={100} width={160} height={30} rx={6} fill={`${C.red}25`} stroke={C.red} strokeWidth={2} />
+              <text x={140} y={120} fill={C.red} fontSize={12} textAnchor="middle" fontWeight={700}>DROPOUT (p = 0.1)</text>
+
+              {/* Arrow */}
+              <line x1={140} y1={130} x2={140} y2={145} stroke="rgba(255,255,255,0.3)" strokeWidth={1.5} />
+
+              {/* Add & Norm */}
+              <rect x={60} y={145} width={160} height={30} rx={6} fill={`${C.blue}15`} stroke={C.blue} strokeWidth={1.5} />
+              <text x={140} y={165} fill={C.blue} fontSize={11} textAnchor="middle" fontWeight={600}>Add & Norm</text>
+
+              {/* Arrow */}
+              <line x1={140} y1={175} x2={140} y2={190} stroke="rgba(255,255,255,0.3)" strokeWidth={1.5} />
+
+              {/* FFN */}
+              <rect x={50} y={190} width={180} height={35} rx={6} fill={`${C.yellow}15`} stroke={C.yellow} strokeWidth={1.5} />
+              <text x={140} y={212} fill={C.yellow} fontSize={11} textAnchor="middle" fontWeight={600}>Feed-Forward Network</text>
+
+              {/* Arrow */}
+              <line x1={140} y1={225} x2={140} y2={240} stroke="rgba(255,255,255,0.3)" strokeWidth={1.5} />
+
+              {/* DROPOUT 2 */}
+              <rect x={60} y={240} width={160} height={30} rx={6} fill={`${C.red}25`} stroke={C.red} strokeWidth={2} />
+              <text x={140} y={260} fill={C.red} fontSize={12} textAnchor="middle" fontWeight={700}>DROPOUT (p = 0.1)</text>
+
+              {/* Arrow */}
+              <line x1={140} y1={270} x2={140} y2={285} stroke="rgba(255,255,255,0.3)" strokeWidth={1.5} />
+
+              {/* Add & Norm 2 */}
+              <rect x={60} y={285} width={160} height={30} rx={6} fill={`${C.blue}15`} stroke={C.blue} strokeWidth={1.5} />
+              <text x={140} y={305} fill={C.blue} fontSize={11} textAnchor="middle" fontWeight={600}>Add & Norm</text>
+            </svg>
+          </div>
+          <div style={{ padding: "10px 14px", background: `${C.orange}08`, border: `1px solid ${C.orange}20`, borderRadius: 8, marginTop: 12 }}>
+            <T color="#ffb74d" size={16}>Typical dropout rate in transformers: p = 0.1 (drop only 10%). This is much lower than the 0.5 used in earlier networks because transformers are already heavily regularized by their architecture.</T>
+          </div>
+        </Box>
+      </Reveal>
+
+      {sub < 5 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
+    </div>
+  );
+};
+
+export const AdamOptimizer = (ctx) => {
+  const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx;
+
+  return (
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
+      {sub >= 0 && (
+        <Box color={C.red} style={{ width: "100%" }}>
+          <T color={C.red} bold center size={20}>The Problem with Vanilla SGD</T>
+          <T color="#ef9a9a" size={17} style={{ marginTop: 12 }}>Gradient descent from chapter 1.12 uses the same learning rate for every parameter. But different parameters need different step sizes.</T>
+          <div style={{ display: "flex", flexDirection: "column", gap: 10, marginTop: 16 }}>
+            <div style={{ padding: "10px 14px", background: `${C.red}08`, border: `1px solid ${C.red}20`, borderRadius: 8 }}>
+              <T color="#ef9a9a" bold size={15}>Parameter A (large gradient)</T>
+              <div style={{ display: "flex", alignItems: "center", gap: 6, marginTop: 6, flexWrap: "wrap" }}>
+                <span style={{ color: C.dim, fontSize: 14 }}>step =</span>
+                <span style={{ padding: "2px 8px", background: `${C.purple}15`, borderRadius: 4, color: "#b8a9ff", fontSize: 14, fontWeight: 600 }}>0.0000001</span>
+                <span style={{ color: C.dim, fontSize: 14 }}>x</span>
+                <span style={{ padding: "2px 8px", background: `${C.red}15`, borderRadius: 4, color: "#ef9a9a", fontSize: 14, fontWeight: 600 }}>-300,000</span>
+                <span style={{ color: C.dim, fontSize: 14 }}>=</span>
+                <span style={{ padding: "2px 8px", background: `${C.green}15`, borderRadius: 4, color: C.green, fontSize: 14, fontWeight: 700 }}>0.03</span>
+              </div>
+            </div>
+            <div style={{ padding: "10px 14px", background: `${C.red}08`, border: `1px solid ${C.red}20`, borderRadius: 8 }}>
+              <T color="#ef9a9a" bold size={15}>Parameter B (small gradient)</T>
+              <div style={{ display: "flex", alignItems: "center", gap: 6, marginTop: 6, flexWrap: "wrap" }}>
+                <span style={{ color: C.dim, fontSize: 14 }}>step =</span>
+                <span style={{ padding: "2px 8px", background: `${C.purple}15`, borderRadius: 4, color: "#b8a9ff", fontSize: 14, fontWeight: 600 }}>0.0000001</span>
+                <span style={{ color: C.dim, fontSize: 14 }}>x</span>
+                <span style={{ padding: "2px 8px", background: `${C.red}15`, borderRadius: 4, color: "#ef9a9a", fontSize: 14, fontWeight: 600 }}>-200</span>
+                <span style={{ color: C.dim, fontSize: 14 }}>=</span>
+                <span style={{ padding: "2px 8px", background: `${C.yellow}15`, borderRadius: 4, color: C.yellow, fontSize: 14, fontWeight: 700 }}>0.00002</span>
+              </div>
+            </div>
+          </div>
+          <T color="#ef9a9a" size={16} style={{ marginTop: 14 }}>Parameter A gets a 1500x bigger step than Parameter B. SGD treats them identically - the only difference is the raw gradient magnitude. We need something smarter.</T>
+        </Box>
+      )}
+
+      <Reveal when={sub >= 1}>
+        <Box color={C.blue} style={{ width: "100%" }}>
+          <T color={C.blue} bold center size={20}>Momentum - Remember Past Gradients</T>
+          <T color="#5eb3ff" size={17} style={{ marginTop: 12 }}>Instead of using only the current gradient, keep a running average. This smooths out noise and builds speed in consistent directions.</T>
+          <div style={{ padding: "14px", background: "rgba(0,0,0,0.4)", borderRadius: 10, border: `1px solid ${C.blue}25`, marginTop: 12, textAlign: "center" }}>
+            <T color={C.blue} bold size={17} style={{ fontFamily: "monospace" }}>m_t = 0.9 x m_(t-1) + 0.1 x g_t</T>
+          </div>
+          <T color="#5eb3ff" size={15} style={{ marginTop: 8 }}>Where beta_1 = 0.9 (weight on history) and g_t is the current gradient.</T>
+          <T color="#5eb3ff" bold size={16} style={{ marginTop: 14 }}>Concrete example with 3 steps:</T>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8, marginTop: 10 }}>
+            {[
+              { step: 1, g: -2, m: "-0.200", calc: "0.9 x 0 + 0.1 x (-2)" },
+              { step: 2, g: 3, m: "0.120", calc: "0.9 x (-0.2) + 0.1 x 3" },
+              { step: 3, g: -1, m: "0.008", calc: "0.9 x 0.12 + 0.1 x (-1)" },
+            ].map(({ step, g, m, calc }) => (
+              <div key={step} style={{ padding: "8px 12px", background: `${C.blue}08`, border: `1px solid ${C.blue}20`, borderRadius: 8, display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
+                <span style={{ padding: "2px 8px", background: `${C.blue}15`, borderRadius: 4, color: "#5eb3ff", fontSize: 13, fontWeight: 700 }}>Step {step}</span>
+                <span style={{ color: C.dim, fontSize: 13 }}>g = {g}</span>
+                <span style={{ color: C.dim, fontSize: 13 }}>{calc}</span>
+                <span style={{ color: C.dim, fontSize: 13 }}>=</span>
+                <span style={{ padding: "2px 8px", background: `${C.green}15`, borderRadius: 4, color: C.green, fontSize: 13, fontWeight: 700 }}>m = {m}</span>
+              </div>
+            ))}
+          </div>
+          <T color="#5eb3ff" size={16} style={{ marginTop: 12 }}>Notice how momentum smooths the zigzag. Even though gradients flip between -2, +3, -1, the momentum stays close to zero - correctly indicating no strong net direction. Like a ball rolling downhill: it accumulates speed in consistent directions and resists sudden changes.</T>
+        </Box>
+      </Reveal>
+
+      <Reveal when={sub >= 2}>
+        <Box color={C.purple} style={{ width: "100%" }}>
+          <T color={C.purple} bold center size={20}>Adaptive Learning Rates</T>
+          <T color="#b8a9ff" size={17} style={{ marginTop: 12 }}>Track the squared gradient magnitude per parameter. Parameters with large gradients get smaller steps. Parameters with small gradients get larger steps.</T>
+          <div style={{ padding: "14px", background: "rgba(0,0,0,0.4)", borderRadius: 10, border: `1px solid ${C.purple}25`, marginTop: 12, textAlign: "center" }}>
+            <T color={C.purple} bold size={17} style={{ fontFamily: "monospace" }}>v_t = 0.999 x v_(t-1) + 0.001 x g_t^2</T>
+          </div>
+          <T color="#b8a9ff" size={15} style={{ marginTop: 8 }}>Where beta_2 = 0.999. This tracks how "large" gradients typically are for this parameter.</T>
+          <div style={{ display: "flex", gap: 14, marginTop: 16 }}>
+            <div style={{ flex: 1, padding: "12px", background: `${C.red}08`, border: `1px solid ${C.red}20`, borderRadius: 8 }}>
+              <T color="#ef9a9a" bold size={15} center>Large-gradient param</T>
+              <T color={C.dim} size={14} style={{ marginTop: 8 }}>Gradients are often big (e.g., 50)</T>
+              <T color={C.dim} size={14} style={{ marginTop: 4 }}>v is large (tracks 50^2 = 2500)</T>
+              <T color={C.dim} size={14} style={{ marginTop: 4 }}>Divide by sqrt(v) = 50</T>
+              <T color={C.red} bold size={14} style={{ marginTop: 6 }}>Effective step: SMALL</T>
+            </div>
+            <div style={{ flex: 1, padding: "12px", background: `${C.green}08`, border: `1px solid ${C.green}20`, borderRadius: 8 }}>
+              <T color="#80e8a5" bold size={15} center>Small-gradient param</T>
+              <T color={C.dim} size={14} style={{ marginTop: 8 }}>Gradients are tiny (e.g., 0.01)</T>
+              <T color={C.dim} size={14} style={{ marginTop: 4 }}>v is small (tracks 0.01^2 = 0.0001)</T>
+              <T color={C.dim} size={14} style={{ marginTop: 4 }}>Divide by sqrt(v) = 0.01</T>
+              <T color={C.green} bold size={14} style={{ marginTop: 6 }}>Effective step: LARGE</T>
+            </div>
+          </div>
+          <T color="#b8a9ff" size={16} style={{ marginTop: 12 }}>This automatically equalizes step sizes - parameters that need bigger steps get them, and parameters that need smaller steps are tamed.</T>
+        </Box>
+      </Reveal>
+
+      <Reveal when={sub >= 3}>
+        <Box color={C.green} style={{ width: "100%" }}>
+          <T color={C.green} bold center size={20}>Bias Correction</T>
+          <T color="#80e8a5" size={17} style={{ marginTop: 12 }}>Both m and v start at zero. In the first few steps, they are biased toward zero because the running average has not had time to "warm up." Adam corrects this.</T>
+          <div style={{ padding: "14px", background: "rgba(0,0,0,0.4)", borderRadius: 10, border: `1px solid ${C.green}25`, marginTop: 12 }}>
+            <div style={{ display: "flex", flexDirection: "column", gap: 6, alignItems: "center" }}>
+              <T color={C.green} bold size={17} style={{ fontFamily: "monospace" }}>m_hat = m_t / (1 - 0.9^t)</T>
+              <T color={C.green} bold size={17} style={{ fontFamily: "monospace" }}>v_hat = v_t / (1 - 0.999^t)</T>
+            </div>
+          </div>
+          <div style={{ display: "flex", flexDirection: "column", gap: 10, marginTop: 16 }}>
+            <div style={{ padding: "10px 14px", background: `${C.green}08`, border: `1px solid ${C.green}20`, borderRadius: 8 }}>
+              <T color="#80e8a5" bold size={15}>At t = 1 (first step)</T>
+              <div style={{ display: "flex", alignItems: "center", gap: 6, marginTop: 6, flexWrap: "wrap" }}>
+                <span style={{ color: C.dim, fontSize: 14 }}>m_hat = m_1 / (1 - 0.9^1) = m_1 / 0.1 =</span>
+                <span style={{ padding: "2px 8px", background: `${C.yellow}15`, borderRadius: 4, color: C.yellow, fontSize: 14, fontWeight: 700 }}>10x larger</span>
+              </div>
+              <T color={C.dim} size={14} style={{ marginTop: 4 }}>The correction is huge because m_1 only reflects 10% of the true mean.</T>
+            </div>
+            <div style={{ padding: "10px 14px", background: `${C.green}08`, border: `1px solid ${C.green}20`, borderRadius: 8 }}>
+              <T color="#80e8a5" bold size={15}>At t = 1000 (late training)</T>
+              <div style={{ display: "flex", alignItems: "center", gap: 6, marginTop: 6, flexWrap: "wrap" }}>
+                <span style={{ color: C.dim, fontSize: 14 }}>m_hat = m_1000 / (1 - 0.9^1000) = m_1000 / 1.0 =</span>
+                <span style={{ padding: "2px 8px", background: `${C.cyan}15`, borderRadius: 4, color: C.cyan, fontSize: 14, fontWeight: 700 }}>no change</span>
+              </div>
+              <T color={C.dim} size={14} style={{ marginTop: 4 }}>After many steps, 0.9^1000 is essentially 0. The correction disappears.</T>
+            </div>
+          </div>
+        </Box>
+      </Reveal>
+
+      <Reveal when={sub >= 4}>
+        <Box color={C.yellow} style={{ width: "100%" }}>
+          <T color={C.yellow} bold center size={20}>The Full Adam Update Rule</T>
+          <div style={{ padding: "16px", background: "rgba(0,0,0,0.4)", borderRadius: 12, border: `1px solid ${C.yellow}25`, marginTop: 12, textAlign: "center" }}>
+            <T color={C.yellow} bold size={18} style={{ fontFamily: "monospace" }}>theta_new = theta - lr x m_hat / (sqrt(v_hat) + epsilon)</T>
+          </div>
+          <div style={{ marginTop: 14, display: "flex", flexDirection: "column", gap: 8 }}>
+            {[
+              { label: "theta", desc: "the parameter's current value", c: C.cyan },
+              { label: "lr", desc: "learning rate (e.g., 0.001)", c: C.purple },
+              { label: "m_hat", desc: "bias-corrected momentum (direction)", c: C.blue },
+              { label: "v_hat", desc: "bias-corrected squared gradient (scale)", c: C.green },
+              { label: "epsilon", desc: "tiny value (1e-8) to prevent division by zero", c: C.orange },
+            ].map(({ label, desc, c }) => (
+              <div key={label} style={{ display: "flex", gap: 10, alignItems: "flex-start" }}>
+                <div style={{ padding: "3px 10px", background: `${c}10`, borderRadius: 6, border: `1px solid ${c}20`, minWidth: 80, textAlign: "center", flexShrink: 0 }}>
+                  <code style={{ color: c, fontSize: 14, fontWeight: 700 }}>{label}</code>
+                </div>
+                <T color={C.dim} size={15} style={{ paddingTop: 2 }}>{desc}</T>
+              </div>
+            ))}
+          </div>
+          <div style={{ padding: "12px 14px", background: `${C.yellow}08`, border: `1px solid ${C.yellow}20`, borderRadius: 8, marginTop: 14 }}>
+            <T color="#ffe082" bold size={15}>Concrete example (t = 1):</T>
+            <div style={{ display: "flex", flexDirection: "column", gap: 4, marginTop: 8 }}>
+              <T color={C.dim} size={14}>theta = 0.5, gradient = 0.1, lr = 0.001</T>
+              <T color={C.dim} size={14}>m_1 = 0.1 x 0.1 = 0.01, m_hat = 0.01 / 0.1 = 0.1</T>
+              <T color={C.dim} size={14}>v_1 = 0.001 x 0.01 = 0.00001, v_hat = 0.00001 / 0.001 = 0.01</T>
+              <T color={C.dim} size={14}>update = 0.001 x 0.1 / (sqrt(0.01) + 1e-8) = 0.001 x 0.1 / 0.1 = 0.001</T>
+              <div style={{ display: "flex", alignItems: "center", gap: 6, marginTop: 4 }}>
+                <span style={{ color: C.dim, fontSize: 14 }}>theta_new = 0.5 - 0.001 =</span>
+                <span style={{ padding: "2px 8px", background: `${C.green}15`, borderRadius: 4, color: C.green, fontSize: 14, fontWeight: 700 }}>0.499</span>
+              </div>
+            </div>
+          </div>
+        </Box>
+      </Reveal>
+
+      <Reveal when={sub >= 5}>
+        <Box color={C.orange} style={{ width: "100%" }}>
+          <T color={C.orange} bold center size={20}>AdamW - Weight Decay Done Right</T>
+          <T color="#ffb74d" size={17} style={{ marginTop: 12 }}>Weight decay is a technique that slightly shrinks all weights each step to prevent them from growing too large. Standard L2 regularization adds the decay to the gradient before Adam processes it. AdamW separates the two.</T>
+          <div style={{ display: "flex", gap: 14, marginTop: 16 }}>
+            <div style={{ flex: 1, padding: "12px", background: `${C.red}08`, border: `1px solid ${C.red}20`, borderRadius: 8 }}>
+              <T color="#ef9a9a" bold size={15} center>Standard L2</T>
+              <T color={C.dim} size={14} style={{ marginTop: 8, fontFamily: "monospace" }}>g' = g + lambda x theta</T>
+              <T color={C.dim} size={14} style={{ marginTop: 4 }}>Then feed g' into Adam.</T>
+              <T color={C.red} size={14} style={{ marginTop: 8 }}>Problem: Adam's adaptive rates distort the weight decay. Parameters with large v get almost no decay.</T>
+            </div>
+            <div style={{ flex: 1, padding: "12px", background: `${C.green}08`, border: `1px solid ${C.green}20`, borderRadius: 8 }}>
+              <T color="#80e8a5" bold size={15} center>AdamW</T>
+              <T color={C.dim} size={14} style={{ marginTop: 8, fontFamily: "monospace" }}>theta = theta - lr x lambda x theta</T>
+              <T color={C.dim} size={14} style={{ marginTop: 4 }}>Apply decay directly AFTER Adam step.</T>
+              <T color={C.green} size={14} style={{ marginTop: 8 }}>Clean separation: Adam handles gradient direction, decay handles weight magnitude. No interference.</T>
+            </div>
+          </div>
+          <div style={{ padding: "10px 14px", background: `${C.orange}08`, border: `1px solid ${C.orange}20`, borderRadius: 8, marginTop: 14 }}>
+            <T color="#ffb74d" size={16}>GPT, BERT, LLaMA, and virtually all modern transformers use AdamW, not standard Adam. The decoupled weight decay was shown to improve generalization consistently.</T>
+          </div>
+        </Box>
+      </Reveal>
+
+      {sub < 5 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
+    </div>
+  );
+};
+
+export const LRWarmupDecay = (ctx) => {
+  const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx;
+
+  return (
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
+      {sub >= 0 && (
+        <Box color={C.red} style={{ width: "100%" }}>
+          <T color={C.red} bold center size={20}>Why a Constant Learning Rate Fails</T>
+          <T color="#ef9a9a" size={17} style={{ marginTop: 12 }}>No single learning rate works well for the entire training process. Too high and you diverge. Too low and you never converge.</T>
+          <div style={{ display: "flex", flexDirection: "column", gap: 10, marginTop: 16 }}>
+            <div style={{ padding: "10px 14px", background: `${C.red}08`, border: `1px solid ${C.red}20`, borderRadius: 8 }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                <span style={{ padding: "2px 10px", background: `${C.red}15`, borderRadius: 4, color: C.red, fontSize: 14, fontWeight: 700 }}>lr = 0.01</span>
+                <T color={C.dim} size={15}>Loss explodes to NaN after a few steps</T>
+              </div>
+              <div style={{ marginTop: 6, height: 10, background: "rgba(255,255,255,0.04)", borderRadius: 4, overflow: "hidden" }}>
+                <div style={{ width: "100%", height: "100%", background: `${C.red}60`, borderRadius: 4 }} />
+              </div>
+            </div>
+            <div style={{ padding: "10px 14px", background: `${C.yellow}08`, border: `1px solid ${C.yellow}20`, borderRadius: 8 }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                <span style={{ padding: "2px 10px", background: `${C.yellow}15`, borderRadius: 4, color: C.yellow, fontSize: 14, fontWeight: 700 }}>lr = 0.0001</span>
+                <T color={C.dim} size={15}>Training crawls - still not converged after 100K steps</T>
+              </div>
+              <div style={{ marginTop: 6, height: 10, background: "rgba(255,255,255,0.04)", borderRadius: 4, overflow: "hidden" }}>
+                <div style={{ width: "20%", height: "100%", background: `${C.yellow}60`, borderRadius: 4 }} />
+              </div>
+            </div>
+            <div style={{ padding: "10px 14px", background: `${C.green}08`, border: `1px solid ${C.green}20`, borderRadius: 8 }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                <span style={{ padding: "2px 10px", background: `${C.green}15`, borderRadius: 4, color: C.green, fontSize: 14, fontWeight: 700 }}>lr = 0.001</span>
+                <T color={C.dim} size={15}>Works OK... but still not optimal for the whole run</T>
+              </div>
+              <div style={{ marginTop: 6, height: 10, background: "rgba(255,255,255,0.04)", borderRadius: 4, overflow: "hidden" }}>
+                <div style={{ width: "65%", height: "100%", background: `${C.green}60`, borderRadius: 4 }} />
+              </div>
+            </div>
+          </div>
+          <T color="#ef9a9a" size={16} style={{ marginTop: 14 }}>The best learning rate changes over the course of training. Early on you need small steps. In the middle, larger steps. Near the end, small steps again.</T>
+        </Box>
+      )}
+
+      <Reveal when={sub >= 1}>
+        <Box color={C.blue} style={{ width: "100%" }}>
+          <T color={C.blue} bold center size={20}>Warmup - Start Tiny, Ramp Up</T>
+          <T color="#5eb3ff" size={17} style={{ marginTop: 12 }}>At step 1, weights are random garbage. Gradients are noisy and unreliable. A large learning rate plus bad gradients equals immediate divergence.</T>
+          <div style={{ display: "flex", justifyContent: "center", marginTop: 16 }}>
+            <Graph
+              points={[[0, 0], [400, 0.0002], [800, 0.0004], [1200, 0.0006], [1600, 0.0008], [2000, 0.001]]}
+              color={C.blue}
+              width={300}
+              height={140}
+              xLabel="Step"
+              yLabel="LR"
+              title="Linear Warmup (2000 steps)"
+            />
+          </div>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8, marginTop: 14 }}>
+            <div style={{ padding: "8px 12px", background: `${C.blue}08`, border: `1px solid ${C.blue}20`, borderRadius: 8, display: "flex", gap: 10, alignItems: "center" }}>
+              <span style={{ padding: "2px 8px", background: `${C.blue}15`, borderRadius: 4, color: "#5eb3ff", fontSize: 13, fontWeight: 700 }}>Step 0</span>
+              <T color={C.dim} size={14}>lr = 0 (no updates yet)</T>
+            </div>
+            <div style={{ padding: "8px 12px", background: `${C.blue}08`, border: `1px solid ${C.blue}20`, borderRadius: 8, display: "flex", gap: 10, alignItems: "center" }}>
+              <span style={{ padding: "2px 8px", background: `${C.blue}15`, borderRadius: 4, color: "#5eb3ff", fontSize: 13, fontWeight: 700 }}>Step 1000</span>
+              <T color={C.dim} size={14}>lr = 0.0005 (halfway to peak)</T>
+            </div>
+            <div style={{ padding: "8px 12px", background: `${C.blue}08`, border: `1px solid ${C.blue}20`, borderRadius: 8, display: "flex", gap: 10, alignItems: "center" }}>
+              <span style={{ padding: "2px 8px", background: `${C.green}15`, borderRadius: 4, color: C.green, fontSize: 13, fontWeight: 700 }}>Step 2000</span>
+              <T color={C.dim} size={14}>lr = 0.001 (peak reached)</T>
+            </div>
+          </div>
+          <T color="#5eb3ff" size={16} style={{ marginTop: 12 }}>Small LR lets the model "find its footing" before taking bigger steps. The gradients stabilize as the weights move toward a reasonable region of the loss landscape.</T>
+        </Box>
+      </Reveal>
+
+      <Reveal when={sub >= 2}>
+        <Box color={C.green} style={{ width: "100%" }}>
+          <T color={C.green} bold center size={20}>Cosine Decay - Smooth Descent</T>
+          <T color="#80e8a5" size={17} style={{ marginTop: 12 }}>After warmup, smoothly decrease the LR following a cosine curve. The formula:</T>
+          <div style={{ padding: "14px", background: "rgba(0,0,0,0.4)", borderRadius: 10, border: `1px solid ${C.green}25`, marginTop: 12, textAlign: "center" }}>
+            <T color={C.green} bold size={16} style={{ fontFamily: "monospace" }}>lr = lr_min + 0.5 x (lr_max - lr_min) x (1 + cos(pi x step / total))</T>
+          </div>
+          <div style={{ display: "flex", justifyContent: "center", marginTop: 16 }}>
+            <Graph
+              points={[
+                [0, 0], [500, 0.00025], [1000, 0.0005], [1500, 0.00075], [2000, 0.001],
+                [3000, 0.000927], [4000, 0.000854], [5000, 0.000691], [6000, 0.0005],
+                [7000, 0.000309], [8000, 0.000146], [9000, 0.000024], [10000, 0]
+              ]}
+              color={C.green}
+              width={320}
+              height={150}
+              xLabel="Step"
+              yLabel="LR"
+              title="Warmup + Cosine Decay"
+              annotations={[
+                { x: 2000, y: 0.001, text: "Peak", color: C.yellow },
+              ]}
+            />
+          </div>
+          <div style={{ display: "flex", gap: 12, marginTop: 14 }}>
+            <div style={{ flex: 1, padding: "8px 12px", background: `${C.blue}08`, border: `1px solid ${C.blue}20`, borderRadius: 8 }}>
+              <T color="#5eb3ff" bold size={14} center>Warmup Phase</T>
+              <T color={C.dim} size={13} style={{ marginTop: 4 }}>Steps 0-2000: Linear ramp from 0 to peak</T>
+            </div>
+            <div style={{ flex: 1, padding: "8px 12px", background: `${C.green}08`, border: `1px solid ${C.green}20`, borderRadius: 8 }}>
+              <T color="#80e8a5" bold size={14} center>Decay Phase</T>
+              <T color={C.dim} size={13} style={{ marginTop: 4 }}>Steps 2000+: Cosine curve gently reduces to minimum</T>
+            </div>
+          </div>
+        </Box>
+      </Reveal>
+
+      <Reveal when={sub >= 3}>
+        <Box color={C.yellow} style={{ width: "100%" }}>
+          <T color={C.yellow} bold center size={20}>Real-World Schedule: GPT-3</T>
+          <T color="#ffe082" size={17} style={{ marginTop: 12 }}>Here is the actual schedule used to train GPT-3 (175 billion parameters):</T>
+          <div style={{ display: "flex", flexDirection: "column", gap: 10, marginTop: 16 }}>
+            {[
+              { label: "Warmup", value: "375M tokens (~2,000 steps)", color: C.blue },
+              { label: "Peak LR", value: "6 x 10^-4 (0.0006)", color: C.green },
+              { label: "Decay over", value: "300B tokens (cosine schedule)", color: C.purple },
+              { label: "Min LR", value: "6 x 10^-5 (10% of peak)", color: C.orange },
+            ].map(({ label, value, color }) => (
+              <div key={label} style={{ padding: "10px 14px", background: `${color}08`, border: `1px solid ${color}20`, borderRadius: 8, display: "flex", gap: 10, alignItems: "center" }}>
+                <div style={{ padding: "3px 10px", background: `${color}15`, borderRadius: 4, minWidth: 90, textAlign: "center", flexShrink: 0 }}>
+                  <T color={color} bold size={14}>{label}</T>
+                </div>
+                <T color={C.dim} size={15}>{value}</T>
+              </div>
+            ))}
+          </div>
+          <div style={{ padding: "10px 14px", background: `${C.yellow}08`, border: `1px solid ${C.yellow}20`, borderRadius: 8, marginTop: 14 }}>
+            <T color="#ffe082" bold size={16}>Why cosine and not linear decay?</T>
+            <T color="#ffe082" size={15} style={{ marginTop: 6 }}>Cosine spends more time at useful learning rates (the middle range) and approaches zero very gradually. Linear decay spends equal time at every LR, wasting steps at near-zero rates where no meaningful learning occurs.</T>
+          </div>
+        </Box>
+      </Reveal>
+
+      {sub < 3 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
+    </div>
+  );
+};
+
+export const WeightInit = (ctx) => {
+  const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx;
+
+  return (
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
+      {sub >= 0 && (
+        <Box color={C.red} style={{ width: "100%" }}>
+          <T color={C.red} bold center size={20}>Why Not Start at Zero?</T>
+          <T color="#ef9a9a" size={17} style={{ marginTop: 12 }}>If all weights start at zero, every neuron in a layer computes the exact same output. All gradients are identical. No neuron ever becomes different from any other. The network is stuck forever.</T>
+          <div style={{ display: "flex", justifyContent: "center", marginTop: 16 }}>
+            <svg viewBox="0 0 360 180" style={{ display: "block", width: "100%", maxWidth: 360 }}>
+              <text x={180} y={14} fill="rgba(255,255,255,0.5)" fontSize={11} textAnchor="middle" fontWeight={600}>All Weights = 0: The Symmetry Problem</text>
+              {/* Input */}
+              <rect x={10} y={60} width={60} height={60} rx={8} fill={`${C.cyan}15`} stroke={C.cyan} strokeWidth={1.5} />
+              <text x={40} y={85} fill={C.cyan} fontSize={11} textAnchor="middle" fontWeight={600}>Input</text>
+              <text x={40} y={100} fill={C.dim} fontSize={10} textAnchor="middle">[1.0, 0.5]</text>
+
+              {/* Arrows to neurons */}
+              {[40, 90, 140].map((y) => (
+                <g key={y}>
+                  <line x1={70} y1={90} x2={120} y2={y} stroke="rgba(255,255,255,0.2)" strokeWidth={1} />
+                  <text x={95} y={y < 90 ? 58 : y > 90 ? 122 : 82} fill={C.red} fontSize={9} textAnchor="middle">[0,0]</text>
+                </g>
+              ))}
+
+              {/* 3 neurons */}
+              {[
+                { y: 40, label: "n1" },
+                { y: 90, label: "n2" },
+                { y: 140, label: "n3" },
+              ].map(({ y, label }) => (
+                <g key={label}>
+                  <circle cx={145} cy={y} r={18} fill={`${C.red}12`} stroke={C.red} strokeWidth={1.5} />
+                  <text x={145} y={y - 4} fill={C.red} fontSize={11} textAnchor="middle" fontWeight={700}>{label}</text>
+                  <text x={145} y={y + 10} fill={C.dim} fontSize={9} textAnchor="middle">w=[0,0]</text>
+                </g>
+              ))}
+
+              {/* Arrows to outputs */}
+              {[40, 90, 140].map((y) => (
+                <line key={`out${y}`} x1={163} y1={y} x2={210} y2={y} stroke="rgba(255,255,255,0.2)" strokeWidth={1} />
+              ))}
+
+              {/* Outputs */}
+              {[40, 90, 140].map((y) => (
+                <g key={`oval${y}`}>
+                  <rect x={210} y={y - 14} width={50} height={28} rx={6} fill={`${C.yellow}12`} stroke={C.yellow} strokeWidth={1} />
+                  <text x={235} y={y + 4} fill={C.yellow} fontSize={11} textAnchor="middle" fontWeight={700}>0.0</text>
+                </g>
+              ))}
+
+              {/* Arrow to "identical" */}
+              <line x1={260} y1={40} x2={290} y2={70} stroke="rgba(255,255,255,0.15)" strokeWidth={1} />
+              <line x1={260} y1={90} x2={290} y2={85} stroke="rgba(255,255,255,0.15)" strokeWidth={1} />
+              <line x1={260} y1={140} x2={290} y2={100} stroke="rgba(255,255,255,0.15)" strokeWidth={1} />
+              <text x={320} y={80} fill={C.red} fontSize={11} textAnchor="middle" fontWeight={700}>All</text>
+              <text x={320} y={95} fill={C.red} fontSize={11} textAnchor="middle" fontWeight={700}>identical!</text>
+
+              {/* Bottom */}
+              <text x={180} y={172} fill="rgba(255,255,255,0.4)" fontSize={10} textAnchor="middle">Same weights, same outputs, same gradients, stuck forever</text>
+            </svg>
+          </div>
+          <T color="#ef9a9a" size={16} style={{ marginTop: 10 }}>This is called the "symmetry problem." Every neuron is a clone of every other. No matter how long you train, they will never differentiate.</T>
+        </Box>
+      )}
+
+      <Reveal when={sub >= 1}>
+        <Box color={C.orange} style={{ width: "100%" }}>
+          <T color={C.orange} bold center size={20}>Too Small - Signal Vanishes</T>
+          <T color="#ffb74d" size={17} style={{ marginTop: 12 }}>If weights are initialized with very small random values (std = 0.001), the signal shrinks as it passes through layers.</T>
+          <div style={{ display: "flex", flexDirection: "column", gap: 6, marginTop: 16 }}>
+            {[
+              { layer: "Input", values: "[1.0, 0.5]", mag: "1.0", bar: 100 },
+              { layer: "After Layer 1", values: "[0.002, -0.001]", mag: "0.002", bar: 0.2 },
+              { layer: "After Layer 3", values: "[~0.000004, ~0.000002]", mag: "0.000004", bar: 0 },
+              { layer: "After Layer 5", values: "[~0, ~0]", mag: "~0", bar: 0 },
+            ].map(({ layer, values, mag: _mag, bar }) => (
+              <div key={layer} style={{ display: "flex", alignItems: "center", gap: 8, padding: "6px 10px" }}>
+                <T color="#ffb74d" size={13} style={{ minWidth: 100, textAlign: "right" }}>{layer}</T>
+                <div style={{ flex: 1, height: 14, background: "rgba(255,255,255,0.04)", borderRadius: 4, overflow: "hidden" }}>
+                  <div style={{ width: `${Math.max(bar, 0.5)}%`, height: "100%", background: C.orange, borderRadius: 4 }} />
+                </div>
+                <T color={C.dim} size={12} style={{ minWidth: 100, textAlign: "right" }}>{values}</T>
+              </div>
+            ))}
+          </div>
+          <T color="#ffb74d" size={16} style={{ marginTop: 12 }}>Each layer multiplies by tiny weights, shrinking the signal exponentially. By layer 5-10, everything is effectively zero. Gradients also vanish - the network cannot learn. The network is "dead."</T>
+        </Box>
+      </Reveal>
+
+      <Reveal when={sub >= 2}>
+        <Box color={C.orange} style={{ width: "100%" }}>
+          <T color={C.orange} bold center size={20}>Too Large - Signal Explodes</T>
+          <T color="#ffb74d" size={17} style={{ marginTop: 12 }}>If weights are initialized with large random values (std = 5.0), the signal grows uncontrollably through layers.</T>
+          <div style={{ display: "flex", flexDirection: "column", gap: 6, marginTop: 16 }}>
+            {[
+              { layer: "Input", values: "[1.0, 0.5]", bar: 0.01 },
+              { layer: "After Layer 1", values: "[8.5, -12.3]", bar: 0.1 },
+              { layer: "After Layer 3", values: "[~450, ~-820]", bar: 8 },
+              { layer: "After Layer 5", values: "[~45000, ~-89000]", bar: 100 },
+            ].map(({ layer, values, bar }) => (
+              <div key={layer} style={{ display: "flex", alignItems: "center", gap: 8, padding: "6px 10px" }}>
+                <T color="#ffb74d" size={13} style={{ minWidth: 100, textAlign: "right" }}>{layer}</T>
+                <div style={{ flex: 1, height: 14, background: "rgba(255,255,255,0.04)", borderRadius: 4, overflow: "hidden" }}>
+                  <div style={{ width: `${Math.min(bar, 100)}%`, height: "100%", background: C.red, borderRadius: 4 }} />
+                </div>
+                <T color={C.dim} size={12} style={{ minWidth: 130, textAlign: "right" }}>{values}</T>
+              </div>
+            ))}
+          </div>
+          <T color="#ffb74d" size={16} style={{ marginTop: 12 }}>Activations saturate, gradients explode, and training produces NaN within a few steps. The network is unstable from the very first forward pass.</T>
+        </Box>
+      </Reveal>
+
+      <Reveal when={sub >= 3}>
+        <Box color={C.green} style={{ width: "100%" }}>
+          <T color={C.green} bold center size={20}>Xavier/Glorot - The "Just Right" Scale</T>
+          <T color="#80e8a5" size={17} style={{ marginTop: 12 }}>Scale random weights so the variance of the output matches the variance of the input. The key: divide by the square root of the number of inputs (fan_in).</T>
+          <div style={{ padding: "14px", background: "rgba(0,0,0,0.4)", borderRadius: 10, border: `1px solid ${C.green}25`, marginTop: 12, textAlign: "center" }}>
+            <T color={C.green} bold size={18} style={{ fontFamily: "monospace" }}>std = sqrt(2 / (fan_in + fan_out))</T>
+          </div>
+          <div style={{ padding: "10px 14px", background: `${C.green}08`, border: `1px solid ${C.green}20`, borderRadius: 8, marginTop: 14 }}>
+            <T color="#80e8a5" bold size={15}>Example: a 512 to 512 layer</T>
+            <div style={{ display: "flex", alignItems: "center", gap: 6, marginTop: 6, flexWrap: "wrap" }}>
+              <span style={{ color: C.dim, fontSize: 14 }}>std = sqrt(2 / (512 + 512)) = sqrt(2 / 1024) = sqrt(0.00195) =</span>
+              <span style={{ padding: "2px 8px", background: `${C.green}15`, borderRadius: 4, color: C.green, fontSize: 14, fontWeight: 700 }}>0.044</span>
+            </div>
+          </div>
+          <T color="#80e8a5" size={16} style={{ marginTop: 12 }}>With this scale, the signal variance stays approximately 1.0 through many layers:</T>
+          <div style={{ display: "flex", flexDirection: "column", gap: 4, marginTop: 10 }}>
+            {[
+              { layer: "Layer 1", var: "~1.0", bar: 100 },
+              { layer: "Layer 3", var: "~0.98", bar: 98 },
+              { layer: "Layer 5", var: "~0.95", bar: 95 },
+              { layer: "Layer 10", var: "~0.90", bar: 90 },
+            ].map(({ layer, var: v, bar }) => (
+              <div key={layer} style={{ display: "flex", alignItems: "center", gap: 8, padding: "4px 10px" }}>
+                <T color="#80e8a5" size={13} style={{ minWidth: 70, textAlign: "right" }}>{layer}</T>
+                <div style={{ flex: 1, height: 12, background: "rgba(255,255,255,0.04)", borderRadius: 4, overflow: "hidden" }}>
+                  <div style={{ width: `${bar}%`, height: "100%", background: C.green, borderRadius: 4 }} />
+                </div>
+                <T color={C.green} bold size={13} style={{ minWidth: 50, textAlign: "right" }}>{v}</T>
+              </div>
+            ))}
+          </div>
+          <T color="#80e8a5" size={15} style={{ marginTop: 10 }}>Stable signal - no vanishing, no exploding. Named after Xavier Glorot, who proved this mathematically in 2010.</T>
+        </Box>
+      </Reveal>
+
+      <Reveal when={sub >= 4}>
+        <Box color={C.purple} style={{ width: "100%" }}>
+          <T color={C.purple} bold center size={20}>He Initialization - Designed for ReLU</T>
+          <T color="#b8a9ff" size={17} style={{ marginTop: 12 }}>ReLU sets all negative values to zero, which kills roughly half the neurons' outputs. This halves the variance at each layer. To compensate, multiply Xavier's scale by sqrt(2).</T>
+          <div style={{ padding: "14px", background: "rgba(0,0,0,0.4)", borderRadius: 10, border: `1px solid ${C.purple}25`, marginTop: 12, textAlign: "center" }}>
+            <T color={C.purple} bold size={18} style={{ fontFamily: "monospace" }}>std = sqrt(2 / fan_in)</T>
+          </div>
+          <div style={{ padding: "10px 14px", background: `${C.purple}08`, border: `1px solid ${C.purple}20`, borderRadius: 8, marginTop: 14 }}>
+            <T color="#b8a9ff" bold size={15}>Example: a layer with 512 inputs</T>
+            <div style={{ display: "flex", alignItems: "center", gap: 6, marginTop: 6, flexWrap: "wrap" }}>
+              <span style={{ color: C.dim, fontSize: 14 }}>std = sqrt(2 / 512) = sqrt(0.00391) =</span>
+              <span style={{ padding: "2px 8px", background: `${C.purple}15`, borderRadius: 4, color: "#b8a9ff", fontSize: 14, fontWeight: 700 }}>0.0625</span>
+            </div>
+            <T color={C.dim} size={14} style={{ marginTop: 6 }}>Compare Xavier: 0.044. He is about 42% larger to compensate for ReLU's halving.</T>
+          </div>
+          <div style={{ display: "flex", gap: 14, marginTop: 14 }}>
+            <div style={{ flex: 1, padding: "10px 12px", background: `${C.red}08`, border: `1px solid ${C.red}20`, borderRadius: 8 }}>
+              <T color="#ef9a9a" bold size={14} center>Xavier + ReLU</T>
+              <div style={{ display: "flex", flexDirection: "column", gap: 2, marginTop: 6 }}>
+                {[
+                  { l: "L1", v: "1.0", b: 100 },
+                  { l: "L5", v: "0.5", b: 50 },
+                  { l: "L10", v: "0.25", b: 25 },
+                ].map(({ l, v, b }) => (
+                  <div key={l} style={{ display: "flex", alignItems: "center", gap: 4 }}>
+                    <T color={C.dim} size={11} style={{ minWidth: 22 }}>{l}</T>
+                    <div style={{ flex: 1, height: 8, background: "rgba(255,255,255,0.04)", borderRadius: 3, overflow: "hidden" }}>
+                      <div style={{ width: `${b}%`, height: "100%", background: C.red, borderRadius: 3 }} />
+                    </div>
+                    <T color={C.dim} size={11} style={{ minWidth: 26, textAlign: "right" }}>{v}</T>
+                  </div>
+                ))}
+              </div>
+              <T color={C.red} size={12} style={{ marginTop: 4 }}>Variance shrinks - signal fades</T>
+            </div>
+            <div style={{ flex: 1, padding: "10px 12px", background: `${C.green}08`, border: `1px solid ${C.green}20`, borderRadius: 8 }}>
+              <T color="#80e8a5" bold size={14} center>He + ReLU</T>
+              <div style={{ display: "flex", flexDirection: "column", gap: 2, marginTop: 6 }}>
+                {[
+                  { l: "L1", v: "1.0", b: 100 },
+                  { l: "L5", v: "0.98", b: 98 },
+                  { l: "L10", v: "0.95", b: 95 },
+                ].map(({ l, v, b }) => (
+                  <div key={l} style={{ display: "flex", alignItems: "center", gap: 4 }}>
+                    <T color={C.dim} size={11} style={{ minWidth: 22 }}>{l}</T>
+                    <div style={{ flex: 1, height: 8, background: "rgba(255,255,255,0.04)", borderRadius: 3, overflow: "hidden" }}>
+                      <div style={{ width: `${b}%`, height: "100%", background: C.green, borderRadius: 3 }} />
+                    </div>
+                    <T color={C.dim} size={11} style={{ minWidth: 26, textAlign: "right" }}>{v}</T>
+                  </div>
+                ))}
+              </div>
+              <T color={C.green} size={12} style={{ marginTop: 4 }}>Variance stable - signal preserved</T>
+            </div>
+          </div>
+          <div style={{ padding: "10px 14px", background: "rgba(0,0,0,0.4)", borderRadius: 10, border: `1px solid ${C.purple}25`, marginTop: 14 }}>
+            <T color="#b8a9ff" size={16}>Named after Kaiming He (2015). Most modern networks with ReLU activations use He initialization. Transformers often use a variant scaled by 1/sqrt(depth) for the residual connections.</T>
+          </div>
+        </Box>
+      </Reveal>
+
+      {sub < 4 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
     </div>
   );
 };

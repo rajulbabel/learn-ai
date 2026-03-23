@@ -646,6 +646,158 @@ export const PosEncodingFinal = (ctx) => { const { sub, subBtnRipple, setSubBtnR
   );
 };
 
+// ═══════ 5.8 RoPE - Rotary Position Embeddings ═══════
+
+export const RoPE = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx; return (
+  <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
+    {sub >= 0 && (
+      <Box color={C.purple} style={{ width: "100%" }}>
+        <T color="#b8a9ff" bold center size={20}>The problem with sinusoidal position encoding</T>
+        <T color="#b8a9ff" style={{ marginTop: 6 }}>Recall chapters 5.3-5.7: we compute a position vector using sin/cos and <strong>ADD</strong> it to each embedding. This gives every token a unique position signal.</T>
+        <T color="#b8a9ff" style={{ marginTop: 8 }}>But there are two fundamental problems:</T>
+        <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 8 }}>
+          <div style={{ padding: "10px 14px", borderRadius: 8, background: `${C.red}06`, border: `1px solid ${C.red}12` }}>
+            <T color={C.red} bold size={16}>Problem 1: Absolute positioning</T>
+            <T color={C.dim} size={15} style={{ marginTop: 4 }}>Position 5 always gets the same encoding vector, regardless of context. But "cats" at position 5 in a 10-word sentence and "cats" at position 5 in a 1000-word sentence should feel different - the relative context is different.</T>
+          </div>
+          <div style={{ padding: "10px 14px", borderRadius: 8, background: `${C.red}06`, border: `1px solid ${C.red}12` }}>
+            <T color={C.red} bold size={16}>Problem 2: Fixed length</T>
+            <T color={C.dim} size={15} style={{ marginTop: 4 }}>If we train on sequences up to 2048 tokens, what happens at position 2049? The model has never seen that position encoding. Performance degrades badly - the model cannot extrapolate to longer contexts.</T>
+          </div>
+        </div>
+        <T color="#b8a9ff" style={{ marginTop: 10 }}>RoPE (Rotary Position Embedding) solves both problems with a single elegant idea.</T>
+      </Box>
+    )}
+
+    <Reveal when={sub >= 1}><Box color={C.green} style={{ width: "100%" }}>
+      <T color="#80e8a5" bold center size={20}>RoPE: rotate instead of add</T>
+      <T color="#80e8a5" style={{ marginTop: 6 }}>Instead of adding a position vector to the embedding, RoPE <strong>rotates</strong> the Query and Key vectors based on their position. The rotation angle depends on position.</T>
+      <div style={{ marginTop: 12, padding: "14px", borderRadius: 8, background: "rgba(0,0,0,0.3)" }}>
+        <T color={C.bright} bold center size={16}>The 2D rotation matrix</T>
+        <T color={C.bright} center size={16} style={{ marginTop: 8, fontFamily: "monospace", lineHeight: 2 }}>
+          [cos(t), -sin(t)] &nbsp;&nbsp; [q1] &nbsp;&nbsp; [q1 cos(t) - q2 sin(t)]<br />
+          [sin(t), &nbsp;cos(t)] x [q2] = [q1 sin(t) + q2 cos(t)]
+        </T>
+        <T color={C.dim} size={14} center style={{ marginTop: 8 }}>where t = position x frequency</T>
+      </div>
+      <div style={{ marginTop: 12, display: "flex", gap: 8, alignItems: "stretch" }}>
+        <div style={{ flex: 1, padding: "10px", borderRadius: 8, background: `${C.red}06`, border: `1px solid ${C.red}12` }}>
+          <T color={C.red} bold center size={16}>Sinusoidal PE</T>
+          <T color={C.dim} size={15} style={{ marginTop: 4 }}>embedding + position_vector</T>
+          <T color={C.dim} size={13} style={{ marginTop: 2 }}>Modifies the embedding directly</T>
+        </div>
+        <div style={{ flex: 1, padding: "10px", borderRadius: 8, background: `${C.green}06`, border: `1px solid ${C.green}12` }}>
+          <T color={C.green} bold center size={16}>RoPE</T>
+          <T color={C.dim} size={15} style={{ marginTop: 4 }}>rotate(Q, position), rotate(K, position)</T>
+          <T color={C.dim} size={13} style={{ marginTop: 2 }}>Only rotates Q and K, not the embedding</T>
+        </div>
+      </div>
+      <T color="#80e8a5" style={{ marginTop: 10 }}>Example: if Q = [1.0, 0.5] and position = 3, with frequency = 0.1, then t = 3 x 0.1 = 0.3 radians. The vector gets rotated by 0.3 radians (about 17 degrees).</T>
+    </Box></Reveal>
+
+    <Reveal when={sub >= 2}><Box color={C.yellow} style={{ width: "100%" }}>
+      <T color="#ffe082" bold center size={20}>The key insight: relative distance emerges naturally</T>
+      <T color="#ffe082" style={{ marginTop: 6 }}>When you compute Q dot K (the attention score), the rotations combine. If Q at position m is rotated by angle m x f, and K at position n is rotated by angle n x f, their dot product depends only on (m - n) x f.</T>
+      <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 8 }}>
+        <div style={{ padding: "10px 14px", borderRadius: 8, background: `${C.cyan}06`, border: `1px solid ${C.cyan}12` }}>
+          <T color={C.cyan} bold center size={16}>Position 100 attending to position 97</T>
+          <T color={C.dim} size={15} style={{ marginTop: 4 }}>Relative distance: 100 - 97 = <strong style={{ color: C.yellow }}>3</strong></T>
+          <T color={C.dim} size={15}>Angle in dot product: (100 - 97) x f = 3f</T>
+        </div>
+        <div style={{ padding: "10px 14px", borderRadius: 8, background: `${C.cyan}06`, border: `1px solid ${C.cyan}12` }}>
+          <T color={C.cyan} bold center size={16}>Position 3 attending to position 0</T>
+          <T color={C.dim} size={15} style={{ marginTop: 4 }}>Relative distance: 3 - 0 = <strong style={{ color: C.yellow }}>3</strong></T>
+          <T color={C.dim} size={15}>Angle in dot product: (3 - 0) x f = 3f</T>
+        </div>
+        <div style={{ padding: "10px 14px", borderRadius: 8, background: `${C.yellow}06`, border: `1px solid ${C.yellow}12` }}>
+          <T color={C.yellow} bold center size={16}>Same relative distance = same angle-based score</T>
+          <T color={C.dim} size={15} style={{ marginTop: 4 }}>The absolute positions cancel out. Only the gap between the two positions matters. This means the model learns <strong>relative</strong> position naturally, without any explicit relative position mechanism.</T>
+        </div>
+      </div>
+    </Box></Reveal>
+
+    <Reveal when={sub >= 3}><Box color={C.cyan} style={{ width: "100%" }}>
+      <T color="#80deea" bold center size={20}>How it works in practice</T>
+      <T color="#80deea" style={{ marginTop: 6 }}>Real embeddings have 128 dims (or more), not 2. RoPE handles this by processing dimensions <strong>in pairs</strong>:</T>
+      <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 8 }}>
+        <div style={{ padding: "10px 14px", borderRadius: 8, background: "rgba(0,0,0,0.3)" }}>
+          <T color={C.bright} bold center size={15}>128-dim vector split into 64 pairs</T>
+          <div style={{ marginTop: 8, display: "flex", gap: 4, flexWrap: "wrap", justifyContent: "center" }}>
+            {[
+              { pair: "(d0, d1)", freq: "fast", color: C.red },
+              { pair: "(d2, d3)", freq: "fast", color: C.orange },
+              { pair: "(d4, d5)", freq: "medium", color: C.yellow },
+              { pair: "...", freq: "", color: C.dim },
+              { pair: "(d124, d125)", freq: "slow", color: C.blue },
+              { pair: "(d126, d127)", freq: "very slow", color: C.purple },
+            ].map(({ pair, freq, color }) => (
+              <div key={pair} style={{ padding: "6px 10px", borderRadius: 6, background: `${color}10`, border: `1px solid ${color}20` }}>
+                <T color={color} bold size={14} center>{pair}</T>
+                {freq && <T color={C.dim} size={11} center>{freq}</T>}
+              </div>
+            ))}
+          </div>
+        </div>
+        <T color="#80deea" style={{ marginTop: 4 }}>Each pair gets its own 2D rotation. The key: each pair rotates at a <strong>different frequency</strong>, just like sinusoidal PE's fast and slow dimensions.</T>
+        <div style={{ display: "flex", flexDirection: "column", gap: 4, marginTop: 4 }}>
+          <div style={{ padding: "8px 12px", borderRadius: 6, background: `${C.red}06`, border: `1px solid ${C.red}12` }}>
+            <T color={C.red} bold size={15}>Early pairs (d0, d1): rotate FAST</T>
+            <T color={C.dim} size={14} style={{ marginTop: 2 }}>High frequency - sensitive to nearby position differences. "Is the next word 1 or 2 positions away?"</T>
+          </div>
+          <div style={{ padding: "8px 12px", borderRadius: 6, background: `${C.purple}06`, border: `1px solid ${C.purple}12` }}>
+            <T color={C.purple} bold size={15}>Late pairs (d126, d127): rotate SLOW</T>
+            <T color={C.dim} size={14} style={{ marginTop: 2 }}>Low frequency - sensitive to distant position differences. "Is this word 500 or 1000 positions away?"</T>
+          </div>
+        </div>
+        <T color="#80deea" style={{ marginTop: 6 }}>The frequency formula is the same idea as sinusoidal PE: f_i = 1 / 10000^(2i/d), where i is the pair index and d is the total dimension. Pair 0 rotates fastest, pair 63 rotates slowest.</T>
+      </div>
+    </Box></Reveal>
+
+    <Reveal when={sub >= 4}><Box color={C.orange} style={{ width: "100%" }}>
+      <T color="#ffb74d" bold center size={20}>Why RoPE won</T>
+      <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 4 }}>
+        <div style={{ display: "grid", gridTemplateColumns: "100px 1fr 1fr 1fr", gap: 6, padding: "8px 10px", borderRadius: 6, background: "rgba(0,0,0,0.3)" }}>
+          <T color={C.bright} bold size={14}></T>
+          <T color={C.red} bold center size={14}>Sinusoidal</T>
+          <T color={C.blue} bold center size={14}>Learned PE</T>
+          <T color={C.green} bold center size={14}>RoPE</T>
+        </div>
+        {[
+          { label: "Type", sin: "Absolute", learned: "Absolute", rope: "Relative" },
+          { label: "Applied to", sin: "Embedding (add)", learned: "Embedding (add)", rope: "Q and K only (rotate)" },
+          { label: "Max length", sin: "Fixed at training", learned: "Fixed at training", rope: "Can extrapolate" },
+          { label: "Extrapolation", sin: "Fails beyond max", learned: "Fails beyond max", rope: "Works with scaling tricks" },
+          { label: "Parameters", sin: "0 (fixed formula)", learned: "pos x dim", rope: "0 (fixed formula)" },
+        ].map(({ label, sin, learned, rope }) => (
+          <div key={label} style={{ display: "grid", gridTemplateColumns: "100px 1fr 1fr 1fr", gap: 6, padding: "5px 10px", borderRadius: 6, background: "rgba(255,255,255,0.02)" }}>
+            <T color={C.mid} bold size={13}>{label}</T>
+            <T color={C.dim} size={13}>{sin}</T>
+            <T color={C.dim} size={13}>{learned}</T>
+            <T color={C.dim} size={13}>{rope}</T>
+          </div>
+        ))}
+      </div>
+      <div style={{ marginTop: 12, padding: "10px 14px", borderRadius: 8, background: `${C.green}06`, border: `1px solid ${C.green}12` }}>
+        <T color={C.green} bold center size={16}>RoPE extrapolation: NTK-aware scaling</T>
+        <T color={C.dim} size={14} style={{ marginTop: 4 }}>If a model trained on 4096 tokens needs to handle 16384, you can scale the rotation frequencies by a factor. The "NTK-aware" variant adjusts different frequency bands differently - slowing down the fast-rotating pairs while keeping the slow ones nearly unchanged. This extends context length 4x or more with minimal quality loss.</T>
+      </div>
+      <div style={{ marginTop: 10, padding: "10px 14px", borderRadius: 8, background: `${C.orange}06`, border: `1px solid ${C.orange}12` }}>
+        <T color={C.orange} bold center size={16}>Models using RoPE</T>
+        <div style={{ marginTop: 6, display: "flex", gap: 6, flexWrap: "wrap", justifyContent: "center" }}>
+          {["LLaMA", "LLaMA 2", "LLaMA 3", "Mistral", "Qwen", "GPT-NeoX", "PaLM"].map(m => (
+            <div key={m} style={{ padding: "4px 10px", borderRadius: 5, background: `${C.orange}12`, border: `1px solid ${C.orange}25` }}>
+              <T color={C.orange} bold size={14}>{m}</T>
+            </div>
+          ))}
+        </div>
+        <T color={C.dim} size={14} style={{ marginTop: 6 }}>Nearly every modern open-source LLM uses RoPE. It has become the default choice for position encoding since 2022.</T>
+      </div>
+    </Box></Reveal>
+
+    {sub < 4 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
+  </div>
+); }
+
 // ═══════ CHAPTER ROUTER ═══════
 
 // ═══════════════════════════════════════

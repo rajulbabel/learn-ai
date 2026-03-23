@@ -326,7 +326,7 @@ function TrainingDiagram({ sub, setSub, subBtnRipple, setSubBtnRipple, registerS
     label(CX, Y + 30, "Showing decoder input: <s> The cat - predicting next token at each position.", "rgba(255,255,255,0.25)", 15, "400");
     Y += 70;
     label(CX, Y, "Decoder Input (target sequence, shifted right, + positional encoding)", "rgba(255,255,255,0.45)", 16, "700");
-    Y += 40;
+    Y += 56;
 
     const decTokens = [
       { name: '"<s>"', cx: 200, color: "#78909c", light: "#b0bec5", bg: "rgba(120,144,156," },
@@ -640,7 +640,7 @@ function InferenceDiagram({ sub, setSub, subBtnRipple, setSubBtnRipple, register
     label(CX, Y + 30, '"The cat sat on the mat" -> 6 tokens flow through all encoder layers in parallel', "rgba(255,255,255,0.3)", 15, "400");
     Y += 30;
     label(CX, Y + 30, "Self-attention (bidirectional, no mask) -> Add&Norm -> FFN -> Add&Norm -> repeat x6", "rgba(255,255,255,0.25)", 12, "400");
-    Y += 68;
+    Y += 86;
     const encTokens = [
       { name: '"The"', cx: 80, color: "#f44336", light: "#ef9a9a", bg: "rgba(244,67,54," },
       { name: '"cat"', cx: 230, color: "#ffc107", light: "#ffe082", bg: "rgba(255,193,7," },
@@ -852,7 +852,7 @@ function InferenceDiagram({ sub, setSub, subBtnRipple, setSubBtnRipple, register
       ["Previous tokens' FFN outputs are already \"baked into\" the K,V vectors stored in the cache.", "rgba(255,255,255,0.4)", 12, "400"],
       ['So running FFN on <s> or "The" again would produce the EXACT same output. No point recomputing.', "rgba(0,230,118,0.5)", 12, "600"],
     ], "rgba(0,230,118,0.6)", "rgba(0,230,118,0.04)");
-    Y += 170;
+    Y += 190;
     layerLabel(Y, 'Add & LayerNorm (decoder block output for "cat")', "#ffb74d");
     Y += 52;
     const dan3Y = Y;
@@ -867,7 +867,7 @@ function InferenceDiagram({ sub, setSub, subBtnRipple, setSubBtnRipple, register
     label(CX, Y + 16, 'Output Head ("cat" vector -> next word prediction)', "#b8a9ff", 17, "700");
     Y += 57;
     layerLabel(Y, "Linear Projection (3 -> vocab size)", "#b8a9ff");
-    Y += 49;
+    Y += 62;
     const outY = Y;
     const vocabWords = ['"sat"', '"is"', '"ran"', '"sees"', '"went"'];
     const vocabX = [270, 360, 450, 540, 630];

@@ -48,7 +48,7 @@ function B(svg) {
   };
   const explainBox = (x, y, w, lines, bc = "rgba(255,152,0,0.4)", bg = "rgba(255,152,0,0.03)") => {
     const h = lines.length * 22 + 20;
-    el("rect", { x: x - w / 2, y: y - 6, width: w, height: h, rx: 8, fill: bg, stroke: bc, "stroke-width": 1 });
+    el("rect", { x: x - w / 2, y: y - 6, width: w, height: h, rx: 8, fill: bg, stroke: bc, "stroke-width": 2 });
     lines.forEach((line, i) => {
       const [t, c, s, wt] = Array.isArray(line) ? line : [line, "rgba(255,255,255,0.4)", 12, "400"];
       label(x, y + 14 + i * 22, t, c, s || 12, wt || "400");
@@ -103,8 +103,8 @@ function TrainingDiagram({ sub, setSub, subBtnRipple, setSubBtnRipple, registerS
     Y += 103;
     label(CX,Y, "Step 0: Raw Input String", "rgba(255,255,255,0.5)", 16, "700");
     Y += 32;
-    el("rect", { x: 80, y: Y - 14, width: 740, height: 30, rx: 8, fill: "rgba(255,255,255,0.03)", stroke: "rgba(255,255,255,0.1)", "stroke-width": 1 });
-    label(CX,Y + 4, '"The cat sat on the mat"', "#80deea", 19, "700");
+    el("rect", { x: 80, y: Y - 12, width: 740, height: 34, rx: 8, fill: "rgba(255,255,255,0.03)", stroke: "rgba(255,255,255,0.1)", "stroke-width": 1 });
+    label(CX,Y + 7, '"The cat sat on the mat"', "#80deea", 19, "700");
 
     Y += 70;
     label(CX,Y, "Step 1: Tokenization (lookup table, no neural network)", "rgba(255,255,255,0.5)", 16, "700");
@@ -115,7 +115,7 @@ function TrainingDiagram({ sub, setSub, subBtnRipple, setSubBtnRipple, registerS
     for (const tok of tokens) {
       label(tok.cx, Y - 18, tok.name, tok.light, 14, "700");
       el("rect", { x: tok.cx - 22, y: Y - 10, width: 44, height: 28, rx: 6, fill: tok.bg + "0.1)", stroke: tok.color, "stroke-width": 1 });
-      label(tok.cx, Y + 5, "ID:" + tok.id, tok.light, 11, "600");
+      label(tok.cx, Y + 8, "ID:" + tok.id, tok.light, 11, "600");
     }
     callout(CX,Y + 42, "Each word becomes one integer. Nothing neural yet.");
 
@@ -314,9 +314,9 @@ function TrainingDiagram({ sub, setSub, subBtnRipple, setSubBtnRipple, registerS
     // Encoder Output
     Y += 76;
     el("rect", { x: 40, y: Y - 8, width: 820, height: 110, rx: 10, fill: "rgba(0,188,212,0.04)", stroke: "rgba(0,188,212,0.3)", "stroke-width": 1.5 });
-    label(CX,Y + 16, "ENCODER OUTPUT: 6 context-enriched vectors (6x512 matrix)", "#80deea", 16, "700");
-    label(CX,Y + 40, "These become K and V for the decoder cross-attention. Computed ONCE, reused every decoder step.", "rgba(255,255,255,0.3)", 12, "400");
-    label(CX,Y + 58, 'Each vector now "knows" about all other words thanks to bidirectional self-attention.', "rgba(0,188,212,0.5)", 12, "600");
+    label(CX,Y + 30, "ENCODER OUTPUT: 6 context-enriched vectors (6x512 matrix)", "#80deea", 16, "700");
+    label(CX,Y + 54, "These become K and V for the decoder cross-attention. Computed ONCE, reused every decoder step.", "rgba(255,255,255,0.3)", 12, "400");
+    label(CX,Y + 72, 'Each vector now "knows" about all other words thanks to bidirectional self-attention.', "rgba(0,188,212,0.5)", 12, "600");
 
     if (sub < 5) { svg.setAttribute("viewBox", "-10 0 900 " + (Y + 130)); return; }
 
@@ -444,7 +444,7 @@ function TrainingDiagram({ sub, setSub, subBtnRipple, setSubBtnRipple, registerS
 
     Y += 81;
     el("rect", { x: 40, y: Y - 10, width: 820, height: 48, rx: 8, fill: "rgba(0,188,212,0.04)", stroke: "rgba(0,188,212,0.2)", "stroke-width": 1 });
-    label(CX,Y + 14, "K and V come from ENCODER OUTPUT (the 6 context-enriched vectors). No mask - full access.", "#80deea", 13, "700");
+    label(CX,Y + 18, "K and V come from ENCODER OUTPUT (the 6 context-enriched vectors). No mask - full access.", "#80deea", 13, "700");
     Y += 73;
     layerLabel(Y, "Cross-Attention: decoder Q . encoder K^T, weighted sum of encoder V", "rgba(0,188,212,0.6)");
     Y += 26;
@@ -561,7 +561,7 @@ function TrainingDiagram({ sub, setSub, subBtnRipple, setSubBtnRipple, registerS
 
     Y = p0Y + 90;
     el("rect", { x: 230, y: Y - 8, width: 440, height: 28, rx: 8, fill: "rgba(244,67,54,0.06)", stroke: "rgba(244,67,54,0.3)", "stroke-width": 1 });
-    label(CX,Y + 14, "Total Loss = avg(0.25 + 0.34 + 0.33) = 0.31 -> backprop updates ALL weights", "#ef9a9a", 13, "700");
+    label(CX,Y + 10, "Total Loss = avg(0.25 + 0.34 + 0.33) = 0.31 -> backprop updates ALL weights", "#ef9a9a", 13, "700");
     Y += 65;
     explainBox(CX,Y, 840, [
       ["During PRODUCTION (generation), we DO only use the last position output.", "rgba(255,152,0,0.7)", 13, "700"],
@@ -574,7 +574,7 @@ function TrainingDiagram({ sub, setSub, subBtnRipple, setSubBtnRipple, registerS
 
     // ═══ sub 9: Summary ═══
     Y += 130;
-    el("rect", { x: 20, y: Y, width: 860, height: 360, rx: 10, fill: "rgba(255,255,255,0.02)", stroke: "rgba(255,255,255,0.08)", "stroke-width": 1 });
+    el("rect", { x: 20, y: Y, width: 860, height: 360, rx: 10, fill: "rgba(255,255,255,0.02)", stroke: "rgba(255,255,255,0.2)", "stroke-width": 1.5 });
     label(CX,Y + 30, "Summary: Training Phase Flow", "rgba(255,255,255,0.5)", 16, "700");
     const sY = Y + 56;
     [
@@ -591,7 +591,7 @@ function TrainingDiagram({ sub, setSub, subBtnRipple, setSubBtnRipple, registerS
       label(40, sY + i * 34, title, color, 13, "700", "start");
       label(220, sY + i * 34, desc, "rgba(255,255,255,0.35)", 12, "400", "start");
     });
-    svg.setAttribute("viewBox", "-10 0 900 " + (Y + 200));
+    svg.setAttribute("viewBox", "-10 0 900 " + (Y + 380));
   }, [sub]);
 
   return (
@@ -670,7 +670,7 @@ function InferenceDiagram({ sub, setSub, subBtnRipple, setSubBtnRipple, register
     el("rect", { x: 20, y: Y - 8, width: 860, height: 54, rx: 8, fill: "rgba(156,120,255,0.04)", stroke: "rgba(156,120,255,0.2)", "stroke-width": 1 });
     label(CX,Y + 16, 'PHASE 2: DECODER - showing Step 3: generating after "<s> The cat"', "#b8a9ff", 15, "700");
     Y += 24;
-    label(CX,Y + 16, 'Already generated: "<s>", "The", "cat". Now predicting the next token.', "rgba(255,255,255,0.3)", 13, "400");
+    label(CX,Y + 24, 'Already generated: "<s>", "The", "cat". Now predicting the next token.', "rgba(255,255,255,0.3)", 13, "400");
     Y += 59;
     explainBox(CX,Y, 840, [
       ["DECODER STATE AT STEP 3", "rgba(156,120,255,0.8)", 14, "700"],
@@ -805,7 +805,7 @@ function InferenceDiagram({ sub, setSub, subBtnRipple, setSubBtnRipple, register
     fcEdges(tNodes(newTok.cx, dan1Y), tNodes(newTok.cx, cqY), "rgba(233,30,99,0.1)", 0.6);
     DIMX.forEach((dx, i) => node(newTok.cx + dx, cqY, "rgba(233,30,99,0.15)", "#e91e63", cqVecs[i], "#f48fb1"));
     Y += 76;
-    el("rect", { x: 20, y: Y - 10, width: 860, height: 150, rx: 8, fill: "rgba(0,188,212,0.03)", stroke: "rgba(0,188,212,0.2)", "stroke-width": 1 });
+    el("rect", { x: 20, y: Y - 10, width: 860, height: 100, rx: 8, fill: "rgba(0,188,212,0.03)", stroke: "rgba(0,188,212,0.2)", "stroke-width": 1 });
     label(CX,Y + 8, "Encoder K,V: 6 vectors from encoder output (cached, never recomputed)", "#80deea", 13, "700");
     const encCacheY = Y + 36;
     for (let t = 0; t < 6; t++) {
@@ -814,7 +814,7 @@ function InferenceDiagram({ sub, setSub, subBtnRipple, setSubBtnRipple, register
       label(cx, encCacheY + 4, encTokens[t].name, encTokens[t].light + "0.8)", 11, "600");
     }
     cacheBadge(CX,encCacheY + 28, "ENCODER OUTPUT - computed once in Phase 1, reused every step");
-    Y += 155;
+    Y += 105;
     layerLabel(Y, '"cat" Q dots ALL 6 encoder K -> weighted sum of 6 encoder V', "rgba(0,188,212,0.6)");
     Y += 46;
     const crossOutY = Y;
@@ -915,9 +915,9 @@ function InferenceDiagram({ sub, setSub, subBtnRipple, setSubBtnRipple, register
 
     // ═══ sub 8: What happens next + Memory cost ═══
     Y += 100;
-    el("rect", { x: 20, y: Y, width: 860, height: 240, rx: 10, fill: "rgba(255,255,255,0.02)", stroke: "rgba(255,255,255,0.08)", "stroke-width": 1 });
-    label(CX,Y + 28, "What Happens Next", "rgba(255,255,255,0.5)", 16, "700");
-    Y += 62;
+    el("rect", { x: 20, y: Y, width: 860, height: 240, rx: 10, fill: "rgba(255,255,255,0.02)", stroke: "rgba(255,255,255,0.2)", "stroke-width": 1.5 });
+    label(CX,Y + 34, "What Happens Next", "rgba(255,255,255,0.5)", 16, "700");
+    Y += 68;
     label(CX,Y, 'Step 4: "sat" enters the decoder. KV cache now has <s>, "The", "cat". Predicts "on".', "rgba(255,255,255,0.4)", 13, "400");
     Y += 34;
     label(CX,Y, 'Step 5: "on" enters. KV cache has <s>, "The", "cat", "sat". Predicts "the".', "rgba(255,255,255,0.4)", 13, "400");
@@ -929,7 +929,7 @@ function InferenceDiagram({ sub, setSub, subBtnRipple, setSubBtnRipple, register
     label(CX,Y, 'Final output: "The cat sat on the mat" (7 decoder steps, encoder ran once)', "rgba(0,230,118,0.6)", 14, "700");
 
     Y += 50;
-    el("rect", { x: 20, y: Y, width: 860, height: 345, rx: 10, fill: "rgba(255,255,255,0.02)", stroke: "rgba(255,255,255,0.08)", "stroke-width": 1 });
+    el("rect", { x: 20, y: Y, width: 860, height: 345, rx: 10, fill: "rgba(255,255,255,0.02)", stroke: "rgba(255,255,255,0.2)", "stroke-width": 1.5 });
     label(CX,Y + 28, "KV Cache: Memory vs Speed Tradeoff", "rgba(255,255,255,0.5)", 16, "700");
     const mY = Y + 56;
     [
@@ -945,7 +945,7 @@ function InferenceDiagram({ sub, setSub, subBtnRipple, setSubBtnRipple, register
       label(40, mY + i * 38, title, color, 13, "700", "start");
       label(220, mY + i * 38, desc, "rgba(255,255,255,0.35)", 12, "400", "start");
     });
-    svg.setAttribute("viewBox", "-10 0 900 " + (Y + 200));
+    svg.setAttribute("viewBox", "-10 0 900 " + (Y + 365));
   }, [sub]);
 
   return (

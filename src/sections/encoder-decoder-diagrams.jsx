@@ -22,6 +22,10 @@ function B(svg) {
   const label = (x, y, text, color = "rgba(255,255,255,0.4)", size = 17, weight = "600", anchor = "middle") => {
     el("text", { x, y, fill: color, "font-size": size, "text-anchor": anchor, "font-weight": weight, "font-family": "sans-serif" }).textContent = text;
   };
+  // Centered label: y = visual center (uses dominant-baseline for perfect box centering)
+  const clabel = (x, y, text, color = "rgba(255,255,255,0.4)", size = 17, weight = "600", anchor = "middle") => {
+    el("text", { x, y, fill: color, "font-size": size, "text-anchor": anchor, "font-weight": weight, "font-family": "sans-serif", "dominant-baseline": "central" }).textContent = text;
+  };
   const sectionBox = (x, y, w, h, color = "rgba(255,255,255,0.06)", strokeColor = "rgba(255,255,255,0.1)") => {
     el("rect", { x, y, width: w, height: h, rx: 12, fill: color, stroke: strokeColor, "stroke-width": 1.5, "stroke-dasharray": "6,4" });
   };
@@ -29,7 +33,7 @@ function B(svg) {
     const w = Math.max(260, text.length * 10 + 40);
     const x = CX - w / 2;
     el("rect", { x, y: y - 17, width: w, height: 34, rx: 6, fill: "#08080d", stroke: color || "rgba(255,255,255,0.15)", "stroke-width": 1 });
-    label(CX, y + 5, text, color || "rgba(255,255,255,0.45)", 16, "700");
+    clabel(CX, y, text, color || "rgba(255,255,255,0.45)", 16, "700");
   };
   const tNodes = (cx, y) => DIMX.map(dx => ({ x: cx + dx, y }));
   const fcEdges = (from, to, color, width = 0.8) => {
@@ -41,7 +45,7 @@ function B(svg) {
   const callout = (x, y, text, color = "rgba(0,188,212,0.7)", bg = "rgba(0,188,212,0.06)") => {
     const w = text.length * 8.5 + 32;
     el("rect", { x: x - w / 2, y: y - 15, width: w, height: 30, rx: 10, fill: bg, stroke: color, "stroke-width": 0.8 });
-    label(x, y + 5, text, color, 15, "600");
+    clabel(x, y, text, color, 15, "600");
   };
   const parallelBadge = (y, text = "ALL 6 VECTORS IN PARALLEL (one matrix multiply)") => {
     callout(CX, y, text, "rgba(0,230,118,0.7)", "rgba(0,230,118,0.06)");
@@ -62,14 +66,14 @@ function B(svg) {
   const cacheBadge = (x, y, text = "CACHED") => {
     const w = text.length * 9.5 + 12;
     el("rect", { x: x - w / 2, y: y - 12, width: w, height: 24, rx: 8, fill: "rgba(255,152,0,0.08)", stroke: "rgba(255,152,0,0.4)", "stroke-width": 0.8 });
-    label(x, y + 4, text, "rgba(255,152,0,0.7)", 12, "700");
+    clabel(x, y, text, "rgba(255,152,0,0.7)", 12, "700");
   };
   const newBadge = (x, y, text = "NEW - flows through network") => {
     const w = text.length * 8.5 + 16;
     el("rect", { x: x - w / 2, y: y - 12, width: w, height: 24, rx: 8, fill: "rgba(0,230,118,0.06)", stroke: "rgba(0,230,118,0.4)", "stroke-width": 0.8 });
-    label(x, y + 4, text, "rgba(0,230,118,0.7)", 12, "700");
+    clabel(x, y, text, "rgba(0,230,118,0.7)", 12, "700");
   };
-  return { el, node, edge, label, sectionBox, layerLabel, tNodes, fcEdges, o2oEdges, callout, parallelBadge, explainBox, cachedNode, cacheBadge, newBadge };
+  return { el, node, edge, label, clabel, sectionBox, layerLabel, tNodes, fcEdges, o2oEdges, callout, parallelBadge, explainBox, cachedNode, cacheBadge, newBadge };
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -82,7 +86,7 @@ function TrainingDiagram({ sub, setSub, subBtnRipple, setSubBtnRipple, registerS
     const svg = ref.current;
     if (!svg) return;
     while (svg.firstChild) svg.removeChild(svg.firstChild);
-    const { el, node, edge, label, sectionBox, layerLabel, tNodes, fcEdges, o2oEdges, callout, parallelBadge, explainBox } = B(svg);
+    const { el, node, edge, label, clabel, sectionBox, layerLabel, tNodes, fcEdges, o2oEdges, callout, parallelBadge, explainBox } = B(svg);
 
     const tokens = [
       { name: '"The"', id: 1042, cx: 80, color: "#f44336", light: "#ef9a9a", bg: "rgba(244,67,54," },
@@ -97,14 +101,14 @@ function TrainingDiagram({ sub, setSub, subBtnRipple, setSubBtnRipple, registerS
 
     // ═══ sub 0: Title + Raw Input + Tokenization ═══
     el("rect", { x: 20, y: Y - 5, width: 860, height: 52, rx: 10, fill: "rgba(0,230,118,0.03)", stroke: "rgba(0,230,118,0.2)", "stroke-width": 1.5 });
-    label(CX, Y + 15, "TRAINING / PREFILL MODE", "rgba(0,230,118,0.7)", 22, "700");
-    label(CX, Y + 37, "All tokens flow as one matrix through every layer simultaneously.", "rgba(0,230,118,0.5)", 15, "600");
+    clabel(CX, Y + 12, "TRAINING / PREFILL MODE", "rgba(0,230,118,0.7)", 22, "700");
+    clabel(CX, Y + 34, "All tokens flow as one matrix through every layer simultaneously.", "rgba(0,230,118,0.5)", 15, "600");
 
     Y += 103;
     label(CX, Y, "Step 0: Raw Input String", "rgba(255,255,255,0.5)", 19, "700");
     Y += 32;
     el("rect", { x: 20, y: Y - 2, width: 860, height: 28, rx: 8, fill: "rgba(255,255,255,0.03)", stroke: "rgba(255,255,255,0.1)", "stroke-width": 1 });
-    label(CX, Y + 16, '"The cat sat on the mat"', "#80deea", 22, "700");
+    clabel(CX, Y + 12, '"The cat sat on the mat"', "#80deea", 22, "700");
 
     Y += 70;
     label(CX, Y, "Step 1: Tokenization (lookup table, no neural network)", "rgba(255,255,255,0.5)", 19, "700");
@@ -115,7 +119,7 @@ function TrainingDiagram({ sub, setSub, subBtnRipple, setSubBtnRipple, registerS
     for (const tok of tokens) {
       label(tok.cx, Y - 26, tok.name, tok.light, 16, "700");
       el("rect", { x: tok.cx - 30, y: Y - 10, width: 60, height: 28, rx: 6, fill: tok.bg + "0.1)", stroke: tok.color, "stroke-width": 1 });
-      label(tok.cx, Y + 8, "ID:" + tok.id, tok.light, 11, "600");
+      clabel(tok.cx, Y + 4, "ID:" + tok.id, tok.light, 11, "600");
     }
     callout(CX, Y + 46, "Each word becomes one integer. Nothing neural yet.");
 
@@ -608,14 +612,14 @@ function InferenceDiagram({ sub, setSub, subBtnRipple, setSubBtnRipple, register
     const svg = ref.current;
     if (!svg) return;
     while (svg.firstChild) svg.removeChild(svg.firstChild);
-    const { el, node, edge, label, sectionBox, layerLabel, tNodes, fcEdges, o2oEdges, callout, explainBox, cachedNode, cacheBadge, newBadge } = B(svg);
+    const { el, node, edge, label, clabel, sectionBox, layerLabel, tNodes, fcEdges, o2oEdges, callout, explainBox, cachedNode, cacheBadge, newBadge } = B(svg);
 
     let Y = 30;
 
     // ═══ sub 0: Title + Big Picture ═══
     el("rect", { x: 20, y: Y - 5, width: 860, height: 52, rx: 10, fill: "rgba(255,152,0,0.04)", stroke: "rgba(255,152,0,0.3)", "stroke-width": 1.5 });
-    label(CX, Y + 15, "PRODUCTION / INFERENCE MODE (autoregressive generation)", "rgba(255,152,0,0.8)", 22, "700");
-    label(CX, Y + 37, "Only ONE new token flows through the decoder at each step. Previous K,V are cached.", "rgba(255,152,0,0.5)", 15, "600");
+    clabel(CX, Y + 12, "PRODUCTION / INFERENCE MODE (autoregressive generation)", "rgba(255,152,0,0.8)", 22, "700");
+    clabel(CX, Y + 34, "Only ONE new token flows through the decoder at each step. Previous K,V are cached.", "rgba(255,152,0,0.5)", 15, "600");
 
     Y += 70;
     explainBox(CX, Y, 840, [
@@ -663,9 +667,9 @@ function InferenceDiagram({ sub, setSub, subBtnRipple, setSubBtnRipple, register
     // ═══ sub 2: Decoder setup + tokens ═══
     Y += 81;
     el("rect", { x: 20, y: Y - 8, width: 860, height: 86, rx: 8, fill: "rgba(156,120,255,0.04)", stroke: "rgba(156,120,255,0.2)", "stroke-width": 1.5 });
-    label(CX, Y + 28, 'PHASE 2: DECODER - showing Step 3: generating after "<s> The cat"', "#b8a9ff", 17, "700");
+    clabel(CX, Y + 22, 'PHASE 2: DECODER - showing Step 3: generating after "<s> The cat"', "#b8a9ff", 17, "700");
+    clabel(CX, Y + 52, 'Already generated: "<s>", "The", "cat". Now predicting the next token.', "rgba(255,255,255,0.3)", 15, "400");
     Y += 30;
-    label(CX, Y + 28, 'Already generated: "<s>", "The", "cat". Now predicting the next token.', "rgba(255,255,255,0.3)", 15, "400");
     Y += 59;
     explainBox(CX, Y, 840, [
       ["DECODER STATE AT STEP 3", "rgba(156,120,255,0.8)", 16, "700"],
@@ -803,7 +807,7 @@ function InferenceDiagram({ sub, setSub, subBtnRipple, setSubBtnRipple, register
     for (let t = 0; t < 6; t++) {
       const cx = 80 + t * 140;
       el("rect", { x: cx - 28, y: encCacheY - 8, width: 56, height: 20, rx: 4, fill: encTokens[t].bg + "0.2)", stroke: encTokens[t].color + "0.7)", "stroke-width": 0.8, "stroke-dasharray": "3,2" });
-      label(cx, encCacheY + 5, encTokens[t].name, encTokens[t].light + "0.8)", 13, "600");
+      clabel(cx, encCacheY + 2, encTokens[t].name, encTokens[t].light + "0.8)", 13, "600");
     }
     cacheBadge(CX, encCacheY + 28, "ENCODER OUTPUT - computed once in Phase 1, reused every step");
     Y += 150;

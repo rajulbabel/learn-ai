@@ -46,9 +46,9 @@ function B(svg) {
   const parallelBadge = (y, text = "ALL 6 VECTORS IN PARALLEL (one matrix multiply)") => {
     callout(CX, y, text, "rgba(0,230,118,0.7)", "rgba(0,230,118,0.06)");
   };
-  const explainBox = (x, y, w, lines, bc = "rgba(255,152,0,0.4)", bg = "rgba(255,152,0,0.03)") => {
+  const explainBox = (x, y, w, lines, bc = "rgba(255,152,0,0.6)", bg = "rgba(255,152,0,0.04)") => {
     const h = lines.length * 22 + 20;
-    el("rect", { x: x - w / 2, y: y - 6, width: w, height: h, rx: 8, fill: bg, stroke: bc, "stroke-width": 2 });
+    el("rect", { x: x - w / 2, y: y - 6, width: w, height: h, rx: 8, fill: bg, stroke: bc, "stroke-width": 2.5 });
     lines.forEach((line, i) => {
       const [t, c, s, wt] = Array.isArray(line) ? line : [line, "rgba(255,255,255,0.4)", 12, "400"];
       label(x, y + 14 + i * 22, t, c, s || 12, wt || "400");
@@ -516,7 +516,7 @@ function TrainingDiagram({ sub, setSub, subBtnRipple, setSubBtnRipple, registerS
       ['During TRAINING, each position predicts the NEXT token. Position 0 (<s>) predicts "The", position 1 ("The") predicts "cat", position 2 ("cat") predicts "sat".', "rgba(255,255,255,0.45)", 12, "400"],
       ["This gives us 3 training signals from 1 forward pass (one per position). Much more efficient than using just the last.", "rgba(0,230,118,0.5)", 12, "600"],
       ['The causal mask ensures each position can only see past tokens, so every prediction is a fair "test".', "rgba(255,255,255,0.35)", 12, "400"],
-    ], "rgba(255,152,0,0.4)", "rgba(255,152,0,0.03)");
+    ], "rgba(255,152,0,0.6)", "rgba(255,152,0,0.04)");
     Y += 160;
 
     const pred0X = 120;
@@ -568,7 +568,7 @@ function TrainingDiagram({ sub, setSub, subBtnRipple, setSubBtnRipple, registerS
       ['Because we already know all previous tokens (we generated them). Only the last position is "new".', "rgba(255,255,255,0.4)", 12, "400"],
       ["But during TRAINING we use ALL positions because the causal mask makes every position a valid prediction task.", "rgba(0,230,118,0.5)", 12, "600"],
       ["3 positions = 3 training examples from 1 forward pass. 1000 tokens = 999 free training signals!", "rgba(255,255,255,0.45)", 12, "400"],
-    ], "rgba(255,152,0,0.4)", "rgba(255,152,0,0.03)");
+    ], "rgba(255,152,0,0.6)", "rgba(255,152,0,0.04)");
 
     if (sub < 9) { svg.setAttribute("viewBox", "-10 0 900 " + (Y + 130)); return; }
 
@@ -622,7 +622,7 @@ function InferenceDiagram({ sub, setSub, subBtnRipple, setSubBtnRipple, register
     label(CX,Y + 34, "Only ONE new token flows through the decoder at each step. Previous K,V are cached.", "rgba(255,152,0,0.5)", 13, "600");
 
     Y += 111;
-    explainBox(CX,Y, 960, [
+    explainBox(CX,Y, 840, [
       ["HOW INFERENCE WORKS - THE BIG PICTURE", "rgba(255,152,0,0.8)", 15, "700"],
       ['1. ENCODER runs ONCE on the full input "The cat sat on the mat" (6 tokens, all in parallel).', "rgba(0,188,212,0.6)", 12, "600"],
       ["2. Encoder output (6 vectors) becomes K,V for cross-attention. Cached permanently.", "rgba(0,188,212,0.5)", 12, "400"],
@@ -633,7 +633,7 @@ function InferenceDiagram({ sub, setSub, subBtnRipple, setSubBtnRipple, register
       ['   Step 4: feed "sat"         -> predict "on"      (KV cache has <s>, "The", "cat")', "rgba(255,255,255,0.45)", 12, "400"],
       ["   ...until <end> token is produced.", "rgba(255,255,255,0.3)", 12, "400"],
       ["4. At each step, ONLY the new token runs through all layers. Previous tokens' K,V are read from cache.", "rgba(0,230,118,0.6)", 12, "700"],
-    ], "rgba(255,152,0,0.3)", "rgba(255,152,0,0.02)");
+    ], "rgba(255,152,0,0.6)", "rgba(255,152,0,0.04)");
 
     if (sub < 1) { svg.setAttribute("viewBox", "-10 0 900 " + (Y + 280)); return; }
 
@@ -667,8 +667,8 @@ function InferenceDiagram({ sub, setSub, subBtnRipple, setSubBtnRipple, register
 
     // ═══ sub 2: Decoder setup + tokens ═══
     Y += 81;
-    el("rect", { x: 20, y: Y - 8, width: 860, height: 54, rx: 8, fill: "rgba(156,120,255,0.04)", stroke: "rgba(156,120,255,0.2)", "stroke-width": 1 });
-    label(CX,Y + 16, 'PHASE 2: DECODER - showing Step 3: generating after "<s> The cat"', "#b8a9ff", 15, "700");
+    el("rect", { x: 20, y: Y - 8, width: 860, height: 78, rx: 8, fill: "rgba(156,120,255,0.04)", stroke: "rgba(156,120,255,0.2)", "stroke-width": 1.5 });
+    label(CX,Y + 20, 'PHASE 2: DECODER - showing Step 3: generating after "<s> The cat"', "#b8a9ff", 15, "700");
     Y += 24;
     label(CX,Y + 24, 'Already generated: "<s>", "The", "cat". Now predicting the next token.', "rgba(255,255,255,0.3)", 13, "400");
     Y += 59;
@@ -780,7 +780,7 @@ function InferenceDiagram({ sub, setSub, subBtnRipple, setSubBtnRipple, register
       ["Without cache: compute Q,K,V for ALL 3 tokens, run attention on 3x3 matrix. O(n^2).", "rgba(255,255,255,0.4)", 12, "400"],
       ["With cache: compute Q,K,V for 1 token, read cached K,V, attention on 1x3. O(n).", "rgba(0,230,118,0.5)", 12, "600"],
       ["At 100K tokens, that is 100,000x cheaper per step. KV cache is essential for fast generation.", "rgba(255,255,255,0.45)", 12, "400"],
-    ], "rgba(0,230,118,0.3)", "rgba(0,230,118,0.02)");
+    ], "rgba(0,230,118,0.6)", "rgba(0,230,118,0.04)");
     Y += 135;
     layerLabel(Y, "Add & LayerNorm (just 1 vector)", "#ffb74d");
     Y += 46;
@@ -814,7 +814,7 @@ function InferenceDiagram({ sub, setSub, subBtnRipple, setSubBtnRipple, register
       label(cx, encCacheY + 4, encTokens[t].name, encTokens[t].light + "0.8)", 11, "600");
     }
     cacheBadge(CX,encCacheY + 28, "ENCODER OUTPUT - computed once in Phase 1, reused every step");
-    Y += 105;
+    Y += 135;
     layerLabel(Y, '"cat" Q dots ALL 6 encoder K -> weighted sum of 6 encoder V', "rgba(0,188,212,0.6)");
     Y += 46;
     const crossOutY = Y;
@@ -860,7 +860,7 @@ function InferenceDiagram({ sub, setSub, subBtnRipple, setSubBtnRipple, register
       ["FFN does NOT mix information between tokens. It applies the same function to each vector independently.", "rgba(255,255,255,0.4)", 12, "400"],
       ["Previous tokens' FFN outputs are already \"baked into\" the K,V vectors stored in the cache.", "rgba(255,255,255,0.4)", 12, "400"],
       ['So running FFN on <s> or "The" again would produce the EXACT same output. No point recomputing.', "rgba(0,230,118,0.5)", 12, "600"],
-    ], "rgba(0,230,118,0.3)", "rgba(0,230,118,0.02)");
+    ], "rgba(0,230,118,0.6)", "rgba(0,230,118,0.04)");
     Y += 167;
     layerLabel(Y, 'Add & LayerNorm (decoder block output for "cat")', "#ffb74d");
     Y += 46;
@@ -904,12 +904,12 @@ function InferenceDiagram({ sub, setSub, subBtnRipple, setSubBtnRipple, register
     label(680, Y, 'Predicted next token: "sat"', "rgba(255,255,255,0.3)", 13, "600");
     label(680, Y + 16, '"sat" feeds back as decoder input for Step 4.', "rgba(255,152,0,0.5)", 12, "600");
     Y += 59;
-    explainBox(CX,Y, 960, [
+    explainBox(CX,Y, 840, [
       ["WHY ONLY THE LAST POSITION?", "rgba(255,152,0,0.8)", 14, "700"],
       ["During generation, there IS only one position flowing through - the new token.", "rgba(255,255,255,0.5)", 12, "400"],
       ['<s> and "The" were processed in Steps 1-2. Their predictions are done. We already used them.', "rgba(255,255,255,0.4)", 12, "400"],
       ['The single vector for "cat" at the output is all we need to predict the next word "sat".', "rgba(0,230,118,0.5)", 12, "600"],
-    ], "rgba(255,152,0,0.3)", "rgba(255,152,0,0.02)");
+    ], "rgba(255,152,0,0.6)", "rgba(255,152,0,0.04)");
 
     if (sub < 8) { svg.setAttribute("viewBox", "-10 0 900 " + (Y + 130)); return; }
 

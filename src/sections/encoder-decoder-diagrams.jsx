@@ -96,26 +96,26 @@ function TrainingDiagram({ sub, setSub, subBtnRipple, setSubBtnRipple, registerS
     let Y = 30;
 
     // ═══ sub 0: Title + Raw Input + Tokenization ═══
-    el("rect", { x: 100, y: Y - 2, width: 700, height: 40, rx: 10, fill: "rgba(0,230,118,0.03)", stroke: "rgba(0,230,118,0.2)", "stroke-width": 1.5 });
+    el("rect", { x: 20, y: Y - 2, width: 860, height: 40, rx: 10, fill: "rgba(0,230,118,0.03)", stroke: "rgba(0,230,118,0.2)", "stroke-width": 1.5 });
     label(CX,Y + 12, "TRAINING / PREFILL MODE", "rgba(0,230,118,0.7)", 22, "700");
     label(CX,Y + 30, "All tokens flow as one matrix through every layer simultaneously.", "rgba(0,230,118,0.5)", 15, "600");
 
     Y += 103;
     label(CX,Y, "Step 0: Raw Input String", "rgba(255,255,255,0.5)", 19, "700");
     Y += 32;
-    el("rect", { x: 80, y: Y - 8, width: 740, height: 30, rx: 8, fill: "rgba(255,255,255,0.03)", stroke: "rgba(255,255,255,0.1)", "stroke-width": 1 });
+    el("rect", { x: 20, y: Y - 8, width: 860, height: 30, rx: 8, fill: "rgba(255,255,255,0.03)", stroke: "rgba(255,255,255,0.1)", "stroke-width": 1 });
     label(CX,Y + 13, '"The cat sat on the mat"', "#80deea", 22, "700");
 
     Y += 70;
     label(CX,Y, "Step 1: Tokenization (lookup table, no neural network)", "rgba(255,255,255,0.5)", 19, "700");
-    Y += 16;
+    Y += 24;
     label(CX,Y, "Split text into tokens, map each to an integer ID", "rgba(255,255,255,0.25)", 15, "400");
     Y += 49;
     const tokY = Y;
     for (const tok of tokens) {
       label(tok.cx, Y - 18, tok.name, tok.light, 16, "700");
-      el("rect", { x: tok.cx - 22, y: Y - 10, width: 44, height: 28, rx: 6, fill: tok.bg + "0.1)", stroke: tok.color, "stroke-width": 1 });
-      label(tok.cx, Y + 8, "ID:" + tok.id, tok.light, 13, "600");
+      el("rect", { x: tok.cx - 30, y: Y - 10, width: 60, height: 28, rx: 6, fill: tok.bg + "0.1)", stroke: tok.color, "stroke-width": 1 });
+      label(tok.cx, Y + 8, "ID:" + tok.id, tok.light, 11, "600");
     }
     callout(CX,Y + 42, "Each word becomes one integer. Nothing neural yet.");
 
@@ -124,7 +124,7 @@ function TrainingDiagram({ sub, setSub, subBtnRipple, setSubBtnRipple, registerS
     // ═══ sub 1: Embedding Lookup ═══
     Y += 97;
     label(CX,Y, "Step 2: Embedding Lookup (one matrix row per token)", "rgba(255,255,255,0.5)", 19, "700");
-    Y += 16;
+    Y += 24;
     label(CX,Y, "Each token ID selects a row from the embedding matrix (learned during training)", "rgba(255,255,255,0.25)", 15, "400");
     Y += 49;
     const embY = Y;
@@ -142,7 +142,7 @@ function TrainingDiagram({ sub, setSub, subBtnRipple, setSubBtnRipple, registerS
     // ═══ sub 2: Positional Encoding ═══
     Y += 105;
     label(CX,Y, "Step 3: Add Positional Encoding (pure math, not learned)", "rgba(255,255,255,0.5)", 19, "700");
-    Y += 16;
+    Y += 24;
     label(CX,Y, "sin/cos values based on position index, added element-wise to embeddings", "rgba(255,255,255,0.25)", 15, "400");
     Y += 49;
     const posY = Y;
@@ -161,14 +161,14 @@ function TrainingDiagram({ sub, setSub, subBtnRipple, setSubBtnRipple, registerS
     Y += 103;
     // sectionBox(20, Y, 1040, 2052, "rgba(0,188,212,0.02)", "rgba(0,188,212,0.15)");
     label(CX,Y + 30, "ENCODER BLOCK (x6 in original Transformer, x96 in GPT-scale)", "#80deea", 19, "700");
-    Y += 22;
+    Y += 30;
     label(CX,Y + 30, "Input: 6x512 matrix (6 tokens, each a 512-dim vector). Shown as 6x3 for clarity.", "rgba(255,255,255,0.25)", 15, "400");
 
     Y += 65;
     // sectionBox(40, Y, 1000, 1107, "rgba(244,67,54,0.02)", "rgba(244,67,54,0.1)");
     label(CX,Y + 28, "Encoder Self-Attention (bidirectional - NO causal mask)", "#ef9a9a", 17, "700");
-    Y += 24;
-    label(CX,Y + 28, "Every token can attend to EVERY other token (including future ones)", "rgba(255,255,255,0.25)", 15, "400");
+    Y += 30;
+    label(CX,Y + 32, "Every token can attend to EVERY other token (including future ones)", "rgba(255,255,255,0.25)", 15, "400");
 
     // W_Q
     Y += 65;
@@ -209,7 +209,7 @@ function TrainingDiagram({ sub, setSub, subBtnRipple, setSubBtnRipple, registerS
     // Q.K^T attention edges
     Y += 92;
     layerLabel(Y, "Q . K^T -> Attention Scores (every token to every token)", "rgba(255,255,255,0.5)");
-    Y += 26;
+    Y += 36;
     label(CX,Y, 'NO causal mask in encoder - "The" can look at "mat", "sat" can look at "cat"', "rgba(244,67,54,0.4)", 12, "600");
     for (let qi = 0; qi < N; qi++) {
       for (let ki = 0; ki < N; ki++) {
@@ -271,9 +271,9 @@ function TrainingDiagram({ sub, setSub, subBtnRipple, setSubBtnRipple, registerS
     Y += 92;
     // sectionBox(40, Y, 1000, 419, "rgba(100,149,237,0.02)", "rgba(100,149,237,0.1)");
     label(CX,Y + 28, "Feed-Forward Network (FFN)", "#90caf9", 17, "700");
-    Y += 24;
+    Y += 30;
     label(CX,Y + 28, "Same weights applied to EACH vector independently. No cross-token mixing.", "rgba(255,255,255,0.25)", 12, "400");
-    Y += 16;
+    Y += 24;
     label(CX,Y + 28, "All 6 go through simultaneously as a batched matrix multiply.", "rgba(0,230,118,0.4)", 12, "600");
     Y += 57;
     layerLabel(Y, "FFN Layer 1: 3 -> 6 dims + ReLU (expand)", "#90caf9");
@@ -313,7 +313,7 @@ function TrainingDiagram({ sub, setSub, subBtnRipple, setSubBtnRipple, registerS
 
     // Encoder Output
     Y += 76;
-    el("rect", { x: 40, y: Y - 8, width: 820, height: 120, rx: 10, fill: "rgba(0,188,212,0.04)", stroke: "rgba(0,188,212,0.3)", "stroke-width": 1.5 });
+    el("rect", { x: 20, y: Y - 8, width: 860, height: 120, rx: 10, fill: "rgba(0,188,212,0.04)", stroke: "rgba(0,188,212,0.3)", "stroke-width": 1.5 });
     label(CX,Y + 30, "ENCODER OUTPUT: 6 context-enriched vectors (6x512 matrix)", "#80deea", 19, "700");
     label(CX,Y + 54, "These become K and V for the decoder cross-attention. Computed ONCE, reused every decoder step.", "rgba(255,255,255,0.3)", 12, "400");
     label(CX,Y + 72, 'Each vector now "knows" about all other words thanks to bidirectional self-attention.', "rgba(0,188,212,0.5)", 12, "600");
@@ -324,9 +324,9 @@ function TrainingDiagram({ sub, setSub, subBtnRipple, setSubBtnRipple, registerS
     Y += 135;
     // sectionBox(20, Y, 1040, 3105, "rgba(156,120,255,0.02)", "rgba(156,120,255,0.15)");
     label(CX,Y + 30, "DECODER BLOCK (x6 in original Transformer)", "#b8a9ff", 19, "700");
-    Y += 22;
+    Y += 30;
     label(CX,Y + 30, "During TRAINING: all decoder tokens processed in parallel (teacher forcing).", "rgba(0,230,118,0.5)", 15, "600");
-    Y += 24;
+    Y += 30;
     label(CX,Y + 30, "Showing decoder input: <s> The cat - predicting next token at each position.", "rgba(255,255,255,0.25)", 15, "400");
     Y += 70;
     label(CX,Y, "Decoder Input (target sequence, shifted right, + positional encoding)", "rgba(255,255,255,0.45)", 16, "700");
@@ -350,7 +350,7 @@ function TrainingDiagram({ sub, setSub, subBtnRipple, setSubBtnRipple, registerS
     Y += 97;
     // sectionBox(40, Y, 1000, 945, "rgba(233,30,99,0.02)", "rgba(233,30,99,0.1)");
     label(CX,Y + 28, "Masked Self-Attention (causal - can only look backward)", "#f48fb1", 17, "700");
-    Y += 24;
+    Y += 30;
     label(CX,Y + 28, '"cat" can see "<s>" and "The", but NOT future tokens. Prevents cheating during training.', "rgba(255,255,255,0.25)", 12, "400");
 
     Y += 65;
@@ -382,7 +382,7 @@ function TrainingDiagram({ sub, setSub, subBtnRipple, setSubBtnRipple, registerS
     }
 
     // Causal attention edges
-    Y += 32;
+    Y += 44;
     layerLabel(Y, "Q . K^T with CAUSAL MASK (lower triangle only)", "rgba(255,255,255,0.5)");
     for (const qn of tNodes(decTokens[0].cx, dqY))
       for (const kn of tNodes(decTokens[0].cx, dkY))
@@ -427,9 +427,9 @@ function TrainingDiagram({ sub, setSub, subBtnRipple, setSubBtnRipple, registerS
     Y += 76;
     // sectionBox(40, Y, 1000, 621, "rgba(0,188,212,0.02)", "rgba(0,188,212,0.1)");
     label(CX,Y + 28, "Cross-Attention: Decoder asks questions, Encoder provides answers", "#80deea", 17, "700");
-    Y += 24;
+    Y += 30;
     label(CX,Y + 28, "Q = from decoder.  K, V = from encoder output (computed once, reused).", "rgba(255,255,255,0.3)", 12, "400");
-    Y += 24;
+    Y += 30;
     label(CX,Y + 28, 'This is how the decoder "reads" the input sentence.', "rgba(0,188,212,0.5)", 12, "600");
     Y += 59;
     layerLabel(Y, "Decoder x W_Q -> Cross-Attention Query", "#f48fb1");
@@ -443,11 +443,11 @@ function TrainingDiagram({ sub, setSub, subBtnRipple, setSubBtnRipple, registerS
     label(CX,cqY + 40, "Q from decoder (3 vectors) attends to K,V from encoder (6 vectors)", "#f48fb1", 12, "600");
 
     Y += 81;
-    el("rect", { x: 40, y: Y - 10, width: 820, height: 48, rx: 8, fill: "rgba(0,188,212,0.04)", stroke: "rgba(0,188,212,0.2)", "stroke-width": 1 });
+    el("rect", { x: 20, y: Y - 10, width: 860, height: 48, rx: 8, fill: "rgba(0,188,212,0.04)", stroke: "rgba(0,188,212,0.2)", "stroke-width": 1 });
     label(CX,Y + 18, "K and V come from ENCODER OUTPUT (the 6 context-enriched vectors). No mask - full access.", "#80deea", 15, "700");
     Y += 73;
     layerLabel(Y, "Cross-Attention: decoder Q . encoder K^T, weighted sum of encoder V", "rgba(0,188,212,0.6)");
-    Y += 26;
+    Y += 36;
     label(CX,Y, "Each decoder token can attend to ALL 6 encoder tokens (no causal mask here)", "rgba(255,255,255,0.25)", 12, "400");
     Y += 40;
     const crossOutY = Y;
@@ -472,7 +472,7 @@ function TrainingDiagram({ sub, setSub, subBtnRipple, setSubBtnRipple, registerS
     Y += 76;
     // sectionBox(40, Y, 1000, 419, "rgba(100,149,237,0.02)", "rgba(100,149,237,0.1)");
     label(CX,Y + 28, "Decoder FFN (same structure as encoder FFN)", "#90caf9", 16, "700");
-    Y += 24;
+    Y += 30;
     label(CX,Y + 28, "Each vector processed independently. Same weights for all positions.", "rgba(255,255,255,0.25)", 12, "400");
     Y += 57;
     layerLabel(Y, "FFN Layer 1: 3 -> 6 + ReLU", "#90caf9");
@@ -508,7 +508,7 @@ function TrainingDiagram({ sub, setSub, subBtnRipple, setSubBtnRipple, registerS
     // ═══ sub 8: Output Head ═══
     Y += 97;
     label(CX,Y + 18, "Output Head - TRAINING: Every Position Predicts the Next Token", "#b8a9ff", 19, "700");
-    Y += 22;
+    Y += 30;
     label(CX,Y + 18, "During training, we compute loss at ALL positions simultaneously (not just the last one).", "rgba(0,230,118,0.5)", 15, "600");
     Y += 54;
     explainBox(CX,Y, 840, [
@@ -560,7 +560,7 @@ function TrainingDiagram({ sub, setSub, subBtnRipple, setSubBtnRipple, registerS
     label(pred2X, p0Y + 60, "Loss = -log(0.72) = 0.33", "rgba(255,255,255,0.3)", 13, "400");
 
     Y = p0Y + 90;
-    el("rect", { x: 230, y: Y - 8, width: 440, height: 28, rx: 8, fill: "rgba(244,67,54,0.06)", stroke: "rgba(244,67,54,0.3)", "stroke-width": 1 });
+    el("rect", { x: 150, y: Y - 8, width: 600, height: 28, rx: 8, fill: "rgba(244,67,54,0.06)", stroke: "rgba(244,67,54,0.3)", "stroke-width": 1 });
     label(CX,Y + 10, "Total Loss = avg(0.25 + 0.34 + 0.33) = 0.31 -> backprop updates ALL weights", "#ef9a9a", 15, "700");
     Y += 65;
     explainBox(CX,Y, 840, [
@@ -586,7 +586,7 @@ function TrainingDiagram({ sub, setSub, subBtnRipple, setSubBtnRipple, registerS
       ["Add & Norm:", "Per-vector operation. Adds residual, normalizes. No cross-token interaction.", "#ffb74d"],
       ["Output Head (train):", "ALL positions produce predictions. Loss computed everywhere. 3 signals from 1 pass.", "rgba(0,230,118,0.6)"],
       ["Output Head (gen):", "Only LAST position predicts next token. Others already known.", "rgba(255,152,0,0.6)"],
-      ["Encoder runs ONCE.", "Its output is reused as K,V for every decoder step. Decoder runs once (train) or N times (gen).", "#80deea"],
+      ["Encoder runs ONCE", "Its output is reused as K,V for every decoder step. Decoder runs once (train) or N times (gen).", "#80deea"],
     ].forEach(([title, desc, color], i) => {
       label(40, sY + i * 34, title, color, 15, "700", "start");
       label(220, sY + i * 34, desc, "rgba(255,255,255,0.35)", 12, "400", "start");
@@ -621,7 +621,7 @@ function InferenceDiagram({ sub, setSub, subBtnRipple, setSubBtnRipple, register
     let Y = 30;
 
     // ═══ sub 0: Title + Big Picture ═══
-    el("rect", { x: 80, y: Y - 2, width: 740, height: 40, rx: 10, fill: "rgba(255,152,0,0.04)", stroke: "rgba(255,152,0,0.3)", "stroke-width": 1.5 });
+    el("rect", { x: 20, y: Y - 2, width: 860, height: 40, rx: 10, fill: "rgba(255,152,0,0.04)", stroke: "rgba(255,152,0,0.3)", "stroke-width": 1.5 });
     label(CX,Y + 12, "PRODUCTION / INFERENCE MODE (autoregressive generation)", "rgba(255,152,0,0.8)", 22, "700");
     label(CX,Y + 30, "Only ONE new token flows through the decoder at each step. Previous K,V are cached.", "rgba(255,152,0,0.5)", 15, "600");
 
@@ -645,9 +645,9 @@ function InferenceDiagram({ sub, setSub, subBtnRipple, setSubBtnRipple, register
     Y += 314;
     // sectionBox(20, Y, 1040, 338, "rgba(0,188,212,0.02)", "rgba(0,188,212,0.15)");
     label(CX,Y + 30, "PHASE 1: ENCODER (runs ONCE, identical to training)", "#80deea", 19, "700");
-    Y += 22;
+    Y += 30;
     label(CX,Y + 30, '"The cat sat on the mat" -> 6 tokens flow through all encoder layers in parallel', "rgba(255,255,255,0.3)", 15, "400");
-    Y += 26;
+    Y += 34;
     label(CX,Y + 30, "Self-attention (bidirectional, no mask) -> Add&Norm -> FFN -> Add&Norm -> repeat x6", "rgba(255,255,255,0.25)", 12, "400");
     Y += 68;
     const encTokens = [
@@ -673,7 +673,7 @@ function InferenceDiagram({ sub, setSub, subBtnRipple, setSubBtnRipple, register
     Y += 81;
     el("rect", { x: 20, y: Y - 8, width: 860, height: 86, rx: 8, fill: "rgba(156,120,255,0.04)", stroke: "rgba(156,120,255,0.2)", "stroke-width": 1.5 });
     label(CX,Y + 20, 'PHASE 2: DECODER - showing Step 3: generating after "<s> The cat"', "#b8a9ff", 17, "700");
-    Y += 24;
+    Y += 30;
     label(CX,Y + 24, 'Already generated: "<s>", "The", "cat". Now predicting the next token.', "rgba(255,255,255,0.3)", 15, "400");
     Y += 59;
     explainBox(CX,Y, 840, [
@@ -713,7 +713,7 @@ function InferenceDiagram({ sub, setSub, subBtnRipple, setSubBtnRipple, register
     Y += 81;
     // sectionBox(40, Y, 1000, 1053, "rgba(233,30,99,0.02)", "rgba(233,30,99,0.1)");
     label(CX,Y + 28, "Masked Self-Attention (with KV Cache)", "#f48fb1", 17, "700");
-    Y += 24;
+    Y += 30;
     label(CX,Y + 28, 'Only "cat" computes Q. K,V for <s> and "The" come from cache.', "rgba(255,255,255,0.25)", 12, "400");
 
     Y += 65;
@@ -758,7 +758,7 @@ function InferenceDiagram({ sub, setSub, subBtnRipple, setSubBtnRipple, register
     // ═══ sub 4: Attention computation + output + savings + Add & Norm ═══
     Y += 81;
     layerLabel(Y, '"cat" Q attends to ALL K (cached + new)', "rgba(255,255,255,0.5)");
-    Y += 26;
+    Y += 36;
     label(CX,Y, '"cat" Q dots with K_<s>, K_The, K_cat -> 3 attention scores -> softmax -> weighted V sum', "rgba(255,255,255,0.25)", 12, "400");
     Y += 14;
     for (const qn of tNodes(newTok.cx, sqY)) {
@@ -799,7 +799,7 @@ function InferenceDiagram({ sub, setSub, subBtnRipple, setSubBtnRipple, register
     Y += 76;
     // sectionBox(40, Y, 1000, 675, "rgba(0,188,212,0.02)", "rgba(0,188,212,0.1)");
     label(CX,Y + 28, "Cross-Attention (decoder Q, encoder K,V from cache)", "#80deea", 17, "700");
-    Y += 24;
+    Y += 30;
     label(CX,Y + 28, 'Only "cat" computes Q. K,V are the 6 encoder vectors (cached from Phase 1).', "rgba(255,255,255,0.25)", 12, "400");
     Y += 65;
     layerLabel(Y, 'Decoder x W_Q -> Cross Q (just 1 vector for "cat")', "#f48fb1");
@@ -815,10 +815,10 @@ function InferenceDiagram({ sub, setSub, subBtnRipple, setSubBtnRipple, register
     for (let t = 0; t < 6; t++) {
       const cx = 80 + t * 140;
       el("rect", { x: cx - 28, y: encCacheY - 8, width: 56, height: 20, rx: 4, fill: encTokens[t].bg + "0.2)", stroke: encTokens[t].color + "0.7)", "stroke-width": 0.8, "stroke-dasharray": "3,2" });
-      label(cx, encCacheY + 4, encTokens[t].name, encTokens[t].light + "0.8)", 13, "600");
+      label(cx, encCacheY + 5, encTokens[t].name, encTokens[t].light + "0.8)", 13, "600");
     }
     cacheBadge(CX,encCacheY + 28, "ENCODER OUTPUT - computed once in Phase 1, reused every step");
-    Y += 135;
+    Y += 150;
     layerLabel(Y, '"cat" Q dots ALL 6 encoder K -> weighted sum of 6 encoder V', "rgba(0,188,212,0.6)");
     Y += 52;
     const crossOutY = Y;
@@ -840,7 +840,7 @@ function InferenceDiagram({ sub, setSub, subBtnRipple, setSubBtnRipple, register
     Y += 76;
     // sectionBox(40, Y, 1000, 446, "rgba(100,149,237,0.02)", "rgba(100,149,237,0.1)");
     label(CX,Y + 28, 'Decoder FFN (just 1 vector through - "cat" only)', "#90caf9", 16, "700");
-    Y += 24;
+    Y += 30;
     label(CX,Y + 28, "FFN processes each vector independently, so only the new token needs to go through.", "rgba(255,255,255,0.25)", 12, "400");
     Y += 57;
     layerLabel(Y, "FFN Layer 1: 3 -> 6 + ReLU", "#90caf9");
@@ -865,7 +865,7 @@ function InferenceDiagram({ sub, setSub, subBtnRipple, setSubBtnRipple, register
       ["Previous tokens' FFN outputs are already \"baked into\" the K,V vectors stored in the cache.", "rgba(255,255,255,0.4)", 12, "400"],
       ['So running FFN on <s> or "The" again would produce the EXACT same output. No point recomputing.', "rgba(0,230,118,0.5)", 12, "600"],
     ], "rgba(0,230,118,0.6)", "rgba(0,230,118,0.04)");
-    Y += 158;
+    Y += 170;
     layerLabel(Y, 'Add & LayerNorm (decoder block output for "cat")', "#ffb74d");
     Y += 52;
     const dan3Y = Y;
@@ -883,7 +883,7 @@ function InferenceDiagram({ sub, setSub, subBtnRipple, setSubBtnRipple, register
     Y += 49;
     const outY = Y;
     const vocabWords = ['"sat"', '"is"', '"ran"', '"sees"', '"went"'];
-    const vocabX = [330, 400, 470, 540, 610];
+    const vocabX = [270, 360, 450, 540, 630];
     const vocabScores = [3.5, 0.8, 1.2, -0.3, 0.5];
     for (const dx of DIMX) for (const vx of vocabX) edge(newTok.cx + dx, dan3Y + R, vx, outY - R, "rgba(156,120,255,0.12)", 0.6);
     vocabX.forEach((vx, i) => {
@@ -932,7 +932,7 @@ function InferenceDiagram({ sub, setSub, subBtnRipple, setSubBtnRipple, register
     Y += 35;
     label(CX,Y, 'Final output: "The cat sat on the mat" (7 decoder steps, encoder ran once)', "rgba(0,230,118,0.6)", 16, "700");
 
-    Y += 50;
+    Y += 100;
     el("rect", { x: 20, y: Y, width: 860, height: 345, rx: 10, fill: "rgba(255,255,255,0.02)", stroke: "rgba(255,255,255,0.2)", "stroke-width": 1.5 });
     label(CX,Y + 28, "KV Cache: Memory vs Speed Tradeoff", "rgba(255,255,255,0.5)", 19, "700");
     const mY = Y + 56;

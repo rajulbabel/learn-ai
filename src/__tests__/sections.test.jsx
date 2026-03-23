@@ -2004,3 +2004,150 @@ describe("Graph helper", () => {
     expect(annotationCircle.getAttribute("stroke")).toBe("#ffd740");
   });
 });
+
+// ─── Chapter 9.6: Encoder-Decoder Training Flow ───
+describe("EncoderDecoderTraining spacing fixes", () => {
+  const fn = EncoderDecoderDiagrams.EncoderDecoderTraining;
+
+  it("sub 0 renders training title box at x=20 width=860", () => {
+    const ctx = makeCtx({ sub: 0 });
+    const { container } = render(fn(ctx));
+    const svg = container.querySelector("svg");
+    expect(svg).toBeTruthy();
+    // First rect should be the training title box
+    const rects = svg.querySelectorAll("rect");
+    const titleBox = rects[0];
+    expect(titleBox.getAttribute("x")).toBe("20");
+    expect(titleBox.getAttribute("width")).toBe("860");
+  });
+
+  it("sub 0 renders input string box at x=20 width=860", () => {
+    const ctx = makeCtx({ sub: 0 });
+    const { container } = render(fn(ctx));
+    const svg = container.querySelector("svg");
+    const rects = Array.from(svg.querySelectorAll("rect"));
+    // The input string box is the second rect
+    const inputBox = rects[1];
+    expect(inputBox.getAttribute("x")).toBe("20");
+    expect(inputBox.getAttribute("width")).toBe("860");
+  });
+
+  it("sub 0 renders token ID boxes with width=60", () => {
+    const ctx = makeCtx({ sub: 0 });
+    const { container } = render(fn(ctx));
+    const svg = container.querySelector("svg");
+    const rects = Array.from(svg.querySelectorAll("rect"));
+    // Token ID boxes come after the title box and input string box
+    const tokenBoxes = rects.filter(r => r.getAttribute("width") === "60" && r.getAttribute("height") === "28");
+    expect(tokenBoxes.length).toBe(6);
+  });
+
+  it("sub 0 renders token ID text with font-size 11", () => {
+    const ctx = makeCtx({ sub: 0 });
+    const { container } = render(fn(ctx));
+    const svg = container.querySelector("svg");
+    const texts = Array.from(svg.querySelectorAll("text"));
+    const idTexts = texts.filter(t => t.textContent.startsWith("ID:"));
+    expect(idTexts.length).toBe(6);
+    idTexts.forEach(t => expect(t.getAttribute("font-size")).toBe("11"));
+  });
+
+  it("sub 4 renders encoder output box at x=20 width=860", () => {
+    const ctx = makeCtx({ sub: 4 });
+    const { container } = render(fn(ctx));
+    const svg = container.querySelector("svg");
+    const rects = Array.from(svg.querySelectorAll("rect"));
+    // Find the encoder output box (has specific fill)
+    const encOutputBox = rects.find(r =>
+      r.getAttribute("fill") === "rgba(0,188,212,0.04)" &&
+      r.getAttribute("height") === "120"
+    );
+    expect(encOutputBox).toBeTruthy();
+    expect(encOutputBox.getAttribute("x")).toBe("20");
+    expect(encOutputBox.getAttribute("width")).toBe("860");
+  });
+
+  it("sub 8 renders total loss box at x=150 width=600", () => {
+    const ctx = makeCtx({ sub: 8 });
+    const { container } = render(fn(ctx));
+    const svg = container.querySelector("svg");
+    const rects = Array.from(svg.querySelectorAll("rect"));
+    const lossBox = rects.find(r =>
+      r.getAttribute("fill") === "rgba(244,67,54,0.06)" &&
+      r.getAttribute("height") === "28"
+    );
+    expect(lossBox).toBeTruthy();
+    expect(lossBox.getAttribute("x")).toBe("150");
+    expect(lossBox.getAttribute("width")).toBe("600");
+  });
+
+  it("sub 9 summary says Encoder runs ONCE without period", () => {
+    const ctx = makeCtx({ sub: 9 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("Encoder runs ONCE");
+    expect(text).not.toContain("Encoder runs ONCE.");
+  });
+
+  it("sub 9 renders and contains all summary items", () => {
+    const ctx = makeCtx({ sub: 9 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("Summary: Training Phase Flow");
+    expect(text).toContain("Encoder:");
+    expect(text).toContain("Decoder:");
+    expect(text).toContain("Cross-Attention:");
+  });
+});
+
+// ─── Chapter 9.7: Encoder-Decoder Inference Flow ───
+describe("EncoderDecoderInference spacing fixes", () => {
+  const fn = EncoderDecoderDiagrams.EncoderDecoderInference;
+
+  it("sub 0 renders inference title box at x=20 width=860", () => {
+    const ctx = makeCtx({ sub: 0 });
+    const { container } = render(fn(ctx));
+    const svg = container.querySelector("svg");
+    expect(svg).toBeTruthy();
+    const rects = svg.querySelectorAll("rect");
+    const titleBox = rects[0];
+    expect(titleBox.getAttribute("x")).toBe("20");
+    expect(titleBox.getAttribute("width")).toBe("860");
+  });
+
+  it("sub 2 renders decoder setup box at x=20 width=860", () => {
+    const ctx = makeCtx({ sub: 2 });
+    const { container } = render(fn(ctx));
+    const svg = container.querySelector("svg");
+    const rects = Array.from(svg.querySelectorAll("rect"));
+    const decoderBox = rects.find(r =>
+      r.getAttribute("fill") === "rgba(156,120,255,0.04)" &&
+      r.getAttribute("height") === "86"
+    );
+    expect(decoderBox).toBeTruthy();
+    expect(decoderBox.getAttribute("x")).toBe("20");
+    expect(decoderBox.getAttribute("width")).toBe("860");
+  });
+
+  it("sub 5 renders encoder K,V box at x=20 width=860", () => {
+    const ctx = makeCtx({ sub: 5 });
+    const { container } = render(fn(ctx));
+    const svg = container.querySelector("svg");
+    const rects = Array.from(svg.querySelectorAll("rect"));
+    const kvBox = rects.find(r =>
+      r.getAttribute("fill") === "rgba(0,188,212,0.03)" &&
+      r.getAttribute("height") === "110"
+    );
+    expect(kvBox).toBeTruthy();
+    expect(kvBox.getAttribute("x")).toBe("20");
+    expect(kvBox.getAttribute("width")).toBe("860");
+  });
+
+  it("sub 8 renders and contains memory cost info", () => {
+    const ctx = makeCtx({ sub: 8 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("KV Cache: Memory vs Speed Tradeoff");
+    expect(text).toContain("What Happens Next");
+  });
+});

@@ -104,7 +104,7 @@ function TrainingDiagram({ sub, setSub, subBtnRipple, setSubBtnRipple, registerS
     label(CX,Y, "Step 0: Raw Input String", "rgba(255,255,255,0.5)", 16, "700");
     Y += 32;
     el("rect", { x: 80, y: Y - 8, width: 740, height: 30, rx: 8, fill: "rgba(255,255,255,0.03)", stroke: "rgba(255,255,255,0.1)", "stroke-width": 1 });
-    label(CX,Y + 9, '"The cat sat on the mat"', "#80deea", 19, "700");
+    label(CX,Y + 13, '"The cat sat on the mat"', "#80deea", 19, "700");
 
     Y += 70;
     label(CX,Y, "Step 1: Tokenization (lookup table, no neural network)", "rgba(255,255,255,0.5)", 16, "700");

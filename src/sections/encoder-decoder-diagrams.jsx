@@ -103,8 +103,8 @@ function TrainingDiagram({ sub, setSub, subBtnRipple, setSubBtnRipple, registerS
     Y += 103;
     label(CX,Y, "Step 0: Raw Input String", "rgba(255,255,255,0.5)", 16, "700");
     Y += 32;
-    el("rect", { x: 80, y: Y - 12, width: 740, height: 34, rx: 8, fill: "rgba(255,255,255,0.03)", stroke: "rgba(255,255,255,0.1)", "stroke-width": 1 });
-    label(CX,Y + 7, '"The cat sat on the mat"', "#80deea", 19, "700");
+    el("rect", { x: 80, y: Y - 8, width: 740, height: 30, rx: 8, fill: "rgba(255,255,255,0.03)", stroke: "rgba(255,255,255,0.1)", "stroke-width": 1 });
+    label(CX,Y + 9, '"The cat sat on the mat"', "#80deea", 19, "700");
 
     Y += 70;
     label(CX,Y, "Step 1: Tokenization (lookup table, no neural network)", "rgba(255,255,255,0.5)", 16, "700");
@@ -918,7 +918,7 @@ function InferenceDiagram({ sub, setSub, subBtnRipple, setSubBtnRipple, register
     if (sub < 8) { svg.setAttribute("viewBox", "-10 0 900 " + (Y + 130)); return; }
 
     // ═══ sub 8: What happens next + Memory cost ═══
-    Y += 100;
+    Y += 125;
     el("rect", { x: 20, y: Y, width: 860, height: 240, rx: 10, fill: "rgba(255,255,255,0.02)", stroke: "rgba(255,255,255,0.2)", "stroke-width": 1.5 });
     label(CX,Y + 34, "What Happens Next", "rgba(255,255,255,0.5)", 16, "700");
     Y += 68;

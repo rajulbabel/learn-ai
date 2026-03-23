@@ -1,4 +1,4 @@
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useCallback } from "react";
 import { SubBtn } from "../components.jsx";
 
 const R = 14, DX = 38, DIMX = [-DX, 0, DX], CX = 450;
@@ -594,10 +594,14 @@ function TrainingDiagram({ sub, setSub, subBtnRipple, setSubBtnRipple, registerS
     svg.setAttribute("viewBox", "-10 0 900 " + (Y + 380));
   }, [sub]);
 
+  const endRef = useRef(null);
+  useEffect(() => { if (sub > 0 && endRef.current && endRef.current.scrollIntoView) endRef.current.scrollIntoView({ behavior: "smooth", block: "end" }); }, [sub]);
+
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 16, width: "100%", alignItems: "center" }}>
       <svg ref={ref} style={{ width: "100%", maxWidth: 1100, display: "block" }} />
       {sub < 9 && <SubBtn onClick={() => setSub(sub + 1)} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
+      <div ref={endRef} />
     </div>
   );
 }
@@ -948,10 +952,14 @@ function InferenceDiagram({ sub, setSub, subBtnRipple, setSubBtnRipple, register
     svg.setAttribute("viewBox", "-10 0 900 " + (Y + 365));
   }, [sub]);
 
+  const endRef = useRef(null);
+  useEffect(() => { if (sub > 0 && endRef.current && endRef.current.scrollIntoView) endRef.current.scrollIntoView({ behavior: "smooth", block: "end" }); }, [sub]);
+
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 16, width: "100%", alignItems: "center" }}>
       <svg ref={ref} style={{ width: "100%", maxWidth: 1100, display: "block" }} />
       {sub < 8 && <SubBtn onClick={() => setSub(sub + 1)} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
+      <div ref={endRef} />
     </div>
   );
 }

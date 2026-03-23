@@ -192,7 +192,7 @@ Only config.js IDs change.
 | 8.8 | PreNormVsPostNorm | Pre-Norm vs Post-Norm |
 | 8.9 | BatchNormVsLayerNorm | Batch Norm vs Layer Norm |
 
-**Section 9: The Decoder** (`road-to-transformers.jsx` + `attention-computation.jsx` + `transformer-input.jsx`)
+**Section 9: The Decoder** (`road-to-transformers.jsx` + `attention-computation.jsx` + `transformer-input.jsx` + `encoder-decoder-diagrams.jsx`)
 
 | Chapter | Component | Title |
 |---------|-----------|-------|
@@ -201,6 +201,8 @@ Only config.js IDs change.
 | 9.3 | CrossAttention | Cross-Attention - The Encoder-Decoder Bridge |
 | 9.4 | WhatTransformerDoes | What is a Transformer Actually Doing? |
 | 9.5 | KVCache | KV Cache - Why Inference is Fast |
+| 9.6 | EncoderDecoderTraining | Encoder-Decoder: The Training Flow |
+| 9.7 | EncoderDecoderInference | Encoder-Decoder: The Inference Flow |
 
 ## Project Structure
 
@@ -232,7 +234,8 @@ learn-ai/
 │       ├── transformer-input.jsx         # Section 5 (+ WhatTransformerDoes in 9)
 │       ├── attention-qkv.jsx             # Section 6
 │       ├── attention-computation.jsx     # Section 7 (+ CausalMask/CrossAttention in 9)
-│       └── transformer-block.jsx        # Section 8 (Add&Norm, FFN, block repeats)
+│       ├── transformer-block.jsx        # Section 8 (Add&Norm, FFN, block repeats)
+│       └── encoder-decoder-diagrams.jsx # Section 9 (Training/Inference flow diagrams)
 ├── .github/workflows/deploy.yml
 └── CLAUDE.md
 ```

@@ -13,6 +13,7 @@ import * as TransformerInput from "../sections/transformer-input.jsx";
 import * as AttentionQKV from "../sections/attention-qkv.jsx";
 import * as AttentionComputation from "../sections/attention-computation.jsx";
 import * as TransformerBlock from "../sections/transformer-block.jsx";
+import * as EncoderDecoderDiagrams from "../sections/encoder-decoder-diagrams.jsx";
 
 const lookup = {
   TOC,
@@ -24,6 +25,7 @@ const lookup = {
   ...AttentionQKV,
   ...AttentionComputation,
   ...TransformerBlock,
+  ...EncoderDecoderDiagrams,
 };
 
 afterEach(() => cleanup());

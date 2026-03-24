@@ -88,12 +88,13 @@ function NavZone({ side, hint, ripple, chapter, onClick, onHover }) {
         cursor: "pointer", zIndex: 10,
         display: "flex", alignItems: "center", justifyContent: isLeft ? "flex-start" : "flex-end",
         transition: "background 0.3s ease", outline: "none",
+        WebkitTapHighlightColor: "transparent",
       }}
     >
       <div style={{
-        position: "absolute", top: "-10%", bottom: "-10%",
-        [isLeft ? "left" : "left"]: isLeft ? "-300%" : "10%",
-        [isLeft ? "right" : "right"]: isLeft ? "10%" : "-300%",
+        position: "absolute", top: 0, bottom: 0,
+        [isLeft ? "left" : "left"]: isLeft ? "-100%" : "10%",
+        [isLeft ? "right" : "right"]: isLeft ? "10%" : "-100%",
         borderRadius: "50%",
         background: hint === side
           ? `linear-gradient(to ${isLeft ? "right" : "left"}, transparent 94%, rgba(167,139,250,0.08) 100%)`

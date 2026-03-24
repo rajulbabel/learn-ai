@@ -518,9 +518,9 @@ function TrainingDiagram({ sub, setSub, subBtnRipple, setSubBtnRipple, registerS
 
     const pred0X = 200;
     label(pred0X, Y, 'Position 0: "<s>"', decTokens[0].light, 15, "700");
-    Y += 6;
-    layerLabel(Y + 16, "Linear + Softmax", "#b8a9ff");
-    Y += 56;
+    Y += 30;
+    layerLabel(Y, "Linear + Softmax", "#b8a9ff");
+    Y += 52;
     const p0Y = Y;
     const vocab0 = ['"The"', '"A"', '"cat"'], vocab0X = [160, 200, 240], prob0 = ["78%", "12%", "4%"];
     for (const dx of DIMX) for (const vx of vocab0X) edge(decTokens[0].cx + dx, dan3Y + R, vx, p0Y - R, "rgba(120,144,156,0.1)", 0.5);
@@ -669,8 +669,7 @@ function InferenceDiagram({ sub, setSub, subBtnRipple, setSubBtnRipple, register
     el("rect", { x: 20, y: Y - 8, width: 860, height: 86, rx: 8, fill: "rgba(156,120,255,0.04)", stroke: "rgba(156,120,255,0.2)", "stroke-width": 1.5 });
     clabel(CX, Y + 22, 'PHASE 2: DECODER - showing Step 3: generating after "<s> The cat"', "#b8a9ff", 17, "700");
     clabel(CX, Y + 52, 'Already generated: "<s>", "The", "cat". Now predicting the next token.', "rgba(255,255,255,0.3)", 15, "400");
-    Y += 30;
-    Y += 59;
+    Y += 105;
     explainBox(CX, Y, 840, [
       ["DECODER STATE AT STEP 3", "rgba(156,120,255,0.8)", 16, "700"],
       ["KV Cache (self-attention) contains K,V for: <s> (step 1), \"The\" (step 2). These were computed in earlier steps.", "rgba(255,152,0,0.6)", 12, "600"],
@@ -680,15 +679,15 @@ function InferenceDiagram({ sub, setSub, subBtnRipple, setSubBtnRipple, register
 
     Y += 158;
     label(CX, Y + 30, 'DECODER STEP 3: Only "cat" flows through all layers', "#b8a9ff", 19, "700");
-    Y += 73;
+    Y += 60;
     const cacheCol = 250, newCol = 680;
-    label(cacheCol, Y - 4, "FROM KV CACHE (not recomputed)", "rgba(255,152,0,0.6)", 15, "700");
-    Y += 32;
+    label(cacheCol, Y, "FROM KV CACHE (not recomputed)", "rgba(255,152,0,0.6)", 15, "700");
+    Y += 45;
     const cachedTokens = [
       { name: '"<s>"', cx: 200, color: "#78909c", light: "#b0bec5", bg: "rgba(120,144,156," },
       { name: '"The"', cx: 380, color: "#e91e63", light: "#f48fb1", bg: "rgba(233,30,99," },
     ];
-    label(newCol, Y - 38, "NEW TOKEN (flows through network)", "rgba(0,230,118,0.6)", 15, "700");
+    label(newCol, Y - 45, "NEW TOKEN (flows through network)", "rgba(0,230,118,0.6)", 15, "700");
     const newTok = { name: '"cat"', cx: 680, color: "#ffc107", light: "#ffe082", bg: "rgba(255,193,7," };
     const allDecY = Y;
     for (const tok of cachedTokens) {
@@ -910,7 +909,7 @@ function InferenceDiagram({ sub, setSub, subBtnRipple, setSubBtnRipple, register
 
     // ═══ sub 8: What happens next + Memory cost ═══
     Y += 158;
-    el("rect", { x: 20, y: Y, width: 860, height: 280, rx: 10, fill: "rgba(255,255,255,0.02)", stroke: "rgba(255,255,255,0.2)", "stroke-width": 1.5 });
+    el("rect", { x: 20, y: Y, width: 860, height: 220, rx: 10, fill: "rgba(255,255,255,0.02)", stroke: "rgba(255,255,255,0.2)", "stroke-width": 1.5 });
     label(CX, Y + 34, "What Happens Next", "rgba(255,255,255,0.5)", 19, "700");
     Y += 68;
     label(CX, Y, 'Step 4: "sat" enters the decoder. KV cache now has <s>, "The", "cat". Predicts "on".', "rgba(255,255,255,0.4)", 15, "400");

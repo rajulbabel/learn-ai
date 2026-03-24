@@ -520,7 +520,7 @@ function TrainingDiagram({ sub, setSub, subBtnRipple, setSubBtnRipple, registerS
     label(pred0X, Y, 'Position 0: "<s>"', decTokens[0].light, 15, "700");
     Y += 30;
     layerLabel(Y, "Linear + Softmax", "#b8a9ff");
-    Y += 52;
+    Y += 90;
     const p0Y = Y;
     const vocab0 = ['"The"', '"A"', '"cat"'], vocab0X = [160, 200, 240], prob0 = ["78%", "12%", "4%"];
     for (const dx of DIMX) for (const vx of vocab0X) edge(decTokens[0].cx + dx, dan3Y + R, vx, p0Y - R, "rgba(120,144,156,0.1)", 0.5);
@@ -558,7 +558,7 @@ function TrainingDiagram({ sub, setSub, subBtnRipple, setSubBtnRipple, registerS
 
     Y = p0Y + 100;
     el("rect", { x: 150, y: Y - 8, width: 600, height: 28, rx: 8, fill: "rgba(244,67,54,0.06)", stroke: "rgba(244,67,54,0.3)", "stroke-width": 1 });
-    label(CX, Y + 10, "Total Loss = avg(0.25 + 0.34 + 0.33) = 0.31 -> backprop updates ALL weights", "#ef9a9a", 15, "700");
+    clabel(CX, Y + 6, "Total Loss = avg(0.25 + 0.34 + 0.33) = 0.31 -> backprop updates ALL weights", "#ef9a9a", 15, "700");
     Y += 65;
     explainBox(CX, Y, 840, [
       ["During PRODUCTION (generation), we DO only use the last position output.", "rgba(255,152,0,0.7)", 15, "700"],
@@ -922,7 +922,7 @@ function InferenceDiagram({ sub, setSub, subBtnRipple, setSubBtnRipple, register
     Y += 35;
     label(CX, Y, 'Final output: "The cat sat on the mat" (7 decoder steps, encoder ran once)', "rgba(0,230,118,0.6)", 16, "700");
 
-    Y += 100;
+    Y += 50;
     el("rect", { x: 20, y: Y, width: 860, height: 345, rx: 10, fill: "rgba(255,255,255,0.02)", stroke: "rgba(255,255,255,0.2)", "stroke-width": 1.5 });
     label(CX, Y + 28, "KV Cache: Memory vs Speed Tradeoff", "rgba(255,255,255,0.5)", 19, "700");
     const mY = Y + 56;

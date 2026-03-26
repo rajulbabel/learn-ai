@@ -102,10 +102,11 @@ export const chapters = [
   { id: "9.1", title: "Decoder-Only - How Modern LLMs Work", section: 9, component: "DecoderOnly" },
   { id: "9.2", title: "Causal Masking - Hiding the Future", section: 9, component: "CausalMask" },
   { id: "9.3", title: "Cross-Attention - The Encoder-Decoder Bridge", section: 9, component: "CrossAttention" },
-  { id: "9.4", title: "What is a Transformer Actually Doing?", section: 9, component: "WhatTransformerDoes" },
-  { id: "9.5", title: "KV Cache - Why Inference is Fast", section: 9, component: "KVCache" },
-  { id: "9.6", title: "Encoder-Decoder: The Training Flow", section: 9, component: "EncoderDecoderTraining" },
-  { id: "9.7", title: "Encoder-Decoder: The Inference Flow", section: 9, component: "EncoderDecoderInference" },
+  { id: "9.4", title: "The Output Head - Linear + Softmax", section: 9, component: "OutputHead" },
+  { id: "9.5", title: "What is a Transformer Actually Doing?", section: 9, component: "WhatTransformerDoes" },
+  { id: "9.6", title: "KV Cache - Why Inference is Fast", section: 9, component: "KVCache" },
+  { id: "9.7", title: "Encoder-Decoder: The Training Flow", section: 9, component: "EncoderDecoderTraining" },
+  { id: "9.8", title: "Encoder-Decoder: The Inference Flow", section: 9, component: "EncoderDecoderInference" },
 ];
 
 export const sectionNames = { 0: "Overview", 1: "Neural Network Foundations", 2: "How LLMs Actually Train", 3: "Scaling & Modern Techniques", 4: "The Road to Transformers", 5: "Transformer Input Pipeline", 6: "Attention - Understanding Q, K, V", 7: "Attention - The Full Computation", 8: "The Encoder", 9: "The Decoder" };

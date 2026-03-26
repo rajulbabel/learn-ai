@@ -4934,24 +4934,159 @@
   {
     "id": 548,
     "chapterId": "9.4",
-    "title": "What is a Transformer Actually Doing?",
+    "title": "The Output Head - Linear + Softmax",
     "section": 9,
     "sectionName": "The Decoder",
     "sub": 0,
-    "text": "What is a Transformer actually doing?You give it a sentence: \"I love cats\"It needs to understand what each word means in context. The word \"love\" alone could mean many things. But \"love\" in \"I love cats\" specifically means \"I have affection for cats.\" The Transformer needs to figure this out.Continue"
+    "text": "From vectors to words - the final stepAfter all transformer layers, every position holds a rich, context-aware vector of 512 numbers. This vector encodes everything the model understood about that position.But we need an actual word, not 512 numbers. The model's vocab has 50,257 possible tokens. How does it choose one?Decoder output[0.82, -0.31, 0.57, 0.14, ...]512 numbers→?Which of 50,257 words?That is exactly what the output head does. It has two parts: a Linear layer and Softmax. These are the two blocks sitting at the very top of the architecture diagram.Continue"
   },
   {
     "id": 549,
     "chapterId": "9.4",
-    "title": "What is a Transformer Actually Doing?",
+    "title": "The Output Head - Linear + Softmax",
     "section": 9,
     "sectionName": "The Decoder",
     "sub": 1,
-    "text": "Each word starts as a list of numbers.The model has a big dictionary (learned during training) that maps every word to a fixed list of numbers. These numbers capture the word's meaning in isolation."
+    "text": "ar layer - one giant matrix multiplyThe Linear layer is a weight matrix W with 512 rows and 50,257 columns. Each column represents one word in the vocabulary.The matrix multiplicationhidden state[1 x 512]×W[512 x 50,257]=logits[1 x 50,257]One matrix multiply. That is it. No activation function, no non-linearity - just multiply the 512-dim hidden state by this giant matrix and you get 50,257 raw scores, one for every word in the vocabulary.This single matrix has 512 x 50,257 = 25.7 million parameters. It is the second largest weight matrix in the model (after the embedding table).Continue"
   },
   {
     "id": 550,
     "chapterId": "9.4",
+    "title": "The Output Head - Linear + Softmax",
+    "section": 9,
+    "sectionName": "The Decoder",
+    "sub": 2,
+    "text": "its mean - dot product similarityEach logit is a dot product between the hidden state and one column of W. A high dot product means the hidden state is pointing in the same direction as that word's template.Computing one logithidden state:[0.82, -0.31, 0.57, 0.14, ... 512 dims]W column for \"cats\":[0.71, -0.25, 0.63, 0.08, ... 512 dims]logit = dot product:(0.82)(0.71) + (-0.31)(-0.25) + (0.57)(0.63) + ... = 4.2This happens for all 50,257 words simultaneously:cats+4.2dogs+3.1the+1.5love-0.3banana-2.1... and 50,252 more words, each with a logit scoreHigh logit = the model's hidden state is similar to that word's representation. Low or negative = dissimilar. But these raw numbers are hard to interpret - we need probabilities.Continue"
+  },
+  {
+    "id": 551,
+    "chapterId": "9.4",
+    "title": "The Output Head - Linear + Softmax",
+    "section": 9,
+    "sectionName": "The Decoder",
+    "sub": 3,
+    "text": "- from scores to probabilitiesRaw logits can be any number: positive, negative, huge, tiny. Softmax converts them into probabilities that are all positive and sum to exactly 1.The softmax formulaP(word_i) = elogit_i / Σ elogit_jExponentiate each logit, then divide by the sum of all exponentiated logits.Watch the transformation:Raw logitscats+4.2dogs+3.1the+1.5love-0.3banana-2.1→After softmaxcats62.2%dogs20.8%the4.2%love0.7%banana0.1%Notice how softmax amplifies differences. A logit gap of just 1.1 between \"cats\" (4.2) and \"dogs\" (3.1) becomes a 3x probability difference (62% vs 21%). The exponential function makes the winner win big.Continue"
+  },
+  {
+    "id": 552,
+    "chapterId": "9.4",
+    "title": "The Output Head - Linear + Softmax",
+    "section": 9,
+    "sectionName": "The Decoder",
+    "sub": 4,
+    "text": "ure - the creativity dialBefore softmax, divide each logit by a number called temperature (T). This controls how \"peaked\" or \"spread out\" the resulting probabilities are.softmax( logit / temperature )T = 0.2Focused - Almost deterministiccats98%dogs2%the0%T = 1.0Default - Balancedcats62%dogs21%the4%T = 2.0Creative - More spread outcats38%dogs27%the12%Low temperature (0.2): divides logits by 0.2, making differences 5x larger before softmax. The top word dominates. High temperature (2.0): divides by 2.0, shrinking differences. More words get a fair chance. Temperature = 0 would be pure greedy (pick the top word every time).Continue"
+  },
+  {
+    "id": 553,
+    "chapterId": "9.4",
+    "title": "The Output Head - Linear + Softmax",
+    "section": 9,
+    "sectionName": "The Decoder",
+    "sub": 5,
+    "text": "strategies - how to pick the next tokenAfter softmax gives us probabilities, we still need to decide: which word do we actually pick? There are three main strategies:Greedy decodingAlways pick the highest probability word. Simple but boring - the same input always produces the same output.cats 62% ✓dogs 21% the 4% love 1% Top-k sampling (e.g., k = 3)Keep only the k highest-probability words. Re-normalize their probabilities and randomly sample from them. Balances quality with variety.cats 62%dogs 21%the 4%love 1%→ sample from top 3Top-p sampling / nucleus (e.g., p = 0.9)Keep adding words (highest probability first) until their cumulative probability reaches p. More adaptive than Top-k - uses fewer words when the model is confident, more when uncertain.cats 62% (Σ62%)dogs 21% (Σ83%)the 4% (Σ87%)love 1% (Σ88%)→ stop at 87% (under 90%)In practice, most APIs combine temperature + Top-p. ChatGPT defaults: temperature = 1.0, Top-p = 1.0 (no filtering). For more focused output: temperature = 0.7, Top-p = 0.9.Continue"
+  },
+  {
+    "id": 554,
+    "chapterId": "9.4",
+    "title": "The Output Head - Linear + Softmax",
+    "section": 9,
+    "sectionName": "The Decoder",
+    "sub": 6,
+    "text": "ying - the elegant shortcutHere is a surprising fact: the output Linear layer's weight matrix W is the same matrix as the embedding table from the input - just transposed.Embedding (input)word → vector[50,257 x 512]SAME MATRIX⇆Linear (output)vector → word scores[512 x 50,257]Why does this work?The embedding table maps each word to a point in 512-dimensional space. The output layer asks: \"which word's point is closest to this hidden state?\" That is the same operation in reverse.If the embedding for \"cats\" is [0.71, -0.25, 0.63, ...] and our hidden state is [0.82, -0.31, 0.57, ...], the dot product is high because they point in similar directions. The model is literally asking: \"which embedding vector is this hidden state most similar to?\"Parameter savings from weight tyingWithout tying: 50,257 x 512 = 25.7M extra parameters. With tying: zero extra parameters - the output layer reuses the embedding matrix. GPT-2 and most modern LLMs use this trick.Continue"
+  },
+  {
+    "id": 555,
+    "chapterId": "9.4",
+    "title": "The Output Head - Linear + Softmax",
+    "section": 9,
+    "sectionName": "The Decoder",
+    "sub": 7,
+    "text": "lete output pipelineHere is every step from hidden state to predicted token:hidden state512 dims→Linear (Wᵀ)512 → 50,257→logits50,257 scores→÷ Ttemperature→softmax→ probabilities→sampleTop-k / Top-p→next token\"cats\"During trainingThe model computes this output head at every position simultaneously. At position 1 (\"I\"), it should predict \"love\". At position 2 (\"love\"), it should predict \"cats\". Cross-entropy loss measures how wrong each prediction was, and backprop updates the weights.During inferenceOnly the last position's hidden state goes through the output head. That is the position where the model predicts the next token. This single prediction gets sampled, appended to the input, and the whole process repeats - one token at a time.The big pictureThe entire transformer - embeddings, positional encoding, attention, FFN, layer stacking - exists to produce one good hidden state at the final position. The output head then converts that single 512-dimensional vector into a probability distribution over 50,257 words. One matrix multiply, one softmax. That is all it takes to go from \"understanding\" to \"speaking.\""
+  },
+  {
+    "id": 556,
+    "chapterId": "9.4",
+    "title": "The Output Head - Linear + Softmax",
+    "section": 9,
+    "sectionName": "The Decoder",
+    "sub": -1,
+    "text": "The Decoder: The Output Head - Linear + Softmax. This chapter covers the output head - linear + softmax."
+  },
+  {
+    "id": 557,
+    "chapterId": "9.5",
+    "title": "What is a Transformer Actually Doing?",
+    "section": 9,
+    "sectionName": "The Decoder",
+    "sub": 0,
+    "text": "What is a Transformer actually doing?You give it a sentence: \"I love cats\"It needs to understand what each word means in context. The word \"love\" alone could mean many things - romantic love, love of food, a tennis score. But in \"I love cats\" it specifically means personal affection for cats.The Transformer figures this out through a pipeline of steps:Ilovecats→contextual understandingContinue"
+  },
+  {
+    "id": 558,
+    "chapterId": "9.5",
+    "title": "What is a Transformer Actually Doing?",
+    "section": 9,
+    "sectionName": "The Decoder",
+    "sub": 1,
+    "text": "Each word becomes a vector (embedding)The model's embedding table maps each token to a vector of numbers. These numbers capture meaning in isolation - \"love\" doesn't know about \"I\" or \"cats\" yet.I→[0.2, -0.5, 0.8, 0.1, ...]512 dimslove→[0.9, 0.1, -0.3, 0.6, ...]512 dimscats→[0.4, 0.7, 0.2, -0.4, ...]512 dimsSimilar words get similar vectors. \"cat\" and \"dog\" are nearby in this 512-dimensional space. But \"love\" here is generic - it could be any kind of love.Continue"
+  },
+  {
+    "id": 559,
+    "chapterId": "9.5",
+    "title": "What is a Transformer Actually Doing?",
+    "section": 9,
+    "sectionName": "The Decoder",
+    "sub": 2,
+    "text": "Add position informationWithout position, \"I love cats\" and \"cats love I\" look identical to the model - same words, same embeddings. Order matters!Positional encoding adds WHERE each word sits in the sentence:Example for \"love\" at position 1:embedding[0.9, 0.1, -0.3, ...]+position[0.84, 0.54, 0.00, ...]=positioned[1.74, 0.64, -0.30, ...]Result: each word now knows WHAT it means AND WHERE it sits. \"love\" at position 1 is different from \"love\" at position 5.Continue"
+  },
+  {
+    "id": 560,
+    "chapterId": "9.5",
+    "title": "What is a Transformer Actually Doing?",
+    "section": 9,
+    "sectionName": "The Decoder",
+    "sub": 3,
+    "text": "Self-attention - words look at each otherThis is the magic step. Each word sends a Query (\"what am I looking for?\"), every word offers a Key (\"here is what I can offer\"), and the model computes attention scores - how relevant is each word to every other?Attention scores for \"I love cats\"IlovecatsI0.600.250.15love0.150.300.55cats0.100.550.35\"love\" attends strongly to \"cats\" (0.55) - loves WHAT? And \"cats\" attends to \"love\" (0.55) - cats in what context?After the weighted sum of Values: \"love\" is no longer generic. It now means \"I-have-affection-for-cats\" - encoded as a completely new vector shaped by its context.Continue"
+  },
+  {
+    "id": 561,
+    "chapterId": "9.5",
+    "title": "What is a Transformer Actually Doing?",
+    "section": 9,
+    "sectionName": "The Decoder",
+    "sub": 4,
+    "text": "Add & Norm + FFNTwo important things happen after attention:Attention OutputContext-aware vectors+Original (residual)Pre-attention vectors→Add & NormStabilize values→FFNTwo linear + GELU→Add & NormStabilize againResidual connectionAdds the ORIGINAL vector (before attention) back to the output. This prevents information loss and helps gradients flow during training. Without it, deep networks cannot learn.FFN (Feed-Forward Network)Two linear layers with GELU activation. Processes each word INDEPENDENTLY. Attention mixed words together - the FFN thinks about each word alone, creating richer features.Continue"
+  },
+  {
+    "id": 562,
+    "chapterId": "9.5",
+    "title": "What is a Transformer Actually Doing?",
+    "section": 9,
+    "sectionName": "The Decoder",
+    "sub": 5,
+    "text": "Repeat N timesOne attention + FFN block is ONE transformer layer. Real models repeat this block many times. Each layer refines understanding further.Layer 1-2Basic syntax, word boundariesLayer 3-6Grammar, subject-verb agreementLayer 7-10Semantic meaning, analogiesLayer 11-12Complex reasoning, long-range dependenciesGPT-2: 12 layers. GPT-3: 96 layers. LLaMA 3 70B: 80 layers.After all layers: \"love\" has been refined from \"generic positive emotion\" to \"specific first-person affection directed at small furry animals in this particular sentence.\"Continue"
+  },
+  {
+    "id": 563,
+    "chapterId": "9.5",
+    "title": "What is a Transformer Actually Doing?",
+    "section": 9,
+    "sectionName": "The Decoder",
+    "sub": 6,
+    "text": "Predict the next tokenAfter all layers, each position holds a rich context-aware vector (512 numbers). The model takes the LAST position's vector and projects it through a Linear layer.Linear: 512 dims → 50,257 (one score per word in vocabulary)Softmax: converts raw scores into probabilities that sum to 1Top predictions after \"I love cats\":very35%so22%a12%the8%really5%The highest probability word becomes the prediction. The model picks \"very\" - \"I love cats very...\" and then repeats the whole process for the next token.Continue"
+  },
+  {
+    "id": 564,
+    "chapterId": "9.5",
+    "title": "What is a Transformer Actually Doing?",
+    "section": 9,
+    "sectionName": "The Decoder",
+    "sub": 7,
+    "text": "lete pipelineHere is every step connected end to end:\"I love cats\"→Tokenize→Embed→+Position→Self-Attention→Add & Norm→FFN→Add & Norm→×N layers→Linear→Softmax→\"very\" (35%)The key insightThe word \"love\" entered as a generic 512-number vector and exited as a completely different 512-number vector that encodes \"first-person affection directed at cats in a casual sentence.\"This is what \"understanding context\" means - every word's vector is reshaped by all the other words around it. That reshaping is the pipeline you just saw."
+  },
+  {
+    "id": 565,
+    "chapterId": "9.5",
     "title": "What is a Transformer Actually Doing?",
     "section": 9,
     "sectionName": "The Decoder",
@@ -4959,8 +5094,8 @@
     "text": "The Decoder: What is a Transformer Actually Doing?. This chapter covers what is a transformer actually doing?."
   },
   {
-    "id": 551,
-    "chapterId": "9.5",
+    "id": 566,
+    "chapterId": "9.6",
     "title": "KV Cache - Why Inference is Fast",
     "section": 9,
     "sectionName": "The Decoder",
@@ -4968,8 +5103,8 @@
     "text": "The Inference Cost ProblemDuring autoregressive generation (chapter 2.6), the model produces one token at a time. To generate token N, it must attend to ALL previous tokens 1 through N-1. Watch the cost grow:Step-by-step generation cost (without cache):Token 1attend to [1]1 opsToken 2attend to [1, 2]4 opsToken 3attend to [1, 2, 3]9 opsToken 4attend to [1, 2, 3, 4]16 opsToken 5attend to [1, 2, 3, 4, 5]25 opsToken N: full self-attention over N tokens = N2 operations per stepTotal cost to generate N tokens (naive approach):12 + 22 + 32 + ... + N2 = O(N3)For N = 1000 tokens: roughly 333 million attention operations!Continue"
   },
   {
-    "id": 552,
-    "chapterId": "9.5",
+    "id": 567,
+    "chapterId": "9.6",
     "title": "KV Cache - Why Inference is Fast",
     "section": 9,
     "sectionName": "The Decoder",
@@ -4977,8 +5112,8 @@
     "text": "Insight: Redundant ComputationWhen generating token 5, we recompute Q, K, V for ALL tokens. But look what stays the same:Generating token 4 (previous step)K1K2K3V1V2V3↓ next step ↓Generating token 5 (current step)K1K2K3K4V1V2V3V4K1, K2, K3 and V1, V2, V3 are exactly the same as last step!The wasteK and V for tokens 1, 2, 3 haven't changed - they're computed from the same embeddings with the same W_K and W_V matrices. Yet we're recomputing them from scratch at every single generation step. For 1000 tokens, K1 gets recomputed 999 times for nothing.Continue"
   },
   {
-    "id": 553,
-    "chapterId": "9.5",
+    "id": 568,
+    "chapterId": "9.6",
     "title": "KV Cache - Why Inference is Fast",
     "section": 9,
     "sectionName": "The Decoder",
@@ -4986,8 +5121,8 @@
     "text": "ache SolutionStore K and V from all previous tokens in a cache. At each step:Step 1Compute Q, K, V for ONLY the new token (1 token, not N)Step 2Append the new K and V to the cacheStep 3Compute attention: new Q against ALL cached K and VCost comparison:Without cacheEach step: recompute ALL N tokens' K, VThen full N x N attentionPer step: O(N2)Total: O(N3)With KV cacheEach step: compute ONLY 1 token's K, VThen 1 x N attention (one Q vs N keys)Per step: O(N)Total: O(N2)N = 1000 tokensWithout cache: ~333 million ops. With cache: ~500 thousand ops. ~660x faster.Continue"
   },
   {
-    "id": 554,
-    "chapterId": "9.5",
+    "id": 569,
+    "chapterId": "9.6",
     "title": "KV Cache - Why Inference is Fast",
     "section": 9,
     "sectionName": "The Decoder",
@@ -4995,8 +5130,8 @@
     "text": "e Growing Step by StepWatch the KV cache grow as the model generates \"I love cats\":Step 1: Generate \"I\"Compute:Compute Q_I, K_I, V_I from scratchK cache:K_IV cache:V_IAttention:Q_I attends to [K_I]Step 2: Generate \"love\"Compute:Compute Q_love, K_love, V_love onlyK cache:K_IK_loveV cache:V_IV_loveAttention:Q_love attends to [K_I, K_love]Step 3: Generate \"cats\"Compute:Compute Q_cats, K_cats, V_cats onlyK cache:K_IK_loveK_catsV cache:V_IV_loveV_catsAttention:Q_cats attends to [K_I, K_love, K_cats]At each step, only the new token's Q, K, V are computed. Old K and V entries are never recomputed - they're read directly from the cache. The cache grows by one K and one V entry per step.Continue"
   },
   {
-    "id": 555,
-    "chapterId": "9.5",
+    "id": 570,
+    "chapterId": "9.6",
     "title": "KV Cache - Why Inference is Fast",
     "section": 9,
     "sectionName": "The Decoder",
@@ -5004,8 +5139,8 @@
     "text": "ry CostKV cache is not free. Each layer needs to store K and V for every token generated so far.Cache size per layer:2(K + V)xseq_lengthxd_modelxbytesExample: LLaMA 70BLayers80d_model8,192Max sequence4,096 tokensPrecisionFP16 (2 bytes)Cache = 2 x 4,096 x 8,192 x 80 x 2 bytes= 10.7 GB per sequenceThis is why:●Long context is expensive: Doubling the sequence length doubles the KV cache. 128K context = enormous memory.●Batch size is limited: Each concurrent user needs their own KV cache. 10 users = 107 GB just for caches.●GQA helps: Grouped-Query Attention shares K, V across multiple Q heads, shrinking the cache by 4-8x.Continue"
   },
   {
-    "id": 556,
-    "chapterId": "9.5",
+    "id": 571,
+    "chapterId": "9.6",
     "title": "KV Cache - Why Inference is Fast",
     "section": 9,
     "sectionName": "The Decoder",
@@ -5013,8 +5148,8 @@
     "text": "amental TradeoffKV cache trades memory for speed. This is the central tension of LLM inference:Without KV CacheSpeed:Slow (recompute everything)Memory:Low (no cache stored)O(N3) compute, O(1) extra memoryWith KV CacheSpeed:Fast (only compute new token)Memory:High (GBs per sequence)O(N2) compute, O(N) extra memoryThe Bottleneck of LLM InferenceThis memory-speed tradeoff is the fundamental bottleneck of LLM serving. Every technique you hear about - GQA (Grouped-Query Attention), quantized KV cache, sliding window attention, paged attention - exists to reduce the memory cost of the KV cache while keeping the speed benefit. When companies say \"serving LLMs is expensive,\" the KV cache is a major reason why.Note: KV cache only applies to inference (generation). During training, all tokens are processed in parallel, so there's no sequential generation and no need for a cache."
   },
   {
-    "id": 557,
-    "chapterId": "9.5",
+    "id": 572,
+    "chapterId": "9.6",
     "title": "KV Cache - Why Inference is Fast",
     "section": 9,
     "sectionName": "The Decoder",

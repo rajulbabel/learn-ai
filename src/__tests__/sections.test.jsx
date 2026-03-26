@@ -2100,6 +2100,144 @@ describe("EncoderDecoderTraining spacing fixes", () => {
   });
 });
 
+// ─── Chapter 9.4: WhatTransformerDoes - expanded content ───
+describe("WhatTransformerDoes expanded sub-steps", () => {
+  const fn = TransformerInput.WhatTransformerDoes;
+
+  it("sub 0 introduces the big question with I love cats example", () => {
+    const ctx = makeCtx({ sub: 0 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("I love cats");
+    expect(text).toContain("context");
+  });
+
+  it("sub 1 shows embeddings with actual vector numbers", () => {
+    const ctx = makeCtx({ sub: 1 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("embedding");
+    expect(text).toContain("0.2");
+  });
+
+  it("sub 2 shows positional encoding being added", () => {
+    const ctx = makeCtx({ sub: 2 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("position");
+  });
+
+  it("sub 3 shows self-attention with words looking at each other", () => {
+    const ctx = makeCtx({ sub: 3 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("attention");
+    expect(text).toContain("love");
+  });
+
+  it("sub 4 shows Add & Norm and FFN processing", () => {
+    const ctx = makeCtx({ sub: 4 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("FFN");
+    expect(text).toContain("residual");
+  });
+
+  it("sub 5 shows repeated layers with progressive refinement", () => {
+    const ctx = makeCtx({ sub: 5 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("layer");
+    expect(text).toContain("repeat");
+  });
+
+  it("sub 6 shows the output prediction step", () => {
+    const ctx = makeCtx({ sub: 6 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("Linear");
+    expect(text).toContain("Softmax");
+    expect(text).toContain("probabilit");
+  });
+
+  it("sub 7 shows the complete pipeline summary", () => {
+    const ctx = makeCtx({ sub: 7 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("pipeline");
+  });
+});
+
+// ─── Chapter 9.6: OutputHead ───
+describe("OutputHead sub-steps", () => {
+  const fn = TransformerInput.OutputHead;
+
+  it("sub 0 introduces the gap between vectors and words", () => {
+    const ctx = makeCtx({ sub: 0 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("512");
+    expect(text).toContain("vocab");
+  });
+
+  it("sub 1 shows the linear projection with matrix dimensions", () => {
+    const ctx = makeCtx({ sub: 1 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("Linear");
+    expect(text).toContain("50,257");
+    expect(text).toContain("matrix");
+  });
+
+  it("sub 2 explains what logits mean with concrete scores", () => {
+    const ctx = makeCtx({ sub: 2 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("logit");
+    expect(text).toContain("dot product");
+  });
+
+  it("sub 3 shows softmax converting logits to probabilities", () => {
+    const ctx = makeCtx({ sub: 3 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("softmax");
+    expect(text).toContain("probabilit");
+  });
+
+  it("sub 4 shows temperature effect on distributions", () => {
+    const ctx = makeCtx({ sub: 4 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("temperature");
+  });
+
+  it("sub 5 shows sampling strategies with visual", () => {
+    const ctx = makeCtx({ sub: 5 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("Greedy");
+    expect(text).toContain("Top-k");
+    expect(text).toContain("Top-p");
+  });
+
+  it("sub 6 explains weight tying", () => {
+    const ctx = makeCtx({ sub: 6 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("weight tying");
+    expect(text).toContain("embedding");
+  });
+
+  it("sub 7 shows the complete output pipeline", () => {
+    const ctx = makeCtx({ sub: 7 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("hidden state");
+    expect(text).toContain("token");
+  });
+});
+
 // ─── Chapter 9.7: Encoder-Decoder Inference Flow ───
 describe("EncoderDecoderInference spacing fixes", () => {
   const fn = EncoderDecoderDiagrams.EncoderDecoderInference;

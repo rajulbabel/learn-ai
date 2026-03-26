@@ -199,10 +199,11 @@ Only config.js IDs change.
 | 9.1 | DecoderOnly | Decoder-Only - How Modern LLMs Work |
 | 9.2 | CausalMask | Causal Masking - Hiding the Future |
 | 9.3 | CrossAttention | Cross-Attention - The Encoder-Decoder Bridge |
-| 9.4 | WhatTransformerDoes | What is a Transformer Actually Doing? |
-| 9.5 | KVCache | KV Cache - Why Inference is Fast |
-| 9.6 | EncoderDecoderTraining | Encoder-Decoder: The Training Flow |
-| 9.7 | EncoderDecoderInference | Encoder-Decoder: The Inference Flow |
+| 9.4 | OutputHead | The Output Head - Linear + Softmax |
+| 9.5 | WhatTransformerDoes | What is a Transformer Actually Doing? |
+| 9.6 | KVCache | KV Cache - Why Inference is Fast |
+| 9.7 | EncoderDecoderTraining | Encoder-Decoder: The Training Flow |
+| 9.8 | EncoderDecoderInference | Encoder-Decoder: The Inference Flow |
 
 ## Project Structure
 

@@ -4068,56 +4068,56 @@ export const WeightInit = (ctx) => {
           <T color={C.red} bold center size={20}>Why Not Start at Zero?</T>
           <T color="#ef9a9a" size={17} style={{ marginTop: 12 }}>If all weights start at zero, every neuron in a layer computes the exact same output. All gradients are identical. No neuron ever becomes different from any other. The network is stuck forever.</T>
           <div style={{ display: "flex", justifyContent: "center", marginTop: 16 }}>
-            <svg viewBox="0 0 360 180" style={{ display: "block", width: "100%", maxWidth: 360 }}>
-              <text x={180} y={14} fill="rgba(255,255,255,0.5)" fontSize={11} textAnchor="middle" fontWeight={600}>All Weights = 0: The Symmetry Problem</text>
+            <svg viewBox="0 0 440 210" style={{ display: "block", width: "100%", maxWidth: 440 }}>
+              <text x={220} y={16} fill="rgba(255,255,255,0.5)" fontSize={12} textAnchor="middle" fontWeight={600}>All Weights = 0: The Symmetry Problem</text>
               {/* Input */}
-              <rect x={10} y={60} width={60} height={60} rx={8} fill={`${C.cyan}15`} stroke={C.cyan} strokeWidth={1.5} />
-              <text x={40} y={85} fill={C.cyan} fontSize={11} textAnchor="middle" fontWeight={600}>Input</text>
-              <text x={40} y={100} fill={C.dim} fontSize={10} textAnchor="middle">[1.0, 0.5]</text>
+              <rect x={15} y={70} width={70} height={55} rx={8} fill={`${C.cyan}15`} stroke={C.cyan} strokeWidth={1.5} />
+              <text x={50} y={93} fill={C.cyan} fontSize={12} textAnchor="middle" fontWeight={600}>Input</text>
+              <text x={50} y={110} fill={C.dim} fontSize={10} textAnchor="middle">[1.0, 0.5]</text>
 
               {/* Arrows to neurons */}
-              {[40, 90, 140].map((y) => (
+              {[50, 100, 150].map((y) => (
                 <g key={y}>
-                  <line x1={70} y1={90} x2={120} y2={y} stroke="rgba(255,255,255,0.2)" strokeWidth={1} />
-                  <text x={95} y={y < 90 ? 58 : y > 90 ? 122 : 82} fill={C.red} fontSize={9} textAnchor="middle">[0,0]</text>
+                  <line x1={85} y1={97} x2={145} y2={y} stroke="rgba(255,255,255,0.2)" strokeWidth={1} />
+                  <text x={112} y={y < 100 ? 66 : y > 100 ? 135 : 90} fill={C.red} fontSize={9} textAnchor="middle">[0,0]</text>
                 </g>
               ))}
 
               {/* 3 neurons */}
               {[
-                { y: 40, label: "n1" },
-                { y: 90, label: "n2" },
-                { y: 140, label: "n3" },
+                { y: 50, label: "n1" },
+                { y: 100, label: "n2" },
+                { y: 150, label: "n3" },
               ].map(({ y, label }) => (
                 <g key={label}>
-                  <circle cx={145} cy={y} r={18} fill={`${C.red}12`} stroke={C.red} strokeWidth={1.5} />
-                  <text x={145} y={y - 4} fill={C.red} fontSize={11} textAnchor="middle" fontWeight={700}>{label}</text>
-                  <text x={145} y={y + 10} fill={C.dim} fontSize={9} textAnchor="middle">w=[0,0]</text>
+                  <circle cx={170} cy={y} r={24} fill={`${C.red}12`} stroke={C.red} strokeWidth={1.5} />
+                  <text x={170} y={y - 4} fill={C.red} fontSize={12} textAnchor="middle" fontWeight={700}>{label}</text>
+                  <text x={170} y={y + 12} fill={C.dim} fontSize={9} textAnchor="middle">w=[0,0]</text>
                 </g>
               ))}
 
               {/* Arrows to outputs */}
-              {[40, 90, 140].map((y) => (
-                <line key={`out${y}`} x1={163} y1={y} x2={210} y2={y} stroke="rgba(255,255,255,0.2)" strokeWidth={1} />
+              {[50, 100, 150].map((y) => (
+                <line key={`out${y}`} x1={194} y1={y} x2={240} y2={y} stroke="rgba(255,255,255,0.2)" strokeWidth={1} />
               ))}
 
               {/* Outputs */}
-              {[40, 90, 140].map((y) => (
+              {[50, 100, 150].map((y) => (
                 <g key={`oval${y}`}>
-                  <rect x={210} y={y - 14} width={50} height={28} rx={6} fill={`${C.yellow}12`} stroke={C.yellow} strokeWidth={1} />
-                  <text x={235} y={y + 4} fill={C.yellow} fontSize={11} textAnchor="middle" fontWeight={700}>0.0</text>
+                  <rect x={240} y={y - 16} width={55} height={32} rx={6} fill={`${C.yellow}12`} stroke={C.yellow} strokeWidth={1} />
+                  <text x={267} y={y + 5} fill={C.yellow} fontSize={12} textAnchor="middle" fontWeight={700}>0.0</text>
                 </g>
               ))}
 
               {/* Arrow to "identical" */}
-              <line x1={260} y1={40} x2={290} y2={70} stroke="rgba(255,255,255,0.15)" strokeWidth={1} />
-              <line x1={260} y1={90} x2={290} y2={85} stroke="rgba(255,255,255,0.15)" strokeWidth={1} />
-              <line x1={260} y1={140} x2={290} y2={100} stroke="rgba(255,255,255,0.15)" strokeWidth={1} />
-              <text x={320} y={80} fill={C.red} fontSize={11} textAnchor="middle" fontWeight={700}>All</text>
-              <text x={320} y={95} fill={C.red} fontSize={11} textAnchor="middle" fontWeight={700}>identical!</text>
+              <line x1={295} y1={50} x2={335} y2={82} stroke="rgba(255,255,255,0.15)" strokeWidth={1} />
+              <line x1={295} y1={100} x2={335} y2={95} stroke="rgba(255,255,255,0.15)" strokeWidth={1} />
+              <line x1={295} y1={150} x2={335} y2={112} stroke="rgba(255,255,255,0.15)" strokeWidth={1} />
+              <text x={380} y={90} fill={C.red} fontSize={12} textAnchor="middle" fontWeight={700}>All</text>
+              <text x={380} y={107} fill={C.red} fontSize={12} textAnchor="middle" fontWeight={700}>identical!</text>
 
               {/* Bottom */}
-              <text x={180} y={172} fill="rgba(255,255,255,0.4)" fontSize={10} textAnchor="middle">Same weights, same outputs, same gradients, stuck forever</text>
+              <text x={220} y={195} fill="rgba(255,255,255,0.4)" fontSize={10} textAnchor="middle">Same weights, same outputs, same gradients, stuck forever</text>
             </svg>
           </div>
           <T color="#ef9a9a" size={16} style={{ marginTop: 10 }}>This is called the "symmetry problem." Every neuron is a clone of every other. No matter how long you train, they will never differentiate.</T>

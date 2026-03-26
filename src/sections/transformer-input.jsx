@@ -1,5 +1,5 @@
 import { C } from "../config.js";
-import { Box, T, Reveal, SubBtn } from "../components.jsx";
+import { Box, T, Reveal, SubBtn, Tag } from "../components.jsx";
 export const FullArchitecture = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx;
   const ArchDiagram = () => (
     <svg width="420" height="580" viewBox="0 0 420 580" style={{ maxWidth: "100%", overflow: "visible" }}>
@@ -810,14 +810,571 @@ export const WhatTransformerDoes = (ctx) => { const { sub, subBtnRipple, setSubB
       <Box color={C.purple} style={{ width: "100%" }}>
         <T color="#b8a9ff" bold center size={21}>What is a Transformer actually doing?</T>
         <T color="#b8a9ff" style={{ marginTop: 8 }}>You give it a sentence: <strong>"I love cats"</strong></T>
-        <T color="#b8a9ff" style={{ marginTop: 6 }}>It needs to understand what each word means <strong>in context</strong>. The word "love" alone could mean many things. But "love" in "I love cats" specifically means "I have affection for cats." The Transformer needs to figure this out.</T>
+        <T color="#b8a9ff" style={{ marginTop: 6 }}>It needs to understand what each word means <strong>in context</strong>. The word "love" alone could mean many things - romantic love, love of food, a tennis score. But in "I love cats" it specifically means personal affection for cats.</T>
+        <T color="#b8a9ff" style={{ marginTop: 8 }}>The Transformer figures this out through a pipeline of steps:</T>
+        <div style={{ display: "flex", gap: 8, marginTop: 10, justifyContent: "center", flexWrap: "wrap" }}>
+          {[{ w: "I", c: C.red }, { w: "love", c: C.purple }, { w: "cats", c: C.cyan }].map(({ w, c }) => (
+            <div key={w} style={{ padding: "6px 14px", borderRadius: 8, background: `${c}12`, border: `1px solid ${c}25` }}>
+              <T color={c} bold size={18}>{w}</T>
+            </div>
+          ))}
+          <T color={C.dim} size={22} style={{ display: "flex", alignItems: "center" }}>{"\u2192"}</T>
+          <div style={{ padding: "6px 14px", borderRadius: 8, background: `${C.green}12`, border: `1px solid ${C.green}25` }}>
+            <T color={C.green} bold size={16}>contextual understanding</T>
+          </div>
+        </div>
       </Box>
     )}
+
     <Reveal when={sub >= 1}><Box color={C.cyan} style={{ width: "100%" }}>
-        <T color="#80deea" bold center size={20}>Step 1: Each word starts as a list of numbers.</T>
-        <T color="#80deea" style={{ marginTop: 6 }}>The model has a big dictionary (learned during training) that maps every word to a fixed list of numbers. These numbers capture the word's meaning in isolation.</T>
-      </Box></Reveal>
-    {sub < 1 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
+      <T color="#80deea" bold center size={20}>Step 1: Each word becomes a vector (embedding)</T>
+      <T color="#80deea" style={{ marginTop: 6 }}>The model's embedding table maps each token to a vector of numbers. These numbers capture meaning <strong>in isolation</strong> - "love" doesn't know about "I" or "cats" yet.</T>
+      <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 6 }}>
+        {[
+          { w: "I", c: C.red, v: [0.2, -0.5, 0.8, 0.1] },
+          { w: "love", c: C.purple, v: [0.9, 0.1, -0.3, 0.6] },
+          { w: "cats", c: C.cyan, v: [0.4, 0.7, 0.2, -0.4] },
+        ].map(({ w, c, v }) => (
+          <div key={w} style={{ display: "flex", alignItems: "center", gap: 8, padding: "6px 12px", borderRadius: 8, background: `${c}06`, border: `1px solid ${c}12` }}>
+            <div style={{ minWidth: 50, padding: "3px 8px", borderRadius: 6, background: `${c}12`, border: `1px solid ${c}25` }}>
+              <T color={c} bold size={17} center>{w}</T>
+            </div>
+            <T color={C.dim} size={18}>{"\u2192"}</T>
+            <code style={{ color: `${c}cc`, fontSize: 15 }}>[{v.join(", ")}, ...]</code>
+            <T color={C.dim} size={13} style={{ marginLeft: "auto" }}>512 dims</T>
+          </div>
+        ))}
+      </div>
+      <T color={C.dim} size={15} style={{ marginTop: 8 }}>Similar words get similar vectors. "cat" and "dog" are nearby in this 512-dimensional space. But "love" here is generic - it could be any kind of love.</T>
+    </Box></Reveal>
+
+    <Reveal when={sub >= 2}><Box color={C.yellow} style={{ width: "100%" }}>
+      <T color="#fff176" bold center size={20}>Step 2: Add position information</T>
+      <T color="#ffe082" style={{ marginTop: 6 }}>Without position, "I love cats" and "cats love I" look identical to the model - same words, same embeddings. Order matters!</T>
+      <T color="#ffe082" style={{ marginTop: 8 }}>Positional encoding adds WHERE each word sits in the sentence:</T>
+      <div style={{ marginTop: 10, padding: "10px 14px", borderRadius: 8, background: `${C.yellow}06`, border: `1px solid ${C.yellow}12` }}>
+        <T color={C.dim} size={15} center>Example for "love" at position 1:</T>
+        <div style={{ display: "flex", alignItems: "center", gap: 6, marginTop: 8, justifyContent: "center", flexWrap: "wrap" }}>
+          <div style={{ padding: "4px 10px", borderRadius: 6, background: `${C.purple}12`, border: `1px solid ${C.purple}25` }}>
+            <T color={C.purple} size={14} bold>embedding</T>
+            <T color={C.dim} size={13} center>[0.9, 0.1, -0.3, ...]</T>
+          </div>
+          <T color={C.bright} size={20} bold>+</T>
+          <div style={{ padding: "4px 10px", borderRadius: 6, background: `${C.yellow}12`, border: `1px solid ${C.yellow}25` }}>
+            <T color={C.yellow} size={14} bold>position</T>
+            <T color={C.dim} size={13} center>[0.84, 0.54, 0.00, ...]</T>
+          </div>
+          <T color={C.bright} size={20} bold>=</T>
+          <div style={{ padding: "4px 10px", borderRadius: 6, background: `${C.green}12`, border: `1px solid ${C.green}25` }}>
+            <T color={C.green} size={14} bold>positioned</T>
+            <T color={C.dim} size={13} center>[1.74, 0.64, -0.30, ...]</T>
+          </div>
+        </div>
+      </div>
+      <T color="#ffe082" style={{ marginTop: 8 }}>Result: each word now knows WHAT it means AND WHERE it sits. "love" at position 1 is different from "love" at position 5.</T>
+    </Box></Reveal>
+
+    <Reveal when={sub >= 3}><Box color={C.green} style={{ width: "100%" }}>
+      <T color="#a5d6a7" bold center size={20}>Step 3: Self-attention - words look at each other</T>
+      <T color="#a5d6a7" style={{ marginTop: 6 }}>This is the magic step. Each word sends a Query ("what am I looking for?"), every word offers a Key ("here is what I can offer"), and the model computes attention scores - how relevant is each word to every other?</T>
+      <div style={{ marginTop: 12, padding: "10px 14px", borderRadius: 8, background: `${C.green}06`, border: `1px solid ${C.green}12` }}>
+        <T color={C.bright} bold center size={16}>Attention scores for "I love cats"</T>
+        <div style={{ marginTop: 10 }}>
+          <div style={{ display: "grid", gridTemplateColumns: "60px 1fr 1fr 1fr", gap: 4, marginBottom: 4 }}>
+            <div />
+            {["I", "love", "cats"].map((w) => (
+              <T key={w} color={C.bright} bold center size={14}>{w}</T>
+            ))}
+          </div>
+          {[
+            { w: "I", scores: [0.60, 0.25, 0.15], colors: [C.red, C.dim, C.dim] },
+            { w: "love", scores: [0.15, 0.30, 0.55], colors: [C.dim, C.dim, C.cyan] },
+            { w: "cats", scores: [0.10, 0.55, 0.35], colors: [C.dim, C.purple, C.dim] },
+          ].map(({ w, scores, colors }) => (
+            <div key={w} style={{ display: "grid", gridTemplateColumns: "60px 1fr 1fr 1fr", gap: 4, marginBottom: 3 }}>
+              <T color={C.bright} bold size={14}>{w}</T>
+              {scores.map((s, i) => (
+                <div key={i} style={{ padding: "4px 0", borderRadius: 4, background: `${colors[i]}${Math.round(s * 40).toString(16).padStart(2, "0")}` }}>
+                  <T color={s > 0.4 ? colors[i] : C.dim} center bold size={14}>{s.toFixed(2)}</T>
+                </div>
+              ))}
+            </div>
+          ))}
+        </div>
+        <T color={C.dim} size={14} style={{ marginTop: 6 }}>"love" attends strongly to "cats" (0.55) - loves WHAT? And "cats" attends to "love" (0.55) - cats in what context?</T>
+      </div>
+      <T color="#a5d6a7" style={{ marginTop: 8 }}>After the weighted sum of Values: "love" is no longer generic. It now means "I-have-affection-for-cats" - encoded as a completely new vector shaped by its context.</T>
+    </Box></Reveal>
+
+    <Reveal when={sub >= 4}><Box color={C.orange} style={{ width: "100%" }}>
+      <T color="#ffcc80" bold center size={20}>Step 4: Add & Norm + FFN</T>
+      <T color="#ffcc80" style={{ marginTop: 6 }}>Two important things happen after attention:</T>
+      <div style={{ marginTop: 10, display: "flex", gap: 6, alignItems: "stretch", flexWrap: "wrap", justifyContent: "center" }}>
+        {[
+          { label: "Attention Output", c: C.green, desc: "Context-aware vectors" },
+          { label: "+", c: C.bright, desc: "" },
+          { label: "Original (residual)", c: C.purple, desc: "Pre-attention vectors" },
+          { label: "\u2192", c: C.bright, desc: "" },
+          { label: "Add & Norm", c: C.orange, desc: "Stabilize values" },
+          { label: "\u2192", c: C.bright, desc: "" },
+          { label: "FFN", c: C.blue, desc: "Two linear + GELU" },
+          { label: "\u2192", c: C.bright, desc: "" },
+          { label: "Add & Norm", c: C.orange, desc: "Stabilize again" },
+        ].map(({ label, c, desc }, i) => (
+          desc ? (
+            <div key={i} style={{ padding: "6px 10px", borderRadius: 8, background: `${c}06`, border: `1px solid ${c}12`, minWidth: 80 }}>
+              <T color={c} bold center size={14}>{label}</T>
+              <T color={C.dim} center size={12}>{desc}</T>
+            </div>
+          ) : (
+            <T key={i} color={c} bold size={20} style={{ display: "flex", alignItems: "center" }}>{label}</T>
+          )
+        ))}
+      </div>
+      <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 6 }}>
+        <div style={{ padding: "8px 12px", borderRadius: 8, background: `${C.purple}06`, border: `1px solid ${C.purple}12` }}>
+          <T color={C.purple} bold size={15}>Residual connection</T>
+          <T color={C.dim} size={14} style={{ marginTop: 2 }}>Adds the ORIGINAL vector (before attention) back to the output. This prevents information loss and helps gradients flow during training. Without it, deep networks cannot learn.</T>
+        </div>
+        <div style={{ padding: "8px 12px", borderRadius: 8, background: `${C.blue}06`, border: `1px solid ${C.blue}12` }}>
+          <T color={C.blue} bold size={15}>FFN (Feed-Forward Network)</T>
+          <T color={C.dim} size={14} style={{ marginTop: 2 }}>Two linear layers with GELU activation. Processes each word INDEPENDENTLY. Attention mixed words together - the FFN thinks about each word alone, creating richer features.</T>
+        </div>
+      </div>
+    </Box></Reveal>
+
+    <Reveal when={sub >= 5}><Box color={C.blue} style={{ width: "100%" }}>
+      <T color="#90caf9" bold center size={20}>Step 5: Repeat N times</T>
+      <T color="#90caf9" style={{ marginTop: 6 }}>One attention + FFN block is ONE transformer layer. Real models repeat this block many times. Each layer refines understanding further.</T>
+      <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 4 }}>
+        {[
+          { label: "Layer 1-2", desc: "Basic syntax, word boundaries", c: C.red, pct: 15 },
+          { label: "Layer 3-6", desc: "Grammar, subject-verb agreement", c: C.orange, pct: 35 },
+          { label: "Layer 7-10", desc: "Semantic meaning, analogies", c: C.yellow, pct: 65 },
+          { label: "Layer 11-12", desc: "Complex reasoning, long-range dependencies", c: C.green, pct: 95 },
+        ].map(({ label, desc, c, pct }) => (
+          <div key={label} style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            <div style={{ minWidth: 80 }}>
+              <Tag color={c}>{label}</Tag>
+            </div>
+            <div style={{ flex: 1, height: 20, borderRadius: 4, background: "rgba(255,255,255,0.05)", overflow: "hidden" }}>
+              <div style={{ width: `${pct}%`, height: "100%", borderRadius: 4, background: `${c}40` }} />
+            </div>
+            <T color={C.dim} size={13} style={{ minWidth: 200 }}>{desc}</T>
+          </div>
+        ))}
+      </div>
+      <div style={{ marginTop: 12, padding: "8px 12px", borderRadius: 8, background: `${C.blue}06`, border: `1px solid ${C.blue}12` }}>
+        <T color={C.dim} size={15}><strong style={{ color: C.bright }}>GPT-2:</strong> 12 layers. <strong style={{ color: C.bright }}>GPT-3:</strong> 96 layers. <strong style={{ color: C.bright }}>LLaMA 3 70B:</strong> 80 layers.</T>
+        <T color="#90caf9" size={15} style={{ marginTop: 4 }}>After all layers: "love" has been refined from "generic positive emotion" to "specific first-person affection directed at small furry animals in this particular sentence."</T>
+      </div>
+    </Box></Reveal>
+
+    <Reveal when={sub >= 6}><Box color={C.red} style={{ width: "100%" }}>
+      <T color="#ef9a9a" bold center size={20}>Step 6: Predict the next token</T>
+      <T color="#ef9a9a" style={{ marginTop: 6 }}>After all layers, each position holds a rich context-aware vector (512 numbers). The model takes the LAST position's vector and projects it through a Linear layer.</T>
+      <div style={{ marginTop: 8, padding: "8px 12px", borderRadius: 8, background: `${C.red}06`, border: `1px solid ${C.red}12` }}>
+        <T color={C.dim} size={15} center><strong style={{ color: C.red }}>Linear:</strong> 512 dims {"\u2192"} 50,257 (one score per word in vocabulary)</T>
+        <T color={C.dim} size={15} center style={{ marginTop: 4 }}><strong style={{ color: C.red }}>Softmax:</strong> converts raw scores into probabilities that sum to 1</T>
+      </div>
+      <T color="#ef9a9a" style={{ marginTop: 10 }} bold>Top predictions after "I love cats":</T>
+      <div style={{ marginTop: 6, display: "flex", flexDirection: "column", gap: 4 }}>
+        {[
+          { word: "very", prob: 35, c: C.green },
+          { word: "so", prob: 22, c: C.cyan },
+          { word: "a", prob: 12, c: C.yellow },
+          { word: "the", prob: 8, c: C.orange },
+          { word: "really", prob: 5, c: C.purple },
+        ].map(({ word, prob, c }) => (
+          <div key={word} style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            <T color={c} bold size={16} style={{ minWidth: 55 }}>{word}</T>
+            <div style={{ flex: 1, height: 18, borderRadius: 4, background: "rgba(255,255,255,0.05)", overflow: "hidden" }}>
+              <div style={{ width: `${prob}%`, height: "100%", borderRadius: 4, background: `${c}60` }} />
+            </div>
+            <T color={C.dim} size={14} style={{ minWidth: 35 }}>{prob}%</T>
+          </div>
+        ))}
+      </div>
+      <T color={C.dim} size={14} style={{ marginTop: 6 }}>The highest probability word becomes the prediction. The model picks "very" - "I love cats very..." and then repeats the whole process for the next token.</T>
+    </Box></Reveal>
+
+    <Reveal when={sub >= 7}><Box color={C.purple} style={{ width: "100%" }}>
+      <T color="#b8a9ff" bold center size={20}>The complete pipeline</T>
+      <T color="#b8a9ff" style={{ marginTop: 6 }}>Here is every step connected end to end:</T>
+      <div style={{ marginTop: 12, display: "flex", flexWrap: "wrap", gap: 6, justifyContent: "center", alignItems: "center" }}>
+        {[
+          { label: '"I love cats"', c: C.bright },
+          { label: "Tokenize", c: C.purple },
+          { label: "Embed", c: C.cyan },
+          { label: "+Position", c: C.yellow },
+          { label: "Self-Attention", c: C.green },
+          { label: "Add & Norm", c: C.orange },
+          { label: "FFN", c: C.blue },
+          { label: "Add & Norm", c: C.orange },
+          { label: "\u00d7N layers", c: C.blue },
+          { label: "Linear", c: C.red },
+          { label: "Softmax", c: C.red },
+          { label: '"very" (35%)', c: C.green },
+        ].map(({ label, c }, i, arr) => (
+          <span key={i} style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
+            <span style={{ padding: "4px 10px", borderRadius: 6, background: `${c}12`, border: `1px solid ${c}25`, whiteSpace: "nowrap" }}>
+              <T color={c} bold size={14}>{label}</T>
+            </span>
+            {i < arr.length - 1 && <T color={C.dim} size={16}>{"\u2192"}</T>}
+          </span>
+        ))}
+      </div>
+      <div style={{ marginTop: 14, padding: "10px 14px", borderRadius: 8, background: `${C.purple}06`, border: `1px solid ${C.purple}12` }}>
+        <T color="#b8a9ff" bold size={16}>The key insight</T>
+        <T color="#b8a9ff" size={15} style={{ marginTop: 4 }}>The word "love" entered as a generic 512-number vector and exited as a completely different 512-number vector that encodes "first-person affection directed at cats in a casual sentence."</T>
+        <T color="#b8a9ff" size={15} style={{ marginTop: 6 }}>This is what "understanding context" means - every word's vector is reshaped by all the other words around it. That reshaping is the pipeline you just saw.</T>
+      </div>
+    </Box></Reveal>
+    {sub < 7 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
+  </div>
+); }
+
+// ═══════════════════════════════════════
+// CHAPTER: The Output Head - Linear + Softmax
+// ═══════════════════════════════════════
+
+export const OutputHead = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx; return (
+  <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
+
+    {/* Sub 0: The gap between vectors and words */}
+    {sub >= 0 && (
+      <Box color={C.purple} style={{ width: "100%" }}>
+        <T color="#b8a9ff" bold center size={21}>From vectors to words - the final step</T>
+        <T color="#b8a9ff" style={{ marginTop: 8 }}>After all transformer layers, every position holds a rich, context-aware vector of <strong>512 numbers</strong>. This vector encodes everything the model understood about that position.</T>
+        <T color="#b8a9ff" style={{ marginTop: 6 }}>But we need an actual <strong>word</strong>, not 512 numbers. The model's vocab has <strong>50,257</strong> possible tokens. How does it choose one?</T>
+
+        <div style={{ marginTop: 14, display: "flex", alignItems: "center", justifyContent: "center", gap: 12, flexWrap: "wrap" }}>
+          <div style={{ padding: "10px 16px", borderRadius: 10, background: `${C.cyan}08`, border: `1px solid ${C.cyan}20`, textAlign: "center" }}>
+            <T color={C.cyan} bold size={16}>Decoder output</T>
+            <T color={C.dim} size={13} style={{ marginTop: 4 }}>[0.82, -0.31, 0.57, 0.14, ...]</T>
+            <T color={C.dim} size={12} style={{ marginTop: 2 }}>512 numbers</T>
+          </div>
+          <T color={C.bright} bold size={24}>{"\u2192"}</T>
+          <div style={{ padding: "10px 16px", borderRadius: 10, background: `${C.purple}08`, border: `1px solid ${C.purple}20`, textAlign: "center" }}>
+            <T color={C.purple} bold size={16}>?</T>
+            <T color={C.dim} size={13} style={{ marginTop: 4 }}>Which of 50,257 words?</T>
+          </div>
+        </div>
+
+        <T color="#b8a9ff" style={{ marginTop: 10 }}>That is exactly what the <strong>output head</strong> does. It has two parts: a <strong>Linear</strong> layer and <strong>Softmax</strong>. These are the two blocks sitting at the very top of the architecture diagram.</T>
+      </Box>
+    )}
+
+    {/* Sub 1: The Linear layer */}
+    <Reveal when={sub >= 1}><Box color={C.cyan} style={{ width: "100%" }}>
+      <T color="#80deea" bold center size={20}>The Linear layer - one giant matrix multiply</T>
+      <T color="#80deea" style={{ marginTop: 6 }}>The Linear layer is a weight matrix W with <strong>512 rows</strong> and <strong>50,257 columns</strong>. Each column represents one word in the vocabulary.</T>
+
+      <div style={{ marginTop: 14, padding: 14, borderRadius: 10, background: `${C.cyan}08`, border: `1px solid ${C.cyan}20` }}>
+        <T color="#80deea" bold center size={16}>The matrix multiplication</T>
+        <div style={{ marginTop: 10, display: "flex", alignItems: "center", justifyContent: "center", gap: 8, flexWrap: "wrap" }}>
+          <div style={{ padding: "8px 12px", borderRadius: 8, background: `${C.green}08`, border: `1px solid ${C.green}15`, textAlign: "center" }}>
+            <T color={C.green} bold size={14}>hidden state</T>
+            <T color={C.dim} size={13}>[1 x 512]</T>
+          </div>
+          <T color={C.bright} bold size={20}>{"\u00d7"}</T>
+          <div style={{ padding: "8px 12px", borderRadius: 8, background: `${C.cyan}08`, border: `1px solid ${C.cyan}15`, textAlign: "center" }}>
+            <T color={C.cyan} bold size={14}>W</T>
+            <T color={C.dim} size={13}>[512 x 50,257]</T>
+          </div>
+          <T color={C.bright} bold size={20}>=</T>
+          <div style={{ padding: "8px 12px", borderRadius: 8, background: `${C.yellow}08`, border: `1px solid ${C.yellow}15`, textAlign: "center" }}>
+            <T color={C.yellow} bold size={14}>logits</T>
+            <T color={C.dim} size={13}>[1 x 50,257]</T>
+          </div>
+        </div>
+      </div>
+
+      <T color="#80deea" style={{ marginTop: 10 }}>One matrix multiply. That is it. No activation function, no non-linearity - just multiply the 512-dim hidden state by this giant matrix and you get <strong>50,257 raw scores</strong>, one for every word in the vocabulary.</T>
+      <T color={C.dim} size={14} style={{ marginTop: 6 }}>This single matrix has 512 x 50,257 = <strong>25.7 million</strong> parameters. It is the second largest weight matrix in the model (after the embedding table).</T>
+    </Box></Reveal>
+
+    {/* Sub 2: What logits mean */}
+    <Reveal when={sub >= 2}><Box color={C.yellow} style={{ width: "100%" }}>
+      <T color="#fff176" bold center size={20}>What logits mean - dot product similarity</T>
+      <T color="#fff176" style={{ marginTop: 6 }}>Each logit is a <strong>dot product</strong> between the hidden state and one column of W. A high dot product means the hidden state is pointing in the same direction as that word's template.</T>
+
+      <div style={{ marginTop: 14, padding: 14, borderRadius: 10, background: `${C.yellow}08`, border: `1px solid ${C.yellow}20` }}>
+        <T color="#fff176" bold center size={16}>Computing one logit</T>
+        <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 6 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "6px 10px", borderRadius: 6, background: `${C.green}06` }}>
+            <T color={C.green} size={14} bold>hidden state:</T>
+            <T color={C.dim} size={13} style={{ fontFamily: "monospace" }}>[0.82, -0.31, 0.57, 0.14, ... 512 dims]</T>
+          </div>
+          <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "6px 10px", borderRadius: 6, background: `${C.cyan}06` }}>
+            <T color={C.cyan} size={14} bold>W column for "cats":</T>
+            <T color={C.dim} size={13} style={{ fontFamily: "monospace" }}>[0.71, -0.25, 0.63, 0.08, ... 512 dims]</T>
+          </div>
+          <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "6px 10px", borderRadius: 6, background: `${C.yellow}06` }}>
+            <T color={C.yellow} size={14} bold>logit = dot product:</T>
+            <T color={C.dim} size={13}>(0.82)(0.71) + (-0.31)(-0.25) + (0.57)(0.63) + ... = <strong style={{ color: C.yellow }}>4.2</strong></T>
+          </div>
+        </div>
+      </div>
+
+      <T color="#fff176" style={{ marginTop: 10 }} bold>This happens for all 50,257 words simultaneously:</T>
+      <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 3 }}>
+        {[
+          { word: "cats", logit: 4.2, c: C.green },
+          { word: "dogs", logit: 3.1, c: C.cyan },
+          { word: "the", logit: 1.5, c: C.yellow },
+          { word: "love", logit: -0.3, c: C.orange },
+          { word: "banana", logit: -2.1, c: C.red },
+        ].map(({ word, logit, c }) => (
+          <div key={word} style={{ display: "flex", alignItems: "center", gap: 8, padding: "4px 8px", borderRadius: 4, background: `${c}06` }}>
+            <T color={c} bold size={15} style={{ minWidth: 60 }}>{word}</T>
+            <div style={{ flex: 1, height: 14, borderRadius: 3, background: "rgba(255,255,255,0.04)", overflow: "hidden" }}>
+              <div style={{ width: `${Math.max((logit + 3) * 14, 2)}%`, height: "100%", borderRadius: 3, background: `${c}50` }} />
+            </div>
+            <T color={C.dim} size={13} style={{ minWidth: 35, fontFamily: "monospace" }}>{logit > 0 ? "+" : ""}{logit.toFixed(1)}</T>
+          </div>
+        ))}
+        <T color={C.dim} size={13} style={{ marginTop: 4 }}>... and 50,252 more words, each with a logit score</T>
+      </div>
+      <T color={C.dim} size={14} style={{ marginTop: 8 }}>High logit = the model's hidden state is similar to that word's representation. Low or negative = dissimilar. But these raw numbers are hard to interpret - we need probabilities.</T>
+    </Box></Reveal>
+
+    {/* Sub 3: Softmax */}
+    <Reveal when={sub >= 3}><Box color={C.green} style={{ width: "100%" }}>
+      <T color="#a5d6a7" bold center size={20}>Softmax - from scores to probabilities</T>
+      <T color="#a5d6a7" style={{ marginTop: 6 }}>Raw logits can be any number: positive, negative, huge, tiny. <strong>Softmax</strong> converts them into probabilities that are all positive and sum to exactly 1.</T>
+
+      <div style={{ marginTop: 14, padding: 14, borderRadius: 10, background: `${C.green}08`, border: `1px solid ${C.green}20` }}>
+        <T color="#a5d6a7" bold center size={16}>The softmax formula</T>
+        <T color={C.bright} center size={17} style={{ marginTop: 8, fontFamily: "monospace" }}>P(word_i) = e<sup>logit_i</sup> / {"\u03A3"} e<sup>logit_j</sup></T>
+        <T color={C.dim} center size={14} style={{ marginTop: 6 }}>Exponentiate each logit, then divide by the sum of all exponentiated logits.</T>
+      </div>
+
+      <T color="#a5d6a7" style={{ marginTop: 12 }} bold>Watch the transformation:</T>
+      <div style={{ marginTop: 8, display: "flex", gap: 8, flexWrap: "wrap" }}>
+        <div style={{ flex: "1 1 180px", display: "flex", flexDirection: "column", gap: 3 }}>
+          <T color={C.yellow} bold center size={14}>Raw logits</T>
+          {[
+            { word: "cats", val: "+4.2", c: C.green },
+            { word: "dogs", val: "+3.1", c: C.cyan },
+            { word: "the", val: "+1.5", c: C.yellow },
+            { word: "love", val: "-0.3", c: C.orange },
+            { word: "banana", val: "-2.1", c: C.red },
+          ].map(({ word, val, c }) => (
+            <div key={word} style={{ display: "flex", justifyContent: "space-between", padding: "3px 8px", borderRadius: 4, background: `${c}06` }}>
+              <T color={c} size={14}>{word}</T>
+              <T color={C.dim} size={14} style={{ fontFamily: "monospace" }}>{val}</T>
+            </div>
+          ))}
+        </div>
+        <div style={{ display: "flex", alignItems: "center" }}>
+          <T color={C.bright} bold size={20}>{"\u2192"}</T>
+        </div>
+        <div style={{ flex: "1 1 180px", display: "flex", flexDirection: "column", gap: 3 }}>
+          <T color={C.green} bold center size={14}>After softmax</T>
+          {[
+            { word: "cats", val: "62.2%", pct: 62.2, c: C.green },
+            { word: "dogs", val: "20.8%", pct: 20.8, c: C.cyan },
+            { word: "the", val: "4.2%", pct: 4.2, c: C.yellow },
+            { word: "love", val: "0.7%", pct: 0.7, c: C.orange },
+            { word: "banana", val: "0.1%", pct: 0.1, c: C.red },
+          ].map(({ word, val, pct, c }) => (
+            <div key={word} style={{ display: "flex", alignItems: "center", gap: 4, padding: "3px 8px", borderRadius: 4, background: `${c}06` }}>
+              <T color={c} size={14} style={{ minWidth: 50 }}>{word}</T>
+              <div style={{ flex: 1, height: 12, borderRadius: 3, background: "rgba(255,255,255,0.04)", overflow: "hidden" }}>
+                <div style={{ width: `${pct}%`, height: "100%", borderRadius: 3, background: `${c}50` }} />
+              </div>
+              <T color={C.dim} size={13} style={{ minWidth: 40, textAlign: "right" }}>{val}</T>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div style={{ marginTop: 12, padding: "8px 12px", borderRadius: 8, background: `${C.green}06`, border: `1px solid ${C.green}12` }}>
+        <T color={C.dim} size={14}>Notice how softmax <strong style={{ color: C.green }}>amplifies differences</strong>. A logit gap of just 1.1 between "cats" (4.2) and "dogs" (3.1) becomes a 3x probability difference (62% vs 21%). The exponential function makes the winner win big.</T>
+      </div>
+    </Box></Reveal>
+
+    {/* Sub 4: Temperature */}
+    <Reveal when={sub >= 4}><Box color={C.orange} style={{ width: "100%" }}>
+      <T color="#ffcc80" bold center size={20}>Temperature - the creativity dial</T>
+      <T color="#ffcc80" style={{ marginTop: 6 }}>Before softmax, divide each logit by a number called <strong>temperature (T)</strong>. This controls how "peaked" or "spread out" the resulting probabilities are.</T>
+
+      <div style={{ marginTop: 12, padding: 10, borderRadius: 8, background: `${C.orange}08`, border: `1px solid ${C.orange}20` }}>
+        <T color={C.bright} center size={16} style={{ fontFamily: "monospace" }}>softmax( logit / temperature )</T>
+      </div>
+
+      <div style={{ marginTop: 14, display: "flex", gap: 8, flexWrap: "wrap" }}>
+        {[
+          { temp: "T = 0.2", label: "Focused", desc: "Almost deterministic", probs: [{ w: "cats", p: 98 }, { w: "dogs", p: 2 }, { w: "the", p: 0 }], c: C.blue },
+          { temp: "T = 1.0", label: "Default", desc: "Balanced", probs: [{ w: "cats", p: 62 }, { w: "dogs", p: 21 }, { w: "the", p: 4 }], c: C.green },
+          { temp: "T = 2.0", label: "Creative", desc: "More spread out", probs: [{ w: "cats", p: 38 }, { w: "dogs", p: 27 }, { w: "the", p: 12 }], c: C.orange },
+        ].map(({ temp, label, desc, probs, c }) => (
+          <div key={temp} style={{ flex: "1 1 140px", padding: 10, borderRadius: 8, background: `${c}06`, border: `1px solid ${c}15` }}>
+            <T color={c} bold center size={15}>{temp}</T>
+            <T color={C.dim} center size={12}>{label} - {desc}</T>
+            <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 3 }}>
+              {probs.map(({ w, p }) => (
+                <div key={w} style={{ display: "flex", alignItems: "center", gap: 4 }}>
+                  <T color={C.dim} size={12} style={{ minWidth: 32 }}>{w}</T>
+                  <div style={{ flex: 1, height: 10, borderRadius: 3, background: "rgba(255,255,255,0.04)", overflow: "hidden" }}>
+                    <div style={{ width: `${p}%`, height: "100%", borderRadius: 3, background: `${c}50` }} />
+                  </div>
+                  <T color={C.dim} size={11} style={{ minWidth: 28, textAlign: "right" }}>{p}%</T>
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div style={{ marginTop: 10, padding: "8px 12px", borderRadius: 8, background: `${C.orange}06`, border: `1px solid ${C.orange}12` }}>
+        <T color={C.dim} size={14}><strong style={{ color: C.orange }}>Low temperature</strong> (0.2): divides logits by 0.2, making differences 5x larger before softmax. The top word dominates. <strong style={{ color: C.orange }}>High temperature</strong> (2.0): divides by 2.0, shrinking differences. More words get a fair chance. Temperature = 0 would be pure greedy (pick the top word every time).</T>
+      </div>
+    </Box></Reveal>
+
+    {/* Sub 5: Sampling strategies */}
+    <Reveal when={sub >= 5}><Box color={C.red} style={{ width: "100%" }}>
+      <T color="#ef9a9a" bold center size={20}>Sampling strategies - how to pick the next token</T>
+      <T color="#ef9a9a" style={{ marginTop: 6 }}>After softmax gives us probabilities, we still need to decide: which word do we actually pick? There are three main strategies:</T>
+
+      <div style={{ marginTop: 14, display: "flex", flexDirection: "column", gap: 10 }}>
+        {/* Greedy */}
+        <div style={{ padding: 12, borderRadius: 10, background: `${C.yellow}06`, border: `1px solid ${C.yellow}20` }}>
+          <T color={C.yellow} bold size={16}>Greedy decoding</T>
+          <T color={C.dim} size={14} style={{ marginTop: 4 }}>Always pick the highest probability word. Simple but boring - the same input always produces the same output.</T>
+          <div style={{ marginTop: 8, display: "flex", gap: 4, alignItems: "center", flexWrap: "wrap" }}>
+            {[
+              { w: "cats", p: 62, pick: true },
+              { w: "dogs", p: 21, pick: false },
+              { w: "the", p: 4, pick: false },
+              { w: "love", p: 1, pick: false },
+            ].map(({ w, p, pick }) => (
+              <div key={w} style={{ padding: "4px 10px", borderRadius: 6, background: pick ? `${C.green}15` : `${C.dim}08`, border: `1px solid ${pick ? C.green : C.dim}25` }}>
+                <T color={pick ? C.green : C.dim} bold={pick} size={13}>{w} {p}% {pick ? "\u2713" : ""}</T>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Top-k */}
+        <div style={{ padding: 12, borderRadius: 10, background: `${C.cyan}06`, border: `1px solid ${C.cyan}20` }}>
+          <T color={C.cyan} bold size={16}>Top-k sampling (e.g., k = 3)</T>
+          <T color={C.dim} size={14} style={{ marginTop: 4 }}>Keep only the k highest-probability words. Re-normalize their probabilities and randomly sample from them. Balances quality with variety.</T>
+          <div style={{ marginTop: 8, display: "flex", gap: 4, alignItems: "center", flexWrap: "wrap" }}>
+            {[
+              { w: "cats", p: 62, keep: true },
+              { w: "dogs", p: 21, keep: true },
+              { w: "the", p: 4, keep: true },
+              { w: "love", p: 1, keep: false },
+            ].map(({ w, p, keep }) => (
+              <div key={w} style={{ padding: "4px 10px", borderRadius: 6, background: keep ? `${C.cyan}15` : `${C.red}08`, border: `1px solid ${keep ? C.cyan : C.red}25`, textDecoration: keep ? "none" : "line-through" }}>
+                <T color={keep ? C.cyan : C.red} size={13}>{w} {p}%</T>
+              </div>
+            ))}
+            <T color={C.dim} size={12}>{"\u2192"} sample from top 3</T>
+          </div>
+        </div>
+
+        {/* Top-p */}
+        <div style={{ padding: 12, borderRadius: 10, background: `${C.green}06`, border: `1px solid ${C.green}20` }}>
+          <T color={C.green} bold size={16}>Top-p sampling / nucleus (e.g., p = 0.9)</T>
+          <T color={C.dim} size={14} style={{ marginTop: 4 }}>Keep adding words (highest probability first) until their cumulative probability reaches p. More adaptive than Top-k - uses fewer words when the model is confident, more when uncertain.</T>
+          <div style={{ marginTop: 8, display: "flex", gap: 4, alignItems: "center", flexWrap: "wrap" }}>
+            {[
+              { w: "cats", p: 62, cum: 62, keep: true },
+              { w: "dogs", p: 21, cum: 83, keep: true },
+              { w: "the", p: 4, cum: 87, keep: true },
+              { w: "love", p: 1, cum: 88, keep: false },
+            ].map(({ w, p, cum, keep }) => (
+              <div key={w} style={{ padding: "4px 10px", borderRadius: 6, background: keep ? `${C.green}15` : `${C.red}08`, border: `1px solid ${keep ? C.green : C.red}25` }}>
+                <T color={keep ? C.green : C.red} size={13}>{w} {p}% <span style={{ color: C.dim, fontSize: 11 }}>({"\u03A3"}{cum}%)</span></T>
+              </div>
+            ))}
+            <T color={C.dim} size={12}>{"\u2192"} stop at 87% (under 90%)</T>
+          </div>
+        </div>
+      </div>
+
+      <T color={C.dim} size={14} style={{ marginTop: 10 }}>In practice, most APIs combine temperature + Top-p. ChatGPT defaults: temperature = 1.0, Top-p = 1.0 (no filtering). For more focused output: temperature = 0.7, Top-p = 0.9.</T>
+    </Box></Reveal>
+
+    {/* Sub 6: Weight tying */}
+    <Reveal when={sub >= 6}><Box color={C.blue} style={{ width: "100%" }}>
+      <T color="#90caf9" bold center size={20}>Weight tying - the elegant shortcut</T>
+      <T color="#90caf9" style={{ marginTop: 6 }}>Here is a surprising fact: the output Linear layer's weight matrix W is <strong>the same matrix</strong> as the embedding table from the input - just transposed.</T>
+
+      <div style={{ marginTop: 14, display: "flex", gap: 8, flexWrap: "wrap", justifyContent: "center", alignItems: "center" }}>
+        <div style={{ padding: "10px 14px", borderRadius: 10, background: `${C.cyan}08`, border: `1px solid ${C.cyan}20`, textAlign: "center" }}>
+          <T color={C.cyan} bold size={15}>Embedding (input)</T>
+          <T color={C.dim} size={13} style={{ marginTop: 4 }}>word {"\u2192"} vector</T>
+          <T color={C.dim} size={12}>[50,257 x 512]</T>
+        </div>
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+          <T color={C.bright} bold size={14}>SAME MATRIX</T>
+          <T color={C.yellow} size={20}>{"\u21C6"}</T>
+        </div>
+        <div style={{ padding: "10px 14px", borderRadius: 10, background: `${C.blue}08`, border: `1px solid ${C.blue}20`, textAlign: "center" }}>
+          <T color={C.blue} bold size={15}>Linear (output)</T>
+          <T color={C.dim} size={13} style={{ marginTop: 4 }}>vector {"\u2192"} word scores</T>
+          <T color={C.dim} size={12}>[512 x 50,257]</T>
+        </div>
+      </div>
+
+      <div style={{ marginTop: 14, padding: 12, borderRadius: 8, background: `${C.blue}06`, border: `1px solid ${C.blue}12` }}>
+        <T color="#90caf9" bold size={15}>Why does this work?</T>
+        <T color={C.dim} size={14} style={{ marginTop: 4 }}>The embedding table maps each word to a point in 512-dimensional space. The output layer asks: "which word's point is closest to this hidden state?" That is the same operation in reverse.</T>
+        <T color={C.dim} size={14} style={{ marginTop: 6 }}>If the embedding for "cats" is [0.71, -0.25, 0.63, ...] and our hidden state is [0.82, -0.31, 0.57, ...], the dot product is high because they point in similar directions. The model is literally asking: "which embedding vector is this hidden state most similar to?"</T>
+      </div>
+
+      <div style={{ marginTop: 10, padding: "8px 12px", borderRadius: 8, background: `${C.green}06`, border: `1px solid ${C.green}12` }}>
+        <T color={C.green} bold size={14}>Parameter savings from weight tying</T>
+        <T color={C.dim} size={14} style={{ marginTop: 4 }}>Without tying: 50,257 x 512 = 25.7M extra parameters. With tying: <strong style={{ color: C.green }}>zero extra parameters</strong> - the output layer reuses the embedding matrix. GPT-2 and most modern LLMs use this trick.</T>
+      </div>
+    </Box></Reveal>
+
+    {/* Sub 7: Complete output pipeline */}
+    <Reveal when={sub >= 7}><Box color={C.purple} style={{ width: "100%" }}>
+      <T color="#b8a9ff" bold center size={20}>The complete output pipeline</T>
+      <T color="#b8a9ff" style={{ marginTop: 6 }}>Here is every step from hidden state to predicted token:</T>
+
+      <div style={{ marginTop: 14, display: "flex", flexWrap: "wrap", gap: 6, justifyContent: "center", alignItems: "center" }}>
+        {[
+          { label: "hidden state", desc: "512 dims", c: C.green },
+          { label: "Linear (W\u1d40)", desc: "512 \u2192 50,257", c: C.cyan },
+          { label: "logits", desc: "50,257 scores", c: C.yellow },
+          { label: "\u00f7 T", desc: "temperature", c: C.orange },
+          { label: "softmax", desc: "\u2192 probabilities", c: C.green },
+          { label: "sample", desc: "Top-k / Top-p", c: C.red },
+          { label: "next token", desc: '"cats"', c: C.purple },
+        ].map(({ label, desc, c }, i, arr) => (
+          <span key={i} style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
+            <span style={{ padding: "6px 12px", borderRadius: 8, background: `${c}10`, border: `1px solid ${c}25`, textAlign: "center" }}>
+              <T color={c} bold size={14}>{label}</T>
+              <T color={C.dim} size={11}>{desc}</T>
+            </span>
+            {i < arr.length - 1 && <T color={C.dim} size={16}>{"\u2192"}</T>}
+          </span>
+        ))}
+      </div>
+
+      <div style={{ marginTop: 14, display: "flex", flexDirection: "column", gap: 8 }}>
+        <div style={{ padding: "8px 12px", borderRadius: 8, background: `${C.purple}06`, border: `1px solid ${C.purple}12` }}>
+          <T color="#b8a9ff" bold size={15}>During training</T>
+          <T color={C.dim} size={14} style={{ marginTop: 4 }}>The model computes this output head at <strong>every</strong> position simultaneously. At position 1 ("I"), it should predict "love". At position 2 ("love"), it should predict "cats". Cross-entropy loss measures how wrong each prediction was, and backprop updates the weights.</T>
+        </div>
+        <div style={{ padding: "8px 12px", borderRadius: 8, background: `${C.cyan}06`, border: `1px solid ${C.cyan}12` }}>
+          <T color="#80deea" bold size={15}>During inference</T>
+          <T color={C.dim} size={14} style={{ marginTop: 4 }}>Only the <strong>last position's</strong> hidden state goes through the output head. That is the position where the model predicts the next token. This single prediction gets sampled, appended to the input, and the whole process repeats - one token at a time.</T>
+        </div>
+      </div>
+
+      <div style={{ marginTop: 12, padding: "10px 14px", borderRadius: 8, background: `${C.yellow}08`, border: `1px solid ${C.yellow}20` }}>
+        <T color="#fff176" bold size={15}>The big picture</T>
+        <T color="#fff176" size={14} style={{ marginTop: 4 }}>The entire transformer - embeddings, positional encoding, attention, FFN, layer stacking - exists to produce one good hidden state at the final position. The output head then converts that single 512-dimensional vector into a probability distribution over 50,257 words. One matrix multiply, one softmax. That is all it takes to go from "understanding" to "speaking."</T>
+      </div>
+    </Box></Reveal>
+    {sub < 7 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
   </div>
 ); }
 

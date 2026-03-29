@@ -5736,8 +5736,8 @@ export const ConcatWO = (ctx) => {
           <T color="#ffe082" bold center style={{ marginTop: 8 }}>
             We stick them end-to-end (concatenate):
           </T>
-          <div style={{ marginTop: 4, padding: "8px", background: "rgba(0,0,0,0.3)", borderRadius: 8 }}>
-            <T color={C.mid} size={16} mono>
+          <div style={{ marginTop: 4, padding: "8px", background: "rgba(0,0,0,0.3)", borderRadius: 8, textAlign: "center" }}>
+            <T color={C.mid} size={16} mono center>
               [0.3, 0.5, -0.2, 0.8, 0.7, -0.1, ..., 0.1, 0.4]
             </T>
           </div>
@@ -6745,10 +6745,10 @@ export const GroupedQueryAttention = (ctx) => {
             <T color={C.yellow} bold center size={16}>
               Total KV cache per batch item
             </T>
-            <T color={C.dim} size={15} style={{ marginTop: 4, fontFamily: "monospace" }}>
+            <T color={C.dim} size={15} center style={{ marginTop: 4, fontFamily: "monospace" }}>
               2 x 64 x 4096 x 128 x 2 bytes = 134,217,728 bytes per layer
             </T>
-            <T color={C.dim} size={15} style={{ fontFamily: "monospace" }}>
+            <T color={C.dim} size={15} center style={{ fontFamily: "monospace" }}>
               134,217,728 x 80 layers = 10,737,418,240 bytes
             </T>
             <T color={C.yellow} bold center size={18} style={{ marginTop: 6 }}>

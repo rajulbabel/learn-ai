@@ -2058,6 +2058,7 @@ export const WhyLinear = (ctx) => {
                 fontSize: 15,
                 color: "#ffe082",
                 lineHeight: 1.9,
+                textAlign: "center",
               }}
             >
               <div>Layer 1: output₁ = input × 3 + 1</div>
@@ -4859,6 +4860,7 @@ export const BackwardPass = (ctx) => {
               borderRadius: 8,
               border: `1px solid ${C.cyan}12`,
               marginBottom: 16,
+              textAlign: "center",
             }}
           >
             <T color={C.cyan} bold size={16} style={{ fontFamily: "monospace" }}>
@@ -9734,7 +9736,7 @@ export const Dropout = (ctx) => {
           </T>
           <div style={{ display: "flex", gap: 16, marginTop: 16 }}>
             <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center" }}>
-              <T color="#ef9a9a" bold size={15} center style={{ marginBottom: 8 }}>
+              <T color="#ef9a9a" bold size={15} center style={{ marginBottom: 8, paddingLeft: 24 }}>
                 Training Loss
               </T>
               <Graph
@@ -9763,6 +9765,7 @@ export const Dropout = (ctx) => {
                   borderRadius: 6,
                   border: `1px solid ${C.green}20`,
                   marginTop: 8,
+                  marginLeft: 24,
                 }}
               >
                 <T color={C.green} bold size={14}>
@@ -9771,7 +9774,7 @@ export const Dropout = (ctx) => {
               </div>
             </div>
             <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center" }}>
-              <T color="#ef9a9a" bold size={15} center style={{ marginBottom: 8 }}>
+              <T color="#ef9a9a" bold size={15} center style={{ marginBottom: 8, paddingLeft: 24 }}>
                 Validation Loss
               </T>
               <Graph
@@ -9801,6 +9804,7 @@ export const Dropout = (ctx) => {
                   borderRadius: 6,
                   border: `1px solid ${C.red}20`,
                   marginTop: 8,
+                  marginLeft: 24,
                 }}
               >
                 <T color={C.red} bold size={14}>

@@ -419,6 +419,11 @@ user to remind you.
   tinted backgrounds: `background: \`\${color}06\``, `border: \`1px solid \${color}12\``,
   `borderRadius: 8`. Never use `opacity` on elements to create transparency -
   use hex alpha instead.
+- **Standalone formulas always centered** - any formula, equation, vector
+  display, or worked computation in its own dark/tinted box MUST have
+  `textAlign: "center"` on the container div. This includes monospace math
+  like `new_weight = old_weight - lr x gradient` and vector displays like
+  `[0.2, 0.9, 0.4]`. Inline formulas within flowing text sentences are exempt.
 - **SVG search metadata** - every `<svg>` element MUST have a `<desc>` child as
   its first element, describing what the diagram shows in plain language (1-2
   sentences). For JSX SVGs, add `<desc>text</desc>`. For the Graph component,

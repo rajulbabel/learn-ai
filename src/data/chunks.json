@@ -1293,7 +1293,7 @@
     "section": 1,
     "sectionName": "Neural Network Foundations",
     "sub": 0,
-    "text": "The Overfitting ProblemA network can memorize the training data instead of learning general patterns. Like a student who memorizes every answer but cannot solve a new problem.Training LossLine graph showing training loss decreasing steadily over epochs, illustrating a model that memorizes training dataEpochLossKeeps dropping02468101214Final: 0.02Validation LossLine graph showing validation loss that initially decreases then increases, with a Best annotation at the minimum, illustrating overfittingEpochLossGoes UP!02468101214BestFinal: 2.8The network scores perfectly on data it has seen, but fails on new data. The gap between 0.02 and 2.8 is the overfitting gap.Continue"
+    "text": "What Are Training Loss and Validation Loss?Before training, we split our data into two groups. The model only ever learns from one group - the other is kept hidden as an honest test.Dataset split bar showing 80% training data in green and 20% validation data in orange, with labeled countsTraining Data (80%)20%800 examples200 examples1,000 total examplesTraining LossIcon showing an open eye with a checkmark, representing data the model sees during trainingError measured on data the model trains on. The model sees these examples, makes predictions, and adjusts its weights.Always goes down with more trainingValidation LossIcon showing a closed eye with a lock, representing held-out data the model never sees during trainingError measured on data the model has NEVER seen. These examples are hidden during training - they are the honest test.The real measure of learningTraining loss tells you how well the model memorizes. Validation loss tells you how well it generalizes to new, unseen data. The gap between them is everything.Continue"
   },
   {
     "id": 144,
@@ -1302,7 +1302,7 @@
     "section": 1,
     "sectionName": "Neural Network Foundations",
     "sub": 1,
-    "text": "tion - Randomly Zero Out NeuronsDuring training, randomly set some neurons to zero. Every forward pass uses a different random subset of the network.Six-neuron layer with dropout showing alternating active and dropped neurons during training6-Neuron Layer with Dropout (p = 0.5)n1ACTIVEDROPPEDn3ACTIVEDROPPEDn5ACTIVEDROPPEDDropout rate p = 0.5 means each neuron has a 50% chance of being zeroed out on each forward pass. Every training step sees a different random subset of the network.Continue"
+    "text": "fitting ProblemWatch what happens as training continues. The model starts to memorize the training data instead of learning general patterns.Combined line graph showing training loss and validation loss over 14 epochs, with annotated zones for both improving, sweet spot, and overfitting region where the curves divergeLossEpoch02468101214Both improvingOverfitting zoneSweet SpotGAPTraining LossValidation LossTraining: 0.02Memorized everything perfectlyValidation: 2.80Fails completely on new dataLike a student who memorizes every answer in the textbook but cannot solve a new problem on the exam. The network scores perfectly on data it has seen, but fails on anything new.Continue"
   },
   {
     "id": 145,
@@ -1311,7 +1311,7 @@
     "section": 1,
     "sectionName": "Neural Network Foundations",
     "sub": 2,
-    "text": "Works - Forced RedundancyNo single neuron can become a \"lone specialist\" that the network depends on entirely. Every neuron must be useful even when its neighbors are missing.Without DropoutNeuron 3 memorizes a specific pattern. If neuron 3 fails, the network breaks. Knowledge is fragile and concentrated.With DropoutAll neurons learn overlapping representations. Any 3 of 6 can carry the signal. Knowledge is distributed and robust.Think of a team of 6 people where any 3 might be absent on any given day. Everyone must learn everyone else's job. The team becomes resilient - no single point of failure.Continue"
+    "text": "tion - Randomly Zero Out NeuronsDuring training, randomly set some neurons to zero. Every forward pass uses a different random subset of the network.Six-neuron layer with dropout showing alternating active and dropped neurons during training6-Neuron Layer with Dropout (p = 0.5)n1ACTIVEDROPPEDn3ACTIVEDROPPEDn5ACTIVEDROPPEDDropout rate p = 0.5 means each neuron has a 50% chance of being zeroed out on each forward pass. Every training step sees a different random subset of the network.Why This Works - Forced RedundancyNo single neuron can become a \"lone specialist\" that the network depends on entirely. Every neuron must be useful even when its neighbors are missing.Without DropoutNeuron 3 memorizes a specific pattern. If neuron 3 fails, the network breaks. Knowledge is fragile and concentrated.With DropoutAll neurons learn overlapping representations. Any 3 of 6 can carry the signal. Knowledge is distributed and robust.Think of a team of 6 people where any 3 might be absent on any given day. Everyone must learn everyone else's job. The team becomes resilient - no single point of failure.Continue"
   },
   {
     "id": 146,

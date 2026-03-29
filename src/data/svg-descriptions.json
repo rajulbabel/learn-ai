@@ -1,0 +1,89 @@
+{
+  "1.1": [
+    "Three-layer neural network with input neurons x1 x2 x3, hidden layer h1 h2 h3, and output neurons o1 o2, showing fully connected weighted edges between layers"
+  ],
+  "1.2": [
+    "Single neuron diagram showing 3 weighted inputs (0.6, 0.3, 0.1) feeding into one neuron that produces a single output value"
+  ],
+  "1.3": [
+    "Neural network layer with 3 inputs (fever, cough, fatigue) connected to 3 neurons (Flu, Cold, Allergy) producing output scores, showing how a layer processes all inputs simultaneously",
+    "Detailed weight connection diagram showing 3 inputs mapped to 3 neurons with 9 individually labeled weights, demonstrating different neurons use different weights on the same inputs"
+  ],
+  "1.4": [
+    "Labeled neuron anatomy diagram showing inputs with weights, sum plus bias, activation function (ReLU), and output, illustrating the complete computation inside a single neuron"
+  ],
+  "1.5": [
+    "Line graph of study hours vs grade showing a linear relationship that a straight line can model",
+    "Curve graph of temperature vs growth showing a parabolic peak pattern that no straight line can fit",
+    "S-curve graph of drug dose vs effect showing a nonlinear response that no straight line can fit"
+  ],
+  "1.6": [
+    "Line graph showing ReLU-activated neuron output that is flat at zero then linearly increases, with an annotated bend point",
+    "Line graph showing a second ReLU neuron with a different bend point, demonstrating how different weights create different activation patterns",
+    "Line graph showing the combined output of two ReLU neurons creating a valley shape that no single straight line could produce"
+  ],
+  "1.7": [
+    "Two-layer neural network with labeled weights and biases on every edge, used for tracing a complete forward pass computation step by step"
+  ],
+  "1.8": [
+    "Bar chart comparing predicted value against actual value with an annotated gap, plus a causal chain showing weights leading to prediction leading to loss"
+  ],
+  "1.10": [
+    "Simple neuron flow diagram showing input connected by weight to a neuron with bias, producing output, used to demonstrate derivative computation",
+    "Parabolic loss curve (loss vs weight) with a marked current point, tangent line labeled slope equals derivative, and an arrow toward the minimum"
+  ],
+  "1.11": [
+    "Chain rule formula rendered as partial derivatives: dLoss/dweight decomposed into three colored fractions showing the three backward pass steps"
+  ],
+  "1.12": [
+    "Gradient descent visualization showing a U-shaped loss curve with labeled steps and curved arrows rolling downhill toward the minimum through successive weight updates"
+  ],
+  "1.13": [
+    "Two-layer neural network annotated with all weights, biases, intermediate outputs, target value, loss value, and backward gradient flow arrow for backpropagation tracing"
+  ],
+  "1.19": [
+    "Neural network layer with 3 medical inputs fully connected to 3 neurons with 9 labeled weights and output scores, demonstrating that a layer is matrix multiplication"
+  ],
+  "1.23": [
+    "Line graph showing training loss decreasing steadily over epochs, illustrating a model that memorizes training data",
+    "Line graph showing validation loss that initially decreases then increases, with a Best annotation at the minimum, illustrating overfitting",
+    "Six-neuron layer with dropout showing alternating active and dropped neurons, illustrating random neuron zeroing during training",
+    "Six-neuron layer at inference showing all neurons active, illustrating that dropout is turned off during prediction",
+    "Vertical transformer block diagram showing where dropout is applied: after attention and after FFN, each with p=0.1"
+  ],
+  "1.25": [
+    "Line graph showing learning rate increasing linearly from zero during warmup phase over 2000 training steps",
+    "Line graph showing learning rate with linear warmup to a peak then smooth cosine decay to zero, illustrating the complete LR schedule"
+  ],
+  "1.26": [
+    "Diagram showing the symmetry problem when all weights are zero: three neurons all produce identical output, the network is stuck forever"
+  ],
+  "2.3": [
+    "Cross-entropy loss formula rendered as mathematical notation: Loss = -log(P_correct), with annotations explaining each term",
+    "Plotted negative log probability curve showing loss vs probability with annotated points from confident-and-right to very-wrong, demonstrating exponential penalty for low confidence"
+  ],
+  "2.5": [
+    "Deep neural network output layer diagram showing hidden state neurons connected through an unembedding weight matrix to vocabulary output neurons, illustrating how hidden states become word predictions"
+  ],
+  "5.1": [
+    "Complete Transformer architecture diagram showing encoder and decoder halves with multi-head attention, add and norm, FFN layers, positional encoding, embeddings, residual skip connections, and linear plus softmax output head"
+  ],
+  "7.4": [
+    "Softmax formula rendered as mathematical notation showing e to the power of each score divided by sum of all e scores, converting raw attention scores to probabilities"
+  ],
+  "8.3": [
+    "Feed-forward network architecture diagram showing expand-then-compress structure: 512-dim input through W1 to 2048-dim hidden with GELU activation, then W2 back to 512-dim output"
+  ],
+  "8.6": [
+    "Vertical Transformer encoder block stack diagram showing token embedding plus positional encoding feeding through repeated blocks (each with self-attention, add and norm, FFN, add and norm) annotated with Nx bracket"
+  ],
+  "9.3": [
+    "Cross-attention architecture diagram showing encoder stack producing K and V projections cached and fanned out to decoder layers, where Q comes from decoder while K and V come from encoder output"
+  ],
+  "9.7": [
+    "Progressive encoder-decoder training flow diagram showing complete pipeline: tokenization, embedding, positional encoding, encoder self-attention with Q K V projections, FFN, decoder with causal masking and cross-attention, and output head producing predictions at every position"
+  ],
+  "9.8": [
+    "Progressive encoder-decoder inference flow diagram showing autoregressive generation: encoder runs once, K V output is cached, decoder runs in a loop processing one new token at a time using KV cache for previously computed keys and values"
+  ]
+}

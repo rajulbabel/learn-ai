@@ -225,7 +225,8 @@ learn-ai/
 │   │   ├── lookup.test.js               # Component lookup tests
 │   │   ├── components.test.jsx          # Shared component tests
 │   │   ├── nav-persistence.test.js      # Nav persistence tests (save, load, edge cases)
-│   │   └── sections.test.jsx            # All chapter function tests
+│   │   ├── sections.test.jsx             # All chapter function tests
+│   │   └── svg-descriptions.test.js     # SVG description manifest validation
 │   └── sections/
 │       ├── toc.jsx                       # Table of Contents
 │       ├── neural-foundations.jsx         # Section 1
@@ -340,6 +341,7 @@ Coverage must not decrease. Any new code must have corresponding tests.
 | `components.test.jsx` | ErrorBoundary, Box, T, Reveal, SubBtn, Tag |
 | `nav-persistence.test.js` | saveNav/loadNav: config match, config change, corrupted data, localStorage errors |
 | `sections.test.jsx` | All chapter functions at every sub level with interaction coverage |
+| `svg-descriptions.test.js` | SVG description manifest: valid IDs, non-empty descriptions, full coverage |
 
 ## Key Design Decisions
 
@@ -417,6 +419,14 @@ user to remind you.
   tinted backgrounds: `background: \`\${color}06\``, `border: \`1px solid \${color}12\``,
   `borderRadius: 8`. Never use `opacity` on elements to create transparency -
   use hex alpha instead.
+- **SVG search metadata** - every `<svg>` element MUST have a `<desc>` child as
+  its first element, describing what the diagram shows in plain language (1-2
+  sentences). For JSX SVGs, add `<desc>text</desc>`. For the Graph component,
+  pass a `desc` prop. For imperative SVGs (B() factory), call `desc("text")`.
+  When adding or modifying an SVG, also add/update the corresponding entry in
+  `src/data/svg-descriptions.json`. Descriptions should use terms a learner
+  would search for. This is invisible metadata that powers semantic search -
+  it never renders visually.
 
 **The goal is advanced-level understanding through the most illustrative,
 visual, and clear explanations possible.** Every formula must be the real

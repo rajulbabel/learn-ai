@@ -1,299 +1,981 @@
 import { C } from "../config.js";
 import { Box, T, Reveal, SubBtn, Tag } from "../components.jsx";
-export const FullArchitecture = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx;
+export const FullArchitecture = (ctx) => {
+  const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx;
   const ArchDiagram = () => (
     <svg width="420" height="580" viewBox="0 0 420 580" style={{ maxWidth: "100%", overflow: "visible" }}>
+      <desc>
+        Complete Transformer architecture diagram showing encoder and decoder halves with multi-head attention, add and
+        norm, FFN layers, positional encoding, embeddings, residual connections, and output head
+      </desc>
       <defs>
-        <marker id="arrowW" markerWidth="7" markerHeight="5" refX="6" refY="2.5" orient="auto"><polygon points="0 0,7 2.5,0 5" fill="rgba(255,255,255,0.45)" /></marker>
-        <marker id="arrowG" markerWidth="7" markerHeight="5" refX="6" refY="2.5" orient="auto"><polygon points="0 0,7 2.5,0 5" fill={`${C.green}90`} /></marker>
+        <marker id="arrowW" markerWidth="7" markerHeight="5" refX="6" refY="2.5" orient="auto">
+          <polygon points="0 0,7 2.5,0 5" fill="rgba(255,255,255,0.45)" />
+        </marker>
+        <marker id="arrowG" markerWidth="7" markerHeight="5" refX="6" refY="2.5" orient="auto">
+          <polygon points="0 0,7 2.5,0 5" fill={`${C.green}90`} />
+        </marker>
       </defs>
 
       {/* ═══ ENCODER (left) ═══ */}
-      <text x="107" y="16" fill={C.cyan} fontSize="12" textAnchor="middle" fontWeight="700">ENCODER</text>
+      <text x="107" y="16" fill={C.cyan} fontSize="12" textAnchor="middle" fontWeight="700">
+        ENCODER
+      </text>
 
       {/* Encoder outer stack box */}
-      <rect x="22" y="188" width="170" height="240" rx="12" fill="rgba(255,255,255,0.02)" stroke="rgba(255,255,255,0.1)" strokeWidth="1.5" strokeDasharray="6,3" />
-      <text x="180" y="420" fill={C.dim} fontSize="9" textAnchor="end">×N</text>
+      <rect
+        x="22"
+        y="188"
+        width="170"
+        height="240"
+        rx="12"
+        fill="rgba(255,255,255,0.02)"
+        stroke="rgba(255,255,255,0.1)"
+        strokeWidth="1.5"
+        strokeDasharray="6,3"
+      />
+      <text x="180" y="420" fill={C.dim} fontSize="9" textAnchor="end">
+        ×N
+      </text>
 
       {/* --- Encoder boxes (bottom to top) --- */}
       {/* E: Multi-Head Attention */}
-      <rect x="45" y="350" width="125" height="44" rx="8" fill="rgba(0,184,212,0.15)" stroke={C.cyan} strokeWidth="1.5" />
-      <text x="107" y="368" fill={C.cyan} fontSize="10" textAnchor="middle" fontWeight="700">Multi-Head</text>
-      <text x="107" y="382" fill={C.cyan} fontSize="10" textAnchor="middle" fontWeight="700">Attention</text>
+      <rect
+        x="45"
+        y="350"
+        width="125"
+        height="44"
+        rx="8"
+        fill="rgba(0,184,212,0.15)"
+        stroke={C.cyan}
+        strokeWidth="1.5"
+      />
+      <text x="107" y="368" fill={C.cyan} fontSize="10" textAnchor="middle" fontWeight="700">
+        Multi-Head
+      </text>
+      <text x="107" y="382" fill={C.cyan} fontSize="10" textAnchor="middle" fontWeight="700">
+        Attention
+      </text>
 
       {/* E: Add & Norm 1 (above attention) */}
-      <rect x="45" y="306" width="125" height="26" rx="6" fill="rgba(255,165,0,0.12)" stroke="#ff9800" strokeWidth="1.2" />
-      <text x="107" y="323" fill="#ff9800" fontSize="10" textAnchor="middle" fontWeight="600">Add & Norm</text>
+      <rect
+        x="45"
+        y="306"
+        width="125"
+        height="26"
+        rx="6"
+        fill="rgba(255,165,0,0.12)"
+        stroke="#ff9800"
+        strokeWidth="1.2"
+      />
+      <text x="107" y="323" fill="#ff9800" fontSize="10" textAnchor="middle" fontWeight="600">
+        Add & Norm
+      </text>
 
       {/* E: FFN */}
-      <rect x="45" y="256" width="125" height="36" rx="8" fill="rgba(100,149,237,0.12)" stroke="cornflowerblue" strokeWidth="1.2" />
-      <text x="107" y="271" fill="cornflowerblue" fontSize="10" textAnchor="middle" fontWeight="700">Point-wise</text>
-      <text x="107" y="284" fill="cornflowerblue" fontSize="10" textAnchor="middle" fontWeight="700">FFN</text>
+      <rect
+        x="45"
+        y="256"
+        width="125"
+        height="36"
+        rx="8"
+        fill="rgba(100,149,237,0.12)"
+        stroke="cornflowerblue"
+        strokeWidth="1.2"
+      />
+      <text x="107" y="271" fill="cornflowerblue" fontSize="10" textAnchor="middle" fontWeight="700">
+        Point-wise
+      </text>
+      <text x="107" y="284" fill="cornflowerblue" fontSize="10" textAnchor="middle" fontWeight="700">
+        FFN
+      </text>
 
       {/* E: Add & Norm 2 (above FFN) */}
-      <rect x="45" y="212" width="125" height="26" rx="6" fill="rgba(255,165,0,0.12)" stroke="#ff9800" strokeWidth="1.2" />
-      <text x="107" y="229" fill="#ff9800" fontSize="10" textAnchor="middle" fontWeight="600">Add & Norm</text>
+      <rect
+        x="45"
+        y="212"
+        width="125"
+        height="26"
+        rx="6"
+        fill="rgba(255,165,0,0.12)"
+        stroke="#ff9800"
+        strokeWidth="1.2"
+      />
+      <text x="107" y="229" fill="#ff9800" fontSize="10" textAnchor="middle" fontWeight="600">
+        Add & Norm
+      </text>
 
       {/* --- Encoder MAIN flow arrows (bottom to top, center) --- */}
       {/* Input area → Attention */}
-      <line x1="107" y1="430" x2="107" y2="396" stroke="rgba(255,255,255,0.35)" strokeWidth="1.5" markerEnd="url(#arrowW)" />
+      <line
+        x1="107"
+        y1="430"
+        x2="107"
+        y2="396"
+        stroke="rgba(255,255,255,0.35)"
+        strokeWidth="1.5"
+        markerEnd="url(#arrowW)"
+      />
       {/* Attention → Add&Norm1 */}
-      <line x1="107" y1="350" x2="107" y2="334" stroke="rgba(255,255,255,0.35)" strokeWidth="1.5" markerEnd="url(#arrowW)" />
+      <line
+        x1="107"
+        y1="350"
+        x2="107"
+        y2="334"
+        stroke="rgba(255,255,255,0.35)"
+        strokeWidth="1.5"
+        markerEnd="url(#arrowW)"
+      />
       {/* Add&Norm1 → FFN */}
-      <line x1="107" y1="306" x2="107" y2="294" stroke="rgba(255,255,255,0.35)" strokeWidth="1.5" markerEnd="url(#arrowW)" />
+      <line
+        x1="107"
+        y1="306"
+        x2="107"
+        y2="294"
+        stroke="rgba(255,255,255,0.35)"
+        strokeWidth="1.5"
+        markerEnd="url(#arrowW)"
+      />
       {/* FFN → Add&Norm2 */}
-      <line x1="107" y1="256" x2="107" y2="240" stroke="rgba(255,255,255,0.35)" strokeWidth="1.5" markerEnd="url(#arrowW)" />
+      <line
+        x1="107"
+        y1="256"
+        x2="107"
+        y2="240"
+        stroke="rgba(255,255,255,0.35)"
+        strokeWidth="1.5"
+        markerEnd="url(#arrowW)"
+      />
       {/* Add&Norm2 → out of stack */}
-      <line x1="107" y1="212" x2="107" y2="185" stroke="rgba(255,255,255,0.35)" strokeWidth="1.5" markerEnd="url(#arrowW)" />
+      <line
+        x1="107"
+        y1="212"
+        x2="107"
+        y2="185"
+        stroke="rgba(255,255,255,0.35)"
+        strokeWidth="1.5"
+        markerEnd="url(#arrowW)"
+      />
 
       {/* --- Encoder RESIDUAL skip connections --- */}
       {/* Skip around Attention: from below attention, go left, up to Add&Norm1 */}
-      <path d="M45,396 L30,396 L30,319 L43,319" fill="none" stroke="rgba(255,255,255,0.22)" strokeWidth="1.5" markerEnd="url(#arrowW)" />
+      <path
+        d="M45,396 L30,396 L30,319 L43,319"
+        fill="none"
+        stroke="rgba(255,255,255,0.22)"
+        strokeWidth="1.5"
+        markerEnd="url(#arrowW)"
+      />
       {/* Skip around FFN: from below FFN (=Add&Norm1 out), go left, up to Add&Norm2 */}
-      <path d="M45,294 L30,294 L30,225 L43,225" fill="none" stroke="rgba(255,255,255,0.22)" strokeWidth="1.5" markerEnd="url(#arrowW)" />
+      <path
+        d="M45,294 L30,294 L30,225 L43,225"
+        fill="none"
+        stroke="rgba(255,255,255,0.22)"
+        strokeWidth="1.5"
+        markerEnd="url(#arrowW)"
+      />
 
       {/* --- Encoder bottom: Positional Encoding + Embedding --- */}
-      <circle cx="107" cy="448" r="14" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.25)" strokeWidth="1.2" />
-      <text x="107" y="452" fill="rgba(255,255,255,0.5)" fontSize="14" textAnchor="middle">⊕</text>
-      <text x="27" y="448" fill={C.dim} fontSize="8" textAnchor="middle">Positional</text>
-      <text x="27" y="459" fill={C.dim} fontSize="8" textAnchor="middle">Encoding</text>
-      <line x1="50" y1="448" x2="91" y2="448" stroke="rgba(255,255,255,0.2)" strokeWidth="1.2" markerEnd="url(#arrowW)" />
+      <circle
+        cx="107"
+        cy="448"
+        r="14"
+        fill="rgba(255,255,255,0.03)"
+        stroke="rgba(255,255,255,0.25)"
+        strokeWidth="1.2"
+      />
+      <text x="107" y="452" fill="rgba(255,255,255,0.5)" fontSize="14" textAnchor="middle">
+        ⊕
+      </text>
+      <text x="27" y="448" fill={C.dim} fontSize="8" textAnchor="middle">
+        Positional
+      </text>
+      <text x="27" y="459" fill={C.dim} fontSize="8" textAnchor="middle">
+        Encoding
+      </text>
+      <line
+        x1="50"
+        y1="448"
+        x2="91"
+        y2="448"
+        stroke="rgba(255,255,255,0.2)"
+        strokeWidth="1.2"
+        markerEnd="url(#arrowW)"
+      />
 
-      <rect x="57" y="480" width="100" height="34" rx="8" fill="rgba(0,230,118,0.12)" stroke={C.green} strokeWidth="1.5" />
-      <text x="107" y="493" fill={C.green} fontSize="10" textAnchor="middle" fontWeight="700">Encoder</text>
-      <text x="107" y="506" fill={C.green} fontSize="10" textAnchor="middle" fontWeight="700">Embedding</text>
+      <rect
+        x="57"
+        y="480"
+        width="100"
+        height="34"
+        rx="8"
+        fill="rgba(0,230,118,0.12)"
+        stroke={C.green}
+        strokeWidth="1.5"
+      />
+      <text x="107" y="493" fill={C.green} fontSize="10" textAnchor="middle" fontWeight="700">
+        Encoder
+      </text>
+      <text x="107" y="506" fill={C.green} fontSize="10" textAnchor="middle" fontWeight="700">
+        Embedding
+      </text>
 
       {/* Embedding → ⊕ */}
-      <line x1="107" y1="480" x2="107" y2="464" stroke="rgba(255,255,255,0.35)" strokeWidth="1.5" markerEnd="url(#arrowW)" />
+      <line
+        x1="107"
+        y1="480"
+        x2="107"
+        y2="464"
+        stroke="rgba(255,255,255,0.35)"
+        strokeWidth="1.5"
+        markerEnd="url(#arrowW)"
+      />
       {/* Inputs label */}
-      <text x="107" y="540" fill={C.dim} fontSize="11" textAnchor="middle">Inputs</text>
-      <line x1="107" y1="530" x2="107" y2="516" stroke="rgba(255,255,255,0.2)" strokeWidth="1.2" markerEnd="url(#arrowW)" />
-
+      <text x="107" y="540" fill={C.dim} fontSize="11" textAnchor="middle">
+        Inputs
+      </text>
+      <line
+        x1="107"
+        y1="530"
+        x2="107"
+        y2="516"
+        stroke="rgba(255,255,255,0.2)"
+        strokeWidth="1.2"
+        markerEnd="url(#arrowW)"
+      />
 
       {/* ═══ DECODER (right) ═══ */}
-      <text x="380" y="6" fill={C.red} fontSize="12" textAnchor="middle" fontWeight="700">DECODER</text>
+      <text x="380" y="6" fill={C.red} fontSize="12" textAnchor="middle" fontWeight="700">
+        DECODER
+      </text>
 
       {/* Output head: Linear & SoftMax */}
-      <rect x="252" y="34" width="120" height="36" rx="8" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.3)" strokeWidth="1.5" />
-      <text x="312" y="49" fill={C.bright} fontSize="10" textAnchor="middle" fontWeight="700">Linear &</text>
-      <text x="312" y="62" fill={C.bright} fontSize="10" textAnchor="middle" fontWeight="700">SoftMax</text>
-      <text x="312" y="27" fill={C.dim} fontSize="9" textAnchor="middle">Output Probabilities</text>
-      <line x1="312" y1="34" x2="312" y2="8" stroke="rgba(255,255,255,0.3)" strokeWidth="1.2" markerEnd="url(#arrowW)" />
+      <rect
+        x="252"
+        y="34"
+        width="120"
+        height="36"
+        rx="8"
+        fill="rgba(255,255,255,0.06)"
+        stroke="rgba(255,255,255,0.3)"
+        strokeWidth="1.5"
+      />
+      <text x="312" y="49" fill={C.bright} fontSize="10" textAnchor="middle" fontWeight="700">
+        Linear &
+      </text>
+      <text x="312" y="62" fill={C.bright} fontSize="10" textAnchor="middle" fontWeight="700">
+        SoftMax
+      </text>
+      <text x="312" y="27" fill={C.dim} fontSize="9" textAnchor="middle">
+        Output Probabilities
+      </text>
+      <line
+        x1="312"
+        y1="34"
+        x2="312"
+        y2="8"
+        stroke="rgba(255,255,255,0.3)"
+        strokeWidth="1.2"
+        markerEnd="url(#arrowW)"
+      />
 
       {/* Decoder outer stack box */}
-      <rect x="228" y="86" width="170" height="340" rx="12" fill="rgba(255,255,255,0.02)" stroke="rgba(255,255,255,0.1)" strokeWidth="1.5" strokeDasharray="6,3" />
-      <text x="386" y="420" fill={C.dim} fontSize="9" textAnchor="end">×N</text>
+      <rect
+        x="228"
+        y="86"
+        width="170"
+        height="340"
+        rx="12"
+        fill="rgba(255,255,255,0.02)"
+        stroke="rgba(255,255,255,0.1)"
+        strokeWidth="1.5"
+        strokeDasharray="6,3"
+      />
+      <text x="386" y="420" fill={C.dim} fontSize="9" textAnchor="end">
+        ×N
+      </text>
 
       {/* --- Decoder boxes (bottom to top) --- */}
       {/* D: Masked Multi-Head Attention */}
-      <rect x="252" y="348" width="125" height="44" rx="8" fill="rgba(255,152,0,0.12)" stroke="#ff9800" strokeWidth="1.5" />
-      <text x="314" y="364" fill="#ff9800" fontSize="9" textAnchor="middle" fontWeight="700">Masked</text>
-      <text x="314" y="377" fill="#ff9800" fontSize="9" textAnchor="middle" fontWeight="700">Multi-Head Attn</text>
+      <rect
+        x="252"
+        y="348"
+        width="125"
+        height="44"
+        rx="8"
+        fill="rgba(255,152,0,0.12)"
+        stroke="#ff9800"
+        strokeWidth="1.5"
+      />
+      <text x="314" y="364" fill="#ff9800" fontSize="9" textAnchor="middle" fontWeight="700">
+        Masked
+      </text>
+      <text x="314" y="377" fill="#ff9800" fontSize="9" textAnchor="middle" fontWeight="700">
+        Multi-Head Attn
+      </text>
 
       {/* D: Add & Norm 1 (above masked attn) */}
-      <rect x="252" y="306" width="125" height="26" rx="6" fill="rgba(255,165,0,0.12)" stroke="#ff9800" strokeWidth="1.2" />
-      <text x="314" y="323" fill="#ff9800" fontSize="10" textAnchor="middle" fontWeight="600">Add & Norm</text>
+      <rect
+        x="252"
+        y="306"
+        width="125"
+        height="26"
+        rx="6"
+        fill="rgba(255,165,0,0.12)"
+        stroke="#ff9800"
+        strokeWidth="1.2"
+      />
+      <text x="314" y="323" fill="#ff9800" fontSize="10" textAnchor="middle" fontWeight="600">
+        Add & Norm
+      </text>
 
       {/* D: Cross-Attention (Multi-Head Attention) */}
-      <rect x="252" y="250" width="125" height="44" rx="8" fill="rgba(0,184,212,0.15)" stroke={C.cyan} strokeWidth="1.5" />
-      <text x="314" y="268" fill={C.cyan} fontSize="10" textAnchor="middle" fontWeight="700">Multi-Head</text>
-      <text x="314" y="282" fill={C.cyan} fontSize="10" textAnchor="middle" fontWeight="700">Attention</text>
+      <rect
+        x="252"
+        y="250"
+        width="125"
+        height="44"
+        rx="8"
+        fill="rgba(0,184,212,0.15)"
+        stroke={C.cyan}
+        strokeWidth="1.5"
+      />
+      <text x="314" y="268" fill={C.cyan} fontSize="10" textAnchor="middle" fontWeight="700">
+        Multi-Head
+      </text>
+      <text x="314" y="282" fill={C.cyan} fontSize="10" textAnchor="middle" fontWeight="700">
+        Attention
+      </text>
 
       {/* D: Add & Norm 2 (above cross-attn) */}
-      <rect x="252" y="210" width="125" height="26" rx="6" fill="rgba(255,165,0,0.12)" stroke="#ff9800" strokeWidth="1.2" />
-      <text x="314" y="227" fill="#ff9800" fontSize="10" textAnchor="middle" fontWeight="600">Add & Norm</text>
+      <rect
+        x="252"
+        y="210"
+        width="125"
+        height="26"
+        rx="6"
+        fill="rgba(255,165,0,0.12)"
+        stroke="#ff9800"
+        strokeWidth="1.2"
+      />
+      <text x="314" y="227" fill="#ff9800" fontSize="10" textAnchor="middle" fontWeight="600">
+        Add & Norm
+      </text>
 
       {/* D: FFN */}
-      <rect x="252" y="160" width="125" height="36" rx="8" fill="rgba(100,149,237,0.12)" stroke="cornflowerblue" strokeWidth="1.2" />
-      <text x="314" y="175" fill="cornflowerblue" fontSize="10" textAnchor="middle" fontWeight="700">Point-wise</text>
-      <text x="314" y="188" fill="cornflowerblue" fontSize="10" textAnchor="middle" fontWeight="700">FFN</text>
+      <rect
+        x="252"
+        y="160"
+        width="125"
+        height="36"
+        rx="8"
+        fill="rgba(100,149,237,0.12)"
+        stroke="cornflowerblue"
+        strokeWidth="1.2"
+      />
+      <text x="314" y="175" fill="cornflowerblue" fontSize="10" textAnchor="middle" fontWeight="700">
+        Point-wise
+      </text>
+      <text x="314" y="188" fill="cornflowerblue" fontSize="10" textAnchor="middle" fontWeight="700">
+        FFN
+      </text>
 
       {/* D: Add & Norm 3 (above FFN) */}
-      <rect x="252" y="118" width="125" height="26" rx="6" fill="rgba(255,165,0,0.12)" stroke="#ff9800" strokeWidth="1.2" />
-      <text x="314" y="135" fill="#ff9800" fontSize="10" textAnchor="middle" fontWeight="600">Add & Norm</text>
+      <rect
+        x="252"
+        y="118"
+        width="125"
+        height="26"
+        rx="6"
+        fill="rgba(255,165,0,0.12)"
+        stroke="#ff9800"
+        strokeWidth="1.2"
+      />
+      <text x="314" y="135" fill="#ff9800" fontSize="10" textAnchor="middle" fontWeight="600">
+        Add & Norm
+      </text>
 
       {/* --- Decoder MAIN flow arrows (bottom to top, center) --- */}
       {/* Input area → Masked Attn */}
-      <line x1="314" y1="430" x2="314" y2="394" stroke="rgba(255,255,255,0.35)" strokeWidth="1.5" markerEnd="url(#arrowW)" />
+      <line
+        x1="314"
+        y1="430"
+        x2="314"
+        y2="394"
+        stroke="rgba(255,255,255,0.35)"
+        strokeWidth="1.5"
+        markerEnd="url(#arrowW)"
+      />
       {/* Masked Attn → Add&Norm1 */}
-      <line x1="314" y1="348" x2="314" y2="334" stroke="rgba(255,255,255,0.35)" strokeWidth="1.5" markerEnd="url(#arrowW)" />
+      <line
+        x1="314"
+        y1="348"
+        x2="314"
+        y2="334"
+        stroke="rgba(255,255,255,0.35)"
+        strokeWidth="1.5"
+        markerEnd="url(#arrowW)"
+      />
       {/* Add&Norm1 → Cross-Attn */}
-      <line x1="314" y1="306" x2="314" y2="296" stroke="rgba(255,255,255,0.35)" strokeWidth="1.5" markerEnd="url(#arrowW)" />
+      <line
+        x1="314"
+        y1="306"
+        x2="314"
+        y2="296"
+        stroke="rgba(255,255,255,0.35)"
+        strokeWidth="1.5"
+        markerEnd="url(#arrowW)"
+      />
       {/* Cross-Attn → Add&Norm2 */}
-      <line x1="314" y1="250" x2="314" y2="238" stroke="rgba(255,255,255,0.35)" strokeWidth="1.5" markerEnd="url(#arrowW)" />
+      <line
+        x1="314"
+        y1="250"
+        x2="314"
+        y2="238"
+        stroke="rgba(255,255,255,0.35)"
+        strokeWidth="1.5"
+        markerEnd="url(#arrowW)"
+      />
       {/* Add&Norm2 → FFN */}
-      <line x1="314" y1="210" x2="314" y2="198" stroke="rgba(255,255,255,0.35)" strokeWidth="1.5" markerEnd="url(#arrowW)" />
+      <line
+        x1="314"
+        y1="210"
+        x2="314"
+        y2="198"
+        stroke="rgba(255,255,255,0.35)"
+        strokeWidth="1.5"
+        markerEnd="url(#arrowW)"
+      />
       {/* FFN → Add&Norm3 */}
-      <line x1="314" y1="160" x2="314" y2="146" stroke="rgba(255,255,255,0.35)" strokeWidth="1.5" markerEnd="url(#arrowW)" />
+      <line
+        x1="314"
+        y1="160"
+        x2="314"
+        y2="146"
+        stroke="rgba(255,255,255,0.35)"
+        strokeWidth="1.5"
+        markerEnd="url(#arrowW)"
+      />
       {/* Add&Norm3 → out of stack → Linear */}
       <line x1="314" y1="118" x2="314" y2="86" stroke="rgba(255,255,255,0.35)" strokeWidth="1.5" />
-      <line x1="314" y1="86" x2="314" y2="72" stroke="rgba(255,255,255,0.35)" strokeWidth="1.5" markerEnd="url(#arrowW)" />
+      <line
+        x1="314"
+        y1="86"
+        x2="314"
+        y2="72"
+        stroke="rgba(255,255,255,0.35)"
+        strokeWidth="1.5"
+        markerEnd="url(#arrowW)"
+      />
 
       {/* --- Decoder RESIDUAL skip connections --- */}
       {/* Skip around Masked Attn: left side, from below masked attn up to Add&Norm1 */}
-      <path d="M252,394 L236,394 L236,319 L250,319" fill="none" stroke="rgba(255,255,255,0.22)" strokeWidth="1.5" markerEnd="url(#arrowW)" />
+      <path
+        d="M252,394 L236,394 L236,319 L250,319"
+        fill="none"
+        stroke="rgba(255,255,255,0.22)"
+        strokeWidth="1.5"
+        markerEnd="url(#arrowW)"
+      />
       {/* Skip around Cross-Attn: left side, from below cross-attn up to Add&Norm2 */}
-      <path d="M252,296 L236,296 L236,223 L250,223" fill="none" stroke="rgba(255,255,255,0.22)" strokeWidth="1.5" markerEnd="url(#arrowW)" />
+      <path
+        d="M252,296 L236,296 L236,223 L250,223"
+        fill="none"
+        stroke="rgba(255,255,255,0.22)"
+        strokeWidth="1.5"
+        markerEnd="url(#arrowW)"
+      />
       {/* Skip around FFN: left side, from below FFN up to Add&Norm3 */}
-      <path d="M252,198 L236,198 L236,131 L250,131" fill="none" stroke="rgba(255,255,255,0.22)" strokeWidth="1.5" markerEnd="url(#arrowW)" />
+      <path
+        d="M252,198 L236,198 L236,131 L250,131"
+        fill="none"
+        stroke="rgba(255,255,255,0.22)"
+        strokeWidth="1.5"
+        markerEnd="url(#arrowW)"
+      />
 
       {/* --- CROSS-ATTENTION: Encoder output → Decoder cross-attention --- */}
       {/* Encoder top output goes right to decoder cross-attention */}
-      <path d="M107,185 L107,172 L210,172 L210,272 L250,272" fill="none" stroke={`${C.green}55`} strokeWidth="2" markerEnd="url(#arrowG)" />
-      <text x="160" y="166" fill={`${C.green}70`} fontSize="8" textAnchor="middle">K, V from encoder</text>
+      <path
+        d="M107,185 L107,172 L210,172 L210,272 L250,272"
+        fill="none"
+        stroke={`${C.green}55`}
+        strokeWidth="2"
+        markerEnd="url(#arrowG)"
+      />
+      <text x="160" y="166" fill={`${C.green}70`} fontSize="8" textAnchor="middle">
+        K, V from encoder
+      </text>
 
       {/* --- Decoder bottom: Positional Encoding + Embedding --- */}
-      <circle cx="314" cy="448" r="14" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.25)" strokeWidth="1.2" />
-      <text x="314" y="452" fill="rgba(255,255,255,0.5)" fontSize="14" textAnchor="middle">⊕</text>
-      <text x="393" y="448" fill={C.dim} fontSize="8" textAnchor="middle">Positional</text>
-      <text x="393" y="459" fill={C.dim} fontSize="8" textAnchor="middle">Encoding</text>
-      <line x1="374" y1="448" x2="330" y2="448" stroke="rgba(255,255,255,0.2)" strokeWidth="1.2" markerEnd="url(#arrowW)" />
+      <circle
+        cx="314"
+        cy="448"
+        r="14"
+        fill="rgba(255,255,255,0.03)"
+        stroke="rgba(255,255,255,0.25)"
+        strokeWidth="1.2"
+      />
+      <text x="314" y="452" fill="rgba(255,255,255,0.5)" fontSize="14" textAnchor="middle">
+        ⊕
+      </text>
+      <text x="393" y="448" fill={C.dim} fontSize="8" textAnchor="middle">
+        Positional
+      </text>
+      <text x="393" y="459" fill={C.dim} fontSize="8" textAnchor="middle">
+        Encoding
+      </text>
+      <line
+        x1="374"
+        y1="448"
+        x2="330"
+        y2="448"
+        stroke="rgba(255,255,255,0.2)"
+        strokeWidth="1.2"
+        markerEnd="url(#arrowW)"
+      />
 
-      <rect x="264" y="480" width="100" height="34" rx="8" fill="rgba(0,230,118,0.12)" stroke={C.green} strokeWidth="1.5" />
-      <text x="314" y="493" fill={C.green} fontSize="10" textAnchor="middle" fontWeight="700">Decoder</text>
-      <text x="314" y="506" fill={C.green} fontSize="10" textAnchor="middle" fontWeight="700">Embedding</text>
+      <rect
+        x="264"
+        y="480"
+        width="100"
+        height="34"
+        rx="8"
+        fill="rgba(0,230,118,0.12)"
+        stroke={C.green}
+        strokeWidth="1.5"
+      />
+      <text x="314" y="493" fill={C.green} fontSize="10" textAnchor="middle" fontWeight="700">
+        Decoder
+      </text>
+      <text x="314" y="506" fill={C.green} fontSize="10" textAnchor="middle" fontWeight="700">
+        Embedding
+      </text>
 
       {/* Embedding → ⊕ */}
-      <line x1="314" y1="480" x2="314" y2="464" stroke="rgba(255,255,255,0.35)" strokeWidth="1.5" markerEnd="url(#arrowW)" />
+      <line
+        x1="314"
+        y1="480"
+        x2="314"
+        y2="464"
+        stroke="rgba(255,255,255,0.35)"
+        strokeWidth="1.5"
+        markerEnd="url(#arrowW)"
+      />
       {/* Outputs label */}
-      <text x="314" y="540" fill={C.dim} fontSize="10" textAnchor="middle">Outputs</text>
-      <text x="314" y="553" fill={C.dim} fontSize="10" textAnchor="middle">(shifted right)</text>
-      <line x1="314" y1="530" x2="314" y2="516" stroke="rgba(255,255,255,0.2)" strokeWidth="1.2" markerEnd="url(#arrowW)" />
+      <text x="314" y="540" fill={C.dim} fontSize="10" textAnchor="middle">
+        Outputs
+      </text>
+      <text x="314" y="553" fill={C.dim} fontSize="10" textAnchor="middle">
+        (shifted right)
+      </text>
+      <line
+        x1="314"
+        y1="530"
+        x2="314"
+        y2="516"
+        stroke="rgba(255,255,255,0.2)"
+        strokeWidth="1.2"
+        markerEnd="url(#arrowW)"
+      />
     </svg>
   );
 
   return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
-      {sub >= 0 && <T center color={C.mid} size={19}>The complete Transformer - matching your original diagram:</T>}
       {sub >= 0 && (
-        <div style={{ background: "rgba(0,0,0,0.3)", borderRadius: 14, padding: "10px 4px", border: `1px solid ${C.border}`, overflowX: "auto", display: "flex", justifyContent: "center" }}>
+        <T center color={C.mid} size={19}>
+          The complete Transformer - matching your original diagram:
+        </T>
+      )}
+      {sub >= 0 && (
+        <div
+          style={{
+            background: "rgba(0,0,0,0.3)",
+            borderRadius: 14,
+            padding: "10px 4px",
+            border: `1px solid ${C.border}`,
+            overflowX: "auto",
+            display: "flex",
+            justifyContent: "center",
+          }}
+        >
           <ArchDiagram />
         </div>
       )}
-      <Reveal when={sub >= 1}><Box color={C.green}><T color="#80e8a5" bold center>🔍 Let's zoom into the bottom first - the green "Embedding" boxes.</T><T color="#80e8a5">This is where words enter the Transformer as numbers.</T><T color={C.dim} size={14} style={{ marginTop: 8 }}>The diagram shows both an Encoder and a Decoder side - we will learn what these are and how they differ in Sections 8 and 9. For now, focus on the building blocks inside each block: Attention, Add & Norm, and FFN.</T></Box></Reveal>
-      {sub < 1 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
+      <Reveal when={sub >= 1}>
+        <Box color={C.green}>
+          <T color="#80e8a5" bold center>
+            🔍 Let's zoom into the bottom first - the green "Embedding" boxes.
+          </T>
+          <T color="#80e8a5">This is where words enter the Transformer as numbers.</T>
+          <T color={C.dim} size={14} style={{ marginTop: 8 }}>
+            The diagram shows both an Encoder and a Decoder side - we will learn what these are and how they differ in
+            Sections 8 and 9. For now, focus on the building blocks inside each block: Attention, Add & Norm, and FFN.
+          </T>
+        </Box>
+      </Reveal>
+      {sub < 1 && (
+        <SubBtn
+          key={sub}
+          onClick={() => {
+            setSubBtnRipple(Date.now());
+            navigate("forward");
+          }}
+          rippleKey={subBtnRipple}
+          registerSubBtn={registerSubBtn}
+        />
+      )}
     </div>
   );
 };
 
 // ═══════ 2.2 Embeddings ═══════
 
-export const Embeddings = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx; return (
-  <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
-    {sub >= 0 && <Box color={C.red}><T color="#ff8a80" bold center>Problem: Neural networks only do math on numbers, not words.</T><T color="#ff8a80">We need 3 stages to convert words → numbers the network can use:</T></Box>}
-    <Reveal when={sub >= 1}><Box color={C.purple} style={{ width: "100%" }}>
-        <T color={C.purple} bold center>Stage 1: Tokenization</T>
-        <div style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 8, flexWrap: "wrap", justifyContent: "center" }}>
-          <div style={{ padding: "5px 12px", borderRadius: 6, background: `${C.red}12`, border: `1px solid ${C.red}25` }}><T color={C.red} size={19} bold center>"I love cats"</T></div>
-          <T color={C.dim} size={26}>→</T>
-          {["I", "love", "cats"].map((t, i) => (<div key={i} style={{ padding: "5px 10px", borderRadius: 6, background: `${C.purple}12`, border: `1px solid ${C.purple}25` }}><T color={C.purple} size={18} bold center>"{t}"</T></div>))}
-        </div>
-        <T color={C.dim} size={16} style={{ marginTop: 4 }}>Real LLMs: "unbelievable" → ["un", "believ", "able"]</T>
-      </Box></Reveal>
-    <Reveal when={sub >= 2}><Box color={C.cyan} style={{ width: "100%" }}>
-        <T color="#80deea" bold center>Stage 2: Token → ID (vocabulary lookup)</T>
-        <div style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 8 }}>
-          {[{ t: '"I"', id: 4 }, { t: '"love"', id: 6 }, { t: '"cats"', id: 2 }].map(({ t, id }, i) => (
-            <div key={i} style={{ display: "flex", alignItems: "center", gap: 4 }}>
-              <span style={{ color: C.purple, fontSize: 18 }}>{t}</span>
-              <span style={{ color: C.dim, fontSize: 14 }}>→</span>
-              <span style={{ color: C.green, fontWeight: 700, fontSize: 20, background: `${C.green}12`, padding: "2px 8px", borderRadius: 4 }}>{id}</span>
+export const Embeddings = (ctx) => {
+  const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx;
+  return (
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
+      {sub >= 0 && (
+        <Box color={C.red}>
+          <T color="#ff8a80" bold center>
+            Problem: Neural networks only do math on numbers, not words.
+          </T>
+          <T color="#ff8a80">We need 3 stages to convert words → numbers the network can use:</T>
+        </Box>
+      )}
+      <Reveal when={sub >= 1}>
+        <Box color={C.purple} style={{ width: "100%" }}>
+          <T color={C.purple} bold center>
+            Stage 1: Tokenization
+          </T>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 8,
+              marginTop: 8,
+              flexWrap: "wrap",
+              justifyContent: "center",
+            }}
+          >
+            <div
+              style={{ padding: "5px 12px", borderRadius: 6, background: `${C.red}12`, border: `1px solid ${C.red}25` }}
+            >
+              <T color={C.red} size={19} bold center>
+                "I love cats"
+              </T>
             </div>
-          ))}
-        </div>
-        <T color={C.dim} size={16} style={{ marginTop: 4 }}>These IDs are arbitrary - the number 6 doesn't "mean" love yet.</T>
-      </Box></Reveal>
-    <Reveal when={sub >= 3}><Box color={C.yellow} style={{ width: "100%" }}>
-        <T color={C.yellow} bold center>Stage 3: ID → Embedding (the KEY step)</T>
-        <T color="#ffe082" style={{ marginTop: 6 }}>Each ID looks up a row in a learned matrix. Each row = 512 numbers representing that word's meaning.</T>
-        <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 3 }}>
-          {[{ w: '"I"', c: C.red, v: "[ 0.12, -0.34, 0.78, ..., 0.91]" }, { w: '"love"', c: C.purple, v: "[ 0.56,  0.23, -0.11, ..., 0.53]" }, { w: '"cats"', c: C.cyan, v: "[-0.45,  0.89,  0.33, ..., 0.67]" }].map(({ w, c, v }) => (
-            <div key={w} style={{ display: "flex", alignItems: "center", gap: 6, padding: "3px 8px", borderRadius: 4, background: `${c}06` }}>
-              <span style={{ color: c, fontWeight: 700, fontSize: 18, minWidth: 40 }}>{w}</span>
-              <span style={{ color: C.dim, fontSize: 14 }}>→</span>
-              <code style={{ color: `${c}aa`, fontSize: 14 }}>{v}</code>
-            </div>
-          ))}
-        </div>
-        <T color="#ffe082" size={16} style={{ marginTop: 6 }}>Similar words (cat/dog) get similar vectors. Learned during training.</T>
-      </Box></Reveal>
-    <Reveal when={sub >= 4}><Box color={C.green}><T color="#80e8a5" bold center>✅ Words are now 512-number vectors!</T><T color="#80e8a5" center size={18}>But still no position info. "I love cats" = "cats love I". That's a problem.</T></Box></Reveal>
-    {sub < 4 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
-  </div>
-); }
+            <T color={C.dim} size={26}>
+              →
+            </T>
+            {["I", "love", "cats"].map((t, i) => (
+              <div
+                key={i}
+                style={{
+                  padding: "5px 10px",
+                  borderRadius: 6,
+                  background: `${C.purple}12`,
+                  border: `1px solid ${C.purple}25`,
+                }}
+              >
+                <T color={C.purple} size={18} bold center>
+                  "{t}"
+                </T>
+              </div>
+            ))}
+          </div>
+          <T color={C.dim} size={16} style={{ marginTop: 4 }}>
+            Real LLMs: "unbelievable" → ["un", "believ", "able"]
+          </T>
+        </Box>
+      </Reveal>
+      <Reveal when={sub >= 2}>
+        <Box color={C.cyan} style={{ width: "100%" }}>
+          <T color="#80deea" bold center>
+            Stage 2: Token → ID (vocabulary lookup)
+          </T>
+          <div style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 8 }}>
+            {[
+              { t: '"I"', id: 4 },
+              { t: '"love"', id: 6 },
+              { t: '"cats"', id: 2 },
+            ].map(({ t, id }, i) => (
+              <div key={i} style={{ display: "flex", alignItems: "center", gap: 4 }}>
+                <span style={{ color: C.purple, fontSize: 18 }}>{t}</span>
+                <span style={{ color: C.dim, fontSize: 14 }}>→</span>
+                <span
+                  style={{
+                    color: C.green,
+                    fontWeight: 700,
+                    fontSize: 20,
+                    background: `${C.green}12`,
+                    padding: "2px 8px",
+                    borderRadius: 4,
+                  }}
+                >
+                  {id}
+                </span>
+              </div>
+            ))}
+          </div>
+          <T color={C.dim} size={16} style={{ marginTop: 4 }}>
+            These IDs are arbitrary - the number 6 doesn't "mean" love yet.
+          </T>
+        </Box>
+      </Reveal>
+      <Reveal when={sub >= 3}>
+        <Box color={C.yellow} style={{ width: "100%" }}>
+          <T color={C.yellow} bold center>
+            Stage 3: ID → Embedding (the KEY step)
+          </T>
+          <T color="#ffe082" style={{ marginTop: 6 }}>
+            Each ID looks up a row in a learned matrix. Each row = 512 numbers representing that word's meaning.
+          </T>
+          <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 3 }}>
+            {[
+              { w: '"I"', c: C.red, v: "[ 0.12, -0.34, 0.78, ..., 0.91]" },
+              { w: '"love"', c: C.purple, v: "[ 0.56,  0.23, -0.11, ..., 0.53]" },
+              { w: '"cats"', c: C.cyan, v: "[-0.45,  0.89,  0.33, ..., 0.67]" },
+            ].map(({ w, c, v }) => (
+              <div
+                key={w}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 6,
+                  padding: "3px 8px",
+                  borderRadius: 4,
+                  background: `${c}06`,
+                }}
+              >
+                <span style={{ color: c, fontWeight: 700, fontSize: 18, minWidth: 40 }}>{w}</span>
+                <span style={{ color: C.dim, fontSize: 14 }}>→</span>
+                <code style={{ color: `${c}aa`, fontSize: 14 }}>{v}</code>
+              </div>
+            ))}
+          </div>
+          <T color="#ffe082" size={16} style={{ marginTop: 6 }}>
+            Similar words (cat/dog) get similar vectors. Learned during training.
+          </T>
+        </Box>
+      </Reveal>
+      <Reveal when={sub >= 4}>
+        <Box color={C.green}>
+          <T color="#80e8a5" bold center>
+            ✅ Words are now 512-number vectors!
+          </T>
+          <T color="#80e8a5" center size={18}>
+            But still no position info. "I love cats" = "cats love I". That's a problem.
+          </T>
+        </Box>
+      </Reveal>
+      {sub < 4 && (
+        <SubBtn
+          key={sub}
+          onClick={() => {
+            setSubBtnRipple(Date.now());
+            navigate("forward");
+          }}
+          rippleKey={subBtnRipple}
+          registerSubBtn={registerSubBtn}
+        />
+      )}
+    </div>
+  );
+};
 
 // ═══════ 2.3 Pos Enc - Problem ═══════
 
-export const PosEncodingProblem = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx; return (
-  <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
-    {sub >= 0 && (
-      <Box color={C.red} style={{ width: "100%" }}>
-        <T color="#ff8a80" bold center>The Transformer sees all words at the same time.</T>
-        <T color="#ff8a80" style={{ marginTop: 6 }}>It receives three embedding vectors simultaneously. Nothing tells it which is first, second, or third.</T>
-        <div style={{ marginTop: 10, padding: "10px", background: "rgba(0,0,0,0.2)", borderRadius: 8 }}>
-          <T color={C.dim} size={18}>"I love cats" → [vec_I, vec_love, vec_cats]</T>
-          <T color={C.dim} size={18}>"cats love I" → [vec_cats, vec_love, vec_I]</T>
-          <T color={C.red} size={18} bold center style={{ marginTop: 4 }}>Same vectors, different order - but model can't see order!</T>
-        </div>
-      </Box>
-    )}
-    <Reveal when={sub >= 1}><Box color={C.yellow} style={{ width: "100%" }}>
-        <T color={C.yellow} bold center>Why simple solutions fail:</T>
-        <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 6 }}>
-          <div style={{ padding: "8px 10px", borderRadius: 6, background: `${C.red}06` }}>
-            <T color="#ff8a80" bold center size={18}>❌ Use [1,1,...], [2,2,...], [3,3,...]?</T>
-            <T color={C.dim} size={16}>Values grow forever. At position 1000, you add 1000 to every dimension - drowns out the word meaning.</T>
+export const PosEncodingProblem = (ctx) => {
+  const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx;
+  return (
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
+      {sub >= 0 && (
+        <Box color={C.red} style={{ width: "100%" }}>
+          <T color="#ff8a80" bold center>
+            The Transformer sees all words at the same time.
+          </T>
+          <T color="#ff8a80" style={{ marginTop: 6 }}>
+            It receives three embedding vectors simultaneously. Nothing tells it which is first, second, or third.
+          </T>
+          <div style={{ marginTop: 10, padding: "10px", background: "rgba(0,0,0,0.2)", borderRadius: 8 }}>
+            <T color={C.dim} size={18}>
+              "I love cats" → [vec_I, vec_love, vec_cats]
+            </T>
+            <T color={C.dim} size={18}>
+              "cats love I" → [vec_cats, vec_love, vec_I]
+            </T>
+            <T color={C.red} size={18} bold center style={{ marginTop: 4 }}>
+              Same vectors, different order - but model can't see order!
+            </T>
           </div>
-          <div style={{ padding: "8px 10px", borderRadius: 6, background: `${C.red}06` }}>
-            <T color="#ff8a80" bold center size={18}>❌ Use pos/max_length (0.0, 0.01, 0.02...)?</T>
-            <T color={C.dim} size={16}>Step size depends on sentence length. Model can't learn consistent patterns.</T>
+        </Box>
+      )}
+      <Reveal when={sub >= 1}>
+        <Box color={C.yellow} style={{ width: "100%" }}>
+          <T color={C.yellow} bold center>
+            Why simple solutions fail:
+          </T>
+          <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 6 }}>
+            <div style={{ padding: "8px 10px", borderRadius: 6, background: `${C.red}06` }}>
+              <T color="#ff8a80" bold center size={18}>
+                ❌ Use [1,1,...], [2,2,...], [3,3,...]?
+              </T>
+              <T color={C.dim} size={16}>
+                Values grow forever. At position 1000, you add 1000 to every dimension - drowns out the word meaning.
+              </T>
+            </div>
+            <div style={{ padding: "8px 10px", borderRadius: 6, background: `${C.red}06` }}>
+              <T color="#ff8a80" bold center size={18}>
+                ❌ Use pos/max_length (0.0, 0.01, 0.02...)?
+              </T>
+              <T color={C.dim} size={16}>
+                Step size depends on sentence length. Model can't learn consistent patterns.
+              </T>
+            </div>
+            <div style={{ padding: "8px 10px", borderRadius: 6, background: `${C.red}06` }}>
+              <T color="#ff8a80" bold center size={18}>
+                ❌ Use random vectors?
+              </T>
+              <T color={C.dim} size={16}>
+                No relationship between positions. Can't learn "pos 5 is near pos 6".
+              </T>
+            </div>
           </div>
-          <div style={{ padding: "8px 10px", borderRadius: 6, background: `${C.red}06` }}>
-            <T color="#ff8a80" bold center size={18}>❌ Use random vectors?</T>
-            <T color={C.dim} size={16}>No relationship between positions. Can't learn "pos 5 is near pos 6".</T>
-          </div>
-        </div>
-      </Box></Reveal>
-    <Reveal when={sub >= 2}><Box color={C.green}><T color="#80e8a5" bold center>We need: bounded values, unique per position, relative distances learnable.</T><T color="#80e8a5" center size={18} style={{ marginTop: 4 }}>Solution: Sine & Cosine waves →</T></Box></Reveal>
-    {sub < 2 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
-  </div>
-); }
+        </Box>
+      </Reveal>
+      <Reveal when={sub >= 2}>
+        <Box color={C.green}>
+          <T color="#80e8a5" bold center>
+            We need: bounded values, unique per position, relative distances learnable.
+          </T>
+          <T color="#80e8a5" center size={18} style={{ marginTop: 4 }}>
+            Solution: Sine & Cosine waves →
+          </T>
+        </Box>
+      </Reveal>
+      {sub < 2 && (
+        <SubBtn
+          key={sub}
+          onClick={() => {
+            setSubBtnRipple(Date.now());
+            navigate("forward");
+          }}
+          rippleKey={subBtnRipple}
+          registerSubBtn={registerSubBtn}
+        />
+      )}
+    </div>
+  );
+};
 
 // ═══════ 2.4 Pos Enc - Formula ═══════
 
-export const PosEncodingFormula = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx; return (
-  <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
-    {sub >= 0 && (
-      <div style={{ background: "rgba(0,0,0,0.3)", border: `1px solid ${C.cyan}20`, borderRadius: 10, padding: "16px", width: "100%" }}>
-        <T color={C.dim} size={14} center style={{ textTransform: "uppercase", letterSpacing: 1.5, marginBottom: 8 }}>The Formula</T>
-        <div style={{ fontFamily: "monospace", fontSize: 19, color: "#80cbc4", textAlign: "center", lineHeight: 2.2 }}>
-          <div>Even dims (0,2,4...): <strong>sin</strong>( pos / 10000<sup style={{ fontSize: 12 }}>i/d_model</sup> )</div>
-          <div>Odd dims (1,3,5...): <strong>cos</strong>( pos / 10000<sup style={{ fontSize: 12 }}>i/d_model</sup> )</div>
-        </div>
-      </div>
-    )}
-    <Reveal when={sub >= 1}><div style={{ display: "flex", flexDirection: "column", gap: 6, width: "100%" }}>
-        {[
-          { term: "pos", desc: "Position of word in sentence (0, 1, 2...)", c: C.red },
-          { term: "i", desc: "Which of the 512 dimensions we're computing", c: C.purple },
-          { term: "d_model", desc: "Size of embedding (512)", c: C.cyan },
-          { term: "10000^(i/d)", desc: "Controls wave speed. Small i = fast. Large i = slow.", c: C.yellow },
-          { term: "sin/cos", desc: "Output always between -1 and +1. Never explodes!", c: C.green },
-        ].map(({ term, desc, c }) => (
-          <div key={term} style={{ display: "flex", gap: 8, alignItems: "center", padding: "6px 10px", borderRadius: 6, background: `${c}06` }}>
-            <code style={{ color: c, fontWeight: 700, fontSize: 18, minWidth: 72, background: `${c}10`, padding: "2px 6px", borderRadius: 4 }}>{term}</code>
-            <T color={C.mid} size={16}>{desc}</T>
+export const PosEncodingFormula = (ctx) => {
+  const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx;
+  return (
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
+      {sub >= 0 && (
+        <div
+          style={{
+            background: "rgba(0,0,0,0.3)",
+            border: `1px solid ${C.cyan}20`,
+            borderRadius: 10,
+            padding: "16px",
+            width: "100%",
+          }}
+        >
+          <T color={C.dim} size={14} center style={{ textTransform: "uppercase", letterSpacing: 1.5, marginBottom: 8 }}>
+            The Formula
+          </T>
+          <div
+            style={{ fontFamily: "monospace", fontSize: 19, color: "#80cbc4", textAlign: "center", lineHeight: 2.2 }}
+          >
+            <div>
+              Even dims (0,2,4...): <strong>sin</strong>( pos / 10000<sup style={{ fontSize: 12 }}>i/d_model</sup> )
+            </div>
+            <div>
+              Odd dims (1,3,5...): <strong>cos</strong>( pos / 10000<sup style={{ fontSize: 12 }}>i/d_model</sup> )
+            </div>
           </div>
-        ))}
-      </div></Reveal>
-    <Reveal when={sub >= 2}><Box color={C.yellow}><T color={C.yellow} bold center>The KEY insight: 10000^(i/d_model)</T><T color="#ffe082">When i=0, divisor=1 → pos/1 = pos → wave oscillates fast.<br />When i=510, divisor≈10000 → pos/10000 ≈ tiny → wave changes barely.<br /><br />Like a clock: <strong style={{ color: C.cyan }}>seconds hand</strong> (fast) + <strong style={{ color: C.purple }}>hours hand</strong> (slow) = exact time.</T></Box></Reveal>
-    {sub < 2 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
-  </div>
-); }
+        </div>
+      )}
+      <Reveal when={sub >= 1}>
+        <div style={{ display: "flex", flexDirection: "column", gap: 6, width: "100%" }}>
+          {[
+            { term: "pos", desc: "Position of word in sentence (0, 1, 2...)", c: C.red },
+            { term: "i", desc: "Which of the 512 dimensions we're computing", c: C.purple },
+            { term: "d_model", desc: "Size of embedding (512)", c: C.cyan },
+            { term: "10000^(i/d)", desc: "Controls wave speed. Small i = fast. Large i = slow.", c: C.yellow },
+            { term: "sin/cos", desc: "Output always between -1 and +1. Never explodes!", c: C.green },
+          ].map(({ term, desc, c }) => (
+            <div
+              key={term}
+              style={{
+                display: "flex",
+                gap: 8,
+                alignItems: "center",
+                padding: "6px 10px",
+                borderRadius: 6,
+                background: `${c}06`,
+              }}
+            >
+              <code
+                style={{
+                  color: c,
+                  fontWeight: 700,
+                  fontSize: 18,
+                  minWidth: 72,
+                  background: `${c}10`,
+                  padding: "2px 6px",
+                  borderRadius: 4,
+                }}
+              >
+                {term}
+              </code>
+              <T color={C.mid} size={16}>
+                {desc}
+              </T>
+            </div>
+          ))}
+        </div>
+      </Reveal>
+      <Reveal when={sub >= 2}>
+        <Box color={C.yellow}>
+          <T color={C.yellow} bold center>
+            The KEY insight: 10000^(i/d_model)
+          </T>
+          <T color="#ffe082">
+            When i=0, divisor=1 → pos/1 = pos → wave oscillates fast.
+            <br />
+            When i=510, divisor≈10000 → pos/10000 ≈ tiny → wave changes barely.
+            <br />
+            <br />
+            Like a clock: <strong style={{ color: C.cyan }}>seconds hand</strong> (fast) +{" "}
+            <strong style={{ color: C.purple }}>hours hand</strong> (slow) = exact time.
+          </T>
+        </Box>
+      </Reveal>
+      {sub < 2 && (
+        <SubBtn
+          key={sub}
+          onClick={() => {
+            setSubBtnRipple(Date.now());
+            navigate("forward");
+          }}
+          rippleKey={subBtnRipple}
+          registerSubBtn={registerSubBtn}
+        />
+      )}
+    </div>
+  );
+};
 
 // ═══════ 2.5 Pos Enc - Computing ═══════
 
-export const PosEncodingCompute = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx;
+export const PosEncodingCompute = (ctx) => {
+  const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx;
   const d = 8;
   const computeRow = (pos) => {
     const vals = [];
@@ -313,58 +995,154 @@ export const PosEncodingCompute = (ctx) => { const { sub, subBtnRipple, setSubBt
 
   return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
-      {sub >= 0 && <T center color={C.mid} size={18}>Using 8 dimensions (real model uses 512, same idea). Actual computed values:</T>}
       {sub >= 0 && (
-        <div style={{ background: C.card, border: `1px solid ${C.border}`, borderRadius: 10, padding: "12px 8px", width: "100%", overflowX: "auto" }}>
+        <T center color={C.mid} size={18}>
+          Using 8 dimensions (real model uses 512, same idea). Actual computed values:
+        </T>
+      )}
+      {sub >= 0 && (
+        <div
+          style={{
+            background: C.card,
+            border: `1px solid ${C.border}`,
+            borderRadius: 10,
+            padding: "12px 8px",
+            width: "100%",
+            overflowX: "auto",
+          }}
+        >
           <div style={{ display: "grid", gridTemplateColumns: "60px repeat(8, 1fr)", gap: 2, marginBottom: 6 }}>
             <span></span>
             {Array.from({ length: 8 }).map((_, i) => (
-              <span key={i} style={{ fontSize: 11, color: i < 2 ? C.yellow : i < 4 ? C.orange : i < 6 ? C.cyan : C.purple, textAlign: "center", fontFamily: "monospace" }}>d{i} {i % 2 === 0 ? "sin" : "cos"}</span>
+              <span
+                key={i}
+                style={{
+                  fontSize: 11,
+                  color: i < 2 ? C.yellow : i < 4 ? C.orange : i < 6 ? C.cyan : C.purple,
+                  textAlign: "center",
+                  fontFamily: "monospace",
+                }}
+              >
+                d{i} {i % 2 === 0 ? "sin" : "cos"}
+              </span>
             ))}
           </div>
           {rows.map(({ pos, word, c, vals }, ri) => (
-            <div key={pos} style={{ display: "grid", gridTemplateColumns: "60px repeat(8, 1fr)", gap: 2, padding: "4px 0", borderRadius: 4, background: `${c}06`, marginBottom: 2 }}>
-              <span style={{ fontSize: 12, color: c, fontWeight: 600 }}>Pos {pos} ({word})</span>
+            <div
+              key={pos}
+              style={{
+                display: "grid",
+                gridTemplateColumns: "60px repeat(8, 1fr)",
+                gap: 2,
+                padding: "4px 0",
+                borderRadius: 4,
+                background: `${c}06`,
+                marginBottom: 2,
+              }}
+            >
+              <span style={{ fontSize: 12, color: c, fontWeight: 600 }}>
+                Pos {pos} ({word})
+              </span>
               {vals.map((v, i) => {
                 const prev = ri > 0 ? rows[ri - 1].vals[i] : null;
                 const change = prev !== null ? Math.abs(v - prev) : 0;
-                return <span key={i} style={{ fontFamily: "monospace", fontSize: 14, textAlign: "center", color: change > 0.2 ? C.yellow : `${c}bb`, fontWeight: change > 0.2 ? 700 : 400 }}>{v.toFixed(3)}</span>;
+                return (
+                  <span
+                    key={i}
+                    style={{
+                      fontFamily: "monospace",
+                      fontSize: 14,
+                      textAlign: "center",
+                      color: change > 0.2 ? C.yellow : `${c}bb`,
+                      fontWeight: change > 0.2 ? 700 : 400,
+                    }}
+                  >
+                    {v.toFixed(3)}
+                  </span>
+                );
               })}
             </div>
           ))}
         </div>
       )}
-      <Reveal when={sub >= 1}><Box color={C.yellow}><T color={C.yellow} bold center>Yellow values = big change between positions.</T><T color="#ffe082">Left columns (d0, d1) change dramatically. Right columns (d6, d7) barely move. Each position has a unique fingerprint.</T></Box></Reveal>
-      <Reveal when={sub >= 2}><Box color={C.green}>
-          <T color="#80e8a5" bold center>Position 0: all sin(0)=0, cos(0)=1 → clean [0, 1, 0, 1, 0, 1, 0, 1]</T>
-          <T color="#80e8a5" style={{ marginTop: 4 }}>Position 1: d0 jumps 0→0.841 (fast!), d6 barely moves 0→0.001 (slow!)</T>
-          <T color="#80e8a5" style={{ marginTop: 4 }}>Position 2: d0 goes 0.841→0.909, d6 goes 0.001→0.002</T>
-        </Box></Reveal>
-      {sub < 2 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
+      <Reveal when={sub >= 1}>
+        <Box color={C.yellow}>
+          <T color={C.yellow} bold center>
+            Yellow values = big change between positions.
+          </T>
+          <T color="#ffe082">
+            Left columns (d0, d1) change dramatically. Right columns (d6, d7) barely move. Each position has a unique
+            fingerprint.
+          </T>
+        </Box>
+      </Reveal>
+      <Reveal when={sub >= 2}>
+        <Box color={C.green}>
+          <T color="#80e8a5" bold center>
+            Position 0: all sin(0)=0, cos(0)=1 → clean [0, 1, 0, 1, 0, 1, 0, 1]
+          </T>
+          <T color="#80e8a5" style={{ marginTop: 4 }}>
+            Position 1: d0 jumps 0→0.841 (fast!), d6 barely moves 0→0.001 (slow!)
+          </T>
+          <T color="#80e8a5" style={{ marginTop: 4 }}>
+            Position 2: d0 goes 0.841→0.909, d6 goes 0.001→0.002
+          </T>
+        </Box>
+      </Reveal>
+      {sub < 2 && (
+        <SubBtn
+          key={sub}
+          onClick={() => {
+            setSubBtnRipple(Date.now());
+            navigate("forward");
+          }}
+          rippleKey={subBtnRipple}
+          registerSubBtn={registerSubBtn}
+        />
+      )}
     </div>
   );
 };
 
 // ═══════ 2.6 Fast vs Slow ═══════
 
-export const PosEncodingFastSlow = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx;
+export const PosEncodingFastSlow = (ctx) => {
+  const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx;
   // Counting grid data
   const countingRows = [
-    { pos: 0, digits: [0, 0, 0] }, { pos: 1, digits: [0, 0, 1] }, { pos: 2, digits: [0, 0, 2] },
-    { pos: 9, digits: [0, 0, 9] }, { pos: 10, digits: [0, 1, 0] }, { pos: 11, digits: [0, 1, 1] },
-    { pos: 99, digits: [0, 9, 9] }, { pos: 100, digits: [1, 0, 0] }, { pos: 101, digits: [1, 0, 1] },
+    { pos: 0, digits: [0, 0, 0] },
+    { pos: 1, digits: [0, 0, 1] },
+    { pos: 2, digits: [0, 0, 2] },
+    { pos: 9, digits: [0, 0, 9] },
+    { pos: 10, digits: [0, 1, 0] },
+    { pos: 11, digits: [0, 1, 1] },
+    { pos: 99, digits: [0, 9, 9] },
+    { pos: 100, digits: [1, 0, 0] },
+    { pos: 101, digits: [1, 0, 1] },
   ];
   const digitColors = [C.purple, C.orange, C.yellow];
   const digitLabels = ["Hundreds (slow)", "Tens (medium)", "Ones (fast)"];
 
   const Digit = ({ value, colIdx, highlight = false }) => (
-    <span style={{
-      display: "inline-flex", alignItems: "center", justifyContent: "center",
-      width: 28, height: 28, borderRadius: 6, fontFamily: "monospace", fontSize: 22, fontWeight: 800,
-      color: digitColors[colIdx], background: `${digitColors[colIdx]}${highlight ? '25' : '10'}`,
-      border: `1.5px solid ${digitColors[colIdx]}${highlight ? '60' : '20'}`,
-      transition: "all 0.2s",
-    }}>{value}</span>
+    <span
+      style={{
+        display: "inline-flex",
+        alignItems: "center",
+        justifyContent: "center",
+        width: 28,
+        height: 28,
+        borderRadius: 6,
+        fontFamily: "monospace",
+        fontSize: 22,
+        fontWeight: 800,
+        color: digitColors[colIdx],
+        background: `${digitColors[colIdx]}${highlight ? "25" : "10"}`,
+        border: `1.5px solid ${digitColors[colIdx]}${highlight ? "60" : "20"}`,
+        transition: "all 0.2s",
+      }}
+    >
+      {value}
+    </span>
   );
 
   return (
@@ -372,18 +1150,40 @@ export const PosEncodingFastSlow = (ctx) => { const { sub, subBtnRipple, setSubB
       {/* Step 0: How you count */}
       {sub >= 0 && (
         <Box color={C.cyan} style={{ width: "100%" }}>
-          <T color="#80deea" bold center size={20}>Think about how you count: ones, tens, hundreds.</T>
-          <T color="#80deea" style={{ marginTop: 4 }}>Each column changes at a different speed:</T>
+          <T color="#80deea" bold center size={20}>
+            Think about how you count: ones, tens, hundreds.
+          </T>
+          <T color="#80deea" style={{ marginTop: 4 }}>
+            Each column changes at a different speed:
+          </T>
         </Box>
       )}
 
       {sub >= 0 && (
-        <div style={{ background: C.card, border: `1px solid ${C.border}`, borderRadius: 10, padding: "12px 14px", width: "100%" }}>
+        <div
+          style={{
+            background: C.card,
+            border: `1px solid ${C.border}`,
+            borderRadius: 10,
+            padding: "12px 14px",
+            width: "100%",
+          }}
+        >
           {/* Column labels */}
-          <div style={{ display: "grid", gridTemplateColumns: "52px repeat(3, 1fr)", gap: 6, marginBottom: 8, alignItems: "center" }}>
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "52px repeat(3, 1fr)",
+              gap: 6,
+              marginBottom: 8,
+              alignItems: "center",
+            }}
+          >
             <span></span>
             {digitLabels.map((lbl, i) => (
-              <T key={i} color={digitColors[i]} bold size={14} center>{lbl}</T>
+              <T key={i} color={digitColors[i]} bold size={14} center>
+                {lbl}
+              </T>
             ))}
           </div>
           {/* Rows */}
@@ -392,9 +1192,25 @@ export const PosEncodingFastSlow = (ctx) => { const { sub, subBtnRipple, setSubB
             const showGap = ri === 3 || ri === 6;
             return (
               <div key={ri}>
-                {showGap && <div style={{ textAlign: "center", padding: "4px 0" }}><T color={C.dim} size={14} center>···</T></div>}
-                <div style={{ display: "grid", gridTemplateColumns: "52px repeat(3, 1fr)", gap: 6, marginBottom: 4, alignItems: "center" }}>
-                  <span style={{ fontFamily: "monospace", fontSize: 16, color: C.dim, textAlign: "right" }}>pos {pos}</span>
+                {showGap && (
+                  <div style={{ textAlign: "center", padding: "4px 0" }}>
+                    <T color={C.dim} size={14} center>
+                      ···
+                    </T>
+                  </div>
+                )}
+                <div
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns: "52px repeat(3, 1fr)",
+                    gap: 6,
+                    marginBottom: 4,
+                    alignItems: "center",
+                  }}
+                >
+                  <span style={{ fontFamily: "monospace", fontSize: 16, color: C.dim, textAlign: "right" }}>
+                    pos {pos}
+                  </span>
                   {digits.map((d, ci) => {
                     const changed = prevDigits && prevDigits[ci] !== d;
                     return (
@@ -417,40 +1233,85 @@ export const PosEncodingFastSlow = (ctx) => { const { sub, subBtnRipple, setSubB
             { label: "Tens", color: C.orange, desc: "Changes every 10 steps" },
             { label: "Hundreds", color: C.purple, desc: "Changes every 100 steps" },
           ].map(({ label, color, desc }) => (
-            <div key={label} style={{ flex: 1, background: `${color}08`, border: `1px solid ${color}18`, borderRadius: 8, padding: "8px", textAlign: "center" }}>
-              <T color={color} bold size={16} center>{label}</T>
-              <T color={C.dim} size={12} center>{desc}</T>
+            <div
+              key={label}
+              style={{
+                flex: 1,
+                background: `${color}08`,
+                border: `1px solid ${color}18`,
+                borderRadius: 8,
+                padding: "8px",
+                textAlign: "center",
+              }}
+            >
+              <T color={color} bold size={16} center>
+                {label}
+              </T>
+              <T color={C.dim} size={12} center>
+                {desc}
+              </T>
             </div>
           ))}
         </div>
       )}
 
       {/* Step 1: What if ONLY ones? */}
-      <Reveal when={sub >= 1}><Box color={C.red} style={{ width: "100%" }}>
-          <T color="#ff8a80" bold center>❌ What if you ONLY had the ones column?</T>
-          <div style={{ display: "flex", flexDirection: "column", gap: 3, marginTop: 8, padding: "10px", background: "rgba(0,0,0,0.2)", borderRadius: 8 }}>
+      <Reveal when={sub >= 1}>
+        <Box color={C.red} style={{ width: "100%" }}>
+          <T color="#ff8a80" bold center>
+            ❌ What if you ONLY had the ones column?
+          </T>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              gap: 3,
+              marginTop: 8,
+              padding: "10px",
+              background: "rgba(0,0,0,0.2)",
+              borderRadius: 8,
+            }}
+          >
             {[
-              { pos: 0, d: 0 }, { pos: 1, d: 1 }, { pos: 2, d: 2 },
+              { pos: 0, d: 0 },
+              { pos: 1, d: 1 },
+              { pos: 2, d: 2 },
               { pos: "...", d: "..." },
               { pos: 9, d: 9 },
               { pos: 10, d: 0, dup: "Same as pos 0!" },
               { pos: 11, d: 1, dup: "Same as pos 1!" },
             ].map(({ pos, d, dup }, i) => (
-              <div key={i} style={{ display: "grid", gridTemplateColumns: "52px 36px 1fr", gap: 10, alignItems: "center" }}>
+              <div
+                key={i}
+                style={{ display: "grid", gridTemplateColumns: "52px 36px 1fr", gap: 10, alignItems: "center" }}
+              >
                 <span style={{ fontFamily: "monospace", fontSize: 16, color: C.dim, textAlign: "right" }}>
                   {pos === "..." ? "" : `pos ${pos}`}
                 </span>
                 {d === "..." ? (
-                  <T color={C.dim} size={14}>···</T>
+                  <T color={C.dim} size={14}>
+                    ···
+                  </T>
                 ) : (
                   <>
-                    <span style={{
-                      display: "inline-flex", alignItems: "center", justifyContent: "center",
-                      width: 26, height: 26, borderRadius: 5, fontFamily: "monospace", fontSize: 20, fontWeight: 800,
-                      color: dup ? C.red : C.yellow,
-                      background: dup ? `${C.red}20` : `${C.yellow}10`,
-                      border: `1.5px solid ${dup ? C.red : C.yellow}${dup ? '50' : '20'}`,
-                    }}>{d}</span>
+                    <span
+                      style={{
+                        display: "inline-flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        width: 26,
+                        height: 26,
+                        borderRadius: 5,
+                        fontFamily: "monospace",
+                        fontSize: 20,
+                        fontWeight: 800,
+                        color: dup ? C.red : C.yellow,
+                        background: dup ? `${C.red}20` : `${C.yellow}10`,
+                        border: `1.5px solid ${dup ? C.red : C.yellow}${dup ? "50" : "20"}`,
+                      }}
+                    >
+                      {d}
+                    </span>
                     {dup && <span style={{ fontSize: 16, color: C.red, fontWeight: 700 }}>← {dup}</span>}
                   </>
                 )}
@@ -458,14 +1319,29 @@ export const PosEncodingFastSlow = (ctx) => { const { sub, subBtnRipple, setSubB
             ))}
           </div>
           <T color="#ff8a80" size={18} style={{ marginTop: 8 }}>
-            After 10 positions, the ones column <strong>repeats</strong>. Position 0 and position 10 look identical. You can only count to 9. <strong>Stuck.</strong>
+            After 10 positions, the ones column <strong>repeats</strong>. Position 0 and position 10 look identical. You
+            can only count to 9. <strong>Stuck.</strong>
           </T>
-        </Box></Reveal>
+        </Box>
+      </Reveal>
 
       {/* Step 2: What if ONLY hundreds? */}
-      <Reveal when={sub >= 2}><Box color={C.red} style={{ width: "100%" }}>
-          <T color="#ff8a80" bold center>❌ What if you ONLY had the hundreds column?</T>
-          <div style={{ display: "flex", flexDirection: "column", gap: 3, marginTop: 8, padding: "10px", background: "rgba(0,0,0,0.2)", borderRadius: 8 }}>
+      <Reveal when={sub >= 2}>
+        <Box color={C.red} style={{ width: "100%" }}>
+          <T color="#ff8a80" bold center>
+            ❌ What if you ONLY had the hundreds column?
+          </T>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              gap: 3,
+              marginTop: 8,
+              padding: "10px",
+              background: "rgba(0,0,0,0.2)",
+              borderRadius: 8,
+            }}
+          >
             {[
               { pos: 0, d: 0, dup: null },
               { pos: 1, d: 0, dup: "Same!" },
@@ -474,84 +1350,166 @@ export const PosEncodingFastSlow = (ctx) => { const { sub, subBtnRipple, setSubB
               { pos: 99, d: 0, dup: "still same!" },
               { pos: 100, d: 1, dup: "finally changes" },
             ].map(({ pos, d, dup }, i) => (
-              <div key={i} style={{ display: "grid", gridTemplateColumns: "52px 36px 1fr", gap: 10, alignItems: "center" }}>
+              <div
+                key={i}
+                style={{ display: "grid", gridTemplateColumns: "52px 36px 1fr", gap: 10, alignItems: "center" }}
+              >
                 <span style={{ fontFamily: "monospace", fontSize: 16, color: C.dim, textAlign: "right" }}>
                   {pos === "..." ? "" : `pos ${pos}`}
                 </span>
                 {d === "..." ? (
-                  <T color={C.dim} size={14}>···</T>
+                  <T color={C.dim} size={14}>
+                    ···
+                  </T>
                 ) : (
                   <>
-                    <span style={{
-                      display: "inline-flex", alignItems: "center", justifyContent: "center",
-                      width: 26, height: 26, borderRadius: 5, fontFamily: "monospace", fontSize: 20, fontWeight: 800,
-                      color: dup === "finally changes" ? C.green : (dup ? C.red : C.purple),
-                      background: dup === "finally changes" ? `${C.green}20` : (dup ? `${C.red}15` : `${C.purple}10`),
-                      border: `1.5px solid ${dup === "finally changes" ? C.green : (dup ? C.red : C.purple)}40`,
-                    }}>{d}</span>
-                    {dup && <span style={{ fontSize: 16, color: dup === "finally changes" ? C.green : C.red, fontWeight: 700 }}>← {dup}</span>}
+                    <span
+                      style={{
+                        display: "inline-flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        width: 26,
+                        height: 26,
+                        borderRadius: 5,
+                        fontFamily: "monospace",
+                        fontSize: 20,
+                        fontWeight: 800,
+                        color: dup === "finally changes" ? C.green : dup ? C.red : C.purple,
+                        background: dup === "finally changes" ? `${C.green}20` : dup ? `${C.red}15` : `${C.purple}10`,
+                        border: `1.5px solid ${dup === "finally changes" ? C.green : dup ? C.red : C.purple}40`,
+                      }}
+                    >
+                      {d}
+                    </span>
+                    {dup && (
+                      <span
+                        style={{ fontSize: 16, color: dup === "finally changes" ? C.green : C.red, fontWeight: 700 }}
+                      >
+                        ← {dup}
+                      </span>
+                    )}
                   </>
                 )}
               </div>
             ))}
           </div>
           <T color="#ff8a80" size={18} style={{ marginTop: 8 }}>
-            Positions 0 through 99 <strong>all look identical</strong> - the hundreds column just shows 0 for all of them. You can't tell neighboring words apart at all.
+            Positions 0 through 99 <strong>all look identical</strong> - the hundreds column just shows 0 for all of
+            them. You can't tell neighboring words apart at all.
           </T>
-        </Box></Reveal>
+        </Box>
+      </Reveal>
 
       {/* Step 3: Combine = magic */}
-      <Reveal when={sub >= 3}><Box color={C.green} style={{ width: "100%" }}>
-          <T color="#80e8a5" bold center size={20}>✅ But COMBINE all three columns?</T>
-          <T color="#80e8a5" style={{ marginTop: 6 }}>
-            Every position from <strong>000 to 999</strong> has a unique combination.
-            That's <strong>1000 unique positions</strong> using just 3 digits!
+      <Reveal when={sub >= 3}>
+        <Box color={C.green} style={{ width: "100%" }}>
+          <T color="#80e8a5" bold center size={20}>
+            ✅ But COMBINE all three columns?
           </T>
-          <div style={{ marginTop: 10, display: "flex", flexDirection: "column", gap: 3, padding: "10px", background: "rgba(0,0,0,0.2)", borderRadius: 8 }}>
+          <T color="#80e8a5" style={{ marginTop: 6 }}>
+            Every position from <strong>000 to 999</strong> has a unique combination. That's{" "}
+            <strong>1000 unique positions</strong> using just 3 digits!
+          </T>
+          <div
+            style={{
+              marginTop: 10,
+              display: "flex",
+              flexDirection: "column",
+              gap: 3,
+              padding: "10px",
+              background: "rgba(0,0,0,0.2)",
+              borderRadius: 8,
+            }}
+          >
             {[
-              { pos: 0, d: [0, 0, 0] }, { pos: 1, d: [0, 0, 1] },
-              { pos: 10, d: [0, 1, 0] }, { pos: 11, d: [0, 1, 1] },
-              { pos: 100, d: [1, 0, 0] }, { pos: 101, d: [1, 0, 1] },
+              { pos: 0, d: [0, 0, 0] },
+              { pos: 1, d: [0, 0, 1] },
+              { pos: 10, d: [0, 1, 0] },
+              { pos: 11, d: [0, 1, 1] },
+              { pos: 100, d: [1, 0, 0] },
+              { pos: 101, d: [1, 0, 1] },
             ].map(({ pos, d }, i) => (
               <div key={i} style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                <span style={{ fontFamily: "monospace", fontSize: 16, color: C.dim, minWidth: 68, textAlign: "right" }}>pos {String(pos).padStart(3, "\u2007")}</span>
+                <span style={{ fontFamily: "monospace", fontSize: 16, color: C.dim, minWidth: 68, textAlign: "right" }}>
+                  pos {String(pos).padStart(3, "\u2007")}
+                </span>
                 <div style={{ display: "flex", gap: 4 }}>
-                  {d.map((v, ci) => <Digit key={ci} value={v} colIdx={ci} />)}
+                  {d.map((v, ci) => (
+                    <Digit key={ci} value={v} colIdx={ci} />
+                  ))}
                 </div>
                 <span style={{ fontSize: 14, color: C.green }}>✓ unique</span>
               </div>
             ))}
           </div>
           <T color="#80e8a5" size={18} style={{ marginTop: 8 }}>
-            The fast column (ones) tells close positions apart (0 vs 1).<br />
-            The slow column (hundreds) tells distant positions apart (0 vs 100).<br />
+            The fast column (ones) tells close positions apart (0 vs 1).
+            <br />
+            The slow column (hundreds) tells distant positions apart (0 vs 100).
+            <br />
             <strong>Together, every position is unique.</strong>
           </T>
-        </Box></Reveal>
+        </Box>
+      </Reveal>
 
       {/* Step 4: Connect back to positional encoding */}
-      <Reveal when={sub >= 4}><Box color={C.cyan} style={{ width: "100%" }}>
-          <T color="#80deea" bold center size={20}>This is EXACTLY what positional encoding does.</T>
+      <Reveal when={sub >= 4}>
+        <Box color={C.cyan} style={{ width: "100%" }}>
+          <T color="#80deea" bold center size={20}>
+            This is EXACTLY what positional encoding does.
+          </T>
           <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 6 }}>
             {[
-              { left: "Ones column", leftSub: "changes every step, repeats after 10", right: "Fast dimensions (dim 0, 1)", rightSub: "sine wave changes fast, repeats quickly", color: C.yellow },
-              { left: "Tens column", leftSub: "changes every 10 steps", right: "Medium dimensions", rightSub: "sine wave at medium speed", color: C.orange },
-              { left: "Hundreds column", leftSub: "changes every 100 steps", right: "Slow dimensions (dim 510, 511)", rightSub: "sine wave barely changes", color: C.purple },
+              {
+                left: "Ones column",
+                leftSub: "changes every step, repeats after 10",
+                right: "Fast dimensions (dim 0, 1)",
+                rightSub: "sine wave changes fast, repeats quickly",
+                color: C.yellow,
+              },
+              {
+                left: "Tens column",
+                leftSub: "changes every 10 steps",
+                right: "Medium dimensions",
+                rightSub: "sine wave at medium speed",
+                color: C.orange,
+              },
+              {
+                left: "Hundreds column",
+                leftSub: "changes every 100 steps",
+                right: "Slow dimensions (dim 510, 511)",
+                rightSub: "sine wave barely changes",
+                color: C.purple,
+              },
             ].map(({ left, leftSub, right, rightSub, color }) => (
-              <div key={left} style={{
-                display: "grid", gridTemplateColumns: "1fr 30px 1fr", alignItems: "center",
-                padding: "10px 12px", borderRadius: 8,
-                background: `${color}06`, border: `1px solid ${color}12`,
-              }}>
+              <div
+                key={left}
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "1fr 30px 1fr",
+                  alignItems: "center",
+                  padding: "10px 12px",
+                  borderRadius: 8,
+                  background: `${color}06`,
+                  border: `1px solid ${color}12`,
+                }}
+              >
                 <div style={{ textAlign: "right", paddingRight: 8 }}>
                   <div style={{ color, fontWeight: 700, fontSize: 19 }}>{left}</div>
                   <div style={{ color: C.dim, fontSize: 14, marginTop: 2 }}>{leftSub}</div>
                 </div>
-                <div style={{
-                  display: "flex", alignItems: "center", justifyContent: "center",
-                  width: 28, height: 28, borderRadius: "50%",
-                  background: `${color}15`, border: `1px solid ${color}30`,
-                }}>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    width: 28,
+                    height: 28,
+                    borderRadius: "50%",
+                    background: `${color}15`,
+                    border: `1px solid ${color}30`,
+                  }}
+                >
                   <span style={{ color, fontSize: 20, fontWeight: 800 }}>=</span>
                 </div>
                 <div style={{ paddingLeft: 8 }}>
@@ -561,242 +1519,621 @@ export const PosEncodingFastSlow = (ctx) => { const { sub, subBtnRipple, setSubB
               </div>
             ))}
           </div>
-          <div style={{ marginTop: 12, padding: "10px", background: "rgba(0,230,118,0.06)", borderRadius: 8, border: `1px solid ${C.green}20` }}>
-            <T color="#80e8a5" bold center>Instead of 3 digits (0-9) → 1,000 unique positions</T>
-            <T color="#80e8a5" center size={18}>Positional encoding uses 512 dimensions (sine waves -1 to +1)</T>
-            <T color="#80e8a5" center size={18}>→ practically <strong>unlimited</strong> unique positions</T>
+          <div
+            style={{
+              marginTop: 12,
+              padding: "10px",
+              background: "rgba(0,230,118,0.06)",
+              borderRadius: 8,
+              border: `1px solid ${C.green}20`,
+            }}
+          >
+            <T color="#80e8a5" bold center>
+              Instead of 3 digits (0-9) → 1,000 unique positions
+            </T>
+            <T color="#80e8a5" center size={18}>
+              Positional encoding uses 512 dimensions (sine waves -1 to +1)
+            </T>
+            <T color="#80e8a5" center size={18}>
+              → practically <strong>unlimited</strong> unique positions
+            </T>
           </div>
-        </Box></Reveal>
+        </Box>
+      </Reveal>
 
-      <Reveal when={sub >= 5}><Box color={C.green}>
+      <Reveal when={sub >= 5}>
+        <Box color={C.green}>
           <T color="#80e8a5" bold center>
-            That's the entire point of fast vs slow. Nothing more, nothing less.<br />
+            That's the entire point of fast vs slow. Nothing more, nothing less.
+            <br />
             Different speeds exist so the combination is always unique, no matter how long the sentence is.
           </T>
-        </Box></Reveal>
+        </Box>
+      </Reveal>
 
-      {sub < 5 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
+      {sub < 5 && (
+        <SubBtn
+          key={sub}
+          onClick={() => {
+            setSubBtnRipple(Date.now());
+            navigate("forward");
+          }}
+          rippleKey={subBtnRipple}
+          registerSubBtn={registerSubBtn}
+        />
+      )}
     </div>
   );
 };
 
 // ═══════ 2.7 Final Addition ═══════
 
-export const PosEncodingFinal = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx;
+export const PosEncodingFinal = (ctx) => {
+  const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx;
   const emb = [0.56, 0.23, -0.11, 0.42, 0.88, -0.33, 0.71, 0.53];
-  const pe = [0.841, 0.540, 0.100, 0.995, 0.010, 1.000, 0.001, 1.000];
+  const pe = [0.841, 0.54, 0.1, 0.995, 0.01, 1.0, 0.001, 1.0];
   const final_ = emb.map((e, i) => (e + pe[i]).toFixed(2));
 
   return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
       {sub >= 0 && (
         <Box color={C.yellow} style={{ width: "100%" }}>
-          <T color={C.yellow} bold center>The addition for "love" at position 1:</T>
+          <T color={C.yellow} bold center>
+            The addition for "love" at position 1:
+          </T>
           <div style={{ marginTop: 12, display: "flex", flexDirection: "column", alignItems: "center", gap: 0 }}>
             {[
-              { label: "Embedding", color: C.purple, vals: emb.map(v => v.toFixed(3)) },
+              { label: "Embedding", color: C.purple, vals: emb.map((v) => v.toFixed(3)) },
               { op: "+" },
-              { label: "Pos Enc (pos=1)", color: C.green, vals: pe.map(v => v.toFixed(3)) },
+              { label: "Pos Enc (pos=1)", color: C.green, vals: pe.map((v) => v.toFixed(3)) },
               { op: "=" },
               { label: "Final Vector", color: C.yellow, vals: final_, bold: true },
-            ].map((row, i) => row.op ? (
-              <div key={i} style={{ padding: "4px 0", display: "flex", justifyContent: "center" }}>
-                <span style={{ color: row.op === "+" ? C.green : C.yellow, fontWeight: 800, fontSize: 22 }}>{row.op}</span>
-              </div>
-            ) : (
-              <div key={i} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4, width: "100%", padding: "6px 0" }}>
-                <span style={{ fontSize: 11, fontWeight: 700, color: row.color, textTransform: "uppercase", letterSpacing: 1.5 }}>{row.label}</span>
-                <div style={{ display: "flex", gap: 2, flexWrap: "wrap", justifyContent: "center" }}>
-                  {row.vals.map((v, j) => (
-                    <span key={j} style={{
-                      fontFamily: "monospace", fontSize: 13, textAlign: "center",
-                      padding: "4px 6px", borderRadius: 5, minWidth: 48,
-                      color: row.bold ? row.color : `${row.color}cc`,
-                      fontWeight: row.bold ? 700 : 500,
-                      background: row.bold ? `${row.color}18` : `${row.color}08`,
-                      border: `1px solid ${row.bold ? `${row.color}30` : `${row.color}12`}`,
-                    }}>{v}</span>
-                  ))}
+            ].map((row, i) =>
+              row.op ? (
+                <div key={i} style={{ padding: "4px 0", display: "flex", justifyContent: "center" }}>
+                  <span style={{ color: row.op === "+" ? C.green : C.yellow, fontWeight: 800, fontSize: 22 }}>
+                    {row.op}
+                  </span>
                 </div>
-              </div>
-            ))}
+              ) : (
+                <div
+                  key={i}
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    gap: 4,
+                    width: "100%",
+                    padding: "6px 0",
+                  }}
+                >
+                  <span
+                    style={{
+                      fontSize: 11,
+                      fontWeight: 700,
+                      color: row.color,
+                      textTransform: "uppercase",
+                      letterSpacing: 1.5,
+                    }}
+                  >
+                    {row.label}
+                  </span>
+                  <div style={{ display: "flex", gap: 2, flexWrap: "wrap", justifyContent: "center" }}>
+                    {row.vals.map((v, j) => (
+                      <span
+                        key={j}
+                        style={{
+                          fontFamily: "monospace",
+                          fontSize: 13,
+                          textAlign: "center",
+                          padding: "4px 6px",
+                          borderRadius: 5,
+                          minWidth: 48,
+                          color: row.bold ? row.color : `${row.color}cc`,
+                          fontWeight: row.bold ? 700 : 500,
+                          background: row.bold ? `${row.color}18` : `${row.color}08`,
+                          border: `1px solid ${row.bold ? `${row.color}30` : `${row.color}12`}`,
+                        }}
+                      >
+                        {v}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              ),
+            )}
           </div>
         </Box>
       )}
-      <Reveal when={sub >= 1}><Box color={C.green}><T color="#80e8a5" bold center>This vector now carries BOTH:</T><T color="#80e8a5">✅ <strong style={{ color: C.purple }}>Meaning</strong> - it mostly represents "love" (embedding dominates)<br />✅ <strong style={{ color: C.green }}>Position</strong> - nudged slightly to encode "I'm at position 1"</T></Box></Reveal>
-      <Reveal when={sub >= 2}><Box color={C.purple} style={{ width: "100%" }}>
-          <T color="#b8a9ff" bold center>4 reasons this design is genius:</T>
+      <Reveal when={sub >= 1}>
+        <Box color={C.green}>
+          <T color="#80e8a5" bold center>
+            This vector now carries BOTH:
+          </T>
+          <T color="#80e8a5">
+            ✅ <strong style={{ color: C.purple }}>Meaning</strong> - it mostly represents "love" (embedding dominates)
+            <br />✅ <strong style={{ color: C.green }}>Position</strong> - nudged slightly to encode "I'm at position
+            1"
+          </T>
+        </Box>
+      </Reveal>
+      <Reveal when={sub >= 2}>
+        <Box color={C.purple} style={{ width: "100%" }}>
+          <T color="#b8a9ff" bold center>
+            4 reasons this design is genius:
+          </T>
           <div style={{ marginTop: 6, display: "flex", flexDirection: "column", gap: 4 }}>
             {[
               { n: "1", t: "Bounded", d: "sin/cos always between -1 and +1. Never explodes." },
               { n: "2", t: "Unique", d: "Every position gets a unique pattern across 512 dims." },
-              { n: "3", t: "Relative distances", d: "sin(a+b) = linear combo of sin(a),cos(a). Model can learn relative positions." },
-              { n: "4", t: "Generalizes", d: "Works for longer sequences than seen in training - sin/cos are smooth and continuous." },
+              {
+                n: "3",
+                t: "Relative distances",
+                d: "sin(a+b) = linear combo of sin(a),cos(a). Model can learn relative positions.",
+              },
+              {
+                n: "4",
+                t: "Generalizes",
+                d: "Works for longer sequences than seen in training - sin/cos are smooth and continuous.",
+              },
             ].map(({ n, t, d }) => (
               <div key={n} style={{ display: "flex", gap: 8, alignItems: "flex-start", padding: "4px 8px" }}>
                 <span style={{ color: C.purple, fontWeight: 800, fontSize: 18 }}>{n}.</span>
-                <T color={C.mid} size={16}><strong style={{ color: C.purple }}>{t}</strong> - {d}</T>
+                <T color={C.mid} size={16}>
+                  <strong style={{ color: C.purple }}>{t}</strong> - {d}
+                </T>
               </div>
             ))}
           </div>
-        </Box></Reveal>
-      <Reveal when={sub >= 3}><Box color={C.green}><T color="#80e8a5" bold center>✅ This is what enters the Transformer layers.</T><T color="#80e8a5" center size={18} style={{ marginTop: 4 }}>Each word now carries both <strong>meaning</strong> and <strong>position</strong>. Ready for attention.</T></Box></Reveal>
-      {sub < 3 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
+        </Box>
+      </Reveal>
+      <Reveal when={sub >= 3}>
+        <Box color={C.green}>
+          <T color="#80e8a5" bold center>
+            ✅ This is what enters the Transformer layers.
+          </T>
+          <T color="#80e8a5" center size={18} style={{ marginTop: 4 }}>
+            Each word now carries both <strong>meaning</strong> and <strong>position</strong>. Ready for attention.
+          </T>
+        </Box>
+      </Reveal>
+      {sub < 3 && (
+        <SubBtn
+          key={sub}
+          onClick={() => {
+            setSubBtnRipple(Date.now());
+            navigate("forward");
+          }}
+          rippleKey={subBtnRipple}
+          registerSubBtn={registerSubBtn}
+        />
+      )}
     </div>
   );
 };
 
 // ═══════ 5.8 RoPE - Rotary Position Embeddings ═══════
 
-export const RoPE = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx; return (
-  <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
-    {sub >= 0 && (
-      <Box color={C.purple} style={{ width: "100%" }}>
-        <T color="#b8a9ff" bold center size={20}>The problem with sinusoidal position encoding</T>
-        <T color="#b8a9ff" style={{ marginTop: 6 }}>Recall chapters 5.3-5.7: we compute a position vector using sin/cos and <strong>ADD</strong> it to each embedding. This gives every token a unique position signal.</T>
-        <T color="#b8a9ff" style={{ marginTop: 8 }}>But there are two fundamental problems:</T>
-        <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 8 }}>
-          <div style={{ padding: "10px 14px", borderRadius: 8, background: `${C.red}06`, border: `1px solid ${C.red}12` }}>
-            <T color={C.red} bold size={16}>Problem 1: Absolute positioning</T>
-            <T color={C.dim} size={15} style={{ marginTop: 4 }}>Position 5 always gets the same encoding vector, regardless of context. But "cats" at position 5 in a 10-word sentence and "cats" at position 5 in a 1000-word sentence should feel different - the relative context is different.</T>
+export const RoPE = (ctx) => {
+  const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx;
+  return (
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
+      {sub >= 0 && (
+        <Box color={C.purple} style={{ width: "100%" }}>
+          <T color="#b8a9ff" bold center size={20}>
+            The problem with sinusoidal position encoding
+          </T>
+          <T color="#b8a9ff" style={{ marginTop: 6 }}>
+            Recall chapters 5.3-5.7: we compute a position vector using sin/cos and <strong>ADD</strong> it to each
+            embedding. This gives every token a unique position signal.
+          </T>
+          <T color="#b8a9ff" style={{ marginTop: 8 }}>
+            But there are two fundamental problems:
+          </T>
+          <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 8 }}>
+            <div
+              style={{
+                padding: "10px 14px",
+                borderRadius: 8,
+                background: `${C.red}06`,
+                border: `1px solid ${C.red}12`,
+              }}
+            >
+              <T color={C.red} bold size={16}>
+                Problem 1: Absolute positioning
+              </T>
+              <T color={C.dim} size={15} style={{ marginTop: 4 }}>
+                Position 5 always gets the same encoding vector, regardless of context. But "cats" at position 5 in a
+                10-word sentence and "cats" at position 5 in a 1000-word sentence should feel different - the relative
+                context is different.
+              </T>
+            </div>
+            <div
+              style={{
+                padding: "10px 14px",
+                borderRadius: 8,
+                background: `${C.red}06`,
+                border: `1px solid ${C.red}12`,
+              }}
+            >
+              <T color={C.red} bold size={16}>
+                Problem 2: Fixed length
+              </T>
+              <T color={C.dim} size={15} style={{ marginTop: 4 }}>
+                If we train on sequences up to 2048 tokens, what happens at position 2049? The model has never seen that
+                position encoding. Performance degrades badly - the model cannot extrapolate to longer contexts.
+              </T>
+            </div>
           </div>
-          <div style={{ padding: "10px 14px", borderRadius: 8, background: `${C.red}06`, border: `1px solid ${C.red}12` }}>
-            <T color={C.red} bold size={16}>Problem 2: Fixed length</T>
-            <T color={C.dim} size={15} style={{ marginTop: 4 }}>If we train on sequences up to 2048 tokens, what happens at position 2049? The model has never seen that position encoding. Performance degrades badly - the model cannot extrapolate to longer contexts.</T>
+          <T color="#b8a9ff" style={{ marginTop: 10 }}>
+            RoPE (Rotary Position Embedding) solves both problems with a single elegant idea.
+          </T>
+        </Box>
+      )}
+
+      <Reveal when={sub >= 1}>
+        <Box color={C.green} style={{ width: "100%" }}>
+          <T color="#80e8a5" bold center size={20}>
+            RoPE: rotate instead of add
+          </T>
+          <T color="#80e8a5" style={{ marginTop: 6 }}>
+            Instead of adding a position vector to the embedding, RoPE <strong>rotates</strong> the Query and Key
+            vectors based on their position. The rotation angle depends on position.
+          </T>
+          <div style={{ marginTop: 12, padding: "14px", borderRadius: 8, background: "rgba(0,0,0,0.3)" }}>
+            <T color={C.bright} bold center size={16}>
+              The 2D rotation matrix
+            </T>
+            <T color={C.bright} center size={16} style={{ marginTop: 8, fontFamily: "monospace", lineHeight: 2 }}>
+              [cos(t), -sin(t)] &nbsp;&nbsp; [q1] &nbsp;&nbsp; [q1 cos(t) - q2 sin(t)]
+              <br />
+              [sin(t), &nbsp;cos(t)] x [q2] = [q1 sin(t) + q2 cos(t)]
+            </T>
+            <T color={C.dim} size={14} center style={{ marginTop: 8 }}>
+              where t = position x frequency
+            </T>
           </div>
-        </div>
-        <T color="#b8a9ff" style={{ marginTop: 10 }}>RoPE (Rotary Position Embedding) solves both problems with a single elegant idea.</T>
-      </Box>
-    )}
+          <div style={{ marginTop: 12, display: "flex", gap: 8, alignItems: "stretch" }}>
+            <div
+              style={{
+                flex: 1,
+                padding: "10px",
+                borderRadius: 8,
+                background: `${C.red}06`,
+                border: `1px solid ${C.red}12`,
+              }}
+            >
+              <T color={C.red} bold center size={16}>
+                Sinusoidal PE
+              </T>
+              <T color={C.dim} size={15} style={{ marginTop: 4 }}>
+                embedding + position_vector
+              </T>
+              <T color={C.dim} size={13} style={{ marginTop: 2 }}>
+                Modifies the embedding directly
+              </T>
+            </div>
+            <div
+              style={{
+                flex: 1,
+                padding: "10px",
+                borderRadius: 8,
+                background: `${C.green}06`,
+                border: `1px solid ${C.green}12`,
+              }}
+            >
+              <T color={C.green} bold center size={16}>
+                RoPE
+              </T>
+              <T color={C.dim} size={15} style={{ marginTop: 4 }}>
+                rotate(Q, position), rotate(K, position)
+              </T>
+              <T color={C.dim} size={13} style={{ marginTop: 2 }}>
+                Only rotates Q and K, not the embedding
+              </T>
+            </div>
+          </div>
+          <T color="#80e8a5" style={{ marginTop: 10 }}>
+            Example: if Q = [1.0, 0.5] and position = 3, with frequency = 0.1, then t = 3 x 0.1 = 0.3 radians. The
+            vector gets rotated by 0.3 radians (about 17 degrees).
+          </T>
+        </Box>
+      </Reveal>
 
-    <Reveal when={sub >= 1}><Box color={C.green} style={{ width: "100%" }}>
-      <T color="#80e8a5" bold center size={20}>RoPE: rotate instead of add</T>
-      <T color="#80e8a5" style={{ marginTop: 6 }}>Instead of adding a position vector to the embedding, RoPE <strong>rotates</strong> the Query and Key vectors based on their position. The rotation angle depends on position.</T>
-      <div style={{ marginTop: 12, padding: "14px", borderRadius: 8, background: "rgba(0,0,0,0.3)" }}>
-        <T color={C.bright} bold center size={16}>The 2D rotation matrix</T>
-        <T color={C.bright} center size={16} style={{ marginTop: 8, fontFamily: "monospace", lineHeight: 2 }}>
-          [cos(t), -sin(t)] &nbsp;&nbsp; [q1] &nbsp;&nbsp; [q1 cos(t) - q2 sin(t)]<br />
-          [sin(t), &nbsp;cos(t)] x [q2] = [q1 sin(t) + q2 cos(t)]
-        </T>
-        <T color={C.dim} size={14} center style={{ marginTop: 8 }}>where t = position x frequency</T>
-      </div>
-      <div style={{ marginTop: 12, display: "flex", gap: 8, alignItems: "stretch" }}>
-        <div style={{ flex: 1, padding: "10px", borderRadius: 8, background: `${C.red}06`, border: `1px solid ${C.red}12` }}>
-          <T color={C.red} bold center size={16}>Sinusoidal PE</T>
-          <T color={C.dim} size={15} style={{ marginTop: 4 }}>embedding + position_vector</T>
-          <T color={C.dim} size={13} style={{ marginTop: 2 }}>Modifies the embedding directly</T>
-        </div>
-        <div style={{ flex: 1, padding: "10px", borderRadius: 8, background: `${C.green}06`, border: `1px solid ${C.green}12` }}>
-          <T color={C.green} bold center size={16}>RoPE</T>
-          <T color={C.dim} size={15} style={{ marginTop: 4 }}>rotate(Q, position), rotate(K, position)</T>
-          <T color={C.dim} size={13} style={{ marginTop: 2 }}>Only rotates Q and K, not the embedding</T>
-        </div>
-      </div>
-      <T color="#80e8a5" style={{ marginTop: 10 }}>Example: if Q = [1.0, 0.5] and position = 3, with frequency = 0.1, then t = 3 x 0.1 = 0.3 radians. The vector gets rotated by 0.3 radians (about 17 degrees).</T>
-    </Box></Reveal>
+      <Reveal when={sub >= 2}>
+        <Box color={C.yellow} style={{ width: "100%" }}>
+          <T color="#ffe082" bold center size={20}>
+            The key insight: relative distance emerges naturally
+          </T>
+          <T color="#ffe082" style={{ marginTop: 6 }}>
+            When you compute Q dot K (the attention score), the rotations combine. If Q at position m is rotated by
+            angle m x f, and K at position n is rotated by angle n x f, their dot product depends only on (m - n) x f.
+          </T>
+          <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 8 }}>
+            <div
+              style={{
+                padding: "10px 14px",
+                borderRadius: 8,
+                background: `${C.cyan}06`,
+                border: `1px solid ${C.cyan}12`,
+              }}
+            >
+              <T color={C.cyan} bold center size={16}>
+                Position 100 attending to position 97
+              </T>
+              <T color={C.dim} size={15} style={{ marginTop: 4 }}>
+                Relative distance: 100 - 97 = <strong style={{ color: C.yellow }}>3</strong>
+              </T>
+              <T color={C.dim} size={15}>
+                Angle in dot product: (100 - 97) x f = 3f
+              </T>
+            </div>
+            <div
+              style={{
+                padding: "10px 14px",
+                borderRadius: 8,
+                background: `${C.cyan}06`,
+                border: `1px solid ${C.cyan}12`,
+              }}
+            >
+              <T color={C.cyan} bold center size={16}>
+                Position 3 attending to position 0
+              </T>
+              <T color={C.dim} size={15} style={{ marginTop: 4 }}>
+                Relative distance: 3 - 0 = <strong style={{ color: C.yellow }}>3</strong>
+              </T>
+              <T color={C.dim} size={15}>
+                Angle in dot product: (3 - 0) x f = 3f
+              </T>
+            </div>
+            <div
+              style={{
+                padding: "10px 14px",
+                borderRadius: 8,
+                background: `${C.yellow}06`,
+                border: `1px solid ${C.yellow}12`,
+              }}
+            >
+              <T color={C.yellow} bold center size={16}>
+                Same relative distance = same angle-based score
+              </T>
+              <T color={C.dim} size={15} style={{ marginTop: 4 }}>
+                The absolute positions cancel out. Only the gap between the two positions matters. This means the model
+                learns <strong>relative</strong> position naturally, without any explicit relative position mechanism.
+              </T>
+            </div>
+          </div>
+        </Box>
+      </Reveal>
 
-    <Reveal when={sub >= 2}><Box color={C.yellow} style={{ width: "100%" }}>
-      <T color="#ffe082" bold center size={20}>The key insight: relative distance emerges naturally</T>
-      <T color="#ffe082" style={{ marginTop: 6 }}>When you compute Q dot K (the attention score), the rotations combine. If Q at position m is rotated by angle m x f, and K at position n is rotated by angle n x f, their dot product depends only on (m - n) x f.</T>
-      <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 8 }}>
-        <div style={{ padding: "10px 14px", borderRadius: 8, background: `${C.cyan}06`, border: `1px solid ${C.cyan}12` }}>
-          <T color={C.cyan} bold center size={16}>Position 100 attending to position 97</T>
-          <T color={C.dim} size={15} style={{ marginTop: 4 }}>Relative distance: 100 - 97 = <strong style={{ color: C.yellow }}>3</strong></T>
-          <T color={C.dim} size={15}>Angle in dot product: (100 - 97) x f = 3f</T>
-        </div>
-        <div style={{ padding: "10px 14px", borderRadius: 8, background: `${C.cyan}06`, border: `1px solid ${C.cyan}12` }}>
-          <T color={C.cyan} bold center size={16}>Position 3 attending to position 0</T>
-          <T color={C.dim} size={15} style={{ marginTop: 4 }}>Relative distance: 3 - 0 = <strong style={{ color: C.yellow }}>3</strong></T>
-          <T color={C.dim} size={15}>Angle in dot product: (3 - 0) x f = 3f</T>
-        </div>
-        <div style={{ padding: "10px 14px", borderRadius: 8, background: `${C.yellow}06`, border: `1px solid ${C.yellow}12` }}>
-          <T color={C.yellow} bold center size={16}>Same relative distance = same angle-based score</T>
-          <T color={C.dim} size={15} style={{ marginTop: 4 }}>The absolute positions cancel out. Only the gap between the two positions matters. This means the model learns <strong>relative</strong> position naturally, without any explicit relative position mechanism.</T>
-        </div>
-      </div>
-    </Box></Reveal>
+      <Reveal when={sub >= 3}>
+        <Box color={C.cyan} style={{ width: "100%" }}>
+          <T color="#80deea" bold center size={20}>
+            How it works in practice
+          </T>
+          <T color="#80deea" style={{ marginTop: 6 }}>
+            Real embeddings have 128 dims (or more), not 2. RoPE handles this by processing dimensions{" "}
+            <strong>in pairs</strong>:
+          </T>
+          <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 8 }}>
+            <div style={{ padding: "10px 14px", borderRadius: 8, background: "rgba(0,0,0,0.3)" }}>
+              <T color={C.bright} bold center size={15}>
+                128-dim vector split into 64 pairs
+              </T>
+              <div style={{ marginTop: 8, display: "flex", gap: 4, flexWrap: "wrap", justifyContent: "center" }}>
+                {[
+                  { pair: "(d0, d1)", freq: "fast", color: C.red },
+                  { pair: "(d2, d3)", freq: "fast", color: C.orange },
+                  { pair: "(d4, d5)", freq: "medium", color: C.yellow },
+                  { pair: "...", freq: "", color: C.dim },
+                  { pair: "(d124, d125)", freq: "slow", color: C.blue },
+                  { pair: "(d126, d127)", freq: "very slow", color: C.purple },
+                ].map(({ pair, freq, color }) => (
+                  <div
+                    key={pair}
+                    style={{
+                      padding: "6px 10px",
+                      borderRadius: 6,
+                      background: `${color}10`,
+                      border: `1px solid ${color}20`,
+                    }}
+                  >
+                    <T color={color} bold size={14} center>
+                      {pair}
+                    </T>
+                    {freq && (
+                      <T color={C.dim} size={11} center>
+                        {freq}
+                      </T>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+            <T color="#80deea" style={{ marginTop: 4 }}>
+              Each pair gets its own 2D rotation. The key: each pair rotates at a <strong>different frequency</strong>,
+              just like sinusoidal PE's fast and slow dimensions.
+            </T>
+            <div style={{ display: "flex", flexDirection: "column", gap: 4, marginTop: 4 }}>
+              <div
+                style={{
+                  padding: "8px 12px",
+                  borderRadius: 6,
+                  background: `${C.red}06`,
+                  border: `1px solid ${C.red}12`,
+                }}
+              >
+                <T color={C.red} bold size={15}>
+                  Early pairs (d0, d1): rotate FAST
+                </T>
+                <T color={C.dim} size={14} style={{ marginTop: 2 }}>
+                  High frequency - sensitive to nearby position differences. "Is the next word 1 or 2 positions away?"
+                </T>
+              </div>
+              <div
+                style={{
+                  padding: "8px 12px",
+                  borderRadius: 6,
+                  background: `${C.purple}06`,
+                  border: `1px solid ${C.purple}12`,
+                }}
+              >
+                <T color={C.purple} bold size={15}>
+                  Late pairs (d126, d127): rotate SLOW
+                </T>
+                <T color={C.dim} size={14} style={{ marginTop: 2 }}>
+                  Low frequency - sensitive to distant position differences. "Is this word 500 or 1000 positions away?"
+                </T>
+              </div>
+            </div>
+            <T color="#80deea" style={{ marginTop: 6 }}>
+              The frequency formula is the same idea as sinusoidal PE: f_i = 1 / 10000^(2i/d), where i is the pair index
+              and d is the total dimension. Pair 0 rotates fastest, pair 63 rotates slowest.
+            </T>
+          </div>
+        </Box>
+      </Reveal>
 
-    <Reveal when={sub >= 3}><Box color={C.cyan} style={{ width: "100%" }}>
-      <T color="#80deea" bold center size={20}>How it works in practice</T>
-      <T color="#80deea" style={{ marginTop: 6 }}>Real embeddings have 128 dims (or more), not 2. RoPE handles this by processing dimensions <strong>in pairs</strong>:</T>
-      <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 8 }}>
-        <div style={{ padding: "10px 14px", borderRadius: 8, background: "rgba(0,0,0,0.3)" }}>
-          <T color={C.bright} bold center size={15}>128-dim vector split into 64 pairs</T>
-          <div style={{ marginTop: 8, display: "flex", gap: 4, flexWrap: "wrap", justifyContent: "center" }}>
+      <Reveal when={sub >= 4}>
+        <Box color={C.orange} style={{ width: "100%" }}>
+          <T color="#ffb74d" bold center size={20}>
+            Why RoPE won
+          </T>
+          <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 4 }}>
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "100px 1fr 1fr 1fr",
+                gap: 6,
+                padding: "8px 10px",
+                borderRadius: 6,
+                background: "rgba(0,0,0,0.3)",
+              }}
+            >
+              <T color={C.bright} bold size={14}></T>
+              <T color={C.red} bold center size={14}>
+                Sinusoidal
+              </T>
+              <T color={C.blue} bold center size={14}>
+                Learned PE
+              </T>
+              <T color={C.green} bold center size={14}>
+                RoPE
+              </T>
+            </div>
             {[
-              { pair: "(d0, d1)", freq: "fast", color: C.red },
-              { pair: "(d2, d3)", freq: "fast", color: C.orange },
-              { pair: "(d4, d5)", freq: "medium", color: C.yellow },
-              { pair: "...", freq: "", color: C.dim },
-              { pair: "(d124, d125)", freq: "slow", color: C.blue },
-              { pair: "(d126, d127)", freq: "very slow", color: C.purple },
-            ].map(({ pair, freq, color }) => (
-              <div key={pair} style={{ padding: "6px 10px", borderRadius: 6, background: `${color}10`, border: `1px solid ${color}20` }}>
-                <T color={color} bold size={14} center>{pair}</T>
-                {freq && <T color={C.dim} size={11} center>{freq}</T>}
+              { label: "Type", sin: "Absolute", learned: "Absolute", rope: "Relative" },
+              {
+                label: "Applied to",
+                sin: "Embedding (add)",
+                learned: "Embedding (add)",
+                rope: "Q and K only (rotate)",
+              },
+              { label: "Max length", sin: "Fixed at training", learned: "Fixed at training", rope: "Can extrapolate" },
+              {
+                label: "Extrapolation",
+                sin: "Fails beyond max",
+                learned: "Fails beyond max",
+                rope: "Works with scaling tricks",
+              },
+              { label: "Parameters", sin: "0 (fixed formula)", learned: "pos x dim", rope: "0 (fixed formula)" },
+            ].map(({ label, sin, learned, rope }) => (
+              <div
+                key={label}
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "100px 1fr 1fr 1fr",
+                  gap: 6,
+                  padding: "5px 10px",
+                  borderRadius: 6,
+                  background: "rgba(255,255,255,0.02)",
+                }}
+              >
+                <T color={C.mid} bold size={13}>
+                  {label}
+                </T>
+                <T color={C.dim} size={13}>
+                  {sin}
+                </T>
+                <T color={C.dim} size={13}>
+                  {learned}
+                </T>
+                <T color={C.dim} size={13}>
+                  {rope}
+                </T>
               </div>
             ))}
           </div>
-        </div>
-        <T color="#80deea" style={{ marginTop: 4 }}>Each pair gets its own 2D rotation. The key: each pair rotates at a <strong>different frequency</strong>, just like sinusoidal PE's fast and slow dimensions.</T>
-        <div style={{ display: "flex", flexDirection: "column", gap: 4, marginTop: 4 }}>
-          <div style={{ padding: "8px 12px", borderRadius: 6, background: `${C.red}06`, border: `1px solid ${C.red}12` }}>
-            <T color={C.red} bold size={15}>Early pairs (d0, d1): rotate FAST</T>
-            <T color={C.dim} size={14} style={{ marginTop: 2 }}>High frequency - sensitive to nearby position differences. "Is the next word 1 or 2 positions away?"</T>
+          <div
+            style={{
+              marginTop: 12,
+              padding: "10px 14px",
+              borderRadius: 8,
+              background: `${C.green}06`,
+              border: `1px solid ${C.green}12`,
+            }}
+          >
+            <T color={C.green} bold center size={16}>
+              RoPE extrapolation: NTK-aware scaling
+            </T>
+            <T color={C.dim} size={14} style={{ marginTop: 4 }}>
+              If a model trained on 4096 tokens needs to handle 16384, you can scale the rotation frequencies by a
+              factor. The "NTK-aware" variant adjusts different frequency bands differently - slowing down the
+              fast-rotating pairs while keeping the slow ones nearly unchanged. This extends context length 4x or more
+              with minimal quality loss.
+            </T>
           </div>
-          <div style={{ padding: "8px 12px", borderRadius: 6, background: `${C.purple}06`, border: `1px solid ${C.purple}12` }}>
-            <T color={C.purple} bold size={15}>Late pairs (d126, d127): rotate SLOW</T>
-            <T color={C.dim} size={14} style={{ marginTop: 2 }}>Low frequency - sensitive to distant position differences. "Is this word 500 or 1000 positions away?"</T>
-          </div>
-        </div>
-        <T color="#80deea" style={{ marginTop: 6 }}>The frequency formula is the same idea as sinusoidal PE: f_i = 1 / 10000^(2i/d), where i is the pair index and d is the total dimension. Pair 0 rotates fastest, pair 63 rotates slowest.</T>
-      </div>
-    </Box></Reveal>
-
-    <Reveal when={sub >= 4}><Box color={C.orange} style={{ width: "100%" }}>
-      <T color="#ffb74d" bold center size={20}>Why RoPE won</T>
-      <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 4 }}>
-        <div style={{ display: "grid", gridTemplateColumns: "100px 1fr 1fr 1fr", gap: 6, padding: "8px 10px", borderRadius: 6, background: "rgba(0,0,0,0.3)" }}>
-          <T color={C.bright} bold size={14}></T>
-          <T color={C.red} bold center size={14}>Sinusoidal</T>
-          <T color={C.blue} bold center size={14}>Learned PE</T>
-          <T color={C.green} bold center size={14}>RoPE</T>
-        </div>
-        {[
-          { label: "Type", sin: "Absolute", learned: "Absolute", rope: "Relative" },
-          { label: "Applied to", sin: "Embedding (add)", learned: "Embedding (add)", rope: "Q and K only (rotate)" },
-          { label: "Max length", sin: "Fixed at training", learned: "Fixed at training", rope: "Can extrapolate" },
-          { label: "Extrapolation", sin: "Fails beyond max", learned: "Fails beyond max", rope: "Works with scaling tricks" },
-          { label: "Parameters", sin: "0 (fixed formula)", learned: "pos x dim", rope: "0 (fixed formula)" },
-        ].map(({ label, sin, learned, rope }) => (
-          <div key={label} style={{ display: "grid", gridTemplateColumns: "100px 1fr 1fr 1fr", gap: 6, padding: "5px 10px", borderRadius: 6, background: "rgba(255,255,255,0.02)" }}>
-            <T color={C.mid} bold size={13}>{label}</T>
-            <T color={C.dim} size={13}>{sin}</T>
-            <T color={C.dim} size={13}>{learned}</T>
-            <T color={C.dim} size={13}>{rope}</T>
-          </div>
-        ))}
-      </div>
-      <div style={{ marginTop: 12, padding: "10px 14px", borderRadius: 8, background: `${C.green}06`, border: `1px solid ${C.green}12` }}>
-        <T color={C.green} bold center size={16}>RoPE extrapolation: NTK-aware scaling</T>
-        <T color={C.dim} size={14} style={{ marginTop: 4 }}>If a model trained on 4096 tokens needs to handle 16384, you can scale the rotation frequencies by a factor. The "NTK-aware" variant adjusts different frequency bands differently - slowing down the fast-rotating pairs while keeping the slow ones nearly unchanged. This extends context length 4x or more with minimal quality loss.</T>
-      </div>
-      <div style={{ marginTop: 10, padding: "10px 14px", borderRadius: 8, background: `${C.orange}06`, border: `1px solid ${C.orange}12` }}>
-        <T color={C.orange} bold center size={16}>Models using RoPE</T>
-        <div style={{ marginTop: 6, display: "flex", gap: 6, flexWrap: "wrap", justifyContent: "center" }}>
-          {["LLaMA", "LLaMA 2", "LLaMA 3", "Mistral", "Qwen", "GPT-NeoX", "PaLM"].map(m => (
-            <div key={m} style={{ padding: "4px 10px", borderRadius: 5, background: `${C.orange}12`, border: `1px solid ${C.orange}25` }}>
-              <T color={C.orange} bold size={14}>{m}</T>
+          <div
+            style={{
+              marginTop: 10,
+              padding: "10px 14px",
+              borderRadius: 8,
+              background: `${C.orange}06`,
+              border: `1px solid ${C.orange}12`,
+            }}
+          >
+            <T color={C.orange} bold center size={16}>
+              Models using RoPE
+            </T>
+            <div style={{ marginTop: 6, display: "flex", gap: 6, flexWrap: "wrap", justifyContent: "center" }}>
+              {["LLaMA", "LLaMA 2", "LLaMA 3", "Mistral", "Qwen", "GPT-NeoX", "PaLM"].map((m) => (
+                <div
+                  key={m}
+                  style={{
+                    padding: "4px 10px",
+                    borderRadius: 5,
+                    background: `${C.orange}12`,
+                    border: `1px solid ${C.orange}25`,
+                  }}
+                >
+                  <T color={C.orange} bold size={14}>
+                    {m}
+                  </T>
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
-        <T color={C.dim} size={14} style={{ marginTop: 6 }}>Nearly every modern open-source LLM uses RoPE. It has become the default choice for position encoding since 2022.</T>
-      </div>
-    </Box></Reveal>
+            <T color={C.dim} size={14} style={{ marginTop: 6 }}>
+              Nearly every modern open-source LLM uses RoPE. It has become the default choice for position encoding
+              since 2022.
+            </T>
+          </div>
+        </Box>
+      </Reveal>
 
-    {sub < 4 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
-  </div>
-); }
+      {sub < 4 && (
+        <SubBtn
+          key={sub}
+          onClick={() => {
+            setSubBtnRipple(Date.now());
+            navigate("forward");
+          }}
+          rippleKey={subBtnRipple}
+          registerSubBtn={registerSubBtn}
+        />
+      )}
+    </div>
+  );
+};
 
 // ═══════ CHAPTER ROUTER ═══════
 
@@ -804,578 +2141,1541 @@ export const RoPE = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, regis
 // SECTION 6: ATTENTION - THE HEART
 // ═══════════════════════════════════════
 
-export const WhatTransformerDoes = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx; return (
-  <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
-    {sub >= 0 && (
-      <Box color={C.purple} style={{ width: "100%" }}>
-        <T color="#b8a9ff" bold center size={21}>What is a Transformer actually doing?</T>
-        <T color="#b8a9ff" style={{ marginTop: 8 }}>You give it a sentence: <strong>"I love cats"</strong></T>
-        <T color="#b8a9ff" style={{ marginTop: 6 }}>It needs to understand what each word means <strong>in context</strong>. The word "love" alone could mean many things - romantic love, love of food, a tennis score. But in "I love cats" it specifically means personal affection for cats.</T>
-        <T color="#b8a9ff" style={{ marginTop: 8 }}>The Transformer figures this out through a pipeline of steps:</T>
-        <div style={{ display: "flex", gap: 8, marginTop: 10, justifyContent: "center", flexWrap: "wrap" }}>
-          {[{ w: "I", c: C.red }, { w: "love", c: C.purple }, { w: "cats", c: C.cyan }].map(({ w, c }) => (
-            <div key={w} style={{ padding: "6px 14px", borderRadius: 8, background: `${c}12`, border: `1px solid ${c}25` }}>
-              <T color={c} bold size={18}>{w}</T>
+export const WhatTransformerDoes = (ctx) => {
+  const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx;
+  return (
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
+      {sub >= 0 && (
+        <Box color={C.purple} style={{ width: "100%" }}>
+          <T color="#b8a9ff" bold center size={21}>
+            What is a Transformer actually doing?
+          </T>
+          <T color="#b8a9ff" style={{ marginTop: 8 }}>
+            You give it a sentence: <strong>"I love cats"</strong>
+          </T>
+          <T color="#b8a9ff" style={{ marginTop: 6 }}>
+            It needs to understand what each word means <strong>in context</strong>. The word "love" alone could mean
+            many things - romantic love, love of food, a tennis score. But in "I love cats" it specifically means
+            personal affection for cats.
+          </T>
+          <T color="#b8a9ff" style={{ marginTop: 8 }}>
+            The Transformer figures this out through a pipeline of steps:
+          </T>
+          <div style={{ display: "flex", gap: 8, marginTop: 10, justifyContent: "center", flexWrap: "wrap" }}>
+            {[
+              { w: "I", c: C.red },
+              { w: "love", c: C.purple },
+              { w: "cats", c: C.cyan },
+            ].map(({ w, c }) => (
+              <div
+                key={w}
+                style={{ padding: "6px 14px", borderRadius: 8, background: `${c}12`, border: `1px solid ${c}25` }}
+              >
+                <T color={c} bold size={18}>
+                  {w}
+                </T>
+              </div>
+            ))}
+            <T color={C.dim} size={22} style={{ display: "flex", alignItems: "center" }}>
+              {"\u2192"}
+            </T>
+            <div
+              style={{
+                padding: "6px 14px",
+                borderRadius: 8,
+                background: `${C.green}12`,
+                border: `1px solid ${C.green}25`,
+              }}
+            >
+              <T color={C.green} bold size={16}>
+                contextual understanding
+              </T>
             </div>
-          ))}
-          <T color={C.dim} size={22} style={{ display: "flex", alignItems: "center" }}>{"\u2192"}</T>
-          <div style={{ padding: "6px 14px", borderRadius: 8, background: `${C.green}12`, border: `1px solid ${C.green}25` }}>
-            <T color={C.green} bold size={16}>contextual understanding</T>
           </div>
-        </div>
-      </Box>
-    )}
+        </Box>
+      )}
 
-    <Reveal when={sub >= 1}><Box color={C.cyan} style={{ width: "100%" }}>
-      <T color="#80deea" bold center size={20}>Step 1: Each word becomes a vector (embedding)</T>
-      <T color="#80deea" style={{ marginTop: 6 }}>The model's embedding table maps each token to a vector of numbers. These numbers capture meaning <strong>in isolation</strong> - "love" doesn't know about "I" or "cats" yet.</T>
-      <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 6 }}>
-        {[
-          { w: "I", c: C.red, v: [0.2, -0.5, 0.8, 0.1] },
-          { w: "love", c: C.purple, v: [0.9, 0.1, -0.3, 0.6] },
-          { w: "cats", c: C.cyan, v: [0.4, 0.7, 0.2, -0.4] },
-        ].map(({ w, c, v }) => (
-          <div key={w} style={{ display: "flex", alignItems: "center", gap: 8, padding: "6px 12px", borderRadius: 8, background: `${c}06`, border: `1px solid ${c}12` }}>
-            <div style={{ minWidth: 50, padding: "3px 8px", borderRadius: 6, background: `${c}12`, border: `1px solid ${c}25` }}>
-              <T color={c} bold size={17} center>{w}</T>
-            </div>
-            <T color={C.dim} size={18}>{"\u2192"}</T>
-            <code style={{ color: `${c}cc`, fontSize: 15 }}>[{v.join(", ")}, ...]</code>
-            <T color={C.dim} size={13} style={{ marginLeft: "auto" }}>512 dims</T>
-          </div>
-        ))}
-      </div>
-      <T color={C.dim} size={15} style={{ marginTop: 8 }}>Similar words get similar vectors. "cat" and "dog" are nearby in this 512-dimensional space. But "love" here is generic - it could be any kind of love.</T>
-    </Box></Reveal>
-
-    <Reveal when={sub >= 2}><Box color={C.yellow} style={{ width: "100%" }}>
-      <T color="#fff176" bold center size={20}>Step 2: Add position information</T>
-      <T color="#ffe082" style={{ marginTop: 6 }}>Without position, "I love cats" and "cats love I" look identical to the model - same words, same embeddings. Order matters!</T>
-      <T color="#ffe082" style={{ marginTop: 8 }}>Positional encoding adds WHERE each word sits in the sentence:</T>
-      <div style={{ marginTop: 10, padding: "10px 14px", borderRadius: 8, background: `${C.yellow}06`, border: `1px solid ${C.yellow}12` }}>
-        <T color={C.dim} size={15} center>Example for "love" at position 1:</T>
-        <div style={{ display: "flex", alignItems: "center", gap: 6, marginTop: 8, justifyContent: "center", flexWrap: "wrap" }}>
-          <div style={{ padding: "4px 10px", borderRadius: 6, background: `${C.purple}12`, border: `1px solid ${C.purple}25` }}>
-            <T color={C.purple} size={14} bold>embedding</T>
-            <T color={C.dim} size={13} center>[0.9, 0.1, -0.3, ...]</T>
-          </div>
-          <T color={C.bright} size={20} bold>+</T>
-          <div style={{ padding: "4px 10px", borderRadius: 6, background: `${C.yellow}12`, border: `1px solid ${C.yellow}25` }}>
-            <T color={C.yellow} size={14} bold>position</T>
-            <T color={C.dim} size={13} center>[0.84, 0.54, 0.00, ...]</T>
-          </div>
-          <T color={C.bright} size={20} bold>=</T>
-          <div style={{ padding: "4px 10px", borderRadius: 6, background: `${C.green}12`, border: `1px solid ${C.green}25` }}>
-            <T color={C.green} size={14} bold>positioned</T>
-            <T color={C.dim} size={13} center>[1.74, 0.64, -0.30, ...]</T>
-          </div>
-        </div>
-      </div>
-      <T color="#ffe082" style={{ marginTop: 8 }}>Result: each word now knows WHAT it means AND WHERE it sits. "love" at position 1 is different from "love" at position 5.</T>
-    </Box></Reveal>
-
-    <Reveal when={sub >= 3}><Box color={C.green} style={{ width: "100%" }}>
-      <T color="#a5d6a7" bold center size={20}>Step 3: Self-attention - words look at each other</T>
-      <T color="#a5d6a7" style={{ marginTop: 6 }}>This is the magic step. Each word sends a Query ("what am I looking for?"), every word offers a Key ("here is what I can offer"), and the model computes attention scores - how relevant is each word to every other?</T>
-      <div style={{ marginTop: 12, padding: "10px 14px", borderRadius: 8, background: `${C.green}06`, border: `1px solid ${C.green}12` }}>
-        <T color={C.bright} bold center size={16}>Attention scores for "I love cats"</T>
-        <div style={{ marginTop: 10 }}>
-          <div style={{ display: "grid", gridTemplateColumns: "60px 1fr 1fr 1fr", gap: 4, marginBottom: 4 }}>
-            <div />
-            {["I", "love", "cats"].map((w) => (
-              <T key={w} color={C.bright} bold center size={14}>{w}</T>
+      <Reveal when={sub >= 1}>
+        <Box color={C.cyan} style={{ width: "100%" }}>
+          <T color="#80deea" bold center size={20}>
+            Step 1: Each word becomes a vector (embedding)
+          </T>
+          <T color="#80deea" style={{ marginTop: 6 }}>
+            The model's embedding table maps each token to a vector of numbers. These numbers capture meaning{" "}
+            <strong>in isolation</strong> - "love" doesn't know about "I" or "cats" yet.
+          </T>
+          <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 6 }}>
+            {[
+              { w: "I", c: C.red, v: [0.2, -0.5, 0.8, 0.1] },
+              { w: "love", c: C.purple, v: [0.9, 0.1, -0.3, 0.6] },
+              { w: "cats", c: C.cyan, v: [0.4, 0.7, 0.2, -0.4] },
+            ].map(({ w, c, v }) => (
+              <div
+                key={w}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 8,
+                  padding: "6px 12px",
+                  borderRadius: 8,
+                  background: `${c}06`,
+                  border: `1px solid ${c}12`,
+                }}
+              >
+                <div
+                  style={{
+                    minWidth: 50,
+                    padding: "3px 8px",
+                    borderRadius: 6,
+                    background: `${c}12`,
+                    border: `1px solid ${c}25`,
+                  }}
+                >
+                  <T color={c} bold size={17} center>
+                    {w}
+                  </T>
+                </div>
+                <T color={C.dim} size={18}>
+                  {"\u2192"}
+                </T>
+                <code style={{ color: `${c}cc`, fontSize: 15 }}>[{v.join(", ")}, ...]</code>
+                <T color={C.dim} size={13} style={{ marginLeft: "auto" }}>
+                  512 dims
+                </T>
+              </div>
             ))}
           </div>
-          {[
-            { w: "I", scores: [0.60, 0.25, 0.15], colors: [C.red, C.dim, C.dim] },
-            { w: "love", scores: [0.15, 0.30, 0.55], colors: [C.dim, C.dim, C.cyan] },
-            { w: "cats", scores: [0.10, 0.55, 0.35], colors: [C.dim, C.purple, C.dim] },
-          ].map(({ w, scores, colors }) => (
-            <div key={w} style={{ display: "grid", gridTemplateColumns: "60px 1fr 1fr 1fr", gap: 4, marginBottom: 3 }}>
-              <T color={C.bright} bold size={14}>{w}</T>
-              {scores.map((s, i) => (
-                <div key={i} style={{ padding: "4px 0", borderRadius: 4, background: `${colors[i]}${Math.round(s * 40).toString(16).padStart(2, "0")}` }}>
-                  <T color={s > 0.4 ? colors[i] : C.dim} center bold size={14}>{s.toFixed(2)}</T>
+          <T color={C.dim} size={15} style={{ marginTop: 8 }}>
+            Similar words get similar vectors. "cat" and "dog" are nearby in this 512-dimensional space. But "love" here
+            is generic - it could be any kind of love.
+          </T>
+        </Box>
+      </Reveal>
+
+      <Reveal when={sub >= 2}>
+        <Box color={C.yellow} style={{ width: "100%" }}>
+          <T color="#fff176" bold center size={20}>
+            Step 2: Add position information
+          </T>
+          <T color="#ffe082" style={{ marginTop: 6 }}>
+            Without position, "I love cats" and "cats love I" look identical to the model - same words, same embeddings.
+            Order matters!
+          </T>
+          <T color="#ffe082" style={{ marginTop: 8 }}>
+            Positional encoding adds WHERE each word sits in the sentence:
+          </T>
+          <div
+            style={{
+              marginTop: 10,
+              padding: "10px 14px",
+              borderRadius: 8,
+              background: `${C.yellow}06`,
+              border: `1px solid ${C.yellow}12`,
+            }}
+          >
+            <T color={C.dim} size={15} center>
+              Example for "love" at position 1:
+            </T>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: 6,
+                marginTop: 8,
+                justifyContent: "center",
+                flexWrap: "wrap",
+              }}
+            >
+              <div
+                style={{
+                  padding: "4px 10px",
+                  borderRadius: 6,
+                  background: `${C.purple}12`,
+                  border: `1px solid ${C.purple}25`,
+                }}
+              >
+                <T color={C.purple} size={14} bold>
+                  embedding
+                </T>
+                <T color={C.dim} size={13} center>
+                  [0.9, 0.1, -0.3, ...]
+                </T>
+              </div>
+              <T color={C.bright} size={20} bold>
+                +
+              </T>
+              <div
+                style={{
+                  padding: "4px 10px",
+                  borderRadius: 6,
+                  background: `${C.yellow}12`,
+                  border: `1px solid ${C.yellow}25`,
+                }}
+              >
+                <T color={C.yellow} size={14} bold>
+                  position
+                </T>
+                <T color={C.dim} size={13} center>
+                  [0.84, 0.54, 0.00, ...]
+                </T>
+              </div>
+              <T color={C.bright} size={20} bold>
+                =
+              </T>
+              <div
+                style={{
+                  padding: "4px 10px",
+                  borderRadius: 6,
+                  background: `${C.green}12`,
+                  border: `1px solid ${C.green}25`,
+                }}
+              >
+                <T color={C.green} size={14} bold>
+                  positioned
+                </T>
+                <T color={C.dim} size={13} center>
+                  [1.74, 0.64, -0.30, ...]
+                </T>
+              </div>
+            </div>
+          </div>
+          <T color="#ffe082" style={{ marginTop: 8 }}>
+            Result: each word now knows WHAT it means AND WHERE it sits. "love" at position 1 is different from "love"
+            at position 5.
+          </T>
+        </Box>
+      </Reveal>
+
+      <Reveal when={sub >= 3}>
+        <Box color={C.green} style={{ width: "100%" }}>
+          <T color="#a5d6a7" bold center size={20}>
+            Step 3: Self-attention - words look at each other
+          </T>
+          <T color="#a5d6a7" style={{ marginTop: 6 }}>
+            This is the magic step. Each word sends a Query ("what am I looking for?"), every word offers a Key ("here
+            is what I can offer"), and the model computes attention scores - how relevant is each word to every other?
+          </T>
+          <div
+            style={{
+              marginTop: 12,
+              padding: "10px 14px",
+              borderRadius: 8,
+              background: `${C.green}06`,
+              border: `1px solid ${C.green}12`,
+            }}
+          >
+            <T color={C.bright} bold center size={16}>
+              Attention scores for "I love cats"
+            </T>
+            <div style={{ marginTop: 10 }}>
+              <div style={{ display: "grid", gridTemplateColumns: "60px 1fr 1fr 1fr", gap: 4, marginBottom: 4 }}>
+                <div />
+                {["I", "love", "cats"].map((w) => (
+                  <T key={w} color={C.bright} bold center size={14}>
+                    {w}
+                  </T>
+                ))}
+              </div>
+              {[
+                { w: "I", scores: [0.6, 0.25, 0.15], colors: [C.red, C.dim, C.dim] },
+                { w: "love", scores: [0.15, 0.3, 0.55], colors: [C.dim, C.dim, C.cyan] },
+                { w: "cats", scores: [0.1, 0.55, 0.35], colors: [C.dim, C.purple, C.dim] },
+              ].map(({ w, scores, colors }) => (
+                <div
+                  key={w}
+                  style={{ display: "grid", gridTemplateColumns: "60px 1fr 1fr 1fr", gap: 4, marginBottom: 3 }}
+                >
+                  <T color={C.bright} bold size={14}>
+                    {w}
+                  </T>
+                  {scores.map((s, i) => (
+                    <div
+                      key={i}
+                      style={{
+                        padding: "4px 0",
+                        borderRadius: 4,
+                        background: `${colors[i]}${Math.round(s * 40)
+                          .toString(16)
+                          .padStart(2, "0")}`,
+                      }}
+                    >
+                      <T color={s > 0.4 ? colors[i] : C.dim} center bold size={14}>
+                        {s.toFixed(2)}
+                      </T>
+                    </div>
+                  ))}
                 </div>
               ))}
             </div>
-          ))}
-        </div>
-        <T color={C.dim} size={14} style={{ marginTop: 6 }}>"love" attends strongly to "cats" (0.55) - loves WHAT? And "cats" attends to "love" (0.55) - cats in what context?</T>
-      </div>
-      <T color="#a5d6a7" style={{ marginTop: 8 }}>After the weighted sum of Values: "love" is no longer generic. It now means "I-have-affection-for-cats" - encoded as a completely new vector shaped by its context.</T>
-    </Box></Reveal>
-
-    <Reveal when={sub >= 4}><Box color={C.orange} style={{ width: "100%" }}>
-      <T color="#ffcc80" bold center size={20}>Step 4: Add & Norm + FFN</T>
-      <T color="#ffcc80" style={{ marginTop: 6 }}>Two important things happen after attention:</T>
-      <div style={{ marginTop: 10, display: "flex", gap: 6, alignItems: "stretch", flexWrap: "wrap", justifyContent: "center" }}>
-        {[
-          { label: "Attention Output", c: C.green, desc: "Context-aware vectors" },
-          { label: "+", c: C.bright, desc: "" },
-          { label: "Original (residual)", c: C.purple, desc: "Pre-attention vectors" },
-          { label: "\u2192", c: C.bright, desc: "" },
-          { label: "Add & Norm", c: C.orange, desc: "Stabilize values" },
-          { label: "\u2192", c: C.bright, desc: "" },
-          { label: "FFN", c: C.blue, desc: "Two linear + GELU" },
-          { label: "\u2192", c: C.bright, desc: "" },
-          { label: "Add & Norm", c: C.orange, desc: "Stabilize again" },
-        ].map(({ label, c, desc }, i) => (
-          desc ? (
-            <div key={i} style={{ padding: "6px 10px", borderRadius: 8, background: `${c}06`, border: `1px solid ${c}12`, minWidth: 80 }}>
-              <T color={c} bold center size={14}>{label}</T>
-              <T color={C.dim} center size={12}>{desc}</T>
-            </div>
-          ) : (
-            <T key={i} color={c} bold size={20} style={{ display: "flex", alignItems: "center" }}>{label}</T>
-          )
-        ))}
-      </div>
-      <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 6 }}>
-        <div style={{ padding: "8px 12px", borderRadius: 8, background: `${C.purple}06`, border: `1px solid ${C.purple}12` }}>
-          <T color={C.purple} bold size={15}>Residual connection</T>
-          <T color={C.dim} size={14} style={{ marginTop: 2 }}>Adds the ORIGINAL vector (before attention) back to the output. This prevents information loss and helps gradients flow during training. Without it, deep networks cannot learn.</T>
-        </div>
-        <div style={{ padding: "8px 12px", borderRadius: 8, background: `${C.blue}06`, border: `1px solid ${C.blue}12` }}>
-          <T color={C.blue} bold size={15}>FFN (Feed-Forward Network)</T>
-          <T color={C.dim} size={14} style={{ marginTop: 2 }}>Two linear layers with GELU activation. Processes each word INDEPENDENTLY. Attention mixed words together - the FFN thinks about each word alone, creating richer features.</T>
-        </div>
-      </div>
-    </Box></Reveal>
-
-    <Reveal when={sub >= 5}><Box color={C.blue} style={{ width: "100%" }}>
-      <T color="#90caf9" bold center size={20}>Step 5: Repeat N times</T>
-      <T color="#90caf9" style={{ marginTop: 6 }}>One attention + FFN block is ONE transformer layer. Real models repeat this block many times. Each layer refines understanding further.</T>
-      <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 4 }}>
-        {[
-          { label: "Layer 1-2", desc: "Basic syntax, word boundaries", c: C.red, pct: 15 },
-          { label: "Layer 3-6", desc: "Grammar, subject-verb agreement", c: C.orange, pct: 35 },
-          { label: "Layer 7-10", desc: "Semantic meaning, analogies", c: C.yellow, pct: 65 },
-          { label: "Layer 11-12", desc: "Complex reasoning, long-range dependencies", c: C.green, pct: 95 },
-        ].map(({ label, desc, c, pct }) => (
-          <div key={label} style={{ display: "flex", alignItems: "center", gap: 8 }}>
-            <div style={{ minWidth: 80 }}>
-              <Tag color={c}>{label}</Tag>
-            </div>
-            <div style={{ flex: 1, height: 20, borderRadius: 4, background: "rgba(255,255,255,0.05)", overflow: "hidden" }}>
-              <div style={{ width: `${pct}%`, height: "100%", borderRadius: 4, background: `${c}40` }} />
-            </div>
-            <T color={C.dim} size={13} style={{ minWidth: 200 }}>{desc}</T>
+            <T color={C.dim} size={14} style={{ marginTop: 6 }}>
+              "love" attends strongly to "cats" (0.55) - loves WHAT? And "cats" attends to "love" (0.55) - cats in what
+              context?
+            </T>
           </div>
-        ))}
-      </div>
-      <div style={{ marginTop: 12, padding: "8px 12px", borderRadius: 8, background: `${C.blue}06`, border: `1px solid ${C.blue}12` }}>
-        <T color={C.dim} size={15}><strong style={{ color: C.bright }}>GPT-2:</strong> 12 layers. <strong style={{ color: C.bright }}>GPT-3:</strong> 96 layers. <strong style={{ color: C.bright }}>LLaMA 3 70B:</strong> 80 layers.</T>
-        <T color="#90caf9" size={15} style={{ marginTop: 4 }}>After all layers: "love" has been refined from "generic positive emotion" to "specific first-person affection directed at small furry animals in this particular sentence."</T>
-      </div>
-    </Box></Reveal>
+          <T color="#a5d6a7" style={{ marginTop: 8 }}>
+            After the weighted sum of Values: "love" is no longer generic. It now means "I-have-affection-for-cats" -
+            encoded as a completely new vector shaped by its context.
+          </T>
+        </Box>
+      </Reveal>
 
-    <Reveal when={sub >= 6}><Box color={C.red} style={{ width: "100%" }}>
-      <T color="#ef9a9a" bold center size={20}>Step 6: Predict the next token</T>
-      <T color="#ef9a9a" style={{ marginTop: 6 }}>After all layers, each position holds a rich context-aware vector (512 numbers). The model takes the LAST position's vector and projects it through a Linear layer.</T>
-      <div style={{ marginTop: 8, padding: "8px 12px", borderRadius: 8, background: `${C.red}06`, border: `1px solid ${C.red}12` }}>
-        <T color={C.dim} size={15} center><strong style={{ color: C.red }}>Linear:</strong> 512 dims {"\u2192"} 50,257 (one score per word in vocabulary)</T>
-        <T color={C.dim} size={15} center style={{ marginTop: 4 }}><strong style={{ color: C.red }}>Softmax:</strong> converts raw scores into probabilities that sum to 1</T>
-      </div>
-      <T color="#ef9a9a" style={{ marginTop: 10 }} bold>Top predictions after "I love cats":</T>
-      <div style={{ marginTop: 6, display: "flex", flexDirection: "column", gap: 4 }}>
-        {[
-          { word: "very", prob: 35, c: C.green },
-          { word: "so", prob: 22, c: C.cyan },
-          { word: "a", prob: 12, c: C.yellow },
-          { word: "the", prob: 8, c: C.orange },
-          { word: "really", prob: 5, c: C.purple },
-        ].map(({ word, prob, c }) => (
-          <div key={word} style={{ display: "flex", alignItems: "center", gap: 8 }}>
-            <T color={c} bold size={16} style={{ minWidth: 55 }}>{word}</T>
-            <div style={{ flex: 1, height: 18, borderRadius: 4, background: "rgba(255,255,255,0.05)", overflow: "hidden" }}>
-              <div style={{ width: `${prob}%`, height: "100%", borderRadius: 4, background: `${c}60` }} />
-            </div>
-            <T color={C.dim} size={14} style={{ minWidth: 35 }}>{prob}%</T>
+      <Reveal when={sub >= 4}>
+        <Box color={C.orange} style={{ width: "100%" }}>
+          <T color="#ffcc80" bold center size={20}>
+            Step 4: Add & Norm + FFN
+          </T>
+          <T color="#ffcc80" style={{ marginTop: 6 }}>
+            Two important things happen after attention:
+          </T>
+          <div
+            style={{
+              marginTop: 10,
+              display: "flex",
+              gap: 6,
+              alignItems: "stretch",
+              flexWrap: "wrap",
+              justifyContent: "center",
+            }}
+          >
+            {[
+              { label: "Attention Output", c: C.green, desc: "Context-aware vectors" },
+              { label: "+", c: C.bright, desc: "" },
+              { label: "Original (residual)", c: C.purple, desc: "Pre-attention vectors" },
+              { label: "\u2192", c: C.bright, desc: "" },
+              { label: "Add & Norm", c: C.orange, desc: "Stabilize values" },
+              { label: "\u2192", c: C.bright, desc: "" },
+              { label: "FFN", c: C.blue, desc: "Two linear + GELU" },
+              { label: "\u2192", c: C.bright, desc: "" },
+              { label: "Add & Norm", c: C.orange, desc: "Stabilize again" },
+            ].map(({ label, c, desc }, i) =>
+              desc ? (
+                <div
+                  key={i}
+                  style={{
+                    padding: "6px 10px",
+                    borderRadius: 8,
+                    background: `${c}06`,
+                    border: `1px solid ${c}12`,
+                    minWidth: 80,
+                  }}
+                >
+                  <T color={c} bold center size={14}>
+                    {label}
+                  </T>
+                  <T color={C.dim} center size={12}>
+                    {desc}
+                  </T>
+                </div>
+              ) : (
+                <T key={i} color={c} bold size={20} style={{ display: "flex", alignItems: "center" }}>
+                  {label}
+                </T>
+              ),
+            )}
           </div>
-        ))}
-      </div>
-      <T color={C.dim} size={14} style={{ marginTop: 6 }}>The highest probability word becomes the prediction. The model picks "very" - "I love cats very..." and then repeats the whole process for the next token.</T>
-    </Box></Reveal>
+          <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 6 }}>
+            <div
+              style={{
+                padding: "8px 12px",
+                borderRadius: 8,
+                background: `${C.purple}06`,
+                border: `1px solid ${C.purple}12`,
+              }}
+            >
+              <T color={C.purple} bold size={15}>
+                Residual connection
+              </T>
+              <T color={C.dim} size={14} style={{ marginTop: 2 }}>
+                Adds the ORIGINAL vector (before attention) back to the output. This prevents information loss and helps
+                gradients flow during training. Without it, deep networks cannot learn.
+              </T>
+            </div>
+            <div
+              style={{
+                padding: "8px 12px",
+                borderRadius: 8,
+                background: `${C.blue}06`,
+                border: `1px solid ${C.blue}12`,
+              }}
+            >
+              <T color={C.blue} bold size={15}>
+                FFN (Feed-Forward Network)
+              </T>
+              <T color={C.dim} size={14} style={{ marginTop: 2 }}>
+                Two linear layers with GELU activation. Processes each word INDEPENDENTLY. Attention mixed words
+                together - the FFN thinks about each word alone, creating richer features.
+              </T>
+            </div>
+          </div>
+        </Box>
+      </Reveal>
 
-    <Reveal when={sub >= 7}><Box color={C.purple} style={{ width: "100%" }}>
-      <T color="#b8a9ff" bold center size={20}>The complete pipeline</T>
-      <T color="#b8a9ff" style={{ marginTop: 6 }}>Here is every step connected end to end:</T>
-      <div style={{ marginTop: 12, display: "flex", flexWrap: "wrap", gap: 6, justifyContent: "center", alignItems: "center" }}>
-        {[
-          { label: '"I love cats"', c: C.bright },
-          { label: "Tokenize", c: C.purple },
-          { label: "Embed", c: C.cyan },
-          { label: "+Position", c: C.yellow },
-          { label: "Self-Attention", c: C.green },
-          { label: "Add & Norm", c: C.orange },
-          { label: "FFN", c: C.blue },
-          { label: "Add & Norm", c: C.orange },
-          { label: "\u00d7N layers", c: C.blue },
-          { label: "Linear", c: C.red },
-          { label: "Softmax", c: C.red },
-          { label: '"very" (35%)', c: C.green },
-        ].map(({ label, c }, i, arr) => (
-          <span key={i} style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
-            <span style={{ padding: "4px 10px", borderRadius: 6, background: `${c}12`, border: `1px solid ${c}25`, whiteSpace: "nowrap" }}>
-              <T color={c} bold size={14}>{label}</T>
-            </span>
-            {i < arr.length - 1 && <T color={C.dim} size={16}>{"\u2192"}</T>}
-          </span>
-        ))}
-      </div>
-      <div style={{ marginTop: 14, padding: "10px 14px", borderRadius: 8, background: `${C.purple}06`, border: `1px solid ${C.purple}12` }}>
-        <T color="#b8a9ff" bold size={16}>The key insight</T>
-        <T color="#b8a9ff" size={15} style={{ marginTop: 4 }}>The word "love" entered as a generic 512-number vector and exited as a completely different 512-number vector that encodes "first-person affection directed at cats in a casual sentence."</T>
-        <T color="#b8a9ff" size={15} style={{ marginTop: 6 }}>This is what "understanding context" means - every word's vector is reshaped by all the other words around it. That reshaping is the pipeline you just saw.</T>
-      </div>
-    </Box></Reveal>
-    {sub < 7 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
-  </div>
-); }
+      <Reveal when={sub >= 5}>
+        <Box color={C.blue} style={{ width: "100%" }}>
+          <T color="#90caf9" bold center size={20}>
+            Step 5: Repeat N times
+          </T>
+          <T color="#90caf9" style={{ marginTop: 6 }}>
+            One attention + FFN block is ONE transformer layer. Real models repeat this block many times. Each layer
+            refines understanding further.
+          </T>
+          <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 4 }}>
+            {[
+              { label: "Layer 1-2", desc: "Basic syntax, word boundaries", c: C.red, pct: 15 },
+              { label: "Layer 3-6", desc: "Grammar, subject-verb agreement", c: C.orange, pct: 35 },
+              { label: "Layer 7-10", desc: "Semantic meaning, analogies", c: C.yellow, pct: 65 },
+              { label: "Layer 11-12", desc: "Complex reasoning, long-range dependencies", c: C.green, pct: 95 },
+            ].map(({ label, desc, c, pct }) => (
+              <div key={label} style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                <div style={{ minWidth: 80 }}>
+                  <Tag color={c}>{label}</Tag>
+                </div>
+                <div
+                  style={{
+                    flex: 1,
+                    height: 20,
+                    borderRadius: 4,
+                    background: "rgba(255,255,255,0.05)",
+                    overflow: "hidden",
+                  }}
+                >
+                  <div style={{ width: `${pct}%`, height: "100%", borderRadius: 4, background: `${c}40` }} />
+                </div>
+                <T color={C.dim} size={13} style={{ minWidth: 200 }}>
+                  {desc}
+                </T>
+              </div>
+            ))}
+          </div>
+          <div
+            style={{
+              marginTop: 12,
+              padding: "8px 12px",
+              borderRadius: 8,
+              background: `${C.blue}06`,
+              border: `1px solid ${C.blue}12`,
+            }}
+          >
+            <T color={C.dim} size={15}>
+              <strong style={{ color: C.bright }}>GPT-2:</strong> 12 layers.{" "}
+              <strong style={{ color: C.bright }}>GPT-3:</strong> 96 layers.{" "}
+              <strong style={{ color: C.bright }}>LLaMA 3 70B:</strong> 80 layers.
+            </T>
+            <T color="#90caf9" size={15} style={{ marginTop: 4 }}>
+              After all layers: "love" has been refined from "generic positive emotion" to "specific first-person
+              affection directed at small furry animals in this particular sentence."
+            </T>
+          </div>
+        </Box>
+      </Reveal>
+
+      <Reveal when={sub >= 6}>
+        <Box color={C.red} style={{ width: "100%" }}>
+          <T color="#ef9a9a" bold center size={20}>
+            Step 6: Predict the next token
+          </T>
+          <T color="#ef9a9a" style={{ marginTop: 6 }}>
+            After all layers, each position holds a rich context-aware vector (512 numbers). The model takes the LAST
+            position's vector and projects it through a Linear layer.
+          </T>
+          <div
+            style={{
+              marginTop: 8,
+              padding: "8px 12px",
+              borderRadius: 8,
+              background: `${C.red}06`,
+              border: `1px solid ${C.red}12`,
+            }}
+          >
+            <T color={C.dim} size={15} center>
+              <strong style={{ color: C.red }}>Linear:</strong> 512 dims {"\u2192"} 50,257 (one score per word in
+              vocabulary)
+            </T>
+            <T color={C.dim} size={15} center style={{ marginTop: 4 }}>
+              <strong style={{ color: C.red }}>Softmax:</strong> converts raw scores into probabilities that sum to 1
+            </T>
+          </div>
+          <T color="#ef9a9a" style={{ marginTop: 10 }} bold>
+            Top predictions after "I love cats":
+          </T>
+          <div style={{ marginTop: 6, display: "flex", flexDirection: "column", gap: 4 }}>
+            {[
+              { word: "very", prob: 35, c: C.green },
+              { word: "so", prob: 22, c: C.cyan },
+              { word: "a", prob: 12, c: C.yellow },
+              { word: "the", prob: 8, c: C.orange },
+              { word: "really", prob: 5, c: C.purple },
+            ].map(({ word, prob, c }) => (
+              <div key={word} style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                <T color={c} bold size={16} style={{ minWidth: 55 }}>
+                  {word}
+                </T>
+                <div
+                  style={{
+                    flex: 1,
+                    height: 18,
+                    borderRadius: 4,
+                    background: "rgba(255,255,255,0.05)",
+                    overflow: "hidden",
+                  }}
+                >
+                  <div style={{ width: `${prob}%`, height: "100%", borderRadius: 4, background: `${c}60` }} />
+                </div>
+                <T color={C.dim} size={14} style={{ minWidth: 35 }}>
+                  {prob}%
+                </T>
+              </div>
+            ))}
+          </div>
+          <T color={C.dim} size={14} style={{ marginTop: 6 }}>
+            The highest probability word becomes the prediction. The model picks "very" - "I love cats very..." and then
+            repeats the whole process for the next token.
+          </T>
+        </Box>
+      </Reveal>
+
+      <Reveal when={sub >= 7}>
+        <Box color={C.purple} style={{ width: "100%" }}>
+          <T color="#b8a9ff" bold center size={20}>
+            The complete pipeline
+          </T>
+          <T color="#b8a9ff" style={{ marginTop: 6 }}>
+            Here is every step connected end to end:
+          </T>
+          <div
+            style={{
+              marginTop: 12,
+              display: "flex",
+              flexWrap: "wrap",
+              gap: 6,
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            {[
+              { label: '"I love cats"', c: C.bright },
+              { label: "Tokenize", c: C.purple },
+              { label: "Embed", c: C.cyan },
+              { label: "+Position", c: C.yellow },
+              { label: "Self-Attention", c: C.green },
+              { label: "Add & Norm", c: C.orange },
+              { label: "FFN", c: C.blue },
+              { label: "Add & Norm", c: C.orange },
+              { label: "\u00d7N layers", c: C.blue },
+              { label: "Linear", c: C.red },
+              { label: "Softmax", c: C.red },
+              { label: '"very" (35%)', c: C.green },
+            ].map(({ label, c }, i, arr) => (
+              <span key={i} style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
+                <span
+                  style={{
+                    padding: "4px 10px",
+                    borderRadius: 6,
+                    background: `${c}12`,
+                    border: `1px solid ${c}25`,
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  <T color={c} bold size={14}>
+                    {label}
+                  </T>
+                </span>
+                {i < arr.length - 1 && (
+                  <T color={C.dim} size={16}>
+                    {"\u2192"}
+                  </T>
+                )}
+              </span>
+            ))}
+          </div>
+          <div
+            style={{
+              marginTop: 14,
+              padding: "10px 14px",
+              borderRadius: 8,
+              background: `${C.purple}06`,
+              border: `1px solid ${C.purple}12`,
+            }}
+          >
+            <T color="#b8a9ff" bold size={16}>
+              The key insight
+            </T>
+            <T color="#b8a9ff" size={15} style={{ marginTop: 4 }}>
+              The word "love" entered as a generic 512-number vector and exited as a completely different 512-number
+              vector that encodes "first-person affection directed at cats in a casual sentence."
+            </T>
+            <T color="#b8a9ff" size={15} style={{ marginTop: 6 }}>
+              This is what "understanding context" means - every word's vector is reshaped by all the other words around
+              it. That reshaping is the pipeline you just saw.
+            </T>
+          </div>
+        </Box>
+      </Reveal>
+      {sub < 7 && (
+        <SubBtn
+          key={sub}
+          onClick={() => {
+            setSubBtnRipple(Date.now());
+            navigate("forward");
+          }}
+          rippleKey={subBtnRipple}
+          registerSubBtn={registerSubBtn}
+        />
+      )}
+    </div>
+  );
+};
 
 // ═══════════════════════════════════════
 // CHAPTER: The Output Head - Linear + Softmax
 // ═══════════════════════════════════════
 
-export const OutputHead = (ctx) => { const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx; return (
-  <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
+export const OutputHead = (ctx) => {
+  const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx;
+  return (
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
+      {/* Sub 0: The gap between vectors and words */}
+      {sub >= 0 && (
+        <Box color={C.purple} style={{ width: "100%" }}>
+          <T color="#b8a9ff" bold center size={21}>
+            From vectors to words - the final step
+          </T>
+          <T color="#b8a9ff" style={{ marginTop: 8 }}>
+            After all transformer layers, every position holds a rich, context-aware vector of{" "}
+            <strong>512 numbers</strong>. This vector encodes everything the model understood about that position.
+          </T>
+          <T color="#b8a9ff" style={{ marginTop: 6 }}>
+            But we need an actual <strong>word</strong>, not 512 numbers. The model's vocab has <strong>50,257</strong>{" "}
+            possible tokens. How does it choose one?
+          </T>
 
-    {/* Sub 0: The gap between vectors and words */}
-    {sub >= 0 && (
-      <Box color={C.purple} style={{ width: "100%" }}>
-        <T color="#b8a9ff" bold center size={21}>From vectors to words - the final step</T>
-        <T color="#b8a9ff" style={{ marginTop: 8 }}>After all transformer layers, every position holds a rich, context-aware vector of <strong>512 numbers</strong>. This vector encodes everything the model understood about that position.</T>
-        <T color="#b8a9ff" style={{ marginTop: 6 }}>But we need an actual <strong>word</strong>, not 512 numbers. The model's vocab has <strong>50,257</strong> possible tokens. How does it choose one?</T>
-
-        <div style={{ marginTop: 14, display: "flex", alignItems: "center", justifyContent: "center", gap: 12, flexWrap: "wrap" }}>
-          <div style={{ padding: "10px 16px", borderRadius: 10, background: `${C.cyan}08`, border: `1px solid ${C.cyan}20`, textAlign: "center" }}>
-            <T color={C.cyan} bold size={16}>Decoder output</T>
-            <T color={C.dim} size={13} style={{ marginTop: 4 }}>[0.82, -0.31, 0.57, 0.14, ...]</T>
-            <T color={C.dim} size={12} style={{ marginTop: 2 }}>512 numbers</T>
-          </div>
-          <T color={C.bright} bold size={24}>{"\u2192"}</T>
-          <div style={{ padding: "10px 16px", borderRadius: 10, background: `${C.purple}08`, border: `1px solid ${C.purple}20`, textAlign: "center" }}>
-            <T color={C.purple} bold size={16}>?</T>
-            <T color={C.dim} size={13} style={{ marginTop: 4 }}>Which of 50,257 words?</T>
-          </div>
-        </div>
-
-        <T color="#b8a9ff" style={{ marginTop: 10 }}>That is exactly what the <strong>output head</strong> does. It has two parts: a <strong>Linear</strong> layer and <strong>Softmax</strong>. These are the two blocks sitting at the very top of the architecture diagram.</T>
-      </Box>
-    )}
-
-    {/* Sub 1: The Linear layer */}
-    <Reveal when={sub >= 1}><Box color={C.cyan} style={{ width: "100%" }}>
-      <T color="#80deea" bold center size={20}>The Linear layer - one giant matrix multiply</T>
-      <T color="#80deea" style={{ marginTop: 6 }}>The Linear layer is a weight matrix W with <strong>512 rows</strong> and <strong>50,257 columns</strong>. Each column represents one word in the vocabulary.</T>
-
-      <div style={{ marginTop: 14, padding: 14, borderRadius: 10, background: `${C.cyan}08`, border: `1px solid ${C.cyan}20` }}>
-        <T color="#80deea" bold center size={16}>The matrix multiplication</T>
-        <div style={{ marginTop: 10, display: "flex", alignItems: "center", justifyContent: "center", gap: 8, flexWrap: "wrap" }}>
-          <div style={{ padding: "8px 12px", borderRadius: 8, background: `${C.green}08`, border: `1px solid ${C.green}15`, textAlign: "center" }}>
-            <T color={C.green} bold size={14}>hidden state</T>
-            <T color={C.dim} size={13}>[1 x 512]</T>
-          </div>
-          <T color={C.bright} bold size={20}>{"\u00d7"}</T>
-          <div style={{ padding: "8px 12px", borderRadius: 8, background: `${C.cyan}08`, border: `1px solid ${C.cyan}15`, textAlign: "center" }}>
-            <T color={C.cyan} bold size={14}>W</T>
-            <T color={C.dim} size={13}>[512 x 50,257]</T>
-          </div>
-          <T color={C.bright} bold size={20}>=</T>
-          <div style={{ padding: "8px 12px", borderRadius: 8, background: `${C.yellow}08`, border: `1px solid ${C.yellow}15`, textAlign: "center" }}>
-            <T color={C.yellow} bold size={14}>logits</T>
-            <T color={C.dim} size={13}>[1 x 50,257]</T>
-          </div>
-        </div>
-      </div>
-
-      <T color="#80deea" style={{ marginTop: 10 }}>One matrix multiply. That is it. No activation function, no non-linearity - just multiply the 512-dim hidden state by this giant matrix and you get <strong>50,257 raw scores</strong>, one for every word in the vocabulary.</T>
-      <T color={C.dim} size={14} style={{ marginTop: 6 }}>This single matrix has 512 x 50,257 = <strong>25.7 million</strong> parameters. It is the second largest weight matrix in the model (after the embedding table).</T>
-    </Box></Reveal>
-
-    {/* Sub 2: What logits mean */}
-    <Reveal when={sub >= 2}><Box color={C.yellow} style={{ width: "100%" }}>
-      <T color="#fff176" bold center size={20}>What logits mean - dot product similarity</T>
-      <T color="#fff176" style={{ marginTop: 6 }}>Each logit is a <strong>dot product</strong> between the hidden state and one column of W. A high dot product means the hidden state is pointing in the same direction as that word's template.</T>
-
-      <div style={{ marginTop: 14, padding: 14, borderRadius: 10, background: `${C.yellow}08`, border: `1px solid ${C.yellow}20` }}>
-        <T color="#fff176" bold center size={16}>Computing one logit</T>
-        <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 6 }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "6px 10px", borderRadius: 6, background: `${C.green}06` }}>
-            <T color={C.green} size={14} bold>hidden state:</T>
-            <T color={C.dim} size={13} style={{ fontFamily: "monospace" }}>[0.82, -0.31, 0.57, 0.14, ... 512 dims]</T>
-          </div>
-          <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "6px 10px", borderRadius: 6, background: `${C.cyan}06` }}>
-            <T color={C.cyan} size={14} bold>W column for "cats":</T>
-            <T color={C.dim} size={13} style={{ fontFamily: "monospace" }}>[0.71, -0.25, 0.63, 0.08, ... 512 dims]</T>
-          </div>
-          <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "6px 10px", borderRadius: 6, background: `${C.yellow}06` }}>
-            <T color={C.yellow} size={14} bold>logit = dot product:</T>
-            <T color={C.dim} size={13}>(0.82)(0.71) + (-0.31)(-0.25) + (0.57)(0.63) + ... = <strong style={{ color: C.yellow }}>4.2</strong></T>
-          </div>
-        </div>
-      </div>
-
-      <T color="#fff176" style={{ marginTop: 10 }} bold>This happens for all 50,257 words simultaneously:</T>
-      <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 3 }}>
-        {[
-          { word: "cats", logit: 4.2, c: C.green },
-          { word: "dogs", logit: 3.1, c: C.cyan },
-          { word: "the", logit: 1.5, c: C.yellow },
-          { word: "love", logit: -0.3, c: C.orange },
-          { word: "banana", logit: -2.1, c: C.red },
-        ].map(({ word, logit, c }) => (
-          <div key={word} style={{ display: "flex", alignItems: "center", gap: 8, padding: "4px 8px", borderRadius: 4, background: `${c}06` }}>
-            <T color={c} bold size={15} style={{ minWidth: 60 }}>{word}</T>
-            <div style={{ flex: 1, height: 14, borderRadius: 3, background: "rgba(255,255,255,0.04)", overflow: "hidden" }}>
-              <div style={{ width: `${Math.max((logit + 3) * 14, 2)}%`, height: "100%", borderRadius: 3, background: `${c}50` }} />
+          <div
+            style={{
+              marginTop: 14,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: 12,
+              flexWrap: "wrap",
+            }}
+          >
+            <div
+              style={{
+                padding: "10px 16px",
+                borderRadius: 10,
+                background: `${C.cyan}08`,
+                border: `1px solid ${C.cyan}20`,
+                textAlign: "center",
+              }}
+            >
+              <T color={C.cyan} bold size={16}>
+                Decoder output
+              </T>
+              <T color={C.dim} size={13} style={{ marginTop: 4 }}>
+                [0.82, -0.31, 0.57, 0.14, ...]
+              </T>
+              <T color={C.dim} size={12} style={{ marginTop: 2 }}>
+                512 numbers
+              </T>
             </div>
-            <T color={C.dim} size={13} style={{ minWidth: 35, fontFamily: "monospace" }}>{logit > 0 ? "+" : ""}{logit.toFixed(1)}</T>
-          </div>
-        ))}
-        <T color={C.dim} size={13} style={{ marginTop: 4 }}>... and 50,252 more words, each with a logit score</T>
-      </div>
-      <T color={C.dim} size={14} style={{ marginTop: 8 }}>High logit = the model's hidden state is similar to that word's representation. Low or negative = dissimilar. But these raw numbers are hard to interpret - we need probabilities.</T>
-    </Box></Reveal>
-
-    {/* Sub 3: Softmax */}
-    <Reveal when={sub >= 3}><Box color={C.green} style={{ width: "100%" }}>
-      <T color="#a5d6a7" bold center size={20}>Softmax - from scores to probabilities</T>
-      <T color="#a5d6a7" style={{ marginTop: 6 }}>Raw logits can be any number: positive, negative, huge, tiny. <strong>Softmax</strong> converts them into probabilities that are all positive and sum to exactly 1.</T>
-
-      <div style={{ marginTop: 14, padding: 14, borderRadius: 10, background: `${C.green}08`, border: `1px solid ${C.green}20` }}>
-        <T color="#a5d6a7" bold center size={16}>The softmax formula</T>
-        <T color={C.bright} center size={17} style={{ marginTop: 8, fontFamily: "monospace" }}>P(word_i) = e<sup>logit_i</sup> / {"\u03A3"} e<sup>logit_j</sup></T>
-        <T color={C.dim} center size={14} style={{ marginTop: 6 }}>Exponentiate each logit, then divide by the sum of all exponentiated logits.</T>
-      </div>
-
-      <T color="#a5d6a7" style={{ marginTop: 12 }} bold>Watch the transformation:</T>
-      <div style={{ marginTop: 8, display: "flex", gap: 8, flexWrap: "wrap" }}>
-        <div style={{ flex: "1 1 180px", display: "flex", flexDirection: "column", gap: 3 }}>
-          <T color={C.yellow} bold center size={14}>Raw logits</T>
-          {[
-            { word: "cats", val: "+4.2", c: C.green },
-            { word: "dogs", val: "+3.1", c: C.cyan },
-            { word: "the", val: "+1.5", c: C.yellow },
-            { word: "love", val: "-0.3", c: C.orange },
-            { word: "banana", val: "-2.1", c: C.red },
-          ].map(({ word, val, c }) => (
-            <div key={word} style={{ display: "flex", justifyContent: "space-between", padding: "3px 8px", borderRadius: 4, background: `${c}06` }}>
-              <T color={c} size={14}>{word}</T>
-              <T color={C.dim} size={14} style={{ fontFamily: "monospace" }}>{val}</T>
+            <T color={C.bright} bold size={24}>
+              {"\u2192"}
+            </T>
+            <div
+              style={{
+                padding: "10px 16px",
+                borderRadius: 10,
+                background: `${C.purple}08`,
+                border: `1px solid ${C.purple}20`,
+                textAlign: "center",
+              }}
+            >
+              <T color={C.purple} bold size={16}>
+                ?
+              </T>
+              <T color={C.dim} size={13} style={{ marginTop: 4 }}>
+                Which of 50,257 words?
+              </T>
             </div>
-          ))}
-        </div>
-        <div style={{ display: "flex", alignItems: "center" }}>
-          <T color={C.bright} bold size={20}>{"\u2192"}</T>
-        </div>
-        <div style={{ flex: "1 1 180px", display: "flex", flexDirection: "column", gap: 3 }}>
-          <T color={C.green} bold center size={14}>After softmax</T>
-          {[
-            { word: "cats", val: "62.2%", pct: 62.2, c: C.green },
-            { word: "dogs", val: "20.8%", pct: 20.8, c: C.cyan },
-            { word: "the", val: "4.2%", pct: 4.2, c: C.yellow },
-            { word: "love", val: "0.7%", pct: 0.7, c: C.orange },
-            { word: "banana", val: "0.1%", pct: 0.1, c: C.red },
-          ].map(({ word, val, pct, c }) => (
-            <div key={word} style={{ display: "flex", alignItems: "center", gap: 4, padding: "3px 8px", borderRadius: 4, background: `${c}06` }}>
-              <T color={c} size={14} style={{ minWidth: 50 }}>{word}</T>
-              <div style={{ flex: 1, height: 12, borderRadius: 3, background: "rgba(255,255,255,0.04)", overflow: "hidden" }}>
-                <div style={{ width: `${pct}%`, height: "100%", borderRadius: 3, background: `${c}50` }} />
+          </div>
+
+          <T color="#b8a9ff" style={{ marginTop: 10 }}>
+            That is exactly what the <strong>output head</strong> does. It has two parts: a <strong>Linear</strong>{" "}
+            layer and <strong>Softmax</strong>. These are the two blocks sitting at the very top of the architecture
+            diagram.
+          </T>
+        </Box>
+      )}
+
+      {/* Sub 1: The Linear layer */}
+      <Reveal when={sub >= 1}>
+        <Box color={C.cyan} style={{ width: "100%" }}>
+          <T color="#80deea" bold center size={20}>
+            The Linear layer - one giant matrix multiply
+          </T>
+          <T color="#80deea" style={{ marginTop: 6 }}>
+            The Linear layer is a weight matrix W with <strong>512 rows</strong> and <strong>50,257 columns</strong>.
+            Each column represents one word in the vocabulary.
+          </T>
+
+          <div
+            style={{
+              marginTop: 14,
+              padding: 14,
+              borderRadius: 10,
+              background: `${C.cyan}08`,
+              border: `1px solid ${C.cyan}20`,
+            }}
+          >
+            <T color="#80deea" bold center size={16}>
+              The matrix multiplication
+            </T>
+            <div
+              style={{
+                marginTop: 10,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: 8,
+                flexWrap: "wrap",
+              }}
+            >
+              <div
+                style={{
+                  padding: "8px 12px",
+                  borderRadius: 8,
+                  background: `${C.green}08`,
+                  border: `1px solid ${C.green}15`,
+                  textAlign: "center",
+                }}
+              >
+                <T color={C.green} bold size={14}>
+                  hidden state
+                </T>
+                <T color={C.dim} size={13}>
+                  [1 x 512]
+                </T>
               </div>
-              <T color={C.dim} size={13} style={{ minWidth: 40, textAlign: "right" }}>{val}</T>
+              <T color={C.bright} bold size={20}>
+                {"\u00d7"}
+              </T>
+              <div
+                style={{
+                  padding: "8px 12px",
+                  borderRadius: 8,
+                  background: `${C.cyan}08`,
+                  border: `1px solid ${C.cyan}15`,
+                  textAlign: "center",
+                }}
+              >
+                <T color={C.cyan} bold size={14}>
+                  W
+                </T>
+                <T color={C.dim} size={13}>
+                  [512 x 50,257]
+                </T>
+              </div>
+              <T color={C.bright} bold size={20}>
+                =
+              </T>
+              <div
+                style={{
+                  padding: "8px 12px",
+                  borderRadius: 8,
+                  background: `${C.yellow}08`,
+                  border: `1px solid ${C.yellow}15`,
+                  textAlign: "center",
+                }}
+              >
+                <T color={C.yellow} bold size={14}>
+                  logits
+                </T>
+                <T color={C.dim} size={13}>
+                  [1 x 50,257]
+                </T>
+              </div>
             </div>
-          ))}
-        </div>
-      </div>
+          </div>
 
-      <div style={{ marginTop: 12, padding: "8px 12px", borderRadius: 8, background: `${C.green}06`, border: `1px solid ${C.green}12` }}>
-        <T color={C.dim} size={14}>Notice how softmax <strong style={{ color: C.green }}>amplifies differences</strong>. A logit gap of just 1.1 between "cats" (4.2) and "dogs" (3.1) becomes a 3x probability difference (62% vs 21%). The exponential function makes the winner win big.</T>
-      </div>
-    </Box></Reveal>
+          <T color="#80deea" style={{ marginTop: 10 }}>
+            One matrix multiply. That is it. No activation function, no non-linearity - just multiply the 512-dim hidden
+            state by this giant matrix and you get <strong>50,257 raw scores</strong>, one for every word in the
+            vocabulary.
+          </T>
+          <T color={C.dim} size={14} style={{ marginTop: 6 }}>
+            This single matrix has 512 x 50,257 = <strong>25.7 million</strong> parameters. It is the second largest
+            weight matrix in the model (after the embedding table).
+          </T>
+        </Box>
+      </Reveal>
 
-    {/* Sub 4: Temperature */}
-    <Reveal when={sub >= 4}><Box color={C.orange} style={{ width: "100%" }}>
-      <T color="#ffcc80" bold center size={20}>Temperature - the creativity dial</T>
-      <T color="#ffcc80" style={{ marginTop: 6 }}>Before softmax, divide each logit by a number called <strong>temperature (T)</strong>. This controls how "peaked" or "spread out" the resulting probabilities are.</T>
+      {/* Sub 2: What logits mean */}
+      <Reveal when={sub >= 2}>
+        <Box color={C.yellow} style={{ width: "100%" }}>
+          <T color="#fff176" bold center size={20}>
+            What logits mean - dot product similarity
+          </T>
+          <T color="#fff176" style={{ marginTop: 6 }}>
+            Each logit is a <strong>dot product</strong> between the hidden state and one column of W. A high dot
+            product means the hidden state is pointing in the same direction as that word's template.
+          </T>
 
-      <div style={{ marginTop: 12, padding: 10, borderRadius: 8, background: `${C.orange}08`, border: `1px solid ${C.orange}20` }}>
-        <T color={C.bright} center size={16} style={{ fontFamily: "monospace" }}>softmax( logit / temperature )</T>
-      </div>
+          <div
+            style={{
+              marginTop: 14,
+              padding: 14,
+              borderRadius: 10,
+              background: `${C.yellow}08`,
+              border: `1px solid ${C.yellow}20`,
+            }}
+          >
+            <T color="#fff176" bold center size={16}>
+              Computing one logit
+            </T>
+            <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 6 }}>
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 8,
+                  padding: "6px 10px",
+                  borderRadius: 6,
+                  background: `${C.green}06`,
+                }}
+              >
+                <T color={C.green} size={14} bold>
+                  hidden state:
+                </T>
+                <T color={C.dim} size={13} style={{ fontFamily: "monospace" }}>
+                  [0.82, -0.31, 0.57, 0.14, ... 512 dims]
+                </T>
+              </div>
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 8,
+                  padding: "6px 10px",
+                  borderRadius: 6,
+                  background: `${C.cyan}06`,
+                }}
+              >
+                <T color={C.cyan} size={14} bold>
+                  W column for "cats":
+                </T>
+                <T color={C.dim} size={13} style={{ fontFamily: "monospace" }}>
+                  [0.71, -0.25, 0.63, 0.08, ... 512 dims]
+                </T>
+              </div>
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 8,
+                  padding: "6px 10px",
+                  borderRadius: 6,
+                  background: `${C.yellow}06`,
+                }}
+              >
+                <T color={C.yellow} size={14} bold>
+                  logit = dot product:
+                </T>
+                <T color={C.dim} size={13}>
+                  (0.82)(0.71) + (-0.31)(-0.25) + (0.57)(0.63) + ... = <strong style={{ color: C.yellow }}>4.2</strong>
+                </T>
+              </div>
+            </div>
+          </div>
 
-      <div style={{ marginTop: 14, display: "flex", gap: 8, flexWrap: "wrap" }}>
-        {[
-          { temp: "T = 0.2", label: "Focused", desc: "Almost deterministic", probs: [{ w: "cats", p: 98 }, { w: "dogs", p: 2 }, { w: "the", p: 0 }], c: C.blue },
-          { temp: "T = 1.0", label: "Default", desc: "Balanced", probs: [{ w: "cats", p: 62 }, { w: "dogs", p: 21 }, { w: "the", p: 4 }], c: C.green },
-          { temp: "T = 2.0", label: "Creative", desc: "More spread out", probs: [{ w: "cats", p: 38 }, { w: "dogs", p: 27 }, { w: "the", p: 12 }], c: C.orange },
-        ].map(({ temp, label, desc, probs, c }) => (
-          <div key={temp} style={{ flex: "1 1 140px", padding: 10, borderRadius: 8, background: `${c}06`, border: `1px solid ${c}15` }}>
-            <T color={c} bold center size={15}>{temp}</T>
-            <T color={C.dim} center size={12}>{label} - {desc}</T>
-            <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 3 }}>
-              {probs.map(({ w, p }) => (
-                <div key={w} style={{ display: "flex", alignItems: "center", gap: 4 }}>
-                  <T color={C.dim} size={12} style={{ minWidth: 32 }}>{w}</T>
-                  <div style={{ flex: 1, height: 10, borderRadius: 3, background: "rgba(255,255,255,0.04)", overflow: "hidden" }}>
-                    <div style={{ width: `${p}%`, height: "100%", borderRadius: 3, background: `${c}50` }} />
+          <T color="#fff176" style={{ marginTop: 10 }} bold>
+            This happens for all 50,257 words simultaneously:
+          </T>
+          <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 3 }}>
+            {[
+              { word: "cats", logit: 4.2, c: C.green },
+              { word: "dogs", logit: 3.1, c: C.cyan },
+              { word: "the", logit: 1.5, c: C.yellow },
+              { word: "love", logit: -0.3, c: C.orange },
+              { word: "banana", logit: -2.1, c: C.red },
+            ].map(({ word, logit, c }) => (
+              <div
+                key={word}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 8,
+                  padding: "4px 8px",
+                  borderRadius: 4,
+                  background: `${c}06`,
+                }}
+              >
+                <T color={c} bold size={15} style={{ minWidth: 60 }}>
+                  {word}
+                </T>
+                <div
+                  style={{
+                    flex: 1,
+                    height: 14,
+                    borderRadius: 3,
+                    background: "rgba(255,255,255,0.04)",
+                    overflow: "hidden",
+                  }}
+                >
+                  <div
+                    style={{
+                      width: `${Math.max((logit + 3) * 14, 2)}%`,
+                      height: "100%",
+                      borderRadius: 3,
+                      background: `${c}50`,
+                    }}
+                  />
+                </div>
+                <T color={C.dim} size={13} style={{ minWidth: 35, fontFamily: "monospace" }}>
+                  {logit > 0 ? "+" : ""}
+                  {logit.toFixed(1)}
+                </T>
+              </div>
+            ))}
+            <T color={C.dim} size={13} style={{ marginTop: 4 }}>
+              ... and 50,252 more words, each with a logit score
+            </T>
+          </div>
+          <T color={C.dim} size={14} style={{ marginTop: 8 }}>
+            High logit = the model's hidden state is similar to that word's representation. Low or negative =
+            dissimilar. But these raw numbers are hard to interpret - we need probabilities.
+          </T>
+        </Box>
+      </Reveal>
+
+      {/* Sub 3: Softmax */}
+      <Reveal when={sub >= 3}>
+        <Box color={C.green} style={{ width: "100%" }}>
+          <T color="#a5d6a7" bold center size={20}>
+            Softmax - from scores to probabilities
+          </T>
+          <T color="#a5d6a7" style={{ marginTop: 6 }}>
+            Raw logits can be any number: positive, negative, huge, tiny. <strong>Softmax</strong> converts them into
+            probabilities that are all positive and sum to exactly 1.
+          </T>
+
+          <div
+            style={{
+              marginTop: 14,
+              padding: 14,
+              borderRadius: 10,
+              background: `${C.green}08`,
+              border: `1px solid ${C.green}20`,
+            }}
+          >
+            <T color="#a5d6a7" bold center size={16}>
+              The softmax formula
+            </T>
+            <T color={C.bright} center size={17} style={{ marginTop: 8, fontFamily: "monospace" }}>
+              P(word_i) = e<sup>logit_i</sup> / {"\u03A3"} e<sup>logit_j</sup>
+            </T>
+            <T color={C.dim} center size={14} style={{ marginTop: 6 }}>
+              Exponentiate each logit, then divide by the sum of all exponentiated logits.
+            </T>
+          </div>
+
+          <T color="#a5d6a7" style={{ marginTop: 12 }} bold>
+            Watch the transformation:
+          </T>
+          <div style={{ marginTop: 8, display: "flex", gap: 8, flexWrap: "wrap" }}>
+            <div style={{ flex: "1 1 180px", display: "flex", flexDirection: "column", gap: 3 }}>
+              <T color={C.yellow} bold center size={14}>
+                Raw logits
+              </T>
+              {[
+                { word: "cats", val: "+4.2", c: C.green },
+                { word: "dogs", val: "+3.1", c: C.cyan },
+                { word: "the", val: "+1.5", c: C.yellow },
+                { word: "love", val: "-0.3", c: C.orange },
+                { word: "banana", val: "-2.1", c: C.red },
+              ].map(({ word, val, c }) => (
+                <div
+                  key={word}
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    padding: "3px 8px",
+                    borderRadius: 4,
+                    background: `${c}06`,
+                  }}
+                >
+                  <T color={c} size={14}>
+                    {word}
+                  </T>
+                  <T color={C.dim} size={14} style={{ fontFamily: "monospace" }}>
+                    {val}
+                  </T>
+                </div>
+              ))}
+            </div>
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <T color={C.bright} bold size={20}>
+                {"\u2192"}
+              </T>
+            </div>
+            <div style={{ flex: "1 1 180px", display: "flex", flexDirection: "column", gap: 3 }}>
+              <T color={C.green} bold center size={14}>
+                After softmax
+              </T>
+              {[
+                { word: "cats", val: "62.2%", pct: 62.2, c: C.green },
+                { word: "dogs", val: "20.8%", pct: 20.8, c: C.cyan },
+                { word: "the", val: "4.2%", pct: 4.2, c: C.yellow },
+                { word: "love", val: "0.7%", pct: 0.7, c: C.orange },
+                { word: "banana", val: "0.1%", pct: 0.1, c: C.red },
+              ].map(({ word, val, pct, c }) => (
+                <div
+                  key={word}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 4,
+                    padding: "3px 8px",
+                    borderRadius: 4,
+                    background: `${c}06`,
+                  }}
+                >
+                  <T color={c} size={14} style={{ minWidth: 50 }}>
+                    {word}
+                  </T>
+                  <div
+                    style={{
+                      flex: 1,
+                      height: 12,
+                      borderRadius: 3,
+                      background: "rgba(255,255,255,0.04)",
+                      overflow: "hidden",
+                    }}
+                  >
+                    <div style={{ width: `${pct}%`, height: "100%", borderRadius: 3, background: `${c}50` }} />
                   </div>
-                  <T color={C.dim} size={11} style={{ minWidth: 28, textAlign: "right" }}>{p}%</T>
+                  <T color={C.dim} size={13} style={{ minWidth: 40, textAlign: "right" }}>
+                    {val}
+                  </T>
                 </div>
               ))}
             </div>
           </div>
-        ))}
-      </div>
 
-      <div style={{ marginTop: 10, padding: "8px 12px", borderRadius: 8, background: `${C.orange}06`, border: `1px solid ${C.orange}12` }}>
-        <T color={C.dim} size={14}><strong style={{ color: C.orange }}>Low temperature</strong> (0.2): divides logits by 0.2, making differences 5x larger before softmax. The top word dominates. <strong style={{ color: C.orange }}>High temperature</strong> (2.0): divides by 2.0, shrinking differences. More words get a fair chance. Temperature = 0 would be pure greedy (pick the top word every time).</T>
-      </div>
-    </Box></Reveal>
+          <div
+            style={{
+              marginTop: 12,
+              padding: "8px 12px",
+              borderRadius: 8,
+              background: `${C.green}06`,
+              border: `1px solid ${C.green}12`,
+            }}
+          >
+            <T color={C.dim} size={14}>
+              Notice how softmax <strong style={{ color: C.green }}>amplifies differences</strong>. A logit gap of just
+              1.1 between "cats" (4.2) and "dogs" (3.1) becomes a 3x probability difference (62% vs 21%). The
+              exponential function makes the winner win big.
+            </T>
+          </div>
+        </Box>
+      </Reveal>
 
-    {/* Sub 5: Sampling strategies */}
-    <Reveal when={sub >= 5}><Box color={C.red} style={{ width: "100%" }}>
-      <T color="#ef9a9a" bold center size={20}>Sampling strategies - how to pick the next token</T>
-      <T color="#ef9a9a" style={{ marginTop: 6 }}>After softmax gives us probabilities, we still need to decide: which word do we actually pick? There are three main strategies:</T>
+      {/* Sub 4: Temperature */}
+      <Reveal when={sub >= 4}>
+        <Box color={C.orange} style={{ width: "100%" }}>
+          <T color="#ffcc80" bold center size={20}>
+            Temperature - the creativity dial
+          </T>
+          <T color="#ffcc80" style={{ marginTop: 6 }}>
+            Before softmax, divide each logit by a number called <strong>temperature (T)</strong>. This controls how
+            "peaked" or "spread out" the resulting probabilities are.
+          </T>
 
-      <div style={{ marginTop: 14, display: "flex", flexDirection: "column", gap: 10 }}>
-        {/* Greedy */}
-        <div style={{ padding: 12, borderRadius: 10, background: `${C.yellow}06`, border: `1px solid ${C.yellow}20` }}>
-          <T color={C.yellow} bold size={16}>Greedy decoding</T>
-          <T color={C.dim} size={14} style={{ marginTop: 4 }}>Always pick the highest probability word. Simple but boring - the same input always produces the same output.</T>
-          <div style={{ marginTop: 8, display: "flex", gap: 4, alignItems: "center", flexWrap: "wrap" }}>
+          <div
+            style={{
+              marginTop: 12,
+              padding: 10,
+              borderRadius: 8,
+              background: `${C.orange}08`,
+              border: `1px solid ${C.orange}20`,
+            }}
+          >
+            <T color={C.bright} center size={16} style={{ fontFamily: "monospace" }}>
+              softmax( logit / temperature )
+            </T>
+          </div>
+
+          <div style={{ marginTop: 14, display: "flex", gap: 8, flexWrap: "wrap" }}>
             {[
-              { w: "cats", p: 62, pick: true },
-              { w: "dogs", p: 21, pick: false },
-              { w: "the", p: 4, pick: false },
-              { w: "love", p: 1, pick: false },
-            ].map(({ w, p, pick }) => (
-              <div key={w} style={{ padding: "4px 10px", borderRadius: 6, background: pick ? `${C.green}15` : `${C.dim}08`, border: `1px solid ${pick ? C.green : C.dim}25` }}>
-                <T color={pick ? C.green : C.dim} bold={pick} size={13}>{w} {p}% {pick ? "\u2713" : ""}</T>
+              {
+                temp: "T = 0.2",
+                label: "Focused",
+                desc: "Almost deterministic",
+                probs: [
+                  { w: "cats", p: 98 },
+                  { w: "dogs", p: 2 },
+                  { w: "the", p: 0 },
+                ],
+                c: C.blue,
+              },
+              {
+                temp: "T = 1.0",
+                label: "Default",
+                desc: "Balanced",
+                probs: [
+                  { w: "cats", p: 62 },
+                  { w: "dogs", p: 21 },
+                  { w: "the", p: 4 },
+                ],
+                c: C.green,
+              },
+              {
+                temp: "T = 2.0",
+                label: "Creative",
+                desc: "More spread out",
+                probs: [
+                  { w: "cats", p: 38 },
+                  { w: "dogs", p: 27 },
+                  { w: "the", p: 12 },
+                ],
+                c: C.orange,
+              },
+            ].map(({ temp, label, desc, probs, c }) => (
+              <div
+                key={temp}
+                style={{
+                  flex: "1 1 140px",
+                  padding: 10,
+                  borderRadius: 8,
+                  background: `${c}06`,
+                  border: `1px solid ${c}15`,
+                }}
+              >
+                <T color={c} bold center size={15}>
+                  {temp}
+                </T>
+                <T color={C.dim} center size={12}>
+                  {label} - {desc}
+                </T>
+                <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 3 }}>
+                  {probs.map(({ w, p }) => (
+                    <div key={w} style={{ display: "flex", alignItems: "center", gap: 4 }}>
+                      <T color={C.dim} size={12} style={{ minWidth: 32 }}>
+                        {w}
+                      </T>
+                      <div
+                        style={{
+                          flex: 1,
+                          height: 10,
+                          borderRadius: 3,
+                          background: "rgba(255,255,255,0.04)",
+                          overflow: "hidden",
+                        }}
+                      >
+                        <div style={{ width: `${p}%`, height: "100%", borderRadius: 3, background: `${c}50` }} />
+                      </div>
+                      <T color={C.dim} size={11} style={{ minWidth: 28, textAlign: "right" }}>
+                        {p}%
+                      </T>
+                    </div>
+                  ))}
+                </div>
               </div>
             ))}
           </div>
-        </div>
 
-        {/* Top-k */}
-        <div style={{ padding: 12, borderRadius: 10, background: `${C.cyan}06`, border: `1px solid ${C.cyan}20` }}>
-          <T color={C.cyan} bold size={16}>Top-k sampling (e.g., k = 3)</T>
-          <T color={C.dim} size={14} style={{ marginTop: 4 }}>Keep only the k highest-probability words. Re-normalize their probabilities and randomly sample from them. Balances quality with variety.</T>
-          <div style={{ marginTop: 8, display: "flex", gap: 4, alignItems: "center", flexWrap: "wrap" }}>
-            {[
-              { w: "cats", p: 62, keep: true },
-              { w: "dogs", p: 21, keep: true },
-              { w: "the", p: 4, keep: true },
-              { w: "love", p: 1, keep: false },
-            ].map(({ w, p, keep }) => (
-              <div key={w} style={{ padding: "4px 10px", borderRadius: 6, background: keep ? `${C.cyan}15` : `${C.red}08`, border: `1px solid ${keep ? C.cyan : C.red}25`, textDecoration: keep ? "none" : "line-through" }}>
-                <T color={keep ? C.cyan : C.red} size={13}>{w} {p}%</T>
-              </div>
-            ))}
-            <T color={C.dim} size={12}>{"\u2192"} sample from top 3</T>
+          <div
+            style={{
+              marginTop: 10,
+              padding: "8px 12px",
+              borderRadius: 8,
+              background: `${C.orange}06`,
+              border: `1px solid ${C.orange}12`,
+            }}
+          >
+            <T color={C.dim} size={14}>
+              <strong style={{ color: C.orange }}>Low temperature</strong> (0.2): divides logits by 0.2, making
+              differences 5x larger before softmax. The top word dominates.{" "}
+              <strong style={{ color: C.orange }}>High temperature</strong> (2.0): divides by 2.0, shrinking
+              differences. More words get a fair chance. Temperature = 0 would be pure greedy (pick the top word every
+              time).
+            </T>
           </div>
-        </div>
+        </Box>
+      </Reveal>
 
-        {/* Top-p */}
-        <div style={{ padding: 12, borderRadius: 10, background: `${C.green}06`, border: `1px solid ${C.green}20` }}>
-          <T color={C.green} bold size={16}>Top-p sampling / nucleus (e.g., p = 0.9)</T>
-          <T color={C.dim} size={14} style={{ marginTop: 4 }}>Keep adding words (highest probability first) until their cumulative probability reaches p. More adaptive than Top-k - uses fewer words when the model is confident, more when uncertain.</T>
-          <div style={{ marginTop: 8, display: "flex", gap: 4, alignItems: "center", flexWrap: "wrap" }}>
-            {[
-              { w: "cats", p: 62, cum: 62, keep: true },
-              { w: "dogs", p: 21, cum: 83, keep: true },
-              { w: "the", p: 4, cum: 87, keep: true },
-              { w: "love", p: 1, cum: 88, keep: false },
-            ].map(({ w, p, cum, keep }) => (
-              <div key={w} style={{ padding: "4px 10px", borderRadius: 6, background: keep ? `${C.green}15` : `${C.red}08`, border: `1px solid ${keep ? C.green : C.red}25` }}>
-                <T color={keep ? C.green : C.red} size={13}>{w} {p}% <span style={{ color: C.dim, fontSize: 11 }}>({"\u03A3"}{cum}%)</span></T>
+      {/* Sub 5: Sampling strategies */}
+      <Reveal when={sub >= 5}>
+        <Box color={C.red} style={{ width: "100%" }}>
+          <T color="#ef9a9a" bold center size={20}>
+            Sampling strategies - how to pick the next token
+          </T>
+          <T color="#ef9a9a" style={{ marginTop: 6 }}>
+            After softmax gives us probabilities, we still need to decide: which word do we actually pick? There are
+            three main strategies:
+          </T>
+
+          <div style={{ marginTop: 14, display: "flex", flexDirection: "column", gap: 10 }}>
+            {/* Greedy */}
+            <div
+              style={{ padding: 12, borderRadius: 10, background: `${C.yellow}06`, border: `1px solid ${C.yellow}20` }}
+            >
+              <T color={C.yellow} bold size={16}>
+                Greedy decoding
+              </T>
+              <T color={C.dim} size={14} style={{ marginTop: 4 }}>
+                Always pick the highest probability word. Simple but boring - the same input always produces the same
+                output.
+              </T>
+              <div style={{ marginTop: 8, display: "flex", gap: 4, alignItems: "center", flexWrap: "wrap" }}>
+                {[
+                  { w: "cats", p: 62, pick: true },
+                  { w: "dogs", p: 21, pick: false },
+                  { w: "the", p: 4, pick: false },
+                  { w: "love", p: 1, pick: false },
+                ].map(({ w, p, pick }) => (
+                  <div
+                    key={w}
+                    style={{
+                      padding: "4px 10px",
+                      borderRadius: 6,
+                      background: pick ? `${C.green}15` : `${C.dim}08`,
+                      border: `1px solid ${pick ? C.green : C.dim}25`,
+                    }}
+                  >
+                    <T color={pick ? C.green : C.dim} bold={pick} size={13}>
+                      {w} {p}% {pick ? "\u2713" : ""}
+                    </T>
+                  </div>
+                ))}
               </div>
-            ))}
-            <T color={C.dim} size={12}>{"\u2192"} stop at 87% (under 90%)</T>
+            </div>
+
+            {/* Top-k */}
+            <div style={{ padding: 12, borderRadius: 10, background: `${C.cyan}06`, border: `1px solid ${C.cyan}20` }}>
+              <T color={C.cyan} bold size={16}>
+                Top-k sampling (e.g., k = 3)
+              </T>
+              <T color={C.dim} size={14} style={{ marginTop: 4 }}>
+                Keep only the k highest-probability words. Re-normalize their probabilities and randomly sample from
+                them. Balances quality with variety.
+              </T>
+              <div style={{ marginTop: 8, display: "flex", gap: 4, alignItems: "center", flexWrap: "wrap" }}>
+                {[
+                  { w: "cats", p: 62, keep: true },
+                  { w: "dogs", p: 21, keep: true },
+                  { w: "the", p: 4, keep: true },
+                  { w: "love", p: 1, keep: false },
+                ].map(({ w, p, keep }) => (
+                  <div
+                    key={w}
+                    style={{
+                      padding: "4px 10px",
+                      borderRadius: 6,
+                      background: keep ? `${C.cyan}15` : `${C.red}08`,
+                      border: `1px solid ${keep ? C.cyan : C.red}25`,
+                      textDecoration: keep ? "none" : "line-through",
+                    }}
+                  >
+                    <T color={keep ? C.cyan : C.red} size={13}>
+                      {w} {p}%
+                    </T>
+                  </div>
+                ))}
+                <T color={C.dim} size={12}>
+                  {"\u2192"} sample from top 3
+                </T>
+              </div>
+            </div>
+
+            {/* Top-p */}
+            <div
+              style={{ padding: 12, borderRadius: 10, background: `${C.green}06`, border: `1px solid ${C.green}20` }}
+            >
+              <T color={C.green} bold size={16}>
+                Top-p sampling / nucleus (e.g., p = 0.9)
+              </T>
+              <T color={C.dim} size={14} style={{ marginTop: 4 }}>
+                Keep adding words (highest probability first) until their cumulative probability reaches p. More
+                adaptive than Top-k - uses fewer words when the model is confident, more when uncertain.
+              </T>
+              <div style={{ marginTop: 8, display: "flex", gap: 4, alignItems: "center", flexWrap: "wrap" }}>
+                {[
+                  { w: "cats", p: 62, cum: 62, keep: true },
+                  { w: "dogs", p: 21, cum: 83, keep: true },
+                  { w: "the", p: 4, cum: 87, keep: true },
+                  { w: "love", p: 1, cum: 88, keep: false },
+                ].map(({ w, p, cum, keep }) => (
+                  <div
+                    key={w}
+                    style={{
+                      padding: "4px 10px",
+                      borderRadius: 6,
+                      background: keep ? `${C.green}15` : `${C.red}08`,
+                      border: `1px solid ${keep ? C.green : C.red}25`,
+                    }}
+                  >
+                    <T color={keep ? C.green : C.red} size={13}>
+                      {w} {p}%{" "}
+                      <span style={{ color: C.dim, fontSize: 11 }}>
+                        ({"\u03A3"}
+                        {cum}%)
+                      </span>
+                    </T>
+                  </div>
+                ))}
+                <T color={C.dim} size={12}>
+                  {"\u2192"} stop at 87% (under 90%)
+                </T>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
 
-      <T color={C.dim} size={14} style={{ marginTop: 10 }}>In practice, most APIs combine temperature + Top-p. ChatGPT defaults: temperature = 1.0, Top-p = 1.0 (no filtering). For more focused output: temperature = 0.7, Top-p = 0.9.</T>
-    </Box></Reveal>
+          <T color={C.dim} size={14} style={{ marginTop: 10 }}>
+            In practice, most APIs combine temperature + Top-p. ChatGPT defaults: temperature = 1.0, Top-p = 1.0 (no
+            filtering). For more focused output: temperature = 0.7, Top-p = 0.9.
+          </T>
+        </Box>
+      </Reveal>
 
-    {/* Sub 6: Weight tying */}
-    <Reveal when={sub >= 6}><Box color={C.blue} style={{ width: "100%" }}>
-      <T color="#90caf9" bold center size={20}>Weight tying - the elegant shortcut</T>
-      <T color="#90caf9" style={{ marginTop: 6 }}>Here is a surprising fact: the output Linear layer's weight matrix W is <strong>the same matrix</strong> as the embedding table from the input - just transposed.</T>
+      {/* Sub 6: Weight tying */}
+      <Reveal when={sub >= 6}>
+        <Box color={C.blue} style={{ width: "100%" }}>
+          <T color="#90caf9" bold center size={20}>
+            Weight tying - the elegant shortcut
+          </T>
+          <T color="#90caf9" style={{ marginTop: 6 }}>
+            Here is a surprising fact: the output Linear layer's weight matrix W is <strong>the same matrix</strong> as
+            the embedding table from the input - just transposed.
+          </T>
 
-      <div style={{ marginTop: 14, display: "flex", gap: 8, flexWrap: "wrap", justifyContent: "center", alignItems: "center" }}>
-        <div style={{ padding: "10px 14px", borderRadius: 10, background: `${C.cyan}08`, border: `1px solid ${C.cyan}20`, textAlign: "center" }}>
-          <T color={C.cyan} bold size={15}>Embedding (input)</T>
-          <T color={C.dim} size={13} style={{ marginTop: 4 }}>word {"\u2192"} vector</T>
-          <T color={C.dim} size={12}>[50,257 x 512]</T>
-        </div>
-        <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-          <T color={C.bright} bold size={14}>SAME MATRIX</T>
-          <T color={C.yellow} size={20}>{"\u21C6"}</T>
-        </div>
-        <div style={{ padding: "10px 14px", borderRadius: 10, background: `${C.blue}08`, border: `1px solid ${C.blue}20`, textAlign: "center" }}>
-          <T color={C.blue} bold size={15}>Linear (output)</T>
-          <T color={C.dim} size={13} style={{ marginTop: 4 }}>vector {"\u2192"} word scores</T>
-          <T color={C.dim} size={12}>[512 x 50,257]</T>
-        </div>
-      </div>
+          <div
+            style={{
+              marginTop: 14,
+              display: "flex",
+              gap: 8,
+              flexWrap: "wrap",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <div
+              style={{
+                padding: "10px 14px",
+                borderRadius: 10,
+                background: `${C.cyan}08`,
+                border: `1px solid ${C.cyan}20`,
+                textAlign: "center",
+              }}
+            >
+              <T color={C.cyan} bold size={15}>
+                Embedding (input)
+              </T>
+              <T color={C.dim} size={13} style={{ marginTop: 4 }}>
+                word {"\u2192"} vector
+              </T>
+              <T color={C.dim} size={12}>
+                [50,257 x 512]
+              </T>
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+              <T color={C.bright} bold size={14}>
+                SAME MATRIX
+              </T>
+              <T color={C.yellow} size={20}>
+                {"\u21C6"}
+              </T>
+            </div>
+            <div
+              style={{
+                padding: "10px 14px",
+                borderRadius: 10,
+                background: `${C.blue}08`,
+                border: `1px solid ${C.blue}20`,
+                textAlign: "center",
+              }}
+            >
+              <T color={C.blue} bold size={15}>
+                Linear (output)
+              </T>
+              <T color={C.dim} size={13} style={{ marginTop: 4 }}>
+                vector {"\u2192"} word scores
+              </T>
+              <T color={C.dim} size={12}>
+                [512 x 50,257]
+              </T>
+            </div>
+          </div>
 
-      <div style={{ marginTop: 14, padding: 12, borderRadius: 8, background: `${C.blue}06`, border: `1px solid ${C.blue}12` }}>
-        <T color="#90caf9" bold size={15}>Why does this work?</T>
-        <T color={C.dim} size={14} style={{ marginTop: 4 }}>The embedding table maps each word to a point in 512-dimensional space. The output layer asks: "which word's point is closest to this hidden state?" That is the same operation in reverse.</T>
-        <T color={C.dim} size={14} style={{ marginTop: 6 }}>If the embedding for "cats" is [0.71, -0.25, 0.63, ...] and our hidden state is [0.82, -0.31, 0.57, ...], the dot product is high because they point in similar directions. The model is literally asking: "which embedding vector is this hidden state most similar to?"</T>
-      </div>
+          <div
+            style={{
+              marginTop: 14,
+              padding: 12,
+              borderRadius: 8,
+              background: `${C.blue}06`,
+              border: `1px solid ${C.blue}12`,
+            }}
+          >
+            <T color="#90caf9" bold size={15}>
+              Why does this work?
+            </T>
+            <T color={C.dim} size={14} style={{ marginTop: 4 }}>
+              The embedding table maps each word to a point in 512-dimensional space. The output layer asks: "which
+              word's point is closest to this hidden state?" That is the same operation in reverse.
+            </T>
+            <T color={C.dim} size={14} style={{ marginTop: 6 }}>
+              If the embedding for "cats" is [0.71, -0.25, 0.63, ...] and our hidden state is [0.82, -0.31, 0.57, ...],
+              the dot product is high because they point in similar directions. The model is literally asking: "which
+              embedding vector is this hidden state most similar to?"
+            </T>
+          </div>
 
-      <div style={{ marginTop: 10, padding: "8px 12px", borderRadius: 8, background: `${C.green}06`, border: `1px solid ${C.green}12` }}>
-        <T color={C.green} bold size={14}>Parameter savings from weight tying</T>
-        <T color={C.dim} size={14} style={{ marginTop: 4 }}>Without tying: 50,257 x 512 = 25.7M extra parameters. With tying: <strong style={{ color: C.green }}>zero extra parameters</strong> - the output layer reuses the embedding matrix. GPT-2 and most modern LLMs use this trick.</T>
-      </div>
-    </Box></Reveal>
+          <div
+            style={{
+              marginTop: 10,
+              padding: "8px 12px",
+              borderRadius: 8,
+              background: `${C.green}06`,
+              border: `1px solid ${C.green}12`,
+            }}
+          >
+            <T color={C.green} bold size={14}>
+              Parameter savings from weight tying
+            </T>
+            <T color={C.dim} size={14} style={{ marginTop: 4 }}>
+              Without tying: 50,257 x 512 = 25.7M extra parameters. With tying:{" "}
+              <strong style={{ color: C.green }}>zero extra parameters</strong> - the output layer reuses the embedding
+              matrix. GPT-2 and most modern LLMs use this trick.
+            </T>
+          </div>
+        </Box>
+      </Reveal>
 
-    {/* Sub 7: Complete output pipeline */}
-    <Reveal when={sub >= 7}><Box color={C.purple} style={{ width: "100%" }}>
-      <T color="#b8a9ff" bold center size={20}>The complete output pipeline</T>
-      <T color="#b8a9ff" style={{ marginTop: 6 }}>Here is every step from hidden state to predicted token:</T>
+      {/* Sub 7: Complete output pipeline */}
+      <Reveal when={sub >= 7}>
+        <Box color={C.purple} style={{ width: "100%" }}>
+          <T color="#b8a9ff" bold center size={20}>
+            The complete output pipeline
+          </T>
+          <T color="#b8a9ff" style={{ marginTop: 6 }}>
+            Here is every step from hidden state to predicted token:
+          </T>
 
-      <div style={{ marginTop: 14, display: "flex", flexWrap: "wrap", gap: 6, justifyContent: "center", alignItems: "center" }}>
-        {[
-          { label: "hidden state", desc: "512 dims", c: C.green },
-          { label: "Linear (W\u1d40)", desc: "512 \u2192 50,257", c: C.cyan },
-          { label: "logits", desc: "50,257 scores", c: C.yellow },
-          { label: "\u00f7 T", desc: "temperature", c: C.orange },
-          { label: "softmax", desc: "\u2192 probabilities", c: C.green },
-          { label: "sample", desc: "Top-k / Top-p", c: C.red },
-          { label: "next token", desc: '"cats"', c: C.purple },
-        ].map(({ label, desc, c }, i, arr) => (
-          <span key={i} style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
-            <span style={{ padding: "6px 12px", borderRadius: 8, background: `${c}10`, border: `1px solid ${c}25`, textAlign: "center" }}>
-              <T color={c} bold size={14}>{label}</T>
-              <T color={C.dim} size={11}>{desc}</T>
-            </span>
-            {i < arr.length - 1 && <T color={C.dim} size={16}>{"\u2192"}</T>}
-          </span>
-        ))}
-      </div>
+          <div
+            style={{
+              marginTop: 14,
+              display: "flex",
+              flexWrap: "wrap",
+              gap: 6,
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            {[
+              { label: "hidden state", desc: "512 dims", c: C.green },
+              { label: "Linear (W\u1d40)", desc: "512 \u2192 50,257", c: C.cyan },
+              { label: "logits", desc: "50,257 scores", c: C.yellow },
+              { label: "\u00f7 T", desc: "temperature", c: C.orange },
+              { label: "softmax", desc: "\u2192 probabilities", c: C.green },
+              { label: "sample", desc: "Top-k / Top-p", c: C.red },
+              { label: "next token", desc: '"cats"', c: C.purple },
+            ].map(({ label, desc, c }, i, arr) => (
+              <span key={i} style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
+                <span
+                  style={{
+                    padding: "6px 12px",
+                    borderRadius: 8,
+                    background: `${c}10`,
+                    border: `1px solid ${c}25`,
+                    textAlign: "center",
+                  }}
+                >
+                  <T color={c} bold size={14}>
+                    {label}
+                  </T>
+                  <T color={C.dim} size={11}>
+                    {desc}
+                  </T>
+                </span>
+                {i < arr.length - 1 && (
+                  <T color={C.dim} size={16}>
+                    {"\u2192"}
+                  </T>
+                )}
+              </span>
+            ))}
+          </div>
 
-      <div style={{ marginTop: 14, display: "flex", flexDirection: "column", gap: 8 }}>
-        <div style={{ padding: "8px 12px", borderRadius: 8, background: `${C.purple}06`, border: `1px solid ${C.purple}12` }}>
-          <T color="#b8a9ff" bold size={15}>During training</T>
-          <T color={C.dim} size={14} style={{ marginTop: 4 }}>The model computes this output head at <strong>every</strong> position simultaneously. At position 1 ("I"), it should predict "love". At position 2 ("love"), it should predict "cats". Cross-entropy loss measures how wrong each prediction was, and backprop updates the weights.</T>
-        </div>
-        <div style={{ padding: "8px 12px", borderRadius: 8, background: `${C.cyan}06`, border: `1px solid ${C.cyan}12` }}>
-          <T color="#80deea" bold size={15}>During inference</T>
-          <T color={C.dim} size={14} style={{ marginTop: 4 }}>Only the <strong>last position's</strong> hidden state goes through the output head. That is the position where the model predicts the next token. This single prediction gets sampled, appended to the input, and the whole process repeats - one token at a time.</T>
-        </div>
-      </div>
+          <div style={{ marginTop: 14, display: "flex", flexDirection: "column", gap: 8 }}>
+            <div
+              style={{
+                padding: "8px 12px",
+                borderRadius: 8,
+                background: `${C.purple}06`,
+                border: `1px solid ${C.purple}12`,
+              }}
+            >
+              <T color="#b8a9ff" bold size={15}>
+                During training
+              </T>
+              <T color={C.dim} size={14} style={{ marginTop: 4 }}>
+                The model computes this output head at <strong>every</strong> position simultaneously. At position 1
+                ("I"), it should predict "love". At position 2 ("love"), it should predict "cats". Cross-entropy loss
+                measures how wrong each prediction was, and backprop updates the weights.
+              </T>
+            </div>
+            <div
+              style={{
+                padding: "8px 12px",
+                borderRadius: 8,
+                background: `${C.cyan}06`,
+                border: `1px solid ${C.cyan}12`,
+              }}
+            >
+              <T color="#80deea" bold size={15}>
+                During inference
+              </T>
+              <T color={C.dim} size={14} style={{ marginTop: 4 }}>
+                Only the <strong>last position's</strong> hidden state goes through the output head. That is the
+                position where the model predicts the next token. This single prediction gets sampled, appended to the
+                input, and the whole process repeats - one token at a time.
+              </T>
+            </div>
+          </div>
 
-      <div style={{ marginTop: 12, padding: "10px 14px", borderRadius: 8, background: `${C.yellow}08`, border: `1px solid ${C.yellow}20` }}>
-        <T color="#fff176" bold size={15}>The big picture</T>
-        <T color="#fff176" size={14} style={{ marginTop: 4 }}>The entire transformer - embeddings, positional encoding, attention, FFN, layer stacking - exists to produce one good hidden state at the final position. The output head then converts that single 512-dimensional vector into a probability distribution over 50,257 words. One matrix multiply, one softmax. That is all it takes to go from "understanding" to "speaking."</T>
-      </div>
-    </Box></Reveal>
-    {sub < 7 && <SubBtn key={sub} onClick={() => { setSubBtnRipple(Date.now()); navigate("forward"); }} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
-  </div>
-); }
+          <div
+            style={{
+              marginTop: 12,
+              padding: "10px 14px",
+              borderRadius: 8,
+              background: `${C.yellow}08`,
+              border: `1px solid ${C.yellow}20`,
+            }}
+          >
+            <T color="#fff176" bold size={15}>
+              The big picture
+            </T>
+            <T color="#fff176" size={14} style={{ marginTop: 4 }}>
+              The entire transformer - embeddings, positional encoding, attention, FFN, layer stacking - exists to
+              produce one good hidden state at the final position. The output head then converts that single
+              512-dimensional vector into a probability distribution over 50,257 words. One matrix multiply, one
+              softmax. That is all it takes to go from "understanding" to "speaking."
+            </T>
+          </div>
+        </Box>
+      </Reveal>
+      {sub < 7 && (
+        <SubBtn
+          key={sub}
+          onClick={() => {
+            setSubBtnRipple(Date.now());
+            navigate("forward");
+          }}
+          rippleKey={subBtnRipple}
+          registerSubBtn={registerSubBtn}
+        />
+      )}
+    </div>
+  );
+};
 
 // ═══════ CH 1: The Problem ═══════

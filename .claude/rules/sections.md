@@ -21,3 +21,4 @@ Every chapter, sub-step, and visual MUST follow these rules.
 - **No em-dashes** - use hyphens or rewrite.
 - **Dot product notation** - use the middle dot, not multiplication sign.
 - **Chapter context** - all chapter functions receive ctx with: sub, setSub, navigate, goTo, bankIdx, setBankIdx, hovered, setHovered, expanded, setExpanded, subBtnRipple, setSubBtnRipple, registerSubBtn.
+- **SVG search metadata** - every `<svg>` MUST have a `<desc>` child as its first element describing what the diagram shows. For JSX SVGs: `<desc>text</desc>`. For Graph component: pass `desc` prop. For imperative SVGs (B() factory): call `desc("text")`. Also add/update the entry in `src/data/svg-descriptions.json`.

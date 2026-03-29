@@ -1920,71 +1920,109 @@ describe("source files have no standalone uppercase IS", () => {
 // ─── Graph helper edge-case branches ───
 describe("Graph helper", () => {
   it("renders with xLabel and yLabel", () => {
-    const { container } = render(Graph({
-      points: [[0, 0], [1, 2], [2, 4]],
-      color: "#ff0000",
-      xLabel: "X Axis",
-      yLabel: "Y Axis",
-    }));
+    const { container } = render(
+      Graph({
+        points: [
+          [0, 0],
+          [1, 2],
+          [2, 4],
+        ],
+        color: "#ff0000",
+        xLabel: "X Axis",
+        yLabel: "Y Axis",
+      }),
+    );
     expect(container.querySelector("svg")).toBeTruthy();
     expect(container.textContent).toContain("X Axis");
     expect(container.textContent).toContain("Y Axis");
   });
 
   it("renders without title (falsy title branch)", () => {
-    const { container } = render(Graph({
-      points: [[0, 1], [1, 2]],
-      color: "#ff0000",
-    }));
+    const { container } = render(
+      Graph({
+        points: [
+          [0, 1],
+          [1, 2],
+        ],
+        color: "#ff0000",
+      }),
+    );
     // Default title is "" so no title text element
     const texts = container.querySelectorAll("text");
-    const titleText = Array.from(texts).find(t => t.getAttribute("y") === "18" && t.getAttribute("font-weight") === "700");
+    const titleText = Array.from(texts).find(
+      (t) => t.getAttribute("y") === "18" && t.getAttribute("font-weight") === "700",
+    );
     expect(titleText).toBeFalsy();
   });
 
   it("handles single-x-value points (maxX === minX division-by-zero fallback)", () => {
-    const { container } = render(Graph({
-      points: [[5, 0], [5, 3], [5, 6]],
-      color: "#00ff00",
-    }));
+    const { container } = render(
+      Graph({
+        points: [
+          [5, 0],
+          [5, 3],
+          [5, 6],
+        ],
+        color: "#00ff00",
+      }),
+    );
     expect(container.querySelector("svg")).toBeTruthy();
   });
 
   it("handles single-y-value points (maxY === minY division-by-zero fallback)", () => {
-    const { container } = render(Graph({
-      points: [[0, 3], [1, 3], [2, 3]],
-      color: "#0000ff",
-    }));
+    const { container } = render(
+      Graph({
+        points: [
+          [0, 3],
+          [1, 3],
+          [2, 3],
+        ],
+        color: "#0000ff",
+      }),
+    );
     expect(container.querySelector("svg")).toBeTruthy();
   });
 
   it("renders zero line when minY < 0 and maxY > 0", () => {
-    const { container } = render(Graph({
-      points: [[0, -2], [1, 0], [2, 3]],
-      color: "#ff00ff",
-    }));
+    const { container } = render(
+      Graph({
+        points: [
+          [0, -2],
+          [1, 0],
+          [2, 3],
+        ],
+        color: "#ff00ff",
+      }),
+    );
     // Zero line has dashed stroke
     const lines = container.querySelectorAll("line");
-    const dashed = Array.from(lines).find(l => l.getAttribute("stroke-dasharray") === "4,4");
+    const dashed = Array.from(lines).find((l) => l.getAttribute("stroke-dasharray") === "4,4");
     expect(dashed).toBeTruthy();
   });
 
   it("skips zero line when all values are positive", () => {
-    const { container } = render(Graph({
-      points: [[0, 1], [1, 2]],
-      color: "#ff0000",
-    }));
+    const { container } = render(
+      Graph({
+        points: [
+          [0, 1],
+          [1, 2],
+        ],
+        color: "#ff0000",
+      }),
+    );
     const lines = container.querySelectorAll("line");
-    const dashed = Array.from(lines).find(l => l.getAttribute("stroke-dasharray") === "4,4");
+    const dashed = Array.from(lines).find((l) => l.getAttribute("stroke-dasharray") === "4,4");
     expect(dashed).toBeFalsy();
   });
 
   it("renders every-other x-label when points.length > 10", () => {
     const manyPoints = Array.from({ length: 12 }, (_, i) => [i, i * 2]);
-    const { container } = render(Graph({
-      points: manyPoints,
-      color: "#ff6600",
-    }));
+    const { container } = render(
+      Graph({
+        points: manyPoints,
+        color: "#ff6600",
+      }),
+    );
     expect(container.querySelector("svg")).toBeTruthy();
     // With 12 points and modulo 2, only even-indexed x-labels appear (6 labels)
     const xLabels = container.querySelectorAll("text[text-anchor='middle']");
@@ -1992,14 +2030,20 @@ describe("Graph helper", () => {
   });
 
   it("renders annotations without explicit color (ac || C.yellow fallback)", () => {
-    const { container } = render(Graph({
-      points: [[0, 0], [1, 2], [2, 4]],
-      color: "#ff0000",
-      annotations: [{ x: 1, y: 2, text: "peak" }],
-    }));
+    const { container } = render(
+      Graph({
+        points: [
+          [0, 0],
+          [1, 2],
+          [2, 4],
+        ],
+        color: "#ff0000",
+        annotations: [{ x: 1, y: 2, text: "peak" }],
+      }),
+    );
     // Should use C.yellow as fallback
     const circles = container.querySelectorAll("circle");
-    const annotationCircle = Array.from(circles).find(c => c.getAttribute("r") === "6");
+    const annotationCircle = Array.from(circles).find((c) => c.getAttribute("r") === "6");
     expect(annotationCircle).toBeTruthy();
     expect(annotationCircle.getAttribute("stroke")).toBe("#ffd740");
   });
@@ -2038,7 +2082,7 @@ describe("EncoderDecoderTraining spacing fixes", () => {
     const svg = container.querySelector("svg");
     const rects = Array.from(svg.querySelectorAll("rect"));
     // Token ID boxes come after the title box and input string box
-    const tokenBoxes = rects.filter(r => r.getAttribute("width") === "60" && r.getAttribute("height") === "28");
+    const tokenBoxes = rects.filter((r) => r.getAttribute("width") === "60" && r.getAttribute("height") === "28");
     expect(tokenBoxes.length).toBe(6);
   });
 
@@ -2047,9 +2091,9 @@ describe("EncoderDecoderTraining spacing fixes", () => {
     const { container } = render(fn(ctx));
     const svg = container.querySelector("svg");
     const texts = Array.from(svg.querySelectorAll("text"));
-    const idTexts = texts.filter(t => t.textContent.startsWith("ID:"));
+    const idTexts = texts.filter((t) => t.textContent.startsWith("ID:"));
     expect(idTexts.length).toBe(6);
-    idTexts.forEach(t => expect(t.getAttribute("font-size")).toBe("11"));
+    idTexts.forEach((t) => expect(t.getAttribute("font-size")).toBe("11"));
   });
 
   it("sub 4 renders encoder output box at x=20 width=860", () => {
@@ -2058,9 +2102,8 @@ describe("EncoderDecoderTraining spacing fixes", () => {
     const svg = container.querySelector("svg");
     const rects = Array.from(svg.querySelectorAll("rect"));
     // Find the encoder output box (has specific fill)
-    const encOutputBox = rects.find(r =>
-      r.getAttribute("fill") === "rgba(0,188,212,0.04)" &&
-      r.getAttribute("height") === "120"
+    const encOutputBox = rects.find(
+      (r) => r.getAttribute("fill") === "rgba(0,188,212,0.04)" && r.getAttribute("height") === "120",
     );
     expect(encOutputBox).toBeTruthy();
     expect(encOutputBox.getAttribute("x")).toBe("20");
@@ -2072,9 +2115,8 @@ describe("EncoderDecoderTraining spacing fixes", () => {
     const { container } = render(fn(ctx));
     const svg = container.querySelector("svg");
     const rects = Array.from(svg.querySelectorAll("rect"));
-    const lossBox = rects.find(r =>
-      r.getAttribute("fill") === "rgba(244,67,54,0.06)" &&
-      r.getAttribute("height") === "28"
+    const lossBox = rects.find(
+      (r) => r.getAttribute("fill") === "rgba(244,67,54,0.06)" && r.getAttribute("height") === "28",
     );
     expect(lossBox).toBeTruthy();
     expect(lossBox.getAttribute("x")).toBe("150");
@@ -2258,9 +2300,8 @@ describe("EncoderDecoderInference spacing fixes", () => {
     const { container } = render(fn(ctx));
     const svg = container.querySelector("svg");
     const rects = Array.from(svg.querySelectorAll("rect"));
-    const decoderBox = rects.find(r =>
-      r.getAttribute("fill") === "rgba(156,120,255,0.04)" &&
-      r.getAttribute("height") === "86"
+    const decoderBox = rects.find(
+      (r) => r.getAttribute("fill") === "rgba(156,120,255,0.04)" && r.getAttribute("height") === "86",
     );
     expect(decoderBox).toBeTruthy();
     expect(decoderBox.getAttribute("x")).toBe("20");
@@ -2272,9 +2313,8 @@ describe("EncoderDecoderInference spacing fixes", () => {
     const { container } = render(fn(ctx));
     const svg = container.querySelector("svg");
     const rects = Array.from(svg.querySelectorAll("rect"));
-    const kvBox = rects.find(r =>
-      r.getAttribute("fill") === "rgba(0,188,212,0.03)" &&
-      r.getAttribute("height") === "110"
+    const kvBox = rects.find(
+      (r) => r.getAttribute("fill") === "rgba(0,188,212,0.03)" && r.getAttribute("height") === "110",
     );
     expect(kvBox).toBeTruthy();
     expect(kvBox.getAttribute("x")).toBe("20");
@@ -2287,5 +2327,75 @@ describe("EncoderDecoderInference spacing fixes", () => {
     const text = container.textContent;
     expect(text).toContain("KV Cache: Memory vs Speed Tradeoff");
     expect(text).toContain("What Happens Next");
+  });
+});
+
+// ─── SVG <desc> metadata for search ───
+describe("Every SVG has a <desc> element", () => {
+  // Chapters known to contain inline SVGs (JSX or Graph)
+  const svgChapters = [
+    "1.1",
+    "1.2",
+    "1.3",
+    "1.4",
+    "1.5",
+    "1.6",
+    "1.7",
+    "1.8",
+    "1.10",
+    "1.11",
+    "1.12",
+    "1.13",
+    "1.19",
+    "1.23",
+    "1.25",
+    "1.26",
+    "2.3",
+    "2.5",
+    "5.1",
+    "7.4",
+    "8.3",
+    "8.6",
+    "9.3",
+  ];
+
+  svgChapters.forEach((chId) => {
+    const chapter = chapters.find((c) => c.id === chId);
+    if (!chapter) return;
+    const fn = lookup[chapter.component];
+
+    it(`${chId} ${chapter.component} - all SVGs have <desc>`, () => {
+      // Render at a high sub to get all content
+      const ctx = makeCtx({ sub: 10 });
+      const { container } = render(fn(ctx));
+      const svgs = container.querySelectorAll("svg");
+      expect(svgs.length).toBeGreaterThan(0);
+      svgs.forEach((svg, i) => {
+        const desc = svg.querySelector("desc");
+        expect(desc, `SVG #${i} in ${chId} missing <desc>`).toBeTruthy();
+        expect(desc.textContent.length, `SVG #${i} in ${chId} has empty <desc>`).toBeGreaterThan(10);
+      });
+      cleanup();
+    });
+  });
+
+  // Encoder-decoder diagrams use imperative SVG (useEffect + ref)
+  ["9.7", "9.8"].forEach((chId) => {
+    const chapter = chapters.find((c) => c.id === chId);
+    if (!chapter) return;
+    const fn = lookup[chapter.component];
+
+    it(`${chId} ${chapter.component} - imperative SVG has <desc>`, () => {
+      const ctx = makeCtx({ sub: 10 });
+      const { container } = render(fn(ctx));
+      const svgs = container.querySelectorAll("svg");
+      expect(svgs.length).toBeGreaterThan(0);
+      svgs.forEach((svg, i) => {
+        const desc = svg.querySelector("desc");
+        expect(desc, `SVG #${i} in ${chId} missing <desc>`).toBeTruthy();
+        expect(desc.textContent.length, `SVG #${i} in ${chId} has empty <desc>`).toBeGreaterThan(10);
+      });
+      cleanup();
+    });
   });
 });

@@ -13,6 +13,7 @@ import { describe, it, vi } from "vitest";
 import { render, cleanup } from "@testing-library/react";
 import { writeFileSync, mkdirSync } from "fs";
 import { chapters, sectionNames } from "../src/config.js";
+import svgDescriptions from "../src/data/svg-descriptions.json";
 
 // Import all sections
 import { TOC } from "../src/sections/toc.jsx";
@@ -151,6 +152,21 @@ describe("Content extraction", () => {
         sub: -1,
         text: `${sectionName}: ${chapter.title}. This chapter covers ${chapter.title.toLowerCase()}.`,
       });
+
+      // Add SVG diagram description chunks for richer semantic search
+      if (svgDescriptions[chapter.id]) {
+        for (const desc of svgDescriptions[chapter.id]) {
+          allChunks.push({
+            id: chunkId++,
+            chapterId: chapter.id,
+            title: chapter.title,
+            section: chapter.section,
+            sectionName,
+            sub: -2,
+            text: `Diagram in ${chapter.title}: ${desc}`,
+          });
+        }
+      }
     }
 
     // Write output

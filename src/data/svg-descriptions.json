@@ -51,6 +51,13 @@
     "Six-neuron layer at inference showing all neurons active, illustrating that dropout is turned off during prediction",
     "Vertical transformer block diagram showing where dropout is applied: after attention and after FFN, each with p=0.1"
   ],
+  "1.24": [
+    "Momentum formula: m_t equals beta_1 times m_(t-1) plus (1 minus beta_1) times g_t, showing exponential moving average of gradients",
+    "Adaptive learning rate formula: v_t equals beta_2 times v_(t-1) plus (1 minus beta_2) times g_t squared, tracking average squared gradient magnitude per parameter",
+    "Bias correction formulas: m-hat_t equals m_t divided by (1 minus beta_1 to the power t), and v-hat_t equals v_t divided by (1 minus beta_2 to the power t), correcting for zero initialization",
+    "Full Adam update rule: theta_(t+1) equals theta_t minus alpha times m-hat_t divided by (square root of v-hat_t plus epsilon), combining momentum, adaptive rates, and bias correction",
+    "AdamW update rule: theta_(t+1) equals theta_t minus alpha times (m-hat_t divided by (square root of v-hat_t plus epsilon) plus lambda times theta_t), with decoupled weight decay applied directly"
+  ],
   "1.25": [
     "Line graph showing learning rate increasing linearly from zero during warmup phase over 2000 training steps",
     "Line graph showing learning rate with linear warmup to a peak then smooth cosine decay to zero, illustrating the complete LR schedule"

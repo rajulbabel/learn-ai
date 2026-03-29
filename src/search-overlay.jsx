@@ -176,15 +176,10 @@ export default function SearchOverlay({ open, onClose, onGoTo }) {
 
   const isReady = searchMode === "semantic";
   const isSearchLoading = searchMode === "loading";
-  const rainbow =
-    "linear-gradient(90deg, #ff6b6b, #ffa726, #ffee58, #66bb6a, #00b8d4, #a78bfa, #e040fb, #ff6b6b)";
+  const rainbow = "linear-gradient(90deg, #ff6b6b, #ffa726, #ffee58, #66bb6a, #00b8d4, #a78bfa, #e040fb, #ff6b6b)";
 
   // Status label + color
-  const dotColor = isReady
-    ? "#00e676"
-    : isSearchLoading
-      ? "#ffab40"
-      : "rgba(255,255,255,0.25)";
+  const dotColor = isReady ? "#00e676" : isSearchLoading ? "#ffab40" : "rgba(255,255,255,0.25)";
   const statusLabel = isReady
     ? "Semantic Search Active"
     : isSearchLoading
@@ -232,8 +227,7 @@ export default function SearchOverlay({ open, onClose, onGoTo }) {
           flexDirection: "column",
           alignItems: "center",
           padding: "40px 16px 12px",
-          background:
-            "linear-gradient(to bottom, rgba(8,8,13,1) 75%, rgba(8,8,13,0.97) 90%, rgba(8,8,13,0))",
+          background: "linear-gradient(to bottom, rgba(8,8,13,1) 75%, rgba(8,8,13,0.97) 90%, rgba(8,8,13,0))",
         }}
       >
         {/* Search input - gradient border wrapper */}
@@ -253,7 +247,10 @@ export default function SearchOverlay({ open, onClose, onGoTo }) {
                 data-search-rainbow="true"
                 style={{
                   position: "absolute",
-                  top: 0, left: 0, right: 0, bottom: 0,
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
                   background: rainbow,
                   animation: "searchRainbowFade 1.2s ease-out forwards",
                   pointerEvents: "none",
@@ -273,9 +270,13 @@ export default function SearchOverlay({ open, onClose, onGoTo }) {
               }}
             >
               <svg
-                width={18} height={18} viewBox="0 0 24 24" fill="none"
+                width={18}
+                height={18}
+                viewBox="0 0 24 24"
+                fill="none"
                 stroke={isReady ? "#e0d4ff" : "rgba(167, 139, 250, 0.8)"}
-                strokeWidth="2.5" strokeLinecap="round"
+                strokeWidth="2.5"
+                strokeLinecap="round"
                 style={{ flexShrink: 0, transition: "stroke 0.6s ease" }}
               >
                 <circle cx="11" cy="11" r="8" />
@@ -289,18 +290,25 @@ export default function SearchOverlay({ open, onClose, onGoTo }) {
                 onKeyDown={handleKeyDown}
                 placeholder="Search chapters, concepts, formulas..."
                 style={{
-                  flex: 1, padding: 0, fontSize: 17,
+                  flex: 1,
+                  padding: 0,
+                  fontSize: 17,
                   fontFamily: "'Segoe UI', system-ui, sans-serif",
-                  background: "transparent", border: "none",
-                  color: "#fff", outline: "none",
+                  background: "transparent",
+                  border: "none",
+                  color: "#fff",
+                  outline: "none",
                 }}
               />
               <button
                 onClick={onClose}
                 style={{
                   background: "rgba(255,255,255,0.08)",
-                  border: "none", borderRadius: 6,
-                  padding: "4px 10px", color: C.dim, fontSize: 12,
+                  border: "none",
+                  borderRadius: 6,
+                  padding: "4px 10px",
+                  color: C.dim,
+                  fontSize: 12,
                   cursor: "pointer",
                   fontFamily: "'Segoe UI', system-ui, sans-serif",
                   flexShrink: 0,
@@ -327,7 +335,9 @@ export default function SearchOverlay({ open, onClose, onGoTo }) {
           <div style={{ display: "flex", alignItems: "center", gap: 5, flexShrink: 0 }}>
             <div
               style={{
-                width: 6, height: 6, borderRadius: "50%",
+                width: 6,
+                height: 6,
+                borderRadius: "50%",
                 background: dotColor,
                 boxShadow: isReady
                   ? "0 0 6px rgba(0, 230, 118, 0.4)"
@@ -372,9 +382,7 @@ export default function SearchOverlay({ open, onClose, onGoTo }) {
                     {k}
                   </span>
                 ))}
-                <span style={{ fontSize: 9, color: "rgba(255,255,255,0.2)" }}>
-                  {label}
-                </span>
+                <span style={{ fontSize: 9, color: "rgba(255,255,255,0.2)" }}>{label}</span>
               </div>
             ))}
           </div>
@@ -401,8 +409,7 @@ export default function SearchOverlay({ open, onClose, onGoTo }) {
         {filteredResults.map((r, i) => {
           const secColor = sectionColors[r.section] || C.purple;
           const isActive = i === activeIdx;
-          const rawSnippet =
-            r.text.length > 180 ? r.text.slice(0, 180) + "..." : r.text;
+          const rawSnippet = r.text.length > 180 ? r.text.slice(0, 180) + "..." : r.text;
           const snippetContent = highlightSnippet(rawSnippet, query);
 
           const sc = r.searchScore;
@@ -418,7 +425,9 @@ export default function SearchOverlay({ open, onClose, onGoTo }) {
           return (
             <button
               key={`${r.chapterId}-${i}`}
-              ref={(el) => { resultRefs.current[i] = el; }}
+              ref={(el) => {
+                resultRefs.current[i] = el;
+              }}
               data-result={i}
               data-active={isActive ? "true" : "false"}
               onClick={() => handleSelect(r.chapterId, r.sub)}
@@ -440,16 +449,21 @@ export default function SearchOverlay({ open, onClose, onGoTo }) {
               <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                 <span
                   style={{
-                    fontSize: 11, fontWeight: 700, color: secColor,
-                    padding: "2px 6px", borderRadius: 4,
-                    background: `${secColor}18`, flexShrink: 0,
+                    fontSize: 11,
+                    fontWeight: 700,
+                    color: secColor,
+                    padding: "2px 6px",
+                    borderRadius: 4,
+                    background: `${secColor}18`,
+                    flexShrink: 0,
                   }}
                 >
                   {r.chapterId}
                 </span>
                 <span
                   style={{
-                    fontSize: 15, fontWeight: 600,
+                    fontSize: 15,
+                    fontWeight: 600,
                     color: isActive ? "#fff" : "rgba(255,255,255,0.85)",
                   }}
                 >
@@ -460,29 +474,27 @@ export default function SearchOverlay({ open, onClose, onGoTo }) {
                     <span
                       data-score="true"
                       style={{
-                        fontSize: 10, fontWeight: 600, color: scoreColor,
-                        padding: "1px 5px", borderRadius: 4,
-                        background: sc >= 7
-                          ? "rgba(0, 230, 118, 0.08)"
-                          : sc >= 4
-                            ? "rgba(255, 171, 64, 0.08)"
-                            : "rgba(255, 255, 255, 0.04)",
+                        fontSize: 10,
+                        fontWeight: 600,
+                        color: scoreColor,
+                        padding: "1px 5px",
+                        borderRadius: 4,
+                        background:
+                          sc >= 7
+                            ? "rgba(0, 230, 118, 0.08)"
+                            : sc >= 4
+                              ? "rgba(255, 171, 64, 0.08)"
+                              : "rgba(255, 255, 255, 0.04)",
                         fontFamily: "'Segoe UI', system-ui, sans-serif",
                       }}
                     >
                       Search Score: {sc.toFixed(1)}
                     </span>
                   )}
-                  {isActive && (
-                    <span style={{ fontSize: 11, color: "rgba(255,255,255,0.3)" }}>
-                      {"\u21B5"}
-                    </span>
-                  )}
+                  {isActive && <span style={{ fontSize: 11, color: "rgba(255,255,255,0.3)" }}>{"\u21B5"}</span>}
                 </span>
               </div>
-              <span style={{ fontSize: 12, color: C.dim, lineHeight: 1.4 }}>
-                {r.sectionName}
-              </span>
+              <span style={{ fontSize: 12, color: C.dim, lineHeight: 1.4 }}>{r.sectionName}</span>
               <span
                 style={{
                   fontSize: 13,

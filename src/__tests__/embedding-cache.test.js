@@ -82,7 +82,10 @@ describe("embedding-cache", () => {
   });
 
   it("cacheEmbeddings stores and getCachedEmbeddings retrieves by checksum", async () => {
-    const testVectors = [[0.1, 0.2], [0.3, 0.4]];
+    const testVectors = [
+      [0.1, 0.2],
+      [0.3, 0.4],
+    ];
     await embeddingCache.cacheEmbeddings("abc123", testVectors);
 
     const result = await embeddingCache.getCachedEmbeddings("abc123");

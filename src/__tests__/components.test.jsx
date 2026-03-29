@@ -15,7 +15,11 @@ describe("Box", () => {
   });
 
   it("renders with custom color and style overrides", () => {
-    const { container } = render(<Box color={C.red} style={{ padding: "5px" }}>Test</Box>);
+    const { container } = render(
+      <Box color={C.red} style={{ padding: "5px" }}>
+        Test
+      </Box>,
+    );
     const div = container.firstChild;
     // jsdom converts hex to rgb, so just check the element rendered with custom padding
     expect(div.style.padding).toBe("5px");
@@ -34,14 +38,22 @@ describe("T", () => {
   });
 
   it("renders bold and centered", () => {
-    const { container } = render(<T bold center>bold text</T>);
+    const { container } = render(
+      <T bold center>
+        bold text
+      </T>,
+    );
     const div = container.firstChild;
     expect(div.style.fontWeight).toBe("700");
     expect(div.style.textAlign).toBe("center");
   });
 
   it("applies custom color, size, and style", () => {
-    const { container } = render(<T color={C.red} size={24} style={{ marginTop: "10px" }}>styled</T>);
+    const { container } = render(
+      <T color={C.red} size={24} style={{ marginTop: "10px" }}>
+        styled
+      </T>,
+    );
     const div = container.firstChild;
     expect(div.getAttribute("style")).toContain("24px");
     expect(div.style.marginTop).toBe("10px");
@@ -50,12 +62,20 @@ describe("T", () => {
 
 describe("Reveal", () => {
   it("returns null when when=false", () => {
-    const { container } = render(<Reveal when={false}><span>hidden</span></Reveal>);
+    const { container } = render(
+      <Reveal when={false}>
+        <span>hidden</span>
+      </Reveal>,
+    );
     expect(container.innerHTML).toBe("");
   });
 
   it("renders children when when=true", () => {
-    const { container } = render(<Reveal when={true}><span>visible</span></Reveal>);
+    const { container } = render(
+      <Reveal when={true}>
+        <span>visible</span>
+      </Reveal>,
+    );
     expect(container.textContent).toBe("visible");
     expect(container.firstChild.getAttribute("data-reveal")).toBe("true");
   });
@@ -114,8 +134,12 @@ describe("Tag", () => {
 describe("ErrorBoundary", () => {
   // Suppress error output during expected errors
   const originalError = console.error;
-  beforeEach(() => { console.error = vi.fn(); });
-  afterEach(() => { console.error = originalError; });
+  beforeEach(() => {
+    console.error = vi.fn();
+  });
+  afterEach(() => {
+    console.error = originalError;
+  });
 
   const ThrowingComponent = ({ shouldThrow = true }) => {
     if (shouldThrow) throw new Error("Test error");
@@ -126,7 +150,7 @@ describe("ErrorBoundary", () => {
     render(
       <ErrorBoundary resetKey={1}>
         <div>child content</div>
-      </ErrorBoundary>
+      </ErrorBoundary>,
     );
     expect(screen.getByText("child content")).toBeTruthy();
   });
@@ -135,7 +159,7 @@ describe("ErrorBoundary", () => {
     render(
       <ErrorBoundary resetKey={1}>
         <ThrowingComponent />
-      </ErrorBoundary>
+      </ErrorBoundary>,
     );
     expect(screen.getByText("Something went wrong")).toBeTruthy();
     expect(screen.getByText("Test error")).toBeTruthy();
@@ -147,7 +171,7 @@ describe("ErrorBoundary", () => {
     render(
       <ErrorBoundary resetKey={1}>
         <ThrowingComponent shouldThrow={true} />
-      </ErrorBoundary>
+      </ErrorBoundary>,
     );
     expect(screen.getByText("Something went wrong")).toBeTruthy();
     // Click Try Again - it will throw again, but that tests the setState path
@@ -160,14 +184,14 @@ describe("ErrorBoundary", () => {
     const { rerender } = render(
       <ErrorBoundary resetKey={1}>
         <ThrowingComponent shouldThrow={true} />
-      </ErrorBoundary>
+      </ErrorBoundary>,
     );
     expect(screen.getByText("Something went wrong")).toBeTruthy();
     // Change resetKey - should attempt re-render (will throw again but tests the branch)
     rerender(
       <ErrorBoundary resetKey={2}>
         <ThrowingComponent shouldThrow={true} />
-      </ErrorBoundary>
+      </ErrorBoundary>,
     );
     expect(screen.getByText("Something went wrong")).toBeTruthy();
   });
@@ -176,14 +200,14 @@ describe("ErrorBoundary", () => {
     const { rerender } = render(
       <ErrorBoundary resetKey={1}>
         <ThrowingComponent shouldThrow={true} />
-      </ErrorBoundary>
+      </ErrorBoundary>,
     );
     expect(screen.getByText("Something went wrong")).toBeTruthy();
     // Re-render with same resetKey
     rerender(
       <ErrorBoundary resetKey={1}>
         <ThrowingComponent shouldThrow={true} />
-      </ErrorBoundary>
+      </ErrorBoundary>,
     );
     // Still showing error since resetKey didn't change
     expect(screen.getByText("Something went wrong")).toBeTruthy();

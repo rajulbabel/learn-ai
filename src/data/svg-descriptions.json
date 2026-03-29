@@ -45,8 +45,10 @@
     "Neural network layer with 3 medical inputs fully connected to 3 neurons with 9 labeled weights and output scores, demonstrating that a layer is matrix multiplication"
   ],
   "1.23": [
-    "Line graph showing training loss decreasing steadily over epochs, illustrating a model that memorizes training data",
-    "Line graph showing validation loss that initially decreases then increases, with a Best annotation at the minimum, illustrating overfitting",
+    "Dataset split bar showing 80% training data in green and 20% validation data in orange, with labeled counts",
+    "Icon showing an open eye with a checkmark, representing data the model sees during training",
+    "Icon showing a closed eye with a lock, representing held-out data the model never sees during training",
+    "Combined line graph showing training loss and validation loss over 14 epochs, with annotated zones for both improving, sweet spot, and overfitting region where the curves diverge",
     "Six-neuron layer with dropout showing alternating active and dropped neurons, illustrating random neuron zeroing during training",
     "Six-neuron layer at inference showing all neurons active, illustrating that dropout is turned off during prediction",
     "Vertical transformer block diagram showing where dropout is applied: after attention and after FFN, each with p=0.1"

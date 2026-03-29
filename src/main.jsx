@@ -5,5 +5,5 @@ import LearnAI from "./learn-ai.jsx";
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <LearnAI />
-  </StrictMode>
+  </StrictMode>,
 );

@@ -50,7 +50,9 @@ describe("loadNav", () => {
 
   it("returns null when localStorage throws", () => {
     const orig = Storage.prototype.getItem;
-    Storage.prototype.getItem = () => { throw new Error("blocked"); };
+    Storage.prototype.getItem = () => {
+      throw new Error("blocked");
+    };
     expect(loadNav(chapters)).toBeNull();
     Storage.prototype.getItem = orig;
   });
@@ -82,7 +84,9 @@ describe("saveNav", () => {
 
   it("does not throw when localStorage throws", () => {
     const orig = Storage.prototype.setItem;
-    Storage.prototype.setItem = () => { throw new Error("quota"); };
+    Storage.prototype.setItem = () => {
+      throw new Error("quota");
+    };
     expect(() => saveNav(0, 0, chapters)).not.toThrow();
     Storage.prototype.setItem = orig;
   });

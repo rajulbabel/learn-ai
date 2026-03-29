@@ -1,11 +1,5 @@
 import { describe, it, expect, vi, afterEach, beforeAll } from "vitest";
-import {
-  render,
-  screen,
-  fireEvent,
-  cleanup,
-  act,
-} from "@testing-library/react";
+import { render, screen, fireEvent, cleanup, act } from "@testing-library/react";
 import SearchOverlay from "../search-overlay.jsx";
 
 // Mock search.js
@@ -143,7 +137,9 @@ describe("SearchOverlay handleSelect", () => {
     await typeAndWait(input, "Full Architecture");
 
     const resultBtn = screen.getByText("The Full Architecture");
-    await act(async () => { fireEvent.click(resultBtn.closest("button")); });
+    await act(async () => {
+      fireEvent.click(resultBtn.closest("button"));
+    });
 
     expect(onGoTo).toHaveBeenCalledTimes(1);
     const [, sub] = onGoTo.mock.calls[0];
@@ -170,7 +166,9 @@ describe("SearchOverlay handleSelect", () => {
     await typeAndWait(input, "Full Architecture");
 
     const resultBtn = screen.getByText("The Full Architecture");
-    await act(async () => { fireEvent.click(resultBtn.closest("button")); });
+    await act(async () => {
+      fireEvent.click(resultBtn.closest("button"));
+    });
 
     expect(onGoTo).toHaveBeenCalledTimes(1);
     const [, sub] = onGoTo.mock.calls[0];
@@ -197,7 +195,9 @@ describe("SearchOverlay handleSelect", () => {
     await typeAndWait(input, "Full Architecture");
 
     const resultBtn = screen.getByText("The Full Architecture");
-    await act(async () => { fireEvent.click(resultBtn.closest("button")); });
+    await act(async () => {
+      fireEvent.click(resultBtn.closest("button"));
+    });
 
     expect(onGoTo).toHaveBeenCalledTimes(1);
     const [, sub] = onGoTo.mock.calls[0];
@@ -217,9 +217,11 @@ describe("SearchOverlay keyboard navigation", () => {
     const input = screen.getByPlaceholderText("Search chapters, concepts, formulas...");
     await typeAndWait(input, "full");
 
-    await act(async () => { fireEvent.keyDown(input, { key: "ArrowDown" }); });
+    await act(async () => {
+      fireEvent.keyDown(input, { key: "ArrowDown" });
+    });
 
-    const buttons = screen.getAllByRole("button").filter(b => b.getAttribute("data-result") != null);
+    const buttons = screen.getAllByRole("button").filter((b) => b.getAttribute("data-result") != null);
     expect(buttons[0].getAttribute("data-active")).toBe("true");
     expect(buttons[1].getAttribute("data-active")).toBe("false");
   });
@@ -240,7 +242,7 @@ describe("SearchOverlay keyboard navigation", () => {
       fireEvent.keyDown(input, { key: "ArrowDown" }); // wraps to first
     });
 
-    const buttons = screen.getAllByRole("button").filter(b => b.getAttribute("data-result") != null);
+    const buttons = screen.getAllByRole("button").filter((b) => b.getAttribute("data-result") != null);
     expect(buttons[0].getAttribute("data-active")).toBe("true");
   });
 
@@ -255,10 +257,10 @@ describe("SearchOverlay keyboard navigation", () => {
 
     await act(async () => {
       fireEvent.keyDown(input, { key: "ArrowDown" }); // go to first (index 0)
-      fireEvent.keyDown(input, { key: "ArrowUp" });   // wrap to last
+      fireEvent.keyDown(input, { key: "ArrowUp" }); // wrap to last
     });
 
-    const buttons = screen.getAllByRole("button").filter(b => b.getAttribute("data-result") != null);
+    const buttons = screen.getAllByRole("button").filter((b) => b.getAttribute("data-result") != null);
     expect(buttons[buttons.length - 1].getAttribute("data-active")).toBe("true");
   });
 
@@ -271,8 +273,12 @@ describe("SearchOverlay keyboard navigation", () => {
     const input = screen.getByPlaceholderText("Search chapters, concepts, formulas...");
     await typeAndWait(input, "full");
 
-    await act(async () => { fireEvent.keyDown(input, { key: "ArrowDown" }); }); // highlight first
-    await act(async () => { fireEvent.keyDown(input, { key: "Enter" }); });     // select it
+    await act(async () => {
+      fireEvent.keyDown(input, { key: "ArrowDown" });
+    }); // highlight first
+    await act(async () => {
+      fireEvent.keyDown(input, { key: "Enter" });
+    }); // select it
 
     expect(onGoTo).toHaveBeenCalledTimes(1);
     const [idx] = onGoTo.mock.calls[0];
@@ -289,7 +295,9 @@ describe("SearchOverlay keyboard navigation", () => {
     render(<SearchOverlay open={true} onClose={onClose} onGoTo={onGoTo} />);
     const input = screen.getByPlaceholderText("Search chapters, concepts, formulas...");
 
-    await act(async () => { fireEvent.keyDown(input, { key: "Enter" }); });
+    await act(async () => {
+      fireEvent.keyDown(input, { key: "Enter" });
+    });
 
     expect(onGoTo).not.toHaveBeenCalled();
   });
@@ -303,12 +311,14 @@ describe("SearchOverlay keyboard navigation", () => {
     const input = screen.getByPlaceholderText("Search chapters, concepts, formulas...");
     await typeAndWait(input, "full");
 
-    await act(async () => { fireEvent.keyDown(input, { key: "ArrowDown" }); });
+    await act(async () => {
+      fireEvent.keyDown(input, { key: "ArrowDown" });
+    });
 
     await typeAndWait(input, "attention");
 
-    const buttons = screen.getAllByRole("button").filter(b => b.getAttribute("data-result") != null);
-    const anyActive = buttons.some(b => b.getAttribute("data-active") === "true");
+    const buttons = screen.getAllByRole("button").filter((b) => b.getAttribute("data-result") != null);
+    const anyActive = buttons.some((b) => b.getAttribute("data-active") === "true");
     expect(anyActive).toBe(false);
   });
 
@@ -321,10 +331,14 @@ describe("SearchOverlay keyboard navigation", () => {
     const input = screen.getByPlaceholderText("Search chapters, concepts, formulas...");
     await typeAndWait(input, "full");
 
-    const buttons = screen.getAllByRole("button").filter(b => b.getAttribute("data-result") != null);
-    buttons.forEach(b => { b.scrollIntoView = vi.fn(); });
+    const buttons = screen.getAllByRole("button").filter((b) => b.getAttribute("data-result") != null);
+    buttons.forEach((b) => {
+      b.scrollIntoView = vi.fn();
+    });
 
-    await act(async () => { fireEvent.keyDown(input, { key: "ArrowDown" }); });
+    await act(async () => {
+      fireEvent.keyDown(input, { key: "ArrowDown" });
+    });
 
     expect(buttons[0].scrollIntoView).toHaveBeenCalledWith({ block: "nearest" });
   });
@@ -346,7 +360,9 @@ describe("SearchOverlay search bar styling", () => {
     mod.getSearchStatus.mockReturnValue({ mode: "semantic", progress: 100 });
 
     render(<SearchOverlay open={true} onClose={vi.fn()} onGoTo={vi.fn()} />);
-    await act(async () => { await new Promise((r) => setTimeout(r, 50)); });
+    await act(async () => {
+      await new Promise((r) => setTimeout(r, 50));
+    });
 
     const rainbow = document.querySelector("[data-search-rainbow]");
     expect(rainbow).toBeTruthy();
@@ -358,7 +374,9 @@ describe("SearchOverlay search bar styling", () => {
     mod.getSearchStatus.mockReturnValue({ mode: "text", progress: 0 });
 
     render(<SearchOverlay open={true} onClose={vi.fn()} onGoTo={vi.fn()} />);
-    await act(async () => { await new Promise((r) => setTimeout(r, 50)); });
+    await act(async () => {
+      await new Promise((r) => setTimeout(r, 50));
+    });
 
     const rainbow = document.querySelector("[data-search-rainbow]");
     expect(rainbow).toBeFalsy();
@@ -444,7 +462,7 @@ describe("SearchOverlay score display and filtering", () => {
     const input = screen.getByPlaceholderText("Search chapters, concepts, formulas...");
     await typeAndWait(input, "full");
 
-    const resultButtons = screen.getAllByRole("button").filter(b => b.getAttribute("data-result") != null);
+    const resultButtons = screen.getAllByRole("button").filter((b) => b.getAttribute("data-result") != null);
     // Only 2 results should pass: 30.0 (10.0) and 10.0 (3.3)
     // Filtered: 3.0 (1.0) and 1.0 (0.3)
     expect(resultButtons.length).toBe(2);
@@ -455,43 +473,47 @@ describe("SearchOverlay score display and filtering", () => {
   });
 
   it("always shows at least 1 result even if scores are low", async () => {
-    await setupSearchMock([{
-      chapterId: "1.1",
-      title: "What is a Neural Network?",
-      section: 1,
-      sectionName: "Neural Network Foundations",
-      sub: 0,
-      text: "An introduction.",
-      source: "text",
-      score: 0.5,
-    }]);
+    await setupSearchMock([
+      {
+        chapterId: "1.1",
+        title: "What is a Neural Network?",
+        section: 1,
+        sectionName: "Neural Network Foundations",
+        sub: 0,
+        text: "An introduction.",
+        source: "text",
+        score: 0.5,
+      },
+    ]);
 
     render(<SearchOverlay open={true} onClose={vi.fn()} onGoTo={vi.fn()} />);
     const input = screen.getByPlaceholderText("Search chapters, concepts, formulas...");
     await typeAndWait(input, "xyz");
 
-    const resultButtons = screen.getAllByRole("button").filter(b => b.getAttribute("data-result") != null);
+    const resultButtons = screen.getAllByRole("button").filter((b) => b.getAttribute("data-result") != null);
     expect(resultButtons.length).toBe(1);
   });
 
   it("handles results with missing score gracefully", async () => {
-    await setupSearchMock([{
-      chapterId: "5.1",
-      title: "The Full Architecture",
-      section: 5,
-      sectionName: "Transformer Input Pipeline",
-      sub: 0,
-      text: "The complete Transformer.",
-      source: "text",
-      // no score field
-    }]);
+    await setupSearchMock([
+      {
+        chapterId: "5.1",
+        title: "The Full Architecture",
+        section: 5,
+        sectionName: "Transformer Input Pipeline",
+        sub: 0,
+        text: "The complete Transformer.",
+        source: "text",
+        // no score field
+      },
+    ]);
 
     render(<SearchOverlay open={true} onClose={vi.fn()} onGoTo={vi.fn()} />);
     const input = screen.getByPlaceholderText("Search chapters, concepts, formulas...");
     await typeAndWait(input, "full");
 
     // Should still render without crashing
-    const resultButtons = screen.getAllByRole("button").filter(b => b.getAttribute("data-result") != null);
+    const resultButtons = screen.getAllByRole("button").filter((b) => b.getAttribute("data-result") != null);
     expect(resultButtons.length).toBe(1);
   });
 });

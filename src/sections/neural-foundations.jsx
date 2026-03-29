@@ -9726,101 +9726,314 @@ export const Dropout = (ctx) => {
   return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
       {sub >= 0 && (
+        <Box color={C.blue} style={{ width: "100%" }}>
+          <T color={C.blue} bold center size={20}>
+            What Are Training Loss and Validation Loss?
+          </T>
+          <T color="#90caf9" size={17} style={{ marginTop: 12 }}>
+            Before training, we split our data into two groups. The model only ever learns from one group - the other is
+            kept hidden as an honest test.
+          </T>
+          <div style={{ display: "flex", justifyContent: "center", marginTop: 16 }}>
+            <svg viewBox="0 0 360 90" style={{ display: "block", width: "100%", maxWidth: 380 }}>
+              <desc>
+                Dataset split bar showing 80% training data in green and 20% validation data in orange, with labeled
+                counts
+              </desc>
+              {/* Full bar background */}
+              <rect x={10} y={18} width={340} height={36} rx={6} fill="rgba(255,255,255,0.04)" />
+              {/* Training portion - 80% */}
+              <rect x={10} y={18} width={272} height={36} rx={6} fill={`${C.green}25`} stroke={C.green} strokeWidth={1.5} />
+              <text x={146} y={41} fill={C.green} fontSize={13} textAnchor="middle" fontWeight={700}>
+                Training Data (80%)
+              </text>
+              {/* Validation portion - 20% */}
+              <rect x={282} y={18} width={68} height={36} rx={6} fill={`${C.orange}25`} stroke={C.orange} strokeWidth={1.5} />
+              <text x={316} y={41} fill={C.orange} fontSize={11} textAnchor="middle" fontWeight={700}>
+                20%
+              </text>
+              {/* Labels below */}
+              <text x={146} y={72} fill={C.green} fontSize={11} textAnchor="middle">
+                800 examples
+              </text>
+              <text x={316} y={72} fill={C.orange} fontSize={11} textAnchor="middle">
+                200 examples
+              </text>
+              {/* Total label */}
+              <text x={180} y={12} fill="rgba(255,255,255,0.4)" fontSize={10} textAnchor="middle">
+                1,000 total examples
+              </text>
+            </svg>
+          </div>
+          <div style={{ display: "flex", gap: 14, marginTop: 16 }}>
+            <div
+              style={{
+                flex: 1,
+                padding: "14px",
+                background: `${C.green}06`,
+                border: `1px solid ${C.green}12`,
+                borderRadius: 8,
+              }}
+            >
+              <T color={C.green} bold size={17} center>
+                Training Loss
+              </T>
+              <div style={{ display: "flex", justifyContent: "center", marginTop: 10 }}>
+                <svg viewBox="0 0 120 50" style={{ width: 120, height: 50 }}>
+                  <desc>Icon showing an open eye with a checkmark, representing data the model sees during training</desc>
+                  {/* Eye icon - open */}
+                  <ellipse cx={60} cy={25} rx={30} ry={16} fill="none" stroke={C.green} strokeWidth={2} />
+                  <circle cx={60} cy={25} r={8} fill={`${C.green}30`} stroke={C.green} strokeWidth={1.5} />
+                  <circle cx={60} cy={25} r={3} fill={C.green} />
+                </svg>
+              </div>
+              <T color="#80e8a5" size={15} style={{ marginTop: 8 }}>
+                Error measured on data the model trains on. The model sees these examples, makes predictions, and adjusts
+                its weights.
+              </T>
+              <div
+                style={{
+                  padding: "6px 10px",
+                  background: `${C.green}10`,
+                  borderRadius: 6,
+                  border: `1px solid ${C.green}20`,
+                  marginTop: 10,
+                }}
+              >
+                <T color={C.green} bold size={14} center>
+                  Always goes down with more training
+                </T>
+              </div>
+            </div>
+            <div
+              style={{
+                flex: 1,
+                padding: "14px",
+                background: `${C.orange}06`,
+                border: `1px solid ${C.orange}12`,
+                borderRadius: 8,
+              }}
+            >
+              <T color={C.orange} bold size={17} center>
+                Validation Loss
+              </T>
+              <div style={{ display: "flex", justifyContent: "center", marginTop: 10 }}>
+                <svg viewBox="0 0 120 50" style={{ width: 120, height: 50 }}>
+                  <desc>
+                    Icon showing a closed eye with a lock, representing held-out data the model never sees during training
+                  </desc>
+                  {/* Eye icon - closed/hidden */}
+                  <path d="M 30 25 Q 60 40 90 25" fill="none" stroke={C.orange} strokeWidth={2} />
+                  <path d="M 30 25 Q 60 10 90 25" fill="none" stroke={C.orange} strokeWidth={2} strokeDasharray="4,3" />
+                  <line x1={42} y1={32} x2={38} y2={40} stroke={C.orange} strokeWidth={2} />
+                  <line x1={60} y1={35} x2={60} y2={44} stroke={C.orange} strokeWidth={2} />
+                  <line x1={78} y1={32} x2={82} y2={40} stroke={C.orange} strokeWidth={2} />
+                </svg>
+              </div>
+              <T color="#ffb74d" size={15} style={{ marginTop: 8 }}>
+                Error measured on data the model has NEVER seen. These examples are hidden during training - they are the
+                honest test.
+              </T>
+              <div
+                style={{
+                  padding: "6px 10px",
+                  background: `${C.orange}10`,
+                  borderRadius: 6,
+                  border: `1px solid ${C.orange}20`,
+                  marginTop: 10,
+                }}
+              >
+                <T color={C.orange} bold size={14} center>
+                  The real measure of learning
+                </T>
+              </div>
+            </div>
+          </div>
+          <div
+            style={{
+              padding: "10px 14px",
+              background: `${C.blue}08`,
+              border: `1px solid ${C.blue}20`,
+              borderRadius: 8,
+              marginTop: 14,
+            }}
+          >
+            <T color="#90caf9" size={16}>
+              Training loss tells you how well the model memorizes. Validation loss tells you how well it generalizes to
+              new, unseen data. The gap between them is everything.
+            </T>
+          </div>
+        </Box>
+      )}
+
+      <Reveal when={sub >= 1}>
         <Box color={C.red} style={{ width: "100%" }}>
           <T color={C.red} bold center size={20}>
             The Overfitting Problem
           </T>
           <T color="#ef9a9a" size={17} style={{ marginTop: 12 }}>
-            A network can memorize the training data instead of learning general patterns. Like a student who memorizes
-            every answer but cannot solve a new problem.
+            Watch what happens as training continues. The model starts to memorize the training data instead of learning
+            general patterns.
           </T>
-          <div style={{ display: "flex", gap: 16, marginTop: 16 }}>
-            <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center" }}>
-              <T color="#ef9a9a" bold size={15} center style={{ marginBottom: 8, paddingLeft: 24 }}>
+          <div style={{ display: "flex", justifyContent: "center", marginTop: 16 }}>
+            <svg viewBox="0 0 360 220" style={{ display: "block", width: "100%", maxWidth: 400 }}>
+              <desc>
+                Combined line graph showing training loss and validation loss over 14 epochs, with annotated zones for
+                both improving, sweet spot, and overfitting region where the curves diverge
+              </desc>
+              {/* Axes */}
+              <line x1={45} y1={18} x2={45} y2={175} stroke="rgba(255,255,255,0.15)" strokeWidth={1} />
+              <line x1={45} y1={175} x2={345} y2={175} stroke="rgba(255,255,255,0.15)" strokeWidth={1} />
+              {/* Y-axis label */}
+              <text x={8} y={100} fill="rgba(255,255,255,0.4)" fontSize={10} textAnchor="middle" transform="rotate(-90, 8, 100)">
+                Loss
+              </text>
+              {/* X-axis label */}
+              <text x={195} y={195} fill="rgba(255,255,255,0.4)" fontSize={10} textAnchor="middle">
+                Epoch
+              </text>
+              {/* X-axis ticks */}
+              {[0, 2, 4, 6, 8, 10, 12, 14].map((v) => {
+                const x = 45 + (v / 14) * 300;
+                return (
+                  <text key={v} x={x} y={188} fill="rgba(255,255,255,0.35)" fontSize={9} textAnchor="middle">
+                    {v}
+                  </text>
+                );
+              })}
+              {/* Zone backgrounds */}
+              {/* Both improving zone (epoch 0-6) */}
+              <rect x={45} y={18} width={128} height={157} fill={`${C.green}06`} />
+              {/* Overfitting zone (epoch 6-14) */}
+              <rect x={173} y={18} width={172} height={157} fill={`${C.red}06`} />
+              {/* Sweet spot line */}
+              <line x1={173} y1={18} x2={173} y2={175} stroke={C.yellow} strokeWidth={1.5} strokeDasharray="5,4" />
+              {/* Zone labels */}
+              <text x={109} y={210} fill={C.green} fontSize={10} textAnchor="middle" fontWeight={600}>
+                Both improving
+              </text>
+              <text x={259} y={210} fill={C.red} fontSize={10} textAnchor="middle" fontWeight={600}>
+                Overfitting zone
+              </text>
+              {/* Sweet spot label */}
+              <text x={173} y={13} fill={C.yellow} fontSize={10} textAnchor="middle" fontWeight={700}>
+                Sweet Spot
+              </text>
+              {/* Training loss line (green) - keeps dropping */}
+              {(() => {
+                const trainPts = [
+                  [0, 2.5], [2, 1.8], [4, 1.2], [6, 0.7], [8, 0.3], [10, 0.1], [12, 0.05], [14, 0.02],
+                ];
+                const sx = (v) => 45 + (v / 14) * 300;
+                const sy = (v) => 28 + ((3.0 - v) / 3.0) * 145;
+                const line = trainPts.map((p) => `${sx(p[0])},${sy(p[1])}`).join(" ");
+                return (
+                  <g>
+                    <polyline points={line} fill="none" stroke={C.green} strokeWidth={2.5} strokeLinejoin="round" />
+                    {trainPts.map((p, i) => (
+                      <circle key={i} cx={sx(p[0])} cy={sy(p[1])} r={3} fill={C.green} />
+                    ))}
+                  </g>
+                );
+              })()}
+              {/* Validation loss line (red) - drops then rises */}
+              {(() => {
+                const valPts = [
+                  [0, 2.6], [2, 1.9], [4, 1.4], [6, 1.1], [8, 1.3], [10, 1.8], [12, 2.3], [14, 2.8],
+                ];
+                const sx = (v) => 45 + (v / 14) * 300;
+                const sy = (v) => 28 + ((3.0 - v) / 3.0) * 145;
+                const line = valPts.map((p) => `${sx(p[0])},${sy(p[1])}`).join(" ");
+                return (
+                  <g>
+                    <polyline points={line} fill="none" stroke={C.red} strokeWidth={2.5} strokeLinejoin="round" />
+                    {valPts.map((p, i) => (
+                      <circle key={i} cx={sx(p[0])} cy={sy(p[1])} r={3} fill={C.red} />
+                    ))}
+                  </g>
+                );
+              })()}
+              {/* Gap annotation at epoch 14 */}
+              {(() => {
+                const sx = 45 + (14 / 14) * 300;
+                const syTrain = 28 + ((3.0 - 0.02) / 3.0) * 145;
+                const syVal = 28 + ((3.0 - 2.8) / 3.0) * 145;
+                return (
+                  <g>
+                    <line x1={sx + 6} y1={syTrain} x2={sx + 6} y2={syVal} stroke={C.yellow} strokeWidth={2} />
+                    <polygon points={`${sx + 6},${syVal} ${sx + 3},${syVal + 6} ${sx + 9},${syVal + 6}`} fill={C.yellow} />
+                    <polygon points={`${sx + 6},${syTrain} ${sx + 3},${syTrain - 6} ${sx + 9},${syTrain - 6}`} fill={C.yellow} />
+                    <text x={sx + 14} y={(syTrain + syVal) / 2 + 4} fill={C.yellow} fontSize={10} fontWeight={700}>
+                      GAP
+                    </text>
+                  </g>
+                );
+              })()}
+              {/* Legend */}
+              <line x1={60} y1={33} x2={80} y2={33} stroke={C.green} strokeWidth={2.5} />
+              <circle cx={70} cy={33} r={3} fill={C.green} />
+              <text x={84} y={37} fill={C.green} fontSize={10} fontWeight={600}>
                 Training Loss
-              </T>
-              <Graph
-                points={[
-                  [0, 2.5],
-                  [2, 1.8],
-                  [4, 1.2],
-                  [6, 0.7],
-                  [8, 0.3],
-                  [10, 0.1],
-                  [12, 0.05],
-                  [14, 0.02],
-                ]}
-                color={C.green}
-                width={160}
-                height={120}
-                xLabel="Epoch"
-                yLabel="Loss"
-                title="Keeps dropping"
-                desc="Line graph showing training loss decreasing steadily over epochs, illustrating a model that memorizes training data"
-              />
-              <div
-                style={{
-                  padding: "6px 12px",
-                  background: `${C.green}10`,
-                  borderRadius: 6,
-                  border: `1px solid ${C.green}20`,
-                  marginTop: 8,
-                  marginLeft: 24,
-                }}
-              >
-                <T color={C.green} bold size={14}>
-                  Final: 0.02
-                </T>
-              </div>
-            </div>
-            <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center" }}>
-              <T color="#ef9a9a" bold size={15} center style={{ marginBottom: 8, paddingLeft: 24 }}>
+              </text>
+              <line x1={185} y1={33} x2={205} y2={33} stroke={C.red} strokeWidth={2.5} />
+              <circle cx={195} cy={33} r={3} fill={C.red} />
+              <text x={209} y={37} fill={C.red} fontSize={10} fontWeight={600}>
                 Validation Loss
+              </text>
+            </svg>
+          </div>
+          <div style={{ display: "flex", gap: 10, marginTop: 14 }}>
+            <div
+              style={{
+                flex: 1,
+                padding: "10px 12px",
+                background: `${C.green}08`,
+                border: `1px solid ${C.green}15`,
+                borderRadius: 8,
+              }}
+            >
+              <T color={C.green} bold size={15} center>
+                Training: 0.02
               </T>
-              <Graph
-                points={[
-                  [0, 2.6],
-                  [2, 1.9],
-                  [4, 1.4],
-                  [6, 1.1],
-                  [8, 1.3],
-                  [10, 1.8],
-                  [12, 2.3],
-                  [14, 2.8],
-                ]}
-                color={C.red}
-                width={160}
-                height={120}
-                xLabel="Epoch"
-                yLabel="Loss"
-                title="Goes UP!"
-                desc="Line graph showing validation loss that initially decreases then increases, with a Best annotation at the minimum, illustrating overfitting"
-                annotations={[{ x: 6, y: 1.1, text: "Best", color: C.yellow }]}
-              />
-              <div
-                style={{
-                  padding: "6px 12px",
-                  background: `${C.red}10`,
-                  borderRadius: 6,
-                  border: `1px solid ${C.red}20`,
-                  marginTop: 8,
-                  marginLeft: 24,
-                }}
-              >
-                <T color={C.red} bold size={14}>
-                  Final: 2.8
-                </T>
-              </div>
+              <T color={C.dim} size={13} style={{ marginTop: 4 }}>
+                Memorized everything perfectly
+              </T>
+            </div>
+            <div
+              style={{
+                flex: 1,
+                padding: "10px 12px",
+                background: `${C.red}08`,
+                border: `1px solid ${C.red}15`,
+                borderRadius: 8,
+              }}
+            >
+              <T color={C.red} bold size={15} center>
+                Validation: 2.80
+              </T>
+              <T color={C.dim} size={13} style={{ marginTop: 4 }}>
+                Fails completely on new data
+              </T>
             </div>
           </div>
-          <T color="#ef9a9a" size={16} style={{ marginTop: 14, textAlign: "center" }}>
-            The network scores perfectly on data it has seen, but fails on new data. The gap between 0.02 and 2.8 is the
-            overfitting gap.
-          </T>
+          <div
+            style={{
+              padding: "10px 14px",
+              background: `${C.yellow}08`,
+              border: `1px solid ${C.yellow}20`,
+              borderRadius: 8,
+              marginTop: 12,
+            }}
+          >
+            <T color="#ffe082" size={16}>
+              Like a student who memorizes every answer in the textbook but cannot solve a new problem on the exam. The
+              network scores perfectly on data it has seen, but fails on anything new.
+            </T>
+          </div>
         </Box>
-      )}
+      </Reveal>
 
-      <Reveal when={sub >= 1}>
+      <Reveal when={sub >= 2}>
         <Box color={C.green} style={{ width: "100%" }}>
           <T color={C.green} bold center size={20}>
             The Solution - Randomly Zero Out Neurons
@@ -9893,7 +10106,7 @@ export const Dropout = (ctx) => {
         </Box>
       </Reveal>
 
-      <Reveal when={sub >= 2}>
+      <Reveal when={sub >= 3}>
         <Box color={C.purple} style={{ width: "100%" }}>
           <T color={C.purple} bold center size={20}>
             Why This Works - Forced Redundancy
@@ -9955,7 +10168,7 @@ export const Dropout = (ctx) => {
         </Box>
       </Reveal>
 
-      <Reveal when={sub >= 3}>
+      <Reveal when={sub >= 4}>
         <Box color={C.yellow} style={{ width: "100%" }}>
           <T color={C.yellow} bold center size={20}>
             The Actual Math
@@ -10102,7 +10315,7 @@ export const Dropout = (ctx) => {
         </Box>
       </Reveal>
 
-      <Reveal when={sub >= 4}>
+      <Reveal when={sub >= 5}>
         <Box color={C.cyan} style={{ width: "100%" }}>
           <T color={C.cyan} bold center size={20}>
             At Inference - No Dropout
@@ -10151,7 +10364,7 @@ export const Dropout = (ctx) => {
         </Box>
       </Reveal>
 
-      <Reveal when={sub >= 5}>
+      <Reveal when={sub >= 6}>
         <Box color={C.orange} style={{ width: "100%" }}>
           <T color={C.orange} bold center size={20}>
             Where Dropout Lives in a Transformer
@@ -10287,7 +10500,7 @@ export const Dropout = (ctx) => {
         </Box>
       </Reveal>
 
-      {sub < 5 && (
+      {sub < 6 && (
         <SubBtn
           key={sub}
           onClick={() => {

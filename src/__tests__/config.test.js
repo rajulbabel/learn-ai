@@ -50,7 +50,22 @@ describe("config.js", () => {
   });
 
   it("colors object has all required keys", () => {
-    const requiredKeys = ["bg", "card", "border", "dim", "mid", "bright", "red", "purple", "green", "cyan", "yellow", "pink", "orange", "blue"];
+    const requiredKeys = [
+      "bg",
+      "card",
+      "border",
+      "dim",
+      "mid",
+      "bright",
+      "red",
+      "purple",
+      "green",
+      "cyan",
+      "yellow",
+      "pink",
+      "orange",
+      "blue",
+    ];
     requiredKeys.forEach((key) => {
       expect(C[key]).toBeDefined();
     });
@@ -73,18 +88,14 @@ describe("config.js", () => {
   });
 
   it("validateConfig detects missing id when component present", () => {
-    const badConfig = [
-      { id: "", title: "A", section: 1, component: "CompA" },
-    ];
+    const badConfig = [{ id: "", title: "A", section: 1, component: "CompA" }];
     const errors = validateConfig(badConfig);
     expect(errors.length).toBe(1);
     expect(errors[0]).toContain("missing id");
   });
 
   it("validateConfig detects missing component", () => {
-    const badConfig = [
-      { id: "1.1", title: "A", section: 1, component: "" },
-    ];
+    const badConfig = [{ id: "1.1", title: "A", section: 1, component: "" }];
     const errors = validateConfig(badConfig);
     expect(errors.length).toBe(1);
     expect(errors[0]).toContain("missing component");

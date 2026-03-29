@@ -33,11 +33,21 @@ export const chapters = [
   { id: "2.3", title: "Cross-Entropy Loss - The LLM Score", section: 2, component: "CrossEntropy" },
   { id: "2.4", title: "The Neural Network in Action", section: 2, component: "NNInAction" },
   { id: "2.5", title: "The Output Layer - From Hidden State to Words", section: 2, component: "OutputLayer" },
-  { id: "2.6", title: "Autoregressive Generation - One Token at a Time", section: 2, component: "AutoregressiveGeneration" },
+  {
+    id: "2.6",
+    title: "Autoregressive Generation - One Token at a Time",
+    section: 2,
+    component: "AutoregressiveGeneration",
+  },
   { id: "2.7", title: "Supervised Fine-Tuning (SFT)", section: 2, component: "SFT" },
   { id: "2.8", title: "RLHF - Making AI Helpful & Safe", section: 2, component: "RLHF" },
   { id: "2.9", title: "DPO - Simpler Alignment", section: 2, component: "DPO" },
-  { id: "2.10", title: "Tokenizer Deep Dive - BPE, WordPiece, SentencePiece", section: 2, component: "TokenizerDeepDive" },
+  {
+    id: "2.10",
+    title: "Tokenizer Deep Dive - BPE, WordPiece, SentencePiece",
+    section: 2,
+    component: "TokenizerDeepDive",
+  },
   // Section 3: Scaling & Modern Techniques (BatchTraining added)
   { id: "3.1", title: "Scaling Laws - Why Bigger Models Win", section: 3, component: "ScalingLaws" },
   { id: "3.2", title: "Parameters at Scale", section: 3, component: "ParametersAtScale" },
@@ -87,7 +97,12 @@ export const chapters = [
   { id: "7.13", title: "Why 8 Heads? Parameter Count & Big Picture", section: 7, component: "WhyEightHeads" },
   { id: "7.14", title: "Is W_O Constant? Does It Change?", section: 7, component: "IsWOConstant" },
   { id: "7.15", title: "The Complete Picture - In Plain English", section: 7, component: "CompletePicture" },
-  { id: "7.16", title: "Grouped-Query Attention - Shrinking the KV Cache", section: 7, component: "GroupedQueryAttention" },
+  {
+    id: "7.16",
+    title: "Grouped-Query Attention - Shrinking the KV Cache",
+    section: 7,
+    component: "GroupedQueryAttention",
+  },
   // Section 8: The Encoder (EncoderDecoder opens, then Add&Norm/FFN/block repeats)
   { id: "8.1", title: "Encoder & Decoder - The Two Halves", section: 8, component: "EncoderDecoder" },
   { id: "8.2", title: "Add & Norm - The Stabilizer", section: 8, component: "AddNorm" },
@@ -109,30 +124,57 @@ export const chapters = [
   { id: "9.8", title: "Encoder-Decoder: The Inference Flow", section: 9, component: "EncoderDecoderInference" },
 ];
 
-export const sectionNames = { 0: "Overview", 1: "Neural Network Foundations", 2: "How LLMs Actually Train", 3: "Scaling & Modern Techniques", 4: "The Road to Transformers", 5: "Transformer Input Pipeline", 6: "Attention - Understanding Q, K, V", 7: "Attention - The Full Computation", 8: "The Encoder", 9: "The Decoder" };
+export const sectionNames = {
+  0: "Overview",
+  1: "Neural Network Foundations",
+  2: "How LLMs Actually Train",
+  3: "Scaling & Modern Techniques",
+  4: "The Road to Transformers",
+  5: "Transformer Input Pipeline",
+  6: "Attention - Understanding Q, K, V",
+  7: "Attention - The Full Computation",
+  8: "The Encoder",
+  9: "The Decoder",
+};
 
 // Section colors (one per section, used in progress bar, TOC, etc.)
 export const sectionColors = {
-  1: "#ff6b6b", 2: "#00b8d4", 3: "#ffd740", 4: "#a78bfa",
-  5: "#ffab40", 6: "#00e676", 7: "#e040fb", 8: "#42a5f5",
+  1: "#ff6b6b",
+  2: "#00b8d4",
+  3: "#ffd740",
+  4: "#a78bfa",
+  5: "#ffab40",
+  6: "#00e676",
+  7: "#e040fb",
+  8: "#42a5f5",
   9: "#ef5350",
 };
 
 // Colors
 export const C = {
-  bg: "#08080d", card: "rgba(255,255,255,0.025)", border: "rgba(255,255,255,0.07)",
-  dim: "rgba(255,255,255,0.35)", mid: "rgba(255,255,255,0.55)", bright: "rgba(255,255,255,0.85)",
-  red: "#ff6b6b", purple: "#a78bfa", green: "#00e676", cyan: "#00b8d4",
-  yellow: "#ffd740", pink: "#e040fb", orange: "#ffab40", blue: "#42a5f5",
+  bg: "#08080d",
+  card: "rgba(255,255,255,0.025)",
+  border: "rgba(255,255,255,0.07)",
+  dim: "rgba(255,255,255,0.35)",
+  mid: "rgba(255,255,255,0.55)",
+  bright: "rgba(255,255,255,0.85)",
+  red: "#ff6b6b",
+  purple: "#a78bfa",
+  green: "#00e676",
+  cyan: "#00b8d4",
+  yellow: "#ffd740",
+  pink: "#e040fb",
+  orange: "#ffab40",
+  blue: "#42a5f5",
 };
 
 // Validate config - extracted for testability
 export function validateConfig(chapterList) {
   const errors = [];
-  const ids = chapterList.map(c => c.id);
+  const ids = chapterList.map((c) => c.id);
   const dupes = ids.filter((id, i) => ids.indexOf(id) !== i);
   if (dupes.length) errors.push(`Duplicate chapter IDs: ${dupes.join(", ")}`);
-  chapterList.forEach(c => {
+  chapterList.forEach((c) => {
     if (c.component && !c.id) errors.push(`Chapter missing id: ${c.component}`);
     if (!c.component) errors.push(`Chapter missing component: id=${c.id}`);
   });

@@ -115,48 +115,47 @@ function loadSemanticInBackground() {
       })
       .catch(() => []),
     // 2. Lazy-load transformers.js (Vite creates a separate chunk, only fetched here)
-    import("@huggingface/transformers")
-      .then(async (mod) => {
-        loadProgress = 10; // Library loaded
-        const { pipeline } = mod;
-        // The HF CDN often omits Content-Length headers, causing the library to
-        // log "Unable to determine content-length" warnings. Suppress that
-        // specific message during model init - it's informational, not an error.
-        const _warn = console.warn;
-        console.warn = (...args) => {
-          if (typeof args[0] === "string" && args[0].includes("Unable to determine content-length")) return;
-          _warn.apply(console, args);
-        };
-        try {
-          return await pipeline("feature-extraction", "Xenova/all-MiniLM-L6-v2", {
-            dtype: "q8",
-            progress_callback: (p) => {
-              // If server sends content-length, we get real percentages
-              if (p.status === "progress" && typeof p.progress === "number") {
-                // Map model download progress (0-100) to our range (10-95)
-                loadProgress = 10 + Math.round(p.progress * 0.85);
-              }
-              // If content-length is missing, estimate from file download events
-              if (p.status === "initiate") {
-                totalFiles++;
-              }
-              if (p.status === "done") {
-                doneFiles++;
-                // Estimate: library load = 10%, file downloads = 10-95%
-                const filePct = totalFiles > 0 ? (doneFiles / totalFiles) : 0;
-                const estimated = 10 + Math.round(filePct * 85);
-                // Only update if we don't have real progress data
-                if (loadProgress < estimated) loadProgress = estimated;
-              }
-              if (p.status === "ready") {
-                loadProgress = 95;
-              }
-            },
-          });
-        } finally {
-          console.warn = _warn;
-        }
-      }),
+    import("@huggingface/transformers").then(async (mod) => {
+      loadProgress = 10; // Library loaded
+      const { pipeline } = mod;
+      // The HF CDN often omits Content-Length headers, causing the library to
+      // log "Unable to determine content-length" warnings. Suppress that
+      // specific message during model init - it's informational, not an error.
+      const _warn = console.warn;
+      console.warn = (...args) => {
+        if (typeof args[0] === "string" && args[0].includes("Unable to determine content-length")) return;
+        _warn.apply(console, args);
+      };
+      try {
+        return await pipeline("feature-extraction", "Xenova/all-MiniLM-L6-v2", {
+          dtype: "q8",
+          progress_callback: (p) => {
+            // If server sends content-length, we get real percentages
+            if (p.status === "progress" && typeof p.progress === "number") {
+              // Map model download progress (0-100) to our range (10-95)
+              loadProgress = 10 + Math.round(p.progress * 0.85);
+            }
+            // If content-length is missing, estimate from file download events
+            if (p.status === "initiate") {
+              totalFiles++;
+            }
+            if (p.status === "done") {
+              doneFiles++;
+              // Estimate: library load = 10%, file downloads = 10-95%
+              const filePct = totalFiles > 0 ? doneFiles / totalFiles : 0;
+              const estimated = 10 + Math.round(filePct * 85);
+              // Only update if we don't have real progress data
+              if (loadProgress < estimated) loadProgress = estimated;
+            }
+            if (p.status === "ready") {
+              loadProgress = 95;
+            }
+          },
+        });
+      } finally {
+        console.warn = _warn;
+      }
+    }),
   ])
     .then(([loadedVectors, pipe]) => {
       // Allow vectors <= chunks: new chapters added since last embedding build

@@ -960,7 +960,7 @@
     "section": 1,
     "sectionName": "Neural Network Foundations",
     "sub": 0,
-    "text": "From One Number to ManyA vector is just a list of numbers.Scalar (one number)Vector (list)42→3725A single number describes one thing. A vector bundles multiple numbers together.Continue"
+    "text": "From One Number to ManyA vector is just a list of numbers.Scalar (one number)42→Vector (list)3725A single number describes one thing. A vector bundles multiple numbers together.Continue"
   },
   {
     "id": 107,
@@ -969,7 +969,7 @@
     "section": 1,
     "sectionName": "Neural Network Foundations",
     "sub": 1,
-    "text": "l Networks, Everything is VectorsInputs? A vector. Hidden layer outputs? Vectors. Every layer takes a vector in and produces a vector out.Input VectorOutput Vector15003→950185Continue"
+    "text": "l Networks, Everything is VectorsInputs? A vector. Hidden layer outputs? Vectors. Every layer takes a vector in and produces a vector out.Input Vector15003→Output Vector950185Continue"
   },
   {
     "id": 108,
@@ -1536,7 +1536,7 @@
     "section": 1,
     "sectionName": "Neural Network Foundations",
     "sub": 1,
-    "text": "l - Signal VanishesIf weights are initialized with very small random values (std = 0.001), the signal shrinks as it passes through layers.Input[1.0, 0.5]After Layer 1[0.002, -0.001]After Layer 3[~0.000004, ~0.000002]After Layer 5[~0, ~0]Each layer multiplies by tiny weights, shrinking the signal exponentially. By layer 5-10, everything is effectively zero. Gradients also vanish - the network cannot learn. The network is \"dead.\"Continue"
+    "text": "l - Numbers Shrink to ZeroIf weights are initialized with very small random values (std = 0.001), the numbers flowing through the network shrink toward zero at every layer. Each layer multiplies the previous output by tiny weights, so the values get smaller and smaller.Input[1.0, 0.5]After Layer 1[0.002, -0.001]After Layer 3[~0.000004, ~0.000002]After Layer 5[~0, ~0]Each layer multiplies by tiny weights, shrinking the output exponentially. By layer 5-10, every value is effectively zero. Gradients also vanish - the network cannot learn. The network is \"dead.\"Continue"
   },
   {
     "id": 171,
@@ -1545,7 +1545,7 @@
     "section": 1,
     "sectionName": "Neural Network Foundations",
     "sub": 2,
-    "text": "e - Signal ExplodesIf weights are initialized with large random values (std = 5.0), the signal grows uncontrollably through layers.Input[1.0, 0.5]After Layer 1[8.5, -12.3]After Layer 3[~450, ~-820]After Layer 5[~45000, ~-89000]Activations saturate, gradients explode, and training produces NaN within a few steps. The network is unstable from the very first forward pass.Continue"
+    "text": "e - Numbers ExplodeIf weights are initialized with large random values (std = 5.0), the numbers flowing through the network grow uncontrollably at every layer. Each layer multiplies by large weights, so the values skyrocket.Input[1.0, 0.5]After Layer 1[8.5, -12.3]After Layer 3[~450, ~-820]After Layer 5[~45000, ~-89000]The values overflow, activations saturate, gradients explode, and training produces NaN within a few steps. The network is unstable from the very first forward pass.Continue"
   },
   {
     "id": 172,
@@ -1608,7 +1608,7 @@
     "section": 2,
     "sectionName": "How LLMs Actually Train",
     "sub": 2,
-    "text": "r Encoding (BPE) - the gold standardBPE learns which character pairs appear together most. It starts with characters, then merges the most common pairs repeatedly.Step 0: Split into charactersI␣love␣catsStep 1: Count adjacent pairsl + o = 1o + v = 1v + e = 1a + t = 1t + s = 1c + a = 1Step 2: Merge most common pairAll pairs tie at frequency 1. Pick l + o → loI␣love␣catsStep 3: Repeat mergingRecount pairs. lo + v is highest. Merge → lov. Then lov + e → love. Then c + a + t + s → cats.I␣love␣catsFinal tokens → IDsI0␣1love2␣1cats3This sequence [0, 1, 2, 1, 3] is what gets fed to the modelContinue"
+    "text": "r Encoding (BPE) - the gold standardBPE learns which character pairs appear together most. It starts with characters, then merges the most common pairs repeatedly.Step 0: Split into charactersI␣love␣catsStep 1: Count adjacent pairsl + o = 1o + v = 1v + e = 1c + a = 1a + t = 1t + s = 1Step 2: Merge most common pairAll pairs tie at frequency 1. Pick l + o → loI␣love␣catsStep 3: Repeat mergingRecount pairs. lo + v is highest. Merge → lov. Then lov + e → love. Then c + a + t + s → cats.I␣love␣catsFinal tokens → IDsI0␣1love2␣1cats3This sequence [0, 1, 2, 1, 3] is what gets fed to the modelContinue"
   },
   {
     "id": 179,

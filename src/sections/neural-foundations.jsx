@@ -980,9 +980,9 @@ export const WhatIsLayer = (ctx) => {
               {/* Layer dashed box */}
               <rect
                 x={170}
-                y={38}
+                y={34}
                 width={180}
-                height={180}
+                height={190}
                 fill="none"
                 stroke={`${C.purple}30`}
                 strokeWidth={2}
@@ -1041,7 +1041,7 @@ export const WhatIsLayer = (ctx) => {
               about."
             </T>
             <div style={{ display: "flex", justifyContent: "center" }}>
-              <svg viewBox="0 0 380 320" style={{ display: "block", width: "100%", maxWidth: 380 }}>
+              <svg viewBox="0 0 380 340" style={{ display: "block", width: "100%", maxWidth: 380 }}>
                 <desc>
                   Detailed weight connection diagram showing 3 inputs mapped to 3 neurons with 9 individually labeled
                   weights
@@ -1129,7 +1129,7 @@ export const WhatIsLayer = (ctx) => {
                 ))}
 
                 {/* Bottom insight */}
-                <text x={190} y={308} fill="rgba(255,255,255,0.4)" fontSize={11} textAnchor="middle">
+                <text x={190} y={328} fill="rgba(255,255,255,0.4)" fontSize={11} textAnchor="middle">
                   Flu cares about fever (0.6) | Allergy focuses on fatigue (0.7)
                 </text>
               </svg>
@@ -7297,17 +7297,9 @@ export const Vectors = (ctx) => {
           <T color="#80deea" size={18} style={{ marginTop: 12 }}>
             A vector is just a list of numbers.
           </T>
-          <div style={{ marginTop: 20, display: "flex", flexDirection: "column", alignItems: "center", gap: 10 }}>
-            <div style={{ display: "flex", gap: 20, alignItems: "center", justifyContent: "center" }}>
-              <T size={14} color={C.mid}>
-                Scalar (one number)
-              </T>
-              <div style={{ width: 28 }} />
-              <T size={14} color={C.mid}>
-                Vector (list)
-              </T>
-            </div>
-            <div style={{ display: "flex", gap: 20, alignItems: "center", justifyContent: "center" }}>
+          <div style={{ marginTop: 20, display: "flex", gap: 20, alignItems: "center", justifyContent: "center" }}>
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8 }}>
+              <T size={14} color={C.mid}>Scalar (one number)</T>
               <div
                 style={{
                   width: 80,
@@ -7320,13 +7312,12 @@ export const Vectors = (ctx) => {
                   borderRadius: 8,
                 }}
               >
-                <T size={24} bold color={C.cyan}>
-                  42
-                </T>
+                <T size={24} bold color={C.cyan}>42</T>
               </div>
-              <T size={28} color={C.mid}>
-                →
-              </T>
+            </div>
+            <T size={28} color={C.mid}>→</T>
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8 }}>
+              <T size={14} color={C.mid}>Vector (list)</T>
               <div style={{ display: "flex", gap: 6 }}>
                 {[3, 7, 2, 5].map((num, i) => (
                   <div
@@ -7342,9 +7333,7 @@ export const Vectors = (ctx) => {
                       borderRadius: 8,
                     }}
                   >
-                    <T size={20} bold color={[C.cyan, C.green, C.yellow, C.orange][i]}>
-                      {num}
-                    </T>
+                    <T size={20} bold color={[C.cyan, C.green, C.yellow, C.orange][i]}>{num}</T>
                   </div>
                 ))}
               </div>
@@ -7364,17 +7353,9 @@ export const Vectors = (ctx) => {
           <T color="#b8a9ff" size={15} style={{ marginTop: 12 }}>
             Inputs? A vector. Hidden layer outputs? Vectors. Every layer takes a vector in and produces a vector out.
           </T>
-          <div style={{ marginTop: 18, display: "flex", flexDirection: "column", alignItems: "center", gap: 8 }}>
-            <div style={{ display: "flex", gap: 16, alignItems: "center", justifyContent: "center" }}>
-              <T size={14} color={C.mid}>
-                Input Vector
-              </T>
-              <div style={{ width: 24 }} />
-              <T size={14} color={C.mid}>
-                Output Vector
-              </T>
-            </div>
-            <div style={{ display: "flex", gap: 16, alignItems: "center", justifyContent: "center" }}>
+          <div style={{ marginTop: 18, display: "flex", gap: 16, alignItems: "center", justifyContent: "center" }}>
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8 }}>
+              <T size={14} color={C.mid}>Input Vector</T>
               <div style={{ display: "flex", gap: 6 }}>
                 {[1500, 3].map((n, i) => (
                   <div
@@ -7398,9 +7379,10 @@ export const Vectors = (ctx) => {
                   </div>
                 ))}
               </div>
-              <T size={24} color={C.mid}>
-                →
-              </T>
+            </div>
+            <T size={24} color={C.mid}>→</T>
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8 }}>
+              <T size={14} color={C.mid}>Output Vector</T>
               <div style={{ display: "flex", gap: 6 }}>
                 {[950, 185].map((n, i) => (
                   <div
@@ -8782,10 +8764,10 @@ export const LayerIsMatMul = (ctx) => {
               ].map(({ y, label, val, c }) => (
                 <g key={label}>
                   <circle cx={65} cy={y} r={26} fill={`${c}12`} stroke={c} strokeWidth={2} />
-                  <text x={65} y={y - 6} fill={c} fontSize={10} textAnchor="middle" fontWeight={700}>
+                  <text x={65} y={y - 5} fill={c} fontSize={10} textAnchor="middle" dominantBaseline="central" fontWeight={700}>
                     {label}
                   </text>
-                  <text x={65} y={y + 10} fill="rgba(255,255,255,0.5)" fontSize={12} textAnchor="middle">
+                  <text x={65} y={y + 9} fill="rgba(255,255,255,0.5)" fontSize={12} textAnchor="middle" dominantBaseline="central">
                     {val}
                   </text>
                 </g>
@@ -8799,13 +8781,13 @@ export const LayerIsMatMul = (ctx) => {
               ].map(({ y, label, out, c, ct }) => (
                 <g key={label}>
                   <circle cx={290} cy={y} r={28} fill={`${c}12`} stroke={c} strokeWidth={2} />
-                  <text x={290} y={y - 4} fill={c} fontSize={11} textAnchor="middle" fontWeight={700}>
+                  <text x={290} y={y - 5} fill={c} fontSize={11} textAnchor="middle" dominantBaseline="central" fontWeight={700}>
                     {label}
                   </text>
-                  <text x={290} y={y + 10} fill="rgba(255,255,255,0.5)" fontSize={10} textAnchor="middle">
+                  <text x={290} y={y + 9} fill="rgba(255,255,255,0.5)" fontSize={10} textAnchor="middle" dominantBaseline="central">
                     {out}
                   </text>
-                  <text x={332} y={y + 4} fill={ct} fontSize={11} textAnchor="start" fontWeight={700}>
+                  <text x={332} y={y} fill={ct} fontSize={11} textAnchor="start" dominantBaseline="central" fontWeight={700}>
                     → {out}
                   </text>
                 </g>
@@ -11201,10 +11183,10 @@ export const LRWarmupDecay = (ctx) => {
               >
                 <div
                   style={{
-                    padding: "3px 10px",
+                    padding: "4px 12px",
                     background: `${color}15`,
                     borderRadius: 4,
-                    minWidth: 90,
+                    minWidth: 100,
                     textAlign: "center",
                     flexShrink: 0,
                   }}
@@ -11374,11 +11356,10 @@ export const WeightInit = (ctx) => {
       <Reveal when={sub >= 1}>
         <Box color={C.orange} style={{ width: "100%" }}>
           <T color={C.orange} bold center size={20}>
-            Too Small - Signal Vanishes
+            Too Small - Numbers Shrink to Zero
           </T>
           <T color="#ffb74d" size={17} style={{ marginTop: 12 }}>
-            If weights are initialized with very small random values (std = 0.001), the signal shrinks as it passes
-            through layers.
+            If weights are initialized with very small random values (std = 0.001), the numbers flowing through the network shrink toward zero at every layer. Each layer multiplies the previous output by tiny weights, so the values get smaller and smaller.
           </T>
           <div style={{ display: "flex", flexDirection: "column", gap: 6, marginTop: 16 }}>
             {[
@@ -11411,8 +11392,7 @@ export const WeightInit = (ctx) => {
             ))}
           </div>
           <T color="#ffb74d" size={16} style={{ marginTop: 12 }}>
-            Each layer multiplies by tiny weights, shrinking the signal exponentially. By layer 5-10, everything is
-            effectively zero. Gradients also vanish - the network cannot learn. The network is "dead."
+            Each layer multiplies by tiny weights, shrinking the output exponentially. By layer 5-10, every value is effectively zero. Gradients also vanish - the network cannot learn. The network is "dead."
           </T>
         </Box>
       </Reveal>
@@ -11420,11 +11400,10 @@ export const WeightInit = (ctx) => {
       <Reveal when={sub >= 2}>
         <Box color={C.orange} style={{ width: "100%" }}>
           <T color={C.orange} bold center size={20}>
-            Too Large - Signal Explodes
+            Too Large - Numbers Explode
           </T>
           <T color="#ffb74d" size={17} style={{ marginTop: 12 }}>
-            If weights are initialized with large random values (std = 5.0), the signal grows uncontrollably through
-            layers.
+            If weights are initialized with large random values (std = 5.0), the numbers flowing through the network grow uncontrollably at every layer. Each layer multiplies by large weights, so the values skyrocket.
           </T>
           <div style={{ display: "flex", flexDirection: "column", gap: 6, marginTop: 16 }}>
             {[
@@ -11457,8 +11436,7 @@ export const WeightInit = (ctx) => {
             ))}
           </div>
           <T color="#ffb74d" size={16} style={{ marginTop: 12 }}>
-            Activations saturate, gradients explode, and training produces NaN within a few steps. The network is
-            unstable from the very first forward pass.
+            The values overflow, activations saturate, gradients explode, and training produces NaN within a few steps. The network is unstable from the very first forward pass.
           </T>
         </Box>
       </Reveal>

@@ -124,9 +124,9 @@ export const Tokenization = (ctx) => {
                   { p: "l + o", n: 1 },
                   { p: "o + v", n: 1 },
                   { p: "v + e", n: 1 },
+                  { p: "c + a", n: 1 },
                   { p: "a + t", n: 1 },
                   { p: "t + s", n: 1 },
-                  { p: "c + a", n: 1 },
                 ].map(({ p, n }, i) => (
                   <div
                     key={i}

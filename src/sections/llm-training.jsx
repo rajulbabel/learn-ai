@@ -1666,10 +1666,10 @@ export const NNInAction = (ctx) => {
             }}
           >
             <T color="#90caf9" bold center size={16}>
-              Model's prediction: "the" (38.3%) → "The cat sat on <u>the</u>"
+              Model's prediction: "the" (46.0%) → "The cat sat on <u>the</u>"
             </T>
             <T color={C.mid} size={14} center style={{ marginTop: 6 }}>
-              The actual next word in training was "the" → loss = -log(0.383) = 0.96
+              The actual next word in training was "the" → loss = -log(0.460) = 0.78
             </T>
             <T color={C.mid} size={14} center style={{ marginTop: 2 }}>
               Not bad! But not 100% confident. Backprop will nudge the weights to make it more confident next time.
@@ -3356,7 +3356,9 @@ export const OutputLayer = (ctx) => {
             </T>
             <T color={C.dim} size={14} style={{ marginTop: 6 }}>
               That is all a logit is - <strong>the raw score the model gives to a word</strong>. Nothing more. The name
-              comes from mathematics ("log-odds"), but for our purposes: logit = score.
+              comes from mathematics ("log-odds"), but for our purposes: logit = score. Note: "logit" is the name for
+              the <strong>value</strong> that comes out - not the layer and not the neuron. The layer is called the
+              "output projection" or "LM head." The logit is the number it produces.
             </T>
             <div style={{ marginTop: 10, display: "flex", flexDirection: "column", gap: 6 }}>
               <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
@@ -3788,11 +3790,11 @@ export const OutputLayer = (ctx) => {
             </T>
             <div style={{ marginTop: 10, display: "flex", flexDirection: "column", gap: 6 }}>
               {[
-                { token: "mat", logit: 8.2, exp: 3641, prob: 62.1 },
-                { token: "floor", logit: 7.5, exp: 1808, prob: 30.8 },
-                { token: "sofa", logit: 6.1, exp: 446, prob: 7.6 },
-                { token: "table", logit: 5.8, exp: 330, prob: 5.6 },
-                { token: "bed", logit: 5.2, exp: 181, prob: 3.1 },
+                { token: "mat", logit: 8.2, exp: 3641, prob: 56.8 },
+                { token: "floor", logit: 7.5, exp: 1808, prob: 28.2 },
+                { token: "sofa", logit: 6.1, exp: 446, prob: 7.0 },
+                { token: "table", logit: 5.8, exp: 330, prob: 5.2 },
+                { token: "bed", logit: 5.2, exp: 181, prob: 2.8 },
               ].map(({ token, logit, exp, prob }) => (
                 <div
                   key={token}
@@ -3829,7 +3831,7 @@ export const OutputLayer = (ctx) => {
           </div>
 
           <T color="#ffe082" style={{ marginTop: 10 }}>
-            The model predicts "mat" with 62.1% confidence. This is the final output - a probability distribution over
+            The model predicts "mat" with 56.8% confidence. This is the final output - a probability distribution over
             the entire vocabulary. During training, we compare this to the actual next word and compute the loss.
           </T>
         </Box>

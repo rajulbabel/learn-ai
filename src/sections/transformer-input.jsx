@@ -3122,10 +3122,10 @@ export const OutputHead = (ctx) => {
                 After softmax
               </T>
               {[
-                { word: "cats", val: "62.2%", pct: 62.2, c: C.green },
-                { word: "dogs", val: "20.8%", pct: 20.8, c: C.cyan },
-                { word: "the", val: "4.2%", pct: 4.2, c: C.yellow },
-                { word: "love", val: "0.7%", pct: 0.7, c: C.orange },
+                { word: "cats", val: "70.8%", pct: 70.8, c: C.green },
+                { word: "dogs", val: "23.6%", pct: 23.6, c: C.cyan },
+                { word: "the", val: "4.8%", pct: 4.8, c: C.yellow },
+                { word: "love", val: "0.8%", pct: 0.8, c: C.orange },
                 { word: "banana", val: "0.1%", pct: 0.1, c: C.red },
               ].map(({ word, val, pct, c }) => (
                 <div
@@ -3172,7 +3172,7 @@ export const OutputHead = (ctx) => {
           >
             <T color={C.dim} size={14}>
               Notice how softmax <strong style={{ color: C.green }}>amplifies differences</strong>. A logit gap of just
-              1.1 between "cats" (4.2) and "dogs" (3.1) becomes a 3x probability difference (62% vs 21%). The
+              1.1 between "cats" (4.2) and "dogs" (3.1) becomes a 3x probability difference (71% vs 24%). The
               exponential function makes the winner win big.
             </T>
           </div>
@@ -3211,8 +3211,8 @@ export const OutputHead = (ctx) => {
                 label: "Focused",
                 desc: "Almost deterministic",
                 probs: [
-                  { w: "cats", p: 98 },
-                  { w: "dogs", p: 2 },
+                  { w: "cats", p: 100 },
+                  { w: "dogs", p: 0 },
                   { w: "the", p: 0 },
                 ],
                 c: C.blue,
@@ -3222,9 +3222,9 @@ export const OutputHead = (ctx) => {
                 label: "Default",
                 desc: "Balanced",
                 probs: [
-                  { w: "cats", p: 62 },
-                  { w: "dogs", p: 21 },
-                  { w: "the", p: 4 },
+                  { w: "cats", p: 71 },
+                  { w: "dogs", p: 24 },
+                  { w: "the", p: 5 },
                 ],
                 c: C.green,
               },
@@ -3233,9 +3233,9 @@ export const OutputHead = (ctx) => {
                 label: "Creative",
                 desc: "More spread out",
                 probs: [
-                  { w: "cats", p: 38 },
-                  { w: "dogs", p: 27 },
-                  { w: "the", p: 12 },
+                  { w: "cats", p: 50 },
+                  { w: "dogs", p: 29 },
+                  { w: "the", p: 13 },
                 ],
                 c: C.orange,
               },
@@ -3328,9 +3328,9 @@ export const OutputHead = (ctx) => {
               </T>
               <div style={{ marginTop: 8, display: "flex", gap: 4, alignItems: "center", flexWrap: "wrap" }}>
                 {[
-                  { w: "cats", p: 62, pick: true },
-                  { w: "dogs", p: 21, pick: false },
-                  { w: "the", p: 4, pick: false },
+                  { w: "cats", p: 71, pick: true },
+                  { w: "dogs", p: 24, pick: false },
+                  { w: "the", p: 5, pick: false },
                   { w: "love", p: 1, pick: false },
                 ].map(({ w, p, pick }) => (
                   <div
@@ -3361,9 +3361,9 @@ export const OutputHead = (ctx) => {
               </T>
               <div style={{ marginTop: 8, display: "flex", gap: 4, alignItems: "center", flexWrap: "wrap" }}>
                 {[
-                  { w: "cats", p: 62, keep: true },
-                  { w: "dogs", p: 21, keep: true },
-                  { w: "the", p: 4, keep: true },
+                  { w: "cats", p: 71, keep: true },
+                  { w: "dogs", p: 24, keep: true },
+                  { w: "the", p: 5, keep: true },
                   { w: "love", p: 1, keep: false },
                 ].map(({ w, p, keep }) => (
                   <div
@@ -3400,10 +3400,10 @@ export const OutputHead = (ctx) => {
               </T>
               <div style={{ marginTop: 8, display: "flex", gap: 4, alignItems: "center", flexWrap: "wrap" }}>
                 {[
-                  { w: "cats", p: 62, cum: 62, keep: true },
-                  { w: "dogs", p: 21, cum: 83, keep: true },
-                  { w: "the", p: 4, cum: 87, keep: true },
-                  { w: "love", p: 1, cum: 88, keep: false },
+                  { w: "cats", p: 71, cum: 71, keep: true },
+                  { w: "dogs", p: 24, cum: 95, keep: true },
+                  { w: "the", p: 5, cum: 100, keep: false },
+                  { w: "love", p: 1, cum: 101, keep: false },
                 ].map(({ w, p, cum, keep }) => (
                   <div
                     key={w}

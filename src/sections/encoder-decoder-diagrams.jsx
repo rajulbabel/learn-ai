@@ -1809,7 +1809,7 @@ function InferenceDiagram({ sub, setSub, subBtnRipple, setSubBtnRipple, register
     layerLabel(Y, "Softmax -> Probabilities", "rgba(255,255,255,0.5)");
     Y += 49;
     const smY = Y;
-    const probs = ["72.1%", "4.8%", "7.2%", "1.6%", "3.6%"];
+    const probs = ["80.7%", "5.4%", "8.1%", "1.8%", "4.0%"];
     vocabX.forEach((vx, i) => {
       edge(vx, outY + R, vx, smY - R, "rgba(255,255,255,0.1)", 0.8);
       const w = i === 0;

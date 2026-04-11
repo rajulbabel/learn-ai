@@ -1535,7 +1535,7 @@ describe("NNInAction sub-steps", () => {
     const text = container.textContent;
     expect(text).toContain("probability");
     expect(text).toContain("the");
-    expect(text).toContain("38.3%");
+    expect(text).toContain("46.0%");
   });
 
   it("sub 7 shows the key insight that it is all multiply and add", () => {

@@ -5736,7 +5736,15 @@ export const ConcatWO = (ctx) => {
           <T color="#ffe082" bold center style={{ marginTop: 8 }}>
             We stick them end-to-end (concatenate):
           </T>
-          <div style={{ marginTop: 4, padding: "8px", background: "rgba(0,0,0,0.3)", borderRadius: 8, textAlign: "center" }}>
+          <div
+            style={{
+              marginTop: 4,
+              padding: "8px",
+              background: "rgba(0,0,0,0.3)",
+              borderRadius: 8,
+              textAlign: "center",
+            }}
+          >
             <T color={C.mid} size={16} mono center>
               [0.3, 0.5, -0.2, 0.8, 0.7, -0.1, ..., 0.1, 0.4]
             </T>
@@ -7131,664 +7139,1190 @@ export const GroupedQueryAttention = (ctx) => {
 
 export const KVCache = (ctx) => {
   const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx;
+
+  const subBtn = (s) =>
+    sub === s && (
+      <SubBtn
+        key={sub}
+        onClick={() => {
+          setSubBtnRipple(Date.now());
+          navigate("forward");
+        }}
+        rippleKey={subBtnRipple}
+        registerSubBtn={registerSubBtn}
+      />
+    );
+
+  // Shared helper: tinted inner box
+  const inner = (color, children, extra = {}) => (
+    <div
+      style={{
+        marginTop: 10,
+        padding: 12,
+        borderRadius: 8,
+        background: `${color}08`,
+        border: `1px solid ${color}20`,
+        ...extra,
+      }}
+    >
+      {children}
+    </div>
+  );
+
+  // Shared helper: monospace formula row
+  const mono = (color, text, size = 14) => (
+    <div style={{ textAlign: "center", marginTop: 6 }}>
+      <code style={{ color, fontSize: size }}>{text}</code>
+    </div>
+  );
+
   return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
-      {/* Sub 0: The inference cost problem */}
+      {/* ── Sub 0: The Attention Formula - What Gets Computed ── */}
       {sub >= 0 && (
+        <Box color={C.cyan} style={{ width: "100%" }}>
+          <T color="#80deea" bold center size={20}>
+            The Attention Formula - What Gets Computed
+          </T>
+          <T color="#80deea" size={16} style={{ marginTop: 8 }}>
+            Before we can understand KV caching, we need to see exactly what a single attention layer computes. For a
+            sequence of N tokens, each represented as a d-dimensional embedding vector:
+          </T>
+
+          {inner(
+            C.cyan,
+            <>
+              <T color="#80deea" bold center size={16}>
+                Three matrix multiplications per layer:
+              </T>
+              <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 6 }}>
+                {[
+                  {
+                    label: "Q",
+                    formula: "Q = X · W_Q",
+                    shape: "(N × d)",
+                    desc: "one query per token",
+                    color: C.purple,
+                  },
+                  {
+                    label: "K",
+                    formula: "K = X · W_K",
+                    shape: "(N × d)",
+                    desc: "one key per token",
+                    color: C.blue,
+                  },
+                  {
+                    label: "V",
+                    formula: "V = X · W_V",
+                    shape: "(N × d)",
+                    desc: "one value per token",
+                    color: C.green,
+                  },
+                ].map(({ label, formula, shape, desc, color }) => (
+                  <div
+                    key={label}
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 8,
+                      padding: "6px 10px",
+                      borderRadius: 6,
+                      background: `${color}06`,
+                      border: `1px solid ${color}12`,
+                    }}
+                  >
+                    <Tag color={color}>{label}</Tag>
+                    <code style={{ color, fontSize: 14 }}>{formula}</code>
+                    <T color={C.dim} size={13}>
+                      {shape} - {desc}
+                    </T>
+                  </div>
+                ))}
+              </div>
+            </>,
+          )}
+
+          {inner(
+            C.yellow,
+            <>
+              <T color="#fff176" bold center size={15}>
+                Then attention combines them:
+              </T>
+              {mono("#fff176", "output = softmax( Q · Kᵀ / √d ) · V", 15)}
+              <T color={C.dim} center size={14} style={{ marginTop: 6 }}>
+                Each row of the output is one token's "context-aware" representation. Row i is computed from token i's
+                query attending to all keys and aggregating all values.
+              </T>
+            </>,
+          )}
+
+          {inner(
+            C.orange,
+            <>
+              <T color="#ffcc80" bold center size={14}>
+                The key point: Q, K, V are computed from X using fixed weight matrices W_Q, W_K, W_V. The same input
+                always produces the same Q, K, V. This is what makes caching possible.
+              </T>
+            </>,
+          )}
+        </Box>
+      )}
+      {subBtn(0)}
+
+      {/* ── Sub 1: Generation Without Cache - See the Waste ── */}
+      <Reveal when={sub >= 1}>
         <Box color={C.red} style={{ width: "100%" }}>
           <T color="#ef9a9a" bold center size={20}>
-            The Inference Cost Problem
+            Generation Without Cache - See the Waste
           </T>
-          <T color="#ef9a9a" size={16} style={{ marginTop: 6 }}>
-            During autoregressive generation (chapter 2.6), the model produces one token at a time. To generate token N,
-            it must attend to ALL previous tokens 1 through N-1. Watch the cost grow:
+          <T color="#ef9a9a" size={16} style={{ marginTop: 8 }}>
+            Generating "I love cats" token by token. At each step, the model must compute Q, K, V for the entire
+            sequence so far. Watch the redundant work pile up:
           </T>
 
-          <div
-            style={{
-              marginTop: 14,
-              padding: 14,
-              borderRadius: 10,
-              background: `${C.red}08`,
-              border: `1px solid ${C.red}20`,
-            }}
-          >
-            <T color="#ef9a9a" bold center size={16}>
-              Step-by-step generation cost (without cache):
-            </T>
-            <div style={{ marginTop: 10, display: "flex", flexDirection: "column", gap: 4 }}>
-              {[
-                { tok: 1, attn: "[1]", ops: 1, bar: 1 },
-                { tok: 2, attn: "[1, 2]", ops: 4, bar: 4 },
-                { tok: 3, attn: "[1, 2, 3]", ops: 9, bar: 9 },
-                { tok: 4, attn: "[1, 2, 3, 4]", ops: 16, bar: 16 },
-                { tok: 5, attn: "[1, 2, 3, 4, 5]", ops: 25, bar: 25 },
-              ].map(({ tok, attn, ops, bar }) => (
-                <div
-                  key={tok}
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 8,
-                    padding: "4px 8px",
-                    borderRadius: 4,
-                    background: `${C.red}06`,
-                  }}
-                >
-                  <Tag color={C.red}>Token {tok}</Tag>
-                  <T color={C.dim} size={13}>
-                    attend to {attn}
-                  </T>
-                  <div
-                    style={{
-                      flex: 1,
-                      height: 10,
-                      borderRadius: 3,
-                      background: "rgba(255,255,255,0.04)",
-                      overflow: "hidden",
-                    }}
-                  >
-                    <div style={{ width: `${bar * 4}%`, height: "100%", borderRadius: 3, background: C.red }} />
-                  </div>
-                  <code style={{ color: C.red, fontSize: 12, minWidth: 40, textAlign: "right" }}>{ops} ops</code>
+          <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 10 }}>
+            {/* Step 1 */}
+            {inner(
+              C.cyan,
+              <>
+                <T color="#80deea" bold size={16}>
+                  Step 1: Generate "I"
+                </T>
+                <T color={C.dim} size={14} style={{ marginTop: 4 }}>
+                  Sequence so far: ["I"]. Compute Q, K, V for 1 token:
+                </T>
+                <div style={{ marginTop: 6, display: "flex", flexDirection: "column", gap: 3 }}>
+                  <code style={{ color: C.purple, fontSize: 13 }}>q_I = W_Q · x_I</code>
+                  <code style={{ color: C.blue, fontSize: 13 }}>k_I = W_K · x_I</code>
+                  <code style={{ color: C.green, fontSize: 13 }}>v_I = W_V · x_I</code>
                 </div>
-              ))}
-              <div style={{ padding: "4px 8px", borderRadius: 4, background: `${C.orange}06` }}>
-                <T color={C.orange} size={13}>
-                  Token N: full self-attention over N tokens = N<sup>2</sup> operations per step
+                <T color={C.dim} size={13} style={{ marginTop: 4 }}>
+                  3 matrix-vector multiplications. All new, nothing wasted.
                 </T>
-              </div>
-            </div>
+              </>,
+            )}
+
+            {/* Step 2 */}
+            {inner(
+              C.yellow,
+              <>
+                <T color="#fff176" bold size={16}>
+                  Step 2: Generate "love"
+                </T>
+                <T color={C.dim} size={14} style={{ marginTop: 4 }}>
+                  Sequence so far: ["I", "love"]. Recompute Q, K, V for ALL 2 tokens:
+                </T>
+                <div style={{ marginTop: 6, display: "flex", flexDirection: "column", gap: 3 }}>
+                  <code style={{ color: C.red, fontSize: 13 }}>
+                    q_I = W_Q · x_I &nbsp;&nbsp;&nbsp; ← Redundant! Same as Step 1
+                  </code>
+                  <code style={{ color: C.red, fontSize: 13 }}>
+                    k_I = W_K · x_I &nbsp;&nbsp;&nbsp; ← Redundant! Same as Step 1
+                  </code>
+                  <code style={{ color: C.red, fontSize: 13 }}>
+                    v_I = W_V · x_I &nbsp;&nbsp;&nbsp; ← Redundant! Same as Step 1
+                  </code>
+                  <code style={{ color: C.purple, fontSize: 13 }}>q_love = W_Q · x_love</code>
+                  <code style={{ color: C.blue, fontSize: 13 }}>k_love = W_K · x_love</code>
+                  <code style={{ color: C.green, fontSize: 13 }}>v_love = W_V · x_love</code>
+                </div>
+                <T color={C.red} size={13} bold style={{ marginTop: 4 }}>
+                  6 multiplications, but 3 are redundant - identical to Step 1.
+                </T>
+              </>,
+            )}
+
+            {/* Step 3 */}
+            {inner(
+              C.orange,
+              <>
+                <T color="#ffcc80" bold size={16}>
+                  Step 3: Generate "cats"
+                </T>
+                <T color={C.dim} size={14} style={{ marginTop: 4 }}>
+                  Sequence so far: ["I", "love", "cats"]. Recompute Q, K, V for ALL 3 tokens:
+                </T>
+                <div style={{ marginTop: 6, display: "flex", flexDirection: "column", gap: 3 }}>
+                  <code style={{ color: C.red, fontSize: 13 }}>
+                    q_I = W_Q · x_I &nbsp;&nbsp;&nbsp; ← Redundant! (computed 3rd time)
+                  </code>
+                  <code style={{ color: C.red, fontSize: 13 }}>
+                    k_I = W_K · x_I &nbsp;&nbsp;&nbsp; ← Redundant! (computed 3rd time)
+                  </code>
+                  <code style={{ color: C.red, fontSize: 13 }}>
+                    v_I = W_V · x_I &nbsp;&nbsp;&nbsp; ← Redundant! (computed 3rd time)
+                  </code>
+                  <code style={{ color: C.red, fontSize: 13 }}>
+                    q_love = W_Q · x_love &nbsp; ← Redundant! (computed 2nd time)
+                  </code>
+                  <code style={{ color: C.red, fontSize: 13 }}>
+                    k_love = W_K · x_love &nbsp; ← Redundant! (computed 2nd time)
+                  </code>
+                  <code style={{ color: C.red, fontSize: 13 }}>
+                    v_love = W_V · x_love &nbsp; ← Redundant! (computed 2nd time)
+                  </code>
+                  <code style={{ color: C.purple, fontSize: 13 }}>q_cats = W_Q · x_cats</code>
+                  <code style={{ color: C.blue, fontSize: 13 }}>k_cats = W_K · x_cats</code>
+                  <code style={{ color: C.green, fontSize: 13 }}>v_cats = W_V · x_cats</code>
+                </div>
+                <T color={C.red} size={13} bold style={{ marginTop: 4 }}>
+                  9 multiplications, but 6 are redundant!
+                </T>
+              </>,
+            )}
           </div>
 
-          <div
-            style={{
-              marginTop: 12,
-              padding: 10,
-              borderRadius: 8,
-              background: `${C.yellow}08`,
-              border: `1px solid ${C.yellow}20`,
-            }}
-          >
-            <T color="#fff176" bold center size={15}>
-              Total cost to generate N tokens (naive approach):
-            </T>
-            <T color="#fff176" center size={16} style={{ marginTop: 4 }}>
-              1<sup>2</sup> + 2<sup>2</sup> + 3<sup>2</sup> + ... + N<sup>2</sup> ={" "}
-              <strong>
-                O(N<sup>3</sup>)
-              </strong>
-            </T>
-            <T color={C.dim} center size={14} style={{ marginTop: 4 }}>
-              For N = 1000 tokens: roughly <strong style={{ color: C.red }}>333 million</strong> attention operations!
-            </T>
-          </div>
-        </Box>
-      )}
-      {sub === 0 && (
-        <SubBtn
-          key={sub}
-          onClick={() => {
-            setSubBtnRipple(Date.now());
-            navigate("forward");
-          }}
-          rippleKey={subBtnRipple}
-          registerSubBtn={registerSubBtn}
-        />
-      )}
-
-      {/* Sub 1: The key insight - redundant computation */}
-      <Reveal when={sub >= 1}>
-        <Box color={C.yellow} style={{ width: "100%" }}>
-          <T color="#fff176" bold center size={20}>
-            The Key Insight: Redundant Computation
-          </T>
-          <T color="#fff176" size={16} style={{ marginTop: 6 }}>
-            When generating token 5, we recompute Q, K, V for ALL tokens. But look what stays the same:
-          </T>
-
-          <div style={{ marginTop: 14, display: "flex", flexDirection: "column", gap: 8 }}>
-            <div
-              style={{ padding: 12, borderRadius: 8, background: `${C.orange}06`, border: `1px solid ${C.orange}15` }}
-            >
-              <T color={C.orange} bold center size={15}>
-                Generating token 4 (previous step)
+          {inner(
+            C.red,
+            <>
+              <T color="#ef9a9a" bold center size={16}>
+                The Waste Grows Quadratically
               </T>
-              <div style={{ marginTop: 6, display: "flex", flexWrap: "wrap", gap: 4, justifyContent: "center" }}>
-                {["K1", "K2", "K3"].map((k) => (
-                  <Tag key={k} color={C.blue}>
-                    {k}
-                  </Tag>
-                ))}
-                {["V1", "V2", "V3"].map((v) => (
-                  <Tag key={v} color={C.green}>
-                    {v}
-                  </Tag>
-                ))}
-              </div>
-            </div>
-            <div style={{ textAlign: "center", color: C.dim, fontSize: 14 }}>↓ next step ↓</div>
-            <div
-              style={{ padding: 12, borderRadius: 8, background: `${C.yellow}06`, border: `1px solid ${C.yellow}15` }}
-            >
-              <T color={C.yellow} bold center size={15}>
-                Generating token 5 (current step)
+              <T color="#ef9a9a" size={15} style={{ marginTop: 6 }}>
+                At step N, we do 3N matrix-vector multiplications but only 3 are new. The other 3(N-1) are identical to
+                work already done in earlier steps. After 1000 tokens, we have performed ~1.5 million redundant
+                multiplications. This is the computation KV cache eliminates.
               </T>
-              <div style={{ marginTop: 6, display: "flex", flexWrap: "wrap", gap: 4, justifyContent: "center" }}>
-                {["K1", "K2", "K3"].map((k) => (
-                  <Tag key={k} color={C.blue}>
-                    {k}
-                  </Tag>
-                ))}
-                <Tag color={C.red}>K4</Tag>
-                {["V1", "V2", "V3"].map((v) => (
-                  <Tag key={v} color={C.green}>
-                    {v}
-                  </Tag>
-                ))}
-                <Tag color={C.red}>V4</Tag>
-              </div>
-              <T color={C.dim} center size={13} style={{ marginTop: 6 }}>
-                K1, K2, K3 and V1, V2, V3 are <strong style={{ color: C.yellow }}>exactly the same</strong> as last
-                step!
-              </T>
-            </div>
-          </div>
-
-          <div
-            style={{
-              marginTop: 12,
-              padding: 12,
-              borderRadius: 8,
-              background: `${C.red}08`,
-              border: `1px solid ${C.red}20`,
-            }}
-          >
-            <T color="#ef9a9a" bold center size={15}>
-              The waste
-            </T>
-            <T color="#ef9a9a" size={15} style={{ marginTop: 4 }}>
-              K and V for tokens 1, 2, 3 haven't changed - they're computed from the same embeddings with the same W_K
-              and W_V matrices. Yet we're recomputing them from scratch at every single generation step. For 1000
-              tokens, K1 gets recomputed 999 times for nothing.
-            </T>
-          </div>
+            </>,
+          )}
         </Box>
       </Reveal>
-      {sub === 1 && (
-        <SubBtn
-          key={sub}
-          onClick={() => {
-            setSubBtnRipple(Date.now());
-            navigate("forward");
-          }}
-          rippleKey={subBtnRipple}
-          registerSubBtn={registerSubBtn}
-        />
-      )}
+      {subBtn(1)}
 
-      {/* Sub 2: The KV Cache solution */}
+      {/* ── Sub 2: Only the Last Row Matters ── */}
       <Reveal when={sub >= 2}>
-        <Box color={C.green} style={{ width: "100%" }}>
-          <T color="#a5d6a7" bold center size={20}>
-            The KV Cache Solution
-          </T>
-          <T color="#a5d6a7" size={16} style={{ marginTop: 6 }}>
-            Store K and V from all previous tokens in a cache. At each step:
-          </T>
-
-          <div style={{ marginTop: 14, display: "flex", flexDirection: "column", gap: 6 }}>
-            {[
-              { step: "1", desc: "Compute Q, K, V for ONLY the new token (1 token, not N)", color: C.cyan },
-              { step: "2", desc: "Append the new K and V to the cache", color: C.blue },
-              { step: "3", desc: "Compute attention: new Q against ALL cached K and V", color: C.green },
-            ].map(({ step, desc, color }) => (
-              <div
-                key={step}
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 8,
-                  padding: "8px 12px",
-                  borderRadius: 8,
-                  background: `${color}06`,
-                  border: `1px solid ${color}15`,
-                }}
-              >
-                <Tag color={color}>Step {step}</Tag>
-                <T color={C.dim} size={15}>
-                  {desc}
-                </T>
-              </div>
-            ))}
-          </div>
-
-          <div
-            style={{
-              marginTop: 14,
-              padding: 14,
-              borderRadius: 10,
-              background: `${C.green}08`,
-              border: `1px solid ${C.green}25`,
-            }}
-          >
-            <T color="#a5d6a7" bold center size={16}>
-              Cost comparison:
-            </T>
-            <div style={{ marginTop: 10, display: "flex", gap: 12, flexWrap: "wrap" }}>
-              <div
-                style={{
-                  flex: "1 1 180px",
-                  padding: 10,
-                  borderRadius: 8,
-                  background: `${C.red}06`,
-                  border: `1px solid ${C.red}15`,
-                }}
-              >
-                <T color={C.red} bold center size={14}>
-                  Without cache
-                </T>
-                <T color={C.dim} size={13} style={{ marginTop: 4 }}>
-                  Each step: recompute ALL N tokens' K, V
-                </T>
-                <T color={C.dim} size={13}>
-                  Then full N x N attention
-                </T>
-                <T color={C.red} bold center size={14} style={{ marginTop: 6 }}>
-                  Per step: O(N<sup>2</sup>)
-                </T>
-                <T color={C.red} bold center size={14}>
-                  Total: O(N<sup>3</sup>)
-                </T>
-              </div>
-              <div
-                style={{
-                  flex: "1 1 180px",
-                  padding: 10,
-                  borderRadius: 8,
-                  background: `${C.green}06`,
-                  border: `1px solid ${C.green}15`,
-                }}
-              >
-                <T color={C.green} bold center size={14}>
-                  With KV cache
-                </T>
-                <T color={C.dim} size={13} style={{ marginTop: 4 }}>
-                  Each step: compute ONLY 1 token's K, V
-                </T>
-                <T color={C.dim} size={13}>
-                  Then 1 x N attention (one Q vs N keys)
-                </T>
-                <T color={C.green} bold center size={14} style={{ marginTop: 6 }}>
-                  Per step: O(N)
-                </T>
-                <T color={C.green} bold center size={14}>
-                  Total: O(N<sup>2</sup>)
-                </T>
-              </div>
-            </div>
-
-            <div
-              style={{
-                marginTop: 10,
-                padding: 8,
-                borderRadius: 6,
-                background: `${C.yellow}08`,
-                border: `1px solid ${C.yellow}20`,
-              }}
-            >
-              <T color="#fff176" bold center size={15}>
-                N = 1000 tokens
-              </T>
-              <T color={C.dim} center size={14} style={{ marginTop: 4 }}>
-                Without cache: ~333 million ops. With cache: ~500 thousand ops.{" "}
-                <strong style={{ color: C.green }}>~660x faster.</strong>
-              </T>
-            </div>
-          </div>
-        </Box>
-      </Reveal>
-      {sub === 2 && (
-        <SubBtn
-          key={sub}
-          onClick={() => {
-            setSubBtnRipple(Date.now());
-            navigate("forward");
-          }}
-          rippleKey={subBtnRipple}
-          registerSubBtn={registerSubBtn}
-        />
-      )}
-
-      {/* Sub 3: Visual - the cache growing step by step */}
-      <Reveal when={sub >= 3}>
         <Box color={C.purple} style={{ width: "100%" }}>
           <T color="#b8a9ff" bold center size={20}>
-            The Cache Growing Step by Step
+            Only the Last Row of Output Matters
           </T>
-          <T color="#b8a9ff" size={16} style={{ marginTop: 6 }}>
-            Watch the KV cache grow as the model generates "I love cats":
+          <T color="#b8a9ff" size={16} style={{ marginTop: 8 }}>
+            The attention formula computes an output for every token in the sequence. But during generation, we already
+            have the outputs for all previous tokens - we computed them in earlier steps. We only need the output for
+            the <strong>new</strong> token.
           </T>
 
-          <div style={{ marginTop: 14, display: "flex", flexDirection: "column", gap: 10 }}>
-            {[
-              {
-                step: 1,
-                word: '"I"',
-                cache: { k: ["K_I"], v: ["V_I"] },
-                compute: "Compute Q_I, K_I, V_I from scratch",
-                attn: "Q_I attends to [K_I]",
-                color: C.red,
-              },
-              {
-                step: 2,
-                word: '"love"',
-                cache: { k: ["K_I", "K_love"], v: ["V_I", "V_love"] },
-                compute: "Compute Q_love, K_love, V_love only",
-                attn: "Q_love attends to [K_I, K_love]",
-                color: C.purple,
-              },
-              {
-                step: 3,
-                word: '"cats"',
-                cache: { k: ["K_I", "K_love", "K_cats"], v: ["V_I", "V_love", "V_cats"] },
-                compute: "Compute Q_cats, K_cats, V_cats only",
-                attn: "Q_cats attends to [K_I, K_love, K_cats]",
-                color: C.cyan,
-              },
-            ].map(({ step, word, cache, compute, attn, color }) => (
-              <div
-                key={step}
-                style={{ padding: 12, borderRadius: 10, background: `${color}06`, border: `1px solid ${color}20` }}
-              >
-                <T color={color} bold size={15}>
-                  Step {step}: Generate {word}
-                </T>
-                <div style={{ marginTop: 6, display: "flex", flexDirection: "column", gap: 4 }}>
+          {inner(
+            C.purple,
+            <>
+              <T color="#b8a9ff" bold center size={15}>
+                Full attention output (N rows):
+              </T>
+              {mono(
+                "#b8a9ff",
+                "output = softmax( Q · Kᵀ / √d ) · V     ← shape: (N × d)",
+                14,
+              )}
+              <div style={{ marginTop: 10, display: "flex", flexDirection: "column", gap: 3 }}>
+                {[
+                  { row: 'Row 1 (for "I")', status: "already computed at step 1", color: C.dim },
+                  { row: 'Row 2 (for "love")', status: "already computed at step 2", color: C.dim },
+                  { row: 'Row 3 (for "cats")', status: "THIS is what we need now", color: C.yellow },
+                ].map(({ row, status, color }) => (
                   <div
+                    key={row}
                     style={{
                       display: "flex",
-                      alignItems: "center",
-                      gap: 6,
+                      gap: 8,
                       padding: "4px 8px",
                       borderRadius: 4,
-                      background: `${C.orange}06`,
+                      background: color === C.yellow ? `${C.yellow}08` : "transparent",
                     }}
                   >
-                    <T color={C.orange} size={12} bold>
-                      Compute:
+                    <T color={color === C.yellow ? "#fff176" : C.dim} size={13} bold>
+                      {row}:
                     </T>
-                    <T color={C.dim} size={12}>
-                      {compute}
-                    </T>
-                  </div>
-                  <div
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: 6,
-                      padding: "4px 8px",
-                      borderRadius: 4,
-                      background: `${C.blue}06`,
-                    }}
-                  >
-                    <T color={C.blue} size={12} bold>
-                      K cache:
-                    </T>
-                    <div style={{ display: "flex", gap: 3 }}>
-                      {cache.k.map((k) => (
-                        <Tag key={k} color={C.blue}>
-                          {k}
-                        </Tag>
-                      ))}
-                    </div>
-                  </div>
-                  <div
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: 6,
-                      padding: "4px 8px",
-                      borderRadius: 4,
-                      background: `${C.green}06`,
-                    }}
-                  >
-                    <T color={C.green} size={12} bold>
-                      V cache:
-                    </T>
-                    <div style={{ display: "flex", gap: 3 }}>
-                      {cache.v.map((v) => (
-                        <Tag key={v} color={C.green}>
-                          {v}
-                        </Tag>
-                      ))}
-                    </div>
-                  </div>
-                  <div
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: 6,
-                      padding: "4px 8px",
-                      borderRadius: 4,
-                      background: `${C.pink}06`,
-                    }}
-                  >
-                    <T color={C.pink} size={12} bold>
-                      Attention:
-                    </T>
-                    <T color={C.dim} size={12}>
-                      {attn}
+                    <T color={color === C.yellow ? "#fff176" : C.dim} size={13}>
+                      {status}
                     </T>
                   </div>
-                </div>
+                ))}
               </div>
-            ))}
-          </div>
+            </>,
+          )}
 
-          <div
-            style={{
-              marginTop: 10,
-              padding: 10,
-              borderRadius: 8,
-              background: `${C.purple}08`,
-              border: `1px solid ${C.purple}20`,
-            }}
-          >
-            <T color="#b8a9ff" size={14} center>
-              At each step, only the <strong>new token's</strong> Q, K, V are computed. Old K and V entries are never
-              recomputed - they're read directly from the cache. The cache grows by one K and one V entry per step.
-            </T>
-          </div>
-        </Box>
-      </Reveal>
-      {sub === 3 && (
-        <SubBtn
-          key={sub}
-          onClick={() => {
-            setSubBtnRipple(Date.now());
-            navigate("forward");
-          }}
-          rippleKey={subBtnRipple}
-          registerSubBtn={registerSubBtn}
-        />
-      )}
-
-      {/* Sub 4: The memory cost */}
-      <Reveal when={sub >= 4}>
-        <Box color={C.orange} style={{ width: "100%" }}>
-          <T color="#ffcc80" bold center size={20}>
-            The Memory Cost
-          </T>
-          <T color="#ffcc80" size={16} style={{ marginTop: 6 }}>
-            KV cache is not free. Each layer needs to store K and V for every token generated so far.
-          </T>
-
-          <div
-            style={{
-              marginTop: 14,
-              padding: 14,
-              borderRadius: 10,
-              background: `${C.orange}08`,
-              border: `1px solid ${C.orange}25`,
-            }}
-          >
-            <T color="#ffcc80" bold center size={16}>
-              Cache size per layer:
-            </T>
-            <div
-              style={{
-                marginTop: 8,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                gap: 6,
-                flexWrap: "wrap",
-              }}
-            >
-              <Tag color={C.blue}>2</Tag>
-              <T color={C.dim} size={14}>
-                (K + V)
+          {inner(
+            C.yellow,
+            <>
+              <T color="#fff176" bold center size={15}>
+                The formula for JUST the new token's output:
               </T>
-              <T color={C.dim} size={14} bold>
-                x
-              </T>
-              <Tag color={C.cyan}>seq_length</Tag>
-              <T color={C.dim} size={14} bold>
-                x
-              </T>
-              <Tag color={C.purple}>d_model</Tag>
-              <T color={C.dim} size={14} bold>
-                x
-              </T>
-              <Tag color={C.orange}>bytes</Tag>
-            </div>
-          </div>
-
-          <div
-            style={{
-              marginTop: 14,
-              padding: 14,
-              borderRadius: 10,
-              background: "rgba(0,0,0,0.25)",
-              border: `1px solid ${C.dim}20`,
-            }}
-          >
-            <T color={C.dim} bold center size={15}>
-              Example: LLaMA 70B
-            </T>
-            <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 4 }}>
-              {[
-                { param: "Layers", val: "80", color: C.green },
-                { param: "d_model", val: "8,192", color: C.purple },
-                { param: "Max sequence", val: "4,096 tokens", color: C.cyan },
-                { param: "Precision", val: "FP16 (2 bytes)", color: C.orange },
-              ].map(({ param, val, color }) => (
+              {mono("#fff176", "output_new = softmax( q_new · K_allᵀ / √d ) · V_all", 15)}
+              <div style={{ marginTop: 10, display: "flex", flexDirection: "column", gap: 6 }}>
                 <div
-                  key={param}
                   style={{
                     display: "flex",
-                    alignItems: "center",
                     gap: 8,
-                    padding: "4px 10px",
+                    alignItems: "flex-start",
+                    padding: "4px 8px",
                     borderRadius: 4,
-                    background: `${color}06`,
+                    background: `${C.purple}06`,
                   }}
                 >
-                  <T color={color} bold size={13} style={{ minWidth: 100 }}>
-                    {param}
-                  </T>
+                  <Tag color={C.purple}>q_new</Tag>
                   <T color={C.dim} size={13}>
-                    {val}
+                    Single vector (1 x d) - only the new token's query
                   </T>
                 </div>
-              ))}
-            </div>
+                <div
+                  style={{
+                    display: "flex",
+                    gap: 8,
+                    alignItems: "flex-start",
+                    padding: "4px 8px",
+                    borderRadius: 4,
+                    background: `${C.blue}06`,
+                  }}
+                >
+                  <Tag color={C.blue}>K_all</Tag>
+                  <T color={C.dim} size={13}>
+                    Matrix of ALL tokens' keys (N x d) - needed for dot product scores
+                  </T>
+                </div>
+                <div
+                  style={{
+                    display: "flex",
+                    gap: 8,
+                    alignItems: "flex-start",
+                    padding: "4px 8px",
+                    borderRadius: 4,
+                    background: `${C.green}06`,
+                  }}
+                >
+                  <Tag color={C.green}>V_all</Tag>
+                  <T color={C.dim} size={13}>
+                    Matrix of ALL tokens' values (N x d) - needed for weighted sum
+                  </T>
+                </div>
+              </div>
+            </>,
+          )}
 
+          {inner(
+            C.cyan,
+            <>
+              <T color="#80deea" bold center size={14}>
+                This single formula is the entire reason KV cache exists. It needs just one Q vector, but ALL keys and
+                ALL values. That asymmetry is the key.
+              </T>
+            </>,
+          )}
+        </Box>
+      </Reveal>
+      {subBtn(2)}
+
+      {/* ── Sub 3: Why K and V Are Cached, Not Q ── */}
+      <Reveal when={sub >= 3}>
+        <Box color={C.blue} style={{ width: "100%" }}>
+          <T color="#90caf9" bold center size={20}>
+            Why K and V Are Cached - Not Q
+          </T>
+          <T color="#90caf9" size={16} style={{ marginTop: 8 }}>
+            Look at the formula again and ask: for each part, do we need the old tokens' values or just the new token's?
+          </T>
+
+          {inner(
+            C.purple,
+            <>
+              <T color="#b8a9ff" bold center size={15}>
+                Q (Query) - we never need old queries again
+              </T>
+              <T color="#b8a9ff" size={15} style={{ marginTop: 6 }}>
+                The formula is: q_new · K_allᵀ. Only q_new appears - the new token's query. We do not multiply
+                q_I or q_love against anything. Those queries already served their purpose in steps 1 and 2. They are
+                dead weight.
+              </T>
+              {mono(C.purple, "Step 3: q_cats · [k_I, k_love, k_cats]ᵀ", 14)}
+              <T color={C.dim} center size={13} style={{ marginTop: 4 }}>
+                Only q_cats is used. q_I and q_love are not part of this computation at all.
+              </T>
+            </>,
+          )}
+
+          {inner(
+            C.blue,
+            <>
+              <T color="#90caf9" bold center size={15}>
+                K (Key) - ALL old keys are needed every step
+              </T>
+              <T color="#90caf9" size={15} style={{ marginTop: 6 }}>
+                The new token must compute a dot product with every key to find which tokens to attend to. When
+                generating "cats", its query must score against k_I, k_love, AND k_cats. If we threw away k_I, the model
+                could not attend to "I" at all.
+              </T>
+              {mono(C.blue, "scores = q_cats · [k_I, k_love, k_cats]ᵀ = [0.25, 0.29, 0.27]", 13)}
+              <T color={C.dim} center size={13} style={{ marginTop: 4 }}>
+                Every key participates. Missing one key = missing one attention score.
+              </T>
+            </>,
+          )}
+
+          {inner(
+            C.green,
+            <>
+              <T color="#a5d6a7" bold center size={15}>
+                V (Value) - ALL old values are needed every step
+              </T>
+              <T color="#a5d6a7" size={15} style={{ marginTop: 6 }}>
+                The output is a weighted sum of ALL value vectors. The attention weights tell us how much of each
+                token's meaning to include. If v_I were missing, the output could not incorporate any information from
+                "I".
+              </T>
+              {mono(C.green, "output = 0.33 · v_I + 0.34 · v_love + 0.33 · v_cats", 13)}
+              <T color={C.dim} center size={13} style={{ marginTop: 4 }}>
+                Every value participates. Missing one value = losing that token's contribution.
+              </T>
+            </>,
+          )}
+
+          {inner(
+            C.yellow,
+            <>
+              <T color="#fff176" bold center size={16}>
+                The Asymmetry
+              </T>
+              <div style={{ marginTop: 8, display: "flex", gap: 10, flexWrap: "wrap" }}>
+                <div
+                  style={{
+                    flex: "1 1 180px",
+                    padding: 10,
+                    borderRadius: 8,
+                    background: `${C.purple}06`,
+                    border: `1px solid ${C.purple}12`,
+                  }}
+                >
+                  <T color={C.purple} bold center size={14}>
+                    Q (Query)
+                  </T>
+                  <T color={C.dim} center size={13} style={{ marginTop: 4 }}>
+                    Only new token's Q is used
+                  </T>
+                  <T color={C.dim} center size={13}>
+                    Old Q values are never needed again
+                  </T>
+                  <T color={C.purple} bold center size={14} style={{ marginTop: 6 }}>
+                    Do not cache
+                  </T>
+                </div>
+                <div
+                  style={{
+                    flex: "1 1 180px",
+                    padding: 10,
+                    borderRadius: 8,
+                    background: `${C.blue}06`,
+                    border: `1px solid ${C.blue}12`,
+                  }}
+                >
+                  <T color={C.blue} bold center size={14}>
+                    K (Key)
+                  </T>
+                  <T color={C.dim} center size={13} style={{ marginTop: 4 }}>
+                    ALL tokens' keys needed every step
+                  </T>
+                  <T color={C.dim} center size={13}>
+                    Recomputing is pure waste
+                  </T>
+                  <T color={C.blue} bold center size={14} style={{ marginTop: 6 }}>
+                    Cache it
+                  </T>
+                </div>
+                <div
+                  style={{
+                    flex: "1 1 180px",
+                    padding: 10,
+                    borderRadius: 8,
+                    background: `${C.green}06`,
+                    border: `1px solid ${C.green}12`,
+                  }}
+                >
+                  <T color={C.green} bold center size={14}>
+                    V (Value)
+                  </T>
+                  <T color={C.dim} center size={13} style={{ marginTop: 4 }}>
+                    ALL tokens' values needed every step
+                  </T>
+                  <T color={C.dim} center size={13}>
+                    Recomputing is pure waste
+                  </T>
+                  <T color={C.green} bold center size={14} style={{ marginTop: 6 }}>
+                    Cache it
+                  </T>
+                </div>
+              </div>
+            </>,
+          )}
+        </Box>
+      </Reveal>
+      {subBtn(3)}
+
+      {/* ── Sub 4: The KV Cache Mechanism - Exact Operations ── */}
+      <Reveal when={sub >= 4}>
+        <Box color={C.green} style={{ width: "100%" }}>
+          <T color="#a5d6a7" bold center size={20}>
+            The KV Cache - Exact Operations
+          </T>
+          <T color="#a5d6a7" size={16} style={{ marginTop: 8 }}>
+            Let's compare exactly what happens at Step 3 (generating "cats") with and without the cache:
+          </T>
+
+          <div style={{ marginTop: 12, display: "flex", gap: 12, flexWrap: "wrap" }}>
+            {/* Without cache */}
             <div
               style={{
-                marginTop: 10,
-                padding: 8,
-                borderRadius: 6,
-                background: `${C.red}08`,
+                flex: "1 1 260px",
+                padding: 14,
+                borderRadius: 10,
+                background: `${C.red}06`,
                 border: `1px solid ${C.red}20`,
               }}
             >
-              <T color={C.dim} center size={13}>
-                Cache = 2 x 4,096 x 8,192 x 80 x 2 bytes
+              <T color={C.red} bold center size={16}>
+                Without Cache
               </T>
-              <T color={C.red} bold center size={16} style={{ marginTop: 4 }}>
-                = 10.7 GB per sequence
+              <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 3 }}>
+                {[
+                  { code: "q_I    = W_Q · x_I", note: "wasted", color: C.red },
+                  { code: "q_love = W_Q · x_love", note: "wasted", color: C.red },
+                  { code: "q_cats = W_Q · x_cats", note: "used", color: C.purple },
+                  { code: "k_I    = W_K · x_I", note: "wasted", color: C.red },
+                  { code: "k_love = W_K · x_love", note: "wasted", color: C.red },
+                  { code: "k_cats = W_K · x_cats", note: "used", color: C.blue },
+                  { code: "v_I    = W_V · x_I", note: "wasted", color: C.red },
+                  { code: "v_love = W_V · x_love", note: "wasted", color: C.red },
+                  { code: "v_cats = W_V · x_cats", note: "used", color: C.green },
+                ].map(({ code, note, color }, i) => (
+                  <div
+                    key={i}
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      padding: "2px 6px",
+                      borderRadius: 4,
+                      background: note === "wasted" ? `${C.red}06` : "transparent",
+                    }}
+                  >
+                    <code style={{ color: note === "wasted" ? C.red : color, fontSize: 12 }}>{code}</code>
+                    <span style={{ color: note === "wasted" ? C.red : C.green, fontSize: 11 }}>{note}</span>
+                  </div>
+                ))}
+              </div>
+              <T color={C.red} bold center size={14} style={{ marginTop: 8 }}>
+                9 multiplications (6 wasted)
+              </T>
+            </div>
+
+            {/* With cache */}
+            <div
+              style={{
+                flex: "1 1 260px",
+                padding: 14,
+                borderRadius: 10,
+                background: `${C.green}06`,
+                border: `1px solid ${C.green}20`,
+              }}
+            >
+              <T color={C.green} bold center size={16}>
+                With Cache
+              </T>
+              <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 3 }}>
+                <div style={{ padding: "4px 6px", borderRadius: 4, background: `${C.blue}06` }}>
+                  <T color={C.dim} size={12}>
+                    K_cache = [k_I, k_love] from steps 1-2
+                  </T>
+                </div>
+                <div style={{ padding: "4px 6px", borderRadius: 4, background: `${C.green}06` }}>
+                  <T color={C.dim} size={12}>
+                    V_cache = [v_I, v_love] from steps 1-2
+                  </T>
+                </div>
+                <div style={{ marginTop: 6, borderTop: `1px solid ${C.dim}15`, paddingTop: 6 }}>
+                  <T color={C.dim} size={12} bold>
+                    Compute only for new token:
+                  </T>
+                </div>
+                <code style={{ color: C.purple, fontSize: 12, padding: "2px 6px" }}>q_cats = W_Q · x_cats</code>
+                <code style={{ color: C.blue, fontSize: 12, padding: "2px 6px" }}>k_cats = W_K · x_cats</code>
+                <code style={{ color: C.green, fontSize: 12, padding: "2px 6px" }}>v_cats = W_V · x_cats</code>
+                <div style={{ marginTop: 6, borderTop: `1px solid ${C.dim}15`, paddingTop: 6 }}>
+                  <T color={C.dim} size={12} bold>
+                    Append to cache:
+                  </T>
+                </div>
+                <T color={C.blue} size={12} style={{ padding: "2px 6px" }}>
+                  K_cache = [k_I, k_love, k_cats]
+                </T>
+                <T color={C.green} size={12} style={{ padding: "2px 6px" }}>
+                  V_cache = [v_I, v_love, v_cats]
+                </T>
+                <div style={{ marginTop: 6, borderTop: `1px solid ${C.dim}15`, paddingTop: 6 }}>
+                  <T color={C.dim} size={12} bold>
+                    Compute attention:
+                  </T>
+                </div>
+                <T color={C.dim} size={12} style={{ padding: "2px 6px" }}>
+                  q_cats · K_cacheᵀ / √d → softmax → · V_cache
+                </T>
+              </div>
+              <T color={C.green} bold center size={14} style={{ marginTop: 8 }}>
+                3 multiplications (0 wasted)
               </T>
             </div>
           </div>
 
-          <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 4 }}>
-            <T color="#ffcc80" bold size={15}>
-              This is why:
-            </T>
-            {[
-              {
-                fact: "Long context is expensive",
-                detail: "Doubling the sequence length doubles the KV cache. 128K context = enormous memory.",
-                color: C.red,
-              },
-              {
-                fact: "Batch size is limited",
-                detail: "Each concurrent user needs their own KV cache. 10 users = 107 GB just for caches.",
-                color: C.orange,
-              },
-              {
-                fact: "GQA helps",
-                detail: "Grouped-Query Attention shares K, V across multiple Q heads, shrinking the cache by 4-8x.",
-                color: C.green,
-              },
-            ].map(({ fact, detail, color }) => (
-              <div
-                key={fact}
-                style={{
-                  display: "flex",
-                  gap: 6,
-                  alignItems: "flex-start",
-                  padding: "6px 10px",
-                  borderRadius: 6,
-                  background: `${color}06`,
-                  border: `1px solid ${color}12`,
-                }}
-              >
-                <span style={{ color, fontSize: 10, marginTop: 4 }}>&#9679;</span>
-                <T color={C.dim} size={13}>
-                  <strong style={{ color }}>{fact}:</strong> {detail}
-                </T>
-              </div>
-            ))}
-          </div>
+          {inner(
+            C.yellow,
+            <>
+              <T color="#fff176" bold center size={15}>
+                Same result, less work
+              </T>
+              <T color="#fff176" size={15} style={{ marginTop: 4 }}>
+                Both approaches produce the exact same output_cats. The attention scores are identical because the same
+                q_cats, k_I, k_love, k_cats are used. The only difference is where k_I and k_love come from - freshly
+                computed (waste) or read from cache (free).
+              </T>
+            </>,
+          )}
+
+          {inner(
+            C.green,
+            <>
+              <T color="#a5d6a7" bold center size={14}>
+                At step N: without cache = 3N multiplications. With cache = 3 multiplications. For N = 1000, that is
+                3000 vs 3 - a 1000x reduction in projection work alone.
+              </T>
+            </>,
+          )}
         </Box>
       </Reveal>
-      {sub === 4 && (
-        <SubBtn
-          key={sub}
-          onClick={() => {
-            setSubBtnRipple(Date.now());
-            navigate("forward");
-          }}
-          rippleKey={subBtnRipple}
-          registerSubBtn={registerSubBtn}
-        />
-      )}
+      {subBtn(4)}
 
-      {/* Sub 5: The tradeoff */}
+      {/* ── Sub 5: Worked Example with Real Numbers ── */}
       <Reveal when={sub >= 5}>
+        <Box color={C.orange} style={{ width: "100%" }}>
+          <T color="#ffcc80" bold center size={20}>
+            Worked Example with Real Numbers
+          </T>
+          <T color="#ffcc80" size={16} style={{ marginTop: 8 }}>
+            Let's trace through the exact computation with d = 2 to see every number. Small dimensions, real math, no
+            hand-waving.
+          </T>
+
+          {/* Embeddings */}
+          {inner(
+            C.cyan,
+            <>
+              <T color="#80deea" bold center size={15}>
+                Token embeddings (d = 2):
+              </T>
+              <div style={{ marginTop: 6, display: "flex", flexDirection: "column", gap: 3, textAlign: "center" }}>
+                <code style={{ color: C.cyan, fontSize: 14 }}>x_I &nbsp;&nbsp;&nbsp;= [1.0, 0.0]</code>
+                <code style={{ color: C.cyan, fontSize: 14 }}>x_love = [0.0, 1.0]</code>
+                <code style={{ color: C.cyan, fontSize: 14 }}>x_cats = [0.5, 0.5]</code>
+              </div>
+            </>,
+          )}
+
+          {/* Weight matrices */}
+          {inner(
+            C.purple,
+            <>
+              <T color="#b8a9ff" bold center size={15}>
+                Weight matrices (2 x 2):
+              </T>
+              <div style={{ marginTop: 6, display: "flex", gap: 12, flexWrap: "wrap", justifyContent: "center" }}>
+                {[
+                  { name: "W_Q", vals: ["[0.5, 0.1]", "[0.2, 0.6]"], color: C.purple },
+                  { name: "W_K", vals: ["[0.3, 0.7]", "[0.4, 0.2]"], color: C.blue },
+                  { name: "W_V", vals: ["[0.8, 0.1]", "[0.3, 0.9]"], color: C.green },
+                ].map(({ name, vals, color }) => (
+                  <div
+                    key={name}
+                    style={{
+                      padding: 8,
+                      borderRadius: 6,
+                      background: `${color}06`,
+                      border: `1px solid ${color}12`,
+                      textAlign: "center",
+                    }}
+                  >
+                    <T color={color} bold size={13}>
+                      {name}
+                    </T>
+                    {vals.map((v, i) => (
+                      <code key={i} style={{ display: "block", color, fontSize: 13 }}>
+                        {v}
+                      </code>
+                    ))}
+                  </div>
+                ))}
+              </div>
+            </>,
+          )}
+
+          {/* Step 1 */}
+          {inner(
+            C.yellow,
+            <>
+              <T color="#fff176" bold center size={15}>
+                Step 1: Process "I" - compute everything
+              </T>
+              <div style={{ marginTop: 6, display: "flex", flexDirection: "column", gap: 3, textAlign: "center" }}>
+                <code style={{ color: C.purple, fontSize: 13 }}>q_I = W_Q · [1.0, 0.0] = [0.5, 0.2]</code>
+                <code style={{ color: C.blue, fontSize: 13 }}>k_I = W_K · [1.0, 0.0] = [0.3, 0.4]</code>
+                <code style={{ color: C.green, fontSize: 13 }}>v_I = W_V · [1.0, 0.0] = [0.8, 0.3]</code>
+              </div>
+              <div
+                style={{ marginTop: 6, padding: 6, borderRadius: 4, background: `${C.blue}06`, textAlign: "center" }}
+              >
+                <T color={C.blue} size={13} bold>
+                  Cache after step 1: K = [[0.3, 0.4]] &nbsp; V = [[0.8, 0.3]]
+                </T>
+              </div>
+            </>,
+          )}
+
+          {/* Step 2 */}
+          {inner(
+            C.orange,
+            <>
+              <T color="#ffcc80" bold center size={15}>
+                Step 2: Process "love" - compute new, load cached
+              </T>
+              <T color={C.dim} size={13} style={{ marginTop: 4 }}>
+                k_I and v_I loaded from cache - not recomputed!
+              </T>
+              <div style={{ marginTop: 6, display: "flex", flexDirection: "column", gap: 3, textAlign: "center" }}>
+                <code style={{ color: C.purple, fontSize: 13 }}>q_love = W_Q · [0.0, 1.0] = [0.1, 0.6]</code>
+                <code style={{ color: C.blue, fontSize: 13 }}>k_love = W_K · [0.0, 1.0] = [0.7, 0.2]</code>
+                <code style={{ color: C.green, fontSize: 13 }}>v_love = W_V · [0.0, 1.0] = [0.1, 0.9]</code>
+              </div>
+              <div
+                style={{ marginTop: 6, padding: 6, borderRadius: 4, background: `${C.blue}06`, textAlign: "center" }}
+              >
+                <T color={C.blue} size={13} bold>
+                  Cache after step 2: K = [[0.3, 0.4], [0.7, 0.2]] &nbsp; V = [[0.8, 0.3], [0.1, 0.9]]
+                </T>
+              </div>
+            </>,
+          )}
+
+          {/* Step 3: the big one */}
+          {inner(
+            C.green,
+            <>
+              <T color="#a5d6a7" bold center size={15}>
+                Step 3: Process "cats" - the full attention computation
+              </T>
+              <T color={C.dim} size={13} style={{ marginTop: 4 }}>
+                k_I, k_love, v_I, v_love all loaded from cache. Only compute for "cats":
+              </T>
+              <div style={{ marginTop: 6, display: "flex", flexDirection: "column", gap: 3, textAlign: "center" }}>
+                <code style={{ color: C.purple, fontSize: 13 }}>q_cats = W_Q · [0.5, 0.5] = [0.3, 0.4]</code>
+                <code style={{ color: C.blue, fontSize: 13 }}>k_cats = W_K · [0.5, 0.5] = [0.5, 0.3]</code>
+                <code style={{ color: C.green, fontSize: 13 }}>v_cats = W_V · [0.5, 0.5] = [0.45, 0.6]</code>
+              </div>
+
+              <div
+                style={{
+                  marginTop: 8,
+                  padding: 8,
+                  borderRadius: 6,
+                  background: `${C.blue}06`,
+                  border: `1px solid ${C.blue}12`,
+                }}
+              >
+                <T color={C.blue} size={13} bold center>
+                  Full K matrix (from cache + new):
+                </T>
+                <div style={{ textAlign: "center", marginTop: 4 }}>
+                  <code style={{ color: C.dim, fontSize: 13 }}>
+                    k_I &nbsp;&nbsp;&nbsp;= [0.3, 0.4] &nbsp; (from cache)
+                  </code>
+                  <br />
+                  <code style={{ color: C.dim, fontSize: 13 }}>k_love = [0.7, 0.2] &nbsp; (from cache)</code>
+                  <br />
+                  <code style={{ color: C.blue, fontSize: 13 }}>k_cats = [0.5, 0.3] &nbsp; (just computed)</code>
+                </div>
+              </div>
+
+              <div
+                style={{
+                  marginTop: 8,
+                  padding: 8,
+                  borderRadius: 6,
+                  background: `${C.purple}06`,
+                  border: `1px solid ${C.purple}12`,
+                }}
+              >
+                <T color={C.purple} size={13} bold center>
+                  Attention scores: q_cats · each key
+                </T>
+                <div style={{ textAlign: "center", marginTop: 4 }}>
+                  <code style={{ color: C.dim, fontSize: 13 }}>
+                    q_cats · k_I &nbsp;&nbsp;&nbsp;= 0.3×0.3 + 0.4×0.4 = 0.25
+                  </code>
+                  <br />
+                  <code style={{ color: C.dim, fontSize: 13 }}>
+                    q_cats · k_love = 0.3×0.7 + 0.4×0.2 = 0.29
+                  </code>
+                  <br />
+                  <code style={{ color: C.dim, fontSize: 13 }}>
+                    q_cats · k_cats = 0.3×0.5 + 0.4×0.3 = 0.27
+                  </code>
+                </div>
+              </div>
+
+              <div
+                style={{
+                  marginTop: 8,
+                  padding: 8,
+                  borderRadius: 6,
+                  background: `${C.yellow}06`,
+                  border: `1px solid ${C.yellow}12`,
+                }}
+              >
+                <T color="#fff176" size={13} bold center>
+                  Scale by √d = √2, then softmax:
+                </T>
+                <div style={{ textAlign: "center", marginTop: 4 }}>
+                  <code style={{ color: C.dim, fontSize: 13 }}>scaled = [0.177, 0.205, 0.191]</code>
+                  <br />
+                  <code style={{ color: "#fff176", fontSize: 13 }}>softmax = [0.329, 0.338, 0.333]</code>
+                </div>
+              </div>
+
+              <div
+                style={{
+                  marginTop: 8,
+                  padding: 8,
+                  borderRadius: 6,
+                  background: `${C.green}06`,
+                  border: `1px solid ${C.green}12`,
+                }}
+              >
+                <T color="#a5d6a7" size={13} bold center>
+                  Weighted sum of values:
+                </T>
+                <div style={{ textAlign: "center", marginTop: 4 }}>
+                  <code style={{ color: C.dim, fontSize: 12 }}>
+                    0.329 × [0.8, 0.3] + 0.338 × [0.1, 0.9] + 0.333 × [0.45, 0.6]
+                  </code>
+                  <br />
+                  <code style={{ color: C.dim, fontSize: 12 }}>= [0.263, 0.099] + [0.034, 0.304] + [0.150, 0.200]</code>
+                  <br />
+                  <code style={{ color: "#a5d6a7", fontSize: 14 }}>output_cats = [0.447, 0.603]</code>
+                </div>
+              </div>
+            </>,
+          )}
+
+          {inner(
+            C.red,
+            <>
+              <T color="#ef9a9a" bold center size={14}>
+                This exact same [0.447, 0.603] would result without the cache. The cache changes WHERE k_I, k_love, v_I,
+                v_love come from (cache vs recompute) but the numbers are identical.
+              </T>
+            </>,
+          )}
+        </Box>
+      </Reveal>
+      {subBtn(5)}
+
+      {/* ── Sub 6: What the Cache Looks Like in Memory ── */}
+      <Reveal when={sub >= 6}>
+        <Box color={C.purple} style={{ width: "100%" }}>
+          <T color="#b8a9ff" bold center size={20}>
+            What the Cache Looks Like in Memory
+          </T>
+          <T color="#b8a9ff" size={16} style={{ marginTop: 8 }}>
+            A real model has many layers and many attention heads. Each one maintains its own independent KV cache.
+          </T>
+
+          {inner(
+            C.purple,
+            <>
+              <T color="#b8a9ff" bold center size={15}>
+                Cache structure per layer, per head:
+              </T>
+              <div style={{ marginTop: 8, display: "flex", gap: 12, flexWrap: "wrap", justifyContent: "center" }}>
+                {[
+                  { name: "K cache", shape: "(seq_len, d_head)", color: C.blue },
+                  { name: "V cache", shape: "(seq_len, d_head)", color: C.green },
+                ].map(({ name, shape, color }) => (
+                  <div
+                    key={name}
+                    style={{
+                      padding: 10,
+                      borderRadius: 8,
+                      background: `${color}06`,
+                      border: `1px solid ${color}12`,
+                      textAlign: "center",
+                    }}
+                  >
+                    <T color={color} bold size={14}>
+                      {name}
+                    </T>
+                    <T color={C.dim} size={13}>
+                      {shape}
+                    </T>
+                    <T color={C.dim} size={12} style={{ marginTop: 4 }}>
+                      Grows by 1 row per token
+                    </T>
+                  </div>
+                ))}
+              </div>
+            </>,
+          )}
+
+          {inner(
+            C.orange,
+            <>
+              <T color="#ffcc80" bold center size={15}>
+                Growing cache for "I love cats" (one head):
+              </T>
+              <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 8 }}>
+                {[
+                  { step: 'After "I"', kRows: ["[0.3, 0.4]"], vRows: ["[0.8, 0.3]"] },
+                  { step: 'After "love"', kRows: ["[0.3, 0.4]", "[0.7, 0.2]"], vRows: ["[0.8, 0.3]", "[0.1, 0.9]"] },
+                  {
+                    step: 'After "cats"',
+                    kRows: ["[0.3, 0.4]", "[0.7, 0.2]", "[0.5, 0.3]"],
+                    vRows: ["[0.8, 0.3]", "[0.1, 0.9]", "[0.45, 0.6]"],
+                  },
+                ].map(({ step, kRows, vRows }) => (
+                  <div
+                    key={step}
+                    style={{
+                      padding: 8,
+                      borderRadius: 6,
+                      background: `${C.orange}06`,
+                      border: `1px solid ${C.orange}12`,
+                    }}
+                  >
+                    <T color="#ffcc80" bold size={13}>
+                      {step}:
+                    </T>
+                    <div style={{ display: "flex", gap: 16, marginTop: 4, flexWrap: "wrap" }}>
+                      <div>
+                        <T color={C.blue} size={12} bold>
+                          K cache:
+                        </T>
+                        {kRows.map((r, i) => (
+                          <code
+                            key={i}
+                            style={{ display: "block", color: i === kRows.length - 1 ? C.blue : C.dim, fontSize: 12 }}
+                          >
+                            {r}
+                            {i === kRows.length - 1 ? " ← new" : ""}
+                          </code>
+                        ))}
+                      </div>
+                      <div>
+                        <T color={C.green} size={12} bold>
+                          V cache:
+                        </T>
+                        {vRows.map((r, i) => (
+                          <code
+                            key={i}
+                            style={{ display: "block", color: i === vRows.length - 1 ? C.green : C.dim, fontSize: 12 }}
+                          >
+                            {r}
+                            {i === vRows.length - 1 ? " ← new" : ""}
+                          </code>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </>,
+          )}
+
+          {inner(
+            C.cyan,
+            <>
+              <T color="#80deea" bold center size={15}>
+                Total cache for a real model:
+              </T>
+              {mono(
+                "#80deea",
+                "KV cache = 2 (K+V) × layers × heads × d_head × seq_len × bytes",
+                13,
+              )}
+              <T color={C.dim} center size={13} style={{ marginTop: 6 }}>
+                A 70B model with 80 layers and 64 heads: that is 2 × 80 × 64 = 10,240 separate cache matrices,
+                each growing by one row per generated token.
+              </T>
+            </>,
+          )}
+        </Box>
+      </Reveal>
+      {subBtn(6)}
+
+      {/* ── Sub 7: The Cost - Operations and Memory ── */}
+      <Reveal when={sub >= 7}>
+        <Box color={C.orange} style={{ width: "100%" }}>
+          <T color="#ffcc80" bold center size={20}>
+            The Cost - Operations and Memory
+          </T>
+
+          {inner(
+            C.green,
+            <>
+              <T color="#a5d6a7" bold center size={16}>
+                Operation savings:
+              </T>
+              <div style={{ marginTop: 8, display: "flex", gap: 12, flexWrap: "wrap" }}>
+                <div
+                  style={{
+                    flex: "1 1 200px",
+                    padding: 10,
+                    borderRadius: 8,
+                    background: `${C.red}06`,
+                    border: `1px solid ${C.red}12`,
+                  }}
+                >
+                  <T color={C.red} bold center size={14}>
+                    Without cache
+                  </T>
+                  <T color={C.dim} size={13} style={{ marginTop: 4 }}>
+                    Per step: 3N projections + N<sup>2</sup> attention
+                  </T>
+                  <T color={C.red} bold center size={14} style={{ marginTop: 4 }}>
+                    Per step: O(N<sup>2</sup>) &nbsp; Total: O(N<sup>3</sup>)
+                  </T>
+                </div>
+                <div
+                  style={{
+                    flex: "1 1 200px",
+                    padding: 10,
+                    borderRadius: 8,
+                    background: `${C.green}06`,
+                    border: `1px solid ${C.green}12`,
+                  }}
+                >
+                  <T color={C.green} bold center size={14}>
+                    With cache
+                  </T>
+                  <T color={C.dim} size={13} style={{ marginTop: 4 }}>
+                    Per step: 3 projections + N attention
+                  </T>
+                  <T color={C.green} bold center size={14} style={{ marginTop: 4 }}>
+                    Per step: O(N) &nbsp; Total: O(N<sup>2</sup>)
+                  </T>
+                </div>
+              </div>
+              <div style={{ marginTop: 8, textAlign: "center" }}>
+                <T color="#fff176" bold size={15}>
+                  N = 1000: ~333 million ops without cache vs ~500 thousand with cache. ~660x faster.
+                </T>
+              </div>
+            </>,
+          )}
+
+          {inner(
+            C.orange,
+            <>
+              <T color="#ffcc80" bold center size={16}>
+                Memory cost - the price we pay:
+              </T>
+              {mono("#ffcc80", "cache = 2 × seq_len × d_model × layers × bytes_per_param", 13)}
+              <div style={{ marginTop: 10, padding: 10, borderRadius: 8, background: "rgba(0,0,0,0.25)" }}>
+                <T color={C.dim} bold center size={14}>
+                  Example: LLaMA 70B
+                </T>
+                <div style={{ marginTop: 6, display: "flex", flexDirection: "column", gap: 3 }}>
+                  {[
+                    { param: "Layers", val: "80", color: C.green },
+                    { param: "d_model", val: "8,192", color: C.purple },
+                    { param: "Max sequence", val: "4,096 tokens", color: C.cyan },
+                    { param: "Precision", val: "FP16 (2 bytes)", color: C.orange },
+                  ].map(({ param, val, color }) => (
+                    <div key={param} style={{ display: "flex", gap: 8, padding: "3px 8px" }}>
+                      <T color={color} bold size={13} style={{ minWidth: 90 }}>
+                        {param}
+                      </T>
+                      <T color={C.dim} size={13}>
+                        {val}
+                      </T>
+                    </div>
+                  ))}
+                </div>
+                <div
+                  style={{ marginTop: 8, padding: 6, borderRadius: 4, background: `${C.red}08`, textAlign: "center" }}
+                >
+                  <T color={C.dim} size={13}>
+                    2 × 4,096 × 8,192 × 80 × 2 bytes
+                  </T>
+                  <T color={C.red} bold size={16} style={{ marginTop: 2 }}>
+                    = 10.7 GB per sequence
+                  </T>
+                </div>
+              </div>
+            </>,
+          )}
+
+          {inner(
+            C.red,
+            <>
+              <T color="#ef9a9a" bold center size={15}>
+                Why this matters:
+              </T>
+              <div style={{ marginTop: 6, display: "flex", flexDirection: "column", gap: 4 }}>
+                {[
+                  {
+                    fact: "Long context is expensive",
+                    detail: "Doubling sequence length doubles cache. 128K context = enormous memory.",
+                    color: C.red,
+                  },
+                  {
+                    fact: "Batch size is limited",
+                    detail: "Each concurrent user needs their own cache. 10 users = 107 GB just for caches.",
+                    color: C.orange,
+                  },
+                  {
+                    fact: "GQA helps",
+                    detail: "Grouped-Query Attention shares K, V across Q heads, shrinking cache 4-8x.",
+                    color: C.green,
+                  },
+                ].map(({ fact, detail, color }) => (
+                  <div
+                    key={fact}
+                    style={{
+                      display: "flex",
+                      gap: 6,
+                      alignItems: "flex-start",
+                      padding: "4px 8px",
+                      borderRadius: 4,
+                      background: `${color}06`,
+                    }}
+                  >
+                    <span style={{ color, fontSize: 10, marginTop: 4 }}>&#9679;</span>
+                    <T color={C.dim} size={13}>
+                      <strong style={{ color }}>{fact}:</strong> {detail}
+                    </T>
+                  </div>
+                ))}
+              </div>
+            </>,
+          )}
+        </Box>
+      </Reveal>
+      {subBtn(7)}
+
+      {/* ── Sub 8: The Fundamental Tradeoff ── */}
+      <Reveal when={sub >= 8}>
         <Box color={C.cyan} style={{ width: "100%" }}>
           <T color="#80deea" bold center size={20}>
             The Fundamental Tradeoff
           </T>
-          <T color="#80deea" size={16} style={{ marginTop: 6 }}>
+          <T color="#80deea" size={16} style={{ marginTop: 8 }}>
             KV cache trades <strong>memory</strong> for <strong>speed</strong>. This is the central tension of LLM
             inference:
           </T>
 
-          <div style={{ marginTop: 14, display: "flex", gap: 12, flexWrap: "wrap" }}>
+          <div style={{ marginTop: 12, display: "flex", gap: 12, flexWrap: "wrap" }}>
             <div
               style={{
                 flex: "1 1 200px",
@@ -7807,7 +8341,7 @@ export const KVCache = (ctx) => {
                     Speed:
                   </T>
                   <T color={C.dim} size={13}>
-                    Slow (recompute everything)
+                    Slow (recompute all Q, K, V)
                   </T>
                 </div>
                 <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
@@ -7841,7 +8375,7 @@ export const KVCache = (ctx) => {
                     Speed:
                   </T>
                   <T color={C.dim} size={13}>
-                    Fast (only compute new token)
+                    Fast (only new token's Q, K, V)
                   </T>
                 </div>
                 <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
@@ -7859,40 +8393,30 @@ export const KVCache = (ctx) => {
             </div>
           </div>
 
-          <div
-            style={{
-              marginTop: 14,
-              padding: 12,
-              borderRadius: 10,
-              background: `${C.cyan}08`,
-              border: `1px solid ${C.cyan}25`,
-            }}
-          >
-            <T color="#80deea" bold center size={16}>
-              The Bottleneck of LLM Inference
-            </T>
-            <T color="#80deea" size={15} style={{ marginTop: 6 }}>
-              This memory-speed tradeoff is the fundamental bottleneck of LLM serving. Every technique you hear about -
-              GQA (Grouped-Query Attention), quantized KV cache, sliding window attention, paged attention - exists to
-              reduce the memory cost of the KV cache while keeping the speed benefit. When companies say "serving LLMs
-              is expensive," the KV cache is a major reason why.
-            </T>
-          </div>
+          {inner(
+            C.cyan,
+            <>
+              <T color="#80deea" bold center size={16}>
+                The Bottleneck of LLM Inference
+              </T>
+              <T color="#80deea" size={15} style={{ marginTop: 6 }}>
+                This memory-speed tradeoff is the fundamental bottleneck of LLM serving. Every technique you hear about
+                - GQA (Grouped-Query Attention), quantized KV cache, sliding window attention, paged attention - exists
+                to reduce the memory cost of the KV cache while keeping the speed benefit. When companies say "serving
+                LLMs is expensive," the KV cache is a major reason why.
+              </T>
+            </>,
+          )}
 
-          <div
-            style={{
-              marginTop: 10,
-              padding: 10,
-              borderRadius: 8,
-              background: `${C.purple}08`,
-              border: `1px solid ${C.purple}20`,
-            }}
-          >
-            <T color="#b8a9ff" size={14} center>
-              Note: KV cache only applies to <strong>inference</strong> (generation). During training, all tokens are
-              processed in parallel, so there's no sequential generation and no need for a cache.
-            </T>
-          </div>
+          {inner(
+            C.purple,
+            <>
+              <T color="#b8a9ff" size={14} center>
+                Note: KV cache only applies to <strong>inference</strong> (generation). During training, all tokens are
+                processed in parallel - so there is no sequential generation and no need for a cache.
+              </T>
+            </>,
+          )}
         </Box>
       </Reveal>
     </div>

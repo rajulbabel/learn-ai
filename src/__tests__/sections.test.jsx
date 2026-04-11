@@ -769,6 +769,10 @@ describe("Vectors sub-steps", () => {
     const text = container.textContent;
     expect(text).toContain("list");
     expect(text).toContain("number");
+    // Arrow should be offset down to center with boxes, not labels
+    const arrows = container.querySelectorAll("[data-arrow]");
+    expect(arrows.length).toBe(1);
+    expect(arrows[0].style.marginTop).toBeTruthy();
   });
 
   it("sub 1 connects vectors to neural networks", () => {
@@ -777,6 +781,12 @@ describe("Vectors sub-steps", () => {
     const text = container.textContent;
     expect(text).toContain("Everything");
     expect(text).toContain("vector");
+    // Both arrow containers should be present (one per illustration)
+    const arrows = container.querySelectorAll("[data-arrow]");
+    expect(arrows.length).toBe(2);
+    arrows.forEach((a) => {
+      expect(a.style.marginTop).toBeTruthy();
+    });
   });
 
   it("sub 2 shows words become vectors", () => {
@@ -1109,6 +1119,31 @@ describe("Dropout sub-steps", () => {
     expect(text).toContain("Transformer");
     expect(text).toContain("Multi-Head Attention");
     expect(text).toContain("Feed-Forward");
+  });
+});
+
+// ─── Chapter 1.24: Adam Optimizer ───
+describe("AdamOptimizer formula annotations", () => {
+  const fn = NeuralFoundations.AdamOptimizer;
+
+  it("sub 1 momentum formula annotations are center-aligned under their symbols", () => {
+    const ctx = makeCtx({ sub: 1 });
+    const { container } = render(fn(ctx));
+    const annotations = container.querySelectorAll("text[text-anchor='middle']");
+    const labels = Array.from(annotations)
+      .map((el) => el.textContent)
+      .filter((t) => ["momentum", "0.9", "gradient"].includes(t));
+    expect(labels).toEqual(expect.arrayContaining(["momentum", "0.9", "gradient"]));
+  });
+
+  it("sub 3 velocity formula annotations are center-aligned under their symbols", () => {
+    const ctx = makeCtx({ sub: 3 });
+    const { container } = render(fn(ctx));
+    const annotations = container.querySelectorAll("text[text-anchor='middle']");
+    const labels = Array.from(annotations)
+      .map((el) => el.textContent)
+      .filter((t) => ["velocity", "0.999", "squared grad"].includes(t));
+    expect(labels).toEqual(expect.arrayContaining(["velocity", "0.999", "squared grad"]));
   });
 });
 
@@ -2122,6 +2157,102 @@ describe("Graph helper", () => {
     const annotationCircle = Array.from(circles).find((c) => c.getAttribute("r") === "6");
     expect(annotationCircle).toBeTruthy();
     expect(annotationCircle.getAttribute("stroke")).toBe("#ffd740");
+  });
+});
+
+// ─── Chapter 9.6: KV Cache ───
+describe("KVCache sub-steps", () => {
+  const fn = AttentionComputation.KVCache;
+
+  it("sub 0 shows the attention formula recap with Q=XW_Q, K=XW_K, V=XW_V", () => {
+    const ctx = makeCtx({ sub: 0 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("The Attention Formula");
+    expect(text).toContain("W_Q");
+    expect(text).toContain("W_K");
+    expect(text).toContain("W_V");
+    expect(text).toContain("softmax");
+  });
+
+  it("sub 1 shows generation without cache with redundant computations highlighted", () => {
+    const ctx = makeCtx({ sub: 1 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("Without Cache");
+    expect(text).toContain("Redundant");
+    expect(text).toContain("W_K");
+    expect(text).toContain("Step 1");
+    expect(text).toContain("Step 2");
+    expect(text).toContain("Step 3");
+  });
+
+  it("sub 2 explains only the last row of output matters during generation", () => {
+    const ctx = makeCtx({ sub: 2 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("Only the Last Row");
+    expect(text).toContain("q_new");
+    expect(text).toContain("K_all");
+    expect(text).toContain("V_all");
+  });
+
+  it("sub 3 explains why K and V are cached, not Q", () => {
+    const ctx = makeCtx({ sub: 3 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("Why K and V");
+    expect(text).toContain("Not Q");
+    expect(text).toContain("never need");
+  });
+
+  it("sub 4 shows exact operations with and without cache side by side", () => {
+    const ctx = makeCtx({ sub: 4 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("Exact Operations");
+    expect(text).toContain("Without Cache");
+    expect(text).toContain("With Cache");
+    expect(text).toContain("Append");
+  });
+
+  it("sub 5 shows worked numerical example with d=2 matrices", () => {
+    const ctx = makeCtx({ sub: 5 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("Worked Example");
+    expect(text).toContain("d = 2");
+    expect(text).toContain("0.3");
+    expect(text).toContain("softmax");
+    expect(text).toContain("Cache");
+  });
+
+  it("sub 6 shows what cache looks like in memory per layer per head", () => {
+    const ctx = makeCtx({ sub: 6 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("Memory");
+    expect(text).toContain("per layer");
+    expect(text).toContain("per head");
+  });
+
+  it("sub 7 shows cost analysis with LLaMA 70B example", () => {
+    const ctx = makeCtx({ sub: 7 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("LLaMA 70B");
+    expect(text).toContain("10.7 GB");
+    expect(text).toContain("O(N");
+  });
+
+  it("sub 8 shows the fundamental tradeoff between memory and speed", () => {
+    const ctx = makeCtx({ sub: 8 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("Fundamental Tradeoff");
+    expect(text).toContain("memory");
+    expect(text).toContain("speed");
+    expect(text).toContain("Bottleneck");
   });
 });
 

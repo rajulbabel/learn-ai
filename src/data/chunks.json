@@ -5487,7 +5487,7 @@
     "section": 9,
     "sectionName": "The Decoder",
     "sub": 0,
-    "text": "The Inference Cost ProblemDuring autoregressive generation (chapter 2.6), the model produces one token at a time. To generate token N, it must attend to ALL previous tokens 1 through N-1. Watch the cost grow:Step-by-step generation cost (without cache):Token 1attend to [1]1 opsToken 2attend to [1, 2]4 opsToken 3attend to [1, 2, 3]9 opsToken 4attend to [1, 2, 3, 4]16 opsToken 5attend to [1, 2, 3, 4, 5]25 opsToken N: full self-attention over N tokens = N2 operations per stepTotal cost to generate N tokens (naive approach):12 + 22 + 32 + ... + N2 = O(N3)For N = 1000 tokens: roughly 333 million attention operations!Continue"
+    "text": "The Attention Formula - What Gets ComputedBefore we can understand KV caching, we need to see exactly what a single attention layer computes. For a sequence of N tokens, each represented as a d-dimensional embedding vector:Three matrix multiplications per layer:QQ = X · W_Q(N × d) - one query per tokenKK = X · W_K(N × d) - one key per tokenVV = X · W_V(N × d) - one value per tokenThen attention combines them:output = softmax( Q · Kᵀ / √d ) · VEach row of the output is one token's \"context-aware\" representation. Row i is computed from token i's query attending to all keys and aggregating all values.The key point: Q, K, V are computed from X using fixed weight matrices W_Q, W_K, W_V. The same input always produces the same Q, K, V. This is what makes caching possible.Continue"
   },
   {
     "id": 610,
@@ -5496,7 +5496,7 @@
     "section": 9,
     "sectionName": "The Decoder",
     "sub": 1,
-    "text": "Insight: Redundant ComputationWhen generating token 5, we recompute Q, K, V for ALL tokens. But look what stays the same:Generating token 4 (previous step)K1K2K3V1V2V3↓ next step ↓Generating token 5 (current step)K1K2K3K4V1V2V3V4K1, K2, K3 and V1, V2, V3 are exactly the same as last step!The wasteK and V for tokens 1, 2, 3 haven't changed - they're computed from the same embeddings with the same W_K and W_V matrices. Yet we're recomputing them from scratch at every single generation step. For 1000 tokens, K1 gets recomputed 999 times for nothing.Continue"
+    "text": "on Without Cache - See the WasteGenerating \"I love cats\" token by token. At each step, the model must compute Q, K, V for the entire sequence so far. Watch the redundant work pile up:Step 1: Generate \"I\"Sequence so far: [\"I\"]. Compute Q, K, V for 1 token:q_I = W_Q · x_Ik_I = W_K · x_Iv_I = W_V · x_I3 matrix-vector multiplications. All new, nothing wasted.Step 2: Generate \"love\"Sequence so far: [\"I\", \"love\"]. Recompute Q, K, V for ALL 2 tokens:q_I = W_Q · x_I ← Redundant! Same as Step 1k_I = W_K · x_I ← Redundant! Same as Step 1v_I = W_V · x_I ← Redundant! Same as Step 1q_love = W_Q · x_lovek_love = W_K · x_lovev_love = W_V · x_love6 multiplications, but 3 are redundant - identical to Step 1.Step 3: Generate \"cats\"Sequence so far: [\"I\", \"love\", \"cats\"]. Recompute Q, K, V for ALL 3 tokens:q_I = W_Q · x_I ← Redundant! (computed 3rd time)k_I = W_K · x_I ← Redundant! (computed 3rd time)v_I = W_V · x_I ← Redundant! (computed 3rd time)q_love = W_Q · x_love ← Redundant! (computed 2nd time)k_love = W_K · x_love ← Redundant! (computed 2nd time)v_love = W_V · x_love ← Redundant! (computed 2nd time)q_cats = W_Q · x_catsk_cats = W_K · x_catsv_cats = W_V · x_cats9 multiplications, but 6 are redundant!The Waste Grows QuadraticallyAt step N, we do 3N matrix-vector multiplications but only 3 are new. The other 3(N-1) are identical to work already done in earlier steps. After 1000 tokens, we have performed ~1.5 million redundant multiplications. This is the computation KV cache eliminates.Continue"
   },
   {
     "id": 611,
@@ -5505,7 +5505,7 @@
     "section": 9,
     "sectionName": "The Decoder",
     "sub": 2,
-    "text": "ache SolutionStore K and V from all previous tokens in a cache. At each step:Step 1Compute Q, K, V for ONLY the new token (1 token, not N)Step 2Append the new K and V to the cacheStep 3Compute attention: new Q against ALL cached K and VCost comparison:Without cacheEach step: recompute ALL N tokens' K, VThen full N x N attentionPer step: O(N2)Total: O(N3)With KV cacheEach step: compute ONLY 1 token's K, VThen 1 x N attention (one Q vs N keys)Per step: O(N)Total: O(N2)N = 1000 tokensWithout cache: ~333 million ops. With cache: ~500 thousand ops. ~660x faster.Continue"
+    "text": "Last Row of Output MattersThe attention formula computes an output for every token in the sequence. But during generation, we already have the outputs for all previous tokens - we computed them in earlier steps. We only need the output for the new token.Full attention output (N rows):output = softmax( Q · Kᵀ / √d ) · V ← shape: (N × d)Row 1 (for \"I\"):already computed at step 1Row 2 (for \"love\"):already computed at step 2Row 3 (for \"cats\"):THIS is what we need nowThe formula for JUST the new token's output:output_new = softmax( q_new · K_allᵀ / √d ) · V_allq_newSingle vector (1 x d) - only the new token's queryK_allMatrix of ALL tokens' keys (N x d) - needed for dot product scoresV_allMatrix of ALL tokens' values (N x d) - needed for weighted sumThis single formula is the entire reason KV cache exists. It needs just one Q vector, but ALL keys and ALL values. That asymmetry is the key.Continue"
   },
   {
     "id": 612,
@@ -5514,7 +5514,7 @@
     "section": 9,
     "sectionName": "The Decoder",
     "sub": 3,
-    "text": "e Growing Step by StepWatch the KV cache grow as the model generates \"I love cats\":Step 1: Generate \"I\"Compute:Compute Q_I, K_I, V_I from scratchK cache:K_IV cache:V_IAttention:Q_I attends to [K_I]Step 2: Generate \"love\"Compute:Compute Q_love, K_love, V_love onlyK cache:K_IK_loveV cache:V_IV_loveAttention:Q_love attends to [K_I, K_love]Step 3: Generate \"cats\"Compute:Compute Q_cats, K_cats, V_cats onlyK cache:K_IK_loveK_catsV cache:V_IV_loveV_catsAttention:Q_cats attends to [K_I, K_love, K_cats]At each step, only the new token's Q, K, V are computed. Old K and V entries are never recomputed - they're read directly from the cache. The cache grows by one K and one V entry per step.Continue"
+    "text": "d V Are Cached - Not QLook at the formula again and ask: for each part, do we need the old tokens' values or just the new token's?Q (Query) - we never need old queries againThe formula is: q_new · K_allᵀ. Only q_new appears - the new token's query. We do not multiply q_I or q_love against anything. Those queries already served their purpose in steps 1 and 2. They are dead weight.Step 3: q_cats · [k_I, k_love, k_cats]ᵀOnly q_cats is used. q_I and q_love are not part of this computation at all.K (Key) - ALL old keys are needed every stepThe new token must compute a dot product with every key to find which tokens to attend to. When generating \"cats\", its query must score against k_I, k_love, AND k_cats. If we threw away k_I, the model could not attend to \"I\" at all.scores = q_cats · [k_I, k_love, k_cats]ᵀ = [0.25, 0.29, 0.27]Every key participates. Missing one key = missing one attention score.V (Value) - ALL old values are needed every stepThe output is a weighted sum of ALL value vectors. The attention weights tell us how much of each token's meaning to include. If v_I were missing, the output could not incorporate any information from \"I\".output = 0.33 · v_I + 0.34 · v_love + 0.33 · v_catsEvery value participates. Missing one value = losing that token's contribution.The AsymmetryQ (Query)Only new token's Q is usedOld Q values are never needed againDo not cacheK (Key)ALL tokens' keys needed every stepRecomputing is pure wasteCache itV (Value)ALL tokens' values needed every stepRecomputing is pure wasteCache itContinue"
   },
   {
     "id": 613,
@@ -5523,7 +5523,7 @@
     "section": 9,
     "sectionName": "The Decoder",
     "sub": 4,
-    "text": "ry CostKV cache is not free. Each layer needs to store K and V for every token generated so far.Cache size per layer:2(K + V)xseq_lengthxd_modelxbytesExample: LLaMA 70BLayers80d_model8,192Max sequence4,096 tokensPrecisionFP16 (2 bytes)Cache = 2 x 4,096 x 8,192 x 80 x 2 bytes= 10.7 GB per sequenceThis is why:●Long context is expensive: Doubling the sequence length doubles the KV cache. 128K context = enormous memory.●Batch size is limited: Each concurrent user needs their own KV cache. 10 users = 107 GB just for caches.●GQA helps: Grouped-Query Attention shares K, V across multiple Q heads, shrinking the cache by 4-8x.Continue"
+    "text": "ache - Exact OperationsLet's compare exactly what happens at Step 3 (generating \"cats\") with and without the cache:Without Cacheq_I = W_Q · x_Iwastedq_love = W_Q · x_lovewastedq_cats = W_Q · x_catsusedk_I = W_K · x_Iwastedk_love = W_K · x_lovewastedk_cats = W_K · x_catsusedv_I = W_V · x_Iwastedv_love = W_V · x_lovewastedv_cats = W_V · x_catsused9 multiplications (6 wasted)With CacheK_cache = [k_I, k_love] from steps 1-2V_cache = [v_I, v_love] from steps 1-2Compute only for new token:q_cats = W_Q · x_catsk_cats = W_K · x_catsv_cats = W_V · x_catsAppend to cache:K_cache = [k_I, k_love, k_cats]V_cache = [v_I, v_love, v_cats]Compute attention:q_cats · K_cacheᵀ / √d → softmax → · V_cache3 multiplications (0 wasted)Same result, less workBoth approaches produce the exact same output_cats. The attention scores are identical because the same q_cats, k_I, k_love, k_cats are used. The only difference is where k_I and k_love come from - freshly computed (waste) or read from cache (free).At step N: without cache = 3N multiplications. With cache = 3 multiplications. For N = 1000, that is 3000 vs 3 - a 1000x reduction in projection work alone.Continue"
   },
   {
     "id": 614,
@@ -5532,10 +5532,37 @@
     "section": 9,
     "sectionName": "The Decoder",
     "sub": 5,
-    "text": "amental TradeoffKV cache trades memory for speed. This is the central tension of LLM inference:Without KV CacheSpeed:Slow (recompute everything)Memory:Low (no cache stored)O(N3) compute, O(1) extra memoryWith KV CacheSpeed:Fast (only compute new token)Memory:High (GBs per sequence)O(N2) compute, O(N) extra memoryThe Bottleneck of LLM InferenceThis memory-speed tradeoff is the fundamental bottleneck of LLM serving. Every technique you hear about - GQA (Grouped-Query Attention), quantized KV cache, sliding window attention, paged attention - exists to reduce the memory cost of the KV cache while keeping the speed benefit. When companies say \"serving LLMs is expensive,\" the KV cache is a major reason why.Note: KV cache only applies to inference (generation). During training, all tokens are processed in parallel, so there's no sequential generation and no need for a cache."
+    "text": "xample with Real NumbersLet's trace through the exact computation with d = 2 to see every number. Small dimensions, real math, no hand-waving.Token embeddings (d = 2):x_I = [1.0, 0.0]x_love = [0.0, 1.0]x_cats = [0.5, 0.5]Weight matrices (2 x 2):W_Q[0.5, 0.1][0.2, 0.6]W_K[0.3, 0.7][0.4, 0.2]W_V[0.8, 0.1][0.3, 0.9]Step 1: Process \"I\" - compute everythingq_I = W_Q · [1.0, 0.0] = [0.5, 0.2]k_I = W_K · [1.0, 0.0] = [0.3, 0.4]v_I = W_V · [1.0, 0.0] = [0.8, 0.3]Cache after step 1: K = [[0.3, 0.4]] V = [[0.8, 0.3]]Step 2: Process \"love\" - compute new, load cachedk_I and v_I loaded from cache - not recomputed!q_love = W_Q · [0.0, 1.0] = [0.1, 0.6]k_love = W_K · [0.0, 1.0] = [0.7, 0.2]v_love = W_V · [0.0, 1.0] = [0.1, 0.9]Cache after step 2: K = [[0.3, 0.4], [0.7, 0.2]] V = [[0.8, 0.3], [0.1, 0.9]]Step 3: Process \"cats\" - the full attention computationk_I, k_love, v_I, v_love all loaded from cache. Only compute for \"cats\":q_cats = W_Q · [0.5, 0.5] = [0.3, 0.4]k_cats = W_K · [0.5, 0.5] = [0.5, 0.3]v_cats = W_V · [0.5, 0.5] = [0.45, 0.6]Full K matrix (from cache + new):k_I = [0.3, 0.4] (from cache)k_love = [0.7, 0.2] (from cache)k_cats = [0.5, 0.3] (just computed)Attention scores: q_cats · each keyq_cats · k_I = 0.3×0.3 + 0.4×0.4 = 0.25q_cats · k_love = 0.3×0.7 + 0.4×0.2 = 0.29q_cats · k_cats = 0.3×0.5 + 0.4×0.3 = 0.27Scale by √d = √2, then softmax:scaled = [0.177, 0.205, 0.191]softmax = [0.329, 0.338, 0.333]Weighted sum of values:0.329 × [0.8, 0.3] + 0.338 × [0.1, 0.9] + 0.333 × [0.45, 0.6]= [0.263, 0.099] + [0.034, 0.304] + [0.150, 0.200]output_cats = [0.447, 0.603]This exact same [0.447, 0.603] would result without the cache. The cache changes WHERE k_I, k_love, v_I, v_love come from (cache vs recompute) but the numbers are identical.Continue"
   },
   {
     "id": 615,
+    "chapterId": "9.6",
+    "title": "KV Cache - Why Inference is Fast",
+    "section": 9,
+    "sectionName": "The Decoder",
+    "sub": 6,
+    "text": "Cache Looks Like in MemoryA real model has many layers and many attention heads. Each one maintains its own independent KV cache.Cache structure per layer, per head:K cache(seq_len, d_head)Grows by 1 row per tokenV cache(seq_len, d_head)Grows by 1 row per tokenGrowing cache for \"I love cats\" (one head):After \"I\":K cache:[0.3, 0.4] ← newV cache:[0.8, 0.3] ← newAfter \"love\":K cache:[0.3, 0.4][0.7, 0.2] ← newV cache:[0.8, 0.3][0.1, 0.9] ← newAfter \"cats\":K cache:[0.3, 0.4][0.7, 0.2][0.5, 0.3] ← newV cache:[0.8, 0.3][0.1, 0.9][0.45, 0.6] ← newTotal cache for a real model:KV cache = 2 (K+V) × layers × heads × d_head × seq_len × bytesA 70B model with 80 layers and 64 heads: that is 2 × 80 × 64 = 10,240 separate cache matrices, each growing by one row per generated token.Continue"
+  },
+  {
+    "id": 616,
+    "chapterId": "9.6",
+    "title": "KV Cache - Why Inference is Fast",
+    "section": 9,
+    "sectionName": "The Decoder",
+    "sub": 7,
+    "text": "- Operations and MemoryOperation savings:Without cachePer step: 3N projections + N2 attentionPer step: O(N2) Total: O(N3)With cachePer step: 3 projections + N attentionPer step: O(N) Total: O(N2)N = 1000: ~333 million ops without cache vs ~500 thousand with cache. ~660x faster.Memory cost - the price we pay:cache = 2 × seq_len × d_model × layers × bytes_per_paramExample: LLaMA 70BLayers80d_model8,192Max sequence4,096 tokensPrecisionFP16 (2 bytes)2 × 4,096 × 8,192 × 80 × 2 bytes= 10.7 GB per sequenceWhy this matters:●Long context is expensive: Doubling sequence length doubles cache. 128K context = enormous memory.●Batch size is limited: Each concurrent user needs their own cache. 10 users = 107 GB just for caches.●GQA helps: Grouped-Query Attention shares K, V across Q heads, shrinking cache 4-8x.Continue"
+  },
+  {
+    "id": 617,
+    "chapterId": "9.6",
+    "title": "KV Cache - Why Inference is Fast",
+    "section": 9,
+    "sectionName": "The Decoder",
+    "sub": 8,
+    "text": "amental TradeoffKV cache trades memory for speed. This is the central tension of LLM inference:Without KV CacheSpeed:Slow (recompute all Q, K, V)Memory:Low (no cache stored)O(N3) compute, O(1) extra memoryWith KV CacheSpeed:Fast (only new token's Q, K, V)Memory:High (GBs per sequence)O(N2) compute, O(N) extra memoryThe Bottleneck of LLM InferenceThis memory-speed tradeoff is the fundamental bottleneck of LLM serving. Every technique you hear about - GQA (Grouped-Query Attention), quantized KV cache, sliding window attention, paged attention - exists to reduce the memory cost of the KV cache while keeping the speed benefit. When companies say \"serving LLMs is expensive,\" the KV cache is a major reason why.Note: KV cache only applies to inference (generation). During training, all tokens are processed in parallel - so there is no sequential generation and no need for a cache."
+  },
+  {
+    "id": 618,
     "chapterId": "9.6",
     "title": "KV Cache - Why Inference is Fast",
     "section": 9,

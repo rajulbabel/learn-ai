@@ -346,10 +346,10 @@ export const SelfSupervised = (ctx) => {
 
       <Reveal when={sub >= 1}>
         <Box color={C.orange} style={{ width: "100%" }}>
-          <T color="#ffb74d" bold center size={20}>
+          <T color="#ffcc80" bold center size={20}>
             Example: "The cat sat on the mat"
           </T>
-          <T color="#ffb74d" style={{ marginTop: 6 }}>
+          <T color="#ffcc80" style={{ marginTop: 6 }}>
             One sentence becomes FIVE training examples. Each one says: "given these words, the next word is..."
           </T>
           <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 8 }}>
@@ -391,7 +391,7 @@ export const SelfSupervised = (ctx) => {
               </div>
             ))}
           </div>
-          <T color="#ffb74d" style={{ marginTop: 8 }}>
+          <T color="#ffcc80" style={{ marginTop: 8 }}>
             From a tiny 8-word sentence, we get 5 (input, target) pairs. From 1 billion words, we get 1 billion training
             examples. For FREE.
           </T>
@@ -974,14 +974,14 @@ export const CrossEntropy = (ctx) => {
 
       <Reveal when={sub >= 2}>
         <Box color={C.orange} style={{ width: "100%" }}>
-          <T color="#ffb74d" bold center size={20}>
+          <T color="#ffcc80" bold center size={20}>
             Why -log? The intuition
           </T>
-          <T color="#ffb74d" style={{ marginTop: 6 }}>
+          <T color="#ffcc80" style={{ marginTop: 6 }}>
             Imagine you're a weather forecaster. You say "70% chance of rain". If it does rain, you did well (70% ≠
             100%, but decent). If it doesn't rain, you were wrong (you said 70%!).
           </T>
-          <T color="#ffb74d" style={{ marginTop: 6 }}>
+          <T color="#ffcc80" style={{ marginTop: 6 }}>
             Loss measures your mistake: <strong>Loss = -log(your prediction for what actually happened)</strong>
           </T>
           <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 6 }}>
@@ -1274,10 +1274,10 @@ export const NNInAction = (ctx) => {
       {/* ── Sub 1: Input sentence ── */}
       <Reveal when={sub >= 1}>
         <Box color={C.orange} style={{ width: "100%" }}>
-          <T color="#ffb74d" bold center size={20}>
+          <T color="#ffcc80" bold center size={20}>
             The input: "The cat sat on" - predict what?
           </T>
-          <T color="#ffb74d" style={{ marginTop: 6 }}>
+          <T color="#ffcc80" style={{ marginTop: 6 }}>
             We feed in four words. The model's job: figure out what word #5 should be.
           </T>
           <div
@@ -1293,7 +1293,7 @@ export const NNInAction = (ctx) => {
             {["The", "cat", "sat", "on"].map((w, i) => (
               <div key={w} style={{ display: "flex", alignItems: "center", gap: 4 }}>
                 <div style={{ padding: "8px 14px", borderRadius: 8, background: `${C.orange}20` }}>
-                  <T color="#ffb74d" bold size={16}>
+                  <T color="#ffcc80" bold size={16}>
                     {w} <span style={{ fontSize: 11, opacity: 0.6 }}>[{i}]</span>
                   </T>
                 </div>
@@ -1351,7 +1351,7 @@ export const NNInAction = (ctx) => {
                   { l: "0", active: false },
                   { l: "1", active: true },
                 ],
-                color: "#ffb74d",
+                color: "#ffcc80",
                 bg: "rgba(255,171,64,0.15)",
               },
               {
@@ -1808,10 +1808,10 @@ export const SFT = (ctx) => {
       {/* ── Sub 1: SFT training data ── */}
       <Reveal when={sub >= 1}>
         <Box color={C.orange} style={{ width: "100%" }}>
-          <T color="#ffb74d" bold center size={20}>
+          <T color="#ffcc80" bold center size={20}>
             The fix: show it what a good assistant says
           </T>
-          <T color="#ffb74d" style={{ marginTop: 8 }}>
+          <T color="#ffcc80" style={{ marginTop: 8 }}>
             Humans sit down and write ~100,000 example conversations. Each one has the exact format the model will see
             when deployed:
           </T>
@@ -1866,7 +1866,7 @@ export const SFT = (ctx) => {
               </div>
             ))}
           </div>
-          <T color="#ffb74d" style={{ marginTop: 10 }}>
+          <T color="#ffcc80" style={{ marginTop: 10 }}>
             Each example says: "When a user asks this, <strong>this</strong> is what you should say." The model will now
             train on these conversations instead of random internet text.
           </T>
@@ -2270,10 +2270,10 @@ export const RLHF = (ctx) => {
 
       <Reveal when={sub >= 1}>
         <Box color={C.orange} style={{ width: "100%" }}>
-          <T color="#ffb74d" bold center size={20}>
+          <T color="#ffcc80" bold center size={20}>
             Step 1: Generate multiple responses
           </T>
-          <T color="#ffb74d" style={{ marginTop: 6 }}>
+          <T color="#ffcc80" style={{ marginTop: 6 }}>
             For a given prompt, the SFT model generates MULTIPLE candidate responses. Temperature controls diversity.
           </T>
           <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 8 }}>
@@ -2719,7 +2719,7 @@ export const RLHF = (ctx) => {
       {/* ── Sub 7: Formula + worked examples + why KL needed ── */}
       <Reveal when={sub >= 7}>
         <Box color={C.orange} style={{ width: "100%" }}>
-          <T color="#ffb74d" bold size={20} center>
+          <T color="#ffcc80" bold size={20} center>
             The formula: Final Score = Reward - (β x KL)
           </T>
           <div style={{ marginTop: 10, display: "flex", flexDirection: "column", gap: 6 }}>
@@ -2777,7 +2777,7 @@ export const RLHF = (ctx) => {
           </div>
 
           {/* Worked examples */}
-          <T color="#ffb74d" bold size={14} style={{ marginTop: 12 }}>
+          <T color="#ffcc80" bold size={14} style={{ marginTop: 12 }}>
             Three examples with β = 0.2:
           </T>
           <div style={{ marginTop: 6, display: "flex", flexDirection: "column", gap: 6 }}>
@@ -2961,10 +2961,10 @@ export const BatchTraining = (ctx) => {
 
       <Reveal when={sub >= 1}>
         <Box color={C.orange} style={{ width: "100%" }}>
-          <T color="#ffb74d" bold center size={20}>
+          <T color="#ffcc80" bold center size={20}>
             Online vs Batch training - a concrete example
           </T>
-          <T color="#ffb74d" style={{ marginTop: 6 }}>
+          <T color="#ffcc80" style={{ marginTop: 6 }}>
             Say we have 3 training examples. Each produces a loss.
           </T>
           <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 10 }}>
@@ -3201,7 +3201,7 @@ export const OutputLayer = (ctx) => {
                     desc: 'Learns basic patterns: "the" is an article, "cat" is a noun',
                     color: "#ffcc80",
                   },
-                  { layer: "Layer 2", desc: 'Learns combinations: "the cat" is a noun phrase', color: "#ffb74d" },
+                  { layer: "Layer 2", desc: 'Learns combinations: "the cat" is a noun phrase', color: "#ffcc80" },
                   { layer: "Layer 6", desc: 'Learns grammar: "sat on the" expects a location next', color: "#ffa726" },
                   {
                     layer: "Layer 12 (final)",
@@ -3272,10 +3272,10 @@ export const OutputLayer = (ctx) => {
       {/* ── Sub 1: What are logits? ── */}
       <Reveal when={sub >= 1}>
         <Box color={C.orange} style={{ width: "100%" }}>
-          <T color="#ffb74d" bold center size={20}>
+          <T color="#ffcc80" bold center size={20}>
             From hidden state to scores: what is a logit?
           </T>
-          <T color="#ffb74d" style={{ marginTop: 6 }}>
+          <T color="#ffcc80" style={{ marginTop: 6 }}>
             We have the hidden state: 768 numbers. The model needs to decide which word comes next. There are 50,000
             words in the vocabulary. So the model computes a <strong>score</strong> for every single word. Higher score
             = "I think this word is more likely to come next".
@@ -3403,7 +3403,7 @@ export const OutputLayer = (ctx) => {
             </T>
           </div>
 
-          <T color="#ffb74d" style={{ marginTop: 12 }}>
+          <T color="#ffcc80" style={{ marginTop: 12 }}>
             So the pipeline so far: hidden state (768 numbers) → <strong>???</strong> → 50,000 logits → softmax →
             probabilities. The missing piece: how does the model go from 768 numbers to 50,000 logits? That is what the{" "}
             <strong>unembedding layer</strong> does.
@@ -3521,7 +3521,7 @@ export const OutputLayer = (ctx) => {
                   <text x={XLN} y={22} fill={C.purple} fontSize={8} textAnchor="middle" opacity="0.7">
                     (= Hidden State)
                   </text>
-                  <text x={XW} y={18} fill="#ffb74d" fontSize={10} textAnchor="middle" fontWeight={700}>
+                  <text x={XW} y={18} fill="#ffcc80" fontSize={10} textAnchor="middle" fontWeight={700}>
                     Unembedding
                   </text>
                   <text x={XOUT} y={18} fill="rgba(255,255,255,0.4)" fontSize={10} textAnchor="middle" fontWeight={600}>
@@ -3552,13 +3552,13 @@ export const OutputLayer = (ctx) => {
                     height={175}
                     rx={10}
                     fill="rgba(255,171,64,0.12)"
-                    stroke="#ffb74d"
+                    stroke="#ffcc80"
                     strokeWidth={2}
                   />
                   <text
                     x={XW}
                     y={133}
-                    fill="#ffb74d"
+                    fill="#ffcc80"
                     fontSize={16}
                     fontWeight="700"
                     textAnchor="middle"
@@ -3660,16 +3660,16 @@ export const OutputLayer = (ctx) => {
       {/* ── Sub 3: How the unembedding matrix works - concrete dot product ── */}
       <Reveal when={sub >= 3}>
         <Box color={C.orange} style={{ width: "100%" }}>
-          <T color="#ffb74d" bold center size={20}>
+          <T color="#ffcc80" bold center size={20}>
             How does it actually work? One dot product per word
           </T>
-          <T color="#ffb74d" style={{ marginTop: 6 }}>
+          <T color="#ffcc80" style={{ marginTop: 6 }}>
             The unembedding matrix has 50,000 rows. Each row is a 768-dimensional vector that represents one vocabulary
             word. To get the logit for a word, we take the dot product of the hidden state with that word's row.
           </T>
 
           <div style={{ marginTop: 12, padding: 14, borderRadius: 8, background: "rgba(0,0,0,0.3)" }}>
-            <T color="#ffb74d" bold center size={15}>
+            <T color="#ffcc80" bold center size={15}>
               Example: computing the logit for "mat"
             </T>
             <div style={{ marginTop: 10, display: "flex", flexDirection: "column", gap: 6 }}>
@@ -3680,10 +3680,10 @@ export const OutputLayer = (ctx) => {
                 Row for "mat" in unembedding matrix: [0.45, 0.82, -0.21, 0.67, ...]
               </T>
               <div style={{ marginTop: 6, padding: "8px 10px", borderRadius: 6, background: `${C.orange}08` }}>
-                <T color="#ffb74d" size={14}>
+                <T color="#ffcc80" size={14}>
                   logit = dot product = (-0.14 x 0.45) + (0.62 x 0.82) + (-0.38 x -0.21) + (1.05 x 0.67) + ...
                 </T>
-                <T color="#ffb74d" size={14} style={{ marginTop: 4 }}>
+                <T color="#ffcc80" size={14} style={{ marginTop: 4 }}>
                   = -0.063 + 0.508 + 0.080 + 0.704 + ... (768 terms added up)
                 </T>
                 <T color={C.green} bold size={16} center style={{ marginTop: 6 }}>
@@ -3693,7 +3693,7 @@ export const OutputLayer = (ctx) => {
             </div>
           </div>
 
-          <T color="#ffb74d" style={{ marginTop: 10 }}>
+          <T color="#ffcc80" style={{ marginTop: 10 }}>
             This happens for ALL 50,000 words in parallel. Each word has its own row, its own dot product, its own
             logit. Words whose rows are "similar" to the hidden state get high scores. Words whose rows point in a
             different direction get low scores.
@@ -3930,7 +3930,7 @@ export const OutputLayer = (ctx) => {
                 border: `1px solid ${C.orange}12`,
               }}
             >
-              <T color="#ffb74d" bold size={15}>
+              <T color="#ffcc80" bold size={15}>
                 Unembedding matrix (output side)
               </T>
               <T color={C.mid} size={14} style={{ marginTop: 4 }}>
@@ -4125,10 +4125,10 @@ export const AutoregressiveGeneration = (ctx) => {
       {/* ── Sub 1: Step-by-step generation with full pipeline visible ── */}
       <Reveal when={sub >= 1}>
         <Box color={C.orange} style={{ width: "100%" }}>
-          <T color="#ffb74d" bold center size={20}>
+          <T color="#ffcc80" bold center size={20}>
             Watch it build the sentence, word by word
           </T>
-          <T color="#ffb74d" style={{ marginTop: 6 }}>
+          <T color="#ffcc80" style={{ marginTop: 6 }}>
             Prompt: <strong>"The cat sat on"</strong>. At each step, the full pipeline runs: tokens go in, hidden layers
             process them, output layer produces 50,000 probabilities via softmax, and the model picks one word.
           </T>
@@ -4518,8 +4518,9 @@ export const AutoregressiveGeneration = (ctx) => {
               softmax( logit / temperature )
             </T>
             <T color={C.dim} size={13} center style={{ marginTop: 6 }}>
-              Low temperature → winner takes all. High temperature → more even distribution. Temperature = 0 would be
-              pure greedy (but we use 0.2 in practice).
+              Low temperature → winner takes all. High temperature → more even distribution. Temperature = 0 can't go
+              into the formula (division by zero!), so in practice T=0 means argmax - just pick the highest logit, skip
+              softmax entirely. Most APIs use T=0.2 as the lowest practical value.
             </T>
           </div>
         </Box>
@@ -4936,10 +4937,10 @@ export const DPO = (ctx) => {
 
       <Reveal when={sub >= 4}>
         <Box color={C.orange} style={{ width: "100%" }}>
-          <T color="#ffb74d" bold center size={20}>
+          <T color="#ffcc80" bold center size={20}>
             Where DPO is used today
           </T>
-          <T color="#ffb74d" style={{ marginTop: 6 }}>
+          <T color="#ffcc80" style={{ marginTop: 6 }}>
             DPO and its variants have largely replaced full RLHF in practice:
           </T>
           <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 6 }}>

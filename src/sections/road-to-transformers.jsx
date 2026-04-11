@@ -469,10 +469,10 @@ export const RNN = (ctx) => {
 
       <Reveal when={sub >= 2}>
         <Box color={C.orange} style={{ width: "100%" }}>
-          <T color="#ffb74d" bold center size={20}>
+          <T color="#ffcc80" bold center size={20}>
             Processing order matters: "Dog bites man" vs "Man bites dog"
           </T>
-          <T color="#ffb74d" style={{ marginTop: 8 }}>
+          <T color="#ffcc80" style={{ marginTop: 8 }}>
             The same three word embeddings, but in different order, produce different hidden states. The network learns
             which word is the subject (first) and which is the object (last).
           </T>
@@ -1336,10 +1336,10 @@ export const EncoderDecoder = (ctx) => {
 
       <Reveal when={sub >= 3}>
         <Box color={C.orange} style={{ width: "100%" }}>
-          <T color="#ffb74d" bold center size={20}>
+          <T color="#ffcc80" bold center size={20}>
             The full encoder-decoder stack
           </T>
-          <T color="#ffb74d" style={{ marginTop: 8 }}>
+          <T color="#ffcc80" style={{ marginTop: 8 }}>
             The 2017 Transformer stacks both halves:
           </T>
 
@@ -1425,7 +1425,7 @@ export const EncoderDecoder = (ctx) => {
             </div>
           </div>
 
-          <T color="#ffb74d" style={{ marginTop: 10 }}>
+          <T color="#ffcc80" style={{ marginTop: 10 }}>
             (Masked Attention = can only look at past tokens; Cross-Attention = looks at encoder output)
           </T>
         </Box>

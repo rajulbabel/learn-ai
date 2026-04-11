@@ -1996,7 +1996,7 @@ export const RoPE = (ctx) => {
 
       <Reveal when={sub >= 4}>
         <Box color={C.orange} style={{ width: "100%" }}>
-          <T color="#ffb74d" bold center size={20}>
+          <T color="#ffcc80" bold center size={20}>
             Why RoPE won
           </T>
           <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 4 }}>

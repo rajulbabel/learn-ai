@@ -1262,6 +1262,7 @@ describe("AutoregressiveGeneration sub-steps", () => {
     const text = container.textContent;
     expect(text).toContain("Temperature");
     expect(text).toContain("logit");
+    expect(text).toContain("argmax");
   });
 
   it("sub 4 explains why generation works and when it stops", () => {

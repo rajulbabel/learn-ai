@@ -254,7 +254,7 @@ export const WhatIsNN = (ctx) => {
             <T color={C.orange} bold center size={20} style={{ marginBottom: 16 }}>
               What's Inside?
             </T>
-            <T color="#ffb74d" size={17} style={{ lineHeight: 1.6 }}>
+            <T color="#ffcc80" size={17} style={{ lineHeight: 1.6 }}>
               It's made of tiny units called neurons connected together. Each connection has a number called a weight.
               These weights are what the network learns during training.
             </T>
@@ -1111,7 +1111,7 @@ export const WhatIsLayer = (ctx) => {
                 {/* Neuron nodes with bias */}
                 {[
                   { y: 50, label: "Flu", bias: "-14", out: "9.48", c: C.red, ct: "#ef9a9a" },
-                  { y: 160, label: "Cold", bias: "-1", out: "3.51", c: C.orange, ct: "#ffb74d" },
+                  { y: 160, label: "Cold", bias: "-1", out: "3.51", c: C.orange, ct: "#ffcc80" },
                   { y: 270, label: "Allergy", bias: "-0.5", out: "0.26", c: C.purple, ct: "#b8a9ff" },
                 ].map(({ y, label, bias, out, c, ct }) => (
                   <g key={label}>
@@ -2030,7 +2030,7 @@ export const WhyLinear = (ctx) => {
                 </T>
               </div>
             </div>
-            <T color="#ffb74d" size={16} style={{ marginTop: 14, lineHeight: 1.7 }}>
+            <T color="#ffcc80" size={16} style={{ marginTop: 14, lineHeight: 1.7 }}>
               Think about real-world patterns. A 1500 sqft house costs more than 1000 sqft - that's roughly linear. But
               plant growth vs temperature? A plant grows faster as temperature rises from 10°C to 25°C, then STOPS
               growing and DIES above 40°C. No straight line can go up, peak, and then come down. Same with medicine
@@ -2524,7 +2524,7 @@ export const ReLU = (ctx) => {
                   borderRadius: 8,
                 }}
               >
-                <T color="#ffb74d" bold size={16}>
+                <T color="#ffcc80" bold size={16}>
                   2 neurons
                 </T>
                 <T color="rgba(255,255,255,0.6)" size={15}>
@@ -2541,7 +2541,7 @@ export const ReLU = (ctx) => {
                   borderRadius: 8,
                 }}
               >
-                <T color="#ffb74d" bold size={16}>
+                <T color="#ffcc80" bold size={16}>
                   10 neurons
                 </T>
                 <T color="rgba(255,255,255,0.6)" size={15}>
@@ -2558,7 +2558,7 @@ export const ReLU = (ctx) => {
                   borderRadius: 8,
                 }}
               >
-                <T color="#ffb74d" bold size={16}>
+                <T color="#ffcc80" bold size={16}>
                   1000 neurons
                 </T>
                 <T color="rgba(255,255,255,0.6)" size={15}>
@@ -2575,7 +2575,7 @@ export const ReLU = (ctx) => {
                   borderRadius: 8,
                 }}
               >
-                <T color="#ffb74d" bold size={16}>
+                <T color="#ffcc80" bold size={16}>
                   Millions
                 </T>
                 <T color="rgba(255,255,255,0.6)" size={15}>
@@ -2729,7 +2729,7 @@ export const ForwardPass = (ctx) => {
               {/* Hidden nodes (r=32, label + bias inside, output outside as arrow) */}
               {[
                 { y: 80, label: "h₁", bias: "50", out: "950", c: C.cyan, ct: "#80deea" },
-                { y: 200, label: "h₂", bias: "5", out: "185", c: C.orange, ct: "#ffb74d" },
+                { y: 200, label: "h₂", bias: "5", out: "185", c: C.orange, ct: "#ffcc80" },
               ].map(({ y, label, bias, out, c, ct }) => (
                 <g key={label}>
                   <circle cx={220} cy={y} r={32} fill={`${c}12`} stroke={c} strokeWidth={2} />
@@ -2794,7 +2794,7 @@ export const ForwardPass = (ctx) => {
               {
                 name: "Neuron h₂",
                 c: C.orange,
-                ct: "#ffb74d",
+                ct: "#ffcc80",
                 label: "h₂",
                 muls: [
                   { input: "x₁", iv: "1500", wv: "0.1", r: "150" },
@@ -3509,7 +3509,7 @@ export const LossFunction = (ctx) => {
                   padding: "2px 8px",
                   background: `${C.orange}15`,
                   borderRadius: 4,
-                  color: "#ffb74d",
+                  color: "#ffcc80",
                   fontSize: 15,
                   fontWeight: 600,
                 }}
@@ -4017,7 +4017,7 @@ export const Derivatives = (ctx) => {
                   padding: "2px 8px",
                   background: `${C.orange}15`,
                   borderRadius: 4,
-                  color: "#ffb74d",
+                  color: "#ffcc80",
                   fontSize: 14,
                   fontWeight: 600,
                 }}
@@ -4167,7 +4167,7 @@ export const Derivatives = (ctx) => {
                   padding: "2px 8px",
                   background: `${C.orange}15`,
                   borderRadius: 4,
-                  color: "#ffb74d",
+                  color: "#ffcc80",
                   fontSize: 14,
                   fontWeight: 600,
                 }}
@@ -4250,7 +4250,7 @@ export const Derivatives = (ctx) => {
                   padding: "2px 8px",
                   background: `${C.orange}15`,
                   borderRadius: 4,
-                  color: "#ffb74d",
+                  color: "#ffcc80",
                   fontSize: 14,
                   fontWeight: 600,
                 }}
@@ -5775,7 +5775,7 @@ export const BackpropRealNetwork = (ctx) => {
               {/* Hidden nodes (r=32) */}
               {[
                 { y: 80, label: "h\u2081", bias: "50", out: "950", c: C.cyan, ct: "#80deea" },
-                { y: 200, label: "h\u2082", bias: "5", out: "185", c: C.orange, ct: "#ffb74d" },
+                { y: 200, label: "h\u2082", bias: "5", out: "185", c: C.orange, ct: "#ffcc80" },
               ].map(({ y, label, bias, out, c, ct }) => (
                 <g key={label}>
                   <circle cx={220} cy={y} r={32} fill={`${c}12`} stroke={c} strokeWidth={2} />
@@ -7321,9 +7321,11 @@ export const Vectors = (ctx) => {
                 </T>
               </div>
             </div>
-            <T size={28} color={C.mid}>
-              →
-            </T>
+            <div data-arrow style={{ marginTop: 25 }}>
+              <T size={28} color={C.mid}>
+                →
+              </T>
+            </div>
             <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8 }}>
               <T size={14} color={C.mid}>
                 Vector (list)
@@ -7394,9 +7396,11 @@ export const Vectors = (ctx) => {
                 ))}
               </div>
             </div>
-            <T size={24} color={C.mid}>
-              →
-            </T>
+            <div data-arrow style={{ marginTop: 25 }}>
+              <T size={24} color={C.mid}>
+                →
+              </T>
+            </div>
             <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8 }}>
               <T size={14} color={C.mid}>
                 Output Vector
@@ -7909,7 +7913,7 @@ export const DotProductIntro = (ctx) => {
                   padding: "2px 8px",
                   background: `${C.orange}15`,
                   borderRadius: 4,
-                  color: "#ffb74d",
+                  color: "#ffcc80",
                   fontSize: 14,
                   fontWeight: 600,
                 }}
@@ -8348,7 +8352,7 @@ export const Matrices = (ctx) => {
                   padding: "2px 8px",
                   background: `${C.orange}15`,
                   borderRadius: 4,
-                  color: "#ffb74d",
+                  color: "#ffcc80",
                   fontSize: 13,
                   fontWeight: 600,
                 }}
@@ -8492,7 +8496,7 @@ export const Matrices = (ctx) => {
                   padding: "2px 8px",
                   background: `${C.orange}15`,
                   borderRadius: 4,
-                  color: "#ffb74d",
+                  color: "#ffcc80",
                   fontSize: 13,
                   fontWeight: 600,
                 }}
@@ -8636,7 +8640,7 @@ export const Matrices = (ctx) => {
                   padding: "2px 8px",
                   background: `${C.orange}15`,
                   borderRadius: 4,
-                  color: "#ffb74d",
+                  color: "#ffcc80",
                   fontSize: 13,
                   fontWeight: 600,
                 }}
@@ -8809,7 +8813,7 @@ export const LayerIsMatMul = (ctx) => {
               {/* Neuron nodes */}
               {[
                 { y: 50, label: "Flu", out: "23.5", c: C.red, ct: "#ef9a9a" },
-                { y: 160, label: "Cold", out: "8.9", c: C.orange, ct: "#ffb74d" },
+                { y: 160, label: "Cold", out: "8.9", c: C.orange, ct: "#ffcc80" },
                 { y: 270, label: "Allergy", out: "16.2", c: C.purple, ct: "#b8a9ff" },
               ].map(({ y, label, out, c, ct }) => (
                 <g key={label}>
@@ -8883,7 +8887,7 @@ export const LayerIsMatMul = (ctx) => {
                   padding: "2px 8px",
                   background: `${C.orange}15`,
                   borderRadius: 4,
-                  color: "#ffb74d",
+                  color: "#ffcc80",
                   fontSize: 13,
                   fontWeight: 600,
                 }}
@@ -9830,7 +9834,7 @@ export const Dropout = (ctx) => {
                   <line x1={78} y1={32} x2={82} y2={40} stroke={C.orange} strokeWidth={2} />
                 </svg>
               </div>
-              <T color="#ffb74d" size={15} style={{ marginTop: 8 }}>
+              <T color="#ffcc80" size={15} style={{ marginTop: 8 }}>
                 Error measured on data the model has NEVER seen. These examples are hidden during training - they are the
                 honest test.
               </T>
@@ -10272,7 +10276,7 @@ export const Dropout = (ctx) => {
                 borderRadius: 8,
               }}
             >
-              <T color="#ffb74d" bold size={15}>
+              <T color="#ffcc80" bold size={15}>
                 Step 4: Scale by 1/(1 - p) = 1/0.5 = 2
               </T>
               <div style={{ display: "flex", gap: 6, marginTop: 6 }}>
@@ -10283,7 +10287,7 @@ export const Dropout = (ctx) => {
                       padding: "3px 8px",
                       background: v > 0 ? `${C.orange}15` : `${C.red}15`,
                       borderRadius: 4,
-                      color: v > 0 ? "#ffb74d" : C.red,
+                      color: v > 0 ? "#ffcc80" : C.red,
                       fontSize: 14,
                       fontWeight: 600,
                     }}
@@ -10369,7 +10373,7 @@ export const Dropout = (ctx) => {
           <T color={C.orange} bold center size={20}>
             Where Dropout Lives in a Transformer
           </T>
-          <T color="#ffb74d" size={17} style={{ marginTop: 12 }}>
+          <T color="#ffcc80" size={17} style={{ marginTop: 12 }}>
             Dropout is applied at two key locations inside each transformer block:
           </T>
           <div style={{ display: "flex", justifyContent: "center", marginTop: 16 }}>
@@ -10492,7 +10496,7 @@ export const Dropout = (ctx) => {
               marginTop: 12,
             }}
           >
-            <T color="#ffb74d" size={16}>
+            <T color="#ffcc80" size={16}>
               Typical dropout rate in transformers: p = 0.1 (drop only 10%). This is much lower than the 0.5 used in
               earlier networks because transformers are already heavily regularized by their architecture.
             </T>
@@ -10770,13 +10774,13 @@ export const AdamOptimizer = (ctx) => {
                 t
               </text>
               {/* Annotations */}
-              <text x="18" y="64" fill="rgba(255,255,255,0.35)" fontSize="10" fontFamily="sans-serif">
+              <text x="18" y="64" fill="rgba(255,255,255,0.35)" fontSize="10" fontFamily="sans-serif" textAnchor="middle">
                 momentum
               </text>
-              <text x="82" y="64" fill="rgba(255,255,255,0.35)" fontSize="10" fontFamily="sans-serif">
+              <text x="82" y="64" fill="rgba(255,255,255,0.35)" fontSize="10" fontFamily="sans-serif" textAnchor="middle">
                 0.9
               </text>
-              <text x="325" y="64" fill="rgba(255,255,255,0.35)" fontSize="10" fontFamily="sans-serif">
+              <text x="335" y="64" fill="rgba(255,255,255,0.35)" fontSize="10" fontFamily="sans-serif" textAnchor="middle">
                 gradient
               </text>
             </svg>
@@ -10966,13 +10970,13 @@ export const AdamOptimizer = (ctx) => {
                 2
               </text>
               {/* Annotations */}
-              <text x="12" y="64" fill="rgba(255,255,255,0.35)" fontSize="10" fontFamily="sans-serif">
+              <text x="12" y="64" fill="rgba(255,255,255,0.35)" fontSize="10" fontFamily="sans-serif" textAnchor="middle">
                 velocity
               </text>
-              <text x="80" y="64" fill="rgba(255,255,255,0.35)" fontSize="10" fontFamily="sans-serif">
+              <text x="80" y="64" fill="rgba(255,255,255,0.35)" fontSize="10" fontFamily="sans-serif" textAnchor="middle">
                 0.999
               </text>
-              <text x="323" y="64" fill="rgba(255,255,255,0.35)" fontSize="10" fontFamily="sans-serif">
+              <text x="335" y="64" fill="rgba(255,255,255,0.35)" fontSize="10" fontFamily="sans-serif" textAnchor="middle">
                 squared grad
               </text>
             </svg>
@@ -11543,15 +11547,15 @@ export const AdamOptimizer = (ctx) => {
           <T color={C.orange} bold center size={20}>
             AdamW - Weight Decay Done Right
           </T>
-          <T color="#ffb74d" size={17} style={{ marginTop: 12 }}>
+          <T color="#ffcc80" size={17} style={{ marginTop: 12 }}>
             Weight decay is a regularization technique that shrinks all weights slightly each step, preventing them from
             growing too large. The original Adam paper mixed weight decay into the gradient, but this was a mistake.
           </T>
 
-          <T color="#ffb74d" bold size={16} style={{ marginTop: 14 }}>
+          <T color="#ffcc80" bold size={16} style={{ marginTop: 14 }}>
             The problem with L2 regularization in Adam
           </T>
-          <T color="#ffb74d" size={16} style={{ marginTop: 6 }}>
+          <T color="#ffcc80" size={16} style={{ marginTop: 6 }}>
             Standard L2 adds a decay term (λ x θ) to the gradient before Adam processes it. But Adam divides by √v - and
             that √v includes the decay term. So parameters with large v (large gradients) barely feel the decay, while
             parameters with small v get too much. The decay is not applied equally.
@@ -11730,10 +11734,10 @@ export const AdamOptimizer = (ctx) => {
               marginTop: 14,
             }}
           >
-            <T color="#ffb74d" bold size={16}>
+            <T color="#ffcc80" bold size={16}>
               Why this matters in practice
             </T>
-            <T color="#ffb74d" size={16} style={{ marginTop: 6 }}>
+            <T color="#ffcc80" size={16} style={{ marginTop: 6 }}>
               GPT, BERT, LLaMA, Gemini, Claude - virtually all modern transformers use AdamW with β₁ = 0.9, β₂ = 0.999,
               ε = 1e-8, and λ between 0.01 and 0.1. The 2017 paper by Loshchilov and Hutter showed that decoupled weight
               decay consistently improves generalization. AdamW is not just an option - it is the default optimizer for
@@ -11742,7 +11746,7 @@ export const AdamOptimizer = (ctx) => {
           </div>
 
           <div style={{ marginTop: 14, display: "flex", flexDirection: "column", gap: 6 }}>
-            <T color="#ffb74d" bold size={16}>
+            <T color="#ffcc80" bold size={16}>
               The complete Adam/AdamW recipe:
             </T>
             {[
@@ -12332,7 +12336,7 @@ export const WeightInit = (ctx) => {
           <T color={C.orange} bold center size={20}>
             Too Small - Numbers Shrink to Zero
           </T>
-          <T color="#ffb74d" size={17} style={{ marginTop: 12 }}>
+          <T color="#ffcc80" size={17} style={{ marginTop: 12 }}>
             If weights are initialized with very small random values (std = 0.001), the numbers flowing through the
             network shrink toward zero at every layer. Each layer multiplies the previous output by tiny weights, so the
             values get smaller and smaller.
@@ -12345,7 +12349,7 @@ export const WeightInit = (ctx) => {
               { layer: "After Layer 5", values: "[~0, ~0]", mag: "~0", bar: 0 },
             ].map(({ layer, values, mag: _mag, bar }) => (
               <div key={layer} style={{ display: "flex", alignItems: "center", gap: 8, padding: "6px 10px" }}>
-                <T color="#ffb74d" size={13} style={{ minWidth: 100, textAlign: "right" }}>
+                <T color="#ffcc80" size={13} style={{ minWidth: 100, textAlign: "right" }}>
                   {layer}
                 </T>
                 <div
@@ -12367,7 +12371,7 @@ export const WeightInit = (ctx) => {
               </div>
             ))}
           </div>
-          <T color="#ffb74d" size={16} style={{ marginTop: 12 }}>
+          <T color="#ffcc80" size={16} style={{ marginTop: 12 }}>
             Each layer multiplies by tiny weights, shrinking the output exponentially. By layer 5-10, every value is
             effectively zero. Gradients also vanish - the network cannot learn. The network is "dead."
           </T>
@@ -12379,7 +12383,7 @@ export const WeightInit = (ctx) => {
           <T color={C.orange} bold center size={20}>
             Too Large - Numbers Explode
           </T>
-          <T color="#ffb74d" size={17} style={{ marginTop: 12 }}>
+          <T color="#ffcc80" size={17} style={{ marginTop: 12 }}>
             If weights are initialized with large random values (std = 5.0), the numbers flowing through the network
             grow uncontrollably at every layer. Each layer multiplies by large weights, so the values skyrocket.
           </T>
@@ -12391,7 +12395,7 @@ export const WeightInit = (ctx) => {
               { layer: "After Layer 5", values: "[~45000, ~-89000]", bar: 100 },
             ].map(({ layer, values, bar }) => (
               <div key={layer} style={{ display: "flex", alignItems: "center", gap: 8, padding: "6px 10px" }}>
-                <T color="#ffb74d" size={13} style={{ minWidth: 100, textAlign: "right" }}>
+                <T color="#ffcc80" size={13} style={{ minWidth: 100, textAlign: "right" }}>
                   {layer}
                 </T>
                 <div
@@ -12413,7 +12417,7 @@ export const WeightInit = (ctx) => {
               </div>
             ))}
           </div>
-          <T color="#ffb74d" size={16} style={{ marginTop: 12 }}>
+          <T color="#ffcc80" size={16} style={{ marginTop: 12 }}>
             The values overflow, activations saturate, gradients explode, and training produces NaN within a few steps.
             The network is unstable from the very first forward pass.
           </T>

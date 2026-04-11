@@ -2964,10 +2964,10 @@ export const CausalMask = (ctx) => {
       {/* Sub 3: Masked scores */}
       <Reveal when={sub >= 3}>
         <Box color={C.orange} style={{ width: "100%" }}>
-          <T color="#ffb74d" bold center size={20}>
+          <T color="#ffcc80" bold center size={20}>
             After masking → softmax only sees allowed tokens
           </T>
-          <T color="#ffb74d" style={{ marginTop: 6 }}>
+          <T color="#ffcc80" style={{ marginTop: 6 }}>
             Here are the masked scores - future positions are now -∞:
           </T>
 
@@ -3018,7 +3018,7 @@ export const CausalMask = (ctx) => {
               border: `1px solid ${C.orange}15`,
             }}
           >
-            <T color="#ffb74d" center size={16}>
+            <T color="#ffcc80" center size={16}>
               The green cells keep their original scores. The red -∞ cells will become exactly 0 after softmax - as if
               those future words don't exist.
             </T>
@@ -3604,10 +3604,10 @@ export const CausalMask = (ctx) => {
                 Lower triangle only - upper triangle masked
               </T>
               <div style={{ marginTop: 8, textAlign: "center" }}>
-                <T color="#ffb74d" size={16}>
+                <T color="#ffcc80" size={16}>
                   <strong>Causal mask</strong> - each word only sees past words + itself.
                 </T>
-                <T color="#ffb74d" size={16} style={{ marginTop: 4 }}>
+                <T color="#ffcc80" size={16} style={{ marginTop: 4 }}>
                   <strong>Why?</strong> The decoder <strong>generates</strong> text one token at a time. At generation
                   step 3, token 4 doesn't exist yet - attending to it would be looking at something that isn't there.
                   During training, the full sentence is fed at once for speed, so we use the mask to simulate the
@@ -4475,7 +4475,7 @@ export const CrossAttention = (ctx) => {
                 border: `1px solid ${C.orange}15`,
               }}
             >
-              <T color="#ffb74d" size={16}>
+              <T color="#ffcc80" size={16}>
                 <strong>Decoder layers 1-6:</strong> each layer computes its own Q (because the decoder's representation
                 changes layer by layer as it gets refined). But K and V are always the same - the encoder's final
                 output.
@@ -4891,7 +4891,7 @@ export const CrossAttention = (ctx) => {
               <T color={C.dim} size={14} center style={{ marginTop: 4 }}>
                 GPT, Claude, LLaMA
               </T>
-              <T color="#ffb74d" bold center size={18} style={{ marginTop: 6 }}>
+              <T color="#ffcc80" bold center size={18} style={{ marginTop: 6 }}>
                 No cross-attention at all
               </T>
               <T color={C.dim} size={15} center style={{ marginTop: 4 }}>

@@ -56,13 +56,13 @@ export const ScalingLaws = (ctx) => {
       </Reveal>
       <Reveal when={sub >= 2}>
         <Box color={C.orange} style={{ width: "100%" }}>
-          <T color="#ffb74d" bold center size={20}>
+          <T color="#ffcc80" bold center size={20}>
             The key scaling law:
           </T>
-          <T color="#ffb74d" style={{ marginTop: 8 }}>
+          <T color="#ffcc80" style={{ marginTop: 8 }}>
             Scale all three together → smooth, predictable improvement
           </T>
-          <T color="#ffb74d" style={{ marginTop: 6 }}>
+          <T color="#ffcc80" style={{ marginTop: 6 }}>
             Scale one alone → diminishing returns
           </T>
           <div
@@ -83,7 +83,7 @@ export const ScalingLaws = (ctx) => {
               Performance improves as a power law with size.
             </T>
           </div>
-          <T color="#ffb74d" style={{ marginTop: 8 }}>
+          <T color="#ffcc80" style={{ marginTop: 8 }}>
             Like a recipe: more flour alone doesn't make more cake without more eggs and butter.
           </T>
         </Box>
@@ -220,7 +220,7 @@ export const ParametersAtScale = (ctx) => {
       </Reveal>
       <Reveal when={sub >= 2}>
         <Box color={C.orange} style={{ width: "100%" }}>
-          <T color="#ffb74d" bold center size={20}>
+          <T color="#ffcc80" bold center size={20}>
             Scaling up to real models:
           </T>
           <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 6 }}>
@@ -1038,13 +1038,13 @@ export const CLIP = (ctx) => {
       </Reveal>
       <Reveal when={sub >= 3}>
         <Box color={C.orange} style={{ width: "100%" }}>
-          <T color="#ffb74d" bold center size={20}>
+          <T color="#ffcc80" bold center size={20}>
             How "similar" are two vectors?
           </T>
-          <T color="#ffb74d" style={{ marginTop: 8 }}>
+          <T color="#ffcc80" style={{ marginTop: 8 }}>
             After encoding, we get two lists of numbers. We need a way to check: are they similar?
           </T>
-          <T color="#ffb74d" style={{ marginTop: 6 }}>
+          <T color="#ffcc80" style={{ marginTop: 6 }}>
             The method is called <strong>cosine similarity</strong>. Here is the actual formula:
           </T>
           <div
@@ -1090,7 +1090,7 @@ export const CLIP = (ctx) => {
               always between -1 (opposite) and +1 (identical direction).
             </T>
           </div>
-          <T color="#ffb74d" size={15} style={{ marginTop: 4 }}>
+          <T color="#ffcc80" size={15} style={{ marginTop: 4 }}>
             Quick example: A = [0.8, 0.3] and B = [0.79, 0.31]
           </T>
           <div style={{ marginTop: 6, padding: "8px 12px", borderRadius: 8, background: `${C.orange}06` }}>
@@ -1157,7 +1157,7 @@ export const CLIP = (ctx) => {
               </div>
             ))}
           </div>
-          <T color="#ffb74d" style={{ marginTop: 8 }}>
+          <T color="#ffcc80" style={{ marginTop: 8 }}>
             During training, the model is rewarded for making correct pairs score HIGH and wrong pairs score LOW.
             Millions of image-caption pairs later, it becomes incredibly good at understanding what images and text
             mean.
@@ -1380,10 +1380,10 @@ export const TrainingPipeline = (ctx) => {
       </Reveal>
       <Reveal when={sub >= 4}>
         <Box color={C.orange} style={{ width: "100%" }}>
-          <T color="#ffb74d" bold center size={20}>
+          <T color="#ffcc80" bold center size={20}>
             After launch - Optional upgrades
           </T>
-          <T color="#ffb74d" style={{ marginTop: 6 }}>
+          <T color="#ffcc80" style={{ marginTop: 6 }}>
             The 3 phases above create the base model. But companies often add extra capabilities:
           </T>
           <div style={{ marginTop: 10, display: "flex", flexDirection: "column", gap: 8 }}>

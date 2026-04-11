@@ -209,7 +209,7 @@ function TrainingDiagram({ sub, setSub, subBtnRipple, setSubBtnRipple, registerS
       { name: '"sat"', id: 3820, cx: 380, color: "#4caf50", light: "#80e8a5", bg: "rgba(76,175,80," },
       { name: '"on"', id: 322, cx: 530, color: "#00bcd4", light: "#80deea", bg: "rgba(0,188,212," },
       { name: '"the"', id: 1042, cx: 680, color: "#9c27b0", light: "#ce93d8", bg: "rgba(156,39,176," },
-      { name: '"mat"', id: 9382, cx: 830, color: "#ff9800", light: "#ffb74d", bg: "rgba(255,152,0," },
+      { name: '"mat"', id: 9382, cx: 830, color: "#ff9800", light: "#ffcc80", bg: "rgba(255,152,0," },
     ];
     const N = tokens.length;
     let Y = 30;
@@ -517,7 +517,7 @@ function TrainingDiagram({ sub, setSub, subBtnRipple, setSubBtnRipple, registerS
 
     // ═══ sub 4: Add & Norm + FFN + Add & Norm 2 + Encoder Output ═══
     Y += 76;
-    layerLabel(Y, "Add & LayerNorm (residual + normalize)", "#ffb74d");
+    layerLabel(Y, "Add & LayerNorm (residual + normalize)", "#ffcc80");
     Y += 52;
     const an1Y = Y;
     const an1Vecs = [
@@ -541,7 +541,7 @@ function TrainingDiagram({ sub, setSub, subBtnRipple, setSubBtnRipple, registerS
     for (let t = 0; t < N; t++) {
       o2oEdges(tNodes(tokens[t].cx, woY), tNodes(tokens[t].cx, an1Y), tokens[t].bg + "0.2)", 1);
       DIMX.forEach((dx, i) =>
-        node(tokens[t].cx + dx, an1Y, "rgba(255,152,0,0.12)", "#ff9800", an1Vecs[t][i], "#ffb74d"),
+        node(tokens[t].cx + dx, an1Y, "rgba(255,152,0,0.12)", "#ff9800", an1Vecs[t][i], "#ffcc80"),
       );
     }
     parallelBadge(Y + 46, "LayerNorm(X + Attention(X)) - applied independently per vector, all at once");
@@ -602,7 +602,7 @@ function TrainingDiagram({ sub, setSub, subBtnRipple, setSubBtnRipple, registerS
 
     // Add & Norm 2
     Y += 76;
-    layerLabel(Y, "Add & LayerNorm (residual + normalize)", "#ffb74d");
+    layerLabel(Y, "Add & LayerNorm (residual + normalize)", "#ffcc80");
     Y += 52;
     const an2Y = Y;
     const an2Vecs = [
@@ -626,7 +626,7 @@ function TrainingDiagram({ sub, setSub, subBtnRipple, setSubBtnRipple, registerS
     for (let t = 0; t < N; t++) {
       o2oEdges(tNodes(tokens[t].cx, ffn2Y), tNodes(tokens[t].cx, an2Y), tokens[t].bg + "0.2)", 1);
       DIMX.forEach((dx, i) =>
-        node(tokens[t].cx + dx, an2Y, "rgba(255,152,0,0.12)", "#ff9800", an2Vecs[t][i], "#ffb74d"),
+        node(tokens[t].cx + dx, an2Y, "rgba(255,152,0,0.12)", "#ff9800", an2Vecs[t][i], "#ffcc80"),
       );
     }
 
@@ -835,7 +835,7 @@ function TrainingDiagram({ sub, setSub, subBtnRipple, setSubBtnRipple, registerS
     }
 
     Y += 95;
-    layerLabel(Y, "Add & LayerNorm", "#ffb74d");
+    layerLabel(Y, "Add & LayerNorm", "#ffcc80");
     Y += 52;
     const dan1Y = Y;
     const dan1Vecs = [
@@ -846,7 +846,7 @@ function TrainingDiagram({ sub, setSub, subBtnRipple, setSubBtnRipple, registerS
     for (let t = 0; t < decN; t++) {
       o2oEdges(tNodes(decTokens[t].cx, dattnOutY), tNodes(decTokens[t].cx, dan1Y), decTokens[t].bg + "0.2)", 1);
       DIMX.forEach((dx, i) =>
-        node(decTokens[t].cx + dx, dan1Y, "rgba(255,152,0,0.12)", "#ff9800", dan1Vecs[t][i], "#ffb74d"),
+        node(decTokens[t].cx + dx, dan1Y, "rgba(255,152,0,0.12)", "#ff9800", dan1Vecs[t][i], "#ffcc80"),
       );
     }
 
@@ -930,7 +930,7 @@ function TrainingDiagram({ sub, setSub, subBtnRipple, setSubBtnRipple, registerS
     }
     callout(CX, Y + 46, '"cat" can now see encoder "The", "cat", "sat", "on", "the", "mat" - the full input');
     Y += 95;
-    layerLabel(Y, "Add & LayerNorm", "#ffb74d");
+    layerLabel(Y, "Add & LayerNorm", "#ffcc80");
     Y += 52;
     const dan2Y = Y;
     const dan2Vecs = [
@@ -941,7 +941,7 @@ function TrainingDiagram({ sub, setSub, subBtnRipple, setSubBtnRipple, registerS
     for (let t = 0; t < decN; t++) {
       o2oEdges(tNodes(decTokens[t].cx, crossOutY), tNodes(decTokens[t].cx, dan2Y), decTokens[t].bg + "0.2)", 1);
       DIMX.forEach((dx, i) =>
-        node(decTokens[t].cx + dx, dan2Y, "rgba(255,152,0,0.12)", "#ff9800", dan2Vecs[t][i], "#ffb74d"),
+        node(decTokens[t].cx + dx, dan2Y, "rgba(255,152,0,0.12)", "#ff9800", dan2Vecs[t][i], "#ffcc80"),
       );
     }
 
@@ -998,7 +998,7 @@ function TrainingDiagram({ sub, setSub, subBtnRipple, setSubBtnRipple, registerS
       );
     }
     Y += 76;
-    layerLabel(Y, "Add & LayerNorm (final decoder layer output)", "#ffb74d");
+    layerLabel(Y, "Add & LayerNorm (final decoder layer output)", "#ffcc80");
     Y += 52;
     const dan3Y = Y;
     const dan3Vecs = [
@@ -1009,7 +1009,7 @@ function TrainingDiagram({ sub, setSub, subBtnRipple, setSubBtnRipple, registerS
     for (let t = 0; t < decN; t++) {
       o2oEdges(tNodes(decTokens[t].cx, dffn2Y), tNodes(decTokens[t].cx, dan3Y), decTokens[t].bg + "0.2)", 1);
       DIMX.forEach((dx, i) =>
-        node(decTokens[t].cx + dx, dan3Y, "rgba(255,152,0,0.12)", "#ff9800", dan3Vecs[t][i], "#ffb74d"),
+        node(decTokens[t].cx + dx, dan3Y, "rgba(255,152,0,0.12)", "#ff9800", dan3Vecs[t][i], "#ffcc80"),
       );
     }
 
@@ -1217,7 +1217,7 @@ function TrainingDiagram({ sub, setSub, subBtnRipple, setSubBtnRipple, registerS
       ],
       ["Self-Attention:", "MIXES information between tokens. Q.K^T creates cross-token connections.", "#ef9a9a"],
       ["FFN:", "Does NOT mix tokens. Same weights applied independently to each vector. No cross-talk.", "#90caf9"],
-      ["Add & Norm:", "Per-vector operation. Adds residual, normalizes. No cross-token interaction.", "#ffb74d"],
+      ["Add & Norm:", "Per-vector operation. Adds residual, normalizes. No cross-token interaction.", "#ffcc80"],
       [
         "Output Head (train):",
         "ALL positions produce predictions. Loss computed everywhere. 3 signals from 1 pass.",
@@ -1384,7 +1384,7 @@ function InferenceDiagram({ sub, setSub, subBtnRipple, setSubBtnRipple, register
       { name: '"sat"', cx: 380, color: "#4caf50", light: "#80e8a5", bg: "rgba(76,175,80," },
       { name: '"on"', cx: 530, color: "#00bcd4", light: "#80deea", bg: "rgba(0,188,212," },
       { name: '"the"', cx: 680, color: "#9c27b0", light: "#ce93d8", bg: "rgba(156,39,176," },
-      { name: '"mat"', cx: 830, color: "#ff9800", light: "#ffb74d", bg: "rgba(255,152,0," },
+      { name: '"mat"', cx: 830, color: "#ff9800", light: "#ffcc80", bg: "rgba(255,152,0," },
     ];
     const encOutY = Y;
     const encOutVecs = [
@@ -1632,12 +1632,12 @@ function InferenceDiagram({ sub, setSub, subBtnRipple, setSubBtnRipple, register
       "rgba(0,230,118,0.04)",
     );
     Y += 158;
-    layerLabel(Y, "Add & LayerNorm (just 1 vector)", "#ffb74d");
+    layerLabel(Y, "Add & LayerNorm (just 1 vector)", "#ffcc80");
     Y += 52;
     const dan1Y = Y;
     const dan1Vec = [-0.3, 0.3, 0.0];
     o2oEdges(tNodes(newTok.cx, saOutY), tNodes(newTok.cx, dan1Y), "rgba(255,193,7,0.2)", 1);
-    DIMX.forEach((dx, i) => node(newTok.cx + dx, dan1Y, "rgba(255,152,0,0.12)", "#ff9800", dan1Vec[i], "#ffb74d"));
+    DIMX.forEach((dx, i) => node(newTok.cx + dx, dan1Y, "rgba(255,152,0,0.12)", "#ff9800", dan1Vec[i], "#ffcc80"));
 
     if (sub < 5) {
       svg.setAttribute("viewBox", "-10 0 900 " + (Y + 160));
@@ -1703,12 +1703,12 @@ function InferenceDiagram({ sub, setSub, subBtnRipple, setSubBtnRipple, register
     );
     callout(CX, crossOutY + 46, '"cat" now incorporates information from ALL input words');
     Y += 95;
-    layerLabel(Y, "Add & LayerNorm", "#ffb74d");
+    layerLabel(Y, "Add & LayerNorm", "#ffcc80");
     Y += 52;
     const dan2Y = Y;
     const dan2Vec = [0.0, 0.1, -0.1];
     o2oEdges(tNodes(newTok.cx, crossOutY), tNodes(newTok.cx, dan2Y), "rgba(255,193,7,0.2)", 1);
-    DIMX.forEach((dx, i) => node(newTok.cx + dx, dan2Y, "rgba(255,152,0,0.12)", "#ff9800", dan2Vec[i], "#ffb74d"));
+    DIMX.forEach((dx, i) => node(newTok.cx + dx, dan2Y, "rgba(255,152,0,0.12)", "#ff9800", dan2Vec[i], "#ffcc80"));
 
     if (sub < 6) {
       svg.setAttribute("viewBox", "-10 0 900 " + (Y + 160));
@@ -1777,12 +1777,12 @@ function InferenceDiagram({ sub, setSub, subBtnRipple, setSubBtnRipple, register
       "rgba(0,230,118,0.04)",
     );
     Y += 190;
-    layerLabel(Y, 'Add & LayerNorm (decoder block output for "cat")', "#ffb74d");
+    layerLabel(Y, 'Add & LayerNorm (decoder block output for "cat")', "#ffcc80");
     Y += 52;
     const dan3Y = Y;
     const dan3Vec = [0.1, 0.2, -0.3];
     o2oEdges(tNodes(newTok.cx, dffn2Y), tNodes(newTok.cx, dan3Y), "rgba(255,193,7,0.2)", 1);
-    DIMX.forEach((dx, i) => node(newTok.cx + dx, dan3Y, "rgba(255,152,0,0.12)", "#ff9800", dan3Vec[i], "#ffb74d"));
+    DIMX.forEach((dx, i) => node(newTok.cx + dx, dan3Y, "rgba(255,152,0,0.12)", "#ff9800", dan3Vec[i], "#ffcc80"));
 
     if (sub < 7) {
       svg.setAttribute("viewBox", "-10 0 900 " + (Y + 160));

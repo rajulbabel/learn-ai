@@ -1084,7 +1084,8 @@ export const CrossEntropy = (ctx) => {
             Why cross-entropy, not MSE?
           </T>
           <T color="#80e8a5" style={{ marginTop: 6 }}>
-            Mean Squared Error (MSE) is common for regression. Why use cross-entropy for language models?
+            MSE (Mean Squared Error) is the default loss for predicting numbers - like "predict the house price." But
+            language models predict probabilities over a vocabulary. Why does that need a different loss?
           </T>
           <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 8 }}>
             {[

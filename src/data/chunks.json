@@ -1806,7 +1806,7 @@
     "section": 2,
     "sectionName": "How LLMs Actually Train",
     "sub": 4,
-    "text": "s-entropy, not MSE?Mean Squared Error (MSE) is common for regression. Why use cross-entropy for language models?MSE LossFormula: (P_pred - P_true)²Example: P_pred=0.1, P_true=1.0 → (0.1-1.0)² = 0.81Why: Treats small & large errors equally. Doesn't penalize confidence enough.Cross-Entropy LossFormula: -log(P_correct)Example: P_pred=0.1 when true=1.0 → -log(0.1) = 2.30Why: HEAVILY punishes confident mistakes. Correct!Continue"
+    "text": "s-entropy, not MSE?MSE (Mean Squared Error) is the default loss for predicting numbers - like \"predict the house price.\" But language models predict probabilities over a vocabulary. Why does that need a different loss?MSE LossFormula: (P_pred - P_true)²Example: P_pred=0.1, P_true=1.0 → (0.1-1.0)² = 0.81Why: Treats small & large errors equally. Doesn't penalize confidence enough.Cross-Entropy LossFormula: -log(P_correct)Example: P_pred=0.1 when true=1.0 → -log(0.1) = 2.30Why: HEAVILY punishes confident mistakes. Correct!Continue"
   },
   {
     "id": 201,

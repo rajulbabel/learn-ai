@@ -1250,7 +1250,15 @@ export const HowQKVCreated = (ctx) => {
           <T color="#b8a9ff" style={{ marginTop: 8 }}>
             But each word starts as just <strong>one</strong> list of numbers - its embedding. For example:
           </T>
-          <div style={{ marginTop: 6, padding: "6px 10px", borderRadius: 6, background: "rgba(0,0,0,0.3)", textAlign: "center" }}>
+          <div
+            style={{
+              marginTop: 6,
+              padding: "6px 10px",
+              borderRadius: 6,
+              background: "rgba(0,0,0,0.3)",
+              textAlign: "center",
+            }}
+          >
             <T color={C.mid} size={18} mono center>
               "love" = [0.2, 0.9, 0.4, -0.1]
             </T>
@@ -2009,7 +2017,15 @@ export const TracingExample = (ctx) => {
               "Who is performing this action? I'm looking for a subject."
             </T>
           </div>
-          <div style={{ marginTop: 10, padding: "10px", background: "rgba(0,0,0,0.3)", borderRadius: 8, textAlign: "center" }}>
+          <div
+            style={{
+              marginTop: 10,
+              padding: "10px",
+              background: "rgba(0,0,0,0.3)",
+              borderRadius: 8,
+              textAlign: "center",
+            }}
+          >
             <T color={C.dim} size={18} center>
               Score = dot product: Q_sat · K_cat
             </T>

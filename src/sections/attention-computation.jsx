@@ -7407,11 +7407,7 @@ export const KVCache = (ctx) => {
               <T color="#b8a9ff" bold center size={15}>
                 Full attention output (N rows):
               </T>
-              {mono(
-                "#b8a9ff",
-                "output = softmax( Q · Kᵀ / √d ) · V     ← shape: (N × d)",
-                14,
-              )}
+              {mono("#b8a9ff", "output = softmax( Q · Kᵀ / √d ) · V     ← shape: (N × d)", 14)}
               <div style={{ marginTop: 10, display: "flex", flexDirection: "column", gap: 3 }}>
                 {[
                   { row: 'Row 1 (for "I")', status: "already computed at step 1", color: C.dim },
@@ -7527,9 +7523,9 @@ export const KVCache = (ctx) => {
                 Q (Query) - we never need old queries again
               </T>
               <T color="#b8a9ff" size={15} style={{ marginTop: 6 }}>
-                The formula is: q_new · K_allᵀ. Only q_new appears - the new token's query. We do not multiply
-                q_I or q_love against anything. Those queries already served their purpose in steps 1 and 2. They are
-                dead weight.
+                The formula is: q_new · K_allᵀ. Only q_new appears - the new token's query. We do not multiply q_I or
+                q_love against anything. Those queries already served their purpose in steps 1 and 2. They are dead
+                weight.
               </T>
               {mono(C.purple, "Step 3: q_cats · [k_I, k_love, k_cats]ᵀ", 14)}
               <T color={C.dim} center size={13} style={{ marginTop: 4 }}>
@@ -7962,13 +7958,9 @@ export const KVCache = (ctx) => {
                     q_cats · k_I &nbsp;&nbsp;&nbsp;= 0.3×0.3 + 0.4×0.4 = 0.25
                   </code>
                   <br />
-                  <code style={{ color: C.dim, fontSize: 13 }}>
-                    q_cats · k_love = 0.3×0.7 + 0.4×0.2 = 0.29
-                  </code>
+                  <code style={{ color: C.dim, fontSize: 13 }}>q_cats · k_love = 0.3×0.7 + 0.4×0.2 = 0.29</code>
                   <br />
-                  <code style={{ color: C.dim, fontSize: 13 }}>
-                    q_cats · k_cats = 0.3×0.5 + 0.4×0.3 = 0.27
-                  </code>
+                  <code style={{ color: C.dim, fontSize: 13 }}>q_cats · k_cats = 0.3×0.5 + 0.4×0.3 = 0.27</code>
                 </div>
               </div>
 
@@ -8145,14 +8137,10 @@ export const KVCache = (ctx) => {
               <T color="#80deea" bold center size={15}>
                 Total cache for a real model:
               </T>
-              {mono(
-                "#80deea",
-                "KV cache = 2 (K+V) × layers × heads × d_head × seq_len × bytes",
-                13,
-              )}
+              {mono("#80deea", "KV cache = 2 (K+V) × layers × heads × d_head × seq_len × bytes", 13)}
               <T color={C.dim} center size={13} style={{ marginTop: 6 }}>
-                A 70B model with 80 layers and 64 heads: that is 2 × 80 × 64 = 10,240 separate cache matrices,
-                each growing by one row per generated token.
+                A 70B model with 80 layers and 64 heads: that is 2 × 80 × 64 = 10,240 separate cache matrices, each
+                growing by one row per generated token.
               </T>
             </>,
           )}

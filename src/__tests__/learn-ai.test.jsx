@@ -1,5 +1,6 @@
 import { describe, it, expect, vi, afterEach } from "vitest";
 import { render, screen, fireEvent, cleanup, act } from "@testing-library/react";
+import { chapters } from "../config.js";
 
 // Mock all dynamic imports so the component renders synchronously in tests
 vi.mock("../sections/toc.jsx", () => ({
@@ -8,8 +9,12 @@ vi.mock("../sections/toc.jsx", () => ({
 vi.mock("../sections/neural-foundations.jsx", () => ({
   WhatIsNN: () => <div>WhatIsNN</div>,
 }));
-vi.mock("../sections/llm-training.jsx", () => ({}));
-vi.mock("../sections/scaling.jsx", () => ({}));
+vi.mock("../sections/llm-training.jsx", () => ({
+  BatchTraining: () => <div data-testid="batch-training">BatchTraining</div>,
+}));
+vi.mock("../sections/scaling.jsx", () => ({
+  ParametersAtScale: () => <div data-testid="parameters-at-scale">ParametersAtScale</div>,
+}));
 vi.mock("../sections/road-to-transformers.jsx", () => ({}));
 vi.mock("../sections/transformer-input.jsx", () => ({}));
 vi.mock("../sections/attention-qkv.jsx", () => ({}));
@@ -29,7 +34,13 @@ vi.mock("../nav-persistence.js", () => ({
   loadNav: vi.fn(() => null),
 }));
 
-afterEach(() => cleanup());
+afterEach(async () => {
+  cleanup();
+  const navMod = await import("../nav-persistence.js");
+  navMod.loadNav.mockReturnValue(null);
+  const searchMod = await import("../search.js");
+  searchMod.getSearchStatus.mockReturnValue({ mode: "off", progress: 0 });
+});
 
 // Helper: render LearnAI and wait for async chapter load
 async function renderLearnAI() {
@@ -144,5 +155,24 @@ describe("LearnAI search bar", () => {
       await new Promise((r) => setTimeout(r, 50));
     });
     expect(screen.getByTestId("search-overlay")).toBeTruthy();
+  });
+});
+
+describe("LearnAI chapter loading", () => {
+  it("loads chapter 3.3 from the combined section 3 modules instead of reusing chapter 3.2", async () => {
+    const navMod = await import("../nav-persistence.js");
+    const chapter32 = chapters.findIndex((c) => c.id === "3.2");
+    navMod.loadNav.mockReturnValue({ ch: chapter32, sub: 0 });
+
+    await renderLearnAI();
+    expect(screen.getByTestId("parameters-at-scale")).toBeTruthy();
+
+    await act(async () => {
+      fireEvent.keyDown(window, { key: "ArrowRight" });
+      await new Promise((r) => setTimeout(r, 120));
+    });
+
+    expect(screen.getByTestId("batch-training")).toBeTruthy();
+    expect(screen.queryByTestId("parameters-at-scale")).toBeNull();
   });
 });

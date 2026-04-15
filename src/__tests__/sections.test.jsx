@@ -1420,6 +1420,103 @@ describe("RLHF split boxes", () => {
   });
 });
 
+// ─── Chapter 2.9: DPO - example-driven rewrite ───
+describe("DPO chapter", () => {
+  const fn = LLMTraining.DPO;
+
+  // Sub 0: The RLHF problem recap with 4 models
+  it("sub 0 shows RLHF requires 4 models and explains why it is painful", () => {
+    const ctx = makeCtx({ sub: 0 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("4 models");
+    expect(text).toContain("reward model");
+    expect(text).toContain("policy");
+    expect(text).toContain("Reference");
+  });
+
+  it("sub 0 does NOT show the DPO insight yet", () => {
+    const ctx = makeCtx({ sub: 0 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).not.toContain("Skip the Reward Model");
+  });
+
+  // Sub 1: DPO insight - skip the reward model
+  it("sub 1 explains DPO skips the reward model and learns directly from preferences", () => {
+    const ctx = makeCtx({ sub: 1 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("Skip the Reward Model");
+    expect(text).toContain("preference");
+  });
+
+  it("sub 1 does NOT show concrete probabilities yet", () => {
+    const ctx = makeCtx({ sub: 1 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).not.toContain("0.030");
+  });
+
+  // Sub 2: Concrete training step with real responses
+  it("sub 2 shows a concrete prompt with preferred and rejected responses", () => {
+    const ctx = makeCtx({ sub: 2 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("Python");
+    expect(text).toContain("Rust");
+    expect(text).toContain("Preferred");
+    expect(text).toContain("Rejected");
+  });
+
+  // Sub 3: The log-ratio trick with real numbers
+  it("sub 3 shows the log-ratio computation with concrete probabilities", () => {
+    const ctx = makeCtx({ sub: 3 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("log");
+    expect(text).toContain("reference");
+    expect(text).toContain("0.030");
+  });
+
+  it("sub 3 does NOT show the full formula yet", () => {
+    const ctx = makeCtx({ sub: 3 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).not.toContain("sigmoid");
+  });
+
+  // Sub 4: Full DPO loss formula with worked computation
+  it("sub 4 shows the full DPO loss formula with sigmoid and worked numbers", () => {
+    const ctx = makeCtx({ sub: 4 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("sigmoid");
+    expect(text).toContain("Loss");
+    expect(text).toContain("beta");
+  });
+
+  // Sub 5: Beta - the safety leash
+  it("sub 5 explains beta as a safety leash with different values", () => {
+    const ctx = makeCtx({ sub: 5 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("beta");
+    expect(text).toContain("0.1");
+    expect(text).toContain("0.5");
+  });
+
+  // Sub 6: RLHF vs DPO comparison
+  it("sub 6 shows a side-by-side RLHF vs DPO comparison", () => {
+    const ctx = makeCtx({ sub: 6 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("RLHF");
+    expect(text).toContain("DPO");
+    expect(text).toContain("2 models");
+  });
+});
+
 // ─── Chapter 2.3: CrossEntropy - graph and formula ───
 describe("CrossEntropy graph and formula", () => {
   const fn = LLMTraining.CrossEntropy;
@@ -1596,6 +1693,52 @@ describe("SFT sub-steps", () => {
     const { container } = render(fn(ctx));
     const text = container.textContent;
     expect(text).toContain("100K");
+  });
+});
+
+// ─── Chapter 3.1: Chinchilla Scaling - illustrative rewrite ───
+describe("Chinchilla scaling in ScalingLaws", () => {
+  const fn = Scaling.ScalingLaws;
+
+  // Sub 5: The problem - models were undertrained
+  it("sub 5 explains that models were undertrained, not too small", () => {
+    const ctx = makeCtx({ sub: 5 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("GPT-3");
+    expect(text).toContain("175B");
+    expect(text).toContain("300B");
+    expect(text).toContain("undertrained");
+  });
+
+  it("sub 5 does NOT show the Chinchilla vs Gopher comparison yet", () => {
+    const ctx = makeCtx({ sub: 5 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).not.toContain("Gopher");
+  });
+
+  // Sub 6: The proof - Chinchilla vs Gopher head to head
+  it("sub 6 shows the Chinchilla vs Gopher comparison with concrete numbers", () => {
+    const ctx = makeCtx({ sub: 6 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("Chinchilla");
+    expect(text).toContain("Gopher");
+    expect(text).toContain("70B");
+    expect(text).toContain("280B");
+    expect(text).toContain("1.4T");
+  });
+
+  // Sub 7: The 20:1 rule with worked examples
+  it("sub 7 shows the 20 tokens per parameter rule with worked examples", () => {
+    const ctx = makeCtx({ sub: 7 });
+    const { container } = render(fn(ctx));
+    const text = container.textContent;
+    expect(text).toContain("20");
+    expect(text).toContain("tokens per parameter");
+    expect(text).toContain("7B");
+    expect(text).toContain("140B");
   });
 });
 

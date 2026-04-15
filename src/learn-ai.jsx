@@ -9,7 +9,10 @@ const sectionLoaders = {
   0: () => import("./sections/toc.jsx"),
   1: () => import("./sections/neural-foundations.jsx"),
   2: () => import("./sections/llm-training.jsx"),
-  3: () => import("./sections/scaling.jsx"),
+  3: () =>
+    Promise.all([import("./sections/scaling.jsx"), import("./sections/llm-training.jsx")]).then((mods) =>
+      Object.assign({}, ...mods),
+    ),
   4: () => import("./sections/road-to-transformers.jsx"),
   5: () => import("./sections/transformer-input.jsx"),
   6: () => import("./sections/attention-qkv.jsx"),
@@ -237,10 +240,17 @@ export default function LearnAI() {
   useEffect(() => {
     const entry = chapters[ch];
     if (!entry) return;
+    let cancelled = false;
     const sectionNum = entry.section;
     const compName = entry.component;
+    setRenderChapter(null);
     loadComponent(sectionNum, compName).then((fn) => {
-      if (fn) setRenderChapter(() => fn);
+      if (cancelled) return;
+      if (fn) {
+        setRenderChapter(() => fn);
+      } else if (import.meta.env.DEV) {
+        console.error(`[lookup] Failed to resolve chapter "${entry.id}" component "${compName}" for section ${sectionNum}.`);
+      }
       // After the first chapter loads, start downloading semantic search in background
       if (!firstLoadDone.current) {
         firstLoadDone.current = true;
@@ -250,6 +260,9 @@ export default function LearnAI() {
         });
       }
     });
+    return () => {
+      cancelled = true;
+    };
   }, [ch, startSemanticPoll]);
 
   // Persist navigation to localStorage on every change

@@ -9747,12 +9747,30 @@ export const Dropout = (ctx) => {
               {/* Full bar background */}
               <rect x={10} y={18} width={340} height={36} rx={6} fill="rgba(255,255,255,0.04)" />
               {/* Training portion - 80% */}
-              <rect x={10} y={18} width={272} height={36} rx={6} fill={`${C.green}25`} stroke={C.green} strokeWidth={1.5} />
+              <rect
+                x={10}
+                y={18}
+                width={272}
+                height={36}
+                rx={6}
+                fill={`${C.green}25`}
+                stroke={C.green}
+                strokeWidth={1.5}
+              />
               <text x={146} y={41} fill={C.green} fontSize={13} textAnchor="middle" fontWeight={700}>
                 Training Data (80%)
               </text>
               {/* Validation portion - 20% */}
-              <rect x={282} y={18} width={68} height={36} rx={6} fill={`${C.orange}25`} stroke={C.orange} strokeWidth={1.5} />
+              <rect
+                x={282}
+                y={18}
+                width={68}
+                height={36}
+                rx={6}
+                fill={`${C.orange}25`}
+                stroke={C.orange}
+                strokeWidth={1.5}
+              />
               <text x={316} y={41} fill={C.orange} fontSize={11} textAnchor="middle" fontWeight={700}>
                 20%
               </text>
@@ -9784,7 +9802,9 @@ export const Dropout = (ctx) => {
               </T>
               <div style={{ display: "flex", justifyContent: "center", marginTop: 10 }}>
                 <svg viewBox="0 0 120 50" style={{ width: 120, height: 50 }}>
-                  <desc>Icon showing an open eye with a checkmark, representing data the model sees during training</desc>
+                  <desc>
+                    Icon showing an open eye with a checkmark, representing data the model sees during training
+                  </desc>
                   {/* Eye icon - open */}
                   <ellipse cx={60} cy={25} rx={30} ry={16} fill="none" stroke={C.green} strokeWidth={2} />
                   <circle cx={60} cy={25} r={8} fill={`${C.green}30`} stroke={C.green} strokeWidth={1.5} />
@@ -9792,8 +9812,8 @@ export const Dropout = (ctx) => {
                 </svg>
               </div>
               <T color="#80e8a5" size={15} style={{ marginTop: 8 }}>
-                Error measured on data the model trains on. The model sees these examples, makes predictions, and adjusts
-                its weights.
+                Error measured on data the model trains on. The model sees these examples, makes predictions, and
+                adjusts its weights.
               </T>
               <div
                 style={{
@@ -9824,7 +9844,8 @@ export const Dropout = (ctx) => {
               <div style={{ display: "flex", justifyContent: "center", marginTop: 10 }}>
                 <svg viewBox="0 0 120 50" style={{ width: 120, height: 50 }}>
                   <desc>
-                    Icon showing a closed eye with a lock, representing held-out data the model never sees during training
+                    Icon showing a closed eye with a lock, representing held-out data the model never sees during
+                    training
                   </desc>
                   {/* Eye icon - closed/hidden */}
                   <path d="M 30 25 Q 60 40 90 25" fill="none" stroke={C.orange} strokeWidth={2} />
@@ -9835,8 +9856,8 @@ export const Dropout = (ctx) => {
                 </svg>
               </div>
               <T color="#ffcc80" size={15} style={{ marginTop: 8 }}>
-                Error measured on data the model has NEVER seen. These examples are hidden during training - they are the
-                honest test.
+                Error measured on data the model has NEVER seen. These examples are hidden during training - they are
+                the honest test.
               </T>
               <div
                 style={{
@@ -9889,7 +9910,14 @@ export const Dropout = (ctx) => {
               <line x1={45} y1={18} x2={45} y2={175} stroke="rgba(255,255,255,0.15)" strokeWidth={1} />
               <line x1={45} y1={175} x2={345} y2={175} stroke="rgba(255,255,255,0.15)" strokeWidth={1} />
               {/* Y-axis label */}
-              <text x={8} y={100} fill="rgba(255,255,255,0.4)" fontSize={10} textAnchor="middle" transform="rotate(-90, 8, 100)">
+              <text
+                x={8}
+                y={100}
+                fill="rgba(255,255,255,0.4)"
+                fontSize={10}
+                textAnchor="middle"
+                transform="rotate(-90, 8, 100)"
+              >
                 Loss
               </text>
               {/* X-axis label */}
@@ -9926,7 +9954,14 @@ export const Dropout = (ctx) => {
               {/* Training loss line (green) - keeps dropping */}
               {(() => {
                 const trainPts = [
-                  [0, 2.5], [2, 1.8], [4, 1.2], [6, 0.7], [8, 0.3], [10, 0.1], [12, 0.05], [14, 0.02],
+                  [0, 2.5],
+                  [2, 1.8],
+                  [4, 1.2],
+                  [6, 0.7],
+                  [8, 0.3],
+                  [10, 0.1],
+                  [12, 0.05],
+                  [14, 0.02],
                 ];
                 const sx = (v) => 45 + (v / 14) * 300;
                 const sy = (v) => 28 + ((3.0 - v) / 3.0) * 145;
@@ -9943,7 +9978,14 @@ export const Dropout = (ctx) => {
               {/* Validation loss line (red) - drops then rises */}
               {(() => {
                 const valPts = [
-                  [0, 2.6], [2, 1.9], [4, 1.4], [6, 1.1], [8, 1.3], [10, 1.8], [12, 2.3], [14, 2.8],
+                  [0, 2.6],
+                  [2, 1.9],
+                  [4, 1.4],
+                  [6, 1.1],
+                  [8, 1.3],
+                  [10, 1.8],
+                  [12, 2.3],
+                  [14, 2.8],
                 ];
                 const sx = (v) => 45 + (v / 14) * 300;
                 const sy = (v) => 28 + ((3.0 - v) / 3.0) * 145;
@@ -9965,8 +10007,14 @@ export const Dropout = (ctx) => {
                 return (
                   <g>
                     <line x1={sx + 6} y1={syTrain} x2={sx + 6} y2={syVal} stroke={C.yellow} strokeWidth={2} />
-                    <polygon points={`${sx + 6},${syVal} ${sx + 3},${syVal + 6} ${sx + 9},${syVal + 6}`} fill={C.yellow} />
-                    <polygon points={`${sx + 6},${syTrain} ${sx + 3},${syTrain - 6} ${sx + 9},${syTrain - 6}`} fill={C.yellow} />
+                    <polygon
+                      points={`${sx + 6},${syVal} ${sx + 3},${syVal + 6} ${sx + 9},${syVal + 6}`}
+                      fill={C.yellow}
+                    />
+                    <polygon
+                      points={`${sx + 6},${syTrain} ${sx + 3},${syTrain - 6} ${sx + 9},${syTrain - 6}`}
+                      fill={C.yellow}
+                    />
                     <text x={sx + 14} y={(syTrain + syVal) / 2 + 4} fill={C.yellow} fontSize={10} fontWeight={700}>
                       GAP
                     </text>
@@ -10774,13 +10822,34 @@ export const AdamOptimizer = (ctx) => {
                 t
               </text>
               {/* Annotations */}
-              <text x="18" y="64" fill="rgba(255,255,255,0.35)" fontSize="10" fontFamily="sans-serif" textAnchor="middle">
+              <text
+                x="18"
+                y="64"
+                fill="rgba(255,255,255,0.35)"
+                fontSize="10"
+                fontFamily="sans-serif"
+                textAnchor="middle"
+              >
                 momentum
               </text>
-              <text x="82" y="64" fill="rgba(255,255,255,0.35)" fontSize="10" fontFamily="sans-serif" textAnchor="middle">
+              <text
+                x="82"
+                y="64"
+                fill="rgba(255,255,255,0.35)"
+                fontSize="10"
+                fontFamily="sans-serif"
+                textAnchor="middle"
+              >
                 0.9
               </text>
-              <text x="335" y="64" fill="rgba(255,255,255,0.35)" fontSize="10" fontFamily="sans-serif" textAnchor="middle">
+              <text
+                x="335"
+                y="64"
+                fill="rgba(255,255,255,0.35)"
+                fontSize="10"
+                fontFamily="sans-serif"
+                textAnchor="middle"
+              >
                 gradient
               </text>
             </svg>
@@ -10970,13 +11039,34 @@ export const AdamOptimizer = (ctx) => {
                 2
               </text>
               {/* Annotations */}
-              <text x="12" y="64" fill="rgba(255,255,255,0.35)" fontSize="10" fontFamily="sans-serif" textAnchor="middle">
+              <text
+                x="12"
+                y="64"
+                fill="rgba(255,255,255,0.35)"
+                fontSize="10"
+                fontFamily="sans-serif"
+                textAnchor="middle"
+              >
                 velocity
               </text>
-              <text x="80" y="64" fill="rgba(255,255,255,0.35)" fontSize="10" fontFamily="sans-serif" textAnchor="middle">
+              <text
+                x="80"
+                y="64"
+                fill="rgba(255,255,255,0.35)"
+                fontSize="10"
+                fontFamily="sans-serif"
+                textAnchor="middle"
+              >
                 0.999
               </text>
-              <text x="335" y="64" fill="rgba(255,255,255,0.35)" fontSize="10" fontFamily="sans-serif" textAnchor="middle">
+              <text
+                x="335"
+                y="64"
+                fill="rgba(255,255,255,0.35)"
+                fontSize="10"
+                fontFamily="sans-serif"
+                textAnchor="middle"
+              >
                 squared grad
               </text>
             </svg>

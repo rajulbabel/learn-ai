@@ -280,13 +280,23 @@ export default function LearnAI() {
     }
   }, [ch]);
 
-  // Auto-scroll to latest reveal or SubBtn
+  // Auto-scroll so the learner lands just above the newly revealed box.
+  // We aim for the midpoint between the previous box's bottom and the new box's top to sit at
+  // the top of the viewport. This leaves some breathing room above the new box instead of
+  // pinning its top edge flush against the screen edge. For the first reveal (no previous box),
+  // fall back to a small fixed offset above it.
   useEffect(() => {
     if (sub > 0) {
       setTimeout(() => {
-        const btn = document.querySelector("[data-subbtn]");
-        const target = btn || document.querySelector("[data-reveal]:last-child");
-        if (target) target.scrollIntoView({ behavior: "smooth", block: "center" });
+        const reveals = document.querySelectorAll("[data-reveal]");
+        const newest = reveals[reveals.length - 1];
+        if (!newest) return;
+        const newTop = newest.getBoundingClientRect().top;
+        const prev = reveals[reveals.length - 2];
+        const targetY = prev
+          ? window.scrollY + (prev.getBoundingClientRect().bottom + newTop) / 2
+          : window.scrollY + newTop - 40;
+        window.scrollTo({ top: targetY, behavior: "smooth" });
       }, 200);
     }
   }, [sub]);

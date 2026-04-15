@@ -7,7 +7,24 @@ vi.mock("../sections/toc.jsx", () => ({
   TOC: () => <div data-testid="toc">TOC</div>,
 }));
 vi.mock("../sections/neural-foundations.jsx", () => ({
-  WhatIsNN: () => <div>WhatIsNN</div>,
+  WhatIsNN: (ctx) => (
+    <div>
+      <div>WhatIsNN</div>
+      {ctx.sub >= 1 && (
+        <div data-reveal="true" data-testid="reveal-1">
+          Reveal 1
+        </div>
+      )}
+      {ctx.sub >= 2 && (
+        <div data-reveal="true" data-testid="reveal-2">
+          Reveal 2
+        </div>
+      )}
+      <button data-subbtn="true" data-testid="subbtn">
+        Continue
+      </button>
+    </div>
+  ),
 }));
 vi.mock("../sections/llm-training.jsx", () => ({
   BatchTraining: () => <div data-testid="batch-training">BatchTraining</div>,
@@ -155,6 +172,64 @@ describe("LearnAI search bar", () => {
       await new Promise((r) => setTimeout(r, 50));
     });
     expect(screen.getByTestId("search-overlay")).toBeTruthy();
+  });
+});
+
+describe("LearnAI auto-scroll on Continue", () => {
+  it("scrolls to the midpoint between the previous box's bottom and the new box's top", async () => {
+    const scrollTo = vi.fn();
+    window.scrollTo = scrollTo;
+    // Ensure we're testing absolute scroll-y, not relative to current viewport scroll.
+    Object.defineProperty(window, "scrollY", { value: 0, configurable: true, writable: true });
+
+    const navMod = await import("../nav-persistence.js");
+    const ch1Idx = chapters.findIndex((c) => c.id === "1.1");
+    // sub=2 means two reveals are in the DOM; we test the midpoint computation between them.
+    navMod.loadNav.mockReturnValue({ ch: ch1Idx, sub: 2 });
+
+    await renderLearnAI();
+
+    // Mock getBoundingClientRect on each reveal so we can predict the midpoint deterministically.
+    const rect = (top, bottom) => ({ top, bottom, left: 0, right: 0, width: 0, height: bottom - top, x: 0, y: top });
+    const reveal1 = screen.getByTestId("reveal-1");
+    const reveal2 = screen.getByTestId("reveal-2");
+    reveal1.getBoundingClientRect = () => rect(100, 200);
+    reveal2.getBoundingClientRect = () => rect(300, 400);
+
+    // Wait past the 200ms setTimeout inside the effect.
+    await act(async () => {
+      await new Promise((r) => setTimeout(r, 300));
+    });
+
+    expect(scrollTo).toHaveBeenCalled();
+    const lastCall = scrollTo.mock.calls[scrollTo.mock.calls.length - 1];
+    // Midpoint = (reveal1.bottom 200 + reveal2.top 300) / 2 = 250. window.scrollY = 0.
+    expect(lastCall[0]).toEqual({ top: 250, behavior: "smooth" });
+  });
+
+  it("falls back to a small offset above the new box when no previous reveal exists (sub=1)", async () => {
+    const scrollTo = vi.fn();
+    window.scrollTo = scrollTo;
+    Object.defineProperty(window, "scrollY", { value: 0, configurable: true, writable: true });
+
+    const navMod = await import("../nav-persistence.js");
+    const ch1Idx = chapters.findIndex((c) => c.id === "1.1");
+    navMod.loadNav.mockReturnValue({ ch: ch1Idx, sub: 1 });
+
+    await renderLearnAI();
+
+    const rect = (top, bottom) => ({ top, bottom, left: 0, right: 0, width: 0, height: bottom - top, x: 0, y: top });
+    const reveal1 = screen.getByTestId("reveal-1");
+    reveal1.getBoundingClientRect = () => rect(500, 800);
+
+    await act(async () => {
+      await new Promise((r) => setTimeout(r, 300));
+    });
+
+    expect(scrollTo).toHaveBeenCalled();
+    const lastCall = scrollTo.mock.calls[scrollTo.mock.calls.length - 1];
+    // First reveal: fall back to reveal.top - 40 (small breathing offset) = 500 - 40 = 460
+    expect(lastCall[0]).toEqual({ top: 460, behavior: "smooth" });
   });
 });
 

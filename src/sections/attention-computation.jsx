@@ -7677,9 +7677,7 @@ export const KVCache = (ctx) => {
               <T color="#ef9a9a" bold center size={15}>
                 Counting the waste across 3 steps
               </T>
-              <div
-                style={{ marginTop: 6, display: "flex", flexDirection: "column", gap: 3, textAlign: "center" }}
-              >
+              <div style={{ marginTop: 6, display: "flex", flexDirection: "column", gap: 3, textAlign: "center" }}>
                 <T color={C.dim} size={14}>
                   Total work: 1 + 2 + 3 = <strong style={{ color: "#ef9a9a" }}>6 blocks</strong>
                 </T>
@@ -7700,8 +7698,8 @@ export const KVCache = (ctx) => {
             C.orange,
             <>
               <T color="#ffcc80" bold center size={14}>
-                Naive generation recomputes identical numbers every step. This chapter shows the one-line fix that
-                makes ChatGPT feel instant.
+                Naive generation recomputes identical numbers every step. This chapter shows the one-line fix that makes
+                ChatGPT feel instant.
               </T>
             </>,
           )}
@@ -7744,9 +7742,7 @@ export const KVCache = (ctx) => {
                   <T color="#80deea" bold size={14}>
                     Step 1 computed
                   </T>
-                  <code style={{ color: C.cyan, fontSize: 14, display: "block", marginTop: 6 }}>
-                    q_I = W_Q · x_I
-                  </code>
+                  <code style={{ color: C.cyan, fontSize: 14, display: "block", marginTop: 6 }}>q_I = W_Q · x_I</code>
                   <code style={{ color: C.cyan, fontSize: 15, display: "block", marginTop: 4, fontWeight: 700 }}>
                     = [0.5, 0.2]
                   </code>
@@ -7765,9 +7761,7 @@ export const KVCache = (ctx) => {
                   <T color="#80deea" bold size={14}>
                     Step 2 re-computed
                   </T>
-                  <code style={{ color: C.cyan, fontSize: 14, display: "block", marginTop: 6 }}>
-                    q_I = W_Q · x_I
-                  </code>
+                  <code style={{ color: C.cyan, fontSize: 14, display: "block", marginTop: 6 }}>q_I = W_Q · x_I</code>
                   <code style={{ color: C.cyan, fontSize: 15, display: "block", marginTop: 4, fontWeight: 700 }}>
                     = [0.5, 0.2]
                   </code>
@@ -7834,9 +7828,9 @@ export const KVCache = (ctx) => {
                 <svg data-viz="matrix-view" width="680" height="360" viewBox="0 0 680 360">
                   <desc>
                     Side by side attention matrix multiplications at generation step 3: Q times K transpose equals
-                    Scores (3 by 3) with rows for I and love dimmed because they were already computed at earlier
-                    steps and only the last row for cats glows, and Scores times V equals Output with only the last
-                    row highlighted as the new result
+                    Scores (3 by 3) with rows for I and love dimmed because they were already computed at earlier steps
+                    and only the last row for cats glows, and Scores times V equals Output with only the last row
+                    highlighted as the new result
                   </desc>
 
                   <text x="340" y="16" fill="#b8a9ff" fontSize="14" fontWeight="700" textAnchor="middle">
@@ -7901,14 +7895,7 @@ export const KVCache = (ctx) => {
                           stroke={C.blue}
                           strokeWidth="1.5"
                         />
-                        <text
-                          x={i * 68 + 30}
-                          y="50"
-                          fill="#fff"
-                          fontSize="13"
-                          textAnchor="middle"
-                          fontWeight="700"
-                        >
+                        <text x={i * 68 + 30} y="50" fill="#fff" fontSize="13" textAnchor="middle" fontWeight="700">
                           {label}
                         </text>
                       </g>
@@ -8026,14 +8013,7 @@ export const KVCache = (ctx) => {
                           stroke={C.green}
                           strokeWidth="1.5"
                         />
-                        <text
-                          x="100"
-                          y={i * 32 + 18}
-                          fill="#fff"
-                          fontSize="13"
-                          textAnchor="middle"
-                          fontWeight="700"
-                        >
+                        <text x="100" y={i * 32 + 18} fill="#fff" fontSize="13" textAnchor="middle" fontWeight="700">
                           {label} (all needed)
                         </text>
                       </g>
@@ -8094,9 +8074,7 @@ export const KVCache = (ctx) => {
               <T color="#fff176" bold center size={16}>
                 Counting cells at step 3
               </T>
-              <div
-                style={{ marginTop: 8, display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap" }}
-              >
+              <div style={{ marginTop: 8, display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap" }}>
                 {[
                   { label: "Without cache", val: "18 cells", sub: "9 score + 9 output", c: C.red },
                   { label: "Actually needed", val: "6 cells", sub: "3 score + 3 output", c: C.green },
@@ -8150,13 +8128,10 @@ export const KVCache = (ctx) => {
             What to Save, What to Throw Away
           </T>
           <T color="#90caf9" size={16} style={{ marginTop: 8 }}>
-            We compute three things per token: Q, K, V. For each, do we need the OLD ones to build the new output
-            row?
+            We compute three things per token: Q, K, V. For each, do we need the OLD ones to build the new output row?
           </T>
 
-          <div
-            style={{ marginTop: 12, display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap" }}
-          >
+          <div style={{ marginTop: 12, display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap" }}>
             {[
               {
                 name: "Q",
@@ -8240,8 +8215,8 @@ export const KVCache = (ctx) => {
             The Cache Is a Growing Notebook
           </T>
           <T color="#a5d6a7" size={16} style={{ marginTop: 8 }}>
-            The KV cache is literally two tables that grow by exactly one row at every step. Nothing moves, nothing
-            gets recomputed. We just append to the notebook.
+            The KV cache is literally two tables that grow by exactly one row at every step. Nothing moves, nothing gets
+            recomputed. We just append to the notebook.
           </T>
 
           {inner(
@@ -8302,14 +8277,7 @@ export const KVCache = (ctx) => {
                     },
                   ].map(({ x, title, k, v }, frameIdx) => (
                     <g key={`frame${frameIdx}`} transform={`translate(${x}, 10)`}>
-                      <text
-                        x="110"
-                        y="14"
-                        fill="#a5d6a7"
-                        fontSize="13"
-                        fontWeight="700"
-                        textAnchor="middle"
-                      >
+                      <text x="110" y="14" fill="#a5d6a7" fontSize="13" fontWeight="700" textAnchor="middle">
                         {title}
                       </text>
                       <text x="50" y="36" fill={C.blue} fontSize="11" textAnchor="middle" fontWeight="700">
@@ -8340,14 +8308,7 @@ export const KVCache = (ctx) => {
                           </text>
                         </g>
                       ))}
-                      <text
-                        x="170"
-                        y="36"
-                        fill={C.green}
-                        fontSize="11"
-                        textAnchor="middle"
-                        fontWeight="700"
-                      >
+                      <text x="170" y="36" fill={C.green} fontSize="11" textAnchor="middle" fontWeight="700">
                         V cache
                       </text>
                       {v.map((row, i) => (
@@ -8386,14 +8347,7 @@ export const KVCache = (ctx) => {
                             strokeWidth="2"
                             markerEnd="url(#kv-arrow)"
                           />
-                          <text
-                            x="235"
-                            y="110"
-                            fill="#a5d6a7"
-                            fontSize="10"
-                            textAnchor="middle"
-                            fontWeight="700"
-                          >
+                          <text x="235" y="110" fill="#a5d6a7" fontSize="10" textAnchor="middle" fontWeight="700">
                             append
                           </text>
                         </g>
@@ -8529,9 +8483,7 @@ export const KVCache = (ctx) => {
                     {code}
                   </code>
                 ))}
-                <div
-                  style={{ padding: "4px 8px", marginTop: 4, borderTop: `1px solid ${C.dim}20` }}
-                >
+                <div style={{ padding: "4px 8px", marginTop: 4, borderTop: `1px solid ${C.dim}20` }}>
                   <T color={C.dim} size={11} bold>
                     Append k_cats, v_cats to cache. Then:
                   </T>
@@ -8569,8 +8521,8 @@ export const KVCache = (ctx) => {
                 The output vector for "cats" is identical in both.
               </T>
               <T color="#80deea" size={14} center style={{ marginTop: 4 }}>
-                Same numbers come out. The cache just changes where the old K and V values come from (freshly
-                recomputed vs memory read).
+                Same numbers come out. The cache just changes where the old K and V values come from (freshly recomputed
+                vs memory read).
               </T>
             </>,
           )}
@@ -8595,9 +8547,7 @@ export const KVCache = (ctx) => {
               <T color="#80deea" bold center size={14}>
                 Embeddings (d = 2) and weights
               </T>
-              <div
-                style={{ marginTop: 6, display: "flex", gap: 12, flexWrap: "wrap", justifyContent: "center" }}
-              >
+              <div style={{ marginTop: 6, display: "flex", gap: 12, flexWrap: "wrap", justifyContent: "center" }}>
                 <div style={{ textAlign: "center" }}>
                   <code style={{ color: C.cyan, fontSize: 13, display: "block" }}>x_I = [1.0, 0.0]</code>
                   <code style={{ color: C.cyan, fontSize: 13, display: "block" }}>x_love = [0.0, 1.0]</code>
@@ -8607,9 +8557,7 @@ export const KVCache = (ctx) => {
                   <code style={{ color: C.purple, fontSize: 12, display: "block" }}>
                     W_Q rows: [0.5, 0.1] [0.2, 0.6]
                   </code>
-                  <code style={{ color: C.blue, fontSize: 12, display: "block" }}>
-                    W_K rows: [0.3, 0.7] [0.4, 0.2]
-                  </code>
+                  <code style={{ color: C.blue, fontSize: 12, display: "block" }}>W_K rows: [0.3, 0.7] [0.4, 0.2]</code>
                   <code style={{ color: C.green, fontSize: 12, display: "block" }}>
                     W_V rows: [0.8, 0.1] [0.3, 0.9]
                   </code>
@@ -8624,9 +8572,7 @@ export const KVCache = (ctx) => {
               <T color="#fff176" bold center size={14}>
                 Step 1: process "I"
               </T>
-              <div
-                style={{ marginTop: 4, display: "flex", flexDirection: "column", gap: 2, textAlign: "center" }}
-              >
+              <div style={{ marginTop: 4, display: "flex", flexDirection: "column", gap: 2, textAlign: "center" }}>
                 <code style={{ color: C.purple, fontSize: 12 }}>q_I = W_Q · [1.0, 0.0] = [0.5, 0.2]</code>
                 <code style={{ color: C.blue, fontSize: 12 }}>k_I = W_K · [1.0, 0.0] = [0.3, 0.4]</code>
                 <code style={{ color: C.green, fontSize: 12 }}>v_I = W_V · [1.0, 0.0] = [0.8, 0.3]</code>
@@ -8659,9 +8605,7 @@ export const KVCache = (ctx) => {
               <T color="#ffcc80" bold center size={14}>
                 Step 2: process "love" (reuse cache for "I")
               </T>
-              <div
-                style={{ marginTop: 4, display: "flex", flexDirection: "column", gap: 2, textAlign: "center" }}
-              >
+              <div style={{ marginTop: 4, display: "flex", flexDirection: "column", gap: 2, textAlign: "center" }}>
                 <code style={{ color: C.purple, fontSize: 12 }}>q_love = W_Q · [0.0, 1.0] = [0.1, 0.6]</code>
                 <code style={{ color: C.blue, fontSize: 12 }}>k_love = W_K · [0.0, 1.0] = [0.7, 0.2]</code>
                 <code style={{ color: C.green, fontSize: 12 }}>v_love = W_V · [0.0, 1.0] = [0.1, 0.9]</code>
@@ -8691,9 +8635,7 @@ export const KVCache = (ctx) => {
               <T color="#a5d6a7" bold center size={14}>
                 Step 3: process "cats" and compute full attention
               </T>
-              <div
-                style={{ marginTop: 4, display: "flex", flexDirection: "column", gap: 2, textAlign: "center" }}
-              >
+              <div style={{ marginTop: 4, display: "flex", flexDirection: "column", gap: 2, textAlign: "center" }}>
                 <code style={{ color: C.purple, fontSize: 12 }}>q_cats = W_Q · [0.5, 0.5] = [0.3, 0.4]</code>
                 <code style={{ color: C.blue, fontSize: 12 }}>k_cats = W_K · [0.5, 0.5] = [0.5, 0.3]</code>
                 <code style={{ color: C.green, fontSize: 12 }}>v_cats = W_V · [0.5, 0.5] = [0.45, 0.6]</code>
@@ -8754,9 +8696,7 @@ export const KVCache = (ctx) => {
                 <code style={{ color: C.dim, fontSize: 11, display: "block", marginTop: 2 }}>
                   0.329 × [0.8, 0.3] + 0.338 × [0.1, 0.9] + 0.333 × [0.45, 0.6]
                 </code>
-                <code
-                  style={{ color: "#a5d6a7", fontSize: 14, display: "block", marginTop: 4, fontWeight: 700 }}
-                >
+                <code style={{ color: "#a5d6a7", fontSize: 14, display: "block", marginTop: 4, fontWeight: 700 }}>
                   output_cats = [0.447, 0.603]
                 </code>
               </div>
@@ -8868,14 +8808,7 @@ export const KVCache = (ctx) => {
                       <text x={x} y="86" fill={C.dim} fontSize="11" textAnchor="middle">
                         {tokens}
                       </text>
-                      <text
-                        x={x}
-                        y="100"
-                        fill="#ef9a9a"
-                        fontSize="12"
-                        textAnchor="middle"
-                        fontWeight="700"
-                      >
+                      <text x={x} y="100" fill="#ef9a9a" fontSize="12" textAnchor="middle" fontWeight="700">
                         {gb}
                       </text>
                     </g>
@@ -8894,9 +8827,7 @@ export const KVCache = (ctx) => {
               <T color="#ef9a9a" bold center size={15}>
                 And every concurrent user needs their own cache
               </T>
-              <div
-                style={{ marginTop: 6, display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap" }}
-              >
+              <div style={{ marginTop: 6, display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap" }}>
                 {[
                   { label: "1 user", val: "10.7 GB" },
                   { label: "10 users", val: "107 GB" },
@@ -9014,9 +8945,7 @@ export const KVCache = (ctx) => {
               <T color="#fff176" bold center size={16}>
                 At 1000 tokens:
               </T>
-              <div
-                style={{ marginTop: 6, display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap" }}
-              >
+              <div style={{ marginTop: 6, display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap" }}>
                 <div
                   style={{
                     padding: 8,
@@ -9072,8 +9001,8 @@ export const KVCache = (ctx) => {
             C.purple,
             <>
               <T color="#b8a9ff" size={13} center>
-                A note on scope: the cache only exists at inference time. During training, all tokens are processed
-                in parallel, so there's nothing to cache.
+                A note on scope: the cache only exists at inference time. During training, all tokens are processed in
+                parallel, so there's nothing to cache.
               </T>
             </>,
           )}

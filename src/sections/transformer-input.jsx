@@ -3033,7 +3033,7 @@ export const WhatTransformerDoes = (ctx) => {
               }}
             >
               <T color={C.green} bold size={16}>
-                contextual understanding
+                Contextual Understanding
               </T>
             </div>
           </div>

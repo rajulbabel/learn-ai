@@ -1148,17 +1148,17 @@ export const EncoderDecoder = (ctx) => {
               </T>
               <div style={{ padding: "6px 10px", borderRadius: 6, background: `${C.green}15` }}>
                 <T color={C.green} bold size={13}>
-                  "J'aime les chats"
+                  "Mujhe billiyaan pasand hain"
                 </T>
                 <T color={C.dim} size={11}>
-                  French output
+                  Hindi output
                 </T>
               </div>
             </div>
           </div>
           <T color="#80deea" style={{ marginTop: 10 }}>
-            The key problem: English and French are different languages. You must fully <strong>understand</strong> the
-            English input before you can <strong>generate</strong> French output. These are two separate tasks.
+            The key problem: English and Hindi are different languages. You must fully <strong>understand</strong> the
+            English input before you can <strong>generate</strong> Hindi output. These are two separate tasks.
           </T>
         </Box>
       )}
@@ -1247,7 +1247,7 @@ export const EncoderDecoder = (ctx) => {
                 }}
               >
                 <T color={C.green} bold size={12}>
-                  Decoder: "J'aime" → "les" → "chats"
+                  Decoder: "Mujhe" → "billiyaan" → "pasand" → "hain"
                 </T>
               </div>
             </div>
@@ -1321,7 +1321,7 @@ export const EncoderDecoder = (ctx) => {
               }}
             >
               <T color={C.green} bold size={13}>
-                Decoder generates: "J'aime les chats"
+                Decoder generates: "Mujhe billiyaan pasand hain"
               </T>
             </div>
           </div>
@@ -1329,7 +1329,7 @@ export const EncoderDecoder = (ctx) => {
           <T color="#b8a9ff" style={{ marginTop: 12 }}>
             When generating "les", the decoder's Query asks "what noun am I translating?" The encoder's Keys/Values
             answer: "you're translating the idea of 'love' and 'cats'". The decoder uses that context to choose the
-            right French word.
+            right Hindi word.
           </T>
         </Box>
       </Reveal>
@@ -1444,7 +1444,7 @@ export const EncoderDecoder = (ctx) => {
 
           <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 8 }}>
             {[
-              { type: "Encoder-Decoder", task: "Translation (T5, BART)", input: "English", output: "French" },
+              { type: "Encoder-Decoder", task: "Translation (T5, BART)", input: "English", output: "Hindi" },
               {
                 type: "Encoder-Only",
                 task: "Classification (BERT, RoBERTa)",
@@ -1519,7 +1519,7 @@ export const DecoderOnly = (ctx) => {
             Translation vs Chatting: different tasks
           </T>
           <T color="#ffe082" style={{ marginTop: 8 }}>
-            <strong>Translation:</strong> input (English) and output (French) are different languages. You must fully
+            <strong>Translation:</strong> input (English) and output (Hindi) are different languages. You must fully
             process the input before generating output.
           </T>
           <T color="#ffe082" style={{ marginTop: 6 }}>
@@ -1546,7 +1546,7 @@ export const DecoderOnly = (ctx) => {
                 ↓
               </T>
               <T color={C.dim} size={12}>
-                French output (generated)
+                Hindi output (generated)
               </T>
               <T color={C.dim} size={11} style={{ marginTop: 4 }}>
                 Two separate "sides"

@@ -595,14 +595,14 @@ export const Distillation = (ctx) => {
             What does "copy how the teacher thinks" mean?
           </T>
           <T color="#ffe082" style={{ marginTop: 8 }}>
-            Question: "What is the capital of France?"
+            Question: "What is the capital of India?"
           </T>
           <T color="#ffe082" style={{ marginTop: 8 }}>
             A lazy teacher just says the answer:
           </T>
           <div style={{ marginTop: 6, padding: "10px", background: "rgba(0,0,0,0.2)", borderRadius: 8 }}>
             <T color={C.red} bold size={14}>
-              Just the answer: "Paris"
+              Just the answer: "Delhi"
             </T>
             <T color={C.dim} size={13} style={{ marginTop: 4 }}>
               That's it. Right or wrong. No nuance.
@@ -616,9 +616,9 @@ export const Distillation = (ctx) => {
               Teacher's confidence on each option:
             </T>
             {[
-              { word: "Paris", pct: 85, color: C.green },
+              { word: "Delhi", pct: 85, color: C.green },
               { word: "London", pct: 8, color: C.yellow },
-              { word: "Lyon", pct: 5, color: C.orange },
+              { word: "Mumbai", pct: 5, color: C.orange },
               { word: "Berlin", pct: 2, color: C.red },
             ].map(({ word, pct, color }) => (
               <div key={word} style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 4 }}>
@@ -684,7 +684,7 @@ export const Distillation = (ctx) => {
               </div>
               <div>
                 <T color={C.green} bold size={14}>
-                  Paris
+                  Delhi
                 </T>
                 <T color={C.dim} size={12}>
                   Correct answer
@@ -752,10 +752,10 @@ export const Distillation = (ctx) => {
               </div>
               <div>
                 <T color={C.orange} bold size={14}>
-                  Lyon
+                  Mumbai
                 </T>
                 <T color={C.dim} size={12}>
-                  Wrong - but it is a French city
+                  Wrong - but it is an Indian city
                 </T>
               </div>
             </div>
@@ -795,12 +795,12 @@ export const Distillation = (ctx) => {
             </div>
           </div>
           <T color="#b8a9ff" style={{ marginTop: 10 }}>
-            If you only said "Paris = right, everything else = wrong" - the student would think London and Pizza are
+            If you only said "Delhi = right, everything else = wrong" - the student would think London and Pizza are
             equally wrong.
           </T>
           <T color="#b8a9ff" style={{ marginTop: 4 }}>
-            But the soft probabilities teach: "London is close (it's a capital). Lyon is related (it's French). Pizza is
-            nonsense." The student absorbs how concepts relate - for free.
+            But the soft probabilities teach: "London is close (it's a capital). Mumbai is related (it's Indian). Pizza
+            is nonsense." The student absorbs how concepts relate - for free.
           </T>
           <div
             style={{
@@ -824,13 +824,13 @@ export const Distillation = (ctx) => {
                   T = 1 (normal)
                 </T>
                 <T color={C.dim} size={12}>
-                  Paris: 85%
+                  Delhi: 85%
                 </T>
                 <T color={C.dim} size={12}>
                   London: 8%
                 </T>
                 <T color={C.dim} size={12}>
-                  Lyon: 5%
+                  Mumbai: 5%
                 </T>
                 <T color={C.dim} size={12}>
                   Berlin: 2%
@@ -841,13 +841,13 @@ export const Distillation = (ctx) => {
                   T = 3 (soft)
                 </T>
                 <T color={C.dim} size={12}>
-                  Paris: 45%
+                  Delhi: 45%
                 </T>
                 <T color={C.dim} size={12}>
                   London: 20%
                 </T>
                 <T color={C.dim} size={12}>
-                  Lyon: 18%
+                  Mumbai: 18%
                 </T>
                 <T color={C.dim} size={12}>
                   Berlin: 17%

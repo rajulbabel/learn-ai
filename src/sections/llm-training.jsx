@@ -527,7 +527,7 @@ export const SelfSupervised = (ctx) => {
               {
                 icon: "🧠",
                 what: "Facts",
-                why: "To predict 'The capital of France is ___', it must memorize that Paris is the answer",
+                why: "To predict 'The capital of India is ___', it must memorize that Delhi is the answer",
               },
               {
                 icon: "🎯",

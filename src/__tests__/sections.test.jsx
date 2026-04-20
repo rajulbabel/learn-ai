@@ -434,12 +434,15 @@ describe("CrossAttention sub-steps", () => {
     expect(text).toContain("encoder");
   });
 
-  it("sub 2 traces a concrete translation example with scores", () => {
+  it("sub 2 traces a concrete translation example with scores (Hindi target)", () => {
     const ctx = makeCtx({ sub: 2 });
     const { container } = render(fn(ctx));
     const text = container.textContent;
     expect(text).toContain("score");
     expect(text).toContain("softmax");
+    expect(text).toContain("billiyaan");
+    expect(text).not.toContain("chats");
+    expect(text).not.toContain("aime");
   });
 
   it("sub 3 compares self-attention vs cross-attention side by side", () => {
@@ -482,8 +485,8 @@ describe("CrossAttention sub-steps", () => {
     const ctx = makeCtx({ sub: 7 });
     const { container } = render(fn(ctx));
     const text = container.textContent;
-    expect(text).toContain("decoder-only");
-    expect(text).toContain("encoder-decoder");
+    expect(text).toMatch(/[Dd]ecoder-[Oo]nly/);
+    expect(text).toMatch(/[Ee]ncoder-[Dd]ecoder/);
   });
 });
 
@@ -1764,6 +1767,21 @@ describe("Distillation temperature mechanism", () => {
     const text = container.textContent;
     expect(text).toContain("temperature");
   });
+
+  it("uses India/Delhi/Mumbai example (not France/Paris/Lyon)", () => {
+    let combined = "";
+    for (let s = 0; s <= 6; s++) {
+      const { container } = render(fn(makeCtx({ sub: s })));
+      combined += container.textContent;
+      cleanup();
+    }
+    expect(combined).toContain("India");
+    expect(combined).toContain("Delhi");
+    expect(combined).toContain("Mumbai");
+    expect(combined).not.toContain("France");
+    expect(combined).not.toContain("Paris");
+    expect(combined).not.toContain("Lyon");
+  });
 });
 
 // ─── Chapter 4.5: Encoder & Decoder ───
@@ -1917,6 +1935,20 @@ describe("FeedForwardNetwork sub-steps", () => {
     expect(text).toContain("smooth");
   });
 
+  it("sub 5 includes a ReLU vs GELU comparison graph", () => {
+    const ctx = makeCtx({ sub: 5 });
+    const { container } = render(fn(ctx));
+    // The comparison graph has at least two polylines (one per curve) and a
+    // <desc> that mentions both functions so screen-reader / search users know.
+    const polylines = container.querySelectorAll("polyline");
+    expect(polylines.length).toBeGreaterThanOrEqual(2);
+    const combinedDescs = Array.from(container.querySelectorAll("desc"))
+      .map((d) => d.textContent)
+      .join(" ");
+    expect(combinedDescs).toMatch(/ReLU/);
+    expect(combinedDescs).toMatch(/GELU/);
+  });
+
   it("sub 6 shows area/length/breadth example", () => {
     const ctx = makeCtx({ sub: 6 });
     const { container } = render(fn(ctx));
@@ -1927,13 +1959,18 @@ describe("FeedForwardNetwork sub-steps", () => {
     expect(text).toContain("knowledge");
   });
 
-  it("sub 7 shows France/Paris factual recall example", () => {
+  it("sub 7 shows India/Delhi factual recall example", () => {
     const ctx = makeCtx({ sub: 7 });
     const { container } = render(fn(ctx));
     const text = container.textContent;
-    expect(text).toContain("France");
-    expect(text).toContain("Paris");
+    expect(text).toContain("India");
+    expect(text).toContain("Delhi");
     expect(text).toContain("847");
+    // Main example is India/Delhi; the only French token is the "capital-of-France"
+    // neuron label kept intentionally as the contrasting suppressed detector.
+    expect(text).toContain("capital-of-France");
+    expect(text).not.toContain("Paris");
+    expect(text).not.toContain("capital of France");
   });
 
   it("sub 8 shows bank/river multi-block example with detector details", () => {

@@ -1743,7 +1743,7 @@
     "section": 2,
     "sectionName": "How LLMs Actually Train",
     "sub": 4,
-    "text": "-supervised worksThe model learns to predict next words by trial and error on BILLIONS of examples. Through this alone, it learns:📖GrammarPredicting next word requires understanding subject-verb agreement, tenses🧠FactsTo predict 'The capital of France is ___', it must memorize that Paris is the answer🎯ReasoningTo predict output of a math problem, it must perform the computation internally💬Style transferAfter SFT, the model uses this learned knowledge to follow human instructionsContinue"
+    "text": "-supervised worksThe model learns to predict next words by trial and error on BILLIONS of examples. Through this alone, it learns:📖GrammarPredicting next word requires understanding subject-verb agreement, tenses🧠FactsTo predict 'The capital of India is ___', it must memorize that Delhi is the answer🎯ReasoningTo predict output of a math problem, it must perform the computation internally💬Style transferAfter SFT, the model uses this learned knowledge to follow human instructionsContinue"
   },
   {
     "id": 194,
@@ -2553,7 +2553,7 @@
     "section": 3,
     "sectionName": "Scaling & Modern Techniques",
     "sub": 2,
-    "text": "s \"copy how the teacher thinks\" mean?Question: \"What is the capital of France?\"A lazy teacher just says the answer:Just the answer: \"Paris\"That's it. Right or wrong. No nuance.A great teacher shares their full thinking - as confidence bars:Teacher's confidence on each option:Paris85%London8%Lyon5%Berlin2%This full set of confidences is called \"soft probabilities\" - and it's the key to distillation.Continue"
+    "text": "s \"copy how the teacher thinks\" mean?Question: \"What is the capital of India?\"A lazy teacher just says the answer:Just the answer: \"Delhi\"That's it. Right or wrong. No nuance.A great teacher shares their full thinking - as confidence bars:Teacher's confidence on each option:Delhi85%London8%Mumbai5%Berlin2%This full set of confidences is called \"soft probabilities\" - and it's the key to distillation.Continue"
   },
   {
     "id": 284,
@@ -2562,7 +2562,7 @@
     "section": 3,
     "sectionName": "Scaling & Modern Techniques",
     "sub": 3,
-    "text": "probabilities are magicLook at the teacher's confidences again. The \"wrong\" answers tell a story:85%ParisCorrect answer8%LondonWrong - but it is a European capital5%LyonWrong - but it is a French city0%PizzaNot even a cityIf you only said \"Paris = right, everything else = wrong\" - the student would think London and Pizza are equally wrong.But the soft probabilities teach: \"London is close (it's a capital). Lyon is related (it's French). Pizza is nonsense.\" The student absorbs how concepts relate - for free.The temperature trickTo get even softer probabilities, we divide the logits by a temperature T before softmax: softmax(z_i / T)T = 1 (normal)Paris: 85%London: 8%Lyon: 5%Berlin: 2%T = 3 (soft)Paris: 45%London: 20%Lyon: 18%Berlin: 17%Higher temperature = softer distribution = more information about the relationships between tokens. This is also the same \"temperature\" slider you see in ChatGPT settings - higher T = more creative (spread out), lower T = more focused (peaked).Continue"
+    "text": "probabilities are magicLook at the teacher's confidences again. The \"wrong\" answers tell a story:85%DelhiCorrect answer8%LondonWrong - but it is a European capital5%MumbaiWrong - but it is an Indian city0%PizzaNot even a cityIf you only said \"Delhi = right, everything else = wrong\" - the student would think London and Pizza are equally wrong.But the soft probabilities teach: \"London is close (it's a capital). Mumbai is related (it's Indian). Pizza is nonsense.\" The student absorbs how concepts relate - for free.The temperature trickTo get even softer probabilities, we divide the logits by a temperature T before softmax: softmax(z_i / T)T = 1 (normal)Delhi: 85%London: 8%Mumbai: 5%Berlin: 2%T = 3 (soft)Delhi: 45%London: 20%Mumbai: 18%Berlin: 17%Higher temperature = softer distribution = more information about the relationships between tokens. This is also the same \"temperature\" slider you see in ChatGPT settings - higher T = more creative (spread out), lower T = more focused (peaked).Continue"
   },
   {
     "id": 285,
@@ -4659,7 +4659,7 @@
     "section": 8,
     "sectionName": "The Encoder",
     "sub": 0,
-    "text": "The original Transformer: 2017 \"Attention Is All You Need\"The paper that introduced Transformers was solving machine translation. It needed two different operations:\"I love cats\"English input→Transformer→\"J'aime les chats\"French outputThe key problem: English and French are different languages. You must fully understand the English input before you can generate French output. These are two separate tasks.Continue"
+    "text": "The original Transformer: 2017 \"Attention Is All You Need\"The paper that introduced Transformers was solving machine translation. It needed two different operations:\"I love cats\"English input→Transformer→\"Mujhe billiyaan pasand hain\"Hindi outputThe key problem: English and Hindi are different languages. You must fully understand the English input before you can generate Hindi output. These are two separate tasks.Continue"
   },
   {
     "id": 518,
@@ -4668,7 +4668,7 @@
     "section": 8,
     "sectionName": "The Encoder",
     "sub": 1,
-    "text": ": Two separate componentsEncoder: reads the input, builds deep understanding → outputs compressed representationDecoder: reads the encoder's output, generates the translation one word at a timeEncoder✓ Process input in parallel✓ All words attend to all words✓ Build context for each wordEncoder output: rich representations of \"I\", \"love\", \"cats\"Decoder✓ Read encoder output✓ Generate translation token by token✓ Use attention to look back at inputDecoder: \"J'aime\" → \"les\" → \"chats\"Continue"
+    "text": ": Two separate componentsEncoder: reads the input, builds deep understanding → outputs compressed representationDecoder: reads the encoder's output, generates the translation one word at a timeEncoder✓ Process input in parallel✓ All words attend to all words✓ Build context for each wordEncoder output: rich representations of \"I\", \"love\", \"cats\"Decoder✓ Read encoder output✓ Generate translation token by token✓ Use attention to look back at inputDecoder: \"Mujhe\" → \"billiyaan\" → \"pasand\" → \"hain\"Continue"
   },
   {
     "id": 519,
@@ -4677,7 +4677,7 @@
     "section": 8,
     "sectionName": "The Encoder",
     "sub": 2,
-    "text": "tention: the bridgeThe decoder doesn't just generate from nothing. It looks back at the encoder's output using a special connection called cross-attention.Encoder output: [rich understanding of \"I\", \"love\", \"cats\"]↓ (Keys & Values)Cross-Attention LayerDecoder's Q asks encoder: \"What's relevant now?\"↓Decoder generates: \"J'aime les chats\"When generating \"les\", the decoder's Query asks \"what noun am I translating?\" The encoder's Keys/Values answer: \"you're translating the idea of 'love' and 'cats'\". The decoder uses that context to choose the right French word.Continue"
+    "text": "tention: the bridgeThe decoder doesn't just generate from nothing. It looks back at the encoder's output using a special connection called cross-attention.Encoder output: [rich understanding of \"I\", \"love\", \"cats\"]↓ (Keys & Values)Cross-Attention LayerDecoder's Q asks encoder: \"What's relevant now?\"↓Decoder generates: \"Mujhe billiyaan pasand hain\"When generating \"les\", the decoder's Query asks \"what noun am I translating?\" The encoder's Keys/Values answer: \"you're translating the idea of 'love' and 'cats'\". The decoder uses that context to choose the right Hindi word.Continue"
   },
   {
     "id": 520,
@@ -4695,7 +4695,7 @@
     "section": 8,
     "sectionName": "The Encoder",
     "sub": 4,
-    "text": "halves? Different model types.The encoder-decoder design is great for translation, but there are other tasks:Encoder-DecoderTranslation (T5, BART)Input: English → Output: FrenchEncoder-OnlyClassification (BERT, RoBERTa)Input: Sentence → Output: Sentiment scoreDecoder-OnlyGeneration (GPT, Claude)Input: Prompt → Output: Continued text"
+    "text": "halves? Different model types.The encoder-decoder design is great for translation, but there are other tasks:Encoder-DecoderTranslation (T5, BART)Input: English → Output: HindiEncoder-OnlyClassification (BERT, RoBERTa)Input: Sentence → Output: Sentiment scoreDecoder-OnlyGeneration (GPT, Claude)Input: Prompt → Output: Continued text"
   },
   {
     "id": 522,
@@ -4830,7 +4830,7 @@
     "section": 8,
     "sectionName": "The Encoder",
     "sub": 5,
-    "text": "he Activation FunctionIn chapter 1.6 we learned ReLU. Modern Transformers use a smoother alternative called GELU (Gaussian Error Linear Unit). Here is the real formula:The GELU FormulaGELU(x)=x·Φ(x)where Φ(x) is the cumulative distribution function of the standard normal distribution:Φ(x)=12[1 + erf(x√2)]x = the input valuethe raw number coming from the linear layerΦ(x) = probability x is \"kept\"ranges from 0 (fully blocked) to 1 (fully passed)erf = Gauss error functiona smooth S-curve that maps any number to [-1, 1]In plain English: GELU multiplies x by the probability that x would be considered \"large\" under a standard normal bell curve. Large positive numbers get through almost fully (Φ near 1). Large negative numbers get almost fully blocked (Φ near 0). Values near zero get partially passed - that's the smooth part.Worked Examples2.0·0.977=1.95Large positive: almost fully passed0.5·0.691=0.35Small positive: 69% passed through0.0·0.500=0.00Zero: exactly half of zero is zero-0.5·0.309=-0.15Small negative: 31% leaked through-2.0·0.023=-0.05Large negative: almost fully blockedReLU (chapter 1.6)if x < 0: output = 0if x > 0: output = xHard cutoff. Negative = dead. Gradient = 0 forever.GELU (smooth)if x < 0: output = small leakif x > 0: output = ~xSmooth transition. Small negatives leak through. Gradient never fully dies.Why does the smooth curve matter? During backpropagation (chapter 1.15), ReLU's gradient is exactly 0 for all negative inputs - the neuron is \"dead\" and can never recover. GELU's smooth curve means even slightly negative values get a small gradient, so neurons can recover. GPT-2 and GPT-3 both use GELU.Continue"
+    "text": "he Activation FunctionIn chapter 1.6 we learned ReLU. Modern Transformers use a smoother alternative called GELU (Gaussian Error Linear Unit). Here is the real formula:The GELU FormulaGELU(x)=x·Φ(x)where Φ(x) is the cumulative distribution function of the standard normal distribution:Φ(x)=12[1 + erf(x√2)]x = the input valuethe raw number coming from the linear layerΦ(x) = probability x is \"kept\"ranges from 0 (fully blocked) to 1 (fully passed)erf = Gauss error functiona smooth S-curve that maps any number to [-1, 1]In plain English: GELU multiplies x by the probability that x would be considered \"large\" under a standard normal bell curve. Large positive numbers get through almost fully (Φ near 1). Large negative numbers get almost fully blocked (Φ near 0). Values near zero get partially passed - that's the smooth part.Worked Examples2.0·0.977=1.95Large positive: almost fully passed0.5·0.691=0.35Small positive: 69% passed through0.0·0.500=0.00Zero: exactly half of zero is zero-0.5·0.309=-0.15Small negative: 31% leaked through-2.0·0.023=-0.05Large negative: almost fully blockedReLU (chapter 1.6)if x < 0: output = 0if x > 0: output = xHard cutoff. Negative = dead. Gradient = 0 forever.GELU (smooth)if x < 0: output = small leakif x > 0: output = ~xSmooth transition. Small negatives leak through. Gradient never fully dies.ReLU(x) = max(0, x)Line graph of the ReLU activation function over x from -3 to 3. The curve is flat at y equals zero for all negative x, forming a horizontal line along the x-axis, then rises with a hard kink at the origin and continues linearly as y equals x for all positive x. This creates a dead region for negatives where the gradient is exactly zero.-3-2-101230123xydead (gradient = 0)hard kinkZero for all negatives. Sharp corner at origin.GELU(x) = x · Φ(x)Line graph of the GELU activation function over x from -3 to 3. The curve is a smooth S-shape: nearly zero for large negative x, dips slightly below zero around x equals minus one (the leak region), passes smoothly through the origin with a continuous derivative, and asymptotically matches y equals x for large positive x. This smooth shape keeps gradients alive for negative inputs.-3-2-101230123xyleak (gradient alive)smooth SSmall leak below zero. Smooth curve - no corner.Why does the smooth curve matter? During backpropagation (chapter 1.15), ReLU's gradient is exactly 0 for all negative inputs - the neuron is \"dead\" and can never recover. GELU's smooth curve means even slightly negative values get a small gradient, so neurons can recover. GPT-2 and GPT-3 both use GELU.Continue"
   },
   {
     "id": 537,
@@ -4848,7 +4848,7 @@
     "section": 8,
     "sectionName": "The Encoder",
     "sub": 7,
-    "text": "2: \"The capital of France is ___\"Attention gathers context, FFN recalls the factAttention Runs FirstQ · K scores for \"___\" position\"___\"'s Query asks \"what country am I about?\" \"France\"'s Key scores highest (0.72 after softmax), \"capital\" gets 0.18, rest get scraps.Weighted sum of ValuesOutput = 0.72 · VFrance + 0.18 · Vcapital + ... This is a blend - a weighted average. It mixes \"France\" info into the \"___\" position.Result: context assembled, but no answer yetThe \"___\" vector now encodes \"I need the capital of France.\" But attention can only average existing vectors - it cannot look up a fact. It assembled the question, not the answer.Then FFN Recalls the FactW1: \"capital-of-France\" detector firesRow 847 of W1 was trained on millions of geography texts. It detects the \"capital-of-France\" pattern in the vector that attention assembled. Dot product: W1[847] · x = 4.2GELU: only relevant knowledge survivesGELU(4.2) = 4.19 → neuron 847 fires. GELU(-1.3) = -0.05 → neuron 200 (\"capital-of-Germany\") is suppressed. Of 2048 neurons, maybe 100-300 fire meaningfully for any given input.W2: writes \"Paris\" into the vectorColumn 847 of W2 was trained to shift vectors toward \"Paris.\" Since neuron 847 fired at 4.19, its column dominates the output: output += 4.19 · W2[:,847]. The answer is now in the vector.Key insight: W1 rows = \"what to detect\", W2 columns = \"what to output\"This is the key-value memory interpretation from research. The FFN is a lookup table: 2048 entries, each asking \"does this pattern match?\" and outputting the corresponding knowledge.Continue"
+    "text": "2: \"The capital of India is ___\"Attention gathers context, FFN recalls the factAttention Runs FirstQ · K scores for \"___\" position\"___\"'s Query asks \"what country am I about?\" \"India\"'s Key scores highest (0.72 after softmax), \"capital\" gets 0.18, rest get scraps.Weighted sum of ValuesOutput = 0.72 · VIndia + 0.18 · Vcapital + ... This is a blend - a weighted average. It mixes \"India\" info into the \"___\" position.Result: context assembled, but no answer yetThe \"___\" vector now encodes \"I need the capital of India.\" But attention can only average existing vectors - it cannot look up a fact. It assembled the question, not the answer.Then FFN Recalls the FactW1: \"capital-of-India\" detector firesRow 847 of W1 was trained on millions of geography texts. It detects the \"capital-of-India\" pattern in the vector that attention assembled. Dot product: W1[847] · x = 4.2GELU: only relevant knowledge survivesGELU(4.2) = 4.19 → neuron 847 fires. GELU(-1.3) = -0.05 → neuron 200 (\"capital-of-France\") is suppressed. Of 2048 neurons, maybe 100-300 fire meaningfully for any given input.W2: writes \"Delhi\" into the vectorColumn 847 of W2 was trained to shift vectors toward \"Delhi.\" Since neuron 847 fired at 4.19, its column dominates the output: output += 4.19 · W2[:,847]. The answer is now in the vector.Key insight: W1 rows = \"what to detect\", W2 columns = \"what to output\"This is the key-value memory interpretation from research. The FFN is a lookup table: 2048 entries, each asking \"does this pattern match?\" and outputting the corresponding knowledge.Continue"
   },
   {
     "id": 539,
@@ -4857,7 +4857,7 @@
     "section": 8,
     "sectionName": "The Encoder",
     "sub": 8,
-    "text": "n + FFN Across Multiple BlocksExample 3: \"She sat by the river bank\"Does \"bank\" mean money or riverbed? Watch attention and FFN collaborate across blocks to resolve the ambiguity.Block 1: Basic context gatheringAttention\"bank\"'s Query matches \"river\"'s Key (adjacent words, high positional score). After softmax, \"bank\" absorbs ~40% of \"river\"'s Value vector. \"sat\" gets ~20% (nearby verb). Result: \"bank\" now carries \"I'm next to the word river and someone sat.\"FFN (receives attention's output)Sees \"bank + some river context.\" W1 row 310 (\"river-location\" detector) fires weakly: 1.2. W1 row 744 (\"financial-institution\" detector) also fires weakly: 0.8. GELU passes both through. W2 nudges the vector slightly toward both meanings. Ambiguity not yet resolved.Block 5: Deeper semantic understandingAttention\"bank\" now attends to \"sat\" (physical action, not financial), \"by\" (location preposition), and \"river\" with much higher scores than Block 1. Why higher? Because Blocks 1-4 FFNs already strengthened the \"nature/location\" features in \"sat\" and \"river.\" Their Value vectors are now richer, so the weighted sum gives \"bank\" a much stronger location signal.FFN (receives attention's output)Now row 310 (\"river-location\") fires at 3.8 (strong match). Row 744 (\"financial\") fires at -1.1 → GELU(-1.1) = -0.03, effectively dead. W2 column 310 shifts the vector hard toward geography/nature features, column 744 contributes almost nothing. \"Bank\" now means \"riverbank\" - ambiguity resolved.Why this takes multiple blocksEach round, attention provides better context because FFN improved the vectors, and FFN makes better decisions because attention gathered more context. They bootstrap each other. Block 1 FFN nudges slightly, Block 2 attention uses that nudge to focus better, Block 2 FFN nudges harder, and so on across all 96 blocks.Three examples, three types of FFN knowledge:1. Implicit knowledge (area/breadth) - FFN adds concepts that aren't in the input but are related by training data2. Factual recall (France/Paris) - FFN looks up a stored fact and writes the answer into the vector3. Disambiguation (bank/river) - FFN resolves ambiguity by suppressing wrong meanings and boosting the right oneContinue"
+    "text": "n + FFN Across Multiple BlocksExample 3: \"She sat by the river bank\"Does \"bank\" mean money or riverbed? Watch attention and FFN collaborate across blocks to resolve the ambiguity.Block 1: Basic context gatheringAttention\"bank\"'s Query matches \"river\"'s Key (adjacent words, high positional score). After softmax, \"bank\" absorbs ~40% of \"river\"'s Value vector. \"sat\" gets ~20% (nearby verb). Result: \"bank\" now carries \"I'm next to the word river and someone sat.\"FFN (receives attention's output)Sees \"bank + some river context.\" W1 row 310 (\"river-location\" detector) fires weakly: 1.2. W1 row 744 (\"financial-institution\" detector) also fires weakly: 0.8. GELU passes both through. W2 nudges the vector slightly toward both meanings. Ambiguity not yet resolved.Block 5: Deeper semantic understandingAttention\"bank\" now attends to \"sat\" (physical action, not financial), \"by\" (location preposition), and \"river\" with much higher scores than Block 1. Why higher? Because Blocks 1-4 FFNs already strengthened the \"nature/location\" features in \"sat\" and \"river.\" Their Value vectors are now richer, so the weighted sum gives \"bank\" a much stronger location signal.FFN (receives attention's output)Now row 310 (\"river-location\") fires at 3.8 (strong match). Row 744 (\"financial\") fires at -1.1 → GELU(-1.1) = -0.03, effectively dead. W2 column 310 shifts the vector hard toward geography/nature features, column 744 contributes almost nothing. \"Bank\" now means \"riverbank\" - ambiguity resolved.Why this takes multiple blocksEach round, attention provides better context because FFN improved the vectors, and FFN makes better decisions because attention gathered more context. They bootstrap each other. Block 1 FFN nudges slightly, Block 2 attention uses that nudge to focus better, Block 2 FFN nudges harder, and so on across all 96 blocks.Three examples, three types of FFN knowledge:1. Implicit knowledge (area/breadth) - FFN adds concepts that aren't in the input but are related by training data2. Factual recall (India/Delhi) - FFN looks up a stored fact and writes the answer into the vector3. Disambiguation (bank/river) - FFN resolves ambiguity by suppressing wrong meanings and boosting the right oneContinue"
   },
   {
     "id": 540,
@@ -4866,7 +4866,7 @@
     "section": 8,
     "sectionName": "The Encoder",
     "sub": 9,
-    "text": "stions You Should Be Able to AnswerWhy can't attention replace FFN?Attention computes weighted averages of Value vectors - a linear operation. It can mix information from different tokens, but it can never create new features. \"If river AND bank are both present, output riverbank\" requires non-linearity (GELU). Only FFN has that.Why can't FFN replace attention?FFN processes each token in complete isolation. It never sees any other word. Without attention first injecting \"river\" into \"bank\"'s vector, FFN would process \"bank\" identically in \"river bank\" and \"investment bank\" - same input, same output, unable to disambiguate.What exactly does \"FFN stores knowledge\" mean?Each row of W₁ is a pattern detector trained during pre-training. Row 847 learned to fire when the input looks like \"capital-of-France.\" The corresponding column of W₂ learned to output a vector that shifts toward \"Paris.\" This row-column pair is literally one stored fact. GPT-3 has 2048-49152 such detectors per block across 96 blocks.How do researchers prove this isn't just a metaphor?Ablation studies: zero out specific FFN neurons and watch \"The capital of France is\" stop producing \"Paris\" while grammar stays intact. Activate those same neurons artificially and watch \"Paris\" appear in unrelated contexts. The knowledge is localized to specific neurons - not distributed across the whole network.Continue"
+    "text": "stions You Should Be Able to AnswerWhy can't attention replace FFN?Attention computes weighted averages of Value vectors - a linear operation. It can mix information from different tokens, but it can never create new features. \"If river AND bank are both present, output riverbank\" requires non-linearity (GELU). Only FFN has that.Why can't FFN replace attention?FFN processes each token in complete isolation. It never sees any other word. Without attention first injecting \"river\" into \"bank\"'s vector, FFN would process \"bank\" identically in \"river bank\" and \"investment bank\" - same input, same output, unable to disambiguate.What exactly does \"FFN stores knowledge\" mean?Each row of W₁ is a pattern detector trained during pre-training. Row 847 learned to fire when the input looks like \"capital-of-India.\" The corresponding column of W₂ learned to output a vector that shifts toward \"Delhi.\" This row-column pair is literally one stored fact. GPT-3 has 2048-49152 such detectors per block across 96 blocks.How do researchers prove this isn't just a metaphor?Ablation studies: zero out specific FFN neurons and watch \"The capital of India is\" stop producing \"Delhi\" while grammar stays intact. Activate those same neurons artificially and watch \"Delhi\" appear in unrelated contexts. The knowledge is localized to specific neurons - not distributed across the whole network.Continue"
   },
   {
     "id": 541,
@@ -4897,6 +4897,24 @@
   },
   {
     "id": 544,
+    "chapterId": "8.3",
+    "title": "FFN - The Feed-Forward Network",
+    "section": 8,
+    "sectionName": "The Encoder",
+    "sub": -2,
+    "text": "Diagram in FFN - The Feed-Forward Network: Line graph of the ReLU activation function over x from -3 to 3. The curve is flat at y equals zero for all negative x, forming a horizontal line along the x-axis, then rises with a hard kink at the origin and continues linearly as y equals x for all positive x. Dead region for negatives where the gradient is exactly zero."
+  },
+  {
+    "id": 545,
+    "chapterId": "8.3",
+    "title": "FFN - The Feed-Forward Network",
+    "section": 8,
+    "sectionName": "The Encoder",
+    "sub": -2,
+    "text": "Diagram in FFN - The Feed-Forward Network: Line graph of the GELU activation function over x from -3 to 3. The curve is a smooth S-shape: nearly zero for large negative x, dips slightly below zero around x equals minus one forming a small leak region, passes smoothly through the origin with a continuous derivative, and asymptotically matches y equals x for large positive x. Smooth shape keeps gradients alive for negative inputs."
+  },
+  {
+    "id": 546,
     "chapterId": "8.4",
     "title": "FFN - Why Word Count Doesn't Matter",
     "section": 8,
@@ -4905,7 +4923,7 @@
     "text": "Recap: FFN With Just One WordIn chapter 8.3 we traced one word (\"cats\") through FFN. Let's make the matrix shapes explicit. Say \"cats\" is a 3-dimensional vector:\"cats\"0.5-0.30.91x3 (one word, 3 dims)×W1wwwwwwwwwwwwwwwwww3x6 (3 dims in, 6 dims out)=Hiddenhhhhhh1x6 (expanded)One word: 1x3 times 3x6 = 1x6. The weight matrix W1 has 3 x 6 = 18 weights. These 18 weights are the same for every single word that ever goes through this FFN.Continue"
   },
   {
-    "id": 545,
+    "id": 547,
     "chapterId": "8.4",
     "title": "FFN - Why Word Count Doesn't Matter",
     "section": 8,
@@ -4914,7 +4932,7 @@
     "text": "k: Stack Words Into a MatrixWhat if we have 3 words? We don't run the FFN 3 times. We stack all 3 word vectors into a single matrix and multiply once:3 words stacked0.5-0.30.90.20.8-0.10.7-0.50.33x3 (\"I\", \"love\", \"cats\")×same W1wwwwwwwwwwwwwwwwww3x6 (unchanged!)=3 outputshhhhhhhhhhhhhhhhhh3x6 (one row per word)3x3 times 3x6 = 3x6. Still the same W1. Still 18 weights. Row 1 of the input only interacts with W to produce row 1 of the output. No mixing between words - that's how matrix multiplication works.Continue"
   },
   {
-    "id": 546,
+    "id": 548,
     "chapterId": "8.4",
     "title": "FFN - Why Word Count Doesn't Matter",
     "section": 8,
@@ -4923,7 +4941,7 @@
     "text": "\"The cat sat on the mat\"Now let's use our full example sentence. 6 words, each a 3-dim vector. Stack them into a 6x3 matrix:6 words0.2-0.90.50.60.3-0.2-0.50.90.10.1-0.40.80.2-0.90.50.70.2-0.66x3×same W13x618 weights=6 outputs6x6one row per word6x3 times 3x6 = 6x6. The W1 matrix is still 3x6 = 18 weights. Doesn't matter that we went from 3 words to 6 - the weight matrix stays the same size.Think about it: row 1 (\"The\") hits W and produces its own output. Row 4 (\"on\") hits the exact same W and produces its own output. The rows never interact. Each word is independently transformed by the same 18 weights.Continue"
   },
   {
-    "id": 547,
+    "id": 549,
     "chapterId": "8.4",
     "title": "FFN - Why Word Count Doesn't Matter",
     "section": 8,
@@ -4932,7 +4950,7 @@
     "text": "? 1000 Words? Same 18 Weights.This is the key insight. The number of words is just the number of rows in the input matrix. The weight matrix W never changes:1 word1x3×3x6=1x6W1 = 18 weights3 words3x3×3x6=3x6W1 = 18 weights6 words6x3×3x6=6x6W1 = 18 weights10 words10x3×3x6=10x6W1 = 18 weights1000 words1000x3×3x6=1000x6W1 = 18 weightsThe Pattern(num_words x d_model) × W1 (d_model x d_ff) = (num_words x d_ff)The \"num_words\" dimension is a free variable. It can be anything. W1 only cares about d_model (3 in our toy example, 512 in real transformers). That's why the model can accept any length input with the same 18 parameters.In GPT-2 (d_model=512, d_ff=2048): W1 has 512 x 2048 = 1,048,576 weights. That number stays the same whether you feed it 10 words or 100,000 words.Continue"
   },
   {
-    "id": 548,
+    "id": 550,
     "chapterId": "8.4",
     "title": "FFN - Why Word Count Doesn't Matter",
     "section": 8,
@@ -4941,7 +4959,7 @@
     "text": "Back Down: W2 Has the Inverse ShapeAfter GELU activation, we need to compress back to the original dimension. W2 simply has the flipped shape:6 words: expand then compressInput6x3×W13x6=Expanded6x6→GELU'd6x6×W26x3=Output6x310 words: same W1, same W2Input10x3×W13x6=Expanded10x6→GELU'd10x6×W26x3=Output10x3The General PatternLayer 1: (words x d_model) × W1 (d_model x d_ff) = (words x d_ff)GELU: (words x d_ff) → (words x d_ff)Layer 2: (words x d_ff) × W2 (d_ff x d_model) = (words x d_model)Word count flows through as the row dimension. W1 and W2 only depend on d_model and d_ff. In, expand, compress back out - same size going in and coming out, regardless of how many words.Continue"
   },
   {
-    "id": 549,
+    "id": 551,
     "chapterId": "8.4",
     "title": "FFN - Why Word Count Doesn't Matter",
     "section": 8,
@@ -4950,7 +4968,7 @@
     "text": "Matters: Massive GPU ParallelismThe reason we stack words into a matrix isn't just math elegance - it's about hardware speed.Without stacking (for loop)for word in words:output = word × W1000 words = 1000 sequential matrix multiplies. Each one waits for the previous to finish. The GPU sits mostly idle because each multiply is tiny (1x3 × 3x6).With stacking (one multiply)output = all_words × W1000 words = one massive parallel matrix multiply (1000x3 × 3x6). GPU processes all rows simultaneously across thousands of cores. One instruction, all words done.The Deep InsightThis parallel trick works because FFN treats each word independently. No word's output depends on any other word. That's the fundamental difference from Attention, which creates cross-word dependencies (Q · K). You can't parallelize Attention the same way because token 3's output depends on tokens 1 and 2.But FFN? Each row hits the same W, gets the same GELU, comes out independently. It's embarrassingly parallel - the GPU's dream workload.This is also why the KV cache during generation only caches attention K,V - not FFN outputs. FFN has no cross-word state to remember. Run it on the new word, get the answer. Previous words' FFN results are already baked into the K,V cache."
   },
   {
-    "id": 550,
+    "id": 552,
     "chapterId": "8.4",
     "title": "FFN - Why Word Count Doesn't Matter",
     "section": 8,
@@ -4959,7 +4977,7 @@
     "text": "The Encoder: FFN - Why Word Count Doesn't Matter. This chapter covers ffn - why word count doesn't matter."
   },
   {
-    "id": 551,
+    "id": 553,
     "chapterId": "8.5",
     "title": "Add & Norm (Again) - The Second Stabilizer",
     "section": 8,
@@ -4968,7 +4986,7 @@
     "text": "The Second Add & NormThe FFN just transformed each token's representation. But remember the problem from chapter 8.2 - values drift in deep networks. We need to stabilize again.Multi-Head Attention↓Add & Norm (first)↓FFN↓Add & Norm (second)↓Block OutputThis second Add & Norm works exactly the same way as the first - but its input is the FFN output instead of the Attention output.Continue"
   },
   {
-    "id": 552,
+    "id": 554,
     "chapterId": "8.5",
     "title": "Add & Norm (Again) - The Second Stabilizer",
     "section": 8,
@@ -4977,7 +4995,7 @@
     "text": "- Residual Around FFNSame idea as chapter 8.2: keep the original input by adding it back. The input to FFN was the first Add & Norm's output.Continuing with \"cats\":FFN input[-1.36, -0.55, 0.86, 1.06]↓ goes through FFN (chapter 8.3) ↓FFN output[0.51, -0.73, 1.14, 0.22]The Add Step: FFN input + FFN output[-1.36, -0.55, 0.86, 1.06]+[0.51, -0.73, 1.14, 0.22]=[-0.85, -1.28, 2.00, 1.28]The residual connection ensures that even if the FFN distorts values, the original signal from Add & Norm #1 survives by being added back.Continue"
   },
   {
-    "id": 553,
+    "id": 555,
     "chapterId": "8.5",
     "title": "Add & Norm (Again) - The Second Stabilizer",
     "section": 8,
@@ -4986,7 +5004,7 @@
     "text": "- Stabilize AgainSame Layer Normalization formula from chapter 8.2 - compute mean, subtract, divide by standard deviation, scale by gamma, shift by beta.Normalizing [-0.85, -1.28, 2.00, 1.28]mu = (-0.85 + -1.28 + 2.00 + 1.28) / 4 = 0.2875variance = 1.9172, sqrt(variance + epsilon) = 1.3846Normalize each: (x - mu) / 1.3846-0.85 → -0.82-1.28 → -1.132.00 → 1.241.28 → 0.72Block output for \"cats\": [-0.82, -1.13, 1.24, 0.72]With gamma=1.0 and beta=0.0 (initial values). The model will learn optimal gamma and beta during training.Continue"
   },
   {
-    "id": 554,
+    "id": 556,
     "chapterId": "8.5",
     "title": "Add & Norm (Again) - The Second Stabilizer",
     "section": 8,
@@ -4995,7 +5013,7 @@
     "text": "lete Single Block - All 4 StepsHere's \"cats\" flowing through one entire Transformer block, start to finish:InputInput (cats)[-0.5, 0.3, 0.7, 0.6]Multi-Head Attention↓AttnAttention Output[0.3, -0.1, 0.2, 0.4]Add & Norm #1↓A&N 1After 1st Add & Norm[-1.36, -0.55, 0.86, 1.06]Feed-Forward Network↓FFNFFN Output[0.51, -0.73, 1.14, 0.22]Add & Norm #2↓A&N 2Block Output[-0.82, -1.13, 1.24, 0.72]One block: Attention moves information between tokens, Add & Norm stabilizes, FFN processes each token's knowledge, Add & Norm stabilizes again. This is the heartbeat of every Transformer.Continue"
   },
   {
-    "id": 555,
+    "id": 557,
     "chapterId": "8.5",
     "title": "Add & Norm (Again) - The Second Stabilizer",
     "section": 8,
@@ -5004,7 +5022,7 @@
     "text": "e? - One Per Sub-LayerAdd & Norm appears twice because each Transformer block has two sub-layers: Attention and FFN. Each sub-layer gets its own Add & Norm because each one can independently cause value drift.Sub-layer 1: AttentionInput x↓Attention(x)↓Add & Norm #1Stabilizes after attention changesSub-layer 2: FFNFrom A&N #1↓FFN(x)↓Add & Norm #2Stabilizes after FFN changesThe RuleIn Transformers, every sub-layer that transforms values gets wrapped with its own residual connection and layer norm. This is what makes it possible to stack 96 blocks deep without the signal degrading. If you only normalized once at the end of the block, the FFN's output could already be in a bad range before it gets stabilized."
   },
   {
-    "id": 556,
+    "id": 558,
     "chapterId": "8.5",
     "title": "Add & Norm (Again) - The Second Stabilizer",
     "section": 8,
@@ -5013,7 +5031,7 @@
     "text": "The Encoder: Add & Norm (Again) - The Second Stabilizer. This chapter covers add & norm (again) - the second stabilizer."
   },
   {
-    "id": 557,
+    "id": 559,
     "chapterId": "8.6",
     "title": "Nx - The Transformer Block Repeats",
     "section": 8,
@@ -5022,7 +5040,7 @@
     "text": "One Block Does Not Repeat EnoughWe've now seen all 4 steps inside one Transformer block: Attention, Add & Norm, FFN, Add & Norm. But one block can only learn simple patterns. To understand language, the model needs to repeat this entire block many times.Think of it like this:1 blockbasic word associations (\"cat\" relates to \"sat\")4 blocksgrammar structure (subject-verb agreement)12 blockscontext and nuance (sarcasm, tone)96 blocksdeep reasoning, world knowledge, complex inferenceEach repeat of the block refines the token representations further. The output of block 1 becomes the input of block 2, and so on.Continue"
   },
   {
-    "id": 558,
+    "id": 560,
     "chapterId": "8.6",
     "title": "Nx - The Transformer Block Repeats",
     "section": 8,
@@ -5031,7 +5049,7 @@
     "text": "k - How Many Blocks?Different models use different numbers of blocks. In the original paper and in practice, this number is called N (hence \"Nx\" in architecture diagrams).GPT-2 Small12 blocksd=768GPT-2 Medium24 blocksd=1024GPT-2 Large36 blocksd=1280GPT-396 blocksd=12288What This MeansIn GPT-3, every single token in your prompt passes through 96 identical blocks in sequence. Each block runs the full Attention → Add & Norm → FFN → Add & Norm pipeline. That's 96 rounds of attention, 96 rounds of FFN, and 192 Add & Norm operations per token.Continue"
   },
   {
-    "id": 559,
+    "id": 561,
     "chapterId": "8.6",
     "title": "Nx - The Transformer Block Repeats",
     "section": 8,
@@ -5040,7 +5058,7 @@
     "text": "ucture, Different WeightsEvery block has the same structure: Attention → Add & Norm → FFN → Add & Norm. But every learnable weight inside each block is unique - learned separately during training. Here's every weight and where it lives:Multi-Head AttentionW_Q(ch 6.9)Creates Queries - \"what am I looking for?\"W_K(ch 6.9)Creates Keys - \"what do I contain?\"W_V(ch 6.9)Creates Values - \"what info do I pass along?\"W_O(ch 7.12)Blends all 8 heads back togetherAdd & Norm #1 (after Attention)γ₁ (gamma)(ch 8.2)Learnable scale per dimension - stretches or shrinks normalized valuesβ₁ (beta)(ch 8.2)Learnable shift per dimension - moves the center up or downFeed-Forward NetworkW₁, b₁(ch 8.3)First layer - expands from 512 to 2048 dims (the thinking space)W₂, b₂(ch 8.3)Second layer - compresses from 2048 back to 512 dimsAdd & Norm #2 (after FFN)γ₂ (gamma)(ch 8.5)Same role as gamma above, but a separate copy learned independentlyβ₂ (beta)(ch 8.5)Same role as beta above, but a separate copy learned independentlyEvery block has its own copy of ALL these weightsBlock 1 has its own W_Q, W_K, W_V, W_O, W1, W2, gammas, and betas. Block 2 has completely different weights. Block 96 has yet another set. If they shared the same weights, stacking 96 blocks would be no better than having one - you'd just repeat the same transformation. Each block's unique weights let it specialize: Block 1 learns different patterns than Block 50.Continue"
   },
   {
-    "id": 560,
+    "id": 562,
     "chapterId": "8.6",
     "title": "Nx - The Transformer Block Repeats",
     "section": 8,
@@ -5049,7 +5067,7 @@
     "text": "h Layer Learns - Shallow to DeepResearch on Transformer internals has revealed a clear pattern: early blocks learn simple things, deep blocks learn abstract things.Blocks 1-4Surface Patterns●Part-of-speech (noun, verb, adjective)●Basic grammar and word order●Simple co-occurrence (\"New\" near \"York\")↓Blocks 5-12Syntax & Structure●Subject-verb agreement across distance●Clause boundaries and nesting●Pronoun resolution (\"she\" refers to \"Alice\")↓Blocks 13-24Semantics & Meaning●Word sense disambiguation (\"bank\" = river vs money)●Sentiment and tone detection●Entity relationships and facts↓Blocks 25-96Abstract Reasoning●Multi-step inference and logic●World knowledge and common sense●Task-specific meaning and generationThis is why depth matters - you need many blocks to build from grammar all the way up to meaning and reasoning. It's the same principle as \"deep\" networks from chapter 1.21, but now each block has both attention (for context) and FFN (for knowledge).Continue"
   },
   {
-    "id": 561,
+    "id": 563,
     "chapterId": "8.6",
     "title": "Nx - The Transformer Block Repeats",
     "section": 8,
@@ -5058,7 +5076,7 @@
     "text": "lete Picture - Token to Output Through N BlocksHere's the full journey of a single token from input to output:Vertical Transformer encoder block stack showing token embedding plus positional encoding feeding through repeated blocks with self-attention, add and norm, and FFN layersToken Embedding + Positional Encoding(Sections 5.2-5.7)Block 1AttentionAdd & NormFFNAdd & NormBlock 2AttentionAdd & NormFFNAdd & NormBlock NAttentionAdd & NormFFNAdd & Norm...Encoder Outputcontextual hidden states for each tokenNxGPT-2 SmallN = 12 blocks, 117M parametersGPT-3N = 96 blocks, 175B parametersThe full recipe of a Transformer encoder:Tokenize → Embed → Add positions → Pass through N blocks (each: Self-Attention → Add & Norm → FFN → Add & Norm) → Rich contextual hidden states. The encoder uses bidirectional attention - every word can see every other word, no masking. This gives the encoder a full understanding of the entire input."
   },
   {
-    "id": 562,
+    "id": 564,
     "chapterId": "8.6",
     "title": "Nx - The Transformer Block Repeats",
     "section": 8,
@@ -5067,7 +5085,7 @@
     "text": "The Encoder: Nx - The Transformer Block Repeats. This chapter covers nx - the transformer block repeats."
   },
   {
-    "id": 563,
+    "id": 565,
     "chapterId": "8.6",
     "title": "Nx - The Transformer Block Repeats",
     "section": 8,
@@ -5076,7 +5094,7 @@
     "text": "Diagram in Nx - The Transformer Block Repeats: Vertical Transformer encoder block stack diagram showing token embedding plus positional encoding feeding through repeated blocks (each with self-attention, add and norm, FFN, add and norm) annotated with Nx bracket"
   },
   {
-    "id": 564,
+    "id": 566,
     "chapterId": "8.7",
     "title": "Residual Connections - The Gradient Highway",
     "section": 8,
@@ -5085,7 +5103,7 @@
     "text": "The Problem: Gradients Vanish in Deep NetworksIn chapter 1.15, we learned that gradients shrink as they travel backward through layers. During backpropagation, each layer multiplies the gradient by its derivative. If that derivative is even slightly below 1.0, the gradient shrinks exponentially.Multiplying through 96 layers:F'(x) = 0.990.99^96 = 0.38Even near-perfect derivatives lose 62% of the gradientF'(x) = 0.90.9^96 = 0.0000396Gradient is effectively zero by layer 1F'(x) = 0.50.5^96 = 1.3 x 10^-29Completely gone - no learning possibleGPT-3 has 96 layers. Without a fix, the gradient arriving at layer 1 from layer 96 would be essentially zero. Layer 1 would never learn. The model would be dead on arrival.Continue"
   },
   {
-    "id": 565,
+    "id": 567,
     "chapterId": "8.7",
     "title": "Residual Connections - The Gradient Highway",
     "section": 8,
@@ -5094,7 +5112,7 @@
     "text": "dual Connection: output = F(x) + xThe fix is deceptively simple: add the input directly to the output. The \"+ x\" creates a shortcut path that bypasses the entire layer.Path A: Without Residualinput x↓weight1↓activation↓weight2↓activation↓outputGradient must travel through every layer. It shrinks at each step.Path B: With Residualinput x↓weight1↓activation↓weight2↓activation↓F(x) + x↓skip!The \"+ x\" adds a direct highway that bypasses all layers.Continue"
   },
   {
-    "id": 566,
+    "id": 568,
     "chapterId": "8.7",
     "title": "Residual Connections - The Gradient Highway",
     "section": 8,
@@ -5103,7 +5121,7 @@
     "text": "olves Vanishing GradientsThe math is elegant. Take the derivative of the residual output:The Residual Gradientddx[F(x)+ x]=F'(x)+ 1F'(x) = gradient through the layer weightscan shrink toward 0+ 1 = gradient through the skip connectionALWAYS exactly 1, no matter whatThat + 1 is everything. Even if F'(x) approaches 0, the total gradient is at least 1. The gradient through the skip connection is always 1, regardless of what the layer weights do.Without residualGradient = F'(x)If F'(x) = 0.01, gradient = 0.01With residualGradient = F'(x) + 1If F'(x) = 0.01, gradient = 1.01Continue"
   },
   {
-    "id": 567,
+    "id": 569,
     "chapterId": "8.7",
     "title": "Residual Connections - The Gradient Highway",
     "section": 8,
@@ -5112,7 +5130,7 @@
     "text": "ient HighwayVisualize a 6-layer transformer. Gradients travel backward from Layer 6 to Layer 1 via two paths:Layer 6Through weights1.00Through skip: always 1.01.00↑ gradient flows backward ↑Layer 5Through weights0.70Through skip: always 1.01.00↑ gradient flows backward ↑Layer 4Through weights0.49Through skip: always 1.01.00↑ gradient flows backward ↑Layer 3Through weights0.34Through skip: always 1.01.00↑ gradient flows backward ↑Layer 2Through weights0.24Through skip: always 1.01.00↑ gradient flows backward ↑Layer 1Through weights0.17Through skip: always 1.01.00Through weights: 0.7^5 = 0.17 (lost 83% of the signal). Through skip connections: 1.00 (full signal preserved). The skip path delivers the gradient from layer 6 to layer 1 without any multiplication.Continue"
   },
   {
-    "id": 568,
+    "id": 570,
     "chapterId": "8.7",
     "title": "Residual Connections - The Gradient Highway",
     "section": 8,
@@ -5121,7 +5139,7 @@
     "text": "Is Critical for TransformersModern transformers are absurdly deep. Without residual connections, training them would be impossible.GPT-212 layers24 gradient highwaysGPT-396 layers192 gradient highwaysGPT-4 (est.)120 layers240 gradient highwaysTWO residual connections per blockEvery transformer block has two sub-layers: Attention and FFN. Each gets its own residual connection (chapter 8.2). That means GPT-3's 96 blocks have 192 gradient highways - one around every Attention layer and one around every FFN layer.Input↓Attention + Residual #1↓FFN + Residual #2↓Block OutputWithout residual connections, gradients would vanish by layer 3. With them, gradients flow freely through all 96 layers on the skip path, letting even the earliest layers learn from the loss signal. This is what makes deep transformers trainable."
   },
   {
-    "id": 569,
+    "id": 571,
     "chapterId": "8.7",
     "title": "Residual Connections - The Gradient Highway",
     "section": 8,
@@ -5130,7 +5148,7 @@
     "text": "The Encoder: Residual Connections - The Gradient Highway. This chapter covers residual connections - the gradient highway."
   },
   {
-    "id": 570,
+    "id": 572,
     "chapterId": "8.8",
     "title": "Pre-Norm vs Post-Norm",
     "section": 8,
@@ -5139,7 +5157,7 @@
     "text": "Post-Norm (Original 2017 Paper)In the original \"Attention Is All You Need\" paper, LayerNorm comes after the residual Add. This is what we covered in chapter 8.2. Here is the exact order:Input x↓Attention(x)↓Add: x + Attention(x)↓LayerNorm↓FFN↓Add: prev + FFN(prev)↓LayerNormKey feature: LayerNorm sits after the residual add. The residual path passes through LayerNorm before reaching the next sub-layer.Continue"
   },
   {
-    "id": 571,
+    "id": 573,
     "chapterId": "8.8",
     "title": "Pre-Norm vs Post-Norm",
     "section": 8,
@@ -5148,7 +5166,7 @@
     "text": "(Modern Approach)In pre-norm, LayerNorm comes before each sub-layer. The residual add gets the raw, unnormalized input - not the normalized version.Input x↓LayerNorm(x)↓Attention(LayerNorm(x))↓Add: x + Attention(LayerNorm(x))↓LayerNorm(prev)↓FFN(LayerNorm(prev))↓Add: prev + FFN(LayerNorm(prev))Key difference: the Add step receives the raw input x, not the normalized version. LayerNorm only feeds into the sub-layer, not into the skip path.Continue"
   },
   {
-    "id": 572,
+    "id": 574,
     "chapterId": "8.8",
     "title": "Pre-Norm vs Post-Norm",
     "section": 8,
@@ -5157,7 +5175,7 @@
     "text": "Side ComparisonLet's trace input [-0.5, 0.3, 0.7, 0.6] (\"cats\" embedding) through the Attention sub-layer in both approaches:Post-NormInput x[-0.5, 0.3, 0.7, 0.6]Attention(x)[0.3, -0.1, 0.2, 0.4]Add: x + Attn[-0.2, 0.2, 0.9, 1.0]LayerNorm[-1.36, -0.55, 0.86, 1.06]Norm is last. Skip path passes through Norm.Pre-NormInput x[-0.5, 0.3, 0.7, 0.6]LayerNorm(x)[-1.36, -0.55, 0.86, 1.06]Attn(LN(x))[0.28, -0.12, 0.18, 0.38]Add: x + Attn[-0.22, 0.18, 0.88, 0.98]Norm is first. Skip path is clean - just addition.Notice the critical difference: in post-norm, the skip path goes through LayerNorm. In pre-norm, the skip path is just pure addition - no transformations on the highway.Continue"
   },
   {
-    "id": 573,
+    "id": 575,
     "chapterId": "8.8",
     "title": "Pre-Norm vs Post-Norm",
     "section": 8,
@@ -5166,7 +5184,7 @@
     "text": "Norm WinsTwo key advantages make pre-norm the clear winner for deep models:1. Cleaner Gradient FlowIn post-norm, the gradient on the skip path must pass through LayerNorm at every block. LayerNorm has its own derivative that modifies the gradient - not as bad as vanishing, but it adds noise and makes optimization harder.In pre-norm, the skip path is pure addition. The gradient flows from the last block to the first block on a clean highway with derivative = 1 at every step. No LayerNorm interference on the residual stream.2. Training StabilityPost-norm requires very careful learning rate warmup - start with a tiny learning rate and slowly increase it over thousands of steps. Without warmup, gradients in early training are unstable and the model diverges (loss goes to infinity).Pre-norm is more forgiving. It works with larger learning rates from the start. The clean gradient highway stabilizes training even without careful warmup schedules. This makes training faster and less finicky.Continue"
   },
   {
-    "id": 574,
+    "id": 576,
     "chapterId": "8.8",
     "title": "Pre-Norm vs Post-Norm",
     "section": 8,
@@ -5175,7 +5193,7 @@
     "text": "WhatPost-Norm●\"Attention Is All You Need\" (2017)●Early BERT models●Some early translation modelsHistorical. Used mainly in the original paper.Pre-Norm●GPT-2, GPT-3, GPT-4●LLaMA, LLaMA 2, LLaMA 3●Mistral, Mixtral●Claude●Virtually all modern LLMsThe industry standard since ~2019.The Field ConvergedThe shift happened because pre-norm trains faster, scales better to deep models, and is more robust. When you hear about a modern LLM with 96+ layers, it is almost certainly using pre-norm. The original paper used post-norm, but practice proved pre-norm superior for large-scale training."
   },
   {
-    "id": 575,
+    "id": 577,
     "chapterId": "8.8",
     "title": "Pre-Norm vs Post-Norm",
     "section": 8,
@@ -5184,7 +5202,7 @@
     "text": "The Encoder: Pre-Norm vs Post-Norm. This chapter covers pre-norm vs post-norm."
   },
   {
-    "id": 576,
+    "id": 578,
     "chapterId": "8.9",
     "title": "Batch Norm vs Layer Norm",
     "section": 8,
@@ -5193,7 +5211,7 @@
     "text": "Batch Normalization (Ioffe & Szegedy, 2015)Batch Norm normalizes across the batch dimension. Given a batch of examples, for each feature, compute the mean and variance across all examples in the batch.Batch of 4 examples, each with 3 features:Feature 1Feature 2Feature 3Example 10.51.2-0.3Example 20.80.90.1Example 30.31.5-0.5Example 40.60.60.2↑ Normalize this column ↑Batch Norm picks one feature (one column) and computes the mean and variance across the 4 examples. For Feature 2: mean = (1.2 + 0.9 + 1.5 + 0.6) / 4 = 1.05. Then it normalizes each example's value for that feature.Continue"
   },
   {
-    "id": 577,
+    "id": 579,
     "chapterId": "8.9",
     "title": "Batch Norm vs Layer Norm",
     "section": 8,
@@ -5202,7 +5220,7 @@
     "text": "h Norm Works for Images and CNNsIn a CNN processing images, batch normalization works beautifully. Here's why:Shared statisticsImages in a batch share similar structure. The feature \"edge detector at position (3,5)\" has a meaningful distribution across a batch of cat photos - they all have edges in roughly similar places.Fixed input sizeImages are always the same dimensions (e.g., 224x224). Position (3,5) means the same thing in every image. Computing statistics across the batch at that position makes sense.Training speedupBN reduced internal covariate shift (layer inputs changing distribution during training), letting CNNs train 10-14x faster. It also acted as a mild regularizer.Batch Norm revolutionized CNN training when it was introduced in 2015. It made training deep image models much faster and more stable. But language is a fundamentally different domain...Continue"
   },
   {
-    "id": 578,
+    "id": 580,
     "chapterId": "8.9",
     "title": "Batch Norm vs Layer Norm",
     "section": 8,
@@ -5211,7 +5229,7 @@
     "text": "h Norm Fails for LanguageThree fundamental problems make Batch Norm a poor fit for text:1. Variable Sequence LengthsSentences have different lengths. In a batch of 4 sentences:\"I love cats\"3 tokens\"The cat sat on the mat last week\"8 tokens\"Hello\"1 tokens\"Deep learning is fascinating\"4 tokensWhat is \"position 5\" across this batch? Only one sentence even has a position 5. Normalizing across the batch at position 5 is meaningless - there's nothing to compare.2. Batch Size 1 at InferenceWhen you chat with an LLM, your prompt is batch size 1. There's no batch to compute statistics over. Batch Norm must fall back to running averages stored from training - a fragile approximation that can drift from the true distribution.3. Tokens Are Fundamentally DifferentNormalizing feature 42 across \"the\", \"cat\", \"sat\", and \"love\" from different sentences treats them as comparable. But they're completely different words with different roles. Unlike pixels at the same position in different images, tokens at position 3 across different sentences share nothing semantically.Continue"
   },
   {
-    "id": 579,
+    "id": 581,
     "chapterId": "8.9",
     "title": "Batch Norm vs Layer Norm",
     "section": 8,
@@ -5220,7 +5238,7 @@
     "text": "rmalization (Ba et al., 2016)Layer Norm normalizes across the feature dimension. For each token independently, compute the mean and variance across its own features.Same 4x3 grid, different dimension:Feature 1Feature 2Feature 3Example 10.51.2-0.3Example 20.80.90.1Example 30.31.5-0.5Example 40.60.60.2← Normalize this row →Layer Norm picks one example (one row) and computes mean and variance across its 3 features. For Example 2: mean = (0.8 + 0.9 + 0.1) / 3 = 0.60. Each token normalizes itself independently.●No batch dependency: Each token normalizes using only its own features. Works with batch size 1.●Any sequence length: Token 5 normalizes itself the same way whether the sentence has 5 or 500 tokens.●Semantically meaningful: Normalizing across a single token's features rescales its representation without mixing different words' statistics.Continue"
   },
   {
-    "id": 580,
+    "id": 582,
     "chapterId": "8.9",
     "title": "Batch Norm vs Layer Norm",
     "section": 8,
@@ -5229,7 +5247,7 @@
     "text": "Difference - Which Dimension?Batch NormNormalizes down columns(across examples in the batch)highlighted column = one BN operationNeeds a batch of examplesUsed in CNNs (image models)Fragile at batch size 1Layer NormNormalizes across rows(across features of one token)highlighted row = one LN operationIndependent per tokenUsed in Transformers (LLMs)Works with any batch sizeThe Key InsightLayer Norm treats each token as its own universe. Its mean and variance depend only on that token's own feature values - not on what other sentences happen to be in the same batch, not on how long other sequences are, and not on what other tokens exist. This independence is exactly what Transformers need: each token's normalization should be a property of that token alone."
   },
   {
-    "id": 581,
+    "id": 583,
     "chapterId": "8.9",
     "title": "Batch Norm vs Layer Norm",
     "section": 8,
@@ -5238,7 +5256,7 @@
     "text": "The Encoder: Batch Norm vs Layer Norm. This chapter covers batch norm vs layer norm."
   },
   {
-    "id": 582,
+    "id": 584,
     "chapterId": "9.1",
     "title": "Decoder-Only - How Modern LLMs Work",
     "section": 9,
@@ -5247,16 +5265,16 @@
     "text": "Plot twist: Modern LLMs are decoder-onlyChatGPT, Claude, LLaMA, Gemini - they all use only the Decoder half. They threw away the Encoder.Why throw away half the architecture? Because translation and chatting are fundamentally different.Continue"
   },
   {
-    "id": 583,
+    "id": 585,
     "chapterId": "9.1",
     "title": "Decoder-Only - How Modern LLMs Work",
     "section": 9,
     "sectionName": "The Decoder",
     "sub": 1,
-    "text": "ion vs Chatting: different tasksTranslation: input (English) and output (French) are different languages. You must fully process the input before generating output.Chatting: input (your prompt) and output (my response) are both English. They're part of one continuous conversation, not two separate things.TranslationEnglish input (complete)↓French output (generated)Two separate \"sides\"ChattingPrompt: \"What is 2+2?\"Response: \"The answer is 4.\"One continuous streamContinue"
+    "text": "ion vs Chatting: different tasksTranslation: input (English) and output (Hindi) are different languages. You must fully process the input before generating output.Chatting: input (your prompt) and output (my response) are both English. They're part of one continuous conversation, not two separate things.TranslationEnglish input (complete)↓Hindi output (generated)Two separate \"sides\"ChattingPrompt: \"What is 2+2?\"Response: \"The answer is 4.\"One continuous streamContinue"
   },
   {
-    "id": 584,
+    "id": 586,
     "chapterId": "9.1",
     "title": "Decoder-Only - How Modern LLMs Work",
     "section": 9,
@@ -5265,7 +5283,7 @@
     "text": "asking: the key differenceIn a decoder-only model, when generating token N, you can only look at tokens 0 through N-1 (the past and present). You cannot look at future tokens.This is called causal masking - causality: effect cannot precede cause.Processing \"What is 2+2?\" sequentially:Step 1:GenerateWhatby looking atnothingStep 2:Generateisby looking atWhatStep 3:Generate2+2by looking atWhat, isStep 4:Generate?by looking atWhat, is, 2+2This is the fundamental constraint of LLMs: they generate one token at a time, and each new token is based only on what came before.Continue"
   },
   {
-    "id": 585,
+    "id": 587,
     "chapterId": "9.1",
     "title": "Decoder-Only - How Modern LLMs Work",
     "section": 9,
@@ -5274,7 +5292,7 @@
     "text": "der-only winsDecoder-only is simpler (half the architecture) but it turns out that a large decoder trained on enough data can:1.Read and understand your prompt (implicit encoder task)2.Generate natural, coherent responses (explicit decoder task)3.Reason, code, translate, summarize (with prompting/fine-tuning)The result: decoder-only models are more general-purpose than any other architecture. They're simpler, faster, and more scalable.Continue"
   },
   {
-    "id": 586,
+    "id": 588,
     "chapterId": "9.1",
     "title": "Decoder-Only - How Modern LLMs Work",
     "section": 9,
@@ -5283,7 +5301,7 @@
     "text": "chitectures: the complete pictureEncoder-DecoderEDTask: TranslationModels: T5, BART, mT5Best for: When input and output are different languages or modesEncoder-OnlyETask: UnderstandingModels: BERT, RoBERTa, DistilBERTBest for: Classification, sentiment, similarity - no generationDecoder-OnlyDTask: GenerationModels: GPT-4, Claude, LLaMA, GeminiBest for: Chat, writing, reasoning, all modern LLMsContinue"
   },
   {
-    "id": 587,
+    "id": 589,
     "chapterId": "9.1",
     "title": "Decoder-Only - How Modern LLMs Work",
     "section": 9,
@@ -5292,7 +5310,7 @@
     "text": "understand the complete evolutionCNN (local patterns) → RNN (sequential memory, slow) → Transformer (attention, parallel) → Decoder-only (the architecture of modern AI).You now have the full history. The upcoming sections go deep into each piece of the Transformer: how input enters, how attention works, and how the complete encoder and decoder blocks are built."
   },
   {
-    "id": 588,
+    "id": 590,
     "chapterId": "9.1",
     "title": "Decoder-Only - How Modern LLMs Work",
     "section": 9,
@@ -5301,7 +5319,7 @@
     "text": "The Decoder: Decoder-Only - How Modern LLMs Work. This chapter covers decoder-only - how modern llms work."
   },
   {
-    "id": 589,
+    "id": 591,
     "chapterId": "9.2",
     "title": "Causal Masking - Hiding the Future",
     "section": 9,
@@ -5310,7 +5328,7 @@
     "text": "The problem: during generation, future words don't exist yetWhen the model generates text one token at a time, it has only produced the tokens so far. The next word hasn't been generated yet - it can't attend to something that doesn't exist.generating \"The cat sat on the mat\"1.The→cat?\"The\" can only see itself2.Thecat→sat?\"cat\" sees \"The\" and itself3.Thecatsat→on?\"sat\" sees \"The\", \"cat\", and itself4.Thecatsaton→the?\"on\" sees all 4 previous tokensBut during training, the model sees the entire sentence at once for efficiency. So we need to artificially hide future tokens - that's what the causal mask does.Continue"
   },
   {
-    "id": 590,
+    "id": 592,
     "chapterId": "9.2",
     "title": "Causal Masking - Hiding the Future",
     "section": 9,
@@ -5319,7 +5337,7 @@
     "text": "look at whom?Each row is a word asking \"who can I attend to?\" Each column is a word being looked at. A word can only see words generated before it (+ itself):row asks →col answers ↓Thecatsaton\"The\" asks →✓✗✗✗\"cat\" asks →✓✓✗✗\"sat\" asks →✓✓✓✗\"on\" asks →✓✓✓✓\"The\"1st word - only itself exists\"cat\"2nd word - sees \"The\" + itself\"sat\"3rd word - sees \"The\", \"cat\" + itself\"on\"4th word - sees everything before it + itselfThe diagonal = each word seeing itself (always allowed)Below diagonal = looking at earlier words (allowed - they already exist)Above diagonal = looking at future words (forbidden - not generated yet)Now here is the actual Q·KT / √dk score matrix:Thecatsaton\"The\" →2.10.50.30.8\"cat\" →1.22.40.70.4\"sat\" →0.61.82.01.1\"on\" →0.90.31.52.3allowed (past + self) - keep these scoresfuture - must be blocked!Continue"
   },
   {
-    "id": 591,
+    "id": 593,
     "chapterId": "9.2",
     "title": "Causal Masking - Hiding the Future",
     "section": 9,
@@ -5328,7 +5346,7 @@
     "text": ": a triangle of negative infinityWe add a mask matrix to the scores. The mask has 0 where a word is allowed to look, and -∞ where it's forbidden:Thecatsaton\"The\" →0-∞-∞-∞\"cat\" →00-∞-∞\"sat\" →000-∞\"on\" →0000Adding -∞ to a score makes it -∞. When softmax sees -∞, it outputs exactly 0 - zero attention, as if that word doesn't exist. The lower triangle (0s) keeps scores unchanged.masked_scores = scores + maskWhere mask[i][j] = 0 if j ≤ i, else -∞Continue"
   },
   {
-    "id": 592,
+    "id": 594,
     "chapterId": "9.2",
     "title": "Causal Masking - Hiding the Future",
     "section": 9,
@@ -5337,7 +5355,7 @@
     "text": "sking → softmax only sees allowed tokensHere are the masked scores - future positions are now -∞:masked scoresThecatsaton\"The\" →2.1-∞-∞-∞\"cat\" →1.22.4-∞-∞\"sat\" →0.61.82.0-∞\"on\" →0.90.31.52.3The green cells keep their original scores. The red -∞ cells will become exactly 0 after softmax - as if those future words don't exist.Continue"
   },
   {
-    "id": 593,
+    "id": 595,
     "chapterId": "9.2",
     "title": "Causal Masking - Hiding the Future",
     "section": 9,
@@ -5346,7 +5364,7 @@
     "text": "turns masked scores into attention weights↓ softmax (each row)attention weights (probabilities)Thecatsaton\"The\" →1.000.000.000.00\"cat\" →0.230.770.000.00\"sat\" →0.120.400.480.00\"on\" →0.130.070.250.55Every -∞ became exactly 0.00 after softmax!\"The\" puts 100% attention on itself. \"cat\" splits between \"The\" and itself. Each row still sums to 1.0 - but only across the visible tokens.Continue"
   },
   {
-    "id": 594,
+    "id": 596,
     "chapterId": "9.2",
     "title": "Causal Masking - Hiding the Future",
     "section": 9,
@@ -5355,7 +5373,7 @@
     "text": "ional vs Causal - see the differenceThe attention formula is identical. The ONLY difference is whether the upper triangle is masked:No mask (bidirectional)every word sees every word0.610.120.100.170.190.620.110.080.100.330.400.160.130.070.250.55Full matrix - all cells activeCausal maskeach word sees only past + self1.000000.230.77000.120.400.4800.130.070.250.55Lower triangle only - upper triangle is darkSame Q, K, V matrices. Same formula. Same softmax. The mask is a single triangle of -∞ values - and it completely changes what the model can do.Continue"
   },
   {
-    "id": 595,
+    "id": 597,
     "chapterId": "9.2",
     "title": "Causal Masking - Hiding the Future",
     "section": 9,
@@ -5364,7 +5382,7 @@
     "text": "ning Insight: Every Position Makes a Prediction4 tokens go in, 4 output vectors come out - always, regardless of masking. Each output vector passes through Linear + Softmax to predict the next token. The mask determines whether those predictions are honest.one forward pass through the transformerThecatsaton↓ ↓ ↓ ↓Transformer Blocks (N layers)↓ ↓ ↓ ↓v1v2v3v4↓ ↓ ↓ ↓Linear + Softmax → 4 next-token predictionsNo Mask (Bidirectional)Every position sees the full sequence\"The\"saw:Thecatsaton→ saw the answer before predicting\"cat\"saw:Thecatsaton→ saw the answer before predicting\"sat\"saw:Thecatsaton→ saw the answer before predicting\"on\"saw:Thecatsaton→ saw the answer before predicting0 usable training examplesEvery prediction \"saw the answer\"Causal MaskEach position sees only past + self\"The\"saw:The→ predicts\"cat\"HONEST\"cat\"saw:Thecat→ predicts\"sat\"HONEST\"sat\"saw:Thecatsat→ predicts\"on\"HONEST\"on\"saw:Thecatsaton→ predicts\"the\"HONEST4 usable training examples!Each prediction was made without peekingThis is why causal masking exists during trainingFrom one forward pass with N tokens, you get N honest next-token predictions to learn from. Without the mask, you'd get zero - the model would \"cheat\" at every position, then completely fail at actual generation.Continue"
   },
   {
-    "id": 596,
+    "id": 598,
     "chapterId": "9.2",
     "title": "Causal Masking - Hiding the Future",
     "section": 9,
@@ -5373,7 +5391,7 @@
     "text": "chitectures - who uses what mask and whyENCODER-ONLYBERT, RoBERTaFull matrix - all cells activeNo mask - every word sees every other word (bidirectional).Why? The encoder's job is to understand the full input. When classifying \"The bank by the river\", \"bank\" NEEDS to see \"river\" (which comes after it) to know it means riverbank, not a financial bank. Hiding future words would cripple understanding.Used for: text classification, sentiment analysis, question answering, named entity recognition.Continue"
   },
   {
-    "id": 597,
+    "id": 599,
     "chapterId": "9.2",
     "title": "Causal Masking - Hiding the Future",
     "section": 9,
@@ -5382,16 +5400,16 @@
     "text": "ONLYGPT, Claude, LLaMALower triangle only - upper triangle maskedCausal mask - each word only sees past words + itself.Why? The decoder generates text one token at a time. At generation step 3, token 4 doesn't exist yet - attending to it would be looking at something that isn't there. During training, the full sentence is fed at once for speed, so we use the mask to simulate the generation condition. Without it, the model would \"cheat\" by seeing the answer, then fail at actual generation.Used for: text generation, chatbots, code completion, reasoning - all modern LLMs.Continue"
   },
   {
-    "id": 598,
+    "id": 600,
     "chapterId": "9.2",
     "title": "Causal Masking - Hiding the Future",
     "section": 9,
     "sectionName": "The Decoder",
     "sub": 9,
-    "text": "DECODEROriginal Transformer, T5, BARTencoder+decoderEncoder: full matrix + Decoder: lower triangleBoth - encoder uses no mask, decoder uses causal mask, plus cross-attention connecting them.Why? The input (e.g., English sentence) already exists fully - the encoder should see all of it. But the output (e.g., French translation) is generated word by word - the decoder must not peek ahead. Cross-attention lets the decoder look at the encoder's full understanding while still generating left-to-right.Used for: translation, summarization, any \"input → different output\" task.The core rule is simpleIf the text already exists (input you're reading) → no mask needed, let every word see everything for maximum understanding.If the text is being generated (output you're writing) → causal mask required, because future words don't exist yet."
+    "text": "DECODEROriginal Transformer, T5, BARTencoder+decoderEncoder: full matrix + Decoder: lower triangleBoth - encoder uses no mask, decoder uses causal mask, plus cross-attention connecting them.Why? The input (e.g., English sentence) already exists fully - the encoder should see all of it. But the output (e.g., Hindi translation) is generated word by word - the decoder must not peek ahead. Cross-attention lets the decoder look at the encoder's full understanding while still generating left-to-right.Used for: translation, summarization, any \"input → different output\" task.The core rule is simpleIf the text already exists (input you're reading) → no mask needed, let every word see everything for maximum understanding.If the text is being generated (output you're writing) → causal mask required, because future words don't exist yet."
   },
   {
-    "id": 599,
+    "id": 601,
     "chapterId": "9.2",
     "title": "Causal Masking - Hiding the Future",
     "section": 9,
@@ -5400,31 +5418,13 @@
     "text": "The Decoder: Causal Masking - Hiding the Future. This chapter covers causal masking - hiding the future."
   },
   {
-    "id": 600,
-    "chapterId": "9.3",
-    "title": "Cross-Attention - The Encoder-Decoder Bridge",
-    "section": 9,
-    "sectionName": "The Decoder",
-    "sub": 0,
-    "text": "The setup: translating \"I love cats\" to FrenchThe encoder has processed the English sentence. Each word is now a rich contextual vector - \"love\" doesn't just mean \"love\" anymore, it means \"love in the context of I-love-cats\".Encoder output (English - fully processed)I768 dimslove768 dimscats768 dimsThese vectors are the encoder's final output - rich with context↓ feeds into decoder's cross-attentionDecoder (French - generating word by word)J'generatedaimegeneratedlesgeneratedchatsnext?The decoder needs to look at the English to know what to generate nextThe decoder's self-attention lets French words look at other French words. But how does the decoder look at the English words? That's what cross-attention does.Continue"
-  },
-  {
-    "id": 601,
-    "chapterId": "9.3",
-    "title": "Cross-Attention - The Encoder-Decoder Bridge",
-    "section": 9,
-    "sectionName": "The Decoder",
-    "sub": 1,
-    "text": "idea: Q from decoder, K and V from encoderIn self-attention, Q, K, and V all come from the same sentence. In cross-attention, they come from different sources:QQuery (Q) ← Decoder (French)The decoder is asking: \"what English word should I pay attention to right now?\"KKey (K) ← Encoder (English)The encoder's words offer their 'labels' for matching - \"I'm the subject\", \"I'm the verb\"VValue (V) ← Encoder (English)The encoder's words offer their actual content - the rich contextual meaning to borrow fromSame formula: Attention(Q, K, V) = softmax( Q·KT / √dk ) · VThe math is identical to self-attention. Only the source of Q, K, V changes.Continue"
-  },
-  {
     "id": 602,
     "chapterId": "9.3",
     "title": "Cross-Attention - The Encoder-Decoder Bridge",
     "section": 9,
     "sectionName": "The Decoder",
-    "sub": 2,
-    "text": "cross-attention: French Q meets English KEach French word's Query asks \"which English word is most relevant to me?\" The score matrix is not square - it's 4 French rows x 3 English columns:cross-attention scores (Q·KT / √dk)decoder Q ↓encoder K →Ilovecats\"J'\" →2.80.40.3\"aime\" →0.53.10.6\"les\" →0.20.32.5\"chats\" →0.30.73.4↓ softmax (each row)attention weightsIlovecats\"J'\" →0.850.080.07\"aime\" →0.060.860.07\"les\" →0.080.090.83\"chats\" →0.040.060.90\"J'\"→85% on \"I\"\"J'\" (I) focuses on \"I\" - direct translation\"aime\"→86% on \"love\"\"aime\" (love) focuses on \"love\" - the verb it's translating\"les\"→83% on \"cats\"\"les\" (the) focuses on \"cats\" - it's the article FOR cats\"chats\"→90% on \"cats\"\"chats\" (cats) focuses on \"cats\" - direct translationContinue"
+    "sub": 0,
+    "text": "The setup: translating \"I love cats\" to HindiThe encoder has processed the English sentence. Each word is now a rich contextual vector - \"love\" doesn't just mean \"love\" anymore, it means \"love in the context of I-love-cats\".Encoder output (English - fully processed)I768 dimslove768 dimscats768 dimsThese vectors are the encoder's final output - rich with context↓ feeds into decoder's cross-attentionDecoder (Hindi - generating word by word)Mujhegeneratedbilliyaangeneratedpasandgeneratedhainnext?The decoder needs to look at the English to know what to generate nextThe decoder's self-attention lets Hindi words look at other Hindi words. But how does the decoder look at the English words? That's what cross-attention does.Continue"
   },
   {
     "id": 603,
@@ -5432,11 +5432,29 @@
     "title": "Cross-Attention - The Encoder-Decoder Bridge",
     "section": 9,
     "sectionName": "The Decoder",
-    "sub": 3,
-    "text": "ention vs Cross-attentionSame formula, different wiring:SELF-ATTENTIONsame sentenceQKVQ, K, V all from the same sentence. Words attend to each other within one language.Score matrix is square (N x N)CROSS-ATTENTIONdecoderencoderQKVQ from decoder, K and V from encoder. Decoder attends to encoder's output.Score matrix is rectangular (M x N)Each decoder layer has BOTH types of attention:1. Masked self-attention - French words look at other French words (with causal mask)2. Cross-attention - French words look at English words (no mask - the full English sentence already exists)Continue"
+    "sub": 1,
+    "text": "idea: Q from decoder, K and V from encoderIn self-attention, Q, K, and V all come from the same sentence. In cross-attention, they come from different sources:QQuery (Q) ← Decoder (Hindi)The decoder is asking: \"what English word should I pay attention to right now?\"KKey (K) ← Encoder (English)The encoder's words offer their 'labels' for matching - \"I'm the subject\", \"I'm the verb\"VValue (V) ← Encoder (English)The encoder's words offer their actual content - the rich contextual meaning to borrow fromSame formula: Attention(Q, K, V) = softmax( Q·KT / √dk ) · VThe math is identical to self-attention. Only the source of Q, K, V changes.Continue"
   },
   {
     "id": 604,
+    "chapterId": "9.3",
+    "title": "Cross-Attention - The Encoder-Decoder Bridge",
+    "section": 9,
+    "sectionName": "The Decoder",
+    "sub": 2,
+    "text": "cross-attention: Hindi Q meets English KEach Hindi word's Query asks \"which English word is most relevant to me?\" The score matrix is not square - it's 4 Hindi rows x 3 English columns:cross-attention scores (Q·KT / √dk)decoder Q ↓encoder K →Ilovecats\"Mujhe\" →2.80.40.3\"billiyaan\" →0.30.73.4\"pasand\" →0.53.10.6\"hain\" →0.42.70.5↓ softmax (each row)attention weightsIlovecats\"Mujhe\" →0.850.080.07\"billiyaan\" →0.040.060.90\"pasand\" →0.060.860.07\"hain\" →0.080.830.09\"Mujhe\"→85% on \"I\"\"Mujhe\" (I/to-me) focuses on \"I\" - the subject/experiencer\"billiyaan\"→90% on \"cats\"\"billiyaan\" (cats) focuses on \"cats\" - direct translation of the object\"pasand\"→86% on \"love\"\"pasand\" (liking/love) focuses on \"love\" - the core verb meaning\"hain\"→83% on \"love\"\"hain\" (auxiliary \"are/is\") aligns with \"love\" to complete the predicateContinue"
+  },
+  {
+    "id": 605,
+    "chapterId": "9.3",
+    "title": "Cross-Attention - The Encoder-Decoder Bridge",
+    "section": 9,
+    "sectionName": "The Decoder",
+    "sub": 3,
+    "text": "ention vs Cross-attentionSame formula, different wiring:SELF-ATTENTIONSame SentenceQKVQ, K, V all from the same sentence. Words attend to each other within one language.Score matrix is square (N x N)CROSS-ATTENTIONDecoderEncoderQKVQ from decoder, K and V from encoder. Decoder attends to encoder's output.Score matrix is rectangular (M x N)Each decoder layer has BOTH types of attention:1. Masked self-attention - Hindi words look at other Hindi words (with causal mask)2. Cross-attention - Hindi words look at English words (no mask - the full English sentence already exists)Continue"
+  },
+  {
+    "id": 606,
     "chapterId": "9.3",
     "title": "Cross-Attention - The Encoder-Decoder Bridge",
     "section": 9,
@@ -5445,34 +5463,34 @@
     "text": "detail: the encoder runs ONCEA common misconception is that encoder layer 1 feeds decoder layer 1, encoder layer 2 feeds decoder layer 2, etc. That's not how it works.WRONGLayer-to-layer mappingE6→D6E5→D5E4→D4E3→D3E2→D2E1→D1✗CORRECTOnly the final layer mattersEncoder Layer 6 (final)↓K, V (computed once)↓↓↓↓↓↓Decoder Layer 1Decoder Layer 2Decoder Layer 3Decoder Layer 4Decoder Layer 5Decoder Layer 6Encoder: runs all 6 layers once on \"I love cats\". The output of layer 6 (the final layer) is the encoder's output - 3 contextual vectors, one per English word.K and V: computed once from the encoder's final output using WK and WV weight matrices. These are then cached and reused.Decoder layers 1-6: each layer computes its own Q (because the decoder's representation changes layer by layer as it gets refined). But K and V are always the same - the encoder's final output.Continue"
   },
   {
-    "id": 605,
-    "chapterId": "9.3",
-    "title": "Cross-Attention - The Encoder-Decoder Bridge",
-    "section": 9,
-    "sectionName": "The Decoder",
-    "sub": 5,
-    "text": "data flow with dimensionsd_model = 512, d_k = 64, 8 headsCross-attention architecture showing encoder stack producing K and V projections fanned out to decoder layers, where Q comes from decoder while K and V come from encoder outputENCODERLayer 6 (final)Layer 5Layer 4Layer 3Layer 2Layer 1\"I love cats\"[3 x 512]Projection (once)K = encoder_out · W_KV = encoder_out · W_V[3 x 512] · [512 x 64] = [3 x 64](per head)K, V CACHEK: [3 x 64] V: [3 x 64]DECODERLayer 6QchangesK,VsameLayer 5QchangesK,VsameLayer 4QchangesK,VsameLayer 3QchangesK,VsameLayer 2QchangesK,VsameLayer 1QchangesK,Vsame\"J' aime les chats\" [4 x 512]Continue"
-  },
-  {
-    "id": 606,
-    "chapterId": "9.3",
-    "title": "Cross-Attention - The Encoder-Decoder Bridge",
-    "section": 9,
-    "sectionName": "The Decoder",
-    "sub": 6,
-    "text": "pens at each decoder layerEvery decoder layer performs cross-attention with the exact same K and V, but a different Q:Layer 1:Attn(Q1,K,V) = softmax(Q1 · KT / √64) · VLayer 2:Attn(Q2,K,V) = softmax(Q2 · KT / √64) · V... same K, V⋮Layer 6:Attn(Q6,K,V) = softmax(Q6 · KT / √64) · VQ1 comes from the decoder's layer 1 output. Q6 comes from layer 6's output. The decoder's representation evolves layer by layer - Q captures \"what I'm looking for\" at each stage of refinement. K and V capture \"what the encoder said\" - and that never changes.Dimension walkthrough (d_model = 512, heads = 8, d_k = 64)Encoder output[3 x 512]3 English tokens, each 512 dimsW_K projection[512 x 64]per head, learned during trainingK (cached)[3 x 64]3 keys, one per English tokenV (cached)[3 x 64]3 values, one per English tokenDecoder layer n[4 x 512]4 French tokens, each 512 dimsQ_n (per layer)[4 x 64]4 queries, changes each layerQ_n · K^T scores[4 x 3]every French word scores every English wordWhy is this efficient?The encoder runs once. K and V are computed once. Only Q changes per decoder layer. For a 1000-token input, this saves computing 1000-token K and V six times - a 6x reduction in encoder-side computation.6 weight matrices per layerEach decoder layer has 6 separate learned matrices: WQ, WK, WV for masked self-attention (Q, K, V all from French) + WQ, WK, WV for cross-attention (Q from French, K and V from English). All learned independently.Continue"
-  },
-  {
     "id": 607,
     "chapterId": "9.3",
     "title": "Cross-Attention - The Encoder-Decoder Bridge",
     "section": 9,
     "sectionName": "The Decoder",
-    "sub": 7,
-    "text": "es cross-attention live?decoder-onlyGPT, Claude, LLaMANo cross-attention at allThere's no encoder, so nothing to cross-attend to. The decoder handles everything with just self-attention. Your prompt and the response are one continuous sequence.encoder-decoderOriginal Transformer, T5, BARTCross-attention in every decoder layerEach decoder layer has three sub-layers in order:1.Masked self-attentionFrench looks at French (causal)2.Cross-attentionFrench looks at English (full)3.Feed-forward networkProcess each position independentlyThis is exactly what the architecture diagram in chapter 5.1 shows - the green arrow \"K, V from encoder\" connects to this cross-attention layer.Cross-attention is elegant but optionalModern LLMs prove you can get world-class results without it. But for tasks with clear input/output separation (translation, summarization), the encoder-decoder architecture with cross-attention remains powerful."
+    "sub": 5,
+    "text": "data flow with dimensionsd_model = 512, d_k = 64, 8 headsCross-attention architecture showing encoder stack producing K and V projections fanned out to decoder layers, where Q comes from decoder while K and V come from encoder outputENCODERLayer 6 (final)Layer 5Layer 4Layer 3Layer 2Layer 1\"I love cats\"[3 x 512]Projection (once)K = encoder_out · W_KV = encoder_out · W_V[3 x 512] · [512 x 64] = [3 x 64](per head)K, V CACHEK: [3 x 64] V: [3 x 64]DECODERLayer 6QchangesK,VsameLayer 5QchangesK,VsameLayer 4QchangesK,VsameLayer 3QchangesK,VsameLayer 2QchangesK,VsameLayer 1QchangesK,Vsame\"Mujhe billiyaan pasand hain\"[4 x 512]Continue"
   },
   {
     "id": 608,
+    "chapterId": "9.3",
+    "title": "Cross-Attention - The Encoder-Decoder Bridge",
+    "section": 9,
+    "sectionName": "The Decoder",
+    "sub": 6,
+    "text": "pens at each decoder layerEvery decoder layer performs cross-attention with the exact same K and V, but a different Q:Layer 1:Attn(Q1,K,V) = softmax(Q1 · KT / √64) · VLayer 2:Attn(Q2,K,V) = softmax(Q2 · KT / √64) · V... same K, V⋮Layer 6:Attn(Q6,K,V) = softmax(Q6 · KT / √64) · VQ1 comes from the decoder's layer 1 output. Q6 comes from layer 6's output. The decoder's representation evolves layer by layer - Q captures \"what I'm looking for\" at each stage of refinement. K and V capture \"what the encoder said\" - and that never changes.Dimension walkthrough (d_model = 512, heads = 8, d_k = 64)Encoder output[3 x 512]3 English tokens, each 512 dimsW_K projection[512 x 64]per head, learned during trainingK (cached)[3 x 64]3 keys, one per English tokenV (cached)[3 x 64]3 values, one per English tokenDecoder layer n[4 x 512]4 Hindi tokens, each 512 dimsQ_n (per layer)[4 x 64]4 queries, changes each layerQ_n · K^T scores[4 x 3]every Hindi word scores every English wordWhy is this efficient?The encoder runs once. K and V are computed once. Only Q changes per decoder layer. For a 1000-token input, this saves computing 1000-token K and V six times - a 6x reduction in encoder-side computation.6 weight matrices per layerEach decoder layer has 6 separate learned matrices: WQ, WK, WV for masked self-attention (Q, K, V all from Hindi) + WQ, WK, WV for cross-attention (Q from Hindi, K and V from English). All learned independently.Continue"
+  },
+  {
+    "id": 609,
+    "chapterId": "9.3",
+    "title": "Cross-Attention - The Encoder-Decoder Bridge",
+    "section": 9,
+    "sectionName": "The Decoder",
+    "sub": 7,
+    "text": "es cross-attention live?Decoder-OnlyGPT, Claude, LLaMANo cross-attention at allThere's no encoder, so nothing to cross-attend to. The decoder handles everything with just self-attention. Your prompt and the response are one continuous sequence.Encoder-DecoderOriginal Transformer, T5, BARTCross-attention in every decoder layerEach decoder layer has three sub-layers in order:1.Masked self-attentionHindi looks at Hindi (causal)2.Cross-attentionHindi looks at English (full)3.Feed-forward networkProcess each position independentlyThis is exactly what the architecture diagram in chapter 5.1 shows - the green arrow \"K, V from encoder\" connects to this cross-attention layer.Cross-attention is elegant but optionalModern LLMs prove you can get world-class results without it. But for tasks with clear input/output separation (translation, summarization), the encoder-decoder architecture with cross-attention remains powerful."
+  },
+  {
+    "id": 610,
     "chapterId": "9.3",
     "title": "Cross-Attention - The Encoder-Decoder Bridge",
     "section": 9,
@@ -5481,7 +5499,7 @@
     "text": "The Decoder: Cross-Attention - The Encoder-Decoder Bridge. This chapter covers cross-attention - the encoder-decoder bridge."
   },
   {
-    "id": 609,
+    "id": 611,
     "chapterId": "9.3",
     "title": "Cross-Attention - The Encoder-Decoder Bridge",
     "section": 9,
@@ -5490,7 +5508,7 @@
     "text": "Diagram in Cross-Attention - The Encoder-Decoder Bridge: Cross-attention architecture diagram showing encoder stack producing K and V projections cached and fanned out to decoder layers, where Q comes from decoder while K and V come from encoder output"
   },
   {
-    "id": 610,
+    "id": 612,
     "chapterId": "9.4",
     "title": "The Output Head - Linear + Softmax",
     "section": 9,
@@ -5499,7 +5517,7 @@
     "text": "From vectors to words - the final stepAfter all transformer layers, every position holds a rich, context-aware vector of 512 numbers. This vector encodes everything the model understood about that position.But we need an actual word, not 512 numbers. The model's vocab has 50,257 possible tokens. How does it choose one?Decoder output[0.82, -0.31, 0.57, 0.14, ...]512 numbers→?Which of 50,257 words?That is exactly what the output head does. It has two parts: a Linear layer and Softmax. These are the two blocks sitting at the very top of the architecture diagram.Continue"
   },
   {
-    "id": 611,
+    "id": 613,
     "chapterId": "9.4",
     "title": "The Output Head - Linear + Softmax",
     "section": 9,
@@ -5508,7 +5526,7 @@
     "text": "ar layer - one giant matrix multiplyThe Linear layer is a weight matrix W with 512 rows and 50,257 columns. Each column represents one word in the vocabulary.The matrix multiplicationhidden state[1 x 512]×W[512 x 50,257]=logits[1 x 50,257]One matrix multiply. That is it. No activation function, no non-linearity - just multiply the 512-dim hidden state by this giant matrix and you get 50,257 raw scores, one for every word in the vocabulary.This single matrix has 512 x 50,257 = 25.7 million parameters. It is the second largest weight matrix in the model (after the embedding table).Continue"
   },
   {
-    "id": 612,
+    "id": 614,
     "chapterId": "9.4",
     "title": "The Output Head - Linear + Softmax",
     "section": 9,
@@ -5517,7 +5535,7 @@
     "text": "its mean - dot product similarityEach logit is a dot product between the hidden state and one column of W. A high dot product means the hidden state is pointing in the same direction as that word's template.Computing one logithidden state:[0.82, -0.31, 0.57, 0.14, ... 512 dims]W column for \"cats\":[0.71, -0.25, 0.63, 0.08, ... 512 dims]logit = dot product:(0.82)(0.71) + (-0.31)(-0.25) + (0.57)(0.63) + ... = 4.2This happens for all 50,257 words simultaneously:cats+4.2dogs+3.1the+1.5love-0.3banana-2.1... and 50,252 more words, each with a logit scoreHigh logit = the model's hidden state is similar to that word's representation. Low or negative = dissimilar. But these raw numbers are hard to interpret - we need probabilities.Continue"
   },
   {
-    "id": 613,
+    "id": 615,
     "chapterId": "9.4",
     "title": "The Output Head - Linear + Softmax",
     "section": 9,
@@ -5526,7 +5544,7 @@
     "text": "- from scores to probabilitiesRaw logits can be any number: positive, negative, huge, tiny. Softmax converts them into probabilities that are all positive and sum to exactly 1.The softmax formulaP(word_i) = elogit_i / Σ elogit_jExponentiate each logit, then divide by the sum of all exponentiated logits.Watch the transformation:Raw logitscats+4.2dogs+3.1the+1.5love-0.3banana-2.1→After softmaxcats70.8%dogs23.6%the4.8%love0.8%banana0.1%Notice how softmax amplifies differences. A logit gap of just 1.1 between \"cats\" (4.2) and \"dogs\" (3.1) becomes a 3x probability difference (71% vs 24%). The exponential function makes the winner win big.Continue"
   },
   {
-    "id": 614,
+    "id": 616,
     "chapterId": "9.4",
     "title": "The Output Head - Linear + Softmax",
     "section": 9,
@@ -5535,7 +5553,7 @@
     "text": "ure - the creativity dialBefore softmax, divide each logit by a number called temperature (T). This controls how \"peaked\" or \"spread out\" the resulting probabilities are.softmax( logit / temperature )T = 0.2Focused - Almost deterministiccats100%dogs0%the0%T = 1.0Default - Balancedcats71%dogs24%the5%T = 2.0Creative - More spread outcats50%dogs29%the13%Low temperature (0.2): divides logits by 0.2, making differences 5x larger before softmax. The top word dominates. High temperature (2.0): divides by 2.0, shrinking differences. More words get a fair chance. Temperature = 0 would be pure greedy (pick the top word every time).Continue"
   },
   {
-    "id": 615,
+    "id": 617,
     "chapterId": "9.4",
     "title": "The Output Head - Linear + Softmax",
     "section": 9,
@@ -5544,7 +5562,7 @@
     "text": "strategies - how to pick the next tokenAfter softmax gives us probabilities, we still need to decide: which word do we actually pick? There are three main strategies:Greedy decodingAlways pick the highest probability word. Simple but boring - the same input always produces the same output.cats 71% ✓dogs 24% the 5% love 1% Top-k sampling (e.g., k = 3)Keep only the k highest-probability words. Re-normalize their probabilities and randomly sample from them. Balances quality with variety.cats 71%dogs 24%the 5%love 1%→ sample from top 3Top-p sampling / nucleus (e.g., p = 0.9)Keep adding words (highest probability first) until their cumulative probability reaches p. More adaptive than Top-k - uses fewer words when the model is confident, more when uncertain.cats 71% (Σ71%)dogs 24% (Σ95%)the 5% (Σ100%)love 1% (Σ101%)→ stop at 87% (under 90%)In practice, most APIs combine temperature + Top-p. ChatGPT defaults: temperature = 1.0, Top-p = 1.0 (no filtering). For more focused output: temperature = 0.7, Top-p = 0.9.Continue"
   },
   {
-    "id": 616,
+    "id": 618,
     "chapterId": "9.4",
     "title": "The Output Head - Linear + Softmax",
     "section": 9,
@@ -5553,7 +5571,7 @@
     "text": "ying - the elegant shortcutHere is a surprising fact: the output Linear layer's weight matrix W is the same matrix as the embedding table from the input - just transposed.Embedding (input)word → vector[50,257 x 512]SAME MATRIX⇆Linear (output)vector → word scores[512 x 50,257]Why does this work?The embedding table maps each word to a point in 512-dimensional space. The output layer asks: \"which word's point is closest to this hidden state?\" That is the same operation in reverse.If the embedding for \"cats\" is [0.71, -0.25, 0.63, ...] and our hidden state is [0.82, -0.31, 0.57, ...], the dot product is high because they point in similar directions. The model is literally asking: \"which embedding vector is this hidden state most similar to?\"Parameter savings from weight tyingWithout tying: 50,257 x 512 = 25.7M extra parameters. With tying: zero extra parameters - the output layer reuses the embedding matrix. GPT-2 and most modern LLMs use this trick.Continue"
   },
   {
-    "id": 617,
+    "id": 619,
     "chapterId": "9.4",
     "title": "The Output Head - Linear + Softmax",
     "section": 9,
@@ -5562,7 +5580,7 @@
     "text": "lete output pipelineHere is every step from hidden state to predicted token:hidden state512 dims→Linear (Wᵀ)512 → 50,257→logits50,257 scores→÷ Ttemperature→softmax→ probabilities→sampleTop-k / Top-p→next token\"cats\"During trainingThe model computes this output head at every position simultaneously. At position 1 (\"I\"), it should predict \"love\". At position 2 (\"love\"), it should predict \"cats\". Cross-entropy loss measures how wrong each prediction was, and backprop updates the weights.During inferenceOnly the last position's hidden state goes through the output head. That is the position where the model predicts the next token. This single prediction gets sampled, appended to the input, and the whole process repeats - one token at a time.The big pictureThe entire transformer - embeddings, positional encoding, attention, FFN, layer stacking - exists to produce one good hidden state at the final position. The output head then converts that single 512-dimensional vector into a probability distribution over 50,257 words. One matrix multiply, one softmax. That is all it takes to go from \"understanding\" to \"speaking.\""
   },
   {
-    "id": 618,
+    "id": 620,
     "chapterId": "9.4",
     "title": "The Output Head - Linear + Softmax",
     "section": 9,
@@ -5571,16 +5589,16 @@
     "text": "The Decoder: The Output Head - Linear + Softmax. This chapter covers the output head - linear + softmax."
   },
   {
-    "id": 619,
+    "id": 621,
     "chapterId": "9.5",
     "title": "What is a Transformer Actually Doing?",
     "section": 9,
     "sectionName": "The Decoder",
     "sub": 0,
-    "text": "What is a Transformer actually doing?You give it a sentence: \"I love cats\"It needs to understand what each word means in context. The word \"love\" alone could mean many things - romantic love, love of food, a tennis score. But in \"I love cats\" it specifically means personal affection for cats.The Transformer figures this out through a pipeline of steps:Ilovecats→contextual understandingContinue"
+    "text": "What is a Transformer actually doing?You give it a sentence: \"I love cats\"It needs to understand what each word means in context. The word \"love\" alone could mean many things - romantic love, love of food, a tennis score. But in \"I love cats\" it specifically means personal affection for cats.The Transformer figures this out through a pipeline of steps:Ilovecats→Contextual UnderstandingContinue"
   },
   {
-    "id": 620,
+    "id": 622,
     "chapterId": "9.5",
     "title": "What is a Transformer Actually Doing?",
     "section": 9,
@@ -5589,7 +5607,7 @@
     "text": "Each word becomes a vector (embedding)The model's embedding table maps each token to a vector of numbers. These numbers capture meaning in isolation - \"love\" doesn't know about \"I\" or \"cats\" yet.I→[0.2, -0.5, 0.8, 0.1, ...]512 dimslove→[0.9, 0.1, -0.3, 0.6, ...]512 dimscats→[0.4, 0.7, 0.2, -0.4, ...]512 dimsSimilar words get similar vectors. \"cat\" and \"dog\" are nearby in this 512-dimensional space. But \"love\" here is generic - it could be any kind of love.Continue"
   },
   {
-    "id": 621,
+    "id": 623,
     "chapterId": "9.5",
     "title": "What is a Transformer Actually Doing?",
     "section": 9,
@@ -5598,7 +5616,7 @@
     "text": "Add position informationWithout position, \"I love cats\" and \"cats love I\" look identical to the model - same words, same embeddings. Order matters!Positional encoding adds WHERE each word sits in the sentence:Example for \"love\" at position 1:embedding[0.9, 0.1, -0.3, ...]+position[0.84, 0.54, 0.00, ...]=positioned[1.74, 0.64, -0.30, ...]Result: each word now knows WHAT it means AND WHERE it sits. \"love\" at position 1 is different from \"love\" at position 5.Continue"
   },
   {
-    "id": 622,
+    "id": 624,
     "chapterId": "9.5",
     "title": "What is a Transformer Actually Doing?",
     "section": 9,
@@ -5607,7 +5625,7 @@
     "text": "Self-attention - words look at each otherThis is the magic step. Each word sends a Query (\"what am I looking for?\"), every word offers a Key (\"here is what I can offer\"), and the model computes attention scores - how relevant is each word to every other?Attention scores for \"I love cats\"IlovecatsI0.600.250.15love0.150.300.55cats0.100.550.35\"love\" attends strongly to \"cats\" (0.55) - loves WHAT? And \"cats\" attends to \"love\" (0.55) - cats in what context?After the weighted sum of Values: \"love\" is no longer generic. It now means \"I-have-affection-for-cats\" - encoded as a completely new vector shaped by its context.Continue"
   },
   {
-    "id": 623,
+    "id": 625,
     "chapterId": "9.5",
     "title": "What is a Transformer Actually Doing?",
     "section": 9,
@@ -5616,7 +5634,7 @@
     "text": "Add & Norm + FFNTwo important things happen after attention:Attention OutputContext-aware vectors+Original (residual)Pre-attention vectors→Add & NormStabilize values→FFNTwo linear + GELU→Add & NormStabilize againResidual connectionAdds the ORIGINAL vector (before attention) back to the output. This prevents information loss and helps gradients flow during training. Without it, deep networks cannot learn.FFN (Feed-Forward Network)Two linear layers with GELU activation. Processes each word INDEPENDENTLY. Attention mixed words together - the FFN thinks about each word alone, creating richer features.Continue"
   },
   {
-    "id": 624,
+    "id": 626,
     "chapterId": "9.5",
     "title": "What is a Transformer Actually Doing?",
     "section": 9,
@@ -5625,7 +5643,7 @@
     "text": "Repeat N timesOne attention + FFN block is ONE transformer layer. Real models repeat this block many times. Each layer refines understanding further.Layer 1-2Basic syntax, word boundariesLayer 3-6Grammar, subject-verb agreementLayer 7-10Semantic meaning, analogiesLayer 11-12Complex reasoning, long-range dependenciesGPT-2: 12 layers. GPT-3: 96 layers. LLaMA 3 70B: 80 layers.After all layers: \"love\" has been refined from \"generic positive emotion\" to \"specific first-person affection directed at small furry animals in this particular sentence.\"Continue"
   },
   {
-    "id": 625,
+    "id": 627,
     "chapterId": "9.5",
     "title": "What is a Transformer Actually Doing?",
     "section": 9,
@@ -5634,7 +5652,7 @@
     "text": "Predict the next tokenAfter all layers, each position holds a rich context-aware vector (512 numbers). The model takes the LAST position's vector and projects it through a Linear layer.Linear: 512 dims → 50,257 (one score per word in vocabulary)Softmax: converts raw scores into probabilities that sum to 1Top predictions after \"I love cats\":very35%so22%a12%the8%really5%The highest probability word becomes the prediction. The model picks \"very\" - \"I love cats very...\" and then repeats the whole process for the next token.Continue"
   },
   {
-    "id": 626,
+    "id": 628,
     "chapterId": "9.5",
     "title": "What is a Transformer Actually Doing?",
     "section": 9,
@@ -5643,7 +5661,7 @@
     "text": "lete pipelineHere is every step connected end to end:\"I love cats\"→Tokenize→Embed→+Position→Self-Attention→Add & Norm→FFN→Add & Norm→×N layers→Linear→Softmax→\"very\" (35%)The key insightThe word \"love\" entered as a generic 512-number vector and exited as a completely different 512-number vector that encodes \"first-person affection directed at cats in a casual sentence.\"This is what \"understanding context\" means - every word's vector is reshaped by all the other words around it. That reshaping is the pipeline you just saw."
   },
   {
-    "id": 627,
+    "id": 629,
     "chapterId": "9.5",
     "title": "What is a Transformer Actually Doing?",
     "section": 9,
@@ -5652,7 +5670,7 @@
     "text": "The Decoder: What is a Transformer Actually Doing?. This chapter covers what is a transformer actually doing?."
   },
   {
-    "id": 628,
+    "id": 630,
     "chapterId": "9.6",
     "title": "KV Cache - Why Inference is Fast",
     "section": 9,
@@ -5661,7 +5679,7 @@
     "text": "The Attention Formula - What Gets ComputedBefore we can understand KV caching, we need to see exactly what a single attention layer computes. For a sequence of N tokens, each represented as a d-dimensional embedding vector:Three matrix multiplications per layer:QQ = X · W_Q(N × d) - one query per tokenKK = X · W_K(N × d) - one key per tokenVV = X · W_V(N × d) - one value per tokenThen attention combines them:output = softmax( Q · Kᵀ / √d ) · VEach row of the output is one token's \"context-aware\" representation. Row i is computed from token i's query attending to all keys and aggregating all values.The key point: Q, K, V are computed from X using fixed weight matrices W_Q, W_K, W_V. The same input always produces the same Q, K, V. This is what makes caching possible.Continue"
   },
   {
-    "id": 629,
+    "id": 631,
     "chapterId": "9.6",
     "title": "KV Cache - Why Inference is Fast",
     "section": 9,
@@ -5670,7 +5688,7 @@
     "text": "on Without Cache - See the WasteGenerating \"I love cats\" token by token. At each step, the model must compute Q, K, V for the entire sequence so far. Watch the redundant work pile up:Step 1: Generate \"I\"Sequence so far: [\"I\"]. Compute Q, K, V for 1 token:q_I = W_Q · x_Ik_I = W_K · x_Iv_I = W_V · x_I3 matrix-vector multiplications. All new, nothing wasted.Step 2: Generate \"love\"Sequence so far: [\"I\", \"love\"]. Recompute Q, K, V for ALL 2 tokens:q_I = W_Q · x_I ← Redundant! Same as Step 1k_I = W_K · x_I ← Redundant! Same as Step 1v_I = W_V · x_I ← Redundant! Same as Step 1q_love = W_Q · x_lovek_love = W_K · x_lovev_love = W_V · x_love6 multiplications, but 3 are redundant - identical to Step 1.Step 3: Generate \"cats\"Sequence so far: [\"I\", \"love\", \"cats\"]. Recompute Q, K, V for ALL 3 tokens:q_I = W_Q · x_I ← Redundant! (computed 3rd time)k_I = W_K · x_I ← Redundant! (computed 3rd time)v_I = W_V · x_I ← Redundant! (computed 3rd time)q_love = W_Q · x_love ← Redundant! (computed 2nd time)k_love = W_K · x_love ← Redundant! (computed 2nd time)v_love = W_V · x_love ← Redundant! (computed 2nd time)q_cats = W_Q · x_catsk_cats = W_K · x_catsv_cats = W_V · x_cats9 multiplications, but 6 are redundant!The Waste Grows QuadraticallyAt step N, we do 3N matrix-vector multiplications but only 3 are new. The other 3(N-1) are identical to work already done in earlier steps. After 1000 tokens, we have performed ~1.5 million redundant multiplications. This is the computation KV cache eliminates.Continue"
   },
   {
-    "id": 630,
+    "id": 632,
     "chapterId": "9.6",
     "title": "KV Cache - Why Inference is Fast",
     "section": 9,
@@ -5679,7 +5697,7 @@
     "text": "Last Row of Output MattersThe attention formula computes an output for every token in the sequence. But during generation, we already have the outputs for all previous tokens - we computed them in earlier steps. We only need the output for the new token.Full attention output (N rows):output = softmax( Q · Kᵀ / √d ) · V ← shape: (N × d)Row 1 (for \"I\"):already computed at step 1Row 2 (for \"love\"):already computed at step 2Row 3 (for \"cats\"):THIS is what we need nowThe formula for JUST the new token's output:output_new = softmax( q_new · K_allᵀ / √d ) · V_allq_newSingle vector (1 x d) - only the new token's queryK_allMatrix of ALL tokens' keys (N x d) - needed for dot product scoresV_allMatrix of ALL tokens' values (N x d) - needed for weighted sumThis single formula is the entire reason KV cache exists. It needs just one Q vector, but ALL keys and ALL values. That asymmetry is the key.Continue"
   },
   {
-    "id": 631,
+    "id": 633,
     "chapterId": "9.6",
     "title": "KV Cache - Why Inference is Fast",
     "section": 9,
@@ -5688,7 +5706,7 @@
     "text": "d V Are Cached - Not QLook at the formula again and ask: for each part, do we need the old tokens' values or just the new token's?Q (Query) - we never need old queries againThe formula is: q_new · K_allᵀ. Only q_new appears - the new token's query. We do not multiply q_I or q_love against anything. Those queries already served their purpose in steps 1 and 2. They are dead weight.Step 3: q_cats · [k_I, k_love, k_cats]ᵀOnly q_cats is used. q_I and q_love are not part of this computation at all.K (Key) - ALL old keys are needed every stepThe new token must compute a dot product with every key to find which tokens to attend to. When generating \"cats\", its query must score against k_I, k_love, AND k_cats. If we threw away k_I, the model could not attend to \"I\" at all.scores = q_cats · [k_I, k_love, k_cats]ᵀ = [0.25, 0.29, 0.27]Every key participates. Missing one key = missing one attention score.V (Value) - ALL old values are needed every stepThe output is a weighted sum of ALL value vectors. The attention weights tell us how much of each token's meaning to include. If v_I were missing, the output could not incorporate any information from \"I\".output = 0.33 · v_I + 0.34 · v_love + 0.33 · v_catsEvery value participates. Missing one value = losing that token's contribution.The AsymmetryQ (Query)Only new token's Q is usedOld Q values are never needed againDo not cacheK (Key)ALL tokens' keys needed every stepRecomputing is pure wasteCache itV (Value)ALL tokens' values needed every stepRecomputing is pure wasteCache itContinue"
   },
   {
-    "id": 632,
+    "id": 634,
     "chapterId": "9.6",
     "title": "KV Cache - Why Inference is Fast",
     "section": 9,
@@ -5697,7 +5715,7 @@
     "text": "ache - Exact OperationsLet's compare exactly what happens at Step 3 (generating \"cats\") with and without the cache:Without Cacheq_I = W_Q · x_Iwastedq_love = W_Q · x_lovewastedq_cats = W_Q · x_catsusedk_I = W_K · x_Iwastedk_love = W_K · x_lovewastedk_cats = W_K · x_catsusedv_I = W_V · x_Iwastedv_love = W_V · x_lovewastedv_cats = W_V · x_catsused9 multiplications (6 wasted)With CacheK_cache = [k_I, k_love] from steps 1-2V_cache = [v_I, v_love] from steps 1-2Compute only for new token:q_cats = W_Q · x_catsk_cats = W_K · x_catsv_cats = W_V · x_catsAppend to cache:K_cache = [k_I, k_love, k_cats]V_cache = [v_I, v_love, v_cats]Compute attention:q_cats · K_cacheᵀ / √d → softmax → · V_cache3 multiplications (0 wasted)Same result, less workBoth approaches produce the exact same output_cats. The attention scores are identical because the same q_cats, k_I, k_love, k_cats are used. The only difference is where k_I and k_love come from - freshly computed (waste) or read from cache (free).At step N: without cache = 3N multiplications. With cache = 3 multiplications. For N = 1000, that is 3000 vs 3 - a 1000x reduction in projection work alone.Continue"
   },
   {
-    "id": 633,
+    "id": 635,
     "chapterId": "9.6",
     "title": "KV Cache - Why Inference is Fast",
     "section": 9,
@@ -5706,7 +5724,7 @@
     "text": "xample with Real NumbersLet's trace through the exact computation with d = 2 to see every number. Small dimensions, real math, no hand-waving.Token embeddings (d = 2):x_I = [1.0, 0.0]x_love = [0.0, 1.0]x_cats = [0.5, 0.5]Weight matrices (2 x 2):W_Q[0.5, 0.1][0.2, 0.6]W_K[0.3, 0.7][0.4, 0.2]W_V[0.8, 0.1][0.3, 0.9]Step 1: Process \"I\" - compute everythingq_I = W_Q · [1.0, 0.0] = [0.5, 0.2]k_I = W_K · [1.0, 0.0] = [0.3, 0.4]v_I = W_V · [1.0, 0.0] = [0.8, 0.3]Cache after step 1: K = [[0.3, 0.4]] V = [[0.8, 0.3]]Step 2: Process \"love\" - compute new, load cachedk_I and v_I loaded from cache - not recomputed!q_love = W_Q · [0.0, 1.0] = [0.1, 0.6]k_love = W_K · [0.0, 1.0] = [0.7, 0.2]v_love = W_V · [0.0, 1.0] = [0.1, 0.9]Cache after step 2: K = [[0.3, 0.4], [0.7, 0.2]] V = [[0.8, 0.3], [0.1, 0.9]]Step 3: Process \"cats\" - the full attention computationk_I, k_love, v_I, v_love all loaded from cache. Only compute for \"cats\":q_cats = W_Q · [0.5, 0.5] = [0.3, 0.4]k_cats = W_K · [0.5, 0.5] = [0.5, 0.3]v_cats = W_V · [0.5, 0.5] = [0.45, 0.6]Full K matrix (from cache + new):k_I = [0.3, 0.4] (from cache)k_love = [0.7, 0.2] (from cache)k_cats = [0.5, 0.3] (just computed)Attention scores: q_cats · each keyq_cats · k_I = 0.3×0.3 + 0.4×0.4 = 0.25q_cats · k_love = 0.3×0.7 + 0.4×0.2 = 0.29q_cats · k_cats = 0.3×0.5 + 0.4×0.3 = 0.27Scale by √d = √2, then softmax:scaled = [0.177, 0.205, 0.191]softmax = [0.329, 0.338, 0.333]Weighted sum of values:0.329 × [0.8, 0.3] + 0.338 × [0.1, 0.9] + 0.333 × [0.45, 0.6]= [0.263, 0.099] + [0.034, 0.304] + [0.150, 0.200]output_cats = [0.447, 0.603]This exact same [0.447, 0.603] would result without the cache. The cache changes WHERE k_I, k_love, v_I, v_love come from (cache vs recompute) but the numbers are identical.Continue"
   },
   {
-    "id": 634,
+    "id": 636,
     "chapterId": "9.6",
     "title": "KV Cache - Why Inference is Fast",
     "section": 9,
@@ -5715,7 +5733,7 @@
     "text": "Cache Looks Like in MemoryA real model has many layers and many attention heads. Each one maintains its own independent KV cache.Cache structure per layer, per head:K cache(seq_len, d_head)Grows by 1 row per tokenV cache(seq_len, d_head)Grows by 1 row per tokenGrowing cache for \"I love cats\" (one head):After \"I\":K cache:[0.3, 0.4] ← newV cache:[0.8, 0.3] ← newAfter \"love\":K cache:[0.3, 0.4][0.7, 0.2] ← newV cache:[0.8, 0.3][0.1, 0.9] ← newAfter \"cats\":K cache:[0.3, 0.4][0.7, 0.2][0.5, 0.3] ← newV cache:[0.8, 0.3][0.1, 0.9][0.45, 0.6] ← newTotal cache for a real model:KV cache = 2 (K+V) × layers × heads × d_head × seq_len × bytesA 70B model with 80 layers and 64 heads: that is 2 × 80 × 64 = 10,240 separate cache matrices, each growing by one row per generated token.Continue"
   },
   {
-    "id": 635,
+    "id": 637,
     "chapterId": "9.6",
     "title": "KV Cache - Why Inference is Fast",
     "section": 9,
@@ -5724,7 +5742,7 @@
     "text": "- Operations and MemoryOperation savings:Without cachePer step: 3N projections + N2 attentionPer step: O(N2) Total: O(N3)With cachePer step: 3 projections + N attentionPer step: O(N) Total: O(N2)N = 1000: ~333 million ops without cache vs ~500 thousand with cache. ~660x faster.Memory cost - the price we pay:cache = 2 × seq_len × d_model × layers × bytes_per_paramExample: LLaMA 70BLayers80d_model8,192Max sequence4,096 tokensPrecisionFP16 (2 bytes)2 × 4,096 × 8,192 × 80 × 2 bytes= 10.7 GB per sequenceWhy this matters:●Long context is expensive: Doubling sequence length doubles cache. 128K context = enormous memory.●Batch size is limited: Each concurrent user needs their own cache. 10 users = 107 GB just for caches.●GQA helps: Grouped-Query Attention shares K, V across Q heads, shrinking cache 4-8x.Continue"
   },
   {
-    "id": 636,
+    "id": 638,
     "chapterId": "9.6",
     "title": "KV Cache - Why Inference is Fast",
     "section": 9,
@@ -5733,7 +5751,7 @@
     "text": "amental TradeoffKV cache trades memory for speed. This is the central tension of LLM inference:Without KV CacheSpeed:Slow (recompute all Q, K, V)Memory:Low (no cache stored)O(N3) compute, O(1) extra memoryWith KV CacheSpeed:Fast (only new token's Q, K, V)Memory:High (GBs per sequence)O(N2) compute, O(N) extra memoryThe Bottleneck of LLM InferenceThis memory-speed tradeoff is the fundamental bottleneck of LLM serving. Every technique you hear about - GQA (Grouped-Query Attention), quantized KV cache, sliding window attention, paged attention - exists to reduce the memory cost of the KV cache while keeping the speed benefit. When companies say \"serving LLMs is expensive,\" the KV cache is a major reason why.Note: KV cache only applies to inference (generation). During training, all tokens are processed in parallel - so there is no sequential generation and no need for a cache."
   },
   {
-    "id": 637,
+    "id": 639,
     "chapterId": "9.6",
     "title": "KV Cache - Why Inference is Fast",
     "section": 9,
@@ -5742,7 +5760,7 @@
     "text": "The Decoder: KV Cache - Why Inference is Fast. This chapter covers kv cache - why inference is fast."
   },
   {
-    "id": 638,
+    "id": 640,
     "chapterId": "9.7",
     "title": "Grouped-Query Attention - Shrinking the KV Cache",
     "section": 9,
@@ -5751,7 +5769,7 @@
     "text": "Recall: Multi-Head AttentionIn chapters 7.9-7.14, we learned standard MHA. With 8 heads, the model maintains 8 independent sets of Q, K, V weight matrices:QueriesW_Q1W_Q2W_Q3W_Q4W_Q5W_Q6W_Q7W_Q8KeysW_K1W_K2W_K3W_K4W_K5W_K6W_K7W_K8ValuesW_V1W_V2W_V3W_V4W_V5W_V6W_V7W_V8That is 8 W_Q + 8 W_K + 8 W_V = 24 weight matrices per attention layer. Each head has its own complete set. This works great for quality, but there is a hidden cost during inference.Continue"
   },
   {
-    "id": 639,
+    "id": 641,
     "chapterId": "9.7",
     "title": "Grouped-Query Attention - Shrinking the KV Cache",
     "section": 9,
@@ -5760,7 +5778,7 @@
     "text": "rence problem: KV cache memoryDuring generation, we cache the K and V vectors for all previous tokens. This avoids recomputing them at every step. But this KV cache grows fast.KV cache memory per layer2 x num_heads x seq_length x d_head x bytes_per_paramConcrete example: LLaMA 2 70Bnum_heads6464 attention headsd_head128128 dims per head (8192 / 64)seq_length40964096 token context windowlayers8080 transformer layersbytes22 bytes per param (float16)Total KV cache per batch item2 x 64 x 4096 x 128 x 2 bytes = 134,217,728 bytes per layer134,217,728 x 80 layers = 10,737,418,240 bytes~10 GB per batch item!Serving 8 users simultaneously = 80 GB just for KV caches. That is an entire A100 GPU of memory - before the model weights themselves.Continue"
   },
   {
-    "id": 640,
+    "id": 642,
     "chapterId": "9.7",
     "title": "Grouped-Query Attention - Shrinking the KV Cache",
     "section": 9,
@@ -5769,7 +5787,7 @@
     "text": "tion: share K and V across query groupsInstead of giving every head its own K and V, we share K and V across groups of query heads. Each head still has its own unique Q - queries stay personal.Example: 8 query heads, 2 KV groupsGroup 1: Heads 1-4 share K_1, V_1Q_1Q_2Q_3Q_4all useK_1V_1Group 2: Heads 5-8 share K_2, V_2Q_5Q_6Q_7Q_8all useK_2V_2Weight matrices needed: 8 W_Q + 2 W_K + 2 W_V = 12 projections (down from 24). The K and V computations (and their caches) shrink by 4x.Continue"
   },
   {
-    "id": 641,
+    "id": 643,
     "chapterId": "9.7",
     "title": "Grouped-Query Attention - Shrinking the KV Cache",
     "section": 9,
@@ -5778,7 +5796,7 @@
     "text": "omparison: MHA vs GQA vs MQAMHA (Multi-Head Attention)8Q heads8K heads8V heads24 projections total8 K + 8 V cached per layerGQA (Grouped-Query Attention, 4 heads per group)8Q heads2K heads2V heads12 projections total2 K + 2 V cached per layer (4x less)MQA (Multi-Query Attention)8Q heads1K heads1V heads10 projections total1 K + 1 V cached per layer (8x less)KV cache savings (LLaMA 2 70B, 4096 context)MHA (64 KV heads)~10 GBGQA-8 (8 KV groups)~1.25 GBMQA (1 KV shared)~160 MBContinue"
   },
   {
-    "id": 642,
+    "id": 644,
     "chapterId": "9.7",
     "title": "Grouped-Query Attention - Shrinking the KV Cache",
     "section": 9,
@@ -5787,7 +5805,7 @@
     "text": "sharing K and V work?The query is the \"question\" each head asks. Each head needs its own unique question to capture different patterns (syntax, semantics, coreference, etc.).But keys and values are the \"answers\" - and it turns out adjacent heads often attend to similar positions anyway. The K and V vectors across heads are highly correlated. Sharing them loses very little information.Research resultGQA matches standard MHA quality within 1% on most benchmarks while using 4x less KV cache memory. The quality-to-efficiency tradeoff is exceptionally favorable.Models using GQALLaMA 2 70B8 KV groupsLLaMA 38 KV groupsMistral 7B8 KV groupsGemmavaries by sizeWhy not always use MQA (1 shared KV)?MQA saves the most memory but does lose quality - about 2-5% on harder tasks. GQA is the sweet spot: most of the memory savings with almost no quality loss. That is why most modern large models use GQA with 8 groups, not full MQA."
   },
   {
-    "id": 643,
+    "id": 645,
     "chapterId": "9.7",
     "title": "Grouped-Query Attention - Shrinking the KV Cache",
     "section": 9,
@@ -5796,7 +5814,7 @@
     "text": "The Decoder: Grouped-Query Attention - Shrinking the KV Cache. This chapter covers grouped-query attention - shrinking the kv cache."
   },
   {
-    "id": 644,
+    "id": 646,
     "chapterId": "9.7",
     "title": "Grouped-Query Attention - Shrinking the KV Cache",
     "section": 9,

@@ -93,7 +93,9 @@
     "Matrix tile visualization used throughout the attention-shapes chapter: a colored rectangle divided into rows-by-columns grid lines, optionally decorated with row labels 'I', 'love', 'cats' to the left and column labels above. Each tile represents one matrix in the attention pipeline (X, Q, K, V, scores, softmax, output) and shows its shape at a glance."
   ],
   "8.3": [
-    "Feed-forward network architecture diagram showing expand-then-compress structure: 512-dim input through W1 to 2048-dim hidden with GELU activation, then W2 back to 512-dim output"
+    "Feed-forward network architecture diagram showing expand-then-compress structure: 512-dim input through W1 to 2048-dim hidden with GELU activation, then W2 back to 512-dim output",
+    "Line graph of the ReLU activation function over x from -3 to 3. The curve is flat at y equals zero for all negative x, forming a horizontal line along the x-axis, then rises with a hard kink at the origin and continues linearly as y equals x for all positive x. Dead region for negatives where the gradient is exactly zero.",
+    "Line graph of the GELU activation function over x from -3 to 3. The curve is a smooth S-shape: nearly zero for large negative x, dips slightly below zero around x equals minus one forming a small leak region, passes smoothly through the origin with a continuous derivative, and asymptotically matches y equals x for large positive x. Smooth shape keeps gradients alive for negative inputs."
   ],
   "8.6": [
     "Vertical Transformer encoder block stack diagram showing token embedding plus positional encoding feeding through repeated blocks (each with self-attention, add and norm, FFN, add and norm) annotated with Nx bracket"

@@ -1603,6 +1603,234 @@ export const FeedForwardNetwork = (ctx) => {
             </div>
           </div>
 
+          {/* Two separate graphs side-by-side: ReLU and GELU */}
+          <div style={{ marginTop: 14, display: "flex", gap: 12, flexWrap: "wrap" }}>
+            {/* ReLU graph */}
+            <div
+              style={{
+                flex: "1 1 220px",
+                padding: 12,
+                borderRadius: 10,
+                background: "rgba(0,0,0,0.3)",
+                border: `1px solid ${C.red}25`,
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+              }}
+            >
+              <T color={C.red} bold center size={14} style={{ marginBottom: 4 }}>
+                ReLU(x) = max(0, x)
+              </T>
+              <svg viewBox="0 0 280 220" style={{ width: "100%", maxWidth: 320 }}>
+                <desc>
+                  Line graph of the ReLU activation function over x from -3 to 3. The curve is flat at y equals zero for
+                  all negative x, forming a horizontal line along the x-axis, then rises with a hard kink at the origin
+                  and continues linearly as y equals x for all positive x. This creates a dead region for negatives
+                  where the gradient is exactly zero.
+                </desc>
+                {/* dashed zero lines */}
+                <line
+                  x1="40"
+                  y1="150"
+                  x2="260"
+                  y2="150"
+                  stroke="rgba(255,255,255,0.1)"
+                  strokeDasharray="3,3"
+                  strokeWidth="1"
+                />
+                <line
+                  x1="150"
+                  y1="20"
+                  x2="150"
+                  y2="190"
+                  stroke="rgba(255,255,255,0.1)"
+                  strokeDasharray="3,3"
+                  strokeWidth="1"
+                />
+                {/* outer axes */}
+                <line x1="40" y1="190" x2="260" y2="190" stroke="rgba(255,255,255,0.25)" strokeWidth="1" />
+                <line x1="40" y1="20" x2="40" y2="190" stroke="rgba(255,255,255,0.25)" strokeWidth="1" />
+                {/* x ticks */}
+                {[-3, -2, -1, 0, 1, 2, 3].map((xv) => {
+                  const px = 150 + xv * 36.67;
+                  return (
+                    <g key={`rx${xv}`}>
+                      <line
+                        x1={px}
+                        y1="190"
+                        x2={px}
+                        y2="194"
+                        stroke="rgba(255,255,255,0.35)"
+                        strokeWidth="1"
+                      />
+                      <text
+                        x={px}
+                        y="206"
+                        fill="rgba(255,255,255,0.5)"
+                        fontSize="10"
+                        textAnchor="middle"
+                      >
+                        {xv}
+                      </text>
+                    </g>
+                  );
+                })}
+                {/* y ticks */}
+                {[0, 1, 2, 3].map((yv) => {
+                  const py = 190 - yv * 40;
+                  return (
+                    <g key={`ry${yv}`}>
+                      <line x1="36" y1={py} x2="40" y2={py} stroke="rgba(255,255,255,0.35)" strokeWidth="1" />
+                      <text x="32" y={py + 3} fill="rgba(255,255,255,0.5)" fontSize="10" textAnchor="end">
+                        {yv}
+                      </text>
+                    </g>
+                  );
+                })}
+                {/* axis label */}
+                <text x="266" y="194" fill="rgba(255,255,255,0.6)" fontSize="10" textAnchor="start">
+                  x
+                </text>
+                <text x="32" y="22" fill="rgba(255,255,255,0.6)" fontSize="10" textAnchor="end">
+                  y
+                </text>
+                {/* ReLU curve: flat at y=0 for x<=0, then y=x */}
+                <polyline
+                  points="40,150 150,150 260,30"
+                  stroke={C.red}
+                  strokeWidth="2.5"
+                  fill="none"
+                  strokeLinejoin="round"
+                />
+                {/* annotation: dead region */}
+                <text x="85" y="142" fill={C.red} fontSize="10" fontWeight="600">
+                  dead (gradient = 0)
+                </text>
+                {/* annotation: hard kink */}
+                <circle cx="150" cy="150" r="4" fill="none" stroke={C.yellow} strokeWidth="1.5" />
+                <text x="158" y="170" fill={C.yellow} fontSize="10" fontWeight="600">
+                  hard kink
+                </text>
+              </svg>
+              <T color={C.dim} center size={11} style={{ marginTop: 4 }}>
+                Zero for all negatives. Sharp corner at origin.
+              </T>
+            </div>
+
+            {/* GELU graph */}
+            <div
+              style={{
+                flex: "1 1 220px",
+                padding: 12,
+                borderRadius: 10,
+                background: "rgba(0,0,0,0.3)",
+                border: `1px solid ${C.green}25`,
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+              }}
+            >
+              <T color={C.green} bold center size={14} style={{ marginBottom: 4 }}>
+                GELU(x) = x · Φ(x)
+              </T>
+              <svg viewBox="0 0 280 220" style={{ width: "100%", maxWidth: 320 }}>
+                <desc>
+                  Line graph of the GELU activation function over x from -3 to 3. The curve is a smooth S-shape: nearly
+                  zero for large negative x, dips slightly below zero around x equals minus one (the leak region),
+                  passes smoothly through the origin with a continuous derivative, and asymptotically matches y equals x
+                  for large positive x. This smooth shape keeps gradients alive for negative inputs.
+                </desc>
+                {/* dashed zero lines */}
+                <line
+                  x1="40"
+                  y1="150"
+                  x2="260"
+                  y2="150"
+                  stroke="rgba(255,255,255,0.1)"
+                  strokeDasharray="3,3"
+                  strokeWidth="1"
+                />
+                <line
+                  x1="150"
+                  y1="20"
+                  x2="150"
+                  y2="190"
+                  stroke="rgba(255,255,255,0.1)"
+                  strokeDasharray="3,3"
+                  strokeWidth="1"
+                />
+                {/* outer axes */}
+                <line x1="40" y1="190" x2="260" y2="190" stroke="rgba(255,255,255,0.25)" strokeWidth="1" />
+                <line x1="40" y1="20" x2="40" y2="190" stroke="rgba(255,255,255,0.25)" strokeWidth="1" />
+                {/* x ticks */}
+                {[-3, -2, -1, 0, 1, 2, 3].map((xv) => {
+                  const px = 150 + xv * 36.67;
+                  return (
+                    <g key={`gx${xv}`}>
+                      <line
+                        x1={px}
+                        y1="190"
+                        x2={px}
+                        y2="194"
+                        stroke="rgba(255,255,255,0.35)"
+                        strokeWidth="1"
+                      />
+                      <text
+                        x={px}
+                        y="206"
+                        fill="rgba(255,255,255,0.5)"
+                        fontSize="10"
+                        textAnchor="middle"
+                      >
+                        {xv}
+                      </text>
+                    </g>
+                  );
+                })}
+                {/* y ticks */}
+                {[0, 1, 2, 3].map((yv) => {
+                  const py = 190 - yv * 40;
+                  return (
+                    <g key={`gy${yv}`}>
+                      <line x1="36" y1={py} x2="40" y2={py} stroke="rgba(255,255,255,0.35)" strokeWidth="1" />
+                      <text x="32" y={py + 3} fill="rgba(255,255,255,0.5)" fontSize="10" textAnchor="end">
+                        {yv}
+                      </text>
+                    </g>
+                  );
+                })}
+                {/* axis label */}
+                <text x="266" y="194" fill="rgba(255,255,255,0.6)" fontSize="10" textAnchor="start">
+                  x
+                </text>
+                <text x="32" y="22" fill="rgba(255,255,255,0.6)" fontSize="10" textAnchor="end">
+                  y
+                </text>
+                {/* GELU curve (sampled via 0.5*x*(1+erf(x/sqrt(2)))) mapped into plot area */}
+                <polyline
+                  points="40,150.14 77,151.82 95.8,154.02 113.3,156.38 132,156.17 150,150 168,137.72 187.3,116.41 205,94.01 224,71.79 242.3,47.47 260,30.17"
+                  stroke={C.green}
+                  strokeWidth="2.5"
+                  fill="none"
+                  strokeLinejoin="round"
+                />
+                {/* annotation: leak */}
+                <circle cx="113.3" cy="156.38" r="5" fill="none" stroke={C.orange} strokeWidth="1.5" />
+                <text x="60" y="178" fill={C.orange} fontSize="10" fontWeight="600">
+                  leak (gradient alive)
+                </text>
+                <line x1="110" y1="158" x2="95" y2="172" stroke={C.orange} strokeWidth="1" />
+                {/* annotation: smooth origin */}
+                <text x="160" y="142" fill={C.yellow} fontSize="10" fontWeight="600">
+                  smooth S
+                </text>
+              </svg>
+              <T color={C.dim} center size={11} style={{ marginTop: 4 }}>
+                Small leak below zero. Smooth curve - no corner.
+              </T>
+            </div>
+          </div>
+
           <T color="#fff176" size={14} style={{ marginTop: 10 }}>
             Why does the smooth curve matter? During backpropagation (chapter 1.15), ReLU's gradient is exactly 0 for
             all negative inputs - the neuron is "dead" and can never recover. GELU's smooth curve means even slightly
@@ -1764,7 +1992,7 @@ export const FeedForwardNetwork = (ctx) => {
       <Reveal when={sub >= 7}>
         <Box color={C.green} style={{ width: "100%" }}>
           <T color="#80e8a5" bold center size={20}>
-            Example 2: "The capital of France is ___"
+            Example 2: "The capital of India is ___"
           </T>
           <T color={C.dim} center size={13} style={{ marginTop: 2 }}>
             Attention gathers context, FFN recalls the fact
@@ -1788,7 +2016,7 @@ export const FeedForwardNetwork = (ctx) => {
                     Q &middot; K scores for "___" position
                   </T>
                   <T color={C.dim} size={12}>
-                    "___"'s Query asks "what country am I about?" "France"'s Key scores highest (0.72 after softmax),
+                    "___"'s Query asks "what country am I about?" "India"'s Key scores highest (0.72 after softmax),
                     "capital" gets 0.18, rest get scraps.
                   </T>
                 </div>
@@ -1797,8 +2025,8 @@ export const FeedForwardNetwork = (ctx) => {
                     Weighted sum of Values
                   </T>
                   <T color={C.dim} size={12}>
-                    Output = 0.72 &middot; V<sub>France</sub> + 0.18 &middot; V<sub>capital</sub> + ... This is a{" "}
-                    <strong>blend</strong> - a weighted average. It mixes "France" info into the "___" position.
+                    Output = 0.72 &middot; V<sub>India</sub> + 0.18 &middot; V<sub>capital</sub> + ... This is a{" "}
+                    <strong>blend</strong> - a weighted average. It mixes "India" info into the "___" position.
                   </T>
                 </div>
                 <div style={{ padding: "6px 10px", borderRadius: 6, background: `${C.pink}08` }}>
@@ -1806,7 +2034,7 @@ export const FeedForwardNetwork = (ctx) => {
                     Result: context assembled, but no answer yet
                   </T>
                   <T color={C.dim} size={12}>
-                    The "___" vector now encodes "I need the capital of France." But attention can only average existing
+                    The "___" vector now encodes "I need the capital of India." But attention can only average existing
                     vectors - it cannot look up a fact. It assembled the question, not the answer.
                   </T>
                 </div>
@@ -1827,11 +2055,11 @@ export const FeedForwardNetwork = (ctx) => {
               <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 6 }}>
                 <div style={{ padding: "6px 10px", borderRadius: 6, background: `${C.orange}08` }}>
                   <T color={C.orange} bold size={13}>
-                    W<sub>1</sub>: "capital-of-France" detector fires
+                    W<sub>1</sub>: "capital-of-India" detector fires
                   </T>
                   <T color={C.dim} size={12}>
                     Row 847 of W<sub>1</sub> was trained on millions of geography texts. It detects the
-                    "capital-of-France" pattern in the vector that attention assembled. Dot product:{" "}
+                    "capital-of-India" pattern in the vector that attention assembled. Dot product:{" "}
                     <code style={{ color: C.orange }}>
                       W<sub>1</sub>[847] &middot; x = 4.2
                     </code>
@@ -1842,16 +2070,16 @@ export const FeedForwardNetwork = (ctx) => {
                     GELU: only relevant knowledge survives
                   </T>
                   <T color={C.dim} size={12}>
-                    GELU(4.2) = 4.19 → neuron 847 fires. GELU(-1.3) = -0.05 → neuron 200 ("capital-of-Germany") is
+                    GELU(4.2) = 4.19 → neuron 847 fires. GELU(-1.3) = -0.05 → neuron 200 ("capital-of-France") is
                     suppressed. Of 2048 neurons, maybe 100-300 fire meaningfully for any given input.
                   </T>
                 </div>
                 <div style={{ padding: "6px 10px", borderRadius: 6, background: `${C.orange}08` }}>
                   <T color={C.orange} bold size={13}>
-                    W<sub>2</sub>: writes "Paris" into the vector
+                    W<sub>2</sub>: writes "Delhi" into the vector
                   </T>
                   <T color={C.dim} size={12}>
-                    Column 847 of W<sub>2</sub> was trained to shift vectors toward "Paris." Since neuron 847 fired at
+                    Column 847 of W<sub>2</sub> was trained to shift vectors toward "Delhi." Since neuron 847 fired at
                     4.19, its column dominates the output:{" "}
                     <code style={{ color: C.orange }}>
                       output += 4.19 &middot; W<sub>2</sub>[:,847]
@@ -1990,7 +2218,7 @@ export const FeedForwardNetwork = (ctx) => {
                 are related by training data
               </T>
               <T color="#fff176" size={13}>
-                <strong>2. Factual recall</strong> (France/Paris) - FFN looks up a stored fact and writes the answer
+                <strong>2. Factual recall</strong> (India/Delhi) - FFN looks up a stored fact and writes the answer
                 into the vector
               </T>
               <T color="#fff176" size={13}>
@@ -2025,12 +2253,12 @@ export const FeedForwardNetwork = (ctx) => {
               },
               {
                 q: 'What exactly does "FFN stores knowledge" mean?',
-                a: 'Each row of W\u2081 is a pattern detector trained during pre-training. Row 847 learned to fire when the input looks like "capital-of-France." The corresponding column of W\u2082 learned to output a vector that shifts toward "Paris." This row-column pair is literally one stored fact. GPT-3 has 2048-49152 such detectors per block across 96 blocks.',
+                a: 'Each row of W\u2081 is a pattern detector trained during pre-training. Row 847 learned to fire when the input looks like "capital-of-India." The corresponding column of W\u2082 learned to output a vector that shifts toward "Delhi." This row-column pair is literally one stored fact. GPT-3 has 2048-49152 such detectors per block across 96 blocks.',
                 color: C.green,
               },
               {
                 q: "How do researchers prove this isn't just a metaphor?",
-                a: 'Ablation studies: zero out specific FFN neurons and watch "The capital of France is" stop producing "Paris" while grammar stays intact. Activate those same neurons artificially and watch "Paris" appear in unrelated contexts. The knowledge is localized to specific neurons - not distributed across the whole network.',
+                a: 'Ablation studies: zero out specific FFN neurons and watch "The capital of India is" stop producing "Delhi" while grammar stays intact. Activate those same neurons artificially and watch "Delhi" appear in unrelated contexts. The knowledge is localized to specific neurons - not distributed across the whole network.',
                 color: C.blue,
               },
             ].map(({ q, a, color }, i) => (

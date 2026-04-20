@@ -3714,7 +3714,7 @@ export const CausalMask = (ctx) => {
                 </T>
                 <T color="#b8a9ff" size={16} style={{ marginTop: 4 }}>
                   <strong>Why?</strong> The input (e.g., English sentence) already exists fully - the encoder should see
-                  all of it. But the output (e.g., French translation) is generated word by word - the decoder must not
+                  all of it. But the output (e.g., Hindi translation) is generated word by word - the decoder must not
                   peek ahead. Cross-attention lets the decoder look at the encoder's full understanding while still
                   generating left-to-right.
                 </T>
@@ -3756,18 +3756,19 @@ export const CausalMask = (ctx) => {
 
 export const CrossAttention = (ctx) => {
   const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx;
-  /* English (encoder) and French (decoder) tokens for translation example */
+  /* English (encoder) and Hindi (decoder) tokens for translation example */
   const encWords = ["I", "love", "cats"];
   const encColors = [C.cyan, C.blue, C.purple];
-  const decWords = ["J'", "aime", "les", "chats"];
+  /* Hindi word order is SOV: "Mujhe billiyaan pasand hain" = "to-me cats liking are" */
+  const decWords = ["Mujhe", "billiyaan", "pasand", "hain"];
   const decColors = [C.orange, C.yellow, C.orange, C.yellow];
 
   /* Fake scores: each decoder token's Q dot-producted with each encoder token's K */
   const crossScores = [
-    [2.8, 0.4, 0.3] /* J' → mostly looks at "I" */,
-    [0.5, 3.1, 0.6] /* aime → mostly looks at "love" */,
-    [0.2, 0.3, 2.5] /* les → mostly looks at "cats" (the article for it) */,
-    [0.3, 0.7, 3.4] /* chats → mostly looks at "cats" */,
+    [2.8, 0.4, 0.3] /* Mujhe → mostly looks at "I" (subject) */,
+    [0.3, 0.7, 3.4] /* billiyaan → mostly looks at "cats" (direct object) */,
+    [0.5, 3.1, 0.6] /* pasand → mostly looks at "love" (verb meaning) */,
+    [0.4, 2.7, 0.5] /* hain → mostly looks at "love" (helper verb) */,
   ];
 
   /* Softmax each row */
@@ -3801,7 +3802,7 @@ export const CrossAttention = (ctx) => {
       {sub >= 0 && (
         <Box color={C.cyan} style={{ width: "100%" }}>
           <T color="#80deea" bold center size={20}>
-            The setup: translating "I love cats" to French
+            The setup: translating "I love cats" to Hindi
           </T>
           <T color="#80deea" style={{ marginTop: 8 }}>
             The encoder has processed the English sentence. Each word is now a rich contextual vector - "love" doesn't
@@ -3821,7 +3822,7 @@ export const CrossAttention = (ctx) => {
               <T color={C.cyan} bold center size={16}>
                 Encoder output (English - fully processed)
               </T>
-              <div style={{ display: "flex", gap: 8, justifyContent: "center", marginTop: 8 }}>
+              <div style={{ display: "flex", gap: 8, justifyContent: "center", marginTop: 8, flexWrap: "wrap" }}>
                 {encWords.map((w, i) => (
                   <div key={i} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4 }}>
                     <span
@@ -3861,9 +3862,9 @@ export const CrossAttention = (ctx) => {
               }}
             >
               <T color={C.orange} bold center size={16}>
-                Decoder (French - generating word by word)
+                Decoder (Hindi - generating word by word)
               </T>
-              <div style={{ display: "flex", gap: 8, justifyContent: "center", marginTop: 8 }}>
+              <div style={{ display: "flex", gap: 8, justifyContent: "center", marginTop: 8, flexWrap: "wrap" }}>
                 {decWords.map((w, i) => (
                   <div key={i} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4 }}>
                     <span
@@ -3890,7 +3891,7 @@ export const CrossAttention = (ctx) => {
           </div>
 
           <T color="#80deea" style={{ marginTop: 10 }}>
-            The decoder's self-attention lets French words look at other French words. But how does the decoder look at
+            The decoder's self-attention lets Hindi words look at other Hindi words. But how does the decoder look at
             the <strong>English</strong> words? That's what cross-attention does.
           </T>
         </Box>
@@ -3911,7 +3912,7 @@ export const CrossAttention = (ctx) => {
             {[
               {
                 role: "Query (Q)",
-                source: "Decoder (French)",
+                source: "Decoder (Hindi)",
                 why: 'The decoder is asking: "what English word should I pay attention to right now?"',
                 color: C.orange,
                 icon: "Q",
@@ -3989,11 +3990,11 @@ export const CrossAttention = (ctx) => {
       <Reveal when={sub >= 2}>
         <Box color={C.green} style={{ width: "100%" }}>
           <T color="#80e8a5" bold center size={20}>
-            Tracing cross-attention: French Q meets English K
+            Tracing cross-attention: Hindi Q meets English K
           </T>
           <T color="#80e8a5" style={{ marginTop: 6 }}>
-            Each French word's Query asks "which English word is most relevant to me?" The score matrix is{" "}
-            <strong>not square</strong> - it's 4 French rows x 3 English columns:
+            Each Hindi word's Query asks "which English word is most relevant to me?" The score matrix is{" "}
+            <strong>not square</strong> - it's 4 Hindi rows x 3 English columns:
           </T>
 
           {/* Score matrix */}
@@ -4004,7 +4005,7 @@ export const CrossAttention = (ctx) => {
             <div
               style={{
                 display: "grid",
-                gridTemplateColumns: `80px repeat(${encWords.length}, 1fr)`,
+                gridTemplateColumns: `130px repeat(${encWords.length}, 1fr)`,
                 gap: 4,
                 alignItems: "center",
               }}
@@ -4048,7 +4049,7 @@ export const CrossAttention = (ctx) => {
             <div
               style={{
                 display: "grid",
-                gridTemplateColumns: `80px repeat(${encWords.length}, 1fr)`,
+                gridTemplateColumns: `130px repeat(${encWords.length}, 1fr)`,
                 gap: 4,
                 alignItems: "center",
               }}
@@ -4076,36 +4077,36 @@ export const CrossAttention = (ctx) => {
           <div style={{ marginTop: 10, display: "flex", flexDirection: "column", gap: 4 }}>
             {[
               {
-                fr: "J'",
+                hi: "Mujhe",
                 en: "I",
                 pct: crossProbs[0][0],
                 c: C.orange,
-                note: '"J\'" (I) focuses on "I" - direct translation',
+                note: '"Mujhe" (I/to-me) focuses on "I" - the subject/experiencer',
               },
               {
-                fr: "aime",
+                hi: "billiyaan",
+                en: "cats",
+                pct: crossProbs[1][2],
+                c: C.yellow,
+                note: '"billiyaan" (cats) focuses on "cats" - direct translation of the object',
+              },
+              {
+                hi: "pasand",
                 en: "love",
-                pct: crossProbs[1][1],
-                c: C.yellow,
-                note: '"aime" (love) focuses on "love" - the verb it\'s translating',
-              },
-              {
-                fr: "les",
-                en: "cats",
-                pct: crossProbs[2][2],
+                pct: crossProbs[2][1],
                 c: C.orange,
-                note: '"les" (the) focuses on "cats" - it\'s the article FOR cats',
+                note: '"pasand" (liking/love) focuses on "love" - the core verb meaning',
               },
               {
-                fr: "chats",
-                en: "cats",
-                pct: crossProbs[3][2],
+                hi: "hain",
+                en: "love",
+                pct: crossProbs[3][1],
                 c: C.yellow,
-                note: '"chats" (cats) focuses on "cats" - direct translation',
+                note: '"hain" (auxiliary "are/is") aligns with "love" to complete the predicate',
               },
-            ].map(({ fr, en, pct, c, note }) => (
+            ].map(({ hi, en, pct, c, note }) => (
               <div
-                key={fr}
+                key={hi}
                 style={{
                   display: "flex",
                   alignItems: "center",
@@ -4115,7 +4116,7 @@ export const CrossAttention = (ctx) => {
                   background: `${c}06`,
                 }}
               >
-                <span style={{ color: c, fontWeight: 700, fontSize: 16, minWidth: 50 }}>"{fr}"</span>
+                <span style={{ color: c, fontWeight: 700, fontSize: 16, minWidth: 110 }}>"{hi}"</span>
                 <span style={{ color: C.dim, fontSize: 14 }}>→</span>
                 <span style={{ color: C.green, fontWeight: 700, fontSize: 16 }}>
                   {(pct * 100).toFixed(0)}% on "{en}"
@@ -4168,7 +4169,7 @@ export const CrossAttention = (ctx) => {
               </div>
               <div style={{ marginTop: 8, padding: "8px 12px", borderRadius: 6, background: `${C.cyan}10` }}>
                 <T color={C.cyan} bold center size={14}>
-                  same sentence
+                  Same Sentence
                 </T>
               </div>
               <div style={{ marginTop: 6, display: "flex", gap: 4 }}>
@@ -4217,12 +4218,12 @@ export const CrossAttention = (ctx) => {
               <div style={{ marginTop: 8, display: "flex", gap: 6 }}>
                 <div style={{ padding: "8px 12px", borderRadius: 6, background: `${C.orange}10` }}>
                   <T color={C.orange} bold center size={14}>
-                    decoder
+                    Decoder
                   </T>
                 </div>
                 <div style={{ padding: "8px 12px", borderRadius: 6, background: `${C.cyan}10` }}>
                   <T color={C.cyan} bold center size={14}>
-                    encoder
+                    Encoder
                   </T>
                 </div>
               </div>
@@ -4265,10 +4266,10 @@ export const CrossAttention = (ctx) => {
               Each decoder layer has BOTH types of attention:
             </T>
             <T color="#ffe082" size={16} style={{ marginTop: 4 }}>
-              1. <strong>Masked self-attention</strong> - French words look at other French words (with causal mask)
+              1. <strong>Masked self-attention</strong> - Hindi words look at other Hindi words (with causal mask)
             </T>
             <T color="#ffe082" size={16} style={{ marginTop: 2 }}>
-              2. <strong>Cross-attention</strong> - French words look at English words (no mask - the full English
+              2. <strong>Cross-attention</strong> - Hindi words look at English words (no mask - the full English
               sentence already exists)
             </T>
           </div>
@@ -4506,7 +4507,7 @@ export const CrossAttention = (ctx) => {
               justifyContent: "center",
             }}
           >
-            <svg viewBox="0 0 540 370" style={{ width: "100%", maxWidth: 560 }}>
+            <svg viewBox="0 0 540 390" style={{ width: "100%", maxWidth: 560 }}>
               <desc>
                 Cross-attention architecture showing encoder stack producing K and V projections fanned out to decoder
                 layers, where Q comes from decoder while K and V come from encoder output
@@ -4685,8 +4686,11 @@ export const CrossAttention = (ctx) => {
                 </g>
               ))}
 
-              <text x="445" y="362" fill={C.dim} fontSize="10" textAnchor="middle">
-                "J' aime les chats" [4 x 512]
+              <text x="445" y="367" fill={C.dim} fontSize="10" textAnchor="middle">
+                "Mujhe billiyaan pasand hain"
+              </text>
+              <text x="445" y="382" fill={C.dim} fontSize="9" textAnchor="middle">
+                [4 x 512]
               </text>
 
               {/* Arrow markers */}
@@ -4780,14 +4784,14 @@ export const CrossAttention = (ctx) => {
               {
                 label: "Decoder layer n",
                 dims: "[4 x 512]",
-                detail: "4 French tokens, each 512 dims",
+                detail: "4 Hindi tokens, each 512 dims",
                 color: C.orange,
               },
               { label: "Q_n (per layer)", dims: "[4 x 64]", detail: "4 queries, changes each layer", color: C.orange },
               {
                 label: "Q_n · K^T scores",
                 dims: "[4 x 3]",
-                detail: "every French word scores every English word",
+                detail: "every Hindi word scores every English word",
                 color: C.yellow,
               },
             ].map((row, i) => (
@@ -4849,8 +4853,8 @@ export const CrossAttention = (ctx) => {
               </T>
               <T color="#ef9a9a" size={15} style={{ marginTop: 4 }}>
                 Each decoder layer has <strong>6</strong> separate learned matrices: W<sub>Q</sub>, W<sub>K</sub>, W
-                <sub>V</sub> for masked self-attention (Q, K, V all from French) + W<sub>Q</sub>, W<sub>K</sub>, W
-                <sub>V</sub> for cross-attention (Q from French, K and V from English). All learned independently.
+                <sub>V</sub> for masked self-attention (Q, K, V all from Hindi) + W<sub>Q</sub>, W<sub>K</sub>, W
+                <sub>V</sub> for cross-attention (Q from Hindi, K and V from English). All learned independently.
               </T>
             </div>
           </div>
@@ -4885,7 +4889,7 @@ export const CrossAttention = (ctx) => {
                 }}
               >
                 <T color={C.orange} bold size={14} center>
-                  decoder-only
+                  Decoder-Only
                 </T>
               </div>
               <T color={C.dim} size={14} center style={{ marginTop: 4 }}>
@@ -4920,7 +4924,7 @@ export const CrossAttention = (ctx) => {
                 }}
               >
                 <T color={C.purple} bold size={14} center>
-                  encoder-decoder
+                  Encoder-Decoder
                 </T>
               </div>
               <T color={C.dim} size={14} center style={{ marginTop: 4 }}>
@@ -4936,8 +4940,8 @@ export const CrossAttention = (ctx) => {
                 style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 4, width: "100%", maxWidth: 340 }}
               >
                 {[
-                  { n: "1", label: "Masked self-attention", desc: "French looks at French (causal)", color: C.orange },
-                  { n: "2", label: "Cross-attention", desc: "French looks at English (full)", color: C.purple },
+                  { n: "1", label: "Masked self-attention", desc: "Hindi looks at Hindi (causal)", color: C.orange },
+                  { n: "2", label: "Cross-attention", desc: "Hindi looks at English (full)", color: C.purple },
                   { n: "3", label: "Feed-forward network", desc: "Process each position independently", color: C.blue },
                 ].map(({ n, label, desc, color }) => (
                   <div

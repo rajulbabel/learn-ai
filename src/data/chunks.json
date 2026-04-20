@@ -5761,6 +5761,42 @@
   },
   {
     "id": 640,
+    "chapterId": "9.6",
+    "title": "KV Cache - Why Inference is Fast",
+    "section": 9,
+    "sectionName": "The Decoder",
+    "sub": -2,
+    "text": "Diagram in KV Cache - Why Inference is Fast: Three stacked work rows showing naive generation redoing history: step 1 with 1 green new block, step 2 with 1 red redundant block and 1 green new block, step 3 with 2 red redundant blocks and 1 green new block, illustrating how computation piles up quadratically when the KV cache is not used"
+  },
+  {
+    "id": 641,
+    "chapterId": "9.6",
+    "title": "KV Cache - Why Inference is Fast",
+    "section": 9,
+    "sectionName": "The Decoder",
+    "sub": -2,
+    "text": "Diagram in KV Cache - Why Inference is Fast: Side by side attention matrix multiplications at generation step 3: Q times K transpose equals Scores (3 by 3) with rows for I and love dimmed because they were already computed at earlier steps and only the last row for cats glows, and Scores times V equals Output with only the last row highlighted as the new result"
+  },
+  {
+    "id": 642,
+    "chapterId": "9.6",
+    "title": "KV Cache - Why Inference is Fast",
+    "section": 9,
+    "sectionName": "The Decoder",
+    "sub": -2,
+    "text": "Diagram in KV Cache - Why Inference is Fast: Three frame growing notebook diagram showing the K cache and V cache tables appending one row per generation step: after I has 1 row, after love has 2 rows with the older row dimmed, after cats has 3 rows with only the newest row highlighted"
+  },
+  {
+    "id": 643,
+    "chapterId": "9.6",
+    "title": "KV Cache - Why Inference is Fast",
+    "section": 9,
+    "sectionName": "The Decoder",
+    "sub": -2,
+    "text": "Diagram in KV Cache - Why Inference is Fast: Horizontal memory meter filling with gradient showing KV cache memory cost scaling with sequence length, with tick marks at 1024 4096 and 32768 tokens and GB values 2.7 10.7 and 86 for LLaMA 70B sized models"
+  },
+  {
+    "id": 644,
     "chapterId": "9.7",
     "title": "Grouped-Query Attention - Shrinking the KV Cache",
     "section": 9,
@@ -5769,7 +5805,7 @@
     "text": "Recall: Multi-Head AttentionIn chapters 7.9-7.14, we learned standard MHA. With 8 heads, the model maintains 8 independent sets of Q, K, V weight matrices:QueriesW_Q1W_Q2W_Q3W_Q4W_Q5W_Q6W_Q7W_Q8KeysW_K1W_K2W_K3W_K4W_K5W_K6W_K7W_K8ValuesW_V1W_V2W_V3W_V4W_V5W_V6W_V7W_V8That is 8 W_Q + 8 W_K + 8 W_V = 24 weight matrices per attention layer. Each head has its own complete set. This works great for quality, but there is a hidden cost during inference.Continue"
   },
   {
-    "id": 641,
+    "id": 645,
     "chapterId": "9.7",
     "title": "Grouped-Query Attention - Shrinking the KV Cache",
     "section": 9,
@@ -5778,7 +5814,7 @@
     "text": "rence problem: KV cache memoryDuring generation, we cache the K and V vectors for all previous tokens. This avoids recomputing them at every step. But this KV cache grows fast.KV cache memory per layer2 x num_heads x seq_length x d_head x bytes_per_paramConcrete example: LLaMA 2 70Bnum_heads6464 attention headsd_head128128 dims per head (8192 / 64)seq_length40964096 token context windowlayers8080 transformer layersbytes22 bytes per param (float16)Total KV cache per batch item2 x 64 x 4096 x 128 x 2 bytes = 134,217,728 bytes per layer134,217,728 x 80 layers = 10,737,418,240 bytes~10 GB per batch item!Serving 8 users simultaneously = 80 GB just for KV caches. That is an entire A100 GPU of memory - before the model weights themselves.Continue"
   },
   {
-    "id": 642,
+    "id": 646,
     "chapterId": "9.7",
     "title": "Grouped-Query Attention - Shrinking the KV Cache",
     "section": 9,
@@ -5787,7 +5823,7 @@
     "text": "tion: share K and V across query groupsInstead of giving every head its own K and V, we share K and V across groups of query heads. Each head still has its own unique Q - queries stay personal.Example: 8 query heads, 2 KV groupsGroup 1: Heads 1-4 share K_1, V_1Q_1Q_2Q_3Q_4all useK_1V_1Group 2: Heads 5-8 share K_2, V_2Q_5Q_6Q_7Q_8all useK_2V_2Weight matrices needed: 8 W_Q + 2 W_K + 2 W_V = 12 projections (down from 24). The K and V computations (and their caches) shrink by 4x.Continue"
   },
   {
-    "id": 643,
+    "id": 647,
     "chapterId": "9.7",
     "title": "Grouped-Query Attention - Shrinking the KV Cache",
     "section": 9,
@@ -5796,7 +5832,7 @@
     "text": "omparison: MHA vs GQA vs MQAMHA (Multi-Head Attention)8Q heads8K heads8V heads24 projections total8 K + 8 V cached per layerGQA (Grouped-Query Attention, 4 heads per group)8Q heads2K heads2V heads12 projections total2 K + 2 V cached per layer (4x less)MQA (Multi-Query Attention)8Q heads1K heads1V heads10 projections total1 K + 1 V cached per layer (8x less)KV cache savings (LLaMA 2 70B, 4096 context)MHA (64 KV heads)~10 GBGQA-8 (8 KV groups)~1.25 GBMQA (1 KV shared)~160 MBContinue"
   },
   {
-    "id": 644,
+    "id": 648,
     "chapterId": "9.7",
     "title": "Grouped-Query Attention - Shrinking the KV Cache",
     "section": 9,
@@ -5805,7 +5841,7 @@
     "text": "sharing K and V work?The query is the \"question\" each head asks. Each head needs its own unique question to capture different patterns (syntax, semantics, coreference, etc.).But keys and values are the \"answers\" - and it turns out adjacent heads often attend to similar positions anyway. The K and V vectors across heads are highly correlated. Sharing them loses very little information.Research resultGQA matches standard MHA quality within 1% on most benchmarks while using 4x less KV cache memory. The quality-to-efficiency tradeoff is exceptionally favorable.Models using GQALLaMA 2 70B8 KV groupsLLaMA 38 KV groupsMistral 7B8 KV groupsGemmavaries by sizeWhy not always use MQA (1 shared KV)?MQA saves the most memory but does lose quality - about 2-5% on harder tasks. GQA is the sweet spot: most of the memory savings with almost no quality loss. That is why most modern large models use GQA with 8 groups, not full MQA."
   },
   {
-    "id": 645,
+    "id": 649,
     "chapterId": "9.7",
     "title": "Grouped-Query Attention - Shrinking the KV Cache",
     "section": 9,
@@ -5814,7 +5850,7 @@
     "text": "The Decoder: Grouped-Query Attention - Shrinking the KV Cache. This chapter covers grouped-query attention - shrinking the kv cache."
   },
   {
-    "id": 646,
+    "id": 650,
     "chapterId": "9.7",
     "title": "Grouped-Query Attention - Shrinking the KV Cache",
     "section": 9,

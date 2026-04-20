@@ -392,6 +392,88 @@ export default function LearnAI() {
     return () => window.removeEventListener("keydown", handleKey);
   }, [navigate, ch, sub]);
 
+  // Tap-anywhere navigation: a click on non-interactive background advances forward
+  // (same semantics as Space / ArrowDown). Skipped when: search is open, user is
+  // selecting text, click is on an interactive element (button/link/input/summary
+  // /cursor:pointer), or the user is double-clicking to select text.
+  //
+  // The first click of a double-click has detail===1 and cannot be distinguished
+  // from a single click at the moment it fires. To avoid advancing on every
+  // double-click, navigation is deferred by the browser's double-click window
+  // (~300ms). A follow-up click with detail>1 cancels the pending navigation.
+  useEffect(() => {
+    let pendingTimer = null;
+    const DOUBLE_CLICK_DELAY = 280;
+
+    const isInteractive = (target) => {
+      let el = target;
+      while (el && el !== document.body && el !== document.documentElement) {
+        const tag = el.tagName;
+        if (
+          tag === "BUTTON" ||
+          tag === "A" ||
+          tag === "INPUT" ||
+          tag === "TEXTAREA" ||
+          tag === "SELECT" ||
+          tag === "SUMMARY" ||
+          tag === "LABEL"
+        ) {
+          return true;
+        }
+        try {
+          const cs = window.getComputedStyle(el);
+          if (cs.cursor === "pointer") return true;
+        } catch {
+          // getComputedStyle can throw on detached nodes; ignore
+        }
+        el = el.parentElement;
+      }
+      return false;
+    };
+
+    const handleClick = (e) => {
+      if (searchOpen) return;
+      if (e.button !== 0) return;
+
+      // Second (or later) click of a multi-click gesture: cancel any pending nav.
+      if (e.detail > 1) {
+        if (pendingTimer) {
+          clearTimeout(pendingTimer);
+          pendingTimer = null;
+        }
+        return;
+      }
+
+      const selection = window.getSelection && window.getSelection();
+      if (selection && selection.toString().length > 0) return;
+      if (isInteractive(e.target)) return;
+
+      // Defer so a quick follow-up double-click (for text selection) can cancel.
+      if (pendingTimer) clearTimeout(pendingTimer);
+      pendingTimer = setTimeout(() => {
+        pendingTimer = null;
+        // Re-check selection: double-click populates selection during the defer window.
+        const selNow = window.getSelection && window.getSelection();
+        if (selNow && selNow.toString().length > 0) return;
+
+        if (subBtnRef.current) {
+          setSubBtnRipple(Date.now());
+        } else if (ch < chapters.length - 1) {
+          setNavHint("right");
+          setRipple({ side: "right", id: Date.now() });
+          setTimeout(() => setNavHint(null), 150);
+          setTimeout(() => setRipple(null), 500);
+        }
+        navigate("forward");
+      }, DOUBLE_CLICK_DELAY);
+    };
+    window.addEventListener("click", handleClick);
+    return () => {
+      window.removeEventListener("click", handleClick);
+      if (pendingTimer) clearTimeout(pendingTimer);
+    };
+  }, [navigate, ch, searchOpen]);
+
   // Handle search open: just open the overlay (search init already started after first chapter load)
   const handleSearchOpen = useCallback(() => {
     setSearchOpen(true);

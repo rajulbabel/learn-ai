@@ -139,7 +139,8 @@ Only config.js IDs change.
 | 5.5 | PosEncodingCompute | Positional Encoding - Computing Positions |
 | 5.6 | PosEncodingFastSlow | Positional Encoding - Fast vs Slow |
 | 5.7 | PosEncodingFinal | Positional Encoding - Final Addition |
-| 5.8 | RoPE | RoPE - Rotary Position Embeddings |
+| 5.8 | PosEncodingHeatmap | Positional Encoding - The Heatmap |
+| 5.9 | RoPE | RoPE - Rotary Position Embeddings |
 
 **Section 6: Attention - Understanding Q, K, V** (`attention-qkv.jsx`)
 
@@ -154,8 +155,9 @@ Only config.js IDs change.
 | 6.7 | WhyKVDifferent | Why Can't Key and Value Be the Same? |
 | 6.8 | GoogleAnalogy | The Google Search Analogy |
 | 6.9 | HowQKVCreated | How Are Q, K, V Created? |
-| 6.10 | WMatrices | W Matrices - Learned During Training |
-| 6.11 | TracingExample | Tracing a Complete Example |
+| 6.10 | QKVShapes | Shapes - Why Q is Smaller Than the Embedding |
+| 6.11 | WMatrices | W Matrices - Learned During Training |
+| 6.12 | TracingExample | Tracing a Complete Example |
 
 **Section 7: Attention - The Full Computation** (`attention-computation.jsx`)
 
@@ -175,8 +177,8 @@ Only config.js IDs change.
 | 7.12 | ConcatWO | Concat + W_O - Blending All Heads |
 | 7.13 | WhyEightHeads | Why 8 Heads? Parameter Count & Big Picture |
 | 7.14 | IsWOConstant | Is W_O Constant? Does It Change? |
-| 7.15 | CompletePicture | The Complete Picture - In Plain English |
-| 7.16 | GroupedQueryAttention | Grouped-Query Attention - Shrinking the KV Cache |
+| 7.15 | AttentionShapes | Attention Flow - Shapes at Every Step |
+| 7.16 | CompletePicture | The Complete Picture - In Plain English |
 
 **Section 8: The Encoder** (`road-to-transformers.jsx` + `transformer-block.jsx`)
 
@@ -202,8 +204,9 @@ Only config.js IDs change.
 | 9.4 | OutputHead | The Output Head - Linear + Softmax |
 | 9.5 | WhatTransformerDoes | What is a Transformer Actually Doing? |
 | 9.6 | KVCache | KV Cache - Why Inference is Fast |
-| 9.7 | EncoderDecoderTraining | Encoder-Decoder: The Training Flow |
-| 9.8 | EncoderDecoderInference | Encoder-Decoder: The Inference Flow |
+| 9.7 | GroupedQueryAttention | Grouped-Query Attention - Shrinking the KV Cache |
+| 9.8 | EncoderDecoderTraining | Encoder-Decoder: The Training Flow |
+| 9.9 | EncoderDecoderInference | Encoder-Decoder: The Inference Flow |
 
 ## Project Structure
 

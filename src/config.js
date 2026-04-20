@@ -68,7 +68,8 @@ export const chapters = [
   { id: "5.5", title: "Positional Encoding - Computing Positions", section: 5, component: "PosEncodingCompute" },
   { id: "5.6", title: "Positional Encoding - Fast vs Slow", section: 5, component: "PosEncodingFastSlow" },
   { id: "5.7", title: "Positional Encoding - Final Addition", section: 5, component: "PosEncodingFinal" },
-  { id: "5.8", title: "RoPE - Rotary Position Embeddings", section: 5, component: "RoPE" },
+  { id: "5.8", title: "Positional Encoding - The Heatmap", section: 5, component: "PosEncodingHeatmap" },
+  { id: "5.9", title: "RoPE - Rotary Position Embeddings", section: 5, component: "RoPE" },
   // Section 6: Attention - Understanding Q, K, V
   { id: "6.1", title: "The Problem - Context is Everything", section: 6, component: "ContextProblem" },
   { id: "6.2", title: "How Does a Word Look At Others?", section: 6, component: "WordLookup" },
@@ -79,8 +80,9 @@ export const chapters = [
   { id: "6.7", title: "Why Can\'t Key and Value Be the Same?", section: 6, component: "WhyKVDifferent" },
   { id: "6.8", title: "The Google Search Analogy", section: 6, component: "GoogleAnalogy" },
   { id: "6.9", title: "How Are Q, K, V Created?", section: 6, component: "HowQKVCreated" },
-  { id: "6.10", title: "W Matrices - Learned During Training", section: 6, component: "WMatrices" },
-  { id: "6.11", title: "Tracing a Complete Example", section: 6, component: "TracingExample" },
+  { id: "6.10", title: "Shapes - Why Q is Smaller Than the Embedding", section: 6, component: "QKVShapes" },
+  { id: "6.11", title: "W Matrices - Learned During Training", section: 6, component: "WMatrices" },
+  { id: "6.12", title: "Tracing a Complete Example", section: 6, component: "TracingExample" },
   // Section 7: Attention - The Full Computation (CausalMask/CrossAttention moved to Section 9)
   { id: "7.1", title: "Step 1 - Compute Q, K, V for Every Word", section: 7, component: "ComputeQKV" },
   { id: "7.2", title: "Step 2 - Attention Scores (Dot Products)", section: 7, component: "AttentionScores" },
@@ -96,13 +98,8 @@ export const chapters = [
   { id: "7.12", title: "Concat + W_O - Blending All Heads", section: 7, component: "ConcatWO" },
   { id: "7.13", title: "Why 8 Heads? Parameter Count & Big Picture", section: 7, component: "WhyEightHeads" },
   { id: "7.14", title: "Is W_O Constant? Does It Change?", section: 7, component: "IsWOConstant" },
-  { id: "7.15", title: "The Complete Picture - In Plain English", section: 7, component: "CompletePicture" },
-  {
-    id: "7.16",
-    title: "Grouped-Query Attention - Shrinking the KV Cache",
-    section: 7,
-    component: "GroupedQueryAttention",
-  },
+  { id: "7.15", title: "Attention Flow - Shapes at Every Step", section: 7, component: "AttentionShapes" },
+  { id: "7.16", title: "The Complete Picture - In Plain English", section: 7, component: "CompletePicture" },
   // Section 8: The Encoder (EncoderDecoder opens, then Add&Norm/FFN/block repeats)
   { id: "8.1", title: "Encoder & Decoder - The Two Halves", section: 8, component: "EncoderDecoder" },
   { id: "8.2", title: "Add & Norm - The Stabilizer", section: 8, component: "AddNorm" },
@@ -120,8 +117,14 @@ export const chapters = [
   { id: "9.4", title: "The Output Head - Linear + Softmax", section: 9, component: "OutputHead" },
   { id: "9.5", title: "What is a Transformer Actually Doing?", section: 9, component: "WhatTransformerDoes" },
   { id: "9.6", title: "KV Cache - Why Inference is Fast", section: 9, component: "KVCache" },
-  { id: "9.7", title: "Encoder-Decoder: The Training Flow", section: 9, component: "EncoderDecoderTraining" },
-  { id: "9.8", title: "Encoder-Decoder: The Inference Flow", section: 9, component: "EncoderDecoderInference" },
+  {
+    id: "9.7",
+    title: "Grouped-Query Attention - Shrinking the KV Cache",
+    section: 9,
+    component: "GroupedQueryAttention",
+  },
+  { id: "9.8", title: "Encoder-Decoder: The Training Flow", section: 9, component: "EncoderDecoderTraining" },
+  { id: "9.9", title: "Encoder-Decoder: The Inference Flow", section: 9, component: "EncoderDecoderInference" },
 ];
 
 export const sectionNames = {

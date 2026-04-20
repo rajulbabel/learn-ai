@@ -233,6 +233,37 @@ describe("LearnAI auto-scroll on Continue", () => {
   });
 });
 
+describe("LearnAI tap-anywhere navigation", () => {
+  it("advances to the next chapter on a single background click", async () => {
+    // Start at TOC (ch=0); a single click should land us at WhatIsNN (ch=1)
+    await renderLearnAI();
+    expect(screen.getByTestId("toc")).toBeTruthy();
+
+    await act(async () => {
+      fireEvent.click(document.body, { detail: 1 });
+      // Wait past the defer window + chapter async load + re-render
+      await new Promise((r) => setTimeout(r, 550));
+    });
+    expect(screen.queryByTestId("toc")).toBeNull();
+    expect(screen.getByText("WhatIsNN")).toBeTruthy();
+  });
+
+  it("does NOT advance when the user double-clicks (text-selection gesture)", async () => {
+    await renderLearnAI();
+    expect(screen.getByTestId("toc")).toBeTruthy();
+
+    await act(async () => {
+      fireEvent.click(document.body, { detail: 1 });
+      // Second click of a double-click arrives quickly with detail > 1
+      fireEvent.click(document.body, { detail: 2 });
+      // Wait past the defer window
+      await new Promise((r) => setTimeout(r, 550));
+    });
+    // Still at TOC; no navigation fired
+    expect(screen.getByTestId("toc")).toBeTruthy();
+  });
+});
+
 describe("LearnAI chapter loading", () => {
   it("loads chapter 3.3 from the combined section 3 modules instead of reusing chapter 3.2", async () => {
     const navMod = await import("../nav-persistence.js");

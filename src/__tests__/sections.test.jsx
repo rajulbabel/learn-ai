@@ -2681,6 +2681,48 @@ describe("EncoderDecoderInference spacing fixes", () => {
   });
 });
 
+// ─── AttentionShapes (7.9) Mat SVG alignment ───
+describe("AttentionShapes Mat component", () => {
+  const fn = AttentionComputation.AttentionShapes;
+
+  const parseViewBox = (svg) => {
+    const vb = svg.getAttribute("viewBox");
+    if (!vb) return null;
+    const [x, y, w, h] = vb.split(/\s+/).map(Number);
+    return { x, y, w, h };
+  };
+
+  // A Mat rect is always at x=0,y=0 with width=cols*unit, height=rows*unit.
+  // For rect-center to align with the SVG bounding-box center (so rects line up
+  // between matrices that have different row/col label configurations), the
+  // viewBox must be symmetric around (w/2, h/2).
+  it("every Mat SVG has a viewBox centered on the rect", () => {
+    // Render at the highest sub so all Mats are mounted
+    const ctx = makeCtx({ sub: 4 });
+    const { container } = render(fn(ctx));
+    // Mats use <rect rx="4"> and <text> for labels; find all candidate svgs
+    const svgs = container.querySelectorAll("svg");
+    const matSvgs = Array.from(svgs).filter((s) => s.querySelector('rect[rx="4"]'));
+    expect(matSvgs.length).toBeGreaterThan(0);
+
+    matSvgs.forEach((svg, i) => {
+      const rect = svg.querySelector('rect[rx="4"]');
+      const rw = Number(rect.getAttribute("width"));
+      const rh = Number(rect.getAttribute("height"));
+      const rx = Number(rect.getAttribute("x") || 0);
+      const ry = Number(rect.getAttribute("y") || 0);
+      const rectCx = rx + rw / 2;
+      const rectCy = ry + rh / 2;
+      const vb = parseViewBox(svg);
+      expect(vb, `Mat svg #${i} missing viewBox`).toBeTruthy();
+      const vbCx = vb.x + vb.w / 2;
+      const vbCy = vb.y + vb.h / 2;
+      expect(vbCx, `Mat svg #${i} viewBox-center-x != rect-center-x`).toBeCloseTo(rectCx, 5);
+      expect(vbCy, `Mat svg #${i} viewBox-center-y != rect-center-y`).toBeCloseTo(rectCy, 5);
+    });
+  });
+});
+
 // ─── SVG <desc> metadata for search ───
 describe("Every SVG has a <desc> element", () => {
   // Chapters known to contain inline SVGs (JSX or Graph)
@@ -2732,7 +2774,7 @@ describe("Every SVG has a <desc> element", () => {
   });
 
   // Encoder-decoder diagrams use imperative SVG (useEffect + ref)
-  ["9.7", "9.8"].forEach((chId) => {
+  ["9.8", "9.9"].forEach((chId) => {
     const chapter = chapters.find((c) => c.id === chId);
     if (!chapter) return;
     const fn = lookup[chapter.component];

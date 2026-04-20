@@ -77,8 +77,20 @@
   "5.1": [
     "Complete Transformer architecture diagram showing encoder and decoder halves with multi-head attention, add and norm, FFN layers, positional encoding, embeddings, residual skip connections, and linear plus softmax output head"
   ],
+  "5.8": [
+    "Full positional-encoding heatmap with rows as positions (0 to 39) and columns as embedding dimensions (0 to 127). Each cell is colored by the sin or cos value at that position and dimension, ranging from dark red at negative one to white at zero to dark blue at positive one. The left side shows a fast checkerboard pattern while the right side shows slow vertical stripes.",
+    "Binary counting table showing positions 0 through 11 with 4-bit binary representations. Each bit is colored: bit 0 (rightmost, fast) flips every step, bit 1 flips every 2 steps, bit 2 flips every 4 steps, bit 3 (leftmost, slow) flips every 8 steps. Side-by-side arrangement emphasizes that each position gets a unique bit pattern, analogous to how each position in the heatmap gets a unique sin/cos signature."
+  ],
+  "5.9": [
+    "Clock-face diagram showing a 2D query vector Q = [0.8, 0.6] rotated by position times frequency. Four labeled arrows spread counter-clockwise across the upper quadrant of a dashed unit circle, representing the same vector at positions 0, 1, 2, and 3.",
+    "Two side-by-side clock faces comparing near versus far scenarios in RoPE. The left clock shows Query at position 3 and Key at position 0; the right clock shows Query at position 10 and Key at position 7. In both cases the angular gap between the Q and K hands is the same 0.9 radians, illustrating that RoPE gives the same attention score whenever the relative distance is the same, regardless of absolute positions.",
+    "Three mini clock faces side by side showing pair 0 rotating fast, pair 10 rotating medium, and pair 60 rotating slow. Each face has a vector at position 0 and position 10 to illustrate that early pairs rotate through large angles while late pairs barely move across the same 10 positions."
+  ],
   "7.4": [
     "Softmax formula rendered as mathematical notation showing e to the power of each score divided by sum of all e scores, converting raw attention scores to probabilities"
+  ],
+  "7.15": [
+    "Matrix tile visualization used throughout the attention-shapes chapter: a colored rectangle divided into rows-by-columns grid lines, optionally decorated with row labels 'I', 'love', 'cats' to the left and column labels above. Each tile represents one matrix in the attention pipeline (X, Q, K, V, scores, softmax, output) and shows its shape at a glance."
   ],
   "8.3": [
     "Feed-forward network architecture diagram showing expand-then-compress structure: 512-dim input through W1 to 2048-dim hidden with GELU activation, then W2 back to 512-dim output"

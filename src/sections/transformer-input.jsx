@@ -1712,10 +1712,741 @@ export const PosEncodingFinal = (ctx) => {
   );
 };
 
-// ═══════ 5.8 RoPE - Rotary Position Embeddings ═══════
+// ═══════ 5.8 Positional Encoding - The Heatmap ═══════
+
+export const PosEncodingHeatmap = (ctx) => {
+  const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx;
+
+  const DIMS = 128;
+  const POSITIONS = 40;
+
+  function peValue(pos, i) {
+    const k = Math.floor(i / 2);
+    const freq = 1 / Math.pow(10000, (2 * k) / DIMS);
+    const angle = pos * freq;
+    return i % 2 === 0 ? Math.sin(angle) : Math.cos(angle);
+  }
+
+  function peColor(val) {
+    const t = Math.max(0, Math.min(1, (val + 1) / 2));
+    const c1 = [103, 0, 31];
+    const c2 = [247, 247, 247];
+    const c3 = [5, 48, 97];
+    let r, g, b;
+    if (t < 0.5) {
+      const u = t * 2;
+      r = c1[0] + (c2[0] - c1[0]) * u;
+      g = c1[1] + (c2[1] - c1[1]) * u;
+      b = c1[2] + (c2[2] - c1[2]) * u;
+    } else {
+      const u = (t - 0.5) * 2;
+      r = c2[0] + (c3[0] - c2[0]) * u;
+      g = c2[1] + (c3[1] - c2[1]) * u;
+      b = c2[2] + (c3[2] - c2[2]) * u;
+    }
+    return `rgb(${r | 0},${g | 0},${b | 0})`;
+  }
+
+  const cellW = 4;
+  const cellH = 8;
+  const leftM = 34;
+  const topM = 10;
+  const botM = 30;
+  const rightM = 70;
+  const heatW = DIMS * cellW;
+  const heatH = POSITIONS * cellH;
+  const svgW = leftM + heatW + rightM;
+  const svgH = topM + heatH + botM;
+
+  const FullHeatmap = () => {
+    const cells = [];
+    for (let p = 0; p < POSITIONS; p++) {
+      for (let i = 0; i < DIMS; i++) {
+        cells.push(
+          <rect
+            key={`${p}-${i}`}
+            x={leftM + i * cellW}
+            y={topM + p * cellH}
+            width={cellW}
+            height={cellH}
+            fill={peColor(peValue(p, i))}
+          />,
+        );
+      }
+    }
+    const cbarX = leftM + heatW + 20;
+    const cbarW = 14;
+    const cbarSteps = 40;
+    const cbarStepH = heatH / cbarSteps;
+    const cbarCells = [];
+    for (let s = 0; s < cbarSteps; s++) {
+      const val = 1 - (2 * s) / (cbarSteps - 1);
+      cbarCells.push(
+        <rect
+          key={`cb-${s}`}
+          x={cbarX}
+          y={topM + s * cbarStepH}
+          width={cbarW}
+          height={cbarStepH + 0.5}
+          fill={peColor(val)}
+        />,
+      );
+    }
+    return (
+      <svg
+        width={svgW}
+        height={svgH}
+        viewBox={`0 0 ${svgW} ${svgH}`}
+        style={{ maxWidth: "100%", display: "block" }}
+      >
+        <desc>
+          Full positional-encoding heatmap with rows as positions (0 to 39) and columns as embedding dimensions (0 to
+          127). Each cell is colored by the sin or cos value at that position and dimension, ranging from dark red at
+          negative one to white at zero to dark blue at positive one. The left side shows a fast checkerboard pattern
+          while the right side shows slow vertical stripes.
+        </desc>
+        {cells}
+        {cbarCells}
+        {[0, 10, 20, 30, 39].map((p) => (
+          <text key={`yl-${p}`} x={leftM - 6} y={topM + p * cellH + cellH / 2 + 3} fontSize="9" fill={C.dim} textAnchor="end">
+            {p}
+          </text>
+        ))}
+        <text
+          x={10}
+          y={topM + heatH / 2}
+          fontSize="11"
+          fill={C.mid}
+          textAnchor="middle"
+          transform={`rotate(-90, 10, ${topM + heatH / 2})`}
+        >
+          Position (row)
+        </text>
+        {[0, 32, 64, 96, 127].map((d) => (
+          <text key={`xl-${d}`} x={leftM + d * cellW + cellW / 2} y={topM + heatH + 12} fontSize="9" fill={C.dim} textAnchor="middle">
+            {d}
+          </text>
+        ))}
+        <text x={leftM + heatW / 2} y={topM + heatH + 25} fontSize="11" fill={C.mid} textAnchor="middle">
+          Dimension i (column)
+        </text>
+        <text x={cbarX + cbarW + 4} y={topM + 8} fontSize="9" fill={C.dim}>
+          +1
+        </text>
+        <text x={cbarX + cbarW + 4} y={topM + heatH / 2 + 3} fontSize="9" fill={C.dim}>
+          0
+        </text>
+        <text x={cbarX + cbarW + 4} y={topM + heatH - 2} fontSize="9" fill={C.dim}>
+          -1
+        </text>
+      </svg>
+    );
+  };
+
+  // Single row strip for "fingerprint" sub-step. Shows 1 position's PE as a horizontal bar.
+  const PositionStrip = ({ pos, color }) => {
+    const cells = [];
+    for (let i = 0; i < DIMS; i++) {
+      cells.push(
+        <rect
+          key={i}
+          x={40 + i * cellW}
+          y={0}
+          width={cellW}
+          height={cellH * 2}
+          fill={peColor(peValue(pos, i))}
+        />,
+      );
+    }
+    return (
+      <svg width={40 + heatW + 10} height={cellH * 2 + 4} viewBox={`0 0 ${40 + heatW + 10} ${cellH * 2 + 4}`} style={{ maxWidth: "100%", display: "block" }}>
+        <text x={34} y={cellH + 4} fontSize="12" fill={color} fontWeight="700" textAnchor="end">
+          pos {pos}
+        </text>
+        {cells}
+      </svg>
+    );
+  };
+
+  // Binary counting grid: rows are positions 0-15, columns are 4 bits (msb to lsb left-to-right)
+  const BinaryGrid = () => {
+    const cellSize = 34;
+    const N = 16;
+    const BITS = 4;
+    const bitColors = [C.purple, C.blue, C.yellow, C.red];
+    const bitLabels = ["bit 3 (slow)", "bit 2", "bit 1", "bit 0 (fast)"];
+    const startX = 60;
+    const startY = 30;
+    const gridW = startX + BITS * cellSize + 20;
+    const gridH = startY + N * cellSize + 10;
+    const rows = [];
+    for (let n = 0; n < N; n++) {
+      const bits = n.toString(2).padStart(BITS, "0").split("").map(Number);
+      rows.push(
+        <g key={n}>
+          <text x={startX - 8} y={startY + n * cellSize + cellSize / 2 + 4} fontSize="13" fill={C.dim} textAnchor="end" fontFamily="monospace">
+            {n}
+          </text>
+          {bits.map((b, bi) => (
+            <g key={bi}>
+              <rect
+                x={startX + bi * cellSize + 2}
+                y={startY + n * cellSize + 2}
+                width={cellSize - 4}
+                height={cellSize - 4}
+                fill={b === 1 ? `${bitColors[bi]}50` : "rgba(255,255,255,0.02)"}
+                stroke={b === 1 ? bitColors[bi] : "rgba(255,255,255,0.08)"}
+                strokeWidth="1.5"
+                rx="4"
+              />
+              <text
+                x={startX + bi * cellSize + cellSize / 2}
+                y={startY + n * cellSize + cellSize / 2 + 5}
+                fontSize="16"
+                fontFamily="monospace"
+                fill={b === 1 ? bitColors[bi] : C.dim}
+                fontWeight="700"
+                textAnchor="middle"
+              >
+                {b}
+              </text>
+            </g>
+          ))}
+        </g>,
+      );
+    }
+    return (
+      <svg width={gridW} height={gridH} viewBox={`0 0 ${gridW} ${gridH}`} style={{ maxWidth: "100%", display: "block" }}>
+        <desc>
+          Binary counting table showing positions 0 through 15 with 4-bit binary representations. Each bit is colored:
+          bit 0 (rightmost, fast) flips every step, bit 1 flips every 2 steps, bit 2 flips every 4 steps, bit 3
+          (leftmost, slow) flips every 8 steps. Each position row gets a unique bit pattern, analogous to how each
+          position in the heatmap gets a unique sin/cos signature.
+        </desc>
+        {bitLabels.map((lbl, bi) => (
+          <text key={lbl} x={startX + bi * cellSize + cellSize / 2} y={20} fontSize="10" fill={bitColors[bi]} textAnchor="middle" fontWeight="700">
+            {lbl}
+          </text>
+        ))}
+        {rows}
+      </svg>
+    );
+  };
+
+  return (
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
+      {sub >= 0 && (
+        <Box color={C.cyan} style={{ width: "100%" }}>
+          <T color="#80deea" bold center size={20}>
+            The famous heatmap: all positions, all dimensions, at once
+          </T>
+          <T color="#80deea" style={{ marginTop: 6 }}>
+            So far we have seen bits and pieces: a formula, a few frequencies, one position vector. Now let's look at
+            the <strong>entire</strong> positional-encoding matrix at once. Every row is one position's encoding, every
+            column is one dimension across all positions, color shows the sin or cos value at that cell.
+          </T>
+          <div style={{ marginTop: 12, display: "flex", justifyContent: "center" }}>
+            <FullHeatmap />
+          </div>
+          <T color={C.dim} size={14} center style={{ marginTop: 8 }}>
+            d_model = 128. Positions 0 to 39 shown. Red = -1, white = 0, blue = +1.
+          </T>
+          <T color="#80deea" style={{ marginTop: 10 }}>
+            Two things jump out: the left side is a wild <strong>checkerboard</strong> that changes every step, and the
+            right side is calm <strong>vertical stripes</strong> that barely change with position. Why?
+          </T>
+        </Box>
+      )}
+
+      <Reveal when={sub >= 1}>
+        <Box color={C.red} style={{ width: "100%" }}>
+          <T color="#ef9a9a" bold center size={20}>
+            Why the left side flips fast
+          </T>
+          <T color="#ef9a9a" style={{ marginTop: 6 }}>
+            Each column uses its own <strong>frequency</strong>. The formula:
+          </T>
+          <div
+            style={{
+              marginTop: 8,
+              padding: "10px 14px",
+              borderRadius: 8,
+              background: "rgba(0,0,0,0.3)",
+              textAlign: "center",
+              fontFamily: "monospace",
+            }}
+          >
+            <T color={C.bright} size={16}>
+              f_i = 1 / 10000^(2 {"\u00B7"} floor(i/2) / d)
+            </T>
+          </div>
+          <T color="#ef9a9a" style={{ marginTop: 10 }}>
+            For small i (left side of the heatmap), the exponent is near 0, so f_i is close to <strong>1.0</strong>.
+            Each step in position moves the angle by about 1 radian (roughly 57 degrees). sin and cos swing wildly.
+          </T>
+          <div
+            style={{
+              marginTop: 10,
+              padding: "10px 14px",
+              borderRadius: 8,
+              background: `${C.red}06`,
+              border: `1px solid ${C.red}12`,
+              fontFamily: "monospace",
+            }}
+          >
+            <T color={C.bright} size={14}>
+              Column i = 0 (f = 1.0): sin(pos {"\u00B7"} 1.0)
+            </T>
+            <div
+              style={{
+                marginTop: 8,
+                display: "grid",
+                gridTemplateColumns: "50px repeat(8, 1fr)",
+                gap: 4,
+                alignItems: "center",
+              }}
+            >
+              <T color={C.dim} size={12}>
+                pos
+              </T>
+              {[0, 1, 2, 3, 4, 5, 6, 7].map((p) => (
+                <T key={p} color={C.dim} size={12} center>
+                  {p}
+                </T>
+              ))}
+              <T color={C.dim} size={12}>
+                sin
+              </T>
+              {[0, 1, 2, 3, 4, 5, 6, 7].map((p) => {
+                const v = Math.sin(p);
+                return (
+                  <div
+                    key={p}
+                    style={{
+                      textAlign: "center",
+                      padding: "4px",
+                      borderRadius: 4,
+                      background: peColor(v),
+                      color: Math.abs(v) > 0.5 ? "#fff" : "#000",
+                      fontWeight: 700,
+                      fontSize: 12,
+                    }}
+                  >
+                    {v.toFixed(2)}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+          <T color="#ef9a9a" style={{ marginTop: 10 }}>
+            Look at those values jumping around: 0.00, 0.84, 0.91, 0.14, -0.76, -0.96, -0.28, 0.66. Every position is a
+            very different number. That's the checkerboard on the left of the heatmap.
+          </T>
+        </Box>
+      </Reveal>
+
+      <Reveal when={sub >= 2}>
+        <Box color={C.blue} style={{ width: "100%" }}>
+          <T color="#90caf9" bold center size={20}>
+            Why the right side barely changes
+          </T>
+          <T color="#90caf9" style={{ marginTop: 6 }}>
+            For large i (right side of the heatmap), the exponent approaches 1, so f_i approaches{" "}
+            <strong>1 / 10000 = 0.0001</strong>. Across 40 positions the angle only moves by{" "}
+            <strong>40 {"\u00B7"} 0.0001 = 0.004 radians</strong> (about 0.23 degrees). sin and cos barely move.
+          </T>
+          <div
+            style={{
+              marginTop: 10,
+              padding: "10px 14px",
+              borderRadius: 8,
+              background: `${C.blue}06`,
+              border: `1px solid ${C.blue}12`,
+              fontFamily: "monospace",
+            }}
+          >
+            <T color={C.bright} size={14}>
+              Column i = 127 (f {"\u2248"} 1/10000): cos(pos {"\u00B7"} 0.0001)
+            </T>
+            <div
+              style={{
+                marginTop: 8,
+                display: "grid",
+                gridTemplateColumns: "50px repeat(8, 1fr)",
+                gap: 4,
+                alignItems: "center",
+              }}
+            >
+              <T color={C.dim} size={12}>
+                pos
+              </T>
+              {[0, 5, 10, 15, 20, 25, 30, 39].map((p) => (
+                <T key={p} color={C.dim} size={12} center>
+                  {p}
+                </T>
+              ))}
+              <T color={C.dim} size={12}>
+                cos
+              </T>
+              {[0, 5, 10, 15, 20, 25, 30, 39].map((p) => {
+                const f = 1 / Math.pow(10000, 126 / DIMS);
+                const v = Math.cos(p * f);
+                return (
+                  <div
+                    key={p}
+                    style={{
+                      textAlign: "center",
+                      padding: "4px",
+                      borderRadius: 4,
+                      background: peColor(v),
+                      color: Math.abs(v) > 0.5 ? "#fff" : "#000",
+                      fontWeight: 700,
+                      fontSize: 12,
+                    }}
+                  >
+                    {v.toFixed(4)}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+          <T color="#90caf9" style={{ marginTop: 10 }}>
+            All values stay near 1.0000. Every position looks nearly identical here. That's the solid blue stripe on
+            the far right of the heatmap.
+          </T>
+          <T color={C.dim} size={14} style={{ marginTop: 8 }}>
+            So what are these slow dimensions for? They encode <strong>very long-range</strong> position information.
+            Two tokens 1000 positions apart differ meaningfully in the slow columns, even if they look identical across
+            40 positions.
+          </T>
+        </Box>
+      </Reveal>
+
+      <Reveal when={sub >= 3}>
+        <Box color={C.yellow} style={{ width: "100%" }}>
+          <T color="#ffe082" bold center size={20}>
+            Every position is a unique fingerprint
+          </T>
+          <T color="#ffe082" style={{ marginTop: 6 }}>
+            Pick any single row. That row <strong>is exactly</strong> the positional encoding vector for that position. It's
+            128 numbers, a unique barcode. Compare rows side by side:
+          </T>
+          <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 6 }}>
+            <PositionStrip pos={5} color={C.cyan} />
+            <PositionStrip pos={6} color={C.green} />
+            <PositionStrip pos={25} color={C.orange} />
+          </div>
+          <T color={C.dim} size={14} style={{ marginTop: 8 }}>
+            Position 5 and position 6 are neighbors. Their left-side cells differ strongly (fast dims), but their
+            right-side cells look identical (slow dims barely moved). Position 25 looks very different from both on the
+            left, but still nearly identical on the far right.
+          </T>
+          <T color="#ffe082" style={{ marginTop: 10 }}>
+            This is exactly the property we want: each position gets a unique vector, AND nearby positions have similar
+            vectors. The model can learn both "which position is this" and "how far apart are these two positions."
+          </T>
+        </Box>
+      </Reveal>
+
+      <Reveal when={sub >= 4}>
+        <Box color={C.purple} style={{ width: "100%" }}>
+          <T color="#b8a9ff" bold center size={20}>
+            Binary counting: the same idea, one bit at a time
+          </T>
+          <T color="#b8a9ff" style={{ marginTop: 6 }}>
+            You have seen this pattern before. Count in binary. Every integer gets a unique bit pattern, and the bits
+            flip at different speeds: the rightmost bit flips every step, the next one flips every 2 steps, the next
+            every 4, and so on.
+          </T>
+          <div style={{ marginTop: 12, display: "flex", justifyContent: "center" }}>
+            <BinaryGrid />
+          </div>
+          <div
+            style={{
+              marginTop: 12,
+              padding: "10px 14px",
+              borderRadius: 8,
+              background: `${C.purple}06`,
+              border: `1px solid ${C.purple}12`,
+            }}
+          >
+            <T color={C.purple} bold size={16}>
+              The mapping is direct:
+            </T>
+            <div
+              style={{
+                marginTop: 6,
+                display: "grid",
+                gridTemplateColumns: "1fr 1fr",
+                gap: 10,
+              }}
+            >
+              <div>
+                <T color={C.bright} bold size={15}>
+                  Binary encoding
+                </T>
+                <T color={C.dim} size={14} style={{ marginTop: 2 }}>
+                  Bit 0 (rightmost, fast) flips 1, 0, 1, 0, ...
+                </T>
+                <T color={C.dim} size={14}>
+                  Bit 3 (leftmost, slow) flips every 8 steps
+                </T>
+                <T color={C.dim} size={14}>
+                  Values: 0 or 1 (discrete)
+                </T>
+                <T color={C.dim} size={14}>
+                  Each number = unique bit pattern
+                </T>
+              </div>
+              <div>
+                <T color={C.bright} bold size={15}>
+                  Sin/cos encoding
+                </T>
+                <T color={C.dim} size={14} style={{ marginTop: 2 }}>
+                  Dim 0 (fast, f = 1.0) oscillates every step
+                </T>
+                <T color={C.dim} size={14}>
+                  Dim 127 (slow, f = 0.0001) barely moves
+                </T>
+                <T color={C.dim} size={14}>
+                  Values: any number in [-1, +1] (smooth)
+                </T>
+                <T color={C.dim} size={14}>
+                  Each position = unique sin/cos signature
+                </T>
+              </div>
+            </div>
+          </div>
+          <T color="#b8a9ff" style={{ marginTop: 10 }}>
+            Sin/cos positional encoding is essentially <strong>binary counting made smooth and continuous</strong>. The
+            fast dimensions play the role of low-order bits, the slow dimensions play the role of high-order bits. The
+            magic of using sin/cos (instead of 0/1) is that the resulting vectors have nice geometric relationships:
+            dot products capture relative distance, values stay bounded, and the encoding is differentiable so gradients
+            flow through it cleanly during training.
+          </T>
+        </Box>
+      </Reveal>
+
+      {sub < 4 && (
+        <SubBtn
+          key={sub}
+          onClick={() => {
+            setSubBtnRipple(Date.now());
+            navigate("forward");
+          }}
+          rippleKey={subBtnRipple}
+          registerSubBtn={registerSubBtn}
+        />
+      )}
+    </div>
+  );
+};
+
+// ═══════ 5.9 RoPE - Rotary Position Embeddings ═══════
 
 export const RoPE = (ctx) => {
   const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx;
+
+  // Clock-face SVG: Q = [0.8, 0.6] rotated at 4 positions with f = 0.3 rad/pos.
+  // Endpoints precomputed at radius 82 so the arrow marker sits just inside the
+  // dashed unit circle (r = 90). Label/angle text sit outside the circle.
+  const RotationClock = () => (
+    <svg width="280" height="280" viewBox="-140 -140 280 280" style={{ maxWidth: "100%" }}>
+      <desc>
+        Clock-face diagram showing a 2D query vector Q = [0.8, 0.6] rotated by position times frequency. Four labeled
+        arrows spread counter-clockwise across the upper quadrant of a dashed unit circle, representing the same vector
+        at positions 0, 1, 2, and 3.
+      </desc>
+      <defs>
+        {[
+          { id: "ropeArrBr", color: C.bright },
+          { id: "ropeArrCy", color: C.cyan },
+          { id: "ropeArrYe", color: C.yellow },
+          { id: "ropeArrGr", color: C.green },
+        ].map(({ id, color }) => (
+          <marker key={id} id={id} markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+            <polygon points="0 0,8 3,0 6" fill={color} />
+          </marker>
+        ))}
+      </defs>
+      <circle
+        cx="0"
+        cy="0"
+        r="90"
+        fill="none"
+        stroke="rgba(255,255,255,0.15)"
+        strokeWidth="1"
+        strokeDasharray="3,3"
+      />
+      <line x1="-115" y1="0" x2="115" y2="0" stroke="rgba(255,255,255,0.2)" strokeWidth="1" />
+      <line x1="0" y1="-115" x2="0" y2="115" stroke="rgba(255,255,255,0.2)" strokeWidth="1" />
+      <text x="120" y="4" fontSize="11" fill={C.dim}>
+        x
+      </text>
+      <text x="0" y="-120" fontSize="11" fill={C.dim} textAnchor="middle">
+        y
+      </text>
+      <path
+        d="M 66,-49 A 82,82 0 0,1 2,-82"
+        fill="none"
+        stroke="rgba(255,255,255,0.3)"
+        strokeWidth="1"
+        strokeDasharray="2,3"
+      />
+      <line x1="0" y1="0" x2="66" y2="-49" stroke={C.bright} strokeWidth="2.5" markerEnd="url(#ropeArrBr)" />
+      <text x="86" y="-48" fontSize="12" fill={C.bright} fontWeight="700" textAnchor="middle">
+        pos 0
+      </text>
+      <text x="86" y="-34" fontSize="10" fill={C.dim} textAnchor="middle">
+        angle 0
+      </text>
+      <line x1="0" y1="0" x2="48" y2="-66" stroke={C.cyan} strokeWidth="2.5" markerEnd="url(#ropeArrCy)" />
+      <text x="68" y="-78" fontSize="12" fill={C.cyan} fontWeight="700" textAnchor="middle">
+        pos 1
+      </text>
+      <text x="68" y="-64" fontSize="10" fill={C.dim} textAnchor="middle">
+        0.3 rad
+      </text>
+      <line x1="0" y1="0" x2="26" y2="-78" stroke={C.yellow} strokeWidth="2.5" markerEnd="url(#ropeArrYe)" />
+      <text x="38" y="-100" fontSize="12" fill={C.yellow} fontWeight="700" textAnchor="middle">
+        pos 2
+      </text>
+      <text x="38" y="-86" fontSize="10" fill={C.dim} textAnchor="middle">
+        0.6 rad
+      </text>
+      <line x1="0" y1="0" x2="2" y2="-82" stroke={C.green} strokeWidth="2.5" markerEnd="url(#ropeArrGr)" />
+      <text x="3" y="-118" fontSize="12" fill={C.green} fontWeight="700" textAnchor="middle">
+        pos 3
+      </text>
+      <text x="3" y="-104" fontSize="10" fill={C.dim} textAnchor="middle">
+        0.9 rad
+      </text>
+    </svg>
+  );
+
+  // Three mini clocks: fast / medium / slow frequencies. Each shows the vector
+  // at pos 0 and pos 10 so the learner can see how far each pair has rotated.
+  const PairFrequencyClocks = () => {
+    const faces = [
+      { cx: -140, label: "Pair 0", freq: "fast", color: C.red, end: { x: -30, y: -24 }, angle: "2.5 rad (143 deg)" },
+      { cx: 0, label: "Pair 10", freq: "medium", color: C.yellow, end: { x: 33, y: -18 }, angle: "0.5 rad (29 deg)" },
+      { cx: 140, label: "Pair 60", freq: "slow", color: C.purple, end: { x: 38, y: -2 }, angle: "0.05 rad (3 deg)" },
+    ];
+    return (
+      <svg width="420" height="170" viewBox="-210 -80 420 170" style={{ maxWidth: "100%" }}>
+        <desc>
+          Three mini clock faces side by side showing pair 0 rotating fast, pair 10 rotating medium, and pair 60
+          rotating slow. Each face has a vector at position 0 and position 10 to illustrate that early pairs rotate
+          through large angles while late pairs barely move across the same 10 positions.
+        </desc>
+        {faces.map(({ cx, label, freq, color, end, angle }) => (
+          <g key={label} transform={`translate(${cx},0)`}>
+            <circle
+              cx="0"
+              cy="0"
+              r="40"
+              fill="none"
+              stroke="rgba(255,255,255,0.15)"
+              strokeWidth="1"
+              strokeDasharray="2,3"
+            />
+            <line x1="-50" y1="0" x2="50" y2="0" stroke="rgba(255,255,255,0.15)" strokeWidth="1" />
+            <line x1="0" y1="-50" x2="0" y2="50" stroke="rgba(255,255,255,0.15)" strokeWidth="1" />
+            <line x1="0" y1="0" x2="38" y2="0" stroke={C.bright} strokeWidth="2" />
+            <text x="44" y="4" fontSize="9" fill={C.bright}>
+              pos 0
+            </text>
+            <line x1="0" y1="0" x2={end.x} y2={end.y} stroke={color} strokeWidth="2.5" />
+            <text x="0" y="58" fontSize="13" fill={color} fontWeight="700" textAnchor="middle">
+              {label}
+            </text>
+            <text x="0" y="73" fontSize="10" fill={C.dim} textAnchor="middle">
+              {freq}
+            </text>
+            <text x="0" y="86" fontSize="10" fill={color} textAnchor="middle">
+              after 10 steps: {angle}
+            </text>
+          </g>
+        ))}
+      </svg>
+    );
+  };
+
+  // Two side-by-side clocks for Sub 2. Each clock shows Q (red) and K (blue)
+  // hands, plus a yellow arc highlighting the angular gap between them. Both
+  // clocks have the same 0.9 rad gap even though absolute rotations differ.
+  const TwoScenarioClocks = () => (
+    <svg width="440" height="260" viewBox="0 0 440 260" style={{ maxWidth: "100%" }}>
+      <desc>
+        Two side-by-side clock faces comparing near versus far scenarios in RoPE. The left clock shows Query at
+        position 3 and Key at position 0; the right clock shows Query at position 10 and Key at position 7. In both
+        cases the angular gap between the Q and K hands is the same 0.9 radians, illustrating that RoPE gives the same
+        attention score whenever the relative distance is the same, regardless of absolute positions.
+      </desc>
+      <defs>
+        <marker id="rsArrR" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+          <polygon points="0 0,8 3,0 6" fill={C.red} />
+        </marker>
+        <marker id="rsArrB" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+          <polygon points="0 0,8 3,0 6" fill={C.blue} />
+        </marker>
+      </defs>
+
+      <text x="110" y="18" fontSize="13" fontWeight="700" fill={C.cyan} textAnchor="middle">
+        Near: Q at pos 3, K at pos 0
+      </text>
+      <text x="330" y="18" fontSize="13" fontWeight="700" fill={C.cyan} textAnchor="middle">
+        Far: Q at pos 10, K at pos 7
+      </text>
+
+      <circle cx="110" cy="120" r="70" fill="none" stroke="rgba(255,255,255,0.15)" strokeWidth="1" strokeDasharray="3,3" />
+      <line x1="30" y1="120" x2="190" y2="120" stroke="rgba(255,255,255,0.12)" strokeWidth="1" />
+      <line x1="110" y1="40" x2="110" y2="200" stroke="rgba(255,255,255,0.12)" strokeWidth="1" />
+      <line x1="110" y1="120" x2="154" y2="65" stroke={C.red} strokeWidth="3" markerEnd="url(#rsArrR)" />
+      <text x="160" y="58" fontSize="11" fontWeight="700" fill={C.red}>
+        Q (pos 3)
+      </text>
+      <line x1="110" y1="120" x2="180" y2="120" stroke={C.blue} strokeWidth="3" markerEnd="url(#rsArrB)" />
+      <text x="187" y="124" fontSize="11" fontWeight="700" fill={C.blue}>
+        K (pos 0)
+      </text>
+      <path d="M 140,120 A 30,30 0 0,0 129,97" fill="none" stroke={C.yellow} strokeWidth="2.5" />
+      <text x="152" y="106" fontSize="11" fontWeight="700" fill={C.yellow}>
+        gap
+      </text>
+
+      <text x="110" y="225" fontSize="12" fill={C.mid} textAnchor="middle">
+        Q spun 0.9 rad {"\u00B7"} K spun 0 rad
+      </text>
+      <text x="110" y="245" fontSize="13" fontWeight="700" fill={C.yellow} textAnchor="middle">
+        gap between Q and K: 0.9 rad
+      </text>
+
+      <circle cx="330" cy="120" r="70" fill="none" stroke="rgba(255,255,255,0.15)" strokeWidth="1" strokeDasharray="3,3" />
+      <line x1="250" y1="120" x2="410" y2="120" stroke="rgba(255,255,255,0.12)" strokeWidth="1" />
+      <line x1="330" y1="40" x2="330" y2="200" stroke="rgba(255,255,255,0.12)" strokeWidth="1" />
+      <line x1="330" y1="120" x2="261" y2="110" stroke={C.red} strokeWidth="3" markerEnd="url(#rsArrR)" />
+      <text x="254" y="105" fontSize="11" fontWeight="700" fill={C.red} textAnchor="end">
+        Q (pos 10)
+      </text>
+      <line x1="330" y1="120" x2="295" y2="60" stroke={C.blue} strokeWidth="3" markerEnd="url(#rsArrB)" />
+      <text x="290" y="52" fontSize="11" fontWeight="700" fill={C.blue} textAnchor="end">
+        K (pos 7)
+      </text>
+      <path d="M 315,94 A 30,30 0 0,0 300,116" fill="none" stroke={C.yellow} strokeWidth="2.5" />
+      <text x="297" y="88" fontSize="11" fontWeight="700" fill={C.yellow} textAnchor="end">
+        gap
+      </text>
+
+      <text x="330" y="225" fontSize="12" fill={C.mid} textAnchor="middle">
+        Q spun 3.0 rad {"\u00B7"} K spun 2.1 rad
+      </text>
+      <text x="330" y="245" fontSize="13" fontWeight="700" fill={C.yellow} textAnchor="middle">
+        gap between Q and K: 0.9 rad
+      </text>
+    </svg>
+  );
+
   return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
       {sub >= 0 && (
@@ -1774,98 +2505,168 @@ export const RoPE = (ctx) => {
       <Reveal when={sub >= 1}>
         <Box color={C.green} style={{ width: "100%" }}>
           <T color="#80e8a5" bold center size={20}>
-            RoPE: rotate instead of add
+            Think of each vector as a clock hand
           </T>
           <T color="#80e8a5" style={{ marginTop: 6 }}>
-            Instead of adding a position vector to the embedding, RoPE <strong>rotates</strong> the Query and Key
-            vectors based on their position. The rotation angle depends on position.
+            Picture every word's Query (and Key) vector as a clock hand. RoPE doesn't <strong>add</strong> anything to
+            it - it simply <strong>turns</strong> the hand. How far? An angle equal to{" "}
+            <strong>position {"\u00B7"} frequency</strong>. Position 1 is a small turn, position 10 is a bigger turn,
+            position 100 is a huge turn.
           </T>
-          <div style={{ marginTop: 12, padding: "14px", borderRadius: 8, background: "rgba(0,0,0,0.3)" }}>
-            <T color={C.bright} bold center size={16}>
-              The 2D rotation matrix
-            </T>
-            <T color={C.bright} center size={16} style={{ marginTop: 8, fontFamily: "monospace", lineHeight: 2 }}>
-              [cos(t), -sin(t)] &nbsp;&nbsp; [q1] &nbsp;&nbsp; [q1 cos(t) - q2 sin(t)]
-              <br />
-              [sin(t), &nbsp;cos(t)] x [q2] = [q1 sin(t) + q2 cos(t)]
-            </T>
-            <T color={C.dim} size={14} center style={{ marginTop: 8 }}>
-              where t = position x frequency
-            </T>
+          <T color="#80e8a5" style={{ marginTop: 8 }}>
+            No new numbers are bolted on. No dimensions are inflated. The hand just points somewhere else.
+          </T>
+
+          <T color="#80e8a5" bold center size={17} style={{ marginTop: 14 }}>
+            See it turn: Q = [0.8, 0.6], f = 0.3 rad per step
+          </T>
+          <T color={C.dim} size={14} center style={{ marginTop: 2 }}>
+            Same vector, 4 different positions. Watch the hand sweep counter-clockwise.
+          </T>
+          <div style={{ display: "flex", justifyContent: "center", marginTop: 8 }}>
+            <RotationClock />
           </div>
-          <div style={{ marginTop: 12, display: "flex", gap: 8, alignItems: "stretch" }}>
+
+          <div
+            style={{
+              marginTop: 10,
+              padding: "10px 14px",
+              borderRadius: 8,
+              background: "rgba(0,0,0,0.3)",
+              fontFamily: "monospace",
+            }}
+          >
             <div
               style={{
-                flex: 1,
-                padding: "10px",
-                borderRadius: 8,
-                background: `${C.red}06`,
-                border: `1px solid ${C.red}12`,
+                display: "grid",
+                gridTemplateColumns: "60px 90px 1fr",
+                gap: 6,
+                padding: "4px 0",
+                borderBottom: `1px solid ${C.border}`,
               }}
             >
-              <T color={C.red} bold center size={16}>
-                Sinusoidal PE
+              <T color={C.mid} bold size={13}>
+                pos
               </T>
-              <T color={C.dim} size={15} style={{ marginTop: 4 }}>
-                embedding + position_vector
+              <T color={C.mid} bold size={13}>
+                angle (rad)
               </T>
-              <T color={C.dim} size={13} style={{ marginTop: 2 }}>
-                Modifies the embedding directly
+              <T color={C.mid} bold size={13}>
+                rotated Q
               </T>
             </div>
+            {[
+              { p: 0, a: "0.0", q: "[0.800, 0.600]", color: C.bright },
+              { p: 1, a: "0.3", q: "[0.587, 0.810]", color: C.cyan },
+              { p: 2, a: "0.6", q: "[0.321, 0.947]", color: C.yellow },
+              { p: 3, a: "0.9", q: "[0.027, 1.000]", color: C.green },
+            ].map(({ p, a, q, color }) => (
+              <div
+                key={p}
+                style={{ display: "grid", gridTemplateColumns: "60px 90px 1fr", gap: 6, padding: "4px 0" }}
+              >
+                <T color={color} bold size={14}>
+                  {p}
+                </T>
+                <T color={C.bright} size={14}>
+                  {a}
+                </T>
+                <T color={color} size={14}>
+                  {q}
+                </T>
+              </div>
+            ))}
+          </div>
+
+          <div
+            style={{
+              marginTop: 12,
+              padding: "10px 14px",
+              borderRadius: 8,
+              background: `${C.green}06`,
+              border: `1px solid ${C.green}12`,
+            }}
+          >
+            <T color={C.green} bold size={15}>
+              Key property: turning preserves length
+            </T>
+            <T color={C.dim} size={14} style={{ marginTop: 4 }}>
+              All four rotated vectors still have the same length (1.0 in this example). Turning only changes{" "}
+              <strong>direction</strong>, not length. Sinusoidal PE, by contrast, adds a position vector that changes
+              both direction and length.
+            </T>
+          </div>
+
+          <details style={{ marginTop: 10 }}>
+            <summary style={{ cursor: "pointer", color: C.dim, fontSize: 13 }}>
+              For the curious: the 2D rotation formula
+            </summary>
             <div
               style={{
-                flex: 1,
-                padding: "10px",
+                marginTop: 6,
+                padding: "10px 14px",
                 borderRadius: 8,
-                background: `${C.green}06`,
-                border: `1px solid ${C.green}12`,
+                background: "rgba(0,0,0,0.3)",
+                textAlign: "center",
+                fontFamily: "monospace",
               }}
             >
-              <T color={C.green} bold center size={16}>
-                RoPE
+              <T color={C.bright} size={14} center style={{ lineHeight: 1.9 }}>
+                R(t) {"\u00B7"} [q1, q2] = [q1 cos(t) - q2 sin(t), &nbsp; q1 sin(t) + q2 cos(t)]
               </T>
-              <T color={C.dim} size={15} style={{ marginTop: 4 }}>
-                rotate(Q, position), rotate(K, position)
-              </T>
-              <T color={C.dim} size={13} style={{ marginTop: 2 }}>
-                Only rotates Q and K, not the embedding
+              <T color={C.dim} size={13} center style={{ marginTop: 4 }}>
+                where t = position {"\u00B7"} frequency
               </T>
             </div>
-          </div>
-          <T color="#80e8a5" style={{ marginTop: 10 }}>
-            Example: if Q = [1.0, 0.5] and position = 3, with frequency = 0.1, then t = 3 x 0.1 = 0.3 radians. The
-            vector gets rotated by 0.3 radians (about 17 degrees).
-          </T>
+          </details>
         </Box>
       </Reveal>
 
       <Reveal when={sub >= 2}>
         <Box color={C.yellow} style={{ width: "100%" }}>
           <T color="#ffe082" bold center size={20}>
-            The key insight: relative distance emerges naturally
+            The magic: only the gap between Q and K matters
           </T>
           <T color="#ffe082" style={{ marginTop: 6 }}>
-            When you compute Q dot K (the attention score), the rotations combine. If Q at position m is rotated by
-            angle m x f, and K at position n is rotated by angle n x f, their dot product depends only on (m - n) x f.
+            The attention score between two words is just the dot product of their clock hands. And the dot product
+            only cares about <strong>one thing</strong>: the angle between the two hands. Same angle = same score, no
+            matter where the hands are pointing absolutely.
           </T>
-          <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 8 }}>
+
+          <T color="#ffe082" style={{ marginTop: 8 }}>
+            Since RoPE spins both Q and K by their <strong>own</strong> positions, the common spin cancels out. Only
+            the gap (position difference) is left. Watch two very different scenarios land on the same answer:
+          </T>
+
+          <div style={{ marginTop: 12, display: "flex", justifyContent: "center" }}>
+            <TwoScenarioClocks />
+          </div>
+
+          <div
+            style={{
+              marginTop: 12,
+              display: "grid",
+              gridTemplateColumns: "1fr 1fr",
+              gap: 10,
+            }}
+          >
             <div
               style={{
                 padding: "10px 14px",
                 borderRadius: 8,
                 background: `${C.cyan}06`,
                 border: `1px solid ${C.cyan}12`,
+                textAlign: "center",
               }}
             >
-              <T color={C.cyan} bold center size={16}>
-                Position 100 attending to position 97
+              <T color={C.cyan} bold size={15}>
+                Near (pos 3, pos 0)
               </T>
-              <T color={C.dim} size={15} style={{ marginTop: 4 }}>
-                Relative distance: 100 - 97 = <strong style={{ color: C.yellow }}>3</strong>
+              <T color={C.dim} size={14} style={{ marginTop: 4 }}>
+                gap = 0.9 rad (same for both)
               </T>
-              <T color={C.dim} size={15}>
-                Angle in dot product: (100 - 97) x f = 3f
+              <T color={C.yellow} bold size={18} style={{ marginTop: 4 }}>
+                score = cos(0.9) {"\u2248"} 0.62
               </T>
             </div>
             <div
@@ -1874,35 +2675,71 @@ export const RoPE = (ctx) => {
                 borderRadius: 8,
                 background: `${C.cyan}06`,
                 border: `1px solid ${C.cyan}12`,
+                textAlign: "center",
               }}
             >
-              <T color={C.cyan} bold center size={16}>
-                Position 3 attending to position 0
+              <T color={C.cyan} bold size={15}>
+                Far (pos 10, pos 7)
               </T>
-              <T color={C.dim} size={15} style={{ marginTop: 4 }}>
-                Relative distance: 3 - 0 = <strong style={{ color: C.yellow }}>3</strong>
+              <T color={C.dim} size={14} style={{ marginTop: 4 }}>
+                gap = 0.9 rad (same for both)
               </T>
-              <T color={C.dim} size={15}>
-                Angle in dot product: (3 - 0) x f = 3f
-              </T>
-            </div>
-            <div
-              style={{
-                padding: "10px 14px",
-                borderRadius: 8,
-                background: `${C.yellow}06`,
-                border: `1px solid ${C.yellow}12`,
-              }}
-            >
-              <T color={C.yellow} bold center size={16}>
-                Same relative distance = same angle-based score
-              </T>
-              <T color={C.dim} size={15} style={{ marginTop: 4 }}>
-                The absolute positions cancel out. Only the gap between the two positions matters. This means the model
-                learns <strong>relative</strong> position naturally, without any explicit relative position mechanism.
+              <T color={C.yellow} bold size={18} style={{ marginTop: 4 }}>
+                score = cos(0.9) {"\u2248"} 0.62
               </T>
             </div>
           </div>
+
+          <div
+            style={{
+              marginTop: 12,
+              padding: "10px 14px",
+              borderRadius: 8,
+              background: `${C.yellow}06`,
+              border: `1px solid ${C.yellow}12`,
+            }}
+          >
+            <T color={C.yellow} bold size={16}>
+              Why the common spin cancels (one-line intuition)
+            </T>
+            <T color={C.dim} size={14} style={{ marginTop: 6 }}>
+              Imagine both Q and K are glued to the same spinning turntable. Whether the turntable is at position 0 or
+              at position 97, the <strong>relative</strong> angle between Q and K on the table never changes. The dot
+              product only sees that relative angle, so the score stays the same. The absolute rotation is invisible to
+              attention.
+            </T>
+            <T color={C.dim} size={14} style={{ marginTop: 6 }}>
+              The model gets <strong>relative position</strong> for free, with zero extra parameters.
+            </T>
+          </div>
+
+          <details style={{ marginTop: 10 }}>
+            <summary style={{ cursor: "pointer", color: C.dim, fontSize: 13 }}>
+              For the curious: the actual algebra
+            </summary>
+            <div
+              style={{
+                marginTop: 6,
+                padding: "10px 14px",
+                borderRadius: 8,
+                background: "rgba(0,0,0,0.3)",
+                fontFamily: "monospace",
+                fontSize: 13,
+              }}
+            >
+              <T color={C.dim} size={13}>
+                Q at position m is rotated by angle m{"\u00B7"}f. K at position n is rotated by n{"\u00B7"}f. Their dot
+                product becomes:
+              </T>
+              <T color={C.bright} size={13} center style={{ marginTop: 6 }}>
+                (R(m{"\u00B7"}f) Q) {"\u00B7"} (R(n{"\u00B7"}f) K) = Q {"\u00B7"} R((n - m){"\u00B7"}f) K
+              </T>
+              <T color={C.dim} size={13} style={{ marginTop: 6 }}>
+                Rotation matrices are orthogonal, so R(a){"\u1D40"} R(b) = R(b - a). Only the gap (n - m) survives. For
+                unit vectors at angular gap {"\u0394"}, the dot product is exactly cos({"\u0394"}).
+              </T>
+            </div>
+          </details>
         </Box>
       </Reveal>
 
@@ -1913,7 +2750,15 @@ export const RoPE = (ctx) => {
           </T>
           <T color="#80deea" style={{ marginTop: 6 }}>
             Real embeddings have 128 dims (or more), not 2. RoPE handles this by processing dimensions{" "}
-            <strong>in pairs</strong>:
+            <strong>in pairs</strong>, and each pair rotates at its own <strong>frequency</strong>. Fast frequencies
+            for early pairs, slow ones for late pairs:
+          </T>
+          <div style={{ display: "flex", justifyContent: "center", marginTop: 10 }}>
+            <PairFrequencyClocks />
+          </div>
+          <T color={C.dim} size={14} center style={{ marginTop: 4 }}>
+            Each mini clock is one (x, y) pair out of 64. The white arrow is the pair at position 0; the colored arrow
+            is the same pair at position 10. Fast pairs rotate far; slow pairs barely move.
           </T>
           <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 8 }}>
             <div style={{ padding: "10px 14px", borderRadius: 8, background: "rgba(0,0,0,0.3)" }}>

@@ -1370,10 +1370,9 @@ export const EncoderDecoder = (ctx) => {
                       borderRadius: 4,
                       background: `${C.blue}12`,
                       border: `1px solid ${C.blue}25`,
-                      textAlign: "center",
                     }}
                   >
-                    <T color={C.dim} size={11}>
+                    <T color={C.dim} size={11} center>
                       {s}
                     </T>
                   </div>
@@ -1381,9 +1380,13 @@ export const EncoderDecoder = (ctx) => {
               </div>
             </div>
 
-            <T color={C.purple} bold size={16}>
-              →
-            </T>
+            {/* Wrapper is a stretched flex item; inner flex centers the arrow
+                vertically between the two stacked boxes. */}
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "center", padding: "0 4px" }}>
+              <T color={C.purple} bold size={16}>
+                →
+              </T>
+            </div>
 
             <div
               style={{
@@ -1412,10 +1415,9 @@ export const EncoderDecoder = (ctx) => {
                         borderRadius: 4,
                         background: `${C.green}12`,
                         border: `1px solid ${C.green}25`,
-                        textAlign: "center",
                       }}
                     >
-                      <T color={C.dim} size={11}>
+                      <T color={C.dim} size={11} center>
                         {s}
                       </T>
                     </div>

@@ -2345,95 +2345,118 @@ describe("Graph helper", () => {
 describe("KVCache sub-steps", () => {
   const fn = AttentionComputation.KVCache;
 
-  it("sub 0 shows the attention formula recap with Q=XW_Q, K=XW_K, V=XW_V", () => {
+  it("sub 0 shows naive generation piling up wasted work on 'I love cats'", () => {
     const ctx = makeCtx({ sub: 0 });
     const { container } = render(fn(ctx));
     const text = container.textContent;
-    expect(text).toContain("The Attention Formula");
-    expect(text).toContain("W_Q");
-    expect(text).toContain("W_K");
-    expect(text).toContain("W_V");
-    expect(text).toContain("softmax");
+    expect(text).toContain("Naive");
+    expect(text).toContain("I");
+    expect(text).toContain("love");
+    expect(text).toContain("cats");
+    expect(text.toLowerCase()).toMatch(/wast(e|ed|eful)/);
+    // Work-bars SVG: 6 block rects (1+2+3 for three steps)
+    const svg = container.querySelector("svg[data-viz='work-bars']");
+    expect(svg).toBeTruthy();
+    const blocks = svg.querySelectorAll("rect[data-block]");
+    expect(blocks.length).toBe(6);
   });
 
-  it("sub 1 shows generation without cache with redundant computations highlighted", () => {
+  it("sub 1 shows same input plus same weights equals identical output", () => {
     const ctx = makeCtx({ sub: 1 });
     const { container } = render(fn(ctx));
     const text = container.textContent;
-    expect(text).toContain("Without Cache");
-    expect(text).toContain("Redundant");
-    expect(text).toContain("W_K");
-    expect(text).toContain("Step 1");
-    expect(text).toContain("Step 2");
-    expect(text).toContain("Step 3");
+    expect(text).toContain("W_Q");
+    expect(text).toContain("q_I");
+    // Two identical vector values shown side by side
+    const matches = text.match(/\[0\.5, 0\.2\]/g);
+    expect(matches).not.toBeNull();
+    expect(matches.length).toBeGreaterThanOrEqual(2);
+    expect(text.toLowerCase()).toContain("identical");
   });
 
-  it("sub 2 explains only the last row of output matters during generation", () => {
+  it("sub 2 shows the matrix view with only the last row highlighted", () => {
     const ctx = makeCtx({ sub: 2 });
     const { container } = render(fn(ctx));
     const text = container.textContent;
-    expect(text).toContain("Only the Last Row");
-    expect(text).toContain("q_new");
-    expect(text).toContain("K_all");
-    expect(text).toContain("V_all");
+    expect(text.toLowerCase()).toContain("last row");
+    expect(text).toContain("q_cats");
+    // Matrix-view SVG present with <desc>
+    const svg = container.querySelector("svg[data-viz='matrix-view']");
+    expect(svg).toBeTruthy();
+    const desc = svg.querySelector("desc");
+    expect(desc).toBeTruthy();
+    expect(desc.textContent.length).toBeGreaterThan(20);
+    // Counter numbers: 18 cells total, 6 needed, 12 wasted
+    expect(text).toMatch(/18/);
+    expect(text).toMatch(/\b6\b/);
+    expect(text).toMatch(/12/);
   });
 
-  it("sub 3 explains why K and V are cached, not Q", () => {
+  it("sub 3 shows Q drop vs K and V cache decision cards", () => {
     const ctx = makeCtx({ sub: 3 });
     const { container } = render(fn(ctx));
     const text = container.textContent;
-    expect(text).toContain("Why K and V");
-    expect(text).toContain("Not Q");
-    expect(text).toContain("never need");
+    expect(text).toContain("KV cache");
+    expect(text).toContain("Q");
+    expect(text).toContain("K");
+    expect(text).toContain("V");
+    expect(text.toLowerCase()).toMatch(/don't cache|dont cache|never cache|don.t cache/);
+    expect(text.toLowerCase()).toContain("cache it");
   });
 
-  it("sub 4 shows exact operations with and without cache side by side", () => {
+  it("sub 4 shows the growing-notebook cache frames with append arrows", () => {
     const ctx = makeCtx({ sub: 4 });
     const { container } = render(fn(ctx));
     const text = container.textContent;
-    expect(text).toContain("Exact Operations");
-    expect(text).toContain("Without Cache");
-    expect(text).toContain("With Cache");
-    expect(text).toContain("Append");
+    expect(text.toLowerCase()).toContain("append");
+    expect(text.toLowerCase()).toContain("notebook");
+    const svg = container.querySelector("svg[data-viz='notebook']");
+    expect(svg).toBeTruthy();
+    const desc = svg.querySelector("desc");
+    expect(desc).toBeTruthy();
   });
 
-  it("sub 5 shows worked numerical example with d=2 matrices", () => {
+  it("sub 5 shows before vs after for step 3 with identical output", () => {
     const ctx = makeCtx({ sub: 5 });
     const { container } = render(fn(ctx));
     const text = container.textContent;
-    expect(text).toContain("Worked Example");
-    expect(text).toContain("d = 2");
-    expect(text).toContain("0.3");
-    expect(text).toContain("softmax");
-    expect(text).toContain("Cache");
+    expect(text).toContain("Without Cache");
+    expect(text).toContain("With Cache");
+    expect(text.toLowerCase()).toContain("identical");
+    expect(text).toContain("q_cats");
+    expect(text).toContain("k_cats");
+    expect(text).toContain("v_cats");
   });
 
-  it("sub 6 shows what cache looks like in memory per layer per head", () => {
+  it("sub 6 traces the worked example with d=2 and final output [0.447, 0.603]", () => {
     const ctx = makeCtx({ sub: 6 });
     const { container } = render(fn(ctx));
     const text = container.textContent;
-    expect(text).toContain("Memory");
-    expect(text).toContain("per layer");
-    expect(text).toContain("per head");
+    expect(text).toContain("0.447");
+    expect(text).toContain("0.603");
+    expect(text).toContain("d = 2");
+    expect(text.toLowerCase()).toContain("cache");
   });
 
-  it("sub 7 shows cost analysis with LLaMA 70B example", () => {
+  it("sub 7 shows LLaMA 70B memory cost with 10.7 GB and memory bar SVG", () => {
     const ctx = makeCtx({ sub: 7 });
     const { container } = render(fn(ctx));
     const text = container.textContent;
     expect(text).toContain("LLaMA 70B");
     expect(text).toContain("10.7 GB");
-    expect(text).toContain("O(N");
+    expect(text).toContain("d_model");
+    expect(text).toContain("layers");
+    const svg = container.querySelector("svg[data-viz='memory-bar']");
+    expect(svg).toBeTruthy();
   });
 
-  it("sub 8 shows the fundamental tradeoff between memory and speed", () => {
+  it("sub 8 shows the final memory-for-speed tradeoff with 660x numbers", () => {
     const ctx = makeCtx({ sub: 8 });
     const { container } = render(fn(ctx));
     const text = container.textContent;
-    expect(text).toContain("Fundamental Tradeoff");
-    expect(text).toContain("memory");
-    expect(text).toContain("speed");
-    expect(text).toContain("Bottleneck");
+    expect(text.toLowerCase()).toContain("memory");
+    expect(text.toLowerCase()).toContain("speed");
+    expect(text).toMatch(/660/);
   });
 });
 

@@ -44,4 +44,12 @@ describe("lookup", () => {
     const componentNames = new Set(chapters.map((c) => c.component));
     expect(componentNames.size).toBe(chapters.length);
   });
+
+  it("vector-foundations.jsx exports all Milestone 1 chapter components", async () => {
+    const mod = await import("../sections/vector-foundations.jsx");
+    expect(typeof mod.RetrievalProblem).toBe("function");
+    expect(typeof mod.BruteForceKNN).toBe("function");
+    expect(typeof mod.ThreeWayTradeoff).toBe("function");
+    expect(typeof mod.DistanceMetrics).toBe("function");
+  });
 });

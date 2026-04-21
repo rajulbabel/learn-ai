@@ -97,7 +97,8 @@ export const MixtureOfExperts = (ctx) => {
               <T color="#80deea" size={14} center style={{ marginTop: 8, fontFamily: "monospace" }}>
                 LayerNorm -&gt; Attention -&gt; Add
                 <br />
-                LayerNorm -&gt; <strong style={{ color: C.cyan }}>[Router -&gt; top-k experts -&gt; weighted sum]</strong> -&gt; Add
+                LayerNorm -&gt;{" "}
+                <strong style={{ color: C.cyan }}>[Router -&gt; top-k experts -&gt; weighted sum]</strong> -&gt; Add
               </T>
             </div>
           </div>
@@ -245,7 +246,7 @@ export const MixtureOfExperts = (ctx) => {
           </div>
           <T color={C.dim} size={15} style={{ marginTop: 8 }}>
             f_i = fraction of tokens routed to expert i; P_i = total router probability mass sent to expert i. Product
-            is minimized when routing is balanced.  The auxiliary loss is added to the main training loss.
+            is minimized when routing is balanced. The auxiliary loss is added to the main training loss.
           </T>
         </Box>
       </Reveal>
@@ -283,8 +284,7 @@ export const MixtureOfExperts = (ctx) => {
             <br />
             &nbsp;&nbsp;Per layer total:&nbsp;&nbsp;&nbsp;~5.6B
             <br />
-            <br />
-            x 32 layers + shared embeddings = <strong style={{ color: C.orange }}>46.7B total</strong>
+            <br />x 32 layers + shared embeddings = <strong style={{ color: C.orange }}>46.7B total</strong>
             <br />
             <br />
             <strong style={{ color: C.green }}>Active per token:</strong>
@@ -307,8 +307,8 @@ export const MixtureOfExperts = (ctx) => {
             Memory holds all experts. Compute only runs two.
           </T>
           <T color="#ef9a9a" style={{ marginTop: 8 }}>
-            This is the core tradeoff. MoE does NOT reduce memory - every expert has to be loaded so the router can
-            pick any of them. What it reduces is compute per token.
+            This is the core tradeoff. MoE does NOT reduce memory - every expert has to be loaded so the router can pick
+            any of them. What it reduces is compute per token.
           </T>
           <div style={{ marginTop: 14, display: "flex", flexDirection: "column", gap: 10 }}>
             {[
@@ -425,8 +425,8 @@ export const MixtureOfExperts = (ctx) => {
             ))}
           </div>
           <T color="#80c8ff" style={{ marginTop: 10 }}>
-            DeepSeek-V3 is the extreme case - only 5.5% of its 671B params activate per token. That is why it is
-            cheap to serve despite being enormous on disk.
+            DeepSeek-V3 is the extreme case - only 5.5% of its 671B params activate per token. That is why it is cheap
+            to serve despite being enormous on disk.
           </T>
         </Box>
       </Reveal>
@@ -436,8 +436,8 @@ export const MixtureOfExperts = (ctx) => {
             MoE is not free lunch
           </T>
           <T color="#f0a0ff" style={{ marginTop: 8 }}>
-            Different deployments have different bottlenecks. MoE trades memory for compute - that wins in some
-            contexts and loses in others.
+            Different deployments have different bottlenecks. MoE trades memory for compute - that wins in some contexts
+            and loses in others.
           </T>
           <div style={{ marginTop: 14, display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
             <div
@@ -715,9 +715,9 @@ export const Thinking = (ctx) => {
           </T>
           <T color="#ffe082" style={{ marginTop: 8 }}>
             There is no "thinking mode switch" in the code. The vocabulary has two special tokens: &lt;think&gt; and
-            &lt;/think&gt;. The model learned to emit them at the right moments, same way it learned any other word.
-            The softmax output is a probability distribution over all tokens, and the special tokens simply win at the
-            right moments.
+            &lt;/think&gt;. The model learned to emit them at the right moments, same way it learned any other word. The
+            softmax output is a probability distribution over all tokens, and the special tokens simply win at the right
+            moments.
           </T>
           <div style={{ marginTop: 14, display: "flex", flexDirection: "column", gap: 10 }}>
             {[
@@ -764,7 +764,12 @@ export const Thinking = (ctx) => {
                         background: r.winner ? `${C.green}06` : "rgba(0,0,0,0.2)",
                       }}
                     >
-                      <T color={r.winner ? C.green : C.bright} bold={r.winner} size={15} style={{ fontFamily: "monospace" }}>
+                      <T
+                        color={r.winner ? C.green : C.bright}
+                        bold={r.winner}
+                        size={15}
+                        style={{ fontFamily: "monospace" }}
+                      >
                         {r.token}
                       </T>
                       <div style={{ height: 10, background: "rgba(255,255,255,0.04)", borderRadius: 3 }}>
@@ -787,8 +792,8 @@ export const Thinking = (ctx) => {
             ))}
           </div>
           <T color="#ffe082" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
-            The model learned to emit &lt;think&gt; and &lt;/think&gt; at the right moments. That is the entire
-            "mode" mechanism.
+            The model learned to emit &lt;think&gt; and &lt;/think&gt; at the right moments. That is the entire "mode"
+            mechanism.
           </T>
         </Box>
       </Reveal>
@@ -798,8 +803,8 @@ export const Thinking = (ctx) => {
             More thinking tokens = better answers on hard problems
           </T>
           <T color="#ffcc80" style={{ marginTop: 8 }}>
-            This is the new scaling axis. Instead of training a bigger model, you let the same model think longer.
-            More thinking tokens means more forward passes, which means more compute spent on the problem.
+            This is the new scaling axis. Instead of training a bigger model, you let the same model think longer. More
+            thinking tokens means more forward passes, which means more compute spent on the problem.
           </T>
           <div
             style={{
@@ -820,7 +825,10 @@ export const Thinking = (ctx) => {
                 { budget: "10,000 tokens", pct: 78 },
                 { budget: "100,000 tokens", pct: 89 },
               ].map(({ budget, pct }) => (
-                <div key={budget} style={{ display: "grid", gridTemplateColumns: "160px 1fr 60px", gap: 10, alignItems: "center" }}>
+                <div
+                  key={budget}
+                  style={{ display: "grid", gridTemplateColumns: "160px 1fr 60px", gap: 10, alignItems: "center" }}
+                >
                   <T color={C.bright} size={15} style={{ fontFamily: "monospace" }}>
                     {budget}
                   </T>
@@ -850,8 +858,8 @@ export const Thinking = (ctx) => {
             What is actually different is the training, not the model
           </T>
           <T color="#f0a0ff" style={{ marginTop: 8 }}>
-            Reasoning models go through three training stages. Stage 1 is the same run that every LLM gets. Stages 2
-            and 3 are where reasoning emerges.
+            Reasoning models go through three training stages. Stage 1 is the same run that every LLM gets. Stages 2 and
+            3 are where reasoning emerges.
           </T>
           <div style={{ marginTop: 14, display: "flex", gap: 8, alignItems: "stretch" }}>
             {[
@@ -981,8 +989,8 @@ export const Thinking = (ctx) => {
             You do not need humans to write millions of reasoning traces
           </T>
           <T color="#80c8ff" style={{ marginTop: 8 }}>
-            The only thing you need is <strong>problems with checkable answers</strong>. Three data sources take care
-            of the rest.
+            The only thing you need is <strong>problems with checkable answers</strong>. Three data sources take care of
+            the rest.
           </T>
           <div style={{ marginTop: 14, display: "flex", flexDirection: "column", gap: 10 }}>
             {[
@@ -1061,8 +1069,7 @@ export const Thinking = (ctx) => {
           </div>
           <T color="#b8a9ff" size={16} style={{ marginTop: 10 }}>
             The DeepSeek-R1 papers documented an <strong>"aha moment"</strong> during training where thinking length
-            spontaneously grew and phrases like "wait" and "let me reconsider" appeared - purely from the reward
-            signal.
+            spontaneously grew and phrases like "wait" and "let me reconsider" appeared - purely from the reward signal.
           </T>
         </Box>
       </Reveal>

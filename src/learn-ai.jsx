@@ -29,10 +29,9 @@ const sectionLoaders = {
       import("./sections/encoder-decoder-diagrams.jsx"),
     ]).then((mods) => Object.assign({}, ...mods)),
   10: () =>
-    Promise.all([
-      import("./sections/attention-computation.jsx"),
-      import("./sections/modern-llm-techniques.jsx"),
-    ]).then((mods) => Object.assign({}, ...mods)),
+    Promise.all([import("./sections/attention-computation.jsx"), import("./sections/modern-llm-techniques.jsx")]).then(
+      (mods) => Object.assign({}, ...mods),
+    ),
 };
 
 // ── Lazy-loaded search: not loaded until search is opened ──
@@ -254,7 +253,9 @@ export default function LearnAI() {
       if (fn) {
         setRenderChapter(() => fn);
       } else if (import.meta.env.DEV) {
-        console.error(`[lookup] Failed to resolve chapter "${entry.id}" component "${compName}" for section ${sectionNum}.`);
+        console.error(
+          `[lookup] Failed to resolve chapter "${entry.id}" component "${compName}" for section ${sectionNum}.`,
+        );
       }
       // After the first chapter loads, start downloading semantic search in background
       if (!firstLoadDone.current) {

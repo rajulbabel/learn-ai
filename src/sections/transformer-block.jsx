@@ -1655,21 +1655,8 @@ export const FeedForwardNetwork = (ctx) => {
                   const px = 150 + xv * 36.67;
                   return (
                     <g key={`rx${xv}`}>
-                      <line
-                        x1={px}
-                        y1="190"
-                        x2={px}
-                        y2="194"
-                        stroke="rgba(255,255,255,0.35)"
-                        strokeWidth="1"
-                      />
-                      <text
-                        x={px}
-                        y="206"
-                        fill="rgba(255,255,255,0.5)"
-                        fontSize="10"
-                        textAnchor="middle"
-                      >
+                      <line x1={px} y1="190" x2={px} y2="194" stroke="rgba(255,255,255,0.35)" strokeWidth="1" />
+                      <text x={px} y="206" fill="rgba(255,255,255,0.5)" fontSize="10" textAnchor="middle">
                         {xv}
                       </text>
                     </g>
@@ -1767,21 +1754,8 @@ export const FeedForwardNetwork = (ctx) => {
                   const px = 150 + xv * 36.67;
                   return (
                     <g key={`gx${xv}`}>
-                      <line
-                        x1={px}
-                        y1="190"
-                        x2={px}
-                        y2="194"
-                        stroke="rgba(255,255,255,0.35)"
-                        strokeWidth="1"
-                      />
-                      <text
-                        x={px}
-                        y="206"
-                        fill="rgba(255,255,255,0.5)"
-                        fontSize="10"
-                        textAnchor="middle"
-                      >
+                      <line x1={px} y1="190" x2={px} y2="194" stroke="rgba(255,255,255,0.35)" strokeWidth="1" />
+                      <text x={px} y="206" fill="rgba(255,255,255,0.5)" fontSize="10" textAnchor="middle">
                         {xv}
                       </text>
                     </g>
@@ -2218,8 +2192,8 @@ export const FeedForwardNetwork = (ctx) => {
                 are related by training data
               </T>
               <T color="#fff176" size={13}>
-                <strong>2. Factual recall</strong> (India/Delhi) - FFN looks up a stored fact and writes the answer
-                into the vector
+                <strong>2. Factual recall</strong> (India/Delhi) - FFN looks up a stored fact and writes the answer into
+                the vector
               </T>
               <T color="#fff176" size={13}>
                 <strong>3. Disambiguation</strong> (bank/river) - FFN resolves ambiguity by suppressing wrong meanings

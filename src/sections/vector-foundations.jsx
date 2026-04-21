@@ -1,7 +1,12 @@
 import { Box, T, Reveal, SubBtn } from "../components.jsx";
 import { C } from "../config.js";
 
-// Running cat-corpus used across Section 11. Vectors are 4-dim illustrative values.
+// Running cat-corpus used across Section 11 chapters. Vectors are 4-dim illustrative values.
+// `catLike` marks the cat-related entries (docs 1, 3, 4, 5, 7); used by 11.2+ to color top-k results.
+//
+// SVG marker and gradient ids in this file follow the pattern: `<type><chapter>-<svg-index>`
+// (e.g., arrow11-1 = first SVG arrow marker in chapter 11.1). When adding SVGs in 11.2+,
+// increment the svg-index for each SVG within the chapter to avoid DOM id collisions.
 const CAT_CORPUS = [
   { id: 1, text: "Cats are small domesticated carnivores", vec: [0.81, 0.12, 0.45, 0.22], catLike: true },
   { id: 2, text: "Dogs are loyal pets", vec: [0.33, 0.68, 0.29, 0.41] },
@@ -171,6 +176,9 @@ export const RetrievalProblem = (ctx) => {
                 top-3 closest (highlighted): docs 1, 3, 7 - all cat-related
               </text>
             </svg>
+            <T color={C.dim} size={13} center style={{ marginTop: 6, fontStyle: "italic" }}>
+              In a 10-doc corpus, top-10 is everything, so we highlight the top-3 to make &quot;closest&quot; visible.
+            </T>
           </div>
           <div
             style={{
@@ -323,7 +331,7 @@ export const RetrievalProblem = (ctx) => {
             {[
               {
                 title: "Semantic search",
-                body: "User types &quot;how to fix leaky faucet&quot;. System returns pages about plumbing repair even if those words never appear verbatim.",
+                body: 'User types "how to fix leaky faucet". System returns pages about plumbing repair even if those words never appear verbatim.',
               },
               {
                 title: "Recommendation",
@@ -359,7 +367,7 @@ export const RetrievalProblem = (ctx) => {
                   {title}
                 </T>
                 <T color={C.bright} size={14} style={{ marginTop: 4 }}>
-                  {body.replace(/&quot;/g, '"')}
+                  {body}
                 </T>
               </div>
             ))}

@@ -194,6 +194,12 @@ describe("Thinking content", () => {
     expect(container.textContent).toMatch(/rollout/i);
     expect(container.textContent).toMatch(/reward|PPO|GRPO/);
   });
+
+  it("sub=7 shows training data sources", () => {
+    const { container } = render(fn(makeCtx({ sub: 7 })));
+    expect(container.textContent).toMatch(/checkable|verifiable/i);
+    expect(container.textContent).toMatch(/synthetic|rejection/i);
+  });
 });
 
 // ─── TOC special branches ───

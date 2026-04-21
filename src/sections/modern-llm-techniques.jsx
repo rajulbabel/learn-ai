@@ -975,6 +975,54 @@ export const Thinking = (ctx) => {
           </T>
         </Box>
       </Reveal>
+      <Reveal when={sub >= 7}>
+        <Box color={C.blue} style={{ width: "100%" }}>
+          <T color={C.blue} bold center size={22}>
+            You do not need humans to write millions of reasoning traces
+          </T>
+          <T color="#80c8ff" style={{ marginTop: 8 }}>
+            The only thing you need is <strong>problems with checkable answers</strong>. Three data sources take care
+            of the rest.
+          </T>
+          <div style={{ marginTop: 14, display: "flex", flexDirection: "column", gap: 10 }}>
+            {[
+              {
+                title: "1. Existing chain-of-thought",
+                body: "Already in the pre-training data: math textbooks, Stack Overflow answers, competitive programming editorials, tutorial posts.",
+              },
+              {
+                title: "2. Synthetic generation",
+                body: "A big LLM generates 64 reasoning attempts per problem. A verifier checks each final answer. Keep the ones that got it right; those become training data.",
+              },
+              {
+                title: "3. Rejection sampling",
+                body: "Have the base model itself try each problem 64 times. Keep the attempts that got the right answer. The model learns from its own best work.",
+              },
+            ].map(({ title, body }) => (
+              <div
+                key={title}
+                style={{
+                  padding: "12px 14px",
+                  borderRadius: 8,
+                  background: `${C.blue}06`,
+                  border: `1px solid ${C.blue}12`,
+                }}
+              >
+                <T color={C.blue} bold size={16}>
+                  {title}
+                </T>
+                <T color={C.bright} size={15} style={{ marginTop: 4 }}>
+                  {body}
+                </T>
+              </div>
+            ))}
+          </div>
+          <T color="#80c8ff" style={{ marginTop: 10 }}>
+            Domains with checkable answers are abundant: GSM8K, MATH, AIME, olympiad problems, LeetCode, Codeforces,
+            scientific multiple-choice. Millions of problems, no humans writing reasoning required.
+          </T>
+        </Box>
+      </Reveal>
       {sub < 9 && (
         <SubBtn
           key={sub}

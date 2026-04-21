@@ -92,6 +92,17 @@ describe("All chapters - full sub + interaction coverage", () => {
   });
 });
 
+describe("MixtureOfExperts content", () => {
+  const fn = ModernLLMTechniques.MixtureOfExperts;
+
+  it("sub=0 shows motivation comparing dense vs MoE", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/47B/);
+    expect(container.textContent).toMatch(/13B/);
+    expect(container.textContent).toMatch(/Mixtral/);
+  });
+});
+
 // ─── TOC special branches ───
 describe("TOC", () => {
   it("renders section list", () => {

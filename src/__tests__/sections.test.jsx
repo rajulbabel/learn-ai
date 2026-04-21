@@ -163,6 +163,12 @@ describe("Thinking content", () => {
     expect(container.textContent).toMatch(/Tokenizer/);
     expect(container.textContent).toMatch(/Attention/);
   });
+
+  it("sub=2 clarifies that both modes loop", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/loop/i);
+    expect(container.textContent).toMatch(/same loop|more.*loop|longer/i);
+  });
 });
 
 // ─── TOC special branches ───

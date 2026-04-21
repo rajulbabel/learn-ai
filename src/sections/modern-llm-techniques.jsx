@@ -645,6 +645,69 @@ export const Thinking = (ctx) => {
           </T>
         </Box>
       </Reveal>
+      <Reveal when={sub >= 2}>
+        <Box color={C.green} style={{ width: "100%" }}>
+          <T color={C.green} bold center size={22}>
+            Not a new loop. The same loop, running longer.
+          </T>
+          <T color="#80e8a5" style={{ marginTop: 8 }}>
+            Autoregressive generation always loops - the transformer can only produce one token per forward pass.
+            Regular LLMs loop a few times. Reasoning LLMs loop thousands of times. Same mechanism either way.
+          </T>
+          <div style={{ marginTop: 14, display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+            {[
+              {
+                title: "Regular LLM",
+                color: C.red,
+                lighter: "#ef9a9a",
+                steps: ["FWD -> 10", "FWD -> 81", "FWD -> <EOS>"],
+                total: "~3 loop iterations",
+              },
+              {
+                title: "Reasoning LLM",
+                color: C.green,
+                lighter: "#80e8a5",
+                steps: ["FWD -> <think>", "FWD -> Let", "FWD -> me", "...", "FWD -> </think>", "FWD -> 1081"],
+                total: "~120 loop iterations",
+              },
+            ].map(({ title, color, lighter, steps, total }) => (
+              <div
+                key={title}
+                style={{
+                  padding: "12px 14px",
+                  borderRadius: 8,
+                  background: `${color}06`,
+                  border: `1px solid ${color}12`,
+                }}
+              >
+                <T color={lighter} bold center size={16}>
+                  {title}
+                </T>
+                <div style={{ marginTop: 10, display: "flex", flexDirection: "column", gap: 4 }}>
+                  {steps.map((s, i) => (
+                    <div
+                      key={i}
+                      style={{
+                        padding: "6px 10px",
+                        borderRadius: 4,
+                        background: "rgba(0,0,0,0.25)",
+                        fontFamily: "monospace",
+                        fontSize: 14,
+                        color: C.bright,
+                      }}
+                    >
+                      {s}
+                    </div>
+                  ))}
+                </div>
+                <T color={lighter} bold size={15} center style={{ marginTop: 10 }}>
+                  {total}
+                </T>
+              </div>
+            ))}
+          </div>
+        </Box>
+      </Reveal>
       {sub < 9 && (
         <SubBtn
           key={sub}

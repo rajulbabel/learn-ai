@@ -104,15 +104,15 @@
     "Cross-attention architecture diagram showing encoder stack producing K and V projections cached and fanned out to decoder layers, where Q comes from decoder while K and V come from encoder output"
   ],
   "9.6": [
+    "Progressive encoder-decoder training flow diagram showing complete pipeline: tokenization, embedding, positional encoding, encoder self-attention with Q K V projections, FFN, decoder with causal masking and cross-attention, and output head producing predictions at every position"
+  ],
+  "9.7": [
+    "Progressive encoder-decoder inference flow diagram showing autoregressive generation: encoder runs once, K V output is cached, decoder runs in a loop processing one new token at a time using KV cache for previously computed keys and values"
+  ],
+  "10.1": [
     "Three stacked work rows showing naive generation redoing history: step 1 with 1 green new block, step 2 with 1 red redundant block and 1 green new block, step 3 with 2 red redundant blocks and 1 green new block, illustrating how computation piles up quadratically when the KV cache is not used",
     "Side by side attention matrix multiplications at generation step 3: Q times K transpose equals Scores (3 by 3) with rows for I and love dimmed because they were already computed at earlier steps and only the last row for cats glows, and Scores times V equals Output with only the last row highlighted as the new result",
     "Three frame growing notebook diagram showing the K cache and V cache tables appending one row per generation step: after I has 1 row, after love has 2 rows with the older row dimmed, after cats has 3 rows with only the newest row highlighted",
     "Horizontal memory meter filling with gradient showing KV cache memory cost scaling with sequence length, with tick marks at 1024 4096 and 32768 tokens and GB values 2.7 10.7 and 86 for LLaMA 70B sized models"
-  ],
-  "9.7": [
-    "Progressive encoder-decoder training flow diagram showing complete pipeline: tokenization, embedding, positional encoding, encoder self-attention with Q K V projections, FFN, decoder with causal masking and cross-attention, and output head producing predictions at every position"
-  ],
-  "9.8": [
-    "Progressive encoder-decoder inference flow diagram showing autoregressive generation: encoder runs once, K V output is cached, decoder runs in a loop processing one new token at a time using KV cache for previously computed keys and values"
   ]
 }

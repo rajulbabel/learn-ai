@@ -1060,18 +1060,13 @@ export const BruteForceKNN = (ctx) => {
 
 // Triangle SVG reused in sub=0 (plain) and sub=5 (with directional labels).
 // vertices: Recall (top), Latency (bottom-left), Memory (bottom-right).
-const Triangle = ({ svgId, annotations = [] }) => (
+const Triangle = ({ annotations = [] }) => (
   <svg viewBox="0 0 420 280" style={{ width: "100%", maxWidth: 420, height: "auto", display: "block" }}>
     <desc>
       Equilateral tradeoff triangle with Recall at the top vertex, Latency at the bottom-left vertex, and Memory at the
       bottom-right vertex. Every vector-database decision moves along an edge of this triangle - improving one corner
       trades against another.
     </desc>
-    <defs>
-      <marker id={`arrow11-3-${svgId}`} markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
-        <polygon points="0 0, 10 3, 0 6" fill={C.purple} />
-      </marker>
-    </defs>
     <polygon points="210,30 50,240 370,240" fill="rgba(167,139,250,0.06)" stroke={C.purple} strokeWidth="2" />
     {/* Recall vertex (top) */}
     <circle cx="210" cy="30" r="8" fill={C.cyan} />
@@ -1123,7 +1118,7 @@ export const ThreeWayTradeoff = (ctx) => {
               justifyContent: "center",
             }}
           >
-            <Triangle svgId="0" />
+            <Triangle />
           </div>
           <div style={{ marginTop: 14, display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 12 }}>
             <div
@@ -1729,7 +1724,6 @@ export const ThreeWayTradeoff = (ctx) => {
             }}
           >
             <Triangle
-              svgId="5"
               annotations={[
                 { x: 210, y: 150, label: "Indexing: latency down, memory up", color: C.orange },
                 { x: 210, y: 170, label: "Quantization: memory down, recall down", color: C.yellow },

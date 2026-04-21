@@ -142,5 +142,9 @@
   ],
   "11.2": [
     "Rightward purple arrow labeled production uses this, pointing from the exact brute-force card on the left to the approximate nearest neighbor (ANN) card on the right, illustrating the tradeoff from exact slow search to approximate fast search"
+  ],
+  "11.3": [
+    "Equilateral tradeoff triangle with Recall at the top vertex in cyan, Latency at the bottom-left vertex in orange, and Memory at the bottom-right vertex in yellow, introducing the three axes every vector-database decision must balance",
+    "Equilateral tradeoff triangle with Recall, Latency, and Memory at the vertices and interior labels mapping each family of techniques to its direction of movement - Indexing trades latency for memory, Quantization trades memory for recall, Filtering and sharding push on all three corners"
   ]
 }

@@ -126,6 +126,12 @@ describe("MixtureOfExperts content", () => {
     expect(container.textContent).toMatch(/46\.7B|46\.7/);
     expect(container.textContent).toMatch(/layers?/i);
   });
+
+  it("sub=5 shows memory vs compute tradeoff", () => {
+    const { container } = render(fn(makeCtx({ sub: 5 })));
+    expect(container.textContent).toMatch(/94 GB|94GB/);
+    expect(container.textContent).toMatch(/26 GFLOPs|GFLOP/);
+  });
 });
 
 // ─── TOC special branches ───

@@ -301,6 +301,66 @@ export const MixtureOfExperts = (ctx) => {
           </T>
         </Box>
       </Reveal>
+      <Reveal when={sub >= 5}>
+        <Box color={C.red} style={{ width: "100%" }}>
+          <T color={C.red} bold center size={22}>
+            Memory holds all experts. Compute only runs two.
+          </T>
+          <T color="#ef9a9a" style={{ marginTop: 8 }}>
+            This is the core tradeoff. MoE does NOT reduce memory - every expert has to be loaded so the router can
+            pick any of them. What it reduces is compute per token.
+          </T>
+          <div style={{ marginTop: 14, display: "flex", flexDirection: "column", gap: 10 }}>
+            {[
+              {
+                label: "GPU memory (fp16)",
+                value: "94 GB",
+                formula: "47B x 2 bytes per param",
+                note: "All 8 experts must be loaded - the router could pick any.",
+                color: C.red,
+                lighter: "#ef9a9a",
+              },
+              {
+                label: "Compute per token",
+                value: "26 GFLOPs",
+                formula: "13B x 2 (fwd-pass cost per param)",
+                note: "Only 2 of 8 experts actually multiply anything for this token.",
+                color: C.green,
+                lighter: "#80e8a5",
+              },
+            ].map(({ label, value, formula, note, color, lighter }) => (
+              <div
+                key={label}
+                style={{
+                  padding: "12px 14px",
+                  borderRadius: 8,
+                  background: `${color}06`,
+                  border: `1px solid ${color}12`,
+                }}
+              >
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
+                  <T color={lighter} bold size={17}>
+                    {label}
+                  </T>
+                  <T color={color} bold size={20}>
+                    {value}
+                  </T>
+                </div>
+                <T color={C.dim} size={14} style={{ marginTop: 4, fontFamily: "monospace" }}>
+                  {formula}
+                </T>
+                <T color={C.dim} size={14} style={{ marginTop: 2 }}>
+                  {note}
+                </T>
+              </div>
+            ))}
+          </div>
+          <T color={C.dim} size={15} style={{ marginTop: 10 }}>
+            Takeaway: MoE is great for data-center serving where memory is abundant but compute is precious. It
+            struggles on edge devices where memory is the bottleneck.
+          </T>
+        </Box>
+      </Reveal>
       {sub < 7 && (
         <SubBtn
           key={sub}

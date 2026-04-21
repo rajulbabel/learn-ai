@@ -595,6 +595,56 @@ export const Thinking = (ctx) => {
           </T>
         </Box>
       )}
+      <Reveal when={sub >= 1}>
+        <Box color={C.purple} style={{ width: "100%" }}>
+          <T color={C.purple} bold center size={22}>
+            Every piece you learned in Sections 1-9 is unchanged
+          </T>
+          <T color="#b8a9ff" style={{ marginTop: 8 }}>
+            A reasoning model is the exact same transformer. Nothing new is added to the architecture. The punchline is
+            simple: a regular LLM and a reasoning LLM could share the same code file.
+          </T>
+          <div
+            style={{
+              marginTop: 14,
+              display: "grid",
+              gridTemplateColumns: "1fr 1fr",
+              gap: 8,
+              padding: "12px 14px",
+              borderRadius: 8,
+              background: `${C.purple}06`,
+              border: `1px solid ${C.purple}12`,
+            }}
+          >
+            {[
+              "Tokenizer",
+              "Multi-head Attention",
+              "Embeddings",
+              "FFN",
+              "Positional encoding (RoPE)",
+              "Layer norms",
+              "Causal mask",
+              "Residual connections",
+              "KV cache",
+              "Output head",
+              "Softmax",
+              "Autoregressive loop",
+            ].map((item) => (
+              <div key={item} style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                <T color={C.green} bold size={16}>
+                  OK
+                </T>
+                <T color={C.bright} size={15}>
+                  {item}
+                </T>
+              </div>
+            ))}
+          </div>
+          <T color="#b8a9ff" center size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
+            A reasoning model and a regular LLM could share the same code file.
+          </T>
+        </Box>
+      </Reveal>
       {sub < 9 && (
         <SubBtn
           key={sub}

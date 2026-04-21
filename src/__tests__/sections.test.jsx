@@ -156,6 +156,13 @@ describe("Thinking content", () => {
     expect(container.textContent).toMatch(/47/);
     expect(container.textContent).toMatch(/1081/);
   });
+
+  it("sub=1 shows unchanged-architecture checklist", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/unchanged|Every piece/i);
+    expect(container.textContent).toMatch(/Tokenizer/);
+    expect(container.textContent).toMatch(/Attention/);
+  });
 });
 
 // ─── TOC special branches ───

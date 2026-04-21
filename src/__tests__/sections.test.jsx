@@ -206,6 +206,12 @@ describe("Thinking content", () => {
     expect(container.textContent).toMatch(/emerg/i);
     expect(container.textContent).toMatch(/self-correct|double-check|verify/i);
   });
+
+  it("sub=9 shows honest scope - where reasoning helps and doesn't", () => {
+    const { container } = render(fn(makeCtx({ sub: 9 })));
+    expect(container.textContent).toMatch(/Math|code|logic/i);
+    expect(container.textContent).toMatch(/creative|empathy|open-ended/i);
+  });
 });
 
 // ─── TOC special branches ───

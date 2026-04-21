@@ -1066,6 +1066,72 @@ export const Thinking = (ctx) => {
           </T>
         </Box>
       </Reveal>
+      <Reveal when={sub >= 9}>
+        <Box color={C.green} style={{ width: "100%" }}>
+          <T color={C.green} bold center size={22}>
+            Reasoning models are not universally better
+          </T>
+          <T color="#80e8a5" style={{ marginTop: 8 }}>
+            Thinking helps when there is a right answer to check. It barely helps when there is not.
+          </T>
+          <div style={{ marginTop: 14, display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+            <div
+              style={{
+                padding: "12px 14px",
+                borderRadius: 8,
+                background: `${C.green}06`,
+                border: `1px solid ${C.green}12`,
+              }}
+            >
+              <T color={C.green} bold center size={17}>
+                Big lift
+              </T>
+              <ul style={{ color: "#80e8a5", fontSize: 15, paddingLeft: 20, marginTop: 8, lineHeight: 1.8 }}>
+                <li>Math, arithmetic, algebra</li>
+                <li>Competitive programming</li>
+                <li>Logic puzzles</li>
+                <li>Scientific Q&amp;A with verifiable answers</li>
+                <li>Constraint-satisfaction problems</li>
+                <li>Formal proofs</li>
+              </ul>
+            </div>
+            <div
+              style={{
+                padding: "12px 14px",
+                borderRadius: 8,
+                background: `${C.red}06`,
+                border: `1px solid ${C.red}12`,
+              }}
+            >
+              <T color={C.red} bold center size={17}>
+                No real gain
+              </T>
+              <ul style={{ color: "#ef9a9a", fontSize: 15, paddingLeft: 20, marginTop: 8, lineHeight: 1.8 }}>
+                <li>Creative writing</li>
+                <li>Poetry, storytelling</li>
+                <li>Open-ended opinions</li>
+                <li>Empathy, emotional support</li>
+                <li>Summarization</li>
+                <li>Casual conversation</li>
+              </ul>
+            </div>
+          </div>
+          <div
+            style={{
+              marginTop: 12,
+              padding: "10px 14px",
+              borderRadius: 8,
+              background: `${C.green}06`,
+              border: `1px solid ${C.green}12`,
+              textAlign: "center",
+            }}
+          >
+            <T color={C.green} bold size={17}>
+              Reasoning helps when there is a right answer to check. It barely helps when there is not.
+            </T>
+          </div>
+        </Box>
+      </Reveal>
       {sub < 9 && (
         <SubBtn
           key={sub}

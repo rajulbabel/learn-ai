@@ -136,5 +136,8 @@
     "Three data source cards for training reasoning models covering existing chain-of-thought in pre-training data, synthetic generation with a verifier filter, and rejection sampling from the model itself",
     "Annotated reasoning trace demonstrating emergent self-correction, verification, and confidence-calibration patterns that arose purely from the reward signal",
     "Two-column honest scope table listing domains where reasoning helps (math, code, logic) and domains where it does not lift quality (creative writing, empathy, casual conversation)"
+  ],
+  "11.1": [
+    "Retrieval diagram with a yellow query box on the left for the phrase about cats pointing an arrow into a cloud of ten numbered document dots, where the three dots closest to the query (documents 1, 3, and 7 - all cat-related sentences) are highlighted green as the top-3 nearest neighbors and the remaining seven dots are dimmed"
   ]
 }

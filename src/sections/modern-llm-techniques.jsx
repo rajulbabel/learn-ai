@@ -274,24 +274,24 @@ export const MixtureOfExperts = (ctx) => {
           >
             Per layer:
             <br />
-            &nbsp;&nbsp;Attention block:&nbsp;&nbsp;&nbsp;~350M
+            &nbsp;&nbsp;Attention (GQA):&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;~41M
             <br />
-            &nbsp;&nbsp;8 experts x ~650M:&nbsp;~5.2B
+            &nbsp;&nbsp;8 experts x ~176M:&nbsp;&nbsp;&nbsp;&nbsp;~1.41B
             <br />
-            &nbsp;&nbsp;Router + norms:&nbsp;&nbsp;&nbsp;~50K (negligible)
+            &nbsp;&nbsp;Router + norms:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;~50K (negligible)
             <br />
             &nbsp;&nbsp;-----------------------
             <br />
-            &nbsp;&nbsp;Per layer total:&nbsp;&nbsp;&nbsp;~5.6B
+            &nbsp;&nbsp;Per layer total:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;~1.45B
             <br />
             <br />x 32 layers + shared embeddings = <strong style={{ color: C.orange }}>46.7B total</strong>
             <br />
             <br />
             <strong style={{ color: C.green }}>Active per token:</strong>
             <br />
-            &nbsp;&nbsp;Attention:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;350M
+            &nbsp;&nbsp;Attention:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;41M
             <br />
-            &nbsp;&nbsp;2 of 8 experts:&nbsp;&nbsp;1.3B per layer
+            &nbsp;&nbsp;2 of 8 experts:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;352M per layer
             <br />
             &nbsp;&nbsp;x 32 layers + embeddings = <strong style={{ color: C.green }}>~13B active</strong>
           </div>

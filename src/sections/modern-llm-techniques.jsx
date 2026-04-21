@@ -708,6 +708,90 @@ export const Thinking = (ctx) => {
           </div>
         </Box>
       </Reveal>
+      <Reveal when={sub >= 3}>
+        <Box color={C.yellow} style={{ width: "100%" }}>
+          <T color={C.yellow} bold center size={22}>
+            How the model switches between thinking and answering
+          </T>
+          <T color="#ffe082" style={{ marginTop: 8 }}>
+            There is no "thinking mode switch" in the code. The vocabulary has two special tokens: &lt;think&gt; and
+            &lt;/think&gt;. The model learned to emit them at the right moments, same way it learned any other word.
+            The softmax output is a probability distribution over all tokens, and the special tokens simply win at the
+            right moments.
+          </T>
+          <div style={{ marginTop: 14, display: "flex", flexDirection: "column", gap: 10 }}>
+            {[
+              {
+                caption: "After 'User: What is 23 x 47? Assistant:'",
+                rows: [
+                  { token: "<think>", prob: 0.87, winner: true },
+                  { token: "1081", prob: 0.03 },
+                  { token: "The", prob: 0.02 },
+                ],
+              },
+              {
+                caption: "Inside thinking, after '... = 1081 OK'",
+                rows: [
+                  { token: "</think>", prob: 0.62, winner: true },
+                  { token: "Let", prob: 0.09 },
+                  { token: "Also", prob: 0.07 },
+                ],
+              },
+            ].map(({ caption, rows }, i) => (
+              <div
+                key={i}
+                style={{
+                  padding: "12px 14px",
+                  borderRadius: 8,
+                  background: `${C.yellow}06`,
+                  border: `1px solid ${C.yellow}12`,
+                }}
+              >
+                <T color={C.dim} size={14} style={{ fontFamily: "monospace" }}>
+                  {caption}
+                </T>
+                <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 4 }}>
+                  {rows.map((r) => (
+                    <div
+                      key={r.token}
+                      style={{
+                        display: "grid",
+                        gridTemplateColumns: "140px 1fr 60px",
+                        gap: 10,
+                        alignItems: "center",
+                        padding: "6px 10px",
+                        borderRadius: 4,
+                        background: r.winner ? `${C.green}06` : "rgba(0,0,0,0.2)",
+                      }}
+                    >
+                      <T color={r.winner ? C.green : C.bright} bold={r.winner} size={15} style={{ fontFamily: "monospace" }}>
+                        {r.token}
+                      </T>
+                      <div style={{ height: 10, background: "rgba(255,255,255,0.04)", borderRadius: 3 }}>
+                        <div
+                          style={{
+                            width: `${r.prob * 100}%`,
+                            height: "100%",
+                            background: r.winner ? C.green : C.mid,
+                            borderRadius: 3,
+                          }}
+                        />
+                      </div>
+                      <T color={C.dim} size={14} style={{ textAlign: "right" }}>
+                        {r.prob.toFixed(2)}
+                      </T>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+          <T color="#ffe082" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
+            The model learned to emit &lt;think&gt; and &lt;/think&gt; at the right moments. That is the entire
+            "mode" mechanism.
+          </T>
+        </Box>
+      </Reveal>
       {sub < 9 && (
         <SubBtn
           key={sub}

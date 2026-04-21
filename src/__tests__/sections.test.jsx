@@ -169,6 +169,12 @@ describe("Thinking content", () => {
     expect(container.textContent).toMatch(/loop/i);
     expect(container.textContent).toMatch(/same loop|more.*loop|longer/i);
   });
+
+  it("sub=3 shows how think/</think> tokens work", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/think/);
+    expect(container.textContent).toMatch(/probabilit/i);
+  });
 });
 
 // ─── TOC special branches ───

@@ -60,6 +60,53 @@ export const MixtureOfExperts = (ctx) => {
           </div>
         </Box>
       )}
+      <Reveal when={sub >= 1}>
+        <Box color={C.cyan} style={{ width: "100%" }}>
+          <T color={C.cyan} bold center size={22}>
+            Replace one FFN with a router + N expert FFNs
+          </T>
+          <div style={{ marginTop: 14, display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+            <div
+              style={{
+                padding: "12px 14px",
+                borderRadius: 8,
+                background: `${C.dim}06`,
+                border: `1px solid ${C.dim}12`,
+              }}
+            >
+              <T color={C.mid} bold center size={17}>
+                Before: standard transformer block
+              </T>
+              <T color={C.dim} size={14} center style={{ marginTop: 8, fontFamily: "monospace" }}>
+                LayerNorm -&gt; Attention -&gt; Add
+                <br />
+                LayerNorm -&gt; <strong style={{ color: C.bright }}>FFN</strong> -&gt; Add
+              </T>
+            </div>
+            <div
+              style={{
+                padding: "12px 14px",
+                borderRadius: 8,
+                background: `${C.cyan}06`,
+                border: `1px solid ${C.cyan}12`,
+              }}
+            >
+              <T color={C.cyan} bold center size={17}>
+                After: MoE block
+              </T>
+              <T color="#80deea" size={14} center style={{ marginTop: 8, fontFamily: "monospace" }}>
+                LayerNorm -&gt; Attention -&gt; Add
+                <br />
+                LayerNorm -&gt; <strong style={{ color: C.cyan }}>[Router -&gt; top-k experts -&gt; weighted sum]</strong> -&gt; Add
+              </T>
+            </div>
+          </div>
+          <T color="#80deea" style={{ marginTop: 10 }}>
+            Each "expert" is just a copy of the FFN architecture (two matrices, an activation). 8 experts means 8
+            independent sets of FFN weights. The router is a tiny linear layer that decides which experts to invoke.
+          </T>
+        </Box>
+      </Reveal>
       {sub < 7 && (
         <SubBtn
           key={sub}

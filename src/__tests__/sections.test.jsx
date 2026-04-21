@@ -101,6 +101,12 @@ describe("MixtureOfExperts content", () => {
     expect(container.textContent).toMatch(/13B/);
     expect(container.textContent).toMatch(/Mixtral/);
   });
+
+  it("sub=1 shows FFN replacement with router + experts", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/Router/);
+    expect(container.textContent).toMatch(/FFN/);
+  });
 });
 
 // ─── TOC special branches ───

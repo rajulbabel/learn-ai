@@ -5671,6 +5671,213 @@
   },
   {
     "id": 630,
+    "chapterId": "9.6",
+    "title": "Encoder-Decoder: The Training Flow",
+    "section": 9,
+    "sectionName": "The Decoder",
+    "sub": 0,
+    "text": "Progressive encoder-decoder training flow diagram showing the complete pipeline: tokenization, embedding, positional encoding, encoder self-attention, FFN, decoder with causal masking and cross-attention, and output headTRAINING / PREFILL MODEAll tokens flow as one matrix through every layer simultaneously.Step 0: Raw Input String\"The cat sat on the mat\"Step 1: Tokenization (lookup table, no neural network)Split text into tokens, map each to an integer ID\"The\"ID:1042\"cat\"ID:5829\"sat\"ID:3820\"on\"ID:322\"the\"ID:1042\"mat\"ID:9382Each word becomes one integer. Nothing neural yet.Continue"
+  },
+  {
+    "id": 631,
+    "chapterId": "9.6",
+    "title": "Encoder-Decoder: The Training Flow",
+    "section": 9,
+    "sectionName": "The Decoder",
+    "sub": 1,
+    "text": "Embedding Lookup (one matrix row per token)Each token ID selects a row from the embedding matrix (learned during training)0.21-0.870.450.620.34-0.18-0.550.910.120.08-0.430.770.21-0.870.450.730.15-0.61ALL 6 lookups happen at once - just row selection from a table\"The\" (ID 1042) and \"the\" (ID 1042) get the SAME embedding - same word, same rowContinue"
+  },
+  {
+    "id": 632,
+    "chapterId": "9.6",
+    "title": "Encoder-Decoder: The Training Flow",
+    "section": 9,
+    "sectionName": "The Decoder",
+    "sub": 2,
+    "text": "Add Positional Encoding (pure math, not learned)sin/cos values based on position index, added element-wise to embeddings0.21-0.871.451.470.34-0.17-0.460.910.130.16-0.431.770.3-0.870.461.580.15-0.6ALL 6 additions happen at once - element-wise, no dependencies\"The\" (pos 0) = [0.21,-0.87,1.45] vs \"the\" (pos 4) = [0.30,-0.87,0.46] - now different!Continue"
+  },
+  {
+    "id": 633,
+    "chapterId": "9.6",
+    "title": "Encoder-Decoder: The Training Flow",
+    "section": 9,
+    "sectionName": "The Decoder",
+    "sub": 3,
+    "text": "BLOCK (x6 in original Transformer, x96 in GPT-scale)Input: 6x512 matrix (6 tokens, each a 512-dim vector). Shown as 6x3 for clarity.Encoder Self-Attention (bidirectional - NO causal mask)Every token can attend to EVERY other token (including future ones)x W_Q (learned) -> Query vectors0.71.51.10.50.30.8-0.30.90.10.1-0.40.70.61.410.80.2-0.5Q = X * W_Q (one matrix multiply: 6x3 * 3x3 = 6x3)x W_K (learned) -> Key vectors0.92.40.10.40.50.6-0.20.80.30.3-0.30.50.82.300.50.1-0.4K = X * W_K (one matrix multiply: 6x3 * 3x3 = 6x3)x W_V (learned) -> Value vectors1.40.61.50.80.30.9-0.40.70.20.2-0.50.81.30.51.40.90.2-0.3V = X * W_V (one matrix multiply: 6x3 * 3x3 = 6x3)Q . K^T -> Attention Scores (every token to every token)NO causal mask in encoder - \"The\" can look at \"mat\", \"sat\" can look at \"cat\"Scale by 1/sqrt(d_k), Softmax, Weighted Sum of V1.20.51.30.90.40.8-0.30.60.30.3-0.40.71.10.41.20.80.1-0.2Attention(Q,K,V) = softmax(QK^T / sqrt(d_k)) * Vx W_O (learned) -> Multi-Head Output0.8-0.31.20.5-0.10.6-0.20.40.20.2-0.30.50.7-0.21.10.50-0.1Continue"
+  },
+  {
+    "id": 634,
+    "chapterId": "9.6",
+    "title": "Encoder-Decoder: The Training Flow",
+    "section": 9,
+    "sectionName": "The Decoder",
+    "sub": 4,
+    "text": "yerNorm (residual + normalize)-1.10.11-0.900.9-0.8-0.21-0.70.10.6-101-0.6-0.10.7LayerNorm(X + Attention(X)) - applied independently per vector, all at onceFeed-Forward Network (FFN)Same weights applied to EACH vector independently. No cross-token mixing.All 6 go through simultaneously as a batched matrix multiply.FFN Layer 1: 3 -> 6 dims + ReLU (expand)FFN Layer 2: 6 -> 3 dims (compress back)0.5-0.30.90.3-0.10.4-0.10.30.10.1-0.20.40.4-0.20.80.30-0.1Add & LayerNorm (residual + normalize)-0.8-0.51.3-0.7-0.31-0.5-0.10.6-0.400.4-0.7-0.41.1-0.3-0.10.4ENCODER OUTPUT: 6 context-enriched vectors (6x512 matrix)These become K and V for the decoder cross-attention. Computed ONCE, reused every decoder step.Each vector now \"knows\" about all other words thanks to bidirectional self-attention.Continue"
+  },
+  {
+    "id": 635,
+    "chapterId": "9.6",
+    "title": "Encoder-Decoder: The Training Flow",
+    "section": 9,
+    "sectionName": "The Decoder",
+    "sub": 5,
+    "text": "BLOCK (x6 in original Transformer)During TRAINING: all decoder tokens processed in parallel (teacher forcing).Showing decoder input: <s> The cat - predicting next token at each position.Decoder Input (target sequence, shifted right, + positional encoding)\"<s>\"0.5-0.10.8\"The\"0.950.42-0.31\"cat\"1.470.34-0.17Already embedded + positional encoding appliedMasked Self-Attention (causal - can only look backward)\"cat\" can see \"<s>\" and \"The\", but NOT future tokens. Prevents cheating during training.x W_Q -> Decoder Query0.3-0.10.50.60.30.20.40.20.6x W_K -> Decoder Key0.400.30.70.20.10.30.40.5x W_V -> Decoder Value0.5-0.20.60.80.10.40.60.30.7Q . K^T with CAUSAL MASK (lower triangle only)Softmax + Weighted Sum of V0.5-0.20.60.700.50.60.10.6Add & LayerNorm-0.90.20.7-0.50.10.4-0.30.30Continue"
+  },
+  {
+    "id": 636,
+    "chapterId": "9.6",
+    "title": "Encoder-Decoder: The Training Flow",
+    "section": 9,
+    "sectionName": "The Decoder",
+    "sub": 6,
+    "text": "tention: Decoder asks questions, Encoder provides answersQ = from decoder. K, V = from encoder output (computed once, reused).This is how the decoder \"reads\" the input sentence.Decoder x W_Q -> Cross-Attention Query-0.60.10.5-0.30.10.3-0.20.20Q from decoder (3 vectors) attends to K,V from encoder (6 vectors)K and V come from ENCODER OUTPUT (the 6 context-enriched vectors). No mask - full access.Cross-Attention: decoder Q . encoder K^T, weighted sum of encoder VEach decoder token can attend to ALL 6 encoder tokens (no causal mask here)0.4-0.10.80.600.50.50.20.3\"cat\" can now see encoder \"The\", \"cat\", \"sat\", \"on\", \"the\", \"mat\" - the full inputAdd & LayerNorm-0.40.10.3-0.200.200.1-0.1Continue"
+  },
+  {
+    "id": 637,
+    "chapterId": "9.6",
+    "title": "Encoder-Decoder: The Training Flow",
+    "section": 9,
+    "sectionName": "The Decoder",
+    "sub": 7,
+    "text": "FFN (same structure as encoder FFN)Each vector processed independently. Same weights for all positions.FFN Layer 1: 3 -> 6 + ReLUFFN Layer 2: 6 -> 30.3-0.20.50.200.30.10.10Add & LayerNorm (final decoder layer output)-0.200.200.10.10.10.2-0.3Continue"
+  },
+  {
+    "id": 638,
+    "chapterId": "9.6",
+    "title": "Encoder-Decoder: The Training Flow",
+    "section": 9,
+    "sectionName": "The Decoder",
+    "sub": 8,
+    "text": "ead - TRAINING: Every Position Predicts the Next TokenDuring training, we compute loss at ALL positions simultaneously (not just the last one).WHY USE ALL POSITIONS (not just the last)?During TRAINING, each position predicts the NEXT token. Position 0 (<s>) predicts \"The\", position 1 (\"The\") predicts \"cat\", position 2 (\"cat\") predicts \"sat\".This gives us 3 training signals from 1 forward pass (one per position). Much more efficient than using just the last.The causal mask ensures each position can only see past tokens, so every prediction is a fair \"test\".Position 0: \"<s>\"Linear + Softmax78%\"The\"12%\"A\"4%\"cat\"Target: \"The\"Loss = -log(0.78) = 0.25Position 1: \"The\"71%\"cat\"12%\"dog\"8%\"sat\"Target: \"cat\"Loss = -log(0.71) = 0.34Position 2: \"cat\"72%\"sat\"5%\"is\"11%\"ran\"Target: \"sat\"Loss = -log(0.72) = 0.33Total Loss = avg(0.25 + 0.34 + 0.33) = 0.31 -> backprop updates ALL weightsDuring PRODUCTION (generation), we DO only use the last position output.Because we already know all previous tokens (we generated them). Only the last position is \"new\".But during TRAINING we use ALL positions because the causal mask makes every position a valid prediction task.3 positions = 3 training examples from 1 forward pass. 1000 tokens = 999 free training signals!Continue"
+  },
+  {
+    "id": 639,
+    "chapterId": "9.6",
+    "title": "Encoder-Decoder: The Training Flow",
+    "section": 9,
+    "sectionName": "The Decoder",
+    "sub": 9,
+    "text": "Training Phase FlowEncoder:ALL 6 input tokens flow as one 6x512 matrix through every layer. Bidirectional attention (no mask).Decoder:ALL 3 target tokens (<s>, \"The\", \"cat\") flow together (teacher forcing). Causal mask prevents cheating.Cross-Attention:Decoder Q attends to encoder K,V. Each decoder token can see ALL encoder tokens.Self-Attention:MIXES information between tokens. Q.K^T creates cross-token connections.FFN:Does NOT mix tokens. Same weights applied independently to each vector. No cross-talk.Add & Norm:Per-vector operation. Adds residual, normalizes. No cross-token interaction.Output Head (train):ALL positions produce predictions. Loss computed everywhere. 3 signals from 1 pass.Output Head (gen):Only LAST position predicts next token. Others already known.Encoder runs ONCEIts output is reused as K,V for every decoder step. Decoder runs once (train) or N times (gen)."
+  },
+  {
+    "id": 640,
+    "chapterId": "9.6",
+    "title": "Encoder-Decoder: The Training Flow",
+    "section": 9,
+    "sectionName": "The Decoder",
+    "sub": -1,
+    "text": "The Decoder: Encoder-Decoder: The Training Flow. This chapter covers encoder-decoder: the training flow."
+  },
+  {
+    "id": 641,
+    "chapterId": "9.6",
+    "title": "Encoder-Decoder: The Training Flow",
+    "section": 9,
+    "sectionName": "The Decoder",
+    "sub": -2,
+    "text": "Diagram in Encoder-Decoder: The Training Flow: Progressive encoder-decoder training flow diagram showing complete pipeline: tokenization, embedding, positional encoding, encoder self-attention with Q K V projections, FFN, decoder with causal masking and cross-attention, and output head producing predictions at every position"
+  },
+  {
+    "id": 642,
+    "chapterId": "9.7",
+    "title": "Encoder-Decoder: The Inference Flow",
+    "section": 9,
+    "sectionName": "The Decoder",
+    "sub": 0,
+    "text": "Progressive encoder-decoder inference flow diagram showing autoregressive generation: encoder runs once, KV output is cached, decoder loops processing one new token at a time using KV cachePRODUCTION / INFERENCE MODE (autoregressive generation)Only ONE new token flows through the decoder at each step. Previous K,V are cached.HOW INFERENCE WORKS - THE BIG PICTURE1. ENCODER runs ONCE on the full input \"The cat sat on the mat\" (6 tokens, all in parallel).2. Encoder output (6 vectors) becomes K,V for cross-attention. Cached permanently.3. DECODER runs in a LOOP, one new token at a time: Step 1: feed <s> -> predict \"The\" Step 2: feed \"The\" -> predict \"cat\" (KV cache has <s>) Step 3: feed \"cat\" -> predict \"sat\" (KV cache has <s>, \"The\") Step 4: feed \"sat\" -> predict \"on\" (KV cache has <s>, \"The\", \"cat\") ...until <end> token is produced.4. At each step, ONLY the new token runs through all layers. Previous tokens' K,V are read from cache.Continue"
+  },
+  {
+    "id": 643,
+    "chapterId": "9.7",
+    "title": "Encoder-Decoder: The Inference Flow",
+    "section": 9,
+    "sectionName": "The Decoder",
+    "sub": 1,
+    "text": "ENCODER (runs ONCE, identical to training)\"The cat sat on the mat\" -> 6 tokens flow through all encoder layers in parallelSelf-attention (bidirectional, no mask) -> Add&Norm -> FFN -> Add&Norm -> repeat x6\"The\"-0.8-0.51.3\"cat\"-0.7-0.31\"sat\"-0.5-0.10.6\"on\"-0.400.4\"the\"-0.7-0.41.1\"mat\"-0.3-0.10.4ENCODER OUTPUT CACHED - reused as cross-attention K,V for every decoder stepContinue"
+  },
+  {
+    "id": 644,
+    "chapterId": "9.7",
+    "title": "Encoder-Decoder: The Inference Flow",
+    "section": 9,
+    "sectionName": "The Decoder",
+    "sub": 2,
+    "text": "DECODER - showing Step 3: generating after \"<s> The cat\"Already generated: \"<s>\", \"The\", \"cat\". Now predicting the next token.DECODER STATE AT STEP 3KV Cache (self-attention) contains K,V for: <s> (step 1), \"The\" (step 2). These were computed in earlier steps.NEW token entering now: \"cat\" (the token we just generated in step 2).Only \"cat\" flows through the full decoder. <s> and \"The\" are NOT recomputed.DECODER STEP 3: Only \"cat\" flows through all layersFROM KV CACHE (not recomputed)NEW TOKEN (flows through network)\"<s>\"\"The\"K,V already in cache from steps 1-2\"cat\"1.470.34-0.17Embedded + positional encodedContinue"
+  },
+  {
+    "id": 645,
+    "chapterId": "9.7",
+    "title": "Encoder-Decoder: The Inference Flow",
+    "section": 9,
+    "sectionName": "The Decoder",
+    "sub": 3,
+    "text": "elf-Attention (with KV Cache)Only \"cat\" computes Q. K,V for <s> and \"The\" come from cache.x W_Q -> Query (ONLY for \"cat\")0.40.20.6Only 1 Q vector computed (not 3)x W_K -> Key (new \"cat\" K joins cached <s>, \"The\" K)0.400.30.70.20.1K from cache (computed in steps 1-2)0.30.40.5New K computed, then ADDED to cachex W_V -> Value (new \"cat\" V joins cached <s>, \"The\" V)0.5-0.20.60.80.10.4V from cache (computed in steps 1-2)0.60.30.7New V computed, then ADDED to cacheContinue"
+  },
+  {
+    "id": 646,
+    "chapterId": "9.7",
+    "title": "Encoder-Decoder: The Inference Flow",
+    "section": 9,
+    "sectionName": "The Decoder",
+    "sub": 4,
+    "text": "attends to ALL K (cached + new)\"cat\" Q dots with K_<s>, K_The, K_cat -> 3 attention scores -> softmax -> weighted V sumAttention Output (1 vector, not 3)0.60.10.6Single output vector for \"cat\" onlyWHY IS THIS FASTER THAN RECOMPUTING?Without cache: compute Q,K,V for ALL 3 tokens, run attention on 3x3 matrix. O(n^2).With cache: compute Q,K,V for 1 token, read cached K,V, attention on 1x3. O(n).At 100K tokens, that is 100,000x cheaper per step. KV cache is essential for fast generation.Add & LayerNorm (just 1 vector)-0.30.30Continue"
+  },
+  {
+    "id": 647,
+    "chapterId": "9.7",
+    "title": "Encoder-Decoder: The Inference Flow",
+    "section": 9,
+    "sectionName": "The Decoder",
+    "sub": 5,
+    "text": "tention (decoder Q, encoder K,V from cache)Only \"cat\" computes Q. K,V are the 6 encoder vectors (cached from Phase 1).Decoder x W_Q -> Cross Q (just 1 vector for \"cat\")-0.20.20Encoder K,V: 6 vectors from encoder output (cached, never recomputed)\"The\"\"cat\"\"sat\"\"on\"\"the\"\"mat\"ENCODER OUTPUT - computed once in Phase 1, reused every step\"cat\" Q dots ALL 6 encoder K -> weighted sum of 6 encoder V0.50.20.3\"cat\" now incorporates information from ALL input wordsAdd & LayerNorm00.1-0.1Continue"
+  },
+  {
+    "id": 648,
+    "chapterId": "9.7",
+    "title": "Encoder-Decoder: The Inference Flow",
+    "section": 9,
+    "sectionName": "The Decoder",
+    "sub": 6,
+    "text": "FFN (just 1 vector through - \"cat\" only)FFN processes each vector independently, so only the new token needs to go through.FFN Layer 1: 3 -> 6 + ReLUFFN Layer 2: 6 -> 30.10.10WHY ONLY RUN FFN ON THE NEW TOKEN?FFN does NOT mix information between tokens. It applies the same function to each vector independently.Previous tokens' FFN outputs are already \"baked into\" the K,V vectors stored in the cache.So running FFN on <s> or \"The\" again would produce the EXACT same output. No point recomputing.Add & LayerNorm (decoder block output for \"cat\")0.10.2-0.3Continue"
+  },
+  {
+    "id": 649,
+    "chapterId": "9.7",
+    "title": "Encoder-Decoder: The Inference Flow",
+    "section": 9,
+    "sectionName": "The Decoder",
+    "sub": 7,
+    "text": "ead (\"cat\" vector -> next word prediction)Linear Projection (3 -> vocab size)3.5\"sat\"0.8\"is\"1.2\"ran\"-0.3\"sees\"0.5\"went\"Softmax -> Probabilities80.7%5.4%8.1%1.8%4.0%\"sat\"Predicted next token: \"sat\"\"sat\" feeds back as decoder input for Step 4.WHY ONLY THE LAST POSITION?During generation, there IS only one position flowing through - the new token.<s> and \"The\" were processed in Steps 1-2. Their predictions are done. We already used them.The single vector for \"cat\" at the output is all we need to predict the next word \"sat\".Continue"
+  },
+  {
+    "id": 650,
+    "chapterId": "9.7",
+    "title": "Encoder-Decoder: The Inference Flow",
+    "section": 9,
+    "sectionName": "The Decoder",
+    "sub": 8,
+    "text": "pens NextStep 4: \"sat\" enters the decoder. KV cache now has <s>, \"The\", \"cat\". Predicts \"on\".Step 5: \"on\" enters. KV cache has <s>, \"The\", \"cat\", \"sat\". Predicts \"the\".Step 6: \"the\" enters. KV cache has <s>, \"The\", \"cat\", \"sat\", \"on\". Predicts \"mat\".Step 7: \"mat\" enters. Predicts <end>. Generation stops.Final output: \"The cat sat on the mat\" (7 decoder steps, encoder ran once)KV Cache: Memory vs Speed TradeoffWhat is stored:K and V vectors at every attention layer, for every past token.Self-attention cache:Grows by 1 entry per step. At step N, holds N-1 K,V pairs per layer.Cross-attention cache:Fixed size (6 vectors K + 6 vectors V). Set once from encoder output.Real scale (GPT-4):96 layers, 128 heads, 128 dims/head. Each token = 96*128*128 = 1.57M floats for K+V.At 100K context:100K * 1.57M * 2 bytes (fp16) = ~300 GB just for the KV cache.Without cache:Each step would recompute ALL tokens. Step N costs O(N). Total: O(N^2). Impossibly slow.With cache:Each step costs O(1) for FFN + O(N) for attention lookup. Total: O(N). Much faster.Tradeoff:KV cache uses lots of GPU memory but makes generation feasible. No cache = no fast LLMs."
+  },
+  {
+    "id": 651,
+    "chapterId": "9.7",
+    "title": "Encoder-Decoder: The Inference Flow",
+    "section": 9,
+    "sectionName": "The Decoder",
+    "sub": -1,
+    "text": "The Decoder: Encoder-Decoder: The Inference Flow. This chapter covers encoder-decoder: the inference flow."
+  },
+  {
+    "id": 652,
+    "chapterId": "9.7",
+    "title": "Encoder-Decoder: The Inference Flow",
+    "section": 9,
+    "sectionName": "The Decoder",
+    "sub": -2,
+    "text": "Diagram in Encoder-Decoder: The Inference Flow: Progressive encoder-decoder inference flow diagram showing autoregressive generation: encoder runs once, K V output is cached, decoder runs in a loop processing one new token at a time using KV cache for previously computed keys and values"
+  },
+  {
+    "id": 653,
     "chapterId": "10.1",
     "title": "KV Cache - Why Inference is Fast",
     "section": 10,
@@ -5679,7 +5886,7 @@
     "text": "The Problem - Naive Generation Redoes HistoryTo generate each new word, the naive approach re-processes every previous word from scratch. Watch the work pile up across three steps of generating \"I love cats\":Work at each step (green = new, red = redundant)Three stacked work rows showing naive generation redoing history: step 1 with 1 green new block, step 2 with 1 red redundant block and 1 green new block, step 3 with 2 red redundant blocks and 1 green new block, illustrating how computation piles up quadratically when the KV cache is not usedStep 1 (\"I\")newStep 2 (\"love\")redonewStep 3 (\"cats\")redoredonewEach block = one token's Q, K, V computed. Green blocks are real new work. Red blocks are identical to work done in earlier steps.Counting the waste across 3 stepsTotal work: 1 + 2 + 3 = 6 blocksActually useful: 3 blocksWasted: 3 blocks (50%)At 1000 tokens: 500,500 blocks of work, only 1000 are useful. 99.8% wasted.Naive generation recomputes identical numbers every step. This chapter shows the one-line fix that makes ChatGPT feel instant.Continue"
   },
   {
-    "id": 631,
+    "id": 654,
     "chapterId": "10.1",
     "title": "KV Cache - Why Inference is Fast",
     "section": 10,
@@ -5688,7 +5895,7 @@
     "text": "tbulb - Same Input, Same Output, AlwaysWhen step 2 re-processes the token \"I\", does it get the same numbers as step 1 did? Let's check.Step 1 computedq_I = W_Q · x_I= [0.5, 0.2]=Step 2 re-computedq_I = W_Q · x_I= [0.5, 0.2]Identical. Every. Single. Time.Why identical? Because neither input has changed.x_I (embedding for \"I\") is frozen: tokens don't change their embedding mid-generation.W_Q (weight matrix) is frozen: trained weights don't change during inference.Same input · same weights = same output, ALWAYS.So stop recomputing. Save the answer the first time. That's a cache.Continue"
   },
   {
-    "id": 632,
+    "id": 655,
     "chapterId": "10.1",
     "title": "KV Cache - Why Inference is Fast",
     "section": 10,
@@ -5697,7 +5904,7 @@
     "text": "ix View - Only the Last Row Is NewAttention is matrix multiplication. Let's draw the full matmul at step 3 (generating \"cats\") and see which parts of the matrices we actually need.Q · Kᵀ = Scores, and Scores · V = OutputSide by side attention matrix multiplications at generation step 3: Q times K transpose equals Scores (3 by 3) with rows for I and love dimmed because they were already computed at earlier steps and only the last row for cats glows, and Scores times V equals Output with only the last row highlighted as the new resultScores = Q · KᵀQ (3×d)q_Iq_loveq_cats·Kᵀ (d×3)k_Ik_lovek_cats=Scores (3×3)(already)(already)(already)(already)(already)(already)·k_I·k_love·k_cats↑ only this row is new: 3 dot products (not 9)Output = softmax(Scores) · VScores (3×3)row_I (old)row_love (old)row_cats (NEW)·V (3×d)v_I (all needed)v_love (all needed)v_cats (all needed)=Output (3×d)out_I (old, discarded)out_love (old, discarded)out_cats (the ONLY one we need)↑ only this row is new: 1 weighted sum (not 3)Counting cells at step 3Without cache18 cells9 score + 9 outputActually needed6 cells3 score + 3 outputWasted12 cells (66%)Cost per step scales as N² without cache. With cache, cost per step stays O(N). Now we just need to figure out what to save so we can skip the gray rows.Continue"
   },
   {
-    "id": 633,
+    "id": 656,
     "chapterId": "10.1",
     "title": "KV Cache - Why Inference is Fast",
     "section": 10,
@@ -5706,7 +5913,7 @@
     "text": "Save, What to Throw AwayWe compute three things per token: Q, K, V. For each, do we need the OLD ones to build the new output row?Q✗Don't cachedead weightOnly the new query q_cats appears in the new output row's formula. Old queries q_I and q_love are never used again.K✓Cache itevery old K neededThe new row of Scores = q_new · every old K. Missing one key = missing one attention score.V✓Cache itevery old V neededThe new output row = weighted sum of every old V. Missing one value = losing that token's contribution.That is why it is called the KV cache.We save K and V. Never Q.Continue"
   },
   {
-    "id": 634,
+    "id": 657,
     "chapterId": "10.1",
     "title": "KV Cache - Why Inference is Fast",
     "section": 10,
@@ -5715,7 +5922,7 @@
     "text": "e Is a Growing NotebookThe KV cache is literally two tables that grow by exactly one row at every step. Nothing moves, nothing gets recomputed. We just append to the notebook.Three frame growing notebook diagram showing the K cache and V cache tables appending one row per generation step: after I has 1 row, after love has 2 rows with the older row dimmed, after cats has 3 rows with only the newest row highlightedAfter 'I'K cacheV cache[0.3, 0.4][0.8, 0.3]After 'love'K cacheV cache[0.3, 0.4][0.7, 0.2][0.8, 0.3][0.1, 0.9]After 'cats'K cacheV cache[0.3, 0.4][0.7, 0.2][0.5, 0.3][0.8, 0.3][0.1, 0.9][0.45, 0.6]appendappendOne append per step. The existing rows don't move, don't change, don't get recomputed. They just sit there in memory, ready to be read.Continue"
   },
   {
-    "id": 635,
+    "id": 658,
     "chapterId": "10.1",
     "title": "KV Cache - Why Inference is Fast",
     "section": 10,
@@ -5724,7 +5931,7 @@
     "text": "s After - Step 3 Side by SideGenerating \"cats\" with and without the cache. Identical output, very different amounts of work.Without CacheRecompute everything from scratchq_I = W_Q · x_Iwastedq_love = W_Q · x_lovewastedq_cats = W_Q · x_catsusedk_I = W_K · x_Iwastedk_love = W_K · x_lovewastedk_cats = W_K · x_catsusedv_I = W_V · x_Iwastedv_love = W_V · x_lovewastedv_cats = W_V · x_catsused9 projections + 9 score cells + 3 output rows15 operations wastedWith CacheRead old rows, compute only the new oneRead from cache: k_I, k_love, v_I, v_loveCompute only for new token:q_cats = W_Q · x_catsk_cats = W_K · x_catsv_cats = W_V · x_catsAppend k_cats, v_cats to cache. Then:scores = q_cats · Kᵀ (last row only, 1×N)output_cats = softmax(scores) · V (1×d)3 projections + 3 score cells + 1 output row0 operations wastedThe output vector for \"cats\" is identical in both.Same numbers come out. The cache just changes where the old K and V values come from (freshly recomputed vs memory read).Continue"
   },
   {
-    "id": 636,
+    "id": 659,
     "chapterId": "10.1",
     "title": "KV Cache - Why Inference is Fast",
     "section": 10,
@@ -5733,7 +5940,7 @@
     "text": "with Real Numbers (d = 2)Let's walk through the complete computation with tiny 2-dim vectors, watching the cache fill up and seeing the identical output that the naive method would have produced.Embeddings (d = 2) and weightsx_I = [1.0, 0.0]x_love = [0.0, 1.0]x_cats = [0.5, 0.5]W_Q rows: [0.5, 0.1] [0.2, 0.6]W_K rows: [0.3, 0.7] [0.4, 0.2]W_V rows: [0.8, 0.1] [0.3, 0.9]Step 1: process \"I\"q_I = W_Q · [1.0, 0.0] = [0.5, 0.2]k_I = W_K · [1.0, 0.0] = [0.3, 0.4]v_I = W_V · [1.0, 0.0] = [0.8, 0.3]Cache after step 1:K = [[0.3, 0.4]]V = [[0.8, 0.3]]Step 2: process \"love\" (reuse cache for \"I\")q_love = W_Q · [0.0, 1.0] = [0.1, 0.6]k_love = W_K · [0.0, 1.0] = [0.7, 0.2]v_love = W_V · [0.0, 1.0] = [0.1, 0.9]K = [[0.3, 0.4], [0.7, 0.2]]V = [[0.8, 0.3], [0.1, 0.9]]Step 3: process \"cats\" and compute full attentionq_cats = W_Q · [0.5, 0.5] = [0.3, 0.4]k_cats = W_K · [0.5, 0.5] = [0.5, 0.3]v_cats = W_V · [0.5, 0.5] = [0.45, 0.6]Scores (last row only): q_cats · each keyq_cats · k_I = 0.3×0.3 + 0.4×0.4 = 0.25q_cats · k_love = 0.3×0.7 + 0.4×0.2 = 0.29q_cats · k_cats = 0.3×0.5 + 0.4×0.3 = 0.27Scale by √2, then softmax:softmax = [0.329, 0.338, 0.333]Weighted sum of values:0.329 × [0.8, 0.3] + 0.338 × [0.1, 0.9] + 0.333 × [0.45, 0.6]output_cats = [0.447, 0.603]This exact [0.447, 0.603] would also come out without the cache. The cache never changes what is computed. It only changes where k_I, k_love, v_I, v_love came from (cached vs recomputed).Continue"
   },
   {
-    "id": 637,
+    "id": 660,
     "chapterId": "10.1",
     "title": "KV Cache - Why Inference is Fast",
     "section": 10,
@@ -5742,7 +5949,7 @@
     "text": "- 10.7 GB Per ConversationThe cache isn't free. It has a specific memory cost that depends on model size and sequence length.The formulacache_bytes = 2 (K+V) × layers × d_model × seq_len × bytes_per_paramExample: LLaMA 70Blayers:80d_model:8,192seq_len (max):4,096 tokensprecision:FP16 (2 bytes)2 × 80 × 8,192 × 4,096 × 2 bytes= 10.7 GB per sequenceHorizontal memory meter filling with gradient showing KV cache memory cost scaling with sequence length, with tick marks at 1024 4096 and 32768 tokens and GB values 2.7 10.7 and 86 for LLaMA 70B sized models1K2.7 GB4K10.7 GB32K86 GBKV cache size grows with sequence length (LLaMA 70B, FP16)And every concurrent user needs their own cache1 user10.7 GB10 users107 GB100 users1,070 GBLong-context models (128K tokens) consume enormous memory. This is a major reason why serving LLMs is expensive, and why techniques like grouped-query attention exist to shrink the cache.Continue"
   },
   {
-    "id": 638,
+    "id": 661,
     "chapterId": "10.1",
     "title": "KV Cache - Why Inference is Fast",
     "section": 10,
@@ -5751,7 +5958,7 @@
     "text": "- Memory for SpeedThe KV cache is a trade. It costs memory and pays back speed. Here's the final ledger.Without KV CacheSpeed:slow, O(N²) per step, O(N³) totalMemory:low, nothing storedWith KV CacheSpeed:fast, O(N) per step, O(N²) totalMemory:GB-scale, grows per tokenAt 1000 tokens:Without cache~333 million opsWith cache~500 thousand ops~660× fasterEvery fast LLM you've ever used runs on this trick.Without it, ChatGPT would take minutes per response instead of seconds.A note on scope: the cache only exists at inference time. During training, all tokens are processed in parallel, so there's nothing to cache."
   },
   {
-    "id": 639,
+    "id": 662,
     "chapterId": "10.1",
     "title": "KV Cache - Why Inference is Fast",
     "section": 10,
@@ -5760,7 +5967,7 @@
     "text": "Modern LLM Techniques: KV Cache - Why Inference is Fast. This chapter covers kv cache - why inference is fast."
   },
   {
-    "id": 640,
+    "id": 663,
     "chapterId": "10.1",
     "title": "KV Cache - Why Inference is Fast",
     "section": 10,
@@ -5769,7 +5976,7 @@
     "text": "Diagram in KV Cache - Why Inference is Fast: Three stacked work rows showing naive generation redoing history: step 1 with 1 green new block, step 2 with 1 red redundant block and 1 green new block, step 3 with 2 red redundant blocks and 1 green new block, illustrating how computation piles up quadratically when the KV cache is not used"
   },
   {
-    "id": 641,
+    "id": 664,
     "chapterId": "10.1",
     "title": "KV Cache - Why Inference is Fast",
     "section": 10,
@@ -5778,7 +5985,7 @@
     "text": "Diagram in KV Cache - Why Inference is Fast: Side by side attention matrix multiplications at generation step 3: Q times K transpose equals Scores (3 by 3) with rows for I and love dimmed because they were already computed at earlier steps and only the last row for cats glows, and Scores times V equals Output with only the last row highlighted as the new result"
   },
   {
-    "id": 642,
+    "id": 665,
     "chapterId": "10.1",
     "title": "KV Cache - Why Inference is Fast",
     "section": 10,
@@ -5787,7 +5994,7 @@
     "text": "Diagram in KV Cache - Why Inference is Fast: Three frame growing notebook diagram showing the K cache and V cache tables appending one row per generation step: after I has 1 row, after love has 2 rows with the older row dimmed, after cats has 3 rows with only the newest row highlighted"
   },
   {
-    "id": 643,
+    "id": 666,
     "chapterId": "10.1",
     "title": "KV Cache - Why Inference is Fast",
     "section": 10,
@@ -5796,7 +6003,7 @@
     "text": "Diagram in KV Cache - Why Inference is Fast: Horizontal memory meter filling with gradient showing KV cache memory cost scaling with sequence length, with tick marks at 1024 4096 and 32768 tokens and GB values 2.7 10.7 and 86 for LLaMA 70B sized models"
   },
   {
-    "id": 644,
+    "id": 667,
     "chapterId": "10.2",
     "title": "Grouped-Query Attention - Shrinking the KV Cache",
     "section": 10,
@@ -5805,7 +6012,7 @@
     "text": "Recall: Multi-Head AttentionIn chapters 7.9-7.14, we learned standard MHA. With 8 heads, the model maintains 8 independent sets of Q, K, V weight matrices:QueriesW_Q1W_Q2W_Q3W_Q4W_Q5W_Q6W_Q7W_Q8KeysW_K1W_K2W_K3W_K4W_K5W_K6W_K7W_K8ValuesW_V1W_V2W_V3W_V4W_V5W_V6W_V7W_V8That is 8 W_Q + 8 W_K + 8 W_V = 24 weight matrices per attention layer. Each head has its own complete set. This works great for quality, but there is a hidden cost during inference.Continue"
   },
   {
-    "id": 645,
+    "id": 668,
     "chapterId": "10.2",
     "title": "Grouped-Query Attention - Shrinking the KV Cache",
     "section": 10,
@@ -5814,7 +6021,7 @@
     "text": "rence problem: KV cache memoryDuring generation, we cache the K and V vectors for all previous tokens. This avoids recomputing them at every step. But this KV cache grows fast.KV cache memory per layer2 x num_heads x seq_length x d_head x bytes_per_paramConcrete example: LLaMA 2 70Bnum_heads6464 attention headsd_head128128 dims per head (8192 / 64)seq_length40964096 token context windowlayers8080 transformer layersbytes22 bytes per param (float16)Total KV cache per batch item2 x 64 x 4096 x 128 x 2 bytes = 134,217,728 bytes per layer134,217,728 x 80 layers = 10,737,418,240 bytes~10 GB per batch item!Serving 8 users simultaneously = 80 GB just for KV caches. That is an entire A100 GPU of memory - before the model weights themselves.Continue"
   },
   {
-    "id": 646,
+    "id": 669,
     "chapterId": "10.2",
     "title": "Grouped-Query Attention - Shrinking the KV Cache",
     "section": 10,
@@ -5823,7 +6030,7 @@
     "text": "tion: share K and V across query groupsInstead of giving every head its own K and V, we share K and V across groups of query heads. Each head still has its own unique Q - queries stay personal.Example: 8 query heads, 2 KV groupsGroup 1: Heads 1-4 share K_1, V_1Q_1Q_2Q_3Q_4all useK_1V_1Group 2: Heads 5-8 share K_2, V_2Q_5Q_6Q_7Q_8all useK_2V_2Weight matrices needed: 8 W_Q + 2 W_K + 2 W_V = 12 projections (down from 24). The K and V computations (and their caches) shrink by 4x.Continue"
   },
   {
-    "id": 647,
+    "id": 670,
     "chapterId": "10.2",
     "title": "Grouped-Query Attention - Shrinking the KV Cache",
     "section": 10,
@@ -5832,7 +6039,7 @@
     "text": "omparison: MHA vs GQA vs MQAMHA (Multi-Head Attention)8Q heads8K heads8V heads24 projections total8 K + 8 V cached per layerGQA (Grouped-Query Attention, 4 heads per group)8Q heads2K heads2V heads12 projections total2 K + 2 V cached per layer (4x less)MQA (Multi-Query Attention)8Q heads1K heads1V heads10 projections total1 K + 1 V cached per layer (8x less)KV cache savings (LLaMA 2 70B, 4096 context)MHA (64 KV heads)~10 GBGQA-8 (8 KV groups)~1.25 GBMQA (1 KV shared)~160 MBContinue"
   },
   {
-    "id": 648,
+    "id": 671,
     "chapterId": "10.2",
     "title": "Grouped-Query Attention - Shrinking the KV Cache",
     "section": 10,
@@ -5841,12 +6048,354 @@
     "text": "sharing K and V work?The query is the \"question\" each head asks. Each head needs its own unique question to capture different patterns (syntax, semantics, coreference, etc.).But keys and values are the \"answers\" - and it turns out adjacent heads often attend to similar positions anyway. The K and V vectors across heads are highly correlated. Sharing them loses very little information.Research resultGQA matches standard MHA quality within 1% on most benchmarks while using 4x less KV cache memory. The quality-to-efficiency tradeoff is exceptionally favorable.Models using GQALLaMA 2 70B8 KV groupsLLaMA 38 KV groupsMistral 7B8 KV groupsGemmavaries by sizeWhy not always use MQA (1 shared KV)?MQA saves the most memory but does lose quality - about 2-5% on harder tasks. GQA is the sweet spot: most of the memory savings with almost no quality loss. That is why most modern large models use GQA with 8 groups, not full MQA."
   },
   {
-    "id": 649,
+    "id": 672,
     "chapterId": "10.2",
     "title": "Grouped-Query Attention - Shrinking the KV Cache",
     "section": 10,
     "sectionName": "Modern LLM Techniques",
     "sub": -1,
     "text": "Modern LLM Techniques: Grouped-Query Attention - Shrinking the KV Cache. This chapter covers grouped-query attention - shrinking the kv cache."
+  },
+  {
+    "id": 673,
+    "chapterId": "10.3",
+    "title": "Mixture of Experts - Bigger Model, Same Compute",
+    "section": 10,
+    "sectionName": "Modern LLM Techniques",
+    "sub": 0,
+    "text": "The problem - more brain, same effort per tokenTraining a bigger model means more knowledge, but every token pays the full compute cost. What if most of the brain could nap while the relevant part does the work?Dense 47B modelActive params per token:47B (all of it)Every FFN, every attention head, every layer fires for every token.MoE model (Mixtral 8x7B)Active params per token:~13B (only 2 of 8 experts)Same 47B total capacity loaded in memory, but only a slice runs per token.Continue"
+  },
+  {
+    "id": 674,
+    "chapterId": "10.3",
+    "title": "Mixture of Experts - Bigger Model, Same Compute",
+    "section": 10,
+    "sectionName": "Modern LLM Techniques",
+    "sub": 1,
+    "text": "one FFN with a router + N expert FFNsBefore: standard transformer blockLayerNorm -> Attention -> AddLayerNorm -> FFN -> AddAfter: MoE blockLayerNorm -> Attention -> AddLayerNorm -> [Router -> top-k experts -> weighted sum] -> AddEach \"expert\" is just a copy of the FFN architecture (two matrices, an activation). 8 experts means 8 independent sets of FFN weights. The router is a tiny linear layer that decides which experts to invoke.Continue"
+  },
+  {
+    "id": 675,
+    "chapterId": "10.3",
+    "title": "Mixture of Experts - Bigger Model, Same Compute",
+    "section": 10,
+    "sectionName": "Modern LLM Techniques",
+    "sub": 2,
+    "text": "en picks its top 2 expertsThe router is a tiny linear layer. For each token, it produces one score per expert, applies softmax, and picks the top-2 highest.Token = \"cat\" (from \"I love cats\")router_scores = softmax(cat . W_router) = [0.03, 0.02, 0.80, 0.01, 0.04, 0.05, 0.02, 0.03] E1 E2 E3 E4 E5 E6 E7 E8top-2 picks: E3 (0.80) and E6 (0.05)normalize: E3 = 0.80 / 0.85 = 0.94 E6 = 0.05 / 0.85 = 0.06output = 0.94 . E3(\"cat\") + 0.06 . E6(\"cat\")The router matrix W_router has shape d_model x num_experts (e.g., 4096 x 8 = 32K params). Negligible cost compared to an expert's ~650M params.Continue"
+  },
+  {
+    "id": 676,
+    "chapterId": "10.3",
+    "title": "Mixture of Experts - Bigger Model, Same Compute",
+    "section": 10,
+    "sectionName": "Modern LLM Techniques",
+    "sub": 3,
+    "text": "a fix, one expert hogs everythingEarly in training the router has no reason to spread load. It often collapses to sending almost every token to one \"lucky\" expert - the others never get gradient updates and go unused.Without load balancingE12%E21%E392%E41%E51%E61%E71%E81%With auxiliary lossE112%E213%E313%E412%E512%E613%E713%E812%L_aux = α . N . Σ (f_i . P_i)f_i = fraction of tokens routed to expert i; P_i = total router probability mass sent to expert i. Product is minimized when routing is balanced. The auxiliary loss is added to the main training loss.Continue"
+  },
+  {
+    "id": 677,
+    "chapterId": "10.3",
+    "title": "Mixture of Experts - Bigger Model, Same Compute",
+    "section": 10,
+    "sectionName": "Modern LLM Techniques",
+    "sub": 4,
+    "text": "s called 8x7B but totals 47B, not 56BAttention is shared (not duplicated per expert). Only the FFN is replaced by experts. So 8 experts of ~7B FFN-size each do not multiply to 56B - most of each \"7B\" is the shared attention.Per layer: Attention (GQA): ~41M 8 experts x ~176M: ~1.41B Router + norms: ~50K (negligible) ----------------------- Per layer total: ~1.45Bx 32 layers + shared embeddings = 46.7B totalActive per token: Attention: 41M 2 of 8 experts: 352M per layer x 32 layers + embeddings = ~13B activeThe \"8x7B\" name is marketing-ish. It hints at \"8 experts, 7B-class model.\" The literal total is 47B because attention is shared across all experts (not replicated eight times).Continue"
+  },
+  {
+    "id": 678,
+    "chapterId": "10.3",
+    "title": "Mixture of Experts - Bigger Model, Same Compute",
+    "section": 10,
+    "sectionName": "Modern LLM Techniques",
+    "sub": 5,
+    "text": "olds all experts. Compute only runs two.This is the core tradeoff. MoE does NOT reduce memory - every expert has to be loaded so the router can pick any of them. What it reduces is compute per token.GPU memory (fp16)94 GB47B x 2 bytes per paramAll 8 experts must be loaded - the router could pick any.Compute per token26 GFLOPs13B x 2 (fwd-pass cost per param)Only 2 of 8 experts actually multiply anything for this token.Takeaway: MoE is great for data-center serving where memory is abundant but compute is precious. It struggles on edge devices where memory is the bottleneck.Continue"
+  },
+  {
+    "id": 679,
+    "chapterId": "10.3",
+    "title": "Mixture of Experts - Bigger Model, Same Compute",
+    "section": 10,
+    "sectionName": "Modern LLM Techniques",
+    "sub": 6,
+    "text": "ls in productionMixtral 8x7Btotal47Bactive13Bexperts8routingtop-2Mixtral 8x22Btotal141Bactive39Bexperts8routingtop-2DeepSeek-V3total671Bactive37Bexperts256 + 1 sharedroutingtop-8Qwen3-Nexttotal80Bactive3Bexperts512routingtop-10DeepSeek-V3 is the extreme case - only 5.5% of its 671B params activate per token. That is why it is cheap to serve despite being enormous on disk.Continue"
+  },
+  {
+    "id": 680,
+    "chapterId": "10.3",
+    "title": "Mixture of Experts - Bigger Model, Same Compute",
+    "section": 10,
+    "sectionName": "Modern LLM Techniques",
+    "sub": 7,
+    "text": "ot free lunchDifferent deployments have different bottlenecks. MoE trades memory for compute - that wins in some contexts and loses in others.WinsLarge-scale data-center trainingHigh-throughput serving (many users at once)Compute-constrained + memory-rich settingsWhen model capacity matters more than latencyStrugglesEdge and on-device deploymentSmall-batch single-user inferenceMemory-constrained environmentsLatency-critical apps (the router adds hops)If you can afford the memory to hold a huge model but not the compute to run it, MoE is the answer."
+  },
+  {
+    "id": 681,
+    "chapterId": "10.3",
+    "title": "Mixture of Experts - Bigger Model, Same Compute",
+    "section": 10,
+    "sectionName": "Modern LLM Techniques",
+    "sub": -1,
+    "text": "Modern LLM Techniques: Mixture of Experts - Bigger Model, Same Compute. This chapter covers mixture of experts - bigger model, same compute."
+  },
+  {
+    "id": 682,
+    "chapterId": "10.3",
+    "title": "Mixture of Experts - Bigger Model, Same Compute",
+    "section": 10,
+    "sectionName": "Modern LLM Techniques",
+    "sub": -2,
+    "text": "Diagram in Mixture of Experts - Bigger Model, Same Compute: Side-by-side comparison of a dense 47B model versus a MoE model with 47B total parameters but only 13B active per token"
+  },
+  {
+    "id": 683,
+    "chapterId": "10.3",
+    "title": "Mixture of Experts - Bigger Model, Same Compute",
+    "section": 10,
+    "sectionName": "Modern LLM Techniques",
+    "sub": -2,
+    "text": "Diagram in Mixture of Experts - Bigger Model, Same Compute: Before and after transformer block diagrams showing the FFN replaced by a router that picks top-k experts and computes a weighted sum"
+  },
+  {
+    "id": 684,
+    "chapterId": "10.3",
+    "title": "Mixture of Experts - Bigger Model, Same Compute",
+    "section": 10,
+    "sectionName": "Modern LLM Techniques",
+    "sub": -2,
+    "text": "Diagram in Mixture of Experts - Bigger Model, Same Compute: Top-k routing walkthrough with softmax scores over 8 experts selecting experts 3 and 6 for the token cat and normalizing their weights"
+  },
+  {
+    "id": 685,
+    "chapterId": "10.3",
+    "title": "Mixture of Experts - Bigger Model, Same Compute",
+    "section": 10,
+    "sectionName": "Modern LLM Techniques",
+    "sub": -2,
+    "text": "Diagram in Mixture of Experts - Bigger Model, Same Compute: Expert load histograms comparing unbalanced routing where one expert hogs 92 percent against balanced routing after the auxiliary loss"
+  },
+  {
+    "id": 686,
+    "chapterId": "10.3",
+    "title": "Mixture of Experts - Bigger Model, Same Compute",
+    "section": 10,
+    "sectionName": "Modern LLM Techniques",
+    "sub": -2,
+    "text": "Diagram in Mixture of Experts - Bigger Model, Same Compute: Parameter math breakdown for Mixtral 8x7B showing per-layer attention expert and router contributions totaling 46.7 billion parameters with 13 billion active per token"
+  },
+  {
+    "id": 687,
+    "chapterId": "10.3",
+    "title": "Mixture of Experts - Bigger Model, Same Compute",
+    "section": 10,
+    "sectionName": "Modern LLM Techniques",
+    "sub": -2,
+    "text": "Diagram in Mixture of Experts - Bigger Model, Same Compute: Memory versus compute cards showing 94 GB of GPU memory for all experts but only 26 GFLOPs of compute per token"
+  },
+  {
+    "id": 688,
+    "chapterId": "10.3",
+    "title": "Mixture of Experts - Bigger Model, Same Compute",
+    "section": 10,
+    "sectionName": "Modern LLM Techniques",
+    "sub": -2,
+    "text": "Diagram in Mixture of Experts - Bigger Model, Same Compute: Production MoE model comparison table covering Mixtral 8x7B, Mixtral 8x22B, DeepSeek-V3, and Qwen3-Next with total parameters active parameters expert counts and routing policy"
+  },
+  {
+    "id": 689,
+    "chapterId": "10.3",
+    "title": "Mixture of Experts - Bigger Model, Same Compute",
+    "section": 10,
+    "sectionName": "Modern LLM Techniques",
+    "sub": -2,
+    "text": "Diagram in Mixture of Experts - Bigger Model, Same Compute: Honest tradeoff cards listing MoE wins (data-center training, high throughput serving) and struggles (edge deployment, single-user low-latency)"
+  },
+  {
+    "id": 690,
+    "chapterId": "10.4",
+    "title": "Thinking - How Reasoning Models Work",
+    "section": 10,
+    "sectionName": "Modern LLM Techniques",
+    "sub": 0,
+    "text": "A regular LLM vs a reasoning LLM on the same problemPrompt: \"What is 23 x 47?\"Regular LLM1081~3 tokens. Fast. No guarantee it is right.Reasoning LLM<think> Let me compute. 23 x 47 = 23 x (50 - 3) = 1150 - 69 = 1081. Verify: 20 x 47 + 3 x 47 = 940 + 141 = 1081 OK</think>1081~120 tokens. Slower. Shows its work.The answer is the same. The process is what changed.Continue"
+  },
+  {
+    "id": 691,
+    "chapterId": "10.4",
+    "title": "Thinking - How Reasoning Models Work",
+    "section": 10,
+    "sectionName": "Modern LLM Techniques",
+    "sub": 1,
+    "text": "ece you learned in Sections 1-9 is unchangedA reasoning model is the exact same transformer. Nothing new is added to the architecture. The punchline is simple: a regular LLM and a reasoning LLM could share the same code file.OKTokenizerOKMulti-head AttentionOKEmbeddingsOKFFNOKPositional encoding (RoPE)OKLayer normsOKCausal maskOKResidual connectionsOKKV cacheOKOutput headOKSoftmaxOKAutoregressive loopA reasoning model and a regular LLM could share the same code file.Continue"
+  },
+  {
+    "id": 692,
+    "chapterId": "10.4",
+    "title": "Thinking - How Reasoning Models Work",
+    "section": 10,
+    "sectionName": "Modern LLM Techniques",
+    "sub": 2,
+    "text": "w loop. The same loop, running longer.Autoregressive generation always loops - the transformer can only produce one token per forward pass. Regular LLMs loop a few times. Reasoning LLMs loop thousands of times. Same mechanism either way.Regular LLMFWD -> 10FWD -> 81FWD -> <EOS>~3 loop iterationsReasoning LLMFWD -> <think>FWD -> LetFWD -> me...FWD -> </think>FWD -> 1081~120 loop iterationsContinue"
+  },
+  {
+    "id": 693,
+    "chapterId": "10.4",
+    "title": "Thinking - How Reasoning Models Work",
+    "section": 10,
+    "sectionName": "Modern LLM Techniques",
+    "sub": 3,
+    "text": "model switches between thinking and answeringThere is no \"thinking mode switch\" in the code. The vocabulary has two special tokens: <think> and </think>. The model learned to emit them at the right moments, same way it learned any other word. The softmax output is a probability distribution over all tokens, and the special tokens simply win at the right moments.After 'User: What is 23 x 47? Assistant:'<think>0.8710810.03The0.02Inside thinking, after '... = 1081 OK'</think>0.62Let0.09Also0.07The model learned to emit <think> and </think> at the right moments. That is the entire \"mode\" mechanism.Continue"
+  },
+  {
+    "id": 694,
+    "chapterId": "10.4",
+    "title": "Thinking - How Reasoning Models Work",
+    "section": 10,
+    "sectionName": "Modern LLM Techniques",
+    "sub": 4,
+    "text": "nking tokens = better answers on hard problemsThis is the new scaling axis. Instead of training a bigger model, you let the same model think longer. More thinking tokens means more forward passes, which means more compute spent on the problem.Representative accuracy on hard math vs thinking budget100 tokens30%1,000 tokens55%10,000 tokens78%100,000 tokens89%For decades, better AI meant a bigger model. Reasoning models added a second knob: spend more compute at inference time instead. This is called test-time compute scaling.(Numbers above are representative of trends across o1/o3/DeepSeek-R1 benchmarks, not a single published result.)Continue"
+  },
+  {
+    "id": 695,
+    "chapterId": "10.4",
+    "title": "Thinking - How Reasoning Models Work",
+    "section": 10,
+    "sectionName": "Modern LLM Techniques",
+    "sub": 5,
+    "text": "actually different is the training, not the modelReasoning models go through three training stages. Stage 1 is the same run that every LLM gets. Stages 2 and 3 are where reasoning emerges.1. Pre-trainingPredict the next token on trillions of internet tokens.trillions of tokens2. SFTFine-tune on curated reasoning traces with <think> tags.~50K curated examples3. RL with verifierGenerate rollouts, reward correct final answers, PPO/GRPO update.millions of rolloutsStage 1 is identical to a regular LLM. The magic is entirely in stages 2 and 3.Continue"
+  },
+  {
+    "id": 696,
+    "chapterId": "10.4",
+    "title": "Thinking - How Reasoning Models Work",
+    "section": 10,
+    "sectionName": "Modern LLM Techniques",
+    "sub": 6,
+    "text": "oning improves, one reward at a timeThe model generates many rollouts per problem. A verifier checks each final answer. PPO or GRPO nudges weights: tokens in winning rollouts become more likely, tokens in losing rollouts less likely.Problem: \"23 x 47 = ?\" (ground truth 1081). Generate 64 rollouts.#1<think>... 23 x 50 - 23 x 3 = 1081</think>1081 OKr = +1#2<think>... (20 + 3) x 47 = 940 + 141 = 1081</think>1081 OKr = +1#3<think>... estimate: roughly 1000</think>1000 Xr = -1#4<think>... 23 x 47 = 1081</think>1081 OKr = +1#5<think>... quick mental math: 1104?</think>1104 Xr = -1PPO / GRPO update:winning rollouts -> token probabilities UPlosing rollouts -> token probabilities DOWNThe reward only checks the FINAL answer. The model figures out on its own what kinds of reasoning lead to correct answers. Nobody hand-labels reasoning steps.Continue"
+  },
+  {
+    "id": 697,
+    "chapterId": "10.4",
+    "title": "Thinking - How Reasoning Models Work",
+    "section": 10,
+    "sectionName": "Modern LLM Techniques",
+    "sub": 7,
+    "text": "ot need humans to write millions of reasoning tracesThe only thing you need is problems with checkable answers. Three data sources take care of the rest.1. Existing chain-of-thoughtAlready in the pre-training data: math textbooks, Stack Overflow answers, competitive programming editorials, tutorial posts.2. Synthetic generationA big LLM generates 64 reasoning attempts per problem. A verifier checks each final answer. Keep the ones that got it right; those become training data.3. Rejection samplingHave the base model itself try each problem 64 times. Keep the attempts that got the right answer. The model learns from its own best work.Domains with checkable answers are abundant: GSM8K, MATH, AIME, olympiad problems, LeetCode, Codeforces, scientific multiple-choice. Millions of problems, no humans writing reasoning required.Continue"
+  },
+  {
+    "id": 698,
+    "chapterId": "10.4",
+    "title": "Thinking - How Reasoning Models Work",
+    "section": 10,
+    "sectionName": "Modern LLM Techniques",
+    "sub": 8,
+    "text": "ks nobody programmedReasoning chains that include self-correction and verification tend to produce correct answers more often. The reward signal pushes those patterns up over millions of rollouts. Nobody writes code that says \"self-correct\" - it emerges from the rewards.23 x 47 = 23 x 50 - 23 x 3 = 1150 - 69 = 1081.Wait, let me double-check. <-- emerged: self-doubtTry another way: 20 x 47 + 3 x 47 = 940 + 141 = 1081. <-- emerged: verificationBoth methods give 1081. Confident. <-- emerged: confidence calibrationThe DeepSeek-R1 papers documented an \"aha moment\" during training where thinking length spontaneously grew and phrases like \"wait\" and \"let me reconsider\" appeared - purely from the reward signal.Continue"
+  },
+  {
+    "id": 699,
+    "chapterId": "10.4",
+    "title": "Thinking - How Reasoning Models Work",
+    "section": 10,
+    "sectionName": "Modern LLM Techniques",
+    "sub": 9,
+    "text": "g models are not universally betterThinking helps when there is a right answer to check. It barely helps when there is not.Big liftMath, arithmetic, algebraCompetitive programmingLogic puzzlesScientific Q&A with verifiable answersConstraint-satisfaction problemsFormal proofsNo real gainCreative writingPoetry, storytellingOpen-ended opinionsEmpathy, emotional supportSummarizationCasual conversationReasoning helps when there is a right answer to check. It barely helps when there is not."
+  },
+  {
+    "id": 700,
+    "chapterId": "10.4",
+    "title": "Thinking - How Reasoning Models Work",
+    "section": 10,
+    "sectionName": "Modern LLM Techniques",
+    "sub": -1,
+    "text": "Modern LLM Techniques: Thinking - How Reasoning Models Work. This chapter covers thinking - how reasoning models work."
+  },
+  {
+    "id": 701,
+    "chapterId": "10.4",
+    "title": "Thinking - How Reasoning Models Work",
+    "section": 10,
+    "sectionName": "Modern LLM Techniques",
+    "sub": -2,
+    "text": "Diagram in Thinking - How Reasoning Models Work: Before and after cards for the prompt What is 23 times 47 showing a regular LLM emitting just 1081 and a reasoning LLM emitting a think block with step-by-step calculation before the final answer"
+  },
+  {
+    "id": 702,
+    "chapterId": "10.4",
+    "title": "Thinking - How Reasoning Models Work",
+    "section": 10,
+    "sectionName": "Modern LLM Techniques",
+    "sub": -2,
+    "text": "Diagram in Thinking - How Reasoning Models Work: Grid checklist of every transformer component (tokenizer, embeddings, positional encoding, attention, FFN, layer norms, residuals, KV cache, output head, softmax, autoregressive loop) each marked unchanged"
+  },
+  {
+    "id": 703,
+    "chapterId": "10.4",
+    "title": "Thinking - How Reasoning Models Work",
+    "section": 10,
+    "sectionName": "Modern LLM Techniques",
+    "sub": -2,
+    "text": "Diagram in Thinking - How Reasoning Models Work: Side-by-side vertical chains of forward-pass boxes comparing a regular LLM with 3 iterations to a reasoning LLM with 120 iterations"
+  },
+  {
+    "id": 704,
+    "chapterId": "10.4",
+    "title": "Thinking - How Reasoning Models Work",
+    "section": 10,
+    "sectionName": "Modern LLM Techniques",
+    "sub": -2,
+    "text": "Diagram in Thinking - How Reasoning Models Work: Token probability distributions at two moments showing the think token winning at the start of a reply and the close-think token winning at the end of a reasoning chain"
+  },
+  {
+    "id": 705,
+    "chapterId": "10.4",
+    "title": "Thinking - How Reasoning Models Work",
+    "section": 10,
+    "sectionName": "Modern LLM Techniques",
+    "sub": -2,
+    "text": "Diagram in Thinking - How Reasoning Models Work: Representative horizontal bar chart showing accuracy climbing with thinking token budget from 30 percent at 100 tokens to 89 percent at 100000 tokens"
+  },
+  {
+    "id": 706,
+    "chapterId": "10.4",
+    "title": "Thinking - How Reasoning Models Work",
+    "section": 10,
+    "sectionName": "Modern LLM Techniques",
+    "sub": -2,
+    "text": "Diagram in Thinking - How Reasoning Models Work: Three-stage training pipeline with pre-training on trillions of tokens then SFT on 50K reasoning examples then RL with verifier on millions of rollouts"
+  },
+  {
+    "id": 707,
+    "chapterId": "10.4",
+    "title": "Thinking - How Reasoning Models Work",
+    "section": 10,
+    "sectionName": "Modern LLM Techniques",
+    "sub": -2,
+    "text": "Diagram in Thinking - How Reasoning Models Work: RL reward loop concrete example with 5 rollouts for the problem 23 times 47 showing correct and incorrect attempts with rewards plus one and minus one and the PPO or GRPO weight update rule"
+  },
+  {
+    "id": 708,
+    "chapterId": "10.4",
+    "title": "Thinking - How Reasoning Models Work",
+    "section": 10,
+    "sectionName": "Modern LLM Techniques",
+    "sub": -2,
+    "text": "Diagram in Thinking - How Reasoning Models Work: Three data source cards for training reasoning models covering existing chain-of-thought in pre-training data, synthetic generation with a verifier filter, and rejection sampling from the model itself"
+  },
+  {
+    "id": 709,
+    "chapterId": "10.4",
+    "title": "Thinking - How Reasoning Models Work",
+    "section": 10,
+    "sectionName": "Modern LLM Techniques",
+    "sub": -2,
+    "text": "Diagram in Thinking - How Reasoning Models Work: Annotated reasoning trace demonstrating emergent self-correction, verification, and confidence-calibration patterns that arose purely from the reward signal"
+  },
+  {
+    "id": 710,
+    "chapterId": "10.4",
+    "title": "Thinking - How Reasoning Models Work",
+    "section": 10,
+    "sectionName": "Modern LLM Techniques",
+    "sub": -2,
+    "text": "Diagram in Thinking - How Reasoning Models Work: Two-column honest scope table listing domains where reasoning helps (math, code, logic) and domains where it does not lift quality (creative writing, empathy, casual conversation)"
   }
 ]

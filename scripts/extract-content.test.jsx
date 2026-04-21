@@ -25,6 +25,8 @@ import * as TransformerInput from "../src/sections/transformer-input.jsx";
 import * as AttentionQKV from "../src/sections/attention-qkv.jsx";
 import * as AttentionComputation from "../src/sections/attention-computation.jsx";
 import * as TransformerBlock from "../src/sections/transformer-block.jsx";
+import * as EncoderDecoderDiagrams from "../src/sections/encoder-decoder-diagrams.jsx";
+import * as ModernLLMTechniques from "../src/sections/modern-llm-techniques.jsx";
 
 const lookup = {
   TOC,
@@ -36,6 +38,8 @@ const lookup = {
   ...AttentionQKV,
   ...AttentionComputation,
   ...TransformerBlock,
+  ...EncoderDecoderDiagrams,
+  ...ModernLLMTechniques,
 };
 
 function makeCtx(overrides = {}) {

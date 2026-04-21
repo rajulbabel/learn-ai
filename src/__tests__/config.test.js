@@ -129,3 +129,13 @@ describe("config.js", () => {
     });
   });
 });
+
+describe("Section 11 registration", () => {
+  it("has section 11 in sectionNames", () => {
+    expect(sectionNames[11]).toBe("Vector Databases");
+  });
+
+  it("has section 11 in sectionColors", () => {
+    expect(sectionColors[11]).toBe("#f06292");
+  });
+});

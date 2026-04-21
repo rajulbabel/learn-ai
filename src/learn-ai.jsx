@@ -32,6 +32,7 @@ const sectionLoaders = {
     Promise.all([import("./sections/attention-computation.jsx"), import("./sections/modern-llm-techniques.jsx")]).then(
       (mods) => Object.assign({}, ...mods),
     ),
+  11: () => import("./sections/vector-foundations.jsx"),
 };
 
 // ── Lazy-loaded search: not loaded until search is opened ──

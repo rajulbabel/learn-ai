@@ -844,6 +844,66 @@ export const Thinking = (ctx) => {
           </T>
         </Box>
       </Reveal>
+      <Reveal when={sub >= 5}>
+        <Box color={C.pink} style={{ width: "100%" }}>
+          <T color={C.pink} bold center size={22}>
+            What is actually different is the training, not the model
+          </T>
+          <T color="#f0a0ff" style={{ marginTop: 8 }}>
+            Reasoning models go through three training stages. Stage 1 is the same run that every LLM gets. Stages 2
+            and 3 are where reasoning emerges.
+          </T>
+          <div style={{ marginTop: 14, display: "flex", gap: 8, alignItems: "stretch" }}>
+            {[
+              {
+                stage: "1. Pre-training",
+                body: "Predict the next token on trillions of internet tokens.",
+                scale: "trillions of tokens",
+                color: C.dim,
+                highlight: false,
+              },
+              {
+                stage: "2. SFT",
+                body: "Fine-tune on curated reasoning traces with <think> tags.",
+                scale: "~50K curated examples",
+                color: C.orange,
+                highlight: false,
+              },
+              {
+                stage: "3. RL with verifier",
+                body: "Generate rollouts, reward correct final answers, PPO/GRPO update.",
+                scale: "millions of rollouts",
+                color: C.pink,
+                highlight: true,
+              },
+            ].map(({ stage, body, scale, color, highlight }, i) => (
+              <div
+                key={i}
+                style={{
+                  flex: 1,
+                  padding: "12px 14px",
+                  borderRadius: 8,
+                  background: highlight ? `${color}10` : `${color}06`,
+                  border: `1px solid ${color}${highlight ? "25" : "12"}`,
+                }}
+              >
+                <T color={color} bold center size={17}>
+                  {stage}
+                </T>
+                <T color={C.bright} size={14} style={{ marginTop: 8 }}>
+                  {body}
+                </T>
+                <T color={C.dim} size={13} center style={{ marginTop: 8, fontFamily: "monospace" }}>
+                  {scale}
+                </T>
+              </div>
+            ))}
+          </div>
+          <T color="#f0a0ff" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
+            Stage 1 is identical to a regular LLM. The magic is entirely in stages 2 and 3.
+          </T>
+        </Box>
+      </Reveal>
       {sub < 9 && (
         <SubBtn
           key={sub}

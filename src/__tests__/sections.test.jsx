@@ -181,6 +181,13 @@ describe("Thinking content", () => {
     expect(container.textContent).toMatch(/test-time|compute/i);
     expect(container.textContent).toMatch(/100 tokens|100,000/);
   });
+
+  it("sub=5 shows 3-stage training pipeline", () => {
+    const { container } = render(fn(makeCtx({ sub: 5 })));
+    expect(container.textContent).toMatch(/Pre-training/);
+    expect(container.textContent).toMatch(/SFT/);
+    expect(container.textContent).toMatch(/RL/);
+  });
 });
 
 // ─── TOC special branches ───

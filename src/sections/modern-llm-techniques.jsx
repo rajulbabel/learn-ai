@@ -107,6 +107,56 @@ export const MixtureOfExperts = (ctx) => {
           </T>
         </Box>
       </Reveal>
+      <Reveal when={sub >= 2}>
+        <Box color={C.green} style={{ width: "100%" }}>
+          <T color={C.green} bold center size={22}>
+            Each token picks its top 2 experts
+          </T>
+          <T color="#80e8a5" style={{ marginTop: 8 }}>
+            The router is a tiny linear layer. For each token, it produces one score per expert, applies softmax, and
+            picks the top-2 highest.
+          </T>
+          <div
+            style={{
+              marginTop: 12,
+              padding: "14px 18px",
+              borderRadius: 8,
+              background: "rgba(0,0,0,0.3)",
+              textAlign: "center",
+              fontFamily: "monospace",
+              fontSize: 15,
+              color: C.bright,
+              lineHeight: 1.9,
+            }}
+          >
+            Token = "cat" (from "I love cats")
+            <br />
+            router_scores = softmax(cat . W_router)
+            <br />
+            &nbsp;&nbsp;&nbsp;&nbsp;= [0.03, 0.02, <strong style={{ color: C.green }}>0.80</strong>, 0.01, 0.04,{" "}
+            <strong style={{ color: C.green }}>0.05</strong>, 0.02, 0.03]
+            <br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;E1&nbsp;&nbsp;&nbsp;E2&nbsp;&nbsp;&nbsp;
+            <strong style={{ color: C.green }}>E3</strong>&nbsp;&nbsp;&nbsp;E4&nbsp;&nbsp;&nbsp;E5&nbsp;&nbsp;&nbsp;
+            <strong style={{ color: C.green }}>E6</strong>&nbsp;&nbsp;&nbsp;E7&nbsp;&nbsp;&nbsp;E8
+            <br />
+            <br />
+            top-2 picks: <strong style={{ color: C.green }}>E3 (0.80)</strong> and{" "}
+            <strong style={{ color: C.green }}>E6 (0.05)</strong>
+            <br />
+            normalize: E3 = 0.80 / 0.85 = 0.94
+            <br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;E6 = 0.05 / 0.85 = 0.06
+            <br />
+            <br />
+            output = 0.94 . E3("cat") + 0.06 . E6("cat")
+          </div>
+          <T color={C.dim} size={15} style={{ marginTop: 10 }}>
+            The router matrix <code>W_router</code> has shape d_model x num_experts (e.g., 4096 x 8 = 32K params).
+            Negligible cost compared to an expert's ~650M params.
+          </T>
+        </Box>
+      </Reveal>
       {sub < 7 && (
         <SubBtn
           key={sub}

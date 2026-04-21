@@ -107,6 +107,13 @@ describe("MixtureOfExperts content", () => {
     expect(container.textContent).toMatch(/Router/);
     expect(container.textContent).toMatch(/FFN/);
   });
+
+  it("sub=2 shows top-k routing with concrete example", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/cat/);
+    expect(container.textContent).toMatch(/0\.80/);
+    expect(container.textContent).toMatch(/top-2|top 2/);
+  });
 });
 
 // ─── TOC special branches ───

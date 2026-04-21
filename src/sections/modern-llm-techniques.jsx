@@ -249,6 +249,58 @@ export const MixtureOfExperts = (ctx) => {
           </T>
         </Box>
       </Reveal>
+      <Reveal when={sub >= 4}>
+        <Box color={C.orange} style={{ width: "100%" }}>
+          <T color={C.orange} bold center size={22}>
+            Why it is called 8x7B but totals 47B, not 56B
+          </T>
+          <T color="#ffcc80" style={{ marginTop: 8 }}>
+            Attention is shared (not duplicated per expert). Only the FFN is replaced by experts. So 8 experts of ~7B
+            FFN-size each do not multiply to 56B - most of each "7B" is the shared attention.
+          </T>
+          <div
+            style={{
+              marginTop: 12,
+              padding: "14px 18px",
+              borderRadius: 8,
+              background: "rgba(0,0,0,0.3)",
+              textAlign: "center",
+              fontFamily: "monospace",
+              fontSize: 15,
+              color: C.bright,
+              lineHeight: 1.9,
+            }}
+          >
+            Per layer:
+            <br />
+            &nbsp;&nbsp;Attention block:&nbsp;&nbsp;&nbsp;~350M
+            <br />
+            &nbsp;&nbsp;8 experts x ~650M:&nbsp;~5.2B
+            <br />
+            &nbsp;&nbsp;Router + norms:&nbsp;&nbsp;&nbsp;~50K (negligible)
+            <br />
+            &nbsp;&nbsp;-----------------------
+            <br />
+            &nbsp;&nbsp;Per layer total:&nbsp;&nbsp;&nbsp;~5.6B
+            <br />
+            <br />
+            x 32 layers + shared embeddings = <strong style={{ color: C.orange }}>46.7B total</strong>
+            <br />
+            <br />
+            <strong style={{ color: C.green }}>Active per token:</strong>
+            <br />
+            &nbsp;&nbsp;Attention:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;350M
+            <br />
+            &nbsp;&nbsp;2 of 8 experts:&nbsp;&nbsp;1.3B per layer
+            <br />
+            &nbsp;&nbsp;x 32 layers + embeddings = <strong style={{ color: C.green }}>~13B active</strong>
+          </div>
+          <T color={C.dim} size={15} style={{ marginTop: 10 }}>
+            The "8x7B" name is marketing-ish. It hints at "8 experts, 7B-class model." The literal total is 47B because
+            attention is shared across all experts (not replicated eight times).
+          </T>
+        </Box>
+      </Reveal>
       {sub < 7 && (
         <SubBtn
           key={sub}

@@ -120,6 +120,12 @@ describe("MixtureOfExperts content", () => {
     expect(container.textContent).toMatch(/L_aux|auxiliary/);
     expect(container.textContent).toMatch(/balanc/i);
   });
+
+  it("sub=4 shows Mixtral 8x7B parameter breakdown", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/46\.7B|46\.7/);
+    expect(container.textContent).toMatch(/layers?/i);
+  });
 });
 
 // ─── TOC special branches ───

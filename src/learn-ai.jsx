@@ -28,6 +28,11 @@ const sectionLoaders = {
       import("./sections/transformer-input.jsx"),
       import("./sections/encoder-decoder-diagrams.jsx"),
     ]).then((mods) => Object.assign({}, ...mods)),
+  10: () =>
+    Promise.all([
+      import("./sections/attention-computation.jsx"),
+      import("./sections/modern-llm-techniques.jsx"),
+    ]).then((mods) => Object.assign({}, ...mods)),
 };
 
 // ── Lazy-loaded search: not loaded until search is opened ──

@@ -175,6 +175,12 @@ describe("Thinking content", () => {
     expect(container.textContent).toMatch(/think/);
     expect(container.textContent).toMatch(/probabilit/i);
   });
+
+  it("sub=4 shows test-time compute scaling", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/test-time|compute/i);
+    expect(container.textContent).toMatch(/100 tokens|100,000/);
+  });
 });
 
 // ─── TOC special branches ───

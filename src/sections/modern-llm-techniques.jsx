@@ -792,6 +792,58 @@ export const Thinking = (ctx) => {
           </T>
         </Box>
       </Reveal>
+      <Reveal when={sub >= 4}>
+        <Box color={C.orange} style={{ width: "100%" }}>
+          <T color={C.orange} bold center size={22}>
+            More thinking tokens = better answers on hard problems
+          </T>
+          <T color="#ffcc80" style={{ marginTop: 8 }}>
+            This is the new scaling axis. Instead of training a bigger model, you let the same model think longer.
+            More thinking tokens means more forward passes, which means more compute spent on the problem.
+          </T>
+          <div
+            style={{
+              marginTop: 14,
+              padding: "12px 14px",
+              borderRadius: 8,
+              background: `${C.orange}06`,
+              border: `1px solid ${C.orange}12`,
+            }}
+          >
+            <T color={C.dim} size={14} center>
+              Representative accuracy on hard math vs thinking budget
+            </T>
+            <div style={{ marginTop: 10, display: "flex", flexDirection: "column", gap: 6 }}>
+              {[
+                { budget: "100 tokens", pct: 30 },
+                { budget: "1,000 tokens", pct: 55 },
+                { budget: "10,000 tokens", pct: 78 },
+                { budget: "100,000 tokens", pct: 89 },
+              ].map(({ budget, pct }) => (
+                <div key={budget} style={{ display: "grid", gridTemplateColumns: "160px 1fr 60px", gap: 10, alignItems: "center" }}>
+                  <T color={C.bright} size={15} style={{ fontFamily: "monospace" }}>
+                    {budget}
+                  </T>
+                  <div style={{ height: 16, background: "rgba(255,255,255,0.04)", borderRadius: 4 }}>
+                    <div style={{ width: `${pct}%`, height: "100%", background: C.orange, borderRadius: 4 }} />
+                  </div>
+                  <T color={C.orange} bold size={16} style={{ textAlign: "right" }}>
+                    {pct}%
+                  </T>
+                </div>
+              ))}
+            </div>
+          </div>
+          <T color="#ffcc80" style={{ marginTop: 10 }}>
+            For decades, better AI meant a bigger model. Reasoning models added a second knob: spend more compute at
+            inference time instead. This is called <strong>test-time compute</strong> scaling.
+          </T>
+          <T color={C.dim} size={13} style={{ marginTop: 6 }}>
+            (Numbers above are representative of trends across o1/o3/DeepSeek-R1 benchmarks, not a single published
+            result.)
+          </T>
+        </Box>
+      </Reveal>
       {sub < 9 && (
         <SubBtn
           key={sub}

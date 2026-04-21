@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, afterEach } from "vitest";
 import { render, fireEvent, cleanup } from "@testing-library/react";
-import { chapters } from "../config.js";
+import { chapters, sectionNames } from "../config.js";
 
 // Import all sections
 import { TOC } from "../sections/toc.jsx";
@@ -258,11 +258,14 @@ describe("TOC", () => {
     }
   });
 
-  // Test all 9 sections expanded to cover each one
-  for (let secNum = 1; secNum <= 9; secNum++) {
+  // Test all 10 sections expanded to cover each one
+  for (let secNum = 1; secNum <= 10; secNum++) {
     it(`shows chapters for section ${secNum}`, () => {
       const { container } = render(TOC(makeCtx({ expanded: secNum })));
       expect(container.innerHTML).toBeTruthy();
+      // Every section in config.js with chapters MUST be listed in the TOC.
+      // This catches bugs where a new section is added to config but not to toc.jsx.
+      expect(container.textContent).toContain(sectionNames[secNum]);
     });
   }
 });

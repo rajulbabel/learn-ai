@@ -47,6 +47,12 @@ export const TOC = (ctx) => {
       color: "#ef5350",
       desc: "Decoder-only, causal masking, cross-attention, full walkthrough",
     },
+    {
+      num: 10,
+      name: "Modern LLM Techniques",
+      color: "#26a69a",
+      desc: "KV cache, grouped-query attention, mixture of experts, reasoning models",
+    },
   ];
   const sectionChapters = {};
   chapters.forEach((c, i) => {

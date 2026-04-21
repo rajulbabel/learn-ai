@@ -215,6 +215,17 @@ Only config.js IDs change.
 | 10.3 | MixtureOfExperts | Mixture of Experts - Bigger Model, Same Compute |
 | 10.4 | Thinking | Thinking - How Reasoning Models Work |
 
+**Section 11: Vector Databases** (`vector-foundations.jsx` - Milestone 1 of 6 complete)
+
+| Chapter | Component | Title |
+|---------|-----------|-------|
+| 11.1 | RetrievalProblem | The Retrieval Problem |
+| 11.2 | BruteForceKNN | Brute-Force kNN |
+| 11.3 | ThreeWayTradeoff | The Three-Way Tradeoff |
+| 11.4 | DistanceMetrics | Distance Metrics |
+
+(Subsequent milestones will extend this table as chapters 11.5-11.35 are added.)
+
 ## Project Structure
 
 ```
@@ -248,7 +259,8 @@ learn-ai/
 │       ├── attention-computation.jsx     # Section 7 (+ CausalMask/CrossAttention in 9)
 │       ├── transformer-block.jsx        # Section 8 (Add&Norm, FFN, block repeats)
 │       ├── encoder-decoder-diagrams.jsx # Section 9 (Training/Inference flow diagrams)
-│       └── modern-llm-techniques.jsx    # Section 10 (MoE, Thinking)
+│       ├── modern-llm-techniques.jsx    # Section 10 (MoE, Thinking)
+│       └── vector-foundations.jsx        # Section 11 (Acts 1+2, chapters 11.1-11.11 by end of Milestone 2; currently 11.1-11.4)
 ├── .github/workflows/deploy.yml
 └── CLAUDE.md
 ```

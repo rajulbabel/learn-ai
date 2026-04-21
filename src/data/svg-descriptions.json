@@ -146,5 +146,9 @@
   "11.3": [
     "Equilateral tradeoff triangle with Recall at the top vertex in cyan, Latency at the bottom-left vertex in orange, and Memory at the bottom-right vertex in yellow, introducing the three axes every vector-database decision must balance",
     "Equilateral tradeoff triangle with Recall, Latency, and Memory at the vertices and interior labels mapping each family of techniques to its direction of movement - Indexing trades latency for memory, Quantization trades memory for recall, Filtering and sharding push on all three corners"
+  ],
+  "11.4": [
+    "Two vectors drawn from the origin - a cyan query vector q and a green document vector d - with a small yellow angle theta between them, illustrating that cosine similarity measures the angle between vectors and that a tight angle means cos(theta) is close to 1.0",
+    "Right triangle with two points q and d in 2D, a horizontal dashed leg labeled as the x-axis difference and a vertical dashed leg labeled as the y-axis difference, and the blue hypotenuse highlighted as the L2 distance equal to the square root of the sum of squared differences (Pythagoras in d dimensions)"
   ]
 }

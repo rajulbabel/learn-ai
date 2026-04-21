@@ -349,6 +349,48 @@ describe("ThreeWayTradeoff (11.3) content", () => {
   });
 });
 
+describe("DistanceMetrics (11.4) content", () => {
+  const fn = VectorFoundations.DistanceMetrics;
+
+  it("sub=0 lists cosine, L2, inner product", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/cosine/i);
+    expect(container.textContent).toMatch(/L2|Euclidean/i);
+    expect(container.textContent).toMatch(/inner product|dot product/i);
+  });
+
+  it("sub=1 defines cosine with range and concrete example", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/cosine/i);
+    expect(container.textContent).toMatch(/angle|\[-1, 1\]/);
+  });
+
+  it("sub=2 defines L2 as a distance with sqrt", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/L2|Euclidean/i);
+    expect(container.textContent).toMatch(/sqrt|√/);
+    expect(container.textContent).toMatch(/magnitude|smaller|distance/i);
+  });
+
+  it("sub=3 highlights inner product speed and SIMD friendliness", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/inner product|dot product/i);
+    expect(container.textContent).toMatch(/SIMD|fastest|no sqrt/i);
+  });
+
+  it("sub=4 shows the normalization identity", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/normalized/i);
+    expect(container.textContent).toMatch(/equivalent|identity|same/i);
+  });
+
+  it("sub=5 gives workload-to-metric guidance", () => {
+    const { container } = render(fn(makeCtx({ sub: 5 })));
+    expect(container.textContent).toMatch(/text|SBERT|OpenAI/i);
+    expect(container.textContent).toMatch(/vision|image/i);
+  });
+});
+
 // ─── TOC special branches ───
 describe("TOC", () => {
   it("renders section list", () => {

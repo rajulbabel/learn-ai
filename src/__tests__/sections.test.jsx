@@ -114,6 +114,12 @@ describe("MixtureOfExperts content", () => {
     expect(container.textContent).toMatch(/0\.80/);
     expect(container.textContent).toMatch(/top-2|top 2/);
   });
+
+  it("sub=3 shows load balancing problem and auxiliary loss fix", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/L_aux|auxiliary/);
+    expect(container.textContent).toMatch(/balanc/i);
+  });
 });
 
 // ─── TOC special branches ───

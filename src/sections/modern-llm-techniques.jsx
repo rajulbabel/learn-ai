@@ -157,6 +157,98 @@ export const MixtureOfExperts = (ctx) => {
           </T>
         </Box>
       </Reveal>
+      <Reveal when={sub >= 3}>
+        <Box color={C.yellow} style={{ width: "100%" }}>
+          <T color={C.yellow} bold center size={22}>
+            Without a fix, one expert hogs everything
+          </T>
+          <T color="#ffe082" style={{ marginTop: 8 }}>
+            Early in training the router has no reason to spread load. It often collapses to sending almost every token
+            to one "lucky" expert - the others never get gradient updates and go unused.
+          </T>
+          <div style={{ marginTop: 14, display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+            {[
+              {
+                title: "Without load balancing",
+                color: C.red,
+                lighter: "#ef9a9a",
+                bars: [
+                  { label: "E1", pct: 2 },
+                  { label: "E2", pct: 1 },
+                  { label: "E3", pct: 92 },
+                  { label: "E4", pct: 1 },
+                  { label: "E5", pct: 1 },
+                  { label: "E6", pct: 1 },
+                  { label: "E7", pct: 1 },
+                  { label: "E8", pct: 1 },
+                ],
+              },
+              {
+                title: "With auxiliary loss",
+                color: C.green,
+                lighter: "#80e8a5",
+                bars: [
+                  { label: "E1", pct: 12 },
+                  { label: "E2", pct: 13 },
+                  { label: "E3", pct: 13 },
+                  { label: "E4", pct: 12 },
+                  { label: "E5", pct: 12 },
+                  { label: "E6", pct: 13 },
+                  { label: "E7", pct: 13 },
+                  { label: "E8", pct: 12 },
+                ],
+              },
+            ].map(({ title, color, lighter, bars }) => (
+              <div
+                key={title}
+                style={{
+                  padding: "12px 14px",
+                  borderRadius: 8,
+                  background: `${color}06`,
+                  border: `1px solid ${color}12`,
+                }}
+              >
+                <T color={lighter} bold center size={16}>
+                  {title}
+                </T>
+                <div style={{ marginTop: 10, display: "flex", flexDirection: "column", gap: 4 }}>
+                  {bars.map((b) => (
+                    <div key={b.label} style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                      <T color={C.dim} size={13} style={{ minWidth: 26 }}>
+                        {b.label}
+                      </T>
+                      <div style={{ flex: 1, height: 12, background: "rgba(255,255,255,0.04)", borderRadius: 3 }}>
+                        <div style={{ width: `${b.pct}%`, height: "100%", background: color, borderRadius: 3 }} />
+                      </div>
+                      <T color={C.dim} size={13} style={{ minWidth: 34, textAlign: "right" }}>
+                        {b.pct}%
+                      </T>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+          <div
+            style={{
+              marginTop: 12,
+              padding: "10px 14px",
+              borderRadius: 8,
+              background: "rgba(0,0,0,0.3)",
+              textAlign: "center",
+              fontFamily: "monospace",
+              fontSize: 18,
+              color: C.bright,
+            }}
+          >
+            L_aux = &alpha; . N . &Sigma; (f_i . P_i)
+          </div>
+          <T color={C.dim} size={15} style={{ marginTop: 8 }}>
+            f_i = fraction of tokens routed to expert i; P_i = total router probability mass sent to expert i. Product
+            is minimized when routing is balanced.  The auxiliary loss is added to the main training loss.
+          </T>
+        </Box>
+      </Reveal>
       {sub < 7 && (
         <SubBtn
           key={sub}

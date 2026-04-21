@@ -13,6 +13,7 @@ import * as AttentionComputation from "../sections/attention-computation.jsx";
 import * as TransformerBlock from "../sections/transformer-block.jsx";
 import * as EncoderDecoderDiagrams from "../sections/encoder-decoder-diagrams.jsx";
 import * as ModernLLMTechniques from "../sections/modern-llm-techniques.jsx";
+import * as VectorFoundations from "../sections/vector-foundations.jsx";
 
 const lookup = {
   TOC,
@@ -26,6 +27,7 @@ const lookup = {
   ...TransformerBlock,
   ...EncoderDecoderDiagrams,
   ...ModernLLMTechniques,
+  ...VectorFoundations,
 };
 
 describe("lookup", () => {

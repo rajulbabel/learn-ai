@@ -430,6 +430,69 @@ export const MixtureOfExperts = (ctx) => {
           </T>
         </Box>
       </Reveal>
+      <Reveal when={sub >= 7}>
+        <Box color={C.pink} style={{ width: "100%" }}>
+          <T color={C.pink} bold center size={22}>
+            MoE is not free lunch
+          </T>
+          <T color="#f0a0ff" style={{ marginTop: 8 }}>
+            Different deployments have different bottlenecks. MoE trades memory for compute - that wins in some
+            contexts and loses in others.
+          </T>
+          <div style={{ marginTop: 14, display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+            <div
+              style={{
+                padding: "12px 14px",
+                borderRadius: 8,
+                background: `${C.green}06`,
+                border: `1px solid ${C.green}12`,
+              }}
+            >
+              <T color={C.green} bold center size={17}>
+                Wins
+              </T>
+              <ul style={{ color: "#80e8a5", fontSize: 15, paddingLeft: 20, marginTop: 8, lineHeight: 1.8 }}>
+                <li>Large-scale data-center training</li>
+                <li>High-throughput serving (many users at once)</li>
+                <li>Compute-constrained + memory-rich settings</li>
+                <li>When model capacity matters more than latency</li>
+              </ul>
+            </div>
+            <div
+              style={{
+                padding: "12px 14px",
+                borderRadius: 8,
+                background: `${C.red}06`,
+                border: `1px solid ${C.red}12`,
+              }}
+            >
+              <T color={C.red} bold center size={17}>
+                Struggles
+              </T>
+              <ul style={{ color: "#ef9a9a", fontSize: 15, paddingLeft: 20, marginTop: 8, lineHeight: 1.8 }}>
+                <li>Edge and on-device deployment</li>
+                <li>Small-batch single-user inference</li>
+                <li>Memory-constrained environments</li>
+                <li>Latency-critical apps (the router adds hops)</li>
+              </ul>
+            </div>
+          </div>
+          <div
+            style={{
+              marginTop: 12,
+              padding: "10px 14px",
+              borderRadius: 8,
+              background: `${C.pink}06`,
+              border: `1px solid ${C.pink}12`,
+              textAlign: "center",
+            }}
+          >
+            <T color={C.pink} bold size={17}>
+              If you can afford the memory to hold a huge model but not the compute to run it, MoE is the answer.
+            </T>
+          </div>
+        </Box>
+      </Reveal>
       {sub < 7 && (
         <SubBtn
           key={sub}

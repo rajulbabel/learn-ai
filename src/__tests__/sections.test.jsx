@@ -139,6 +139,12 @@ describe("MixtureOfExperts content", () => {
     expect(container.textContent).toMatch(/DeepSeek/);
     expect(container.textContent).toMatch(/Qwen/);
   });
+
+  it("sub=7 shows honest tradeoffs of MoE", () => {
+    const { container } = render(fn(makeCtx({ sub: 7 })));
+    expect(container.textContent).toMatch(/edge|deployment/i);
+    expect(container.textContent).toMatch(/free lunch|tradeoff/i);
+  });
 });
 
 // ─── TOC special branches ───

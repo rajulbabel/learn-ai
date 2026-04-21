@@ -295,6 +295,14 @@ describe("BruteForceKNN (11.2) content", () => {
     expect(container.textContent).toMatch(/recall/i);
     expect(container.textContent).toMatch(/99%|0\.99/);
   });
+
+  // New assertion - lock in the canonical top-3 (docs 1, 3, 7) matching 11.1's SVG
+  it("sub=1 top-3 matches 11.1's highlighted docs (1, 3, 7)", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    const text = container.textContent;
+    // The narrative should reference docs 1, 3, 7 as the top-3
+    expect(text).toMatch(/1.*3.*7|docs? 1.*3.*7|top.*1.*3.*7/is);
+  });
 });
 
 // ─── TOC special branches ───

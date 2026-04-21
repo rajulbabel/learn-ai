@@ -501,16 +501,17 @@ export const RetrievalProblem = (ctx) => {
   );
 };
 
-// Ranked cosine-similarity results for 11.2 sub=1.
-// Cat-related docs rank highest (0.85-0.95), mid "dog chased the cat" sits in the middle,
-// and off-topic docs score lowest. Values are illustrative but consistent with the 4-dim vectors above.
+// Illustrative cosine similarity scores for the brute-force demonstration in 11.2.
+// Values are chosen so the cat-related docs (1, 3, 7 top-3, then 4, 5) rank highest,
+// matching the highlighted docs in 11.1's SVG. Real cosines of CAT_CORPUS vectors
+// cluster tightly (0.98-1.00 for cat docs); these spread the numbers for visual clarity.
 const BRUTE_FORCE_SCORES = [
-  { id: 7, cos: 0.98 },
-  { id: 1, cos: 0.96 },
-  { id: 4, cos: 0.94 },
-  { id: 5, cos: 0.93 },
-  { id: 3, cos: 0.89 },
-  { id: 8, cos: 0.67 },
+  { id: 1, cos: 0.97 },
+  { id: 3, cos: 0.94 },
+  { id: 7, cos: 0.92 },
+  { id: 5, cos: 0.89 },
+  { id: 4, cos: 0.87 },
+  { id: 8, cos: 0.68 },
   { id: 2, cos: 0.48 },
   { id: 6, cos: 0.35 },
   { id: 9, cos: 0.3 },
@@ -690,7 +691,7 @@ export const BruteForceKNN = (ctx) => {
             </T>
             <T color="#80e8a5" size={15} style={{ marginTop: 6 }}>
               We compared the query to every single doc in the corpus. No doc was skipped, no shortcut was taken. The
-              top-3 returned (docs 7, 1, 4) are guaranteed to be the true three most similar. That is the promise of
+              top-3 returned (docs 1, 3, 7) are guaranteed to be the true three most similar. That is the promise of
               brute force: perfect answers.
             </T>
           </div>

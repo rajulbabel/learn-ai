@@ -1023,6 +1023,49 @@ export const Thinking = (ctx) => {
           </T>
         </Box>
       </Reveal>
+      <Reveal when={sub >= 8}>
+        <Box color={C.purple} style={{ width: "100%" }}>
+          <T color={C.purple} bold center size={22}>
+            The tricks nobody programmed
+          </T>
+          <T color="#b8a9ff" style={{ marginTop: 8 }}>
+            Reasoning chains that include self-correction and verification tend to produce correct answers more often.
+            The reward signal pushes those patterns up over millions of rollouts. Nobody writes code that says
+            "self-correct" - it emerges from the rewards.
+          </T>
+          <div
+            style={{
+              marginTop: 14,
+              padding: "12px 14px",
+              borderRadius: 8,
+              background: "rgba(0,0,0,0.3)",
+              fontFamily: "monospace",
+              fontSize: 14,
+              color: C.bright,
+              lineHeight: 1.8,
+            }}
+          >
+            23 x 47 = 23 x 50 - 23 x 3 = 1150 - 69 = 1081.
+            <br />
+            <br />
+            <span style={{ color: C.yellow }}>Wait, let me double-check.</span>{" "}
+            <span style={{ color: C.dim }}>&lt;-- emerged: self-doubt</span>
+            <br />
+            <br />
+            <span style={{ color: C.yellow }}>Try another way:</span> 20 x 47 + 3 x 47 = 940 + 141 = 1081.{" "}
+            <span style={{ color: C.dim }}>&lt;-- emerged: verification</span>
+            <br />
+            <br />
+            <span style={{ color: C.yellow }}>Both methods give 1081. Confident.</span>{" "}
+            <span style={{ color: C.dim }}>&lt;-- emerged: confidence calibration</span>
+          </div>
+          <T color="#b8a9ff" size={16} style={{ marginTop: 10 }}>
+            The DeepSeek-R1 papers documented an <strong>"aha moment"</strong> during training where thinking length
+            spontaneously grew and phrases like "wait" and "let me reconsider" appeared - purely from the reward
+            signal.
+          </T>
+        </Box>
+      </Reveal>
       {sub < 9 && (
         <SubBtn
           key={sub}

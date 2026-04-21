@@ -200,6 +200,12 @@ describe("Thinking content", () => {
     expect(container.textContent).toMatch(/checkable|verifiable/i);
     expect(container.textContent).toMatch(/synthetic|rejection/i);
   });
+
+  it("sub=8 shows emergent behaviors", () => {
+    const { container } = render(fn(makeCtx({ sub: 8 })));
+    expect(container.textContent).toMatch(/emerg/i);
+    expect(container.textContent).toMatch(/self-correct|double-check|verify/i);
+  });
 });
 
 // ─── TOC special branches ───

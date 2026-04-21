@@ -139,5 +139,8 @@
   ],
   "11.1": [
     "Retrieval diagram with a yellow query box on the left for the phrase about cats pointing an arrow into a cloud of ten numbered document dots, where the three dots closest to the query (documents 1, 3, and 7 - all cat-related sentences) are highlighted green as the top-3 nearest neighbors and the remaining seven dots are dimmed"
+  ],
+  "11.2": [
+    "Rightward purple arrow labeled production uses this, pointing from the exact brute-force card on the left to the approximate nearest neighbor (ANN) card on the right, illustrating the tradeoff from exact slow search to approximate fast search"
   ]
 }

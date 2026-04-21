@@ -259,6 +259,44 @@ describe("RetrievalProblem (11.1) content", () => {
   });
 });
 
+describe("BruteForceKNN (11.2) content", () => {
+  const fn = VectorFoundations.BruteForceKNN;
+
+  it("sub=0 describes the compute-sort-return-k algorithm", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/compute.*similarit/i);
+    expect(container.textContent).toMatch(/sort/i);
+    expect(container.textContent).toMatch(/top-k|top k/i);
+  });
+
+  it("sub=1 runs brute-force on the 10-doc corpus with cosine", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/cosine/i);
+    expect(container.textContent).toMatch(/cats are small/i);
+    expect(container.textContent).toMatch(/exact/i);
+  });
+
+  it("sub=2 shows slowdown at N = 1 million", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/1,000,000|1 million|1M/);
+    expect(container.textContent).toMatch(/768/);
+  });
+
+  it("sub=3 shows 3 TB memory math at 1 billion scale", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/3\.072 TB|3 TB/);
+    expect(container.textContent).toMatch(/1 billion|1B/);
+    expect(container.textContent).toMatch(/hopeless|not feasible|bottleneck/i);
+  });
+
+  it("sub=4 introduces ANN and recall as the metric", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/ANN|Approximate Nearest Neighbor/);
+    expect(container.textContent).toMatch(/recall/i);
+    expect(container.textContent).toMatch(/99%|0\.99/);
+  });
+});
+
 // ─── TOC special branches ───
 describe("TOC", () => {
   it("renders section list", () => {

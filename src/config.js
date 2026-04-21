@@ -128,6 +128,11 @@ export const chapters = [
   },
   { id: "10.3", title: "Mixture of Experts - Bigger Model, Same Compute", section: 10, component: "MixtureOfExperts" },
   { id: "10.4", title: "Thinking - How Reasoning Models Work", section: 10, component: "Thinking" },
+  // Section 11: Vector Databases
+  { id: "11.1", title: "The Retrieval Problem", section: 11, component: "RetrievalProblem" },
+  { id: "11.2", title: "Brute-Force kNN", section: 11, component: "BruteForceKNN" },
+  { id: "11.3", title: "The Three-Way Tradeoff", section: 11, component: "ThreeWayTradeoff" },
+  { id: "11.4", title: "Distance Metrics", section: 11, component: "DistanceMetrics" },
 ];
 
 export const sectionNames = {

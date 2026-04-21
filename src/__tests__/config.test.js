@@ -139,3 +139,22 @@ describe("Section 11 registration", () => {
     expect(sectionColors[11]).toBe("#f06292");
   });
 });
+
+describe("Section 11 chapters", () => {
+  it("has chapters 11.1 through 11.4 in order", () => {
+    const section11 = chapters.filter((ch) => ch.section === 11);
+    expect(section11.length).toBe(4);
+    expect(section11[0].id).toBe("11.1");
+    expect(section11[0].component).toBe("RetrievalProblem");
+    expect(section11[0].title).toBe("The Retrieval Problem");
+    expect(section11[1].id).toBe("11.2");
+    expect(section11[1].component).toBe("BruteForceKNN");
+    expect(section11[1].title).toBe("Brute-Force kNN");
+    expect(section11[2].id).toBe("11.3");
+    expect(section11[2].component).toBe("ThreeWayTradeoff");
+    expect(section11[2].title).toBe("The Three-Way Tradeoff");
+    expect(section11[3].id).toBe("11.4");
+    expect(section11[3].component).toBe("DistanceMetrics");
+    expect(section11[3].title).toBe("Distance Metrics");
+  });
+});

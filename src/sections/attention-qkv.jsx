@@ -1689,8 +1689,8 @@ export const QKVShapes = (ctx) => {
           </T>
           <T color="#80deea" style={{ marginTop: 6 }}>
             Think of the embedding as the word's <strong>full profile</strong> - it stays 4 numbers long for the entire
-            journey through the Transformer. Q, K, V are three <strong>compressed lenses</strong> on that profile,
-            built only for the attention step.
+            journey through the Transformer. Q, K, V are three <strong>compressed lenses</strong> on that profile, built
+            only for the attention step.
           </T>
           <div style={{ marginTop: 14, display: "flex", justifyContent: "center" }}>
             <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 12 }}>
@@ -1733,9 +1733,9 @@ export const QKVShapes = (ctx) => {
             Why smaller? Multi-head attention splits the budget
           </T>
           <T color="#80e8a5" style={{ marginTop: 6 }}>
-            Here is the real reason for the smaller shape. The Transformer runs <strong>several heads in parallel</strong>{" "}
-            on the same embedding. Each head gets its own set of W_Q, W_K, W_V and works independently, looking at the
-            embedding through its own 2-number lens.
+            Here is the real reason for the smaller shape. The Transformer runs{" "}
+            <strong>several heads in parallel</strong> on the same embedding. Each head gets its own set of W_Q, W_K,
+            W_V and works independently, looking at the embedding through its own 2-number lens.
           </T>
           <div style={{ marginTop: 14, display: "flex", justifyContent: "center" }}>
             <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 12 }}>
@@ -1761,8 +1761,8 @@ export const QKVShapes = (ctx) => {
           </div>
           <T color={C.dim} size={14} style={{ marginTop: 12 }}>
             Two heads, each with its own W_Q (4×2). Each produces a different 2-number Query because W_Q₁ and W_Q₂
-            learned different things. After both heads do their attention, their outputs are <strong>concatenated</strong>{" "}
-            back to 4 numbers total (2 + 2) and fed forward.
+            learned different things. After both heads do their attention, their outputs are{" "}
+            <strong>concatenated</strong> back to 4 numbers total (2 + 2) and fed forward.
           </T>
           <div
             style={{
@@ -1777,8 +1777,8 @@ export const QKVShapes = (ctx) => {
               The budget intuition
             </T>
             <T color={C.dim} size={14} style={{ marginTop: 4 }}>
-              Fixed budget: 4 output numbers per token. Options: one big head with a 4-number Q, or two small heads
-              each with a 2-number Q. Multi-head picks the second: more heads, each specialized.{" "}
+              Fixed budget: 4 output numbers per token. Options: one big head with a 4-number Q, or two small heads each
+              with a 2-number Q. Multi-head picks the second: more heads, each specialized.{" "}
               <strong>d_k = d_model / num_heads</strong>.
             </T>
           </div>
@@ -1791,7 +1791,8 @@ export const QKVShapes = (ctx) => {
             Real Transformer numbers (GPT-style)
           </T>
           <T color="#ffcc80" style={{ marginTop: 6 }}>
-            Scale everything up. The chapter's 4 becomes 512. The chapter's 2 becomes 64. The chapter's 2 heads become 8.
+            Scale everything up. The chapter's 4 becomes 512. The chapter's 2 becomes 64. The chapter's 2 heads become
+            8.
           </T>
           <div
             style={{
@@ -1915,8 +1916,8 @@ export const QKVShapes = (ctx) => {
           </div>
           <T color="#ffe082" style={{ marginTop: 12 }}>
             Bottom line: W_Q is <strong>not square</strong>. It's a rectangular projection from embedding space into a
-            smaller query space. The embedding keeps its original size; the query is a compressed view used only for
-            the attention computation.
+            smaller query space. The embedding keeps its original size; the query is a compressed view used only for the
+            attention computation.
           </T>
         </Box>
       </Reveal>

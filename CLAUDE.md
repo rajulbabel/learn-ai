@@ -203,10 +203,17 @@ Only config.js IDs change.
 | 9.3 | CrossAttention | Cross-Attention - The Encoder-Decoder Bridge |
 | 9.4 | OutputHead | The Output Head - Linear + Softmax |
 | 9.5 | WhatTransformerDoes | What is a Transformer Actually Doing? |
-| 9.6 | KVCache | KV Cache - Why Inference is Fast |
-| 9.7 | GroupedQueryAttention | Grouped-Query Attention - Shrinking the KV Cache |
-| 9.8 | EncoderDecoderTraining | Encoder-Decoder: The Training Flow |
-| 9.9 | EncoderDecoderInference | Encoder-Decoder: The Inference Flow |
+| 9.6 | EncoderDecoderTraining | Encoder-Decoder: The Training Flow |
+| 9.7 | EncoderDecoderInference | Encoder-Decoder: The Inference Flow |
+
+**Section 10: Modern LLM Techniques** (`attention-computation.jsx` + `modern-llm-techniques.jsx`)
+
+| Chapter | Component | Title |
+|---------|-----------|-------|
+| 10.1 | KVCache | KV Cache - Why Inference is Fast |
+| 10.2 | GroupedQueryAttention | Grouped-Query Attention - Shrinking the KV Cache |
+| 10.3 | MixtureOfExperts | Mixture of Experts - Bigger Model, Same Compute |
+| 10.4 | Thinking | Thinking - How Reasoning Models Work |
 
 ## Project Structure
 
@@ -240,7 +247,8 @@ learn-ai/
 │       ├── attention-qkv.jsx             # Section 6
 │       ├── attention-computation.jsx     # Section 7 (+ CausalMask/CrossAttention in 9)
 │       ├── transformer-block.jsx        # Section 8 (Add&Norm, FFN, block repeats)
-│       └── encoder-decoder-diagrams.jsx # Section 9 (Training/Inference flow diagrams)
+│       ├── encoder-decoder-diagrams.jsx # Section 9 (Training/Inference flow diagrams)
+│       └── modern-llm-techniques.jsx    # Section 10 (MoE, Thinking)
 ├── .github/workflows/deploy.yml
 └── CLAUDE.md
 ```

@@ -116,15 +116,18 @@ export const chapters = [
   { id: "9.3", title: "Cross-Attention - The Encoder-Decoder Bridge", section: 9, component: "CrossAttention" },
   { id: "9.4", title: "The Output Head - Linear + Softmax", section: 9, component: "OutputHead" },
   { id: "9.5", title: "What is a Transformer Actually Doing?", section: 9, component: "WhatTransformerDoes" },
-  { id: "9.6", title: "KV Cache - Why Inference is Fast", section: 9, component: "KVCache" },
+  { id: "9.6", title: "Encoder-Decoder: The Training Flow", section: 9, component: "EncoderDecoderTraining" },
+  { id: "9.7", title: "Encoder-Decoder: The Inference Flow", section: 9, component: "EncoderDecoderInference" },
+  // Section 10: Modern LLM Techniques
+  { id: "10.1", title: "KV Cache - Why Inference is Fast", section: 10, component: "KVCache" },
   {
-    id: "9.7",
+    id: "10.2",
     title: "Grouped-Query Attention - Shrinking the KV Cache",
-    section: 9,
+    section: 10,
     component: "GroupedQueryAttention",
   },
-  { id: "9.8", title: "Encoder-Decoder: The Training Flow", section: 9, component: "EncoderDecoderTraining" },
-  { id: "9.9", title: "Encoder-Decoder: The Inference Flow", section: 9, component: "EncoderDecoderInference" },
+  { id: "10.3", title: "Mixture of Experts - Bigger Model, Same Compute", section: 10, component: "MixtureOfExperts" },
+  { id: "10.4", title: "Thinking - How Reasoning Models Work", section: 10, component: "Thinking" },
 ];
 
 export const sectionNames = {
@@ -138,6 +141,7 @@ export const sectionNames = {
   7: "Attention - The Full Computation",
   8: "The Encoder",
   9: "The Decoder",
+  10: "Modern LLM Techniques",
 };
 
 // Section colors (one per section, used in progress bar, TOC, etc.)
@@ -151,6 +155,7 @@ export const sectionColors = {
   7: "#e040fb",
   8: "#42a5f5",
   9: "#ef5350",
+  10: "#26a69a",
 };
 
 // Colors

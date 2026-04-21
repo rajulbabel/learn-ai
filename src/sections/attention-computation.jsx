@@ -5141,7 +5141,10 @@ export const AttentionShapes = (ctx) => {
           {positions.map((x, i) => (
             <g key={i}>
               <line x1={x} y1={barY} x2={x} y2={arrowBottom - 6} stroke={color} strokeWidth="1.5" />
-              <polygon points={`${x},${arrowBottom} ${x - 5},${arrowBottom - 8} ${x + 5},${arrowBottom - 8}`} fill={color} />
+              <polygon
+                points={`${x},${arrowBottom} ${x - 5},${arrowBottom - 8} ${x + 5},${arrowBottom - 8}`}
+                fill={color}
+              />
             </g>
           ))}
         </svg>
@@ -5185,7 +5188,14 @@ export const AttentionShapes = (ctx) => {
           {positions.map((x, i) => (
             <line key={`s${i}`} x1={x} y1={0} x2={x} y2={stemBottom} stroke={color} strokeWidth="1.5" />
           ))}
-          <line x1={positions[0]} y1={stemBottom} x2={positions[n - 1]} y2={stemBottom} stroke={color} strokeWidth="1.5" />
+          <line
+            x1={positions[0]}
+            y1={stemBottom}
+            x2={positions[n - 1]}
+            y2={stemBottom}
+            stroke={color}
+            strokeWidth="1.5"
+          />
           <line x1={centerX} y1={stemBottom} x2={centerX} y2={arrowBottom - 6} stroke={color} strokeWidth="1.5" />
           <polygon
             points={`${centerX},${arrowBottom} ${centerX - 5},${arrowBottom - 8} ${centerX + 5},${arrowBottom - 8}`}
@@ -5219,8 +5229,8 @@ export const AttentionShapes = (ctx) => {
           </T>
           <T color="#80deea" center style={{ marginTop: 6 }}>
             Teaching scale: <strong>3 tokens, d_model = 4, d_k = 2, 2 heads</strong>. Sentence:{" "}
-            <strong>"I love cats"</strong>. In every matrix with 3 rows, row 1 is "I", row 2 is "love", row 3 is
-            "cats" - each word keeps its row the whole way.
+            <strong>"I love cats"</strong>. In every matrix with 3 rows, row 1 is "I", row 2 is "love", row 3 is "cats"
+            - each word keeps its row the whole way.
           </T>
 
           {/* ── Single-head flow: X -> W_Q/W_K/W_V -> Q/K/V -> Q·K^T -> softmax -> weights·V -> head output ── */}
@@ -5320,9 +5330,9 @@ export const AttentionShapes = (ctx) => {
             Multi-head: concat the heads, then project with W_O
           </T>
           <T color="#ffcc80" center style={{ marginTop: 6 }}>
-            Every head produced a <strong>3 × 2</strong> output (3 tokens, d_k = 2). With{" "}
-            <strong>h = 2 heads</strong>, we have two such tiles. Stack them side-by-side (concat along the column
-            axis) to get a 3 × 4 block, then multiply by <strong>W_O</strong> to mix information across heads.
+            Every head produced a <strong>3 × 2</strong> output (3 tokens, d_k = 2). With <strong>h = 2 heads</strong>,
+            we have two such tiles. Stack them side-by-side (concat along the column axis) to get a 3 × 4 block, then
+            multiply by <strong>W_O</strong> to mix information across heads.
           </T>
 
           <div
@@ -7007,8 +7017,8 @@ export const GroupedQueryAttention = (ctx) => {
             Recall: Multi-Head Attention
           </T>
           <T color={C.blue} style={{ marginTop: 6 }}>
-            In chapters 7.9-7.14, we learned standard MHA. With 8 heads, the model maintains 8 independent sets of Q,
-            K, V weight matrices:
+            In chapters 7.9-7.14, we learned standard MHA. With 8 heads, the model maintains 8 independent sets of Q, K,
+            V weight matrices:
           </T>
           <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 6 }}>
             <div
@@ -7742,9 +7752,7 @@ export const KVCache = (ctx) => {
                   <T color="#80deea" bold center size={14}>
                     Step 1 computed
                   </T>
-                  <code
-                    style={{ color: C.cyan, fontSize: 14, display: "block", marginTop: 6, textAlign: "center" }}
-                  >
+                  <code style={{ color: C.cyan, fontSize: 14, display: "block", marginTop: 6, textAlign: "center" }}>
                     q_I = W_Q · x_I
                   </code>
                   <code
@@ -7774,9 +7782,7 @@ export const KVCache = (ctx) => {
                   <T color="#80deea" bold center size={14}>
                     Step 2 re-computed
                   </T>
-                  <code
-                    style={{ color: C.cyan, fontSize: 14, display: "block", marginTop: 6, textAlign: "center" }}
-                  >
+                  <code style={{ color: C.cyan, fontSize: 14, display: "block", marginTop: 6, textAlign: "center" }}>
                     q_I = W_Q · x_I
                   </code>
                   <code

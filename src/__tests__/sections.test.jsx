@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, afterEach } from "vitest";
 import { render, fireEvent, cleanup } from "@testing-library/react";
-import { chapters } from "../config.js";
+import { chapters, sectionNames } from "../config.js";
 
 // Import all sections
 import { TOC } from "../sections/toc.jsx";
@@ -14,6 +14,7 @@ import * as AttentionQKV from "../sections/attention-qkv.jsx";
 import * as AttentionComputation from "../sections/attention-computation.jsx";
 import * as TransformerBlock from "../sections/transformer-block.jsx";
 import * as EncoderDecoderDiagrams from "../sections/encoder-decoder-diagrams.jsx";
+import * as ModernLLMTechniques from "../sections/modern-llm-techniques.jsx";
 
 const lookup = {
   TOC,
@@ -26,6 +27,7 @@ const lookup = {
   ...AttentionComputation,
   ...TransformerBlock,
   ...EncoderDecoderDiagrams,
+  ...ModernLLMTechniques,
 };
 
 afterEach(() => cleanup());
@@ -90,6 +92,136 @@ describe("All chapters - full sub + interaction coverage", () => {
   });
 });
 
+describe("MixtureOfExperts content", () => {
+  const fn = ModernLLMTechniques.MixtureOfExperts;
+
+  it("sub=0 shows motivation comparing dense vs MoE", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/47B/);
+    expect(container.textContent).toMatch(/13B/);
+    expect(container.textContent).toMatch(/Mixtral/);
+  });
+
+  it("sub=1 shows FFN replacement with router + experts", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/Router/);
+    expect(container.textContent).toMatch(/FFN/);
+  });
+
+  it("sub=1 Before card uses valid CSS (no rgba with appended hex)", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    // Invalid CSS like "rgba(255,255,255,0.35)06" is silently dropped by browsers.
+    // The Before card must use hex-alpha (e.g., "#ffffff0a") instead.
+    const html = container.innerHTML;
+    expect(html).not.toMatch(/rgba\([^)]*\)[0-9a-fA-F]{2}/);
+  });
+
+  it("sub=2 shows top-k routing with concrete example", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/cat/);
+    expect(container.textContent).toMatch(/0\.80/);
+    expect(container.textContent).toMatch(/top-2|top 2/);
+  });
+
+  it("sub=3 shows load balancing problem and auxiliary loss fix", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/L_aux|auxiliary/);
+    expect(container.textContent).toMatch(/balanc/i);
+  });
+
+  it("sub=4 shows Mixtral 8x7B parameter breakdown", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/46\.7B|46\.7/);
+    expect(container.textContent).toMatch(/layers?/i);
+  });
+
+  it("sub=5 shows memory vs compute tradeoff", () => {
+    const { container } = render(fn(makeCtx({ sub: 5 })));
+    expect(container.textContent).toMatch(/94 GB|94GB/);
+    expect(container.textContent).toMatch(/26 GFLOPs|GFLOP/);
+  });
+
+  it("sub=6 shows real MoE model examples", () => {
+    const { container } = render(fn(makeCtx({ sub: 6 })));
+    expect(container.textContent).toMatch(/Mixtral/);
+    expect(container.textContent).toMatch(/DeepSeek/);
+    expect(container.textContent).toMatch(/Qwen/);
+  });
+
+  it("sub=7 shows honest tradeoffs of MoE", () => {
+    const { container } = render(fn(makeCtx({ sub: 7 })));
+    expect(container.textContent).toMatch(/edge|deployment/i);
+    expect(container.textContent).toMatch(/free lunch|tradeoff/i);
+  });
+});
+
+describe("Thinking content", () => {
+  const fn = ModernLLMTechniques.Thinking;
+
+  it("sub=0 shows before/after comparison with 23 x 47", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/23/);
+    expect(container.textContent).toMatch(/47/);
+    expect(container.textContent).toMatch(/1081/);
+  });
+
+  it("sub=1 shows unchanged-architecture checklist", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/unchanged|Every piece/i);
+    expect(container.textContent).toMatch(/Tokenizer/);
+    expect(container.textContent).toMatch(/Attention/);
+  });
+
+  it("sub=2 clarifies that both modes loop", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/loop/i);
+    expect(container.textContent).toMatch(/same loop|more.*loop|longer/i);
+  });
+
+  it("sub=3 shows how think/</think> tokens work", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/think/);
+    expect(container.textContent).toMatch(/probabilit/i);
+  });
+
+  it("sub=4 shows test-time compute scaling", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/test-time|compute/i);
+    expect(container.textContent).toMatch(/100 tokens|100,000/);
+  });
+
+  it("sub=5 shows 3-stage training pipeline", () => {
+    const { container } = render(fn(makeCtx({ sub: 5 })));
+    expect(container.textContent).toMatch(/Pre-training/);
+    expect(container.textContent).toMatch(/SFT/);
+    expect(container.textContent).toMatch(/RL/);
+  });
+
+  it("sub=6 shows RL reward loop with rollouts", () => {
+    const { container } = render(fn(makeCtx({ sub: 6 })));
+    expect(container.textContent).toMatch(/rollout/i);
+    expect(container.textContent).toMatch(/reward|PPO|GRPO/);
+  });
+
+  it("sub=7 shows training data sources", () => {
+    const { container } = render(fn(makeCtx({ sub: 7 })));
+    expect(container.textContent).toMatch(/checkable|verifiable/i);
+    expect(container.textContent).toMatch(/synthetic|rejection/i);
+  });
+
+  it("sub=8 shows emergent behaviors", () => {
+    const { container } = render(fn(makeCtx({ sub: 8 })));
+    expect(container.textContent).toMatch(/emerg/i);
+    expect(container.textContent).toMatch(/self-correct|double-check|verify/i);
+  });
+
+  it("sub=9 shows honest scope - where reasoning helps and doesn't", () => {
+    const { container } = render(fn(makeCtx({ sub: 9 })));
+    expect(container.textContent).toMatch(/Math|code|logic/i);
+    expect(container.textContent).toMatch(/creative|empathy|open-ended/i);
+  });
+});
+
 // ─── TOC special branches ───
 describe("TOC", () => {
   it("renders section list", () => {
@@ -134,11 +266,14 @@ describe("TOC", () => {
     }
   });
 
-  // Test all 9 sections expanded to cover each one
-  for (let secNum = 1; secNum <= 9; secNum++) {
+  // Test all 10 sections expanded to cover each one
+  for (let secNum = 1; secNum <= 10; secNum++) {
     it(`shows chapters for section ${secNum}`, () => {
       const { container } = render(TOC(makeCtx({ expanded: secNum })));
       expect(container.innerHTML).toBeTruthy();
+      // Every section in config.js with chapters MUST be listed in the TOC.
+      // This catches bugs where a new section is added to config but not to toc.jsx.
+      expect(container.textContent).toContain(sectionNames[secNum]);
     });
   }
 });

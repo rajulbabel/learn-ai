@@ -1793,12 +1793,7 @@ export const PosEncodingHeatmap = (ctx) => {
       );
     }
     return (
-      <svg
-        width={svgW}
-        height={svgH}
-        viewBox={`0 0 ${svgW} ${svgH}`}
-        style={{ maxWidth: "100%", display: "block" }}
-      >
+      <svg width={svgW} height={svgH} viewBox={`0 0 ${svgW} ${svgH}`} style={{ maxWidth: "100%", display: "block" }}>
         <desc>
           Full positional-encoding heatmap with rows as positions (0 to 39) and columns as embedding dimensions (0 to
           127). Each cell is colored by the sin or cos value at that position and dimension, ranging from dark red at
@@ -1808,7 +1803,14 @@ export const PosEncodingHeatmap = (ctx) => {
         {cells}
         {cbarCells}
         {[0, 10, 20, 30, 39].map((p) => (
-          <text key={`yl-${p}`} x={leftM - 6} y={topM + p * cellH + cellH / 2 + 3} fontSize="9" fill={C.dim} textAnchor="end">
+          <text
+            key={`yl-${p}`}
+            x={leftM - 6}
+            y={topM + p * cellH + cellH / 2 + 3}
+            fontSize="9"
+            fill={C.dim}
+            textAnchor="end"
+          >
             {p}
           </text>
         ))}
@@ -1823,7 +1825,14 @@ export const PosEncodingHeatmap = (ctx) => {
           Position (row)
         </text>
         {[0, 32, 64, 96, 127].map((d) => (
-          <text key={`xl-${d}`} x={leftM + d * cellW + cellW / 2} y={topM + heatH + 12} fontSize="9" fill={C.dim} textAnchor="middle">
+          <text
+            key={`xl-${d}`}
+            x={leftM + d * cellW + cellW / 2}
+            y={topM + heatH + 12}
+            fontSize="9"
+            fill={C.dim}
+            textAnchor="middle"
+          >
             {d}
           </text>
         ))}
@@ -1848,18 +1857,16 @@ export const PosEncodingHeatmap = (ctx) => {
     const cells = [];
     for (let i = 0; i < DIMS; i++) {
       cells.push(
-        <rect
-          key={i}
-          x={40 + i * cellW}
-          y={0}
-          width={cellW}
-          height={cellH * 2}
-          fill={peColor(peValue(pos, i))}
-        />,
+        <rect key={i} x={40 + i * cellW} y={0} width={cellW} height={cellH * 2} fill={peColor(peValue(pos, i))} />,
       );
     }
     return (
-      <svg width={40 + heatW + 10} height={cellH * 2 + 4} viewBox={`0 0 ${40 + heatW + 10} ${cellH * 2 + 4}`} style={{ maxWidth: "100%", display: "block" }}>
+      <svg
+        width={40 + heatW + 10}
+        height={cellH * 2 + 4}
+        viewBox={`0 0 ${40 + heatW + 10} ${cellH * 2 + 4}`}
+        style={{ maxWidth: "100%", display: "block" }}
+      >
         <text x={34} y={cellH + 4} fontSize="12" fill={color} fontWeight="700" textAnchor="end">
           pos {pos}
         </text>
@@ -1884,7 +1891,14 @@ export const PosEncodingHeatmap = (ctx) => {
       const bits = n.toString(2).padStart(BITS, "0").split("").map(Number);
       rows.push(
         <g key={n}>
-          <text x={startX - 8} y={startY + n * cellSize + cellSize / 2 + 4} fontSize="13" fill={C.dim} textAnchor="end" fontFamily="monospace">
+          <text
+            x={startX - 8}
+            y={startY + n * cellSize + cellSize / 2 + 4}
+            fontSize="13"
+            fill={C.dim}
+            textAnchor="end"
+            fontFamily="monospace"
+          >
             {n}
           </text>
           {bits.map((b, bi) => (
@@ -1916,7 +1930,12 @@ export const PosEncodingHeatmap = (ctx) => {
       );
     }
     return (
-      <svg width={gridW} height={gridH} viewBox={`0 0 ${gridW} ${gridH}`} style={{ maxWidth: "100%", display: "block" }}>
+      <svg
+        width={gridW}
+        height={gridH}
+        viewBox={`0 0 ${gridW} ${gridH}`}
+        style={{ maxWidth: "100%", display: "block" }}
+      >
         <desc>
           Binary counting table showing positions 0 through 15 with 4-bit binary representations. Each bit is colored:
           bit 0 (rightmost, fast) flips every step, bit 1 flips every 2 steps, bit 2 flips every 4 steps, bit 3
@@ -1924,7 +1943,15 @@ export const PosEncodingHeatmap = (ctx) => {
           position in the heatmap gets a unique sin/cos signature.
         </desc>
         {bitLabels.map((lbl, bi) => (
-          <text key={lbl} x={startX + bi * cellSize + cellSize / 2} y={20} fontSize="10" fill={bitColors[bi]} textAnchor="middle" fontWeight="700">
+          <text
+            key={lbl}
+            x={startX + bi * cellSize + cellSize / 2}
+            y={20}
+            fontSize="10"
+            fill={bitColors[bi]}
+            textAnchor="middle"
+            fontWeight="700"
+          >
             {lbl}
           </text>
         ))}
@@ -2111,8 +2138,8 @@ export const PosEncodingHeatmap = (ctx) => {
             </div>
           </div>
           <T color="#90caf9" style={{ marginTop: 10 }}>
-            All values stay near 1.0000. Every position looks nearly identical here. That's the solid blue stripe on
-            the far right of the heatmap.
+            All values stay near 1.0000. Every position looks nearly identical here. That's the solid blue stripe on the
+            far right of the heatmap.
           </T>
           <T color={C.dim} size={14} style={{ marginTop: 8 }}>
             So what are these slow dimensions for? They encode <strong>very long-range</strong> position information.
@@ -2128,8 +2155,8 @@ export const PosEncodingHeatmap = (ctx) => {
             Every position is a unique fingerprint
           </T>
           <T color="#ffe082" style={{ marginTop: 6 }}>
-            Pick any single row. That row <strong>is exactly</strong> the positional encoding vector for that position. It's
-            128 numbers, a unique barcode. Compare rows side by side:
+            Pick any single row. That row <strong>is exactly</strong> the positional encoding vector for that position.
+            It's 128 numbers, a unique barcode. Compare rows side by side:
           </T>
           <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 6 }}>
             <PositionStrip pos={5} color={C.cyan} />
@@ -2220,8 +2247,8 @@ export const PosEncodingHeatmap = (ctx) => {
           <T color="#b8a9ff" style={{ marginTop: 10 }}>
             Sin/cos positional encoding is essentially <strong>binary counting made smooth and continuous</strong>. The
             fast dimensions play the role of low-order bits, the slow dimensions play the role of high-order bits. The
-            magic of using sin/cos (instead of 0/1) is that the resulting vectors have nice geometric relationships:
-            dot products capture relative distance, values stay bounded, and the encoding is differentiable so gradients
+            magic of using sin/cos (instead of 0/1) is that the resulting vectors have nice geometric relationships: dot
+            products capture relative distance, values stay bounded, and the encoding is differentiable so gradients
             flow through it cleanly during training.
           </T>
         </Box>
@@ -2269,15 +2296,7 @@ export const RoPE = (ctx) => {
           </marker>
         ))}
       </defs>
-      <circle
-        cx="0"
-        cy="0"
-        r="90"
-        fill="none"
-        stroke="rgba(255,255,255,0.15)"
-        strokeWidth="1"
-        strokeDasharray="3,3"
-      />
+      <circle cx="0" cy="0" r="90" fill="none" stroke="rgba(255,255,255,0.15)" strokeWidth="1" strokeDasharray="3,3" />
       <line x1="-115" y1="0" x2="115" y2="0" stroke="rgba(255,255,255,0.2)" strokeWidth="1" />
       <line x1="0" y1="-115" x2="0" y2="115" stroke="rgba(255,255,255,0.2)" strokeWidth="1" />
       <text x="120" y="4" fontSize="11" fill={C.dim}>
@@ -2378,10 +2397,10 @@ export const RoPE = (ctx) => {
   const TwoScenarioClocks = () => (
     <svg width="440" height="260" viewBox="0 0 440 260" style={{ maxWidth: "100%" }}>
       <desc>
-        Two side-by-side clock faces comparing near versus far scenarios in RoPE. The left clock shows Query at
-        position 3 and Key at position 0; the right clock shows Query at position 10 and Key at position 7. In both
-        cases the angular gap between the Q and K hands is the same 0.9 radians, illustrating that RoPE gives the same
-        attention score whenever the relative distance is the same, regardless of absolute positions.
+        Two side-by-side clock faces comparing near versus far scenarios in RoPE. The left clock shows Query at position
+        3 and Key at position 0; the right clock shows Query at position 10 and Key at position 7. In both cases the
+        angular gap between the Q and K hands is the same 0.9 radians, illustrating that RoPE gives the same attention
+        score whenever the relative distance is the same, regardless of absolute positions.
       </desc>
       <defs>
         <marker id="rsArrR" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
@@ -2399,7 +2418,15 @@ export const RoPE = (ctx) => {
         Far: Q at pos 10, K at pos 7
       </text>
 
-      <circle cx="110" cy="120" r="70" fill="none" stroke="rgba(255,255,255,0.15)" strokeWidth="1" strokeDasharray="3,3" />
+      <circle
+        cx="110"
+        cy="120"
+        r="70"
+        fill="none"
+        stroke="rgba(255,255,255,0.15)"
+        strokeWidth="1"
+        strokeDasharray="3,3"
+      />
       <line x1="30" y1="120" x2="190" y2="120" stroke="rgba(255,255,255,0.12)" strokeWidth="1" />
       <line x1="110" y1="40" x2="110" y2="200" stroke="rgba(255,255,255,0.12)" strokeWidth="1" />
       <line x1="110" y1="120" x2="154" y2="65" stroke={C.red} strokeWidth="3" markerEnd="url(#rsArrR)" />
@@ -2422,7 +2449,15 @@ export const RoPE = (ctx) => {
         gap between Q and K: 0.9 rad
       </text>
 
-      <circle cx="330" cy="120" r="70" fill="none" stroke="rgba(255,255,255,0.15)" strokeWidth="1" strokeDasharray="3,3" />
+      <circle
+        cx="330"
+        cy="120"
+        r="70"
+        fill="none"
+        stroke="rgba(255,255,255,0.15)"
+        strokeWidth="1"
+        strokeDasharray="3,3"
+      />
       <line x1="250" y1="120" x2="410" y2="120" stroke="rgba(255,255,255,0.12)" strokeWidth="1" />
       <line x1="330" y1="40" x2="330" y2="200" stroke="rgba(255,255,255,0.12)" strokeWidth="1" />
       <line x1="330" y1="120" x2="261" y2="110" stroke={C.red} strokeWidth="3" markerEnd="url(#rsArrR)" />
@@ -2561,10 +2596,7 @@ export const RoPE = (ctx) => {
               { p: 2, a: "0.6", q: "[0.321, 0.947]", color: C.yellow },
               { p: 3, a: "0.9", q: "[0.027, 1.000]", color: C.green },
             ].map(({ p, a, q, color }) => (
-              <div
-                key={p}
-                style={{ display: "grid", gridTemplateColumns: "60px 90px 1fr", gap: 6, padding: "4px 0" }}
-              >
+              <div key={p} style={{ display: "grid", gridTemplateColumns: "60px 90px 1fr", gap: 6, padding: "4px 0" }}>
                 <T color={color} bold size={14}>
                   {p}
                 </T>
@@ -2628,14 +2660,14 @@ export const RoPE = (ctx) => {
             The magic: only the gap between Q and K matters
           </T>
           <T color="#ffe082" style={{ marginTop: 6 }}>
-            The attention score between two words is just the dot product of their clock hands. And the dot product
-            only cares about <strong>one thing</strong>: the angle between the two hands. Same angle = same score, no
-            matter where the hands are pointing absolutely.
+            The attention score between two words is just the dot product of their clock hands. And the dot product only
+            cares about <strong>one thing</strong>: the angle between the two hands. Same angle = same score, no matter
+            where the hands are pointing absolutely.
           </T>
 
           <T color="#ffe082" style={{ marginTop: 8 }}>
-            Since RoPE spins both Q and K by their <strong>own</strong> positions, the common spin cancels out. Only
-            the gap (position difference) is left. Watch two very different scenarios land on the same answer:
+            Since RoPE spins both Q and K by their <strong>own</strong> positions, the common spin cancels out. Only the
+            gap (position difference) is left. Watch two very different scenarios land on the same answer:
           </T>
 
           <div style={{ marginTop: 12, display: "flex", justifyContent: "center" }}>
@@ -2750,8 +2782,8 @@ export const RoPE = (ctx) => {
           </T>
           <T color="#80deea" style={{ marginTop: 6 }}>
             Real embeddings have 128 dims (or more), not 2. RoPE handles this by processing dimensions{" "}
-            <strong>in pairs</strong>, and each pair rotates at its own <strong>frequency</strong>. Fast frequencies
-            for early pairs, slow ones for late pairs:
+            <strong>in pairs</strong>, and each pair rotates at its own <strong>frequency</strong>. Fast frequencies for
+            early pairs, slow ones for late pairs:
           </T>
           <div style={{ display: "flex", justifyContent: "center", marginTop: 10 }}>
             <PairFrequencyClocks />

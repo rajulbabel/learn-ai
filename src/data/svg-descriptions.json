@@ -104,15 +104,37 @@
     "Cross-attention architecture diagram showing encoder stack producing K and V projections cached and fanned out to decoder layers, where Q comes from decoder while K and V come from encoder output"
   ],
   "9.6": [
+    "Progressive encoder-decoder training flow diagram showing complete pipeline: tokenization, embedding, positional encoding, encoder self-attention with Q K V projections, FFN, decoder with causal masking and cross-attention, and output head producing predictions at every position"
+  ],
+  "9.7": [
+    "Progressive encoder-decoder inference flow diagram showing autoregressive generation: encoder runs once, K V output is cached, decoder runs in a loop processing one new token at a time using KV cache for previously computed keys and values"
+  ],
+  "10.1": [
     "Three stacked work rows showing naive generation redoing history: step 1 with 1 green new block, step 2 with 1 red redundant block and 1 green new block, step 3 with 2 red redundant blocks and 1 green new block, illustrating how computation piles up quadratically when the KV cache is not used",
     "Side by side attention matrix multiplications at generation step 3: Q times K transpose equals Scores (3 by 3) with rows for I and love dimmed because they were already computed at earlier steps and only the last row for cats glows, and Scores times V equals Output with only the last row highlighted as the new result",
     "Three frame growing notebook diagram showing the K cache and V cache tables appending one row per generation step: after I has 1 row, after love has 2 rows with the older row dimmed, after cats has 3 rows with only the newest row highlighted",
     "Horizontal memory meter filling with gradient showing KV cache memory cost scaling with sequence length, with tick marks at 1024 4096 and 32768 tokens and GB values 2.7 10.7 and 86 for LLaMA 70B sized models"
   ],
-  "9.7": [
-    "Progressive encoder-decoder training flow diagram showing complete pipeline: tokenization, embedding, positional encoding, encoder self-attention with Q K V projections, FFN, decoder with causal masking and cross-attention, and output head producing predictions at every position"
+  "10.3": [
+    "Side-by-side comparison of a dense 47B model versus a MoE model with 47B total parameters but only 13B active per token",
+    "Before and after transformer block diagrams showing the FFN replaced by a router that picks top-k experts and computes a weighted sum",
+    "Top-k routing walkthrough with softmax scores over 8 experts selecting experts 3 and 6 for the token cat and normalizing their weights",
+    "Expert load histograms comparing unbalanced routing where one expert hogs 92 percent against balanced routing after the auxiliary loss",
+    "Parameter math breakdown for Mixtral 8x7B showing per-layer attention expert and router contributions totaling 46.7 billion parameters with 13 billion active per token",
+    "Memory versus compute cards showing 94 GB of GPU memory for all experts but only 26 GFLOPs of compute per token",
+    "Production MoE model comparison table covering Mixtral 8x7B, Mixtral 8x22B, DeepSeek-V3, and Qwen3-Next with total parameters active parameters expert counts and routing policy",
+    "Honest tradeoff cards listing MoE wins (data-center training, high throughput serving) and struggles (edge deployment, single-user low-latency)"
   ],
-  "9.8": [
-    "Progressive encoder-decoder inference flow diagram showing autoregressive generation: encoder runs once, K V output is cached, decoder runs in a loop processing one new token at a time using KV cache for previously computed keys and values"
+  "10.4": [
+    "Before and after cards for the prompt What is 23 times 47 showing a regular LLM emitting just 1081 and a reasoning LLM emitting a think block with step-by-step calculation before the final answer",
+    "Grid checklist of every transformer component (tokenizer, embeddings, positional encoding, attention, FFN, layer norms, residuals, KV cache, output head, softmax, autoregressive loop) each marked unchanged",
+    "Side-by-side vertical chains of forward-pass boxes comparing a regular LLM with 3 iterations to a reasoning LLM with 120 iterations",
+    "Token probability distributions at two moments showing the think token winning at the start of a reply and the close-think token winning at the end of a reasoning chain",
+    "Representative horizontal bar chart showing accuracy climbing with thinking token budget from 30 percent at 100 tokens to 89 percent at 100000 tokens",
+    "Three-stage training pipeline with pre-training on trillions of tokens then SFT on 50K reasoning examples then RL with verifier on millions of rollouts",
+    "RL reward loop concrete example with 5 rollouts for the problem 23 times 47 showing correct and incorrect attempts with rewards plus one and minus one and the PPO or GRPO weight update rule",
+    "Three data source cards for training reasoning models covering existing chain-of-thought in pre-training data, synthetic generation with a verifier filter, and rejection sampling from the model itself",
+    "Annotated reasoning trace demonstrating emergent self-correction, verification, and confidence-calibration patterns that arose purely from the reward signal",
+    "Two-column honest scope table listing domains where reasoning helps (math, code, logic) and domains where it does not lift quality (creative writing, empathy, casual conversation)"
   ]
 }

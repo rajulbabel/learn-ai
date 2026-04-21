@@ -132,6 +132,13 @@ describe("MixtureOfExperts content", () => {
     expect(container.textContent).toMatch(/94 GB|94GB/);
     expect(container.textContent).toMatch(/26 GFLOPs|GFLOP/);
   });
+
+  it("sub=6 shows real MoE model examples", () => {
+    const { container } = render(fn(makeCtx({ sub: 6 })));
+    expect(container.textContent).toMatch(/Mixtral/);
+    expect(container.textContent).toMatch(/DeepSeek/);
+    expect(container.textContent).toMatch(/Qwen/);
+  });
 });
 
 // ─── TOC special branches ───

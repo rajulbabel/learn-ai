@@ -361,6 +361,75 @@ export const MixtureOfExperts = (ctx) => {
           </T>
         </Box>
       </Reveal>
+      <Reveal when={sub >= 6}>
+        <Box color={C.blue} style={{ width: "100%" }}>
+          <T color={C.blue} bold center size={22}>
+            MoE models in production
+          </T>
+          <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 8 }}>
+            {[
+              { model: "Mixtral 8x7B", total: "47B", active: "13B", experts: "8", routing: "top-2" },
+              { model: "Mixtral 8x22B", total: "141B", active: "39B", experts: "8", routing: "top-2" },
+              { model: "DeepSeek-V3", total: "671B", active: "37B", experts: "256 + 1 shared", routing: "top-8" },
+              { model: "Qwen3-Next", total: "80B", active: "3B", experts: "512", routing: "top-10" },
+            ].map(({ model, total, active, experts, routing }) => (
+              <div
+                key={model}
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "1.2fr 0.8fr 0.8fr 1fr 0.8fr",
+                  gap: 8,
+                  padding: "10px 14px",
+                  borderRadius: 8,
+                  background: `${C.blue}06`,
+                  border: `1px solid ${C.blue}12`,
+                  alignItems: "center",
+                }}
+              >
+                <T color={C.blue} bold size={16}>
+                  {model}
+                </T>
+                <div>
+                  <T color={C.dim} size={12}>
+                    total
+                  </T>
+                  <T color={C.bright} bold size={16}>
+                    {total}
+                  </T>
+                </div>
+                <div>
+                  <T color={C.dim} size={12}>
+                    active
+                  </T>
+                  <T color={C.green} bold size={16}>
+                    {active}
+                  </T>
+                </div>
+                <div>
+                  <T color={C.dim} size={12}>
+                    experts
+                  </T>
+                  <T color={C.bright} size={15}>
+                    {experts}
+                  </T>
+                </div>
+                <div>
+                  <T color={C.dim} size={12}>
+                    routing
+                  </T>
+                  <T color={C.bright} size={15}>
+                    {routing}
+                  </T>
+                </div>
+              </div>
+            ))}
+          </div>
+          <T color="#80c8ff" style={{ marginTop: 10 }}>
+            DeepSeek-V3 is the extreme case - only 5.5% of its 671B params activate per token. That is why it is
+            cheap to serve despite being enormous on disk.
+          </T>
+        </Box>
+      </Reveal>
       {sub < 7 && (
         <SubBtn
           key={sub}

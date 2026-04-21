@@ -508,10 +508,104 @@ export const MixtureOfExperts = (ctx) => {
   );
 };
 
-export const Thinking = () => (
-  <Box color={C.cyan} style={{ width: "100%" }}>
-    <T color={C.cyan} bold center size={20}>
-      Placeholder - implemented in later tasks
-    </T>
-  </Box>
-);
+export const Thinking = (ctx) => {
+  const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx;
+  return (
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
+      {sub >= 0 && (
+        <Box color={C.cyan} style={{ width: "100%" }}>
+          <T color={C.cyan} bold center size={22}>
+            A regular LLM vs a reasoning LLM on the same problem
+          </T>
+          <T color="#80deea" center size={16} style={{ marginTop: 6 }}>
+            Prompt: "What is 23 x 47?"
+          </T>
+          <div style={{ marginTop: 14, display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+            <div
+              style={{
+                padding: "12px 14px",
+                borderRadius: 8,
+                background: `${C.red}06`,
+                border: `1px solid ${C.red}12`,
+              }}
+            >
+              <T color={C.red} bold center size={17}>
+                Regular LLM
+              </T>
+              <div
+                style={{
+                  marginTop: 10,
+                  padding: "10px",
+                  background: "rgba(0,0,0,0.3)",
+                  borderRadius: 6,
+                  fontFamily: "monospace",
+                  fontSize: 16,
+                  color: C.bright,
+                  textAlign: "center",
+                }}
+              >
+                1081
+              </div>
+              <T color={C.dim} size={13} center style={{ marginTop: 6 }}>
+                ~3 tokens. Fast. No guarantee it is right.
+              </T>
+            </div>
+            <div
+              style={{
+                padding: "12px 14px",
+                borderRadius: 8,
+                background: `${C.green}06`,
+                border: `1px solid ${C.green}12`,
+              }}
+            >
+              <T color={C.green} bold center size={17}>
+                Reasoning LLM
+              </T>
+              <div
+                style={{
+                  marginTop: 10,
+                  padding: "10px",
+                  background: "rgba(0,0,0,0.3)",
+                  borderRadius: 6,
+                  fontFamily: "monospace",
+                  fontSize: 13,
+                  color: C.bright,
+                  lineHeight: 1.7,
+                }}
+              >
+                &lt;think&gt;
+                <br />
+                &nbsp;Let me compute. 23 x 47 = 23 x (50 - 3)
+                <br />
+                &nbsp;= 1150 - 69 = 1081.
+                <br />
+                &nbsp;Verify: 20 x 47 + 3 x 47 = 940 + 141 = 1081 OK
+                <br />
+                &lt;/think&gt;
+                <br />
+                <strong style={{ color: C.green }}>1081</strong>
+              </div>
+              <T color={C.dim} size={13} center style={{ marginTop: 6 }}>
+                ~120 tokens. Slower. Shows its work.
+              </T>
+            </div>
+          </div>
+          <T color="#80deea" center size={17} style={{ marginTop: 10, fontStyle: "italic" }}>
+            The answer is the same. The process is what changed.
+          </T>
+        </Box>
+      )}
+      {sub < 9 && (
+        <SubBtn
+          key={sub}
+          onClick={() => {
+            setSubBtnRipple(Date.now());
+            navigate("forward");
+          }}
+          rippleKey={subBtnRipple}
+          registerSubBtn={registerSubBtn}
+        />
+      )}
+    </div>
+  );
+};

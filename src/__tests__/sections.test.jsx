@@ -147,6 +147,17 @@ describe("MixtureOfExperts content", () => {
   });
 });
 
+describe("Thinking content", () => {
+  const fn = ModernLLMTechniques.Thinking;
+
+  it("sub=0 shows before/after comparison with 23 x 47", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/23/);
+    expect(container.textContent).toMatch(/47/);
+    expect(container.textContent).toMatch(/1081/);
+  });
+});
+
 // ─── TOC special branches ───
 describe("TOC", () => {
   it("renders section list", () => {

@@ -1999,7 +1999,7 @@ export const DistanceMetrics = (ctx) => {
               <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 5 }}>
                 {[
                   { doc: "doc 1 (Cats are small...)", cos: "0.9993", color: C.green },
-                  { doc: "doc 3 (Lions are big cats...)", cos: "0.9867", color: C.green },
+                  { doc: "doc 7 (Kittens grow up to be cats)", cos: "0.9984", color: C.green },
                   { doc: "doc 10 (Fish live underwater)", cos: "0.6229", color: C.yellow },
                   { doc: "doc 6 (Python is a prog. lang)", cos: "0.3554", color: C.red },
                 ].map((row, i) => (
@@ -2137,7 +2137,7 @@ export const DistanceMetrics = (ctx) => {
               <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 5 }}>
                 {[
                   { doc: "doc 1 (Cats are small...)", l2: "0.047", color: C.green },
-                  { doc: "doc 3 (Lions are big cats...)", l2: "0.162", color: C.green },
+                  { doc: "doc 7 (Kittens grow up to be cats)", l2: "0.057", color: C.green },
                   { doc: "doc 10 (Fish live underwater)", l2: "0.922", color: C.yellow },
                   { doc: "doc 6 (Python is a prog. lang)", l2: "1.228", color: C.red },
                 ].map((row, i) => (

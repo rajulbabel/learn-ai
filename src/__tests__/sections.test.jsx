@@ -108,6 +108,14 @@ describe("MixtureOfExperts content", () => {
     expect(container.textContent).toMatch(/FFN/);
   });
 
+  it("sub=1 Before card uses valid CSS (no rgba with appended hex)", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    // Invalid CSS like "rgba(255,255,255,0.35)06" is silently dropped by browsers.
+    // The Before card must use hex-alpha (e.g., "#ffffff0a") instead.
+    const html = container.innerHTML;
+    expect(html).not.toMatch(/rgba\([^)]*\)[0-9a-fA-F]{2}/);
+  });
+
   it("sub=2 shows top-k routing with concrete example", () => {
     const { container } = render(fn(makeCtx({ sub: 2 })));
     expect(container.textContent).toMatch(/cat/);

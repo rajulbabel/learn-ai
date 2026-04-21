@@ -70,8 +70,8 @@ export const MixtureOfExperts = (ctx) => {
               style={{
                 padding: "12px 14px",
                 borderRadius: 8,
-                background: `${C.dim}06`,
-                border: `1px solid ${C.dim}12`,
+                background: "#ffffff0a",
+                border: "1px solid #ffffff14",
               }}
             >
               <T color={C.mid} bold center size={17}>

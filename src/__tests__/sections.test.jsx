@@ -188,6 +188,12 @@ describe("Thinking content", () => {
     expect(container.textContent).toMatch(/SFT/);
     expect(container.textContent).toMatch(/RL/);
   });
+
+  it("sub=6 shows RL reward loop with rollouts", () => {
+    const { container } = render(fn(makeCtx({ sub: 6 })));
+    expect(container.textContent).toMatch(/rollout/i);
+    expect(container.textContent).toMatch(/reward|PPO|GRPO/);
+  });
 });
 
 // ─── TOC special branches ───

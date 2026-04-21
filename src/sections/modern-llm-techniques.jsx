@@ -904,6 +904,77 @@ export const Thinking = (ctx) => {
           </T>
         </Box>
       </Reveal>
+      <Reveal when={sub >= 6}>
+        <Box color={C.red} style={{ width: "100%" }}>
+          <T color={C.red} bold center size={22}>
+            How reasoning improves, one reward at a time
+          </T>
+          <T color="#ef9a9a" style={{ marginTop: 8 }}>
+            The model generates many rollouts per problem. A verifier checks each final answer. PPO or GRPO nudges
+            weights: tokens in winning rollouts become more likely, tokens in losing rollouts less likely.
+          </T>
+          <div
+            style={{
+              marginTop: 14,
+              padding: "12px 14px",
+              borderRadius: 8,
+              background: `${C.red}06`,
+              border: `1px solid ${C.red}12`,
+            }}
+          >
+            <T color={C.bright} bold size={15} center>
+              Problem: "23 x 47 = ?" (ground truth 1081). Generate 64 rollouts.
+            </T>
+            <div style={{ marginTop: 10, display: "flex", flexDirection: "column", gap: 4 }}>
+              {[
+                { n: 1, chain: "... 23 x 50 - 23 x 3 = 1081", answer: "1081", ok: true },
+                { n: 2, chain: "... (20 + 3) x 47 = 940 + 141 = 1081", answer: "1081", ok: true },
+                { n: 3, chain: "... estimate: roughly 1000", answer: "1000", ok: false },
+                { n: 4, chain: "... 23 x 47 = 1081", answer: "1081", ok: true },
+                { n: 5, chain: "... quick mental math: 1104?", answer: "1104", ok: false },
+              ].map(({ n, chain, answer, ok }) => (
+                <div
+                  key={n}
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns: "60px 1fr 80px 70px",
+                    gap: 8,
+                    padding: "6px 10px",
+                    borderRadius: 4,
+                    background: ok ? `${C.green}08` : `${C.red}08`,
+                    fontFamily: "monospace",
+                    fontSize: 13,
+                  }}
+                >
+                  <T color={C.dim} size={13}>
+                    #{n}
+                  </T>
+                  <T color={C.bright} size={13}>
+                    &lt;think&gt;{chain}&lt;/think&gt;
+                  </T>
+                  <T color={ok ? C.green : C.red} bold size={13}>
+                    {answer} {ok ? "OK" : "X"}
+                  </T>
+                  <T color={ok ? C.green : C.red} bold size={13}>
+                    r = {ok ? "+1" : "-1"}
+                  </T>
+                </div>
+              ))}
+            </div>
+            <T color={C.bright} size={14} center style={{ marginTop: 10, fontFamily: "monospace" }}>
+              PPO / GRPO update:
+              <br />
+              winning rollouts -&gt; token probabilities UP
+              <br />
+              losing rollouts&nbsp; -&gt; token probabilities DOWN
+            </T>
+          </div>
+          <T color="#ef9a9a" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
+            The reward only checks the FINAL answer. The model figures out on its own what kinds of reasoning lead to
+            correct answers. Nobody hand-labels reasoning steps.
+          </T>
+        </Box>
+      </Reveal>
       {sub < 9 && (
         <SubBtn
           key={sub}

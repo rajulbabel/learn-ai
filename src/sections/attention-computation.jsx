@@ -7678,13 +7678,13 @@ export const KVCache = (ctx) => {
                 Counting the waste across 3 steps
               </T>
               <div style={{ marginTop: 6, display: "flex", flexDirection: "column", gap: 3, textAlign: "center" }}>
-                <T color={C.dim} size={14}>
+                <T color={C.dim} center size={14}>
                   Total work: 1 + 2 + 3 = <strong style={{ color: "#ef9a9a" }}>6 blocks</strong>
                 </T>
-                <T color={C.dim} size={14}>
+                <T color={C.dim} center size={14}>
                   Actually useful: <strong style={{ color: C.green }}>3 blocks</strong>
                 </T>
-                <T color="#ef9a9a" size={14} bold>
+                <T color="#ef9a9a" center size={14} bold>
                   Wasted: 3 blocks (50%)
                 </T>
               </div>
@@ -7739,11 +7739,24 @@ export const KVCache = (ctx) => {
                     textAlign: "center",
                   }}
                 >
-                  <T color="#80deea" bold size={14}>
+                  <T color="#80deea" bold center size={14}>
                     Step 1 computed
                   </T>
-                  <code style={{ color: C.cyan, fontSize: 14, display: "block", marginTop: 6 }}>q_I = W_Q · x_I</code>
-                  <code style={{ color: C.cyan, fontSize: 15, display: "block", marginTop: 4, fontWeight: 700 }}>
+                  <code
+                    style={{ color: C.cyan, fontSize: 14, display: "block", marginTop: 6, textAlign: "center" }}
+                  >
+                    q_I = W_Q · x_I
+                  </code>
+                  <code
+                    style={{
+                      color: C.cyan,
+                      fontSize: 15,
+                      display: "block",
+                      marginTop: 4,
+                      fontWeight: 700,
+                      textAlign: "center",
+                    }}
+                  >
                     = [0.5, 0.2]
                   </code>
                 </div>
@@ -7758,11 +7771,24 @@ export const KVCache = (ctx) => {
                     textAlign: "center",
                   }}
                 >
-                  <T color="#80deea" bold size={14}>
+                  <T color="#80deea" bold center size={14}>
                     Step 2 re-computed
                   </T>
-                  <code style={{ color: C.cyan, fontSize: 14, display: "block", marginTop: 6 }}>q_I = W_Q · x_I</code>
-                  <code style={{ color: C.cyan, fontSize: 15, display: "block", marginTop: 4, fontWeight: 700 }}>
+                  <code
+                    style={{ color: C.cyan, fontSize: 14, display: "block", marginTop: 6, textAlign: "center" }}
+                  >
+                    q_I = W_Q · x_I
+                  </code>
+                  <code
+                    style={{
+                      color: C.cyan,
+                      fontSize: 15,
+                      display: "block",
+                      marginTop: 4,
+                      fontWeight: 700,
+                      textAlign: "center",
+                    }}
+                  >
                     = [0.5, 0.2]
                   </code>
                 </div>
@@ -7825,7 +7851,7 @@ export const KVCache = (ctx) => {
                 Q · Kᵀ = Scores, and Scores · V = Output
               </T>
               <div style={{ display: "flex", justifyContent: "center", marginTop: 10, overflowX: "auto" }}>
-                <svg data-viz="matrix-view" width="680" height="360" viewBox="0 0 680 360">
+                <svg data-viz="matrix-view" width="680" height="400" viewBox="0 0 680 400">
                   <desc>
                     Side by side attention matrix multiplications at generation step 3: Q times K transpose equals
                     Scores (3 by 3) with rows for I and love dimmed because they were already computed at earlier steps
@@ -7938,7 +7964,7 @@ export const KVCache = (ctx) => {
                               fontSize="11"
                               textAnchor="middle"
                             >
-                              {rowDim ? "(already)" : `q_cats·${["k_I", "k_love", "k_cats"][c]}`}
+                              {rowDim ? "(already)" : ["·k_I", "·k_love", "·k_cats"][c]}
                             </text>
                           ))}
                         </g>
@@ -7955,7 +7981,7 @@ export const KVCache = (ctx) => {
                   </text>
 
                   {/* Scores (compressed) */}
-                  <g transform="translate(20, 204)">
+                  <g transform="translate(20, 240)">
                     <text x="50" y="-4" fill={C.dim} fontSize="12" textAnchor="middle">
                       Scores (3×3)
                     </text>
@@ -7991,12 +8017,12 @@ export const KVCache = (ctx) => {
                     ))}
                   </g>
 
-                  <text x="135" y="250" fill={C.dim} fontSize="22" textAnchor="middle" fontWeight="700">
+                  <text x="135" y="286" fill={C.dim} fontSize="22" textAnchor="middle" fontWeight="700">
                     ·
                   </text>
 
                   {/* V matrix - all rows bright */}
-                  <g transform="translate(155, 204)">
+                  <g transform="translate(155, 240)">
                     <text x="100" y="-4" fill={C.dim} fontSize="12" textAnchor="middle">
                       V (3×d)
                     </text>
@@ -8020,12 +8046,12 @@ export const KVCache = (ctx) => {
                     ))}
                   </g>
 
-                  <text x="385" y="250" fill={C.dim} fontSize="22" textAnchor="middle" fontWeight="700">
+                  <text x="385" y="286" fill={C.dim} fontSize="22" textAnchor="middle" fontWeight="700">
                     =
                   </text>
 
                   {/* Output 3xd */}
-                  <g transform="translate(410, 204)">
+                  <g transform="translate(410, 240)">
                     <text x="135" y="-4" fill={C.dim} fontSize="12" textAnchor="middle">
                       Output (3×d)
                     </text>
@@ -8060,7 +8086,7 @@ export const KVCache = (ctx) => {
                     ))}
                   </g>
 
-                  <text x="340" y="340" fill="#e040fb" fontSize="13" fontWeight="700" textAnchor="middle">
+                  <text x="340" y="376" fill="#e040fb" fontSize="13" fontWeight="700" textAnchor="middle">
                     ↑ only this row is new: 1 weighted sum (not 3)
                   </text>
                 </svg>
@@ -8091,14 +8117,14 @@ export const KVCache = (ctx) => {
                       textAlign: "center",
                     }}
                   >
-                    <T color={x.c} bold size={13}>
+                    <T color={x.c} bold center size={13}>
                       {x.label}
                     </T>
-                    <T color={C.dim} size={16} bold style={{ marginTop: 4 }}>
+                    <T color={C.dim} size={16} bold center style={{ marginTop: 4 }}>
                       {x.val}
                     </T>
                     {x.sub && (
-                      <T color={C.dim} size={11} style={{ marginTop: 2 }}>
+                      <T color={C.dim} size={11} center style={{ marginTop: 2 }}>
                         {x.sub}
                       </T>
                     )}
@@ -8180,13 +8206,13 @@ export const KVCache = (ctx) => {
                   {name}
                 </T>
                 <div style={{ fontSize: 48, color: iconColor, fontWeight: 700, lineHeight: 1 }}>{icon}</div>
-                <T color={hex} bold size={16} style={{ marginTop: 4 }}>
+                <T color={hex} bold center size={16} style={{ marginTop: 4 }}>
                   {verdict}
                 </T>
-                <T color={C.dim} size={12} style={{ marginTop: 6 }}>
+                <T color={C.dim} center size={12} style={{ marginTop: 6 }}>
                   {tag}
                 </T>
-                <T color={C.dim} size={13} style={{ marginTop: 8 }}>
+                <T color={C.dim} center size={13} style={{ marginTop: 8 }}>
                   {desc}
                 </T>
               </div>
@@ -8223,7 +8249,7 @@ export const KVCache = (ctx) => {
             C.green,
             <>
               <div style={{ display: "flex", justifyContent: "center", marginTop: 4, overflowX: "auto" }}>
-                <svg data-viz="notebook" width="720" height="240" viewBox="0 0 720 240">
+                <svg data-viz="notebook" width="780" height="170" viewBox="0 0 780 170">
                   <desc>
                     Three frame growing notebook diagram showing the K cache and V cache tables appending one row per
                     generation step: after I has 1 row, after love has 2 rows with the older row dimmed, after cats has
@@ -8250,7 +8276,7 @@ export const KVCache = (ctx) => {
                       v: [{ val: "[0.8, 0.3]", bright: true }],
                     },
                     {
-                      x: 250,
+                      x: 280,
                       title: "After 'love'",
                       k: [
                         { val: "[0.3, 0.4]", bright: false },
@@ -8262,7 +8288,7 @@ export const KVCache = (ctx) => {
                       ],
                     },
                     {
-                      x: 490,
+                      x: 550,
                       title: "After 'cats'",
                       k: [
                         { val: "[0.3, 0.4]", bright: false },
@@ -8275,83 +8301,96 @@ export const KVCache = (ctx) => {
                         { val: "[0.45, 0.6]", bright: true },
                       ],
                     },
-                  ].map(({ x, title, k, v }, frameIdx) => (
-                    <g key={`frame${frameIdx}`} transform={`translate(${x}, 10)`}>
-                      <text x="110" y="14" fill="#a5d6a7" fontSize="13" fontWeight="700" textAnchor="middle">
-                        {title}
+                  ].map(({ x, title, k, v }, frameIdx) => {
+                    const nRows = k.length;
+                    // Center rows vertically around y=100 (frame coords) so Frame 1's single
+                    // row aligns with Frame 3's middle row. Row height 22, pitch 26.
+                    const rowStartY = 100 - (nRows * 22 + (nRows - 1) * 4) / 2;
+                    return (
+                      <g key={`frame${frameIdx}`} transform={`translate(${x}, 10)`}>
+                        <text x="110" y="14" fill="#a5d6a7" fontSize="13" fontWeight="700" textAnchor="middle">
+                          {title}
+                        </text>
+                        {/* Labels fixed at y=46 across all frames so they line up horizontally */}
+                        <text x="50" y="46" fill={C.blue} fontSize="11" textAnchor="middle" fontWeight="700">
+                          K cache
+                        </text>
+                        <text x="170" y="46" fill={C.green} fontSize="11" textAnchor="middle" fontWeight="700">
+                          V cache
+                        </text>
+                        {k.map((row, i) => (
+                          <g key={`k${frameIdx}-${i}`}>
+                            <rect
+                              x="10"
+                              y={rowStartY + i * 26}
+                              width="80"
+                              height="22"
+                              rx="3"
+                              fill={C.blue}
+                              fillOpacity={row.bright ? 0.45 : 0.12}
+                              stroke={C.blue}
+                              strokeWidth={row.bright ? 2 : 1}
+                            />
+                            <text
+                              x="50"
+                              y={rowStartY + 15 + i * 26}
+                              fill={row.bright ? "#fff" : C.dim}
+                              fontSize="10"
+                              textAnchor="middle"
+                              fontWeight={row.bright ? 700 : 400}
+                            >
+                              {row.val}
+                            </text>
+                          </g>
+                        ))}
+                        {v.map((row, i) => (
+                          <g key={`v${frameIdx}-${i}`}>
+                            <rect
+                              x="130"
+                              y={rowStartY + i * 26}
+                              width="80"
+                              height="22"
+                              rx="3"
+                              fill={C.green}
+                              fillOpacity={row.bright ? 0.45 : 0.12}
+                              stroke={C.green}
+                              strokeWidth={row.bright ? 2 : 1}
+                            />
+                            <text
+                              x="170"
+                              y={rowStartY + 15 + i * 26}
+                              fill={row.bright ? "#fff" : C.dim}
+                              fontSize="10"
+                              textAnchor="middle"
+                              fontWeight={row.bright ? 700 : 400}
+                            >
+                              {row.val}
+                            </text>
+                          </g>
+                        ))}
+                      </g>
+                    );
+                  })}
+                  {/* Arrows drawn outside frame translate. Abs y = frame translate y (10) + row center y (100) = 110.
+                      Aligns with Frame 1's single row, Frame 2's gap between rows, Frame 3's middle row.
+                      Horizontal center of each gap: Frame content ends at x=translate+220, next starts at x=translate+10. */}
+                  {[
+                    { cx: 255 }, // between frame 0 (ends abs 220) and frame 1 (K cache starts abs 290) → center 255
+                    { cx: 525 }, // between frame 1 (ends abs 490) and frame 2 (K cache starts abs 560) → center 525
+                  ].map(({ cx }, i) => (
+                    <g key={`arrow${i}`}>
+                      <text x={cx} y="98" fill="#a5d6a7" fontSize="11" textAnchor="middle" fontWeight="700">
+                        append
                       </text>
-                      <text x="50" y="36" fill={C.blue} fontSize="11" textAnchor="middle" fontWeight="700">
-                        K cache
-                      </text>
-                      {k.map((row, i) => (
-                        <g key={`k${frameIdx}-${i}`}>
-                          <rect
-                            x="10"
-                            y={44 + i * 26}
-                            width="80"
-                            height="22"
-                            rx="3"
-                            fill={C.blue}
-                            fillOpacity={row.bright ? 0.45 : 0.12}
-                            stroke={C.blue}
-                            strokeWidth={row.bright ? 2 : 1}
-                          />
-                          <text
-                            x="50"
-                            y={60 + i * 26}
-                            fill={row.bright ? "#fff" : C.dim}
-                            fontSize="10"
-                            textAnchor="middle"
-                            fontWeight={row.bright ? 700 : 400}
-                          >
-                            {row.val}
-                          </text>
-                        </g>
-                      ))}
-                      <text x="170" y="36" fill={C.green} fontSize="11" textAnchor="middle" fontWeight="700">
-                        V cache
-                      </text>
-                      {v.map((row, i) => (
-                        <g key={`v${frameIdx}-${i}`}>
-                          <rect
-                            x="130"
-                            y={44 + i * 26}
-                            width="80"
-                            height="22"
-                            rx="3"
-                            fill={C.green}
-                            fillOpacity={row.bright ? 0.45 : 0.12}
-                            stroke={C.green}
-                            strokeWidth={row.bright ? 2 : 1}
-                          />
-                          <text
-                            x="170"
-                            y={60 + i * 26}
-                            fill={row.bright ? "#fff" : C.dim}
-                            fontSize="10"
-                            textAnchor="middle"
-                            fontWeight={row.bright ? 700 : 400}
-                          >
-                            {row.val}
-                          </text>
-                        </g>
-                      ))}
-                      {frameIdx < 2 && (
-                        <g>
-                          <line
-                            x1="225"
-                            y1="120"
-                            x2="245"
-                            y2="120"
-                            stroke="#a5d6a7"
-                            strokeWidth="2"
-                            markerEnd="url(#kv-arrow)"
-                          />
-                          <text x="235" y="110" fill="#a5d6a7" fontSize="10" textAnchor="middle" fontWeight="700">
-                            append
-                          </text>
-                        </g>
-                      )}
+                      <line
+                        x1={cx - 16}
+                        y1="110"
+                        x2={cx + 16}
+                        y2="110"
+                        stroke="#a5d6a7"
+                        strokeWidth="2"
+                        markerEnd="url(#kv-arrow)"
+                      />
                     </g>
                   ))}
                 </svg>
@@ -8438,10 +8477,10 @@ export const KVCache = (ctx) => {
                   textAlign: "center",
                 }}
               >
-                <T color="#ef9a9a" bold size={13}>
+                <T color="#ef9a9a" bold center size={13}>
                   9 projections + 9 score cells + 3 output rows
                 </T>
-                <T color="#ef9a9a" size={13}>
+                <T color="#ef9a9a" center size={13}>
                   <strong>15 operations wasted</strong>
                 </T>
               </div>
@@ -8504,10 +8543,10 @@ export const KVCache = (ctx) => {
                   textAlign: "center",
                 }}
               >
-                <T color="#a5d6a7" bold size={13}>
+                <T color="#a5d6a7" bold center size={13}>
                   3 projections + 3 score cells + 1 output row
                 </T>
-                <T color="#a5d6a7" size={13}>
+                <T color="#a5d6a7" center size={13}>
                   <strong>0 operations wasted</strong>
                 </T>
               </div>
@@ -8586,13 +8625,13 @@ export const KVCache = (ctx) => {
                   textAlign: "center",
                 }}
               >
-                <T color={C.dim} size={12}>
+                <T color={C.dim} center size={12}>
                   Cache after step 1:
                 </T>
-                <T color={C.blue} size={12} bold>
+                <T color={C.blue} center size={12} bold>
                   K = [[0.3, 0.4]]
                 </T>
-                <T color={C.green} size={12} bold>
+                <T color={C.green} center size={12} bold>
                   V = [[0.8, 0.3]]
                 </T>
               </div>
@@ -8619,10 +8658,10 @@ export const KVCache = (ctx) => {
                   textAlign: "center",
                 }}
               >
-                <T color={C.blue} size={12} bold>
+                <T color={C.blue} center size={12} bold>
                   K = [[0.3, 0.4], [0.7, 0.2]]
                 </T>
-                <T color={C.green} size={12} bold>
+                <T color={C.green} center size={12} bold>
                   V = [[0.8, 0.3], [0.1, 0.9]]
                 </T>
               </div>
@@ -8650,7 +8689,7 @@ export const KVCache = (ctx) => {
                   textAlign: "center",
                 }}
               >
-                <T color={C.purple} size={12} bold>
+                <T color={C.purple} center size={12} bold>
                   Scores (last row only): q_cats · each key
                 </T>
                 <code style={{ color: C.dim, fontSize: 11, display: "block", marginTop: 2 }}>
@@ -8673,7 +8712,7 @@ export const KVCache = (ctx) => {
                   textAlign: "center",
                 }}
               >
-                <T color="#fff176" size={12} bold>
+                <T color="#fff176" center size={12} bold>
                   Scale by √2, then softmax:
                 </T>
                 <code style={{ color: "#fff176", fontSize: 12, display: "block", marginTop: 2 }}>
@@ -8690,7 +8729,7 @@ export const KVCache = (ctx) => {
                   textAlign: "center",
                 }}
               >
-                <T color="#a5d6a7" size={12} bold>
+                <T color="#a5d6a7" center size={12} bold>
                   Weighted sum of values:
                 </T>
                 <code style={{ color: C.dim, fontSize: 11, display: "block", marginTop: 2 }}>
@@ -8844,10 +8883,10 @@ export const KVCache = (ctx) => {
                       textAlign: "center",
                     }}
                   >
-                    <T color={C.dim} size={12}>
+                    <T color={C.dim} center size={12}>
                       {label}
                     </T>
-                    <T color="#ef9a9a" size={14} bold>
+                    <T color="#ef9a9a" center size={14} bold>
                       {val}
                     </T>
                   </div>
@@ -8955,10 +8994,10 @@ export const KVCache = (ctx) => {
                     textAlign: "center",
                   }}
                 >
-                  <T color={C.red} bold size={13}>
+                  <T color={C.red} bold center size={13}>
                     Without cache
                   </T>
-                  <T color={C.dim} size={13}>
+                  <T color={C.dim} center size={13}>
                     ~333 million ops
                   </T>
                 </div>
@@ -8971,10 +9010,10 @@ export const KVCache = (ctx) => {
                     textAlign: "center",
                   }}
                 >
-                  <T color={C.green} bold size={13}>
+                  <T color={C.green} bold center size={13}>
                     With cache
                   </T>
-                  <T color={C.dim} size={13}>
+                  <T color={C.dim} center size={13}>
                     ~500 thousand ops
                   </T>
                 </div>

@@ -24,6 +24,23 @@ const QUERY = { text: "information about cats", vec: [0.85, 0.14, 0.44, 0.21] };
 
 const fmtVec = (v) => `[${v.map((x) => x.toFixed(2)).join(", ")}]`;
 
+// 2D scatter coordinates reused across 11.5-11.9 diagrams. Cat docs (1, 3, 4, 5, 7)
+// cluster in the upper-left; the query lands inside the cat cluster. Non-cat docs spread
+// across other regions so k-means produces three separable clusters in the IVF chapter.
+const CORPUS_XY = {
+  1: { x: 110, y: 90 },
+  3: { x: 140, y: 110 },
+  4: { x: 125, y: 130 },
+  5: { x: 105, y: 115 },
+  7: { x: 135, y: 90 },
+  2: { x: 320, y: 100 },
+  8: { x: 290, y: 140 },
+  9: { x: 380, y: 220 },
+  10: { x: 420, y: 180 },
+  6: { x: 220, y: 260 },
+};
+const QUERY_XY = { x: 120, y: 105 };
+
 export const RetrievalProblem = (ctx) => {
   const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx;
   return (
@@ -2547,6 +2564,112 @@ export const DistanceMetrics = (ctx) => {
           rippleKey={subBtnRipple}
           registerSubBtn={registerSubBtn}
         />
+      )}
+    </div>
+  );
+};
+
+// Stubs for chapters 11.5-11.11 - full implementations follow per-task.
+export const IVF = (ctx) => {
+  const { sub } = ctx;
+  return (
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
+      {sub >= 0 && (
+        <Box color={C.cyan} style={{ width: "100%" }}>
+          <T color={C.cyan} bold center size={22}>
+            IVF (stub)
+          </T>
+        </Box>
+      )}
+    </div>
+  );
+};
+
+export const ANNFamilyTree = (ctx) => {
+  const { sub } = ctx;
+  return (
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
+      {sub >= 0 && (
+        <Box color={C.purple} style={{ width: "100%" }}>
+          <T color={C.purple} bold center size={22}>
+            ANN Family Tree (stub)
+          </T>
+        </Box>
+      )}
+    </div>
+  );
+};
+
+export const HNSWIntuition = (ctx) => {
+  const { sub } = ctx;
+  return (
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
+      {sub >= 0 && (
+        <Box color={C.green} style={{ width: "100%" }}>
+          <T color={C.green} bold center size={22}>
+            HNSW Intuition (stub)
+          </T>
+        </Box>
+      )}
+    </div>
+  );
+};
+
+export const HNSWConstruction = (ctx) => {
+  const { sub } = ctx;
+  return (
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
+      {sub >= 0 && (
+        <Box color={C.orange} style={{ width: "100%" }}>
+          <T color={C.orange} bold center size={22}>
+            HNSW Construction (stub)
+          </T>
+        </Box>
+      )}
+    </div>
+  );
+};
+
+export const HNSWSearch = (ctx) => {
+  const { sub } = ctx;
+  return (
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
+      {sub >= 0 && (
+        <Box color={C.yellow} style={{ width: "100%" }}>
+          <T color={C.yellow} bold center size={22}>
+            HNSW Search (stub)
+          </T>
+        </Box>
+      )}
+    </div>
+  );
+};
+
+export const HNSWParameters = (ctx) => {
+  const { sub } = ctx;
+  return (
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
+      {sub >= 0 && (
+        <Box color={C.red} style={{ width: "100%" }}>
+          <T color={C.red} bold center size={22}>
+            HNSW Parameters (stub)
+          </T>
+        </Box>
+      )}
+    </div>
+  );
+};
+
+export const Vamana = (ctx) => {
+  const { sub } = ctx;
+  return (
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
+      {sub >= 0 && (
+        <Box color={C.blue} style={{ width: "100%" }}>
+          <T color={C.blue} bold center size={22}>
+            Vamana / DiskANN (stub)
+          </T>
+        </Box>
       )}
     </div>
   );

@@ -141,20 +141,26 @@ describe("Section 11 registration", () => {
 });
 
 describe("Section 11 chapters", () => {
-  it("has chapters 11.1 through 11.4 in order", () => {
+  it("has chapters 11.1 through 11.11 in order", () => {
     const section11 = chapters.filter((ch) => ch.section === 11);
-    expect(section11.length).toBe(4);
-    expect(section11[0].id).toBe("11.1");
-    expect(section11[0].component).toBe("RetrievalProblem");
-    expect(section11[0].title).toBe("The Retrieval Problem");
-    expect(section11[1].id).toBe("11.2");
-    expect(section11[1].component).toBe("BruteForceKNN");
-    expect(section11[1].title).toBe("Brute-Force kNN");
-    expect(section11[2].id).toBe("11.3");
-    expect(section11[2].component).toBe("ThreeWayTradeoff");
-    expect(section11[2].title).toBe("The Three-Way Tradeoff");
-    expect(section11[3].id).toBe("11.4");
-    expect(section11[3].component).toBe("DistanceMetrics");
-    expect(section11[3].title).toBe("Distance Metrics");
+    const expected = [
+      { id: "11.1", component: "RetrievalProblem", title: "The Retrieval Problem" },
+      { id: "11.2", component: "BruteForceKNN", title: "Brute-Force kNN" },
+      { id: "11.3", component: "ThreeWayTradeoff", title: "The Three-Way Tradeoff" },
+      { id: "11.4", component: "DistanceMetrics", title: "Distance Metrics" },
+      { id: "11.5", component: "IVF", title: "IVF (Inverted File Index)" },
+      { id: "11.6", component: "ANNFamilyTree", title: "The ANN Family Tree" },
+      { id: "11.7", component: "HNSWIntuition", title: "HNSW - The Small-World Intuition" },
+      { id: "11.8", component: "HNSWConstruction", title: "HNSW Construction" },
+      { id: "11.9", component: "HNSWSearch", title: "HNSW Search" },
+      { id: "11.10", component: "HNSWParameters", title: "HNSW Parameters" },
+      { id: "11.11", component: "Vamana", title: "Vamana / DiskANN" },
+    ];
+    expect(section11.length).toBe(expected.length);
+    expected.forEach((exp, i) => {
+      expect(section11[i].id).toBe(exp.id);
+      expect(section11[i].component).toBe(exp.component);
+      expect(section11[i].title).toBe(exp.title);
+    });
   });
 });

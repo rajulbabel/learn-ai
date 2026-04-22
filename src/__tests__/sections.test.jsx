@@ -997,6 +997,47 @@ describe("IVFPQ (11.17) content", () => {
   });
 });
 
+describe("HNSWPQ (11.18) content", () => {
+  const fn = VectorCompression.HNSWPQ;
+
+  it("sub=0 combines HNSW graph navigation with PQ compression", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/HNSW/);
+    expect(container.textContent).toMatch(/PQ/);
+    expect(container.textContent).toMatch(/graph/i);
+    expect(container.textContent).toMatch(/code|encoded/i);
+  });
+
+  it("sub=1 keeps the graph structure and stores PQ codes at nodes", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/graph/i);
+    expect(container.textContent).toMatch(/code|96 bytes/i);
+    expect(container.textContent).toMatch(/196|100M|node/i);
+  });
+
+  it("sub=2 uses PQ asymmetric distance lookup", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/lookup|table/i);
+    expect(container.textContent).toMatch(/asymmetric/i);
+    expect(container.textContent).toMatch(/faster|speedup|10x/i);
+  });
+
+  it("sub=3 compensates for recall drop with higher ef_search", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/recall/i);
+    expect(container.textContent).toMatch(/ef_search/i);
+    expect(container.textContent).toMatch(/error|drop|accuracy/i);
+    expect(container.textContent).toMatch(/50|150/);
+  });
+
+  it("sub=4 names production systems that support HNSW + PQ", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/Qdrant/);
+    expect(container.textContent).toMatch(/Weaviate|Milvus/);
+    expect(container.textContent).toMatch(/production|default|standard/i);
+  });
+});
+
 // ─── TOC special branches ───
 describe("TOC", () => {
   it("renders section list", () => {

@@ -1478,6 +1478,52 @@ describe("CapacityPlanning (11.28) content", () => {
   });
 });
 
+describe("Pgvector (11.30) content", () => {
+  const fn = VectorSystems.Pgvector;
+
+  it("sub=0 frames pgvector as a Postgres extension", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/Postgres/i);
+    expect(container.textContent).toMatch(/extension/i);
+    expect(container.textContent).toMatch(/vector/i);
+  });
+
+  it("sub=1 shows SQL ALTER TABLE and cosine distance operator", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/ALTER TABLE|ADD COLUMN/i);
+    expect(container.textContent).toMatch(/vector\(768\)|768/);
+    expect(container.textContent).toMatch(/<=>|cosine/i);
+  });
+
+  it("sub=2 describes HNSW and IVFFlat index types", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/HNSW/i);
+    expect(container.textContent).toMatch(/IVFFlat|IVF/i);
+    expect(container.textContent).toMatch(/SQL|tuning|parameters/i);
+  });
+
+  it("sub=3 highlights inherited Postgres features", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/transaction|ACID/i);
+    expect(container.textContent).toMatch(/SQL join|join/i);
+    expect(container.textContent).toMatch(/metadata/i);
+  });
+
+  it("sub=4 names the good-fit workloads", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/10M|under 10M/i);
+    expect(container.textContent).toMatch(/metadata/i);
+    expect(container.textContent).toMatch(/existing|Postgres team/i);
+  });
+
+  it("sub=5 names the bad-fit workloads", () => {
+    const { container } = render(fn(makeCtx({ sub: 5 })));
+    expect(container.textContent).toMatch(/100M|over 100M/i);
+    expect(container.textContent).toMatch(/10K|QPS/i);
+    expect(container.textContent).toMatch(/multi[- ]?region/i);
+  });
+});
+
 describe("FAISS (11.29) content", () => {
   const fn = VectorSystems.FAISS;
 

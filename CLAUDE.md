@@ -215,7 +215,7 @@ Only config.js IDs change.
 | 10.3 | MixtureOfExperts | Mixture of Experts - Bigger Model, Same Compute |
 | 10.4 | Thinking | Thinking - How Reasoning Models Work |
 
-**Section 11: Vector Databases** (`vector-foundations.jsx` + `vector-compression.jsx` - Milestones 1-3 of 6 complete)
+**Section 11: Vector Databases** (`vector-foundations.jsx` + `vector-compression.jsx` - Milestones 1-4 of 6 complete)
 
 | Chapter | Component | Title |
 |---------|-----------|-------|
@@ -235,8 +235,10 @@ Only config.js IDs change.
 | 11.14 | ProductQuantization | Product Quantization (+ OPQ) |
 | 11.15 | BinaryQuantization | Binary Quantization |
 | 11.16 | Matryoshka | Matryoshka Embeddings |
+| 11.17 | IVFPQ | IVF-PQ |
+| 11.18 | HNSWPQ | HNSW + PQ |
 
-(Subsequent milestones will extend this table as chapters 11.17-11.35 are added.)
+(Subsequent milestones will extend this table as chapters 11.19-11.35 are added.)
 
 ## Project Structure
 
@@ -273,7 +275,7 @@ learn-ai/
 │       ├── encoder-decoder-diagrams.jsx # Section 9 (Training/Inference flow diagrams)
 │       ├── modern-llm-techniques.jsx    # Section 10 (MoE, Thinking)
 │       ├── vector-foundations.jsx        # Section 11 (Acts 1+2, chapters 11.1-11.11)
-│       └── vector-compression.jsx        # Section 11 (Act 3, chapters 11.12-11.16)
+│       └── vector-compression.jsx        # Section 11 (Acts 3+4, chapters 11.12-11.18)
 ├── .github/workflows/deploy.yml
 └── CLAUDE.md
 ```

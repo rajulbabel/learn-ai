@@ -215,7 +215,7 @@ Only config.js IDs change.
 | 10.3 | MixtureOfExperts | Mixture of Experts - Bigger Model, Same Compute |
 | 10.4 | Thinking | Thinking - How Reasoning Models Work |
 
-**Section 11: Vector Databases** (`vector-foundations.jsx` + `vector-compression.jsx` + `vector-production.jsx` - Milestones 1-5 of 6 complete)
+**Section 11: Vector Databases** (`vector-foundations.jsx` + `vector-compression.jsx` + `vector-production.jsx` + `vector-systems.jsx` - Milestones 1-6 of 6 complete)
 
 | Chapter | Component | Title |
 |---------|-----------|-------|
@@ -247,8 +247,13 @@ Only config.js IDs change.
 | 11.26 | EmbeddingLifecycle | Embedding Lifecycle & Re-embedding |
 | 11.27 | Observability | Observability |
 | 11.28 | CapacityPlanning | Capacity Planning & Cost Models |
-
-(Subsequent milestones will extend this table as chapters 11.29-11.35 are added.)
+| 11.29 | FAISS | FAISS |
+| 11.30 | Pgvector | pgvector |
+| 11.31 | Qdrant | Qdrant |
+| 11.32 | Pinecone | Pinecone |
+| 11.33 | QdrantVsPinecone | Qdrant vs Pinecone |
+| 11.34 | WeaviateMilvusChroma | Weaviate / Milvus / Chroma |
+| 11.35 | DecisionFramework | The Decision Framework |
 
 ## Project Structure
 
@@ -286,7 +291,8 @@ learn-ai/
 │       ├── modern-llm-techniques.jsx    # Section 10 (MoE, Thinking)
 │       ├── vector-foundations.jsx        # Section 11 (Acts 1+2, chapters 11.1-11.11)
 │       ├── vector-compression.jsx        # Section 11 (Acts 3+4, chapters 11.12-11.18)
-│       └── vector-production.jsx         # Section 11 (Act 5, chapters 11.19-11.28)
+│       ├── vector-production.jsx         # Section 11 (Act 5, chapters 11.19-11.28)
+│       └── vector-systems.jsx            # Section 11 (Act 6, chapters 11.29-11.35)
 ├── .github/workflows/deploy.yml
 └── CLAUDE.md
 ```

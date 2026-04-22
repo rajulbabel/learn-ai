@@ -5663,15 +5663,510 @@ export const HNSWParameters = (ctx) => {
 };
 
 export const Vamana = (ctx) => {
-  const { sub } = ctx;
+  const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx;
   return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
       {sub >= 0 && (
-        <Box color={C.blue} style={{ width: "100%" }}>
-          <T color={C.blue} bold center size={22}>
-            Vamana / DiskANN (stub)
+        <Box color={C.red} style={{ width: "100%" }}>
+          <T color={C.red} bold center size={22}>
+            HNSW hits a RAM wall around 100M vectors
+          </T>
+          <T color="#ef9a9a" style={{ marginTop: 8 }}>
+            HNSW assumes the entire graph plus every vector lives in RAM. That assumption breaks at production scale. A
+            single machine with 384 GB of RAM can just barely hold 100 million 768-dim float32 vectors plus their HNSW
+            graph. Beyond that we need either sharding across many machines or a different algorithm.
+          </T>
+          <div
+            style={{
+              marginTop: 14,
+              padding: "14px 18px",
+              borderRadius: 8,
+              background: "rgba(0,0,0,0.3)",
+              textAlign: "center",
+              fontFamily: "monospace",
+              fontSize: 16,
+              color: C.bright,
+              lineHeight: 2,
+            }}
+          >
+            at N = 100M, d = 768, M = 16:
+            <br />
+            vectors: 300 GB
+            <br />
+            HNSW graph: 20 GB
+            <br />
+            total RAM needed: <span style={{ color: C.red }}>320 GB</span>{" "}
+            <span style={{ color: C.dim }}>(barely fits on one server)</span>
+            <br />
+            at N = 1,000,000,000: <span style={{ color: C.red }}>3.2 TB</span>{" "}
+            <span style={{ color: C.dim }}>(needs multi-node sharding)</span>
+          </div>
+          <T color="#ef9a9a" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
+            Microsoft hit this wall on Bing. Their answer, published in 2019, is Vamana - a graph index designed from
+            the ground up to work when the graph lives on SSD and only a cache slice lives in RAM.
           </T>
         </Box>
+      )}
+      <Reveal when={sub >= 1}>
+        <Box color={C.cyan} style={{ width: "100%" }}>
+          <T color={C.cyan} bold center size={22}>
+            One flat layer, carefully chosen edges
+          </T>
+          <T color="#80deea" style={{ marginTop: 8 }}>
+            HNSW uses a layered hierarchy because in-RAM random access is free - jumping from hub to hub costs nothing.
+            On SSD, random access is expensive, so the hierarchy gains less. Vamana drops the hierarchy entirely and
+            keeps a single flat layer with the right edges. Each node has up to R neighbors (R = 64 in the default
+            DiskANN configuration), chosen to keep the graph navigable from any starting point.
+          </T>
+          <div
+            style={{
+              marginTop: 14,
+              padding: "12px 14px",
+              borderRadius: 8,
+              background: `${C.cyan}06`,
+              border: `1px solid ${C.cyan}12`,
+            }}
+          >
+            <svg viewBox="0 0 500 220" style={{ width: "100%", maxWidth: 520, height: "auto", display: "block" }}>
+              <desc>
+                Single-layer Vamana graph over the 10 cat-corpus documents. Each node has a handful of edges chosen for
+                diversity, no hierarchical layers above it.
+              </desc>
+              {[
+                [1, 3],
+                [1, 7],
+                [1, 5],
+                [1, 10],
+                [3, 4],
+                [3, 7],
+                [5, 7],
+                [4, 5],
+                [2, 8],
+                [2, 1],
+                [2, 9],
+                [8, 4],
+                [8, 6],
+                [6, 10],
+                [6, 9],
+                [9, 10],
+                [10, 4],
+              ].map(([a, b], i) => {
+                const pa = CORPUS_XY[a];
+                const pb = CORPUS_XY[b];
+                return (
+                  <line
+                    key={i}
+                    x1={pa.x}
+                    y1={pa.y - 40}
+                    x2={pb.x}
+                    y2={pb.y - 40}
+                    stroke={C.cyan}
+                    strokeOpacity="0.5"
+                    strokeWidth="1.5"
+                  />
+                );
+              })}
+              {Object.entries(CORPUS_XY).map(([id, p]) => (
+                <g key={id}>
+                  <circle cx={p.x} cy={p.y - 40} r={10} fill={C.cyan} stroke={C.cyan} />
+                  <text x={p.x} y={p.y - 36} textAnchor="middle" fill="#08080d" fontSize="12" fontWeight="bold">
+                    {id}
+                  </text>
+                </g>
+              ))}
+            </svg>
+          </div>
+          <div
+            style={{
+              marginTop: 14,
+              padding: "12px 14px",
+              borderRadius: 8,
+              background: "rgba(0,0,0,0.3)",
+              textAlign: "center",
+              fontFamily: "monospace",
+              fontSize: 16,
+              color: C.bright,
+              lineHeight: 1.9,
+            }}
+          >
+            R = 64 <span style={{ color: C.dim }}>(default max neighbors)</span>
+            <br />
+            no hierarchy, no layer stack
+            <br />
+            navigable from any starting node
+          </div>
+          <T color="#80deea" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
+            The trade is fewer long-range jumps in exchange for being drastically easier to store on disk and cache
+            selectively in RAM.
+          </T>
+        </Box>
+      </Reveal>
+      <Reveal when={sub >= 2}>
+        <Box color={C.purple} style={{ width: "100%" }}>
+          <T color={C.purple} bold center size={22}>
+            Alpha-pruning: only keep diverse edges
+          </T>
+          <T color="#b8a9ff" style={{ marginTop: 8 }}>
+            Building the graph greedily would give every node its R nearest neighbors. That sounds good but leaves a
+            fatal gap: the graph has only short-range edges, so search has to trudge through many intermediate nodes to
+            cross the space. Vamana fixes this with the alpha-pruning rule, which trims redundant short edges and keeps
+            only diverse ones.
+          </T>
+          <div
+            style={{
+              marginTop: 14,
+              padding: "14px 18px",
+              borderRadius: 8,
+              background: "rgba(0,0,0,0.3)",
+              textAlign: "center",
+              fontFamily: "monospace",
+              fontSize: 16,
+              color: C.bright,
+              lineHeight: 2,
+            }}
+          >
+            <span style={{ color: C.purple }}>alpha-pruning rule</span>
+            <br />
+            keep edge (p, q) only if no existing neighbor q&apos; of p satisfies:
+            <br />
+            dist(q&apos;, q) &middot; <span style={{ color: C.yellow }}>&alpha;</span> &le; dist(p, q)
+            <br />
+            <span style={{ color: C.dim }}>default &alpha; = 1.2</span>
+          </div>
+          <div style={{ marginTop: 14, display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+            <div
+              style={{
+                padding: "12px 14px",
+                borderRadius: 8,
+                background: `${C.red}06`,
+                border: `1px solid ${C.red}12`,
+              }}
+            >
+              <T color={C.red} bold center size={16}>
+                Before pruning (redundant edges)
+              </T>
+              <svg viewBox="0 0 200 160" style={{ width: "100%", height: "auto", display: "block", marginTop: 6 }}>
+                <desc>
+                  Graph node with too many redundant short edges clustered in one direction; all neighbors are close to
+                  each other.
+                </desc>
+                <circle cx="100" cy="80" r="10" fill={C.red} />
+                {[
+                  [140, 70],
+                  [145, 85],
+                  [150, 95],
+                  [130, 100],
+                  [155, 70],
+                ].map(([x, y], i) => (
+                  <g key={i}>
+                    <line x1="100" y1="80" x2={x} y2={y} stroke={C.red} strokeWidth="1.5" />
+                    <circle cx={x} cy={y} r="5" fill={C.red} />
+                  </g>
+                ))}
+              </svg>
+              <T color={C.bright} size={13} center style={{ marginTop: 4 }}>
+                5 neighbors, all clumped together - searches get stuck.
+              </T>
+            </div>
+            <div
+              style={{
+                padding: "12px 14px",
+                borderRadius: 8,
+                background: `${C.green}06`,
+                border: `1px solid ${C.green}12`,
+              }}
+            >
+              <T color={C.green} bold center size={16}>
+                After alpha-pruning (diverse edges)
+              </T>
+              <svg viewBox="0 0 200 160" style={{ width: "100%", height: "auto", display: "block", marginTop: 6 }}>
+                <desc>
+                  Graph node after alpha-pruning: fewer neighbors, spread in different directions across the 2D space so
+                  the graph is navigable from anywhere.
+                </desc>
+                <circle cx="100" cy="80" r="10" fill={C.green} />
+                {[
+                  [160, 50],
+                  [150, 130],
+                  [40, 60],
+                  [60, 140],
+                ].map(([x, y], i) => (
+                  <g key={i}>
+                    <line x1="100" y1="80" x2={x} y2={y} stroke={C.green} strokeWidth="1.5" />
+                    <circle cx={x} cy={y} r="5" fill={C.green} />
+                  </g>
+                ))}
+              </svg>
+              <T color={C.bright} size={13} center style={{ marginTop: 4 }}>
+                4 neighbors, each in a different direction - search can escape.
+              </T>
+            </div>
+          </div>
+          <T color="#b8a9ff" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
+            alpha = 1.2 is a sweet spot; alpha closer to 1 keeps many redundant short edges, alpha higher than 1.5 may
+            drop edges that were actually useful. 1.2 is what DiskANN ships with.
+          </T>
+        </Box>
+      </Reveal>
+      <Reveal when={sub >= 3}>
+        <Box color={C.orange} style={{ width: "100%" }}>
+          <T color={C.orange} bold center size={22}>
+            Graph lives on SSD; a cache slice lives in RAM
+          </T>
+          <T color="#ffcc80" style={{ marginTop: 8 }}>
+            Adjacency lists are stored on disk as 4 KB blocks aligned to the NVMe page size. Every block holds one
+            node&apos;s neighbor list and the vector itself, so a single 4 KB SSD read delivers both the edges and the
+            data needed to compute distance. A small subset of the graph - typically the central high-degree entry-layer
+            nodes - is kept in RAM.
+          </T>
+          <div
+            style={{
+              marginTop: 14,
+              padding: "12px 14px",
+              borderRadius: 8,
+              background: `${C.orange}06`,
+              border: `1px solid ${C.orange}12`,
+            }}
+          >
+            <svg viewBox="0 0 500 180" style={{ width: "100%", maxWidth: 520, height: "auto", display: "block" }}>
+              <desc>
+                Storage hierarchy diagram: top layer shows a RAM cache holding a small subset of high-degree entry
+                nodes; bottom layer shows the SSD storing every graph node as 4 KB blocks aligned to NVMe pages.
+              </desc>
+              <rect
+                x="20"
+                y="20"
+                width="460"
+                height="60"
+                fill={`${C.green}10`}
+                stroke={C.green}
+                strokeWidth="2"
+                rx="6"
+              />
+              <text x="30" y="40" fill={C.green} fontSize="13" fontWeight="bold">
+                RAM cache (entry layer)
+              </text>
+              <text x="30" y="60" fill={C.bright} fontSize="12" fontFamily="monospace">
+                ~1-5% of nodes, kept hot for every query
+              </text>
+              {[1, 2, 3, 4, 5].map((i) => (
+                <circle key={i} cx={280 + i * 30} cy={50} r={10} fill={C.green} />
+              ))}
+              <rect
+                x="20"
+                y="100"
+                width="460"
+                height="70"
+                fill={`${C.orange}10`}
+                stroke={C.orange}
+                strokeWidth="2"
+                rx="6"
+              />
+              <text x="30" y="122" fill={C.orange} fontSize="13" fontWeight="bold">
+                SSD (NVMe)
+              </text>
+              <text x="30" y="140" fill={C.bright} fontSize="12" fontFamily="monospace">
+                4 KB blocks, one per node (vector + adjacency list)
+              </text>
+              {Array.from({ length: 18 }).map((_, i) => (
+                <rect
+                  key={i}
+                  x={175 + i * 15}
+                  y={145}
+                  width={11}
+                  height={18}
+                  fill={C.orange}
+                  stroke="#08080d"
+                  strokeWidth="0.5"
+                />
+              ))}
+            </svg>
+          </div>
+          <div
+            style={{
+              marginTop: 14,
+              padding: "12px 14px",
+              borderRadius: 8,
+              background: "rgba(0,0,0,0.3)",
+              textAlign: "center",
+              fontFamily: "monospace",
+              fontSize: 15,
+              color: C.bright,
+              lineHeight: 1.9,
+            }}
+          >
+            disk block = 4 KB = 1 vector + neighbor ids
+            <br />
+            NVMe random read latency: ~10 &micro;s per block
+            <br />
+            memory cache: entry-layer nodes (most-traversed)
+          </div>
+          <T color="#ffcc80" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
+            The 4 KB choice is deliberate - it matches NVMe page granularity so we pay for one IO per hop, no more.
+          </T>
+        </Box>
+      </Reveal>
+      <Reveal when={sub >= 4}>
+        <Box color={C.green} style={{ width: "100%" }}>
+          <T color={C.green} bold center size={22}>
+            Search: greedy in RAM, a few SSD fetches, done
+          </T>
+          <T color="#80e8a5" style={{ marginTop: 8 }}>
+            A Vamana search starts in the RAM cache and greedy-descends there for free (no disk IO). When the greedy
+            walk drops off the cached subgraph, every hop costs one SSD read. With a good graph and a well-chosen cache,
+            total SSD reads per query stay under 80 - about 800 microseconds of IO plus compute.
+          </T>
+          <div
+            style={{
+              marginTop: 14,
+              padding: "12px 14px",
+              borderRadius: 8,
+              background: `${C.green}06`,
+              border: `1px solid ${C.green}12`,
+            }}
+          >
+            <T color={C.green} bold center size={16}>
+              Per-query budget at N = 100M, d = 768
+            </T>
+            <div
+              style={{
+                marginTop: 10,
+                display: "grid",
+                gridTemplateColumns: "1fr 1fr 1fr",
+                gap: 10,
+              }}
+            >
+              {[
+                { label: "RAM hops", value: "~20", detail: "free (nanoseconds each)", color: C.green },
+                { label: "SSD reads", value: "40-80", detail: "10 us each on NVMe", color: C.orange },
+                { label: "Distance ops", value: "~80", detail: "about 60 ns each", color: C.yellow },
+              ].map((row) => (
+                <div
+                  key={row.label}
+                  style={{
+                    padding: "10px 12px",
+                    borderRadius: 8,
+                    background: `${row.color}08`,
+                    border: `1px solid ${row.color}18`,
+                  }}
+                >
+                  <T color={row.color} bold center size={14}>
+                    {row.label}
+                  </T>
+                  <T color={row.color} bold center size={24} style={{ marginTop: 4, fontFamily: "monospace" }}>
+                    {row.value}
+                  </T>
+                  <T color={C.bright} size={12} center style={{ marginTop: 4 }}>
+                    {row.detail}
+                  </T>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div
+            style={{
+              marginTop: 14,
+              padding: "12px 14px",
+              borderRadius: 8,
+              background: "rgba(0,0,0,0.3)",
+              textAlign: "center",
+              fontFamily: "monospace",
+              fontSize: 15,
+              color: C.bright,
+              lineHeight: 1.9,
+            }}
+          >
+            total latency &approx; 80 &middot; 10 &micro;s + compute &approx;{" "}
+            <span style={{ color: C.green }}>~1 ms per query</span>
+          </div>
+          <T color="#80e8a5" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
+            A single-digit-millisecond vector search over a graph that never fits in RAM. That is the whole point of
+            DiskANN.
+          </T>
+        </Box>
+      </Reveal>
+      <Reveal when={sub >= 5}>
+        <Box color={C.yellow} style={{ width: "100%" }}>
+          <T color={C.yellow} bold center size={22}>
+            100 billion vectors on one machine
+          </T>
+          <T color="#ffe082" style={{ marginTop: 8 }}>
+            With R = 64, d = 768, and 1.2 alpha-pruning, a single server with about 128 GB of RAM and 10 TB of NVMe
+            holds 100 billion vectors and still answers queries in a few milliseconds. That is more vectors than Google
+            indexes for web search. Azure AI Search and Milvus disk mode both ship DiskANN implementations; self-hosted
+            OpenSearch-vector and several Milvus deployments use it too.
+          </T>
+          <div
+            style={{
+              marginTop: 14,
+              padding: "14px 18px",
+              borderRadius: 8,
+              background: "rgba(0,0,0,0.3)",
+              textAlign: "center",
+              fontFamily: "monospace",
+              fontSize: 16,
+              color: C.bright,
+              lineHeight: 2,
+            }}
+          >
+            1 server: 128 GB RAM + 10 TB NVMe
+            <br />
+            holds: <span style={{ color: C.yellow }}>100,000,000,000 vectors</span>
+            <br />
+            query latency: ~5 ms at recall@10 = 0.95
+            <br />
+            cost: ~1/10 of HNSW multi-node cluster at the same scale
+          </div>
+          <div style={{ marginTop: 14, display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+            <div
+              style={{
+                padding: "12px 14px",
+                borderRadius: 8,
+                background: `${C.yellow}06`,
+                border: `1px solid ${C.yellow}12`,
+              }}
+            >
+              <T color={C.yellow} bold center size={16}>
+                Where DiskANN is deployed
+              </T>
+              <T color={C.bright} size={14} style={{ marginTop: 6 }}>
+                Azure AI Search (core engine for Bing), Milvus disk mode, Weaviate with Vamana backend, self-hosted
+                DiskANN deployments at Microsoft, Snowflake, Databricks.
+              </T>
+            </div>
+            <div
+              style={{
+                padding: "12px 14px",
+                borderRadius: 8,
+                background: `${C.yellow}06`,
+                border: `1px solid ${C.yellow}12`,
+              }}
+            >
+              <T color={C.yellow} bold center size={16}>
+                FreshDiskANN for updates and deletes
+              </T>
+              <T color={C.bright} size={14} style={{ marginTop: 6 }}>
+                The 2021 follow-up paper adds incremental inserts and deletes on top of Vamana, handling the one thing
+                the original couldn&apos;t. Production systems use it to avoid periodic full rebuilds.
+              </T>
+            </div>
+          </div>
+          <T color="#ffe082" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
+            Vamana is the answer when the graph does not fit in RAM. HNSW is still the production default under 100M
+            vectors, but above that, Vamana / DiskANN is the algorithm the large-scale systems reach for.
+          </T>
+        </Box>
+      </Reveal>
+      {sub < 5 && (
+        <SubBtn
+          key={sub}
+          onClick={() => {
+            setSubBtnRipple(Date.now());
+            navigate("forward");
+          }}
+          rippleKey={subBtnRipple}
+          registerSubBtn={registerSubBtn}
+        />
       )}
     </div>
   );

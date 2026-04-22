@@ -680,6 +680,54 @@ describe("HNSWParameters (11.10) content", () => {
   });
 });
 
+describe("Vamana (11.11) content", () => {
+  const fn = VectorFoundations.Vamana;
+
+  it("sub=0 motivates DiskANN with the HNSW RAM wall", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/RAM/i);
+    expect(container.textContent).toMatch(/100M|100 million/i);
+    expect(container.textContent).toMatch(/320 GB|300 GB|TB/);
+  });
+
+  it("sub=1 introduces a single flat layer with R neighbors", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/single layer|one layer|flat/i);
+    expect(container.textContent).toMatch(/R|64/);
+    expect(container.textContent).toMatch(/hierarchy|no layer/i);
+  });
+
+  it("sub=2 covers the alpha-pruning rule", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/alpha|α/);
+    expect(container.textContent).toMatch(/1\.2|diverse/i);
+    expect(container.textContent).toMatch(/edge/i);
+    expect(container.textContent).toMatch(/prun/i);
+  });
+
+  it("sub=3 describes the disk layout with SSD blocks", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/SSD|disk/i);
+    expect(container.textContent).toMatch(/RAM/i);
+    expect(container.textContent).toMatch(/4\s*KB|page|NVMe/i);
+  });
+
+  it("sub=4 shows the minimize-disk-reads search pattern", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/RAM/i);
+    expect(container.textContent).toMatch(/SSD|disk/i);
+    expect(container.textContent).toMatch(/80|40|reads/i);
+  });
+
+  it("sub=5 hits 100B scale with Azure/Milvus and FreshDiskANN", () => {
+    const { container } = render(fn(makeCtx({ sub: 5 })));
+    expect(container.textContent).toMatch(/100 billion|100B/i);
+    expect(container.textContent).toMatch(/Azure|Milvus/);
+    expect(container.textContent).toMatch(/NVMe|SSD/);
+    expect(container.textContent).toMatch(/FreshDiskANN|delete/i);
+  });
+});
+
 // ─── TOC special branches ───
 describe("TOC", () => {
   it("renders section list", () => {

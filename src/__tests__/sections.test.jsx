@@ -1128,6 +1128,50 @@ describe("UpdatesDeletes (11.20) content", () => {
   });
 });
 
+describe("Sharding (11.21) content", () => {
+  const fn = VectorProduction.Sharding;
+
+  it("sub=0 frames the single-node limit", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/100M|100 million|r7i/i);
+    expect(container.textContent).toMatch(/single[- ]?node|one node/i);
+  });
+
+  it("sub=1 describes random sharding with round-robin", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/random/i);
+    expect(container.textContent).toMatch(/round[- ]?robin|hash/i);
+    expect(container.textContent).toMatch(/fan[- ]?out|all shards/i);
+  });
+
+  it("sub=2 explains semantic sharding by IVF cluster", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/semantic|cluster/i);
+    expect(container.textContent).toMatch(/IVF|region|subset/i);
+  });
+
+  it("sub=3 shows fan-out to shards and coordinator merge", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/fan[- ]?out/i);
+    expect(container.textContent).toMatch(/coordinator|merge/i);
+    expect(container.textContent).toMatch(/top[- ]?k|top-10|top-20/i);
+  });
+
+  it("sub=4 explains recall math via per-shard buffer", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/recall/i);
+    expect(container.textContent).toMatch(/merge/i);
+    expect(container.textContent).toMatch(/buffer|top-20|top-50/i);
+  });
+
+  it("sub=5 prunes shards by filter predicate", () => {
+    const { container } = render(fn(makeCtx({ sub: 5 })));
+    expect(container.textContent).toMatch(/filter/i);
+    expect(container.textContent).toMatch(/shard/i);
+    expect(container.textContent).toMatch(/prune|skip/i);
+  });
+});
+
 // ─── TOC special branches ───
 describe("TOC", () => {
   it("renders section list", () => {

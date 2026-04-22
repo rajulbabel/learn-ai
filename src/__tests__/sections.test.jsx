@@ -1040,6 +1040,48 @@ describe("HNSWPQ (11.18) content", () => {
   });
 });
 
+describe("Filtering (11.19) content", () => {
+  const fn = VectorProduction.Filtering;
+
+  it("sub=0 frames similarity search with a WHERE clause", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/tenant/i);
+    expect(container.textContent).toMatch(/filter|predicate|WHERE/i);
+  });
+
+  it("sub=1 pre-filter shrinks the set then searches", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/pre[- ]?filter/i);
+    expect(container.textContent).toMatch(/brute/i);
+    expect(container.textContent).toMatch(/selectiv|tight|loose/i);
+  });
+
+  it("sub=2 post-filter returns fewer than k when tight", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/post[- ]?filter/i);
+    expect(container.textContent).toMatch(/fewer|empty|insufficient/i);
+  });
+
+  it("sub=3 inline filtered-HNSW evaluates during traversal", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/inline|filtered[- ]?HNSW/i);
+    expect(container.textContent).toMatch(/Qdrant/);
+    expect(container.textContent).toMatch(/traversal|graph hop|payload/i);
+  });
+
+  it("sub=4 compares strategies by selectivity", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/selectiv/i);
+    expect(container.textContent).toMatch(/0\.1|50|5%/);
+  });
+
+  it("sub=5 names filter-index implementations across systems", () => {
+    const { container } = render(fn(makeCtx({ sub: 5 })));
+    expect(container.textContent).toMatch(/bitmap|inverted|column/i);
+    expect(container.textContent).toMatch(/Qdrant|Pinecone|Weaviate|pgvector/);
+  });
+});
+
 // ─── TOC special branches ───
 describe("TOC", () => {
   it("renders section list", () => {

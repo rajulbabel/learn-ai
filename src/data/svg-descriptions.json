@@ -227,5 +227,8 @@
   ],
   "11.24": [
     "Cross-encoder architecture diagram. A row of input token boxes labeled CLS, query, query, SEP, doc, doc, doc, doc, SEP sits at the bottom connected by arrows up into a single wide yellow transformer rectangle spanning all tokens. A green circle labeled score sits at the top. Illustrates that cross-encoder rerankers run full attention over the concatenated query and doc tokens in one forward pass."
+  ],
+  "11.35": [
+    "Four-branch decision flowchart for picking a vector database. A cyan root node labeled 'New vector-search feature' sits at the top; axis one (data size) splits the flow into four buckets - green under 1M, yellow 1M-100M, orange 100M-1B, red over 1B - with each bucket showing recommended systems below (pgvector/Chroma at small scale, Qdrant/Pinecone/pgvector in the middle band, Qdrant multi-node or Milvus at large scale, Milvus/Vespa at billion-plus). Axis 2 ops capacity, axis 3 filter complexity, and axis 4 cost band are listed as follow-on constraints that narrow the shortlist to a single pick."
   ]
 }

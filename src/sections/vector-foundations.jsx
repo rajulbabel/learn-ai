@@ -4207,16 +4207,495 @@ export const HNSWIntuition = (ctx) => {
   );
 };
 
+// Deterministic per-doc layer assignments for the 11.8 walkthrough.
+// Values chosen so ~94% (8/10) land at L=0, one at L=1, one at L=2, matching the exponential decay.
+const HNSW_INSERT_ORDER = [
+  { id: 1, L: 2, u: 0.01, neighbors: [] },
+  { id: 6, L: 1, u: 0.07, neighbors: [1] },
+  { id: 7, L: 0, u: 0.45, neighbors: [1] },
+  { id: 3, L: 0, u: 0.31, neighbors: [1, 7] },
+  { id: 5, L: 0, u: 0.55, neighbors: [1, 7, 3] },
+  { id: 4, L: 0, u: 0.78, neighbors: [5, 3] },
+  { id: 2, L: 0, u: 0.63, neighbors: [1, 7] },
+  { id: 8, L: 0, u: 0.82, neighbors: [2, 4] },
+  { id: 10, L: 0, u: 0.68, neighbors: [6] },
+  { id: 9, L: 0, u: 0.92, neighbors: [10, 6] },
+];
+
 export const HNSWConstruction = (ctx) => {
-  const { sub } = ctx;
+  const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx;
   return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
       {sub >= 0 && (
-        <Box color={C.orange} style={{ width: "100%" }}>
-          <T color={C.orange} bold center size={22}>
-            HNSW Construction (stub)
+        <Box color={C.cyan} style={{ width: "100%" }}>
+          <T color={C.cyan} bold center size={22}>
+            Start empty; insert one vector at a time
+          </T>
+          <T color="#80deea" style={{ marginTop: 8 }}>
+            Before any queries, we build the graph. Insertion is incremental - one vector at a time. The very first doc
+            has no one to connect to, so it becomes the graph&apos;s entry point at whatever layer the layer formula
+            assigns it.
+          </T>
+          <div
+            style={{
+              marginTop: 14,
+              padding: "14px 18px",
+              borderRadius: 8,
+              background: `${C.cyan}06`,
+              border: `1px solid ${C.cyan}12`,
+            }}
+          >
+            <svg viewBox="0 0 400 180" style={{ width: "100%", maxWidth: 400, height: "auto", display: "block" }}>
+              <desc>
+                First vector inserted into an empty HNSW graph: a single cyan dot labeled doc 1, marked as the
+                graph&apos;s entry point. No edges, no neighbors yet.
+              </desc>
+              <line x1="10" y1="40" x2="390" y2="40" stroke={C.red} strokeDasharray="2 4" strokeOpacity="0.4" />
+              <line x1="10" y1="90" x2="390" y2="90" stroke={C.yellow} strokeDasharray="2 4" strokeOpacity="0.4" />
+              <line x1="10" y1="150" x2="390" y2="150" stroke={C.cyan} strokeDasharray="2 4" strokeOpacity="0.4" />
+              <text x="16" y="32" fill={C.red} fontSize="11">
+                layer 2
+              </text>
+              <text x="16" y="82" fill={C.yellow} fontSize="11">
+                layer 1
+              </text>
+              <text x="16" y="168" fill={C.cyan} fontSize="11">
+                layer 0
+              </text>
+              <circle cx="200" cy="150" r="12" fill={C.cyan} />
+              <text x="200" y="154" textAnchor="middle" fill="#08080d" fontSize="12" fontWeight="bold">
+                1
+              </text>
+              <text x="200" y="130" textAnchor="middle" fill={C.cyan} fontSize="11" fontFamily="monospace">
+                entry point (L = 0 in this example)
+              </text>
+            </svg>
+          </div>
+          <T color="#80deea" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
+            The entry point is important: every future query starts from whichever doc currently sits in the top layer.
+            As more docs are inserted, upper-layer residents can get replaced.
           </T>
         </Box>
+      )}
+      <Reveal when={sub >= 1}>
+        <Box color={C.purple} style={{ width: "100%" }}>
+          <T color={C.purple} bold center size={22}>
+            Layer assignment: one sample from an exponential distribution
+          </T>
+          <T color="#b8a9ff" style={{ marginTop: 8 }}>
+            Every inserted vector is placed at a random layer L. The assignment is not uniform - it is drawn from an
+            exponential distribution so that the upper layers stay sparse. HNSW uses this exact formula in the original
+            paper:
+          </T>
+          <div
+            style={{
+              marginTop: 14,
+              padding: "14px 18px",
+              borderRadius: 8,
+              background: "rgba(0,0,0,0.3)",
+              textAlign: "center",
+              fontFamily: "monospace",
+              fontSize: 18,
+              color: C.bright,
+              lineHeight: 2,
+            }}
+          >
+            <span style={{ color: C.purple }}>L</span> = <span style={{ color: C.yellow }}>floor</span>(&minus;
+            <span style={{ color: C.yellow }}>ln</span>(<span style={{ color: C.green }}>uniform(0, 1)</span>) &middot;{" "}
+            <span style={{ color: C.cyan }}>mL</span>)
+            <br />
+            <span style={{ color: C.dim, fontSize: 14 }}>mL = 1 / ln(M) &approx; 1 / ln(16) &approx; 0.36</span>
+          </div>
+          <div style={{ marginTop: 14, display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+            <div
+              style={{
+                padding: "12px 14px",
+                borderRadius: 8,
+                background: `${C.purple}06`,
+                border: `1px solid ${C.purple}12`,
+              }}
+            >
+              <T color={C.purple} bold center size={16}>
+                Example: u = 0.7
+              </T>
+              <div
+                style={{
+                  marginTop: 6,
+                  padding: "10px 12px",
+                  borderRadius: 6,
+                  background: "rgba(0,0,0,0.3)",
+                  fontFamily: "monospace",
+                  fontSize: 14,
+                  color: C.bright,
+                  lineHeight: 1.9,
+                  textAlign: "center",
+                }}
+              >
+                &minus;ln(0.7) = 0.357
+                <br />
+                0.357 &middot; 0.36 = 0.128
+                <br />
+                floor(0.128) = <span style={{ color: C.green }}>L = 0</span>
+              </div>
+              <T color={C.bright} size={13} center style={{ marginTop: 6 }}>
+                Nearly any random u lands at layer 0.
+              </T>
+            </div>
+            <div
+              style={{
+                padding: "12px 14px",
+                borderRadius: 8,
+                background: `${C.purple}06`,
+                border: `1px solid ${C.purple}12`,
+              }}
+            >
+              <T color={C.purple} bold center size={16}>
+                Example: u = 0.01
+              </T>
+              <div
+                style={{
+                  marginTop: 6,
+                  padding: "10px 12px",
+                  borderRadius: 6,
+                  background: "rgba(0,0,0,0.3)",
+                  fontFamily: "monospace",
+                  fontSize: 14,
+                  color: C.bright,
+                  lineHeight: 1.9,
+                  textAlign: "center",
+                }}
+              >
+                &minus;ln(0.01) = 4.605
+                <br />
+                4.605 &middot; 0.36 = 1.658
+                <br />
+                floor(1.658) = <span style={{ color: C.yellow }}>L = 1</span>
+              </div>
+              <T color={C.bright} size={13} center style={{ marginTop: 6 }}>
+                Only rare, extreme u values get promoted to layer 1 or higher.
+              </T>
+            </div>
+          </div>
+          <T color="#b8a9ff" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
+            This asymmetric distribution is the whole reason upper layers stay small. No tuning needed beyond M.
+          </T>
+        </Box>
+      </Reveal>
+      <Reveal when={sub >= 2}>
+        <Box color={C.yellow} style={{ width: "100%" }}>
+          <T color={C.yellow} bold center size={22}>
+            Most nodes end up at layer 0
+          </T>
+          <T color="#ffe082" style={{ marginTop: 8 }}>
+            Simulate the formula a million times at M = 16. About 94% of samples land at layer 0, 5.7% at layer 1, and
+            the tail decays exponentially by a factor of 1/M per layer. This is what keeps the upper tiers cheap.
+          </T>
+          <div
+            style={{
+              marginTop: 14,
+              padding: "14px 18px",
+              borderRadius: 8,
+              background: `${C.yellow}06`,
+              border: `1px solid ${C.yellow}12`,
+            }}
+          >
+            <T color={C.yellow} bold center size={16}>
+              Expected node counts per layer (N = 1,000,000, M = 16)
+            </T>
+            <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 6 }}>
+              {[
+                { layer: 0, pct: 93.75, count: "937,500" },
+                { layer: 1, pct: 5.86, count: "58,600" },
+                { layer: 2, pct: 0.37, count: "3,700" },
+                { layer: 3, pct: 0.023, count: "230" },
+                { layer: 4, pct: 0.001, count: "14" },
+              ].map((row) => (
+                <div
+                  key={row.layer}
+                  style={{ display: "grid", gridTemplateColumns: "70px 1fr 110px", gap: 10, alignItems: "center" }}
+                >
+                  <T color={C.yellow} bold size={14} style={{ fontFamily: "monospace" }}>
+                    L = {row.layer}
+                  </T>
+                  <div style={{ height: 16, background: "rgba(0,0,0,0.4)", borderRadius: 4, overflow: "hidden" }}>
+                    <div
+                      style={{
+                        width: `${Math.min(row.pct * 1.05, 100)}%`,
+                        height: "100%",
+                        background: C.yellow,
+                      }}
+                    />
+                  </div>
+                  <T color={C.bright} size={13} style={{ fontFamily: "monospace", textAlign: "right" }}>
+                    {row.pct}% ({row.count})
+                  </T>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div
+            style={{
+              marginTop: 14,
+              padding: "12px 14px",
+              borderRadius: 8,
+              background: "rgba(0,0,0,0.3)",
+              textAlign: "center",
+              fontFamily: "monospace",
+              fontSize: 15,
+              color: C.bright,
+              lineHeight: 1.9,
+            }}
+          >
+            <span style={{ color: C.yellow }}>exponential decay</span>: P(L &ge; k+1) / P(L &ge; k) = 1/M
+            <br />
+            at M = 16: each layer is 1/16 the size of the one below it
+          </div>
+          <T color="#ffe082" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
+            Upper layers hold a handful of hub nodes - cheap in storage, expensive in importance. Every query enters
+            through them.
+          </T>
+        </Box>
+      </Reveal>
+      <Reveal when={sub >= 3}>
+        <Box color={C.green} style={{ width: "100%" }}>
+          <T color={C.green} bold center size={22}>
+            Greedy insert: take the M nearest from the candidate pool
+          </T>
+          <T color="#80e8a5" style={{ marginTop: 8 }}>
+            Given the rolled L, insert the new node on layers L, L-1, ..., 0. On each layer, start at the current entry
+            point, greedy-descend to the closest existing node, expand a candidate pool of size ef_construction (default
+            200), and connect the new node to its M nearest among the pool by adding edges.
+          </T>
+          <div
+            style={{
+              marginTop: 14,
+              padding: "12px 14px",
+              borderRadius: 8,
+              background: `${C.green}06`,
+              border: `1px solid ${C.green}12`,
+            }}
+          >
+            <T color={C.green} bold center size={16}>
+              Insertion pseudo-code (HNSW paper, Algorithm 1)
+            </T>
+            <div
+              style={{
+                marginTop: 10,
+                padding: "12px 14px",
+                borderRadius: 6,
+                background: "rgba(0,0,0,0.3)",
+                fontFamily: "monospace",
+                fontSize: 14,
+                color: C.bright,
+                lineHeight: 1.9,
+              }}
+            >
+              insert(q, M, ef_construction):
+              <br />
+              &nbsp;&nbsp;L = floor(&minus;ln(uniform()) &middot; mL)
+              <br />
+              &nbsp;&nbsp;ep = entry_point
+              <br />
+              &nbsp;&nbsp;for layer in top_level ... L+1:
+              <br />
+              &nbsp;&nbsp;&nbsp;&nbsp;ep = greedy_descend(q, ep, layer){"  "}
+              <span style={{ color: C.dim }}>// 1 candidate only</span>
+              <br />
+              &nbsp;&nbsp;for layer in L ... 0:
+              <br />
+              &nbsp;&nbsp;&nbsp;&nbsp;candidates = beam_search(q, ep, layer,{" "}
+              <span style={{ color: C.yellow }}>ef_construction</span>)
+              <br />
+              &nbsp;&nbsp;&nbsp;&nbsp;neighbors = select_<span style={{ color: C.green }}>M</span>_nearest(candidates)
+              <br />
+              &nbsp;&nbsp;&nbsp;&nbsp;add_edges(q, neighbors){"  "}
+              <span style={{ color: C.dim }}>// bidirectional, capped at M per node</span>
+              <br />
+              &nbsp;&nbsp;&nbsp;&nbsp;ep = neighbors[0]
+            </div>
+          </div>
+          <T color="#80e8a5" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
+            ef_construction is the candidate pool size. Larger means better neighbor choice at insert time (and
+            therefore better recall later) but slower builds.
+          </T>
+        </Box>
+      </Reveal>
+      <Reveal when={sub >= 4}>
+        <Box color={C.orange} style={{ width: "100%" }}>
+          <T color={C.orange} bold center size={22}>
+            Insert all 10 cat-corpus docs
+          </T>
+          <T color="#ffcc80" style={{ marginTop: 8 }}>
+            Roll the layer formula for every doc (deterministic values shown below for the walkthrough), then run the
+            insertion algorithm. Doc 1 &quot;Cats are small domesticated carnivores&quot; gets lucky with u = 0.01 and
+            lands at L = 2, making it the top entry point. Doc 6 &quot;Python is a programming language&quot; lands at L
+            = 1. The other 8 docs stay at layer 0 - the expected 80% in this tiny sample, 94% in the limit.
+          </T>
+          <div
+            style={{
+              marginTop: 14,
+              padding: "12px 14px",
+              borderRadius: 8,
+              background: `${C.orange}06`,
+              border: `1px solid ${C.orange}12`,
+            }}
+          >
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "48px 2fr 80px 80px 1fr",
+                gap: 10,
+                padding: "6px 10px",
+                borderBottom: `1px solid ${C.orange}22`,
+              }}
+            >
+              <T color={C.orange} bold size={13}>
+                doc
+              </T>
+              <T color={C.orange} bold size={13}>
+                text
+              </T>
+              <T color={C.orange} bold size={13} style={{ textAlign: "center" }}>
+                u
+              </T>
+              <T color={C.orange} bold size={13} style={{ textAlign: "center" }}>
+                L
+              </T>
+              <T color={C.orange} bold size={13}>
+                edges added
+              </T>
+            </div>
+            {HNSW_INSERT_ORDER.map((row) => {
+              const doc = CAT_CORPUS.find((d) => d.id === row.id);
+              const layerBg = row.L === 2 ? `${C.red}18` : row.L === 1 ? `${C.yellow}18` : `${C.cyan}18`;
+              return (
+                <div
+                  key={row.id}
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns: "48px 2fr 80px 80px 1fr",
+                    gap: 10,
+                    alignItems: "center",
+                    padding: "6px 10px",
+                    borderRadius: 4,
+                    background: layerBg,
+                    marginTop: 4,
+                  }}
+                >
+                  <T color={C.bright} bold size={14} style={{ fontFamily: "monospace" }}>
+                    #{row.id}
+                  </T>
+                  <T color={C.bright} size={13}>
+                    {doc.text}
+                  </T>
+                  <T color={C.dim} size={13} style={{ fontFamily: "monospace", textAlign: "center" }}>
+                    {row.u}
+                  </T>
+                  <T color={C.orange} bold size={14} style={{ fontFamily: "monospace", textAlign: "center" }}>
+                    L = {row.L}
+                  </T>
+                  <T color={C.bright} size={13} style={{ fontFamily: "monospace" }}>
+                    {row.neighbors.length === 0 ? "- (entry point)" : `to ${row.neighbors.join(", ")}`}
+                  </T>
+                </div>
+              );
+            })}
+          </div>
+          <T color="#ffcc80" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
+            In practice the layer rolls are truly random, but the distribution always looks like this: one or two docs
+            at the top, a handful in the middle, everyone else at the bottom.
+          </T>
+        </Box>
+      </Reveal>
+      <Reveal when={sub >= 5}>
+        <Box color={C.red} style={{ width: "100%" }}>
+          <T color={C.red} bold center size={22}>
+            M = 16 sets quality, cost, and memory all at once
+          </T>
+          <T color="#ef9a9a" style={{ marginTop: 8 }}>
+            M is the single most important construction parameter. Larger M means every node has more edges, which makes
+            the graph navigable from more starting points (better recall) but also burns more memory and slightly slower
+            queries per hop.
+          </T>
+          <div
+            style={{
+              marginTop: 14,
+              padding: "14px 18px",
+              borderRadius: 8,
+              background: "rgba(0,0,0,0.3)",
+              textAlign: "center",
+              fontFamily: "monospace",
+              fontSize: 16,
+              color: C.bright,
+              lineHeight: 2,
+            }}
+          >
+            <span style={{ color: C.red }}>M = 16</span> <span style={{ color: C.dim }}>(the production default)</span>
+            <br />
+            edges per node at layer 0 &le; M = 16{"  "}
+            <span style={{ color: C.dim }}>bidirectional</span>
+            <br />
+            edges per node at upper layers &le; M/2 = 8
+            <br />
+            memory per vector &approx; M &middot; 4 bytes (neighbor ids) + upper layers &approx;{" "}
+            <span style={{ color: C.red }}>70 bytes per vector</span>
+          </div>
+          <div style={{ marginTop: 14, display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+            <div
+              style={{
+                padding: "12px 14px",
+                borderRadius: 8,
+                background: `${C.red}06`,
+                border: `1px solid ${C.red}12`,
+                textAlign: "center",
+              }}
+            >
+              <T color={C.red} bold size={16}>
+                Graph overhead at N = 1,000,000
+              </T>
+              <T color="#ef9a9a" bold size={22} style={{ marginTop: 8, fontFamily: "monospace" }}>
+                70 MB
+              </T>
+              <T color={C.bright} size={13} style={{ marginTop: 4 }}>
+                tiny next to the vectors themselves (3 GB)
+              </T>
+            </div>
+            <div
+              style={{
+                padding: "12px 14px",
+                borderRadius: 8,
+                background: `${C.red}06`,
+                border: `1px solid ${C.red}12`,
+                textAlign: "center",
+              }}
+            >
+              <T color={C.red} bold size={16}>
+                Graph overhead at N = 100,000,000
+              </T>
+              <T color="#ef9a9a" bold size={22} style={{ marginTop: 8, fontFamily: "monospace" }}>
+                7 GB
+              </T>
+              <T color={C.bright} size={13} style={{ marginTop: 4 }}>
+                still cheap compared to 300 GB of vectors
+              </T>
+            </div>
+          </div>
+          <T color="#ef9a9a" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
+            M is the one knob you usually set up front and leave alone. 8 for memory-tight deployments, 16 for typical,
+            32 or 48 for recall-critical workloads.
+          </T>
+        </Box>
+      </Reveal>
+      {sub < 5 && (
+        <SubBtn
+          key={sub}
+          onClick={() => {
+            setSubBtnRipple(Date.now());
+            navigate("forward");
+          }}
+          rippleKey={subBtnRipple}
+          registerSubBtn={registerSubBtn}
+        />
       )}
     </div>
   );

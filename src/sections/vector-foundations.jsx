@@ -2569,17 +2569,600 @@ export const DistanceMetrics = (ctx) => {
   );
 };
 
-// Stubs for chapters 11.5-11.11 - full implementations follow per-task.
+// Three k-means clusters used across 11.5 IVF visuals.
+// Cluster A holds the 5 cat-related docs; B holds the two dog docs; C holds birds/fish/python.
+const IVF_CLUSTERS = [
+  { id: "A", color: C.purple, light: "#b8a9ff", centroid: { x: 123, y: 107 }, docs: [1, 3, 4, 5, 7], label: "cats" },
+  { id: "B", color: C.yellow, light: "#ffe082", centroid: { x: 305, y: 120 }, docs: [2, 8], label: "dogs" },
+  { id: "C", color: C.cyan, light: "#80deea", centroid: { x: 340, y: 220 }, docs: [6, 9, 10], label: "other" },
+];
+
+const docCluster = (docId) => IVF_CLUSTERS.find((c) => c.docs.includes(docId));
+
+// Small scatter SVG used in sub=0 through sub=3 of 11.5 and reused in 11.6/11.8/11.9.
+// Variant controls what's drawn (clusters, cells, probe arrows). Kept local to this file
+// because the rendering concerns are IVF-specific and we do not want to expand components.jsx.
+const IVFScatter = ({
+  variant, // "bare" | "clustered" | "cells" | "probe"
+  nprobe = 1,
+  desc,
+  showQuery = true,
+  highlightTopK = false,
+}) => {
+  const probedClusters = IVF_CLUSTERS.slice(0, nprobe).map((c) => c.id);
+  return (
+    <svg viewBox="0 0 500 320" style={{ width: "100%", maxWidth: 520, height: "auto", display: "block" }}>
+      <desc>{desc}</desc>
+      {/* Cell polygons (approximate Voronoi) */}
+      {(variant === "cells" || variant === "probe") &&
+        IVF_CLUSTERS.map((cl) => {
+          const isProbed = variant !== "probe" || probedClusters.includes(cl.id);
+          const fill = isProbed ? `${cl.color}12` : `${cl.color}04`;
+          const stroke = isProbed ? `${cl.color}55` : `${cl.color}22`;
+          const rectBounds = {
+            A: { x: 25, y: 25, w: 210, h: 145 },
+            B: { x: 235, y: 25, w: 145, h: 145 },
+            C: { x: 235, y: 170, w: 245, h: 140 },
+          }[cl.id];
+          const leftover = cl.id === "A" ? { x: 25, y: 170, w: 210, h: 140 } : null;
+          return (
+            <g key={cl.id}>
+              <rect {...rectBounds} fill={fill} stroke={stroke} strokeDasharray="4 4" />
+              {leftover && <rect {...leftover} fill={fill} stroke={stroke} strokeDasharray="4 4" />}
+            </g>
+          );
+        })}
+      {/* Arrows from query to every dot for bare brute-force view */}
+      {variant === "bare" &&
+        Object.entries(CORPUS_XY).map(([id, p]) => (
+          <line
+            key={id}
+            x1={QUERY_XY.x}
+            y1={QUERY_XY.y}
+            x2={p.x}
+            y2={p.y}
+            stroke={C.red}
+            strokeWidth="1"
+            strokeOpacity="0.35"
+          />
+        ))}
+      {/* Arrow from query to nearest centroid for probe view */}
+      {variant === "probe" && (
+        <>
+          <defs>
+            <marker id="ivfProbeArrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+              <polygon points="0 0, 10 3, 0 6" fill={C.orange} />
+            </marker>
+          </defs>
+          <line
+            x1={QUERY_XY.x + 4}
+            y1={QUERY_XY.y + 4}
+            x2={IVF_CLUSTERS[0].centroid.x - 6}
+            y2={IVF_CLUSTERS[0].centroid.y - 4}
+            stroke={C.orange}
+            strokeWidth="2.5"
+            markerEnd="url(#ivfProbeArrow)"
+          />
+        </>
+      )}
+      {/* Doc dots, colored per variant */}
+      {Object.entries(CORPUS_XY).map(([id, p]) => {
+        const cl = docCluster(Number(id));
+        const isProbed = variant !== "probe" || probedClusters.includes(cl.id);
+        let fill = "rgba(255,255,255,0.28)";
+        let stroke = "rgba(255,255,255,0.45)";
+        if (variant === "clustered" || variant === "cells" || variant === "probe") {
+          fill = isProbed ? cl.color : `${cl.color}33`;
+          stroke = isProbed ? cl.color : `${cl.color}55`;
+        }
+        if (highlightTopK && [1, 3, 7].includes(Number(id)) && variant === "probe") {
+          fill = C.green;
+          stroke = C.green;
+        }
+        return (
+          <g key={id}>
+            <circle cx={p.x} cy={p.y} r={10} fill={fill} stroke={stroke} />
+            <text
+              x={p.x}
+              y={p.y + 4}
+              textAnchor="middle"
+              fill={fill === "rgba(255,255,255,0.28)" ? "rgba(255,255,255,0.85)" : "#08080d"}
+              fontSize="12"
+              fontWeight="bold"
+            >
+              {id}
+            </text>
+          </g>
+        );
+      })}
+      {/* Centroid squares for clustered and later */}
+      {(variant === "clustered" || variant === "cells" || variant === "probe") &&
+        IVF_CLUSTERS.map((cl) => {
+          const isProbed = variant !== "probe" || probedClusters.includes(cl.id);
+          const fill = isProbed ? cl.color : `${cl.color}55`;
+          return (
+            <g key={cl.id}>
+              <rect
+                x={cl.centroid.x - 10}
+                y={cl.centroid.y - 10}
+                width="20"
+                height="20"
+                fill={fill}
+                stroke="#08080d"
+                strokeWidth="2"
+              />
+              <text
+                x={cl.centroid.x}
+                y={cl.centroid.y + 4}
+                textAnchor="middle"
+                fill="#08080d"
+                fontSize="11"
+                fontWeight="bold"
+              >
+                {cl.id}
+              </text>
+            </g>
+          );
+        })}
+      {/* Query dot */}
+      {showQuery && (
+        <g>
+          <circle cx={QUERY_XY.x} cy={QUERY_XY.y} r={8} fill={C.yellow} stroke={C.yellow} />
+          <text
+            x={QUERY_XY.x}
+            y={QUERY_XY.y - 12}
+            textAnchor="middle"
+            fill={C.yellow}
+            fontSize="11"
+            fontFamily="monospace"
+            fontWeight="bold"
+          >
+            query
+          </text>
+        </g>
+      )}
+    </svg>
+  );
+};
+
 export const IVF = (ctx) => {
-  const { sub } = ctx;
+  const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx;
   return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
       {sub >= 0 && (
-        <Box color={C.cyan} style={{ width: "100%" }}>
-          <T color={C.cyan} bold center size={22}>
-            IVF (stub)
+        <Box color={C.red} style={{ width: "100%" }}>
+          <T color={C.red} bold center size={22}>
+            Brute force touches every vector
+          </T>
+          <T color="#ef9a9a" style={{ marginTop: 8 }}>
+            Start from where the last chapter left off. Brute force is correct but slow because it reads every single
+            stored vector for every query. Here are our 10 cat-corpus docs in a 2D view, with the query in the middle
+            and an arrow from the query to every vector. Nothing is skipped.
+          </T>
+          <div
+            style={{
+              marginTop: 14,
+              padding: "12px 14px",
+              borderRadius: 8,
+              background: `${C.red}06`,
+              border: `1px solid ${C.red}12`,
+            }}
+          >
+            <IVFScatter
+              variant="bare"
+              desc="Scatter plot of the 10 cat-corpus documents with the query vector at the center. Faint red lines fan out from the query to every document, showing that brute-force kNN compares the query to every vector."
+            />
+            <T color={C.dim} size={14} center style={{ marginTop: 6, fontStyle: "italic" }}>
+              Every line is a distance computation. At N = 10 this is nothing; at N = 1 billion it was the 3 TB we
+              walked away from in the last chapter.
+            </T>
+          </div>
+          <div
+            style={{
+              marginTop: 14,
+              padding: "12px 14px",
+              borderRadius: 8,
+              background: "rgba(0,0,0,0.3)",
+              textAlign: "center",
+              fontFamily: "monospace",
+              fontSize: 16,
+              color: C.bright,
+              lineHeight: 1.9,
+            }}
+          >
+            brute force: read every vector, every query
+            <br />
+            cost = N &middot; d per query
+          </div>
+          <T color="#ef9a9a" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
+            The IVF trick is simple in hindsight: group the vectors ahead of time so at query time we only look inside
+            the group the query landed in.
           </T>
         </Box>
+      )}
+      <Reveal when={sub >= 1}>
+        <Box color={C.cyan} style={{ width: "100%" }}>
+          <T color={C.cyan} bold center size={22}>
+            Cluster the corpus with k-means
+          </T>
+          <T color="#80deea" style={{ marginTop: 8 }}>
+            Before we accept any queries, run k-means on the stored vectors. Pick the number of clusters nlist = 3 and
+            let the algorithm find three centroids that minimize the average distance from each doc to its closest
+            centroid. Each doc gets assigned to exactly one cluster.
+          </T>
+          <div
+            style={{
+              marginTop: 14,
+              padding: "12px 14px",
+              borderRadius: 8,
+              background: `${C.cyan}06`,
+              border: `1px solid ${C.cyan}12`,
+            }}
+          >
+            <IVFScatter
+              variant="clustered"
+              desc="The same 10 docs colored by cluster after k-means with nlist = 3. Purple centroid A sits in the cat-doc cluster, yellow centroid B in the dog-doc group, and cyan centroid C in the birds and fish group. Each doc inherits its cluster color."
+            />
+          </div>
+          <div style={{ marginTop: 14, display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 10 }}>
+            {IVF_CLUSTERS.map((cl) => (
+              <div
+                key={cl.id}
+                style={{
+                  padding: "10px 12px",
+                  borderRadius: 8,
+                  background: `${cl.color}06`,
+                  border: `1px solid ${cl.color}12`,
+                }}
+              >
+                <T color={cl.light} bold center size={15}>
+                  Cluster {cl.id} - {cl.label}
+                </T>
+                <T color={C.bright} size={13} center style={{ marginTop: 4, fontFamily: "monospace" }}>
+                  docs {cl.docs.join(", ")}
+                </T>
+                <T color={cl.color} size={12} center style={{ marginTop: 4, fontFamily: "monospace" }}>
+                  centroid ({cl.centroid.x}, {cl.centroid.y})
+                </T>
+              </div>
+            ))}
+          </div>
+          <T color="#80deea" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
+            nlist is a tuning knob. Small nlist means few large clusters; large nlist means many tiny clusters. 3 is
+            drawable; production picks roughly sqrt(N).
+          </T>
+        </Box>
+      </Reveal>
+      <Reveal when={sub >= 2}>
+        <Box color={C.green} style={{ width: "100%" }}>
+          <T color={C.green} bold center size={22}>
+            Voronoi cells: every doc belongs to exactly one cell
+          </T>
+          <T color="#80e8a5" style={{ marginTop: 8 }}>
+            Draw the region of space closer to centroid A than to any other centroid. That is centroid A&apos;s Voronoi
+            cell. Repeat for B and C and the whole plane is divided into three cells. Every stored doc sits in exactly
+            one cell, and the cell it sits in is its cluster assignment.
+          </T>
+          <div
+            style={{
+              marginTop: 14,
+              padding: "12px 14px",
+              borderRadius: 8,
+              background: `${C.green}06`,
+              border: `1px solid ${C.green}12`,
+            }}
+          >
+            <IVFScatter
+              variant="cells"
+              desc="Voronoi cells drawn as dashed colored rectangles behind the 10 docs, showing the region of space that each centroid owns. Every doc belongs to exactly one cell."
+            />
+          </div>
+          <div
+            style={{
+              marginTop: 14,
+              padding: "12px 14px",
+              borderRadius: 8,
+              background: "rgba(0,0,0,0.3)",
+              textAlign: "center",
+              fontFamily: "monospace",
+              fontSize: 15,
+              color: C.bright,
+              lineHeight: 1.9,
+            }}
+          >
+            cell(p) = argmin over i of &#124;&#124;p &minus; centroid<sub>i</sub>&#124;&#124;
+            <br />
+            every doc: cluster assignment fixed after training
+          </div>
+          <T color="#80e8a5" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
+            Real IVF does not store the cell polygons. It only stores the assignment: &quot;doc 4 belongs to cluster
+            A.&quot; The cell boundary is implicit from the centroids.
+          </T>
+        </Box>
+      </Reveal>
+      <Reveal when={sub >= 3}>
+        <Box color={C.orange} style={{ width: "100%" }}>
+          <T color={C.orange} bold center size={22}>
+            nprobe = 1: probe only the nearest cell
+          </T>
+          <T color="#ffcc80" style={{ marginTop: 8 }}>
+            A query arrives. Compute the distance from the query to each of the nlist centroids - just 3 distances, not
+            10. Pick the nearest centroid and scan only the docs inside its cell. The other 2 cells are skipped
+            entirely. This is how IVF buys its speedup.
+          </T>
+          <div
+            style={{
+              marginTop: 14,
+              padding: "12px 14px",
+              borderRadius: 8,
+              background: `${C.orange}06`,
+              border: `1px solid ${C.orange}12`,
+            }}
+          >
+            <IVFScatter
+              variant="probe"
+              nprobe={1}
+              desc="Query vector with an orange arrow pointing at centroid A, the nearest centroid. Cluster A's docs are highlighted while clusters B and C are dimmed, showing that only cluster A's docs are scanned when nprobe = 1."
+              highlightTopK
+            />
+          </div>
+          <div style={{ marginTop: 14, display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+            <div
+              style={{
+                padding: "12px 14px",
+                borderRadius: 8,
+                background: `${C.orange}06`,
+                border: `1px solid ${C.orange}12`,
+                textAlign: "center",
+              }}
+            >
+              <T color={C.orange} bold size={15}>
+                Work with nprobe = 1
+              </T>
+              <T color="#ffcc80" bold size={22} style={{ marginTop: 6, fontFamily: "monospace" }}>
+                3 + 5 = 8 dot products
+              </T>
+              <T color={C.bright} size={13} style={{ marginTop: 4 }}>
+                3 to pick the nearest centroid, 5 to scan cluster A
+              </T>
+            </div>
+            <div
+              style={{
+                padding: "12px 14px",
+                borderRadius: 8,
+                background: `${C.red}06`,
+                border: `1px solid ${C.red}12`,
+                textAlign: "center",
+              }}
+            >
+              <T color={C.red} bold size={15}>
+                Brute force
+              </T>
+              <T color="#ef9a9a" bold size={22} style={{ marginTop: 6, fontFamily: "monospace" }}>
+                10 dot products
+              </T>
+              <T color={C.bright} size={13} style={{ marginTop: 4 }}>
+                scan every doc every query
+              </T>
+            </div>
+          </div>
+          <T color="#ffcc80" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
+            At N = 10, 8 vs 10 looks tiny. At N = 1M with nlist = 1000, IVF at nprobe = 1 scans about N/1000 = 1000 docs
+            instead of a million. That is a thousand-times speedup, and it is where IVF earns its keep.
+          </T>
+        </Box>
+      </Reveal>
+      <Reveal when={sub >= 4}>
+        <Box color={C.yellow} style={{ width: "100%" }}>
+          <T color={C.yellow} bold center size={22}>
+            nprobe is the recall-latency knob
+          </T>
+          <T color="#ffe082" style={{ marginTop: 8 }}>
+            nprobe = 1 is fastest but fragile: if the true neighbor sits just across a cell boundary, the probe misses
+            it. Raising nprobe tells IVF to scan the top-nprobe closest cells, not just the closest one. More cells
+            scanned means higher recall and higher latency - a direct move on the tradeoff triangle.
+          </T>
+          <div style={{ marginTop: 14, display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 10 }}>
+            {[
+              { nprobe: 1, label: "probe 1 cell", ratio: "1/3 of corpus" },
+              { nprobe: 2, label: "probe 2 cells", ratio: "2/3 of corpus" },
+              { nprobe: 3, label: "probe all cells", ratio: "full corpus" },
+            ].map((v) => (
+              <div
+                key={v.nprobe}
+                style={{
+                  padding: "10px 12px",
+                  borderRadius: 8,
+                  background: `${C.yellow}06`,
+                  border: `1px solid ${C.yellow}12`,
+                }}
+              >
+                <T color={C.yellow} bold center size={15} style={{ fontFamily: "monospace" }}>
+                  nprobe = {v.nprobe}
+                </T>
+                <div style={{ marginTop: 6 }}>
+                  <IVFScatter
+                    variant="probe"
+                    nprobe={v.nprobe}
+                    showQuery
+                    desc={`IVF scatter with nprobe = ${v.nprobe}; ${v.label}.`}
+                  />
+                </div>
+                <T color={C.bright} size={13} center style={{ marginTop: 4 }}>
+                  {v.ratio}
+                </T>
+              </div>
+            ))}
+          </div>
+          <div
+            style={{
+              marginTop: 14,
+              padding: "12px 14px",
+              borderRadius: 8,
+              background: `${C.yellow}06`,
+              border: `1px solid ${C.yellow}12`,
+            }}
+          >
+            <T color={C.yellow} bold center size={16}>
+              Measured recall and cost at a realistic scale (N = 1M, nlist = 1000)
+            </T>
+            <div
+              style={{
+                marginTop: 10,
+                display: "grid",
+                gridTemplateColumns: "80px 1fr 1fr 1fr",
+                gap: 6,
+                fontFamily: "monospace",
+                fontSize: 14,
+                color: C.bright,
+              }}
+            >
+              <T color={C.yellow} bold size={13}>
+                nprobe
+              </T>
+              <T color={C.yellow} bold size={13} style={{ textAlign: "center" }}>
+                recall@10
+              </T>
+              <T color={C.yellow} bold size={13} style={{ textAlign: "center" }}>
+                docs scanned
+              </T>
+              <T color={C.yellow} bold size={13} style={{ textAlign: "center" }}>
+                latency vs brute
+              </T>
+              {[
+                { n: 1, recall: "0.80", scanned: "1,000", speed: "1000x" },
+                { n: 4, recall: "0.93", scanned: "4,000", speed: "250x" },
+                { n: 8, recall: "0.97", scanned: "8,000", speed: "125x" },
+                { n: 32, recall: "0.995", scanned: "32,000", speed: "31x" },
+              ].flatMap((row) => [
+                <T key={`n-${row.n}`} color={C.bright} size={13} style={{ fontFamily: "monospace" }}>
+                  {row.n}
+                </T>,
+                <T
+                  key={`r-${row.n}`}
+                  color={C.green}
+                  size={13}
+                  style={{ fontFamily: "monospace", textAlign: "center" }}
+                >
+                  {row.recall}
+                </T>,
+                <T
+                  key={`s-${row.n}`}
+                  color={C.bright}
+                  size={13}
+                  style={{ fontFamily: "monospace", textAlign: "center" }}
+                >
+                  {row.scanned}
+                </T>,
+                <T
+                  key={`v-${row.n}`}
+                  color={C.yellow}
+                  size={13}
+                  style={{ fontFamily: "monospace", textAlign: "center" }}
+                >
+                  {row.speed}
+                </T>,
+              ])}
+            </div>
+          </div>
+          <T color="#ffe082" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
+            nprobe is the single most important IVF knob. Pick it to hit your recall target, then accept the latency
+            that comes with it.
+          </T>
+        </Box>
+      </Reveal>
+      <Reveal when={sub >= 5}>
+        <Box color={C.purple} style={{ width: "100%" }}>
+          <T color={C.purple} bold center size={22}>
+            Sizing IVF in production
+          </T>
+          <T color="#b8a9ff" style={{ marginTop: 8 }}>
+            Two rules of thumb cover 90 percent of IVF deployments. Pick nlist to keep each cell small enough that
+            scanning it is fast, and pick nprobe from a recall curve measured on your own data.
+          </T>
+          <div
+            style={{
+              marginTop: 14,
+              padding: "14px 18px",
+              borderRadius: 8,
+              background: "rgba(0,0,0,0.3)",
+              textAlign: "center",
+              fontFamily: "monospace",
+              fontSize: 16,
+              color: C.bright,
+              lineHeight: 2,
+            }}
+          >
+            nlist &approx; &radic;N <span style={{ color: C.dim }}>(FAISS default rule)</span>
+            <br />N = 1,000,000 &rarr; sqrt(N) &approx; 1000 &rarr; FAISS rounds up to{" "}
+            <span style={{ color: C.purple }}>4096</span>
+            <br />N = 100,000,000 &rarr; sqrt(N) &approx; 10,000 &rarr; <span style={{ color: C.purple }}>32,768</span>
+          </div>
+          <div style={{ marginTop: 14, display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+            <div
+              style={{
+                padding: "12px 14px",
+                borderRadius: 8,
+                background: `${C.purple}06`,
+                border: `1px solid ${C.purple}12`,
+              }}
+            >
+              <T color={C.purple} bold center size={17}>
+                nprobe = 8
+              </T>
+              <T color={C.bright} size={14} style={{ marginTop: 6 }}>
+                A sensible starting point that typically reaches 97% recall on text embeddings. Raise to 16 or 32 for
+                recall-critical workloads, drop to 4 or less when latency is tight.
+              </T>
+            </div>
+            <div
+              style={{
+                padding: "12px 14px",
+                borderRadius: 8,
+                background: `${C.purple}06`,
+                border: `1px solid ${C.purple}12`,
+              }}
+            >
+              <T color={C.purple} bold center size={17}>
+                Memory overhead
+              </T>
+              <T color={C.bright} size={14} style={{ marginTop: 6 }}>
+                nlist centroids at d=768 float32 = nlist &middot; 3 KB. At nlist=4096 that is 12 MB of centroids,
+                negligible next to the vectors themselves.
+              </T>
+            </div>
+          </div>
+          <div
+            style={{
+              marginTop: 14,
+              padding: "12px 14px",
+              borderRadius: 8,
+              background: `${C.purple}06`,
+              border: `1px solid ${C.purple}12`,
+              textAlign: "center",
+            }}
+          >
+            <T color={C.purple} bold size={17}>
+              The tradeoff IVF makes
+            </T>
+            <T color="#b8a9ff" size={15} style={{ marginTop: 6 }}>
+              IVF trades a tiny bit of recall (docs near cell boundaries can be missed) and a fixed one-time clustering
+              cost for a massive per-query speedup. Memory overhead is trivial. This is why IVF is the FAISS default for
+              million-scale static corpora.
+            </T>
+          </div>
+        </Box>
+      </Reveal>
+      {sub < 5 && (
+        <SubBtn
+          key={sub}
+          onClick={() => {
+            setSubBtnRipple(Date.now());
+            navigate("forward");
+          }}
+          rippleKey={subBtnRipple}
+          registerSubBtn={registerSubBtn}
+        />
       )}
     </div>
   );

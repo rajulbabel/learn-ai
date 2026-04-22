@@ -410,6 +410,51 @@ describe("DistanceMetrics (11.4) content", () => {
   });
 });
 
+describe("IVF (11.5) content", () => {
+  const fn = VectorFoundations.IVF;
+
+  it("sub=0 revisits the brute-force-scans-every-vector baseline", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/every vector/i);
+    expect(container.textContent).toMatch(/brute[- ]?force/i);
+    expect(container.textContent).toMatch(/10/);
+  });
+
+  it("sub=1 introduces k-means with nlist = 3 clusters", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/k[- ]?means/i);
+    expect(container.textContent).toMatch(/nlist|3 clusters/i);
+    expect(container.textContent).toMatch(/centroid/i);
+  });
+
+  it("sub=2 draws Voronoi cells around centroids", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/voronoi|cell/i);
+    expect(container.textContent).toMatch(/belongs to|exactly one/i);
+  });
+
+  it("sub=3 probes the single nearest cluster at nprobe = 1", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/nprobe\s*=\s*1/i);
+    expect(container.textContent).toMatch(/nearest|centroid/i);
+  });
+
+  it("sub=4 shows recall vs nprobe tradeoff with concrete numbers", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/nprobe/i);
+    expect(container.textContent).toMatch(/recall/i);
+    expect(container.textContent).toMatch(/0\.8|0\.9|1\.0|100%/);
+  });
+
+  it("sub=5 gives parameter guidance nlist sqrt(N) and nprobe", () => {
+    const { container } = render(fn(makeCtx({ sub: 5 })));
+    expect(container.textContent).toMatch(/sqrt|√/i);
+    expect(container.textContent).toMatch(/nlist/i);
+    expect(container.textContent).toMatch(/nprobe/i);
+    expect(container.textContent).toMatch(/4096|1000/);
+  });
+});
+
 // ─── TOC special branches ───
 describe("TOC", () => {
   it("renders section list", () => {

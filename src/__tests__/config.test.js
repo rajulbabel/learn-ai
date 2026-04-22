@@ -141,7 +141,7 @@ describe("Section 11 registration", () => {
 });
 
 describe("Section 11 chapters", () => {
-  it("has chapters 11.1 through 11.28 in order", () => {
+  it("has chapters 11.1 through 11.35 in order", () => {
     const section11 = chapters.filter((ch) => ch.section === 11);
     const expected = [
       { id: "11.1", component: "RetrievalProblem", title: "The Retrieval Problem" },
@@ -172,6 +172,13 @@ describe("Section 11 chapters", () => {
       { id: "11.26", component: "EmbeddingLifecycle", title: "Embedding Lifecycle & Re-embedding" },
       { id: "11.27", component: "Observability", title: "Observability" },
       { id: "11.28", component: "CapacityPlanning", title: "Capacity Planning & Cost Models" },
+      { id: "11.29", component: "FAISS", title: "FAISS" },
+      { id: "11.30", component: "Pgvector", title: "pgvector" },
+      { id: "11.31", component: "Qdrant", title: "Qdrant" },
+      { id: "11.32", component: "Pinecone", title: "Pinecone" },
+      { id: "11.33", component: "QdrantVsPinecone", title: "Qdrant vs Pinecone" },
+      { id: "11.34", component: "WeaviateMilvusChroma", title: "Weaviate / Milvus / Chroma" },
+      { id: "11.35", component: "DecisionFramework", title: "The Decision Framework" },
     ];
     expect(section11.length).toBe(expected.length);
     expected.forEach((exp, i) => {

@@ -16,6 +16,7 @@ import * as ModernLLMTechniques from "../sections/modern-llm-techniques.jsx";
 import * as VectorFoundations from "../sections/vector-foundations.jsx";
 import * as VectorCompression from "../sections/vector-compression.jsx";
 import * as VectorProduction from "../sections/vector-production.jsx";
+import * as VectorSystems from "../sections/vector-systems.jsx";
 
 const lookup = {
   TOC,
@@ -32,6 +33,7 @@ const lookup = {
   ...VectorFoundations,
   ...VectorCompression,
   ...VectorProduction,
+  ...VectorSystems,
 };
 
 describe("lookup", () => {

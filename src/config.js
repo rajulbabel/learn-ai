@@ -157,6 +157,13 @@ export const chapters = [
   { id: "11.26", title: "Embedding Lifecycle & Re-embedding", section: 11, component: "EmbeddingLifecycle" },
   { id: "11.27", title: "Observability", section: 11, component: "Observability" },
   { id: "11.28", title: "Capacity Planning & Cost Models", section: 11, component: "CapacityPlanning" },
+  { id: "11.29", title: "FAISS", section: 11, component: "FAISS" },
+  { id: "11.30", title: "pgvector", section: 11, component: "Pgvector" },
+  { id: "11.31", title: "Qdrant", section: 11, component: "Qdrant" },
+  { id: "11.32", title: "Pinecone", section: 11, component: "Pinecone" },
+  { id: "11.33", title: "Qdrant vs Pinecone", section: 11, component: "QdrantVsPinecone" },
+  { id: "11.34", title: "Weaviate / Milvus / Chroma", section: 11, component: "WeaviateMilvusChroma" },
+  { id: "11.35", title: "The Decision Framework", section: 11, component: "DecisionFramework" },
 ];
 
 export const sectionNames = {

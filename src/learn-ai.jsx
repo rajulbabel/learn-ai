@@ -37,6 +37,7 @@ const sectionLoaders = {
       import("./sections/vector-foundations.jsx"),
       import("./sections/vector-compression.jsx"),
       import("./sections/vector-production.jsx"),
+      import("./sections/vector-systems.jsx"),
     ]).then((mods) => Object.assign({}, ...mods)),
 };
 

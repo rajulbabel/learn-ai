@@ -1478,6 +1478,44 @@ describe("CapacityPlanning (11.28) content", () => {
   });
 });
 
+describe("WeaviateMilvusChroma (11.34) content", () => {
+  const fn = VectorSystems.WeaviateMilvusChroma;
+
+  it("sub=0 describes Weaviate - Go, self-host, modules", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/Weaviate/i);
+    expect(container.textContent).toMatch(/Go|self[- ]?host/i);
+    expect(container.textContent).toMatch(/module|transformer|generative/i);
+  });
+
+  it("sub=1 describes Milvus distributed-native", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/Milvus/i);
+    expect(container.textContent).toMatch(/distributed|billion/i);
+    expect(container.textContent).toMatch(/Azure|AI Search|core/i);
+  });
+
+  it("sub=2 describes Chroma Python-first local embedded", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/Chroma/i);
+    expect(container.textContent).toMatch(/Python|local|embedded/i);
+    expect(container.textContent).toMatch(/prototype|small/i);
+  });
+
+  it("sub=3 describes Elastic / OpenSearch dense_vector", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/Elastic|OpenSearch/i);
+    expect(container.textContent).toMatch(/dense_vector/i);
+    expect(container.textContent).toMatch(/existing|already/i);
+  });
+
+  it("sub=4 summarizes context-dependent picks", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/Weaviate|Milvus|Chroma|Elastic/i);
+    expect(container.textContent).toMatch(/context|pick|fit/i);
+  });
+});
+
 describe("QdrantVsPinecone (11.33) content", () => {
   const fn = VectorSystems.QdrantVsPinecone;
 

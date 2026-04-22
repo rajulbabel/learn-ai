@@ -862,6 +862,50 @@ describe("ProductQuantization (11.14) content", () => {
   });
 });
 
+describe("BinaryQuantization (11.15) content", () => {
+  const fn = VectorCompression.BinaryQuantization;
+
+  it("sub=0 shows float32 vector at d=1024 as 4 KB", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/1024/);
+    expect(container.textContent).toMatch(/4 KB|4096/);
+    expect(container.textContent).toMatch(/float32/i);
+  });
+
+  it("sub=1 takes the sign of each dimension for 1 bit", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/sign/i);
+    expect(container.textContent).toMatch(/1 bit|128 bytes/);
+    expect(container.textContent).toMatch(/32[x×]|32 times/i);
+  });
+
+  it("sub=2 computes Hamming via XOR and popcount", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/Hamming/i);
+    expect(container.textContent).toMatch(/XOR/i);
+    expect(container.textContent).toMatch(/popcount/i);
+  });
+
+  it("sub=3 shows high-d embeddings keep recall", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/recall/i);
+    expect(container.textContent).toMatch(/95%|high/i);
+    expect(container.textContent).toMatch(/768|1024|BERT/);
+  });
+
+  it("sub=4 shows low-d collapse", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/low|collapse|128|drop/i);
+    expect(container.textContent).toMatch(/recall/i);
+  });
+
+  it("sub=5 shows production use with rerank", () => {
+    const { container } = render(fn(makeCtx({ sub: 5 })));
+    expect(container.textContent).toMatch(/Qdrant|Pinecone/);
+    expect(container.textContent).toMatch(/rerank|stage/i);
+  });
+});
+
 // ─── TOC special branches ───
 describe("TOC", () => {
   it("renders section list", () => {

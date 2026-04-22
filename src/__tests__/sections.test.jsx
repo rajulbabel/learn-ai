@@ -630,6 +630,56 @@ describe("HNSWSearch (11.9) content", () => {
   });
 });
 
+describe("HNSWParameters (11.10) content", () => {
+  const fn = VectorFoundations.HNSWParameters;
+
+  it("sub=0 introduces the three knobs with defaults", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/M/);
+    expect(container.textContent).toMatch(/ef_construction/i);
+    expect(container.textContent).toMatch(/ef_search/i);
+    expect(container.textContent).toMatch(/16/);
+    expect(container.textContent).toMatch(/200/);
+    expect(container.textContent).toMatch(/50/);
+  });
+
+  it("sub=1 shows M controls recall-memory tradeoff", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/M/);
+    expect(container.textContent).toMatch(/recall/i);
+    expect(container.textContent).toMatch(/memory|byte/i);
+  });
+
+  it("sub=2 covers ef_construction as build-time quality vs build time", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/ef_construction/i);
+    expect(container.textContent).toMatch(/build/i);
+  });
+
+  it("sub=3 shows ef_search as the main query-time dial", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/ef_search/i);
+    expect(container.textContent).toMatch(/recall/i);
+    expect(container.textContent).toMatch(/latency|ms/i);
+  });
+
+  it("sub=4 shows recall curves at M = 8, 16, 32", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/M\s*=\s*8|M = 8/);
+    expect(container.textContent).toMatch(/M\s*=\s*16/);
+    expect(container.textContent).toMatch(/M\s*=\s*32/);
+    expect(container.textContent).toMatch(/curve|recall/i);
+  });
+
+  it("sub=5 shows memory math and a raise-this-parameter playbook", () => {
+    const { container } = render(fn(makeCtx({ sub: 5 })));
+    expect(container.textContent).toMatch(/memory/i);
+    expect(container.textContent).toMatch(/100M|100,000,000|320 GB/);
+    expect(container.textContent).toMatch(/playbook|raise|lower/i);
+    expect(container.textContent).toMatch(/ef_search/i);
+  });
+});
+
 // ─── TOC special branches ───
 describe("TOC", () => {
   it("renders section list", () => {

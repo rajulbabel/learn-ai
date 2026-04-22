@@ -140,6 +140,11 @@ export const chapters = [
   { id: "11.9", title: "HNSW Search", section: 11, component: "HNSWSearch" },
   { id: "11.10", title: "HNSW Parameters", section: 11, component: "HNSWParameters" },
   { id: "11.11", title: "Vamana / DiskANN", section: 11, component: "Vamana" },
+  { id: "11.12", title: "The Memory Wall", section: 11, component: "MemoryWall" },
+  { id: "11.13", title: "Scalar Quantization", section: 11, component: "ScalarQuantization" },
+  { id: "11.14", title: "Product Quantization (+ OPQ)", section: 11, component: "ProductQuantization" },
+  { id: "11.15", title: "Binary Quantization", section: 11, component: "BinaryQuantization" },
+  { id: "11.16", title: "Matryoshka Embeddings", section: 11, component: "Matryoshka" },
 ];
 
 export const sectionNames = {

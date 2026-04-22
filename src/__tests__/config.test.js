@@ -141,7 +141,7 @@ describe("Section 11 registration", () => {
 });
 
 describe("Section 11 chapters", () => {
-  it("has chapters 11.1 through 11.11 in order", () => {
+  it("has chapters 11.1 through 11.16 in order", () => {
     const section11 = chapters.filter((ch) => ch.section === 11);
     const expected = [
       { id: "11.1", component: "RetrievalProblem", title: "The Retrieval Problem" },
@@ -155,6 +155,11 @@ describe("Section 11 chapters", () => {
       { id: "11.9", component: "HNSWSearch", title: "HNSW Search" },
       { id: "11.10", component: "HNSWParameters", title: "HNSW Parameters" },
       { id: "11.11", component: "Vamana", title: "Vamana / DiskANN" },
+      { id: "11.12", component: "MemoryWall", title: "The Memory Wall" },
+      { id: "11.13", component: "ScalarQuantization", title: "Scalar Quantization" },
+      { id: "11.14", component: "ProductQuantization", title: "Product Quantization (+ OPQ)" },
+      { id: "11.15", component: "BinaryQuantization", title: "Binary Quantization" },
+      { id: "11.16", component: "Matryoshka", title: "Matryoshka Embeddings" },
     ];
     expect(section11.length).toBe(expected.length);
     expected.forEach((exp, i) => {

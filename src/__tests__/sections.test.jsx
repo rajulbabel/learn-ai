@@ -1478,6 +1478,51 @@ describe("CapacityPlanning (11.28) content", () => {
   });
 });
 
+describe("Qdrant (11.31) content", () => {
+  const fn = VectorSystems.Qdrant;
+
+  it("sub=0 frames Qdrant as a Rust open-source vector DB", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/Qdrant/);
+    expect(container.textContent).toMatch(/Rust/i);
+    expect(container.textContent).toMatch(/open[- ]?source|self[- ]?host/i);
+  });
+
+  it("sub=1 describes HNSW with inline filter during traversal", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/HNSW/);
+    expect(container.textContent).toMatch(/inline|filter|traversal/i);
+    expect(container.textContent).toMatch(/payload/i);
+  });
+
+  it("sub=2 describes collections and payload metadata", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/collection/i);
+    expect(container.textContent).toMatch(/payload|metadata/i);
+    expect(container.textContent).toMatch(/multi[- ]?vector/i);
+  });
+
+  it("sub=3 lists built-in features including quantization variants", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/hybrid/i);
+    expect(container.textContent).toMatch(/quantization|scalar|binary/i);
+    expect(container.textContent).toMatch(/SQ|PQ|BQ/);
+  });
+
+  it("sub=4 covers the self-host deployment story", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/binary|Docker|Kubernetes/i);
+    expect(container.textContent).toMatch(/self[- ]?host|operator/i);
+  });
+
+  it("sub=5 names the tradeoffs", () => {
+    const { container } = render(fn(makeCtx({ sub: 5 })));
+    expect(container.textContent).toMatch(/ops|operational/i);
+    expect(container.textContent).toMatch(/multi[- ]?region|ecosystem/i);
+    expect(container.textContent).toMatch(/Elastic|smaller/i);
+  });
+});
+
 describe("Pgvector (11.30) content", () => {
   const fn = VectorSystems.Pgvector;
 

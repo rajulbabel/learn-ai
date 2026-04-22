@@ -767,6 +767,50 @@ describe("MemoryWall (11.12) content", () => {
   });
 });
 
+describe("ScalarQuantization (11.13) content", () => {
+  const fn = VectorCompression.ScalarQuantization;
+
+  it("sub=0 shows a float32 vector with 4-byte dimensions", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/float32/i);
+    expect(container.textContent).toMatch(/4 bytes/i);
+  });
+
+  it("sub=1 describes per-dimension min/max calibration", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/min/i);
+    expect(container.textContent).toMatch(/max/i);
+    expect(container.textContent).toMatch(/calibrat|scan/i);
+  });
+
+  it("sub=2 shows the linear map to [0, 255]", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/255/);
+    expect(container.textContent).toMatch(/round/i);
+  });
+
+  it("sub=3 shows before/after quantized values", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/int8/i);
+    expect(container.textContent).toMatch(/before/i);
+    expect(container.textContent).toMatch(/after/i);
+  });
+
+  it("sub=4 highlights SIMD int8 speed", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/SIMD/);
+    expect(container.textContent).toMatch(/int8/i);
+    expect(container.textContent).toMatch(/faster|speedup/i);
+  });
+
+  it("sub=5 shows 4x memory win for 1-3% recall loss", () => {
+    const { container } = render(fn(makeCtx({ sub: 5 })));
+    expect(container.textContent).toMatch(/4[x×]|4 times/i);
+    expect(container.textContent).toMatch(/1-3%|recall loss|recall drop/i);
+    expect(container.textContent).toMatch(/768|bytes per vector/i);
+  });
+});
+
 // ─── TOC special branches ───
 describe("TOC", () => {
   it("renders section list", () => {

@@ -455,6 +455,49 @@ describe("IVF (11.5) content", () => {
   });
 });
 
+describe("ANNFamilyTree (11.6) content", () => {
+  const fn = VectorFoundations.ANNFamilyTree;
+
+  it("sub=0 frames sub-linear search as the goal", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/sub[- ]?linear|log\s*N/i);
+    expect(container.textContent).toMatch(/1 billion|1B|million/i);
+  });
+
+  it("sub=1 covers KD-trees and the curse of dimensionality", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/kd[- ]?tree/i);
+    expect(container.textContent).toMatch(/curse of dimensionality/i);
+    expect(container.textContent).toMatch(/768|high dim/i);
+  });
+
+  it("sub=2 explains LSH as hash-based bucketing", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/LSH|locality[- ]?sensitive/i);
+    expect(container.textContent).toMatch(/hash|bucket/i);
+  });
+
+  it("sub=3 recaps IVF clustering as partition-and-probe", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/IVF|cluster/i);
+    expect(container.textContent).toMatch(/partition/i);
+  });
+
+  it("sub=4 introduces HNSW and Vamana as graph indexes", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/HNSW/);
+    expect(container.textContent).toMatch(/Vamana/);
+    expect(container.textContent).toMatch(/graph|edge|node/i);
+  });
+
+  it("sub=5 explains why graphs won in production", () => {
+    const { container } = render(fn(makeCtx({ sub: 5 })));
+    expect(container.textContent).toMatch(/production|ann[- ]?benchmarks/i);
+    expect(container.textContent).toMatch(/HNSW/);
+    expect(container.textContent).toMatch(/Qdrant|Weaviate|Milvus|FAISS/);
+  });
+});
+
 // ─── TOC special branches ───
 describe("TOC", () => {
   it("renders section list", () => {

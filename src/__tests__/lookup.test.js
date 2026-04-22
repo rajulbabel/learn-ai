@@ -15,6 +15,7 @@ import * as EncoderDecoderDiagrams from "../sections/encoder-decoder-diagrams.js
 import * as ModernLLMTechniques from "../sections/modern-llm-techniques.jsx";
 import * as VectorFoundations from "../sections/vector-foundations.jsx";
 import * as VectorCompression from "../sections/vector-compression.jsx";
+import * as VectorProduction from "../sections/vector-production.jsx";
 
 const lookup = {
   TOC,
@@ -30,6 +31,7 @@ const lookup = {
   ...ModernLLMTechniques,
   ...VectorFoundations,
   ...VectorCompression,
+  ...VectorProduction,
 };
 
 describe("lookup", () => {

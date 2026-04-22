@@ -141,7 +141,7 @@ describe("Section 11 registration", () => {
 });
 
 describe("Section 11 chapters", () => {
-  it("has chapters 11.1 through 11.18 in order", () => {
+  it("has chapters 11.1 through 11.28 in order", () => {
     const section11 = chapters.filter((ch) => ch.section === 11);
     const expected = [
       { id: "11.1", component: "RetrievalProblem", title: "The Retrieval Problem" },
@@ -162,6 +162,16 @@ describe("Section 11 chapters", () => {
       { id: "11.16", component: "Matryoshka", title: "Matryoshka Embeddings" },
       { id: "11.17", component: "IVFPQ", title: "IVF-PQ" },
       { id: "11.18", component: "HNSWPQ", title: "HNSW + PQ" },
+      { id: "11.19", component: "Filtering", title: "Filtering" },
+      { id: "11.20", component: "UpdatesDeletes", title: "Updates & Deletes" },
+      { id: "11.21", component: "Sharding", title: "Sharding & Partitioning" },
+      { id: "11.22", component: "Replication", title: "Replication & High Availability" },
+      { id: "11.23", component: "HybridSearch", title: "Hybrid Search" },
+      { id: "11.24", component: "Rerankers", title: "Rerankers" },
+      { id: "11.25", component: "MultiVectorRetrieval", title: "Multi-vector Retrieval (ColBERT-style)" },
+      { id: "11.26", component: "EmbeddingLifecycle", title: "Embedding Lifecycle & Re-embedding" },
+      { id: "11.27", component: "Observability", title: "Observability" },
+      { id: "11.28", component: "CapacityPlanning", title: "Capacity Planning & Cost Models" },
     ];
     expect(section11.length).toBe(expected.length);
     expected.forEach((exp, i) => {

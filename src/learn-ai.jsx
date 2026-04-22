@@ -33,9 +33,11 @@ const sectionLoaders = {
       (mods) => Object.assign({}, ...mods),
     ),
   11: () =>
-    Promise.all([import("./sections/vector-foundations.jsx"), import("./sections/vector-compression.jsx")]).then(
-      (mods) => Object.assign({}, ...mods),
-    ),
+    Promise.all([
+      import("./sections/vector-foundations.jsx"),
+      import("./sections/vector-compression.jsx"),
+      import("./sections/vector-production.jsx"),
+    ]).then((mods) => Object.assign({}, ...mods)),
 };
 
 // ── Lazy-loaded search: not loaded until search is opened ──

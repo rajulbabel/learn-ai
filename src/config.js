@@ -147,6 +147,16 @@ export const chapters = [
   { id: "11.16", title: "Matryoshka Embeddings", section: 11, component: "Matryoshka" },
   { id: "11.17", title: "IVF-PQ", section: 11, component: "IVFPQ" },
   { id: "11.18", title: "HNSW + PQ", section: 11, component: "HNSWPQ" },
+  { id: "11.19", title: "Filtering", section: 11, component: "Filtering" },
+  { id: "11.20", title: "Updates & Deletes", section: 11, component: "UpdatesDeletes" },
+  { id: "11.21", title: "Sharding & Partitioning", section: 11, component: "Sharding" },
+  { id: "11.22", title: "Replication & High Availability", section: 11, component: "Replication" },
+  { id: "11.23", title: "Hybrid Search", section: 11, component: "HybridSearch" },
+  { id: "11.24", title: "Rerankers", section: 11, component: "Rerankers" },
+  { id: "11.25", title: "Multi-vector Retrieval (ColBERT-style)", section: 11, component: "MultiVectorRetrieval" },
+  { id: "11.26", title: "Embedding Lifecycle & Re-embedding", section: 11, component: "EmbeddingLifecycle" },
+  { id: "11.27", title: "Observability", section: 11, component: "Observability" },
+  { id: "11.28", title: "Capacity Planning & Cost Models", section: 11, component: "CapacityPlanning" },
 ];
 
 export const sectionNames = {

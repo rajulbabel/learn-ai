@@ -128,6 +128,42 @@ export const chapters = [
   },
   { id: "10.3", title: "Mixture of Experts - Bigger Model, Same Compute", section: 10, component: "MixtureOfExperts" },
   { id: "10.4", title: "Thinking - How Reasoning Models Work", section: 10, component: "Thinking" },
+  // Section 11: Vector Databases
+  { id: "11.1", title: "The Retrieval Problem", section: 11, component: "RetrievalProblem" },
+  { id: "11.2", title: "Brute-Force kNN", section: 11, component: "BruteForceKNN" },
+  { id: "11.3", title: "The Three-Way Tradeoff", section: 11, component: "ThreeWayTradeoff" },
+  { id: "11.4", title: "Distance Metrics", section: 11, component: "DistanceMetrics" },
+  { id: "11.5", title: "IVF (Inverted File Index)", section: 11, component: "IVF" },
+  { id: "11.6", title: "The ANN Family Tree", section: 11, component: "ANNFamilyTree" },
+  { id: "11.7", title: "HNSW - The Small-World Intuition", section: 11, component: "HNSWIntuition" },
+  { id: "11.8", title: "HNSW Construction", section: 11, component: "HNSWConstruction" },
+  { id: "11.9", title: "HNSW Search", section: 11, component: "HNSWSearch" },
+  { id: "11.10", title: "HNSW Parameters", section: 11, component: "HNSWParameters" },
+  { id: "11.11", title: "Vamana / DiskANN", section: 11, component: "Vamana" },
+  { id: "11.12", title: "The Memory Wall", section: 11, component: "MemoryWall" },
+  { id: "11.13", title: "Scalar Quantization", section: 11, component: "ScalarQuantization" },
+  { id: "11.14", title: "Product Quantization (+ OPQ)", section: 11, component: "ProductQuantization" },
+  { id: "11.15", title: "Binary Quantization", section: 11, component: "BinaryQuantization" },
+  { id: "11.16", title: "Matryoshka Embeddings", section: 11, component: "Matryoshka" },
+  { id: "11.17", title: "IVF-PQ", section: 11, component: "IVFPQ" },
+  { id: "11.18", title: "HNSW + PQ", section: 11, component: "HNSWPQ" },
+  { id: "11.19", title: "Filtering", section: 11, component: "Filtering" },
+  { id: "11.20", title: "Updates & Deletes", section: 11, component: "UpdatesDeletes" },
+  { id: "11.21", title: "Sharding & Partitioning", section: 11, component: "Sharding" },
+  { id: "11.22", title: "Replication & High Availability", section: 11, component: "Replication" },
+  { id: "11.23", title: "Hybrid Search", section: 11, component: "HybridSearch" },
+  { id: "11.24", title: "Rerankers", section: 11, component: "Rerankers" },
+  { id: "11.25", title: "Multi-vector Retrieval (ColBERT-style)", section: 11, component: "MultiVectorRetrieval" },
+  { id: "11.26", title: "Embedding Lifecycle & Re-embedding", section: 11, component: "EmbeddingLifecycle" },
+  { id: "11.27", title: "Observability", section: 11, component: "Observability" },
+  { id: "11.28", title: "Capacity Planning & Cost Models", section: 11, component: "CapacityPlanning" },
+  { id: "11.29", title: "FAISS", section: 11, component: "FAISS" },
+  { id: "11.30", title: "pgvector", section: 11, component: "Pgvector" },
+  { id: "11.31", title: "Qdrant", section: 11, component: "Qdrant" },
+  { id: "11.32", title: "Pinecone", section: 11, component: "Pinecone" },
+  { id: "11.33", title: "Qdrant vs Pinecone", section: 11, component: "QdrantVsPinecone" },
+  { id: "11.34", title: "Weaviate / Milvus / Chroma", section: 11, component: "WeaviateMilvusChroma" },
+  { id: "11.35", title: "The Decision Framework", section: 11, component: "DecisionFramework" },
 ];
 
 export const sectionNames = {
@@ -142,6 +178,7 @@ export const sectionNames = {
   8: "The Encoder",
   9: "The Decoder",
   10: "Modern LLM Techniques",
+  11: "Vector Databases",
 };
 
 // Section colors (one per section, used in progress bar, TOC, etc.)
@@ -156,6 +193,7 @@ export const sectionColors = {
   8: "#42a5f5",
   9: "#ef5350",
   10: "#26a69a",
+  11: "#f06292",
 };
 
 // Colors

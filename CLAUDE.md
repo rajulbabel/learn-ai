@@ -215,6 +215,46 @@ Only config.js IDs change.
 | 10.3 | MixtureOfExperts | Mixture of Experts - Bigger Model, Same Compute |
 | 10.4 | Thinking | Thinking - How Reasoning Models Work |
 
+**Section 11: Vector Databases** (`vector-foundations.jsx` + `vector-compression.jsx` + `vector-production.jsx` + `vector-systems.jsx` - Milestones 1-6 of 6 complete)
+
+| Chapter | Component | Title |
+|---------|-----------|-------|
+| 11.1 | RetrievalProblem | The Retrieval Problem |
+| 11.2 | BruteForceKNN | Brute-Force kNN |
+| 11.3 | ThreeWayTradeoff | The Three-Way Tradeoff |
+| 11.4 | DistanceMetrics | Distance Metrics |
+| 11.5 | IVF | IVF (Inverted File Index) |
+| 11.6 | ANNFamilyTree | The ANN Family Tree |
+| 11.7 | HNSWIntuition | HNSW - The Small-World Intuition |
+| 11.8 | HNSWConstruction | HNSW Construction |
+| 11.9 | HNSWSearch | HNSW Search |
+| 11.10 | HNSWParameters | HNSW Parameters |
+| 11.11 | Vamana | Vamana / DiskANN |
+| 11.12 | MemoryWall | The Memory Wall |
+| 11.13 | ScalarQuantization | Scalar Quantization |
+| 11.14 | ProductQuantization | Product Quantization (+ OPQ) |
+| 11.15 | BinaryQuantization | Binary Quantization |
+| 11.16 | Matryoshka | Matryoshka Embeddings |
+| 11.17 | IVFPQ | IVF-PQ |
+| 11.18 | HNSWPQ | HNSW + PQ |
+| 11.19 | Filtering | Filtering |
+| 11.20 | UpdatesDeletes | Updates & Deletes |
+| 11.21 | Sharding | Sharding & Partitioning |
+| 11.22 | Replication | Replication & High Availability |
+| 11.23 | HybridSearch | Hybrid Search |
+| 11.24 | Rerankers | Rerankers |
+| 11.25 | MultiVectorRetrieval | Multi-vector Retrieval (ColBERT-style) |
+| 11.26 | EmbeddingLifecycle | Embedding Lifecycle & Re-embedding |
+| 11.27 | Observability | Observability |
+| 11.28 | CapacityPlanning | Capacity Planning & Cost Models |
+| 11.29 | FAISS | FAISS |
+| 11.30 | Pgvector | pgvector |
+| 11.31 | Qdrant | Qdrant |
+| 11.32 | Pinecone | Pinecone |
+| 11.33 | QdrantVsPinecone | Qdrant vs Pinecone |
+| 11.34 | WeaviateMilvusChroma | Weaviate / Milvus / Chroma |
+| 11.35 | DecisionFramework | The Decision Framework |
+
 ## Project Structure
 
 ```
@@ -248,7 +288,11 @@ learn-ai/
 │       ├── attention-computation.jsx     # Section 7 (+ CausalMask/CrossAttention in 9)
 │       ├── transformer-block.jsx        # Section 8 (Add&Norm, FFN, block repeats)
 │       ├── encoder-decoder-diagrams.jsx # Section 9 (Training/Inference flow diagrams)
-│       └── modern-llm-techniques.jsx    # Section 10 (MoE, Thinking)
+│       ├── modern-llm-techniques.jsx    # Section 10 (MoE, Thinking)
+│       ├── vector-foundations.jsx        # Section 11 (Acts 1+2, chapters 11.1-11.11)
+│       ├── vector-compression.jsx        # Section 11 (Acts 3+4, chapters 11.12-11.18)
+│       ├── vector-production.jsx         # Section 11 (Act 5, chapters 11.19-11.28)
+│       └── vector-systems.jsx            # Section 11 (Act 6, chapters 11.29-11.35)
 ├── .github/workflows/deploy.yml
 └── CLAUDE.md
 ```

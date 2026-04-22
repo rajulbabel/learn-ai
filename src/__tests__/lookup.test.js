@@ -13,6 +13,10 @@ import * as AttentionComputation from "../sections/attention-computation.jsx";
 import * as TransformerBlock from "../sections/transformer-block.jsx";
 import * as EncoderDecoderDiagrams from "../sections/encoder-decoder-diagrams.jsx";
 import * as ModernLLMTechniques from "../sections/modern-llm-techniques.jsx";
+import * as VectorFoundations from "../sections/vector-foundations.jsx";
+import * as VectorCompression from "../sections/vector-compression.jsx";
+import * as VectorProduction from "../sections/vector-production.jsx";
+import * as VectorSystems from "../sections/vector-systems.jsx";
 
 const lookup = {
   TOC,
@@ -26,6 +30,10 @@ const lookup = {
   ...TransformerBlock,
   ...EncoderDecoderDiagrams,
   ...ModernLLMTechniques,
+  ...VectorFoundations,
+  ...VectorCompression,
+  ...VectorProduction,
+  ...VectorSystems,
 };
 
 describe("lookup", () => {
@@ -43,5 +51,13 @@ describe("lookup", () => {
   it("lookup has exactly the right number of components", () => {
     const componentNames = new Set(chapters.map((c) => c.component));
     expect(componentNames.size).toBe(chapters.length);
+  });
+
+  it("vector-foundations.jsx exports all Milestone 1 chapter components", async () => {
+    const mod = await import("../sections/vector-foundations.jsx");
+    expect(typeof mod.RetrievalProblem).toBe("function");
+    expect(typeof mod.BruteForceKNN).toBe("function");
+    expect(typeof mod.ThreeWayTradeoff).toBe("function");
+    expect(typeof mod.DistanceMetrics).toBe("function");
   });
 });

@@ -136,5 +136,99 @@
     "Three data source cards for training reasoning models covering existing chain-of-thought in pre-training data, synthetic generation with a verifier filter, and rejection sampling from the model itself",
     "Annotated reasoning trace demonstrating emergent self-correction, verification, and confidence-calibration patterns that arose purely from the reward signal",
     "Two-column honest scope table listing domains where reasoning helps (math, code, logic) and domains where it does not lift quality (creative writing, empathy, casual conversation)"
+  ],
+  "11.1": [
+    "Retrieval diagram with a yellow query box on the left for the phrase about cats pointing an arrow into a cloud of ten numbered document dots, where the three dots closest to the query (documents 1, 3, and 7 - all cat-related sentences) are highlighted green as the top-3 nearest neighbors and the remaining seven dots are dimmed"
+  ],
+  "11.2": [
+    "Rightward purple arrow labeled production uses this, pointing from the exact brute-force card on the left to the approximate nearest neighbor (ANN) card on the right, illustrating the tradeoff from exact slow search to approximate fast search"
+  ],
+  "11.3": [
+    "Equilateral tradeoff triangle with Recall at the top vertex in cyan, Latency at the bottom-left vertex in orange, and Memory at the bottom-right vertex in yellow, introducing the three axes every vector-database decision must balance",
+    "Equilateral tradeoff triangle with Recall, Latency, and Memory at the vertices and interior labels mapping each family of techniques to its direction of movement - Indexing trades latency for memory, Quantization trades memory for recall, Filtering and sharding push on all three corners"
+  ],
+  "11.4": [
+    "Two vectors drawn from the origin - a cyan query vector q and a green document vector d - with a small yellow angle theta between them, illustrating that cosine similarity measures the angle between vectors and that a tight angle means cos(theta) is close to 1.0",
+    "Right triangle with two points q and d in 2D, a horizontal dashed leg labeled as the x-axis difference and a vertical dashed leg labeled as the y-axis difference, and the blue hypotenuse highlighted as the L2 distance equal to the square root of the sum of squared differences (Pythagoras in d dimensions)"
+  ],
+  "11.5": [
+    "Scatter plot of the 10 cat-corpus documents with the query vector at the center and faint red lines fanning out to every dot, showing that brute-force kNN compares the query to every vector",
+    "Same 10 docs colored by k-means cluster after running with nlist = 3: purple centroid A among the cat docs, yellow centroid B around the dog docs, cyan centroid C around the other docs",
+    "Same scatter with dashed colored rectangles behind the dots approximating Voronoi cells, showing each doc belongs to exactly one cell",
+    "Query vector with an orange arrow pointing at centroid A (the nearest centroid), cluster A highlighted and other clusters dimmed, illustrating nprobe = 1 where only one cluster is scanned",
+    "Small IVF scatter with nprobe = 1: only the nearest cluster is probed",
+    "Small IVF scatter with nprobe = 2: the two nearest clusters are probed",
+    "Small IVF scatter with nprobe = 3: all three clusters are probed, equivalent to a full scan"
+  ],
+  "11.6": [
+    "KD-tree recursive partition of a 2D point cloud - vertical split down the middle, horizontal splits in each half, one more vertical split in a quadrant - showing clean logarithmic partitioning at low dimensions",
+    "Two-dimensional space with three random hyperplane lines slicing it; vectors in the same intersection share a 3-bit LSH hash code like 011 or 100",
+    "Small IVF recap scatter - three Voronoi cells with the query probing the nearest one",
+    "Proximity graph of the 10 cat-corpus documents with edges connecting each node to its two or three nearest neighbors, and a highlighted green path from the lower-right birds/fish doc across several hops to the cat cluster",
+    "Illustrative recall vs queries-per-second scatter inspired by ann-benchmarks: HNSW and Vamana sit on the upper-right Pareto frontier, while IVF+PQ, LSH, and KD-tree fall below and to the left"
+  ],
+  "11.7": [
+    "Flat proximity graph of the 10 cat-corpus documents with each node connected by cyan edges to its two or three nearest neighbors - the starting point before any hierarchy is added",
+    "Same flat graph with a dashed red greedy-search path meandering across many nodes before reaching the cat cluster, illustrating that random-start greedy search on a flat graph is slow",
+    "Two-layer HNSW illustration - bottom cyan layer is the flat proximity graph of all 10 docs, top yellow layer holds three hub nodes (docs 1, 6, 10) with yellow long-range edges between them",
+    "Three-layer HNSW illustration - bottom cyan all-nodes layer, middle yellow hub layer with long-range edges, top red hub-of-hubs layer with a single global entry-point node"
+  ],
+  "11.8": [
+    "First vector inserted into an empty HNSW graph - a single cyan dot labeled doc 1 marked as the entry point, with no edges or neighbors yet"
+  ],
+  "11.9": [
+    "Three-tier HNSW diagram where the query enters at the top layer entry-point node, with the lower layers still untouched",
+    "Greedy descent at layer 2 picks the closest hub neighbor to the query and hops there, highlighted in green",
+    "Search drops from layer 2 to layer 1 to layer 0 along green vertical edges whenever no neighbor on the current layer is closer to the query",
+    "At layer 0 three candidate nodes (docs 1, 3, 7) are highlighted green inside the beam as it starts expanding neighbors",
+    "Beam expansion at layer 0 shown as purple edges between candidate nodes; when the best candidate stops changing the beam has converged",
+    "Complete HNSW search path - green edges from the layer-2 entry through layer 1 down to the layer-0 beam, which converges on docs 1, 3, and 7"
+  ],
+  "11.10": [
+    "Line chart plotting recall@10 against ef_search on a log horizontal axis, with three curves for M = 8 (cyan), M = 16 (yellow), and M = 32 (green); higher M curves converge closer to 1.0 but require more memory"
+  ],
+  "11.11": [
+    "Single-layer Vamana graph over the 10 cat-corpus documents - a handful of diverse edges per node, no hierarchical layers above it",
+    "Graph node with five redundant short edges all clustered in one direction - the before state where searches can get stuck",
+    "Same node after alpha-pruning: four neighbors in different directions across the 2D space, keeping the graph navigable from anywhere",
+    "Storage hierarchy diagram - top layer shows a RAM cache with a small subset of high-degree entry nodes, bottom layer shows the SSD storing every graph node as 4 KB blocks aligned to NVMe pages"
+  ],
+  "11.15": [
+    "Curve showing binary quantization recall rising sharply with embedding dimension - near zero at d=64, rising past 0.9 around d=512, plateauing around 0.96 at d=1024 and higher, illustrating why binary works for high-dim BERT-style embeddings but collapses at low dimensions"
+  ],
+  "11.16": [
+    "Long horizontal vector bar divided into colored prefix regions at 256, 512, 1024, and 3072 dimensions, each prefix labeled as a valid Matryoshka truncation so early-dimension subsets are usable embeddings",
+    "Four concentric circles representing Matryoshka embedding prefixes - innermost red 256 dims, then orange 512, yellow 1024, and green 3072 - resembling nested Russian dolls where each ring is itself a complete embedding"
+  ],
+  "11.17": [
+    "Cat-corpus 2D scatter partitioned into three IVF clusters after k-means with nlist = 3: five cat docs form cluster A around the purple centroid square C_A, two dog docs form cluster B around the yellow centroid C_B, and three other docs form cluster C around the cyan centroid C_C, illustrating step 1 of IVF-PQ which clusters the space first",
+    "IVF-PQ search trajectory on the 10-doc cat corpus: the query vector sits inside cluster A, an orange arrow points to the closest centroid C_A, the two nearest cells A and B are highlighted as probed while cluster C is dimmed as skipped, illustrating nprobe = 2 where only the two nearest clusters get their PQ codes scanned"
+  ],
+  "11.18": [
+    "Three-layer HNSW graph with each node labeled by a compact PQ code like [c17, c203, c89, ...] instead of a float vector. The bottom cyan layer holds all eight docs with dense edges, the middle yellow layer holds three hub nodes with long-range edges, and the top red layer has a single global entry-point node. Green dashed vertical lines are layer-to-layer links, illustrating that HNSW + PQ keeps the graph structure and only changes the node payload from float32 vectors to PQ codes"
+  ],
+  "11.19": [
+    "Three-stage filter funnel for the pre-filter strategy. Wide yellow trapezoid represents 1 million vectors in the corpus, middle narrowing trapezoid represents the approximately 1,000 docs that pass the tenant_id and published_year predicates, and the rightmost green trapezoid represents the final top-3 returned after brute-force similarity search over the survivors.",
+    "Small HNSW-style graph with 10 nodes where the four that pass the predicate are filled in orange and the six that fail are dimmed. Gray edges connect near neighbors and an orange traversal path with arrows visits only the passing nodes 1, 3, 5, and 7, illustrating the Qdrant inline filtered-HNSW approach that evaluates the predicate during graph traversal instead of pre- or post-filtering."
+  ],
+  "11.20": [
+    "Small graph with 8 nodes where central hub node D has edges to A, B, C, E, F, G, and H. Node D is struck through in red to indicate deletion, and every edge touching D is drawn with a dashed red line to indicate a broken route. The remaining edges between the outer-ring nodes are dimmed, showing that removing a hub shatters multiple routing paths at once.",
+    "Line chart plotting recall at 10 on the vertical axis (0.80 to 1.00) against delete percentage on the horizontal axis (0 to 50 percent). The orange curve starts at 0.97 at 0 deletes, dips gently to 0.965 at 10%, then drops through 0.92 at 30% deletes and falls to 0.85 at 50% deletes. A dashed red line at 30% marks the typical rebuild trigger."
+  ],
+  "11.21": [
+    "Random sharding diagram showing a query icon on the left sending fan-out arrows to four shard rectangles labeled shard 0 through shard 3. Each shard holds a mixed scatter of colored dots. Illustrates that random sharding forces every query to hit every shard because any shard may contain the nearest neighbor.",
+    "Semantic sharding diagram showing a query icon on the left sending routing arrows to only two of four shards labeled cats and animals. The dogs and misc shards are dimmed. Illustrates that when shards align with IVF clusters the query can skip the unrelated regions of the embedding space and touch only the shards likely to contain matches."
+  ],
+  "11.22": [
+    "Read-replica topology diagram with five green client circles on the left feeding into a yellow load-balancer box labeled LB, which distributes traffic across four cyan replica boxes labeled R1 through R4 on the right. Illustrates how read replicas hold identical copies of the index and share query load while writes go elsewhere."
+  ],
+  "11.23": [
+    "Hybrid-search flow diagram with a green query icon on the left that splits into two parallel lanes. The upper cyan lane flows to a Vector ANN box emitting a top-N ranked list; the lower yellow lane flows to a BM25 box emitting another top-N list. Both lists arrive at a green merge node labeled RRF on the right. Illustrates the parallel-ranker architecture of hybrid search."
+  ],
+  "11.24": [
+    "Cross-encoder architecture diagram. A row of input token boxes labeled CLS, query, query, SEP, doc, doc, doc, doc, SEP sits at the bottom connected by arrows up into a single wide yellow transformer rectangle spanning all tokens. A green circle labeled score sits at the top. Illustrates that cross-encoder rerankers run full attention over the concatenated query and doc tokens in one forward pass."
+  ],
+  "11.35": [
+    "Four-branch decision flowchart for picking a vector database. A cyan root node labeled 'New vector-search feature' sits at the top; axis one (data size) splits the flow into four buckets - green under 1M, yellow 1M-100M, orange 100M-1B, red over 1B - with each bucket showing recommended systems below (pgvector/Chroma at small scale, Qdrant/Pinecone/pgvector in the middle band, Qdrant multi-node or Milvus at large scale, Milvus/Vespa at billion-plus). Axis 2 ops capacity, axis 3 filter complexity, and axis 4 cost band are listed as follow-on constraints that narrow the shortlist to a single pick."
   ]
 }

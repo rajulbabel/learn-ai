@@ -15,6 +15,10 @@ import * as AttentionComputation from "../sections/attention-computation.jsx";
 import * as TransformerBlock from "../sections/transformer-block.jsx";
 import * as EncoderDecoderDiagrams from "../sections/encoder-decoder-diagrams.jsx";
 import * as ModernLLMTechniques from "../sections/modern-llm-techniques.jsx";
+import * as VectorFoundations from "../sections/vector-foundations.jsx";
+import * as VectorCompression from "../sections/vector-compression.jsx";
+import * as VectorProduction from "../sections/vector-production.jsx";
+import * as VectorSystems from "../sections/vector-systems.jsx";
 
 const lookup = {
   TOC,
@@ -28,6 +32,10 @@ const lookup = {
   ...TransformerBlock,
   ...EncoderDecoderDiagrams,
   ...ModernLLMTechniques,
+  ...VectorFoundations,
+  ...VectorCompression,
+  ...VectorProduction,
+  ...VectorSystems,
 };
 
 afterEach(() => cleanup());
@@ -222,6 +230,1560 @@ describe("Thinking content", () => {
   });
 });
 
+describe("RetrievalProblem (11.1) content", () => {
+  const fn = VectorFoundations.RetrievalProblem;
+
+  it("sub=0 shows embeddings and the 10-doc cat corpus", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/5\.2|embedding/i);
+    expect(container.textContent).toMatch(/cats are small/i);
+    expect(container.textContent).toMatch(/information about cats/i);
+  });
+
+  it("sub=1 frames the retrieval task as top-k similarity", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/top-10|top 10/i);
+    expect(container.textContent).toMatch(/similar/i);
+    expect(container.textContent).toMatch(/retriev/i);
+  });
+
+  it("sub=2 shows N scaling to 1 billion", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/1 billion|1B/);
+    expect(container.textContent).toMatch(/every vector/i);
+  });
+
+  it("sub=3 shows multiple production use cases", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/semantic search/i);
+    expect(container.textContent).toMatch(/recommend|image|RAG/i);
+  });
+
+  it("sub=4 frames the section as a systems problem", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/systems problem|retrieval.*not.*training|indexing/i);
+  });
+});
+
+describe("BruteForceKNN (11.2) content", () => {
+  const fn = VectorFoundations.BruteForceKNN;
+
+  it("sub=0 describes the compute-sort-return-k algorithm", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/compute.*similarit/i);
+    expect(container.textContent).toMatch(/sort/i);
+    expect(container.textContent).toMatch(/top-k|top k/i);
+  });
+
+  it("sub=1 runs brute-force on the 10-doc corpus with cosine", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/cosine/i);
+    expect(container.textContent).toMatch(/cats are small/i);
+    expect(container.textContent).toMatch(/exact/i);
+  });
+
+  it("sub=2 shows slowdown at N = 1 million", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/1,000,000|1 million|1M/);
+    expect(container.textContent).toMatch(/768/);
+  });
+
+  it("sub=3 shows 3 TB memory math at 1 billion scale", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/3\.072 TB|3 TB/);
+    expect(container.textContent).toMatch(/1 billion|1B/);
+    expect(container.textContent).toMatch(/hopeless|not feasible|bottleneck/i);
+  });
+
+  it("sub=4 introduces ANN and recall as the metric", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/ANN|Approximate Nearest Neighbor/);
+    expect(container.textContent).toMatch(/recall/i);
+    expect(container.textContent).toMatch(/99%|0\.99/);
+  });
+
+  // New assertion - lock in the canonical top-3 (docs 1, 3, 7) matching 11.1's SVG
+  it("sub=1 top-3 matches 11.1's highlighted docs (1, 3, 7)", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    const text = container.textContent;
+    // The narrative should reference docs 1, 3, 7 as the top-3
+    expect(text).toMatch(/1.*3.*7|docs? 1.*3.*7|top.*1.*3.*7/is);
+  });
+});
+
+describe("ThreeWayTradeoff (11.3) content", () => {
+  const fn = VectorFoundations.ThreeWayTradeoff;
+
+  it("sub=0 introduces recall, latency, memory as the three axes", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/recall/i);
+    expect(container.textContent).toMatch(/latency/i);
+    expect(container.textContent).toMatch(/memory/i);
+    expect(container.textContent).toMatch(/tradeoff|trade-off|trade off/i);
+  });
+
+  it("sub=1 defines recall@k with concrete 0.9 example", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/recall@k|recall@10/i);
+    expect(container.textContent).toMatch(/0\.9|90%/);
+  });
+
+  it("sub=2 compares brute-force and HNSW latencies", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/100\s?ms/);
+    expect(container.textContent).toMatch(/1\s?ms/);
+    expect(container.textContent).toMatch(/HNSW/);
+  });
+
+  it("sub=3 shows per-vector memory math at d=768", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/3 KB|3072 bytes/);
+    expect(container.textContent).toMatch(/768/);
+  });
+
+  it("sub=4 shows ef_search, compression, replica tradeoffs", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/ef_search/);
+    expect(container.textContent).toMatch(/PQ|compression/i);
+    expect(container.textContent).toMatch(/replica|cache/i);
+  });
+
+  it("sub=5 frames every decision as a tradeoff-triangle move", () => {
+    const { container } = render(fn(makeCtx({ sub: 5 })));
+    expect(container.textContent).toMatch(/algorithm/i);
+    expect(container.textContent).toMatch(/quantization|PQ/i);
+  });
+});
+
+describe("DistanceMetrics (11.4) content", () => {
+  const fn = VectorFoundations.DistanceMetrics;
+
+  it("sub=0 lists cosine, L2, inner product", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/cosine/i);
+    expect(container.textContent).toMatch(/L2|Euclidean/i);
+    expect(container.textContent).toMatch(/inner product|dot product/i);
+  });
+
+  it("sub=1 defines cosine with range and concrete example", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/cosine/i);
+    expect(container.textContent).toMatch(/angle|\[-1, 1\]/);
+  });
+
+  it("sub=1 cosine table uses doc 7 (Kittens) as #2 cat exemplar - matches 11.2 top-3", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    // Doc 7 must appear in the cosine table because 11.2's top-3 is {1, 3, 7}
+    // and doc 7's real cosine (0.9984) beats doc 3's (0.9867). Featuring doc 3
+    // at #2 instead of doc 7 would contradict 11.2's BRUTE_FORCE_SCORES ordering.
+    expect(container.textContent).toContain("doc 7");
+    expect(container.textContent).toContain("Kittens");
+    expect(container.textContent).toContain("0.9984");
+    expect(container.textContent).not.toContain("doc 3 (Lions");
+  });
+
+  it("sub=2 defines L2 as a distance with sqrt", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/L2|Euclidean/i);
+    expect(container.textContent).toMatch(/sqrt|√/);
+    expect(container.textContent).toMatch(/magnitude|smaller|distance/i);
+  });
+
+  it("sub=2 L2 table uses doc 7 (Kittens) as #2 cat exemplar - matches 11.2 top-3", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toContain("doc 7");
+    expect(container.textContent).toContain("Kittens");
+    expect(container.textContent).toContain("0.057");
+    expect(container.textContent).not.toContain("doc 3 (Lions");
+  });
+
+  it("sub=3 highlights inner product speed and SIMD friendliness", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/inner product|dot product/i);
+    expect(container.textContent).toMatch(/SIMD|fastest|no sqrt/i);
+  });
+
+  it("sub=4 shows the normalization identity", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/normalized/i);
+    expect(container.textContent).toMatch(/equivalent|identity|same/i);
+  });
+
+  it("sub=5 gives workload-to-metric guidance", () => {
+    const { container } = render(fn(makeCtx({ sub: 5 })));
+    expect(container.textContent).toMatch(/text|SBERT|OpenAI/i);
+    expect(container.textContent).toMatch(/vision|image/i);
+  });
+});
+
+describe("IVF (11.5) content", () => {
+  const fn = VectorFoundations.IVF;
+
+  it("sub=0 revisits the brute-force-scans-every-vector baseline", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/every vector/i);
+    expect(container.textContent).toMatch(/brute[- ]?force/i);
+    expect(container.textContent).toMatch(/10/);
+  });
+
+  it("sub=1 introduces k-means with nlist = 3 clusters", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/k[- ]?means/i);
+    expect(container.textContent).toMatch(/nlist|3 clusters/i);
+    expect(container.textContent).toMatch(/centroid/i);
+  });
+
+  it("sub=2 draws Voronoi cells around centroids", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/voronoi|cell/i);
+    expect(container.textContent).toMatch(/belongs to|exactly one/i);
+  });
+
+  it("sub=3 probes the single nearest cluster at nprobe = 1", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/nprobe\s*=\s*1/i);
+    expect(container.textContent).toMatch(/nearest|centroid/i);
+  });
+
+  it("sub=4 shows recall vs nprobe tradeoff with concrete numbers", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/nprobe/i);
+    expect(container.textContent).toMatch(/recall/i);
+    expect(container.textContent).toMatch(/0\.8|0\.9|1\.0|100%/);
+  });
+
+  it("sub=5 gives parameter guidance nlist sqrt(N) and nprobe", () => {
+    const { container } = render(fn(makeCtx({ sub: 5 })));
+    expect(container.textContent).toMatch(/sqrt|√/i);
+    expect(container.textContent).toMatch(/nlist/i);
+    expect(container.textContent).toMatch(/nprobe/i);
+    expect(container.textContent).toMatch(/4096|1000/);
+  });
+});
+
+describe("ANNFamilyTree (11.6) content", () => {
+  const fn = VectorFoundations.ANNFamilyTree;
+
+  it("sub=0 frames sub-linear search as the goal", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/sub[- ]?linear|log\s*N/i);
+    expect(container.textContent).toMatch(/1 billion|1B|million/i);
+  });
+
+  it("sub=1 covers KD-trees and the curse of dimensionality", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/kd[- ]?tree/i);
+    expect(container.textContent).toMatch(/curse of dimensionality/i);
+    expect(container.textContent).toMatch(/768|high dim/i);
+  });
+
+  it("sub=2 explains LSH as hash-based bucketing", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/LSH|locality[- ]?sensitive/i);
+    expect(container.textContent).toMatch(/hash|bucket/i);
+  });
+
+  it("sub=3 recaps IVF clustering as partition-and-probe", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/IVF|cluster/i);
+    expect(container.textContent).toMatch(/partition/i);
+  });
+
+  it("sub=4 introduces HNSW and Vamana as graph indexes", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/HNSW/);
+    expect(container.textContent).toMatch(/Vamana/);
+    expect(container.textContent).toMatch(/graph|edge|node/i);
+  });
+
+  it("sub=5 explains why graphs won in production", () => {
+    const { container } = render(fn(makeCtx({ sub: 5 })));
+    expect(container.textContent).toMatch(/production|ann[- ]?benchmarks/i);
+    expect(container.textContent).toMatch(/HNSW/);
+    expect(container.textContent).toMatch(/Qdrant|Weaviate|Milvus|FAISS/);
+  });
+});
+
+describe("HNSWIntuition (11.7) content", () => {
+  const fn = VectorFoundations.HNSWIntuition;
+
+  it("sub=0 introduces the flat proximity graph", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/flat/i);
+    expect(container.textContent).toMatch(/proximity/i);
+    expect(container.textContent).toMatch(/M|nearest/);
+  });
+
+  it("sub=1 shows greedy-from-random-start is slow", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/greedy/i);
+    expect(container.textContent).toMatch(/hop/i);
+    expect(container.textContent).toMatch(/random|slow|many/i);
+  });
+
+  it("sub=2 introduces a sparse hub layer with long-range edges", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/hub/i);
+    expect(container.textContent).toMatch(/long[- ]?range|long distance|long-haul/i);
+    expect(container.textContent).toMatch(/layer/i);
+  });
+
+  it("sub=3 derives O(log N) from stacked layers", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/log\s*N|O\(log/i);
+    expect(container.textContent).toMatch(/layer/i);
+    expect(container.textContent).toMatch(/1,000,000|1M|20/);
+  });
+
+  it("sub=4 connects to the airport analogy", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/airport/i);
+    expect(container.textContent).toMatch(/hub/i);
+    expect(container.textContent).toMatch(/international|regional|local/i);
+  });
+});
+
+describe("HNSWConstruction (11.8) content", () => {
+  const fn = VectorFoundations.HNSWConstruction;
+
+  it("sub=0 inserts the first vector as the entry point", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/empty|first/i);
+    expect(container.textContent).toMatch(/entry point/i);
+  });
+
+  it("sub=1 shows the real layer-assignment formula with ln and mL", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/floor/i);
+    expect(container.textContent).toMatch(/ln|log/i);
+    expect(container.textContent).toMatch(/uniform/i);
+    expect(container.textContent).toMatch(/mL/);
+  });
+
+  it("sub=2 shows the exponential decay with ~94% at layer 0", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/layer 0/i);
+    expect(container.textContent).toMatch(/94%|93%|95%|most/i);
+    expect(container.textContent).toMatch(/exponential/i);
+  });
+
+  it("sub=3 describes greedy M-nearest insertion with ef_construction", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/M nearest|nearest M/i);
+    expect(container.textContent).toMatch(/greedy/i);
+    expect(container.textContent).toMatch(/edges?/i);
+    expect(container.textContent).toMatch(/ef_construction/i);
+  });
+
+  it("sub=4 walks the insertion of all 10 cat-corpus docs", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/10/);
+    expect(container.textContent).toMatch(/cats|kittens|cat sat|dog/i);
+    expect(container.textContent).toMatch(/layer|L\s*=/i);
+  });
+
+  it("sub=5 gives M = 16 and the per-vector memory math", () => {
+    const { container } = render(fn(makeCtx({ sub: 5 })));
+    expect(container.textContent).toMatch(/M\s*=\s*16|M = 16/);
+    expect(container.textContent).toMatch(/memory/i);
+    expect(container.textContent).toMatch(/70|bytes per vector|bytes\/vector/i);
+  });
+});
+
+describe("HNSWSearch (11.9) content", () => {
+  const fn = VectorFoundations.HNSWSearch;
+
+  it("sub=0 starts the query at the top-layer entry point", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/entry point/i);
+    expect(container.textContent).toMatch(/top/i);
+    expect(container.textContent).toMatch(/layer/i);
+  });
+
+  it("sub=1 greedy-descends within the current layer", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/greedy/i);
+    expect(container.textContent).toMatch(/neighbor/i);
+    expect(container.textContent).toMatch(/closer|distance/i);
+  });
+
+  it("sub=2 drops down when stuck on the current layer", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/drop/i);
+    expect(container.textContent).toMatch(/layer/i);
+    expect(container.textContent).toMatch(/0|next/i);
+  });
+
+  it("sub=3 switches to beam search with ef_search = 50 at layer 0", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/ef_search/i);
+    expect(container.textContent).toMatch(/beam/i);
+    expect(container.textContent).toMatch(/50|candidates/i);
+  });
+
+  it("sub=4 expands the beam until it stops improving", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/expand/i);
+    expect(container.textContent).toMatch(/ef_search|queue/i);
+    expect(container.textContent).toMatch(/top|best/i);
+  });
+
+  it("sub=5 returns top-k and traces the full path", () => {
+    const { container } = render(fn(makeCtx({ sub: 5 })));
+    expect(container.textContent).toMatch(/top[- ]?k|top 3|top-10/i);
+    expect(container.textContent).toMatch(/path|trace/i);
+    expect(container.textContent).toMatch(/cat|1|3|7/i);
+  });
+});
+
+describe("HNSWParameters (11.10) content", () => {
+  const fn = VectorFoundations.HNSWParameters;
+
+  it("sub=0 introduces the three knobs with defaults", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/M/);
+    expect(container.textContent).toMatch(/ef_construction/i);
+    expect(container.textContent).toMatch(/ef_search/i);
+    expect(container.textContent).toMatch(/16/);
+    expect(container.textContent).toMatch(/200/);
+    expect(container.textContent).toMatch(/50/);
+  });
+
+  it("sub=1 shows M controls recall-memory tradeoff", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/M/);
+    expect(container.textContent).toMatch(/recall/i);
+    expect(container.textContent).toMatch(/memory|byte/i);
+  });
+
+  it("sub=2 covers ef_construction as build-time quality vs build time", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/ef_construction/i);
+    expect(container.textContent).toMatch(/build/i);
+  });
+
+  it("sub=3 shows ef_search as the main query-time dial", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/ef_search/i);
+    expect(container.textContent).toMatch(/recall/i);
+    expect(container.textContent).toMatch(/latency|ms/i);
+  });
+
+  it("sub=4 shows recall curves at M = 8, 16, 32", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/M\s*=\s*8|M = 8/);
+    expect(container.textContent).toMatch(/M\s*=\s*16/);
+    expect(container.textContent).toMatch(/M\s*=\s*32/);
+    expect(container.textContent).toMatch(/curve|recall/i);
+  });
+
+  it("sub=5 shows memory math and a raise-this-parameter playbook", () => {
+    const { container } = render(fn(makeCtx({ sub: 5 })));
+    expect(container.textContent).toMatch(/memory/i);
+    expect(container.textContent).toMatch(/100M|100,000,000|320 GB/);
+    expect(container.textContent).toMatch(/playbook|raise|lower/i);
+    expect(container.textContent).toMatch(/ef_search/i);
+  });
+});
+
+describe("Vamana (11.11) content", () => {
+  const fn = VectorFoundations.Vamana;
+
+  it("sub=0 motivates DiskANN with the HNSW RAM wall", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/RAM/i);
+    expect(container.textContent).toMatch(/100M|100 million/i);
+    expect(container.textContent).toMatch(/320 GB|300 GB|TB/);
+  });
+
+  it("sub=1 introduces a single flat layer with R neighbors", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/single layer|one layer|flat/i);
+    expect(container.textContent).toMatch(/R|64/);
+    expect(container.textContent).toMatch(/hierarchy|no layer/i);
+  });
+
+  it("sub=2 covers the alpha-pruning rule", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/alpha|α/);
+    expect(container.textContent).toMatch(/1\.2|diverse/i);
+    expect(container.textContent).toMatch(/edge/i);
+    expect(container.textContent).toMatch(/prun/i);
+  });
+
+  it("sub=3 describes the disk layout with SSD blocks", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/SSD|disk/i);
+    expect(container.textContent).toMatch(/RAM/i);
+    expect(container.textContent).toMatch(/4\s*KB|page|NVMe/i);
+  });
+
+  it("sub=4 shows the minimize-disk-reads search pattern", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/RAM/i);
+    expect(container.textContent).toMatch(/SSD|disk/i);
+    expect(container.textContent).toMatch(/80|40|reads/i);
+  });
+
+  it("sub=5 hits 100B scale with Azure/Milvus and FreshDiskANN", () => {
+    const { container } = render(fn(makeCtx({ sub: 5 })));
+    expect(container.textContent).toMatch(/100 billion|100B/i);
+    expect(container.textContent).toMatch(/Azure|Milvus/);
+    expect(container.textContent).toMatch(/NVMe|SSD/);
+    expect(container.textContent).toMatch(/FreshDiskANN|delete/i);
+  });
+});
+
+describe("MemoryWall (11.12) content", () => {
+  const fn = VectorCompression.MemoryWall;
+
+  it("sub=0 calculates 3 KB per vector at d=768 float32", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/768/);
+    expect(container.textContent).toMatch(/4 bytes|float32/i);
+    expect(container.textContent).toMatch(/3 KB|3072/);
+  });
+
+  it("sub=1 shows a scaling table through 1B", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/300 GB/);
+    expect(container.textContent).toMatch(/3 TB|TB/);
+    expect(container.textContent).toMatch(/1 billion|1B/);
+  });
+
+  it("sub=2 adds HNSW graph overhead", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/graph/i);
+    expect(container.textContent).toMatch(/overhead|100 bytes/i);
+  });
+
+  it("sub=3 touches real server economics", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/r7i|768 GB|\$/);
+  });
+
+  it("sub=4 teases four compression techniques", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/scalar/i);
+    expect(container.textContent).toMatch(/PQ|product/i);
+    expect(container.textContent).toMatch(/binary/i);
+    expect(container.textContent).toMatch(/Matryoshka/i);
+  });
+});
+
+describe("ScalarQuantization (11.13) content", () => {
+  const fn = VectorCompression.ScalarQuantization;
+
+  it("sub=0 shows a float32 vector with 4-byte dimensions", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/float32/i);
+    expect(container.textContent).toMatch(/4 bytes/i);
+  });
+
+  it("sub=1 describes per-dimension min/max calibration", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/min/i);
+    expect(container.textContent).toMatch(/max/i);
+    expect(container.textContent).toMatch(/calibrat|scan/i);
+  });
+
+  it("sub=2 shows the linear map to [0, 255]", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/255/);
+    expect(container.textContent).toMatch(/round/i);
+  });
+
+  it("sub=3 shows before/after quantized values", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/int8/i);
+    expect(container.textContent).toMatch(/before/i);
+    expect(container.textContent).toMatch(/after/i);
+  });
+
+  it("sub=4 highlights SIMD int8 speed", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/SIMD/);
+    expect(container.textContent).toMatch(/int8/i);
+    expect(container.textContent).toMatch(/faster|speedup/i);
+  });
+
+  it("sub=5 shows 4x memory win for 1-3% recall loss", () => {
+    const { container } = render(fn(makeCtx({ sub: 5 })));
+    expect(container.textContent).toMatch(/4[x×]|4 times/i);
+    expect(container.textContent).toMatch(/1-3%|recall loss|recall drop/i);
+    expect(container.textContent).toMatch(/768|bytes per vector/i);
+  });
+});
+
+describe("ProductQuantization (11.14) content", () => {
+  const fn = VectorCompression.ProductQuantization;
+
+  it("sub=0 splits 768-dim vector into 96 subvectors", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/768/);
+    expect(container.textContent).toMatch(/96/);
+    expect(container.textContent).toMatch(/sub[- ]?vector|split/i);
+  });
+
+  it("sub=1 runs k-means per slot with 256 centroids", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/256/);
+    expect(container.textContent).toMatch(/centroid/i);
+    expect(container.textContent).toMatch(/codebook/i);
+    expect(container.textContent).toMatch(/k[- ]?means/i);
+  });
+
+  it("sub=2 encodes each subvector to a centroid id", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/centroid id|code/i);
+  });
+
+  it("sub=3 shows 96 bytes = 32x compression", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/96/);
+    expect(container.textContent).toMatch(/3072|3,072/);
+    expect(container.textContent).toMatch(/32/);
+  });
+
+  it("sub=4 describes asymmetric distance via lookup table", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/asymmetric/i);
+    expect(container.textContent).toMatch(/lookup|table/i);
+  });
+
+  it("sub=5 explains OPQ rotation", () => {
+    const { container } = render(fn(makeCtx({ sub: 5 })));
+    expect(container.textContent).toMatch(/OPQ/);
+    expect(container.textContent).toMatch(/rotat/i);
+    expect(container.textContent).toMatch(/decorrelat|correlat/i);
+  });
+
+  it("sub=6 shows the recall-compression curve", () => {
+    const { container } = render(fn(makeCtx({ sub: 6 })));
+    expect(container.textContent).toMatch(/m\s*=\s*96|m=96/i);
+    expect(container.textContent).toMatch(/recall/i);
+    expect(container.textContent).toMatch(/compress/i);
+  });
+});
+
+describe("BinaryQuantization (11.15) content", () => {
+  const fn = VectorCompression.BinaryQuantization;
+
+  it("sub=0 shows float32 vector at d=1024 as 4 KB", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/1024/);
+    expect(container.textContent).toMatch(/4 KB|4096/);
+    expect(container.textContent).toMatch(/float32/i);
+  });
+
+  it("sub=1 takes the sign of each dimension for 1 bit", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/sign/i);
+    expect(container.textContent).toMatch(/1 bit|128 bytes/);
+    expect(container.textContent).toMatch(/32[x×]|32 times/i);
+  });
+
+  it("sub=2 computes Hamming via XOR and popcount", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/Hamming/i);
+    expect(container.textContent).toMatch(/XOR/i);
+    expect(container.textContent).toMatch(/popcount/i);
+  });
+
+  it("sub=3 shows high-d embeddings keep recall", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/recall/i);
+    expect(container.textContent).toMatch(/95%|high/i);
+    expect(container.textContent).toMatch(/768|1024|BERT/);
+  });
+
+  it("sub=4 shows low-d collapse", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/low|collapse|128|drop/i);
+    expect(container.textContent).toMatch(/recall/i);
+  });
+
+  it("sub=5 shows production use with rerank", () => {
+    const { container } = render(fn(makeCtx({ sub: 5 })));
+    expect(container.textContent).toMatch(/Qdrant|Pinecone/);
+    expect(container.textContent).toMatch(/rerank|stage/i);
+  });
+});
+
+describe("Matryoshka (11.16) content", () => {
+  const fn = VectorCompression.Matryoshka;
+
+  it("sub=0 frames the re-embedding problem", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/re[- ]?embed|re[- ]?encoding/i);
+    expect(container.textContent).toMatch(/500M|500 million|million/i);
+  });
+
+  it("sub=1 introduces Matryoshka truncation", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/256/);
+    expect(container.textContent).toMatch(/512/);
+    expect(container.textContent).toMatch(/first[- ]?K|truncate|nested/i);
+  });
+
+  it("sub=2 shows the Russian doll concentric visual", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/nested|concentric/i);
+    expect(container.textContent).toMatch(/Russian doll|dolls/i);
+  });
+
+  it("sub=3 truncates to 512 for 6x savings", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/512/);
+    expect(container.textContent).toMatch(/3072|3,072/);
+    expect(container.textContent).toMatch(/6[x×]|6 times|saving/i);
+  });
+
+  it("sub=4 covers adaptive precision for coarse-to-fine", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/coarse/i);
+    expect(container.textContent).toMatch(/rerank|fine/i);
+    expect(container.textContent).toMatch(/256|adaptive/i);
+  });
+
+  it("sub=5 names OpenAI/Cohere production availability", () => {
+    const { container } = render(fn(makeCtx({ sub: 5 })));
+    expect(container.textContent).toMatch(/OpenAI/);
+    expect(container.textContent).toMatch(/text-embedding-3|Cohere/i);
+  });
+});
+
+describe("IVFPQ (11.17) content", () => {
+  const fn = VectorCompression.IVFPQ;
+
+  it("sub=0 recaps IVF clustering and PQ compression", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/IVF/);
+    expect(container.textContent).toMatch(/PQ/);
+    expect(container.textContent).toMatch(/cluster/i);
+    expect(container.textContent).toMatch(/subvector|m bytes/i);
+  });
+
+  it("sub=1 runs IVF k-means first", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/k-means/i);
+    expect(container.textContent).toMatch(/nlist/i);
+    expect(container.textContent).toMatch(/centroid/i);
+  });
+
+  it("sub=2 computes residual = vector - centroid", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/residual/i);
+    expect(container.textContent).toMatch(/centroid/i);
+    expect(container.textContent).toMatch(/tighter|smaller/i);
+  });
+
+  it("sub=3 PQ-encodes the residuals with higher recall", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/residual/i);
+    expect(container.textContent).toMatch(/PQ/);
+    expect(container.textContent).toMatch(/recall/i);
+    expect(container.textContent).toMatch(/0\.8|0\.9|codebook/i);
+  });
+
+  it("sub=4 describes search: probe nprobe cells, scan codes", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/nprobe/i);
+    expect(container.textContent).toMatch(/centroid/i);
+    expect(container.textContent).toMatch(/lookup|table|scan/i);
+  });
+
+  it("sub=5 hits 20 bytes per vector with FAISS IndexIVFPQ", () => {
+    const { container } = render(fn(makeCtx({ sub: 5 })));
+    expect(container.textContent).toMatch(/20 bytes|20 GB/);
+    expect(container.textContent).toMatch(/1B|1 billion/i);
+    expect(container.textContent).toMatch(/FAISS|Milvus/);
+  });
+});
+
+describe("HNSWPQ (11.18) content", () => {
+  const fn = VectorCompression.HNSWPQ;
+
+  it("sub=0 combines HNSW graph navigation with PQ compression", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/HNSW/);
+    expect(container.textContent).toMatch(/PQ/);
+    expect(container.textContent).toMatch(/graph/i);
+    expect(container.textContent).toMatch(/code|encoded/i);
+  });
+
+  it("sub=1 keeps the graph structure and stores PQ codes at nodes", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/graph/i);
+    expect(container.textContent).toMatch(/code|96 bytes/i);
+    expect(container.textContent).toMatch(/196|100M|node/i);
+  });
+
+  it("sub=2 uses PQ asymmetric distance lookup", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/lookup|table/i);
+    expect(container.textContent).toMatch(/asymmetric/i);
+    expect(container.textContent).toMatch(/faster|speedup|10x/i);
+  });
+
+  it("sub=3 compensates for recall drop with higher ef_search", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/recall/i);
+    expect(container.textContent).toMatch(/ef_search/i);
+    expect(container.textContent).toMatch(/error|drop|accuracy/i);
+    expect(container.textContent).toMatch(/50|150/);
+  });
+
+  it("sub=4 names production systems that support HNSW + PQ", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/Qdrant/);
+    expect(container.textContent).toMatch(/Weaviate|Milvus/);
+    expect(container.textContent).toMatch(/production|default|standard/i);
+  });
+});
+
+describe("Filtering (11.19) content", () => {
+  const fn = VectorProduction.Filtering;
+
+  it("sub=0 frames similarity search with a WHERE clause", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/tenant/i);
+    expect(container.textContent).toMatch(/filter|predicate|WHERE/i);
+  });
+
+  it("sub=1 pre-filter shrinks the set then searches", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/pre[- ]?filter/i);
+    expect(container.textContent).toMatch(/brute/i);
+    expect(container.textContent).toMatch(/selectiv|tight|loose/i);
+  });
+
+  it("sub=2 post-filter returns fewer than k when tight", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/post[- ]?filter/i);
+    expect(container.textContent).toMatch(/fewer|empty|insufficient/i);
+  });
+
+  it("sub=3 inline filtered-HNSW evaluates during traversal", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/inline|filtered[- ]?HNSW/i);
+    expect(container.textContent).toMatch(/Qdrant/);
+    expect(container.textContent).toMatch(/traversal|graph hop|payload/i);
+  });
+
+  it("sub=4 compares strategies by selectivity", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/selectiv/i);
+    expect(container.textContent).toMatch(/0\.1|50|5%/);
+  });
+
+  it("sub=5 names filter-index implementations across systems", () => {
+    const { container } = render(fn(makeCtx({ sub: 5 })));
+    expect(container.textContent).toMatch(/bitmap|inverted|column/i);
+    expect(container.textContent).toMatch(/Qdrant|Pinecone|Weaviate|pgvector/);
+  });
+});
+
+describe("UpdatesDeletes (11.20) content", () => {
+  const fn = VectorProduction.UpdatesDeletes;
+
+  it("sub=0 inserts append and connect to M nearest", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/insert/i);
+    expect(container.textContent).toMatch(/append|connect|neighbor/i);
+    expect(container.textContent).toMatch(/M|16/);
+  });
+
+  it("sub=1 delete problem breaks routing paths", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/delete|remove/i);
+    expect(container.textContent).toMatch(/path|route|hop/i);
+    expect(container.textContent).toMatch(/break|lost|broken/i);
+  });
+
+  it("sub=2 tombstones mark-and-filter at query time", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/tombstone/i);
+    expect(container.textContent).toMatch(/mark|soft/i);
+    expect(container.textContent).toMatch(/query time|filter/i);
+  });
+
+  it("sub=3 shows graph degradation curve at 30% deletes", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/30/);
+    expect(container.textContent).toMatch(/recall/i);
+    expect(container.textContent).toMatch(/0\.92|0\.85|degrad|drop/i);
+  });
+
+  it("sub=4 lists rebuild strategies", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/rebuild/i);
+    expect(container.textContent).toMatch(/segment|rotation|incremental/i);
+    expect(container.textContent).toMatch(/downtime|operational/i);
+  });
+
+  it("sub=5 compares delete pain by index type", () => {
+    const { container } = render(fn(makeCtx({ sub: 5 })));
+    expect(container.textContent).toMatch(/IVF/);
+    expect(container.textContent).toMatch(/HNSW/);
+    expect(container.textContent).toMatch(/Qdrant|pgvector/);
+  });
+});
+
+describe("Sharding (11.21) content", () => {
+  const fn = VectorProduction.Sharding;
+
+  it("sub=0 frames the single-node limit", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/100M|100 million|r7i/i);
+    expect(container.textContent).toMatch(/single[- ]?node|one node/i);
+  });
+
+  it("sub=1 describes random sharding with round-robin", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/random/i);
+    expect(container.textContent).toMatch(/round[- ]?robin|hash/i);
+    expect(container.textContent).toMatch(/fan[- ]?out|all shards/i);
+  });
+
+  it("sub=2 explains semantic sharding by IVF cluster", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/semantic|cluster/i);
+    expect(container.textContent).toMatch(/IVF|region|subset/i);
+  });
+
+  it("sub=3 shows fan-out to shards and coordinator merge", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/fan[- ]?out/i);
+    expect(container.textContent).toMatch(/coordinator|merge/i);
+    expect(container.textContent).toMatch(/top[- ]?k|top-10|top-20/i);
+  });
+
+  it("sub=4 explains recall math via per-shard buffer", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/recall/i);
+    expect(container.textContent).toMatch(/merge/i);
+    expect(container.textContent).toMatch(/buffer|top-20|top-50/i);
+  });
+
+  it("sub=5 prunes shards by filter predicate", () => {
+    const { container } = render(fn(makeCtx({ sub: 5 })));
+    expect(container.textContent).toMatch(/filter/i);
+    expect(container.textContent).toMatch(/shard/i);
+    expect(container.textContent).toMatch(/prune|skip/i);
+  });
+});
+
+describe("Replication (11.22) content", () => {
+  const fn = VectorProduction.Replication;
+
+  it("sub=0 describes read replicas with load balancing", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/replica|read replica/i);
+    expect(container.textContent).toMatch(/load[- ]?balance/i);
+  });
+
+  it("sub=1 covers leader-follower replication lag", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/leader|follower|primary/i);
+    expect(container.textContent).toMatch(/lag|delay/i);
+    expect(container.textContent).toMatch(/50|2 s|200 ms/);
+  });
+
+  it("sub=2 handles leader failure via follower promotion", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/leader|primary/i);
+    expect(container.textContent).toMatch(/promote|election/i);
+    expect(container.textContent).toMatch(/lost|window/i);
+  });
+
+  it("sub=3 covers in-memory durability via WAL or snapshots", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/durab|persist/i);
+    expect(container.textContent).toMatch(/WAL|write[- ]?ahead|snapshot/i);
+    expect(container.textContent).toMatch(/RAM/i);
+  });
+
+  it("sub=4 compares recovery time WAL vs re-embed", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/recovery|rebuild/i);
+    expect(container.textContent).toMatch(/WAL|re[- ]?embed/i);
+    expect(container.textContent).toMatch(/hours|days|weeks/i);
+  });
+});
+
+describe("HybridSearch (11.23) content", () => {
+  const fn = VectorProduction.HybridSearch;
+
+  it("sub=0 explains vectors miss exact matches", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/SKU|exact|proper noun/i);
+    expect(container.textContent).toMatch(/vector|embedding/i);
+    expect(container.textContent).toMatch(/miss|blur/i);
+  });
+
+  it("sub=1 recaps BM25 formula", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/BM25/);
+    expect(container.textContent).toMatch(/term frequency|TF/i);
+    expect(container.textContent).toMatch(/IDF|inverse document/i);
+  });
+
+  it("sub=2 runs BM25 and vector in parallel", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/parallel|both/i);
+    expect(container.textContent).toMatch(/ranked|top/i);
+  });
+
+  it("sub=3 uses Reciprocal Rank Fusion with k=60", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/RRF|Reciprocal Rank Fusion/i);
+    expect(container.textContent).toMatch(/60/);
+    expect(container.textContent).toMatch(/1 \/|rank/i);
+  });
+
+  it("sub=4 works the tabby example vector vs BM25 vs hybrid", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/tabby/i);
+    expect(container.textContent).toMatch(/vector/i);
+    expect(container.textContent).toMatch(/BM25/i);
+  });
+
+  it("sub=5 covers weighted hybrid tuning", () => {
+    const { container } = render(fn(makeCtx({ sub: 5 })));
+    expect(container.textContent).toMatch(/weight|alpha|0\.7/i);
+    expect(container.textContent).toMatch(/hybrid/i);
+  });
+});
+
+describe("Rerankers (11.24) content", () => {
+  const fn = VectorProduction.Rerankers;
+
+  it("sub=0 frames two-stage retrieval", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/two[- ]?stage|stage 1/i);
+    expect(container.textContent).toMatch(/top[- ]?100|100/);
+    expect(container.textContent).toMatch(/fast|approximate/i);
+  });
+
+  it("sub=1 introduces cross-encoder concatenation", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/cross[- ]?encoder/i);
+    expect(container.textContent).toMatch(/concatenated|together/i);
+    expect(container.textContent).toMatch(/attention/i);
+  });
+
+  it("sub=2 contrasts bi-encoder and cross-encoder", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/bi[- ]?encoder/i);
+    expect(container.textContent).toMatch(/token|interaction/i);
+    expect(container.textContent).toMatch(/attention/i);
+  });
+
+  it("sub=3 reranks top-100 to top-10", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/rerank|re-rank/i);
+    expect(container.textContent).toMatch(/top[- ]?10|10/i);
+    expect(container.textContent).toMatch(/score|sort/i);
+  });
+
+  it("sub=4 shows latency cost on GPU", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/latency|ms|100 ms/i);
+    expect(container.textContent).toMatch(/1 ms|100/);
+    expect(container.textContent).toMatch(/GPU|A10|H100/i);
+  });
+
+  it("sub=5 names production reranker models", () => {
+    const { container } = render(fn(makeCtx({ sub: 5 })));
+    expect(container.textContent).toMatch(/Cohere|BGE|MS[- ]?MARCO/i);
+  });
+});
+
+describe("MultiVectorRetrieval (11.25) content", () => {
+  const fn = VectorProduction.MultiVectorRetrieval;
+
+  it("sub=0 frames the single-vector blur problem", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/single[- ]?vector|one vector/i);
+    expect(container.textContent).toMatch(/blur|lossy|average/i);
+  });
+
+  it("sub=1 introduces ColBERT one-vector-per-token", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/ColBERT/i);
+    expect(container.textContent).toMatch(/token/i);
+    expect(container.textContent).toMatch(/200|per token/i);
+  });
+
+  it("sub=2 uses max-sim aggregation", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/max[- ]?sim|maxsim/i);
+    expect(container.textContent).toMatch(/token/i);
+    expect(container.textContent).toMatch(/sum/i);
+  });
+
+  it("sub=3 walks the max-sim calculation on cat corpus", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/walkthrough|cat|token/i);
+  });
+
+  it("sub=4 shows storage cost scaled by token count", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/storage|memory/i);
+    expect(container.textContent).toMatch(/20|100|600 GB/);
+    expect(container.textContent).toMatch(/token/i);
+  });
+
+  it("sub=5 names Vespa, Qdrant, Elasticsearch support", () => {
+    const { container } = render(fn(makeCtx({ sub: 5 })));
+    expect(container.textContent).toMatch(/Vespa/i);
+    expect(container.textContent).toMatch(/Qdrant/i);
+    expect(container.textContent).toMatch(/Elasticsearch|nested|tensor/i);
+  });
+});
+
+describe("EmbeddingLifecycle (11.26) content", () => {
+  const fn = VectorProduction.EmbeddingLifecycle;
+
+  it("sub=0 frames the indexed-two-years-ago scenario", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/500M|500 million/);
+    expect(container.textContent).toMatch(/ada[- ]?002|text-embedding|two years/i);
+    expect(container.textContent).toMatch(/upgrade|moved/i);
+  });
+
+  it("sub=1 highlights the dimension mismatch", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/1536/);
+    expect(container.textContent).toMatch(/3072/);
+    expect(container.textContent).toMatch(/dimension|dims|mismatch/i);
+  });
+
+  it("sub=2 describes the re-embed cost path", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/re[- ]?embed/i);
+    expect(container.textContent).toMatch(/source/i);
+    expect(container.textContent).toMatch(/cost|\$|bill/i);
+  });
+
+  it("sub=3 describes parallel indexes during migration", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/parallel|dual/i);
+    expect(container.textContent).toMatch(/serve|traffic/i);
+    expect(container.textContent).toMatch(/cutover|flip|migrate/i);
+  });
+
+  it("sub=4 covers the pin-the-old-model option", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/pin|freeze/i);
+    expect(container.textContent).toMatch(/deprecated|drift|decay/i);
+  });
+
+  it("sub=5 lays out drift monitoring", () => {
+    const { container } = render(fn(makeCtx({ sub: 5 })));
+    expect(container.textContent).toMatch(/drift|regression|eval/i);
+    expect(container.textContent).toMatch(/monitor|ground[- ]?truth/i);
+    expect(container.textContent).toMatch(/recall|quality/i);
+  });
+});
+
+describe("Observability (11.27) content", () => {
+  const fn = VectorProduction.Observability;
+
+  it("sub=0 covers P50/P95/P99 latency tails", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/P50|P95|P99/);
+    expect(container.textContent).toMatch(/tail/i);
+  });
+
+  it("sub=1 describes recall@k ground-truth sampling", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/recall/i);
+    expect(container.textContent).toMatch(/sample|ground[- ]?truth/i);
+    expect(container.textContent).toMatch(/compare|brute[- ]?force/i);
+  });
+
+  it("sub=2 discusses per-query cache and CPU telemetry", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/cache/i);
+    expect(container.textContent).toMatch(/hit rate|cache hit/i);
+    expect(container.textContent).toMatch(/memory|pages|CPU/i);
+  });
+
+  it("sub=3 explains ANN-Benchmarks methodology", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/ANN[- ]?Benchmarks|ann-benchmarks/i);
+    expect(container.textContent).toMatch(/QPS|queries per second/i);
+    expect(container.textContent).toMatch(/recall/i);
+  });
+
+  it("sub=4 lays out alert vs watch dashboard", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/dashboard|Grafana|panel/i);
+    expect(container.textContent).toMatch(/alert|watch/i);
+    expect(container.textContent).toMatch(/P99|recall@10/i);
+  });
+
+  it("sub=5 reminds about unmeasured metrics", () => {
+    const { container } = render(fn(makeCtx({ sub: 5 })));
+    expect(container.textContent).toMatch(/tenant|cold[- ]?start|per-tenant/i);
+    expect(container.textContent).toMatch(/checklist|capture|measure/i);
+  });
+});
+
+describe("CapacityPlanning (11.28) content", () => {
+  const fn = VectorProduction.CapacityPlanning;
+
+  it("sub=0 lists the sizing inputs", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/N|vectors/i);
+    expect(container.textContent).toMatch(/QPS|queries per second/i);
+    expect(container.textContent).toMatch(/P99|latency/i);
+    expect(container.textContent).toMatch(/selectivity|availability|filter/i);
+  });
+
+  it("sub=1 gives the memory formula with cache and fragmentation", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/RAM|memory/i);
+    expect(container.textContent).toMatch(/graph|cache|fragmentation/i);
+  });
+
+  it("sub=2 sizes CPU with headroom", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/CPU|cores/i);
+    expect(container.textContent).toMatch(/QPS|200/i);
+    expect(container.textContent).toMatch(/headroom/i);
+  });
+
+  it("sub=3 shows 500M x 200 QPS worked example", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/500M|500 million/);
+    expect(container.textContent).toMatch(/3 TB|1\.5 TB|TB/);
+    expect(container.textContent).toMatch(/nodes|6 nodes/i);
+  });
+
+  it("sub=4 compares costs across Pinecone, Qdrant, pgvector", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/Pinecone/);
+    expect(container.textContent).toMatch(/Qdrant|pgvector/);
+    expect(container.textContent).toMatch(/\$|cost|month/i);
+  });
+
+  it("sub=5 frames the decision via cost per million", () => {
+    const { container } = render(fn(makeCtx({ sub: 5 })));
+    expect(container.textContent).toMatch(/per million|per-million/i);
+    expect(container.textContent).toMatch(/cost|\$/i);
+    expect(container.textContent).toMatch(/decision|framework/i);
+  });
+});
+
+describe("DecisionFramework (11.35) content", () => {
+  const fn = VectorSystems.DecisionFramework;
+
+  it("sub=0 shows the decision flowchart with the axes", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/flowchart|decision/i);
+    expect(container.textContent).toMatch(/data size|ops|filter|cost/i);
+  });
+
+  it("sub=1 shows the size buckets", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/1M|100M|1B/);
+    expect(container.textContent).toMatch(/bucket|size/i);
+  });
+
+  it("sub=2 shows the ops preference axis", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/ops|preference/i);
+    expect(container.textContent).toMatch(/Pinecone|Qdrant|Milvus|pgvector/);
+  });
+
+  it("sub=3 shows the filter complexity axis", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/filter/i);
+    expect(container.textContent).toMatch(/simple|complex|analytical/i);
+  });
+
+  it("sub=4 shows the design-review checklist", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/checklist|questions/i);
+    expect(container.textContent).toMatch(/size|QPS|P99|selectivity|availability/i);
+  });
+
+  it("sub=5 recap: learner can answer Qdrant vs Pinecone from first principles", () => {
+    const { container } = render(fn(makeCtx({ sub: 5 })));
+    expect(container.textContent).toMatch(/recap|first principles|Qdrant|Pinecone/i);
+    expect(container.textContent).toMatch(/section|learn|master/i);
+  });
+});
+
+describe("WeaviateMilvusChroma (11.34) content", () => {
+  const fn = VectorSystems.WeaviateMilvusChroma;
+
+  it("sub=0 describes Weaviate - Go, self-host, modules", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/Weaviate/i);
+    expect(container.textContent).toMatch(/Go|self[- ]?host/i);
+    expect(container.textContent).toMatch(/module|transformer|generative/i);
+  });
+
+  it("sub=1 describes Milvus distributed-native", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/Milvus/i);
+    expect(container.textContent).toMatch(/distributed|billion/i);
+    expect(container.textContent).toMatch(/Azure|AI Search|core/i);
+  });
+
+  it("sub=2 describes Chroma Python-first local embedded", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/Chroma/i);
+    expect(container.textContent).toMatch(/Python|local|embedded/i);
+    expect(container.textContent).toMatch(/prototype|small/i);
+  });
+
+  it("sub=3 describes Elastic / OpenSearch dense_vector", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/Elastic|OpenSearch/i);
+    expect(container.textContent).toMatch(/dense_vector/i);
+    expect(container.textContent).toMatch(/existing|already/i);
+  });
+
+  it("sub=4 summarizes context-dependent picks", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/Weaviate|Milvus|Chroma|Elastic/i);
+    expect(container.textContent).toMatch(/context|pick|fit/i);
+  });
+});
+
+describe("QdrantVsPinecone (11.33) content", () => {
+  const fn = VectorSystems.QdrantVsPinecone;
+
+  it("sub=0 names the decision axes", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/axis|axes/i);
+    expect(container.textContent).toMatch(/ops|filter|cost|feature/i);
+  });
+
+  it("sub=1 scenario A: prototype -> Pinecone serverless", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/scenario A|prototype/i);
+    expect(container.textContent).toMatch(/Pinecone/);
+    expect(container.textContent).toMatch(/serverless/i);
+  });
+
+  it("sub=2 scenario B: 10M + complex filters -> Qdrant", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/scenario B|10M/i);
+    expect(container.textContent).toMatch(/Qdrant/);
+    expect(container.textContent).toMatch(/filter|complex/i);
+  });
+
+  it("sub=3 scenario C: 1B at 10K QPS -> Qdrant multi-node or Milvus", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/scenario C|1B/i);
+    expect(container.textContent).toMatch(/10K QPS|steady/i);
+    expect(container.textContent).toMatch(/Qdrant|Milvus/);
+  });
+
+  it("sub=4 scenario D: spiky + EU -> Pinecone region or Qdrant Cloud EU", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/scenario D|spiky/i);
+    expect(container.textContent).toMatch(/EU|residency/i);
+    expect(container.textContent).toMatch(/region|Pinecone|Qdrant Cloud/);
+  });
+
+  it("sub=5 shows the decision flowchart summary", () => {
+    const { container } = render(fn(makeCtx({ sub: 5 })));
+    expect(container.textContent).toMatch(/flowchart|decision/i);
+    expect(container.textContent).toMatch(/Pinecone|Qdrant/);
+  });
+});
+
+describe("Pinecone (11.32) content", () => {
+  const fn = VectorSystems.Pinecone;
+
+  it("sub=0 frames Pinecone as managed SaaS with opinionated defaults", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/Pinecone/);
+    expect(container.textContent).toMatch(/managed|SaaS/i);
+    expect(container.textContent).toMatch(/proprietary|opinion/i);
+  });
+
+  it("sub=1 describes the pod architecture", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/pod/i);
+    expect(container.textContent).toMatch(/shard/i);
+    expect(container.textContent).toMatch(/p1|p2|scale/i);
+  });
+
+  it("sub=2 describes serverless with scale-to-zero and cold-start", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/serverless/i);
+    expect(container.textContent).toMatch(/scale[- ]?to[- ]?zero|scale to zero/i);
+    expect(container.textContent).toMatch(/cold[- ]?start/i);
+  });
+
+  it("sub=3 lists built-in filtering, hybrid, namespaces", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/filter/i);
+    expect(container.textContent).toMatch(/hybrid/i);
+    expect(container.textContent).toMatch(/namespace|tenant/i);
+  });
+
+  it("sub=4 names the good-fit workloads", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/no ops|without ops/i);
+    expect(container.textContent).toMatch(/variable|workload/i);
+    expect(container.textContent).toMatch(/time[- ]?to[- ]?market|prototype/i);
+  });
+
+  it("sub=5 names vendor lock-in and cost-at-scale tradeoffs", () => {
+    const { container } = render(fn(makeCtx({ sub: 5 })));
+    expect(container.textContent).toMatch(/lock[- ]?in/i);
+    expect(container.textContent).toMatch(/cost|expensive/i);
+    expect(container.textContent).toMatch(/opinion/i);
+  });
+});
+
+describe("Qdrant (11.31) content", () => {
+  const fn = VectorSystems.Qdrant;
+
+  it("sub=0 frames Qdrant as a Rust open-source vector DB", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/Qdrant/);
+    expect(container.textContent).toMatch(/Rust/i);
+    expect(container.textContent).toMatch(/open[- ]?source|self[- ]?host/i);
+  });
+
+  it("sub=1 describes HNSW with inline filter during traversal", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/HNSW/);
+    expect(container.textContent).toMatch(/inline|filter|traversal/i);
+    expect(container.textContent).toMatch(/payload/i);
+  });
+
+  it("sub=2 describes collections and payload metadata", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/collection/i);
+    expect(container.textContent).toMatch(/payload|metadata/i);
+    expect(container.textContent).toMatch(/multi[- ]?vector/i);
+  });
+
+  it("sub=3 lists built-in features including quantization variants", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/hybrid/i);
+    expect(container.textContent).toMatch(/quantization|scalar|binary/i);
+    expect(container.textContent).toMatch(/SQ|PQ|BQ/);
+  });
+
+  it("sub=4 covers the self-host deployment story", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/binary|Docker|Kubernetes/i);
+    expect(container.textContent).toMatch(/self[- ]?host|operator/i);
+  });
+
+  it("sub=5 names the tradeoffs", () => {
+    const { container } = render(fn(makeCtx({ sub: 5 })));
+    expect(container.textContent).toMatch(/ops|operational/i);
+    expect(container.textContent).toMatch(/multi[- ]?region|ecosystem/i);
+    expect(container.textContent).toMatch(/Elastic|smaller/i);
+  });
+});
+
+describe("Pgvector (11.30) content", () => {
+  const fn = VectorSystems.Pgvector;
+
+  it("sub=0 frames pgvector as a Postgres extension", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/Postgres/i);
+    expect(container.textContent).toMatch(/extension/i);
+    expect(container.textContent).toMatch(/vector/i);
+  });
+
+  it("sub=1 shows SQL ALTER TABLE and cosine distance operator", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/ALTER TABLE|ADD COLUMN/i);
+    expect(container.textContent).toMatch(/vector\(768\)|768/);
+    expect(container.textContent).toMatch(/<=>|cosine/i);
+  });
+
+  it("sub=2 describes HNSW and IVFFlat index types", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/HNSW/i);
+    expect(container.textContent).toMatch(/IVFFlat|IVF/i);
+    expect(container.textContent).toMatch(/SQL|tuning|parameters/i);
+  });
+
+  it("sub=3 highlights inherited Postgres features", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/transaction|ACID/i);
+    expect(container.textContent).toMatch(/SQL join|join/i);
+    expect(container.textContent).toMatch(/metadata/i);
+  });
+
+  it("sub=4 names the good-fit workloads", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/10M|under 10M/i);
+    expect(container.textContent).toMatch(/metadata/i);
+    expect(container.textContent).toMatch(/existing|Postgres team/i);
+  });
+
+  it("sub=5 names the bad-fit workloads", () => {
+    const { container } = render(fn(makeCtx({ sub: 5 })));
+    expect(container.textContent).toMatch(/100M|over 100M/i);
+    expect(container.textContent).toMatch(/10K|QPS/i);
+    expect(container.textContent).toMatch(/multi[- ]?region/i);
+  });
+});
+
+describe("FAISS (11.29) content", () => {
+  const fn = VectorSystems.FAISS;
+
+  it("sub=0 frames FAISS as Meta's 2017 reference library", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/FAISS/);
+    expect(container.textContent).toMatch(/Meta|Facebook/i);
+    expect(container.textContent).toMatch(/2017|library/i);
+  });
+
+  it("sub=1 names the algorithms inside FAISS", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/IVF/);
+    expect(container.textContent).toMatch(/PQ/);
+    expect(container.textContent).toMatch(/HNSW/);
+    expect(container.textContent).toMatch(/CPU|CUDA|GPU/i);
+  });
+
+  it("sub=2 describes Python bindings over a C++ core", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/Python/i);
+    expect(container.textContent).toMatch(/C\+\+|core/i);
+    expect(container.textContent).toMatch(/bindings?|embed/i);
+  });
+
+  it("sub=3 enumerates what FAISS does not provide", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/persist/i);
+    expect(container.textContent).toMatch(/API|REST/i);
+    expect(container.textContent).toMatch(/filter|ACID|replicat/i);
+  });
+
+  it("sub=4 names systems that embed FAISS", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/Milvus/);
+    expect(container.textContent).toMatch(/OpenSearch|engine/i);
+    expect(container.textContent).toMatch(/inside|underneath/i);
+  });
+
+  it("sub=5 states the build-vs-use rule", () => {
+    const { container } = render(fn(makeCtx({ sub: 5 })));
+    expect(container.textContent).toMatch(/build/i);
+    expect(container.textContent).toMatch(/DB|database/i);
+    expect(container.textContent).toMatch(/use one|use it/i);
+  });
+});
+
 // ─── TOC special branches ───
 describe("TOC", () => {
   it("renders section list", () => {
@@ -266,8 +1828,11 @@ describe("TOC", () => {
     }
   });
 
-  // Test all 10 sections expanded to cover each one
-  for (let secNum = 1; secNum <= 10; secNum++) {
+  // Test every section that has chapters in config.js. Data-driven so new
+  // sections are auto-covered and we catch the bug where a section was added
+  // to config but its TOC entry was forgotten in toc.jsx.
+  const sectionNumbers = [...new Set(chapters.map((c) => c.section).filter((s) => s > 0))].sort((a, b) => a - b);
+  sectionNumbers.forEach((secNum) => {
     it(`shows chapters for section ${secNum}`, () => {
       const { container } = render(TOC(makeCtx({ expanded: secNum })));
       expect(container.innerHTML).toBeTruthy();
@@ -275,7 +1840,7 @@ describe("TOC", () => {
       // This catches bugs where a new section is added to config but not to toc.jsx.
       expect(container.textContent).toContain(sectionNames[secNum]);
     });
-  }
+  });
 });
 
 // ─── Special interactive chapters ───
@@ -2946,6 +4511,24 @@ describe("Every SVG has a <desc> element", () => {
     "8.3",
     "8.6",
     "9.3",
+    "11.5",
+    "11.6",
+    "11.7",
+    "11.8",
+    "11.9",
+    "11.10",
+    "11.11",
+    "11.15",
+    "11.16",
+    "11.17",
+    "11.18",
+    "11.19",
+    "11.20",
+    "11.21",
+    "11.22",
+    "11.23",
+    "11.24",
+    "11.35",
   ];
 
   svgChapters.forEach((chId) => {

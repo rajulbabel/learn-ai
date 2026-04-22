@@ -129,3 +129,62 @@ describe("config.js", () => {
     });
   });
 });
+
+describe("Section 11 registration", () => {
+  it("has section 11 in sectionNames", () => {
+    expect(sectionNames[11]).toBe("Vector Databases");
+  });
+
+  it("has section 11 in sectionColors", () => {
+    expect(sectionColors[11]).toBe("#f06292");
+  });
+});
+
+describe("Section 11 chapters", () => {
+  it("has chapters 11.1 through 11.35 in order", () => {
+    const section11 = chapters.filter((ch) => ch.section === 11);
+    const expected = [
+      { id: "11.1", component: "RetrievalProblem", title: "The Retrieval Problem" },
+      { id: "11.2", component: "BruteForceKNN", title: "Brute-Force kNN" },
+      { id: "11.3", component: "ThreeWayTradeoff", title: "The Three-Way Tradeoff" },
+      { id: "11.4", component: "DistanceMetrics", title: "Distance Metrics" },
+      { id: "11.5", component: "IVF", title: "IVF (Inverted File Index)" },
+      { id: "11.6", component: "ANNFamilyTree", title: "The ANN Family Tree" },
+      { id: "11.7", component: "HNSWIntuition", title: "HNSW - The Small-World Intuition" },
+      { id: "11.8", component: "HNSWConstruction", title: "HNSW Construction" },
+      { id: "11.9", component: "HNSWSearch", title: "HNSW Search" },
+      { id: "11.10", component: "HNSWParameters", title: "HNSW Parameters" },
+      { id: "11.11", component: "Vamana", title: "Vamana / DiskANN" },
+      { id: "11.12", component: "MemoryWall", title: "The Memory Wall" },
+      { id: "11.13", component: "ScalarQuantization", title: "Scalar Quantization" },
+      { id: "11.14", component: "ProductQuantization", title: "Product Quantization (+ OPQ)" },
+      { id: "11.15", component: "BinaryQuantization", title: "Binary Quantization" },
+      { id: "11.16", component: "Matryoshka", title: "Matryoshka Embeddings" },
+      { id: "11.17", component: "IVFPQ", title: "IVF-PQ" },
+      { id: "11.18", component: "HNSWPQ", title: "HNSW + PQ" },
+      { id: "11.19", component: "Filtering", title: "Filtering" },
+      { id: "11.20", component: "UpdatesDeletes", title: "Updates & Deletes" },
+      { id: "11.21", component: "Sharding", title: "Sharding & Partitioning" },
+      { id: "11.22", component: "Replication", title: "Replication & High Availability" },
+      { id: "11.23", component: "HybridSearch", title: "Hybrid Search" },
+      { id: "11.24", component: "Rerankers", title: "Rerankers" },
+      { id: "11.25", component: "MultiVectorRetrieval", title: "Multi-vector Retrieval (ColBERT-style)" },
+      { id: "11.26", component: "EmbeddingLifecycle", title: "Embedding Lifecycle & Re-embedding" },
+      { id: "11.27", component: "Observability", title: "Observability" },
+      { id: "11.28", component: "CapacityPlanning", title: "Capacity Planning & Cost Models" },
+      { id: "11.29", component: "FAISS", title: "FAISS" },
+      { id: "11.30", component: "Pgvector", title: "pgvector" },
+      { id: "11.31", component: "Qdrant", title: "Qdrant" },
+      { id: "11.32", component: "Pinecone", title: "Pinecone" },
+      { id: "11.33", component: "QdrantVsPinecone", title: "Qdrant vs Pinecone" },
+      { id: "11.34", component: "WeaviateMilvusChroma", title: "Weaviate / Milvus / Chroma" },
+      { id: "11.35", component: "DecisionFramework", title: "The Decision Framework" },
+    ];
+    expect(section11.length).toBe(expected.length);
+    expected.forEach((exp, i) => {
+      expect(section11[i].id).toBe(exp.id);
+      expect(section11[i].component).toBe(exp.component);
+      expect(section11[i].title).toBe(exp.title);
+    });
+  });
+});

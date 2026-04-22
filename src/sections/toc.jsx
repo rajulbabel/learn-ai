@@ -53,6 +53,12 @@ export const TOC = (ctx) => {
       color: "#26a69a",
       desc: "KV cache, grouped-query attention, mixture of experts, reasoning models",
     },
+    {
+      num: 11,
+      name: "Vector Databases",
+      color: "#f06292",
+      desc: "Why exact search breaks, ANN indexing, compression, production systems",
+    },
   ];
   const sectionChapters = {};
   chapters.forEach((c, i) => {

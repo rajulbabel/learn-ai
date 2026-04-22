@@ -954,15 +954,652 @@ export const ScalarQuantization = (ctx) => {
 
 export const ProductQuantization = (ctx) => {
   const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx;
+  // 8-dim illustrative slice split into m=2 subvectors of dim 4.
+  const pqFloatVec = [0.81, 0.12, 0.45, 0.22, 0.63, 0.07, 0.38, 0.91];
+  const subvec0 = pqFloatVec.slice(0, 4);
+  const subvec1 = pqFloatVec.slice(4, 8);
+
   return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
       {sub >= 0 && (
-        <Box color={C.purple} style={{ width: "100%" }}>
-          <T color={C.purple} bold center size={22}>
-            Product Quantization (stub)
+        <Box color={C.cyan} style={{ width: "100%" }}>
+          <T color={C.cyan} bold center size={22}>
+            Split a 768-dim vector into m = 96 subvectors
+          </T>
+          <T color="#80deea" style={{ marginTop: 8 }}>
+            Product quantization takes a single vector and cuts it into m equal-length chunks. At d = 768 with m = 96,
+            each chunk is a subvector of 8 dimensions. We will treat each slot independently: slot 0 handles dims 0-7 of
+            every document in the corpus, slot 1 handles dims 8-15, and so on across all 96 slots. Every slot gets its
+            own codebook.
+          </T>
+          <div
+            style={{
+              marginTop: 14,
+              padding: "12px 14px",
+              borderRadius: 8,
+              background: `${C.cyan}06`,
+              border: `1px solid ${C.cyan}12`,
+            }}
+          >
+            <T color={C.cyan} bold center size={16}>
+              Illustrative split (8 dims, m = 2 subvectors of dim 4)
+            </T>
+            <div
+              style={{
+                marginTop: 10,
+                display: "grid",
+                gridTemplateColumns: "1fr 1fr",
+                gap: 12,
+              }}
+            >
+              <div
+                style={{
+                  padding: "10px 12px",
+                  background: `${C.cyan}10`,
+                  border: `1px solid ${C.cyan}20`,
+                  borderRadius: 6,
+                }}
+              >
+                <T color={C.cyan} bold center size={14}>
+                  subvector 0 (dims 0-3)
+                </T>
+                <div
+                  style={{
+                    marginTop: 6,
+                    display: "grid",
+                    gridTemplateColumns: "repeat(4, 1fr)",
+                    gap: 4,
+                    fontFamily: "monospace",
+                    fontSize: 13,
+                  }}
+                >
+                  {subvec0.map((v, i) => (
+                    <div
+                      key={i}
+                      style={{ padding: "6px 4px", textAlign: "center", color: C.bright, background: `${C.cyan}08` }}
+                    >
+                      {v.toFixed(2)}
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div
+                style={{
+                  padding: "10px 12px",
+                  background: `${C.purple}10`,
+                  border: `1px solid ${C.purple}20`,
+                  borderRadius: 6,
+                }}
+              >
+                <T color={C.purple} bold center size={14}>
+                  subvector 1 (dims 4-7)
+                </T>
+                <div
+                  style={{
+                    marginTop: 6,
+                    display: "grid",
+                    gridTemplateColumns: "repeat(4, 1fr)",
+                    gap: 4,
+                    fontFamily: "monospace",
+                    fontSize: 13,
+                  }}
+                >
+                  {subvec1.map((v, i) => (
+                    <div
+                      key={i}
+                      style={{ padding: "6px 4px", textAlign: "center", color: C.bright, background: `${C.purple}08` }}
+                    >
+                      {v.toFixed(2)}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            style={{
+              marginTop: 14,
+              padding: "14px 18px",
+              borderRadius: 8,
+              background: "rgba(0,0,0,0.3)",
+              textAlign: "center",
+              fontFamily: "monospace",
+              fontSize: 16,
+              color: C.bright,
+              lineHeight: 2,
+            }}
+          >
+            at d = 768: <span style={{ color: C.cyan }}>m = 96 subvectors &middot; 8 dims each</span>
+            <br />
+            slot 0 = dims 0..7 &middot; slot 1 = dims 8..15 &middot; ... &middot; slot 95 = dims 760..767
+          </div>
+          <T color="#80deea" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
+            The split is the setup. Each slot is a miniature 8-dim vector database of its own.
           </T>
         </Box>
       )}
+      <Reveal when={sub >= 1}>
+        <Box color={C.yellow} style={{ width: "100%" }}>
+          <T color={C.yellow} bold center size={22}>
+            Per-slot codebook: k-means with 256 centroids
+          </T>
+          <T color="#ffe082" style={{ marginTop: 8 }}>
+            For each of the 96 slots, run k-means across the entire dataset&apos;s subvectors at that slot. Pick k = 256
+            centroids. These 256 centroids are the codebook for that slot - every future subvector at slot 0 will be
+            approximated by whichever of the 256 centroids it is closest to. Each slot has its own independent codebook.
+          </T>
+          <div
+            style={{
+              marginTop: 14,
+              padding: "12px 14px",
+              borderRadius: 8,
+              background: `${C.yellow}06`,
+              border: `1px solid ${C.yellow}12`,
+            }}
+          >
+            <T color={C.yellow} bold center size={16}>
+              Slot 0 codebook (32 of the 256 centroids shown as 4-dim vectors)
+            </T>
+            <div
+              style={{
+                marginTop: 10,
+                display: "grid",
+                gridTemplateColumns: "repeat(4, 1fr)",
+                gap: 6,
+                fontFamily: "monospace",
+                fontSize: 11,
+              }}
+            >
+              {Array.from({ length: 32 }).map((_, i) => {
+                const c = [
+                  ((i * 31) % 100) / 100,
+                  ((i * 47 + 13) % 100) / 100,
+                  ((i * 23 + 7) % 100) / 100,
+                  ((i * 59 + 11) % 100) / 100,
+                ];
+                return (
+                  <div
+                    key={i}
+                    style={{
+                      padding: "5px 6px",
+                      background: `${C.yellow}10`,
+                      border: `1px solid ${C.yellow}20`,
+                      borderRadius: 4,
+                      textAlign: "center",
+                      color: C.bright,
+                    }}
+                  >
+                    <div style={{ color: C.yellow, fontSize: 10, fontWeight: "bold" }}>id {i}</div>
+                    <div>
+                      [{c[0].toFixed(2)},{c[1].toFixed(2)}]
+                    </div>
+                    <div>
+                      [{c[2].toFixed(2)},{c[3].toFixed(2)}]
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+            <T color={C.dim} size={13} center style={{ marginTop: 8 }}>
+              ... 224 more centroids (256 total) ...
+            </T>
+          </div>
+          <div
+            style={{
+              marginTop: 14,
+              padding: "14px 18px",
+              borderRadius: 8,
+              background: "rgba(0,0,0,0.3)",
+              textAlign: "center",
+              fontFamily: "monospace",
+              fontSize: 16,
+              color: C.bright,
+              lineHeight: 2,
+            }}
+          >
+            96 slots &middot; 256 centroids each = <span style={{ color: C.yellow }}>24,576 centroids total</span>
+            <br />
+            codebook storage: 96 &middot; 256 &middot; 8 dims &middot; 4 bytes &approx; 786 KB (one-time, fits in L2)
+          </div>
+          <T color="#ffe082" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
+            256 codes fit in a single 8-bit byte. That is the whole reason k = 256 is the PQ default.
+          </T>
+        </Box>
+      </Reveal>
+      <Reveal when={sub >= 2}>
+        <Box color={C.green} style={{ width: "100%" }}>
+          <T color={C.green} bold center size={22}>
+            Encode: each subvector becomes one centroid id
+          </T>
+          <T color="#80e8a5" style={{ marginTop: 8 }}>
+            With the codebooks in place, encoding is a simple operation. For each slot of a new document vector, find
+            the centroid id (0 through 255) that is closest to the subvector and store that single byte. A whole 768-dim
+            vector becomes 96 bytes - one byte per slot. The search index stores these 96-byte codes, never the original
+            float32 vector.
+          </T>
+          <div
+            style={{
+              marginTop: 14,
+              padding: "12px 14px",
+              borderRadius: 8,
+              background: `${C.green}06`,
+              border: `1px solid ${C.green}12`,
+            }}
+          >
+            <T color={C.green} bold center size={16}>
+              Encoding doc 1 (first 4 of 96 slots shown)
+            </T>
+            <div
+              style={{
+                marginTop: 10,
+                display: "grid",
+                gridTemplateColumns: "120px 1fr 60px",
+                gap: 10,
+                fontFamily: "monospace",
+                fontSize: 13,
+                alignItems: "center",
+              }}
+            >
+              {[
+                { slot: 0, sub: "[0.81, 0.12, 0.45, 0.22]", id: 17 },
+                { slot: 1, sub: "[0.63, 0.07, 0.38, 0.91]", id: 203 },
+                { slot: 2, sub: "[0.44, 0.28, 0.56, 0.19]", id: 89 },
+                { slot: 3, sub: "[0.72, 0.34, 0.15, 0.48]", id: 142 },
+              ].map((row) => (
+                <div key={row.slot} style={{ display: "contents" }}>
+                  <div style={{ color: C.green, textAlign: "right" }}>slot {row.slot}</div>
+                  <div style={{ color: C.bright, textAlign: "center", padding: "4px 6px" }}>{row.sub}</div>
+                  <div
+                    style={{
+                      color: C.bright,
+                      textAlign: "center",
+                      padding: "6px 8px",
+                      background: `${C.green}14`,
+                      border: `1px solid ${C.green}28`,
+                      borderRadius: 4,
+                      fontWeight: "bold",
+                    }}
+                  >
+                    id = {row.id}
+                  </div>
+                </div>
+              ))}
+            </div>
+            <T color={C.dim} size={13} center style={{ marginTop: 10 }}>
+              ... 92 more slots, each one 1 byte ...
+            </T>
+          </div>
+          <div
+            style={{
+              marginTop: 14,
+              padding: "14px 18px",
+              borderRadius: 8,
+              background: "rgba(0,0,0,0.3)",
+              textAlign: "center",
+              fontFamily: "monospace",
+              fontSize: 16,
+              color: C.bright,
+              lineHeight: 2,
+            }}
+          >
+            doc 1 code = [17, 203, 89, 142, ..., 71]
+            <br />
+            <span style={{ color: C.green }}>96 centroid ids &middot; 1 byte each = 96 bytes total</span>
+          </div>
+          <T color="#80e8a5" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
+            The vector is now a compact sequence of byte-sized pointers into 96 small codebooks.
+          </T>
+        </Box>
+      </Reveal>
+      <Reveal when={sub >= 3}>
+        <Box color={C.orange} style={{ width: "100%" }}>
+          <T color={C.orange} bold center size={22}>
+            96 bytes instead of 3,072: 32x compression
+          </T>
+          <T color="#ffcc80" style={{ marginTop: 8 }}>
+            The full vector replaced by a 96-byte code is the headline number for product quantization. That is 32x
+            smaller than the float32 original. A corpus of 1 billion 768-dim vectors drops from 3 TB down to 96 GB - it
+            now fits on a single reasonably-specced server, with room for the graph index and a cache.
+          </T>
+          <div
+            style={{
+              marginTop: 14,
+              padding: "14px 18px",
+              borderRadius: 8,
+              background: "rgba(0,0,0,0.3)",
+              textAlign: "center",
+              fontFamily: "monospace",
+              fontSize: 16,
+              color: C.bright,
+              lineHeight: 2,
+            }}
+          >
+            float32: 768 &middot; 4 = <span style={{ color: C.cyan }}>3,072 bytes</span>
+            <br />
+            PQ (m=96): 96 &middot; 1 = <span style={{ color: C.orange }}>96 bytes</span>
+            <br />
+            <span style={{ color: C.green, fontWeight: "bold" }}>compression ratio = 32x</span>
+          </div>
+          <div style={{ marginTop: 14, display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 10 }}>
+            {[
+              { n: "1M", float: "3 GB", pq: "96 MB" },
+              { n: "100M", float: "300 GB", pq: "9.6 GB" },
+              { n: "1B", float: "3 TB", pq: "96 GB" },
+            ].map((row) => (
+              <div
+                key={row.n}
+                style={{
+                  padding: "12px 14px",
+                  borderRadius: 8,
+                  background: `${C.orange}06`,
+                  border: `1px solid ${C.orange}20`,
+                  textAlign: "center",
+                }}
+              >
+                <T color={C.orange} bold size={16}>
+                  N = {row.n}
+                </T>
+                <div style={{ marginTop: 6, fontFamily: "monospace", fontSize: 14, color: C.dim, lineHeight: 1.7 }}>
+                  float32: {row.float}
+                  <br />
+                  <span style={{ color: C.green, fontWeight: "bold" }}>PQ: {row.pq}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+          <T color="#ffcc80" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
+            A billion vectors in 96 GB is what made vector databases economically viable at web scale.
+          </T>
+        </Box>
+      </Reveal>
+      <Reveal when={sub >= 4}>
+        <Box color={C.red} style={{ width: "100%" }}>
+          <T color={C.red} bold center size={22}>
+            Asymmetric distance: keep query float, look up doc codes
+          </T>
+          <T color="#ef9a9a" style={{ marginTop: 8 }}>
+            Storing docs as codes is half the story. Distance computation has to work too. The trick is asymmetric: the
+            query stays in its full float32 form, and only the documents are encoded. For each query, precompute one
+            small table per slot that gives the squared distance from the query&apos;s subvector to every centroid.
+            Then, looking up a document&apos;s distance is m table lookups summed together - no multiplies, just adds.
+          </T>
+          <div
+            style={{
+              marginTop: 14,
+              padding: "14px 18px",
+              borderRadius: 8,
+              background: "rgba(0,0,0,0.3)",
+              textAlign: "center",
+              fontFamily: "monospace",
+              fontSize: 15,
+              color: C.bright,
+              lineHeight: 2,
+            }}
+          >
+            <span style={{ color: C.red }}>once per query (precompute step):</span>
+            <br />
+            for slot s in 0..96: for c in 0..256: table[s][c] = || q_s - centroid_s_c ||&sup2;
+            <br />
+            <span style={{ color: C.red }}>per document d (search-time cost):</span>
+            <br />
+            dist(q, d) = &Sigma;&nbsp;table[s][d.code[s]] for s in 0..96
+          </div>
+          <div
+            style={{
+              marginTop: 14,
+              padding: "12px 14px",
+              borderRadius: 8,
+              background: `${C.red}06`,
+              border: `1px solid ${C.red}12`,
+            }}
+          >
+            <T color={C.red} bold center size={16}>
+              Precomputed lookup table (96 slots &times; 256 centroids)
+            </T>
+            <div
+              style={{
+                marginTop: 10,
+                display: "grid",
+                gridTemplateColumns: "auto 1fr",
+                columnGap: 12,
+                rowGap: 6,
+                fontFamily: "monospace",
+                fontSize: 13,
+                color: C.bright,
+              }}
+            >
+              <div style={{ color: C.red, textAlign: "right" }}>size:</div>
+              <div>96 &middot; 256 = 24,576 entries &middot; 4 bytes &approx; 96 KB (fits L2 cache)</div>
+              <div style={{ color: C.red, textAlign: "right" }}>cost per doc:</div>
+              <div>96 cache-resident lookups + 96 adds (no multiplies)</div>
+              <div style={{ color: C.red, textAlign: "right" }}>vs float32:</div>
+              <div>768 multiplies + 768 adds per doc (about 10x slower)</div>
+            </div>
+          </div>
+          <T color="#ef9a9a" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
+            A 10x speedup stacked on a 32x memory win is why PQ dominated large-scale vector search for a decade before
+            graph indexes arrived.
+          </T>
+        </Box>
+      </Reveal>
+      <Reveal when={sub >= 5}>
+        <Box color={C.purple} style={{ width: "100%" }}>
+          <T color={C.purple} bold center size={22}>
+            OPQ: rotate the data first so PQ works better
+          </T>
+          <T color="#b8a9ff" style={{ marginTop: 8 }}>
+            PQ treats each slot as independent, but real embedding dimensions are correlated - what happens at dim 0 is
+            linked to what happens at dim 200. Correlated dimensions spread data across slots in an awkward way, leaving
+            the per-slot k-means with loose clusters and bad approximations. Optimized Product Quantization (OPQ) solves
+            this with a learned orthonormal rotation matrix R applied before the split. The rotation decorrelates the
+            dimensions so each slot sees tighter clusters, and the per-slot codebooks fit the data better.
+          </T>
+          <div
+            style={{
+              marginTop: 14,
+              padding: "12px 14px",
+              borderRadius: 8,
+              background: `${C.purple}06`,
+              border: `1px solid ${C.purple}12`,
+            }}
+          >
+            <T color={C.purple} bold center size={16}>
+              PQ pipeline with and without OPQ
+            </T>
+            <div
+              style={{
+                marginTop: 10,
+                display: "grid",
+                gridTemplateColumns: "1fr 1fr",
+                gap: 10,
+              }}
+            >
+              <div
+                style={{
+                  padding: "10px 12px",
+                  background: `${C.red}08`,
+                  border: `1px solid ${C.red}18`,
+                  borderRadius: 6,
+                  fontFamily: "monospace",
+                  fontSize: 14,
+                  color: C.bright,
+                  textAlign: "center",
+                  lineHeight: 2,
+                }}
+              >
+                <T color={C.red} bold center size={15}>
+                  plain PQ
+                </T>
+                <div style={{ marginTop: 8 }}>
+                  v &rarr; split &rarr; encode
+                  <br />
+                  correlated dims hurt k-means
+                </div>
+              </div>
+              <div
+                style={{
+                  padding: "10px 12px",
+                  background: `${C.green}08`,
+                  border: `1px solid ${C.green}18`,
+                  borderRadius: 6,
+                  fontFamily: "monospace",
+                  fontSize: 14,
+                  color: C.bright,
+                  textAlign: "center",
+                  lineHeight: 2,
+                }}
+              >
+                <T color={C.green} bold center size={15}>
+                  OPQ + PQ
+                </T>
+                <div style={{ marginTop: 8 }}>
+                  v &rarr; <span style={{ color: C.purple }}>Rv (rotate)</span> &rarr; split &rarr; encode
+                  <br />
+                  decorrelated dims &rarr; tighter clusters
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            style={{
+              marginTop: 14,
+              padding: "14px 18px",
+              borderRadius: 8,
+              background: "rgba(0,0,0,0.3)",
+              textAlign: "center",
+              fontFamily: "monospace",
+              fontSize: 15,
+              color: C.bright,
+              lineHeight: 2,
+            }}
+          >
+            recall@10 at m = 96 (typical)
+            <br />
+            plain PQ: <span style={{ color: C.red }}>0.89</span> &middot; OPQ + PQ:{" "}
+            <span style={{ color: C.green }}>0.94</span>
+            <br />
+            <span style={{ color: C.dim }}>
+              R is a 768 &times; 768 orthonormal matrix learned alongside the codebooks
+            </span>
+          </div>
+          <T color="#b8a9ff" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
+            FAISS, ScaNN, and most production PQ implementations use OPQ by default. It is a free recall bump for a
+            one-time training cost.
+          </T>
+        </Box>
+      </Reveal>
+      <Reveal when={sub >= 6}>
+        <Box color={C.pink} style={{ width: "100%" }}>
+          <T color={C.pink} bold center size={22}>
+            Pick m to hit your target recall
+          </T>
+          <T color="#f8aee0" style={{ marginTop: 8 }}>
+            The only real PQ tuning knob is m (the number of subvectors). Higher m means smaller subvectors, which means
+            the per-slot k-means sees simpler data and the approximation is tighter. Higher m also means more bytes per
+            encoded vector - the compression ratio drops. The typical production sweep:
+          </T>
+          <div
+            style={{
+              marginTop: 14,
+              padding: "12px 14px",
+              borderRadius: 8,
+              background: `${C.pink}06`,
+              border: `1px solid ${C.pink}12`,
+            }}
+          >
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(5, 1fr)",
+                gap: 6,
+                fontFamily: "monospace",
+                fontSize: 13,
+              }}
+            >
+              {["m", "bytes/vec", "compression", "recall@10 (OPQ)", "typical use"].map((h, i) => (
+                <div
+                  key={`h-${i}`}
+                  style={{
+                    padding: "8px 6px",
+                    background: `${C.pink}14`,
+                    color: C.pink,
+                    fontWeight: "bold",
+                    textAlign: "center",
+                    borderRadius: 4,
+                  }}
+                >
+                  {h}
+                </div>
+              ))}
+              {[
+                { m: "8", bytes: "8", ratio: "384x", recall: "0.81", use: "extreme scale" },
+                { m: "48", bytes: "48", ratio: "64x", recall: "0.91", use: "web-scale search" },
+                { m: "96", bytes: "96", ratio: "32x", recall: "0.96", use: "the production sweet spot" },
+                { m: "192", bytes: "192", ratio: "16x", recall: "0.98", use: "recall-sensitive workloads" },
+              ].map((row, i) => (
+                <div key={`r-${i}`} style={{ display: "contents" }}>
+                  <div
+                    style={{
+                      padding: "8px 6px",
+                      textAlign: "center",
+                      color: C.bright,
+                      background: i === 2 ? `${C.pink}08` : "transparent",
+                      fontWeight: i === 2 ? "bold" : "normal",
+                    }}
+                  >
+                    {row.m}
+                  </div>
+                  <div
+                    style={{
+                      padding: "8px 6px",
+                      textAlign: "center",
+                      color: C.bright,
+                      background: i === 2 ? `${C.pink}08` : "transparent",
+                    }}
+                  >
+                    {row.bytes}
+                  </div>
+                  <div
+                    style={{
+                      padding: "8px 6px",
+                      textAlign: "center",
+                      color: C.bright,
+                      background: i === 2 ? `${C.pink}08` : "transparent",
+                    }}
+                  >
+                    {row.ratio}
+                  </div>
+                  <div
+                    style={{
+                      padding: "8px 6px",
+                      textAlign: "center",
+                      color: C.bright,
+                      background: i === 2 ? `${C.pink}08` : "transparent",
+                      fontWeight: i === 2 ? "bold" : "normal",
+                    }}
+                  >
+                    {row.recall}
+                  </div>
+                  <div
+                    style={{
+                      padding: "8px 6px",
+                      textAlign: "center",
+                      color: C.dim,
+                      background: i === 2 ? `${C.pink}08` : "transparent",
+                    }}
+                  >
+                    {row.use}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+          <T color="#f8aee0" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
+            m = 96 (32x compression, 0.96 recall) is the canonical production setting. It is what FAISS ships with and
+            what Qdrant&apos;s PQ mode defaults to.
+          </T>
+        </Box>
+      </Reveal>
       {sub < 6 && (
         <SubBtn
           key={sub}

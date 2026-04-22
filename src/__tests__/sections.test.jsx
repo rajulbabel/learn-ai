@@ -811,6 +811,57 @@ describe("ScalarQuantization (11.13) content", () => {
   });
 });
 
+describe("ProductQuantization (11.14) content", () => {
+  const fn = VectorCompression.ProductQuantization;
+
+  it("sub=0 splits 768-dim vector into 96 subvectors", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/768/);
+    expect(container.textContent).toMatch(/96/);
+    expect(container.textContent).toMatch(/sub[- ]?vector|split/i);
+  });
+
+  it("sub=1 runs k-means per slot with 256 centroids", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/256/);
+    expect(container.textContent).toMatch(/centroid/i);
+    expect(container.textContent).toMatch(/codebook/i);
+    expect(container.textContent).toMatch(/k[- ]?means/i);
+  });
+
+  it("sub=2 encodes each subvector to a centroid id", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/centroid id|code/i);
+  });
+
+  it("sub=3 shows 96 bytes = 32x compression", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/96/);
+    expect(container.textContent).toMatch(/3072|3,072/);
+    expect(container.textContent).toMatch(/32/);
+  });
+
+  it("sub=4 describes asymmetric distance via lookup table", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/asymmetric/i);
+    expect(container.textContent).toMatch(/lookup|table/i);
+  });
+
+  it("sub=5 explains OPQ rotation", () => {
+    const { container } = render(fn(makeCtx({ sub: 5 })));
+    expect(container.textContent).toMatch(/OPQ/);
+    expect(container.textContent).toMatch(/rotat/i);
+    expect(container.textContent).toMatch(/decorrelat|correlat/i);
+  });
+
+  it("sub=6 shows the recall-compression curve", () => {
+    const { container } = render(fn(makeCtx({ sub: 6 })));
+    expect(container.textContent).toMatch(/m\s*=\s*96|m=96/i);
+    expect(container.textContent).toMatch(/recall/i);
+    expect(container.textContent).toMatch(/compress/i);
+  });
+});
+
 // ─── TOC special branches ───
 describe("TOC", () => {
   it("renders section list", () => {

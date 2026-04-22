@@ -1254,6 +1254,50 @@ describe("HybridSearch (11.23) content", () => {
   });
 });
 
+describe("Rerankers (11.24) content", () => {
+  const fn = VectorProduction.Rerankers;
+
+  it("sub=0 frames two-stage retrieval", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/two[- ]?stage|stage 1/i);
+    expect(container.textContent).toMatch(/top[- ]?100|100/);
+    expect(container.textContent).toMatch(/fast|approximate/i);
+  });
+
+  it("sub=1 introduces cross-encoder concatenation", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/cross[- ]?encoder/i);
+    expect(container.textContent).toMatch(/concatenated|together/i);
+    expect(container.textContent).toMatch(/attention/i);
+  });
+
+  it("sub=2 contrasts bi-encoder and cross-encoder", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/bi[- ]?encoder/i);
+    expect(container.textContent).toMatch(/token|interaction/i);
+    expect(container.textContent).toMatch(/attention/i);
+  });
+
+  it("sub=3 reranks top-100 to top-10", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/rerank|re-rank/i);
+    expect(container.textContent).toMatch(/top[- ]?10|10/i);
+    expect(container.textContent).toMatch(/score|sort/i);
+  });
+
+  it("sub=4 shows latency cost on GPU", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/latency|ms|100 ms/i);
+    expect(container.textContent).toMatch(/1 ms|100/);
+    expect(container.textContent).toMatch(/GPU|A10|H100/i);
+  });
+
+  it("sub=5 names production reranker models", () => {
+    const { container } = render(fn(makeCtx({ sub: 5 })));
+    expect(container.textContent).toMatch(/Cohere|BGE|MS[- ]?MARCO/i);
+  });
+});
+
 // ─── TOC special branches ───
 describe("TOC", () => {
   it("renders section list", () => {

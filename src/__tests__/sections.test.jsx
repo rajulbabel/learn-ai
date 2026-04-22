@@ -1341,6 +1341,51 @@ describe("MultiVectorRetrieval (11.25) content", () => {
   });
 });
 
+describe("EmbeddingLifecycle (11.26) content", () => {
+  const fn = VectorProduction.EmbeddingLifecycle;
+
+  it("sub=0 frames the indexed-two-years-ago scenario", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/500M|500 million/);
+    expect(container.textContent).toMatch(/ada[- ]?002|text-embedding|two years/i);
+    expect(container.textContent).toMatch(/upgrade|moved/i);
+  });
+
+  it("sub=1 highlights the dimension mismatch", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/1536/);
+    expect(container.textContent).toMatch(/3072/);
+    expect(container.textContent).toMatch(/dimension|dims|mismatch/i);
+  });
+
+  it("sub=2 describes the re-embed cost path", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/re[- ]?embed/i);
+    expect(container.textContent).toMatch(/source/i);
+    expect(container.textContent).toMatch(/cost|\$|bill/i);
+  });
+
+  it("sub=3 describes parallel indexes during migration", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/parallel|dual/i);
+    expect(container.textContent).toMatch(/serve|traffic/i);
+    expect(container.textContent).toMatch(/cutover|flip|migrate/i);
+  });
+
+  it("sub=4 covers the pin-the-old-model option", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/pin|freeze/i);
+    expect(container.textContent).toMatch(/deprecated|drift|decay/i);
+  });
+
+  it("sub=5 lays out drift monitoring", () => {
+    const { container } = render(fn(makeCtx({ sub: 5 })));
+    expect(container.textContent).toMatch(/drift|regression|eval/i);
+    expect(container.textContent).toMatch(/monitor|ground[- ]?truth/i);
+    expect(container.textContent).toMatch(/recall|quality/i);
+  });
+});
+
 // ─── TOC special branches ───
 describe("TOC", () => {
   it("renders section list", () => {

@@ -1478,6 +1478,46 @@ describe("CapacityPlanning (11.28) content", () => {
   });
 });
 
+describe("DecisionFramework (11.35) content", () => {
+  const fn = VectorSystems.DecisionFramework;
+
+  it("sub=0 shows the decision flowchart with the axes", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/flowchart|decision/i);
+    expect(container.textContent).toMatch(/data size|ops|filter|cost/i);
+  });
+
+  it("sub=1 shows the size buckets", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/1M|100M|1B/);
+    expect(container.textContent).toMatch(/bucket|size/i);
+  });
+
+  it("sub=2 shows the ops preference axis", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/ops|preference/i);
+    expect(container.textContent).toMatch(/Pinecone|Qdrant|Milvus|pgvector/);
+  });
+
+  it("sub=3 shows the filter complexity axis", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/filter/i);
+    expect(container.textContent).toMatch(/simple|complex|analytical/i);
+  });
+
+  it("sub=4 shows the design-review checklist", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/checklist|questions/i);
+    expect(container.textContent).toMatch(/size|QPS|P99|selectivity|availability/i);
+  });
+
+  it("sub=5 recap: learner can answer Qdrant vs Pinecone from first principles", () => {
+    const { container } = render(fn(makeCtx({ sub: 5 })));
+    expect(container.textContent).toMatch(/recap|first principles|Qdrant|Pinecone/i);
+    expect(container.textContent).toMatch(/section|learn|master/i);
+  });
+});
+
 describe("WeaviateMilvusChroma (11.34) content", () => {
   const fn = VectorSystems.WeaviateMilvusChroma;
 

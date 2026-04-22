@@ -4214,6 +4214,12 @@ describe("Every SVG has a <desc> element", () => {
     "11.16",
     "11.17",
     "11.18",
+    "11.19",
+    "11.20",
+    "11.21",
+    "11.22",
+    "11.23",
+    "11.24",
   ];
 
   svgChapters.forEach((chId) => {

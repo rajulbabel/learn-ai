@@ -4701,16 +4701,455 @@ export const HNSWConstruction = (ctx) => {
   );
 };
 
+// Miniature 3-tier diagram used throughout 11.9 to animate the search path by stage.
+const SearchPathDiagram = ({ stage, desc }) => {
+  const Y2 = 40;
+  const Y1 = 130;
+  const Y0 = 230;
+  const layer2 = [{ id: 1, x: 250 }];
+  const layer1 = [
+    { id: 1, x: 130 },
+    { id: 6, x: 250 },
+    { id: 10, x: 370 },
+  ];
+  const layer0 = [
+    { id: 1, x: 110 },
+    { id: 3, x: 160 },
+    { id: 4, x: 180 },
+    { id: 5, x: 90 },
+    { id: 7, x: 130 },
+    { id: 2, x: 240 },
+    { id: 8, x: 220 },
+    { id: 6, x: 290 },
+    { id: 10, x: 380 },
+    { id: 9, x: 410 },
+  ];
+  const activeL2 = stage >= 0 ? [1] : [];
+  const activeL1 = stage >= 1 ? [1] : [];
+  const activeL0 = stage >= 3 ? [1, 3, 7] : [];
+  const beamPairs =
+    stage >= 4
+      ? [
+          [1, 7],
+          [7, 3],
+          [3, 4],
+          [1, 3],
+        ]
+      : [];
+  return (
+    <svg viewBox="0 0 500 300" style={{ width: "100%", maxWidth: 520, height: "auto", display: "block" }}>
+      <desc>{desc}</desc>
+      <defs>
+        <marker id="searchArrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+          <polygon points="0 0, 10 3, 0 6" fill={C.green} />
+        </marker>
+      </defs>
+      <line x1="10" y1={Y2} x2="490" y2={Y2} stroke={C.red} strokeDasharray="2 4" strokeOpacity="0.4" />
+      <line x1="10" y1={Y1} x2="490" y2={Y1} stroke={C.yellow} strokeDasharray="2 4" strokeOpacity="0.4" />
+      <line x1="10" y1={Y0} x2="490" y2={Y0} stroke={C.cyan} strokeDasharray="2 4" strokeOpacity="0.4" />
+      <text x="16" y={Y2 - 8} fill={C.red} fontSize="11">
+        layer 2
+      </text>
+      <text x="16" y={Y1 - 8} fill={C.yellow} fontSize="11">
+        layer 1
+      </text>
+      <text x="16" y={Y0 + 16} fill={C.cyan} fontSize="11">
+        layer 0
+      </text>
+      {[
+        [1, 6],
+        [6, 10],
+      ].map(([a, b], i) => {
+        const pa = layer1.find((n) => n.id === a);
+        const pb = layer1.find((n) => n.id === b);
+        return <line key={`l1e${i}`} x1={pa.x} y1={Y1} x2={pb.x} y2={Y1} stroke={C.yellow} strokeWidth="1.5" />;
+      })}
+      {[
+        [1, 5],
+        [1, 7],
+        [1, 3],
+        [3, 4],
+        [3, 7],
+        [4, 5],
+        [7, 5],
+        [2, 8],
+        [8, 4],
+        [6, 10],
+        [8, 6],
+        [9, 10],
+      ].map(([a, b], i) => {
+        const pa = layer0.find((n) => n.id === a);
+        const pb = layer0.find((n) => n.id === b);
+        return (
+          <line
+            key={`l0e${i}`}
+            x1={pa.x}
+            y1={Y0}
+            x2={pb.x}
+            y2={Y0}
+            stroke={C.cyan}
+            strokeOpacity="0.3"
+            strokeWidth="1.5"
+          />
+        );
+      })}
+      {beamPairs.map(([a, b], i) => {
+        const pa = layer0.find((n) => n.id === a);
+        const pb = layer0.find((n) => n.id === b);
+        return <line key={`bp${i}`} x1={pa.x} y1={Y0} x2={pb.x} y2={Y0} stroke={C.purple} strokeWidth="3" />;
+      })}
+      {stage >= 1 && (
+        <line x1={layer2[0].x} y1={Y2} x2={layer1.find((n) => n.id === 1).x} y2={Y1} stroke={C.green} strokeWidth="3" />
+      )}
+      {stage >= 2 && (
+        <line
+          x1={layer1.find((n) => n.id === 1).x}
+          y1={Y1}
+          x2={layer0.find((n) => n.id === 1).x}
+          y2={Y0}
+          stroke={C.green}
+          strokeWidth="3"
+        />
+      )}
+      {stage >= 0 && (
+        <line
+          x1="450"
+          y1="20"
+          x2={layer2[0].x + 10}
+          y2={Y2 - 8}
+          stroke={C.yellow}
+          strokeWidth="2"
+          markerEnd="url(#searchArrow)"
+        />
+      )}
+      {layer2.map((n) => (
+        <g key={`l2n${n.id}`}>
+          <circle cx={n.x} cy={Y2} r={12} fill={activeL2.includes(n.id) ? C.green : C.red} stroke={C.red} />
+          <text x={n.x} y={Y2 + 4} textAnchor="middle" fill="#08080d" fontSize="12" fontWeight="bold">
+            {n.id}
+          </text>
+        </g>
+      ))}
+      {layer1.map((n) => (
+        <g key={`l1n${n.id}`}>
+          <circle cx={n.x} cy={Y1} r={12} fill={activeL1.includes(n.id) ? C.green : C.yellow} stroke={C.yellow} />
+          <text x={n.x} y={Y1 + 4} textAnchor="middle" fill="#08080d" fontSize="12" fontWeight="bold">
+            {n.id}
+          </text>
+        </g>
+      ))}
+      {layer0.map((n) => (
+        <g key={`l0n${n.id}`}>
+          <circle cx={n.x} cy={Y0} r={12} fill={activeL0.includes(n.id) ? C.green : C.cyan} stroke={C.cyan} />
+          <text x={n.x} y={Y0 + 4} textAnchor="middle" fill="#08080d" fontSize="12" fontWeight="bold">
+            {n.id}
+          </text>
+        </g>
+      ))}
+      {stage >= 0 && (
+        <text x="470" y="15" textAnchor="end" fill={C.yellow} fontSize="11" fontFamily="monospace">
+          query
+        </text>
+      )}
+    </svg>
+  );
+};
+
 export const HNSWSearch = (ctx) => {
-  const { sub } = ctx;
+  const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx;
   return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
       {sub >= 0 && (
-        <Box color={C.yellow} style={{ width: "100%" }}>
-          <T color={C.yellow} bold center size={22}>
-            HNSW Search (stub)
+        <Box color={C.cyan} style={{ width: "100%" }}>
+          <T color={C.cyan} bold center size={22}>
+            Start at the top-layer entry point
+          </T>
+          <T color="#80deea" style={{ marginTop: 8 }}>
+            Every HNSW search begins at the graph&apos;s current entry point, which lives in the top layer. The entry
+            point is one specific node - whichever doc won the layer roll during construction. For our cat-corpus graph
+            that is doc 1 at layer 2.
+          </T>
+          <div
+            style={{
+              marginTop: 14,
+              padding: "12px 14px",
+              borderRadius: 8,
+              background: `${C.cyan}06`,
+              border: `1px solid ${C.cyan}12`,
+            }}
+          >
+            <SearchPathDiagram
+              stage={0}
+              desc="Three-tier HNSW diagram. Query vector enters at the top layer's entry-point node (doc 1). Below it, the graph's full layer structure is visible; the yellow query arrow points into the top hub."
+            />
+          </div>
+          <T color="#80deea" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
+            No matter where in the embedding space the query lands, it starts from this exact node. The upper-tier
+            long-range edges do the initial heavy lifting of getting close.
           </T>
         </Box>
+      )}
+      <Reveal when={sub >= 1}>
+        <Box color={C.green} style={{ width: "100%" }}>
+          <T color={C.green} bold center size={22}>
+            Greedy descent: move to any neighbor closer to the query
+          </T>
+          <T color="#80e8a5" style={{ marginTop: 8 }}>
+            At the current layer, look at every neighbor of the current node. Measure the distance from each neighbor to
+            the query. If any neighbor is closer than where we are now, move there and repeat. When no neighbor is
+            closer, we have hit a local minimum on this layer.
+          </T>
+          <div
+            style={{
+              marginTop: 14,
+              padding: "12px 14px",
+              borderRadius: 8,
+              background: `${C.green}06`,
+              border: `1px solid ${C.green}12`,
+            }}
+          >
+            <SearchPathDiagram
+              stage={1}
+              desc="Greedy descent at layer 2 picks the closest hub neighbor to the query and hops there. The green path highlights the hop; remaining layer 1 and 0 are still untouched."
+            />
+          </div>
+          <div
+            style={{
+              marginTop: 14,
+              padding: "14px 18px",
+              borderRadius: 8,
+              background: "rgba(0,0,0,0.3)",
+              textAlign: "center",
+              fontFamily: "monospace",
+              fontSize: 15,
+              color: C.bright,
+              lineHeight: 1.9,
+            }}
+          >
+            <span style={{ color: C.dim }}># greedy step, one layer at a time</span>
+            <br />
+            while any neighbor n of current:
+            <br />
+            &nbsp;&nbsp;if dist(n, q) &lt; dist(current, q): current = n
+            <br />
+            &nbsp;&nbsp;else: stop
+          </div>
+          <T color="#80e8a5" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
+            This is the same local-search move as IVF&apos;s cluster probe, but over graph edges instead of cluster
+            centroids. Each hop shrinks the distance to the query.
+          </T>
+        </Box>
+      </Reveal>
+      <Reveal when={sub >= 2}>
+        <Box color={C.yellow} style={{ width: "100%" }}>
+          <T color={C.yellow} bold center size={22}>
+            Stuck on this layer? Drop down to the next one
+          </T>
+          <T color="#ffe082" style={{ marginTop: 8 }}>
+            When greedy descent hits a local minimum at layer L, drop down to the next layer (L &minus; 1) using the
+            same node. The node also exists down there by construction, and its neighbors on the lower layer are
+            different - more of them, and finer-grained. Resume greedy descent there.
+          </T>
+          <div
+            style={{
+              marginTop: 14,
+              padding: "12px 14px",
+              borderRadius: 8,
+              background: `${C.yellow}06`,
+              border: `1px solid ${C.yellow}12`,
+            }}
+          >
+            <SearchPathDiagram
+              stage={2}
+              desc="Search drops from layer 2 to layer 1 to layer 0 along green vertical edges. Each drop happens when no neighbor on the current layer is closer to the query."
+            />
+          </div>
+          <div
+            style={{
+              marginTop: 14,
+              padding: "12px 14px",
+              borderRadius: 8,
+              background: "rgba(0,0,0,0.3)",
+              textAlign: "center",
+              fontFamily: "monospace",
+              fontSize: 15,
+              color: C.bright,
+              lineHeight: 1.9,
+            }}
+          >
+            <span style={{ color: C.yellow }}>drop</span>: current node persists, we now see its denser neighborhood on
+            layer 0
+            <br />
+            total layer drops = top_level &minus; 0
+          </div>
+          <T color="#ffe082" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
+            Drops are free. The node is already in memory, we just switch which adjacency list we follow. The expensive
+            part is the distance computations themselves.
+          </T>
+        </Box>
+      </Reveal>
+      <Reveal when={sub >= 3}>
+        <Box color={C.orange} style={{ width: "100%" }}>
+          <T color={C.orange} bold center size={22}>
+            At layer 0, switch to beam search with ef_search candidates
+          </T>
+          <T color="#ffcc80" style={{ marginTop: 8 }}>
+            Layer 0 is where greedy breaks: the proximity graph has too many dead-ends, and a pure greedy walk can get
+            stuck in a suboptimal local minimum. Instead of greedy, we keep a priority queue of the top ef_search
+            candidates seen so far. ef_search defaults to 50. Think of it as how wide a net the search casts.
+          </T>
+          <div
+            style={{
+              marginTop: 14,
+              padding: "12px 14px",
+              borderRadius: 8,
+              background: `${C.orange}06`,
+              border: `1px solid ${C.orange}12`,
+            }}
+          >
+            <SearchPathDiagram
+              stage={3}
+              desc="At layer 0, three candidate nodes (docs 1, 3, 7) are highlighted green inside the beam. The search is about to expand their neighbors."
+            />
+          </div>
+          <div
+            style={{
+              marginTop: 14,
+              padding: "12px 14px",
+              borderRadius: 8,
+              background: "rgba(0,0,0,0.3)",
+              textAlign: "center",
+              fontFamily: "monospace",
+              fontSize: 15,
+              color: C.bright,
+              lineHeight: 1.9,
+            }}
+          >
+            beam = priority queue, size = <span style={{ color: C.orange }}>ef_search = 50</span> candidates
+            <br />
+            initial beam = {"{"}current node, its neighbors, sorted by distance to q{"}"}
+          </div>
+          <T color="#ffcc80" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
+            ef_search = 50 is the starting default. Raise to 200 for high-recall workloads, drop to 10 when latency is
+            critical.
+          </T>
+        </Box>
+      </Reveal>
+      <Reveal when={sub >= 4}>
+        <Box color={C.purple} style={{ width: "100%" }}>
+          <T color={C.purple} bold center size={22}>
+            Expand the beam until the top stops changing
+          </T>
+          <T color="#b8a9ff" style={{ marginTop: 8 }}>
+            Repeat: pop the unexplored candidate with the smallest distance, look at its neighbors, insert them into the
+            queue if they are closer than the current worst-in-queue, evict the worst. Stop when a full expansion fails
+            to update the top of the queue. That is the signal we have converged.
+          </T>
+          <div
+            style={{
+              marginTop: 14,
+              padding: "12px 14px",
+              borderRadius: 8,
+              background: `${C.purple}06`,
+              border: `1px solid ${C.purple}12`,
+            }}
+          >
+            <SearchPathDiagram
+              stage={4}
+              desc="Beam expansion at layer 0 shown as purple edges between candidate doc nodes. The priority queue is updated as neighbors are explored; when the best candidate stops changing, the beam has converged."
+            />
+          </div>
+          <div
+            style={{
+              marginTop: 14,
+              padding: "12px 14px",
+              borderRadius: 8,
+              background: "rgba(0,0,0,0.3)",
+              textAlign: "center",
+              fontFamily: "monospace",
+              fontSize: 14,
+              color: C.bright,
+              lineHeight: 1.8,
+            }}
+          >
+            <span style={{ color: C.dim }}># layer-0 beam expansion</span>
+            <br />
+            while beam has unexplored candidates:
+            <br />
+            &nbsp;&nbsp;pick the closest unexplored node c
+            <br />
+            &nbsp;&nbsp;for neighbor n of c:
+            <br />
+            &nbsp;&nbsp;&nbsp;&nbsp;if dist(n, q) &lt; dist(worst-in-beam, q):
+            <br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;beam = push(beam, n); beam = keep_ef_search_closest(beam)
+            <br />
+            &nbsp;&nbsp;if beam top unchanged for one full sweep: stop
+          </div>
+          <T color="#b8a9ff" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
+            Beam search is why HNSW beats greedy-only graph indexes. The priority queue lets the algorithm back out of
+            dead-ends.
+          </T>
+        </Box>
+      </Reveal>
+      <Reveal when={sub >= 5}>
+        <Box color={C.red} style={{ width: "100%" }}>
+          <T color={C.red} bold center size={22}>
+            Return the top-k and trace the full end-to-end path
+          </T>
+          <T color="#ef9a9a" style={{ marginTop: 8 }}>
+            When the beam has converged, take its top k entries. For our running example with the query
+            &quot;information about cats&quot; and k = 3, the returned docs are 1, 3, 7 - exactly the cat docs. Here is
+            the full path from the entry point all the way down to the returned neighbors.
+          </T>
+          <div
+            style={{
+              marginTop: 14,
+              padding: "12px 14px",
+              borderRadius: 8,
+              background: `${C.red}06`,
+              border: `1px solid ${C.red}12`,
+            }}
+          >
+            <SearchPathDiagram
+              stage={4}
+              desc="Complete HNSW search path for the cat-corpus query. Green edges trace the descent from the layer-2 entry through layer 1 down to the layer-0 beam, which converges on docs 1, 3, and 7."
+            />
+          </div>
+          <div
+            style={{
+              marginTop: 14,
+              padding: "14px 18px",
+              borderRadius: 8,
+              background: "rgba(0,0,0,0.3)",
+              fontFamily: "monospace",
+              fontSize: 15,
+              color: C.bright,
+              lineHeight: 1.9,
+              textAlign: "center",
+            }}
+          >
+            path: <span style={{ color: C.red }}>entry(L2, doc 1)</span> &rarr;{" "}
+            <span style={{ color: C.yellow }}>L1 hub doc 1</span> &rarr; <span style={{ color: C.green }}>L0 beam</span>{" "}
+            &rarr; top-3: <span style={{ color: C.green }}>docs 1, 3, 7</span>{" "}
+            <span style={{ color: C.dim }}>(cat docs)</span>
+          </div>
+          <T color="#ef9a9a" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
+            Same algorithm scales from 10 docs to 1 billion docs. The only things that change are the number of layers
+            (log N of them) and the size of ef_search.
+          </T>
+        </Box>
+      </Reveal>
+      {sub < 5 && (
+        <SubBtn
+          key={sub}
+          onClick={() => {
+            setSubBtnRipple(Date.now());
+            navigate("forward");
+          }}
+          rippleKey={subBtnRipple}
+          registerSubBtn={registerSubBtn}
+        />
       )}
     </div>
   );

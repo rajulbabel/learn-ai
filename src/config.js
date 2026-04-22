@@ -145,6 +145,8 @@ export const chapters = [
   { id: "11.14", title: "Product Quantization (+ OPQ)", section: 11, component: "ProductQuantization" },
   { id: "11.15", title: "Binary Quantization", section: 11, component: "BinaryQuantization" },
   { id: "11.16", title: "Matryoshka Embeddings", section: 11, component: "Matryoshka" },
+  { id: "11.17", title: "IVF-PQ", section: 11, component: "IVFPQ" },
+  { id: "11.18", title: "HNSW + PQ", section: 11, component: "HNSWPQ" },
 ];
 
 export const sectionNames = {

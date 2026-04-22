@@ -215,7 +215,7 @@ Only config.js IDs change.
 | 10.3 | MixtureOfExperts | Mixture of Experts - Bigger Model, Same Compute |
 | 10.4 | Thinking | Thinking - How Reasoning Models Work |
 
-**Section 11: Vector Databases** (`vector-foundations.jsx` + `vector-compression.jsx` - Milestones 1-4 of 6 complete)
+**Section 11: Vector Databases** (`vector-foundations.jsx` + `vector-compression.jsx` + `vector-production.jsx` - Milestones 1-5 of 6 complete)
 
 | Chapter | Component | Title |
 |---------|-----------|-------|
@@ -237,8 +237,18 @@ Only config.js IDs change.
 | 11.16 | Matryoshka | Matryoshka Embeddings |
 | 11.17 | IVFPQ | IVF-PQ |
 | 11.18 | HNSWPQ | HNSW + PQ |
+| 11.19 | Filtering | Filtering |
+| 11.20 | UpdatesDeletes | Updates & Deletes |
+| 11.21 | Sharding | Sharding & Partitioning |
+| 11.22 | Replication | Replication & High Availability |
+| 11.23 | HybridSearch | Hybrid Search |
+| 11.24 | Rerankers | Rerankers |
+| 11.25 | MultiVectorRetrieval | Multi-vector Retrieval (ColBERT-style) |
+| 11.26 | EmbeddingLifecycle | Embedding Lifecycle & Re-embedding |
+| 11.27 | Observability | Observability |
+| 11.28 | CapacityPlanning | Capacity Planning & Cost Models |
 
-(Subsequent milestones will extend this table as chapters 11.19-11.35 are added.)
+(Subsequent milestones will extend this table as chapters 11.29-11.35 are added.)
 
 ## Project Structure
 
@@ -275,7 +285,8 @@ learn-ai/
 │       ├── encoder-decoder-diagrams.jsx # Section 9 (Training/Inference flow diagrams)
 │       ├── modern-llm-techniques.jsx    # Section 10 (MoE, Thinking)
 │       ├── vector-foundations.jsx        # Section 11 (Acts 1+2, chapters 11.1-11.11)
-│       └── vector-compression.jsx        # Section 11 (Acts 3+4, chapters 11.12-11.18)
+│       ├── vector-compression.jsx        # Section 11 (Acts 3+4, chapters 11.12-11.18)
+│       └── vector-production.jsx         # Section 11 (Act 5, chapters 11.19-11.28)
 ├── .github/workflows/deploy.yml
 └── CLAUDE.md
 ```

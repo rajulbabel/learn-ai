@@ -4724,7 +4724,9 @@ const SearchPathDiagram = ({ stage, desc }) => {
     { id: 10, x: 380 },
     { id: 9, x: 410 },
   ];
-  const activeL2 = stage >= 0 ? [1] : [];
+  // activeL2 always holds the single layer-2 hub once search has entered the graph.
+  // stage never goes negative in practice, so no conditional here.
+  const activeL2 = [1];
   const activeL1 = stage >= 1 ? [1] : [];
   const activeL0 = stage >= 3 ? [1, 3, 7] : [];
   const beamPairs =
@@ -4811,20 +4813,18 @@ const SearchPathDiagram = ({ stage, desc }) => {
           strokeWidth="3"
         />
       )}
-      {stage >= 0 && (
-        <line
-          x1="450"
-          y1="20"
-          x2={layer2[0].x + 10}
-          y2={Y2 - 8}
-          stroke={C.yellow}
-          strokeWidth="2"
-          markerEnd="url(#searchArrow)"
-        />
-      )}
+      <line
+        x1="450"
+        y1="20"
+        x2={layer2[0].x + 10}
+        y2={Y2 - 8}
+        stroke={C.yellow}
+        strokeWidth="2"
+        markerEnd="url(#searchArrow)"
+      />
       {layer2.map((n) => (
         <g key={`l2n${n.id}`}>
-          <circle cx={n.x} cy={Y2} r={12} fill={activeL2.includes(n.id) ? C.green : C.red} stroke={C.red} />
+          <circle cx={n.x} cy={Y2} r={12} fill={C.green} stroke={C.red} />
           <text x={n.x} y={Y2 + 4} textAnchor="middle" fill="#08080d" fontSize="12" fontWeight="bold">
             {n.id}
           </text>
@@ -4846,11 +4846,9 @@ const SearchPathDiagram = ({ stage, desc }) => {
           </text>
         </g>
       ))}
-      {stage >= 0 && (
-        <text x="470" y="15" textAnchor="end" fill={C.yellow} fontSize="11" fontFamily="monospace">
-          query
-        </text>
-      )}
+      <text x="470" y="15" textAnchor="end" fill={C.yellow} fontSize="11" fontFamily="monospace">
+        query
+      </text>
     </svg>
   );
 };

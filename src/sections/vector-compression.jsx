@@ -2193,12 +2193,502 @@ export const Matryoshka = (ctx) => {
   return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
       {sub >= 0 && (
-        <Box color={C.green} style={{ width: "100%" }}>
-          <T color={C.green} bold center size={22}>
-            Matryoshka (stub)
+        <Box color={C.cyan} style={{ width: "100%" }}>
+          <T color={C.cyan} bold center size={22}>
+            You indexed 500M docs; now you want smaller vectors
+          </T>
+          <T color="#80deea" style={{ marginTop: 8 }}>
+            A year ago the team indexed 500 million documents at d = 3072 using OpenAI&apos;s text-embedding-3-large.
+            Latency and memory bills are getting painful. A smaller embedding would help, but re-embedding 500 million
+            docs is an expensive proposition: you need the original source text (not always available), API calls add up
+            to a significant dollar cost, and the full re-encoding + re-indexing job takes days. What if you could just
+            cut the existing vectors shorter?
+          </T>
+          <div
+            style={{
+              marginTop: 14,
+              padding: "12px 14px",
+              borderRadius: 8,
+              background: `${C.cyan}06`,
+              border: `1px solid ${C.cyan}12`,
+            }}
+          >
+            <T color={C.cyan} bold center size={16}>
+              The cost of re-embedding 500 million documents
+            </T>
+            <div
+              style={{
+                marginTop: 10,
+                display: "grid",
+                gridTemplateColumns: "1fr 1fr",
+                gap: 10,
+              }}
+            >
+              {[
+                { metric: "OpenAI API cost", value: "~$30,000", note: "at $0.13 per 1M tokens, ~2B tokens" },
+                { metric: "wall-clock time", value: "~3-5 days", note: "even with high concurrency + batching" },
+                { metric: "source-text requirement", value: "must retain", note: "many pipelines drop it" },
+                { metric: "index rebuild", value: "on top of that", note: "extra days of HNSW re-construction" },
+              ].map((row, i) => (
+                <div
+                  key={`cost-${i}`}
+                  style={{
+                    padding: "10px 12px",
+                    background: `${C.cyan}10`,
+                    border: `1px solid ${C.cyan}20`,
+                    borderRadius: 6,
+                  }}
+                >
+                  <T color={C.cyan} bold size={14}>
+                    {row.metric}
+                  </T>
+                  <T color={C.bright} bold size={17} style={{ marginTop: 4, fontFamily: "monospace" }}>
+                    {row.value}
+                  </T>
+                  <T color={C.dim} size={13} style={{ marginTop: 2 }}>
+                    {row.note}
+                  </T>
+                </div>
+              ))}
+            </div>
+          </div>
+          <T color="#80deea" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
+            Re-embedding is feasible for 1 million docs. At 500 million it is an expensive migration. Matryoshka avoids
+            it entirely.
           </T>
         </Box>
       )}
+      <Reveal when={sub >= 1}>
+        <Box color={C.purple} style={{ width: "100%" }}>
+          <T color={C.purple} bold center size={22}>
+            Matryoshka: the first K dimensions are also a valid embedding
+          </T>
+          <T color="#b8a9ff" style={{ marginTop: 8 }}>
+            Matryoshka Representation Learning (MRL) is a training-time trick. Instead of training the encoder to
+            produce one useful vector at d = 3072, it is trained to produce a vector where the first 256 dims are useful
+            on their own, AND the first 512 are useful (and better), AND the first 1024, AND the full 3072. Every prefix
+            of the vector is itself a valid embedding. Simply truncating to the first K dims at query time gives a
+            working smaller vector, no re-encoding needed.
+          </T>
+          <div
+            style={{
+              marginTop: 14,
+              padding: "12px 14px",
+              borderRadius: 8,
+              background: `${C.purple}06`,
+              border: `1px solid ${C.purple}12`,
+            }}
+          >
+            <T color={C.purple} bold center size={16}>
+              One vector, several usable truncations
+            </T>
+            <svg viewBox="0 0 600 140" style={{ width: "100%", maxWidth: 620, height: "auto", display: "block" }}>
+              <desc>
+                Long horizontal vector bar divided into colored prefix regions at 256, 512, 1024, and 3072 dimensions;
+                each prefix is labeled as a valid truncation.
+              </desc>
+              <rect x="20" y="50" width="80" height="40" fill={C.red} stroke="#08080d" strokeWidth="1" />
+              <rect x="100" y="50" width="80" height="40" fill={C.orange} stroke="#08080d" strokeWidth="1" />
+              <rect x="180" y="50" width="160" height="40" fill={C.yellow} stroke="#08080d" strokeWidth="1" />
+              <rect x="340" y="50" width="240" height="40" fill={C.green} stroke="#08080d" strokeWidth="1" />
+              <text x="60" y="75" textAnchor="middle" fill="#08080d" fontSize="12" fontWeight="bold">
+                256
+              </text>
+              <text x="140" y="75" textAnchor="middle" fill="#08080d" fontSize="12" fontWeight="bold">
+                512
+              </text>
+              <text x="260" y="75" textAnchor="middle" fill="#08080d" fontSize="12" fontWeight="bold">
+                1024
+              </text>
+              <text x="460" y="75" textAnchor="middle" fill="#08080d" fontSize="13" fontWeight="bold">
+                3072 (full)
+              </text>
+              <line x1="20" y1="40" x2="100" y2="40" stroke={C.red} strokeWidth="1" />
+              <text x="60" y="32" textAnchor="middle" fill={C.red} fontSize="11">
+                first 256
+              </text>
+              <line x1="20" y1="110" x2="180" y2="110" stroke={C.orange} strokeWidth="1" />
+              <text x="100" y="122" textAnchor="middle" fill={C.orange} fontSize="11">
+                first 512
+              </text>
+              <line x1="20" y1="25" x2="340" y2="25" stroke={C.yellow} strokeWidth="1" />
+              <text x="180" y="17" textAnchor="middle" fill={C.yellow} fontSize="11">
+                first 1024
+              </text>
+            </svg>
+          </div>
+          <div
+            style={{
+              marginTop: 14,
+              padding: "14px 18px",
+              borderRadius: 8,
+              background: "rgba(0,0,0,0.3)",
+              textAlign: "center",
+              fontFamily: "monospace",
+              fontSize: 15,
+              color: C.bright,
+              lineHeight: 2,
+            }}
+          >
+            training loss = &Sigma; over K in {"{"}256, 512, 1024, 2048, 3072{"}"}: L(embed[0..K])
+            <br />
+            <span style={{ color: C.purple }}>each prefix K is trained to be a usable embedding on its own</span>
+          </div>
+          <T color="#b8a9ff" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
+            The insight: by penalizing every truncation during training, the model is forced to pack the most important
+            information into the early dimensions.
+          </T>
+        </Box>
+      </Reveal>
+      <Reveal when={sub >= 2}>
+        <Box color={C.green} style={{ width: "100%" }}>
+          <T color={C.green} bold center size={22}>
+            Like Russian dolls: nested valid representations
+          </T>
+          <T color="#80e8a5" style={{ marginTop: 8 }}>
+            Matryoshka dolls nest inside each other - the small one fits inside the medium one, which fits inside the
+            large one, and each one is a complete doll on its own. That is exactly the structure of a Matryoshka
+            embedding. The 256-dim prefix sits inside the 512-dim prefix sits inside the 1024-dim prefix sits inside the
+            full 3072-dim vector. Each prefix is a complete, usable embedding at its own resolution.
+          </T>
+          <div
+            style={{
+              marginTop: 14,
+              padding: "12px 14px",
+              borderRadius: 8,
+              background: `${C.green}06`,
+              border: `1px solid ${C.green}12`,
+            }}
+          >
+            <T color={C.green} bold center size={16}>
+              Nested concentric spheres: each ring is a valid embedding
+            </T>
+            <svg viewBox="0 0 400 300" style={{ width: "100%", maxWidth: 440, height: "auto", display: "block" }}>
+              <desc>
+                Four concentric circles representing Matryoshka embedding prefixes: innermost 256 dims, then 512, 1024,
+                and full 3072, resembling nested Russian dolls.
+              </desc>
+              <circle cx="200" cy="150" r="140" fill={`${C.green}10`} stroke={C.green} strokeWidth="2" />
+              <circle cx="200" cy="150" r="105" fill={`${C.yellow}10`} stroke={C.yellow} strokeWidth="2" />
+              <circle cx="200" cy="150" r="70" fill={`${C.orange}10`} stroke={C.orange} strokeWidth="2" />
+              <circle cx="200" cy="150" r="38" fill={`${C.red}20`} stroke={C.red} strokeWidth="2" />
+              <text x="200" y="153" textAnchor="middle" fill={C.bright} fontSize="13" fontWeight="bold">
+                256
+              </text>
+              <text x="200" y="95" textAnchor="middle" fill={C.orange} fontSize="12" fontWeight="bold">
+                512
+              </text>
+              <text x="200" y="60" textAnchor="middle" fill={C.yellow} fontSize="12" fontWeight="bold">
+                1024
+              </text>
+              <text x="200" y="25" textAnchor="middle" fill={C.green} fontSize="12" fontWeight="bold">
+                3072 (full)
+              </text>
+            </svg>
+          </div>
+          <T color="#80e8a5" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
+            Nested. Concentric. Each prefix is complete. The Russian doll analogy is not metaphor; it is structural.
+          </T>
+        </Box>
+      </Reveal>
+      <Reveal when={sub >= 3}>
+        <Box color={C.orange} style={{ width: "100%" }}>
+          <T color={C.orange} bold center size={22}>
+            Truncate to 512 dims for 6x memory savings
+          </T>
+          <T color="#ffcc80" style={{ marginTop: 8 }}>
+            Here is the payoff. Keep shipping the full 3072-dim embedding (it is the richest version and useful for
+            reranking), but only load the first 512 dimensions into the vector index. The index is 6x smaller (3072 /
+            512), HNSW graph distances are 6x cheaper to compute, RAM footprint drops 6x. On typical long-context
+            retrieval workloads the recall hit is about 2-4% - a much smaller cost than re-embedding from scratch.
+          </T>
+          <div
+            style={{
+              marginTop: 14,
+              padding: "12px 14px",
+              borderRadius: 8,
+              background: `${C.orange}06`,
+              border: `1px solid ${C.orange}12`,
+            }}
+          >
+            <T color={C.orange} bold center size={16}>
+              Memory at N = 500M, Matryoshka truncation to 512
+            </T>
+            <div
+              style={{
+                marginTop: 10,
+                display: "grid",
+                gridTemplateColumns: "1fr 1fr",
+                gap: 10,
+                fontFamily: "monospace",
+                fontSize: 14,
+                lineHeight: 1.8,
+              }}
+            >
+              <div
+                style={{
+                  padding: "10px 12px",
+                  background: `${C.cyan}08`,
+                  border: `1px solid ${C.cyan}18`,
+                  borderRadius: 6,
+                  textAlign: "center",
+                  color: C.bright,
+                }}
+              >
+                <T color={C.cyan} bold size={15}>
+                  full d = 3072
+                </T>
+                <div style={{ marginTop: 6 }}>
+                  3,072 &middot; 4 = 12,288 bytes per vector
+                  <br />
+                  500M &middot; 12 KB = <span style={{ color: C.red }}>6 TB index</span>
+                </div>
+              </div>
+              <div
+                style={{
+                  padding: "10px 12px",
+                  background: `${C.orange}10`,
+                  border: `1px solid ${C.orange}28`,
+                  borderRadius: 6,
+                  textAlign: "center",
+                  color: C.bright,
+                }}
+              >
+                <T color={C.orange} bold size={15}>
+                  truncated to 512
+                </T>
+                <div style={{ marginTop: 6 }}>
+                  512 &middot; 4 = 2,048 bytes per vector
+                  <br />
+                  500M &middot; 2 KB = <span style={{ color: C.green }}>1 TB index</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            style={{
+              marginTop: 14,
+              padding: "14px 18px",
+              borderRadius: 8,
+              background: "rgba(0,0,0,0.3)",
+              textAlign: "center",
+              fontFamily: "monospace",
+              fontSize: 15,
+              color: C.bright,
+              lineHeight: 2,
+            }}
+          >
+            <span style={{ color: C.green, fontWeight: "bold" }}>6x savings: 6 TB &rarr; 1 TB</span>
+            <br />
+            recall@10: 0.97 at 3072 &rarr; 0.94 at 512 (about 3% drop)
+            <br />
+            full 3072-dim kept on cold storage for reranking stage
+          </div>
+          <T color="#ffcc80" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
+            The vectors already exist in their full form. Truncation is a metadata change. Zero re-encoding cost.
+          </T>
+        </Box>
+      </Reveal>
+      <Reveal when={sub >= 4}>
+        <Box color={C.yellow} style={{ width: "100%" }}>
+          <T color={C.yellow} bold center size={22}>
+            Adaptive precision: coarse to fine, same embedding
+          </T>
+          <T color="#ffe082" style={{ marginTop: 8 }}>
+            Matryoshka enables a smarter two-stage retrieval than binary + float rerank. Stage 1 uses the 256-dim prefix
+            to scan a large candidate pool cheaply - every document gets a coarse comparison. Stage 2 reruns just the
+            top 100 candidates with the full 3072-dim vector for the fine-grained ranking. Both stages use the same
+            source embedding; no separate models, no separate index. Adaptive precision with zero retraining cost.
+          </T>
+          <div
+            style={{
+              marginTop: 14,
+              padding: "12px 14px",
+              borderRadius: 8,
+              background: `${C.yellow}06`,
+              border: `1px solid ${C.yellow}12`,
+            }}
+          >
+            <T color={C.yellow} bold center size={16}>
+              Coarse-to-fine retrieval with a single embedding
+            </T>
+            <div
+              style={{
+                marginTop: 10,
+                display: "grid",
+                gridTemplateColumns: "1fr auto 1fr",
+                gap: 12,
+                alignItems: "center",
+              }}
+            >
+              <div
+                style={{
+                  padding: "12px 14px",
+                  background: `${C.red}08`,
+                  border: `1px solid ${C.red}18`,
+                  borderRadius: 6,
+                  textAlign: "center",
+                  fontFamily: "monospace",
+                  fontSize: 14,
+                  color: C.bright,
+                  lineHeight: 1.7,
+                }}
+              >
+                <T color={C.red} bold size={15}>
+                  stage 1: coarse (256-dim)
+                </T>
+                <div style={{ marginTop: 6 }}>
+                  scan 500M docs fast
+                  <br />
+                  6x smaller index vs truncate=512
+                  <br />
+                  12x smaller index vs full
+                  <br />
+                  return top 100
+                </div>
+              </div>
+              <div style={{ fontSize: 26, color: C.yellow }}>&rarr;</div>
+              <div
+                style={{
+                  padding: "12px 14px",
+                  background: `${C.green}08`,
+                  border: `1px solid ${C.green}18`,
+                  borderRadius: 6,
+                  textAlign: "center",
+                  fontFamily: "monospace",
+                  fontSize: 14,
+                  color: C.bright,
+                  lineHeight: 1.7,
+                }}
+              >
+                <T color={C.green} bold size={15}>
+                  stage 2: fine (3072-dim)
+                </T>
+                <div style={{ marginTop: 6 }}>
+                  rerank 100 candidates
+                  <br />
+                  full 3072-dim precision
+                  <br />
+                  cheap: only 100 dot products
+                  <br />
+                  return final top 10
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            style={{
+              marginTop: 14,
+              padding: "14px 18px",
+              borderRadius: 8,
+              background: "rgba(0,0,0,0.3)",
+              textAlign: "center",
+              fontFamily: "monospace",
+              fontSize: 15,
+              color: C.bright,
+              lineHeight: 2,
+            }}
+          >
+            end-to-end recall: ~0.98 &middot; end-to-end latency: ~5 ms
+            <br />
+            <span style={{ color: C.yellow }}>one embedding, two resolutions, adaptive precision</span>
+          </div>
+          <T color="#ffe082" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
+            The 256-dim prefix wears the cheap-filter hat; the 3072-dim full vector wears the accurate-rerank hat. One
+            encoder pass at index time; both roles served thereafter.
+          </T>
+        </Box>
+      </Reveal>
+      <Reveal when={sub >= 5}>
+        <Box color={C.red} style={{ width: "100%" }}>
+          <T color={C.red} bold center size={22}>
+            Where Matryoshka is available today
+          </T>
+          <T color="#ef9a9a" style={{ marginTop: 8 }}>
+            Matryoshka went from research paper (ICML 2022) to production in about a year. OpenAI shipped
+            text-embedding-3-small (d = 1536) and text-embedding-3-large (d = 3072) with Matryoshka training in January
+            2024; both expose a dimensions parameter in their API that does the truncation on-server before returning
+            the vector. Cohere Embed v3 and Jina AI v3 followed. Custom Matryoshka training is also available for
+            self-hosted models via the sentence-transformers library.
+          </T>
+          <div
+            style={{
+              marginTop: 14,
+              padding: "12px 14px",
+              borderRadius: 8,
+              background: `${C.red}06`,
+              border: `1px solid ${C.red}12`,
+            }}
+          >
+            <T color={C.red} bold center size={16}>
+              Production Matryoshka embedding models
+            </T>
+            <div
+              style={{
+                marginTop: 10,
+                display: "grid",
+                gridTemplateColumns: "1fr 1fr",
+                gap: 10,
+              }}
+            >
+              {[
+                {
+                  name: "OpenAI text-embedding-3-large",
+                  full: "d = 3072",
+                  trunc: "any K <= 3072",
+                  note: "dimensions parameter in API",
+                },
+                {
+                  name: "OpenAI text-embedding-3-small",
+                  full: "d = 1536",
+                  trunc: "any K <= 1536",
+                  note: "cheaper, same technique",
+                },
+                {
+                  name: "Cohere Embed v3 (English)",
+                  full: "d = 1024",
+                  trunc: "256, 384, 512, 1024",
+                  note: "int8 + binary too",
+                },
+                {
+                  name: "Jina Embeddings v3",
+                  full: "d = 1024",
+                  trunc: "K <= 1024",
+                  note: "open weights + Matryoshka",
+                },
+              ].map((model) => (
+                <div
+                  key={model.name}
+                  style={{
+                    padding: "10px 12px",
+                    background: `${C.red}08`,
+                    border: `1px solid ${C.red}18`,
+                    borderRadius: 6,
+                  }}
+                >
+                  <T color={C.red} bold size={14}>
+                    {model.name}
+                  </T>
+                  <div
+                    style={{ marginTop: 4, fontFamily: "monospace", fontSize: 13, color: C.bright, lineHeight: 1.7 }}
+                  >
+                    full: {model.full}
+                    <br />
+                    truncation: {model.trunc}
+                  </div>
+                  <T color={C.dim} size={12} style={{ marginTop: 4 }}>
+                    {model.note}
+                  </T>
+                </div>
+              ))}
+            </div>
+          </div>
+          <T color="#ef9a9a" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
+            Matryoshka is the compression lever production teams can turn on the same day the model provider ships it. A
+            smaller, faster index with zero re-embedding, available out of the box from the major providers.
+          </T>
+        </Box>
+      </Reveal>
       {sub < 5 && (
         <SubBtn
           key={sub}

@@ -1298,6 +1298,49 @@ describe("Rerankers (11.24) content", () => {
   });
 });
 
+describe("MultiVectorRetrieval (11.25) content", () => {
+  const fn = VectorProduction.MultiVectorRetrieval;
+
+  it("sub=0 frames the single-vector blur problem", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/single[- ]?vector|one vector/i);
+    expect(container.textContent).toMatch(/blur|lossy|average/i);
+  });
+
+  it("sub=1 introduces ColBERT one-vector-per-token", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/ColBERT/i);
+    expect(container.textContent).toMatch(/token/i);
+    expect(container.textContent).toMatch(/200|per token/i);
+  });
+
+  it("sub=2 uses max-sim aggregation", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/max[- ]?sim|maxsim/i);
+    expect(container.textContent).toMatch(/token/i);
+    expect(container.textContent).toMatch(/sum/i);
+  });
+
+  it("sub=3 walks the max-sim calculation on cat corpus", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/walkthrough|cat|token/i);
+  });
+
+  it("sub=4 shows storage cost scaled by token count", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/storage|memory/i);
+    expect(container.textContent).toMatch(/20|100|600 GB/);
+    expect(container.textContent).toMatch(/token/i);
+  });
+
+  it("sub=5 names Vespa, Qdrant, Elasticsearch support", () => {
+    const { container } = render(fn(makeCtx({ sub: 5 })));
+    expect(container.textContent).toMatch(/Vespa/i);
+    expect(container.textContent).toMatch(/Qdrant/i);
+    expect(container.textContent).toMatch(/Elasticsearch|nested|tensor/i);
+  });
+});
+
 // ─── TOC special branches ───
 describe("TOC", () => {
   it("renders section list", () => {

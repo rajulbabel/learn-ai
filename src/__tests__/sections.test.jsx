@@ -1210,6 +1210,50 @@ describe("Replication (11.22) content", () => {
   });
 });
 
+describe("HybridSearch (11.23) content", () => {
+  const fn = VectorProduction.HybridSearch;
+
+  it("sub=0 explains vectors miss exact matches", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/SKU|exact|proper noun/i);
+    expect(container.textContent).toMatch(/vector|embedding/i);
+    expect(container.textContent).toMatch(/miss|blur/i);
+  });
+
+  it("sub=1 recaps BM25 formula", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/BM25/);
+    expect(container.textContent).toMatch(/term frequency|TF/i);
+    expect(container.textContent).toMatch(/IDF|inverse document/i);
+  });
+
+  it("sub=2 runs BM25 and vector in parallel", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/parallel|both/i);
+    expect(container.textContent).toMatch(/ranked|top/i);
+  });
+
+  it("sub=3 uses Reciprocal Rank Fusion with k=60", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/RRF|Reciprocal Rank Fusion/i);
+    expect(container.textContent).toMatch(/60/);
+    expect(container.textContent).toMatch(/1 \/|rank/i);
+  });
+
+  it("sub=4 works the tabby example vector vs BM25 vs hybrid", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/tabby/i);
+    expect(container.textContent).toMatch(/vector/i);
+    expect(container.textContent).toMatch(/BM25/i);
+  });
+
+  it("sub=5 covers weighted hybrid tuning", () => {
+    const { container } = render(fn(makeCtx({ sub: 5 })));
+    expect(container.textContent).toMatch(/weight|alpha|0\.7/i);
+    expect(container.textContent).toMatch(/hybrid/i);
+  });
+});
+
 // ─── TOC special branches ───
 describe("TOC", () => {
   it("renders section list", () => {

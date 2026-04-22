@@ -3684,16 +3684,524 @@ export const ANNFamilyTree = (ctx) => {
   );
 };
 
+// Edges of a flat proximity graph over the 10-doc corpus. Each doc connects to its ~3 nearest
+// neighbors by CORPUS_XY distance. Reused in 11.7 sub=0/1 (flat) and 11.8/11.9 (layered).
+const FLAT_GRAPH_EDGES = [
+  [1, 5],
+  [1, 7],
+  [1, 3],
+  [3, 4],
+  [3, 7],
+  [4, 5],
+  [5, 7],
+  [2, 8],
+  [2, 3],
+  [8, 4],
+  [8, 6],
+  [6, 10],
+  [9, 10],
+  [6, 9],
+  [8, 10],
+  [2, 1],
+];
+
+// Upper-layer hubs for 11.7 sub=2/3 diagrams.
+// Layer 1 (yellow) = a few nodes that bridge the scatter with long edges.
+// Layer 2 (red) = top hub(s) for global entry.
+const HNSW_LAYER_1 = [1, 6, 10];
+const HNSW_LAYER_2 = [1];
+
+const HNSWLayeredGraph = ({
+  mode, // "flat" | "slowGreedy" | "hubLayer" | "twoLayers"
+  desc,
+  highlightPath = [],
+}) => {
+  // For mode "slowGreedy", trace a long flat-graph path from doc 10 to doc 1
+  const slowPath =
+    mode === "slowGreedy"
+      ? [
+          [10, 8],
+          [8, 6],
+          [6, 9],
+          [9, 10],
+          [10, 8],
+          [8, 2],
+          [2, 3],
+          [3, 1],
+        ]
+      : [];
+  const hubEdges =
+    mode === "hubLayer" || mode === "twoLayers"
+      ? [
+          [1, 6],
+          [6, 10],
+          [1, 10],
+        ]
+      : [];
+  return (
+    <svg viewBox="0 0 500 340" style={{ width: "100%", maxWidth: 520, height: "auto", display: "block" }}>
+      <desc>{desc}</desc>
+      {mode === "twoLayers" && (
+        <>
+          <line
+            x1="10"
+            y1="40"
+            x2="490"
+            y2="40"
+            stroke={C.red}
+            strokeDasharray="2 4"
+            strokeWidth="1"
+            strokeOpacity="0.5"
+          />
+          <line
+            x1="10"
+            y1="110"
+            x2="490"
+            y2="110"
+            stroke={C.yellow}
+            strokeDasharray="2 4"
+            strokeWidth="1"
+            strokeOpacity="0.5"
+          />
+          <text x="20" y="32" fill={C.red} fontSize="11" fontWeight="bold">
+            layer 2 (hubs of hubs)
+          </text>
+          <text x="20" y="102" fill={C.yellow} fontSize="11" fontWeight="bold">
+            layer 1 (hubs)
+          </text>
+          <text x="20" y="320" fill={C.cyan} fontSize="11" fontWeight="bold">
+            layer 0 (everything)
+          </text>
+        </>
+      )}
+      {mode === "hubLayer" && (
+        <>
+          <line
+            x1="10"
+            y1="50"
+            x2="490"
+            y2="50"
+            stroke={C.yellow}
+            strokeDasharray="2 4"
+            strokeWidth="1"
+            strokeOpacity="0.5"
+          />
+          <text x="20" y="42" fill={C.yellow} fontSize="11" fontWeight="bold">
+            layer 1 (hubs)
+          </text>
+          <text x="20" y="330" fill={C.cyan} fontSize="11" fontWeight="bold">
+            layer 0 (everything)
+          </text>
+        </>
+      )}
+      {/* Baseline flat edges - shift the scatter down to make room for upper-layer tiers in layered modes */}
+      {FLAT_GRAPH_EDGES.map(([a, b], i) => {
+        const offsetY = mode === "twoLayers" ? 60 : mode === "hubLayer" ? 60 : 0;
+        const pa = CORPUS_XY[a];
+        const pb = CORPUS_XY[b];
+        return (
+          <line
+            key={`e${i}`}
+            x1={pa.x}
+            y1={pa.y + offsetY}
+            x2={pb.x}
+            y2={pb.y + offsetY}
+            stroke={C.cyan}
+            strokeOpacity="0.35"
+            strokeWidth="1.5"
+          />
+        );
+      })}
+      {/* Slow-greedy path */}
+      {slowPath.map(([a, b], i) => (
+        <line
+          key={`sp${i}`}
+          x1={CORPUS_XY[a].x}
+          y1={CORPUS_XY[a].y}
+          x2={CORPUS_XY[b].x}
+          y2={CORPUS_XY[b].y}
+          stroke={C.red}
+          strokeWidth="2.5"
+          strokeDasharray={i < 3 ? "4 4" : ""}
+        />
+      ))}
+      {/* Hub layer long-range edges */}
+      {hubEdges.map(([a, b], i) => {
+        const offsetY = mode === "twoLayers" ? -50 : -40;
+        const pa = CORPUS_XY[a];
+        const pb = CORPUS_XY[b];
+        return (
+          <line
+            key={`h${i}`}
+            x1={pa.x}
+            y1={pa.y + (mode === "twoLayers" ? 60 : 60) + offsetY}
+            x2={pb.x}
+            y2={pb.y + (mode === "twoLayers" ? 60 : 60) + offsetY}
+            stroke={C.yellow}
+            strokeWidth="2.5"
+          />
+        );
+      })}
+      {/* Layer 2 top hub */}
+      {mode === "twoLayers" &&
+        HNSW_LAYER_2.map((id) => (
+          <g key={`l2${id}`}>
+            <circle cx={CORPUS_XY[id].x} cy={40} r={10} fill={C.red} stroke={C.red} />
+            <text x={CORPUS_XY[id].x} y={44} textAnchor="middle" fill="#08080d" fontSize="12" fontWeight="bold">
+              {id}
+            </text>
+          </g>
+        ))}
+      {/* Dots */}
+      {Object.entries(CORPUS_XY).map(([id, p]) => {
+        const offsetY = mode === "twoLayers" ? 60 : mode === "hubLayer" ? 60 : 0;
+        const isHub = HNSW_LAYER_1.includes(Number(id));
+        const onPath = highlightPath.includes(Number(id));
+        const color = onPath ? C.green : isHub && mode !== "flat" && mode !== "slowGreedy" ? C.yellow : C.cyan;
+        return (
+          <g key={`n${id}`}>
+            <circle cx={p.x} cy={p.y + offsetY} r={10} fill={color} stroke={color} />
+            <text x={p.x} y={p.y + offsetY + 4} textAnchor="middle" fill="#08080d" fontSize="12" fontWeight="bold">
+              {id}
+            </text>
+          </g>
+        );
+      })}
+      {/* Copies of hubs at layer 1 for hubLayer/twoLayers */}
+      {(mode === "hubLayer" || mode === "twoLayers") &&
+        HNSW_LAYER_1.map((id) => (
+          <g key={`l1${id}`}>
+            <circle
+              cx={CORPUS_XY[id].x}
+              cy={mode === "twoLayers" ? 110 : 90}
+              r={10}
+              fill={C.yellow}
+              stroke={C.yellow}
+            />
+            <text
+              x={CORPUS_XY[id].x}
+              y={(mode === "twoLayers" ? 110 : 90) + 4}
+              textAnchor="middle"
+              fill="#08080d"
+              fontSize="12"
+              fontWeight="bold"
+            >
+              {id}
+            </text>
+          </g>
+        ))}
+    </svg>
+  );
+};
+
 export const HNSWIntuition = (ctx) => {
-  const { sub } = ctx;
+  const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx;
   return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
       {sub >= 0 && (
-        <Box color={C.green} style={{ width: "100%" }}>
-          <T color={C.green} bold center size={22}>
-            HNSW Intuition (stub)
+        <Box color={C.cyan} style={{ width: "100%" }}>
+          <T color={C.cyan} bold center size={22}>
+            A flat proximity graph: every node linked to its M nearest
+          </T>
+          <T color="#80deea" style={{ marginTop: 8 }}>
+            HNSW starts with one simple idea. Build a graph over the 10 docs where each node has an edge to its M
+            nearest neighbors. M is a tuning knob; for this visual we draw M = 3 so the picture is readable. In
+            production M = 16 is standard.
+          </T>
+          <div
+            style={{
+              marginTop: 14,
+              padding: "12px 14px",
+              borderRadius: 8,
+              background: `${C.cyan}06`,
+              border: `1px solid ${C.cyan}12`,
+            }}
+          >
+            <HNSWLayeredGraph
+              mode="flat"
+              desc="Flat proximity graph of the 10 cat-corpus documents with each node connected by cyan edges to its two or three nearest neighbors."
+            />
+          </div>
+          <div
+            style={{
+              marginTop: 14,
+              padding: "12px 14px",
+              borderRadius: 8,
+              background: "rgba(0,0,0,0.3)",
+              textAlign: "center",
+              fontFamily: "monospace",
+              fontSize: 15,
+              color: C.bright,
+              lineHeight: 1.9,
+            }}
+          >
+            for each doc d:
+            <br />
+            &nbsp;&nbsp;neighbors(d) = M nearest docs by distance
+          </div>
+          <T color="#80deea" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
+            Every doc is reachable from every other doc by hopping along edges. The question is how fast we can reach
+            the right one.
           </T>
         </Box>
+      )}
+      <Reveal when={sub >= 1}>
+        <Box color={C.red} style={{ width: "100%" }}>
+          <T color={C.red} bold center size={22}>
+            Greedy from a random start: too many hops
+          </T>
+          <T color="#ef9a9a" style={{ marginTop: 8 }}>
+            Greedy search starts somewhere and moves to whichever neighbor is closer to the query. Simple and correct -
+            but if the starting node is far from the query, the walk across the flat graph takes many short hops. On N =
+            1,000,000 with a random start, greedy-on-flat averages about 1,000 hops. Slow.
+          </T>
+          <div
+            style={{
+              marginTop: 14,
+              padding: "12px 14px",
+              borderRadius: 8,
+              background: `${C.red}06`,
+              border: `1px solid ${C.red}12`,
+            }}
+          >
+            <HNSWLayeredGraph
+              mode="slowGreedy"
+              desc="Flat proximity graph with a dashed red path that meanders through many nodes before converging on the cat cluster near doc 1. Illustrates that random-start greedy search on a flat graph is slow."
+              highlightPath={[10, 8, 6, 9, 10, 8, 2, 3, 1]}
+            />
+          </div>
+          <div
+            style={{
+              marginTop: 14,
+              padding: "12px 14px",
+              borderRadius: 8,
+              background: "rgba(0,0,0,0.3)",
+              textAlign: "center",
+              fontFamily: "monospace",
+              fontSize: 16,
+              color: C.bright,
+              lineHeight: 1.9,
+            }}
+          >
+            start: doc 10 (birds/fish)
+            <br />
+            target: doc 1 (cats)
+            <br />
+            hops on this flat graph: <span style={{ color: C.red }}>~8 hops</span> for 10 docs
+            <br />
+            extrapolated to N = 1,000,000: <span style={{ color: C.red }}>many hundreds of hops</span>
+          </div>
+          <T color="#ef9a9a" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
+            Many hops because the flat graph has only local edges. There is no way to jump across the space in one step
+            - we have to trudge through every intermediate doc.
+          </T>
+        </Box>
+      </Reveal>
+      <Reveal when={sub >= 2}>
+        <Box color={C.yellow} style={{ width: "100%" }}>
+          <T color={C.yellow} bold center size={22}>
+            Lift a few nodes to a hub layer with long-range edges
+          </T>
+          <T color="#ffe082" style={{ marginTop: 8 }}>
+            Now add a sparse second layer above the flat graph. Only a handful of nodes exist on it - we call them hubs.
+            Hubs are connected to each other by long-range edges that span the whole dataset. A query enters the graph
+            at the hub layer, jumps across the space in one or two long hops, then drops down to the flat layer for the
+            final fine-grained search.
+          </T>
+          <div
+            style={{
+              marginTop: 14,
+              padding: "12px 14px",
+              borderRadius: 8,
+              background: `${C.yellow}06`,
+              border: `1px solid ${C.yellow}12`,
+            }}
+          >
+            <HNSWLayeredGraph
+              mode="hubLayer"
+              desc="Two-layer HNSW illustration: bottom cyan layer is the flat proximity graph of all 10 docs; top yellow layer holds three hub nodes (docs 1, 6, 10) with yellow long-range edges between them spanning the space."
+            />
+          </div>
+          <div style={{ marginTop: 14, display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+            <div
+              style={{
+                padding: "10px 12px",
+                borderRadius: 8,
+                background: `${C.yellow}06`,
+                border: `1px solid ${C.yellow}12`,
+              }}
+            >
+              <T color={C.yellow} bold center size={15}>
+                Long-range edges
+              </T>
+              <T color={C.bright} size={13} style={{ marginTop: 4 }}>
+                Hub-to-hub edges reach across the dataset in one hop. Enter at a hub, pay one long-haul, and we are
+                already near the target&apos;s neighborhood.
+              </T>
+            </div>
+            <div
+              style={{
+                padding: "10px 12px",
+                borderRadius: 8,
+                background: `${C.yellow}06`,
+                border: `1px solid ${C.yellow}12`,
+              }}
+            >
+              <T color={C.yellow} bold center size={15}>
+                Drop down once close
+              </T>
+              <T color={C.bright} size={13} style={{ marginTop: 4 }}>
+                When no hub is closer to the query, drop to layer 0 and do the last mile on the flat graph&apos;s short
+                edges.
+              </T>
+            </div>
+          </div>
+          <T color="#ffe082" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
+            One sparse hub layer already drops search from N-scale hops to a handful. Stacking one more layer on top
+            takes it to log N.
+          </T>
+        </Box>
+      </Reveal>
+      <Reveal when={sub >= 3}>
+        <Box color={C.green} style={{ width: "100%" }}>
+          <T color={C.green} bold center size={22}>
+            Stack layers exponentially: O(log N) hops total
+          </T>
+          <T color="#80e8a5" style={{ marginTop: 8 }}>
+            Stack a third layer on top, holding only a hub-of-hubs node or two. Searches enter at the top layer, descend
+            through each tier with a constant number of hops per layer, and land at layer 0 already right next to the
+            target. Because each layer holds roughly 1/M of the nodes beneath it, the number of layers grows with log(N)
+            and so does the total hop count.
+          </T>
+          <div
+            style={{
+              marginTop: 14,
+              padding: "12px 14px",
+              borderRadius: 8,
+              background: `${C.green}06`,
+              border: `1px solid ${C.green}12`,
+            }}
+          >
+            <HNSWLayeredGraph
+              mode="twoLayers"
+              desc="Three-layer HNSW illustration: bottom cyan layer is the flat graph of all 10 docs; middle yellow layer has three hub nodes with long-range edges; top red layer has a single hub-of-hubs node providing the global entry point."
+            />
+          </div>
+          <div
+            style={{
+              marginTop: 14,
+              padding: "14px 18px",
+              borderRadius: 8,
+              background: "rgba(0,0,0,0.3)",
+              textAlign: "center",
+              fontFamily: "monospace",
+              fontSize: 16,
+              color: C.bright,
+              lineHeight: 2,
+            }}
+          >
+            layers = &lceil;log<sub>M</sub>(N)&rceil;
+            <br />
+            at M = 16, N = 1,000,000:{"  "}
+            <span style={{ color: C.green }}>log&#8321;&#8326;(1,000,000) &approx; 5 layers</span>
+            <br />
+            hops per layer &approx; constant (~6 with ef_search = 50)
+            <br />
+            total hops &approx; <span style={{ color: C.green }}>30</span> to find the top-k{"  "}
+            <span style={{ color: C.dim }}>vs. ~1000 on flat</span>
+          </div>
+          <T color="#80e8a5" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
+            That is the whole HNSW payoff. Flat graph: O(N) hops. Hierarchical graph: O(log N) hops. Exponential speedup
+            for a small memory bump from the upper layers.
+          </T>
+        </Box>
+      </Reveal>
+      <Reveal when={sub >= 4}>
+        <Box color={C.purple} style={{ width: "100%" }}>
+          <T color={C.purple} bold center size={22}>
+            The airport analogy makes it concrete
+          </T>
+          <T color="#b8a9ff" style={{ marginTop: 8 }}>
+            Getting from a small town in India to a small town in Portugal is not one direct flight. You take a local
+            cab to the regional airport, a regional flight to an international hub, a long-haul flight across continents
+            to another international hub, a regional flight down, and a local cab in. HNSW search does the same thing
+            for vectors - the long-haul tier lets us cover enormous distance in one hop.
+          </T>
+          <div style={{ marginTop: 14, display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 12 }}>
+            {[
+              {
+                title: "Local (layer 0)",
+                color: C.cyan,
+                light: "#80deea",
+                body: "Every city has an airstrip. Many connections to nearby towns. On a flat graph you are stuck using only these.",
+                qty: "100% of nodes",
+              },
+              {
+                title: "Regional (layer 1)",
+                color: C.yellow,
+                light: "#ffe082",
+                body: "A handful of regional airports. Reachable from any local airstrip, and connected to each other by medium-range flights.",
+                qty: "~6% of nodes (1/M = 1/16)",
+              },
+              {
+                title: "International (layer 2+)",
+                color: C.red,
+                light: "#ef9a9a",
+                body: "A few global hubs. Long-haul flights between continents. Search enters here and drops down as it gets closer to the target.",
+                qty: "<1% of nodes",
+              },
+            ].map((tier) => (
+              <div
+                key={tier.title}
+                style={{
+                  padding: "12px 14px",
+                  borderRadius: 8,
+                  background: `${tier.color}06`,
+                  border: `1px solid ${tier.color}12`,
+                }}
+              >
+                <T color={tier.light} bold center size={16}>
+                  {tier.title}
+                </T>
+                <T color={tier.color} size={13} center style={{ marginTop: 4, fontFamily: "monospace" }}>
+                  {tier.qty}
+                </T>
+                <T color={C.bright} size={13} style={{ marginTop: 6 }}>
+                  {tier.body}
+                </T>
+              </div>
+            ))}
+          </div>
+          <div
+            style={{
+              marginTop: 14,
+              padding: "12px 14px",
+              borderRadius: 8,
+              background: `${C.purple}06`,
+              border: `1px solid ${C.purple}12`,
+              textAlign: "center",
+            }}
+          >
+            <T color={C.purple} bold size={17}>
+              The route a query takes
+            </T>
+            <T color="#b8a9ff" size={15} style={{ marginTop: 6 }}>
+              long-haul at international layer &rarr; regional hops once you are over the right continent &rarr; short
+              local hops to the final neighbor. Same strategy planes use. Same strategy HNSW uses.
+            </T>
+          </div>
+        </Box>
+      </Reveal>
+      {sub < 4 && (
+        <SubBtn
+          key={sub}
+          onClick={() => {
+            setSubBtnRipple(Date.now());
+            navigate("forward");
+          }}
+          rippleKey={subBtnRipple}
+          registerSubBtn={registerSubBtn}
+        />
       )}
     </div>
   );

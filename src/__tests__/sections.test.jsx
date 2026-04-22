@@ -949,6 +949,54 @@ describe("Matryoshka (11.16) content", () => {
   });
 });
 
+describe("IVFPQ (11.17) content", () => {
+  const fn = VectorCompression.IVFPQ;
+
+  it("sub=0 recaps IVF clustering and PQ compression", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/IVF/);
+    expect(container.textContent).toMatch(/PQ/);
+    expect(container.textContent).toMatch(/cluster/i);
+    expect(container.textContent).toMatch(/subvector|m bytes/i);
+  });
+
+  it("sub=1 runs IVF k-means first", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/k-means/i);
+    expect(container.textContent).toMatch(/nlist/i);
+    expect(container.textContent).toMatch(/centroid/i);
+  });
+
+  it("sub=2 computes residual = vector - centroid", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/residual/i);
+    expect(container.textContent).toMatch(/centroid/i);
+    expect(container.textContent).toMatch(/tighter|smaller/i);
+  });
+
+  it("sub=3 PQ-encodes the residuals with higher recall", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/residual/i);
+    expect(container.textContent).toMatch(/PQ/);
+    expect(container.textContent).toMatch(/recall/i);
+    expect(container.textContent).toMatch(/0\.8|0\.9|codebook/i);
+  });
+
+  it("sub=4 describes search: probe nprobe cells, scan codes", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/nprobe/i);
+    expect(container.textContent).toMatch(/centroid/i);
+    expect(container.textContent).toMatch(/lookup|table|scan/i);
+  });
+
+  it("sub=5 hits 20 bytes per vector with FAISS IndexIVFPQ", () => {
+    const { container } = render(fn(makeCtx({ sub: 5 })));
+    expect(container.textContent).toMatch(/20 bytes|20 GB/);
+    expect(container.textContent).toMatch(/1B|1 billion/i);
+    expect(container.textContent).toMatch(/FAISS|Milvus/);
+  });
+});
+
 // ─── TOC special branches ───
 describe("TOC", () => {
   it("renders section list", () => {

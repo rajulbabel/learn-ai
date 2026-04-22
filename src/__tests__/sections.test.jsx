@@ -1478,6 +1478,53 @@ describe("CapacityPlanning (11.28) content", () => {
   });
 });
 
+describe("FAISS (11.29) content", () => {
+  const fn = VectorSystems.FAISS;
+
+  it("sub=0 frames FAISS as Meta's 2017 reference library", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/FAISS/);
+    expect(container.textContent).toMatch(/Meta|Facebook/i);
+    expect(container.textContent).toMatch(/2017|library/i);
+  });
+
+  it("sub=1 names the algorithms inside FAISS", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/IVF/);
+    expect(container.textContent).toMatch(/PQ/);
+    expect(container.textContent).toMatch(/HNSW/);
+    expect(container.textContent).toMatch(/CPU|CUDA|GPU/i);
+  });
+
+  it("sub=2 describes Python bindings over a C++ core", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/Python/i);
+    expect(container.textContent).toMatch(/C\+\+|core/i);
+    expect(container.textContent).toMatch(/bindings?|embed/i);
+  });
+
+  it("sub=3 enumerates what FAISS does not provide", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/persist/i);
+    expect(container.textContent).toMatch(/API|REST/i);
+    expect(container.textContent).toMatch(/filter|ACID|replicat/i);
+  });
+
+  it("sub=4 names systems that embed FAISS", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/Milvus/);
+    expect(container.textContent).toMatch(/OpenSearch|engine/i);
+    expect(container.textContent).toMatch(/inside|underneath/i);
+  });
+
+  it("sub=5 states the build-vs-use rule", () => {
+    const { container } = render(fn(makeCtx({ sub: 5 })));
+    expect(container.textContent).toMatch(/build/i);
+    expect(container.textContent).toMatch(/DB|database/i);
+    expect(container.textContent).toMatch(/use one|use it/i);
+  });
+});
+
 // ─── TOC special branches ───
 describe("TOC", () => {
   it("renders section list", () => {

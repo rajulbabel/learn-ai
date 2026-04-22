@@ -1172,6 +1172,44 @@ describe("Sharding (11.21) content", () => {
   });
 });
 
+describe("Replication (11.22) content", () => {
+  const fn = VectorProduction.Replication;
+
+  it("sub=0 describes read replicas with load balancing", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/replica|read replica/i);
+    expect(container.textContent).toMatch(/load[- ]?balance/i);
+  });
+
+  it("sub=1 covers leader-follower replication lag", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/leader|follower|primary/i);
+    expect(container.textContent).toMatch(/lag|delay/i);
+    expect(container.textContent).toMatch(/50|2 s|200 ms/);
+  });
+
+  it("sub=2 handles leader failure via follower promotion", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/leader|primary/i);
+    expect(container.textContent).toMatch(/promote|election/i);
+    expect(container.textContent).toMatch(/lost|window/i);
+  });
+
+  it("sub=3 covers in-memory durability via WAL or snapshots", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/durab|persist/i);
+    expect(container.textContent).toMatch(/WAL|write[- ]?ahead|snapshot/i);
+    expect(container.textContent).toMatch(/RAM/i);
+  });
+
+  it("sub=4 compares recovery time WAL vs re-embed", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/recovery|rebuild/i);
+    expect(container.textContent).toMatch(/WAL|re[- ]?embed/i);
+    expect(container.textContent).toMatch(/hours|days|weeks/i);
+  });
+});
+
 // ─── TOC special branches ───
 describe("TOC", () => {
   it("renders section list", () => {

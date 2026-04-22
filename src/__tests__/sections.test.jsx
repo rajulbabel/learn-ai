@@ -1386,6 +1386,50 @@ describe("EmbeddingLifecycle (11.26) content", () => {
   });
 });
 
+describe("Observability (11.27) content", () => {
+  const fn = VectorProduction.Observability;
+
+  it("sub=0 covers P50/P95/P99 latency tails", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/P50|P95|P99/);
+    expect(container.textContent).toMatch(/tail/i);
+  });
+
+  it("sub=1 describes recall@k ground-truth sampling", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/recall/i);
+    expect(container.textContent).toMatch(/sample|ground[- ]?truth/i);
+    expect(container.textContent).toMatch(/compare|brute[- ]?force/i);
+  });
+
+  it("sub=2 discusses per-query cache and CPU telemetry", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/cache/i);
+    expect(container.textContent).toMatch(/hit rate|cache hit/i);
+    expect(container.textContent).toMatch(/memory|pages|CPU/i);
+  });
+
+  it("sub=3 explains ANN-Benchmarks methodology", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/ANN[- ]?Benchmarks|ann-benchmarks/i);
+    expect(container.textContent).toMatch(/QPS|queries per second/i);
+    expect(container.textContent).toMatch(/recall/i);
+  });
+
+  it("sub=4 lays out alert vs watch dashboard", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/dashboard|Grafana|panel/i);
+    expect(container.textContent).toMatch(/alert|watch/i);
+    expect(container.textContent).toMatch(/P99|recall@10/i);
+  });
+
+  it("sub=5 reminds about unmeasured metrics", () => {
+    const { container } = render(fn(makeCtx({ sub: 5 })));
+    expect(container.textContent).toMatch(/tenant|cold[- ]?start|per-tenant/i);
+    expect(container.textContent).toMatch(/checklist|capture|measure/i);
+  });
+});
+
 // ─── TOC special branches ───
 describe("TOC", () => {
   it("renders section list", () => {

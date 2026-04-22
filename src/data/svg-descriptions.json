@@ -192,5 +192,12 @@
     "Graph node with five redundant short edges all clustered in one direction - the before state where searches can get stuck",
     "Same node after alpha-pruning: four neighbors in different directions across the 2D space, keeping the graph navigable from anywhere",
     "Storage hierarchy diagram - top layer shows a RAM cache with a small subset of high-degree entry nodes, bottom layer shows the SSD storing every graph node as 4 KB blocks aligned to NVMe pages"
+  ],
+  "11.15": [
+    "Curve showing binary quantization recall rising sharply with embedding dimension - near zero at d=64, rising past 0.9 around d=512, plateauing around 0.96 at d=1024 and higher, illustrating why binary works for high-dim BERT-style embeddings but collapses at low dimensions"
+  ],
+  "11.16": [
+    "Long horizontal vector bar divided into colored prefix regions at 256, 512, 1024, and 3072 dimensions, each prefix labeled as a valid Matryoshka truncation so early-dimension subsets are usable embeddings",
+    "Four concentric circles representing Matryoshka embedding prefixes - innermost red 256 dims, then orange 512, yellow 1024, and green 3072 - resembling nested Russian dolls where each ring is itself a complete embedding"
   ]
 }

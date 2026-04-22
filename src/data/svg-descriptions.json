@@ -199,5 +199,12 @@
   "11.16": [
     "Long horizontal vector bar divided into colored prefix regions at 256, 512, 1024, and 3072 dimensions, each prefix labeled as a valid Matryoshka truncation so early-dimension subsets are usable embeddings",
     "Four concentric circles representing Matryoshka embedding prefixes - innermost red 256 dims, then orange 512, yellow 1024, and green 3072 - resembling nested Russian dolls where each ring is itself a complete embedding"
+  ],
+  "11.17": [
+    "Cat-corpus 2D scatter partitioned into three IVF clusters after k-means with nlist = 3: five cat docs form cluster A around the purple centroid square C_A, two dog docs form cluster B around the yellow centroid C_B, and three other docs form cluster C around the cyan centroid C_C, illustrating step 1 of IVF-PQ which clusters the space first",
+    "IVF-PQ search trajectory on the 10-doc cat corpus: the query vector sits inside cluster A, an orange arrow points to the closest centroid C_A, the two nearest cells A and B are highlighted as probed while cluster C is dimmed as skipped, illustrating nprobe = 2 where only the two nearest clusters get their PQ codes scanned"
+  ],
+  "11.18": [
+    "Three-layer HNSW graph with each node labeled by a compact PQ code like [c17, c203, c89, ...] instead of a float vector. The bottom cyan layer holds all eight docs with dense edges, the middle yellow layer holds three hub nodes with long-range edges, and the top red layer has a single global entry-point node. Green dashed vertical lines are layer-to-layer links, illustrating that HNSW + PQ keeps the graph structure and only changes the node payload from float32 vectors to PQ codes"
   ]
 }

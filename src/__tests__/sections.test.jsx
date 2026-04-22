@@ -454,8 +454,11 @@ describe("TOC", () => {
     }
   });
 
-  // Test all 10 sections expanded to cover each one
-  for (let secNum = 1; secNum <= 10; secNum++) {
+  // Test every section that has chapters in config.js. Data-driven so new
+  // sections are auto-covered and we catch the bug where a section was added
+  // to config but its TOC entry was forgotten in toc.jsx.
+  const sectionNumbers = [...new Set(chapters.map((c) => c.section).filter((s) => s > 0))].sort((a, b) => a - b);
+  sectionNumbers.forEach((secNum) => {
     it(`shows chapters for section ${secNum}`, () => {
       const { container } = render(TOC(makeCtx({ expanded: secNum })));
       expect(container.innerHTML).toBeTruthy();
@@ -463,7 +466,7 @@ describe("TOC", () => {
       // This catches bugs where a new section is added to config but not to toc.jsx.
       expect(container.textContent).toContain(sectionNames[secNum]);
     });
-  }
+  });
 });
 
 // ─── Special interactive chapters ───

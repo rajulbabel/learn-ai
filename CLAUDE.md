@@ -215,7 +215,7 @@ Only config.js IDs change.
 | 10.3 | MixtureOfExperts | Mixture of Experts - Bigger Model, Same Compute |
 | 10.4 | Thinking | Thinking - How Reasoning Models Work |
 
-**Section 11: Vector Databases** (`vector-foundations.jsx` - Milestone 1 of 6 complete)
+**Section 11: Vector Databases** (`vector-foundations.jsx` - Milestones 1-2 of 6 complete)
 
 | Chapter | Component | Title |
 |---------|-----------|-------|
@@ -223,8 +223,15 @@ Only config.js IDs change.
 | 11.2 | BruteForceKNN | Brute-Force kNN |
 | 11.3 | ThreeWayTradeoff | The Three-Way Tradeoff |
 | 11.4 | DistanceMetrics | Distance Metrics |
+| 11.5 | IVF | IVF (Inverted File Index) |
+| 11.6 | ANNFamilyTree | The ANN Family Tree |
+| 11.7 | HNSWIntuition | HNSW - The Small-World Intuition |
+| 11.8 | HNSWConstruction | HNSW Construction |
+| 11.9 | HNSWSearch | HNSW Search |
+| 11.10 | HNSWParameters | HNSW Parameters |
+| 11.11 | Vamana | Vamana / DiskANN |
 
-(Subsequent milestones will extend this table as chapters 11.5-11.35 are added.)
+(Subsequent milestones will extend this table as chapters 11.12-11.35 are added.)
 
 ## Project Structure
 
@@ -260,7 +267,7 @@ learn-ai/
 │       ├── transformer-block.jsx        # Section 8 (Add&Norm, FFN, block repeats)
 │       ├── encoder-decoder-diagrams.jsx # Section 9 (Training/Inference flow diagrams)
 │       ├── modern-llm-techniques.jsx    # Section 10 (MoE, Thinking)
-│       └── vector-foundations.jsx        # Section 11 (Acts 1+2, chapters 11.1-11.11 by end of Milestone 2; currently 11.1-11.4)
+│       └── vector-foundations.jsx        # Section 11 (Acts 1+2, chapters 11.1-11.11)
 ├── .github/workflows/deploy.yml
 └── CLAUDE.md
 ```

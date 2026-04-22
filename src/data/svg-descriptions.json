@@ -150,5 +150,47 @@
   "11.4": [
     "Two vectors drawn from the origin - a cyan query vector q and a green document vector d - with a small yellow angle theta between them, illustrating that cosine similarity measures the angle between vectors and that a tight angle means cos(theta) is close to 1.0",
     "Right triangle with two points q and d in 2D, a horizontal dashed leg labeled as the x-axis difference and a vertical dashed leg labeled as the y-axis difference, and the blue hypotenuse highlighted as the L2 distance equal to the square root of the sum of squared differences (Pythagoras in d dimensions)"
+  ],
+  "11.5": [
+    "Scatter plot of the 10 cat-corpus documents with the query vector at the center and faint red lines fanning out to every dot, showing that brute-force kNN compares the query to every vector",
+    "Same 10 docs colored by k-means cluster after running with nlist = 3: purple centroid A among the cat docs, yellow centroid B around the dog docs, cyan centroid C around the other docs",
+    "Same scatter with dashed colored rectangles behind the dots approximating Voronoi cells, showing each doc belongs to exactly one cell",
+    "Query vector with an orange arrow pointing at centroid A (the nearest centroid), cluster A highlighted and other clusters dimmed, illustrating nprobe = 1 where only one cluster is scanned",
+    "Small IVF scatter with nprobe = 1: only the nearest cluster is probed",
+    "Small IVF scatter with nprobe = 2: the two nearest clusters are probed",
+    "Small IVF scatter with nprobe = 3: all three clusters are probed, equivalent to a full scan"
+  ],
+  "11.6": [
+    "KD-tree recursive partition of a 2D point cloud - vertical split down the middle, horizontal splits in each half, one more vertical split in a quadrant - showing clean logarithmic partitioning at low dimensions",
+    "Two-dimensional space with three random hyperplane lines slicing it; vectors in the same intersection share a 3-bit LSH hash code like 011 or 100",
+    "Small IVF recap scatter - three Voronoi cells with the query probing the nearest one",
+    "Proximity graph of the 10 cat-corpus documents with edges connecting each node to its two or three nearest neighbors, and a highlighted green path from the lower-right birds/fish doc across several hops to the cat cluster",
+    "Illustrative recall vs queries-per-second scatter inspired by ann-benchmarks: HNSW and Vamana sit on the upper-right Pareto frontier, while IVF+PQ, LSH, and KD-tree fall below and to the left"
+  ],
+  "11.7": [
+    "Flat proximity graph of the 10 cat-corpus documents with each node connected by cyan edges to its two or three nearest neighbors - the starting point before any hierarchy is added",
+    "Same flat graph with a dashed red greedy-search path meandering across many nodes before reaching the cat cluster, illustrating that random-start greedy search on a flat graph is slow",
+    "Two-layer HNSW illustration - bottom cyan layer is the flat proximity graph of all 10 docs, top yellow layer holds three hub nodes (docs 1, 6, 10) with yellow long-range edges between them",
+    "Three-layer HNSW illustration - bottom cyan all-nodes layer, middle yellow hub layer with long-range edges, top red hub-of-hubs layer with a single global entry-point node"
+  ],
+  "11.8": [
+    "First vector inserted into an empty HNSW graph - a single cyan dot labeled doc 1 marked as the entry point, with no edges or neighbors yet"
+  ],
+  "11.9": [
+    "Three-tier HNSW diagram where the query enters at the top layer entry-point node, with the lower layers still untouched",
+    "Greedy descent at layer 2 picks the closest hub neighbor to the query and hops there, highlighted in green",
+    "Search drops from layer 2 to layer 1 to layer 0 along green vertical edges whenever no neighbor on the current layer is closer to the query",
+    "At layer 0 three candidate nodes (docs 1, 3, 7) are highlighted green inside the beam as it starts expanding neighbors",
+    "Beam expansion at layer 0 shown as purple edges between candidate nodes; when the best candidate stops changing the beam has converged",
+    "Complete HNSW search path - green edges from the layer-2 entry through layer 1 down to the layer-0 beam, which converges on docs 1, 3, and 7"
+  ],
+  "11.10": [
+    "Line chart plotting recall@10 against ef_search on a log horizontal axis, with three curves for M = 8 (cyan), M = 16 (yellow), and M = 32 (green); higher M curves converge closer to 1.0 but require more memory"
+  ],
+  "11.11": [
+    "Single-layer Vamana graph over the 10 cat-corpus documents - a handful of diverse edges per node, no hierarchical layers above it",
+    "Graph node with five redundant short edges all clustered in one direction - the before state where searches can get stuck",
+    "Same node after alpha-pruning: four neighbors in different directions across the 2D space, keeping the graph navigable from anywhere",
+    "Storage hierarchy diagram - top layer shows a RAM cache with a small subset of high-degree entry nodes, bottom layer shows the SSD storing every graph node as 4 KB blocks aligned to NVMe pages"
   ]
 }

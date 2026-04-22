@@ -14,6 +14,7 @@ import * as TransformerBlock from "../sections/transformer-block.jsx";
 import * as EncoderDecoderDiagrams from "../sections/encoder-decoder-diagrams.jsx";
 import * as ModernLLMTechniques from "../sections/modern-llm-techniques.jsx";
 import * as VectorFoundations from "../sections/vector-foundations.jsx";
+import * as VectorCompression from "../sections/vector-compression.jsx";
 
 const lookup = {
   TOC,
@@ -28,6 +29,7 @@ const lookup = {
   ...EncoderDecoderDiagrams,
   ...ModernLLMTechniques,
   ...VectorFoundations,
+  ...VectorCompression,
 };
 
 describe("lookup", () => {

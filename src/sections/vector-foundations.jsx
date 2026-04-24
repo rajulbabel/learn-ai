@@ -4034,30 +4034,48 @@ export const ANNFamilyTree = (ctx) => {
   );
 };
 
-// Edges of a flat proximity graph over the 10-doc corpus, computed as the symmetric
-// union of each node's 3 nearest neighbors by CORPUS_XY squared distance. Because
-// the graph is undirected, some nodes end up with 4 edges (a neighbor chose them
-// reciprocally) - this matches real HNSW behavior where M is the per-insert bound,
-// not a hard per-node cap. Reused in 11.7 sub=0/1 (flat) and 11.8/11.9 (layered).
-const FLAT_GRAPH_EDGES = [
-  [1, 4],
-  [1, 5],
-  [1, 7],
-  [2, 7],
-  [2, 8],
-  [2, 10],
-  [3, 4],
-  [3, 5],
-  [3, 7],
-  [4, 5],
-  [4, 7],
-  [6, 8],
-  [6, 9],
-  [6, 10],
-  [8, 9],
-  [8, 10],
-  [9, 10],
-];
+// Dedicated layout for HNSW diagrams (11.7-11.9). Chosen so the 3-NN proximity
+// graph draws with zero edge crossings in 2D. Separate from CORPUS_XY because
+// those visuals don't draw edges while HNSW diagrams do.
+const HNSW_CORPUS_XY = {
+  1: { x: 68, y: 58 },
+  7: { x: 230, y: 60 },
+  3: { x: 150, y: 130 },
+  4: { x: 230, y: 200 },
+  5: { x: 70, y: 200 },
+  2: { x: 370, y: 70 },
+  8: { x: 420, y: 170 },
+  10: { x: 430, y: 240 },
+  6: { x: 370, y: 240 },
+  9: { x: 480, y: 320 },
+};
+
+// Edges of the flat proximity graph derived from HNSW_CORPUS_XY as the symmetric
+// union of each node's 3 nearest neighbors by squared distance. Because the graph
+// is undirected, some nodes end up with 4 edges (a neighbor chose them reciprocally)
+// - this matches real HNSW behavior where M is the per-insert bound, not a hard
+// per-node cap. Reused in 11.7 sub=0/1 (flat) and 11.8/11.9 (layered).
+const computeFlatEdges = (xy) => {
+  const ids = Object.keys(xy).map(Number);
+  const edges = new Set();
+  for (const a of ids) {
+    const ranked = ids
+      .filter((b) => b !== a)
+      .map((b) => {
+        const dx = xy[a].x - xy[b].x;
+        const dy = xy[a].y - xy[b].y;
+        return { b, d2: dx * dx + dy * dy };
+      })
+      .sort((x, y) => x.d2 - y.d2)
+      .slice(0, 3);
+    for (const { b } of ranked) {
+      const [lo, hi] = a < b ? [a, b] : [b, a];
+      edges.add(`${lo}-${hi}`);
+    }
+  }
+  return [...edges].map((k) => k.split("-").map(Number));
+};
+const FLAT_GRAPH_EDGES = computeFlatEdges(HNSW_CORPUS_XY);
 
 // Upper-layer hubs for 11.7 sub=2/3 diagrams.
 // Layer 1 (yellow) = a few nodes that bridge the scatter with long edges.
@@ -4074,9 +4092,9 @@ const HNSWLayeredGraph = ({
   const slowPath =
     mode === "slowGreedy"
       ? [
-          [10, 6],
-          [6, 9],
-          [9, 10],
+          [10, 9],
+          [9, 6],
+          [6, 10],
           [10, 8],
           [8, 2],
           [2, 7],
@@ -4092,13 +4110,14 @@ const HNSWLayeredGraph = ({
         ]
       : [];
   // Per-mode vertical layout so hub rows never touch their flat-layer copies and
-  // doc 6 at the bottom of CORPUS_XY is not clipped by the viewBox.
+  // the lowest doc in HNSW_CORPUS_XY is not clipped by the viewBox.
   const layered = mode === "hubLayer" || mode === "twoLayers";
   const flatOffsetY = mode === "twoLayers" ? 100 : mode === "hubLayer" ? 80 : 0;
   const hubY = mode === "twoLayers" ? 110 : 90;
   const layer2Y = 40;
-  const maxFlatY = 280 + flatOffsetY + 20; // doc 6 bottom edge + padding
-  const vbH = layered ? Math.max(360, maxFlatY + 20) : 340;
+  const maxHnswY = Math.max(...Object.values(HNSW_CORPUS_XY).map((p) => p.y));
+  const maxFlatY = maxHnswY + flatOffsetY + 20;
+  const vbH = layered ? Math.max(360, maxFlatY + 20) : Math.max(360, maxFlatY + 20);
   return (
     <svg
       viewBox={`0 0 500 ${vbH}`}
@@ -4160,8 +4179,8 @@ const HNSWLayeredGraph = ({
       )}
       {/* Baseline flat edges - shifted down by flatOffsetY in layered modes */}
       {FLAT_GRAPH_EDGES.map(([a, b], i) => {
-        const pa = CORPUS_XY[a];
-        const pb = CORPUS_XY[b];
+        const pa = HNSW_CORPUS_XY[a];
+        const pb = HNSW_CORPUS_XY[b];
         return (
           <line
             key={`e${i}`}
@@ -4179,10 +4198,10 @@ const HNSWLayeredGraph = ({
       {slowPath.map(([a, b], i) => (
         <line
           key={`sp${i}`}
-          x1={CORPUS_XY[a].x}
-          y1={CORPUS_XY[a].y}
-          x2={CORPUS_XY[b].x}
-          y2={CORPUS_XY[b].y}
+          x1={HNSW_CORPUS_XY[a].x}
+          y1={HNSW_CORPUS_XY[a].y}
+          x2={HNSW_CORPUS_XY[b].x}
+          y2={HNSW_CORPUS_XY[b].y}
           stroke={C.red}
           strokeWidth="2.5"
           strokeDasharray={i < 3 ? "4 4" : ""}
@@ -4190,8 +4209,8 @@ const HNSWLayeredGraph = ({
       ))}
       {/* Hub layer long-range edges - drawn between hub-row copies */}
       {hubEdges.map(([a, b], i) => {
-        const pa = CORPUS_XY[a];
-        const pb = CORPUS_XY[b];
+        const pa = HNSW_CORPUS_XY[a];
+        const pb = HNSW_CORPUS_XY[b];
         return (
           <line
             key={`h${i}`}
@@ -4208,9 +4227,9 @@ const HNSWLayeredGraph = ({
       {mode === "twoLayers" &&
         HNSW_LAYER_2.map((id) => (
           <g key={`l2${id}`}>
-            <circle cx={CORPUS_XY[id].x} cy={layer2Y} r={10} fill={C.red} stroke={C.red} />
+            <circle cx={HNSW_CORPUS_XY[id].x} cy={layer2Y} r={10} fill={C.red} stroke={C.red} />
             <text
-              x={CORPUS_XY[id].x}
+              x={HNSW_CORPUS_XY[id].x}
               y={layer2Y + 4}
               textAnchor="middle"
               fill="#08080d"
@@ -4222,7 +4241,7 @@ const HNSWLayeredGraph = ({
           </g>
         ))}
       {/* Flat-layer dots (layer 0) */}
-      {Object.entries(CORPUS_XY).map(([id, p]) => {
+      {Object.entries(HNSW_CORPUS_XY).map(([id, p]) => {
         const isHub = HNSW_LAYER_1.includes(Number(id));
         const onPath = highlightPath.includes(Number(id));
         const color = onPath ? C.green : isHub && layered ? C.yellow : C.cyan;
@@ -4246,9 +4265,9 @@ const HNSWLayeredGraph = ({
       {layered &&
         HNSW_LAYER_1.map((id) => (
           <g key={`l1${id}`}>
-            <circle cx={CORPUS_XY[id].x} cy={hubY} r={10} fill={C.yellow} stroke={C.yellow} />
+            <circle cx={HNSW_CORPUS_XY[id].x} cy={hubY} r={10} fill={C.yellow} stroke={C.yellow} />
             <text
-              x={CORPUS_XY[id].x}
+              x={HNSW_CORPUS_XY[id].x}
               y={hubY + 4}
               textAnchor="middle"
               fill="#08080d"
@@ -4482,6 +4501,11 @@ export const HNSWIntuition = (ctx) => {
             <br />
             hops per layer &asymp; constant (~6 with ef_search = 50)
             <br />
+            <span style={{ color: C.dim, fontSize: 13 }}>
+              ef_search = how many candidates the search keeps in its shortlist at each step (bigger = better recall,
+              slower)
+            </span>
+            <br />
             total hops &asymp; <span style={{ color: C.green }}>30</span> to find the top-k{"  "}
             <span style={{ color: C.dim }}>vs. ~1000 on flat</span>
           </div>
@@ -4675,11 +4699,18 @@ export const HNSWConstruction = (ctx) => {
               lineHeight: 2,
             }}
           >
+            <span style={{ color: C.green }}>u</span> = <span style={{ color: C.green }}>uniform(0, 1)</span>{" "}
+            <span style={{ color: C.dim, fontSize: 14 }}>&larr; random number between 0 and 1</span>
+            <br />
             <span style={{ color: C.purple }}>L</span> = <span style={{ color: C.yellow }}>floor</span>(&minus;
-            <span style={{ color: C.yellow }}>ln</span>(<span style={{ color: C.green }}>uniform(0, 1)</span>) &middot;{" "}
+            <span style={{ color: C.yellow }}>ln</span>(<span style={{ color: C.green }}>u</span>) &middot;{" "}
             <span style={{ color: C.cyan }}>mL</span>)
             <br />
-            <span style={{ color: C.dim, fontSize: 14 }}>mL = 1 / ln(M) &asymp; 1 / ln(16) &asymp; 0.36</span>
+            <span style={{ color: C.dim, fontSize: 14 }}>
+              mL = 1 / ln(M) &asymp; 0.36 &larr; level multiplier (thins upper layers)
+            </span>
+            <br />
+            <span style={{ color: C.dim, fontSize: 14 }}>M = max neighbors per node (16)</span>
           </div>
           <div style={{ marginTop: 14, display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
             <div

@@ -1984,11 +1984,11 @@ export const BinaryQuantization = (ctx) => {
                 strokeWidth="2.5"
               />
               <circle cx="380" cy="50" r="5" fill={C.green} />
-              <text x="392" y="46" fill={C.green} fontSize="12" fontWeight="bold">
+              <text x="380" y="30" textAnchor="middle" fill={C.green} fontSize="12" fontWeight="bold">
                 d=768, recall 0.95
               </text>
               <circle cx="440" cy="45" r="5" fill={C.green} />
-              <text x="350" y="75" fill={C.green} fontSize="12" fontWeight="bold">
+              <text x="440" y="80" textAnchor="middle" fill={C.green} fontSize="12" fontWeight="bold">
                 d=1024, recall 0.96
               </text>
             </svg>
@@ -3498,14 +3498,14 @@ export const IVFPQ = (ctx) => {
 // top hub. Positions are tuned so the code labels never overlap adjacent nodes.
 const HNSWPQ_LAYERS = {
   L0: [
-    { id: "a", x: 60, y: 260, code: "[c17, c203, c89, ...]" },
-    { id: "b", x: 130, y: 260, code: "[c22, c199, c91, ...]" },
-    { id: "c", x: 200, y: 260, code: "[c41, c180, c77, ...]" },
-    { id: "d", x: 270, y: 260, code: "[c38, c175, c82, ...]" },
-    { id: "e", x: 340, y: 260, code: "[c55, c160, c68, ...]" },
-    { id: "f", x: 410, y: 260, code: "[c62, c151, c73, ...]" },
-    { id: "g", x: 480, y: 260, code: "[c71, c144, c80, ...]" },
-    { id: "h", x: 550, y: 260, code: "[c85, c137, c95, ...]" },
+    { id: "a", x: 60, y: 260, code: "[c17,...]" },
+    { id: "b", x: 130, y: 260, code: "[c22,...]" },
+    { id: "c", x: 200, y: 260, code: "[c41,...]" },
+    { id: "d", x: 270, y: 260, code: "[c38,...]" },
+    { id: "e", x: 340, y: 260, code: "[c55,...]" },
+    { id: "f", x: 410, y: 260, code: "[c62,...]" },
+    { id: "g", x: 480, y: 260, code: "[c71,...]" },
+    { id: "h", x: 550, y: 260, code: "[c85,...]" },
   ],
   L1: [
     { id: "h1", x: 130, y: 160, code: "[c22, c199, ...]" },

@@ -237,23 +237,24 @@ Only config.js IDs change.
 | 11.16 | Matryoshka | Matryoshka Embeddings |
 | 11.17 | IVFPQ | IVF-PQ |
 | 11.18 | HNSWPQ | HNSW + PQ |
-| 11.19 | Filtering | Filtering |
-| 11.20 | UpdatesDeletes | Updates & Deletes |
-| 11.21 | Sharding | Sharding & Partitioning |
-| 11.22 | Replication | Replication & High Availability |
-| 11.23 | HybridSearch | Hybrid Search |
-| 11.24 | Rerankers | Rerankers |
-| 11.25 | MultiVectorRetrieval | Multi-vector Retrieval (ColBERT-style) |
-| 11.26 | EmbeddingLifecycle | Embedding Lifecycle & Re-embedding |
-| 11.27 | Observability | Observability |
-| 11.28 | CapacityPlanning | Capacity Planning & Cost Models |
-| 11.29 | FAISS | FAISS |
-| 11.30 | Pgvector | pgvector |
-| 11.31 | Qdrant | Qdrant |
-| 11.32 | Pinecone | Pinecone |
-| 11.33 | QdrantVsPinecone | Qdrant vs Pinecone |
-| 11.34 | WeaviateMilvusChroma | Weaviate / Milvus / Chroma |
-| 11.35 | DecisionFramework | The Decision Framework |
+| 11.19 | CompressionDecision | The Compression Decision |
+| 11.20 | Filtering | Filtering |
+| 11.21 | UpdatesDeletes | Updates & Deletes |
+| 11.22 | Sharding | Sharding & Partitioning |
+| 11.23 | Replication | Replication & High Availability |
+| 11.24 | HybridSearch | Hybrid Search |
+| 11.25 | Rerankers | Rerankers |
+| 11.26 | MultiVectorRetrieval | Multi-vector Retrieval (ColBERT-style) |
+| 11.27 | EmbeddingLifecycle | Embedding Lifecycle & Re-embedding |
+| 11.28 | Observability | Observability |
+| 11.29 | CapacityPlanning | Capacity Planning & Cost Models |
+| 11.30 | FAISS | FAISS |
+| 11.31 | Pgvector | pgvector |
+| 11.32 | Qdrant | Qdrant |
+| 11.33 | Pinecone | Pinecone |
+| 11.34 | QdrantVsPinecone | Qdrant vs Pinecone |
+| 11.35 | WeaviateMilvusChroma | Weaviate / Milvus / Chroma |
+| 11.36 | DecisionFramework | The Decision Framework |
 
 ## Project Structure
 

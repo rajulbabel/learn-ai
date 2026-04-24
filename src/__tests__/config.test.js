@@ -145,6 +145,29 @@ describe("config.js", () => {
       expect(c.title).not.toMatch(/\bIS\b/);
     });
   });
+
+  it("Section 11 chapters are renumbered with CompressionDecision at 11.19", () => {
+    const byId = Object.fromEntries(chapters.map((c) => [c.id, c]));
+    expect(byId["11.19"]?.component).toBe("CompressionDecision");
+    expect(byId["11.19"]?.title).toBe("The Compression Decision");
+    expect(byId["11.20"]?.component).toBe("Filtering");
+    expect(byId["11.21"]?.component).toBe("UpdatesDeletes");
+    expect(byId["11.22"]?.component).toBe("Sharding");
+    expect(byId["11.23"]?.component).toBe("Replication");
+    expect(byId["11.24"]?.component).toBe("HybridSearch");
+    expect(byId["11.25"]?.component).toBe("Rerankers");
+    expect(byId["11.26"]?.component).toBe("MultiVectorRetrieval");
+    expect(byId["11.27"]?.component).toBe("EmbeddingLifecycle");
+    expect(byId["11.28"]?.component).toBe("Observability");
+    expect(byId["11.29"]?.component).toBe("CapacityPlanning");
+    expect(byId["11.30"]?.component).toBe("FAISS");
+    expect(byId["11.31"]?.component).toBe("Pgvector");
+    expect(byId["11.32"]?.component).toBe("Qdrant");
+    expect(byId["11.33"]?.component).toBe("Pinecone");
+    expect(byId["11.34"]?.component).toBe("QdrantVsPinecone");
+    expect(byId["11.35"]?.component).toBe("WeaviateMilvusChroma");
+    expect(byId["11.36"]?.component).toBe("DecisionFramework");
+  });
 });
 
 describe("Section 11 registration", () => {
@@ -158,7 +181,7 @@ describe("Section 11 registration", () => {
 });
 
 describe("Section 11 chapters", () => {
-  it("has chapters 11.1 through 11.35 in order", () => {
+  it("has chapters 11.1 through 11.36 in order", () => {
     const section11 = chapters.filter((ch) => ch.section === 11);
     const expected = [
       { id: "11.1", component: "RetrievalProblem", title: "The Retrieval Problem" },
@@ -179,23 +202,24 @@ describe("Section 11 chapters", () => {
       { id: "11.16", component: "Matryoshka", title: "Matryoshka Embeddings" },
       { id: "11.17", component: "IVFPQ", title: "IVF-PQ" },
       { id: "11.18", component: "HNSWPQ", title: "HNSW + PQ" },
-      { id: "11.19", component: "Filtering", title: "Filtering" },
-      { id: "11.20", component: "UpdatesDeletes", title: "Updates & Deletes" },
-      { id: "11.21", component: "Sharding", title: "Sharding & Partitioning" },
-      { id: "11.22", component: "Replication", title: "Replication & High Availability" },
-      { id: "11.23", component: "HybridSearch", title: "Hybrid Search" },
-      { id: "11.24", component: "Rerankers", title: "Rerankers" },
-      { id: "11.25", component: "MultiVectorRetrieval", title: "Multi-vector Retrieval (ColBERT-style)" },
-      { id: "11.26", component: "EmbeddingLifecycle", title: "Embedding Lifecycle & Re-embedding" },
-      { id: "11.27", component: "Observability", title: "Observability" },
-      { id: "11.28", component: "CapacityPlanning", title: "Capacity Planning & Cost Models" },
-      { id: "11.29", component: "FAISS", title: "FAISS" },
-      { id: "11.30", component: "Pgvector", title: "pgvector" },
-      { id: "11.31", component: "Qdrant", title: "Qdrant" },
-      { id: "11.32", component: "Pinecone", title: "Pinecone" },
-      { id: "11.33", component: "QdrantVsPinecone", title: "Qdrant vs Pinecone" },
-      { id: "11.34", component: "WeaviateMilvusChroma", title: "Weaviate / Milvus / Chroma" },
-      { id: "11.35", component: "DecisionFramework", title: "The Decision Framework" },
+      { id: "11.19", component: "CompressionDecision", title: "The Compression Decision" },
+      { id: "11.20", component: "Filtering", title: "Filtering" },
+      { id: "11.21", component: "UpdatesDeletes", title: "Updates & Deletes" },
+      { id: "11.22", component: "Sharding", title: "Sharding & Partitioning" },
+      { id: "11.23", component: "Replication", title: "Replication & High Availability" },
+      { id: "11.24", component: "HybridSearch", title: "Hybrid Search" },
+      { id: "11.25", component: "Rerankers", title: "Rerankers" },
+      { id: "11.26", component: "MultiVectorRetrieval", title: "Multi-vector Retrieval (ColBERT-style)" },
+      { id: "11.27", component: "EmbeddingLifecycle", title: "Embedding Lifecycle & Re-embedding" },
+      { id: "11.28", component: "Observability", title: "Observability" },
+      { id: "11.29", component: "CapacityPlanning", title: "Capacity Planning & Cost Models" },
+      { id: "11.30", component: "FAISS", title: "FAISS" },
+      { id: "11.31", component: "Pgvector", title: "pgvector" },
+      { id: "11.32", component: "Qdrant", title: "Qdrant" },
+      { id: "11.33", component: "Pinecone", title: "Pinecone" },
+      { id: "11.34", component: "QdrantVsPinecone", title: "Qdrant vs Pinecone" },
+      { id: "11.35", component: "WeaviateMilvusChroma", title: "Weaviate / Milvus / Chroma" },
+      { id: "11.36", component: "DecisionFramework", title: "The Decision Framework" },
     ];
     expect(section11.length).toBe(expected.length);
     expected.forEach((exp, i) => {

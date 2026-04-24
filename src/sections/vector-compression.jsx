@@ -4149,3 +4149,96 @@ export const HNSWPQ = (ctx) => {
     </div>
   );
 };
+
+export const CompressionDecision = (ctx) => {
+  const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx;
+  return (
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
+      {sub >= 0 && (
+        <Box color={C.cyan} style={{ width: "100%" }}>
+          <T color={C.cyan} bold center size={22}>
+            Five techniques, which one? Four inputs decide.
+          </T>
+          <T color="#80deea" style={{ marginTop: 8 }}>
+            The last seven chapters introduced scalar quantization, product quantization, binary quantization, Matryoshka
+            truncation, IVF-PQ, and HNSW+PQ. Each one works. None is universally the right pick. The choice depends on
+            four inputs - corpus size, embedding dimensionality, the database&apos;s capability surface, and how much
+            recall loss the product can absorb.
+          </T>
+          <div
+            style={{
+              marginTop: 14,
+              padding: "12px 14px",
+              borderRadius: 8,
+              background: `${C.cyan}06`,
+              border: `1px solid ${C.cyan}12`,
+            }}
+          >
+            <T color={C.cyan} bold center size={16}>
+              The four decision axes
+            </T>
+            <div style={{ marginTop: 12, display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
+              {[
+                {
+                  axis: "Corpus size (N)",
+                  role: "Primary driver",
+                  detail: "Under 1M, nothing helps. At 100M+, compression is not optional.",
+                },
+                {
+                  axis: "Embedding dim (d)",
+                  role: "Gates binary quantization",
+                  detail: "Binary quantization needs d >= 768 to stay production-safe (from 11.15's recall table).",
+                },
+                {
+                  axis: "Database capability",
+                  role: "Constrains the menu",
+                  detail: "pgvector mainline: halfvec only. Pinecone: abstracted. Qdrant/Weaviate: full suite + rescore.",
+                },
+                {
+                  axis: "Recall tolerance",
+                  role: "Override knob",
+                  detail: "High-stakes retrieval (medical, legal) downgrades one step from the default.",
+                },
+              ].map((r) => (
+                <div
+                  key={r.axis}
+                  style={{
+                    padding: "10px 12px",
+                    background: `${C.cyan}10`,
+                    border: `1px solid ${C.cyan}22`,
+                    borderRadius: 6,
+                  }}
+                >
+                  <T color={C.cyan} bold size={15}>
+                    {r.axis}
+                  </T>
+                  <T color={C.bright} size={13} style={{ marginTop: 4, fontStyle: "italic" }}>
+                    {r.role}
+                  </T>
+                  <T color={C.bright} size={13} style={{ marginTop: 6 }}>
+                    {r.detail}
+                  </T>
+                </div>
+              ))}
+            </div>
+          </div>
+          <T color="#80deea" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
+            The next sub-step folds these four inputs into a single decision tree. The one after walks four real-world
+            scenarios through it, numbers and all.
+          </T>
+        </Box>
+      )}
+      {sub < 0 && (
+        <SubBtn
+          key={sub}
+          onClick={() => {
+            setSubBtnRipple(Date.now());
+            navigate("forward");
+          }}
+          rippleKey={subBtnRipple}
+          registerSubBtn={registerSubBtn}
+        />
+      )}
+    </div>
+  );
+};

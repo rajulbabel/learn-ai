@@ -1117,6 +1117,19 @@ describe("HNSWPQ (11.18) content", () => {
   });
 });
 
+describe("CompressionDecision (11.19) content", () => {
+  const fn = VectorCompression.CompressionDecision;
+
+  it("sub=0 frames the four decision axes", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/five techniques|five ways|which one/i);
+    expect(container.textContent).toMatch(/corpus size|N/);
+    expect(container.textContent).toMatch(/dimension|dim/i);
+    expect(container.textContent).toMatch(/DB|database|support/i);
+    expect(container.textContent).toMatch(/recall/i);
+  });
+});
+
 describe("Filtering (11.19) content", () => {
   const fn = VectorProduction.Filtering;
 
@@ -4597,13 +4610,13 @@ describe("Every SVG has a <desc> element", () => {
     "11.16",
     "11.17",
     "11.18",
-    "11.19",
     "11.20",
     "11.21",
     "11.22",
     "11.23",
     "11.24",
-    "11.35",
+    "11.25",
+    "11.36",
   ];
 
   svgChapters.forEach((chId) => {

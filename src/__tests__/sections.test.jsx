@@ -1130,7 +1130,7 @@ describe("CompressionDecision (11.19) content", () => {
   });
 });
 
-describe("Filtering (11.19) content", () => {
+describe("Filtering (11.20) content", () => {
   const fn = VectorProduction.Filtering;
 
   it("sub=0 frames similarity search with a WHERE clause", () => {
@@ -1172,7 +1172,7 @@ describe("Filtering (11.19) content", () => {
   });
 });
 
-describe("UpdatesDeletes (11.20) content", () => {
+describe("UpdatesDeletes (11.21) content", () => {
   const fn = VectorProduction.UpdatesDeletes;
 
   it("sub=0 inserts append and connect to M nearest", () => {
@@ -1218,7 +1218,7 @@ describe("UpdatesDeletes (11.20) content", () => {
   });
 });
 
-describe("Sharding (11.21) content", () => {
+describe("Sharding (11.22) content", () => {
   const fn = VectorProduction.Sharding;
 
   it("sub=0 frames the single-node limit", () => {
@@ -1262,7 +1262,7 @@ describe("Sharding (11.21) content", () => {
   });
 });
 
-describe("Replication (11.22) content", () => {
+describe("Replication (11.23) content", () => {
   const fn = VectorProduction.Replication;
 
   it("sub=0 describes read replicas with load balancing", () => {
@@ -1300,7 +1300,7 @@ describe("Replication (11.22) content", () => {
   });
 });
 
-describe("HybridSearch (11.23) content", () => {
+describe("HybridSearch (11.24) content", () => {
   const fn = VectorProduction.HybridSearch;
 
   it("sub=0 explains vectors miss exact matches", () => {
@@ -1344,7 +1344,7 @@ describe("HybridSearch (11.23) content", () => {
   });
 });
 
-describe("Rerankers (11.24) content", () => {
+describe("Rerankers (11.25) content", () => {
   const fn = VectorProduction.Rerankers;
 
   it("sub=0 frames two-stage retrieval", () => {
@@ -1388,7 +1388,7 @@ describe("Rerankers (11.24) content", () => {
   });
 });
 
-describe("MultiVectorRetrieval (11.25) content", () => {
+describe("MultiVectorRetrieval (11.26) content", () => {
   const fn = VectorProduction.MultiVectorRetrieval;
 
   it("sub=0 frames the single-vector blur problem", () => {
@@ -1431,7 +1431,7 @@ describe("MultiVectorRetrieval (11.25) content", () => {
   });
 });
 
-describe("EmbeddingLifecycle (11.26) content", () => {
+describe("EmbeddingLifecycle (11.27) content", () => {
   const fn = VectorProduction.EmbeddingLifecycle;
 
   it("sub=0 frames the indexed-two-years-ago scenario", () => {
@@ -1476,7 +1476,7 @@ describe("EmbeddingLifecycle (11.26) content", () => {
   });
 });
 
-describe("Observability (11.27) content", () => {
+describe("Observability (11.28) content", () => {
   const fn = VectorProduction.Observability;
 
   it("sub=0 covers P50/P95/P99 latency tails", () => {
@@ -1520,7 +1520,7 @@ describe("Observability (11.27) content", () => {
   });
 });
 
-describe("CapacityPlanning (11.28) content", () => {
+describe("CapacityPlanning (11.29) content", () => {
   const fn = VectorProduction.CapacityPlanning;
 
   it("sub=0 lists the sizing inputs", () => {
@@ -1566,7 +1566,7 @@ describe("CapacityPlanning (11.28) content", () => {
   });
 });
 
-describe("DecisionFramework (11.35) content", () => {
+describe("DecisionFramework (11.36) content", () => {
   const fn = VectorSystems.DecisionFramework;
 
   it("sub=0 shows the decision flowchart with the axes", () => {
@@ -1606,7 +1606,7 @@ describe("DecisionFramework (11.35) content", () => {
   });
 });
 
-describe("WeaviateMilvusChroma (11.34) content", () => {
+describe("WeaviateMilvusChroma (11.35) content", () => {
   const fn = VectorSystems.WeaviateMilvusChroma;
 
   it("sub=0 describes Weaviate - Go, self-host, modules", () => {
@@ -1644,7 +1644,7 @@ describe("WeaviateMilvusChroma (11.34) content", () => {
   });
 });
 
-describe("QdrantVsPinecone (11.33) content", () => {
+describe("QdrantVsPinecone (11.34) content", () => {
   const fn = VectorSystems.QdrantVsPinecone;
 
   it("sub=0 names the decision axes", () => {
@@ -1688,7 +1688,7 @@ describe("QdrantVsPinecone (11.33) content", () => {
   });
 });
 
-describe("Pinecone (11.32) content", () => {
+describe("Pinecone (11.33) content", () => {
   const fn = VectorSystems.Pinecone;
 
   it("sub=0 frames Pinecone as managed SaaS with opinionated defaults", () => {
@@ -1734,7 +1734,7 @@ describe("Pinecone (11.32) content", () => {
   });
 });
 
-describe("Qdrant (11.31) content", () => {
+describe("Qdrant (11.32) content", () => {
   const fn = VectorSystems.Qdrant;
 
   it("sub=0 frames Qdrant as a Rust open-source vector DB", () => {
@@ -1779,7 +1779,7 @@ describe("Qdrant (11.31) content", () => {
   });
 });
 
-describe("Pgvector (11.30) content", () => {
+describe("Pgvector (11.31) content", () => {
   const fn = VectorSystems.Pgvector;
 
   it("sub=0 frames pgvector as a Postgres extension", () => {
@@ -1825,7 +1825,7 @@ describe("Pgvector (11.30) content", () => {
   });
 });
 
-describe("FAISS (11.29) content", () => {
+describe("FAISS (11.30) content", () => {
   const fn = VectorSystems.FAISS;
 
   it("sub=0 frames FAISS as Meta's 2017 reference library", () => {

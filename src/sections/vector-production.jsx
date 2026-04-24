@@ -1,12 +1,12 @@
 import { Box, T, Reveal, SubBtn } from "../components.jsx";
 import { C } from "../config.js";
 
-// Section 11 Act 5: Production Realities (chapters 11.19-11.28).
+// Section 11 Act 5: Production Realities (chapters 11.20-11.29).
 // Continues the cat-corpus + production-scale numbers established in 11.1-11.18.
 // Canonical scale dim d = 768. SVG marker/gradient ids follow `<type><chapter>-<svg-index>`.
 
 // ───────────────────────────────────────────────────────────────────────────
-// 11.19 Filtering
+// 11.20 Filtering
 // ───────────────────────────────────────────────────────────────────────────
 
 // Cat corpus snapshot with synthetic metadata so filter predicates have something
@@ -826,7 +826,7 @@ export const Filtering = (ctx) => {
 };
 
 // ───────────────────────────────────────────────────────────────────────────
-// 11.20 Updates & Deletes
+// 11.21 Updates & Deletes
 // ───────────────────────────────────────────────────────────────────────────
 
 // Small HNSW-like graph used in sub=1 and sub=2 to show how deletion
@@ -1514,7 +1514,7 @@ export const UpdatesDeletes = (ctx) => {
 };
 
 // ───────────────────────────────────────────────────────────────────────────
-// 11.21 Sharding & Partitioning
+// 11.22 Sharding & Partitioning
 // ───────────────────────────────────────────────────────────────────────────
 
 export const Sharding = (ctx) => {
@@ -2142,7 +2142,7 @@ export const Sharding = (ctx) => {
   );
 };
 // ───────────────────────────────────────────────────────────────────────────
-// 11.22 Replication & High Availability
+// 11.23 Replication & High Availability
 // ───────────────────────────────────────────────────────────────────────────
 
 export const Replication = (ctx) => {
@@ -2682,7 +2682,7 @@ export const Replication = (ctx) => {
 };
 
 // ───────────────────────────────────────────────────────────────────────────
-// 11.23 Hybrid Search
+// 11.24 Hybrid Search
 // ───────────────────────────────────────────────────────────────────────────
 
 export const HybridSearch = (ctx) => {
@@ -3400,7 +3400,7 @@ export const HybridSearch = (ctx) => {
 };
 
 // ───────────────────────────────────────────────────────────────────────────
-// 11.24 Rerankers
+// 11.25 Rerankers
 // ───────────────────────────────────────────────────────────────────────────
 
 export const Rerankers = (ctx) => {
@@ -4065,7 +4065,7 @@ export const Rerankers = (ctx) => {
 };
 
 // ───────────────────────────────────────────────────────────────────────────
-// 11.25 Multi-vector Retrieval (ColBERT-style)
+// 11.26 Multi-vector Retrieval (ColBERT-style)
 // ───────────────────────────────────────────────────────────────────────────
 
 // Token-level similarity grid used in sub=3. Query tokens on one axis, doc
@@ -4624,7 +4624,7 @@ export const MultiVectorRetrieval = (ctx) => {
 };
 
 // ───────────────────────────────────────────────────────────────────────────
-// 11.26 Embedding Lifecycle & Re-embedding
+// 11.27 Embedding Lifecycle & Re-embedding
 // ───────────────────────────────────────────────────────────────────────────
 
 export const EmbeddingLifecycle = (ctx) => {
@@ -5112,7 +5112,7 @@ export const EmbeddingLifecycle = (ctx) => {
 };
 
 // ───────────────────────────────────────────────────────────────────────────
-// 11.27 Observability
+// 11.28 Observability
 // ───────────────────────────────────────────────────────────────────────────
 
 export const Observability = (ctx) => {
@@ -5579,7 +5579,7 @@ export const Observability = (ctx) => {
 };
 
 // ───────────────────────────────────────────────────────────────────────────
-// 11.28 Capacity Planning & Cost Models
+// 11.29 Capacity Planning & Cost Models
 // ───────────────────────────────────────────────────────────────────────────
 
 export const CapacityPlanning = (ctx) => {

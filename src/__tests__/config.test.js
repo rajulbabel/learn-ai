@@ -146,6 +146,29 @@ describe("config.js", () => {
     });
   });
 
+  it("no JSX content references the old chapter IDs 11.19-11.35 after renumber", () => {
+    const sectionFiles = [
+      path.join(SRC_DIR, "sections/vector-systems.jsx"),
+      path.join(SRC_DIR, "sections/vector-production.jsx"),
+      path.join(SRC_DIR, "sections/vector-compression.jsx"),
+    ];
+    const stalePatterns = [
+      /Recall from 11\.19/,
+      /chapter 11\.19[^0-9]/,
+      /read 11\.19 carefully/,
+      /decision framework in 11\.35/,
+      /production realities \(11\.19-11\.28\)/,
+      /chapters 11\.30 - 11\.34/,
+      /the system comparison \(11\.29-11\.34\)/,
+    ];
+    for (const file of sectionFiles) {
+      const content = fs.readFileSync(file, "utf8");
+      for (const pattern of stalePatterns) {
+        expect(content, `${file} still contains ${pattern}`).not.toMatch(pattern);
+      }
+    }
+  });
+
   it("Section 11 chapters are renumbered with CompressionDecision at 11.19", () => {
     const byId = Object.fromEntries(chapters.map((c) => [c.id, c]));
     expect(byId["11.19"]?.component).toBe("CompressionDecision");

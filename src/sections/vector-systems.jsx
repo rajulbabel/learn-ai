@@ -1,13 +1,13 @@
 import { Box, T, Reveal, SubBtn } from "../components.jsx";
 import { C } from "../config.js";
 
-// Section 11 Act 6: System Selection (chapters 11.29-11.35).
-// Continues the cat-corpus + production-scale numbers from 11.1-11.28.
-// Capacity-planning anchor (11.28): 500M vectors x d=768 x 200 QPS x 6 nodes x 3 TB RAM.
+// Section 11 Act 6: System Selection (chapters 11.30-11.36).
+// Continues the cat-corpus + production-scale numbers from 11.1-11.29.
+// Capacity-planning anchor (11.29): 500M vectors x d=768 x 200 QPS x 6 nodes x 3 TB RAM.
 // Monthly ratios Pinecone ~$30K / Qdrant ~$8K / pgvector ~$5K.
 
 // ───────────────────────────────────────────────────────────────────────────
-// 11.29 FAISS
+// 11.30 FAISS
 // ───────────────────────────────────────────────────────────────────────────
 
 export const FAISS = (ctx) => {
@@ -540,7 +540,7 @@ export const FAISS = (ctx) => {
 };
 
 // ───────────────────────────────────────────────────────────────────────────
-// 11.30 pgvector
+// 11.31 pgvector
 // ───────────────────────────────────────────────────────────────────────────
 
 export const Pgvector = (ctx) => {
@@ -1049,7 +1049,7 @@ export const Pgvector = (ctx) => {
 };
 
 // ───────────────────────────────────────────────────────────────────────────
-// 11.31 Qdrant
+// 11.32 Qdrant
 // ───────────────────────────────────────────────────────────────────────────
 
 export const Qdrant = (ctx) => {
@@ -1130,7 +1130,7 @@ export const Qdrant = (ctx) => {
           </T>
           <T color="#ffe082" style={{ marginTop: 8 }}>
             Qdrant&apos;s core index is HNSW, same as chapter 11.9. What makes it distinctive is the filter story.
-            Recall from 11.19: the three strategies are pre-filter, post-filter, and inline. Qdrant implements inline
+            Recall from 11.20: the three strategies are pre-filter, post-filter, and inline. Qdrant implements inline
             filtered-HNSW natively - predicates evaluate as the graph traversal visits each candidate, so tight filters
             never degenerate into brute-force or return empty results.
           </T>
@@ -1233,7 +1233,7 @@ export const Qdrant = (ctx) => {
           </div>
           <T color="#ffe082" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
             Qdrant built a dedicated payload index (inverted index over metadata) so filter evaluation is essentially
-            free during traversal. This is why Qdrant wins chapter 11.19&apos;s filter-heavy scenarios.
+            free during traversal. This is why Qdrant wins chapter 11.20&apos;s filter-heavy scenarios.
           </T>
         </Box>
       </Reveal>
@@ -1303,7 +1303,7 @@ export const Qdrant = (ctx) => {
             {[
               {
                 t: "Multi-vector support",
-                d: "one point can store several named vectors (title, body, image) in the same record - native support since v1.10 (chapter 11.25)",
+                d: "one point can store several named vectors (title, body, image) in the same record - native support since v1.10 (chapter 11.26)",
                 color: C.green,
               },
               {
@@ -1344,7 +1344,7 @@ export const Qdrant = (ctx) => {
           <T color="#ffb74d" style={{ marginTop: 8 }}>
             Qdrant ships the main compression schemes as configurable flags on a collection. You turn on scalar
             quantization (SQ), product quantization (PQ), or binary quantization (BQ) at collection create time; the
-            HNSW index below it adapts. Hybrid search (BM25 + vector, RRF fusion from 11.23) is also first-class.
+            HNSW index below it adapts. Hybrid search (BM25 + vector, RRF fusion from 11.24) is also first-class.
           </T>
           <div
             style={{
@@ -1597,7 +1597,7 @@ export const Qdrant = (ctx) => {
 };
 
 // ───────────────────────────────────────────────────────────────────────────
-// 11.32 Pinecone
+// 11.33 Pinecone
 // ───────────────────────────────────────────────────────────────────────────
 
 export const Pinecone = (ctx) => {
@@ -2041,7 +2041,7 @@ export const Pinecone = (ctx) => {
               },
               {
                 t: "Cost at scale",
-                d: "~$30K/month for 500M vectors x 200 QPS (chapter 11.28); 4x-6x self-host Qdrant",
+                d: "~$30K/month for 500M vectors x 200 QPS (chapter 11.29); 4x-6x self-host Qdrant",
               },
               {
                 t: "Opinionated scaling",
@@ -2107,7 +2107,7 @@ export const Pinecone = (ctx) => {
 };
 
 // ───────────────────────────────────────────────────────────────────────────
-// 11.33 Qdrant vs Pinecone
+// 11.34 Qdrant vs Pinecone
 // ───────────────────────────────────────────────────────────────────────────
 
 export const QdrantVsPinecone = (ctx) => {
@@ -2712,7 +2712,7 @@ export const QdrantVsPinecone = (ctx) => {
 };
 
 // ───────────────────────────────────────────────────────────────────────────
-// 11.34 Weaviate / Milvus / Chroma
+// 11.35 Weaviate / Milvus / Chroma
 // ───────────────────────────────────────────────────────────────────────────
 
 export const WeaviateMilvusChroma = (ctx) => {
@@ -3107,7 +3107,7 @@ export const WeaviateMilvusChroma = (ctx) => {
           >
             no single winner - <span style={{ color: C.purple }}>context picks the product</span>
             <br />
-            the decision framework in 11.35 pulls all seven systems together
+            the decision framework in 11.36 pulls all seven systems together
           </div>
           <T color="#b8a9ff" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
             One chapter can only skim each of these. Each has enough nuance for a deep dive of its own; the goal here
@@ -3131,7 +3131,7 @@ export const WeaviateMilvusChroma = (ctx) => {
 };
 
 // ───────────────────────────────────────────────────────────────────────────
-// 11.35 The Decision Framework
+// 11.36 The Decision Framework
 // ───────────────────────────────────────────────────────────────────────────
 
 export const DecisionFramework = (ctx) => {
@@ -3455,7 +3455,7 @@ export const DecisionFramework = (ctx) => {
           <T color="#ffb74d" style={{ marginTop: 8 }}>
             Filtering is where products separate most. Simple filters (tenant_id = 42) work on everything. Complex
             compound filters (tenant + geo + date + ACL) exercise the vendor; Qdrant&apos;s inline filtered-HNSW
-            (chapter 11.19) wins. When the query involves SQL-shaped joins to rows in other tables, pgvector is the
+            (chapter 11.20) wins. When the query involves SQL-shaped joins to rows in other tables, pgvector is the
             right answer because Postgres has always been good at that.
           </T>
           <div
@@ -3522,7 +3522,7 @@ export const DecisionFramework = (ctx) => {
           >
             mismatched filter complexity is <span style={{ color: C.orange }}>the #1 post-launch surprise</span>
             <br />
-            read 11.19 carefully before committing
+            read 11.20 carefully before committing
           </div>
           <T color="#ffb74d" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
             Teams often underestimate filter complexity until the product is in flight. The first selectivity-edge-case
@@ -3551,42 +3551,42 @@ export const DecisionFramework = (ctx) => {
             {[
               {
                 q: "Data size",
-                ref: "chapters 11.2, 11.12, 11.28",
+                ref: "chapters 11.2, 11.12, 11.29",
                 what: "N now, N in 18 months; d of the embedding model",
               },
               {
                 q: "Update frequency",
-                ref: "chapter 11.20",
+                ref: "chapter 11.21",
                 what: "inserts/sec, deletes/sec; tombstone tolerance; rebuild cadence",
               },
               {
                 q: "Filter selectivity",
-                ref: "chapter 11.19",
+                ref: "chapter 11.20",
                 what: "tight (0.1%) vs loose (50%); compound predicates",
               },
               {
                 q: "QPS budget",
-                ref: "chapter 11.28",
+                ref: "chapter 11.29",
                 what: "peak QPS, sustained QPS, ratio, seasonal spikes",
               },
               {
                 q: "P99 target",
-                ref: "chapter 11.27",
+                ref: "chapter 11.28",
                 what: "latency budget, tail behavior, cold-start tolerance",
               },
               {
                 q: "Availability target",
-                ref: "chapters 11.22, 11.27",
+                ref: "chapters 11.23, 11.28",
                 what: "SLA (99.9% vs 99.99%); failover story; multi-region",
               },
               {
                 q: "Embedding model stability",
-                ref: "chapter 11.26",
+                ref: "chapter 11.27",
                 what: "drift plan; re-embedding cost; migration path",
               },
               {
                 q: "Ops capacity",
-                ref: "chapters 11.30 - 11.34",
+                ref: "chapters 11.31 - 11.35",
                 what: "SRE hours, on-call rotation, K8s familiarity",
               },
             ].map((r) => (
@@ -3642,7 +3642,7 @@ export const DecisionFramework = (ctx) => {
           <T color="#b8a9ff" style={{ marginTop: 8 }}>
             Section 11 has covered the full vector database landscape. From the retrieval problem (11.1) through
             brute-force kNN (11.2), the ANN family (11.5-11.11), compression (11.12-11.16), combined indexes
-            (11.17-11.18), production realities (11.19-11.28), and the system comparison (11.29-11.34). You can now
+            (11.17-11.18), the compression decision (11.19), production realities (11.20-11.29), and the system comparison (11.30-11.35). You can now
             answer Qdrant vs Pinecone - and every related question - from first principles.
           </T>
           <div

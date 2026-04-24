@@ -3807,31 +3807,15 @@ export const ANNFamilyTree = (ctx) => {
               border: `1px solid ${C.green}12`,
             }}
           >
-            <svg viewBox="0 0 500 310" style={{ width: "100%", maxWidth: 520, height: "auto", display: "block" }}>
+            <svg viewBox="0 0 500 360" style={{ width: "100%", maxWidth: 520, height: "auto", display: "block" }}>
               <desc>
-                Proximity graph of the 10 cat-corpus documents with edges connecting each node to its two or three
-                nearest neighbors. A highlighted green path traces a search from a starting node in the lower-right
-                across several hops to the cat cluster in the upper-left.
+                Proximity graph of the 10 cat-corpus documents with edges connecting each node to its three nearest
+                neighbors. A highlighted green path traces a search from a starting node in the lower-right across
+                several hops to the cat cluster in the upper-left.
               </desc>
-              {[
-                [1, 5],
-                [1, 7],
-                [1, 3],
-                [3, 4],
-                [4, 5],
-                [7, 5],
-                [7, 3],
-                [2, 8],
-                [8, 4],
-                [6, 10],
-                [9, 10],
-                [6, 9],
-                [2, 1],
-                [6, 8],
-                [8, 10],
-              ].map(([a, b], i) => {
-                const pa = CORPUS_XY[a];
-                const pb = CORPUS_XY[b];
+              {FLAT_GRAPH_EDGES.map(([a, b], i) => {
+                const pa = HNSW_CORPUS_XY[a];
+                const pb = HNSW_CORPUS_XY[b];
                 return (
                   <line
                     key={i}
@@ -3847,15 +3831,16 @@ export const ANNFamilyTree = (ctx) => {
               })}
               {[
                 [10, 8],
-                [8, 4],
-                [4, 1],
+                [8, 2],
+                [2, 7],
+                [7, 1],
               ].map(([a, b], i) => {
-                const pa = CORPUS_XY[a];
-                const pb = CORPUS_XY[b];
+                const pa = HNSW_CORPUS_XY[a];
+                const pb = HNSW_CORPUS_XY[b];
                 return <line key={`p${i}`} x1={pa.x} y1={pa.y} x2={pb.x} y2={pb.y} stroke={C.green} strokeWidth="3" />;
               })}
-              {Object.entries(CORPUS_XY).map(([id, p]) => {
-                const onPath = [10, 8, 4, 1].includes(Number(id));
+              {Object.entries(HNSW_CORPUS_XY).map(([id, p]) => {
+                const onPath = [10, 8, 2, 7, 1].includes(Number(id));
                 return (
                   <g key={id}>
                     <circle
@@ -3878,15 +3863,8 @@ export const ANNFamilyTree = (ctx) => {
                   </g>
                 );
               })}
-              <circle cx={QUERY_XY.x} cy={QUERY_XY.y} r={7} fill={C.yellow} />
-              <text
-                x={QUERY_XY.x}
-                y={QUERY_XY.y - 12}
-                textAnchor="middle"
-                fill={C.yellow}
-                fontSize="11"
-                fontFamily="monospace"
-              >
+              <circle cx={40} cy={30} r={7} fill={C.yellow} />
+              <text x={40} y={18} textAnchor="middle" fill={C.yellow} fontSize="11" fontFamily="monospace">
                 query
               </text>
             </svg>

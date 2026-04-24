@@ -2173,7 +2173,7 @@ export const Replication = (ctx) => {
               Load balancer + 4 read replicas (N copies of the index)
             </T>
             <div style={{ display: "flex", justifyContent: "center", marginTop: 10 }}>
-              <svg viewBox="0 0 520 240" style={{ width: "100%", maxWidth: 560, height: "auto" }}>
+              <svg viewBox="0 0 520 270" style={{ width: "100%", maxWidth: 560, height: "auto" }}>
                 <desc>
                   Diagram showing a yellow load-balancer box on the left labeled LB with four arrows fanning out to four
                   cyan replica boxes on the right labeled R1 through R4. Each replica icon has a small index symbol
@@ -2231,7 +2231,7 @@ export const Replication = (ctx) => {
                     </g>
                   );
                 })}
-                <text x={260} y={220} fill={C.dim} fontSize={11} textAnchor="middle">
+                <text x={260} y={260} fill={C.dim} fontSize={11} textAnchor="middle">
                   every replica is an identical copy of the index
                 </text>
               </svg>

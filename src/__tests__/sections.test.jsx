@@ -742,37 +742,56 @@ describe("Vamana (11.11) content", () => {
     expect(container.textContent).toMatch(/320 GB|300 GB|TB/);
   });
 
-  it("sub=1 introduces a single flat layer with R neighbors", () => {
+  it("sub=1 contrasts HNSW's pyramid with Vamana's flat layer", () => {
     const { container } = render(fn(makeCtx({ sub: 1 })));
-    expect(container.textContent).toMatch(/single layer|one layer|flat/i);
-    expect(container.textContent).toMatch(/R|64/);
-    expect(container.textContent).toMatch(/hierarchy|no layer/i);
+    expect(container.textContent).toMatch(/HNSW/);
+    expect(container.textContent).toMatch(/pyramid|hierarchy/i);
+    expect(container.textContent).toMatch(/flat/i);
+    expect(container.textContent).toMatch(/single layer|one layer|one plane/i);
   });
 
-  it("sub=2 covers the alpha-pruning rule", () => {
+  it("sub=2 explains why the hierarchy stops paying off on SSD", () => {
     const { container } = render(fn(makeCtx({ sub: 2 })));
-    expect(container.textContent).toMatch(/alpha|α/);
-    expect(container.textContent).toMatch(/1\.2|diverse/i);
-    expect(container.textContent).toMatch(/edge/i);
-    expect(container.textContent).toMatch(/prun/i);
+    expect(container.textContent).toMatch(/hop/i);
+    expect(container.textContent).toMatch(/SSD/);
+    expect(container.textContent).toMatch(/RAM/);
+    expect(container.textContent).toMatch(/10\s*[µu]s|0\.1\s*[µu]s/i);
   });
 
-  it("sub=3 describes the disk layout with SSD blocks", () => {
+  it("sub=3 shows each node's 64 edges doing double duty", () => {
     const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/R|64/);
+    expect(container.textContent).toMatch(/short/i);
+    expect(container.textContent).toMatch(/long/i);
+    expect(container.textContent).toMatch(/double duty|double-duty/i);
+    expect(container.textContent).toMatch(/alpha|α/i);
+  });
+
+  it("sub=4 introduces NVMe", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/NVMe/);
+    expect(container.textContent).toMatch(/Non-Volatile Memory Express/);
+    expect(container.textContent).toMatch(/PCIe/);
+    expect(container.textContent).toMatch(/4\s*KB|page/i);
+  });
+
+  it("sub=5 describes the disk layout with SSD blocks and RAM cache", () => {
+    const { container } = render(fn(makeCtx({ sub: 5 })));
     expect(container.textContent).toMatch(/SSD|disk/i);
     expect(container.textContent).toMatch(/RAM/i);
-    expect(container.textContent).toMatch(/4\s*KB|page|NVMe/i);
+    expect(container.textContent).toMatch(/4\s*KB|page/i);
+    expect(container.textContent).toMatch(/cache/i);
   });
 
-  it("sub=4 shows the minimize-disk-reads search pattern", () => {
-    const { container } = render(fn(makeCtx({ sub: 4 })));
+  it("sub=6 shows the minimize-disk-reads search pattern", () => {
+    const { container } = render(fn(makeCtx({ sub: 6 })));
     expect(container.textContent).toMatch(/RAM/i);
     expect(container.textContent).toMatch(/SSD|disk/i);
     expect(container.textContent).toMatch(/80|40|reads/i);
   });
 
-  it("sub=5 hits 100B scale with Azure/Milvus and FreshDiskANN", () => {
-    const { container } = render(fn(makeCtx({ sub: 5 })));
+  it("sub=7 hits 100B scale with Azure/Milvus and FreshDiskANN", () => {
+    const { container } = render(fn(makeCtx({ sub: 7 })));
     expect(container.textContent).toMatch(/100 billion|100B/i);
     expect(container.textContent).toMatch(/Azure|Milvus/);
     expect(container.textContent).toMatch(/NVMe|SSD/);

@@ -810,9 +810,8 @@ export const BruteForceKNN = (ctx) => {
             First, what is FLOPS?
           </T>
           <T color="#80deea" style={{ marginTop: 8 }}>
-            FLOPS means <b>FLoating-point OPerations per Second</b>. In plain words: how many math steps
-            (an add, a multiply, a compare) a chip can do in one second. It is the standard way people
-            brag about chip speed.
+            FLOPS means <b>FLoating-point OPerations per Second</b>. In plain words: how many math steps (an add, a
+            multiply, a compare) a chip can do in one second. It is the standard way people brag about chip speed.
           </T>
           <div
             style={{
@@ -837,17 +836,14 @@ export const BruteForceKNN = (ctx) => {
           <T color={C.cyan} bold center size={17} style={{ marginTop: 16 }}>
             The chef and the warehouse
           </T>
-          <svg
-            viewBox="0 0 500 170"
-            style={{ width: "100%", height: "auto", display: "block", marginTop: 10 }}
-          >
+          <svg viewBox="0 0 500 170" style={{ width: "100%", height: "auto", display: "block", marginTop: 10 }}>
             <desc>
-              A super-fast chef on the left (labeled chef equals chip) stands next to a cutting board with
-              chopping marks, connected by a long dashed red arrow labeled slow delivery to a distant
-              warehouse on the right (labeled warehouse equals memory). The illustration shows that the
-              chef can chop in one second but has to wait ten minutes for each delivery, so fetching the
-              ingredients is the real bottleneck, not chopping speed. This is the analogy for why memory
-              bandwidth, not FLOPS, limits brute-force search at billion-vector scale.
+              A super-fast chef on the left (labeled chef equals chip) stands next to a cutting board with chopping
+              marks, connected by a long dashed red arrow labeled slow delivery to a distant warehouse on the right
+              (labeled warehouse equals memory). The illustration shows that the chef can chop in one second but has to
+              wait ten minutes for each delivery, so fetching the ingredients is the real bottleneck, not chopping
+              speed. This is the analogy for why memory bandwidth, not FLOPS, limits brute-force search at
+              billion-vector scale.
             </desc>
             <defs>
               <marker id="flops-arrow-11-2" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
@@ -940,9 +936,9 @@ export const BruteForceKNN = (ctx) => {
           </div>
 
           <T color="#80deea" size={16} style={{ marginTop: 12, fontStyle: "italic" }}>
-            Chopping is lightning-fast. Fetching the next vegetable from the warehouse is the slow part.
-            So when we say &quot;the real killer is not FLOPS, it is memory,&quot; we mean: the chip is
-            waiting on deliveries, not on math.
+            Chopping is lightning-fast. Fetching the next vegetable from the warehouse is the slow part. So when we say
+            &quot;the real killer is not FLOPS, it is memory,&quot; we mean: the chip is waiting on deliveries, not on
+            math.
           </T>
         </Box>
       </Reveal>
@@ -2916,8 +2912,8 @@ export const IVF = (ctx) => {
             Brute force touches every vector
           </T>
           <T color="#ef9a9a" style={{ marginTop: 8 }}>
-            Brute force is correct but slow because it reads every single stored vector for every query. Here are our
-            10 cat-corpus docs in a 2D view, with the query in the middle and an arrow from the query to every vector.
+            Brute force is correct but slow because it reads every single stored vector for every query. Here are our 10
+            cat-corpus docs in a 2D view, with the query in the middle and an arrow from the query to every vector.
             Nothing is skipped.
           </T>
           <div
@@ -2934,8 +2930,8 @@ export const IVF = (ctx) => {
               desc="Scatter plot of the 10 cat-corpus documents with the query vector at the center. Faint red lines fan out from the query to every document, showing that brute-force kNN compares the query to every vector."
             />
             <T color={C.dim} size={14} center style={{ marginTop: 6, fontStyle: "italic" }}>
-              Every line is a distance computation. At N = 10 this is nothing; at N = 1 billion it balloons to the
-              3 TB of scans per query that brute force cannot afford.
+              Every line is a distance computation. At N = 10 this is nothing; at N = 1 billion it balloons to the 3 TB
+              of scans per query that brute force cannot afford.
             </T>
           </div>
           <div
@@ -3218,8 +3214,7 @@ export const IVF = (ctx) => {
                 A → [1, 3, 4, 5, 7]
                 <br />
                 B → [2, 8]
-                <br />
-                C → [6, 9, 10]
+                <br />C → [6, 9, 10]
               </div>
             </div>
             <T color="#80e8a5" size={16} style={{ marginTop: 10 }}>
@@ -3731,10 +3726,10 @@ export const ANNFamilyTree = (ctx) => {
             Clustering (IVF): partition the space, probe the nearest cell
           </T>
           <T color="#80deea" style={{ marginTop: 8 }}>
-            IVF (Inverted File Index) does partition-and-probe: cluster the corpus into nlist Voronoi
-            cells ahead of time, and at query time scan only the nprobe nearest cells. Cheap to build, easy to update,
-            decent recall at nprobe = 8 to 32. Its weakness is neighbors that sit just across a cell boundary - the
-            partition hides them from the probe.
+            IVF (Inverted File Index) does partition-and-probe: cluster the corpus into nlist Voronoi cells ahead of
+            time, and at query time scan only the nprobe nearest cells. Cheap to build, easy to update, decent recall at
+            nprobe = 8 to 32. Its weakness is neighbors that sit just across a cell boundary - the partition hides them
+            from the probe.
           </T>
           <div
             style={{
@@ -4015,7 +4010,7 @@ export const ANNFamilyTree = (ctx) => {
 // Dedicated layout for HNSW diagrams (11.7-11.9). Chosen so the 3-NN proximity
 // graph draws with zero edge crossings in 2D. Separate from CORPUS_XY because
 // those visuals don't draw edges while HNSW diagrams do.
-const HNSW_CORPUS_XY = {
+export const HNSW_CORPUS_XY = {
   1: { x: 68, y: 58 },
   7: { x: 230, y: 60 },
   3: { x: 150, y: 130 },
@@ -4053,7 +4048,7 @@ const computeFlatEdges = (xy) => {
   }
   return [...edges].map((k) => k.split("-").map(Number));
 };
-const FLAT_GRAPH_EDGES = computeFlatEdges(HNSW_CORPUS_XY);
+export const FLAT_GRAPH_EDGES = computeFlatEdges(HNSW_CORPUS_XY);
 
 // Upper-layer hubs for 11.7 sub=2/3 diagrams.
 // Layer 1 (yellow) = a few nodes that bridge the scatter with long edges.
@@ -4097,10 +4092,7 @@ const HNSWLayeredGraph = ({
   const maxFlatY = maxHnswY + flatOffsetY + 20;
   const vbH = layered ? Math.max(360, maxFlatY + 20) : Math.max(360, maxFlatY + 20);
   return (
-    <svg
-      viewBox={`0 0 500 ${vbH}`}
-      style={{ width: "100%", maxWidth: 520, height: "auto", display: "block" }}
-    >
+    <svg viewBox={`0 0 500 ${vbH}`} style={{ width: "100%", maxWidth: 520, height: "auto", display: "block" }}>
       <desc>{desc}</desc>
       {mode === "twoLayers" && (
         <>
@@ -4189,17 +4181,7 @@ const HNSWLayeredGraph = ({
       {hubEdges.map(([a, b], i) => {
         const pa = HNSW_CORPUS_XY[a];
         const pb = HNSW_CORPUS_XY[b];
-        return (
-          <line
-            key={`h${i}`}
-            x1={pa.x}
-            y1={hubY}
-            x2={pb.x}
-            y2={hubY}
-            stroke={C.yellow}
-            strokeWidth="2.5"
-          />
-        );
+        return <line key={`h${i}`} x1={pa.x} y1={hubY} x2={pb.x} y2={hubY} stroke={C.yellow} strokeWidth="2.5" />;
       })}
       {/* Layer 2 top hub */}
       {mode === "twoLayers" &&
@@ -4226,14 +4208,7 @@ const HNSWLayeredGraph = ({
         return (
           <g key={`n${id}`}>
             <circle cx={p.x} cy={p.y + flatOffsetY} r={10} fill={color} stroke={color} />
-            <text
-              x={p.x}
-              y={p.y + flatOffsetY + 4}
-              textAnchor="middle"
-              fill="#08080d"
-              fontSize="12"
-              fontWeight="bold"
-            >
+            <text x={p.x} y={p.y + flatOffsetY + 4} textAnchor="middle" fill="#08080d" fontSize="12" fontWeight="bold">
               {id}
             </text>
           </g>
@@ -4271,14 +4246,14 @@ export const HNSWIntuition = (ctx) => {
           </T>
           <T color="#80deea" style={{ marginTop: 8 }}>
             HNSW starts with one simple idea. Build a graph over the 10 docs where each node links to its M nearest
-            neighbors. M is a tuning knob; for this visual we use M = 3 so the picture stays readable. In production
-            M = 16 is standard.
+            neighbors. M is a tuning knob; for this visual we use M = 3 so the picture stays readable. In production M =
+            16 is standard.
           </T>
           <T color="#80deea" style={{ marginTop: 8 }}>
-            One nuance: because the graph is undirected, a node ends up with <i>at least</i> M edges, not exactly M.
-            If another node picks this one among its M nearest, the link is added both ways - so some nodes in the
-            picture below have 4 edges instead of 3. Real HNSW caps this at a hard upper bound called M_max (usually
-            2M), pruning older neighbors if a node gets too crowded.
+            One nuance: because the graph is undirected, a node ends up with <i>at least</i> M edges, not exactly M. If
+            another node picks this one among its M nearest, the link is added both ways - so some nodes in the picture
+            below have 4 edges instead of 3. Real HNSW caps this at a hard upper bound called M_max (usually 2M),
+            pruning older neighbors if a node gets too crowded.
           </T>
           <div
             style={{
@@ -5902,10 +5877,10 @@ export const HNSWParameters = (ctx) => {
               </desc>
               <line x1="60" y1="30" x2="60" y2="230" stroke={C.dim} strokeWidth="1" />
               <line x1="60" y1="230" x2="500" y2="230" stroke={C.dim} strokeWidth="1" />
-              <text x="40" y="40" fill={C.dim} fontSize="11">
+              <text x="55" y="40" fill={C.dim} fontSize="11" textAnchor="end">
                 1.0
               </text>
-              <text x="40" y="230" fill={C.dim} fontSize="11">
+              <text x="55" y="234" fill={C.dim} fontSize="11" textAnchor="end">
                 0.80
               </text>
               <text x="60" y="258" fill={C.dim} fontSize="11" textAnchor="middle">
@@ -5953,8 +5928,8 @@ export const HNSWParameters = (ctx) => {
           </T>
           <T color="#ef9a9a" style={{ marginTop: 8 }}>
             At production scale (N = 100M, d = 768, M = 16), the total memory is dominated by vectors, with a small but
-            real graph overhead on top. Compression (Acts 3 and 4) knocks the vector portion way down. The playbook
-            below tells you which knob to raise when a specific metric goes wrong.
+            real graph overhead on top. Compression knocks the vector portion way down. The playbook below tells you
+            which knob to raise when a specific metric goes wrong.
           </T>
           <div
             style={{
@@ -5997,7 +5972,7 @@ export const HNSWParameters = (ctx) => {
                 },
                 {
                   symptom: "Memory is too high",
-                  action: "lower M (rebuild), then apply PQ compression (Act 3)",
+                  action: "lower M (rebuild), then apply PQ compression",
                   color: C.yellow,
                 },
                 {
@@ -6104,11 +6079,12 @@ export const Vamana = (ctx) => {
             One flat layer, carefully chosen edges
           </T>
           <T color="#80deea" style={{ marginTop: 8 }}>
-            HNSW uses a layered hierarchy because in-RAM random access is free - jumping from hub to hub costs nothing.
-            On SSD, random access is expensive, so the hierarchy gains less. Vamana drops the hierarchy entirely and
-            keeps a single flat layer with the right edges. Each node has up to R neighbors (R = 64 in the default
-            DiskANN configuration), chosen to keep the graph navigable from any starting point.
+            HNSW builds a pyramid of layers so it can make fast long-range jumps through the upper hubs. Vamana throws
+            the pyramid away and keeps a single flat graph. Each node gets up to R = 64 neighbors, picked so some are
+            short-range (for local precision) and some are long-range (replacing what HNSW&apos;s upper layers used to
+            do).
           </T>
+
           <div
             style={{
               marginTop: 14,
@@ -6118,55 +6094,258 @@ export const Vamana = (ctx) => {
               border: `1px solid ${C.cyan}12`,
             }}
           >
-            <svg viewBox="0 0 500 220" style={{ width: "100%", maxWidth: 520, height: "auto", display: "block" }}>
+            <T color={C.cyan} bold center size={16}>
+              HNSW pyramid vs Vamana flat layer
+            </T>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginTop: 8 }}>
+              <div>
+                <svg viewBox="0 0 240 200" style={{ width: "100%", height: "auto", display: "block" }}>
+                  <desc>
+                    HNSW hierarchical graph with three stacked layers. The top layer holds a single hub node, the middle
+                    layer three hub nodes connected by long orange arcs, and the bottom layer eight nodes connected by
+                    short green edges. Dashed vertical lines link the same node across layers.
+                  </desc>
+                  <text x="8" y="34" fill={C.dim} fontSize="11">
+                    L2
+                  </text>
+                  <text x="8" y="94" fill={C.dim} fontSize="11">
+                    L1
+                  </text>
+                  <text x="8" y="169" fill={C.dim} fontSize="11">
+                    L0
+                  </text>
+                  <line x1="120" y1="30" x2="60" y2="90" stroke={C.orange} strokeWidth="1.5" />
+                  <line x1="120" y1="30" x2="180" y2="90" stroke={C.orange} strokeWidth="1.5" />
+                  <line x1="60" y1="90" x2="120" y2="90" stroke={C.cyan} strokeWidth="1.2" strokeOpacity="0.6" />
+                  <line x1="120" y1="90" x2="180" y2="90" stroke={C.cyan} strokeWidth="1.2" strokeOpacity="0.6" />
+                  <line x1="30" y1="165" x2="60" y2="165" stroke={C.green} strokeWidth="1.3" />
+                  <line x1="60" y1="165" x2="90" y2="165" stroke={C.green} strokeWidth="1.3" />
+                  <line x1="90" y1="165" x2="120" y2="165" stroke={C.green} strokeWidth="1.3" />
+                  <line x1="120" y1="165" x2="150" y2="165" stroke={C.green} strokeWidth="1.3" />
+                  <line x1="150" y1="165" x2="180" y2="165" stroke={C.green} strokeWidth="1.3" />
+                  <line x1="180" y1="165" x2="210" y2="165" stroke={C.green} strokeWidth="1.3" />
+                  <line x1="60" y1="145" x2="60" y2="165" stroke={C.green} strokeWidth="1.3" />
+                  <line x1="60" y1="145" x2="90" y2="165" stroke={C.green} strokeWidth="1.3" />
+                  <line x1="120" y1="30" x2="120" y2="90" stroke={C.dim} strokeDasharray="3,3" strokeWidth="0.8" />
+                  <line x1="120" y1="90" x2="120" y2="165" stroke={C.dim} strokeDasharray="3,3" strokeWidth="0.8" />
+                  <line x1="60" y1="90" x2="60" y2="145" stroke={C.dim} strokeDasharray="3,3" strokeWidth="0.8" />
+                  <line x1="180" y1="90" x2="180" y2="165" stroke={C.dim} strokeDasharray="3,3" strokeWidth="0.8" />
+                  <circle cx="120" cy="30" r="7" fill={C.cyan} />
+                  {[60, 120, 180].map((x) => (
+                    <circle key={`m${x}`} cx={x} cy={90} r="6" fill={C.cyan} />
+                  ))}
+                  {[
+                    [30, 165],
+                    [60, 165],
+                    [90, 165],
+                    [120, 165],
+                    [150, 165],
+                    [180, 165],
+                    [210, 165],
+                    [60, 145],
+                  ].map(([x, y], i) => (
+                    <circle key={`b${i}`} cx={x} cy={y} r="5" fill={C.cyan} />
+                  ))}
+                </svg>
+                <T color={C.dim} size={13} center style={{ marginTop: 4 }}>
+                  HNSW: 3 layers, long jumps live on top
+                </T>
+              </div>
+              <div>
+                <svg viewBox="0 0 240 200" style={{ width: "100%", height: "auto", display: "block" }}>
+                  <desc>
+                    Single flat Vamana graph with eight nodes on one plane. Short green edges connect nearby nodes for
+                    local precision while long orange edges stretch across the plane, doing the cross-space work
+                    HNSW&apos;s upper layers used to do.
+                  </desc>
+                  <text x="8" y="105" fill={C.dim} fontSize="11">
+                    flat
+                  </text>
+                  <line x1="40" y1="60" x2="80" y2="40" stroke={C.green} strokeWidth="1.3" />
+                  <line x1="80" y1="40" x2="115" y2="85" stroke={C.green} strokeWidth="1.3" />
+                  <line x1="115" y1="85" x2="155" y2="55" stroke={C.green} strokeWidth="1.3" />
+                  <line x1="155" y1="55" x2="200" y2="70" stroke={C.green} strokeWidth="1.3" />
+                  <line x1="60" y1="130" x2="130" y2="150" stroke={C.green} strokeWidth="1.3" />
+                  <line x1="130" y1="150" x2="195" y2="140" stroke={C.green} strokeWidth="1.3" />
+                  <line x1="115" y1="85" x2="130" y2="150" stroke={C.green} strokeWidth="1.3" />
+                  <line x1="40" y1="60" x2="195" y2="140" stroke={C.orange} strokeWidth="1.6" />
+                  <line x1="80" y1="40" x2="130" y2="150" stroke={C.orange} strokeWidth="1.6" />
+                  <line x1="200" y1="70" x2="60" y2="130" stroke={C.orange} strokeWidth="1.6" />
+                  {[
+                    [40, 60],
+                    [80, 40],
+                    [115, 85],
+                    [155, 55],
+                    [200, 70],
+                    [60, 130],
+                    [130, 150],
+                    [195, 140],
+                  ].map(([x, y], i) => (
+                    <circle key={`f${i}`} cx={x} cy={y} r="6" fill={C.cyan} />
+                  ))}
+                </svg>
+                <T color={C.dim} size={13} center style={{ marginTop: 4 }}>
+                  Vamana: 1 layer, every edge lives here
+                </T>
+              </div>
+            </div>
+          </div>
+
+          <div
+            style={{
+              marginTop: 14,
+              padding: "12px 14px",
+              borderRadius: 8,
+              background: `${C.yellow}06`,
+              border: `1px solid ${C.yellow}12`,
+            }}
+          >
+            <T color={C.yellow} bold center size={16}>
+              Why drop the pyramid? On SSD every hop costs the same
+            </T>
+            <T color={C.bright} size={15} style={{ marginTop: 6 }}>
+              HNSW&apos;s pyramid only earns its keep because top-layer hops in RAM are essentially free. Once the graph
+              lives on SSD, every hop - whether through a top-layer hub or a bottom-layer neighbor - costs the same 10
+              microseconds. The hierarchy stops paying for itself, so Vamana skips it.
+            </T>
+            <div style={{ marginTop: 10, display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
+              <div
+                style={{
+                  padding: "10px 12px",
+                  borderRadius: 8,
+                  background: `${C.green}06`,
+                  border: `1px solid ${C.green}12`,
+                  textAlign: "center",
+                }}
+              >
+                <T color={C.green} bold size={14}>
+                  HNSW in RAM
+                </T>
+                <T color={C.bright} size={14} style={{ marginTop: 4, fontFamily: "monospace" }}>
+                  top-layer jump: ~0.1 &micro;s
+                </T>
+                <T color={C.bright} size={14} style={{ fontFamily: "monospace" }}>
+                  bottom hop: ~0.1 &micro;s
+                </T>
+                <T color={C.dim} size={13} style={{ marginTop: 4, fontStyle: "italic" }}>
+                  layering saves hops cheaply
+                </T>
+              </div>
+              <div
+                style={{
+                  padding: "10px 12px",
+                  borderRadius: 8,
+                  background: `${C.red}06`,
+                  border: `1px solid ${C.red}12`,
+                  textAlign: "center",
+                }}
+              >
+                <T color={C.red} bold size={14}>
+                  Vamana on SSD
+                </T>
+                <T color={C.bright} size={14} style={{ marginTop: 4, fontFamily: "monospace" }}>
+                  any hop: ~10 &micro;s
+                </T>
+                <T color={C.bright} size={14} style={{ fontFamily: "monospace" }}>
+                  every layer: same cost
+                </T>
+                <T color={C.dim} size={13} style={{ marginTop: 4, fontStyle: "italic" }}>
+                  no free jumps; hierarchy adds nothing
+                </T>
+              </div>
+            </div>
+          </div>
+
+          <div
+            style={{
+              marginTop: 14,
+              padding: "12px 14px",
+              borderRadius: 8,
+              background: `${C.green}06`,
+              border: `1px solid ${C.green}12`,
+            }}
+          >
+            <T color={C.green} bold center size={16}>
+              One node&apos;s R = 64 edges do double duty
+            </T>
+            <svg
+              viewBox="0 0 420 260"
+              style={{ width: "100%", maxWidth: 480, height: "auto", display: "block", margin: "8px auto 0" }}
+            >
               <desc>
-                Single-layer Vamana graph over the 10 cat-corpus documents. Each node has a handful of edges chosen for
-                diversity, no hierarchical layers above it.
+                A single focal Vamana node p at the center surrounded by a mix of short green edges fanning to close
+                neighbors for local precision and long orange edges shooting across the plane to distant nodes, together
+                replacing both HNSW&apos;s bottom-layer edges and its top-layer hub jumps.
               </desc>
               {[
-                [1, 3],
-                [1, 7],
-                [1, 5],
-                [1, 10],
-                [3, 4],
-                [3, 7],
-                [5, 7],
-                [4, 5],
-                [2, 8],
-                [2, 1],
-                [2, 9],
-                [8, 4],
-                [8, 6],
-                [6, 10],
-                [6, 9],
-                [9, 10],
-                [10, 4],
-              ].map(([a, b], i) => {
-                const pa = CORPUS_XY[a];
-                const pb = CORPUS_XY[b];
-                return (
-                  <line
-                    key={i}
-                    x1={pa.x}
-                    y1={pa.y - 40}
-                    x2={pb.x}
-                    y2={pb.y - 40}
-                    stroke={C.cyan}
-                    strokeOpacity="0.5"
-                    strokeWidth="1.5"
-                  />
-                );
-              })}
-              {Object.entries(CORPUS_XY).map(([id, p]) => (
-                <g key={id}>
-                  <circle cx={p.x} cy={p.y - 40} r={10} fill={C.cyan} stroke={C.cyan} />
-                  <text x={p.x} y={p.y - 36} textAnchor="middle" fill="#08080d" fontSize="12" fontWeight="bold">
-                    {id}
-                  </text>
-                </g>
+                [180, 110],
+                [240, 105],
+                [245, 155],
+                [175, 160],
+              ].map(([x, y], i) => (
+                <line key={`sl${i}`} x1="210" y1="130" x2={x} y2={y} stroke={C.green} strokeWidth="1.6" />
               ))}
+              {[
+                [30, 40],
+                [400, 30],
+                [30, 230],
+                [400, 220],
+                [180, 20],
+                [240, 240],
+              ].map(([x, y], i) => (
+                <line key={`ll${i}`} x1="210" y1="130" x2={x} y2={y} stroke={C.orange} strokeWidth="1.6" />
+              ))}
+              {[
+                [100, 70],
+                [320, 80],
+                [80, 180],
+                [330, 200],
+              ].map(([x, y], i) => (
+                <circle key={`o${i}`} cx={x} cy={y} r="5" fill={C.dim} fillOpacity="0.5" />
+              ))}
+              {[
+                [180, 110],
+                [240, 105],
+                [245, 155],
+                [175, 160],
+              ].map(([x, y], i) => (
+                <circle key={`sn${i}`} cx={x} cy={y} r="6" fill={C.cyan} />
+              ))}
+              {[
+                [30, 40],
+                [400, 30],
+                [30, 230],
+                [400, 220],
+                [180, 20],
+                [240, 240],
+              ].map(([x, y], i) => (
+                <circle key={`ln${i}`} cx={x} cy={y} r="6" fill={C.cyan} />
+              ))}
+              <circle cx="210" cy="130" r="11" fill={C.green} stroke={C.green} strokeWidth="2" />
+              <text x="210" y="134" textAnchor="middle" fill="#08080d" fontSize="12" fontWeight="bold">
+                p
+              </text>
             </svg>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                gap: 18,
+                marginTop: 6,
+                fontSize: 14,
+                flexWrap: "wrap",
+                fontFamily: "monospace",
+              }}
+            >
+              <span style={{ color: C.green }}>-- short edges = local precision</span>
+              <span style={{ color: C.orange }}>-- long edges = cross-space jumps</span>
+            </div>
+            <T color={C.bright} size={14} center style={{ marginTop: 6, fontStyle: "italic" }}>
+              The short greens do what HNSW&apos;s bottom layer did. The long oranges do what its top layer did. All
+              baked into one node on one flat graph.
+            </T>
           </div>
+
           <div
             style={{
               marginTop: 14,
@@ -6180,135 +6359,99 @@ export const Vamana = (ctx) => {
               lineHeight: 1.9,
             }}
           >
-            R = 64 <span style={{ color: C.dim }}>(default max neighbors)</span>
+            R = 64 <span style={{ color: C.dim }}>(default max neighbors per node)</span>
             <br />
-            no hierarchy, no layer stack
+            single flat layer, no hierarchy
             <br />
-            navigable from any starting node
+            each node&apos;s edges span short + long ranges
           </div>
           <T color="#80deea" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
-            The trade is fewer long-range jumps in exchange for being drastically easier to store on disk and cache
-            selectively in RAM.
+            Vamana&apos;s build algorithm, called alpha-pruning, is what picks these 64 edges to be diverse - a mix of
+            short for precision and long for cross-space jumps - instead of the 64 closest neighbors which would all
+            clump together.
           </T>
         </Box>
       </Reveal>
       <Reveal when={sub >= 2}>
-        <Box color={C.purple} style={{ width: "100%" }}>
-          <T color={C.purple} bold center size={22}>
-            Alpha-pruning: only keep diverse edges
-          </T>
-          <T color="#b8a9ff" style={{ marginTop: 8 }}>
-            Building the graph greedily would give every node its R nearest neighbors. That sounds good but leaves a
-            fatal gap: the graph has only short-range edges, so search has to trudge through many intermediate nodes to
-            cross the space. Vamana fixes this with the alpha-pruning rule, which trims redundant short edges and keeps
-            only diverse ones.
-          </T>
-          <div
-            style={{
-              marginTop: 14,
-              padding: "14px 18px",
-              borderRadius: 8,
-              background: "rgba(0,0,0,0.3)",
-              textAlign: "center",
-              fontFamily: "monospace",
-              fontSize: 16,
-              color: C.bright,
-              lineHeight: 2,
-            }}
-          >
-            <span style={{ color: C.purple }}>alpha-pruning rule</span>
-            <br />
-            keep edge (p, q) only if no existing neighbor q&apos; of p satisfies:
-            <br />
-            dist(q&apos;, q) &middot; <span style={{ color: C.yellow }}>&alpha;</span> &le; dist(p, q)
-            <br />
-            <span style={{ color: C.dim }}>default &alpha; = 1.2</span>
-          </div>
-          <div style={{ marginTop: 14, display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
-            <div
-              style={{
-                padding: "12px 14px",
-                borderRadius: 8,
-                background: `${C.red}06`,
-                border: `1px solid ${C.red}12`,
-              }}
-            >
-              <T color={C.red} bold center size={16}>
-                Before pruning (redundant edges)
-              </T>
-              <svg viewBox="0 0 200 160" style={{ width: "100%", height: "auto", display: "block", marginTop: 6 }}>
-                <desc>
-                  Graph node with too many redundant short edges clustered in one direction; all neighbors are close to
-                  each other.
-                </desc>
-                <circle cx="100" cy="80" r="10" fill={C.red} />
-                {[
-                  [140, 70],
-                  [145, 85],
-                  [150, 95],
-                  [130, 100],
-                  [155, 70],
-                ].map(([x, y], i) => (
-                  <g key={i}>
-                    <line x1="100" y1="80" x2={x} y2={y} stroke={C.red} strokeWidth="1.5" />
-                    <circle cx={x} cy={y} r="5" fill={C.red} />
-                  </g>
-                ))}
-              </svg>
-              <T color={C.bright} size={13} center style={{ marginTop: 4 }}>
-                5 neighbors, all clumped together - searches get stuck.
-              </T>
-            </div>
-            <div
-              style={{
-                padding: "12px 14px",
-                borderRadius: 8,
-                background: `${C.green}06`,
-                border: `1px solid ${C.green}12`,
-              }}
-            >
-              <T color={C.green} bold center size={16}>
-                After alpha-pruning (diverse edges)
-              </T>
-              <svg viewBox="0 0 200 160" style={{ width: "100%", height: "auto", display: "block", marginTop: 6 }}>
-                <desc>
-                  Graph node after alpha-pruning: fewer neighbors, spread in different directions across the 2D space so
-                  the graph is navigable from anywhere.
-                </desc>
-                <circle cx="100" cy="80" r="10" fill={C.green} />
-                {[
-                  [160, 50],
-                  [150, 130],
-                  [40, 60],
-                  [60, 140],
-                ].map(([x, y], i) => (
-                  <g key={i}>
-                    <line x1="100" y1="80" x2={x} y2={y} stroke={C.green} strokeWidth="1.5" />
-                    <circle cx={x} cy={y} r="5" fill={C.green} />
-                  </g>
-                ))}
-              </svg>
-              <T color={C.bright} size={13} center style={{ marginTop: 4 }}>
-                4 neighbors, each in a different direction - search can escape.
-              </T>
-            </div>
-          </div>
-          <T color="#b8a9ff" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
-            alpha = 1.2 is a sweet spot; alpha closer to 1 keeps many redundant short edges, alpha higher than 1.5 may
-            drop edges that were actually useful. 1.2 is what DiskANN ships with.
-          </T>
-        </Box>
-      </Reveal>
-      <Reveal when={sub >= 3}>
         <Box color={C.orange} style={{ width: "100%" }}>
           <T color={C.orange} bold center size={22}>
             Graph lives on SSD; a cache slice lives in RAM
           </T>
-          <T color="#ffcc80" style={{ marginTop: 8 }}>
-            Adjacency lists are stored on disk as 4 KB blocks aligned to the NVMe page size. Every block holds one
-            node&apos;s neighbor list and the vector itself, so a single 4 KB SSD read delivers both the edges and the
-            data needed to compute distance. A small subset of the graph - typically the central high-degree entry-layer
-            nodes - is kept in RAM.
+
+          <div
+            style={{
+              marginTop: 12,
+              padding: "12px 14px",
+              borderRadius: 8,
+              background: `${C.cyan}06`,
+              border: `1px solid ${C.cyan}12`,
+            }}
+          >
+            <T color={C.cyan} bold center size={16}>
+              Quick primer: what is NVMe?
+            </T>
+            <T color="#80deea" size={15} style={{ marginTop: 6 }}>
+              <b>NVMe</b> stands for <b>Non-Volatile Memory Express</b>. It is the modern protocol that plugs an SSD
+              directly into the PCIe bus, skipping the slow older SATA path. Inside the drive, flash is organised into
+              fixed-size <b>pages</b> - almost always 4 KB each. One SSD read returns one page; asking for fewer bytes
+              still costs a whole page.
+            </T>
+            <div
+              style={{
+                marginTop: 10,
+                display: "grid",
+                gridTemplateColumns: "1fr 1fr",
+                gap: 10,
+              }}
+            >
+              <div
+                style={{
+                  padding: "10px 12px",
+                  borderRadius: 8,
+                  background: "rgba(0,0,0,0.3)",
+                  textAlign: "center",
+                }}
+              >
+                <T color={C.dim} size={13}>
+                  older SATA SSD
+                </T>
+                <T color={C.bright} size={14} style={{ marginTop: 4, fontFamily: "monospace" }}>
+                  ~500 MB/s
+                </T>
+                <T color={C.bright} size={14} style={{ fontFamily: "monospace" }}>
+                  ~100 &micro;s per random read
+                </T>
+              </div>
+              <div
+                style={{
+                  padding: "10px 12px",
+                  borderRadius: 8,
+                  background: `${C.green}06`,
+                  border: `1px solid ${C.green}12`,
+                  textAlign: "center",
+                }}
+              >
+                <T color={C.green} bold size={13}>
+                  NVMe SSD (modern)
+                </T>
+                <T color={C.bright} size={14} style={{ marginTop: 4, fontFamily: "monospace" }}>
+                  ~3-7 GB/s
+                </T>
+                <T color={C.bright} size={14} style={{ fontFamily: "monospace" }}>
+                  ~10 &micro;s per random read
+                </T>
+              </div>
+            </div>
+            <T color="#80deea" size={14} center style={{ marginTop: 8, fontStyle: "italic" }}>
+              ~10x faster than SATA. Vamana only works as an online search engine because of NVMe speeds.
+            </T>
+          </div>
+
+          <T color="#ffcc80" style={{ marginTop: 12 }}>
+            Vamana stores each node&apos;s adjacency list on SSD as a 4 KB block aligned to the NVMe page. Every block
+            holds one node&apos;s neighbor list <b>and</b> the vector itself, so a single 4 KB read delivers both the
+            edges and the data needed to compute distance - one IO per hop, no waste. A small subset of the graph
+            (typically the central high-degree entry-layer nodes) is kept in RAM as a cache.
           </T>
           <div
             style={{
@@ -6340,8 +6483,8 @@ export const Vamana = (ctx) => {
               <text x="30" y="60" fill={C.bright} fontSize="12" fontFamily="monospace">
                 ~1-5% of nodes, kept hot for every query
               </text>
-              {[1, 2, 3, 4, 5].map((i) => (
-                <circle key={i} cx={280 + i * 30} cy={50} r={10} fill={C.green} />
+              {[0, 1, 2, 3, 4].map((i) => (
+                <circle key={i} cx={340 + i * 25} cy={50} r={8} fill={C.green} />
               ))}
               <rect
                 x="20"
@@ -6397,7 +6540,7 @@ export const Vamana = (ctx) => {
           </T>
         </Box>
       </Reveal>
-      <Reveal when={sub >= 4}>
+      <Reveal when={sub >= 3}>
         <Box color={C.green} style={{ width: "100%" }}>
           <T color={C.green} bold center size={22}>
             Search: greedy in RAM, a few SSD fetches, done
@@ -6476,7 +6619,7 @@ export const Vamana = (ctx) => {
           </T>
         </Box>
       </Reveal>
-      <Reveal when={sub >= 5}>
+      <Reveal when={sub >= 4}>
         <Box color={C.yellow} style={{ width: "100%" }}>
           <T color={C.yellow} bold center size={22}>
             100 billion vectors on one machine

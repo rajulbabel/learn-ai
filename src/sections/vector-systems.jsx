@@ -183,8 +183,9 @@ export const FAISS = (ctx) => {
             GPU gives 10x to 100x throughput on high-QPS indexing
           </div>
           <T color="#ffe082" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
-            Every algorithm from Section 11 Acts 2-4 has a FAISS implementation. That is why FAISS is the benchmark -
-            when a paper claims something beats HNSW, the comparison usually runs against the FAISS HNSW.
+            Every ANN and compression algorithm covered in this section has a FAISS implementation. That is why FAISS is
+            the benchmark - when a paper claims something beats HNSW, the comparison usually runs against the FAISS
+            HNSW.
           </T>
         </Box>
       </Reveal>
@@ -1341,7 +1342,7 @@ export const Qdrant = (ctx) => {
             Built-in: hybrid search, SQ / PQ / BQ quantization
           </T>
           <T color="#ffb74d" style={{ marginTop: 8 }}>
-            Qdrant ships most Act 3 compression schemes as configurable flags on a collection. You turn on scalar
+            Qdrant ships the main compression schemes as configurable flags on a collection. You turn on scalar
             quantization (SQ), product quantization (PQ), or binary quantization (BQ) at collection create time; the
             HNSW index below it adapts. Hybrid search (BM25 + vector, RRF fusion from 11.23) is also first-class.
           </T>

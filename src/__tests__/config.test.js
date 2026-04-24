@@ -218,3 +218,21 @@ describe("HTML entity hygiene", () => {
     expect(offenders).toEqual([]);
   });
 });
+
+describe("Act references do not leak into user-visible content", () => {
+  // "Act N" / "Acts N-M" is an internal file-partition name (see CLAUDE.md).
+  // Learners only see chapter numbers like 11.14 - they never encounter "Acts".
+  // Comments (// ...) may still describe the file layout; visible JSX/strings may not.
+  it("no section file references 'Act N' or 'Acts N' outside comments", () => {
+    const offenders = [];
+    const pattern = /\bActs?\s+\d/;
+    for (const file of walk(SRC_DIR)) {
+      const content = fs.readFileSync(file, "utf8");
+      content.split("\n").forEach((line, idx) => {
+        if (line.trim().startsWith("//")) return;
+        if (pattern.test(line)) offenders.push(`${path.relative(SRC_DIR, file)}:${idx + 1}`);
+      });
+    }
+    expect(offenders).toEqual([]);
+  });
+});

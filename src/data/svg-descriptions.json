@@ -189,9 +189,9 @@
     "Line chart plotting recall@10 against ef_search on a log horizontal axis, with three curves for M = 8 (cyan), M = 16 (yellow), and M = 32 (green); higher M curves converge closer to 1.0 but require more memory"
   ],
   "11.11": [
-    "Single-layer Vamana graph over the 10 cat-corpus documents - a handful of diverse edges per node, no hierarchical layers above it",
-    "Graph node with five redundant short edges all clustered in one direction - the before state where searches can get stuck",
-    "Same node after alpha-pruning: four neighbors in different directions across the 2D space, keeping the graph navigable from anywhere",
+    "HNSW hierarchical graph with three stacked layers: top layer has a single hub node, middle layer has three hub nodes connected by long orange arcs, and bottom layer has eight nodes connected by short green edges, with dashed vertical lines linking the same node across layers",
+    "Single flat Vamana graph with eight nodes on one plane connected by a mix of short green edges for local precision and long orange edges stretching across the plane for cross-space jumps, doing the work HNSW's upper layers used to do",
+    "Focal Vamana node p at the center surrounded by a mix of short green edges fanning to close neighbors and long orange edges shooting across the plane to distant nodes, showing how one node's 64 edges do double duty as both local-precision and long-range hub edges",
     "Storage hierarchy diagram - top layer shows a RAM cache with a small subset of high-degree entry nodes, bottom layer shows the SSD storing every graph node as 4 KB blocks aligned to NVMe pages"
   ],
   "11.15": [

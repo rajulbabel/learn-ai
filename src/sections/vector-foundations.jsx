@@ -29,19 +29,20 @@ const fmtVec = (v) => `[${v.map((x) => x.toFixed(2)).join(", ")}]`;
 // across other regions so k-means produces three separable clusters in the IVF chapter.
 // Three tight visual clusters so the IVF illustrations clearly show
 // three groups: cats in upper-left, dogs in upper-right, other in lower-right.
+// Each cluster is a compact ~55-pixel blob so it reads as one cloud, not two.
 const CORPUS_XY = {
-  1: { x: 95, y: 85 },
-  7: { x: 165, y: 85 },
-  5: { x: 95, y: 145 },
-  4: { x: 130, y: 165 },
-  3: { x: 165, y: 145 },
-  2: { x: 320, y: 65 },
-  8: { x: 370, y: 115 },
-  10: { x: 420, y: 200 },
-  9: { x: 420, y: 275 },
-  6: { x: 340, y: 260 },
+  1: { x: 100, y: 100 },
+  7: { x: 150, y: 100 },
+  5: { x: 95, y: 135 },
+  3: { x: 150, y: 140 },
+  4: { x: 125, y: 155 },
+  2: { x: 325, y: 80 },
+  8: { x: 365, y: 115 },
+  10: { x: 405, y: 215 },
+  9: { x: 410, y: 265 },
+  6: { x: 350, y: 240 },
 };
-const QUERY_XY = { x: 60, y: 55 };
+const QUERY_XY = { x: 55, y: 55 };
 
 export const RetrievalProblem = (ctx) => {
   const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx;
@@ -2716,9 +2717,9 @@ export const DistanceMetrics = (ctx) => {
 // Three k-means clusters used across 11.5 IVF visuals.
 // Cluster A holds the 5 cat-related docs; B holds the two dog docs; C holds birds/fish/python.
 const IVF_CLUSTERS = [
-  { id: "A", color: C.purple, light: "#b8a9ff", centroid: { x: 130, y: 115 }, docs: [1, 3, 4, 5, 7], label: "cats" },
-  { id: "B", color: C.yellow, light: "#ffe082", centroid: { x: 345, y: 90 }, docs: [2, 8], label: "dogs" },
-  { id: "C", color: C.cyan, light: "#80deea", centroid: { x: 385, y: 240 }, docs: [6, 9, 10], label: "other" },
+  { id: "A", color: C.purple, light: "#b8a9ff", centroid: { x: 125, y: 125 }, docs: [1, 3, 4, 5, 7], label: "cats" },
+  { id: "B", color: C.yellow, light: "#ffe082", centroid: { x: 345, y: 97 }, docs: [2, 8], label: "dogs" },
+  { id: "C", color: C.cyan, light: "#80deea", centroid: { x: 390, y: 240 }, docs: [6, 9, 10], label: "other" },
 ];
 
 const docCluster = (docId) => IVF_CLUSTERS.find((c) => c.docs.includes(docId));
@@ -3967,15 +3968,15 @@ export const ANNFamilyTree = (ctx) => {
                 recall@10
               </text>
               {[
-                { name: "HNSW", x: 430, y: 50, color: C.green },
-                { name: "Vamana", x: 390, y: 60, color: C.green },
-                { name: "IVF+PQ", x: 340, y: 90, color: C.cyan },
-                { name: "LSH", x: 250, y: 110, color: C.yellow },
-                { name: "KD-tree", x: 160, y: 130, color: C.orange },
+                { name: "HNSW", x: 440, y: 45, color: C.green },
+                { name: "Vamana", x: 355, y: 72, color: C.green },
+                { name: "IVF+PQ", x: 305, y: 100, color: C.cyan },
+                { name: "LSH", x: 235, y: 125, color: C.yellow },
+                { name: "KD-tree", x: 160, y: 140, color: C.orange },
               ].map((p) => (
                 <g key={p.name}>
                   <circle cx={p.x} cy={p.y} r="7" fill={p.color} />
-                  <text x={p.x + 10} y={p.y + 4} fill={p.color} fontSize="12" fontWeight="bold">
+                  <text x={p.x + 11} y={p.y + 4} fill={p.color} fontSize="12" fontWeight="bold">
                     {p.name}
                   </text>
                 </g>
@@ -4033,25 +4034,29 @@ export const ANNFamilyTree = (ctx) => {
   );
 };
 
-// Edges of a flat proximity graph over the 10-doc corpus. Each doc connects to its ~3 nearest
-// neighbors by CORPUS_XY distance. Reused in 11.7 sub=0/1 (flat) and 11.8/11.9 (layered).
+// Edges of a flat proximity graph over the 10-doc corpus, computed as the symmetric
+// union of each node's 3 nearest neighbors by CORPUS_XY squared distance. Because
+// the graph is undirected, some nodes end up with 4 edges (a neighbor chose them
+// reciprocally) - this matches real HNSW behavior where M is the per-insert bound,
+// not a hard per-node cap. Reused in 11.7 sub=0/1 (flat) and 11.8/11.9 (layered).
 const FLAT_GRAPH_EDGES = [
+  [1, 4],
   [1, 5],
   [1, 7],
-  [1, 3],
+  [2, 7],
+  [2, 8],
+  [2, 10],
   [3, 4],
+  [3, 5],
   [3, 7],
   [4, 5],
-  [5, 7],
-  [2, 8],
-  [2, 3],
-  [8, 4],
-  [8, 6],
-  [6, 10],
-  [9, 10],
+  [4, 7],
+  [6, 8],
   [6, 9],
+  [6, 10],
+  [8, 9],
   [8, 10],
-  [2, 1],
+  [9, 10],
 ];
 
 // Upper-layer hubs for 11.7 sub=2/3 diagrams.
@@ -4069,14 +4074,13 @@ const HNSWLayeredGraph = ({
   const slowPath =
     mode === "slowGreedy"
       ? [
-          [10, 8],
-          [8, 6],
+          [10, 6],
           [6, 9],
           [9, 10],
           [10, 8],
           [8, 2],
-          [2, 3],
-          [3, 1],
+          [2, 7],
+          [7, 1],
         ]
       : [];
   const hubEdges =
@@ -4269,9 +4273,15 @@ export const HNSWIntuition = (ctx) => {
             A flat proximity graph: every node linked to its M nearest
           </T>
           <T color="#80deea" style={{ marginTop: 8 }}>
-            HNSW starts with one simple idea. Build a graph over the 10 docs where each node has an edge to its M
-            nearest neighbors. M is a tuning knob; for this visual we draw M = 3 so the picture is readable. In
-            production M = 16 is standard.
+            HNSW starts with one simple idea. Build a graph over the 10 docs where each node links to its M nearest
+            neighbors. M is a tuning knob; for this visual we use M = 3 so the picture stays readable. In production
+            M = 16 is standard.
+          </T>
+          <T color="#80deea" style={{ marginTop: 8 }}>
+            One nuance: because the graph is undirected, a node ends up with <i>at least</i> M edges, not exactly M.
+            If another node picks this one among its M nearest, the link is added both ways - so some nodes in the
+            picture below have 4 edges instead of 3. Real HNSW caps this at a hard upper bound called M_max (usually
+            2M), pruning older neighbors if a node gets too crowded.
           </T>
           <div
             style={{

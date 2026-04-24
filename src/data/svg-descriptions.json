@@ -153,6 +153,13 @@
     "Right triangle with two points q and d in 2D, a horizontal dashed leg labeled as the x-axis difference and a vertical dashed leg labeled as the y-axis difference, and the blue hypotenuse highlighted as the L2 distance equal to the square root of the sum of squared differences (Pythagoras in d dimensions)"
   ],
   "11.5": [
+    "KD-tree recursive partition of a 2D point cloud - vertical split down the middle, horizontal splits in each half, one more vertical split in a quadrant - showing clean logarithmic partitioning at low dimensions",
+    "Two-dimensional space with three random hyperplane lines slicing it; vectors in the same intersection share a 3-bit LSH hash code like 011 or 100",
+    "Small IVF recap scatter - three Voronoi cells with the query probing the nearest one",
+    "Proximity graph of the 10 cat-corpus documents with edges connecting each node to its two or three nearest neighbors, and a highlighted green path from the lower-right birds/fish doc across several hops to the cat cluster",
+    "Illustrative recall vs queries-per-second scatter inspired by ann-benchmarks: HNSW and Vamana sit on the upper-right Pareto frontier, while IVF+PQ, LSH, and KD-tree fall below and to the left"
+  ],
+  "11.6": [
     "Scatter plot of the 10 cat-corpus documents with the query vector at the center and faint red lines fanning out to every dot, showing that brute-force kNN compares the query to every vector",
     "Same 10 docs colored by k-means cluster after running with nlist = 3: purple centroid A among the cat docs, yellow centroid B around the dog docs, cyan centroid C around the other docs",
     "Same scatter with dashed colored rectangles behind the dots approximating Voronoi cells, showing each doc belongs to exactly one cell",
@@ -160,13 +167,6 @@
     "Small IVF scatter with nprobe = 1: only the nearest cluster is probed",
     "Small IVF scatter with nprobe = 2: the two nearest clusters are probed",
     "Small IVF scatter with nprobe = 3: all three clusters are probed, equivalent to a full scan"
-  ],
-  "11.6": [
-    "KD-tree recursive partition of a 2D point cloud - vertical split down the middle, horizontal splits in each half, one more vertical split in a quadrant - showing clean logarithmic partitioning at low dimensions",
-    "Two-dimensional space with three random hyperplane lines slicing it; vectors in the same intersection share a 3-bit LSH hash code like 011 or 100",
-    "Small IVF recap scatter - three Voronoi cells with the query probing the nearest one",
-    "Proximity graph of the 10 cat-corpus documents with edges connecting each node to its two or three nearest neighbors, and a highlighted green path from the lower-right birds/fish doc across several hops to the cat cluster",
-    "Illustrative recall vs queries-per-second scatter inspired by ann-benchmarks: HNSW and Vamana sit on the upper-right Pareto frontier, while IVF+PQ, LSH, and KD-tree fall below and to the left"
   ],
   "11.7": [
     "Flat proximity graph of the 10 cat-corpus documents with each node connected by cyan edges to its two or three nearest neighbors - the starting point before any hierarchy is added",

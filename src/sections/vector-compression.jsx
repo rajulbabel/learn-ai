@@ -2709,22 +2709,22 @@ export const Matryoshka = (ctx) => {
 // Cluster A (cats): 1, 3, 4, 5, 7 - upper left. Cluster B (dogs): 2, 8 - upper right.
 // Cluster C (other): 6, 9, 10 - lower right. Query lands inside cluster A.
 const IVFPQ_CORPUS_XY = {
-  1: { x: 95, y: 85, cluster: "A", label: "cats domesticated" },
-  7: { x: 165, y: 85, cluster: "A", label: "kittens" },
-  5: { x: 95, y: 145, cluster: "A", label: "tigers striped" },
-  4: { x: 130, y: 165, cluster: "A", label: "cat on mat" },
-  3: { x: 165, y: 145, cluster: "A", label: "lions big cats" },
-  2: { x: 320, y: 65, cluster: "B", label: "dogs loyal" },
-  8: { x: 370, y: 115, cluster: "B", label: "dog chased cat" },
-  10: { x: 420, y: 200, cluster: "C", label: "fish underwater" },
-  9: { x: 420, y: 275, cluster: "C", label: "birds fly" },
-  6: { x: 340, y: 260, cluster: "C", label: "python language" },
+  1: { x: 100, y: 100, cluster: "A", label: "cats domesticated" },
+  7: { x: 150, y: 100, cluster: "A", label: "kittens" },
+  5: { x: 95, y: 135, cluster: "A", label: "tigers striped" },
+  3: { x: 150, y: 140, cluster: "A", label: "lions big cats" },
+  4: { x: 125, y: 155, cluster: "A", label: "cat on mat" },
+  2: { x: 325, y: 80, cluster: "B", label: "dogs loyal" },
+  8: { x: 365, y: 115, cluster: "B", label: "dog chased cat" },
+  10: { x: 405, y: 215, cluster: "C", label: "fish underwater" },
+  9: { x: 410, y: 265, cluster: "C", label: "birds fly" },
+  6: { x: 350, y: 240, cluster: "C", label: "python language" },
 };
-const IVFPQ_QUERY_XY = { x: 60, y: 55 };
+const IVFPQ_QUERY_XY = { x: 55, y: 55 };
 const IVFPQ_CENTROIDS = {
-  A: { x: 130, y: 115, color: C.purple, label: "C_A (cats)" },
-  B: { x: 345, y: 90, color: C.yellow, label: "C_B (dogs)" },
-  C: { x: 385, y: 240, color: C.cyan, label: "C_C (other)" },
+  A: { x: 125, y: 125, color: C.purple, label: "C_A (cats)" },
+  B: { x: 345, y: 97, color: C.yellow, label: "C_B (dogs)" },
+  C: { x: 390, y: 240, color: C.cyan, label: "C_C (other)" },
 };
 
 // 4-dim vectors for the three docs used in the residual table (sub=2).

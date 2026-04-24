@@ -1188,6 +1188,20 @@ describe("CompressionDecision (11.19) content", () => {
     expect(container.textContent).toMatch(/Qdrant/);
     expect(container.textContent).toMatch(/pgvector/);
   });
+
+  it("sub=3 lists five heuristics and four traps to avoid", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/memory bites|quantize until/i);
+    expect(container.textContent).toMatch(/MRL is free|always apply/i);
+    expect(container.textContent).toMatch(/DB first|database first/i);
+    expect(container.textContent).toMatch(/Rescor(e|ing) is.*free|rescor.*default/i);
+    expect(container.textContent).toMatch(/measure recall|your own data/i);
+    expect(container.textContent).toMatch(/traps|avoid/i);
+    expect(container.textContent).toMatch(/BQ at d.*256|d <= 256/i);
+    expect(container.textContent).toMatch(/skip(ping)? MRL/i);
+    expect(container.textContent).toMatch(/stacking|without measuring/i);
+    expect(container.textContent).toMatch(/disabl.*rescor/i);
+  });
 });
 
 describe("Filtering (11.20) content", () => {

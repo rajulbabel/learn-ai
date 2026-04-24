@@ -4533,7 +4533,147 @@ export const CompressionDecision = (ctx) => {
           </T>
         </Box>
       </Reveal>
-      {sub < 0 && (
+      <Reveal when={sub >= 3}>
+        <Box color={C.green} style={{ width: "100%" }}>
+          <T color={C.green} bold center size={22}>
+            Heuristics to keep and traps to avoid
+          </T>
+          <T color="#80e8a5" style={{ marginTop: 8 }}>
+            Five rules of thumb compress this whole chapter into a design-review checklist. The four traps are the
+            failure modes that reliably surface when teams skip the checklist.
+          </T>
+          <div
+            style={{
+              marginTop: 14,
+              display: "grid",
+              gridTemplateColumns: "1fr 1fr",
+              gap: 12,
+            }}
+          >
+            <div
+              style={{
+                padding: "12px 14px",
+                background: `${C.green}08`,
+                border: `1px solid ${C.green}22`,
+                borderRadius: 8,
+              }}
+            >
+              <T color={C.green} bold center size={16}>
+                Five rules of thumb
+              </T>
+              <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 10 }}>
+                {[
+                  {
+                    rule: "Don't quantize until memory bites",
+                    why: "Under 1M vectors, complexity isn't worth the tradeoff - run fp32 and move on.",
+                  },
+                  {
+                    rule: "MRL is free; always apply it first",
+                    why: "If the model supports it, truncate at embed time. Halves downstream memory before the DB sees anything.",
+                  },
+                  {
+                    rule: "DB first, compression second",
+                    why: "Pick the DB for ops/filter/SLA reasons, then pick compression from whatever menu that DB offers. pgvector shortens the menu to one option.",
+                  },
+                  {
+                    rule: "Rescoring is nearly free; turn it on by default",
+                    why: "BQ without rescore loses 5-10% recall; with rescore loses <1%. Cost is one extra disk read per top-k candidate.",
+                  },
+                  {
+                    rule: "Measure recall on your own data before committing",
+                    why: "Generic benchmark numbers assume generic data distributions. A 5-minute recall test on your corpus beats any published table.",
+                  },
+                ].map((h, idx) => (
+                  <div
+                    key={h.rule}
+                    style={{
+                      padding: "8px 10px",
+                      background: `${C.green}10`,
+                      border: `1px solid ${C.green}22`,
+                      borderRadius: 6,
+                    }}
+                  >
+                    <T color={C.green} bold size={14}>
+                      {idx + 1}. {h.rule}
+                    </T>
+                    <T color={C.bright} size={12} style={{ marginTop: 4 }}>
+                      {h.why}
+                    </T>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div
+              style={{
+                padding: "12px 14px",
+                background: `${C.red}08`,
+                border: `1px solid ${C.red}22`,
+                borderRadius: 8,
+              }}
+            >
+              <T color={C.red} bold center size={16}>
+                Four traps to avoid
+              </T>
+              <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 10 }}>
+                {[
+                  {
+                    trap: "BQ at d <= 256",
+                    why: "Recall collapses to ~0.82 or worse per 11.15's measured table. The binary code loses too much information at low dimensions.",
+                  },
+                  {
+                    trap: "Skipping MRL when available",
+                    why: "Leaves free compression on the table. An OpenAI-3 embedding at d=3072 with no MRL truncation wastes half the memory budget.",
+                  },
+                  {
+                    trap: "Stacking SQ+PQ+BQ without measuring",
+                    why: "Each layer adds tuning surface. Benchmark before committing to a stacked scheme; the recall multiplier compounds.",
+                  },
+                  {
+                    trap: "Trusting recall numbers that silently disable rescoring",
+                    why: "BQ without rescore is a different product than BQ with rescore. Published comparisons that omit rescore settings mislead.",
+                  },
+                ].map((t, idx) => (
+                  <div
+                    key={t.trap}
+                    style={{
+                      padding: "8px 10px",
+                      background: `${C.red}10`,
+                      border: `1px solid ${C.red}22`,
+                      borderRadius: 6,
+                    }}
+                  >
+                    <T color={C.red} bold size={14}>
+                      {idx + 1}. {t.trap}
+                    </T>
+                    <T color={C.bright} size={12} style={{ marginTop: 4 }}>
+                      {t.why}
+                    </T>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+          <div
+            style={{
+              marginTop: 14,
+              padding: "14px 18px",
+              borderRadius: 8,
+              background: "rgba(0,0,0,0.3)",
+              textAlign: "center",
+              fontFamily: "monospace",
+              fontSize: 14,
+              color: C.bright,
+              lineHeight: 1.9,
+            }}
+          >
+            <span style={{ color: C.green }}>five rules</span> on the left,{" "}
+            <span style={{ color: C.red }}>four traps</span> on the right
+            <br />
+            together they compress the five compression techniques into a working decision framework
+          </div>
+        </Box>
+      </Reveal>
+      {sub < 3 && (
         <SubBtn
           key={sub}
           onClick={() => {

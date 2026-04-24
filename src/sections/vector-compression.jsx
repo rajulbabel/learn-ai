@@ -207,9 +207,9 @@ export const MemoryWall = (ctx) => {
               lineHeight: 2,
             }}
           >
-            HNSW overhead per vector &approx; (M + M/2 + M/4 + ...) &middot; 8 bytes
+            HNSW overhead per vector &asymp; (M + M/2 + M/4 + ...) &middot; 8 bytes
             <br />
-            &approx; 2M &middot; 8 bytes = 32M bytes &approx;{" "}
+            &asymp; 2M &middot; 8 bytes = 32M bytes &asymp;{" "}
             <span style={{ color: C.yellow }}>100 bytes per vector</span>
           </div>
           <div
@@ -810,7 +810,7 @@ export const ScalarQuantization = (ctx) => {
                   <br />
                   16 floats per op
                   <br />
-                  &approx; 48 ops per 768-dim pair
+                  &asymp; 48 ops per 768-dim pair
                 </div>
               </div>
               <div
@@ -838,7 +838,7 @@ export const ScalarQuantization = (ctx) => {
                   <br />
                   64 int8 per op
                   <br />
-                  &approx; 12 ops per 768-dim pair
+                  &asymp; 12 ops per 768-dim pair
                 </div>
               </div>
             </div>
@@ -1159,7 +1159,7 @@ export const ProductQuantization = (ctx) => {
           >
             96 slots &middot; 256 centroids each = <span style={{ color: C.yellow }}>24,576 centroids total</span>
             <br />
-            codebook storage: 96 &middot; 256 &middot; 8 dims &middot; 4 bytes &approx; 786 KB (one-time, fits in L2)
+            codebook storage: 96 &middot; 256 &middot; 8 dims &middot; 4 bytes &asymp; 786 KB (one-time, fits in L2)
           </div>
           <T color="#ffe082" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
             256 codes fit in a single 8-bit byte. That is the whole reason k = 256 is the PQ default.
@@ -1369,7 +1369,7 @@ export const ProductQuantization = (ctx) => {
               }}
             >
               <div style={{ color: C.red, textAlign: "right" }}>size:</div>
-              <div>96 &middot; 256 = 24,576 entries &middot; 4 bytes &approx; 96 KB (fits L2 cache)</div>
+              <div>96 &middot; 256 = 24,576 entries &middot; 4 bytes &asymp; 96 KB (fits L2 cache)</div>
               <div style={{ color: C.red, textAlign: "right" }}>cost per doc:</div>
               <div>96 cache-resident lookups + 96 adds (no multiplies)</div>
               <div style={{ color: C.red, textAlign: "right" }}>vs float32:</div>
@@ -2709,22 +2709,22 @@ export const Matryoshka = (ctx) => {
 // Cluster A (cats): 1, 3, 4, 5, 7 - upper left. Cluster B (dogs): 2, 8 - upper right.
 // Cluster C (other): 6, 9, 10 - lower right. Query lands inside cluster A.
 const IVFPQ_CORPUS_XY = {
-  1: { x: 60, y: 60, cluster: "A", label: "cats domesticated" },
-  3: { x: 215, y: 105, cluster: "A", label: "lions big cats" },
-  4: { x: 140, y: 170, cluster: "A", label: "cat on mat" },
-  5: { x: 55, y: 145, cluster: "A", label: "tigers striped" },
-  7: { x: 200, y: 50, cluster: "A", label: "kittens" },
-  2: { x: 345, y: 55, cluster: "B", label: "dogs loyal" },
-  8: { x: 295, y: 155, cluster: "B", label: "dog chased cat" },
-  9: { x: 420, y: 255, cluster: "C", label: "birds fly" },
-  10: { x: 460, y: 185, cluster: "C", label: "fish underwater" },
-  6: { x: 305, y: 280, cluster: "C", label: "python language" },
+  1: { x: 95, y: 85, cluster: "A", label: "cats domesticated" },
+  7: { x: 165, y: 85, cluster: "A", label: "kittens" },
+  5: { x: 95, y: 145, cluster: "A", label: "tigers striped" },
+  4: { x: 130, y: 165, cluster: "A", label: "cat on mat" },
+  3: { x: 165, y: 145, cluster: "A", label: "lions big cats" },
+  2: { x: 320, y: 65, cluster: "B", label: "dogs loyal" },
+  8: { x: 370, y: 115, cluster: "B", label: "dog chased cat" },
+  10: { x: 420, y: 200, cluster: "C", label: "fish underwater" },
+  9: { x: 420, y: 275, cluster: "C", label: "birds fly" },
+  6: { x: 340, y: 260, cluster: "C", label: "python language" },
 };
-const IVFPQ_QUERY_XY = { x: 110, y: 100 };
+const IVFPQ_QUERY_XY = { x: 60, y: 55 };
 const IVFPQ_CENTROIDS = {
-  A: { x: 150, y: 130, color: C.purple, label: "C_A (cats)" },
-  B: { x: 320, y: 105, color: C.yellow, label: "C_B (dogs)" },
-  C: { x: 395, y: 235, color: C.cyan, label: "C_C (other)" },
+  A: { x: 130, y: 115, color: C.purple, label: "C_A (cats)" },
+  B: { x: 345, y: 90, color: C.yellow, label: "C_B (dogs)" },
+  C: { x: 385, y: 240, color: C.cyan, label: "C_C (other)" },
 };
 
 // 4-dim vectors for the three docs used in the residual table (sub=2).

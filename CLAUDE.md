@@ -223,8 +223,8 @@ Only config.js IDs change.
 | 11.2 | BruteForceKNN | Brute-Force kNN |
 | 11.3 | ThreeWayTradeoff | The Three-Way Tradeoff |
 | 11.4 | DistanceMetrics | Distance Metrics |
-| 11.5 | IVF | IVF (Inverted File Index) |
-| 11.6 | ANNFamilyTree | The ANN Family Tree |
+| 11.5 | ANNFamilyTree | The ANN Family Tree |
+| 11.6 | IVF | IVF (Inverted File Index) |
 | 11.7 | HNSWIntuition | HNSW - The Small-World Intuition |
 | 11.8 | HNSWConstruction | HNSW Construction |
 | 11.9 | HNSWSearch | HNSW Search |

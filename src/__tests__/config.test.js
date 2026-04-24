@@ -1,5 +1,22 @@
 import { describe, it, expect } from "vitest";
+import fs from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 import { chapters, sectionNames, sectionColors, C, validateConfig } from "../config.js";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const SRC_DIR = path.resolve(__dirname, "..");
+
+function walk(dir) {
+  const out = [];
+  for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+    if (entry.name === "__tests__" || entry.name === "node_modules" || entry.name.startsWith(".")) continue;
+    const full = path.join(dir, entry.name);
+    if (entry.isDirectory()) out.push(...walk(full));
+    else if (/\.(jsx?|tsx?)$/.test(entry.name)) out.push(full);
+  }
+  return out;
+}
 
 describe("config.js", () => {
   it("has no duplicate chapter IDs", () => {
@@ -148,8 +165,8 @@ describe("Section 11 chapters", () => {
       { id: "11.2", component: "BruteForceKNN", title: "Brute-Force kNN" },
       { id: "11.3", component: "ThreeWayTradeoff", title: "The Three-Way Tradeoff" },
       { id: "11.4", component: "DistanceMetrics", title: "Distance Metrics" },
-      { id: "11.5", component: "IVF", title: "IVF (Inverted File Index)" },
-      { id: "11.6", component: "ANNFamilyTree", title: "The ANN Family Tree" },
+      { id: "11.5", component: "ANNFamilyTree", title: "The ANN Family Tree" },
+      { id: "11.6", component: "IVF", title: "IVF (Inverted File Index)" },
       { id: "11.7", component: "HNSWIntuition", title: "HNSW - The Small-World Intuition" },
       { id: "11.8", component: "HNSWConstruction", title: "HNSW Construction" },
       { id: "11.9", component: "HNSWSearch", title: "HNSW Search" },
@@ -186,5 +203,18 @@ describe("Section 11 chapters", () => {
       expect(section11[i].component).toBe(exp.component);
       expect(section11[i].title).toBe(exp.title);
     });
+  });
+});
+
+describe("HTML entity hygiene", () => {
+  it("no source file uses the broken &approx; entity (React does not parse it; use &asymp;)", () => {
+    const offenders = [];
+    for (const file of walk(SRC_DIR)) {
+      const content = fs.readFileSync(file, "utf8");
+      content.split("\n").forEach((line, idx) => {
+        if (line.includes("&approx;")) offenders.push(`${path.relative(SRC_DIR, file)}:${idx + 1}`);
+      });
+    }
+    expect(offenders).toEqual([]);
   });
 });

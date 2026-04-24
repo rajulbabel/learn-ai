@@ -27,19 +27,21 @@ const fmtVec = (v) => `[${v.map((x) => x.toFixed(2)).join(", ")}]`;
 // 2D scatter coordinates reused across 11.5-11.9 diagrams. Cat docs (1, 3, 4, 5, 7)
 // cluster in the upper-left; the query lands inside the cat cluster. Non-cat docs spread
 // across other regions so k-means produces three separable clusters in the IVF chapter.
+// Three tight visual clusters so the IVF illustrations clearly show
+// three groups: cats in upper-left, dogs in upper-right, other in lower-right.
 const CORPUS_XY = {
-  1: { x: 60, y: 60 },
-  3: { x: 215, y: 105 },
-  4: { x: 140, y: 170 },
-  5: { x: 55, y: 145 },
-  7: { x: 200, y: 50 },
-  2: { x: 345, y: 55 },
-  8: { x: 295, y: 155 },
-  9: { x: 420, y: 255 },
-  10: { x: 460, y: 185 },
-  6: { x: 305, y: 280 },
+  1: { x: 95, y: 85 },
+  7: { x: 165, y: 85 },
+  5: { x: 95, y: 145 },
+  4: { x: 130, y: 165 },
+  3: { x: 165, y: 145 },
+  2: { x: 320, y: 65 },
+  8: { x: 370, y: 115 },
+  10: { x: 420, y: 200 },
+  9: { x: 420, y: 275 },
+  6: { x: 340, y: 260 },
 };
-const QUERY_XY = { x: 110, y: 100 };
+const QUERY_XY = { x: 60, y: 55 };
 
 export const RetrievalProblem = (ctx) => {
   const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx;
@@ -2714,9 +2716,9 @@ export const DistanceMetrics = (ctx) => {
 // Three k-means clusters used across 11.5 IVF visuals.
 // Cluster A holds the 5 cat-related docs; B holds the two dog docs; C holds birds/fish/python.
 const IVF_CLUSTERS = [
-  { id: "A", color: C.purple, light: "#b8a9ff", centroid: { x: 150, y: 130 }, docs: [1, 3, 4, 5, 7], label: "cats" },
-  { id: "B", color: C.yellow, light: "#ffe082", centroid: { x: 320, y: 105 }, docs: [2, 8], label: "dogs" },
-  { id: "C", color: C.cyan, light: "#80deea", centroid: { x: 395, y: 235 }, docs: [6, 9, 10], label: "other" },
+  { id: "A", color: C.purple, light: "#b8a9ff", centroid: { x: 130, y: 115 }, docs: [1, 3, 4, 5, 7], label: "cats" },
+  { id: "B", color: C.yellow, light: "#ffe082", centroid: { x: 345, y: 90 }, docs: [2, 8], label: "dogs" },
+  { id: "C", color: C.cyan, light: "#80deea", centroid: { x: 385, y: 240 }, docs: [6, 9, 10], label: "other" },
 ];
 
 const docCluster = (docId) => IVF_CLUSTERS.find((c) => c.docs.includes(docId));
@@ -2797,8 +2799,16 @@ const IVFScatter = ({
           return (
             <>
               <defs>
-                <marker id="ivfProbeArrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
-                  <polygon points="0 0, 10 3, 0 6" fill={C.orange} />
+                <marker
+                  id="ivfProbeArrow"
+                  markerWidth="8"
+                  markerHeight="8"
+                  refX="7"
+                  refY="4"
+                  orient="auto"
+                  markerUnits="userSpaceOnUse"
+                >
+                  <polygon points="0 0, 8 4, 0 8" fill={C.orange} />
                 </marker>
               </defs>
               <line
@@ -2807,7 +2817,7 @@ const IVFScatter = ({
                 x2={cx - ux * sr}
                 y2={cy - uy * sr}
                 stroke={C.orange}
-                strokeWidth="2.5"
+                strokeWidth="1.8"
                 markerEnd="url(#ivfProbeArrow)"
               />
             </>
@@ -2905,9 +2915,9 @@ export const IVF = (ctx) => {
             Brute force touches every vector
           </T>
           <T color="#ef9a9a" style={{ marginTop: 8 }}>
-            Start from where the last chapter left off. Brute force is correct but slow because it reads every single
-            stored vector for every query. Here are our 10 cat-corpus docs in a 2D view, with the query in the middle
-            and an arrow from the query to every vector. Nothing is skipped.
+            Brute force is correct but slow because it reads every single stored vector for every query. Here are our
+            10 cat-corpus docs in a 2D view, with the query in the middle and an arrow from the query to every vector.
+            Nothing is skipped.
           </T>
           <div
             style={{
@@ -2923,8 +2933,8 @@ export const IVF = (ctx) => {
               desc="Scatter plot of the 10 cat-corpus documents with the query vector at the center. Faint red lines fan out from the query to every document, showing that brute-force kNN compares the query to every vector."
             />
             <T color={C.dim} size={14} center style={{ marginTop: 6, fontStyle: "italic" }}>
-              Every line is a distance computation. At N = 10 this is nothing; at N = 1 billion it was the 3 TB we
-              walked away from in the last chapter.
+              Every line is a distance computation. At N = 10 this is nothing; at N = 1 billion it balloons to the
+              3 TB of scans per query that brute force cannot afford.
             </T>
           </div>
           <div
@@ -3432,10 +3442,10 @@ export const IVF = (ctx) => {
               lineHeight: 2,
             }}
           >
-            nlist &approx; &radic;N <span style={{ color: C.dim }}>(FAISS default rule)</span>
-            <br />N = 1,000,000 &rarr; sqrt(N) &approx; 1000 &rarr; FAISS rounds up to{" "}
+            nlist &asymp; &radic;N <span style={{ color: C.dim }}>(FAISS default rule)</span>
+            <br />N = 1,000,000 &rarr; sqrt(N) &asymp; 1000 &rarr; FAISS rounds up to{" "}
             <span style={{ color: C.purple }}>4096</span>
-            <br />N = 100,000,000 &rarr; sqrt(N) &approx; 10,000 &rarr; <span style={{ color: C.purple }}>32,768</span>
+            <br />N = 100,000,000 &rarr; sqrt(N) &asymp; 10,000 &rarr; <span style={{ color: C.purple }}>32,768</span>
           </div>
           <div style={{ marginTop: 14, display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
             <div
@@ -3466,8 +3476,8 @@ export const IVF = (ctx) => {
                 Memory overhead
               </T>
               <T color={C.bright} size={14} style={{ marginTop: 6 }}>
-                nlist centroids at d=768 float32 = nlist &middot; 3 KB. At nlist=4096 that is 12 MB of centroids,
-                negligible next to the vectors themselves.
+                Each centroid is d=768 float32 numbers = 3 KB, so nlist centroids cost nlist &middot; 3 KB. At
+                nlist=4096 that is 12 MB total, negligible next to the vector dataset itself.
               </T>
             </div>
           </div>
@@ -3720,7 +3730,7 @@ export const ANNFamilyTree = (ctx) => {
             Clustering (IVF): partition the space, probe the nearest cell
           </T>
           <T color="#80deea" style={{ marginTop: 8 }}>
-            IVF, which we walked through last chapter, does partition-and-probe: cluster the corpus into nlist Voronoi
+            IVF (Inverted File Index) does partition-and-probe: cluster the corpus into nlist Voronoi
             cells ahead of time, and at query time scan only the nprobe nearest cells. Cheap to build, easy to update,
             decent recall at nprobe = 8 to 32. Its weakness is neighbors that sit just across a cell boundary - the
             partition hides them from the probe.
@@ -4458,11 +4468,11 @@ export const HNSWIntuition = (ctx) => {
             layers = &lceil;log<sub>M</sub>(N)&rceil;
             <br />
             at M = 16, N = 1,000,000:{"  "}
-            <span style={{ color: C.green }}>log&#8321;&#8326;(1,000,000) &approx; 5 layers</span>
+            <span style={{ color: C.green }}>log&#8321;&#8326;(1,000,000) &asymp; 5 layers</span>
             <br />
-            hops per layer &approx; constant (~6 with ef_search = 50)
+            hops per layer &asymp; constant (~6 with ef_search = 50)
             <br />
-            total hops &approx; <span style={{ color: C.green }}>30</span> to find the top-k{"  "}
+            total hops &asymp; <span style={{ color: C.green }}>30</span> to find the top-k{"  "}
             <span style={{ color: C.dim }}>vs. ~1000 on flat</span>
           </div>
           <T color="#80e8a5" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
@@ -4659,7 +4669,7 @@ export const HNSWConstruction = (ctx) => {
             <span style={{ color: C.yellow }}>ln</span>(<span style={{ color: C.green }}>uniform(0, 1)</span>) &middot;{" "}
             <span style={{ color: C.cyan }}>mL</span>)
             <br />
-            <span style={{ color: C.dim, fontSize: 14 }}>mL = 1 / ln(M) &approx; 1 / ln(16) &approx; 0.36</span>
+            <span style={{ color: C.dim, fontSize: 14 }}>mL = 1 / ln(M) &asymp; 1 / ln(16) &asymp; 0.36</span>
           </div>
           <div style={{ marginTop: 14, display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
             <div
@@ -4992,7 +5002,7 @@ export const HNSWConstruction = (ctx) => {
             <br />
             edges per node at upper layers &le; M/2 = 8
             <br />
-            memory per vector &approx; M &middot; 4 bytes (neighbor ids) + upper layers &approx;{" "}
+            memory per vector &asymp; M &middot; 4 bytes (neighbor ids) + upper layers &asymp;{" "}
             <span style={{ color: C.red }}>70 bytes per vector</span>
           </div>
           <div style={{ marginTop: 14, display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
@@ -5098,8 +5108,16 @@ const SearchPathDiagram = ({ stage, desc }) => {
     <svg viewBox="0 0 500 300" style={{ width: "100%", maxWidth: 520, height: "auto", display: "block" }}>
       <desc>{desc}</desc>
       <defs>
-        <marker id="searchArrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
-          <polygon points="0 0, 10 3, 0 6" fill={C.green} />
+        <marker
+          id="searchArrow"
+          markerWidth="8"
+          markerHeight="8"
+          refX="7"
+          refY="4"
+          orient="auto"
+          markerUnits="userSpaceOnUse"
+        >
+          <polygon points="0 0, 8 4, 0 8" fill={C.green} />
         </marker>
       </defs>
       <line x1="10" y1={Y2} x2="490" y2={Y2} stroke={C.red} strokeDasharray="2 4" strokeOpacity="0.4" />
@@ -5932,11 +5950,11 @@ export const HNSWParameters = (ctx) => {
               lineHeight: 1.9,
             }}
           >
-            memory &approx; N &middot; (d &middot; 4 + M &middot; 8) bytes
+            memory &asymp; N &middot; (d &middot; 4 + M &middot; 8) bytes
             <br />
             at N = 100M, d = 768, M = 16:
             <br />
-            100M &middot; (3072 + 128) &approx; <span style={{ color: C.red }}>320 GB</span>{" "}
+            100M &middot; (3072 + 128) &asymp; <span style={{ color: C.red }}>320 GB</span>{" "}
             <span style={{ color: C.dim }}>(300 GB vectors + 20 GB graph)</span>
           </div>
           <div
@@ -6430,7 +6448,7 @@ export const Vamana = (ctx) => {
               lineHeight: 1.9,
             }}
           >
-            total latency &approx; 80 &middot; 10 &micro;s + compute &approx;{" "}
+            total latency &asymp; 80 &middot; 10 &micro;s + compute &asymp;{" "}
             <span style={{ color: C.green }}>~1 ms per query</span>
           </div>
           <T color="#80e8a5" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>

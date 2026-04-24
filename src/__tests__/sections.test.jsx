@@ -748,6 +748,9 @@ describe("Vamana (11.11) content", () => {
     expect(container.textContent).toMatch(/pyramid|hierarchy/i);
     expect(container.textContent).toMatch(/flat/i);
     expect(container.textContent).toMatch(/single layer|one layer|one plane/i);
+    // double-duty and NVMe belong to later subs
+    expect(container.textContent).not.toMatch(/double duty/i);
+    expect(container.textContent).not.toMatch(/NVMe/);
   });
 
   it("sub=2 explains why the hierarchy stops paying off on SSD", () => {
@@ -756,6 +759,8 @@ describe("Vamana (11.11) content", () => {
     expect(container.textContent).toMatch(/SSD/);
     expect(container.textContent).toMatch(/RAM/);
     expect(container.textContent).toMatch(/10\s*[µu]s|0\.1\s*[µu]s/i);
+    // double-duty belongs to sub 3
+    expect(container.textContent).not.toMatch(/double duty/i);
   });
 
   it("sub=3 shows each node's 64 edges doing double duty", () => {
@@ -765,6 +770,8 @@ describe("Vamana (11.11) content", () => {
     expect(container.textContent).toMatch(/long/i);
     expect(container.textContent).toMatch(/double duty|double-duty/i);
     expect(container.textContent).toMatch(/alpha|α/i);
+    // NVMe belongs to sub 4
+    expect(container.textContent).not.toMatch(/NVMe/);
   });
 
   it("sub=4 introduces NVMe", () => {
@@ -773,14 +780,17 @@ describe("Vamana (11.11) content", () => {
     expect(container.textContent).toMatch(/Non-Volatile Memory Express/);
     expect(container.textContent).toMatch(/PCIe/);
     expect(container.textContent).toMatch(/4\s*KB|page/i);
+    // SSD storage layout heading belongs to sub 5
+    expect(container.textContent).not.toMatch(/Graph lives on SSD/);
   });
 
   it("sub=5 describes the disk layout with SSD blocks and RAM cache", () => {
     const { container } = render(fn(makeCtx({ sub: 5 })));
-    expect(container.textContent).toMatch(/SSD|disk/i);
-    expect(container.textContent).toMatch(/RAM/i);
+    expect(container.textContent).toMatch(/Graph lives on SSD/);
     expect(container.textContent).toMatch(/4\s*KB|page/i);
     expect(container.textContent).toMatch(/cache/i);
+    // search budget content belongs to sub 6
+    expect(container.textContent).not.toMatch(/Per-query budget/i);
   });
 
   it("sub=6 shows the minimize-disk-reads search pattern", () => {

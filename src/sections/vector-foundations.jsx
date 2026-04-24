@@ -6076,13 +6076,11 @@ export const Vamana = (ctx) => {
       <Reveal when={sub >= 1}>
         <Box color={C.cyan} style={{ width: "100%" }}>
           <T color={C.cyan} bold center size={22}>
-            One flat layer, carefully chosen edges
+            HNSW has a pyramid, Vamana has one flat layer
           </T>
           <T color="#80deea" style={{ marginTop: 8 }}>
             HNSW builds a pyramid of layers so it can make fast long-range jumps through the upper hubs. Vamana throws
-            the pyramid away and keeps a single flat graph. Each node gets up to R = 64 neighbors, picked so some are
-            short-range (for local precision) and some are long-range (replacing what HNSW&apos;s upper layers used to
-            do).
+            the pyramid away and uses a single flat graph - every node sits on one plane with no layer stack above it.
           </T>
 
           <div
@@ -6095,7 +6093,7 @@ export const Vamana = (ctx) => {
             }}
           >
             <T color={C.cyan} bold center size={16}>
-              HNSW pyramid vs Vamana flat layer
+              Side-by-side: pyramid vs flat layer
             </T>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginTop: 8 }}>
               <div>
@@ -6190,72 +6188,81 @@ export const Vamana = (ctx) => {
               </div>
             </div>
           </div>
+        </Box>
+      </Reveal>
 
-          <div
-            style={{
-              marginTop: 14,
-              padding: "12px 14px",
-              borderRadius: 8,
-              background: `${C.yellow}06`,
-              border: `1px solid ${C.yellow}12`,
-            }}
-          >
-            <T color={C.yellow} bold center size={16}>
-              Why drop the pyramid? On SSD every hop costs the same
-            </T>
-            <T color={C.bright} size={15} style={{ marginTop: 6 }}>
-              HNSW&apos;s pyramid only earns its keep because top-layer hops in RAM are essentially free. Once the graph
-              lives on SSD, every hop - whether through a top-layer hub or a bottom-layer neighbor - costs the same 10
-              microseconds. The hierarchy stops paying for itself, so Vamana skips it.
-            </T>
-            <div style={{ marginTop: 10, display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
-              <div
-                style={{
-                  padding: "10px 12px",
-                  borderRadius: 8,
-                  background: `${C.green}06`,
-                  border: `1px solid ${C.green}12`,
-                  textAlign: "center",
-                }}
-              >
-                <T color={C.green} bold size={14}>
-                  HNSW in RAM
-                </T>
-                <T color={C.bright} size={14} style={{ marginTop: 4, fontFamily: "monospace" }}>
-                  top-layer jump: ~0.1 &micro;s
-                </T>
-                <T color={C.bright} size={14} style={{ fontFamily: "monospace" }}>
-                  bottom hop: ~0.1 &micro;s
-                </T>
-                <T color={C.dim} size={13} style={{ marginTop: 4, fontStyle: "italic" }}>
-                  layering saves hops cheaply
-                </T>
-              </div>
-              <div
-                style={{
-                  padding: "10px 12px",
-                  borderRadius: 8,
-                  background: `${C.red}06`,
-                  border: `1px solid ${C.red}12`,
-                  textAlign: "center",
-                }}
-              >
-                <T color={C.red} bold size={14}>
-                  Vamana on SSD
-                </T>
-                <T color={C.bright} size={14} style={{ marginTop: 4, fontFamily: "monospace" }}>
-                  any hop: ~10 &micro;s
-                </T>
-                <T color={C.bright} size={14} style={{ fontFamily: "monospace" }}>
-                  every layer: same cost
-                </T>
-                <T color={C.dim} size={13} style={{ marginTop: 4, fontStyle: "italic" }}>
-                  no free jumps; hierarchy adds nothing
-                </T>
-              </div>
+      <Reveal when={sub >= 2}>
+        <Box color={C.yellow} style={{ width: "100%" }}>
+          <T color={C.yellow} bold center size={22}>
+            Why drop the pyramid? On SSD every hop costs the same
+          </T>
+          <T color="#ffe082" style={{ marginTop: 8 }}>
+            HNSW&apos;s pyramid only earns its keep because top-layer hops in RAM are essentially free. Once the graph
+            lives on SSD, every hop - whether through a top-layer hub or a bottom-layer neighbor - costs the same 10
+            microseconds. The hierarchy stops paying for itself, so Vamana skips it.
+          </T>
+          <div style={{ marginTop: 12, display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
+            <div
+              style={{
+                padding: "12px 14px",
+                borderRadius: 8,
+                background: `${C.green}06`,
+                border: `1px solid ${C.green}12`,
+                textAlign: "center",
+              }}
+            >
+              <T color={C.green} bold size={16}>
+                HNSW in RAM
+              </T>
+              <T color={C.bright} size={15} style={{ marginTop: 6, fontFamily: "monospace" }}>
+                top-layer jump: ~0.1 &micro;s
+              </T>
+              <T color={C.bright} size={15} style={{ fontFamily: "monospace" }}>
+                bottom hop: ~0.1 &micro;s
+              </T>
+              <T color={C.dim} size={14} style={{ marginTop: 6, fontStyle: "italic" }}>
+                layering saves hops cheaply
+              </T>
+            </div>
+            <div
+              style={{
+                padding: "12px 14px",
+                borderRadius: 8,
+                background: `${C.red}06`,
+                border: `1px solid ${C.red}12`,
+                textAlign: "center",
+              }}
+            >
+              <T color={C.red} bold size={16}>
+                Vamana on SSD
+              </T>
+              <T color={C.bright} size={15} style={{ marginTop: 6, fontFamily: "monospace" }}>
+                any hop: ~10 &micro;s
+              </T>
+              <T color={C.bright} size={15} style={{ fontFamily: "monospace" }}>
+                every layer: same cost
+              </T>
+              <T color={C.dim} size={14} style={{ marginTop: 6, fontStyle: "italic" }}>
+                no free jumps; hierarchy adds nothing
+              </T>
             </div>
           </div>
+          <T color="#ffe082" size={16} style={{ marginTop: 12, fontStyle: "italic" }}>
+            A 100x speed difference per hop is why HNSW wins in RAM and Vamana wins on SSD.
+          </T>
+        </Box>
+      </Reveal>
 
+      <Reveal when={sub >= 3}>
+        <Box color={C.green} style={{ width: "100%" }}>
+          <T color={C.green} bold center size={22}>
+            Each node&apos;s R = 64 edges do double duty
+          </T>
+          <T color="#80e8a5" style={{ marginTop: 8 }}>
+            Without a pyramid to provide long-range jumps, each Vamana node&apos;s 64 neighbors have to cover both jobs
+            at once: some are short-range (for final local precision near the target) and some are long-range (for fast
+            cross-space jumps that HNSW used to do on the top layer).
+          </T>
           <div
             style={{
               marginTop: 14,
@@ -6265,12 +6272,9 @@ export const Vamana = (ctx) => {
               border: `1px solid ${C.green}12`,
             }}
           >
-            <T color={C.green} bold center size={16}>
-              One node&apos;s R = 64 edges do double duty
-            </T>
             <svg
               viewBox="0 0 420 260"
-              style={{ width: "100%", maxWidth: 480, height: "auto", display: "block", margin: "8px auto 0" }}
+              style={{ width: "100%", maxWidth: 480, height: "auto", display: "block", margin: "0 auto" }}
             >
               <desc>
                 A single focal Vamana node p at the center surrounded by a mix of short green edges fanning to close
@@ -6331,7 +6335,7 @@ export const Vamana = (ctx) => {
                 display: "flex",
                 justifyContent: "center",
                 gap: 18,
-                marginTop: 6,
+                marginTop: 8,
                 fontSize: 14,
                 flexWrap: "wrap",
                 fontFamily: "monospace",
@@ -6341,11 +6345,10 @@ export const Vamana = (ctx) => {
               <span style={{ color: C.orange }}>-- long edges = cross-space jumps</span>
             </div>
             <T color={C.bright} size={14} center style={{ marginTop: 6, fontStyle: "italic" }}>
-              The short greens do what HNSW&apos;s bottom layer did. The long oranges do what its top layer did. All
+              The short greens do what HNSW&apos;s bottom layer did. The long oranges do what its top layer did. Both
               baked into one node on one flat graph.
             </T>
           </div>
-
           <div
             style={{
               marginTop: 14,
@@ -6365,89 +6368,82 @@ export const Vamana = (ctx) => {
             <br />
             each node&apos;s edges span short + long ranges
           </div>
-          <T color="#80deea" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
+          <T color="#80e8a5" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
             Vamana&apos;s build algorithm, called alpha-pruning, is what picks these 64 edges to be diverse - a mix of
             short for precision and long for cross-space jumps - instead of the 64 closest neighbors which would all
             clump together.
           </T>
         </Box>
       </Reveal>
-      <Reveal when={sub >= 2}>
+      <Reveal when={sub >= 4}>
+        <Box color={C.purple} style={{ width: "100%" }}>
+          <T color={C.purple} bold center size={22}>
+            Quick primer: what is NVMe?
+          </T>
+          <T color="#b8a9ff" style={{ marginTop: 8 }}>
+            <b>NVMe</b> stands for <b>Non-Volatile Memory Express</b>. It is the modern protocol that plugs an SSD
+            directly into the PCIe bus, skipping the slow older SATA path. Inside the drive, flash is organised into
+            fixed-size <b>pages</b> - almost always 4 KB each. One SSD read returns one page; asking for fewer bytes
+            still costs a whole page.
+          </T>
+          <div
+            style={{
+              marginTop: 12,
+              display: "grid",
+              gridTemplateColumns: "1fr 1fr",
+              gap: 10,
+            }}
+          >
+            <div
+              style={{
+                padding: "12px 14px",
+                borderRadius: 8,
+                background: "rgba(0,0,0,0.3)",
+                textAlign: "center",
+              }}
+            >
+              <T color={C.dim} size={14} bold>
+                older SATA SSD
+              </T>
+              <T color={C.bright} size={15} style={{ marginTop: 6, fontFamily: "monospace" }}>
+                ~500 MB/s
+              </T>
+              <T color={C.bright} size={15} style={{ fontFamily: "monospace" }}>
+                ~100 &micro;s per random read
+              </T>
+            </div>
+            <div
+              style={{
+                padding: "12px 14px",
+                borderRadius: 8,
+                background: `${C.green}06`,
+                border: `1px solid ${C.green}12`,
+                textAlign: "center",
+              }}
+            >
+              <T color={C.green} bold size={14}>
+                NVMe SSD (modern)
+              </T>
+              <T color={C.bright} size={15} style={{ marginTop: 6, fontFamily: "monospace" }}>
+                ~3-7 GB/s
+              </T>
+              <T color={C.bright} size={15} style={{ fontFamily: "monospace" }}>
+                ~10 &micro;s per random read
+              </T>
+            </div>
+          </div>
+          <T color="#b8a9ff" size={16} style={{ marginTop: 12, fontStyle: "italic" }}>
+            ~10x faster than SATA. Vamana only works as an online search engine because of NVMe speeds.
+          </T>
+        </Box>
+      </Reveal>
+
+      <Reveal when={sub >= 5}>
         <Box color={C.orange} style={{ width: "100%" }}>
           <T color={C.orange} bold center size={22}>
             Graph lives on SSD; a cache slice lives in RAM
           </T>
-
-          <div
-            style={{
-              marginTop: 12,
-              padding: "12px 14px",
-              borderRadius: 8,
-              background: `${C.cyan}06`,
-              border: `1px solid ${C.cyan}12`,
-            }}
-          >
-            <T color={C.cyan} bold center size={16}>
-              Quick primer: what is NVMe?
-            </T>
-            <T color="#80deea" size={15} style={{ marginTop: 6 }}>
-              <b>NVMe</b> stands for <b>Non-Volatile Memory Express</b>. It is the modern protocol that plugs an SSD
-              directly into the PCIe bus, skipping the slow older SATA path. Inside the drive, flash is organised into
-              fixed-size <b>pages</b> - almost always 4 KB each. One SSD read returns one page; asking for fewer bytes
-              still costs a whole page.
-            </T>
-            <div
-              style={{
-                marginTop: 10,
-                display: "grid",
-                gridTemplateColumns: "1fr 1fr",
-                gap: 10,
-              }}
-            >
-              <div
-                style={{
-                  padding: "10px 12px",
-                  borderRadius: 8,
-                  background: "rgba(0,0,0,0.3)",
-                  textAlign: "center",
-                }}
-              >
-                <T color={C.dim} size={13}>
-                  older SATA SSD
-                </T>
-                <T color={C.bright} size={14} style={{ marginTop: 4, fontFamily: "monospace" }}>
-                  ~500 MB/s
-                </T>
-                <T color={C.bright} size={14} style={{ fontFamily: "monospace" }}>
-                  ~100 &micro;s per random read
-                </T>
-              </div>
-              <div
-                style={{
-                  padding: "10px 12px",
-                  borderRadius: 8,
-                  background: `${C.green}06`,
-                  border: `1px solid ${C.green}12`,
-                  textAlign: "center",
-                }}
-              >
-                <T color={C.green} bold size={13}>
-                  NVMe SSD (modern)
-                </T>
-                <T color={C.bright} size={14} style={{ marginTop: 4, fontFamily: "monospace" }}>
-                  ~3-7 GB/s
-                </T>
-                <T color={C.bright} size={14} style={{ fontFamily: "monospace" }}>
-                  ~10 &micro;s per random read
-                </T>
-              </div>
-            </div>
-            <T color="#80deea" size={14} center style={{ marginTop: 8, fontStyle: "italic" }}>
-              ~10x faster than SATA. Vamana only works as an online search engine because of NVMe speeds.
-            </T>
-          </div>
-
-          <T color="#ffcc80" style={{ marginTop: 12 }}>
+          <T color="#ffcc80" style={{ marginTop: 8 }}>
             Vamana stores each node&apos;s adjacency list on SSD as a 4 KB block aligned to the NVMe page. Every block
             holds one node&apos;s neighbor list <b>and</b> the vector itself, so a single 4 KB read delivers both the
             edges and the data needed to compute distance - one IO per hop, no waste. A small subset of the graph
@@ -6540,7 +6536,7 @@ export const Vamana = (ctx) => {
           </T>
         </Box>
       </Reveal>
-      <Reveal when={sub >= 3}>
+      <Reveal when={sub >= 6}>
         <Box color={C.green} style={{ width: "100%" }}>
           <T color={C.green} bold center size={22}>
             Search: greedy in RAM, a few SSD fetches, done
@@ -6619,7 +6615,7 @@ export const Vamana = (ctx) => {
           </T>
         </Box>
       </Reveal>
-      <Reveal when={sub >= 4}>
+      <Reveal when={sub >= 7}>
         <Box color={C.yellow} style={{ width: "100%" }}>
           <T color={C.yellow} bold center size={22}>
             100 billion vectors on one machine

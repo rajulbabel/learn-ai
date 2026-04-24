@@ -1128,6 +1128,26 @@ describe("CompressionDecision (11.19) content", () => {
     expect(container.textContent).toMatch(/DB|database|support/i);
     expect(container.textContent).toMatch(/recall/i);
   });
+
+  it("sub=1 renders the decision tree with four N-range branches and DB gate table", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/MRL|Matryoshka/);
+    expect(container.textContent).toMatch(/N < 1M|under 1M/i);
+    expect(container.textContent).toMatch(/Skip|no quantization/i);
+    expect(container.textContent).toMatch(/1M.*10M/);
+    expect(container.textContent).toMatch(/Scalar|int8|SQ/);
+    expect(container.textContent).toMatch(/10M.*100M/);
+    expect(container.textContent).toMatch(/Binary|BQ/);
+    expect(container.textContent).toMatch(/rescore|rescoring/i);
+    expect(container.textContent).toMatch(/100M/);
+    expect(container.textContent).toMatch(/HNSW.*PQ|PQ/);
+    expect(container.textContent).toMatch(/pgvector/);
+    expect(container.textContent).toMatch(/Qdrant/);
+    expect(container.textContent).toMatch(/Pinecone/);
+    const svg = container.querySelector("svg");
+    expect(svg).toBeTruthy();
+    expect(svg.querySelector("desc")).toBeTruthy();
+  });
 });
 
 describe("Filtering (11.20) content", () => {

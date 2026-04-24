@@ -4228,6 +4228,189 @@ export const CompressionDecision = (ctx) => {
           </T>
         </Box>
       )}
+      <Reveal when={sub >= 1}>
+        <Box color={C.purple} style={{ width: "100%" }}>
+          <T color={C.purple} bold center size={22}>
+            The decision tree: N drives the branch; d and DB gate binary quantization
+          </T>
+          <T color="#b8a9ff" style={{ marginTop: 8 }}>
+            One pre-step is orthogonal and always worth trying: if the embedding model is Matryoshka-trained (OpenAI
+            text-embedding-3 series, BGE-M3, some Cohere variants), request a smaller dim at the API call itself -
+            truncating 3072 to 1536 or 1024 costs about 1% quality and halves every downstream memory number. Then walk
+            the main tree below.
+          </T>
+          <div
+            style={{
+              marginTop: 14,
+              padding: "12px 14px",
+              borderRadius: 8,
+              background: `${C.purple}06`,
+              border: `1px solid ${C.purple}12`,
+            }}
+          >
+            <T color={C.purple} bold center size={16}>
+              The compression decision flowchart
+            </T>
+            <div style={{ display: "flex", justifyContent: "center", marginTop: 12 }}>
+              <svg viewBox="0 0 640 440" style={{ width: "100%", maxWidth: 640, height: "auto" }}>
+                <desc>
+                  Compression-technique decision flowchart. Top box shows the four inputs (corpus size N, embedding
+                  dimension d, database capability, recall tolerance). An orthogonal pre-step on the left notes that
+                  Matryoshka-trained embedding models can be truncated at the API call. The main flow branches on N:
+                  under 1M skips quantization; 1M to 10M uses scalar quantization; 10M to 100M uses binary quantization
+                  plus rescore when d is at least 768 and the DB supports it, otherwise falls back to scalar; 100M and
+                  above uses HNSW plus product quantization as the production default at scale.
+                </desc>
+                <rect x={180} y={10} width={280} height={50} rx={8} fill={`${C.cyan}22`} stroke={C.cyan} strokeWidth={2} />
+                <text x={320} y={32} fill={C.cyan} fontSize={14} fontWeight="bold" textAnchor="middle">
+                  Inputs: N, d, DB, recall tolerance
+                </text>
+                <text x={320} y={50} fill={C.bright} fontSize={11} textAnchor="middle">
+                  start here
+                </text>
+                <rect x={10} y={80} width={150} height={48} rx={8} fill={`${C.yellow}18`} stroke={C.yellow} strokeWidth={2} />
+                <text x={85} y={100} fill={C.yellow} fontSize={12} fontWeight="bold" textAnchor="middle">
+                  MRL pre-step
+                </text>
+                <text x={85} y={118} fill={C.bright} fontSize={10} textAnchor="middle">
+                  truncate d at embed time
+                </text>
+                <line x1={160} y1={104} x2={180} y2={35} stroke={C.dim} strokeWidth={1} strokeDasharray="4 3" />
+                <line x1={320} y1={60} x2={320} y2={85} stroke={C.dim} strokeWidth={1} />
+                <line x1={60} y1={160} x2={580} y2={160} stroke={C.dim} strokeWidth={1} />
+                <line x1={60} y1={85} x2={60} y2={160} stroke={C.dim} strokeWidth={1} />
+                <line x1={220} y1={160} x2={220} y2={85} stroke={C.dim} strokeWidth={1} />
+                <line x1={420} y1={160} x2={420} y2={85} stroke={C.dim} strokeWidth={1} />
+                <line x1={580} y1={160} x2={580} y2={85} stroke={C.dim} strokeWidth={1} />
+                <line x1={320} y1={85} x2={320} y2={130} stroke={C.dim} strokeWidth={1} />
+                <text x={320} y={148} fill={C.dim} fontSize={12} textAnchor="middle">
+                  branch on N
+                </text>
+                {[
+                  {
+                    x: 10,
+                    label: "N < 1M",
+                    color: C.green,
+                    pick: "Skip",
+                    sub: "HNSW + fp32",
+                  },
+                  {
+                    x: 170,
+                    label: "1M - 10M",
+                    color: C.yellow,
+                    pick: "Scalar Q",
+                    sub: "int8, 4x",
+                  },
+                  {
+                    x: 330,
+                    label: "10M - 100M",
+                    color: C.orange,
+                    pick: "BQ + rescore",
+                    sub: "(d>=768, DB ok)",
+                  },
+                  {
+                    x: 490,
+                    label: "N >= 100M",
+                    color: C.red,
+                    pick: "HNSW + PQ",
+                    sub: "the scale default",
+                  },
+                ].map((r) => (
+                  <g key={r.label}>
+                    <rect
+                      x={r.x}
+                      y={170}
+                      width={140}
+                      height={50}
+                      rx={6}
+                      fill={`${r.color}18`}
+                      stroke={r.color}
+                      strokeWidth={2}
+                    />
+                    <text x={r.x + 70} y={190} fill={r.color} fontSize={13} fontWeight="bold" textAnchor="middle">
+                      {r.label}
+                    </text>
+                    <text x={r.x + 70} y={208} fill={C.bright} fontSize={11} textAnchor="middle">
+                      -&gt; {r.pick}
+                    </text>
+                    <line x1={r.x + 70} y1={220} x2={r.x + 70} y2={246} stroke={C.dim} strokeWidth={1} />
+                    <text x={r.x + 70} y={260} fill={C.dim} fontSize={11} textAnchor="middle">
+                      {r.sub}
+                    </text>
+                  </g>
+                ))}
+                <text x={320} y={300} fill={C.purple} fontSize={12} fontWeight="bold" textAnchor="middle">
+                  fallback rule for the BQ branch
+                </text>
+                <text x={320} y={320} fill={C.dim} fontSize={11} textAnchor="middle">
+                  if d &lt; 768 OR DB lacks BQ+rescore: downgrade to Scalar Q
+                </text>
+                <text x={320} y={355} fill={C.purple} fontSize={12} fontWeight="bold" textAnchor="middle">
+                  recall-tolerance override
+                </text>
+                <text x={320} y={375} fill={C.dim} fontSize={11} textAnchor="middle">
+                  if recall must exceed 99%: downgrade one step (BQ -&gt; SQ; SQ -&gt; skip; PQ -&gt; raise m)
+                </text>
+                <text x={320} y={410} fill={C.purple} fontSize={12} fontWeight="bold" textAnchor="middle">
+                  fold inputs -&gt; one compression stack
+                </text>
+              </svg>
+            </div>
+          </div>
+          <div
+            style={{
+              marginTop: 14,
+              padding: "12px 14px",
+              borderRadius: 8,
+              background: `${C.purple}06`,
+              border: `1px solid ${C.purple}12`,
+            }}
+          >
+            <T color={C.purple} bold center size={16}>
+              Database capability gate
+            </T>
+            <div
+              style={{
+                marginTop: 10,
+                display: "grid",
+                gridTemplateColumns: "1.4fr 1fr 1fr 1.3fr",
+                gap: 6,
+                fontSize: 13,
+                color: C.bright,
+              }}
+            >
+              <div style={{ fontWeight: "bold", color: C.purple, textAlign: "center" }}>DB</div>
+              <div style={{ fontWeight: "bold", color: C.purple, textAlign: "center" }}>SQ</div>
+              <div style={{ fontWeight: "bold", color: C.purple, textAlign: "center" }}>PQ</div>
+              <div style={{ fontWeight: "bold", color: C.purple, textAlign: "center" }}>BQ + rescore</div>
+              {[
+                ["Qdrant, Weaviate", "yes", "yes", "yes"],
+                ["Milvus", "yes", "yes", "partial"],
+                ["pgvector (mainline)", "halfvec", "no", "no"],
+                ["Pinecone", "managed", "managed", "managed"],
+              ].map((row) => (
+                <div
+                  key={row[0]}
+                  style={{ display: "contents" }}
+                >
+                  <div style={{ textAlign: "center", padding: "6px 4px", background: `${C.purple}08` }}>{row[0]}</div>
+                  <div style={{ textAlign: "center", padding: "6px 4px", background: `${C.purple}08` }}>{row[1]}</div>
+                  <div style={{ textAlign: "center", padding: "6px 4px", background: `${C.purple}08` }}>{row[2]}</div>
+                  <div style={{ textAlign: "center", padding: "6px 4px", background: `${C.purple}08` }}>{row[3]}</div>
+                </div>
+              ))}
+            </div>
+            <T color={C.bright} size={13} style={{ marginTop: 10, fontStyle: "italic", textAlign: "center" }}>
+              For pgvector the tree collapses to halfvec or nothing regardless of N. For Pinecone, compression is
+              abstracted - the only knob is MRL at embed time.
+            </T>
+          </div>
+          <T color="#b8a9ff" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
+            The tree is deliberately conservative. Start with the default branch for your N, confirm the gate for the
+            BQ path, and downgrade by one step if recall must hold above 99%.
+          </T>
+        </Box>
+      </Reveal>
       {sub < 0 && (
         <SubBtn
           key={sub}

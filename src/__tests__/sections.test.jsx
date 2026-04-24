@@ -459,21 +459,47 @@ describe("IVF (11.5) content", () => {
     expect(container.textContent).toMatch(/belongs to|exactly one/i);
   });
 
-  it("sub=3 probes the single nearest cluster at nprobe = 1", () => {
+  it("sub=2 clarifies that cell, cluster, partition, and posting list are the same thing", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    const txt = container.textContent;
+    expect(txt).toMatch(/cluster/i);
+    expect(txt).toMatch(/cell/i);
+    expect(txt).toMatch(/partition/i);
+    expect(txt).toMatch(/posting list/i);
+    expect(txt).toMatch(/same thing|four names|different (names|angles|views)/i);
+  });
+
+  it("sub=3 explains the argmin formula and the frozen assignment in plain language", () => {
     const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/argmin/i);
+    expect(container.textContent).toMatch(/closest centroid|nearest centroid/i);
+    expect(container.textContent).toMatch(/distance/i);
+    expect(container.textContent).toMatch(/k[- ]?means/i);
+    expect(container.textContent).toMatch(/frozen|does not change|doesn't change/i);
+  });
+
+  it("sub=3 explains why IVF does not store polygons and what it stores instead", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/teaching|visual|illustration|just for/i);
+    expect(container.textContent).toMatch(/inverted file|posting list|doc.*ID|table/i);
+    expect(container.textContent).toMatch(/implicit|derive|on the fly|argmin/i);
+  });
+
+  it("sub=4 probes the single nearest cluster at nprobe = 1", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
     expect(container.textContent).toMatch(/nprobe\s*=\s*1/i);
     expect(container.textContent).toMatch(/nearest|centroid/i);
   });
 
-  it("sub=4 shows recall vs nprobe tradeoff with concrete numbers", () => {
-    const { container } = render(fn(makeCtx({ sub: 4 })));
+  it("sub=5 shows recall vs nprobe tradeoff with concrete numbers", () => {
+    const { container } = render(fn(makeCtx({ sub: 5 })));
     expect(container.textContent).toMatch(/nprobe/i);
     expect(container.textContent).toMatch(/recall/i);
     expect(container.textContent).toMatch(/0\.8|0\.9|1\.0|100%/);
   });
 
-  it("sub=5 gives parameter guidance nlist sqrt(N) and nprobe", () => {
-    const { container } = render(fn(makeCtx({ sub: 5 })));
+  it("sub=6 gives parameter guidance nlist sqrt(N) and nprobe", () => {
+    const { container } = render(fn(makeCtx({ sub: 6 })));
     expect(container.textContent).toMatch(/sqrt|√/i);
     expect(container.textContent).toMatch(/nlist/i);
     expect(container.textContent).toMatch(/nprobe/i);

@@ -28,18 +28,18 @@ const fmtVec = (v) => `[${v.map((x) => x.toFixed(2)).join(", ")}]`;
 // cluster in the upper-left; the query lands inside the cat cluster. Non-cat docs spread
 // across other regions so k-means produces three separable clusters in the IVF chapter.
 const CORPUS_XY = {
-  1: { x: 110, y: 90 },
-  3: { x: 140, y: 110 },
-  4: { x: 125, y: 130 },
-  5: { x: 105, y: 115 },
-  7: { x: 135, y: 90 },
-  2: { x: 320, y: 100 },
-  8: { x: 290, y: 140 },
-  9: { x: 380, y: 220 },
-  10: { x: 420, y: 180 },
-  6: { x: 220, y: 260 },
+  1: { x: 60, y: 60 },
+  3: { x: 215, y: 105 },
+  4: { x: 140, y: 170 },
+  5: { x: 55, y: 145 },
+  7: { x: 200, y: 50 },
+  2: { x: 345, y: 55 },
+  8: { x: 295, y: 155 },
+  9: { x: 420, y: 255 },
+  10: { x: 460, y: 185 },
+  6: { x: 305, y: 280 },
 };
-const QUERY_XY = { x: 120, y: 105 };
+const QUERY_XY = { x: 110, y: 100 };
 
 export const RetrievalProblem = (ctx) => {
   const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx;
@@ -2714,9 +2714,9 @@ export const DistanceMetrics = (ctx) => {
 // Three k-means clusters used across 11.5 IVF visuals.
 // Cluster A holds the 5 cat-related docs; B holds the two dog docs; C holds birds/fish/python.
 const IVF_CLUSTERS = [
-  { id: "A", color: C.purple, light: "#b8a9ff", centroid: { x: 123, y: 107 }, docs: [1, 3, 4, 5, 7], label: "cats" },
-  { id: "B", color: C.yellow, light: "#ffe082", centroid: { x: 305, y: 120 }, docs: [2, 8], label: "dogs" },
-  { id: "C", color: C.cyan, light: "#80deea", centroid: { x: 340, y: 220 }, docs: [6, 9, 10], label: "other" },
+  { id: "A", color: C.purple, light: "#b8a9ff", centroid: { x: 150, y: 130 }, docs: [1, 3, 4, 5, 7], label: "cats" },
+  { id: "B", color: C.yellow, light: "#ffe082", centroid: { x: 320, y: 105 }, docs: [2, 8], label: "dogs" },
+  { id: "C", color: C.cyan, light: "#80deea", centroid: { x: 395, y: 235 }, docs: [6, 9, 10], label: "other" },
 ];
 
 const docCluster = (docId) => IVF_CLUSTERS.find((c) => c.docs.includes(docId));
@@ -2754,45 +2754,73 @@ const IVFScatter = ({
             </g>
           );
         })}
-      {/* Arrows from query to every dot for bare brute-force view */}
+      {/* Arrows from query to every dot for bare brute-force view.
+          Both endpoints inset past the circle radii so the line stops visibly short
+          of the node edge. Doc circles are opaque, so any portion of a line that
+          would cross another node is hidden behind the node's fill. */}
       {variant === "bare" &&
-        Object.entries(CORPUS_XY).map(([id, p]) => (
-          <line
-            key={id}
-            x1={QUERY_XY.x}
-            y1={QUERY_XY.y}
-            x2={p.x}
-            y2={p.y}
-            stroke={C.red}
-            strokeWidth="1"
-            strokeOpacity="0.35"
-          />
-        ))}
-      {/* Arrow from query to nearest centroid for probe view */}
-      {variant === "probe" && (
-        <>
-          <defs>
-            <marker id="ivfProbeArrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
-              <polygon points="0 0, 10 3, 0 6" fill={C.orange} />
-            </marker>
-          </defs>
-          <line
-            x1={QUERY_XY.x + 4}
-            y1={QUERY_XY.y + 4}
-            x2={IVF_CLUSTERS[0].centroid.x - 6}
-            y2={IVF_CLUSTERS[0].centroid.y - 4}
-            stroke={C.orange}
-            strokeWidth="2.5"
-            markerEnd="url(#ivfProbeArrow)"
-          />
-        </>
-      )}
-      {/* Doc dots, colored per variant */}
+        Object.entries(CORPUS_XY).map(([id, p]) => {
+          const dx = p.x - QUERY_XY.x;
+          const dy = p.y - QUERY_XY.y;
+          const len = Math.hypot(dx, dy) || 1;
+          const ux = dx / len;
+          const uy = dy / len;
+          const qr = 11; // query radius (8) + 3 visible gap
+          const pr = 13; // doc radius (10) + 3 visible gap
+          return (
+            <line
+              key={id}
+              x1={QUERY_XY.x + ux * qr}
+              y1={QUERY_XY.y + uy * qr}
+              x2={p.x - ux * pr}
+              y2={p.y - uy * pr}
+              stroke={C.red}
+              strokeWidth="1"
+              strokeOpacity="0.55"
+            />
+          );
+        })}
+      {/* Arrow from query to nearest centroid for probe view.
+          Endpoints inset past the query circle and the centroid square so the arrow
+          is entirely between them and clearly visible as a standalone element. */}
+      {variant === "probe" &&
+        (() => {
+          const cx = IVF_CLUSTERS[0].centroid.x;
+          const cy = IVF_CLUSTERS[0].centroid.y;
+          const dx = cx - QUERY_XY.x;
+          const dy = cy - QUERY_XY.y;
+          const len = Math.hypot(dx, dy) || 1;
+          const ux = dx / len;
+          const uy = dy / len;
+          const qr = 11; // query circle radius + gap
+          const sr = 14; // centroid square half + gap
+          return (
+            <>
+              <defs>
+                <marker id="ivfProbeArrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+                  <polygon points="0 0, 10 3, 0 6" fill={C.orange} />
+                </marker>
+              </defs>
+              <line
+                x1={QUERY_XY.x + ux * qr}
+                y1={QUERY_XY.y + uy * qr}
+                x2={cx - ux * sr}
+                y2={cy - uy * sr}
+                stroke={C.orange}
+                strokeWidth="2.5"
+                markerEnd="url(#ivfProbeArrow)"
+              />
+            </>
+          );
+        })()}
+      {/* Doc dots, colored per variant. Bare-variant uses an OPAQUE dark fill so
+          the brute-force lines cannot visually pass through any node. */}
       {Object.entries(CORPUS_XY).map(([id, p]) => {
         const cl = docCluster(Number(id));
         const isProbed = variant !== "probe" || probedClusters.includes(cl.id);
-        let fill = "rgba(255,255,255,0.28)";
-        let stroke = "rgba(255,255,255,0.45)";
+        let fill = "#12121a"; // opaque, slightly lighter than page bg
+        let stroke = "rgba(255,255,255,0.65)";
+        let isBare = variant === "bare";
         if (variant === "clustered" || variant === "cells" || variant === "probe") {
           fill = isProbed ? cl.color : `${cl.color}33`;
           stroke = isProbed ? cl.color : `${cl.color}55`;
@@ -2803,12 +2831,12 @@ const IVFScatter = ({
         }
         return (
           <g key={id}>
-            <circle cx={p.x} cy={p.y} r={10} fill={fill} stroke={stroke} />
+            <circle cx={p.x} cy={p.y} r={10} fill={fill} stroke={stroke} strokeWidth="1.5" />
             <text
               x={p.x}
               y={p.y + 4}
               textAnchor="middle"
-              fill={fill === "rgba(255,255,255,0.28)" ? "rgba(255,255,255,0.85)" : "#08080d"}
+              fill={isBare ? "rgba(255,255,255,0.95)" : "#08080d"}
               fontSize="12"
               fontWeight="bold"
             >
@@ -3004,25 +3032,194 @@ export const IVF = (ctx) => {
               marginTop: 14,
               padding: "12px 14px",
               borderRadius: 8,
-              background: "rgba(0,0,0,0.3)",
-              textAlign: "center",
-              fontFamily: "monospace",
-              fontSize: 15,
-              color: C.bright,
-              lineHeight: 1.9,
+              background: `${C.green}06`,
+              border: `1px solid ${C.green}12`,
             }}
           >
-            cell(p) = argmin over i of &#124;&#124;p &minus; centroid<sub>i</sub>&#124;&#124;
-            <br />
-            every doc: cluster assignment fixed after training
+            <T color={C.green} bold center size={17}>
+              Heads up: four names, one thing
+            </T>
+            <T color="#80e8a5" size={16} style={{ marginTop: 8 }}>
+              IVF papers and code swap these words as if they are interchangeable, because they are. All four describe
+              the same group of docs from a different angle:
+            </T>
+            <div
+              style={{
+                marginTop: 10,
+                display: "grid",
+                gridTemplateColumns: "1fr 1fr",
+                gap: 10,
+              }}
+            >
+              <div
+                style={{
+                  padding: "10px 12px",
+                  borderRadius: 8,
+                  background: "rgba(0,0,0,0.3)",
+                  fontSize: 14,
+                  color: C.bright,
+                  lineHeight: 1.6,
+                }}
+              >
+                <div style={{ color: "#80e8a5", fontWeight: 700, marginBottom: 4 }}>cluster</div>
+                The k-means view. &quot;These docs landed near the same centroid.&quot;
+              </div>
+              <div
+                style={{
+                  padding: "10px 12px",
+                  borderRadius: 8,
+                  background: "rgba(0,0,0,0.3)",
+                  fontSize: 14,
+                  color: C.bright,
+                  lineHeight: 1.6,
+                }}
+              >
+                <div style={{ color: "#80e8a5", fontWeight: 700, marginBottom: 4 }}>cell (Voronoi cell)</div>
+                The geometric view. &quot;The region of space closer to centroid A than any other.&quot;
+              </div>
+              <div
+                style={{
+                  padding: "10px 12px",
+                  borderRadius: 8,
+                  background: "rgba(0,0,0,0.3)",
+                  fontSize: 14,
+                  color: C.bright,
+                  lineHeight: 1.6,
+                }}
+              >
+                <div style={{ color: "#80e8a5", fontWeight: 700, marginBottom: 4 }}>partition</div>
+                The set-theory view. &quot;The dataset split into nlist disjoint groups, every doc in exactly one.&quot;
+              </div>
+              <div
+                style={{
+                  padding: "10px 12px",
+                  borderRadius: 8,
+                  background: "rgba(0,0,0,0.3)",
+                  fontSize: 14,
+                  color: C.bright,
+                  lineHeight: 1.6,
+                }}
+              >
+                <div style={{ color: "#80e8a5", fontWeight: 700, marginBottom: 4 }}>posting list (inverted list)</div>
+                The storage view. &quot;The on-disk array of doc IDs assigned to centroid A.&quot; This is why it is
+                called an Inverted File index.
+              </div>
+            </div>
+            <T color="#80e8a5" size={16} style={{ marginTop: 10 }}>
+              One centroid owns one cell owns one cluster owns one posting list. Centroid = representative. Cell =
+              territory. Cluster = group. Posting list = the stored IDs.
+            </T>
           </div>
-          <T color="#80e8a5" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
-            Real IVF does not store the cell polygons. It only stores the assignment: &quot;doc 4 belongs to cluster
-            A.&quot; The cell boundary is implicit from the centroids.
-          </T>
         </Box>
       </Reveal>
       <Reveal when={sub >= 3}>
+        <Box color={C.green} style={{ width: "100%" }}>
+          <T color={C.green} bold center size={22}>
+            The cell formula and what IVF stores
+          </T>
+          <T color="#80e8a5" style={{ marginTop: 8 }}>
+            One short formula decides which cell a point falls into, and one tiny pair of tables is everything IVF keeps
+            on disk.
+          </T>
+          <div
+            style={{
+              marginTop: 14,
+              padding: "12px 14px",
+              borderRadius: 8,
+              background: "rgba(0,0,0,0.3)",
+              textAlign: "center",
+              lineHeight: 1.7,
+            }}
+          >
+            <div style={{ fontFamily: "monospace", fontSize: 15, color: C.bright }}>
+              cell(p) = argmin over i of &#124;&#124;p &minus; centroid<sub>i</sub>&#124;&#124;
+            </div>
+            <div style={{ fontSize: 14, color: "#80e8a5", marginTop: 4 }}>
+              In words: cell of point p is the index of the closest centroid. ||p &minus; centroid<sub>i</sub>|| is the
+              distance from p to centroid i; argmin picks the i that makes that distance smallest.
+            </div>
+            <div style={{ height: 10 }} />
+            <div style={{ fontFamily: "monospace", fontSize: 15, color: C.bright }}>
+              every doc: cluster assignment fixed after training
+            </div>
+            <div style={{ fontSize: 14, color: "#80e8a5", marginTop: 4 }}>
+              &quot;Training&quot; here is the k-means step that picked the centroids. Once it ends, every doc gets its
+              cell label written down once and that label is frozen. New queries do not move docs around; they only
+              choose which cell to scan. Assignments only change if you retrain the centroids later.
+            </div>
+          </div>
+          <div
+            style={{
+              marginTop: 14,
+              padding: "12px 14px",
+              borderRadius: 8,
+              background: `${C.green}06`,
+              border: `1px solid ${C.green}12`,
+            }}
+          >
+            <T color={C.green} bold center size={17}>
+              What IVF actually stores on disk
+            </T>
+            <T color="#80e8a5" size={16} style={{ marginTop: 8 }}>
+              The dashed cell polygons in the previous step are just for teaching - they help you picture the partition.
+              Real IVF code never builds those shapes. It stores only two tiny things:
+            </T>
+            <div
+              style={{
+                marginTop: 10,
+                display: "grid",
+                gridTemplateColumns: "1fr 1fr",
+                gap: 10,
+              }}
+            >
+              <div
+                style={{
+                  padding: "10px 12px",
+                  borderRadius: 8,
+                  background: "rgba(0,0,0,0.3)",
+                  fontFamily: "monospace",
+                  fontSize: 14,
+                  color: C.bright,
+                  textAlign: "center",
+                  lineHeight: 1.7,
+                }}
+              >
+                <div style={{ color: "#80e8a5", marginBottom: 4 }}>1. centroid list</div>
+                A: [1.3, 1.1]
+                <br />
+                B: [3.1, 1.0]
+                <br />
+                C: [3.5, 2.3]
+              </div>
+              <div
+                style={{
+                  padding: "10px 12px",
+                  borderRadius: 8,
+                  background: "rgba(0,0,0,0.3)",
+                  fontFamily: "monospace",
+                  fontSize: 14,
+                  color: C.bright,
+                  textAlign: "center",
+                  lineHeight: 1.7,
+                }}
+              >
+                <div style={{ color: "#80e8a5", marginBottom: 4 }}>2. inverted file (posting lists)</div>
+                A → [1, 3, 4, 5, 7]
+                <br />
+                B → [2, 8]
+                <br />
+                C → [6, 9, 10]
+              </div>
+            </div>
+            <T color="#80e8a5" size={16} style={{ marginTop: 10 }}>
+              That is it - no polygons, no boundary geometry. The boundaries are implicit: any time you need to know
+              which cell a point falls into, run the argmin formula above on the fly. The centroids alone fully define
+              the partition.
+            </T>
+          </div>
+        </Box>
+      </Reveal>
+      <Reveal when={sub >= 4}>
         <Box color={C.orange} style={{ width: "100%" }}>
           <T color={C.orange} bold center size={22}>
             nprobe = 1: probe only the nearest cell
@@ -3094,7 +3291,7 @@ export const IVF = (ctx) => {
           </T>
         </Box>
       </Reveal>
-      <Reveal when={sub >= 4}>
+      <Reveal when={sub >= 5}>
         <Box color={C.yellow} style={{ width: "100%" }}>
           <T color={C.yellow} bold center size={22}>
             nprobe is the recall-latency knob
@@ -3213,7 +3410,7 @@ export const IVF = (ctx) => {
           </T>
         </Box>
       </Reveal>
-      <Reveal when={sub >= 5}>
+      <Reveal when={sub >= 6}>
         <Box color={C.purple} style={{ width: "100%" }}>
           <T color={C.purple} bold center size={22}>
             Sizing IVF in production
@@ -3295,7 +3492,7 @@ export const IVF = (ctx) => {
           </div>
         </Box>
       </Reveal>
-      {sub < 5 && (
+      {sub < 6 && (
         <SubBtn
           key={sub}
           onClick={() => {
@@ -3476,14 +3673,14 @@ export const ANNFamilyTree = (ctx) => {
                 <line x1="30" y1="160" x2="200" y2="30" stroke={C.yellow} strokeWidth="1.5" />
                 <line x1="60" y1="10" x2="170" y2="170" stroke={C.yellow} strokeWidth="1.5" />
                 {[
-                  [90, 60, "011"],
-                  [95, 65, "011"],
+                  [85, 55, "011"],
+                  [105, 80, "011"],
                   [150, 110, "100"],
                   [50, 140, "001"],
                 ].map(([x, y, code], i) => (
                   <g key={i}>
                     <circle cx={x} cy={y} r="4" fill={C.yellow} />
-                    <text x={x + 6} y={y + 3} fill={C.bright} fontSize="10" fontFamily="monospace">
+                    <text x={x + 7} y={y + 3} fill={C.bright} fontSize="10" fontFamily="monospace">
                       {code}
                     </text>
                   </g>
@@ -3599,7 +3796,7 @@ export const ANNFamilyTree = (ctx) => {
               border: `1px solid ${C.green}12`,
             }}
           >
-            <svg viewBox="0 0 500 280" style={{ width: "100%", maxWidth: 520, height: "auto", display: "block" }}>
+            <svg viewBox="0 0 500 310" style={{ width: "100%", maxWidth: 520, height: "auto", display: "block" }}>
               <desc>
                 Proximity graph of the 10 cat-corpus documents with edges connecting each node to its two or three
                 nearest neighbors. A highlighted green path traces a search from a starting node in the lower-right
@@ -3751,12 +3948,12 @@ export const ANNFamilyTree = (ctx) => {
                 on the upper-right Pareto frontier (high recall and high QPS); IVF, LSH, and KD-tree points fall below
                 and to the left of the frontier.
               </desc>
-              <line x1="40" y1="30" x2="40" y2="150" stroke={C.dim} strokeWidth="1" />
-              <line x1="40" y1="150" x2="470" y2="150" stroke={C.dim} strokeWidth="1" />
-              <text x="30" y="90" textAnchor="end" fill={C.dim} fontSize="11">
+              <line x1="50" y1="30" x2="50" y2="150" stroke={C.dim} strokeWidth="1" />
+              <line x1="50" y1="150" x2="470" y2="150" stroke={C.dim} strokeWidth="1" />
+              <text x="8" y="24" fill={C.dim} fontSize="11">
                 QPS (log)
               </text>
-              <text x="250" y="170" textAnchor="middle" fill={C.dim} fontSize="11">
+              <text x="250" y="172" textAnchor="middle" fill={C.dim} fontSize="11">
                 recall@10
               </text>
               {[
@@ -3880,16 +4077,27 @@ const HNSWLayeredGraph = ({
           [1, 10],
         ]
       : [];
+  // Per-mode vertical layout so hub rows never touch their flat-layer copies and
+  // doc 6 at the bottom of CORPUS_XY is not clipped by the viewBox.
+  const layered = mode === "hubLayer" || mode === "twoLayers";
+  const flatOffsetY = mode === "twoLayers" ? 100 : mode === "hubLayer" ? 80 : 0;
+  const hubY = mode === "twoLayers" ? 110 : 90;
+  const layer2Y = 40;
+  const maxFlatY = 280 + flatOffsetY + 20; // doc 6 bottom edge + padding
+  const vbH = layered ? Math.max(360, maxFlatY + 20) : 340;
   return (
-    <svg viewBox="0 0 500 340" style={{ width: "100%", maxWidth: 520, height: "auto", display: "block" }}>
+    <svg
+      viewBox={`0 0 500 ${vbH}`}
+      style={{ width: "100%", maxWidth: 520, height: "auto", display: "block" }}
+    >
       <desc>{desc}</desc>
       {mode === "twoLayers" && (
         <>
           <line
             x1="10"
-            y1="40"
+            y1={layer2Y - 10}
             x2="490"
-            y2="40"
+            y2={layer2Y - 10}
             stroke={C.red}
             strokeDasharray="2 4"
             strokeWidth="1"
@@ -3897,21 +4105,21 @@ const HNSWLayeredGraph = ({
           />
           <line
             x1="10"
-            y1="110"
+            y1={hubY - 20}
             x2="490"
-            y2="110"
+            y2={hubY - 20}
             stroke={C.yellow}
             strokeDasharray="2 4"
             strokeWidth="1"
             strokeOpacity="0.5"
           />
-          <text x="20" y="32" fill={C.red} fontSize="11" fontWeight="bold">
+          <text x="20" y={layer2Y - 18} fill={C.red} fontSize="11" fontWeight="bold">
             layer 2 (hubs of hubs)
           </text>
-          <text x="20" y="102" fill={C.yellow} fontSize="11" fontWeight="bold">
+          <text x="20" y={hubY - 28} fill={C.yellow} fontSize="11" fontWeight="bold">
             layer 1 (hubs)
           </text>
-          <text x="20" y="320" fill={C.cyan} fontSize="11" fontWeight="bold">
+          <text x="20" y={vbH - 10} fill={C.cyan} fontSize="11" fontWeight="bold">
             layer 0 (everything)
           </text>
         </>
@@ -3920,41 +4128,40 @@ const HNSWLayeredGraph = ({
         <>
           <line
             x1="10"
-            y1="50"
+            y1={hubY - 30}
             x2="490"
-            y2="50"
+            y2={hubY - 30}
             stroke={C.yellow}
             strokeDasharray="2 4"
             strokeWidth="1"
             strokeOpacity="0.5"
           />
-          <text x="20" y="42" fill={C.yellow} fontSize="11" fontWeight="bold">
+          <text x="20" y={hubY - 38} fill={C.yellow} fontSize="11" fontWeight="bold">
             layer 1 (hubs)
           </text>
-          <text x="20" y="330" fill={C.cyan} fontSize="11" fontWeight="bold">
+          <text x="20" y={vbH - 10} fill={C.cyan} fontSize="11" fontWeight="bold">
             layer 0 (everything)
           </text>
         </>
       )}
-      {/* Baseline flat edges - shift the scatter down to make room for upper-layer tiers in layered modes */}
+      {/* Baseline flat edges - shifted down by flatOffsetY in layered modes */}
       {FLAT_GRAPH_EDGES.map(([a, b], i) => {
-        const offsetY = mode === "twoLayers" ? 60 : mode === "hubLayer" ? 60 : 0;
         const pa = CORPUS_XY[a];
         const pb = CORPUS_XY[b];
         return (
           <line
             key={`e${i}`}
             x1={pa.x}
-            y1={pa.y + offsetY}
+            y1={pa.y + flatOffsetY}
             x2={pb.x}
-            y2={pb.y + offsetY}
+            y2={pb.y + flatOffsetY}
             stroke={C.cyan}
             strokeOpacity="0.35"
             strokeWidth="1.5"
           />
         );
       })}
-      {/* Slow-greedy path */}
+      {/* Slow-greedy path (only in non-layered modes) */}
       {slowPath.map(([a, b], i) => (
         <line
           key={`sp${i}`}
@@ -3967,18 +4174,17 @@ const HNSWLayeredGraph = ({
           strokeDasharray={i < 3 ? "4 4" : ""}
         />
       ))}
-      {/* Hub layer long-range edges */}
+      {/* Hub layer long-range edges - drawn between hub-row copies */}
       {hubEdges.map(([a, b], i) => {
-        const offsetY = mode === "twoLayers" ? -50 : -40;
         const pa = CORPUS_XY[a];
         const pb = CORPUS_XY[b];
         return (
           <line
             key={`h${i}`}
             x1={pa.x}
-            y1={pa.y + (mode === "twoLayers" ? 60 : 60) + offsetY}
+            y1={hubY}
             x2={pb.x}
-            y2={pb.y + (mode === "twoLayers" ? 60 : 60) + offsetY}
+            y2={hubY}
             stroke={C.yellow}
             strokeWidth="2.5"
           />
@@ -3988,41 +4194,48 @@ const HNSWLayeredGraph = ({
       {mode === "twoLayers" &&
         HNSW_LAYER_2.map((id) => (
           <g key={`l2${id}`}>
-            <circle cx={CORPUS_XY[id].x} cy={40} r={10} fill={C.red} stroke={C.red} />
-            <text x={CORPUS_XY[id].x} y={44} textAnchor="middle" fill="#08080d" fontSize="12" fontWeight="bold">
+            <circle cx={CORPUS_XY[id].x} cy={layer2Y} r={10} fill={C.red} stroke={C.red} />
+            <text
+              x={CORPUS_XY[id].x}
+              y={layer2Y + 4}
+              textAnchor="middle"
+              fill="#08080d"
+              fontSize="12"
+              fontWeight="bold"
+            >
               {id}
             </text>
           </g>
         ))}
-      {/* Dots */}
+      {/* Flat-layer dots (layer 0) */}
       {Object.entries(CORPUS_XY).map(([id, p]) => {
-        const offsetY = mode === "twoLayers" ? 60 : mode === "hubLayer" ? 60 : 0;
         const isHub = HNSW_LAYER_1.includes(Number(id));
         const onPath = highlightPath.includes(Number(id));
-        const color = onPath ? C.green : isHub && mode !== "flat" && mode !== "slowGreedy" ? C.yellow : C.cyan;
+        const color = onPath ? C.green : isHub && layered ? C.yellow : C.cyan;
         return (
           <g key={`n${id}`}>
-            <circle cx={p.x} cy={p.y + offsetY} r={10} fill={color} stroke={color} />
-            <text x={p.x} y={p.y + offsetY + 4} textAnchor="middle" fill="#08080d" fontSize="12" fontWeight="bold">
+            <circle cx={p.x} cy={p.y + flatOffsetY} r={10} fill={color} stroke={color} />
+            <text
+              x={p.x}
+              y={p.y + flatOffsetY + 4}
+              textAnchor="middle"
+              fill="#08080d"
+              fontSize="12"
+              fontWeight="bold"
+            >
               {id}
             </text>
           </g>
         );
       })}
-      {/* Copies of hubs at layer 1 for hubLayer/twoLayers */}
-      {(mode === "hubLayer" || mode === "twoLayers") &&
+      {/* Hub-layer copies of the three hub docs */}
+      {layered &&
         HNSW_LAYER_1.map((id) => (
           <g key={`l1${id}`}>
-            <circle
-              cx={CORPUS_XY[id].x}
-              cy={mode === "twoLayers" ? 110 : 90}
-              r={10}
-              fill={C.yellow}
-              stroke={C.yellow}
-            />
+            <circle cx={CORPUS_XY[id].x} cy={hubY} r={10} fill={C.yellow} stroke={C.yellow} />
             <text
               x={CORPUS_XY[id].x}
-              y={(mode === "twoLayers" ? 110 : 90) + 4}
+              y={hubY + 4}
               textAnchor="middle"
               fill="#08080d"
               fontSize="12"
@@ -4851,20 +5064,21 @@ const SearchPathDiagram = ({ stage, desc }) => {
   const layer2 = [{ id: 1, x: 250 }];
   const layer1 = [
     { id: 1, x: 130 },
-    { id: 6, x: 250 },
-    { id: 10, x: 370 },
+    { id: 6, x: 260 },
+    { id: 10, x: 390 },
   ];
+  // Evenly spaced across the width so adjacent circles (r=10) never visually touch.
   const layer0 = [
-    { id: 1, x: 110 },
-    { id: 3, x: 160 },
-    { id: 4, x: 180 },
-    { id: 5, x: 90 },
-    { id: 7, x: 130 },
-    { id: 2, x: 240 },
-    { id: 8, x: 220 },
-    { id: 6, x: 290 },
-    { id: 10, x: 380 },
-    { id: 9, x: 410 },
+    { id: 5, x: 75 },
+    { id: 1, x: 115 },
+    { id: 7, x: 155 },
+    { id: 3, x: 195 },
+    { id: 4, x: 235 },
+    { id: 8, x: 275 },
+    { id: 2, x: 315 },
+    { id: 6, x: 355 },
+    { id: 10, x: 410 },
+    { id: 9, x: 450 },
   ];
   // activeL2 always holds the single layer-2 hub once search has entered the graph.
   // stage never goes negative in practice, so no conditional here.
@@ -5641,8 +5855,8 @@ export const HNSWParameters = (ctx) => {
               recall@10 curves vs ef_search
             </T>
             <svg
-              viewBox="0 0 520 280"
-              style={{ width: "100%", maxWidth: 540, height: "auto", display: "block", marginTop: 8 }}
+              viewBox="0 0 570 280"
+              style={{ width: "100%", maxWidth: 590, height: "auto", display: "block", marginTop: 8 }}
             >
               <desc>
                 Line chart plotting recall@10 on the vertical axis against ef_search on a log horizontal axis, with
@@ -5674,17 +5888,17 @@ export const HNSWParameters = (ctx) => {
               </text>
               {/* M=8 curve (cyan) */}
               <polyline points="60,180 180,90 330,60 480,45" fill="none" stroke={C.cyan} strokeWidth="2.5" />
-              <text x="490" y="47" fill={C.cyan} fontSize="12" fontWeight="bold">
+              <text x="490" y="49" fill={C.cyan} fontSize="12" fontWeight="bold">
                 M = 8
               </text>
               {/* M=16 curve (yellow) */}
               <polyline points="60,160 180,70 330,38 480,30" fill="none" stroke={C.yellow} strokeWidth="2.5" />
-              <text x="490" y="26" fill={C.yellow} fontSize="12" fontWeight="bold">
+              <text x="490" y="32" fill={C.yellow} fontSize="12" fontWeight="bold">
                 M = 16
               </text>
               {/* M=32 curve (green) */}
               <polyline points="60,150 180,55 330,33 480,28" fill="none" stroke={C.green} strokeWidth="2.5" />
-              <text x="200" y="50" fill={C.green} fontSize="12" fontWeight="bold">
+              <text x="490" y="18" fill={C.green} fontSize="12" fontWeight="bold">
                 M = 32
               </text>
             </svg>

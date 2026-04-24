@@ -2709,22 +2709,22 @@ export const Matryoshka = (ctx) => {
 // Cluster A (cats): 1, 3, 4, 5, 7 - upper left. Cluster B (dogs): 2, 8 - upper right.
 // Cluster C (other): 6, 9, 10 - lower right. Query lands inside cluster A.
 const IVFPQ_CORPUS_XY = {
-  1: { x: 110, y: 90, cluster: "A", label: "cats domesticated" },
-  3: { x: 140, y: 110, cluster: "A", label: "lions big cats" },
-  4: { x: 125, y: 130, cluster: "A", label: "cat on mat" },
-  5: { x: 105, y: 115, cluster: "A", label: "tigers striped" },
-  7: { x: 135, y: 90, cluster: "A", label: "kittens" },
-  2: { x: 320, y: 100, cluster: "B", label: "dogs loyal" },
-  8: { x: 290, y: 140, cluster: "B", label: "dog chased cat" },
-  9: { x: 380, y: 220, cluster: "C", label: "birds fly" },
-  10: { x: 420, y: 180, cluster: "C", label: "fish underwater" },
-  6: { x: 220, y: 260, cluster: "C", label: "python language" },
+  1: { x: 60, y: 60, cluster: "A", label: "cats domesticated" },
+  3: { x: 215, y: 105, cluster: "A", label: "lions big cats" },
+  4: { x: 140, y: 170, cluster: "A", label: "cat on mat" },
+  5: { x: 55, y: 145, cluster: "A", label: "tigers striped" },
+  7: { x: 200, y: 50, cluster: "A", label: "kittens" },
+  2: { x: 345, y: 55, cluster: "B", label: "dogs loyal" },
+  8: { x: 295, y: 155, cluster: "B", label: "dog chased cat" },
+  9: { x: 420, y: 255, cluster: "C", label: "birds fly" },
+  10: { x: 460, y: 185, cluster: "C", label: "fish underwater" },
+  6: { x: 305, y: 280, cluster: "C", label: "python language" },
 };
-const IVFPQ_QUERY_XY = { x: 118, y: 102 };
+const IVFPQ_QUERY_XY = { x: 110, y: 100 };
 const IVFPQ_CENTROIDS = {
-  A: { x: 123, y: 107, color: C.purple, label: "C_A (cats)" },
-  B: { x: 305, y: 120, color: C.yellow, label: "C_B (dogs)" },
-  C: { x: 340, y: 220, color: C.cyan, label: "C_C (other)" },
+  A: { x: 150, y: 130, color: C.purple, label: "C_A (cats)" },
+  B: { x: 320, y: 105, color: C.yellow, label: "C_B (dogs)" },
+  C: { x: 395, y: 235, color: C.cyan, label: "C_C (other)" },
 };
 
 // 4-dim vectors for the three docs used in the residual table (sub=2).

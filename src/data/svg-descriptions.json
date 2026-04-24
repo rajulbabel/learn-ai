@@ -141,6 +141,7 @@
     "Retrieval diagram with a yellow query box on the left for the phrase about cats pointing an arrow into a cloud of ten numbered document dots, where the three dots closest to the query (documents 1, 3, and 7 - all cat-related sentences) are highlighted green as the top-3 nearest neighbors and the remaining seven dots are dimmed"
   ],
   "11.2": [
+    "A super-fast chef on the left (labeled chef equals chip) stands next to a cutting board with chopping marks, connected by a long dashed red arrow labeled slow delivery to a distant warehouse on the right (labeled warehouse equals memory). The illustration shows that the chef can chop in one second but has to wait ten minutes for each delivery, so fetching the ingredients is the real bottleneck, not chopping speed. This is the analogy for why memory bandwidth, not FLOPS, limits brute-force search at billion-vector scale.",
     "Rightward purple arrow labeled production uses this, pointing from the exact brute-force card on the left to the approximate nearest neighbor (ANN) card on the right, illustrating the tradeoff from exact slow search to approximate fast search"
   ],
   "11.3": [

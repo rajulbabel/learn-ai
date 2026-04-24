@@ -288,15 +288,28 @@ describe("BruteForceKNN (11.2) content", () => {
     expect(container.textContent).toMatch(/768/);
   });
 
-  it("sub=3 shows 3 TB memory math at 1 billion scale", () => {
+  it("sub=3 defines FLOPS with the chef-warehouse analogy", () => {
     const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/FLOPS/);
+    expect(container.textContent).toMatch(/floating.?point|math.*per second|operations per second/i);
+    expect(container.textContent).toMatch(/chef|warehouse|fetch|deliver/i);
+  });
+
+  it("sub=3 does NOT yet show the 1 billion hopeless math", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).not.toMatch(/3\.072 TB/);
+    expect(container.textContent).not.toMatch(/NOT FEASIBLE/);
+  });
+
+  it("sub=4 shows 3 TB memory math at 1 billion scale", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
     expect(container.textContent).toMatch(/3\.072 TB|3 TB/);
     expect(container.textContent).toMatch(/1 billion|1B/);
     expect(container.textContent).toMatch(/hopeless|not feasible|bottleneck/i);
   });
 
-  it("sub=4 introduces ANN and recall as the metric", () => {
-    const { container } = render(fn(makeCtx({ sub: 4 })));
+  it("sub=5 introduces ANN and recall as the metric", () => {
+    const { container } = render(fn(makeCtx({ sub: 5 })));
     expect(container.textContent).toMatch(/ANN|Approximate Nearest Neighbor/);
     expect(container.textContent).toMatch(/recall/i);
     expect(container.textContent).toMatch(/99%|0\.99/);
@@ -346,6 +359,13 @@ describe("ThreeWayTradeoff (11.3) content", () => {
     expect(container.textContent).toMatch(/ef_search/);
     expect(container.textContent).toMatch(/PQ|compression/i);
     expect(container.textContent).toMatch(/replica|cache/i);
+  });
+
+  it("sub=4 glosses HNSW, codebook indices, and P99 so early readers are not lost", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/HNSW.*graph|graph.*HNSW/i);
+    expect(container.textContent).toMatch(/codebook.*(code|lookup|integer)|(code|integer).*codebook/i);
+    expect(container.textContent).toMatch(/P99.*(99|percentile|worst)|percentile.*P99/i);
   });
 
   it("sub=5 frames every decision as a tradeoff-triangle move", () => {

@@ -802,6 +802,148 @@ export const BruteForceKNN = (ctx) => {
         </Box>
       </Reveal>
       <Reveal when={sub >= 3}>
+        <Box color={C.cyan} style={{ width: "100%", marginBottom: 14 }}>
+          <T color={C.cyan} bold center size={22}>
+            First, what is FLOPS?
+          </T>
+          <T color="#80deea" style={{ marginTop: 8 }}>
+            FLOPS means <b>FLoating-point OPerations per Second</b>. In plain words: how many math steps
+            (an add, a multiply, a compare) a chip can do in one second. It is the standard way people
+            brag about chip speed.
+          </T>
+          <div
+            style={{
+              marginTop: 14,
+              padding: "14px 18px",
+              borderRadius: 8,
+              background: "rgba(0,0,0,0.3)",
+              textAlign: "center",
+              fontFamily: "monospace",
+              fontSize: 16,
+              color: C.bright,
+              lineHeight: 2,
+            }}
+          >
+            <span style={{ color: C.dim }}># 1 FLOP = one floating-point math step</span>
+            <br />
+            <span style={{ color: C.cyan }}>a &middot; b + c</span> counts as 2 FLOPs (one multiply, one add)
+            <br />A modern GPU does about <span style={{ color: C.cyan, fontSize: 20 }}>10^12 FLOPS/sec</span>{" "}
+            <span style={{ color: C.dim }}>(a trillion math steps a second)</span>
+          </div>
+
+          <T color={C.cyan} bold center size={17} style={{ marginTop: 16 }}>
+            The chef and the warehouse
+          </T>
+          <svg
+            viewBox="0 0 500 170"
+            style={{ width: "100%", height: "auto", display: "block", marginTop: 10 }}
+          >
+            <desc>
+              A super-fast chef on the left (labeled chef equals chip) stands next to a cutting board with
+              chopping marks, connected by a long dashed red arrow labeled slow delivery to a distant
+              warehouse on the right (labeled warehouse equals memory). The illustration shows that the
+              chef can chop in one second but has to wait ten minutes for each delivery, so fetching the
+              ingredients is the real bottleneck, not chopping speed. This is the analogy for why memory
+              bandwidth, not FLOPS, limits brute-force search at billion-vector scale.
+            </desc>
+            <defs>
+              <marker id="flops-arrow-11-2" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+                <polygon points="0 0, 10 3, 0 6" fill={C.red} />
+              </marker>
+            </defs>
+
+            <circle cx="80" cy="70" r="22" fill={C.cyan} opacity="0.85" />
+            <rect x="66" y="36" width="28" height="14" rx="4" fill={C.cyan} />
+            <rect x="60" y="48" width="40" height="4" fill={C.cyan} opacity="0.7" />
+            <line x1="112" y1="58" x2="142" y2="48" stroke={C.cyan} strokeWidth="2" />
+            <line x1="112" y1="70" x2="145" y2="70" stroke={C.cyan} strokeWidth="2" />
+            <line x1="112" y1="82" x2="142" y2="92" stroke={C.cyan} strokeWidth="2" />
+            <text x="80" y="125" textAnchor="middle" fontSize="14" fill={C.bright}>
+              chef = chip
+            </text>
+            <text x="80" y="143" textAnchor="middle" fontSize="12" fill={C.dim}>
+              chops in 1 second
+            </text>
+
+            <line
+              x1="170"
+              y1="70"
+              x2="370"
+              y2="70"
+              stroke={C.red}
+              strokeWidth="3"
+              strokeDasharray="6,6"
+              markerEnd="url(#flops-arrow-11-2)"
+            />
+            <text x="270" y="56" textAnchor="middle" fontSize="14" fill={C.red}>
+              slow delivery
+            </text>
+            <text x="270" y="92" textAnchor="middle" fontSize="12" fill={C.dim}>
+              takes 10 minutes
+            </text>
+
+            <polygon points="390,46 430,22 470,46" fill={C.red} opacity="0.85" />
+            <rect x="390" y="46" width="80" height="54" rx="3" fill={C.red} opacity="0.7" />
+            <rect x="420" y="68" width="20" height="32" fill="#08080d" />
+            <text x="430" y="125" textAnchor="middle" fontSize="14" fill={C.bright}>
+              warehouse = memory
+            </text>
+            <text x="430" y="143" textAnchor="middle" fontSize="12" fill={C.dim}>
+              holds all the vectors
+            </text>
+          </svg>
+
+          <div style={{ marginTop: 10, display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+            <div
+              style={{
+                padding: "12px 14px",
+                borderRadius: 8,
+                background: `${C.cyan}06`,
+                border: `1px solid ${C.cyan}12`,
+              }}
+            >
+              <T color={C.cyan} bold center size={15}>
+                Chop speed
+              </T>
+              <T color="#80deea" bold center size={20} style={{ marginTop: 6, fontFamily: "monospace" }}>
+                ~10^12 /sec
+              </T>
+              <T color={C.bright} size={13} center style={{ marginTop: 4 }}>
+                FLOPS
+                <br />
+                (how fast math happens)
+              </T>
+            </div>
+            <div
+              style={{
+                padding: "12px 14px",
+                borderRadius: 8,
+                background: `${C.red}06`,
+                border: `1px solid ${C.red}12`,
+              }}
+            >
+              <T color={C.red} bold center size={15}>
+                Delivery speed
+              </T>
+              <T color="#ef9a9a" bold center size={20} style={{ marginTop: 6, fontFamily: "monospace" }}>
+                ~50 GB/sec
+              </T>
+              <T color={C.bright} size={13} center style={{ marginTop: 4 }}>
+                memory bandwidth
+                <br />
+                (how fast data arrives)
+              </T>
+            </div>
+          </div>
+
+          <T color="#80deea" size={16} style={{ marginTop: 12, fontStyle: "italic" }}>
+            Chopping is lightning-fast. Fetching the next vegetable from the warehouse is the slow part.
+            So when we say &quot;the real killer is not FLOPS, it is memory,&quot; we mean: the chip is
+            waiting on deliveries, not on math.
+          </T>
+        </Box>
+      </Reveal>
+      <Reveal when={sub >= 4}>
         <Box color={C.red} style={{ width: "100%" }}>
           <T color={C.red} bold center size={22}>
             At N = 1 billion it is hopeless
@@ -899,7 +1041,7 @@ export const BruteForceKNN = (ctx) => {
           </T>
         </Box>
       </Reveal>
-      <Reveal when={sub >= 4}>
+      <Reveal when={sub >= 5}>
         <Box color={C.purple} style={{ width: "100%" }}>
           <T color={C.purple} bold center size={22}>
             Give up exactness for speed
@@ -1622,7 +1764,7 @@ export const ThreeWayTradeoff = (ctx) => {
                 dstArrow: "up",
                 dstLabel: "latency up",
                 dstColor: C.orange,
-                body: "HNSW has a knob called ef_search that controls how many candidate nodes to explore per query. Bigger number = more exploration = higher recall, but linearly more work, so latency rises. Typical tuning: ef_search = 200 gives 0.99 recall, ef_search = 50 gives 0.95 recall at 4x the speed.",
+                body: "HNSW (a graph-based index we build later in this section) has a knob called ef_search that controls how many candidate nodes to explore per query. Bigger number = more exploration = higher recall, but linearly more work, so latency rises. Typical tuning: ef_search = 200 gives 0.99 recall, ef_search = 50 gives 0.95 recall at 4x the speed.",
               },
               {
                 title: "Add PQ compression to shrink memory",
@@ -1634,7 +1776,7 @@ export const ThreeWayTradeoff = (ctx) => {
                 dstArrow: "down",
                 dstLabel: "recall down",
                 dstColor: C.cyan,
-                body: "Product Quantization replaces each 3 KB vector with ~96 bytes of codebook indices - a 32x memory win. But the stored vectors are approximate, so distances are approximate, so recall drops. Typical cost: 0.98 recall becomes 0.94.",
+                body: "Product Quantization replaces each 3 KB vector with ~96 bytes of codebook indices (small integer codes that look up an approximate version of the real vector) - a 32x memory win. But the stored vectors are approximate, so distances are approximate, so recall drops. Typical cost: 0.98 recall becomes 0.94.",
               },
               {
                 title: "Add replicas to cut tail latency",
@@ -1646,7 +1788,7 @@ export const ThreeWayTradeoff = (ctx) => {
                 dstArrow: "up",
                 dstLabel: "memory cost up",
                 dstColor: C.yellow,
-                body: "Run three copies of the index on three machines and route each query to the least-loaded one. P99 drops because no single node gets a long queue. But you are paying for 3x the RAM. Caching the most frequent queries is a variant - memory for speed.",
+                body: "Run three copies of the index on three machines and route each query to the least-loaded one. P99 (the 99th-percentile latency, i.e. the worst 1% of queries) drops because no single node gets a long queue. But you are paying for 3x the RAM. Caching the most frequent queries is a variant - memory for speed.",
               },
             ].map((tr, i) => (
               <div

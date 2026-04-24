@@ -4426,6 +4426,113 @@ export const CompressionDecision = (ctx) => {
           </T>
         </Box>
       </Reveal>
+      <Reveal when={sub >= 2}>
+        <Box color={C.orange} style={{ width: "100%" }}>
+          <T color={C.orange} bold center size={22}>
+            Four worked scenarios: the tree with real numbers
+          </T>
+          <T color="#ffb74d" style={{ marginTop: 8 }}>
+            Same tree, four corpora. Each scenario fixes the four inputs, walks the branches, and prints the memory
+            number that lands on the procurement doc.
+          </T>
+          <div
+            style={{
+              marginTop: 14,
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
+              gap: 12,
+            }}
+          >
+            {[
+              {
+                title: "Startup - the skip path",
+                color: C.green,
+                stack: "Qdrant + OpenAI-3-large (d=3072) + N=500K",
+                path: "N < 1M gate hits immediately; MRL optional at this scale",
+                result: "Skip quantization. HNSW + fp32.",
+                math: "500K x 12 KB = 6 GB RAM. Fits on any dev box.",
+              },
+              {
+                title: "Growing product - the high-leverage path",
+                color: C.yellow,
+                stack: "Qdrant + OpenAI-3-large (d: 3072 -> 1536 via MRL) + N=50M",
+                path: "MRL halves d up front; N in 10M-100M; d>=768; Qdrant supports BQ+rescore",
+                result: "MRL + BQ + rescore.",
+                math: "fp32 baseline = 300 GB. Final = 50M x 192 B = ~10 GB. ~30x smaller, <2% recall loss.",
+              },
+              {
+                title: "pgvector constrained - the menu-is-short path",
+                color: C.cyan,
+                stack: "pgvector + BGE-small (d=384, not MRL) + N=5M",
+                path: "No MRL; N in 1M-10M so default would be SQ; pgvector supports halfvec, not BQ or PQ",
+                result: "halfvec (fp16).",
+                math: "fp32 = 7.7 GB. Final = 3.8 GB. 2x smaller. BQ off-limits anyway since d=384 is below the 768 threshold.",
+              },
+              {
+                title: "Massive scale - the HNSW+PQ default",
+                color: C.red,
+                stack: "Qdrant + OpenAI-3-small (d: 1536 -> 1024 via MRL) + N=200M",
+                path: "MRL reduces d; N >= 100M gate hits immediately",
+                result: "HNSW + PQ (m=96).",
+                math: "fp32 = 820 GB. Final = 200M x 96 B = ~19 GB. ~40x smaller. The scale default per 11.18.",
+              },
+            ].map((s) => (
+              <div
+                key={s.title}
+                style={{
+                  padding: "12px 14px",
+                  background: `${s.color}08`,
+                  border: `1px solid ${s.color}22`,
+                  borderRadius: 8,
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: 10,
+                }}
+              >
+                <T color={s.color} bold center size={15}>
+                  {s.title}
+                </T>
+                <div>
+                  <T color={C.dim} size={11} style={{ textTransform: "uppercase", letterSpacing: 0.5 }}>
+                    stack
+                  </T>
+                  <T color={C.bright} size={13} style={{ marginTop: 2, fontFamily: "monospace" }}>
+                    {s.stack}
+                  </T>
+                </div>
+                <div>
+                  <T color={C.dim} size={11} style={{ textTransform: "uppercase", letterSpacing: 0.5 }}>
+                    tree walk
+                  </T>
+                  <T color={C.bright} size={13} style={{ marginTop: 2 }}>
+                    {s.path}
+                  </T>
+                </div>
+                <div
+                  style={{
+                    padding: "10px 12px",
+                    borderRadius: 6,
+                    background: "rgba(0,0,0,0.35)",
+                    textAlign: "center",
+                  }}
+                >
+                  <T color={s.color} bold size={14}>
+                    {s.result}
+                  </T>
+                  <T color={C.bright} size={12} style={{ marginTop: 4, fontFamily: "monospace" }}>
+                    {s.math}
+                  </T>
+                </div>
+              </div>
+            ))}
+          </div>
+          <T color="#ffb74d" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
+            Scenario 1 is the &quot;do nothing&quot; case that engineers talk themselves out of. It is the right answer
+            more often than the literature suggests. Quantization buys memory savings you do not yet need; it costs
+            tuning and recall risk you cannot yet afford.
+          </T>
+        </Box>
+      </Reveal>
       {sub < 0 && (
         <SubBtn
           key={sub}

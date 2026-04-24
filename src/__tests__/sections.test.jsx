@@ -1171,6 +1171,23 @@ describe("CompressionDecision (11.19) content", () => {
       expect(dropLine, `expected drop-line from bucket center x=${cx} y=130 to y=170`).toBeTruthy();
     }
   });
+
+  it("sub=2 walks four worked scenarios with concrete memory numbers", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/500K|500,000/);
+    expect(container.textContent).toMatch(/6 GB|6GB/);
+    expect(container.textContent).toMatch(/50M|50,000,000/);
+    expect(container.textContent).toMatch(/10 GB|10GB|9\.6/);
+    expect(container.textContent).toMatch(/300 GB|300GB|307/);
+    expect(container.textContent).toMatch(/5M|5,000,000/);
+    expect(container.textContent).toMatch(/3\.8 GB|3\.8GB|halfvec/);
+    expect(container.textContent).toMatch(/200M|200,000,000/);
+    expect(container.textContent).toMatch(/19 GB|19GB|820 GB/);
+    expect(container.textContent).toMatch(/OpenAI|text-embedding-3/);
+    expect(container.textContent).toMatch(/BGE/);
+    expect(container.textContent).toMatch(/Qdrant/);
+    expect(container.textContent).toMatch(/pgvector/);
+  });
 });
 
 describe("Filtering (11.20) content", () => {

@@ -1148,6 +1148,29 @@ describe("CompressionDecision (11.19) content", () => {
     expect(svg).toBeTruthy();
     expect(svg.querySelector("desc")).toBeTruthy();
   });
+
+  it("sub=1 flowchart SVG has horizontal connector at y=130 and drop-lines to bucket centers", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    const lines = Array.from(container.querySelectorAll("svg line"));
+    const horizontalConnector = lines.find(
+      (l) =>
+        l.getAttribute("y1") === "130" &&
+        l.getAttribute("y2") === "130" &&
+        l.getAttribute("x1") === "80" &&
+        l.getAttribute("x2") === "560",
+    );
+    expect(horizontalConnector, "expected a horizontal connector at y=130 from x=80 to x=560").toBeTruthy();
+    for (const cx of [80, 240, 400, 560]) {
+      const dropLine = lines.find(
+        (l) =>
+          l.getAttribute("x1") === String(cx) &&
+          l.getAttribute("x2") === String(cx) &&
+          l.getAttribute("y1") === "130" &&
+          l.getAttribute("y2") === "170",
+      );
+      expect(dropLine, `expected drop-line from bucket center x=${cx} y=130 to y=170`).toBeTruthy();
+    }
+  });
 });
 
 describe("Filtering (11.20) content", () => {

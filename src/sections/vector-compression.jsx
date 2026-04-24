@@ -4160,10 +4160,10 @@ export const CompressionDecision = (ctx) => {
             Five techniques, which one? Four inputs decide.
           </T>
           <T color="#80deea" style={{ marginTop: 8 }}>
-            The last seven chapters introduced scalar quantization, product quantization, binary quantization, Matryoshka
-            truncation, IVF-PQ, and HNSW+PQ. Each one works. None is universally the right pick. The choice depends on
-            four inputs - corpus size, embedding dimensionality, the database&apos;s capability surface, and how much
-            recall loss the product can absorb.
+            The last seven chapters introduced scalar quantization, product quantization, binary quantization,
+            Matryoshka truncation, IVF-PQ, and HNSW+PQ. Each one works. None is universally the right pick. The choice
+            depends on four inputs - corpus size, embedding dimensionality, the database&apos;s capability surface, and
+            how much recall loss the product can absorb.
           </T>
           <div
             style={{
@@ -4192,7 +4192,8 @@ export const CompressionDecision = (ctx) => {
                 {
                   axis: "Database capability",
                   role: "Constrains the menu",
-                  detail: "pgvector mainline: halfvec only. Pinecone: abstracted. Qdrant/Weaviate: full suite + rescore.",
+                  detail:
+                    "pgvector mainline: halfvec only. Pinecone: abstracted. Qdrant/Weaviate: full suite + rescore.",
                 },
                 {
                   axis: "Recall tolerance",
@@ -4261,14 +4262,32 @@ export const CompressionDecision = (ctx) => {
                   plus rescore when d is at least 768 and the DB supports it, otherwise falls back to scalar; 100M and
                   above uses HNSW plus product quantization as the production default at scale.
                 </desc>
-                <rect x={180} y={10} width={280} height={50} rx={8} fill={`${C.cyan}22`} stroke={C.cyan} strokeWidth={2} />
+                <rect
+                  x={180}
+                  y={10}
+                  width={280}
+                  height={50}
+                  rx={8}
+                  fill={`${C.cyan}22`}
+                  stroke={C.cyan}
+                  strokeWidth={2}
+                />
                 <text x={320} y={32} fill={C.cyan} fontSize={14} fontWeight="bold" textAnchor="middle">
                   Inputs: N, d, DB, recall tolerance
                 </text>
                 <text x={320} y={50} fill={C.bright} fontSize={11} textAnchor="middle">
                   start here
                 </text>
-                <rect x={10} y={80} width={150} height={48} rx={8} fill={`${C.yellow}18`} stroke={C.yellow} strokeWidth={2} />
+                <rect
+                  x={10}
+                  y={80}
+                  width={150}
+                  height={48}
+                  rx={8}
+                  fill={`${C.yellow}18`}
+                  stroke={C.yellow}
+                  strokeWidth={2}
+                />
                 <text x={85} y={100} fill={C.yellow} fontSize={12} fontWeight="bold" textAnchor="middle">
                   MRL pre-step
                 </text>
@@ -4276,13 +4295,12 @@ export const CompressionDecision = (ctx) => {
                   truncate d at embed time
                 </text>
                 <line x1={160} y1={104} x2={180} y2={35} stroke={C.dim} strokeWidth={1} strokeDasharray="4 3" />
-                <line x1={320} y1={60} x2={320} y2={85} stroke={C.dim} strokeWidth={1} />
-                <line x1={60} y1={160} x2={580} y2={160} stroke={C.dim} strokeWidth={1} />
-                <line x1={60} y1={85} x2={60} y2={160} stroke={C.dim} strokeWidth={1} />
-                <line x1={220} y1={160} x2={220} y2={85} stroke={C.dim} strokeWidth={1} />
-                <line x1={420} y1={160} x2={420} y2={85} stroke={C.dim} strokeWidth={1} />
-                <line x1={580} y1={160} x2={580} y2={85} stroke={C.dim} strokeWidth={1} />
-                <line x1={320} y1={85} x2={320} y2={130} stroke={C.dim} strokeWidth={1} />
+                <line x1={320} y1={60} x2={320} y2={130} stroke={C.dim} strokeWidth={1} />
+                <line x1={80} y1={130} x2={560} y2={130} stroke={C.dim} strokeWidth={1} />
+                <line x1={80} y1={130} x2={80} y2={170} stroke={C.dim} strokeWidth={1} />
+                <line x1={240} y1={130} x2={240} y2={170} stroke={C.dim} strokeWidth={1} />
+                <line x1={400} y1={130} x2={400} y2={170} stroke={C.dim} strokeWidth={1} />
+                <line x1={560} y1={130} x2={560} y2={170} stroke={C.dim} strokeWidth={1} />
                 <text x={320} y={148} fill={C.dim} fontSize={12} textAnchor="middle">
                   branch on N
                 </text>
@@ -4389,10 +4407,7 @@ export const CompressionDecision = (ctx) => {
                 ["pgvector (mainline)", "halfvec", "no", "no"],
                 ["Pinecone", "managed", "managed", "managed"],
               ].map((row) => (
-                <div
-                  key={row[0]}
-                  style={{ display: "contents" }}
-                >
+                <div key={row[0]} style={{ display: "contents" }}>
                   <div style={{ textAlign: "center", padding: "6px 4px", background: `${C.purple}08` }}>{row[0]}</div>
                   <div style={{ textAlign: "center", padding: "6px 4px", background: `${C.purple}08` }}>{row[1]}</div>
                   <div style={{ textAlign: "center", padding: "6px 4px", background: `${C.purple}08` }}>{row[2]}</div>
@@ -4406,8 +4421,8 @@ export const CompressionDecision = (ctx) => {
             </T>
           </div>
           <T color="#b8a9ff" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
-            The tree is deliberately conservative. Start with the default branch for your N, confirm the gate for the
-            BQ path, and downgrade by one step if recall must hold above 99%.
+            The tree is deliberately conservative. Start with the default branch for your N, confirm the gate for the BQ
+            path, and downgrade by one step if recall must hold above 99%.
           </T>
         </Box>
       </Reveal>

@@ -28,9 +28,7 @@ describe("svg-descriptions.json", () => {
 
   it("Section 11 keys align with current chapter content after renumber", () => {
     // 11.19 = CompressionDecision flowchart
-    expect(svgDescriptions["11.19"][0]).toMatch(
-      /compression-technique decision flowchart|decision flowchart/i,
-    );
+    expect(svgDescriptions["11.19"][0]).toMatch(/compression-technique decision flowchart|decision flowchart/i);
     // 11.20 = Filtering (three-stage funnel) - was at 11.19 before renumber
     expect(svgDescriptions["11.20"][0]).toMatch(/filter funnel|pre-filter|three-stage/i);
     // 11.21 = UpdatesDeletes (graph with hub node D) - was at 11.20 before renumber

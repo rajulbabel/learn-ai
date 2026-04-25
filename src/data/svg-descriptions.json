@@ -194,6 +194,9 @@
     "Focal Vamana node p at the center surrounded by a mix of short green edges fanning to close neighbors and long orange edges shooting across the plane to distant nodes, showing how one node's 64 edges do double duty as both local-precision and long-range hub edges",
     "Storage hierarchy diagram - top layer shows a RAM cache with a small subset of high-degree entry nodes, bottom layer shows the SSD storing every graph node as 4 KB blocks aligned to NVMe pages"
   ],
+  "11.14": [
+    "Banded horizontal vector bar split into 96 slot segments aligned across multiple stacked document rows, illustrating how PQ chops every vector at the same slot boundaries"
+  ],
   "11.15": [
     "Curve showing binary quantization recall rising sharply with embedding dimension - near zero at d=64, rising past 0.9 around d=512, plateauing around 0.96 at d=1024 and higher, illustrating why binary works for high-dim BERT-style embeddings but collapses at low dimensions"
   ],

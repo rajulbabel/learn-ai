@@ -1089,12 +1089,7 @@ export const ProductQuantization = (ctx) => {
       <Reveal when={sub >= 1}>
         <Box color={C.yellow} style={{ width: "100%" }}>
           <T color={C.yellow} bold center size={22}>
-            Per-slot codebook: k-means with 256 centroids
-          </T>
-          <T color="#ffe082" style={{ marginTop: 8 }}>
-            For each of the 96 slots, run k-means across the entire dataset&apos;s subvectors at that slot. Pick k = 256
-            centroids. These 256 centroids are the codebook for that slot - every future subvector at slot 0 will be
-            approximated by whichever of the 256 centroids it is closest to. Each slot has its own independent codebook.
+            Each slot learns its own 256-word dictionary
           </T>
           <div
             style={{
@@ -1106,52 +1101,108 @@ export const ProductQuantization = (ctx) => {
             }}
           >
             <T color={C.yellow} bold center size={16}>
-              Slot 0 codebook (32 of the 256 centroids shown as 4-dim vectors)
+              Slot 0 sub-vectors clustered by k-means (codebook = 256 centroids)
             </T>
-            <div
-              style={{
-                marginTop: 10,
-                display: "grid",
-                gridTemplateColumns: "repeat(4, 1fr)",
-                gap: 6,
-                fontFamily: "monospace",
-                fontSize: 11,
-              }}
+            <T color={C.dim} center size={12} style={{ marginTop: 4 }}>
+              slot 0 is 8-D &middot; drawn here as 2-D for clarity
+            </T>
+            <svg
+              viewBox="0 0 720 360"
+              style={{ width: "100%", maxWidth: 740, height: "auto", display: "block", marginTop: 6 }}
             >
-              {Array.from({ length: 32 }).map((_, i) => {
-                const c = [
-                  ((i * 31) % 100) / 100,
-                  ((i * 47 + 13) % 100) / 100,
-                  ((i * 23 + 7) % 100) / 100,
-                  ((i * 59 + 11) % 100) / 100,
-                ];
-                return (
-                  <div
-                    key={i}
-                    style={{
-                      padding: "5px 6px",
-                      background: `${C.yellow}10`,
-                      border: `1px solid ${C.yellow}20`,
-                      borderRadius: 4,
-                      textAlign: "center",
-                      color: C.bright,
-                    }}
-                  >
-                    <div style={{ color: C.yellow, fontSize: 10, fontWeight: "bold" }}>id {i}</div>
-                    <div>
-                      [{c[0].toFixed(2)},{c[1].toFixed(2)}]
-                    </div>
-                    <div>
-                      [{c[2].toFixed(2)},{c[3].toFixed(2)}]
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-            <T color={C.dim} size={13} center style={{ marginTop: 8 }}>
-              ... 224 more centroids (256 total) ...
-            </T>
+              <desc>
+                A 2-D scatter projection of slot-0 sub-vectors with 16 highlighted k-means centroid markers labeled c0
+                to c255 representing the 256 codebook entries that snap each sub-vector to its nearest prototype.
+              </desc>
+              {/* Background panel */}
+              <rect x="20" y="20" width="460" height="320" fill={`${C.yellow}05`} stroke={`${C.yellow}22`} />
+              {/* Random-looking dots representing slot-0 sub-vectors. Use a deterministic set. */}
+              {[
+                [60, 90], [80, 110], [120, 80], [150, 70], [180, 100], [210, 130], [90, 160], [130, 175], [170, 200],
+                [200, 230], [240, 90], [275, 120], [310, 100], [340, 70], [370, 110], [400, 95], [410, 140], [380, 175],
+                [350, 200], [310, 230], [255, 215], [225, 260], [185, 280], [140, 250], [110, 230], [70, 250], [60, 290],
+                [115, 305], [165, 315], [220, 305], [270, 295], [320, 280], [365, 270], [410, 255], [440, 220], [445, 175],
+                [430, 100], [395, 65], [330, 50], [275, 65], [225, 55], [165, 50], [110, 65], [85, 195], [105, 145],
+                [195, 165], [235, 145], [285, 175], [330, 165], [375, 200], [305, 130], [255, 100], [195, 95], [145, 110],
+                [135, 220], [185, 230], [235, 195], [290, 220], [355, 230], [395, 215], [400, 290], [350, 305], [285, 320],
+                [240, 320], [195, 320], [150, 320], [100, 320], [70, 220], [55, 170], [50, 130], [70, 60], [120, 50],
+              ].map(([x, y], i) => (
+                <circle key={i} cx={x} cy={y} r="2.5" fill={`${C.yellow}88`} />
+              ))}
+              {/* Centroid markers (16 representing 256). Larger filled circles with id labels. */}
+              {[
+                { x: 95, y: 95, id: "c0" },
+                { x: 175, y: 100, id: "c1" },
+                { x: 260, y: 95, id: "c5" },
+                { x: 355, y: 80, id: "c17" },
+                { x: 415, y: 130, id: "c42" },
+                { x: 90, y: 175, id: "c89" },
+                { x: 195, y: 200, id: "c97" },
+                { x: 290, y: 195, id: "c103" },
+                { x: 370, y: 215, id: "c142" },
+                { x: 130, y: 260, id: "c170" },
+                { x: 230, y: 270, id: "c188" },
+                { x: 320, y: 260, id: "c201" },
+                { x: 405, y: 280, id: "c220" },
+                { x: 60, y: 300, id: "c238" },
+                { x: 175, y: 305, id: "c247" },
+                { x: 270, y: 310, id: "c255" },
+              ].map((c, i) => (
+                <g key={i}>
+                  <circle cx={c.x} cy={c.y} r="9" fill={C.yellow} stroke="#08080d" strokeWidth="1.5" />
+                  <text x={c.x} y={c.y + 22} textAnchor="middle" fill={C.yellow} fontSize="10" fontWeight="bold">
+                    {c.id}
+                  </text>
+                </g>
+              ))}
+              <text x="250" y="14" textAnchor="middle" fill={C.yellow} fontSize="12" fontWeight="bold">
+                slot 0 sub-vector cloud (corpus-wide)
+              </text>
+              {/* Side panel */}
+              <rect x="510" y="40" width="190" height="280" fill={`${C.yellow}10`} stroke={`${C.yellow}22`} rx="6" />
+              <text x="605" y="70" textAnchor="middle" fill={C.yellow} fontSize="13" fontWeight="bold">
+                k-means on slot 0
+              </text>
+              <text x="605" y="100" textAnchor="middle" fill={C.bright} fontSize="11">
+                input: billions of 8-D points
+              </text>
+              <text x="605" y="120" textAnchor="middle" fill={C.bright} fontSize="11">
+                output: 256 centroids
+              </text>
+              <text x="605" y="155" textAnchor="middle" fill={C.yellow} fontSize="12" fontWeight="bold">
+                = slot 0 codebook
+              </text>
+              <line x1="540" y1="180" x2="670" y2="180" stroke={`${C.yellow}44`} strokeWidth="1" />
+              <text x="605" y="205" textAnchor="middle" fill={C.bright} fontSize="11">
+                why exactly 256?
+              </text>
+              <text x="605" y="225" textAnchor="middle" fill={C.bright} fontSize="11">
+                2^8 = 256
+              </text>
+              <text x="605" y="245" textAnchor="middle" fill={C.bright} fontSize="11">
+                fits in a single byte
+              </text>
+              <text x="605" y="285" textAnchor="middle" fill={C.dim} fontSize="10">
+                repeat for slots 1..95
+              </text>
+              <text x="605" y="305" textAnchor="middle" fill={C.dim} fontSize="10">
+                = 96 codebooks total
+              </text>
+            </svg>
           </div>
+          <T color="#ffe082" style={{ marginTop: 12 }}>
+            Pick one slot - say slot 0. Look at slot 0&apos;s sub-vector across every document in the corpus. That is
+            billions of 8-D points. Run k-means on them with k = 256.
+          </T>
+          <T color="#ffe082" style={{ marginTop: 8 }}>
+            k-means finds 256 prototype points - call them <strong>centroids</strong> - that summarize this cloud. These
+            256 centroids are slot 0&apos;s <strong>codebook</strong>. Every future slot-0 sub-vector will be replaced
+            by whichever of these 256 it is closest to.
+          </T>
+          <T color="#ffe082" style={{ marginTop: 8 }}>
+            Why exactly 256? Because 2^8 = 256, and that fits in a single byte. The whole PQ design is built around
+            squeezing one slot into one byte.
+          </T>
           <div
             style={{
               marginTop: 14,
@@ -1165,12 +1216,13 @@ export const ProductQuantization = (ctx) => {
               lineHeight: 2,
             }}
           >
-            96 slots &middot; 256 centroids each = <span style={{ color: C.yellow }}>24,576 centroids total</span>
+            96 slots &middot; 256 centroids &middot; 8 dims &middot; 4 bytes ={" "}
+            <span style={{ color: C.yellow }}>786 KB total codebook</span>
             <br />
-            codebook storage: 96 &middot; 256 &middot; 8 dims &middot; 4 bytes &asymp; 786 KB (one-time, fits in L2)
+            <span style={{ color: C.dim }}>(one-time cost &middot; fits in L2 cache)</span>
           </div>
           <T color="#ffe082" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
-            256 codes fit in a single 8-bit byte. That is the whole reason k = 256 is the PQ default.
+            256 prototypes per slot. 96 codebooks. The whole dictionary is L2-resident.
           </T>
         </Box>
       </Reveal>

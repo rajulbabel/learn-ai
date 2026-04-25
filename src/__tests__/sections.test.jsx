@@ -908,6 +908,8 @@ describe("ProductQuantization (11.14) content", () => {
     expect(container.textContent).toMatch(/centroid/i);
     expect(container.textContent).toMatch(/codebook/i);
     expect(container.textContent).toMatch(/k[- ]?means/i);
+    expect(container.textContent).toMatch(/256-word dictionary/i);
+    expect(container.textContent).toMatch(/2\^8|fits in (a |one )?single byte|fits in a byte/i);
   });
 
   it("sub=2 encodes each subvector to a centroid id", () => {

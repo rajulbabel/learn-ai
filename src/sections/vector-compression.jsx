@@ -1229,13 +1229,7 @@ export const ProductQuantization = (ctx) => {
       <Reveal when={sub >= 2}>
         <Box color={C.green} style={{ width: "100%" }}>
           <T color={C.green} bold center size={22}>
-            Encode: each subvector becomes one centroid id
-          </T>
-          <T color="#80e8a5" style={{ marginTop: 8 }}>
-            With the codebooks in place, encoding is a simple operation. For each slot of a new document vector, find
-            the centroid id (0 through 255) that is closest to the subvector and store that single byte. A whole 768-dim
-            vector becomes 96 bytes - one byte per slot. The search index stores these 96-byte codes, never the original
-            float32 vector.
+            Encode = snap each slice to its nearest prototype
           </T>
           <div
             style={{
@@ -1247,48 +1241,189 @@ export const ProductQuantization = (ctx) => {
             }}
           >
             <T color={C.green} bold center size={16}>
-              Encoding doc 1 (first 4 of 96 slots shown)
+              One sub-vector snaps to one centroid id (1 byte)
             </T>
-            <div
-              style={{
-                marginTop: 10,
-                display: "grid",
-                gridTemplateColumns: "120px 1fr 60px",
-                gap: 10,
-                fontFamily: "monospace",
-                fontSize: 13,
-                alignItems: "center",
-              }}
+            <svg
+              viewBox="0 0 720 380"
+              style={{ width: "100%", maxWidth: 740, height: "auto", display: "block", marginTop: 8 }}
             >
+              <desc>
+                Top half: a small scatter showing one query sub-vector as a green diamond with a thick arrow to its
+                nearest centroid c17. Bottom half: a row of four input sub-vector bars snapping into a row of four byte
+                boxes labeled with their assigned centroid ids, then a final assembled 96-byte code.
+              </desc>
+              <defs>
+                <marker
+                  id="snap-arrow"
+                  markerWidth="6"
+                  markerHeight="6"
+                  refX="5"
+                  refY="3"
+                  orient="auto"
+                  markerUnits="strokeWidth"
+                >
+                  <path d="M0,0 L0,6 L5,3 Z" fill={C.green} />
+                </marker>
+              </defs>
+              {/* Top: small scatter */}
+              <rect x="20" y="10" width="320" height="170" fill={`${C.green}05`} stroke={`${C.green}22`} />
+              <text x="180" y="25" textAnchor="middle" fill={C.green} fontSize="11" fontWeight="bold">
+                slot 0 cloud
+              </text>
+              {/* dim points */}
               {[
-                { slot: 0, sub: "[0.81, 0.12, 0.45, 0.22]", id: 17 },
-                { slot: 1, sub: "[0.63, 0.07, 0.38, 0.91]", id: 203 },
-                { slot: 2, sub: "[0.44, 0.28, 0.56, 0.19]", id: 89 },
-                { slot: 3, sub: "[0.72, 0.34, 0.15, 0.48]", id: 142 },
-              ].map((row) => (
-                <div key={row.slot} style={{ display: "contents" }}>
-                  <div style={{ color: C.green, textAlign: "right" }}>slot {row.slot}</div>
-                  <div style={{ color: C.bright, textAlign: "center", padding: "4px 6px" }}>{row.sub}</div>
-                  <div
-                    style={{
-                      color: C.bright,
-                      textAlign: "center",
-                      padding: "6px 8px",
-                      background: `${C.green}14`,
-                      border: `1px solid ${C.green}28`,
-                      borderRadius: 4,
-                      fontWeight: "bold",
-                    }}
-                  >
-                    id = {row.id}
-                  </div>
-                </div>
+                [60, 60], [90, 80], [130, 50], [165, 90], [210, 70], [255, 110], [300, 60], [275, 145], [220, 145],
+                [165, 145], [100, 130], [60, 110], [240, 90], [195, 105], [110, 95], [90, 155], [310, 130], [285, 90],
+                [180, 60], [240, 160], [125, 110], [70, 145], [305, 100],
+              ].map(([x, y], i) => (
+                <circle key={i} cx={x} cy={y} r="2" fill={`${C.yellow}66`} />
               ))}
-            </div>
-            <T color={C.dim} size={13} center style={{ marginTop: 10 }}>
-              ... 92 more slots, each one 1 byte ...
-            </T>
+              {/* centroids */}
+              {[
+                { x: 95, y: 70, id: "c5" },
+                { x: 230, y: 90, id: "c17" },
+                { x: 290, y: 140, id: "c89" },
+                { x: 110, y: 145, id: "c142" },
+              ].map((c, i) => (
+                <g key={i}>
+                  <circle cx={c.x} cy={c.y} r="7" fill={C.yellow} stroke="#08080d" strokeWidth="1" />
+                  <text x={c.x} y={c.y + 18} textAnchor="middle" fill={C.yellow} fontSize="9" fontWeight="bold">
+                    {c.id}
+                  </text>
+                </g>
+              ))}
+              {/* query sub-vector as green diamond */}
+              <polygon points="200,80 215,95 200,110 185,95" fill={C.green} stroke="#08080d" strokeWidth="1" />
+              <text x="170" y="78" textAnchor="end" fill={C.green} fontSize="10" fontWeight="bold">
+                q sub
+              </text>
+              {/* arrow to nearest centroid (c17) */}
+              <line x1="208" y1="90" x2="225" y2="90" stroke={C.green} strokeWidth="2" markerEnd="url(#snap-arrow)" />
+              <text x="225" y="78" textAnchor="middle" fill={C.green} fontSize="10">
+                snap
+              </text>
+              {/* annotation: distances drawn dimly to other centroids */}
+              <line x1="200" y1="95" x2="95" y2="70" stroke={`${C.green}33`} strokeWidth="1" strokeDasharray="3,3" />
+              <line x1="200" y1="95" x2="290" y2="140" stroke={`${C.green}33`} strokeWidth="1" strokeDasharray="3,3" />
+              <line x1="200" y1="95" x2="110" y2="145" stroke={`${C.green}33`} strokeWidth="1" strokeDasharray="3,3" />
+              <text x="180" y="170" textAnchor="middle" fill={C.dim} fontSize="10">
+                closest of all 256 centroids = c17
+              </text>
+              {/* Right side: arrow + result */}
+              <line x1="345" y1="90" x2="395" y2="90" stroke={C.green} strokeWidth="2" markerEnd="url(#snap-arrow)" />
+              <rect x="400" y="68" width="80" height="46" fill={`${C.green}22`} stroke={C.green} strokeWidth="1.5" rx="4" />
+              <text x="440" y="85" textAnchor="middle" fill={C.bright} fontSize="11">
+                store
+              </text>
+              <text x="440" y="102" textAnchor="middle" fill={C.green} fontSize="14" fontWeight="bold">
+                id 17
+              </text>
+              <text x="440" y="128" textAnchor="middle" fill={C.dim} fontSize="10">
+                1 byte
+              </text>
+              {/* Bottom: row of 4 sub-vectors snapping to 4 bytes */}
+              <text x="20" y="215" textAnchor="start" fill={C.green} fontSize="12" fontWeight="bold">
+                doc 1: 4 of 96 slots
+              </text>
+              {[
+                { slot: 0, vals: [0.81, 0.12, 0.45, 0.22], id: 17 },
+                { slot: 1, vals: [0.63, 0.07, 0.38, 0.91], id: 203 },
+                { slot: 2, vals: [0.44, 0.28, 0.56, 0.19], id: 89 },
+                { slot: 3, vals: [0.72, 0.34, 0.15, 0.48], id: 142 },
+              ].map((row, ri) => {
+                const y = 240 + ri * 32;
+                return (
+                  <g key={ri}>
+                    <text x="60" y={y + 14} textAnchor="end" fill={C.dim} fontSize="11">
+                      slot {row.slot}
+                    </text>
+                    {/* sub-vector visualized as 4 small cells */}
+                    {row.vals.map((v, ci) => (
+                      <g key={ci}>
+                        <rect
+                          x={75 + ci * 28}
+                          y={y}
+                          width="26"
+                          height="22"
+                          fill={`${C.green}${Math.floor(v * 99)
+                            .toString(16)
+                            .padStart(2, "0")}`}
+                          stroke={`${C.green}55`}
+                        />
+                        <text
+                          x={75 + ci * 28 + 13}
+                          y={y + 14}
+                          textAnchor="middle"
+                          fill={C.bright}
+                          fontSize="9"
+                          fontFamily="monospace"
+                        >
+                          {v.toFixed(2)}
+                        </text>
+                      </g>
+                    ))}
+                    {/* arrow */}
+                    <line
+                      x1="195"
+                      y1={y + 11}
+                      x2="240"
+                      y2={y + 11}
+                      stroke={C.green}
+                      strokeWidth="1.5"
+                      markerEnd="url(#snap-arrow)"
+                    />
+                    <text x="218" y={y + 7} textAnchor="middle" fill={C.dim} fontSize="9">
+                      snap
+                    </text>
+                    {/* byte box */}
+                    <rect
+                      x="245"
+                      y={y - 1}
+                      width="60"
+                      height="24"
+                      fill={`${C.green}22`}
+                      stroke={C.green}
+                      strokeWidth="1.2"
+                      rx="3"
+                    />
+                    <text
+                      x="275"
+                      y={y + 16}
+                      textAnchor="middle"
+                      fill={C.bright}
+                      fontSize="13"
+                      fontWeight="bold"
+                      fontFamily="monospace"
+                    >
+                      id {row.id}
+                    </text>
+                  </g>
+                );
+              })}
+              <text x="345" y="280" textAnchor="start" fill={C.dim} fontSize="11">
+                ... 92 more slots ...
+              </text>
+              {/* Assembled byte string */}
+              <rect x="20" y="330" width="680" height="40" fill={`${C.green}10`} stroke={C.green} strokeWidth="1.5" rx="4" />
+              <text x="360" y="355" textAnchor="middle" fill={C.bright} fontSize="14" fontFamily="monospace">
+                doc 1 PQ code = [17, 203, 89, 142, 88, 17, 250, 61, ..., 71]
+                <tspan fill={C.green} fontWeight="bold">
+                  {"   "}96 bytes
+                </tspan>
+              </text>
+            </svg>
           </div>
+          <T color="#80e8a5" style={{ marginTop: 12 }}>
+            Now we have all 96 codebooks. Encoding a new document vector is just lookup.
+          </T>
+          <T color="#80e8a5" style={{ marginTop: 8 }}>
+            For each of its 96 slots, find the closest centroid in that slot&apos;s codebook. Write down that
+            centroid&apos;s index - a number 0 to 255. That index fits in one byte.
+          </T>
+          <T color="#80e8a5" style={{ marginTop: 8 }}>
+            Repeat 96 times. The whole 768-dim vector is now 96 bytes. The original floats are thrown away. The index
+            stores only the byte codes.
+          </T>
           <div
             style={{
               marginTop: 14,
@@ -1307,7 +1442,7 @@ export const ProductQuantization = (ctx) => {
             <span style={{ color: C.green }}>96 centroid ids &middot; 1 byte each = 96 bytes total</span>
           </div>
           <T color="#80e8a5" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
-            The vector is now a compact sequence of byte-sized pointers into 96 small codebooks.
+            A vector becomes 96 byte-pointers into 96 tiny codebooks.
           </T>
         </Box>
       </Reveal>

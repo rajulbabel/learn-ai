@@ -915,6 +915,9 @@ describe("ProductQuantization (11.14) content", () => {
   it("sub=2 encodes each subvector to a centroid id", () => {
     const { container } = render(fn(makeCtx({ sub: 2 })));
     expect(container.textContent).toMatch(/centroid id|code/i);
+    expect(container.textContent).toMatch(/snap/i);
+    expect(container.textContent).toMatch(/nearest prototype|nearest centroid/i);
+    expect(container.textContent).toMatch(/96 bytes/i);
   });
 
   it("sub=3 shows 96 bytes = 32x compression", () => {

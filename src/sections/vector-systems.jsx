@@ -3642,8 +3642,9 @@ export const DecisionFramework = (ctx) => {
           <T color="#b8a9ff" style={{ marginTop: 8 }}>
             Section 11 has covered the full vector database landscape. From the retrieval problem (11.1) through
             brute-force kNN (11.2), the ANN family (11.5-11.11), compression (11.12-11.16), combined indexes
-            (11.17-11.18), the compression decision (11.19), production realities (11.20-11.29), and the system comparison (11.30-11.35). You can now
-            answer Qdrant vs Pinecone - and every related question - from first principles.
+            (11.17-11.18), the compression decision (11.19), production realities (11.20-11.29), and the system
+            comparison (11.30-11.35). You can now answer Qdrant vs Pinecone - and every related question - from first
+            principles.
           </T>
           <div
             style={{

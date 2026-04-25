@@ -1063,10 +1063,21 @@ export const ProductQuantization = (ctx) => {
                   </g>
                 );
               })}
-              {/* Bracket on the right covering slot 0 column across all 3 doc rows */}
-              <line x1={60 + (620 / 96) * 1} y1="142" x2={60 + (620 / 96) * 1} y2="262" stroke={C.cyan} strokeWidth="1" />
-              <text x={60 + (620 / 96) * 1 + 12} y="208" textAnchor="start" fill={C.cyan} fontSize="11">
-                slot 0 of every doc
+              {/* Dashed overlay marking the highlighted slots 0-3 column across all docs */}
+              <rect
+                x="60"
+                y="143"
+                width={(620 / 96) * 4}
+                height="102"
+                fill="none"
+                stroke={`${C.cyan}88`}
+                strokeWidth="1"
+                strokeDasharray="3,3"
+              />
+              {/* Connector + single-line label in the clean gap between doc 1 and doc 2 */}
+              <line x1={60 + (620 / 96) * 4} y1="175" x2="92" y2="175" stroke={C.cyan} strokeWidth="1" />
+              <text x="98" y="178" textAnchor="start" fill={C.cyan} fontSize="11" fontWeight="bold">
+                slots 0-3 of every doc &middot; same dim range
               </text>
             </svg>
           </div>
@@ -1981,8 +1992,8 @@ export const ProductQuantization = (ctx) => {
                 { x: 80, y: 222, label: "0.81", lx: 0, ly: -10, anchor: "middle" },
                 { x: 220, y: 142, label: "0.91", lx: 0, ly: -10, anchor: "middle" },
                 { x: 360, y: 102, label: "0.96", lx: 0, ly: -10, anchor: "middle" },
-                // last point's label sits LEFT of the marker to avoid overlap with the "192" bytes tick
-                { x: 640, y: 86, label: "0.98", lx: -8, ly: 4, anchor: "end" },
+                // last point's label sits well LEFT of the marker to avoid touching it and the "192" bytes tick
+                { x: 640, y: 86, label: "0.98", lx: -16, ly: 4, anchor: "end" },
               ].map((p, i) => (
                 <g key={i}>
                   <circle cx={p.x} cy={p.y} r="4" fill={C.green} stroke="#08080d" strokeWidth="1" />

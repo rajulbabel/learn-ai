@@ -954,10 +954,6 @@ export const ScalarQuantization = (ctx) => {
 
 export const ProductQuantization = (ctx) => {
   const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx;
-  // 8-dim illustrative slice split into m=2 subvectors of dim 4.
-  const pqFloatVec = [0.81, 0.12, 0.45, 0.22, 0.63, 0.07, 0.38, 0.91];
-  const subvec0 = pqFloatVec.slice(0, 4);
-  const subvec1 = pqFloatVec.slice(4, 8);
 
   return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>

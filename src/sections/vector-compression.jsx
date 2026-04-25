@@ -1737,14 +1737,7 @@ export const ProductQuantization = (ctx) => {
       <Reveal when={sub >= 5}>
         <Box color={C.purple} style={{ width: "100%" }}>
           <T color={C.purple} bold center size={22}>
-            OPQ: rotate the data first so PQ works better
-          </T>
-          <T color="#b8a9ff" style={{ marginTop: 8 }}>
-            PQ treats each slot as independent, but real embedding dimensions are correlated - what happens at dim 0 is
-            linked to what happens at dim 200. Correlated dimensions spread data across slots in an awkward way, leaving
-            the per-slot k-means with loose clusters and bad approximations. Optimized Product Quantization (OPQ) solves
-            this with a learned orthonormal rotation matrix R applied before the split. The rotation decorrelates the
-            dimensions so each slot sees tighter clusters, and the per-slot codebooks fit the data better.
+            OPQ: rotate first, so the slots line up with the data
           </T>
           <div
             style={{
@@ -1756,62 +1749,93 @@ export const ProductQuantization = (ctx) => {
             }}
           >
             <T color={C.purple} bold center size={16}>
-              PQ pipeline with and without OPQ
+              Same data. Different axes. Tighter clusters.
             </T>
-            <div
-              style={{
-                marginTop: 10,
-                display: "grid",
-                gridTemplateColumns: "1fr 1fr",
-                gap: 10,
-              }}
+            <svg
+              viewBox="0 0 720 320"
+              style={{ width: "100%", maxWidth: 740, height: "auto", display: "block", marginTop: 8 }}
             >
-              <div
-                style={{
-                  padding: "10px 12px",
-                  background: `${C.red}08`,
-                  border: `1px solid ${C.red}18`,
-                  borderRadius: 6,
-                  fontFamily: "monospace",
-                  fontSize: 14,
-                  color: C.bright,
-                  textAlign: "center",
-                  lineHeight: 2,
-                }}
-              >
-                <T color={C.red} bold center size={15}>
-                  plain PQ
-                </T>
-                <div style={{ marginTop: 8 }}>
-                  v &rarr; split &rarr; encode
-                  <br />
-                  correlated dims hurt k-means
-                </div>
-              </div>
-              <div
-                style={{
-                  padding: "10px 12px",
-                  background: `${C.green}08`,
-                  border: `1px solid ${C.green}18`,
-                  borderRadius: 6,
-                  fontFamily: "monospace",
-                  fontSize: 14,
-                  color: C.bright,
-                  textAlign: "center",
-                  lineHeight: 2,
-                }}
-              >
-                <T color={C.green} bold center size={15}>
-                  OPQ + PQ
-                </T>
-                <div style={{ marginTop: 8 }}>
-                  v &rarr; <span style={{ color: C.purple }}>Rv (rotate)</span> &rarr; split &rarr; encode
-                  <br />
-                  decorrelated dims &rarr; tighter clusters
-                </div>
-              </div>
-            </div>
+              <desc>
+                Two side-by-side scatter plots illustrating OPQ. Left plot shows an elongated diagonal cluster of points
+                with a vertical slot boundary cutting through it awkwardly. Right plot shows the same points after a
+                learned rotation, now axis-aligned, with the slot boundary cleanly separating two tight sub-clusters.
+              </desc>
+              <defs>
+                <marker
+                  id="opq-arrow"
+                  markerWidth="6"
+                  markerHeight="6"
+                  refX="5"
+                  refY="3"
+                  orient="auto"
+                  markerUnits="strokeWidth"
+                >
+                  <path d="M0,0 L0,6 L5,3 Z" fill={C.purple} />
+                </marker>
+              </defs>
+              {/* Left scatter - plain PQ */}
+              <rect x="20" y="40" width="280" height="240" fill={`${C.red}05`} stroke={`${C.red}33`} />
+              <text x="160" y="32" textAnchor="middle" fill={C.red} fontSize="13" fontWeight="bold">
+                plain PQ: correlated dims
+              </text>
+              {/* elongated diagonal cluster */}
+              {[
+                [55, 240], [70, 225], [85, 215], [100, 205], [115, 195], [130, 185], [145, 175], [160, 165], [175, 155],
+                [190, 145], [205, 135], [220, 125], [235, 115], [250, 105], [265, 95], [280, 85], [55, 250], [80, 235],
+                [105, 220], [130, 200], [155, 180], [180, 160], [205, 140], [230, 120], [255, 100], [265, 80], [70, 245],
+                [95, 230], [120, 210], [145, 190], [170, 170], [195, 150], [220, 130], [245, 110], [270, 90],
+              ].map(([x, y], i) => (
+                <circle key={i} cx={x} cy={y} r="2.5" fill={`${C.red}aa`} />
+              ))}
+              {/* slot boundary - dashed vertical */}
+              <line x1="160" y1="40" x2="160" y2="280" stroke={C.yellow} strokeWidth="2" strokeDasharray="6,4" />
+              <text x="160" y="298" textAnchor="middle" fill={C.yellow} fontSize="10">
+                slot boundary
+              </text>
+              <text x="160" y="312" textAnchor="middle" fill={C.dim} fontSize="9">
+                cluster crosses boundary &rarr; loose k-means
+              </text>
+              {/* Curved arrow between plots */}
+              <path d="M 310 160 Q 360 100 410 160" stroke={C.purple} strokeWidth="2" fill="none" markerEnd="url(#opq-arrow)" />
+              <text x="360" y="95" textAnchor="middle" fill={C.purple} fontSize="11" fontWeight="bold">
+                &times; R (learned)
+              </text>
+              {/* Right scatter - OPQ + PQ */}
+              <rect x="420" y="40" width="280" height="240" fill={`${C.green}05`} stroke={`${C.green}33`} />
+              <text x="560" y="32" textAnchor="middle" fill={C.green} fontSize="13" fontWeight="bold">
+                OPQ + PQ: rotated, decorrelated
+              </text>
+              {/* axis-aligned cluster: two tighter sub-blobs */}
+              {[
+                [475, 100], [485, 110], [495, 105], [505, 115], [490, 95], [500, 100], [515, 110], [480, 120],
+                [510, 95], [520, 105], [495, 125], [475, 115], [505, 130], [485, 130], [515, 125], [525, 115],
+                [495, 140], [475, 130], [505, 110], [485, 100],
+                [605, 200], [615, 210], [625, 205], [635, 215], [620, 195], [630, 200], [645, 210], [610, 220],
+                [640, 195], [650, 205], [625, 225], [605, 215], [635, 230], [615, 230], [645, 225], [655, 215],
+                [625, 240], [605, 230], [635, 210], [615, 200],
+              ].map(([x, y], i) => (
+                <circle key={i} cx={x} cy={y} r="2.5" fill={`${C.green}aa`} />
+              ))}
+              {/* slot boundary - dashed vertical */}
+              <line x1="560" y1="40" x2="560" y2="280" stroke={C.yellow} strokeWidth="2" strokeDasharray="6,4" />
+              <text x="560" y="298" textAnchor="middle" fill={C.yellow} fontSize="10">
+                slot boundary
+              </text>
+              <text x="560" y="312" textAnchor="middle" fill={C.dim} fontSize="9">
+                clean split &rarr; tight k-means clusters
+              </text>
+            </svg>
           </div>
+          <T color="#b8a9ff" style={{ marginTop: 12 }}>
+            Real embedding dimensions are not independent. Dim 0 and dim 200 might be highly correlated. When PQ chops
+            the vector by raw position, correlated information gets split across slots and each slot&apos;s k-means
+            sees a stretched, awkward cloud.
+          </T>
+          <T color="#b8a9ff" style={{ marginTop: 8 }}>
+            <strong>OPQ</strong> fixes this: learn an orthonormal rotation matrix R alongside the codebooks. Apply Rv to
+            every vector before splitting. The rotation decorrelates the dimensions, the per-slot clusters become tight
+            and round, k-means fits them better, and recall goes up.
+          </T>
           <div
             style={{
               marginTop: 14,
@@ -1825,18 +1849,15 @@ export const ProductQuantization = (ctx) => {
               lineHeight: 2,
             }}
           >
-            recall@10 at m = 96 (typical)
+            pipeline: v &rarr; <span style={{ color: C.purple }}>Rv</span> &rarr; split &rarr; encode
             <br />
-            plain PQ: <span style={{ color: C.red }}>0.89</span> &middot; OPQ + PQ:{" "}
+            recall@10 at m = 96: plain PQ <span style={{ color: C.red }}>0.89</span> &middot; OPQ + PQ{" "}
             <span style={{ color: C.green }}>0.94</span>
             <br />
-            <span style={{ color: C.dim }}>
-              R is a 768 &times; 768 orthonormal matrix learned alongside the codebooks
-            </span>
+            <span style={{ color: C.dim }}>R is 768 &times; 768 orthonormal &middot; learned alongside codebooks</span>
           </div>
           <T color="#b8a9ff" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
-            FAISS, ScaNN, and most production PQ implementations use OPQ by default. It is a free recall bump for a
-            one-time training cost.
+            Free recall bump for one extra matrix multiply. FAISS, ScaNN, and Qdrant all default to OPQ.
           </T>
         </Box>
       </Reveal>

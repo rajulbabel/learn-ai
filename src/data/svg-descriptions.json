@@ -199,7 +199,8 @@
     "A 2-D scatter projection of slot-0 sub-vectors with 16 highlighted k-means centroid markers labeled c0 to c255, representing the 256 codebook entries that snap each sub-vector to its nearest prototype",
     "Encoding step diagram showing one query sub-vector snapping to its nearest centroid c17, then a row of four sub-vector bars snapping to four byte boxes containing centroid ids that assemble into a 96-byte PQ code",
     "Two horizontal bars drawn to scale comparing PQ storage: a wide cyan 3072-byte bar for float32 and a narrow orange 96-byte bar for PQ codes, with a 32x reduction badge",
-    "Asymmetric distance computation diagram showing the float query split into 8 sub-queries that index into 8 precomputed lookup tables; each document code byte points to one highlighted row per table and the 8 distances sum to the document's distance"
+    "Asymmetric distance computation diagram showing the float query split into 8 sub-queries that index into 8 precomputed lookup tables; each document code byte points to one highlighted row per table and the 8 distances sum to the document's distance",
+    "Two side-by-side scatter plots illustrating OPQ: a left plot with an elongated diagonal cluster awkwardly crossing the slot boundary, and a right plot showing the same data after a learned rotation that aligns clusters with slot axes for tighter k-means fits"
   ],
   "11.15": [
     "Curve showing binary quantization recall rising sharply with embedding dimension - near zero at d=64, rising past 0.9 around d=512, plateauing around 0.96 at d=1024 and higher, illustrating why binary works for high-dim BERT-style embeddings but collapses at low dimensions"

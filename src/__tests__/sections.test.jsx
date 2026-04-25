@@ -943,6 +943,8 @@ describe("ProductQuantization (11.14) content", () => {
     expect(container.textContent).toMatch(/OPQ/);
     expect(container.textContent).toMatch(/rotat/i);
     expect(container.textContent).toMatch(/decorrelat|correlat/i);
+    expect(container.textContent).toMatch(/rotate first/i);
+    expect(container.textContent).toMatch(/0\.94|0\.89/);
   });
 
   it("sub=6 shows the recall-compression curve", () => {

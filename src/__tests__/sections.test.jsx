@@ -952,6 +952,8 @@ describe("ProductQuantization (11.14) content", () => {
     expect(container.textContent).toMatch(/m\s*=\s*96|m=96/i);
     expect(container.textContent).toMatch(/recall/i);
     expect(container.textContent).toMatch(/compress/i);
+    expect(container.textContent).toMatch(/only knob|knob/i);
+    expect(container.textContent).toMatch(/sweet spot/i);
   });
 });
 

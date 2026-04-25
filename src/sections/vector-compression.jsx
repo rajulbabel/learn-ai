@@ -1864,12 +1864,134 @@ export const ProductQuantization = (ctx) => {
       <Reveal when={sub >= 6}>
         <Box color={C.pink} style={{ width: "100%" }}>
           <T color={C.pink} bold center size={22}>
-            Pick m to hit your target recall
+            m is the only knob: bytes-per-vector vs recall
           </T>
-          <T color="#f8aee0" style={{ marginTop: 8 }}>
-            The only real PQ tuning knob is m (the number of subvectors). Higher m means smaller subvectors, which means
-            the per-slot k-means sees simpler data and the approximation is tighter. Higher m also means more bytes per
-            encoded vector - the compression ratio drops. The typical production sweep:
+          <div
+            style={{
+              marginTop: 14,
+              padding: "12px 14px",
+              borderRadius: 8,
+              background: `${C.pink}06`,
+              border: `1px solid ${C.pink}12`,
+            }}
+          >
+            <T color={C.pink} bold center size={16}>
+              Higher m: bigger codes, better recall. m = 96 is the sweet spot.
+            </T>
+            <svg
+              viewBox="0 0 720 300"
+              style={{ width: "100%", maxWidth: 740, height: "auto", display: "block", marginTop: 8 }}
+            >
+              <desc>
+                Dual-axis line chart showing how m affects bytes-per-vector and recall@10. The orange bytes-per-vector
+                line rises linearly from 8 at m=8 to 192 at m=192. The green recall@10 curve rises from 0.81 to 0.98
+                and flattens; a vertical highlight band at m=96 marks the production sweet spot.
+              </desc>
+              {/* Axis box */}
+              <line x1="80" y1="50" x2="80" y2="240" stroke={C.dim} strokeWidth="1" />
+              <line x1="80" y1="240" x2="640" y2="240" stroke={C.dim} strokeWidth="1" />
+              <line x1="640" y1="50" x2="640" y2="240" stroke={C.dim} strokeWidth="1" />
+              {/* X-axis ticks: m = 8, 48, 96, 192 spread along x=80..640 */}
+              {[
+                { m: 8, x: 80 },
+                { m: 48, x: 220 },
+                { m: 96, x: 360 },
+                { m: 192, x: 640 },
+              ].map((t) => (
+                <g key={t.m}>
+                  <line x1={t.x} y1="240" x2={t.x} y2="246" stroke={C.dim} strokeWidth="1" />
+                  <text x={t.x} y="262" textAnchor="middle" fill={C.bright} fontSize="11" fontFamily="monospace">
+                    m = {t.m}
+                  </text>
+                </g>
+              ))}
+              <text x="360" y="285" textAnchor="middle" fill={C.bright} fontSize="12" fontWeight="bold">
+                m (number of slots)
+              </text>
+              {/* Highlight band at m=96 */}
+              <rect x="335" y="50" width="50" height="190" fill={`${C.pink}18`} />
+              <text x="360" y="46" textAnchor="middle" fill={C.pink} fontSize="11" fontWeight="bold">
+                production sweet spot
+              </text>
+              {/* Left y-axis label (recall) */}
+              <text x="36" y="148" textAnchor="middle" fill={C.green} fontSize="12" fontWeight="bold" transform="rotate(-90 36 148)">
+                recall@10
+              </text>
+              {/* Right y-axis label (bytes) */}
+              <text x="688" y="148" textAnchor="middle" fill={C.orange} fontSize="12" fontWeight="bold" transform="rotate(90 688 148)">
+                bytes / vec
+              </text>
+              {/* Recall y-axis ticks */}
+              {[
+                { v: 0.8, y: 230 },
+                { v: 0.9, y: 150 },
+                { v: 1.0, y: 70 },
+              ].map((t, i) => (
+                <g key={i}>
+                  <line x1="74" y1={t.y} x2="80" y2={t.y} stroke={C.green} strokeWidth="1" />
+                  <text x="68" y={t.y + 4} textAnchor="end" fill={C.green} fontSize="10" fontFamily="monospace">
+                    {t.v.toFixed(1)}
+                  </text>
+                </g>
+              ))}
+              {/* Bytes y-axis ticks */}
+              {[
+                { v: 8, y: 232 },
+                { v: 96, y: 150 },
+                { v: 192, y: 70 },
+              ].map((t, i) => (
+                <g key={i}>
+                  <line x1="640" y1={t.y} x2="646" y2={t.y} stroke={C.orange} strokeWidth="1" />
+                  <text x="652" y={t.y + 4} textAnchor="start" fill={C.orange} fontSize="10" fontFamily="monospace">
+                    {t.v}
+                  </text>
+                </g>
+              ))}
+              {/* Bytes line - linear from (80,232) m=8 to (640,70) m=192 */}
+              <line x1="80" y1="232" x2="220" y2="200" stroke={C.orange} strokeWidth="2" />
+              <line x1="220" y1="200" x2="360" y2="150" stroke={C.orange} strokeWidth="2" />
+              <line x1="360" y1="150" x2="640" y2="70" stroke={C.orange} strokeWidth="2" />
+              {/* Bytes points */}
+              {[
+                { x: 80, y: 232 },
+                { x: 220, y: 200 },
+                { x: 360, y: 150 },
+                { x: 640, y: 70 },
+              ].map((p, i) => (
+                <circle key={i} cx={p.x} cy={p.y} r="4" fill={C.orange} stroke="#08080d" strokeWidth="1" />
+              ))}
+              {/* Recall curve - rising and flattening from 0.81 to 0.98 */}
+              {/* recall axis: 0.8 -> y=230, 1.0 -> y=70; range 0.2 over 160 */}
+              {/* values: 0.81 -> y=222, 0.91 -> y=142, 0.96 -> y=102, 0.98 -> y=86 */}
+              <path d="M 80 222 Q 150 200 220 142 Q 290 110 360 102 Q 500 95 640 86" stroke={C.green} strokeWidth="2.5" fill="none" />
+              {[
+                { x: 80, y: 222, label: "0.81" },
+                { x: 220, y: 142, label: "0.91" },
+                { x: 360, y: 102, label: "0.96" },
+                { x: 640, y: 86, label: "0.98" },
+              ].map((p, i) => (
+                <g key={i}>
+                  <circle cx={p.x} cy={p.y} r="4" fill={C.green} stroke="#08080d" strokeWidth="1" />
+                  <text x={p.x} y={p.y - 10} textAnchor="middle" fill={C.green} fontSize="10" fontFamily="monospace">
+                    {p.label}
+                  </text>
+                </g>
+              ))}
+              {/* Legend */}
+              <rect x="500" y="55" width="130" height="40" fill="rgba(0,0,0,0.4)" stroke={`${C.pink}44`} rx="4" />
+              <line x1="510" y1="68" x2="528" y2="68" stroke={C.green} strokeWidth="2.5" />
+              <text x="534" y="72" textAnchor="start" fill={C.green} fontSize="10">
+                recall@10 (OPQ)
+              </text>
+              <line x1="510" y1="84" x2="528" y2="84" stroke={C.orange} strokeWidth="2" />
+              <text x="534" y="88" textAnchor="start" fill={C.orange} fontSize="10">
+                bytes per vector
+              </text>
+            </svg>
+          </div>
+          <T color="#f8aee0" style={{ marginTop: 12 }}>
+            m controls everything. Higher m means smaller sub-vectors, simpler k-means, tighter approximation, higher
+            recall. But it also means more bytes per encoded vector. Pick the smallest m that hits your recall target.
           </T>
           <div
             style={{
@@ -1911,65 +2033,26 @@ export const ProductQuantization = (ctx) => {
                 { m: "192", bytes: "192", ratio: "16x", recall: "0.98", use: "recall-sensitive workloads" },
               ].map((row, i) => (
                 <div key={`r-${i}`} style={{ display: "contents" }}>
-                  <div
-                    style={{
-                      padding: "8px 6px",
-                      textAlign: "center",
-                      color: C.bright,
-                      background: i === 2 ? `${C.pink}08` : "transparent",
-                      fontWeight: i === 2 ? "bold" : "normal",
-                    }}
-                  >
-                    {row.m}
-                  </div>
-                  <div
-                    style={{
-                      padding: "8px 6px",
-                      textAlign: "center",
-                      color: C.bright,
-                      background: i === 2 ? `${C.pink}08` : "transparent",
-                    }}
-                  >
-                    {row.bytes}
-                  </div>
-                  <div
-                    style={{
-                      padding: "8px 6px",
-                      textAlign: "center",
-                      color: C.bright,
-                      background: i === 2 ? `${C.pink}08` : "transparent",
-                    }}
-                  >
-                    {row.ratio}
-                  </div>
-                  <div
-                    style={{
-                      padding: "8px 6px",
-                      textAlign: "center",
-                      color: C.bright,
-                      background: i === 2 ? `${C.pink}08` : "transparent",
-                      fontWeight: i === 2 ? "bold" : "normal",
-                    }}
-                  >
-                    {row.recall}
-                  </div>
-                  <div
-                    style={{
-                      padding: "8px 6px",
-                      textAlign: "center",
-                      color: C.dim,
-                      background: i === 2 ? `${C.pink}08` : "transparent",
-                    }}
-                  >
-                    {row.use}
-                  </div>
+                  {[row.m, row.bytes, row.ratio, row.recall, row.use].map((cell, ci) => (
+                    <div
+                      key={ci}
+                      style={{
+                        padding: "8px 6px",
+                        textAlign: "center",
+                        color: ci === 4 ? C.dim : C.bright,
+                        background: i === 2 ? `${C.pink}08` : "transparent",
+                        fontWeight: i === 2 && ci !== 4 ? "bold" : "normal",
+                      }}
+                    >
+                      {cell}
+                    </div>
+                  ))}
                 </div>
               ))}
             </div>
           </div>
           <T color="#f8aee0" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
-            m = 96 (32x compression, 0.96 recall) is the canonical production setting. It is what FAISS ships with and
-            what Qdrant&apos;s PQ mode defaults to.
+            m = 96 (32x compression, 0.96 recall) is the canonical setting in FAISS and Qdrant.
           </T>
         </Box>
       </Reveal>

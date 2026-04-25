@@ -1559,13 +1559,153 @@ export const ProductQuantization = (ctx) => {
       <Reveal when={sub >= 4}>
         <Box color={C.red} style={{ width: "100%" }}>
           <T color={C.red} bold center size={22}>
-            Asymmetric distance: keep query float, look up doc codes
+            Don&apos;t reconstruct. Look up.
+          </T>
+          <div
+            style={{
+              marginTop: 14,
+              padding: "12px 14px",
+              borderRadius: 8,
+              background: `${C.red}06`,
+              border: `1px solid ${C.red}12`,
+            }}
+          >
+            <T color={C.red} bold center size={16}>
+              ADC: query stays float, doc stays code, distance is a sum of table reads
+            </T>
+            <T color={C.dim} center size={12} style={{ marginTop: 4 }}>
+              showing 8 of 96 slots for clarity
+            </T>
+            <svg
+              viewBox="0 0 720 420"
+              style={{ width: "100%", maxWidth: 740, height: "auto", display: "block", marginTop: 6 }}
+            >
+              <desc>
+                Asymmetric distance computation diagram: top row shows the float query split into 8 sub-queries; middle
+                row shows 8 vertical lookup tables of 256 rows each with one row highlighted per slot; bottom row shows
+                the document&apos;s PQ code bytes pointing to the highlighted rows; arrows feed all 8 distances into a
+                summation symbol producing the final document distance.
+              </desc>
+              {/* Top: query split into 8 sub-queries */}
+              <text x="20" y="22" textAnchor="start" fill={C.red} fontSize="12" fontWeight="bold">
+                query q (float32, 8 of 96 slots shown)
+              </text>
+              {Array.from({ length: 8 }).map((_, i) => {
+                const x = 30 + i * 82;
+                return (
+                  <g key={i}>
+                    <rect x={x} y="30" width="64" height="28" fill={`${C.red}22`} stroke={C.red} strokeWidth="1" rx="3" />
+                    <text
+                      x={x + 32}
+                      y={48}
+                      textAnchor="middle"
+                      fill={C.bright}
+                      fontSize="11"
+                      fontFamily="monospace"
+                    >
+                      q_{i}
+                    </text>
+                    {/* down arrow */}
+                    <line x1={x + 32} y1="60" x2={x + 32} y2="78" stroke={C.red} strokeWidth="1.5" />
+                    <polygon
+                      points={`${x + 28},78 ${x + 36},78 ${x + 32},85`}
+                      fill={C.red}
+                    />
+                  </g>
+                );
+              })}
+              {/* Middle: 8 lookup tables, each a vertical strip of 8 rows representing 256 */}
+              <text x="20" y="98" textAnchor="start" fill={C.red} fontSize="12" fontWeight="bold">
+                precomputed table[s][c] (96 KB total, fits L2)
+              </text>
+              {[17, 203, 89, 142, 88, 17, 250, 61].map((codeId, slotIdx) => {
+                const tx = 30 + slotIdx * 82;
+                const highlightRow = codeId % 8; // visual stand-in for the 256 rows
+                return (
+                  <g key={slotIdx}>
+                    {Array.from({ length: 8 }).map((_, r) => {
+                      const ry = 105 + r * 22;
+                      const fill = r === highlightRow ? `${C.yellow}aa` : `${C.red}10`;
+                      const stroke = r === highlightRow ? C.yellow : `${C.red}33`;
+                      return (
+                        <g key={r}>
+                          <rect x={tx} y={ry} width="64" height="20" fill={fill} stroke={stroke} strokeWidth="1" />
+                          <text
+                            x={tx + 32}
+                            y={ry + 14}
+                            textAnchor="middle"
+                            fill={r === highlightRow ? "#08080d" : C.dim}
+                            fontSize="9"
+                            fontFamily="monospace"
+                          >
+                            {r === highlightRow
+                              ? `d=${(0.05 + r * 0.08).toFixed(2)}`
+                              : "."}
+                          </text>
+                        </g>
+                      );
+                    })}
+                    <text x={tx + 32} y="296" textAnchor="middle" fill={C.dim} fontSize="9">
+                      slot {slotIdx}
+                    </text>
+                  </g>
+                );
+              })}
+              {/* Bottom: doc code bytes */}
+              <text x="20" y="320" textAnchor="start" fill={C.red} fontSize="12" fontWeight="bold">
+                doc PQ code (bytes)
+              </text>
+              {[17, 203, 89, 142, 88, 17, 250, 61].map((codeId, slotIdx) => {
+                const tx = 30 + slotIdx * 82;
+                return (
+                  <g key={slotIdx}>
+                    {/* arrow up from code byte to highlighted row */}
+                    <line x1={tx + 32} y1="328" x2={tx + 32} y2={105 + (codeId % 8) * 22 + 20} stroke={`${C.yellow}77`} strokeWidth="1.2" strokeDasharray="3,3" />
+                    <rect
+                      x={tx}
+                      y="332"
+                      width="64"
+                      height="28"
+                      fill={`${C.green}22`}
+                      stroke={C.green}
+                      strokeWidth="1.2"
+                      rx="3"
+                    />
+                    <text
+                      x={tx + 32}
+                      y={350}
+                      textAnchor="middle"
+                      fill={C.bright}
+                      fontSize="11"
+                      fontWeight="bold"
+                      fontFamily="monospace"
+                    >
+                      {codeId}
+                    </text>
+                  </g>
+                );
+              })}
+              {/* Sum at bottom */}
+              <text x="360" y="395" textAnchor="middle" fill={C.red} fontSize="14" fontWeight="bold" fontFamily="monospace">
+                &Sigma; 8 highlighted distances &rarr; full doc distance (after 96 of these)
+              </text>
+            </svg>
+          </div>
+          <T color="#ef9a9a" style={{ marginTop: 12 }}>
+            To search, the query stays as full floats. The documents stay as PQ codes. We never reconstruct.
           </T>
           <T color="#ef9a9a" style={{ marginTop: 8 }}>
-            Storing docs as codes is half the story. Distance computation has to work too. The trick is asymmetric: the
-            query stays in its full float32 form, and only the documents are encoded. For each query, precompute one
-            small table per slot that gives the squared distance from the query&apos;s subvector to every centroid.
-            Then, looking up a document&apos;s distance is m table lookups summed together - no multiplies, just adds.
+            <strong>Once per query:</strong> compute the squared distance from each of the query&apos;s 96 sub-vectors
+            to all 256 centroids in that slot&apos;s codebook. Save the results as 96 small lookup tables.
+          </T>
+          <T color="#ef9a9a" style={{ marginTop: 8 }}>
+            <strong>Per document:</strong> read its 96 bytes. Each byte is an index into one of those tables. Sum the 96
+            looked-up distances. That is the document&apos;s distance to the query.
+          </T>
+          <T color="#ef9a9a" style={{ marginTop: 8 }}>
+            No multiplications during the scan. Just memory lookups and adds. This is called{" "}
+            <strong>Asymmetric Distance Computation</strong> - asymmetric because the query is precise but the docs are
+            approximate.
           </T>
           <div
             style={{
@@ -1580,49 +1720,17 @@ export const ProductQuantization = (ctx) => {
               lineHeight: 2,
             }}
           >
-            <span style={{ color: C.red }}>once per query (precompute step):</span>
+            precompute: 96 &middot; 256 = 24,576 entries &asymp;{" "}
+            <span style={{ color: C.red }}>96 KB (fits L2)</span>
             <br />
-            for slot s in 0..96: for c in 0..256: table[s][c] = || q_s - centroid_s_c ||&sup2;
+            per doc: <span style={{ color: C.red }}>96 lookups + 96 adds</span> &middot; no multiplies
             <br />
-            <span style={{ color: C.red }}>per document d (search-time cost):</span>
-            <br />
-            dist(q, d) = &Sigma;&nbsp;table[s][d.code[s]] for s in 0..96
-          </div>
-          <div
-            style={{
-              marginTop: 14,
-              padding: "12px 14px",
-              borderRadius: 8,
-              background: `${C.red}06`,
-              border: `1px solid ${C.red}12`,
-            }}
-          >
-            <T color={C.red} bold center size={16}>
-              Precomputed lookup table (96 slots &times; 256 centroids)
-            </T>
-            <div
-              style={{
-                marginTop: 10,
-                display: "grid",
-                gridTemplateColumns: "auto 1fr",
-                columnGap: 12,
-                rowGap: 6,
-                fontFamily: "monospace",
-                fontSize: 13,
-                color: C.bright,
-              }}
-            >
-              <div style={{ color: C.red, textAlign: "right" }}>size:</div>
-              <div>96 &middot; 256 = 24,576 entries &middot; 4 bytes &asymp; 96 KB (fits L2 cache)</div>
-              <div style={{ color: C.red, textAlign: "right" }}>cost per doc:</div>
-              <div>96 cache-resident lookups + 96 adds (no multiplies)</div>
-              <div style={{ color: C.red, textAlign: "right" }}>vs float32:</div>
-              <div>768 multiplies + 768 adds per doc (about 10x slower)</div>
-            </div>
+            <span style={{ color: C.dim }}>
+              vs float32: 768 multiplies + 768 adds per doc (about 10x slower)
+            </span>
           </div>
           <T color="#ef9a9a" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
-            A 10x speedup stacked on a 32x memory win is why PQ dominated large-scale vector search for a decade before
-            graph indexes arrived.
+            PQ wins twice: 32x less memory and roughly 10x faster scans.
           </T>
         </Box>
       </Reveal>

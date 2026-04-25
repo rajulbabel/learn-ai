@@ -933,6 +933,9 @@ describe("ProductQuantization (11.14) content", () => {
     const { container } = render(fn(makeCtx({ sub: 4 })));
     expect(container.textContent).toMatch(/asymmetric/i);
     expect(container.textContent).toMatch(/lookup|table/i);
+    expect(container.textContent).toMatch(/Don.t reconstruct|never reconstruct/i);
+    expect(container.textContent).toMatch(/Once per query|once per query/i);
+    expect(container.textContent).toMatch(/Per document|per doc/i);
   });
 
   it("sub=5 explains OPQ rotation", () => {

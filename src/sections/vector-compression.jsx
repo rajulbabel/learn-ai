@@ -995,36 +995,53 @@ export const ProductQuantization = (ctx) => {
               <text x="360" y="28" textAnchor="middle" fill={C.cyan} fontSize="13" fontWeight="bold">
                 vector v &middot; 768 dims
               </text>
-              {/* Slot labels for the first 4 + last */}
-              <text x={20 + (680 / 96) * 0.5} y="92" textAnchor="middle" fill={C.bright} fontSize="11">
-                slot 0
+              {/* Bracket beneath the 4 highlighted cells (slots 0-3) */}
+              <line x1="20" y1="82" x2={20 + (680 / 96) * 4} y2="82" stroke={C.cyan} strokeWidth="1.5" />
+              <line x1="20" y1="78" x2="20" y2="86" stroke={C.cyan} strokeWidth="1.5" />
+              <line
+                x1={20 + (680 / 96) * 4}
+                y1="78"
+                x2={20 + (680 / 96) * 4}
+                y2="86"
+                stroke={C.cyan}
+                strokeWidth="1.5"
+              />
+              <text
+                x={20 + (680 / 96) * 4 + 8}
+                y="86"
+                textAnchor="start"
+                fill={C.cyan}
+                fontSize="11"
+                fontWeight="bold"
+              >
+                slots 0-3 (highlighted)
               </text>
-              <text x={20 + (680 / 96) * 1.5} y="92" textAnchor="middle" fill={C.bright} fontSize="11">
-                slot 1
-              </text>
-              <text x={20 + (680 / 96) * 2.5} y="92" textAnchor="middle" fill={C.bright} fontSize="11">
-                slot 2
-              </text>
-              <text x={20 + (680 / 96) * 3.5} y="92" textAnchor="middle" fill={C.bright} fontSize="11">
-                slot 3
-              </text>
-              <text x="360" y="92" textAnchor="middle" fill={C.dim} fontSize="11">
+              {/* "..." in the middle */}
+              <text x="360" y="100" textAnchor="middle" fill={C.dim} fontSize="11">
                 . . .
               </text>
-              <text x={20 + 680 - (680 / 96) * 0.5} y="92" textAnchor="middle" fill={C.bright} fontSize="11">
-                slot 95
-              </text>
-              {/* Annotation pointing to slot 0 with "8 dims (dims 0-7)" */}
+              {/* Leader line and label for the last slot */}
               <line
-                x1={20 + (680 / 96) * 0.5}
-                y1="105"
-                x2={20 + (680 / 96) * 0.5}
-                y2="125"
+                x1={20 + 680 - (680 / 96) * 0.5}
+                y1="78"
+                x2={20 + 680 - (680 / 96) * 0.5}
+                y2="92"
                 stroke={C.cyan}
                 strokeWidth="1"
               />
-              <text x={20 + (680 / 96) * 0.5 + 70} y="120" textAnchor="middle" fill={C.cyan} fontSize="11">
-                8 dims (dims 0-7)
+              <text
+                x={20 + 680 - (680 / 96) * 0.5 - 8}
+                y="100"
+                textAnchor="end"
+                fill={C.bright}
+                fontSize="11"
+                fontWeight="bold"
+              >
+                slot 95
+              </text>
+              {/* Central annotation: 1 slot = 8 dims */}
+              <text x="360" y="125" textAnchor="middle" fill={C.cyan} fontSize="12">
+                1 slot = 8 dims &middot; 96 slots cover all 768 dims
               </text>
               {/* Three document rows stacked */}
               {[0, 1, 2].map((row) => {
@@ -1240,7 +1257,7 @@ export const ProductQuantization = (ctx) => {
               One sub-vector snaps to one centroid id (1 byte)
             </T>
             <svg
-              viewBox="0 0 720 380"
+              viewBox="0 0 720 440"
               style={{ width: "100%", maxWidth: 740, height: "auto", display: "block", marginTop: 8 }}
             >
               <desc>
@@ -1302,7 +1319,7 @@ export const ProductQuantization = (ctx) => {
               <line x1="200" y1="95" x2="95" y2="70" stroke={`${C.green}33`} strokeWidth="1" strokeDasharray="3,3" />
               <line x1="200" y1="95" x2="290" y2="140" stroke={`${C.green}33`} strokeWidth="1" strokeDasharray="3,3" />
               <line x1="200" y1="95" x2="110" y2="145" stroke={`${C.green}33`} strokeWidth="1" strokeDasharray="3,3" />
-              <text x="180" y="170" textAnchor="middle" fill={C.dim} fontSize="10">
+              <text x="180" y="195" textAnchor="middle" fill={C.dim} fontSize="10">
                 closest of all 256 centroids = c17
               </text>
               {/* Right side: arrow + result */}
@@ -1399,9 +1416,9 @@ export const ProductQuantization = (ctx) => {
               <text x="345" y="280" textAnchor="start" fill={C.dim} fontSize="11">
                 ... 92 more slots ...
               </text>
-              {/* Assembled byte string */}
-              <rect x="20" y="330" width="680" height="40" fill={`${C.green}10`} stroke={C.green} strokeWidth="1.5" rx="4" />
-              <text x="360" y="355" textAnchor="middle" fill={C.bright} fontSize="14" fontFamily="monospace">
+              {/* Assembled byte string (placed below row 3 with 25px clearance) */}
+              <rect x="20" y="390" width="680" height="40" fill={`${C.green}10`} stroke={C.green} strokeWidth="1.5" rx="4" />
+              <text x="360" y="415" textAnchor="middle" fill={C.bright} fontSize="14" fontFamily="monospace">
                 doc 1 PQ code = [17, 203, 89, 142, 88, 17, 250, 61, ..., 71]
                 <tspan fill={C.green} fontWeight="bold">
                   {"   "}96 bytes
@@ -1961,26 +1978,34 @@ export const ProductQuantization = (ctx) => {
               {/* values: 0.81 -> y=222, 0.91 -> y=142, 0.96 -> y=102, 0.98 -> y=86 */}
               <path d="M 80 222 Q 150 200 220 142 Q 290 110 360 102 Q 500 95 640 86" stroke={C.green} strokeWidth="2.5" fill="none" />
               {[
-                { x: 80, y: 222, label: "0.81" },
-                { x: 220, y: 142, label: "0.91" },
-                { x: 360, y: 102, label: "0.96" },
-                { x: 640, y: 86, label: "0.98" },
+                { x: 80, y: 222, label: "0.81", lx: 0, ly: -10, anchor: "middle" },
+                { x: 220, y: 142, label: "0.91", lx: 0, ly: -10, anchor: "middle" },
+                { x: 360, y: 102, label: "0.96", lx: 0, ly: -10, anchor: "middle" },
+                // last point's label sits LEFT of the marker to avoid overlap with the "192" bytes tick
+                { x: 640, y: 86, label: "0.98", lx: -8, ly: 4, anchor: "end" },
               ].map((p, i) => (
                 <g key={i}>
                   <circle cx={p.x} cy={p.y} r="4" fill={C.green} stroke="#08080d" strokeWidth="1" />
-                  <text x={p.x} y={p.y - 10} textAnchor="middle" fill={C.green} fontSize="10" fontFamily="monospace">
+                  <text
+                    x={p.x + p.lx}
+                    y={p.y + p.ly}
+                    textAnchor={p.anchor}
+                    fill={C.green}
+                    fontSize="10"
+                    fontFamily="monospace"
+                  >
                     {p.label}
                   </text>
                 </g>
               ))}
-              {/* Legend */}
-              <rect x="500" y="55" width="130" height="40" fill="rgba(0,0,0,0.4)" stroke={`${C.pink}44`} rx="4" />
-              <line x1="510" y1="68" x2="528" y2="68" stroke={C.green} strokeWidth="2.5" />
-              <text x="534" y="72" textAnchor="start" fill={C.green} fontSize="10">
+              {/* Legend - positioned in the top-left corner above the chart, clear of all data */}
+              <rect x="95" y="10" width="220" height="30" fill="rgba(0,0,0,0.4)" stroke={`${C.pink}44`} rx="4" />
+              <line x1="105" y1="22" x2="123" y2="22" stroke={C.green} strokeWidth="2.5" />
+              <text x="129" y="26" textAnchor="start" fill={C.green} fontSize="10">
                 recall@10 (OPQ)
               </text>
-              <line x1="510" y1="84" x2="528" y2="84" stroke={C.orange} strokeWidth="2" />
-              <text x="534" y="88" textAnchor="start" fill={C.orange} fontSize="10">
+              <line x1="217" y1="22" x2="235" y2="22" stroke={C.orange} strokeWidth="2" />
+              <text x="241" y="26" textAnchor="start" fill={C.orange} fontSize="10">
                 bytes per vector
               </text>
             </svg>

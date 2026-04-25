@@ -1,7 +1,7 @@
 import { Box, T, Reveal, SubBtn } from "../components.jsx";
 import { C } from "../config.js";
 
-// Section 11 Act 3: Compression (chapters 11.12-11.16).
+// Section 11 Act 3: Compression (chapters 11.12-11.19).
 // Continues the cat-corpus running thread established in 11.1-11.11.
 // Canonical scale dim d = 768 (float32 = 4 bytes/dim baseline, 3 KB/vector).
 // SVG marker/gradient ids follow the pattern: `<type><chapter>-<svg-index>`.
@@ -4546,7 +4546,7 @@ export const CompressionDecision = (ctx) => {
             style={{
               marginTop: 14,
               display: "grid",
-              gridTemplateColumns: "1fr 1fr",
+              gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
               gap: 12,
             }}
           >
@@ -4596,7 +4596,7 @@ export const CompressionDecision = (ctx) => {
                     <T color={C.green} bold size={14}>
                       {idx + 1}. {h.rule}
                     </T>
-                    <T color={C.bright} size={12} style={{ marginTop: 4 }}>
+                    <T color={C.bright} size={13} style={{ marginTop: 4 }}>
                       {h.why}
                     </T>
                   </div>
@@ -4645,7 +4645,7 @@ export const CompressionDecision = (ctx) => {
                     <T color={C.red} bold size={14}>
                       {idx + 1}. {t.trap}
                     </T>
-                    <T color={C.bright} size={12} style={{ marginTop: 4 }}>
+                    <T color={C.bright} size={13} style={{ marginTop: 4 }}>
                       {t.why}
                     </T>
                   </div>

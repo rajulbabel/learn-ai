@@ -1202,6 +1202,32 @@ describe("CompressionDecision (11.19) content", () => {
     expect(container.textContent).toMatch(/stacking|without measuring/i);
     expect(container.textContent).toMatch(/disabl.*rescor/i);
   });
+
+  it("sub=3 heuristics/traps grid uses responsive auto-fit columns for mobile readability", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    // Find the heuristics title element, then walk up until we find an ancestor that is a CSS grid.
+    const heuristicsTitle = Array.from(container.querySelectorAll("*")).find(
+      (n) => n.textContent === "Five rules of thumb",
+    );
+    expect(heuristicsTitle, "expected the 'Five rules of thumb' title to render in Sub 3").toBeTruthy();
+    let node = heuristicsTitle.parentElement;
+    let gridAncestor = null;
+    while (node) {
+      const style = node.getAttribute("style") || "";
+      if (style.includes("display: grid") && style.includes("grid-template-columns")) {
+        gridAncestor = node;
+        break;
+      }
+      node = node.parentElement;
+    }
+    expect(gridAncestor, "expected the heuristics title to live inside a CSS grid ancestor").toBeTruthy();
+    const gridStyle = gridAncestor.getAttribute("style") || "";
+    expect(
+      gridStyle,
+      `expected Sub 3 outer grid to use responsive auto-fit minmax(280px, 1fr); got style="${gridStyle}"`,
+    ).toMatch(/auto-fit/);
+    expect(gridStyle).toMatch(/minmax\(280px/);
+  });
 });
 
 describe("Filtering (11.20) content", () => {

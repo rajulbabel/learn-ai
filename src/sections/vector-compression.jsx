@@ -964,13 +964,7 @@ export const ProductQuantization = (ctx) => {
       {sub >= 0 && (
         <Box color={C.cyan} style={{ width: "100%" }}>
           <T color={C.cyan} bold center size={22}>
-            Split a 768-dim vector into m = 96 subvectors
-          </T>
-          <T color="#80deea" style={{ marginTop: 8 }}>
-            Product quantization takes a single vector and cuts it into m equal-length chunks. At d = 768 with m = 96,
-            each chunk is a subvector of 8 dimensions. We will treat each slot independently: slot 0 handles dims 0-7 of
-            every document in the corpus, slot 1 handles dims 8-15, and so on across all 96 slots. Every slot gets its
-            own codebook.
+            Cut one fat vector into 96 small ones
           </T>
           <div
             style={{
@@ -982,80 +976,96 @@ export const ProductQuantization = (ctx) => {
             }}
           >
             <T color={C.cyan} bold center size={16}>
-              Illustrative split (8 dims, m = 2 subvectors of dim 4)
+              One 768-dim vector, banded into 96 slots
             </T>
-            <div
-              style={{
-                marginTop: 10,
-                display: "grid",
-                gridTemplateColumns: "1fr 1fr",
-                gap: 12,
-              }}
+            <svg
+              viewBox="0 0 720 280"
+              style={{ width: "100%", maxWidth: 740, height: "auto", display: "block", marginTop: 8 }}
             >
-              <div
-                style={{
-                  padding: "10px 12px",
-                  background: `${C.cyan}10`,
-                  border: `1px solid ${C.cyan}20`,
-                  borderRadius: 6,
-                }}
-              >
-                <T color={C.cyan} bold center size={14}>
-                  subvector 0 (dims 0-3)
-                </T>
-                <div
-                  style={{
-                    marginTop: 6,
-                    display: "grid",
-                    gridTemplateColumns: "repeat(4, 1fr)",
-                    gap: 4,
-                    fontFamily: "monospace",
-                    fontSize: 13,
-                  }}
-                >
-                  {subvec0.map((v, i) => (
-                    <div
-                      key={i}
-                      style={{ padding: "6px 4px", textAlign: "center", color: C.bright, background: `${C.cyan}08` }}
-                    >
-                      {v.toFixed(2)}
-                    </div>
-                  ))}
-                </div>
-              </div>
-              <div
-                style={{
-                  padding: "10px 12px",
-                  background: `${C.purple}10`,
-                  border: `1px solid ${C.purple}20`,
-                  borderRadius: 6,
-                }}
-              >
-                <T color={C.purple} bold center size={14}>
-                  subvector 1 (dims 4-7)
-                </T>
-                <div
-                  style={{
-                    marginTop: 6,
-                    display: "grid",
-                    gridTemplateColumns: "repeat(4, 1fr)",
-                    gap: 4,
-                    fontFamily: "monospace",
-                    fontSize: 13,
-                  }}
-                >
-                  {subvec1.map((v, i) => (
-                    <div
-                      key={i}
-                      style={{ padding: "6px 4px", textAlign: "center", color: C.bright, background: `${C.purple}08` }}
-                    >
-                      {v.toFixed(2)}
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
+              <desc>
+                A 768-dim vector drawn as a long horizontal bar split into 96 colored segments (slots), with three
+                stacked document rows below sharing the same slot boundaries to show that slot 0 covers the same dim
+                range across every document.
+              </desc>
+              {/* Top vector with slot bands. 96 cells across the bar from x=20 to x=700. */}
+              {Array.from({ length: 96 }).map((_, i) => {
+                const cellW = 680 / 96;
+                const x = 20 + i * cellW;
+                let fill = `${C.cyan}22`;
+                if (i < 4) fill = C.cyan;
+                else if (i === 95) fill = `${C.cyan}cc`;
+                return <rect key={i} x={x} y="40" width={cellW - 0.5} height="36" fill={fill} />;
+              })}
+              <text x="360" y="28" textAnchor="middle" fill={C.cyan} fontSize="13" fontWeight="bold">
+                vector v &middot; 768 dims
+              </text>
+              {/* Slot labels for the first 4 + last */}
+              <text x={20 + (680 / 96) * 0.5} y="92" textAnchor="middle" fill={C.bright} fontSize="11">
+                slot 0
+              </text>
+              <text x={20 + (680 / 96) * 1.5} y="92" textAnchor="middle" fill={C.bright} fontSize="11">
+                slot 1
+              </text>
+              <text x={20 + (680 / 96) * 2.5} y="92" textAnchor="middle" fill={C.bright} fontSize="11">
+                slot 2
+              </text>
+              <text x={20 + (680 / 96) * 3.5} y="92" textAnchor="middle" fill={C.bright} fontSize="11">
+                slot 3
+              </text>
+              <text x="360" y="92" textAnchor="middle" fill={C.dim} fontSize="11">
+                . . .
+              </text>
+              <text x={20 + 680 - (680 / 96) * 0.5} y="92" textAnchor="middle" fill={C.bright} fontSize="11">
+                slot 95
+              </text>
+              {/* Annotation pointing to slot 0 with "8 dims (dims 0-7)" */}
+              <line
+                x1={20 + (680 / 96) * 0.5}
+                y1="105"
+                x2={20 + (680 / 96) * 0.5}
+                y2="125"
+                stroke={C.cyan}
+                strokeWidth="1"
+              />
+              <text x={20 + (680 / 96) * 0.5 + 70} y="120" textAnchor="middle" fill={C.cyan} fontSize="11">
+                8 dims (dims 0-7)
+              </text>
+              {/* Three document rows stacked */}
+              {[0, 1, 2].map((row) => {
+                const y = 145 + row * 38;
+                const label = `doc ${row + 1}`;
+                return (
+                  <g key={row}>
+                    <text x="10" y={y + 17} textAnchor="start" fill={C.dim} fontSize="11">
+                      {label}
+                    </text>
+                    {Array.from({ length: 96 }).map((_, i) => {
+                      const cellW = 620 / 96;
+                      const x = 60 + i * cellW;
+                      let fill = `${C.cyan}18`;
+                      if (i < 4) fill = `${C.cyan}aa`;
+                      else if (i === 95) fill = `${C.cyan}66`;
+                      return <rect key={i} x={x} y={y} width={cellW - 0.5} height="22" fill={fill} />;
+                    })}
+                  </g>
+                );
+              })}
+              {/* Bracket on the right covering slot 0 column across all 3 doc rows */}
+              <line x1={60 + (620 / 96) * 1} y1="142" x2={60 + (620 / 96) * 1} y2="262" stroke={C.cyan} strokeWidth="1" />
+              <text x={60 + (620 / 96) * 1 + 12} y="208" textAnchor="start" fill={C.cyan} fontSize="11">
+                slot 0 of every doc
+              </text>
+            </svg>
           </div>
+          <T color="#80deea" style={{ marginTop: 12 }}>
+            A 768-dim embedding is too fat to compress as a single thing. PQ&apos;s first move is to chop it into 96
+            small pieces, 8 dims each. We call each piece a <strong>slot</strong>.
+          </T>
+          <T color="#80deea" style={{ marginTop: 8 }}>
+            Why slots matter: every slot gets its own dictionary. Slot 0&apos;s dictionary only has to describe the
+            patterns that appear in dims 0-7 across the whole corpus. That is a much easier job than describing all 768
+            dims at once.
+          </T>
           <div
             style={{
               marginTop: 14,
@@ -1069,12 +1079,10 @@ export const ProductQuantization = (ctx) => {
               lineHeight: 2,
             }}
           >
-            at d = 768: <span style={{ color: C.cyan }}>m = 96 subvectors &middot; 8 dims each</span>
-            <br />
-            slot 0 = dims 0..7 &middot; slot 1 = dims 8..15 &middot; ... &middot; slot 95 = dims 760..767
+            d = 768 &middot; m = 96 &middot; <span style={{ color: C.cyan }}>d / m = 8 dims per slot</span>
           </div>
           <T color="#80deea" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
-            The split is the setup. Each slot is a miniature 8-dim vector database of its own.
+            One vector becomes 96 mini-problems. Each one is small enough to compress hard.
           </T>
         </Box>
       )}

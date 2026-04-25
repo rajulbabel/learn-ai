@@ -898,6 +898,8 @@ describe("ProductQuantization (11.14) content", () => {
     expect(container.textContent).toMatch(/768/);
     expect(container.textContent).toMatch(/96/);
     expect(container.textContent).toMatch(/sub[- ]?vector|split/i);
+    expect(container.textContent).toMatch(/Cut one fat vector/i);
+    expect(container.textContent).toMatch(/slot/i);
   });
 
   it("sub=1 runs k-means per slot with 256 centroids", () => {

@@ -1449,12 +1449,61 @@ export const ProductQuantization = (ctx) => {
       <Reveal when={sub >= 3}>
         <Box color={C.orange} style={{ width: "100%" }}>
           <T color={C.orange} bold center size={22}>
-            96 bytes instead of 3,072: 32x compression
+            3,072 bytes shrinks to 96 bytes per vector. 32x smaller.
+          </T>
+          <div
+            style={{
+              marginTop: 14,
+              padding: "12px 14px",
+              borderRadius: 8,
+              background: `${C.orange}06`,
+              border: `1px solid ${C.orange}12`,
+            }}
+          >
+            <T color={C.orange} bold center size={16}>
+              Same vector. Two storage formats. Drawn to scale.
+            </T>
+            <svg
+              viewBox="0 0 720 200"
+              style={{ width: "100%", maxWidth: 740, height: "auto", display: "block", marginTop: 8 }}
+            >
+              <desc>
+                Two horizontal bars drawn to scale comparing storage size: a wide cyan bar of 3072 bytes for the
+                float32 vector and a narrow orange sliver of 96 bytes for the PQ code, with a 32x badge between them.
+              </desc>
+              {/* float32 bar (full width 640) */}
+              <text x="20" y="40" textAnchor="start" fill={C.cyan} fontSize="13" fontWeight="bold">
+                float32
+              </text>
+              <rect x="20" y="50" width="640" height="44" fill={C.cyan} stroke="#08080d" strokeWidth="1" rx="3" />
+              <text x="340" y="79" textAnchor="middle" fill="#08080d" fontSize="14" fontWeight="bold">
+                3,072 bytes / vector (768 dims &times; 4 B)
+              </text>
+              {/* PQ bar (1/32 width = 20px) */}
+              <text x="20" y="125" textAnchor="start" fill={C.orange} fontSize="13" fontWeight="bold">
+                PQ (m=96)
+              </text>
+              <rect x="20" y="135" width="20" height="44" fill={C.orange} stroke="#08080d" strokeWidth="1" rx="3" />
+              <text x="55" y="164" textAnchor="start" fill={C.orange} fontSize="14" fontWeight="bold">
+                96 bytes / vector
+              </text>
+              {/* 32x badge */}
+              <rect x="555" y="125" width="120" height="60" fill={`${C.green}22`} stroke={C.green} strokeWidth="1.5" rx="6" />
+              <text x="615" y="150" textAnchor="middle" fill={C.green} fontSize="22" fontWeight="bold">
+                32x
+              </text>
+              <text x="615" y="170" textAnchor="middle" fill={C.green} fontSize="11">
+                smaller
+              </text>
+            </svg>
+          </div>
+          <T color="#ffcc80" style={{ marginTop: 12 }}>
+            One float32 vector at d = 768 takes 3,072 bytes. The PQ code at m = 96 takes 96 bytes. That is 32x smaller,
+            per vector.
           </T>
           <T color="#ffcc80" style={{ marginTop: 8 }}>
-            The full vector replaced by a 96-byte code is the headline number for product quantization. That is 32x
-            smaller than the float32 original. A corpus of 1 billion 768-dim vectors drops from 3 TB down to 96 GB - it
-            now fits on a single reasonably-specced server, with room for the graph index and a cache.
+            At billion-vector scale this changes the economics. Storage stops being the bottleneck. The whole corpus
+            fits on one server with room for the graph index and a cache.
           </T>
           <div
             style={{
@@ -1503,7 +1552,7 @@ export const ProductQuantization = (ctx) => {
             ))}
           </div>
           <T color="#ffcc80" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
-            A billion vectors in 96 GB is what made vector databases economically viable at web scale.
+            A billion vectors in 96 GB. One server. That is why PQ exists.
           </T>
         </Box>
       </Reveal>

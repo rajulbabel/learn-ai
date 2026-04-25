@@ -925,6 +925,8 @@ describe("ProductQuantization (11.14) content", () => {
     expect(container.textContent).toMatch(/96/);
     expect(container.textContent).toMatch(/3072|3,072/);
     expect(container.textContent).toMatch(/32/);
+    expect(container.textContent).toMatch(/96 bytes per vector|per vector/i);
+    expect(container.textContent).toMatch(/billion vectors in 96 GB|one server/i);
   });
 
   it("sub=4 describes asymmetric distance via lookup table", () => {

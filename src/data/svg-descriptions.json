@@ -197,7 +197,8 @@
   "11.14": [
     "A 768-dim vector banded into 96 slot segments, with three stacked document rows aligned at the same slot boundaries to show that slot 0 covers the same dim range across every document",
     "A 2-D scatter projection of slot-0 sub-vectors with 16 highlighted k-means centroid markers labeled c0 to c255, representing the 256 codebook entries that snap each sub-vector to its nearest prototype",
-    "Encoding step diagram showing one query sub-vector snapping to its nearest centroid c17, then a row of four sub-vector bars snapping to four byte boxes containing centroid ids that assemble into a 96-byte PQ code"
+    "Encoding step diagram showing one query sub-vector snapping to its nearest centroid c17, then a row of four sub-vector bars snapping to four byte boxes containing centroid ids that assemble into a 96-byte PQ code",
+    "Two horizontal bars drawn to scale comparing PQ storage: a wide cyan 3072-byte bar for float32 and a narrow orange 96-byte bar for PQ codes, with a 32x reduction badge"
   ],
   "11.15": [
     "Curve showing binary quantization recall rising sharply with embedding dimension - near zero at d=64, rising past 0.9 around d=512, plateauing around 0.96 at d=1024 and higher, illustrating why binary works for high-dim BERT-style embeddings but collapses at low dimensions"

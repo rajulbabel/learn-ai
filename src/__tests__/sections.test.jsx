@@ -2032,6 +2032,29 @@ describe("TOC", () => {
     }
   });
 
+  it("clicking the description in an expanded section does not bubble to the window tap-anywhere handler", () => {
+    // The expanded panel re-renders the section description (line 153-155 in toc.jsx).
+    // It has no onClick of its own, so without stopPropagation the click bubbles up to
+    // window where the tap-anywhere handler treats it as background and advances forward
+    // to chapter 1.1. The expanded panel must stop propagation.
+    const { container } = render(TOC(makeCtx({ expanded: 1 })));
+    const desc = Array.from(container.querySelectorAll("div")).find(
+      (d) => d.textContent === "How neural networks actually work" && d.children.length === 0,
+    );
+    expect(desc).toBeTruthy();
+    let bubbledToWindow = false;
+    const onWindowClick = () => {
+      bubbledToWindow = true;
+    };
+    window.addEventListener("click", onWindowClick);
+    try {
+      fireEvent.click(desc);
+    } finally {
+      window.removeEventListener("click", onWindowClick);
+    }
+    expect(bubbledToWindow).toBe(false);
+  });
+
   // Test every section that has chapters in config.js. Data-driven so new
   // sections are auto-covered and we catch the bug where a section was added
   // to config but its TOC entry was forgotten in toc.jsx.

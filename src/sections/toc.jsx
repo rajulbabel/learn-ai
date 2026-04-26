@@ -149,7 +149,10 @@ export const TOC = (ctx) => {
                 </div>
               </div>
               {isOpen && (
-                <div style={{ padding: "0 14px 12px", display: "flex", flexDirection: "column", gap: 2 }}>
+                <div
+                  onClick={(e) => e.stopPropagation()}
+                  style={{ padding: "0 14px 12px", display: "flex", flexDirection: "column", gap: 2 }}
+                >
                   <T color={C.dim} size={12} style={{ marginBottom: 4, paddingLeft: 40 }}>
                     {p.desc}
                   </T>

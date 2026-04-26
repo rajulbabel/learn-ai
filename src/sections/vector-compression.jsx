@@ -1006,14 +1006,7 @@ export const ProductQuantization = (ctx) => {
                 stroke={C.cyan}
                 strokeWidth="1.5"
               />
-              <text
-                x={20 + (680 / 96) * 4 + 8}
-                y="86"
-                textAnchor="start"
-                fill={C.cyan}
-                fontSize="11"
-                fontWeight="bold"
-              >
+              <text x={20 + (680 / 96) * 4 + 8} y="86" textAnchor="start" fill={C.cyan} fontSize="11" fontWeight="bold">
                 slots 0-3 (highlighted)
               </text>
               {/* "..." in the middle */}
@@ -1142,14 +1135,78 @@ export const ProductQuantization = (ctx) => {
               <rect x="20" y="20" width="460" height="320" fill={`${C.yellow}05`} stroke={`${C.yellow}22`} />
               {/* Random-looking dots representing slot-0 sub-vectors. Use a deterministic set. */}
               {[
-                [60, 90], [80, 110], [120, 80], [150, 70], [180, 100], [210, 130], [90, 160], [130, 175], [170, 200],
-                [200, 230], [240, 90], [275, 120], [310, 100], [340, 70], [370, 110], [400, 95], [410, 140], [380, 175],
-                [350, 200], [310, 230], [255, 215], [225, 260], [185, 280], [140, 250], [110, 230], [70, 250], [60, 290],
-                [115, 305], [165, 315], [220, 305], [270, 295], [320, 280], [365, 270], [410, 255], [440, 220], [445, 175],
-                [430, 100], [395, 65], [330, 50], [275, 65], [225, 55], [165, 50], [110, 65], [85, 195], [105, 145],
-                [195, 165], [235, 145], [285, 175], [330, 165], [375, 200], [305, 130], [255, 100], [195, 95], [145, 110],
-                [135, 220], [185, 230], [235, 195], [290, 220], [355, 230], [395, 215], [400, 290], [350, 305], [285, 320],
-                [240, 320], [195, 320], [150, 320], [100, 320], [70, 220], [55, 170], [50, 130], [70, 60], [120, 50],
+                [60, 90],
+                [80, 110],
+                [120, 80],
+                [150, 70],
+                [180, 100],
+                [210, 130],
+                [90, 160],
+                [130, 175],
+                [170, 200],
+                [200, 230],
+                [240, 90],
+                [275, 120],
+                [310, 100],
+                [340, 70],
+                [370, 110],
+                [400, 95],
+                [410, 140],
+                [380, 175],
+                [350, 200],
+                [310, 230],
+                [255, 215],
+                [225, 260],
+                [185, 280],
+                [140, 250],
+                [110, 230],
+                [70, 250],
+                [60, 290],
+                [115, 305],
+                [165, 315],
+                [220, 305],
+                [270, 295],
+                [320, 280],
+                [365, 270],
+                [410, 255],
+                [440, 220],
+                [445, 175],
+                [430, 100],
+                [395, 65],
+                [330, 50],
+                [275, 65],
+                [225, 55],
+                [165, 50],
+                [110, 65],
+                [85, 195],
+                [105, 145],
+                [195, 165],
+                [235, 145],
+                [285, 175],
+                [330, 165],
+                [375, 200],
+                [305, 130],
+                [255, 100],
+                [195, 95],
+                [145, 110],
+                [135, 220],
+                [185, 230],
+                [235, 195],
+                [290, 220],
+                [355, 230],
+                [395, 215],
+                [400, 290],
+                [350, 305],
+                [285, 320],
+                [240, 320],
+                [195, 320],
+                [150, 320],
+                [100, 320],
+                [70, 220],
+                [55, 170],
+                [50, 130],
+                [70, 60],
+                [120, 50],
               ].map(([x, y], i) => (
                 <circle key={i} cx={x} cy={y} r="2.5" fill={`${C.yellow}88`} />
               ))}
@@ -1296,9 +1353,29 @@ export const ProductQuantization = (ctx) => {
               </text>
               {/* dim points */}
               {[
-                [60, 60], [90, 80], [130, 50], [165, 90], [210, 70], [255, 110], [300, 60], [275, 145], [220, 145],
-                [165, 145], [100, 130], [60, 110], [240, 90], [195, 105], [110, 95], [90, 155], [310, 130], [285, 90],
-                [180, 60], [240, 160], [125, 110], [70, 145], [305, 100],
+                [60, 60],
+                [90, 80],
+                [130, 50],
+                [165, 90],
+                [210, 70],
+                [255, 110],
+                [300, 60],
+                [275, 145],
+                [220, 145],
+                [165, 145],
+                [100, 130],
+                [60, 110],
+                [240, 90],
+                [195, 105],
+                [110, 95],
+                [90, 155],
+                [310, 130],
+                [285, 90],
+                [180, 60],
+                [240, 160],
+                [125, 110],
+                [70, 145],
+                [305, 100],
               ].map(([x, y], i) => (
                 <circle key={i} cx={x} cy={y} r="2" fill={`${C.yellow}66`} />
               ))}
@@ -1335,7 +1412,16 @@ export const ProductQuantization = (ctx) => {
               </text>
               {/* Right side: arrow + result */}
               <line x1="345" y1="90" x2="395" y2="90" stroke={C.green} strokeWidth="2" markerEnd="url(#snap-arrow)" />
-              <rect x="400" y="68" width="80" height="46" fill={`${C.green}22`} stroke={C.green} strokeWidth="1.5" rx="4" />
+              <rect
+                x="400"
+                y="68"
+                width="80"
+                height="46"
+                fill={`${C.green}22`}
+                stroke={C.green}
+                strokeWidth="1.5"
+                rx="4"
+              />
               <text x="440" y="85" textAnchor="middle" fill={C.bright} fontSize="11">
                 store
               </text>
@@ -1428,7 +1514,16 @@ export const ProductQuantization = (ctx) => {
                 ... 92 more slots ...
               </text>
               {/* Assembled byte string (placed below row 3 with 25px clearance) */}
-              <rect x="20" y="390" width="680" height="40" fill={`${C.green}10`} stroke={C.green} strokeWidth="1.5" rx="4" />
+              <rect
+                x="20"
+                y="390"
+                width="680"
+                height="40"
+                fill={`${C.green}10`}
+                stroke={C.green}
+                strokeWidth="1.5"
+                rx="4"
+              />
               <text x="360" y="415" textAnchor="middle" fill={C.bright} fontSize="14" fontFamily="monospace">
                 doc 1 PQ code = [17, 203, 89, 142, 88, 17, 250, 61, ..., 71]
                 <tspan fill={C.green} fontWeight="bold">
@@ -1492,8 +1587,8 @@ export const ProductQuantization = (ctx) => {
               style={{ width: "100%", maxWidth: 740, height: "auto", display: "block", marginTop: 8 }}
             >
               <desc>
-                Two horizontal bars drawn to scale comparing storage size: a wide cyan bar of 3072 bytes for the
-                float32 vector and a narrow orange sliver of 96 bytes for the PQ code, with a 32x badge between them.
+                Two horizontal bars drawn to scale comparing storage size: a wide cyan bar of 3072 bytes for the float32
+                vector and a narrow orange sliver of 96 bytes for the PQ code, with a 32x badge between them.
               </desc>
               {/* float32 bar (full width 640) */}
               <text x="20" y="40" textAnchor="start" fill={C.cyan} fontSize="13" fontWeight="bold">
@@ -1512,7 +1607,16 @@ export const ProductQuantization = (ctx) => {
                 96 bytes / vector
               </text>
               {/* 32x badge */}
-              <rect x="555" y="125" width="120" height="60" fill={`${C.green}22`} stroke={C.green} strokeWidth="1.5" rx="6" />
+              <rect
+                x="555"
+                y="125"
+                width="120"
+                height="60"
+                fill={`${C.green}22`}
+                stroke={C.green}
+                strokeWidth="1.5"
+                rx="6"
+              />
               <text x="615" y="150" textAnchor="middle" fill={C.green} fontSize="22" fontWeight="bold">
                 32x
               </text>
@@ -1618,23 +1722,22 @@ export const ProductQuantization = (ctx) => {
                 const x = 30 + i * 82;
                 return (
                   <g key={i}>
-                    <rect x={x} y="30" width="64" height="28" fill={`${C.red}22`} stroke={C.red} strokeWidth="1" rx="3" />
-                    <text
-                      x={x + 32}
-                      y={48}
-                      textAnchor="middle"
-                      fill={C.bright}
-                      fontSize="11"
-                      fontFamily="monospace"
-                    >
+                    <rect
+                      x={x}
+                      y="30"
+                      width="64"
+                      height="28"
+                      fill={`${C.red}22`}
+                      stroke={C.red}
+                      strokeWidth="1"
+                      rx="3"
+                    />
+                    <text x={x + 32} y={48} textAnchor="middle" fill={C.bright} fontSize="11" fontFamily="monospace">
                       q_{i}
                     </text>
                     {/* down arrow */}
                     <line x1={x + 32} y1="60" x2={x + 32} y2="78" stroke={C.red} strokeWidth="1.5" />
-                    <polygon
-                      points={`${x + 28},78 ${x + 36},78 ${x + 32},85`}
-                      fill={C.red}
-                    />
+                    <polygon points={`${x + 28},78 ${x + 36},78 ${x + 32},85`} fill={C.red} />
                   </g>
                 );
               })}
@@ -1662,9 +1765,7 @@ export const ProductQuantization = (ctx) => {
                             fontSize="9"
                             fontFamily="monospace"
                           >
-                            {r === highlightRow
-                              ? `d=${(0.05 + r * 0.08).toFixed(2)}`
-                              : "."}
+                            {r === highlightRow ? `d=${(0.05 + r * 0.08).toFixed(2)}` : "."}
                           </text>
                         </g>
                       );
@@ -1684,7 +1785,15 @@ export const ProductQuantization = (ctx) => {
                 return (
                   <g key={slotIdx}>
                     {/* arrow up from code byte to highlighted row */}
-                    <line x1={tx + 32} y1="328" x2={tx + 32} y2={105 + (codeId % 8) * 22 + 20} stroke={`${C.yellow}77`} strokeWidth="1.2" strokeDasharray="3,3" />
+                    <line
+                      x1={tx + 32}
+                      y1="328"
+                      x2={tx + 32}
+                      y2={105 + (codeId % 8) * 22 + 20}
+                      stroke={`${C.yellow}77`}
+                      strokeWidth="1.2"
+                      strokeDasharray="3,3"
+                    />
                     <rect
                       x={tx}
                       y="332"
@@ -1710,7 +1819,15 @@ export const ProductQuantization = (ctx) => {
                 );
               })}
               {/* Sum at bottom */}
-              <text x="360" y="395" textAnchor="middle" fill={C.red} fontSize="14" fontWeight="bold" fontFamily="monospace">
+              <text
+                x="360"
+                y="395"
+                textAnchor="middle"
+                fill={C.red}
+                fontSize="14"
+                fontWeight="bold"
+                fontFamily="monospace"
+              >
                 &Sigma; 8 highlighted distances &rarr; full doc distance (after 96 of these)
               </text>
             </svg>
@@ -1744,14 +1861,11 @@ export const ProductQuantization = (ctx) => {
               lineHeight: 2,
             }}
           >
-            precompute: 96 &middot; 256 = 24,576 entries &asymp;{" "}
-            <span style={{ color: C.red }}>96 KB (fits L2)</span>
+            precompute: 96 &middot; 256 = 24,576 entries &asymp; <span style={{ color: C.red }}>96 KB (fits L2)</span>
             <br />
             per doc: <span style={{ color: C.red }}>96 lookups + 96 adds</span> &middot; no multiplies
             <br />
-            <span style={{ color: C.dim }}>
-              vs float32: 768 multiplies + 768 adds per doc (about 10x slower)
-            </span>
+            <span style={{ color: C.dim }}>vs float32: 768 multiplies + 768 adds per doc (about 10x slower)</span>
           </div>
           <T color="#ef9a9a" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
             PQ wins twice: 32x less memory and roughly 10x faster scans.
@@ -1804,10 +1918,41 @@ export const ProductQuantization = (ctx) => {
               </text>
               {/* elongated diagonal cluster */}
               {[
-                [55, 240], [70, 225], [85, 215], [100, 205], [115, 195], [130, 185], [145, 175], [160, 165], [175, 155],
-                [190, 145], [205, 135], [220, 125], [235, 115], [250, 105], [265, 95], [280, 85], [55, 250], [80, 235],
-                [105, 220], [130, 200], [155, 180], [180, 160], [205, 140], [230, 120], [255, 100], [265, 80], [70, 245],
-                [95, 230], [120, 210], [145, 190], [170, 170], [195, 150], [220, 130], [245, 110], [270, 90],
+                [55, 240],
+                [70, 225],
+                [85, 215],
+                [100, 205],
+                [115, 195],
+                [130, 185],
+                [145, 175],
+                [160, 165],
+                [175, 155],
+                [190, 145],
+                [205, 135],
+                [220, 125],
+                [235, 115],
+                [250, 105],
+                [265, 95],
+                [280, 85],
+                [55, 250],
+                [80, 235],
+                [105, 220],
+                [130, 200],
+                [155, 180],
+                [180, 160],
+                [205, 140],
+                [230, 120],
+                [255, 100],
+                [265, 80],
+                [70, 245],
+                [95, 230],
+                [120, 210],
+                [145, 190],
+                [170, 170],
+                [195, 150],
+                [220, 130],
+                [245, 110],
+                [270, 90],
               ].map(([x, y], i) => (
                 <circle key={i} cx={x} cy={y} r="2.5" fill={`${C.red}aa`} />
               ))}
@@ -1820,7 +1965,13 @@ export const ProductQuantization = (ctx) => {
                 cluster crosses boundary &rarr; loose k-means
               </text>
               {/* Curved arrow between plots */}
-              <path d="M 310 160 Q 360 100 410 160" stroke={C.purple} strokeWidth="2" fill="none" markerEnd="url(#opq-arrow)" />
+              <path
+                d="M 310 160 Q 360 100 410 160"
+                stroke={C.purple}
+                strokeWidth="2"
+                fill="none"
+                markerEnd="url(#opq-arrow)"
+              />
               <text x="360" y="95" textAnchor="middle" fill={C.purple} fontSize="11" fontWeight="bold">
                 &times; R (learned)
               </text>
@@ -1831,12 +1982,46 @@ export const ProductQuantization = (ctx) => {
               </text>
               {/* axis-aligned cluster: two tighter sub-blobs */}
               {[
-                [475, 100], [485, 110], [495, 105], [505, 115], [490, 95], [500, 100], [515, 110], [480, 120],
-                [510, 95], [520, 105], [495, 125], [475, 115], [505, 130], [485, 130], [515, 125], [525, 115],
-                [495, 140], [475, 130], [505, 110], [485, 100],
-                [605, 200], [615, 210], [625, 205], [635, 215], [620, 195], [630, 200], [645, 210], [610, 220],
-                [640, 195], [650, 205], [625, 225], [605, 215], [635, 230], [615, 230], [645, 225], [655, 215],
-                [625, 240], [605, 230], [635, 210], [615, 200],
+                [475, 100],
+                [485, 110],
+                [495, 105],
+                [505, 115],
+                [490, 95],
+                [500, 100],
+                [515, 110],
+                [480, 120],
+                [510, 95],
+                [520, 105],
+                [495, 125],
+                [475, 115],
+                [505, 130],
+                [485, 130],
+                [515, 125],
+                [525, 115],
+                [495, 140],
+                [475, 130],
+                [505, 110],
+                [485, 100],
+                [605, 200],
+                [615, 210],
+                [625, 205],
+                [635, 215],
+                [620, 195],
+                [630, 200],
+                [645, 210],
+                [610, 220],
+                [640, 195],
+                [650, 205],
+                [625, 225],
+                [605, 215],
+                [635, 230],
+                [615, 230],
+                [645, 225],
+                [655, 215],
+                [625, 240],
+                [605, 230],
+                [635, 210],
+                [615, 200],
               ].map(([x, y], i) => (
                 <circle key={i} cx={x} cy={y} r="2.5" fill={`${C.green}aa`} />
               ))}
@@ -1852,8 +2037,8 @@ export const ProductQuantization = (ctx) => {
           </div>
           <T color="#b8a9ff" style={{ marginTop: 12 }}>
             Real embedding dimensions are not independent. Dim 0 and dim 200 might be highly correlated. When PQ chops
-            the vector by raw position, correlated information gets split across slots and each slot&apos;s k-means
-            sees a stretched, awkward cloud.
+            the vector by raw position, correlated information gets split across slots and each slot&apos;s k-means sees
+            a stretched, awkward cloud.
           </T>
           <T color="#b8a9ff" style={{ marginTop: 8 }}>
             <strong>OPQ</strong> fixes this: learn an orthonormal rotation matrix R alongside the codebooks. Apply Rv to
@@ -1908,8 +2093,8 @@ export const ProductQuantization = (ctx) => {
             >
               <desc>
                 Dual-axis line chart showing how m affects bytes-per-vector and recall@10. The orange bytes-per-vector
-                line rises linearly from 8 at m=8 to 192 at m=192. The green recall@10 curve rises from 0.81 to 0.98
-                and flattens; a vertical highlight band at m=96 marks the production sweet spot.
+                line rises linearly from 8 at m=8 to 192 at m=192. The green recall@10 curve rises from 0.81 to 0.98 and
+                flattens; a vertical highlight band at m=96 marks the production sweet spot.
               </desc>
               {/* Axis box */}
               <line x1="80" y1="50" x2="80" y2="240" stroke={C.dim} strokeWidth="1" />
@@ -1938,11 +2123,27 @@ export const ProductQuantization = (ctx) => {
                 production sweet spot
               </text>
               {/* Left y-axis label (recall) */}
-              <text x="36" y="148" textAnchor="middle" fill={C.green} fontSize="12" fontWeight="bold" transform="rotate(-90 36 148)">
+              <text
+                x="36"
+                y="148"
+                textAnchor="middle"
+                fill={C.green}
+                fontSize="12"
+                fontWeight="bold"
+                transform="rotate(-90 36 148)"
+              >
                 recall@10
               </text>
               {/* Right y-axis label (bytes) */}
-              <text x="688" y="148" textAnchor="middle" fill={C.orange} fontSize="12" fontWeight="bold" transform="rotate(90 688 148)">
+              <text
+                x="688"
+                y="148"
+                textAnchor="middle"
+                fill={C.orange}
+                fontSize="12"
+                fontWeight="bold"
+                transform="rotate(90 688 148)"
+              >
                 bytes / vec
               </text>
               {/* Recall y-axis ticks */}
@@ -1987,7 +2188,12 @@ export const ProductQuantization = (ctx) => {
               {/* Recall curve - rising and flattening from 0.81 to 0.98 */}
               {/* recall axis: 0.8 -> y=230, 1.0 -> y=70; range 0.2 over 160 */}
               {/* values: 0.81 -> y=222, 0.91 -> y=142, 0.96 -> y=102, 0.98 -> y=86 */}
-              <path d="M 80 222 Q 150 200 220 142 Q 290 110 360 102 Q 500 95 640 86" stroke={C.green} strokeWidth="2.5" fill="none" />
+              <path
+                d="M 80 222 Q 150 200 220 142 Q 290 110 360 102 Q 500 95 640 86"
+                stroke={C.green}
+                strokeWidth="2.5"
+                fill="none"
+              />
               {[
                 { x: 80, y: 222, label: "0.81", lx: 0, ly: -10, anchor: "middle" },
                 { x: 220, y: 142, label: "0.91", lx: 0, ly: -10, anchor: "middle" },

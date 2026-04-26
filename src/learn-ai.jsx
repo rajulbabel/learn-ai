@@ -224,6 +224,10 @@ export default function LearnAI() {
     subBtnRef.current = present;
   }, []);
 
+  // Ref to the <main> element so the click-to-navigate handler can skip
+  // clicks that land inside the content column.
+  const mainRef = useRef(null);
+
   // Poll for semantic search progress
   const pollRef = useRef(null);
   const startSemanticPoll = useCallback(() => {
@@ -405,22 +409,29 @@ export default function LearnAI() {
     return () => window.removeEventListener("keydown", handleKey);
   }, [navigate, ch, sub]);
 
-  // Tap-anywhere navigation: a click on non-interactive background advances forward
-  // (same semantics as Space / ArrowDown). Skipped when: search is open, user is
-  // selecting text, click is on an interactive element (button/link/input/summary
-  // /cursor:pointer), or the user is double-clicking to select text.
+  // Tap-to-navigate: a click in the side band to the left of <main> mirrors
+  // ArrowLeft/Up, and a click to the right of <main> mirrors ArrowRight/Down/
+  // Space. Clicks that land inside the main content column do nothing, so the
+  // learner can interact with text and visuals without triggering navigation.
+  // Also skipped when: search is open, user is selecting text, click is on an
+  // interactive element (button/link/input/summary/cursor:pointer), or the
+  // user is double-clicking to select text.
   //
   // The first click of a double-click has detail===1 and cannot be distinguished
-  // from a single click at the moment it fires. To avoid advancing on every
+  // from a single click at the moment it fires. To avoid navigating on every
   // double-click, navigation is deferred by the browser's double-click window
   // (~300ms). A follow-up click with detail>1 cancels the pending navigation.
   useEffect(() => {
     let pendingTimer = null;
     const DOUBLE_CLICK_DELAY = 280;
 
-    const isInteractive = (target) => {
-      let el = target;
-      while (el && el !== document.body && el !== document.documentElement) {
+    // Walk composedPath() instead of parentElement so that React onClicks which
+    // re-render and unmount the click target (e.g. TOC's `{!isOpen && <desc/>}`)
+    // still expose their cursor:pointer ancestor at the time of dispatch.
+    const isInteractive = (event) => {
+      const path = typeof event.composedPath === "function" ? event.composedPath() : [];
+      for (const el of path) {
+        if (!el || el.nodeType !== 1 || el === document.body || el === document.documentElement) continue;
         const tag = el.tagName;
         if (
           tag === "BUTTON" ||
@@ -439,7 +450,6 @@ export default function LearnAI() {
         } catch {
           // getComputedStyle can throw on detached nodes; ignore
         }
-        el = el.parentElement;
       }
       return false;
     };
@@ -459,7 +469,17 @@ export default function LearnAI() {
 
       const selection = window.getSelection && window.getSelection();
       if (selection && selection.toString().length > 0) return;
-      if (isInteractive(e.target)) return;
+      if (isInteractive(e)) return;
+
+      // Skip clicks that land inside the main content column - only the side
+      // bands flanking <main> trigger navigation.
+      const mainEl = mainRef.current;
+      if (mainEl) {
+        const rect = mainEl.getBoundingClientRect();
+        if (e.clientX >= rect.left && e.clientX <= rect.right) return;
+      }
+
+      const direction = e.clientX < window.innerWidth / 2 ? "back" : "forward";
 
       // Defer so a quick follow-up double-click (for text selection) can cancel.
       if (pendingTimer) clearTimeout(pendingTimer);
@@ -469,15 +489,25 @@ export default function LearnAI() {
         const selNow = window.getSelection && window.getSelection();
         if (selNow && selNow.toString().length > 0) return;
 
-        if (subBtnRef.current) {
-          setSubBtnRipple(Date.now());
-        } else if (ch < chapters.length - 1) {
-          setNavHint("right");
-          setRipple({ side: "right", id: Date.now() });
-          setTimeout(() => setNavHint(null), 150);
-          setTimeout(() => setRipple(null), 500);
+        if (direction === "forward") {
+          if (subBtnRef.current) {
+            setSubBtnRipple(Date.now());
+          } else if (ch < chapters.length - 1) {
+            setNavHint("right");
+            setRipple({ side: "right", id: Date.now() });
+            setTimeout(() => setNavHint(null), 150);
+            setTimeout(() => setRipple(null), 500);
+          }
+          navigate("forward");
+        } else {
+          if (sub === 0 && ch > 0) {
+            setNavHint("left");
+            setRipple({ side: "left", id: Date.now() });
+            setTimeout(() => setNavHint(null), 150);
+            setTimeout(() => setRipple(null), 500);
+          }
+          navigate("back");
         }
-        navigate("forward");
       }, DOUBLE_CLICK_DELAY);
     };
     window.addEventListener("click", handleClick);
@@ -485,7 +515,7 @@ export default function LearnAI() {
       window.removeEventListener("click", handleClick);
       if (pendingTimer) clearTimeout(pendingTimer);
     };
-  }, [navigate, ch, searchOpen]);
+  }, [navigate, ch, sub, searchOpen]);
 
   // Handle search open: just open the overlay (search init already started after first chapter load)
   const handleSearchOpen = useCallback(() => {
@@ -739,6 +769,7 @@ export default function LearnAI() {
         )}
 
         <main
+          ref={mainRef}
           style={{
             width: "100%",
             maxWidth: 840,

@@ -59,8 +59,10 @@ afterEach(async () => {
   searchMod.getSearchStatus.mockReturnValue({ mode: "off", progress: 0 });
 });
 
-// Helper: render LearnAI and wait for async chapter load
-async function renderLearnAI() {
+// Helper: render LearnAI and wait for async chapter load. Mocks the <main>
+// element's bounding rect so click-position tests have predictable side-band
+// geometry (jsdom returns all-zero rects by default).
+async function renderLearnAI({ mainBounds = { left: 200, right: 824 } } = {}) {
   const mod = await import("../learn-ai.jsx");
   const LearnAI = mod.default;
   let result;
@@ -70,6 +72,20 @@ async function renderLearnAI() {
   await act(async () => {
     await new Promise((r) => setTimeout(r, 50));
   });
+  const main = document.querySelector("main");
+  if (main && mainBounds) {
+    main.getBoundingClientRect = () => ({
+      left: mainBounds.left,
+      right: mainBounds.right,
+      top: 0,
+      bottom: 1000,
+      width: mainBounds.right - mainBounds.left,
+      height: 1000,
+      x: mainBounds.left,
+      y: 0,
+      toJSON: () => ({}),
+    });
+  }
   return result;
 }
 
@@ -234,13 +250,13 @@ describe("LearnAI auto-scroll on Continue", () => {
 });
 
 describe("LearnAI tap-anywhere navigation", () => {
-  it("advances to the next chapter on a single background click", async () => {
-    // Start at TOC (ch=0); a single click should land us at WhatIsNN (ch=1)
+  it("advances to the next chapter on a click in the right side band (right of main)", async () => {
+    // Start at TOC (ch=0); a click to the right of <main> should land at WhatIsNN (ch=1)
     await renderLearnAI();
     expect(screen.getByTestId("toc")).toBeTruthy();
 
     await act(async () => {
-      fireEvent.click(document.body, { detail: 1 });
+      fireEvent.click(document.body, { detail: 1, clientX: 900 });
       // Wait past the defer window + chapter async load + re-render
       await new Promise((r) => setTimeout(r, 550));
     });
@@ -248,18 +264,88 @@ describe("LearnAI tap-anywhere navigation", () => {
     expect(screen.getByText("WhatIsNN")).toBeTruthy();
   });
 
+  it("goes back to the previous chapter on a click in the left side band (left of main)", async () => {
+    const navMod = await import("../nav-persistence.js");
+    const ch1Idx = chapters.findIndex((c) => c.id === "1.1");
+    navMod.loadNav.mockReturnValue({ ch: ch1Idx, sub: 0 });
+
+    await renderLearnAI();
+    expect(screen.getByText("WhatIsNN")).toBeTruthy();
+
+    await act(async () => {
+      fireEvent.click(document.body, { detail: 1, clientX: 100 });
+      await new Promise((r) => setTimeout(r, 550));
+    });
+    expect(screen.queryByText("WhatIsNN")).toBeNull();
+    expect(screen.getByTestId("toc")).toBeTruthy();
+  });
+
+  it("does NOT navigate on a left-band click on the TOC (no previous chapter)", async () => {
+    await renderLearnAI();
+    expect(screen.getByTestId("toc")).toBeTruthy();
+
+    await act(async () => {
+      fireEvent.click(document.body, { detail: 1, clientX: 100 });
+      await new Promise((r) => setTimeout(r, 550));
+    });
+    expect(screen.getByTestId("toc")).toBeTruthy();
+  });
+
+  it("does NOT navigate when the click lands inside the main content column", async () => {
+    // clientX 600 falls within the mocked main bounds (200-824). It is also in
+    // the right half of the viewport, so without the bounds skip it would
+    // advance to the next chapter; with the skip it must stay on TOC.
+    await renderLearnAI();
+    expect(screen.getByTestId("toc")).toBeTruthy();
+
+    await act(async () => {
+      fireEvent.click(document.body, { detail: 1, clientX: 600 });
+      await new Promise((r) => setTimeout(r, 550));
+    });
+    expect(screen.getByTestId("toc")).toBeTruthy();
+    expect(screen.queryByText("WhatIsNN")).toBeNull();
+  });
+
   it("does NOT advance when the user double-clicks (text-selection gesture)", async () => {
     await renderLearnAI();
     expect(screen.getByTestId("toc")).toBeTruthy();
 
     await act(async () => {
-      fireEvent.click(document.body, { detail: 1 });
+      fireEvent.click(document.body, { detail: 1, clientX: 900 });
       // Second click of a double-click arrives quickly with detail > 1
-      fireEvent.click(document.body, { detail: 2 });
+      fireEvent.click(document.body, { detail: 2, clientX: 900 });
       // Wait past the defer window
       await new Promise((r) => setTimeout(r, 550));
     });
     // Still at TOC; no navigation fired
+    expect(screen.getByTestId("toc")).toBeTruthy();
+  });
+
+  it("does NOT advance when click target is removed from DOM by its own React onClick", async () => {
+    // Reproduces the TOC bug: clicking a child of a cursor:pointer element whose React
+    // onClick re-renders to remove the target leaves e.target detached. The handler must
+    // inspect composedPath() (which preserves the original ancestor chain) rather than
+    // walking via parentElement, otherwise it incorrectly treats the click as background.
+    await renderLearnAI();
+    expect(screen.getByTestId("toc")).toBeTruthy();
+
+    const detachedTarget = document.createElement("div");
+    const interactiveAncestor = document.createElement("div");
+    interactiveAncestor.style.cursor = "pointer";
+    // Intentionally NOT linked via appendChild - mimics React's post-unmount state where
+    // parentElement is null but the originally-dispatched composedPath still has ancestors.
+
+    await act(async () => {
+      const ev = new MouseEvent("click", { bubbles: true, button: 0, detail: 1, clientX: 900 });
+      Object.defineProperty(ev, "composedPath", {
+        value: () => [detachedTarget, interactiveAncestor, document.body, document, window],
+      });
+      Object.defineProperty(ev, "target", { value: detachedTarget });
+      window.dispatchEvent(ev);
+      await new Promise((r) => setTimeout(r, 550));
+    });
+
+    // Still at TOC; window handler must have detected the cursor:pointer ancestor.
     expect(screen.getByTestId("toc")).toBeTruthy();
   });
 });

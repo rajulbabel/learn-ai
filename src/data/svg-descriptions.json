@@ -206,6 +206,10 @@
     "Focal Vamana node p at the center surrounded by a mix of short green edges fanning to close neighbors and long orange edges shooting across the plane to distant nodes, showing how one node's 64 edges do double duty as both local-precision and long-range hub edges",
     "Storage hierarchy diagram - top layer shows a RAM cache with a small subset of high-degree entry nodes, bottom layer shows the SSD storing every graph node as 4 KB blocks aligned to NVMe pages"
   ],
+  "11.13": [
+    "Number line with calibrated cyan band from -1.2 to 1.4 and a 0 to 255 bucket scale; green training point at 0.5 maps to bucket 167, red new-vector point at 1.8 sits outside the band with a bent arrow clipping it back to 1.4 = bucket 255, a red gap bar labeled error = 0.4, and a faded tombstone marker for a deleted entry whose int8 row still lives",
+    "Two stacked number lines comparing min/max calibration to p1/p99 plus 10 percent headroom; the top band spans -1.2 to 1.4 and the new value 1.8 clips with a red error bar of 0.4, while the bottom band spans -1.4 to 1.7 and the same new value clips with a red error bar of only 0.1"
+  ],
   "11.14": [
     "A 768-dim vector banded into 96 slot segments, with three stacked document rows aligned at the same slot boundaries to show that slot 0 covers the same dim range across every document",
     "A 2-D scatter projection of slot-0 sub-vectors with 16 highlighted k-means centroid markers labeled c0 to c255, representing the 256 codebook entries that snap each sub-vector to its nearest prototype",
@@ -215,10 +219,14 @@
     "Frame B of ADC search: 8 sub-queries feed into 8 columns of a precomputed LUT (256 rows each), showing that once per query we materialize 96 columns by 256 rows of distance values",
     "Frame C of ADC search: doc 1's PQ code bytes index into the LUT, each byte selecting one cell per slot; the 8 looked-up distances sum to doc 1's approximate distance to the query",
     "Two side-by-side scatter plots illustrating OPQ: a left plot with an elongated diagonal cluster awkwardly crossing the slot boundary, and a right plot showing the same data after a learned rotation that aligns clusters with slot axes for tighter k-means fits",
-    "Dual-axis line chart of m versus bytes-per-vector (orange) and recall@10 (green) at m = 8, 48, 96, 192, with a vertical highlight band at m = 96 marking the production sweet spot"
+    "Dual-axis line chart of m versus bytes-per-vector (orange) and recall@10 (green) at m = 8, 48, 96, 192, with a vertical highlight band at m = 96 marking the production sweet spot",
+    "Slot-0 2D scatter showing a tight cluster of 32 representative gray X centroids (of 256 trained per slot) around the origin with gray training dots inside, plus a red new-vector dot at (2.1, 1.9) far outside the cluster connected to the nearest centroid by a dashed line labeled distance = 1.8, alongside an inset label training avg distance = 0.3 and faded strikethrough dots indicating deleted training entries",
+    "Line chart of 95th-percentile PQ reconstruction error over time from 0 to 50M vectors with a flat baseline rising into a spike between 10M and 20M, a horizontal dashed retrain threshold crossed at 15M, a vertical dashed line marking retrain triggered at 20M then a return to baseline, plus colored ticks below the x-axis marking inserts, updates, and deletes"
   ],
   "11.15": [
-    "Curve showing binary quantization recall rising sharply with embedding dimension - near zero at d=64, rising past 0.9 around d=512, plateauing around 0.96 at d=1024 and higher, illustrating why binary works for high-dim BERT-style embeddings but collapses at low dimensions"
+    "Curve showing binary quantization recall rising sharply with embedding dimension - near zero at d=64, rising past 0.9 around d=512, plateauing around 0.96 at d=1024 and higher, illustrating why binary works for high-dim BERT-style embeddings but collapses at low dimensions",
+    "Side-by-side histograms for dim 5: a green training distribution centered at 0 with split 51/49 and a red drifted distribution centered at 0.4 with split 78/22, both cut by a dashed sign threshold at x = 0; below are two 8-cell bit-grid rows showing training mostly mixed bits versus drifted mostly 1s plus a small tombstone cell",
+    "Bit-balance bar grid sampling 64 representative dims (of 1024) where each bar height equals the absolute deviation from a 50/50 split; most bars are short and green while a handful are tall and red flagged with small alert badges above, with a horizontal yellow dashed 70 percent imbalance alert line"
   ],
   "11.16": [
     "Long horizontal vector bar divided into colored prefix regions at 256, 512, 1024, and 3072 dimensions, each prefix labeled as a valid Matryoshka truncation so early-dimension subsets are usable embeddings",

@@ -889,17 +889,40 @@ describe("ScalarQuantization (11.13) content", () => {
     expect(container.textContent).toMatch(/768|bytes per vector/i);
   });
 
-  it("sub=6 shows SQ pairs with any index (HNSW, IVF, flat)", () => {
-    const { container } = render(fn(makeCtx({ sub: 6 })));
+  it("sub=8 shows SQ pairs with any index (HNSW, IVF, flat)", () => {
+    const { container } = render(fn(makeCtx({ sub: 8 })));
     expect(container.textContent).toMatch(/HNSW/);
     expect(container.textContent).toMatch(/IVF|flat/i);
     expect(container.textContent).toMatch(/drop[- ]?in|payload|swap/i);
     expect(container.textContent).toMatch(/index.*unchanged|graph.*unchanged|same (graph|index)/i);
   });
 
-  it("sub=6 names production examples", () => {
-    const { container } = render(fn(makeCtx({ sub: 6 })));
+  it("sub=8 names production examples", () => {
+    const { container } = render(fn(makeCtx({ sub: 8 })));
     expect(container.textContent).toMatch(/pgvector|Qdrant|FAISS/);
+  });
+
+  it("sub=6 shows insert/update/delete drift the calibrated range", () => {
+    const { container } = render(fn(makeCtx({ sub: 6 })));
+    expect(container.textContent).toMatch(/insert/i);
+    expect(container.textContent).toMatch(/update/i);
+    expect(container.textContent).toMatch(/delete/i);
+    expect(container.textContent).toMatch(/outside|out[- ]of[- ]range|drift/i);
+    expect(container.textContent).toMatch(/clip/i);
+    expect(container.textContent).toMatch(/error\s*=\s*0\.4/i);
+    expect(container.textContent).toMatch(/-?1\.2|1\.4|1\.8/);
+  });
+
+  it("sub=7 shows percentile bounds + vacuum + scheduled recalibration", () => {
+    const { container } = render(fn(makeCtx({ sub: 7 })));
+    expect(container.textContent).toMatch(/percentile|p1|p99|headroom/i);
+    expect(container.textContent).toMatch(/recalibrat|re-calibrat/i);
+    expect(container.textContent).toMatch(/vacuum|tombstone|compact/i);
+    expect(container.textContent).toMatch(/0\.5%|drift|clip/i);
+    expect(container.textContent).toMatch(/FAISS/);
+    expect(container.textContent).toMatch(/Qdrant/);
+    expect(container.textContent).toMatch(/Pinecone/);
+    expect(container.textContent).toMatch(/Vespa/);
   });
 });
 
@@ -960,13 +983,36 @@ describe("ProductQuantization (11.14) content", () => {
     expect(container.textContent).toMatch(/0\.94|0\.89/);
   });
 
-  it("sub=6 shows the recall-compression curve", () => {
-    const { container } = render(fn(makeCtx({ sub: 6 })));
+  it("sub=8 shows the recall-compression curve", () => {
+    const { container } = render(fn(makeCtx({ sub: 8 })));
     expect(container.textContent).toMatch(/m\s*=\s*96|m=96/i);
     expect(container.textContent).toMatch(/recall/i);
     expect(container.textContent).toMatch(/compress/i);
     expect(container.textContent).toMatch(/only knob|knob/i);
     expect(container.textContent).toMatch(/sweet spot/i);
+  });
+
+  it("sub=6 shows insert/update/delete drift the codebooks", () => {
+    const { container } = render(fn(makeCtx({ sub: 6 })));
+    expect(container.textContent).toMatch(/insert/i);
+    expect(container.textContent).toMatch(/update/i);
+    expect(container.textContent).toMatch(/delete/i);
+    expect(container.textContent).toMatch(/codebook/i);
+    expect(container.textContent).toMatch(/centroid/i);
+    expect(container.textContent).toMatch(/distance\s*=\s*1\.8/i);
+    expect(container.textContent).toMatch(/0\.3/);
+  });
+
+  it("sub=7 shows oversample + tombstones + retrain on error spike", () => {
+    const { container } = render(fn(makeCtx({ sub: 7 })));
+    expect(container.textContent).toMatch(/oversample|sample|k_per_slot/i);
+    expect(container.textContent).toMatch(/retrain/i);
+    expect(container.textContent).toMatch(/tombstone|compact/i);
+    expect(container.textContent).toMatch(/95p|95th|threshold/i);
+    expect(container.textContent).toMatch(/FAISS/);
+    expect(container.textContent).toMatch(/Vespa/);
+    expect(container.textContent).toMatch(/Milvus/);
+    expect(container.textContent).toMatch(/Qdrant/);
   });
 });
 
@@ -1039,17 +1085,41 @@ describe("BinaryQuantization (11.15) content", () => {
     }
   });
 
-  it("sub=6 pairs BQ with HNSW for graph-accelerated stage 1", () => {
-    const { container } = render(fn(makeCtx({ sub: 6 })));
+  it("sub=8 pairs BQ with HNSW for graph-accelerated stage 1", () => {
+    const { container } = render(fn(makeCtx({ sub: 8 })));
     expect(container.textContent).toMatch(/HNSW/);
     expect(container.textContent).toMatch(/Hamming/i);
     expect(container.textContent).toMatch(/graph/i);
     expect(container.textContent).toMatch(/rerank|rescore/i);
   });
 
-  it("sub=6 explains why BQ does not get its own combo chapter", () => {
+  it("sub=6 shows insert/update/delete drift the sign threshold", () => {
     const { container } = render(fn(makeCtx({ sub: 6 })));
-    expect(container.textContent).toMatch(/two[- ]?stage|stage 1.*stage 2|same.*pattern/i);
+    expect(container.textContent).toMatch(/insert/i);
+    expect(container.textContent).toMatch(/update/i);
+    expect(container.textContent).toMatch(/delete/i);
+    expect(container.textContent).toMatch(/sign/i);
+    expect(container.textContent).toMatch(/51\s*\/\s*49|51\/49/);
+    expect(container.textContent).toMatch(/78\s*\/\s*22|78\/22/);
+    expect(container.textContent).toMatch(/dim 5|dim\s*5/i);
+  });
+
+  it("sub=8 explains how BQ pairs with HNSW for stage 1", () => {
+    const { container } = render(fn(makeCtx({ sub: 8 })));
+    expect(container.textContent).toMatch(/dedicated combo|no.*combo chapter|HNSW \+ BQ/i);
+    expect(container.textContent).toMatch(/HNSW/);
+  });
+
+  it("sub=7 shows zero-centered models + bit-balance alert + compaction", () => {
+    const { container } = render(fn(makeCtx({ sub: 7 })));
+    expect(container.textContent).toMatch(/zero[- ]centered/i);
+    expect(container.textContent).toMatch(/bit[- ]balance/i);
+    expect(container.textContent).toMatch(/compact|tombstone/i);
+    expect(container.textContent).toMatch(/Cohere/);
+    expect(container.textContent).toMatch(/Mixedbread|mxbai/i);
+    expect(container.textContent).toMatch(/OpenAI|text-embedding-3/i);
+    expect(container.textContent).toMatch(/Milvus|Qdrant/);
+    expect(container.textContent).toMatch(/70%|>\s*70/);
   });
 });
 

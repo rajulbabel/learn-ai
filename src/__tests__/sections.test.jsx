@@ -912,6 +912,18 @@ describe("ScalarQuantization (11.13) content", () => {
     expect(container.textContent).toMatch(/error\s*=\s*0\.4/i);
     expect(container.textContent).toMatch(/-?1\.2|1\.4|1\.8/);
   });
+
+  it("sub=7 shows percentile bounds + vacuum + scheduled recalibration", () => {
+    const { container } = render(fn(makeCtx({ sub: 7 })));
+    expect(container.textContent).toMatch(/percentile|p1|p99|headroom/i);
+    expect(container.textContent).toMatch(/recalibrat|re-calibrat/i);
+    expect(container.textContent).toMatch(/vacuum|tombstone|compact/i);
+    expect(container.textContent).toMatch(/0\.5%|drift|clip/i);
+    expect(container.textContent).toMatch(/FAISS/);
+    expect(container.textContent).toMatch(/Qdrant/);
+    expect(container.textContent).toMatch(/Pinecone/);
+    expect(container.textContent).toMatch(/Vespa/);
+  });
 });
 
 describe("ProductQuantization (11.14) content", () => {

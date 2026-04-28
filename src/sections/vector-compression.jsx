@@ -1019,6 +1019,113 @@ export const ScalarQuantization = (ctx) => {
           </svg>
         </Box>
       </Reveal>
+      <Reveal when={sub >= 7}>
+        <Box color={C.green} style={{ width: "100%" }}>
+          <T color={C.green} bold center size={22}>
+            Industry fix: percentile bounds + tombstone vacuum + recalibration job
+          </T>
+          <svg
+            viewBox="0 0 720 260"
+            style={{ width: "100%", maxWidth: 760, height: "auto", display: "block", marginTop: 14 }}
+          >
+            <desc>
+              Two stacked number lines comparing min/max calibration to p1/p99 plus 10 percent headroom; the top band
+              spans -1.2 to 1.4 and the new value 1.8 clips with a red error bar of 0.4, while the bottom band spans
+              -1.4 to 1.7 and the same new value clips with a red error bar of only 0.1.
+            </desc>
+            <text x="60" y="40" fontSize="12" fill="#aaa">
+              min/max calibration
+            </text>
+            <line x1="60" y1="70" x2="700" y2="70" stroke="#666" strokeWidth="1" />
+            <rect x="160" y="55" width="320" height="30" fill={`${C.cyan}1a`} stroke={`${C.cyan}40`} />
+            <text x="160" y="50" fontSize="10" fill={C.cyan} textAnchor="middle">
+              -1.2
+            </text>
+            <text x="480" y="50" fontSize="10" fill={C.cyan} textAnchor="middle">
+              1.4
+            </text>
+            <circle cx="560" cy="70" r="5" fill={C.red} />
+            <text x="560" y="62" fontSize="10" fill={C.red} textAnchor="middle">
+              1.8
+            </text>
+            <rect x="480" y="92" width="80" height="8" fill={`${C.red}66`} />
+            <text x="520" y="112" fontSize="11" fill={C.red} textAnchor="middle" fontWeight="bold">
+              error = 0.4
+            </text>
+            <text x="60" y="160" fontSize="12" fill="#aaa">
+              p1 / p99 + 10% headroom
+            </text>
+            <line x1="60" y1="190" x2="700" y2="190" stroke="#666" strokeWidth="1" />
+            <rect x="140" y="175" width="400" height="30" fill={`${C.green}1a`} stroke={`${C.green}40`} />
+            <text x="140" y="170" fontSize="10" fill={C.green} textAnchor="middle">
+              -1.4
+            </text>
+            <text x="540" y="170" fontSize="10" fill={C.green} textAnchor="middle">
+              1.7
+            </text>
+            <circle cx="560" cy="190" r="5" fill={C.red} />
+            <text x="560" y="182" fontSize="10" fill={C.red} textAnchor="middle">
+              1.8
+            </text>
+            <rect x="540" y="212" width="20" height="8" fill={`${C.red}66`} />
+            <text x="560" y="232" fontSize="11" fill={C.red} textAnchor="middle" fontWeight="bold">
+              error = 0.1
+            </text>
+          </svg>
+          <div style={{ marginTop: 12, display: "grid", gridTemplateColumns: "1fr", gap: 8 }}>
+            {[
+              { op: "INSERT / UPDATE", text: "clip rare; drift counter increments on clip" },
+              { op: "DELETE", text: "tombstone bit set; vacuum job rebuilds row store" },
+              { op: "DRIFT", text: "% clipped > 0.5% triggers scheduled recalibration" },
+            ].map((row) => (
+              <div
+                key={row.op}
+                style={{
+                  padding: "8px 12px",
+                  borderRadius: 8,
+                  background: `${C.green}06`,
+                  border: `1px solid ${C.green}12`,
+                  display: "flex",
+                  gap: 12,
+                  alignItems: "center",
+                }}
+              >
+                <T color={C.green} bold size={14} style={{ minWidth: 130 }}>
+                  {row.op}
+                </T>
+                <T color={C.bright} size={14}>
+                  {row.text}
+                </T>
+              </div>
+            ))}
+          </div>
+          <div style={{ marginTop: 14, display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 10 }}>
+            {[
+              { name: "FAISS", line: "IndexScalarQuantizer(d, QT_8bit_uniform) + custom range" },
+              { name: "Qdrant", line: "quantization_config.scalar.rescaling: true + optimizer.deleted_threshold" },
+              { name: "Pinecone", line: "managed re-quantization on shard rebalance" },
+              { name: "Vespa", line: "tensor int8 cell-type with explicit bounds + auto-compact" },
+            ].map((s) => (
+              <div
+                key={s.name}
+                style={{
+                  padding: "10px 12px",
+                  borderRadius: 8,
+                  background: `${C.cyan}06`,
+                  border: `1px solid ${C.cyan}12`,
+                }}
+              >
+                <T color={C.cyan} bold center size={15}>
+                  {s.name}
+                </T>
+                <T color={C.bright} size={13} style={{ marginTop: 4, fontFamily: "monospace", textAlign: "center" }}>
+                  {s.line}
+                </T>
+              </div>
+            ))}
+          </div>
+        </Box>
+      </Reveal>
       <Reveal when={sub >= 8}>
         <Box color={C.purple} style={{ width: "100%" }}>
           <T color={C.purple} bold center size={22}>

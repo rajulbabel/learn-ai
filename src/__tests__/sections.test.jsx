@@ -983,8 +983,8 @@ describe("ProductQuantization (11.14) content", () => {
     expect(container.textContent).toMatch(/0\.94|0\.89/);
   });
 
-  it("sub=6 shows the recall-compression curve", () => {
-    const { container } = render(fn(makeCtx({ sub: 6 })));
+  it("sub=8 shows the recall-compression curve", () => {
+    const { container } = render(fn(makeCtx({ sub: 8 })));
     expect(container.textContent).toMatch(/m\s*=\s*96|m=96/i);
     expect(container.textContent).toMatch(/recall/i);
     expect(container.textContent).toMatch(/compress/i);

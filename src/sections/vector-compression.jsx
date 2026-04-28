@@ -2755,7 +2755,7 @@ export const ProductQuantization = (ctx) => {
           </T>
         </Box>
       </Reveal>
-      <Reveal when={sub >= 6}>
+      <Reveal when={sub >= 8}>
         <Box color={C.pink} style={{ width: "100%" }}>
           <T color={C.pink} bold center size={22}>
             m is the only knob: bytes-per-vector vs recall
@@ -2979,7 +2979,7 @@ export const ProductQuantization = (ctx) => {
           </T>
         </Box>
       </Reveal>
-      {sub < 6 && (
+      {sub < 8 && (
         <SubBtn
           key={sub}
           onClick={() => {

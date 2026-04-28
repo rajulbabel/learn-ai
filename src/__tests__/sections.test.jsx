@@ -1002,6 +1002,18 @@ describe("ProductQuantization (11.14) content", () => {
     expect(container.textContent).toMatch(/distance\s*=\s*1\.8/i);
     expect(container.textContent).toMatch(/0\.3/);
   });
+
+  it("sub=7 shows oversample + tombstones + retrain on error spike", () => {
+    const { container } = render(fn(makeCtx({ sub: 7 })));
+    expect(container.textContent).toMatch(/oversample|100x|390x/i);
+    expect(container.textContent).toMatch(/retrain/i);
+    expect(container.textContent).toMatch(/tombstone|compact/i);
+    expect(container.textContent).toMatch(/95p|95th|threshold/i);
+    expect(container.textContent).toMatch(/FAISS/);
+    expect(container.textContent).toMatch(/Vespa/);
+    expect(container.textContent).toMatch(/Milvus/);
+    expect(container.textContent).toMatch(/Qdrant/);
+  });
 });
 
 describe("BinaryQuantization (11.15) content", () => {

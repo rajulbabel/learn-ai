@@ -2852,6 +2852,109 @@ export const ProductQuantization = (ctx) => {
           </svg>
         </Box>
       </Reveal>
+      <Reveal when={sub >= 7}>
+        <Box color={C.green} style={{ width: "100%" }}>
+          <T color={C.green} bold center size={22}>
+            Industry fix: oversample + tombstones + retrain when 95p error spikes
+          </T>
+          <svg
+            viewBox="0 0 720 280"
+            style={{ width: "100%", maxWidth: 760, height: "auto", display: "block", marginTop: 14 }}
+          >
+            <desc>
+              Line chart of 95th-percentile reconstruction error over time from 0 to 50M vectors; the line is flat at
+              baseline 0 to 10M, spikes between 10M and 20M, crosses a horizontal dashed retrain threshold at 15M, a
+              vertical dashed line marks retrain triggered at 20M, then the line returns to baseline. Below the x-axis
+              are colored ticks marking inserts, updates, and deletes.
+            </desc>
+            <line x1="60" y1="40" x2="60" y2="220" stroke="#666" strokeWidth="1" />
+            <line x1="60" y1="220" x2="700" y2="220" stroke="#666" strokeWidth="1" />
+            <text x="40" y="125" fontSize="11" fill="#999" textAnchor="middle" transform="rotate(-90 40 125)">95p recon error</text>
+            <text x="60" y="240" fontSize="11" fill="#999">0</text>
+            <text x="700" y="240" fontSize="11" fill="#999" textAnchor="end">50M vectors</text>
+            <line x1="60" y1="120" x2="700" y2="120" stroke={C.yellow} strokeDasharray="4 4" strokeWidth="1" />
+            <text x="700" y="115" fontSize="11" fill={C.yellow} textAnchor="end">retrain threshold</text>
+            <polyline
+              points="60,200 220,200 280,150 320,90 360,200 700,200"
+              fill="none"
+              stroke={C.red}
+              strokeWidth="2"
+            />
+            <line x1="360" y1="40" x2="360" y2="220" stroke={C.green} strokeDasharray="6 4" strokeWidth="1.5" />
+            <text x="360" y="32" fontSize="11" fill={C.green} textAnchor="middle">retrain triggered (20M)</text>
+            <text x="60" y="262" fontSize="11" fill="#999">ops:</text>
+            {[
+              { x: 110, c: C.cyan },
+              { x: 150, c: C.cyan },
+              { x: 190, c: C.yellow },
+              { x: 240, c: C.cyan },
+              { x: 290, c: C.red },
+              { x: 340, c: C.yellow },
+              { x: 410, c: C.cyan },
+              { x: 470, c: C.red },
+              { x: 540, c: C.cyan },
+              { x: 620, c: C.yellow },
+            ].map((t, i) => (
+              <line key={i} x1={t.x} y1="252" x2={t.x} y2="262" stroke={t.c} strokeWidth="2" />
+            ))}
+            <text x="650" y="262" fontSize="10" fill={C.cyan}>insert</text>
+            <text x="650" y="274" fontSize="10" fill={C.yellow}>update</text>
+            <text x="700" y="262" fontSize="10" fill={C.red} textAnchor="end">delete</text>
+          </svg>
+          <div style={{ marginTop: 12, display: "grid", gridTemplateColumns: "1fr", gap: 8 }}>
+            {[
+              { op: "INSERT / UPDATE", text: "re-encode with current codebooks; track 95p recon error" },
+              { op: "DELETE", text: "tombstone in posting list; background compaction reclaims and reshapes residuals" },
+              { op: "DRIFT", text: "95p error breach -> train new codebooks on fresh sample (FAISS default 100x oversample), hot-swap" },
+            ].map((row) => (
+              <div
+                key={row.op}
+                style={{
+                  padding: "8px 12px",
+                  borderRadius: 8,
+                  background: `${C.green}06`,
+                  border: `1px solid ${C.green}12`,
+                  display: "flex",
+                  gap: 12,
+                  alignItems: "center",
+                }}
+              >
+                <T color={C.green} bold size={14} style={{ minWidth: 130 }}>
+                  {row.op}
+                </T>
+                <T color={C.bright} size={14}>
+                  {row.text}
+                </T>
+              </div>
+            ))}
+          </div>
+          <div style={{ marginTop: 14, display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 10 }}>
+            {[
+              { name: "FAISS", line: "ProductQuantizer.train(new_set) + index rebuild" },
+              { name: "Vespa", line: "background re-quantization with hot-swap" },
+              { name: "Milvus", line: "scheduled IVF_PQ retraining + segment compaction" },
+              { name: "Qdrant", line: "POST /collections/{name}/quantization + optimizer.deleted_threshold" },
+            ].map((s) => (
+              <div
+                key={s.name}
+                style={{
+                  padding: "10px 12px",
+                  borderRadius: 8,
+                  background: `${C.cyan}06`,
+                  border: `1px solid ${C.cyan}12`,
+                }}
+              >
+                <T color={C.cyan} bold center size={15}>
+                  {s.name}
+                </T>
+                <T color={C.bright} size={13} style={{ marginTop: 4, fontFamily: "monospace", textAlign: "center" }}>
+                  {s.line}
+                </T>
+              </div>
+            ))}
+          </div>
+        </Box>
+      </Reveal>
       <Reveal when={sub >= 8}>
         <Box color={C.pink} style={{ width: "100%" }}>
           <T color={C.pink} bold center size={22}>

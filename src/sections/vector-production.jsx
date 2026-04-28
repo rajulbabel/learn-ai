@@ -136,8 +136,8 @@ export const Filtering = (ctx) => {
                 color: C.bright,
               }}
             >
-              <div style={{ color: C.cyan, fontWeight: "bold", padding: "6px 8px" }}>ID</div>
-              <div style={{ color: C.cyan, fontWeight: "bold", padding: "6px 8px" }}>Text</div>
+              <div style={{ color: C.cyan, fontWeight: "bold", padding: "6px 8px", textAlign: "center" }}>ID</div>
+              <div style={{ color: C.cyan, fontWeight: "bold", padding: "6px 8px", textAlign: "center" }}>Text</div>
               <div style={{ color: C.cyan, fontWeight: "bold", padding: "6px 8px", textAlign: "center" }}>Tenant</div>
               <div style={{ color: C.cyan, fontWeight: "bold", padding: "6px 8px", textAlign: "center" }}>Year</div>
               <div style={{ color: C.cyan, fontWeight: "bold", padding: "6px 8px", textAlign: "center" }}>Passes?</div>
@@ -618,7 +618,7 @@ export const Filtering = (ctx) => {
                 color: C.bright,
               }}
             >
-              <div style={{ color: C.red, fontWeight: "bold", padding: "6px 8px" }}>Strategy</div>
+              <div style={{ color: C.red, fontWeight: "bold", padding: "6px 8px", textAlign: "center" }}>Strategy</div>
               <div style={{ color: C.red, fontWeight: "bold", padding: "6px 8px", textAlign: "center" }}>
                 Tight 0.1%
               </div>
@@ -951,7 +951,11 @@ export const UpdatesDeletes = (ctx) => {
                 <T color={m.color} bold center size={14}>
                   {m.label}
                 </T>
-                <div style={{ marginTop: 4, fontFamily: "monospace", fontSize: 16, color: m.color }}>{m.value}</div>
+                <div
+                  style={{ marginTop: 4, fontFamily: "monospace", fontSize: 16, color: m.color, textAlign: "center" }}
+                >
+                  {m.value}
+                </div>
               </div>
             ))}
           </div>
@@ -1399,12 +1403,18 @@ export const UpdatesDeletes = (ctx) => {
                 color: C.bright,
               }}
             >
-              <div style={{ color: C.purple, fontWeight: "bold", padding: "6px 8px" }}>Index family</div>
+              <div style={{ color: C.purple, fontWeight: "bold", padding: "6px 8px", textAlign: "center" }}>
+                Index family
+              </div>
               <div style={{ color: C.purple, fontWeight: "bold", padding: "6px 8px", textAlign: "center" }}>
                 Delete cost
               </div>
-              <div style={{ color: C.purple, fontWeight: "bold", padding: "6px 8px" }}>Rebuild trigger</div>
-              <div style={{ color: C.purple, fontWeight: "bold", padding: "6px 8px" }}>Example</div>
+              <div style={{ color: C.purple, fontWeight: "bold", padding: "6px 8px", textAlign: "center" }}>
+                Rebuild trigger
+              </div>
+              <div style={{ color: C.purple, fontWeight: "bold", padding: "6px 8px", textAlign: "center" }}>
+                Example
+              </div>
               {[
                 {
                   name: "IVF / IVF-PQ",
@@ -2316,7 +2326,11 @@ export const Replication = (ctx) => {
                   <T color={r.color} bold center size={14}>
                     {r.label}
                   </T>
-                  <div style={{ marginTop: 4, fontFamily: "monospace", fontSize: 20, color: r.color }}>{r.value}</div>
+                  <div
+                    style={{ marginTop: 4, fontFamily: "monospace", fontSize: 20, color: r.color, textAlign: "center" }}
+                  >
+                    {r.value}
+                  </div>
                   <T color={C.dim} center size={12} style={{ marginTop: 4 }}>
                     {r.note}
                   </T>
@@ -2583,9 +2597,9 @@ export const Replication = (ctx) => {
                 color: C.bright,
               }}
             >
-              <div style={{ color: C.red, fontWeight: "bold", padding: "6px 8px" }}>Strategy</div>
+              <div style={{ color: C.red, fontWeight: "bold", padding: "6px 8px", textAlign: "center" }}>Strategy</div>
               <div style={{ color: C.red, fontWeight: "bold", padding: "6px 8px", textAlign: "center" }}>Time</div>
-              <div style={{ color: C.red, fontWeight: "bold", padding: "6px 8px" }}>Why</div>
+              <div style={{ color: C.red, fontWeight: "bold", padding: "6px 8px", textAlign: "center" }}>Why</div>
               {[
                 {
                   name: "Snapshot + WAL replay",
@@ -2844,8 +2858,8 @@ export const HybridSearch = (ctx) => {
                 color: C.bright,
               }}
             >
-              <div style={{ color: C.yellow, fontWeight: "bold", padding: "6px 8px" }}>ID</div>
-              <div style={{ color: C.yellow, fontWeight: "bold", padding: "6px 8px" }}>Text</div>
+              <div style={{ color: C.yellow, fontWeight: "bold", padding: "6px 8px", textAlign: "center" }}>ID</div>
+              <div style={{ color: C.yellow, fontWeight: "bold", padding: "6px 8px", textAlign: "center" }}>Text</div>
               <div style={{ color: C.yellow, fontWeight: "bold", padding: "6px 8px", textAlign: "center" }}>BM25</div>
               <div style={{ color: C.yellow, fontWeight: "bold", padding: "6px 8px", textAlign: "center" }}>Rank</div>
               {[
@@ -3083,7 +3097,7 @@ export const HybridSearch = (ctx) => {
                 color: C.bright,
               }}
             >
-              <div style={{ color: C.orange, fontWeight: "bold", padding: "6px 8px" }}>Doc</div>
+              <div style={{ color: C.orange, fontWeight: "bold", padding: "6px 8px", textAlign: "center" }}>Doc</div>
               <div style={{ color: C.orange, fontWeight: "bold", padding: "6px 8px", textAlign: "center" }}>
                 Vec rank
               </div>
@@ -3483,11 +3497,19 @@ export const Rerankers = (ctx) => {
                 <T color={r.color} bold size={14} center>
                   {r.stage}
                 </T>
-                <div style={{ marginTop: 4, fontFamily: "monospace", fontSize: 13, color: C.bright }}>{r.cost}</div>
+                <div
+                  style={{ marginTop: 4, fontFamily: "monospace", fontSize: 13, color: C.bright, textAlign: "center" }}
+                >
+                  {r.cost}
+                </div>
                 <T color={C.dim} size={12} style={{ marginTop: 4 }} center>
                   {r.tech}
                 </T>
-                <div style={{ marginTop: 4, fontFamily: "monospace", fontSize: 12, color: r.color }}>{r.size}</div>
+                <div
+                  style={{ marginTop: 4, fontFamily: "monospace", fontSize: 12, color: r.color, textAlign: "center" }}
+                >
+                  {r.size}
+                </div>
               </div>
             ))}
           </div>
@@ -3789,8 +3811,8 @@ export const Rerankers = (ctx) => {
                 color: C.bright,
               }}
             >
-              <div style={{ color: C.orange, fontWeight: "bold", padding: "6px 8px" }}>Doc</div>
-              <div style={{ color: C.orange, fontWeight: "bold", padding: "6px 8px" }}>Text</div>
+              <div style={{ color: C.orange, fontWeight: "bold", padding: "6px 8px", textAlign: "center" }}>Doc</div>
+              <div style={{ color: C.orange, fontWeight: "bold", padding: "6px 8px", textAlign: "center" }}>Text</div>
               <div style={{ color: C.orange, fontWeight: "bold", padding: "6px 8px", textAlign: "center" }}>
                 ANN rank
               </div>
@@ -3878,7 +3900,7 @@ export const Rerankers = (ctx) => {
                 color: C.bright,
               }}
             >
-              <div style={{ color: C.red, fontWeight: "bold", padding: "6px 8px" }}>GPU</div>
+              <div style={{ color: C.red, fontWeight: "bold", padding: "6px 8px", textAlign: "center" }}>GPU</div>
               <div style={{ color: C.red, fontWeight: "bold", padding: "6px 8px", textAlign: "center" }}>Per-pair</div>
               <div style={{ color: C.red, fontWeight: "bold", padding: "6px 8px", textAlign: "center" }}>
                 100 candidates
@@ -4481,7 +4503,11 @@ export const MultiVectorRetrieval = (ctx) => {
                   <T color={r.color} bold center size={14}>
                     {r.label}
                   </T>
-                  <div style={{ marginTop: 4, fontFamily: "monospace", fontSize: 18, color: r.color }}>{r.size}</div>
+                  <div
+                    style={{ marginTop: 4, fontFamily: "monospace", fontSize: 18, color: r.color, textAlign: "center" }}
+                  >
+                    {r.size}
+                  </div>
                   <T color={C.dim} center size={12} style={{ marginTop: 4 }}>
                     {r.ratio}
                   </T>
@@ -5174,7 +5200,11 @@ export const Observability = (ctx) => {
                   <T color={r.color} bold size={16} center>
                     {r.name}
                   </T>
-                  <div style={{ marginTop: 4, fontFamily: "monospace", fontSize: 18, color: r.color }}>{r.target}</div>
+                  <div
+                    style={{ marginTop: 4, fontFamily: "monospace", fontSize: 18, color: r.color, textAlign: "center" }}
+                  >
+                    {r.target}
+                  </div>
                   <T color={C.dim} size={12} style={{ marginTop: 4 }} center>
                     {r.note}
                   </T>
@@ -5904,11 +5934,11 @@ export const CapacityPlanning = (ctx) => {
                 color: C.bright,
               }}
             >
-              <div style={{ color: C.red, fontWeight: "bold", padding: "6px 8px" }}>System</div>
+              <div style={{ color: C.red, fontWeight: "bold", padding: "6px 8px", textAlign: "center" }}>System</div>
               <div style={{ color: C.red, fontWeight: "bold", padding: "6px 8px", textAlign: "center" }}>
                 Est. monthly cost
               </div>
-              <div style={{ color: C.red, fontWeight: "bold", padding: "6px 8px" }}>Trade</div>
+              <div style={{ color: C.red, fontWeight: "bold", padding: "6px 8px", textAlign: "center" }}>Trade</div>
               {[
                 {
                   name: "Pinecone (pod-based)",

@@ -388,9 +388,13 @@ export const FAISS = (ctx) => {
                 color: C.bright,
               }}
             >
-              <div style={{ color: C.red, fontWeight: "bold", padding: "6px 8px" }}>System</div>
-              <div style={{ color: C.red, fontWeight: "bold", padding: "6px 8px" }}>Relationship</div>
-              <div style={{ color: C.red, fontWeight: "bold", padding: "6px 8px" }}>What the wrapper adds</div>
+              <div style={{ color: C.red, fontWeight: "bold", padding: "6px 8px", textAlign: "center" }}>System</div>
+              <div style={{ color: C.red, fontWeight: "bold", padding: "6px 8px", textAlign: "center" }}>
+                Relationship
+              </div>
+              <div style={{ color: C.red, fontWeight: "bold", padding: "6px 8px", textAlign: "center" }}>
+                What the wrapper adds
+              </div>
               {[
                 { name: "Milvus", rel: "FAISS inside", add: "Distributed cluster, API, metadata, lifecycle" },
                 { name: "OpenSearch", rel: "FAISS engine", add: "Lucene index, REST, auth, hybrid with BM25" },
@@ -2147,10 +2151,10 @@ export const QdrantVsPinecone = (ctx) => {
                 color: C.bright,
               }}
             >
-              <div style={{ color: C.cyan, fontWeight: "bold", padding: "6px 8px" }}>Axis</div>
+              <div style={{ color: C.cyan, fontWeight: "bold", padding: "6px 8px", textAlign: "center" }}>Axis</div>
               <div style={{ color: C.cyan, fontWeight: "bold", padding: "6px 8px", textAlign: "center" }}>Qdrant</div>
               <div style={{ color: C.cyan, fontWeight: "bold", padding: "6px 8px", textAlign: "center" }}>Pinecone</div>
-              <div style={{ color: C.cyan, fontWeight: "bold", padding: "6px 8px" }}>Comment</div>
+              <div style={{ color: C.cyan, fontWeight: "bold", padding: "6px 8px", textAlign: "center" }}>Comment</div>
               {[
                 { axis: "Ops preference", q: "self-host", p: "managed", n: "Who runs it" },
                 { axis: "Filter complexity", q: "Inline HNSW", p: "post-filter", n: "Qdrant deeper" },

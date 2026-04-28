@@ -651,16 +651,16 @@ export const BruteForceKNN = (ctx) => {
                 borderBottom: `1px solid ${C.green}12`,
               }}
             >
-              <T color={C.green} bold size={13}>
+              <T color={C.green} bold size={13} center>
                 Rank
               </T>
-              <T color={C.green} bold size={13}>
+              <T color={C.green} bold size={13} center>
                 Document
               </T>
-              <T color={C.green} bold size={13} style={{ textAlign: "right" }}>
+              <T color={C.green} bold size={13} center>
                 cosine(q, v)
               </T>
-              <T color={C.green} bold size={13} style={{ textAlign: "center" }}>
+              <T color={C.green} bold size={13} center>
                 Top-3?
               </T>
             </div>
@@ -1671,16 +1671,16 @@ export const ThreeWayTradeoff = (ctx) => {
                 borderBottom: `1px solid ${C.yellow}12`,
               }}
             >
-              <T color={C.yellow} bold size={13}>
+              <T color={C.yellow} bold size={13} center>
                 N
               </T>
-              <T color={C.yellow} bold size={13}>
+              <T color={C.yellow} bold size={13} center>
                 Vectors (3 KB each)
               </T>
-              <T color={C.yellow} bold size={13}>
+              <T color={C.yellow} bold size={13} center>
                 + HNSW graph (100 B/vec)
               </T>
-              <T color={C.yellow} bold size={13}>
+              <T color={C.yellow} bold size={13} center>
                 Total
               </T>
             </div>

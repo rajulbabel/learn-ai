@@ -1030,7 +1030,7 @@ describe("BinaryQuantization (11.15) content", () => {
     const { container } = render(fn(makeCtx({ sub: 5 })));
     const labels = Array.from(container.querySelectorAll("div")).filter((n) => {
       const text = (n.textContent || "").trim();
-      return /^stage [12]: [^]*$/.test(text) && n.children.length === 0;
+      return /^stage [12]: [^]*$/i.test(text) && n.children.length === 0;
     });
     expect(labels.length, "expected stage 1 and stage 2 leaf labels").toBeGreaterThanOrEqual(2);
     for (const el of labels) {

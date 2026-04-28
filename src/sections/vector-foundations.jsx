@@ -149,7 +149,7 @@ export const RetrievalProblem = (ctx) => {
               </desc>
               <rect x="20" y="95" width="110" height="50" rx="8" fill="rgba(255,215,64,0.08)" stroke="#ffd740" />
               <text x="75" y="118" textAnchor="middle" fill="#ffd740" fontSize="13" fontFamily="monospace">
-                query
+                Query
               </text>
               <text x="75" y="135" textAnchor="middle" fill="#ffd740" fontSize="11" fontFamily="monospace">
                 &quot;about cats&quot;
@@ -193,7 +193,7 @@ export const RetrievalProblem = (ctx) => {
                 </g>
               ))}
               <text x="295" y="210" textAnchor="middle" fill="#80deea" fontSize="13">
-                top-3 closest (highlighted): docs 1, 3, 7 - all cat-related
+                Top-3 closest (highlighted): docs 1, 3, 7 - all cat-related
               </text>
             </svg>
             <T color={C.dim} size={13} center style={{ marginTop: 6, fontStyle: "italic" }}>
@@ -328,9 +328,9 @@ export const RetrievalProblem = (ctx) => {
               lineHeight: 1.8,
             }}
           >
-            naive cost = N &middot; d multiplications per query
+            Naive cost = N &middot; d multiplications per query
             <br />
-            at N = <span style={{ color: C.red }}>1 billion</span>, d = 1536: ~1.5 trillion multiplies per query
+            At N = <span style={{ color: C.red }}>1 billion</span>, d = 1536: ~1.5 trillion multiplies per query
           </div>
           <T color="#ffcc80" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
             Checking every vector works for 10 docs. At 1B, it is an 8-minute wait per search. Users expect answers in
@@ -435,13 +435,13 @@ export const RetrievalProblem = (ctx) => {
                   lineHeight: 1.7,
                 }}
               >
-                forward pass
+                Forward pass
                 <br />
                 loss = cross_entropy(...)
                 <br />
-                backward pass
+                Backward pass
                 <br />
-                weights -= lr &middot; grad
+                Weights -= lr &middot; grad
               </div>
               <T color={C.dim} size={13} center style={{ marginTop: 8 }}>
                 Output: a function that maps text to vectors.
@@ -473,7 +473,7 @@ export const RetrievalProblem = (ctx) => {
                   lineHeight: 1.7,
                 }}
               >
-                encode query -&gt; q
+                Encode query -&gt; q
                 <br />
                 index.search(q, k=10)
                 <br />
@@ -661,7 +661,7 @@ export const BruteForceKNN = (ctx) => {
                 cosine(q, v)
               </T>
               <T color={C.green} bold size={13} style={{ textAlign: "center" }}>
-                top-3?
+                Top-3?
               </T>
             </div>
             {ranked.map((d) => {
@@ -744,7 +744,7 @@ export const BruteForceKNN = (ctx) => {
               lineHeight: 1.9,
             }}
           >
-            ops per query = N &middot; d
+            Ops per query = N &middot; d
             <br />= <span style={{ color: C.yellow }}>1,000,000</span> &middot;{" "}
             <span style={{ color: C.yellow }}>768</span>
             <br />= <span style={{ color: C.yellow }}>~770 million</span> multiply-add operations
@@ -861,7 +861,7 @@ export const BruteForceKNN = (ctx) => {
               chef = chip
             </text>
             <text x="80" y="143" textAnchor="middle" fontSize="12" fill={C.dim}>
-              chops in 1 second
+              Chops in 1 second
             </text>
 
             <line
@@ -875,10 +875,10 @@ export const BruteForceKNN = (ctx) => {
               markerEnd="url(#flops-arrow-11-2)"
             />
             <text x="270" y="56" textAnchor="middle" fontSize="14" fill={C.red}>
-              slow delivery
+              Slow delivery
             </text>
             <text x="270" y="92" textAnchor="middle" fontSize="12" fill={C.dim}>
-              takes 10 minutes
+              Takes 10 minutes
             </text>
 
             <polygon points="390,46 430,22 470,46" fill={C.red} opacity="0.85" />
@@ -888,7 +888,7 @@ export const BruteForceKNN = (ctx) => {
               warehouse = memory
             </text>
             <text x="430" y="143" textAnchor="middle" fontSize="12" fill={C.dim}>
-              holds all the vectors
+              Holds all the vectors
             </text>
           </svg>
 
@@ -928,7 +928,7 @@ export const BruteForceKNN = (ctx) => {
                 ~50 GB/sec
               </T>
               <T color={C.bright} size={13} center style={{ marginTop: 4 }}>
-                memory bandwidth
+                Memory bandwidth
                 <br />
                 (how fast data arrives)
               </T>
@@ -989,9 +989,9 @@ export const BruteForceKNN = (ctx) => {
                 3.072 TB
               </T>
               <T color={C.bright} size={14} center style={{ marginTop: 6 }}>
-                read from memory
+                Read from memory
                 <br />
-                per single user query
+                Per single user query
               </T>
             </div>
             <div
@@ -1011,7 +1011,7 @@ export const BruteForceKNN = (ctx) => {
               <T color={C.bright} size={14} center style={{ marginTop: 6 }}>
                 a single DDR5 channel
                 <br />
-                at peak bandwidth
+                At peak bandwidth
               </T>
             </div>
           </div>
@@ -1075,11 +1075,11 @@ export const BruteForceKNN = (ctx) => {
                 lineHeight: 1.8,
               }}
             >
-              recall@k = <span style={{ color: C.green }}>|approx_topk &cap; true_topk|</span>
+              Recall@k = <span style={{ color: C.green }}>|approx_topk &cap; true_topk|</span>
               {" / "}
               <span style={{ color: C.yellow }}>k</span>
             </div>
-            <T color="#b8a9ff" size={14} style={{ marginTop: 8 }}>
+            <T color="#b8a9ff" size={14} style={{ marginTop: 8 }} center>
               Of the k neighbors the approximate method returned, what fraction were in the true top-k? 1.0 means
               perfect (same as brute force). 0.0 means completely wrong.
             </T>
@@ -1106,7 +1106,7 @@ export const BruteForceKNN = (ctx) => {
               </T>
               <div style={{ marginTop: 10 }}>
                 <T color="#ef9a9a" size={14}>
-                  recall@k:
+                  Recall@k:
                 </T>
                 <T color={C.red} bold size={18} style={{ fontFamily: "monospace" }}>
                   {" "}
@@ -1115,7 +1115,7 @@ export const BruteForceKNN = (ctx) => {
               </div>
               <div style={{ marginTop: 4 }}>
                 <T color="#ef9a9a" size={14}>
-                  latency at 1B:
+                  Latency at 1B:
                 </T>
                 <T color={C.red} bold size={18} style={{ fontFamily: "monospace" }}>
                   {" "}
@@ -1139,11 +1139,11 @@ export const BruteForceKNN = (ctx) => {
                 </defs>
                 <line x1="5" y1="25" x2="70" y2="25" stroke={C.purple} strokeWidth="3" markerEnd="url(#arrow11-2)" />
               </svg>
-              <T color={C.purple} size={12} bold style={{ marginTop: 2 }}>
-                production
+              <T color={C.purple} size={12} bold style={{ marginTop: 2 }} center>
+                Production
               </T>
-              <T color={C.purple} size={12} bold>
-                uses this
+              <T color={C.purple} size={12} bold center>
+                Uses this
               </T>
             </div>
             <div
@@ -1159,7 +1159,7 @@ export const BruteForceKNN = (ctx) => {
               </T>
               <div style={{ marginTop: 10 }}>
                 <T color="#b8a9ff" size={14}>
-                  recall@k:
+                  Recall@k:
                 </T>
                 <T color={C.purple} bold size={18} style={{ fontFamily: "monospace" }}>
                   {" "}
@@ -1168,7 +1168,7 @@ export const BruteForceKNN = (ctx) => {
               </div>
               <div style={{ marginTop: 4 }}>
                 <T color="#b8a9ff" size={14}>
-                  latency at 1B:
+                  Latency at 1B:
                 </T>
                 <T color={C.purple} bold size={18} style={{ fontFamily: "monospace" }}>
                   {" "}
@@ -1356,7 +1356,7 @@ export const ThreeWayTradeoff = (ctx) => {
               lineHeight: 1.9,
             }}
           >
-            recall@k = <span style={{ color: C.green }}>|ANN_results &cap; true_top_k|</span>
+            Recall@k = <span style={{ color: C.green }}>|ANN_results &cap; true_top_k|</span>
             {" / "}
             <span style={{ color: C.yellow }}>k</span>
           </div>
@@ -1414,7 +1414,7 @@ export const ThreeWayTradeoff = (ctx) => {
                         #{i + 1}
                       </T>
                       <T color={C.bright} size={13} style={{ fontFamily: "monospace" }}>
-                        doc {id}
+                        Doc {id}
                       </T>
                     </div>
                   ))}
@@ -1458,7 +1458,7 @@ export const ThreeWayTradeoff = (ctx) => {
                         #{i + 1}
                       </T>
                       <T color={C.bright} size={13} style={{ fontFamily: "monospace" }}>
-                        doc {row.id}
+                        Doc {row.id}
                       </T>
                       <T
                         color={row.match ? C.green : C.red}
@@ -1486,7 +1486,7 @@ export const ThreeWayTradeoff = (ctx) => {
                 lineHeight: 1.9,
               }}
             >
-              recall@10 = <span style={{ color: C.green }}>9</span> / <span style={{ color: C.yellow }}>10</span> ={" "}
+              Recall@10 = <span style={{ color: C.green }}>9</span> / <span style={{ color: C.yellow }}>10</span> ={" "}
               <span style={{ color: C.green, fontSize: 19 }}>0.9</span> <span style={{ color: C.dim }}>(90%)</span>
             </div>
           </div>
@@ -1605,13 +1605,13 @@ export const ThreeWayTradeoff = (ctx) => {
                     textAlign: "center",
                   }}
                 >
-                  <T color={C.orange} bold size={16} style={{ fontFamily: "monospace" }}>
+                  <T color={C.orange} bold size={16} style={{ fontFamily: "monospace" }} center>
                     {p}
                   </T>
-                  <T color={C.bright} bold size={18} style={{ marginTop: 4, fontFamily: "monospace" }}>
+                  <T color={C.bright} bold size={18} style={{ marginTop: 4, fontFamily: "monospace" }} center>
                     {val}
                   </T>
-                  <T color={C.dim} size={13} style={{ marginTop: 2, fontStyle: "italic" }}>
+                  <T color={C.dim} size={13} style={{ marginTop: 2, fontStyle: "italic" }} center>
                     {note}
                   </T>
                 </div>
@@ -1681,7 +1681,7 @@ export const ThreeWayTradeoff = (ctx) => {
                 + HNSW graph (100 B/vec)
               </T>
               <T color={C.yellow} bold size={13}>
-                total
+                Total
               </T>
             </div>
             {[
@@ -1819,13 +1819,13 @@ export const ThreeWayTradeoff = (ctx) => {
                       textAlign: "center",
                     }}
                   >
-                    <T color={tr.srcLighter} size={13}>
-                      lever
+                    <T color={tr.srcLighter} size={13} center>
+                      Lever
                     </T>
-                    <T color={tr.srcColor} bold size={15} style={{ marginTop: 2, fontFamily: "monospace" }}>
+                    <T color={tr.srcColor} bold size={15} style={{ marginTop: 2, fontFamily: "monospace" }} center>
                       {tr.src}
                     </T>
-                    <T color={tr.srcColor} bold size={14} style={{ marginTop: 4 }}>
+                    <T color={tr.srcColor} bold size={14} style={{ marginTop: 4 }} center>
                       {tr.srcArrow === "up" ? "↑" : "↓"} {tr.srcLabel}
                     </T>
                   </div>
@@ -1840,15 +1840,15 @@ export const ThreeWayTradeoff = (ctx) => {
                       textAlign: "center",
                     }}
                   >
-                    <T color={tr.dstColor} size={13}>
-                      cost
+                    <T color={tr.dstColor} size={13} center>
+                      Cost
                     </T>
-                    <T color={tr.dstColor} bold size={15} style={{ marginTop: 2, fontFamily: "monospace" }}>
+                    <T color={tr.dstColor} bold size={15} style={{ marginTop: 2, fontFamily: "monospace" }} center>
                       {tr.dstArrow === "up" ? "↑" : "↓"} {tr.dstLabel}
                     </T>
                   </div>
                 </div>
-                <T color={C.bright} size={14} style={{ marginTop: 10 }}>
+                <T color={C.bright} size={14} style={{ marginTop: 10 }} center>
                   {tr.body}
                 </T>
               </div>
@@ -1991,10 +1991,10 @@ export const DistanceMetrics = (ctx) => {
               <T color={C.green} bold center size={17}>
                 Cosine
               </T>
-              <T color={C.bright} size={15} style={{ marginTop: 8, fontFamily: "monospace", lineHeight: 1.4 }}>
+              <T color={C.bright} size={15} style={{ marginTop: 8, fontFamily: "monospace", lineHeight: 1.4 }} center>
                 (q &middot; d) / (||q|| ||d||)
               </T>
-              <T color={C.bright} size={14} style={{ marginTop: 8 }}>
+              <T color={C.bright} size={14} style={{ marginTop: 8 }} center>
                 Angle between the vectors. Ignores magnitude.
               </T>
             </div>
@@ -2010,10 +2010,10 @@ export const DistanceMetrics = (ctx) => {
               <T color={C.blue} bold center size={17}>
                 L2 (Euclidean)
               </T>
-              <T color={C.bright} size={15} style={{ marginTop: 8, fontFamily: "monospace", lineHeight: 1.4 }}>
+              <T color={C.bright} size={15} style={{ marginTop: 8, fontFamily: "monospace", lineHeight: 1.4 }} center>
                 √(Σ (q<sub>i</sub> - d<sub>i</sub>)²)
               </T>
-              <T color={C.bright} size={14} style={{ marginTop: 8 }}>
+              <T color={C.bright} size={14} style={{ marginTop: 8 }} center>
                 Straight-line distance. Smaller is closer.
               </T>
             </div>
@@ -2029,10 +2029,10 @@ export const DistanceMetrics = (ctx) => {
               <T color={C.orange} bold center size={17}>
                 Inner product
               </T>
-              <T color={C.bright} size={15} style={{ marginTop: 8, fontFamily: "monospace", lineHeight: 1.4 }}>
+              <T color={C.bright} size={15} style={{ marginTop: 8, fontFamily: "monospace", lineHeight: 1.4 }} center>
                 q &middot; d = Σ q<sub>i</sub> &middot; d<sub>i</sub>
               </T>
-              <T color={C.bright} size={14} style={{ marginTop: 8 }}>
+              <T color={C.bright} size={14} style={{ marginTop: 8 }} center>
                 Raw dot product. No normalization, no sqrt.
               </T>
             </div>
@@ -2066,7 +2066,7 @@ export const DistanceMetrics = (ctx) => {
             }}
           >
             cos(q, d) = <span style={{ color: C.green }}>(q &middot; d) / (||q|| &middot; ||d||)</span>
-            <div style={{ marginTop: 6, fontSize: 15, color: C.dim }}>range: [-1, 1]</div>
+            <div style={{ marginTop: 6, fontSize: 15, color: C.dim }}>Range: [-1, 1]</div>
           </div>
           <div
             style={{
@@ -2133,10 +2133,10 @@ export const DistanceMetrics = (ctx) => {
                 </text>
                 <circle cx="30" cy="190" r="3" fill={C.bright} />
                 <text x="10" y="208" fill={C.dim} fontSize="11">
-                  origin
+                  Origin
                 </text>
               </svg>
-              <T color="#80e8a5" size={13} style={{ marginTop: 6 }}>
+              <T color="#80e8a5" size={13} style={{ marginTop: 6 }} center>
                 Small angle θ means cos(θ) is close to 1.0.
               </T>
             </div>
@@ -2220,7 +2220,7 @@ export const DistanceMetrics = (ctx) => {
               √( Σ<sub>i</sub> (q<sub>i</sub> - d<sub>i</sub>)² )
             </span>
             <div style={{ marginTop: 6, fontSize: 15, color: C.dim }}>
-              smaller is closer (it is a distance, not a similarity)
+              Smaller is closer (it is a distance, not a similarity)
             </div>
           </div>
           <div
@@ -2274,7 +2274,7 @@ export const DistanceMetrics = (ctx) => {
                   L2
                 </text>
               </svg>
-              <T color="#7cc4ff" size={13} style={{ marginTop: 6 }}>
+              <T color="#7cc4ff" size={13} style={{ marginTop: 6 }} center>
                 Two legs squared, sum, take sqrt. Same trick scales to d=768.
               </T>
             </div>
@@ -2357,7 +2357,7 @@ export const DistanceMetrics = (ctx) => {
             <span style={{ color: C.orange }}>
               Σ<sub>i</sub> q<sub>i</sub> &middot; d<sub>i</sub>
             </span>
-            <div style={{ marginTop: 6, fontSize: 15, color: C.dim }}>range: unbounded (depends on magnitudes)</div>
+            <div style={{ marginTop: 6, fontSize: 15, color: C.dim }}>Range: unbounded (depends on magnitudes)</div>
           </div>
           <div
             style={{
@@ -2455,13 +2455,13 @@ export const DistanceMetrics = (ctx) => {
               <T color={C.green} bold center size={15}>
                 Cosine
               </T>
-              <T color={C.bright} size={14} style={{ marginTop: 8, fontFamily: "monospace", lineHeight: 1.6 }}>
+              <T color={C.bright} size={14} style={{ marginTop: 8, fontFamily: "monospace", lineHeight: 1.6 }} center>
                 (q &middot; d) / (||q|| ||d||)
               </T>
-              <T color={C.dim} size={13} style={{ marginTop: 4 }}>
-                with ||q|| = ||d|| = 1
+              <T color={C.dim} size={13} style={{ marginTop: 4 }} center>
+                With ||q|| = ||d|| = 1
               </T>
-              <T color={C.green} bold size={15} style={{ marginTop: 8, fontFamily: "monospace" }}>
+              <T color={C.green} bold size={15} style={{ marginTop: 8, fontFamily: "monospace" }} center>
                 = q &middot; d
               </T>
             </div>
@@ -2477,13 +2477,13 @@ export const DistanceMetrics = (ctx) => {
               <T color={C.orange} bold center size={15}>
                 Inner product
               </T>
-              <T color={C.bright} size={14} style={{ marginTop: 8, fontFamily: "monospace", lineHeight: 1.6 }}>
+              <T color={C.bright} size={14} style={{ marginTop: 8, fontFamily: "monospace", lineHeight: 1.6 }} center>
                 q &middot; d
               </T>
-              <T color={C.dim} size={13} style={{ marginTop: 4 }}>
-                already bounded in [-1, 1]
+              <T color={C.dim} size={13} style={{ marginTop: 4 }} center>
+                Already bounded in [-1, 1]
               </T>
-              <T color={C.orange} bold size={15} style={{ marginTop: 8, fontFamily: "monospace" }}>
+              <T color={C.orange} bold size={15} style={{ marginTop: 8, fontFamily: "monospace" }} center>
                 = q &middot; d
               </T>
             </div>
@@ -2499,13 +2499,13 @@ export const DistanceMetrics = (ctx) => {
               <T color={C.blue} bold center size={15}>
                 L2 squared
               </T>
-              <T color={C.bright} size={14} style={{ marginTop: 8, fontFamily: "monospace", lineHeight: 1.6 }}>
+              <T color={C.bright} size={14} style={{ marginTop: 8, fontFamily: "monospace", lineHeight: 1.6 }} center>
                 ||q||² + ||d||² - 2(q &middot; d)
               </T>
-              <T color={C.dim} size={13} style={{ marginTop: 4 }}>
+              <T color={C.dim} size={13} style={{ marginTop: 4 }} center>
                 = 1 + 1 - 2(q &middot; d)
               </T>
-              <T color={C.blue} bold size={15} style={{ marginTop: 8, fontFamily: "monospace" }}>
+              <T color={C.blue} bold size={15} style={{ marginTop: 8, fontFamily: "monospace" }} center>
                 = 2 - 2(q &middot; d)
               </T>
             </div>
@@ -2555,7 +2555,7 @@ export const DistanceMetrics = (ctx) => {
             >
               <div>
                 <T color={C.dim} size={13}>
-                  before normalization
+                  Before normalization
                 </T>
                 <div>q = [0.85, 0.14, 0.44, 0.21]</div>
                 <div>d = [0.81, 0.12, 0.45, 0.22]</div>
@@ -2566,7 +2566,7 @@ export const DistanceMetrics = (ctx) => {
               </div>
               <div>
                 <T color={C.dim} size={13}>
-                  after normalization
+                  After normalization
                 </T>
                 <div>q&apos; = [0.8587, 0.1414, 0.4445, 0.2122]</div>
                 <div>d&apos; = [0.8438, 0.1250, 0.4688, 0.2292]</div>
@@ -2889,7 +2889,7 @@ const IVFScatter = ({
             fontFamily="monospace"
             fontWeight="bold"
           >
-            query
+            Query
           </text>
         </g>
       )}
@@ -2942,11 +2942,11 @@ export const IVF = (ctx) => {
               lineHeight: 1.9,
             }}
           >
-            brute force: read every vector, every query
+            Brute force: read every vector, every query
             <br />
             cost = N &middot; d per query
           </div>
-          <T color="#ef9a9a" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
+          <T color="#ef9a9a" size={16} style={{ marginTop: 10, fontStyle: "italic" }} center>
             The IVF trick is simple in hindsight: group the vectors ahead of time so at query time we only look inside
             the group the query landed in.
           </T>
@@ -2957,7 +2957,7 @@ export const IVF = (ctx) => {
           <T color={C.cyan} bold center size={22}>
             Cluster the corpus with k-means
           </T>
-          <T color="#80deea" style={{ marginTop: 8 }}>
+          <T color="#80deea" style={{ marginTop: 8 }} center>
             Before we accept any queries, run k-means on the stored vectors. Pick the number of clusters nlist = 3 and
             let the algorithm find three centroids that minimize the average distance from each doc to its closest
             centroid. Each doc gets assigned to exactly one cluster.
@@ -2991,7 +2991,7 @@ export const IVF = (ctx) => {
                   Cluster {cl.id} - {cl.label}
                 </T>
                 <T color={C.bright} size={13} center style={{ marginTop: 4, fontFamily: "monospace" }}>
-                  docs {cl.docs.join(", ")}
+                  Docs {cl.docs.join(", ")}
                 </T>
                 <T color={cl.color} size={12} center style={{ marginTop: 4, fontFamily: "monospace" }}>
                   centroid ({cl.centroid.x}, {cl.centroid.y})
@@ -3063,7 +3063,7 @@ export const IVF = (ctx) => {
                   lineHeight: 1.6,
                 }}
               >
-                <div style={{ color: "#80e8a5", fontWeight: 700, marginBottom: 4 }}>cluster</div>
+                <div style={{ color: "#80e8a5", fontWeight: 700, marginBottom: 4 }}>Cluster</div>
                 The k-means view. &quot;These docs landed near the same centroid.&quot;
               </div>
               <div
@@ -3089,7 +3089,7 @@ export const IVF = (ctx) => {
                   lineHeight: 1.6,
                 }}
               >
-                <div style={{ color: "#80e8a5", fontWeight: 700, marginBottom: 4 }}>partition</div>
+                <div style={{ color: "#80e8a5", fontWeight: 700, marginBottom: 4 }}>Partition</div>
                 The set-theory view. &quot;The dataset split into nlist disjoint groups, every doc in exactly one.&quot;
               </div>
               <div
@@ -3102,7 +3102,7 @@ export const IVF = (ctx) => {
                   lineHeight: 1.6,
                 }}
               >
-                <div style={{ color: "#80e8a5", fontWeight: 700, marginBottom: 4 }}>posting list (inverted list)</div>
+                <div style={{ color: "#80e8a5", fontWeight: 700, marginBottom: 4 }}>Posting list (inverted list)</div>
                 The storage view. &quot;The on-disk array of doc IDs assigned to centroid A.&quot; This is why it is
                 called an Inverted File index.
               </div>
@@ -3142,7 +3142,7 @@ export const IVF = (ctx) => {
             </div>
             <div style={{ height: 10 }} />
             <div style={{ fontFamily: "monospace", fontSize: 15, color: C.bright }}>
-              every doc: cluster assignment fixed after training
+              Every doc: cluster assignment fixed after training
             </div>
             <div style={{ fontSize: 14, color: "#80e8a5", marginTop: 4 }}>
               &quot;Training&quot; here is the k-means step that picked the centroids. Once it ends, every doc gets its
@@ -3255,13 +3255,13 @@ export const IVF = (ctx) => {
                 textAlign: "center",
               }}
             >
-              <T color={C.orange} bold size={15}>
+              <T color={C.orange} bold size={15} center>
                 Work with nprobe = 1
               </T>
-              <T color="#ffcc80" bold size={22} style={{ marginTop: 6, fontFamily: "monospace" }}>
+              <T color="#ffcc80" bold size={22} style={{ marginTop: 6, fontFamily: "monospace" }} center>
                 3 + 5 = 8 dot products
               </T>
-              <T color={C.bright} size={13} style={{ marginTop: 4 }}>
+              <T color={C.bright} size={13} style={{ marginTop: 4 }} center>
                 3 to pick the nearest centroid, 5 to scan cluster A
               </T>
             </div>
@@ -3274,14 +3274,14 @@ export const IVF = (ctx) => {
                 textAlign: "center",
               }}
             >
-              <T color={C.red} bold size={15}>
+              <T color={C.red} bold size={15} center>
                 Brute force
               </T>
-              <T color="#ef9a9a" bold size={22} style={{ marginTop: 6, fontFamily: "monospace" }}>
+              <T color="#ef9a9a" bold size={22} style={{ marginTop: 6, fontFamily: "monospace" }} center>
                 10 dot products
               </T>
-              <T color={C.bright} size={13} style={{ marginTop: 4 }}>
-                scan every doc every query
+              <T color={C.bright} size={13} style={{ marginTop: 4 }} center>
+                Scan every doc every query
               </T>
             </div>
           </div>
@@ -3360,13 +3360,13 @@ export const IVF = (ctx) => {
                 nprobe
               </T>
               <T color={C.yellow} bold size={13} style={{ textAlign: "center" }}>
-                recall@10
+                Recall@10
               </T>
               <T color={C.yellow} bold size={13} style={{ textAlign: "center" }}>
-                docs scanned
+                Docs scanned
               </T>
               <T color={C.yellow} bold size={13} style={{ textAlign: "center" }}>
-                latency vs brute
+                Latency vs brute
               </T>
               {[
                 { n: 1, recall: "0.80", scanned: "1,000", speed: "1000x" },
@@ -3374,7 +3374,7 @@ export const IVF = (ctx) => {
                 { n: 8, recall: "0.97", scanned: "8,000", speed: "125x" },
                 { n: 32, recall: "0.995", scanned: "32,000", speed: "31x" },
               ].flatMap((row) => [
-                <T key={`n-${row.n}`} color={C.bright} size={13} style={{ fontFamily: "monospace" }}>
+                <T key={`n-${row.n}`} color={C.bright} size={13} style={{ fontFamily: "monospace" }} center>
                   {row.n}
                 </T>,
                 <T
@@ -3540,9 +3540,9 @@ export const ANNFamilyTree = (ctx) => {
             <span style={{ color: C.green }}>goal</span>: cost &prop; log(N) &middot; d{"  "}
             <span style={{ color: C.dim }}>(sub-linear, often O(log N))</span>
             <br />
-            at N = 1,000,000,000: linear is a billion ops, log N is about 30 ops
+            At N = 1,000,000,000: linear is a billion ops, log N is about 30 ops
           </div>
-          <T color="#ef9a9a" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
+          <T color="#ef9a9a" size={16} style={{ marginTop: 10, fontStyle: "italic" }} center>
             Four families of algorithms have tried to deliver this. Three of them had their moment and lost. One family
             won. The rest of this chapter is the family tree.
           </T>
@@ -3553,7 +3553,7 @@ export const ANNFamilyTree = (ctx) => {
           <T color={C.orange} bold center size={22}>
             Trees: beautiful at d = 2, broken at d = 768
           </T>
-          <T color="#ffcc80" style={{ marginTop: 8 }}>
+          <T color="#ffcc80" style={{ marginTop: 8 }} center>
             The KD-tree partitions space by alternating axis splits - split on x at the median, then y at the median of
             each half, then x again, recursively. At d = 2 with 10 docs, it gives a clean log N search. At high
             dimensions it collapses: the curse of dimensionality erases the partitioning&apos;s advantage.
@@ -3624,7 +3624,7 @@ export const ANNFamilyTree = (ctx) => {
               >
                 <span style={{ color: C.red }}>high dim</span>: almost every pair
                 <br />
-                sits at a similar distance
+                Sits at a similar distance
                 <br />
                 &rarr; partitions lose meaning
                 <br />
@@ -3854,7 +3854,7 @@ export const ANNFamilyTree = (ctx) => {
               })}
               <circle cx={40} cy={30} r={7} fill={C.yellow} />
               <text x={40} y={18} textAnchor="middle" fill={C.yellow} fontSize="11" fontFamily="monospace">
-                query
+                Query
               </text>
             </svg>
           </div>
@@ -3932,7 +3932,7 @@ export const ANNFamilyTree = (ctx) => {
                 QPS (log)
               </text>
               <text x="250" y="172" textAnchor="middle" fill={C.dim} fontSize="11">
-                recall@10
+                Recall@10
               </text>
               {[
                 { name: "HNSW", x: 440, y: 45, color: C.green },
@@ -4111,13 +4111,13 @@ const HNSWLayeredGraph = ({
             strokeOpacity="0.5"
           />
           <text x="20" y={layer2Y - 18} fill={C.red} fontSize="11" fontWeight="bold">
-            layer 2 (hubs of hubs)
+            Layer 2 (hubs of hubs)
           </text>
           <text x="20" y={hubY - 28} fill={C.yellow} fontSize="11" fontWeight="bold">
-            layer 1 (hubs)
+            Layer 1 (hubs)
           </text>
           <text x="20" y={vbH - 10} fill={C.cyan} fontSize="11" fontWeight="bold">
-            layer 0 (everything)
+            Layer 0 (everything)
           </text>
         </>
       )}
@@ -4134,10 +4134,10 @@ const HNSWLayeredGraph = ({
             strokeOpacity="0.5"
           />
           <text x="20" y={hubY - 38} fill={C.yellow} fontSize="11" fontWeight="bold">
-            layer 1 (hubs)
+            Layer 1 (hubs)
           </text>
           <text x="20" y={vbH - 10} fill={C.cyan} fontSize="11" fontWeight="bold">
-            layer 0 (everything)
+            Layer 0 (everything)
           </text>
         </>
       )}
@@ -4276,11 +4276,11 @@ export const HNSWIntuition = (ctx) => {
               lineHeight: 1.9,
             }}
           >
-            for each doc d:
+            For each doc d:
             <br />
             &nbsp;&nbsp;neighbors(d) = M nearest docs by distance
           </div>
-          <T color="#80deea" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
+          <T color="#80deea" size={16} style={{ marginTop: 10, fontStyle: "italic" }} center>
             Every doc is reachable from every other doc by hopping along edges. The question is how fast we can reach
             the right one.
           </T>
@@ -4291,7 +4291,7 @@ export const HNSWIntuition = (ctx) => {
           <T color={C.red} bold center size={22}>
             Greedy from a random start: too many hops
           </T>
-          <T color="#ef9a9a" style={{ marginTop: 8 }}>
+          <T color="#ef9a9a" style={{ marginTop: 8 }} center>
             Greedy search starts somewhere and moves to whichever neighbor is closer to the query. Simple and correct -
             but if the starting node is far from the query, the walk across the flat graph takes many short hops. On N =
             1,000,000 with a random start, greedy-on-flat averages about 1,000 hops. Slow.
@@ -4324,13 +4324,13 @@ export const HNSWIntuition = (ctx) => {
               lineHeight: 1.9,
             }}
           >
-            start: doc 10 (birds/fish)
+            Start: doc 10 (birds/fish)
             <br />
-            target: doc 1 (cats)
+            Target: doc 1 (cats)
             <br />
-            hops on this flat graph: <span style={{ color: C.red }}>~8 hops</span> for 10 docs
+            Hops on this flat graph: <span style={{ color: C.red }}>~8 hops</span> for 10 docs
             <br />
-            extrapolated to N = 1,000,000: <span style={{ color: C.red }}>many hundreds of hops</span>
+            Extrapolated to N = 1,000,000: <span style={{ color: C.red }}>many hundreds of hops</span>
           </div>
           <T color="#ef9a9a" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
             Many hops because the flat graph has only local edges. There is no way to jump across the space in one step
@@ -4443,17 +4443,17 @@ export const HNSWIntuition = (ctx) => {
           >
             layers = &lceil;log<sub>M</sub>(N)&rceil;
             <br />
-            at M = 16, N = 1,000,000:{"  "}
+            At M = 16, N = 1,000,000:{"  "}
             <span style={{ color: C.green }}>log&#8321;&#8326;(1,000,000) &asymp; 5 layers</span>
             <br />
-            hops per layer &asymp; constant (~6 with ef_search = 50)
+            Hops per layer &asymp; constant (~6 with ef_search = 50)
             <br />
             <span style={{ color: C.dim, fontSize: 13 }}>
               ef_search = how many candidates the search keeps in its shortlist at each step (bigger = better recall,
               slower)
             </span>
             <br />
-            total hops &asymp; <span style={{ color: C.green }}>30</span> to find the top-k{"  "}
+            Total hops &asymp; <span style={{ color: C.green }}>30</span> to find the top-k{"  "}
             <span style={{ color: C.dim }}>vs. ~1000 on flat</span>
           </div>
           <T color="#80e8a5" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
@@ -4621,20 +4621,20 @@ export const HNSWConstruction = (ctx) => {
               <line x1="10" y1="90" x2="390" y2="90" stroke={C.yellow} strokeDasharray="2 4" strokeOpacity="0.4" />
               <line x1="10" y1="150" x2="390" y2="150" stroke={C.cyan} strokeDasharray="2 4" strokeOpacity="0.4" />
               <text x="16" y="32" fill={C.red} fontSize="11">
-                layer 2
+                Layer 2
               </text>
               <text x="16" y="82" fill={C.yellow} fontSize="11">
-                layer 1
+                Layer 1
               </text>
               <text x="16" y="168" fill={C.cyan} fontSize="11">
-                layer 0
+                Layer 0
               </text>
               <circle cx="200" cy="150" r="12" fill={C.cyan} />
               <text x="200" y="154" textAnchor="middle" fill="#08080d" fontSize="12" fontWeight="bold">
                 1
               </text>
               <text x="200" y="130" textAnchor="middle" fill={C.cyan} fontSize="11" fontFamily="monospace">
-                entry point (L = 0 in this example)
+                Entry point (L = 0 in this example)
               </text>
             </svg>
           </div>
@@ -4675,7 +4675,7 @@ export const HNSWConstruction = (ctx) => {
             <span style={{ color: C.cyan }}>mL</span>)
             <br />
             <span style={{ color: C.dim, fontSize: 14 }}>
-              mL = 1 / ln(M) &asymp; 0.36 &larr; level multiplier (thins upper layers)
+              ML = 1 / ln(M) &asymp; 0.36 &larr; level multiplier (thins upper layers)
             </span>
             <br />
             <span style={{ color: C.dim, fontSize: 14 }}>M = max neighbors per node (16)</span>
@@ -4822,7 +4822,7 @@ export const HNSWConstruction = (ctx) => {
           >
             <span style={{ color: C.yellow }}>exponential decay</span>: P(L &ge; k+1) / P(L &ge; k) = 1/M
             <br />
-            at M = 16: each layer is 1/16 the size of the one below it
+            At M = 16: each layer is 1/16 the size of the one below it
           </div>
           <T color="#ffe082" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
             Upper layers hold a handful of hub nodes - cheap in storage, expensive in importance. Every query enters
@@ -4865,7 +4865,7 @@ export const HNSWConstruction = (ctx) => {
                 lineHeight: 1.8,
               }}
             >
-              u = 0.45 &nbsp;&rarr;&nbsp; L = floor(&minus;ln(0.45) &middot; 0.36) = floor(0.288) ={" "}
+              U = 0.45 &nbsp;&rarr;&nbsp; L = floor(&minus;ln(0.45) &middot; 0.36) = floor(0.288) ={" "}
               <span style={{ color: C.green, fontSize: 18 }}>L = 0</span>
             </div>
             <T color="#80e8a5" size={13} center style={{ marginTop: 6 }}>
@@ -4895,13 +4895,13 @@ export const HNSWConstruction = (ctx) => {
                 <line x1="10" y1="115" x2="490" y2="115" stroke={C.yellow} strokeDasharray="2 4" strokeOpacity="0.4" />
                 <line x1="10" y1="190" x2="490" y2="190" stroke={C.cyan} strokeDasharray="2 4" strokeOpacity="0.4" />
                 <text x="16" y="32" fill={C.red} fontSize="11">
-                  layer 2 (top entry)
+                  Layer 2 (top entry)
                 </text>
                 <text x="16" y="107" fill={C.yellow} fontSize="11">
-                  layer 1
+                  Layer 1
                 </text>
                 <text x="16" y="208" fill={C.cyan} fontSize="11">
-                  layer 0 (target = L)
+                  Layer 0 (target = L)
                 </text>
                 <line x1="250" y1="40" x2="250" y2="115" stroke={C.green} strokeWidth="3" />
                 <line x1="250" y1="115" x2="250" y2="190" stroke={C.green} strokeWidth="3" />
@@ -4927,15 +4927,15 @@ export const HNSWConstruction = (ctx) => {
                   ep = doc 1
                 </text>
                 <text x="270" y="119" fill={C.bright} fontSize="11" fontFamily="monospace">
-                  ep = doc 1 (no closer L1 neighbor)
+                  Ep = doc 1 (no closer L1 neighbor)
                 </text>
                 <text x="270" y="194" fill={C.bright} fontSize="11" fontFamily="monospace">
-                  ep = doc 1 (start of L0 beam)
+                  Ep = doc 1 (start of L0 beam)
                 </text>
               </svg>
             </div>
             <T color="#80e8a5" size={13} center style={{ marginTop: 6, fontFamily: "monospace" }}>
-              above L: 1 candidate per layer (cheap). Stop when we hit layer L.
+              Above L: 1 candidate per layer (cheap). Stop when we hit layer L.
             </T>
           </div>
 
@@ -5042,7 +5042,7 @@ export const HNSWConstruction = (ctx) => {
                     fontFamily="monospace"
                     fontWeight="bold"
                   >
-                    new doc
+                    New doc
                   </text>
                 </g>
               </svg>
@@ -5141,13 +5141,13 @@ export const HNSWConstruction = (ctx) => {
                     fontFamily="monospace"
                     fontWeight="bold"
                   >
-                    new doc N
+                    New doc N
                   </text>
                 </g>
               </svg>
             </div>
             <T color="#80e8a5" size={13} center style={{ marginTop: 6, fontFamily: "monospace" }}>
-              edges added: N&harr;7, N&harr;4, N&harr;3 (M = 3). Doc 2 stays out of the picked set.
+              Edges added: N&harr;7, N&harr;4, N&harr;3 (M = 3). Doc 2 stays out of the picked set.
             </T>
           </div>
 
@@ -5166,7 +5166,7 @@ export const HNSWConstruction = (ctx) => {
           >
             <span style={{ color: C.dim }}>HNSW Algorithm 1 (paper):</span>
             <br />
-            roll <span style={{ color: C.green }}>L</span> &rarr; greedy descend top to L + 1 &rarr; beam search at L..0
+            Roll <span style={{ color: C.green }}>L</span> &rarr; greedy descend top to L + 1 &rarr; beam search at L..0
             with <span style={{ color: C.yellow }}>ef_construction</span> &rarr; connect{" "}
             <span style={{ color: C.green }}>M</span> nearest
           </div>
@@ -5352,19 +5352,19 @@ export const HNSWConstruction = (ctx) => {
               }}
             >
               <T color={C.orange} bold size={12}>
-                doc
+                Doc
               </T>
               <T color={C.orange} bold size={12}>
-                text
+                Text
               </T>
               <T color={C.orange} bold size={12} style={{ textAlign: "center" }}>
-                u
+                U
               </T>
               <T color={C.orange} bold size={12} style={{ textAlign: "center" }}>
                 L
               </T>
-              <T color={C.orange} bold size={12}>
-                edges
+              <T color={C.orange} bold size={12} center>
+                Edges
               </T>
             </div>
             {HNSW_INSERT_ORDER.map((row) => {
@@ -5396,7 +5396,7 @@ export const HNSWConstruction = (ctx) => {
                   <T color={C.orange} bold size={13} style={{ fontFamily: "monospace", textAlign: "center" }}>
                     L = {row.L}
                   </T>
-                  <T color={C.bright} size={12} style={{ fontFamily: "monospace" }}>
+                  <T color={C.bright} size={12} style={{ fontFamily: "monospace" }} center>
                     {row.neighbors.length === 0 ? "- (entry)" : `to ${row.neighbors.join(", ")}`}
                   </T>
                 </div>
@@ -5458,7 +5458,7 @@ export const HNSWConstruction = (ctx) => {
                     textAlign: "center",
                   }}
                 >
-                  <T color={cfg.color} bold size={15}>
+                  <T color={cfg.color} bold size={15} center>
                     {cfg.label}
                   </T>
                   <svg
@@ -5486,10 +5486,10 @@ export const HNSWConstruction = (ctx) => {
                       </g>
                     ))}
                   </svg>
-                  <T color={C.bright} size={12} style={{ marginTop: 6, fontFamily: "monospace" }}>
+                  <T color={C.bright} size={12} style={{ marginTop: 6, fontFamily: "monospace" }} center>
                     {cfg.note}
                   </T>
-                  <T color={C.dim} size={11} style={{ marginTop: 2, fontFamily: "monospace" }}>
+                  <T color={C.dim} size={11} style={{ marginTop: 2, fontFamily: "monospace" }} center>
                     {edges.length} undirected edges shown
                   </T>
                 </div>
@@ -5512,11 +5512,11 @@ export const HNSWConstruction = (ctx) => {
           >
             <span style={{ color: C.red }}>M = 16</span> <span style={{ color: C.dim }}>(the production default)</span>
             <br />
-            edges per node at layer 0 &le; M = 16 &nbsp;<span style={{ color: C.dim }}>bidirectional</span>
+            Edges per node at layer 0 &le; M = 16 &nbsp;<span style={{ color: C.dim }}>bidirectional</span>
             <br />
-            edges per node at upper layers &le; M / 2 = 8
+            Edges per node at upper layers &le; M / 2 = 8
             <br />
-            memory per vector &asymp; M &middot; 4 bytes + upper layers &asymp;{" "}
+            Memory per vector &asymp; M &middot; 4 bytes + upper layers &asymp;{" "}
             <span style={{ color: C.red }}>70 bytes per vector</span>
           </div>
 
@@ -5530,14 +5530,14 @@ export const HNSWConstruction = (ctx) => {
                 textAlign: "center",
               }}
             >
-              <T color={C.red} bold size={16}>
+              <T color={C.red} bold size={16} center>
                 Graph overhead at N = 1,000,000
               </T>
-              <T color="#ef9a9a" bold size={22} style={{ marginTop: 8, fontFamily: "monospace" }}>
+              <T color="#ef9a9a" bold size={22} style={{ marginTop: 8, fontFamily: "monospace" }} center>
                 70 MB
               </T>
-              <T color={C.bright} size={13} style={{ marginTop: 4 }}>
-                tiny next to the vectors themselves (3 GB)
+              <T color={C.bright} size={13} style={{ marginTop: 4 }} center>
+                Tiny next to the vectors themselves (3 GB)
               </T>
             </div>
             <div
@@ -5549,14 +5549,14 @@ export const HNSWConstruction = (ctx) => {
                 textAlign: "center",
               }}
             >
-              <T color={C.red} bold size={16}>
+              <T color={C.red} bold size={16} center>
                 Graph overhead at N = 100,000,000
               </T>
-              <T color="#ef9a9a" bold size={22} style={{ marginTop: 8, fontFamily: "monospace" }}>
+              <T color="#ef9a9a" bold size={22} style={{ marginTop: 8, fontFamily: "monospace" }} center>
                 7 GB
               </T>
-              <T color={C.bright} size={13} style={{ marginTop: 4 }}>
-                still cheap compared to 300 GB of vectors
+              <T color={C.bright} size={13} style={{ marginTop: 4 }} center>
+                Still cheap compared to 300 GB of vectors
               </T>
             </div>
           </div>
@@ -5691,13 +5691,13 @@ const HnswHierarchy = ({ desc, activeL2 = null, activeL1 = null, activeL0 = null
       <line x1="10" y1={Y1} x2="490" y2={Y1} stroke={C.yellow} strokeDasharray="2 4" strokeOpacity="0.4" />
       <line x1="10" y1={Y0} x2="490" y2={Y0} stroke={C.cyan} strokeDasharray="2 4" strokeOpacity="0.4" />
       <text x="16" y={Y2 - 8} fill={C.red} fontSize="11">
-        layer 2
+        Layer 2
       </text>
       <text x="16" y={Y1 - 8} fill={C.yellow} fontSize="11">
-        layer 1
+        Layer 1
       </text>
       <text x="16" y={Y0 + 16} fill={C.cyan} fontSize="11">
-        layer 0
+        Layer 0
       </text>
       {l1Edges.map(([a, b], i) => {
         const pa = find(layer1, a);
@@ -5743,7 +5743,7 @@ const HnswHierarchy = ({ desc, activeL2 = null, activeL1 = null, activeL0 = null
         markerEnd="url(#hsArrow)"
       />
       <text x="475" y="12" textAnchor="end" fill={C.yellow} fontSize="11" fontFamily="monospace">
-        query
+        Query
       </text>
       {layer2.map((n) => (
         <g key={`l2n${n.id}`}>
@@ -5895,7 +5895,7 @@ const HnswSpatial = ({
           fontFamily="monospace"
           fontWeight="bold"
         >
-          query
+          Query
         </text>
       </g>
     </svg>
@@ -5918,7 +5918,7 @@ const DistanceBars = ({ items, max }) => {
             style={{ display: "grid", gridTemplateColumns: "70px 1fr 70px", gap: 8, alignItems: "center" }}
           >
             <T color={col} bold size={13} style={{ fontFamily: "monospace" }}>
-              doc {it.id}
+              Doc {it.id}
             </T>
             <div style={{ height: 12, background: "rgba(0,0,0,0.4)", borderRadius: 3, overflow: "hidden" }}>
               <div
@@ -6094,7 +6094,7 @@ export const HNSWSearch = (ctx) => {
                 L2 neighbors of doc 1: none
               </T>
               <T color={C.green} bold size={14} center style={{ fontFamily: "monospace" }}>
-                no closer neighbor &rarr; drop to L1
+                No closer neighbor &rarr; drop to L1
               </T>
             </div>
           </div>
@@ -6164,7 +6164,7 @@ export const HNSWSearch = (ctx) => {
                 ]}
               />
               <T color={C.yellow} bold size={14} center style={{ fontFamily: "monospace", marginTop: 6 }}>
-                doc 6 farther &rarr; stay at doc 1 &rarr; drop to L0
+                Doc 6 farther &rarr; stay at doc 1 &rarr; drop to L0
               </T>
             </div>
           </div>
@@ -6218,7 +6218,7 @@ export const HNSWSearch = (ctx) => {
                 <BeamSlots ef={3} items={[{ id: 1, dist: HNSW_DISTS[1] }]} />
               </div>
               <T color={C.bright} size={12} center style={{ marginTop: 8, fontFamily: "monospace" }}>
-                production default: ef_search = 50
+                Production default: ef_search = 50
               </T>
             </div>
           </div>
@@ -6270,7 +6270,7 @@ export const HNSWSearch = (ctx) => {
                   popped={1}
                 />
                 <T color="#b8a9ff" size={12} center style={{ marginTop: 8, fontFamily: "monospace" }}>
-                  doc 5 (135.4) rejected: farther than worst-in-queue (87.1)
+                  Doc 5 (135.4) rejected: farther than worst-in-queue (87.1)
                 </T>
               </div>
             </div>
@@ -6309,7 +6309,7 @@ export const HNSWSearch = (ctx) => {
                   popped={3}
                 />
                 <T color="#b8a9ff" size={12} center style={{ marginTop: 8, fontFamily: "monospace" }}>
-                  doc 4 (136.6) rejected; doc 1, 7 already in queue
+                  Doc 4 (136.6) rejected; doc 1, 7 already in queue
                 </T>
               </div>
             </div>
@@ -6348,7 +6348,7 @@ export const HNSWSearch = (ctx) => {
                   popped={7}
                 />
                 <T color={C.green} bold size={13} center style={{ marginTop: 8, fontFamily: "monospace" }}>
-                  beam top unchanged: best top-3 are now stable, converged
+                  Beam top unchanged: best top-3 are now stable, converged
                 </T>
               </div>
             </div>
@@ -6366,7 +6366,7 @@ export const HNSWSearch = (ctx) => {
               color: C.bright,
             }}
           >
-            beam = priority queue, capacity = <span style={{ color: C.orange }}>ef_search</span>; expand until best in
+            Beam = priority queue, capacity = <span style={{ color: C.orange }}>ef_search</span>; expand until best in
             queue stops changing
           </div>
         </Box>
@@ -6452,7 +6452,7 @@ export const HNSWSearch = (ctx) => {
                     #{i + 1}
                   </T>
                   <T color={C.green} bold size={13} style={{ fontFamily: "monospace" }}>
-                    doc {r.id}
+                    Doc {r.id}
                   </T>
                   <T color={C.bright} size={13}>
                     {r.text} <span style={{ color: C.dim, fontFamily: "monospace" }}>(d={r.dist.toFixed(1)})</span>
@@ -6590,13 +6590,13 @@ export const HNSWParameters = (ctx) => {
                 M
               </T>
               <T color={C.cyan} bold size={13} style={{ textAlign: "center" }}>
-                recall@10
+                Recall@10
               </T>
               <T color={C.cyan} bold size={13} style={{ textAlign: "center" }}>
-                graph bytes/vec
+                Graph bytes/vec
               </T>
               <T color={C.cyan} bold size={13} style={{ textAlign: "center" }}>
-                memory at N = 1M
+                Memory at N = 1M
               </T>
               {[
                 { m: 8, recall: "0.93", bpv: "~35", total: "35 MB" },
@@ -6604,7 +6604,7 @@ export const HNSWParameters = (ctx) => {
                 { m: 32, recall: "0.99", bpv: "~140", total: "140 MB" },
                 { m: 48, recall: "0.995", bpv: "~210", total: "210 MB" },
               ].flatMap((row) => [
-                <T key={`m-${row.m}`} color={C.bright} size={13} style={{ fontFamily: "monospace" }}>
+                <T key={`m-${row.m}`} color={C.bright} size={13} style={{ fontFamily: "monospace" }} center>
                   {row.m}
                 </T>,
                 <T
@@ -6677,10 +6677,10 @@ export const HNSWParameters = (ctx) => {
                 ef_construction
               </T>
               <T color={C.yellow} bold size={13} style={{ textAlign: "center" }}>
-                build time
+                Build time
               </T>
               <T color={C.yellow} bold size={13} style={{ textAlign: "center" }}>
-                recall@10 ceiling
+                Recall@10 ceiling
               </T>
               {[
                 { ef: 100, time: "~5 min", recall: "0.95" },
@@ -6688,7 +6688,7 @@ export const HNSWParameters = (ctx) => {
                 { ef: 500, time: "~20 min", recall: "0.98" },
                 { ef: 1000, time: "~35 min", recall: "0.985" },
               ].flatMap((row) => [
-                <T key={`e-${row.ef}`} color={C.bright} size={13} style={{ fontFamily: "monospace" }}>
+                <T key={`e-${row.ef}`} color={C.bright} size={13} style={{ fontFamily: "monospace" }} center>
                   {row.ef}
                 </T>,
                 <T
@@ -6766,10 +6766,10 @@ export const HNSWParameters = (ctx) => {
                 ef_search
               </T>
               <T color={C.green} bold size={13} style={{ textAlign: "center" }}>
-                recall@10
+                Recall@10
               </T>
               <T color={C.green} bold size={13} style={{ textAlign: "center" }}>
-                latency
+                Latency
               </T>
               {[
                 { ef: 10, recall: "0.85", ms: "0.5 ms" },
@@ -6777,7 +6777,7 @@ export const HNSWParameters = (ctx) => {
                 { ef: 200, recall: "0.995", ms: "3.0 ms" },
                 { ef: 500, recall: "0.999", ms: "6.0 ms" },
               ].flatMap((row) => [
-                <T key={`s-${row.ef}`} color={C.bright} size={13} style={{ fontFamily: "monospace" }}>
+                <T key={`s-${row.ef}`} color={C.bright} size={13} style={{ fontFamily: "monospace" }} center>
                   {row.ef}
                 </T>,
                 <T
@@ -6825,7 +6825,7 @@ export const HNSWParameters = (ctx) => {
             }}
           >
             <T color={C.orange} bold center size={16}>
-              recall@10 curves vs ef_search
+              Recall@10 curves vs ef_search
             </T>
             <svg
               viewBox="0 0 570 280"
@@ -6905,9 +6905,9 @@ export const HNSWParameters = (ctx) => {
               lineHeight: 1.9,
             }}
           >
-            memory &asymp; N &middot; (d &middot; 4 + M &middot; 8) bytes
+            Memory &asymp; N &middot; (d &middot; 4 + M &middot; 8) bytes
             <br />
-            at N = 100M, d = 768, M = 16:
+            At N = 100M, d = 768, M = 16:
             <br />
             100M &middot; (3072 + 128) &asymp; <span style={{ color: C.red }}>320 GB</span>{" "}
             <span style={{ color: C.dim }}>(300 GB vectors + 20 GB graph)</span>
@@ -7016,19 +7016,19 @@ export const Vamana = (ctx) => {
               lineHeight: 2,
             }}
           >
-            at N = 100M, d = 768, M = 16:
+            At N = 100M, d = 768, M = 16:
             <br />
             vectors: 300 GB
             <br />
             HNSW graph: 20 GB
             <br />
-            total RAM needed: <span style={{ color: C.red }}>320 GB</span>{" "}
+            Total RAM needed: <span style={{ color: C.red }}>320 GB</span>{" "}
             <span style={{ color: C.dim }}>(barely fits on one server)</span>
             <br />
-            at N = 1,000,000,000: <span style={{ color: C.red }}>3.2 TB</span>{" "}
+            At N = 1,000,000,000: <span style={{ color: C.red }}>3.2 TB</span>{" "}
             <span style={{ color: C.dim }}>(needs multi-node sharding)</span>
           </div>
-          <T color="#ef9a9a" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
+          <T color="#ef9a9a" size={16} style={{ marginTop: 10, fontStyle: "italic" }} center>
             Microsoft hit this wall on Bing. Their answer, published in 2019, is Vamana - a graph index designed from
             the ground up to work when the graph lives on SSD and only a cache slice lives in RAM.
           </T>
@@ -7039,7 +7039,7 @@ export const Vamana = (ctx) => {
           <T color={C.cyan} bold center size={22}>
             HNSW has a pyramid, Vamana has one flat layer
           </T>
-          <T color="#80deea" style={{ marginTop: 8 }}>
+          <T color="#80deea" style={{ marginTop: 8 }} center>
             HNSW builds a pyramid of layers so it can make fast long-range jumps through the upper hubs. Vamana throws
             the pyramid away and uses a single flat graph - every node sits on one plane with no layer stack above it.
           </T>
@@ -7118,7 +7118,7 @@ export const Vamana = (ctx) => {
                     HNSW&apos;s upper layers used to do.
                   </desc>
                   <text x="8" y="105" fill={C.dim} fontSize="11">
-                    flat
+                    Flat
                   </text>
                   <line x1="40" y1="60" x2="80" y2="40" stroke={C.green} strokeWidth="1.3" />
                   <line x1="80" y1="40" x2="115" y2="85" stroke={C.green} strokeWidth="1.3" />
@@ -7172,17 +7172,17 @@ export const Vamana = (ctx) => {
                 textAlign: "center",
               }}
             >
-              <T color={C.green} bold size={16}>
+              <T color={C.green} bold size={16} center>
                 HNSW in RAM
               </T>
-              <T color={C.bright} size={15} style={{ marginTop: 6, fontFamily: "monospace" }}>
-                top-layer jump: ~0.1 &micro;s
+              <T color={C.bright} size={15} style={{ marginTop: 6, fontFamily: "monospace" }} center>
+                Top-layer jump: ~0.1 &micro;s
               </T>
-              <T color={C.bright} size={15} style={{ fontFamily: "monospace" }}>
-                bottom hop: ~0.1 &micro;s
+              <T color={C.bright} size={15} style={{ fontFamily: "monospace" }} center>
+                Bottom hop: ~0.1 &micro;s
               </T>
-              <T color={C.dim} size={14} style={{ marginTop: 6, fontStyle: "italic" }}>
-                layering saves hops cheaply
+              <T color={C.dim} size={14} style={{ marginTop: 6, fontStyle: "italic" }} center>
+                Layering saves hops cheaply
               </T>
             </div>
             <div
@@ -7194,17 +7194,17 @@ export const Vamana = (ctx) => {
                 textAlign: "center",
               }}
             >
-              <T color={C.red} bold size={16}>
+              <T color={C.red} bold size={16} center>
                 Vamana on SSD
               </T>
-              <T color={C.bright} size={15} style={{ marginTop: 6, fontFamily: "monospace" }}>
-                any hop: ~10 &micro;s
+              <T color={C.bright} size={15} style={{ marginTop: 6, fontFamily: "monospace" }} center>
+                Any hop: ~10 &micro;s
               </T>
-              <T color={C.bright} size={15} style={{ fontFamily: "monospace" }}>
-                every layer: same cost
+              <T color={C.bright} size={15} style={{ fontFamily: "monospace" }} center>
+                Every layer: same cost
               </T>
-              <T color={C.dim} size={14} style={{ marginTop: 6, fontStyle: "italic" }}>
-                no free jumps; hierarchy adds nothing
+              <T color={C.dim} size={14} style={{ marginTop: 6, fontStyle: "italic" }} center>
+                No free jumps; hierarchy adds nothing
               </T>
             </div>
           </div>
@@ -7325,9 +7325,9 @@ export const Vamana = (ctx) => {
           >
             R = 64 <span style={{ color: C.dim }}>(default max neighbors per node)</span>
             <br />
-            single flat layer, no hierarchy
+            Single flat layer, no hierarchy
             <br />
-            each node&apos;s edges span short + long ranges
+            Each node&apos;s edges span short + long ranges
           </div>
           <T color="#80e8a5" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
             Vamana&apos;s build algorithm, called alpha-pruning, is what picks these 64 edges to be diverse - a mix of
@@ -7363,13 +7363,13 @@ export const Vamana = (ctx) => {
                 textAlign: "center",
               }}
             >
-              <T color={C.dim} size={14} bold>
-                older SATA SSD
+              <T color={C.dim} size={14} bold center>
+                Older SATA SSD
               </T>
-              <T color={C.bright} size={15} style={{ marginTop: 6, fontFamily: "monospace" }}>
+              <T color={C.bright} size={15} style={{ marginTop: 6, fontFamily: "monospace" }} center>
                 ~500 MB/s
               </T>
-              <T color={C.bright} size={15} style={{ fontFamily: "monospace" }}>
+              <T color={C.bright} size={15} style={{ fontFamily: "monospace" }} center>
                 ~100 &micro;s per random read
               </T>
             </div>
@@ -7382,13 +7382,13 @@ export const Vamana = (ctx) => {
                 textAlign: "center",
               }}
             >
-              <T color={C.green} bold size={14}>
+              <T color={C.green} bold size={14} center>
                 NVMe SSD (modern)
               </T>
-              <T color={C.bright} size={15} style={{ marginTop: 6, fontFamily: "monospace" }}>
+              <T color={C.bright} size={15} style={{ marginTop: 6, fontFamily: "monospace" }} center>
                 ~3-7 GB/s
               </T>
-              <T color={C.bright} size={15} style={{ fontFamily: "monospace" }}>
+              <T color={C.bright} size={15} style={{ fontFamily: "monospace" }} center>
                 ~10 &micro;s per random read
               </T>
             </div>
@@ -7486,11 +7486,11 @@ export const Vamana = (ctx) => {
               lineHeight: 1.9,
             }}
           >
-            disk block = 4 KB = 1 vector + neighbor ids
+            Disk block = 4 KB = 1 vector + neighbor ids
             <br />
             NVMe random read latency: ~10 &micro;s per block
             <br />
-            memory cache: entry-layer nodes (most-traversed)
+            Memory cache: entry-layer nodes (most-traversed)
           </div>
           <T color="#ffcc80" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
             The 4 KB choice is deliberate - it matches NVMe page granularity so we pay for one IO per hop, no more.
@@ -7567,7 +7567,7 @@ export const Vamana = (ctx) => {
               lineHeight: 1.9,
             }}
           >
-            total latency &asymp; 80 &middot; 10 &micro;s + compute &asymp;{" "}
+            Total latency &asymp; 80 &middot; 10 &micro;s + compute &asymp;{" "}
             <span style={{ color: C.green }}>~1 ms per query</span>
           </div>
           <T color="#80e8a5" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
@@ -7602,11 +7602,11 @@ export const Vamana = (ctx) => {
           >
             1 server: 128 GB RAM + 10 TB NVMe
             <br />
-            holds: <span style={{ color: C.yellow }}>100,000,000,000 vectors</span>
+            Holds: <span style={{ color: C.yellow }}>100,000,000,000 vectors</span>
             <br />
-            query latency: ~5 ms at recall@10 = 0.95
+            Query latency: ~5 ms at recall@10 = 0.95
             <br />
-            cost: ~1/10 of HNSW multi-node cluster at the same scale
+            Cost: ~1/10 of HNSW multi-node cluster at the same scale
           </div>
           <div style={{ marginTop: 14, display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
             <div

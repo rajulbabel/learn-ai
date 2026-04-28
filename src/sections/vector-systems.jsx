@@ -65,10 +65,10 @@ export const FAISS = (ctx) => {
                     textAlign: "center",
                   }}
                 >
-                  <T color={C.cyan} bold size={16}>
+                  <T color={C.cyan} bold size={16} center>
                     {r.year}
                   </T>
-                  <T color={C.bright} size={12} style={{ marginTop: 4 }}>
+                  <T color={C.bright} size={12} style={{ marginTop: 4 }} center>
                     {r.what}
                   </T>
                 </div>
@@ -90,7 +90,7 @@ export const FAISS = (ctx) => {
           >
             FAISS = <span style={{ color: C.cyan }}>library</span>, not a database
             <br />
-            gives you <span style={{ color: C.cyan }}>algorithms</span>; everything else is on you
+            Gives you <span style={{ color: C.cyan }}>algorithms</span>; everything else is on you
           </div>
           <T color="#80deea" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
             That distinction is the spine of this whole act. A library hands you the index; a database hands you the
@@ -177,7 +177,7 @@ export const FAISS = (ctx) => {
               lineHeight: 1.9,
             }}
           >
-            backends: <span style={{ color: C.yellow }}>CPU (default)</span> +{" "}
+            Backends: <span style={{ color: C.yellow }}>CPU (default)</span> +{" "}
             <span style={{ color: C.yellow }}>CUDA / GPU</span> for IVF, PQ, IVF-PQ
             <br />
             GPU gives 10x to 100x throughput on high-QPS indexing
@@ -347,7 +347,7 @@ export const FAISS = (ctx) => {
             FAISS provides the <span style={{ color: C.orange }}>algorithm</span>, not the{" "}
             <span style={{ color: C.orange }}>system</span>
             <br />
-            everything above is a vector database&apos;s job
+            Everything above is a vector database&apos;s job
           </div>
           <T color="#ffb74d" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
             Seen this way, the real vector databases (Qdrant, Pinecone, Milvus, pgvector) are all answers to the
@@ -388,9 +388,9 @@ export const FAISS = (ctx) => {
                 color: C.bright,
               }}
             >
-              <div style={{ color: C.red, fontWeight: "bold", padding: "6px 8px" }}>system</div>
-              <div style={{ color: C.red, fontWeight: "bold", padding: "6px 8px" }}>relationship</div>
-              <div style={{ color: C.red, fontWeight: "bold", padding: "6px 8px" }}>what the wrapper adds</div>
+              <div style={{ color: C.red, fontWeight: "bold", padding: "6px 8px" }}>System</div>
+              <div style={{ color: C.red, fontWeight: "bold", padding: "6px 8px" }}>Relationship</div>
+              <div style={{ color: C.red, fontWeight: "bold", padding: "6px 8px" }}>What the wrapper adds</div>
               {[
                 { name: "Milvus", rel: "FAISS inside", add: "distributed cluster, API, metadata, lifecycle" },
                 { name: "OpenSearch", rel: "FAISS engine", add: "Lucene index, REST, auth, hybrid with BM25" },
@@ -433,7 +433,7 @@ export const FAISS = (ctx) => {
           >
             FAISS lives <span style={{ color: C.red }}>underneath</span> most vector DBs
             <br />
-            the DB is the wrapper that turns &quot;library&quot; into &quot;product&quot;
+            The DB is the wrapper that turns &quot;library&quot; into &quot;product&quot;
           </div>
           <T color="#ef9a9a" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
             This is why learning FAISS first was the right order - understanding its algorithms transfers directly to
@@ -464,20 +464,20 @@ export const FAISS = (ctx) => {
               {
                 side: "Use FAISS if",
                 items: [
-                  "you are building a new system or research prototype",
-                  "you control persistence, API, and ops yourself",
-                  "you need custom index composition FAISS exposes",
-                  "you want to embed ANN in a training loop",
+                  "You are building a new system or research prototype",
+                  "You control persistence, API, and ops yourself",
+                  "You need custom index composition FAISS exposes",
+                  "You want to embed ANN in a training loop",
                 ],
                 color: C.cyan,
               },
               {
                 side: "Use a DB if",
                 items: [
-                  "you want to use one, not write one",
-                  "you need filters, metadata, HA out of the box",
-                  "you want a running service with API and auth",
-                  "operational story is someone else&apos;s problem",
+                  "You want to use one, not write one",
+                  "You need filters, metadata, HA out of the box",
+                  "You want a running service with API and auth",
+                  "Operational story is someone else&apos;s problem",
                 ],
                 color: C.purple,
               },
@@ -586,7 +586,7 @@ export const Pgvector = (ctx) => {
               CREATE EXTENSION <span style={{ color: C.cyan }}>vector</span>;
             </div>
             <T color={C.dim} size={13} center style={{ marginTop: 8, fontStyle: "italic" }}>
-              your existing Postgres instance now speaks vectors
+              Your existing Postgres instance now speaks vectors
             </T>
           </div>
           <div
@@ -611,10 +611,10 @@ export const Pgvector = (ctx) => {
                   textAlign: "center",
                 }}
               >
-                <T color={C.cyan} bold size={15}>
+                <T color={C.cyan} bold size={15} center>
                   {r.t}
                 </T>
-                <T color={C.bright} size={13} style={{ marginTop: 4 }}>
+                <T color={C.bright} size={13} style={{ marginTop: 4 }} center>
                   {r.d}
                 </T>
               </div>
@@ -698,13 +698,13 @@ export const Pgvector = (ctx) => {
                   textAlign: "center",
                 }}
               >
-                <T color={r.color} bold size={18} style={{ fontFamily: "monospace" }}>
+                <T color={r.color} bold size={18} style={{ fontFamily: "monospace" }} center>
                   {r.op}
                 </T>
-                <T color={C.bright} size={13} style={{ marginTop: 4 }}>
+                <T color={C.bright} size={13} style={{ marginTop: 4 }} center>
                   {r.name}
                 </T>
-                <T color={C.dim} size={12} style={{ marginTop: 4, fontStyle: "italic" }}>
+                <T color={C.dim} size={12} style={{ marginTop: 4, fontStyle: "italic" }} center>
                   {r.when}
                 </T>
               </div>
@@ -956,9 +956,9 @@ export const Pgvector = (ctx) => {
               lineHeight: 1.9,
             }}
           >
-            the right answer <span style={{ color: C.green }}>more often than people think</span>
+            The right answer <span style={{ color: C.green }}>more often than people think</span>
             <br />
-            especially when you already have a Postgres team
+            Especially when you already have a Postgres team
           </div>
           <T color="#80e8a5" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
             &quot;We should use a vector DB&quot; often just means &quot;we should add pgvector.&quot; Most workloads
@@ -1025,7 +1025,7 @@ export const Pgvector = (ctx) => {
           >
             pgvector at 100M+ / 10K+ QPS / multi-region = <span style={{ color: C.red }}>out of its lane</span>
             <br />
-            time to look at Qdrant, Pinecone, or Milvus
+            Time to look at Qdrant, Pinecone, or Milvus
           </div>
           <T color="#ef9a9a" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
             Good product choices have clear boundaries. pgvector&apos;s boundary is at large scale; the next chapters
@@ -1090,10 +1090,10 @@ export const Qdrant = (ctx) => {
                   textAlign: "center",
                 }}
               >
-                <T color={C.cyan} bold size={15}>
+                <T color={C.cyan} bold size={15} center>
                   {r.t}
                 </T>
-                <T color={C.bright} size={13} style={{ marginTop: 4 }}>
+                <T color={C.bright} size={13} style={{ marginTop: 4 }} center>
                   {r.d}
                 </T>
               </div>
@@ -1228,7 +1228,7 @@ export const Qdrant = (ctx) => {
               <br />
               -&gt; if false, skip edge; if true, proceed
               <br />
-              predicate cost is ~1 pointer dereference per hop
+              Predicate cost is ~1 pointer dereference per hop
             </div>
           </div>
           <T color="#ffe082" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
@@ -1417,7 +1417,7 @@ export const Qdrant = (ctx) => {
           >
             SQ / PQ / BQ = memory knobs, <span style={{ color: C.orange }}>one YAML flag each</span>
             <br />
-            hybrid + multi-vector are first-class, not bolt-ons
+            Hybrid + multi-vector are first-class, not bolt-ons
           </div>
           <T color="#ffb74d" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
             Qdrant exposes more tuning than most competitors; this is a double-edged win - more control, more knobs
@@ -1498,7 +1498,7 @@ export const Qdrant = (ctx) => {
               lineHeight: 1.9,
             }}
           >
-            you control: <span style={{ color: C.red }}>persistence, backups, upgrades, replication</span>
+            You control: <span style={{ color: C.red }}>persistence, backups, upgrades, replication</span>
             <br />
             Qdrant Cloud is optional - everything also runs on your own infra
           </div>
@@ -1571,7 +1571,7 @@ export const Qdrant = (ctx) => {
               lineHeight: 1.9,
             }}
           >
-            great fit when: <span style={{ color: C.purple }}>ops capacity exists</span> +{" "}
+            Great fit when: <span style={{ color: C.purple }}>ops capacity exists</span> +{" "}
             <span style={{ color: C.purple }}>filtering matters</span> +{" "}
             <span style={{ color: C.purple }}>cost-sensitive at scale</span>
           </div>
@@ -1637,10 +1637,10 @@ export const Pinecone = (ctx) => {
                   textAlign: "center",
                 }}
               >
-                <T color={C.cyan} bold size={15}>
+                <T color={C.cyan} bold size={15} center>
                   {r.t}
                 </T>
-                <T color={C.bright} size={13} style={{ marginTop: 4 }}>
+                <T color={C.bright} size={13} style={{ marginTop: 4 }} center>
                   {r.d}
                 </T>
               </div>
@@ -1766,9 +1766,9 @@ export const Pinecone = (ctx) => {
               lineHeight: 1.9,
             }}
           >
-            scale by <span style={{ color: C.yellow }}>adding pods</span> (each pod = one shard)
+            Scale by <span style={{ color: C.yellow }}>adding pods</span> (each pod = one shard)
             <br />
-            replicas added for throughput and availability, multiplies cost
+            Replicas added for throughput and availability, multiplies cost
             <br />
             N_total = pods &middot; replicas
           </div>
@@ -1811,16 +1811,16 @@ export const Pinecone = (ctx) => {
                   textAlign: "center",
                 }}
               >
-                <T color={C.green} bold size={15}>
+                <T color={C.green} bold size={15} center>
                   {r.phase}
                 </T>
-                <T color={C.bright} size={13} style={{ marginTop: 4, fontFamily: "monospace" }}>
+                <T color={C.bright} size={13} style={{ marginTop: 4, fontFamily: "monospace" }} center>
                   {r.cost}
                 </T>
-                <T color={C.cyan} size={12} style={{ marginTop: 4 }}>
+                <T color={C.cyan} size={12} style={{ marginTop: 4 }} center>
                   {r.latency}
                 </T>
-                <T color={C.dim} size={11} style={{ marginTop: 4, fontStyle: "italic" }}>
+                <T color={C.dim} size={11} style={{ marginTop: 4, fontStyle: "italic" }} center>
                   {r.note}
                 </T>
               </div>
@@ -1851,13 +1851,13 @@ export const Pinecone = (ctx) => {
                 lineHeight: 1.9,
               }}
             >
-              bursty workload: 1K queries in an hour, idle the rest
+              Bursty workload: 1K queries in an hour, idle the rest
               <br />
-              pod-based: pay <span style={{ color: C.red }}>all 24 hours</span> of pod time
+              Pod-based: pay <span style={{ color: C.red }}>all 24 hours</span> of pod time
               <br />
-              serverless: pay <span style={{ color: C.green }}>1 hour compute</span> + 24 hours cheap storage
+              Serverless: pay <span style={{ color: C.green }}>1 hour compute</span> + 24 hours cheap storage
               <br />
-              savings can be 10x at low, bursty duty-cycle
+              Savings can be 10x at low, bursty duty-cycle
             </div>
           </div>
           <T color="#80e8a5" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
@@ -1933,9 +1933,9 @@ export const Pinecone = (ctx) => {
               lineHeight: 1.9,
             }}
           >
-            enough feature breadth for <span style={{ color: C.orange }}>most RAG-style apps</span>
+            Enough feature breadth for <span style={{ color: C.orange }}>most RAG-style apps</span>
             <br />
-            not as deep as Qdrant on filtering, not as broad as Elastic on ecosystem
+            Not as deep as Qdrant on filtering, not as broad as Elastic on ecosystem
           </div>
           <T color="#ffb74d" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
             For the typical chatbot-on-documents use case, what Pinecone ships is more than enough. For complex compound
@@ -2079,11 +2079,11 @@ export const Pinecone = (ctx) => {
               lineHeight: 1.9,
             }}
           >
-            watch out at: <span style={{ color: C.red }}>steady high QPS</span> +{" "}
+            Watch out at: <span style={{ color: C.red }}>steady high QPS</span> +{" "}
             <span style={{ color: C.red }}>100M+ vectors</span> +{" "}
             <span style={{ color: C.red }}>custom tuning needs</span>
             <br />
-            that is when the math flips toward self-host
+            That is when the math flips toward self-host
           </div>
           <T color="#ef9a9a" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
             The Pinecone premium is real. It is worth paying when operational capacity is the bottleneck; it is not
@@ -2147,10 +2147,10 @@ export const QdrantVsPinecone = (ctx) => {
                 color: C.bright,
               }}
             >
-              <div style={{ color: C.cyan, fontWeight: "bold", padding: "6px 8px" }}>axis</div>
+              <div style={{ color: C.cyan, fontWeight: "bold", padding: "6px 8px" }}>Axis</div>
               <div style={{ color: C.cyan, fontWeight: "bold", padding: "6px 8px", textAlign: "center" }}>Qdrant</div>
               <div style={{ color: C.cyan, fontWeight: "bold", padding: "6px 8px", textAlign: "center" }}>Pinecone</div>
-              <div style={{ color: C.cyan, fontWeight: "bold", padding: "6px 8px" }}>comment</div>
+              <div style={{ color: C.cyan, fontWeight: "bold", padding: "6px 8px" }}>Comment</div>
               {[
                 { axis: "Ops preference", q: "self-host", p: "managed", n: "who runs it" },
                 { axis: "Filter complexity", q: "inline HNSW", p: "post-filter", n: "Qdrant deeper" },
@@ -2243,10 +2243,10 @@ export const QdrantVsPinecone = (ctx) => {
                     textAlign: "center",
                   }}
                 >
-                  <T color={C.yellow} bold size={14}>
+                  <T color={C.yellow} bold size={14} center>
                     {r.t}
                   </T>
-                  <T color={C.bright} size={13} style={{ marginTop: 4 }}>
+                  <T color={C.bright} size={13} style={{ marginTop: 4 }} center>
                     {r.v}
                   </T>
                 </div>
@@ -2266,11 +2266,11 @@ export const QdrantVsPinecone = (ctx) => {
               lineHeight: 1.9,
             }}
           >
-            answer: <span style={{ color: C.yellow }}>Pinecone Serverless</span>
+            Answer: <span style={{ color: C.yellow }}>Pinecone Serverless</span>
             <br />
-            zero infrastructure, scale-to-zero when idle, pay per query
+            Zero infrastructure, scale-to-zero when idle, pay per query
             <br />
-            revisit at 100K/day sustained traffic
+            Revisit at 100K/day sustained traffic
           </div>
           <T color="#ffe082" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
             The dangerous mistake here is premature self-host - spending two weeks standing up Qdrant on Kubernetes
@@ -2324,10 +2324,10 @@ export const QdrantVsPinecone = (ctx) => {
                     textAlign: "center",
                   }}
                 >
-                  <T color={C.green} bold size={14}>
+                  <T color={C.green} bold size={14} center>
                     {r.t}
                   </T>
-                  <T color={C.bright} size={13} style={{ marginTop: 4 }}>
+                  <T color={C.bright} size={13} style={{ marginTop: 4 }} center>
                     {r.v}
                   </T>
                 </div>
@@ -2347,11 +2347,11 @@ export const QdrantVsPinecone = (ctx) => {
               lineHeight: 1.9,
             }}
           >
-            answer: <span style={{ color: C.green }}>Qdrant self-host</span>
+            Answer: <span style={{ color: C.green }}>Qdrant self-host</span>
             <br />
-            inline filtered-HNSW wins across the full selectivity range
+            Inline filtered-HNSW wins across the full selectivity range
             <br />
-            saves ~$22K/month vs managed Pinecone at 10M scale
+            Saves ~$22K/month vs managed Pinecone at 10M scale
           </div>
           <T color="#80e8a5" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
             Here the filter complexity and the available ops capacity point the same way. When those line up, the
@@ -2404,10 +2404,10 @@ export const QdrantVsPinecone = (ctx) => {
                     textAlign: "center",
                   }}
                 >
-                  <T color={C.orange} bold size={14}>
+                  <T color={C.orange} bold size={14} center>
                     {r.t}
                   </T>
-                  <T color={C.bright} size={13} style={{ marginTop: 4 }}>
+                  <T color={C.bright} size={13} style={{ marginTop: 4 }} center>
                     {r.v}
                   </T>
                 </div>
@@ -2432,7 +2432,7 @@ export const QdrantVsPinecone = (ctx) => {
               <br />
               Milvus on K8s: similar to Qdrant at this scale
               <br />
-              annual savings <span style={{ color: C.orange }}>pay a whole platform engineer</span>
+              Annual savings <span style={{ color: C.orange }}>pay a whole platform engineer</span>
             </div>
           </div>
           <div
@@ -2448,10 +2448,10 @@ export const QdrantVsPinecone = (ctx) => {
               lineHeight: 1.9,
             }}
           >
-            answer: <span style={{ color: C.orange }}>Qdrant multi-node</span> or{" "}
+            Answer: <span style={{ color: C.orange }}>Qdrant multi-node</span> or{" "}
             <span style={{ color: C.orange }}>Milvus</span>
             <br />
-            the cost delta funds the ops headcount
+            The cost delta funds the ops headcount
           </div>
           <T color="#ffb74d" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
             At billion-scale, Pinecone is almost always the wrong answer unless the team truly cannot run
@@ -2504,10 +2504,10 @@ export const QdrantVsPinecone = (ctx) => {
                     textAlign: "center",
                   }}
                 >
-                  <T color={C.red} bold size={14}>
+                  <T color={C.red} bold size={14} center>
                     {r.t}
                   </T>
-                  <T color={C.bright} size={13} style={{ marginTop: 4 }}>
+                  <T color={C.bright} size={13} style={{ marginTop: 4 }} center>
                     {r.v}
                   </T>
                 </div>
@@ -2570,9 +2570,9 @@ export const QdrantVsPinecone = (ctx) => {
               lineHeight: 1.9,
             }}
           >
-            answer: spiky + no ops <span style={{ color: C.red }}>-&gt; Pinecone EU</span>
+            Answer: spiky + no ops <span style={{ color: C.red }}>-&gt; Pinecone EU</span>
             <br />
-            spiky + some ops + cost focus <span style={{ color: C.red }}>-&gt; Qdrant Cloud EU</span>
+            Spiky + some ops + cost focus <span style={{ color: C.red }}>-&gt; Qdrant Cloud EU</span>
           </div>
           <T color="#ef9a9a" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
             The residency question is rarely the hard part anymore - both vendors support EU. The tiebreaker is back to
@@ -2652,20 +2652,20 @@ export const QdrantVsPinecone = (ctx) => {
               {
                 t: "Pinecone shines",
                 items: [
-                  "team has no ops capacity",
-                  "workload is spiky / low duty-cycle",
-                  "speed to market matters most",
-                  "compliance pre-certified is a requirement",
+                  "Team has no ops capacity",
+                  "Workload is spiky / low duty-cycle",
+                  "Speed to market matters most",
+                  "Compliance pre-certified is a requirement",
                 ],
                 color: C.orange,
               },
               {
                 t: "Qdrant shines",
                 items: [
-                  "team has ops capacity",
-                  "filters are complex or compound",
-                  "steady traffic + cost sensitivity",
-                  "data must stay in your own infra",
+                  "Team has ops capacity",
+                  "Filters are complex or compound",
+                  "Steady traffic + cost sensitivity",
+                  "Data must stay in your own infra",
                 ],
                 color: C.green,
               },
@@ -2788,9 +2788,9 @@ export const WeaviateMilvusChroma = (ctx) => {
               lineHeight: 1.9,
             }}
           >
-            pick if: you want <span style={{ color: C.cyan }}>modular RAG pipelines</span>
+            Pick if: you want <span style={{ color: C.cyan }}>modular RAG pipelines</span>
             <br />
-            out-of-the-box integrations for embedding and generation
+            Out-of-the-box integrations for embedding and generation
           </div>
           <T color="#80deea" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
             Weaviate is popular with teams building RAG where the embedding + retrieval + generation stack lives in one
@@ -2834,16 +2834,16 @@ export const WeaviateMilvusChroma = (ctx) => {
                 lineHeight: 1.9,
               }}
             >
-              separated <span style={{ color: C.yellow }}>storage</span>, <span style={{ color: C.yellow }}>index</span>
+              Separated <span style={{ color: C.yellow }}>storage</span>, <span style={{ color: C.yellow }}>index</span>
               , <span style={{ color: C.yellow }}>query</span> tiers
               <br />
-              scale each independently based on the bottleneck
+              Scale each independently based on the bottleneck
               <br />
-              storage tier -&gt; object store / S3
+              Storage tier -&gt; object store / S3
               <br />
-              query tier -&gt; in-memory index replicas
+              Query tier -&gt; in-memory index replicas
               <br />
-              handles <span style={{ color: C.yellow }}>billions of vectors</span> in a single cluster
+              Handles <span style={{ color: C.yellow }}>billions of vectors</span> in a single cluster
             </div>
           </div>
           <div
@@ -3022,11 +3022,11 @@ export const WeaviateMilvusChroma = (ctx) => {
               lineHeight: 1.9,
             }}
           >
-            pick if: your team <span style={{ color: C.orange }}>already runs Elastic / OpenSearch</span>
+            Pick if: your team <span style={{ color: C.orange }}>already runs Elastic / OpenSearch</span>
             <br />
-            unified search across logs, text, and vectors
+            Unified search across logs, text, and vectors
             <br />
-            hybrid BM25 + dense is native, not bolted on
+            Hybrid BM25 + dense is native, not bolted on
           </div>
           <T color="#ffb74d" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
             The argument for Elastic+vector is almost entirely operational: zero new infrastructure, one query language.
@@ -3105,9 +3105,9 @@ export const WeaviateMilvusChroma = (ctx) => {
               lineHeight: 1.9,
             }}
           >
-            no single winner - <span style={{ color: C.purple }}>context picks the product</span>
+            No single winner - <span style={{ color: C.purple }}>context picks the product</span>
             <br />
-            the decision framework in 11.36 pulls all seven systems together
+            The decision framework in 11.36 pulls all seven systems together
           </div>
           <T color="#b8a9ff" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
             One chapter can only skim each of these. Each has enough nuance for a deep dive of its own; the goal here
@@ -3184,10 +3184,10 @@ export const DecisionFramework = (ctx) => {
                   New vector-search feature
                 </text>
                 <text x={320} y={50} fill={C.bright} fontSize={11} textAnchor="middle">
-                  start here
+                  Start here
                 </text>
                 <text x={320} y={75} fill={C.dim} fontSize={12} textAnchor="middle">
-                  axis 1: data size
+                  Axis 1: data size
                 </text>
                 <line x1={320} y1={58} x2={320} y2={85} stroke={C.dim} strokeWidth={1} />
                 <line x1={80} y1={110} x2={560} y2={110} stroke={C.dim} strokeWidth={1} />
@@ -3225,16 +3225,16 @@ export const DecisionFramework = (ctx) => {
                   </g>
                 ))}
                 <text x={320} y={300} fill={C.dim} fontSize={12} textAnchor="middle">
-                  axis 2: ops capacity -&gt; narrow further
+                  Axis 2: ops capacity -&gt; narrow further
                 </text>
                 <text x={320} y={322} fill={C.dim} fontSize={12} textAnchor="middle">
-                  axis 3: filter complexity -&gt; favor Qdrant when compound
+                  Axis 3: filter complexity -&gt; favor Qdrant when compound
                 </text>
                 <text x={320} y={344} fill={C.dim} fontSize={12} textAnchor="middle">
-                  axis 4: cost band -&gt; per-million-vector and per-million-query ratios
+                  Axis 4: cost band -&gt; per-million-vector and per-million-query ratios
                 </text>
                 <text x={320} y={370} fill={C.cyan} fontSize={12} fontWeight="bold" textAnchor="middle">
-                  fold all four -&gt; single vendor shortlist
+                  Fold all four -&gt; single vendor shortlist
                 </text>
               </svg>
             </div>
@@ -3313,7 +3313,7 @@ export const DecisionFramework = (ctx) => {
                 >
                   {r.defaults.join(" / ")}
                 </div>
-                <T color={C.dim} size={12} style={{ marginTop: 6, fontStyle: "italic" }}>
+                <T color={C.dim} size={12} style={{ marginTop: 6, fontStyle: "italic" }} center>
                   {r.note}
                 </T>
               </div>
@@ -3332,11 +3332,11 @@ export const DecisionFramework = (ctx) => {
               lineHeight: 1.9,
             }}
           >
-            rule of thumb: <span style={{ color: C.yellow }}>N vectors &middot; 3 KB</span> per vector at d=768
+            Rule of thumb: <span style={{ color: C.yellow }}>N vectors &middot; 3 KB</span> per vector at d=768
             <br />
             1M = 3 GB, 100M = 300 GB, 1B = 3 TB
             <br />
-            when the memory number gets scary, time to shift buckets
+            When the memory number gets scary, time to shift buckets
           </div>
           <T color="#ffe082" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
             Size alone rarely decides the product, but it reliably narrows the shortlist from seven to two or three.
@@ -3417,7 +3417,7 @@ export const DecisionFramework = (ctx) => {
                   >
                     {r.picks.join(" / ")}
                   </div>
-                  <T color={C.dim} size={12} style={{ marginTop: 6, fontStyle: "italic" }}>
+                  <T color={C.dim} size={12} style={{ marginTop: 6, fontStyle: "italic" }} center>
                     {r.note}
                   </T>
                 </div>
@@ -3437,9 +3437,9 @@ export const DecisionFramework = (ctx) => {
               lineHeight: 1.9,
             }}
           >
-            ops capacity is <span style={{ color: C.green }}>not a preference</span>, it is a constraint
+            Ops capacity is <span style={{ color: C.green }}>not a preference</span>, it is a constraint
             <br />
-            even a cheap product is expensive if your team cannot run it
+            Even a cheap product is expensive if your team cannot run it
           </div>
           <T color="#80e8a5" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
             The honest conversation in design reviews is usually about ops capacity. Teams that want Qdrant but do not
@@ -3520,9 +3520,9 @@ export const DecisionFramework = (ctx) => {
               lineHeight: 1.9,
             }}
           >
-            mismatched filter complexity is <span style={{ color: C.orange }}>the #1 post-launch surprise</span>
+            Mismatched filter complexity is <span style={{ color: C.orange }}>the #1 post-launch surprise</span>
             <br />
-            read 11.20 carefully before committing
+            Read 11.20 carefully before committing
           </div>
           <T color="#ffb74d" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
             Teams often underestimate filter complexity until the product is in flight. The first selectivity-edge-case
@@ -3624,9 +3624,9 @@ export const DecisionFramework = (ctx) => {
               lineHeight: 1.9,
             }}
           >
-            eight questions, <span style={{ color: C.red }}>one per axis</span>
+            Eight questions, <span style={{ color: C.red }}>one per axis</span>
             <br />
-            if you can answer all eight, the vendor choice defends itself
+            If you can answer all eight, the vendor choice defends itself
           </div>
           <T color="#ef9a9a" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
             Keep this checklist in the design-review template. Unanswered questions reliably become post-launch
@@ -3726,7 +3726,7 @@ export const DecisionFramework = (ctx) => {
           >
             Section 11 <span style={{ color: C.purple }}>master class complete</span>
             <br />
-            from retrieval problem to vendor decision, first principles end-to-end
+            From retrieval problem to vendor decision, first principles end-to-end
           </div>
           <T color="#b8a9ff" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
             That is the goal: not memorized product matrices that age, but the framework to re-derive the right pick as

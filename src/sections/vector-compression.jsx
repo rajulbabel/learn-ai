@@ -32,7 +32,7 @@ export const MemoryWall = (ctx) => {
             }}
           >
             <T color={C.red} bold center size={16}>
-              doc 1: &quot;Cats are small domesticated carnivores&quot; (first 8 of 768 dims shown)
+              Doc 1: &quot;Cats are small domesticated carnivores&quot; (first 8 of 768 dims shown)
             </T>
             <div
               style={{
@@ -154,7 +154,7 @@ export const MemoryWall = (ctx) => {
                   color: C.orange,
                 }}
               >
-                what that means
+                What that means
               </div>
               {[
                 { n: "10 (cat corpus)", bytes: "30 KB", note: "fits in L1 cache" },
@@ -233,13 +233,13 @@ export const MemoryWall = (ctx) => {
             >
               <div style={{ padding: "6px 8px", color: C.yellow, fontWeight: "bold", textAlign: "center" }}>N</div>
               <div style={{ padding: "6px 8px", color: C.yellow, fontWeight: "bold", textAlign: "center" }}>
-                vectors
+                Vectors
               </div>
               <div style={{ padding: "6px 8px", color: C.yellow, fontWeight: "bold", textAlign: "center" }}>
-                graph overhead
+                Graph overhead
               </div>
               <div style={{ padding: "6px 8px", color: C.yellow, fontWeight: "bold", textAlign: "center" }}>
-                total RAM
+                Total RAM
               </div>
               {[
                 { n: "1M", vec: "3 GB", graph: "100 MB", total: "3.1 GB" },
@@ -296,13 +296,13 @@ export const MemoryWall = (ctx) => {
                   lineHeight: 1.9,
                 }}
               >
-                r7i.24xlarge: 768 GB RAM
+                R7i.24xlarge: 768 GB RAM
                 <br />
                 100M vectors: 310 GB
                 <br />
                 <span style={{ color: C.green }}>headroom: 458 GB for cache + copies</span>
                 <br />
-                cost: ~$5,000 / month
+                Cost: ~$5,000 / month
               </div>
             </div>
             <div
@@ -326,13 +326,13 @@ export const MemoryWall = (ctx) => {
                   lineHeight: 1.9,
                 }}
               >
-                r7i.24xlarge: 768 GB RAM
+                R7i.24xlarge: 768 GB RAM
                 <br />
                 1B vectors: 3.1 TB
                 <br />
                 <span style={{ color: C.red }}>needs 4+ shards</span>
                 <br />
-                cost: ~$20,000+ / month
+                Cost: ~$20,000+ / month
               </div>
             </div>
           </div>
@@ -414,9 +414,9 @@ export const MemoryWall = (ctx) => {
                     color: C.bright,
                   }}
                 >
-                  <div style={{ color: card.color }}>compress:</div>
+                  <div style={{ color: card.color }}>Compress:</div>
                   <div>{card.compress}</div>
-                  <div style={{ color: card.color }}>recall:</div>
+                  <div style={{ color: card.color }}>Recall:</div>
                   <div>{card.recall}</div>
                 </div>
                 <T color={C.dim} size={13} style={{ marginTop: 8 }}>
@@ -482,7 +482,7 @@ export const ScalarQuantization = (ctx) => {
             }}
           >
             <T color={C.cyan} bold center size={16}>
-              doc 1: first 8 dims of the float32 vector
+              Doc 1: first 8 dims of the float32 vector
             </T>
             <div
               style={{
@@ -511,7 +511,7 @@ export const ScalarQuantization = (ctx) => {
               ))}
             </div>
             <T color={C.dim} size={13} center style={{ marginTop: 6 }}>
-              each cell = 4 bytes (float32) &middot; total for this row = 32 bytes
+              Each cell = 4 bytes (float32) &middot; total for this row = 32 bytes
             </T>
           </div>
           <div
@@ -569,7 +569,7 @@ export const ScalarQuantization = (ctx) => {
                 fontSize: 13,
               }}
             >
-              <div style={{ color: C.yellow, padding: "4px 6px", textAlign: "right" }}>dim</div>
+              <div style={{ color: C.yellow, padding: "4px 6px", textAlign: "right" }}>Dim</div>
               {[0, 1, 2, 3, 4, 5, 6, 7].map((d) => (
                 <div key={`dh-${d}`} style={{ color: C.yellow, padding: "4px 6px", textAlign: "center" }}>
                   {d}
@@ -769,7 +769,7 @@ export const ScalarQuantization = (ctx) => {
       <Reveal when={sub >= 4}>
         <Box color={C.purple} style={{ width: "100%" }}>
           <T color={C.purple} bold center size={22}>
-            int8 distances are SIMD-friendly and often faster
+            Int8 distances are SIMD-friendly and often faster
           </T>
           <T color="#b8a9ff" style={{ marginTop: 8 }}>
             Modern CPUs have dedicated int8 dot-product instructions. On AVX-512, VPDPBUSD processes 64 int8 multiplies
@@ -795,7 +795,7 @@ export const ScalarQuantization = (ctx) => {
                 }}
               >
                 <T color={C.cyan} bold center size={16}>
-                  float32 path
+                  Float32 path
                 </T>
                 <div
                   style={{
@@ -823,7 +823,7 @@ export const ScalarQuantization = (ctx) => {
                 }}
               >
                 <T color={C.purple} bold center size={16}>
-                  int8 path
+                  Int8 path
                 </T>
                 <div
                   style={{
@@ -857,9 +857,9 @@ export const ScalarQuantization = (ctx) => {
               lineHeight: 2,
             }}
           >
-            int8 SIMD speedup: <span style={{ color: C.purple }}>~3-4x faster</span>
+            Int8 SIMD speedup: <span style={{ color: C.purple }}>~3-4x faster</span>
             <br />
-            stacked on 4x memory win = same hardware can serve 3-4x more QPS
+            Stacked on 4x memory win = same hardware can serve 3-4x more QPS
           </div>
           <T color="#b8a9ff" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
             FAISS, Qdrant, pgvector, and Milvus all use int8 SIMD kernels when the index is scalar-quantized. This is
@@ -893,9 +893,9 @@ export const ScalarQuantization = (ctx) => {
           >
             d = 768 vector
             <br />
-            before: <span style={{ color: C.cyan }}>3,072 bytes</span> (float32)
+            Before: <span style={{ color: C.cyan }}>3,072 bytes</span> (float32)
             <br />
-            after: <span style={{ color: C.red }}>768 bytes</span> (int8) &middot; bytes per vector = d
+            After: <span style={{ color: C.red }}>768 bytes</span> (int8) &middot; bytes per vector = d
             <br />
             <span style={{ color: C.green }}>compression: 4x</span> &middot;{" "}
             <span style={{ color: C.yellow }}>recall loss: 1-3%</span>
@@ -1096,7 +1096,7 @@ export const ProductQuantization = (ctx) => {
                 return <rect key={i} x={x} y="40" width={cellW - 0.5} height="36" fill={fill} />;
               })}
               <text x="360" y="28" textAnchor="middle" fill={C.cyan} fontSize="13" fontWeight="bold">
-                vector v &middot; 768 dims
+                Vector v &middot; 768 dims
               </text>
               {/* Bracket beneath the 4 highlighted cells (slots 0-3) */}
               <line x1="20" y1="82" x2={20 + (680 / 96) * 4} y2="82" stroke={C.cyan} strokeWidth="1.5" />
@@ -1110,7 +1110,7 @@ export const ProductQuantization = (ctx) => {
                 strokeWidth="1.5"
               />
               <text x={20 + (680 / 96) * 4 + 8} y="86" textAnchor="start" fill={C.cyan} fontSize="11" fontWeight="bold">
-                slots 0-3 (highlighted)
+                Slots 0-3 (highlighted)
               </text>
               {/* "..." in the middle */}
               <text x="360" y="100" textAnchor="middle" fill={C.dim} fontSize="11">
@@ -1133,7 +1133,7 @@ export const ProductQuantization = (ctx) => {
                 fontSize="11"
                 fontWeight="bold"
               >
-                slot 95
+                Slot 95
               </text>
               {/* Central annotation: 1 slot = 8 dims */}
               <text x="360" y="125" textAnchor="middle" fill={C.cyan} fontSize="12">
@@ -1173,7 +1173,7 @@ export const ProductQuantization = (ctx) => {
               {/* Connector + single-line label in the clean gap between doc 1 and doc 2 */}
               <line x1={60 + (620 / 96) * 4} y1="175" x2="92" y2="175" stroke={C.cyan} strokeWidth="1" />
               <text x="98" y="178" textAnchor="start" fill={C.cyan} fontSize="11" fontWeight="bold">
-                slots 0-3 of every doc &middot; same dim range
+                Slots 0-3 of every doc &middot; same dim range
               </text>
             </svg>
           </div>
@@ -1224,7 +1224,7 @@ export const ProductQuantization = (ctx) => {
               Slot 0 sub-vectors clustered by k-means (codebook = 256 centroids)
             </T>
             <T color={C.dim} center size={12} style={{ marginTop: 4 }}>
-              slot 0 is 8-D &middot; drawn here as 2-D for clarity
+              Slot 0 is 8-D &middot; drawn here as 2-D for clarity
             </T>
             <svg
               viewBox="0 0 720 360"
@@ -1340,7 +1340,7 @@ export const ProductQuantization = (ctx) => {
                 </g>
               ))}
               <text x="250" y="14" textAnchor="middle" fill={C.yellow} fontSize="12" fontWeight="bold">
-                slot 0 sub-vector cloud (corpus-wide)
+                Slot 0 sub-vector cloud (corpus-wide)
               </text>
               {/* Side panel */}
               <rect x="510" y="40" width="190" height="280" fill={`${C.yellow}10`} stroke={`${C.yellow}22`} rx="6" />
@@ -1348,7 +1348,7 @@ export const ProductQuantization = (ctx) => {
                 k-means on slot 0
               </text>
               <text x="605" y="100" textAnchor="middle" fill={C.bright} fontSize="11">
-                input: billions of 8-D points
+                Input: billions of 8-D points
               </text>
               <text x="605" y="120" textAnchor="middle" fill={C.bright} fontSize="11">
                 output: 256 centroids
@@ -1358,16 +1358,16 @@ export const ProductQuantization = (ctx) => {
               </text>
               <line x1="540" y1="180" x2="670" y2="180" stroke={`${C.yellow}44`} strokeWidth="1" />
               <text x="605" y="205" textAnchor="middle" fill={C.bright} fontSize="11">
-                why exactly 256?
+                Why exactly 256?
               </text>
               <text x="605" y="225" textAnchor="middle" fill={C.bright} fontSize="11">
                 2^8 = 256
               </text>
               <text x="605" y="245" textAnchor="middle" fill={C.bright} fontSize="11">
-                fits in a single byte
+                Fits in a single byte
               </text>
               <text x="605" y="285" textAnchor="middle" fill={C.dim} fontSize="10">
-                repeat for slots 1..95
+                Repeat for slots 1..95
               </text>
               <text x="605" y="305" textAnchor="middle" fill={C.dim} fontSize="10">
                 = 96 codebooks total
@@ -1453,7 +1453,7 @@ export const ProductQuantization = (ctx) => {
               <g transform="translate(120, 0)">
                 <rect x="20" y="10" width="320" height="170" fill={`${C.green}05`} stroke={`${C.green}22`} />
                 <text x="180" y="25" textAnchor="middle" fill={C.green} fontSize="11" fontWeight="bold">
-                  slot 0 cloud
+                  Slot 0 cloud
                 </text>
                 {/* dim points */}
                 {[
@@ -1505,7 +1505,7 @@ export const ProductQuantization = (ctx) => {
                 {/* arrow to nearest centroid (c17) */}
                 <line x1="208" y1="90" x2="225" y2="90" stroke={C.green} strokeWidth="2" markerEnd="url(#snap-arrow)" />
                 <text x="225" y="78" textAnchor="middle" fill={C.green} fontSize="10">
-                  snap
+                  Snap
                 </text>
                 {/* annotation: distances drawn dimly to other centroids */}
                 <line x1="200" y1="95" x2="95" y2="70" stroke={`${C.green}33`} strokeWidth="1" strokeDasharray="3,3" />
@@ -1528,7 +1528,7 @@ export const ProductQuantization = (ctx) => {
                   strokeDasharray="3,3"
                 />
                 <text x="180" y="195" textAnchor="middle" fill={C.dim} fontSize="10">
-                  closest of all 256 centroids = c17
+                  Closest of all 256 centroids = c17
                 </text>
                 {/* Right side: arrow + result */}
                 <line x1="345" y1="90" x2="395" y2="90" stroke={C.green} strokeWidth="2" markerEnd="url(#snap-arrow)" />
@@ -1543,7 +1543,7 @@ export const ProductQuantization = (ctx) => {
                   rx="4"
                 />
                 <text x="440" y="85" textAnchor="middle" fill={C.bright} fontSize="11">
-                  store
+                  Store
                 </text>
                 <text x="440" y="102" textAnchor="middle" fill={C.green} fontSize="14" fontWeight="bold">
                   id 17
@@ -1555,7 +1555,7 @@ export const ProductQuantization = (ctx) => {
               {/* Bottom: row of 4 sub-vectors snapping to 4 bytes (centered group) */}
               <g transform="translate(215, 0)">
                 <text x="20" y="215" textAnchor="start" fill={C.green} fontSize="12" fontWeight="bold">
-                  doc 1: 4 of 96 slots
+                  Doc 1: 4 of 96 slots
                 </text>
                 {[
                   { slot: 0, vals: [0.81, 0.12, 0.45, 0.22], id: 17 },
@@ -1567,7 +1567,7 @@ export const ProductQuantization = (ctx) => {
                   return (
                     <g key={ri}>
                       <text x="60" y={y + 14} textAnchor="end" fill={C.dim} fontSize="11">
-                        slot {row.slot}
+                        Slot {row.slot}
                       </text>
                       {/* sub-vector visualized as 4 small cells */}
                       {row.vals.map((v, ci) => (
@@ -1605,7 +1605,7 @@ export const ProductQuantization = (ctx) => {
                         markerEnd="url(#snap-arrow)"
                       />
                       <text x="218" y={y + 7} textAnchor="middle" fill={C.dim} fontSize="9">
-                        snap
+                        Snap
                       </text>
                       {/* byte box */}
                       <rect
@@ -1648,7 +1648,7 @@ export const ProductQuantization = (ctx) => {
                 rx="4"
               />
               <text x="360" y="415" textAnchor="middle" fill={C.bright} fontSize="14" fontFamily="monospace">
-                doc 1 PQ code = [17, 203, 89, 142, 88, 17, 250, 61, ..., 71]
+                Doc 1 PQ code = [17, 203, 89, 142, 88, 17, 250, 61, ..., 71]
                 <tspan fill={C.green} fontWeight="bold">
                   {"   "}96 bytes
                 </tspan>
@@ -1679,7 +1679,7 @@ export const ProductQuantization = (ctx) => {
               lineHeight: 2,
             }}
           >
-            doc 1 code = [17, 203, 89, 142, ..., 71]
+            Doc 1 code = [17, 203, 89, 142, ..., 71]
             <br />
             <span style={{ color: C.green }}>96 centroid ids &middot; 1 byte each = 96 bytes total</span>
           </div>
@@ -1715,7 +1715,7 @@ export const ProductQuantization = (ctx) => {
               </desc>
               {/* float32 bar (full width 640) */}
               <text x="20" y="40" textAnchor="start" fill={C.cyan} fontSize="13" fontWeight="bold">
-                float32
+                Float32
               </text>
               <rect x="20" y="50" width="640" height="44" fill={C.cyan} stroke="#08080d" strokeWidth="1" rx="3" />
               <text x="340" y="79" textAnchor="middle" fill="#08080d" fontSize="14" fontWeight="bold">
@@ -1744,7 +1744,7 @@ export const ProductQuantization = (ctx) => {
                 32x
               </text>
               <text x="615" y="170" textAnchor="middle" fill={C.green} fontSize="11">
-                smaller
+                Smaller
               </text>
             </svg>
           </div>
@@ -1841,7 +1841,7 @@ export const ProductQuantization = (ctx) => {
                 (centroid IDs). The query stays as float; the docs are codes. No float doc vectors exist on disk.
               </desc>
               <text x="360" y="22" textAnchor="middle" fill={C.red} fontSize="13" fontWeight="bold">
-                query q (full float, 96 sub-queries; 8 shown)
+                Query q (full float, 96 sub-queries; 8 shown)
               </text>
               {Array.from({ length: 8 }).map((_, i) => {
                 const x = 70 + i * 81;
@@ -1866,7 +1866,7 @@ export const ProductQuantization = (ctx) => {
                       fontFamily="monospace"
                       fontWeight="bold"
                     >
-                      q_{i}
+                      Q_{i}
                     </text>
                     <text x={x + 32} y={61} textAnchor="middle" fill={C.dim} fontSize="9" fontFamily="monospace">
                       8 floats
@@ -1875,7 +1875,7 @@ export const ProductQuantization = (ctx) => {
                 );
               })}
               <text x="360" y="100" textAnchor="middle" fill={C.red} fontSize="13" fontWeight="bold">
-                doc database: 5 of N docs as 96-byte codes
+                Doc database: 5 of N docs as 96-byte codes
               </text>
               {[
                 { id: 1, code: [17, 203, 89, 142, 88, 17, 250, 61] },
@@ -1888,7 +1888,7 @@ export const ProductQuantization = (ctx) => {
                 return (
                   <g key={doc.id}>
                     <text x="10" y={y + 18} fill={C.green} fontSize="11" fontFamily="monospace" fontWeight="bold">
-                      doc {doc.id}
+                      Doc {doc.id}
                     </text>
                     {doc.code.map((b, i) => {
                       const x = 70 + i * 81;
@@ -1912,7 +1912,7 @@ export const ProductQuantization = (ctx) => {
                 );
               })}
               <text x="360" y="265" textAnchor="middle" fill={C.dim} fontSize="11">
-                no float doc vectors exist on disk - only 96 bytes per doc
+                No float doc vectors exist on disk - only 96 bytes per doc
               </text>
             </svg>
           </div>
@@ -1969,7 +1969,7 @@ export const ProductQuantization = (ctx) => {
                       fontFamily="monospace"
                       fontWeight="bold"
                     >
-                      q_{i}
+                      Q_{i}
                     </text>
                     <line x1={x + 32} y1="60" x2={x + 32} y2="78" stroke={C.red} strokeWidth="1.5" />
                     <polygon points={`${x + 28},78 ${x + 36},78 ${x + 32},85`} fill={C.red} />
@@ -2012,7 +2012,7 @@ export const ProductQuantization = (ctx) => {
                       );
                     })}
                     <text x={tx + 32} y={285} textAnchor="middle" fill={C.bright} fontSize="10" fontFamily="monospace">
-                      slot {slotIdx}
+                      Slot {slotIdx}
                     </text>
                     <text x={tx + 32} y={300} textAnchor="middle" fill={C.dim} fontSize="9">
                       256 rows
@@ -2040,7 +2040,7 @@ export const ProductQuantization = (ctx) => {
               Frame C - score one doc: 96 lookups, 96 adds
             </T>
             <T color={C.dim} center size={12} style={{ marginTop: 4 }}>
-              each byte names a centroid in its slot. The LUT cell already holds the distance from that slot&apos;s
+              Each byte names a centroid in its slot. The LUT cell already holds the distance from that slot&apos;s
               sub-query to that centroid - one read per slot.
             </T>
             <svg
@@ -2082,7 +2082,7 @@ export const ProductQuantization = (ctx) => {
                       {b}
                     </text>
                     <text x={x + 39} y={76} textAnchor="middle" fill={C.dim} fontSize="10" fontFamily="monospace">
-                      means c{b}
+                      Means c{b}
                     </text>
                     <line
                       x1={x + 39}
@@ -2132,7 +2132,7 @@ export const ProductQuantization = (ctx) => {
                       fontFamily="monospace"
                       fontWeight="bold"
                     >
-                      q_{i} &rarr; c{cell.byte}
+                      Q_{i} &rarr; c{cell.byte}
                     </text>
                     <line x1={x + 8} y1={167} x2={x + 70} y2={167} stroke={`#08080d55`} strokeWidth="1" />
                     <text
@@ -2147,7 +2147,7 @@ export const ProductQuantization = (ctx) => {
                       {cell.d.toFixed(2)}
                     </text>
                     <text x={x + 39} y={213} textAnchor="middle" fill={C.dim} fontSize="10" fontFamily="monospace">
-                      slot {i}
+                      Slot {i}
                     </text>
                     <line x1={x + 39} y1="222" x2={x + 39} y2="244" stroke={C.red} strokeWidth="1.5" />
                     <polygon points={`${x + 35},244 ${x + 43},244 ${x + 39},250`} fill={C.red} />
@@ -2179,7 +2179,7 @@ export const ProductQuantization = (ctx) => {
                 d(q, doc 1) &asymp; 0.05 + 0.12 + 0.08 + 0.21 + 0.06 + 0.05 + 0.18 + 0.19 = 0.94
               </text>
               <text x="360" y="345" textAnchor="middle" fill={C.dim} fontSize="11">
-                no multiplies during the scan - just byte reads, table lookups, and adds
+                No multiplies during the scan - just byte reads, table lookups, and adds
               </text>
             </svg>
           </div>
@@ -2200,7 +2200,7 @@ export const ProductQuantization = (ctx) => {
             <div style={{ marginTop: 10, display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
               <div>
                 <T color={C.dim} size={12} center style={{ marginBottom: 6, fontFamily: "monospace" }}>
-                  scan: distance for each doc
+                  Scan: distance for each doc
                 </T>
                 {[
                   { id: 1, sum: 0.94 },
@@ -2224,7 +2224,7 @@ export const ProductQuantization = (ctx) => {
                     }}
                   >
                     <T color={C.green} bold size={13} style={{ fontFamily: "monospace" }}>
-                      doc {row.id}
+                      Doc {row.id}
                     </T>
                     <div style={{ height: 10, background: "rgba(0,0,0,0.4)", borderRadius: 3, overflow: "hidden" }}>
                       <div style={{ width: `${(row.sum / 1.5) * 100}%`, height: "100%", background: C.green }} />
@@ -2237,7 +2237,7 @@ export const ProductQuantization = (ctx) => {
               </div>
               <div>
                 <T color={C.dim} size={12} center style={{ marginBottom: 6, fontFamily: "monospace" }}>
-                  sort ascending - top 3
+                  Sort ascending - top 3
                 </T>
                 {[
                   { id: 2, sum: 0.42, rank: 1 },
@@ -2262,10 +2262,10 @@ export const ProductQuantization = (ctx) => {
                       #{row.rank}
                     </T>
                     <T color={C.red} bold size={13} style={{ fontFamily: "monospace" }}>
-                      doc {row.id}
+                      Doc {row.id}
                     </T>
                     <T color={C.bright} size={11}>
-                      nearest neighbor
+                      Nearest neighbor
                     </T>
                     <T color={C.bright} size={12} style={{ fontFamily: "monospace", textAlign: "right" }}>
                       d={row.sum.toFixed(2)}
@@ -2275,7 +2275,7 @@ export const ProductQuantization = (ctx) => {
               </div>
             </div>
             <T color={C.dim} size={12} center style={{ marginTop: 10, fontFamily: "monospace" }}>
-              for each doc: 96 lookups + 96 adds &middot; for N = 1M docs: 96M lookups + 96M adds (vs 1.5G float ops)
+              For each doc: 96 lookups + 96 adds &middot; for N = 1M docs: 96M lookups + 96M adds (vs 1.5G float ops)
             </T>
           </div>
 
@@ -2294,9 +2294,9 @@ export const ProductQuantization = (ctx) => {
           >
             <span style={{ color: C.red }}>Asymmetric Distance Computation (ADC):</span>
             <br />
-            once per query: build LUT (96 &middot; 256 = 24,576 dists &asymp; 96 KB; fits L2)
+            Once per query: build LUT (96 &middot; 256 = 24,576 dists &asymp; 96 KB; fits L2)
             <br />
-            per doc: <span style={{ color: C.red }}>96 lookups + 96 adds</span> &middot; no multiplies
+            Per doc: <span style={{ color: C.red }}>96 lookups + 96 adds</span> &middot; no multiplies
           </div>
 
           <div
@@ -2411,7 +2411,7 @@ export const ProductQuantization = (ctx) => {
               {/* Left scatter - plain PQ */}
               <rect x="20" y="40" width="280" height="240" fill={`${C.red}05`} stroke={`${C.red}33`} />
               <text x="160" y="32" textAnchor="middle" fill={C.red} fontSize="13" fontWeight="bold">
-                plain PQ: correlated dims
+                Plain PQ: correlated dims
               </text>
               {/* elongated diagonal cluster */}
               {[
@@ -2456,10 +2456,10 @@ export const ProductQuantization = (ctx) => {
               {/* slot boundary - dashed vertical */}
               <line x1="160" y1="40" x2="160" y2="280" stroke={C.yellow} strokeWidth="2" strokeDasharray="6,4" />
               <text x="160" y="298" textAnchor="middle" fill={C.yellow} fontSize="10">
-                slot boundary
+                Slot boundary
               </text>
               <text x="160" y="312" textAnchor="middle" fill={C.dim} fontSize="9">
-                cluster crosses boundary &rarr; loose k-means
+                Cluster crosses boundary &rarr; loose k-means
               </text>
               {/* Curved arrow between plots */}
               <path
@@ -2525,10 +2525,10 @@ export const ProductQuantization = (ctx) => {
               {/* slot boundary - dashed vertical */}
               <line x1="560" y1="40" x2="560" y2="280" stroke={C.yellow} strokeWidth="2" strokeDasharray="6,4" />
               <text x="560" y="298" textAnchor="middle" fill={C.yellow} fontSize="10">
-                slot boundary
+                Slot boundary
               </text>
               <text x="560" y="312" textAnchor="middle" fill={C.dim} fontSize="9">
-                clean split &rarr; tight k-means clusters
+                Clean split &rarr; tight k-means clusters
               </text>
             </svg>
           </div>
@@ -2555,9 +2555,9 @@ export const ProductQuantization = (ctx) => {
               lineHeight: 2,
             }}
           >
-            pipeline: v &rarr; <span style={{ color: C.purple }}>Rv</span> &rarr; split &rarr; encode
+            Pipeline: v &rarr; <span style={{ color: C.purple }}>Rv</span> &rarr; split &rarr; encode
             <br />
-            recall@10 at m = 96: plain PQ <span style={{ color: C.red }}>0.89</span> &middot; OPQ + PQ{" "}
+            Recall@10 at m = 96: plain PQ <span style={{ color: C.red }}>0.89</span> &middot; OPQ + PQ{" "}
             <span style={{ color: C.green }}>0.94</span>
             <br />
             <span style={{ color: C.dim }}>R is 768 &times; 768 orthonormal &middot; learned alongside codebooks</span>
@@ -2617,7 +2617,7 @@ export const ProductQuantization = (ctx) => {
               {/* Highlight band at m=96 */}
               <rect x="335" y="50" width="50" height="190" fill={`${C.pink}18`} />
               <text x="360" y="46" textAnchor="middle" fill={C.pink} fontSize="11" fontWeight="bold">
-                production sweet spot
+                Production sweet spot
               </text>
               {/* Left y-axis label (recall) */}
               <text
@@ -2629,7 +2629,7 @@ export const ProductQuantization = (ctx) => {
                 fontWeight="bold"
                 transform="rotate(-90 36 148)"
               >
-                recall@10
+                Recall@10
               </text>
               {/* Right y-axis label (bytes) */}
               <text
@@ -2716,7 +2716,7 @@ export const ProductQuantization = (ctx) => {
               <rect x="95" y="10" width="220" height="30" fill="rgba(0,0,0,0.4)" stroke={`${C.pink}44`} rx="4" />
               <line x1="105" y1="22" x2="123" y2="22" stroke={C.green} strokeWidth="2.5" />
               <text x="129" y="26" textAnchor="start" fill={C.green} fontSize="10">
-                recall@10 (OPQ)
+                Recall@10 (OPQ)
               </text>
               <line x1="217" y1="22" x2="235" y2="22" stroke={C.orange} strokeWidth="2" />
               <text x="241" y="26" textAnchor="start" fill={C.orange} fontSize="10">
@@ -2841,7 +2841,7 @@ export const BinaryQuantization = (ctx) => {
             }}
           >
             <T color={C.cyan} bold center size={16}>
-              float32 vector at d = 1024 (first 16 dims shown)
+              Float32 vector at d = 1024 (first 16 dims shown)
             </T>
             <div
               style={{
@@ -2885,7 +2885,7 @@ export const BinaryQuantization = (ctx) => {
           >
             d = 1024 &middot; 4 bytes = <span style={{ color: C.cyan }}>4,096 bytes = 4 KB</span>
             <br />
-            at N = 1B: <span style={{ color: C.red }}>4 TB of raw vectors</span>
+            At N = 1B: <span style={{ color: C.red }}>4 TB of raw vectors</span>
           </div>
           <T color="#80deea" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
             Scalar quantization brought this down to 1 KB. Binary quantization pushes it to 128 bytes.
@@ -2926,7 +2926,7 @@ export const BinaryQuantization = (ctx) => {
                 alignItems: "center",
               }}
             >
-              <div style={{ color: C.yellow, textAlign: "right" }}>float32:</div>
+              <div style={{ color: C.yellow, textAlign: "right" }}>Float32:</div>
               <div style={{ display: "grid", gridTemplateColumns: "repeat(16, 1fr)", gap: 3 }}>
                 {bqFloatVec.map((v, i) => (
                   <div
@@ -2977,7 +2977,7 @@ export const BinaryQuantization = (ctx) => {
               lineHeight: 2,
             }}
           >
-            bit_i = 1 if v_i &ge; 0 else 0
+            Bit_i = 1 if v_i &ge; 0 else 0
             <br />d = 1024 &rarr; 1024 bits = <span style={{ color: C.yellow }}>128 bytes per vector</span>
             <br />
             <span style={{ color: C.green, fontWeight: "bold" }}>32x compression vs float32</span>
@@ -3022,7 +3022,7 @@ export const BinaryQuantization = (ctx) => {
                 alignItems: "center",
               }}
             >
-              <div style={{ color: C.green, textAlign: "right" }}>doc A:</div>
+              <div style={{ color: C.green, textAlign: "right" }}>Doc A:</div>
               <div style={{ display: "grid", gridTemplateColumns: "repeat(16, 1fr)", gap: 3 }}>
                 {bqBits.map((b, i) => (
                   <div
@@ -3039,7 +3039,7 @@ export const BinaryQuantization = (ctx) => {
                   </div>
                 ))}
               </div>
-              <div style={{ color: C.green, textAlign: "right" }}>doc B:</div>
+              <div style={{ color: C.green, textAlign: "right" }}>Doc B:</div>
               <div style={{ display: "grid", gridTemplateColumns: "repeat(16, 1fr)", gap: 3 }}>
                 {bqBitsB.map((b, i) => (
                   <div
@@ -3125,7 +3125,7 @@ export const BinaryQuantization = (ctx) => {
             }}
           >
             <T color={C.purple} bold center size={16}>
-              recall@10 vs embedding dimension (BERT-style models)
+              Recall@10 vs embedding dimension (BERT-style models)
             </T>
             <svg viewBox="0 0 500 220" style={{ width: "100%", maxWidth: 560, height: "auto", display: "block" }}>
               <desc>
@@ -3135,10 +3135,10 @@ export const BinaryQuantization = (ctx) => {
               <line x1="60" y1="180" x2="480" y2="180" stroke={C.dim} strokeWidth="1" />
               <line x1="60" y1="30" x2="60" y2="180" stroke={C.dim} strokeWidth="1" />
               <text x="270" y="205" textAnchor="middle" fill={C.dim} fontSize="12">
-                embedding dimension d
+                Embedding dimension d
               </text>
               <text x="30" y="105" textAnchor="middle" fill={C.dim} fontSize="12" transform="rotate(-90 30 105)">
-                recall@10
+                Recall@10
               </text>
               {[
                 { d: "64", x: 80 },
@@ -3220,12 +3220,12 @@ export const BinaryQuantization = (ctx) => {
               }}
             >
               <div style={{ padding: "8px 10px", color: C.red, fontWeight: "bold", textAlign: "center" }}>
-                dimension
+                Dimension
               </div>
               <div style={{ padding: "8px 10px", color: C.red, fontWeight: "bold", textAlign: "center" }}>
-                recall@10
+                Recall@10
               </div>
-              <div style={{ padding: "8px 10px", color: C.red, fontWeight: "bold", textAlign: "center" }}>status</div>
+              <div style={{ padding: "8px 10px", color: C.red, fontWeight: "bold", textAlign: "center" }}>Status</div>
               {[
                 { d: "64", recall: "0.18", ok: false, note: "near-random" },
                 { d: "128", recall: "0.60", ok: false, note: "unusable" },
@@ -3302,12 +3302,12 @@ export const BinaryQuantization = (ctx) => {
                 }}
               >
                 <T color={C.yellow} bold center size={15}>
-                  stage 1: binary index
+                  Stage 1: binary index
                 </T>
                 <div style={{ marginTop: 6 }}>
                   N = 1B docs
                   <br />
-                  scan with XOR + popcount
+                  Scan with XOR + popcount
                   <br />
                   return top 100 candidates
                 </div>
@@ -3327,12 +3327,12 @@ export const BinaryQuantization = (ctx) => {
                 }}
               >
                 <T color={C.green} bold center size={15}>
-                  stage 2: float32 rerank
+                  Stage 2: float32 rerank
                 </T>
                 <div style={{ marginTop: 6 }}>
                   100 candidates
                   <br />
-                  full float32 dot products
+                  Full float32 dot products
                   <br />
                   return final top 10
                 </div>
@@ -3356,7 +3356,7 @@ export const BinaryQuantization = (ctx) => {
             <br />
             Pinecone uses the same pattern in its serverless tier.
             <br />
-            recall recovery after rerank: back to ~99% of the float32 baseline
+            Recall recovery after rerank: back to ~99% of the float32 baseline
           </div>
           <T color="#ffcc80" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
             Binary is the right compression when memory is the bottleneck AND you have room for a short rerank pass.
@@ -3410,12 +3410,12 @@ export const BinaryQuantization = (ctx) => {
                 }}
               >
                 <T color={C.yellow} bold center size={15}>
-                  stage 1: HNSW over binary
+                  Stage 1: HNSW over binary
                 </T>
                 <div style={{ marginTop: 6 }}>
                   N = 1B docs, 128 B each
                   <br />
-                  graph edges + Hamming distance
+                  Graph edges + Hamming distance
                   <br />
                   ef_search = 200, return top 200
                 </div>
@@ -3435,12 +3435,12 @@ export const BinaryQuantization = (ctx) => {
                 }}
               >
                 <T color={C.green} bold center size={15}>
-                  stage 2: float32 rerank
+                  Stage 2: float32 rerank
                 </T>
                 <div style={{ marginTop: 6 }}>
                   200 candidates
                   <br />
-                  full float32 dot products
+                  Full float32 dot products
                   <br />
                   return final top 10
                 </div>
@@ -3511,7 +3511,7 @@ export const BinaryQuantization = (ctx) => {
             <br />
             FAISS: <span style={{ color: C.cyan }}>IndexBinaryHNSW</span> + manual float rerank pass
             <br />
-            recall after rerank: back to ~98-99% of the float32 baseline
+            Recall after rerank: back to ~98-99% of the float32 baseline
           </div>
           <T color="#b8a9ff" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
             Why no dedicated combo chapter? The mechanism is the same two-stage pattern from the previous step. Only
@@ -3652,15 +3652,15 @@ export const Matryoshka = (ctx) => {
               </text>
               <line x1="20" y1="20" x2="340" y2="20" stroke={C.yellow} strokeWidth="1" />
               <text x="180" y="14" textAnchor="middle" fill={C.yellow} fontSize="11">
-                first 1024
+                First 1024
               </text>
               <line x1="20" y1="50" x2="100" y2="50" stroke={C.red} strokeWidth="1" />
               <text x="60" y="42" textAnchor="middle" fill={C.red} fontSize="11">
-                first 256
+                First 256
               </text>
               <line x1="20" y1="118" x2="180" y2="118" stroke={C.orange} strokeWidth="1" />
               <text x="100" y="132" textAnchor="middle" fill={C.orange} fontSize="11">
-                first 512
+                First 512
               </text>
             </svg>
           </div>
@@ -3677,7 +3677,7 @@ export const Matryoshka = (ctx) => {
               lineHeight: 2,
             }}
           >
-            training loss = &Sigma; over K in {"{"}256, 512, 1024, 2048, 3072{"}"}: L(embed[0..K])
+            Training loss = &Sigma; over K in {"{"}256, 512, 1024, 2048, 3072{"}"}: L(embed[0..K])
             <br />
             <span style={{ color: C.purple }}>each prefix K is trained to be a usable embedding on its own</span>
           </div>
@@ -3783,7 +3783,7 @@ export const Matryoshka = (ctx) => {
                 }}
               >
                 <T color={C.cyan} bold center size={15}>
-                  full d = 3072
+                  Full d = 3072
                 </T>
                 <div style={{ marginTop: 6 }}>
                   3,072 &middot; 4 = 12,288 bytes per vector
@@ -3802,7 +3802,7 @@ export const Matryoshka = (ctx) => {
                 }}
               >
                 <T color={C.orange} bold center size={15}>
-                  truncated to 512
+                  Truncated to 512
                 </T>
                 <div style={{ marginTop: 6 }}>
                   512 &middot; 4 = 2,048 bytes per vector
@@ -3827,9 +3827,9 @@ export const Matryoshka = (ctx) => {
           >
             <span style={{ color: C.green, fontWeight: "bold" }}>6x savings: 6 TB &rarr; 1 TB</span>
             <br />
-            recall@10: 0.97 at 3072 &rarr; 0.94 at 512 (about 3% drop)
+            Recall@10: 0.97 at 3072 &rarr; 0.94 at 512 (about 3% drop)
             <br />
-            full 3072-dim kept on cold storage for reranking stage
+            Full 3072-dim kept on cold storage for reranking stage
           </div>
           <T color="#ffcc80" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
             The vectors already exist in their full form. Truncation is a metadata change. Zero re-encoding cost.
@@ -3882,10 +3882,10 @@ export const Matryoshka = (ctx) => {
                 }}
               >
                 <T color={C.red} bold center size={15}>
-                  stage 1: coarse (256-dim)
+                  Stage 1: coarse (256-dim)
                 </T>
                 <div style={{ marginTop: 6 }}>
-                  scan 500M docs fast
+                  Scan 500M docs fast
                   <br />
                   6x smaller index vs truncate=512
                   <br />
@@ -3909,14 +3909,14 @@ export const Matryoshka = (ctx) => {
                 }}
               >
                 <T color={C.green} bold center size={15}>
-                  stage 2: fine (3072-dim)
+                  Stage 2: fine (3072-dim)
                 </T>
                 <div style={{ marginTop: 6 }}>
-                  rerank 100 candidates
+                  Rerank 100 candidates
                   <br />
-                  full 3072-dim precision
+                  Full 3072-dim precision
                   <br />
-                  cheap: only 100 dot products
+                  Cheap: only 100 dot products
                   <br />
                   return final top 10
                 </div>
@@ -3936,7 +3936,7 @@ export const Matryoshka = (ctx) => {
               lineHeight: 2,
             }}
           >
-            end-to-end recall: ~0.98 &middot; end-to-end latency: ~5 ms
+            End-to-end recall: ~0.98 &middot; end-to-end latency: ~5 ms
             <br />
             <span style={{ color: C.yellow }}>one embedding, two resolutions, adaptive precision</span>
           </div>
@@ -4086,12 +4086,12 @@ export const Matryoshka = (ctx) => {
                 strokeDasharray="5 4"
               />
               <text x={500} y={50} textAnchor="middle" fill={C.cyan} fontSize={13} fontWeight="bold">
-                full float32: 3072 dims &times; 32 bits = 12,288 B
+                Full float32: 3072 dims &times; 32 bits = 12,288 B
               </text>
               {/* After MRL only (purple solid) - 1024 dims at 32 bits */}
               <rect x={80} y={20} width={200} height={300} fill={`${C.purple}25`} stroke={C.purple} strokeWidth={2} />
               <text x={180} y={140} textAnchor="middle" fill={C.purple} fontSize={13} fontWeight="bold">
-                after MRL only
+                After MRL only
               </text>
               <text x={180} y={158} textAnchor="middle" fill={C.bright} fontSize={11}>
                 1024 dims &times; 32 bits = 4,096 B
@@ -4222,10 +4222,10 @@ export const Matryoshka = (ctx) => {
               </desc>
               {/* Stage 1: full float32 row of 24 cells, tall */}
               <text x={10} y={36} textAnchor="start" fill={C.cyan} fontSize={12} fontWeight="bold">
-                full
+                Full
               </text>
               <text x={10} y={52} textAnchor="start" fill={C.dim} fontSize={10}>
-                float32
+                Float32
               </text>
               {Array.from({ length: 24 }).map((_, i) => (
                 <rect
@@ -4250,7 +4250,7 @@ export const Matryoshka = (ctx) => {
                 + MRL
               </text>
               <text x={10} y={132} textAnchor="start" fill={C.dim} fontSize={10}>
-                truncate
+                Truncate
               </text>
               {Array.from({ length: 24 }).map((_, i) => {
                 const kept = i < 8;
@@ -4272,14 +4272,14 @@ export const Matryoshka = (ctx) => {
                 4,096 B
               </text>
               <text x={380} y={164} textAnchor="middle" fill={C.dim} fontSize={11}>
-                first 1024 dims kept (8 cells solid) &middot; last 2048 chopped (16 cells dashed)
+                First 1024 dims kept (8 cells solid) &middot; last 2048 chopped (16 cells dashed)
               </text>
               {/* Stage 3: MRL+SQ - same 8 cells, but 1/4 height */}
               <text x={10} y={196} textAnchor="start" fill={C.green} fontSize={12} fontWeight="bold">
                 + SQ
               </text>
               <text x={10} y={212} textAnchor="start" fill={C.dim} fontSize={10}>
-                int8
+                Int8
               </text>
               {Array.from({ length: 8 }).map((_, i) => (
                 <rect
@@ -4297,7 +4297,7 @@ export const Matryoshka = (ctx) => {
                 1,024 B
               </text>
               <text x={380} y={228} textAnchor="middle" fill={C.dim} fontSize={11}>
-                same 1024 dims &middot; each cell now 8 bits tall (1/4 of float32)
+                Same 1024 dims &middot; each cell now 8 bits tall (1/4 of float32)
               </text>
               {/* Stage 4: MRL+BQ - same 8 cells, 1 bit (tiny sliver) */}
               <text x={10} y={262} textAnchor="start" fill={C.orange} fontSize={12} fontWeight="bold">
@@ -4322,7 +4322,7 @@ export const Matryoshka = (ctx) => {
                 128 B
               </text>
               <text x={380} y={290} textAnchor="middle" fill={C.dim} fontSize={11}>
-                same 1024 dims &middot; each cell now 1 bit tall (1/32 of float32)
+                Same 1024 dims &middot; each cell now 1 bit tall (1/32 of float32)
               </text>
               <text x={380} y={310} textAnchor="middle" fill={C.bright} fontSize={12} fontStyle="italic">
                 MRL chops cells from the right. Quantization shrinks the cells that remain.
@@ -4369,7 +4369,7 @@ export const Matryoshka = (ctx) => {
                 3 &times; 4 = 12x total
               </T>
               <T color={C.bright} size={13} center style={{ marginTop: 4 }}>
-                recall ~96-97%
+                Recall ~96-97%
               </T>
             </div>
             <div
@@ -4403,7 +4403,7 @@ export const Matryoshka = (ctx) => {
                 3 &times; 32 = 96x total
               </T>
               <T color={C.bright} size={13} center style={{ marginTop: 4 }}>
-                recall ~93-95%
+                Recall ~93-95%
               </T>
             </div>
             <div
@@ -4505,12 +4505,12 @@ export const Matryoshka = (ctx) => {
               lineHeight: 2,
             }}
           >
-            real-world stack at N = 1B docs
+            Real-world stack at N = 1B docs
             <br />
             OpenAI text-embedding-3-large &rarr; <span style={{ color: C.cyan }}>MRL to 1024</span> &rarr;{" "}
             <span style={{ color: C.cyan }}>SQ int8</span> &rarr; <span style={{ color: C.cyan }}>HNSW</span>
             <br />
-            hot RAM: 1B &middot; 1024 B = <span style={{ color: C.green }}>1 TB</span>
+            Hot RAM: 1B &middot; 1024 B = <span style={{ color: C.green }}>1 TB</span>
             <br />
             vs baseline: 1B &middot; 12,288 B = <span style={{ color: C.red }}>12 TB</span>
             <br />
@@ -4626,7 +4626,7 @@ export const IVFPQ = (ctx) => {
                   textAlign: "center",
                 }}
               >
-                cost per query &asymp; nlist + nprobe &middot; (N / nlist)
+                Cost per query &asymp; nlist + nprobe &middot; (N / nlist)
               </div>
             </div>
             <div
@@ -4769,7 +4769,7 @@ export const IVFPQ = (ctx) => {
             cluster(v) = argmin<sub>j</sub> &nbsp;||&nbsp; v &minus; C<sub>j</sub> &nbsp;||
             <br />
             <span style={{ color: C.yellow }}>
-              at production scale: N = 1M, nlist = 4,096; N = 100M, nlist = 32,768
+              At production scale: N = 1M, nlist = 4,096; N = 100M, nlist = 32,768
             </span>
           </div>
           <T color="#ffe082" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
@@ -4829,13 +4829,13 @@ export const IVFPQ = (ctx) => {
                 color: C.bright,
               }}
             >
-              <div style={{ color: C.green, fontWeight: "bold", textAlign: "left", padding: "6px 8px" }}>doc</div>
+              <div style={{ color: C.green, fontWeight: "bold", textAlign: "left", padding: "6px 8px" }}>Doc</div>
               <div style={{ color: C.green, fontWeight: "bold", textAlign: "center", padding: "6px 8px" }}>
                 v (original)
               </div>
               <div style={{ color: C.green, fontWeight: "bold", textAlign: "center", padding: "6px 8px" }}>C_A</div>
               <div style={{ color: C.green, fontWeight: "bold", textAlign: "center", padding: "6px 8px" }}>
-                residual
+                Residual
               </div>
               {IVFPQ_CLUSTER_A_ROWS.flatMap((row) => {
                 const residual = row.v.map((x, i) => x - IVFPQ_CENTROID_A_VEC[i]);
@@ -4850,7 +4850,7 @@ export const IVFPQ = (ctx) => {
                       fontSize: 12,
                     }}
                   >
-                    doc {row.id}: {row.text}
+                    Doc {row.id}: {row.text}
                   </div>,
                   <div
                     key={`orig-${row.id}`}
@@ -4948,7 +4948,7 @@ export const IVFPQ = (ctx) => {
                   textAlign: "center",
                 }}
               >
-                recall@10 &asymp; <span style={{ fontSize: 20 }}>0.89</span>
+                Recall@10 &asymp; <span style={{ fontSize: 20 }}>0.89</span>
               </div>
             </div>
             <div
@@ -4979,7 +4979,7 @@ export const IVFPQ = (ctx) => {
                   textAlign: "center",
                 }}
               >
-                recall@10 &asymp; <span style={{ fontSize: 20 }}>0.94</span>
+                Recall@10 &asymp; <span style={{ fontSize: 20 }}>0.94</span>
               </div>
             </div>
           </div>
@@ -4996,7 +4996,7 @@ export const IVFPQ = (ctx) => {
               lineHeight: 2,
             }}
           >
-            each stored vector = cluster id (4 bytes) + residual PQ codebook index (96 bytes)
+            Each stored vector = cluster id (4 bytes) + residual PQ codebook index (96 bytes)
             <br />
             <span style={{ color: C.orange }}>
               reconstruct(code) = C_cluster + decode_PQ(code) &nbsp;&rarr;&nbsp; approximate original
@@ -5140,7 +5140,7 @@ export const IVFPQ = (ctx) => {
                   fontWeight="bold"
                   textAnchor="middle"
                 >
-                  query
+                  Query
                 </text>
                 <text x={250} y={350} fill={C.dim} fontSize={12} textAnchor="middle">
                   A + B are probed &middot; C is skipped
@@ -5175,12 +5175,12 @@ export const IVFPQ = (ctx) => {
                 <br />
                 Step 2: build a <span style={{ color: C.red }}>m &middot; 256 = 24,576</span> entry
                 <br />
-                asymmetric lookup table once per query
+                Asymmetric lookup table once per query
                 <br />
                 Step 3: scan <span style={{ color: C.red }}>nprobe &middot; (N / nlist)</span>
                 <br />= 8 &middot; 244 &asymp; <span style={{ color: C.red }}>2,000</span> codes
                 <br />
-                each code is <span style={{ color: C.red }}>m = 96</span> table lookups + adds
+                Each code is <span style={{ color: C.red }}>m = 96</span> table lookups + adds
               </div>
               <div style={{ marginTop: 10, fontSize: 14, color: C.bright, lineHeight: 1.7 }}>
                 <div>&bull; Brute force over 1M: 1,000,000 distances</div>
@@ -5234,7 +5234,7 @@ export const IVFPQ = (ctx) => {
                 lineHeight: 2,
               }}
             >
-              cluster id (4 bytes) + residual PQ code (m = 16 &middot; 1 byte)
+              Cluster id (4 bytes) + residual PQ code (m = 16 &middot; 1 byte)
               <br />= <span style={{ color: C.purple, fontSize: 20 }}>20 bytes per vector</span>
             </div>
           </div>
@@ -5485,7 +5485,7 @@ export const HNSWPQ = (ctx) => {
           >
             HNSW graph structure (edges, layers, M, ef_search) = <span style={{ color: C.yellow }}>unchanged</span>
             <br />
-            node payload: float32 vector &rarr; <span style={{ color: C.purple }}>PQ code</span> (96 bytes instead of
+            Node payload: float32 vector &rarr; <span style={{ color: C.purple }}>PQ code</span> (96 bytes instead of
             3,072)
           </div>
           <T color="#80deea" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
@@ -5545,13 +5545,13 @@ export const HNSWPQ = (ctx) => {
                 strokeWidth={1}
               />
               <text x={30} y={50} fill={C.red} fontSize={12} fontWeight="bold">
-                layer 2 (top hub)
+                Layer 2 (top hub)
               </text>
               <text x={30} y={150} fill={C.yellow} fontSize={12} fontWeight="bold">
-                layer 1 (hubs)
+                Layer 1 (hubs)
               </text>
               <text x={30} y={250} fill={C.cyan} fontSize={12} fontWeight="bold">
-                layer 0 (all docs)
+                Layer 0 (all docs)
               </text>
               {HNSWPQ_EDGES.V.map(([from, to], i) => {
                 const [fL, fId] = from.split(":");
@@ -5652,10 +5652,10 @@ export const HNSWPQ = (ctx) => {
               lineHeight: 1.9,
             }}
           >
-            per-vector memory = graph edges (&asymp; 100 bytes) + PQ code (96 bytes) ={" "}
+            Per-vector memory = graph edges (&asymp; 100 bytes) + PQ code (96 bytes) ={" "}
             <span style={{ color: C.yellow }}>196 bytes</span>
             <br />
-            at N = <span style={{ color: C.yellow }}>100M</span>: 196 &middot; 10^8 bytes ={" "}
+            At N = <span style={{ color: C.yellow }}>100M</span>: 196 &middot; 10^8 bytes ={" "}
             <span style={{ color: C.yellow }}>19.6 GB</span> - fits on a single server
           </div>
           <T color="#ffe082" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
@@ -5745,7 +5745,7 @@ export const HNSWPQ = (ctx) => {
                 <br />
                 m = 96 table lookups + 96 adds
                 <br />
-                table built once per query (m &middot; 256 entries)
+                Table built once per query (m &middot; 256 entries)
                 <br />
                 <span style={{ color: C.green }}>~10x faster per distance</span>
               </div>
@@ -5766,10 +5766,10 @@ export const HNSWPQ = (ctx) => {
           >
             HNSW hop count &asymp; log<sub>M</sub>(N) &middot; ef_search
             <br />
-            per-hop cost: <span style={{ color: C.red }}>float32</span> &rarr;{" "}
+            Per-hop cost: <span style={{ color: C.red }}>float32</span> &rarr;{" "}
             <span style={{ color: C.green }}>~10x cheaper PQ lookup</span>
             <br />
-            net: end-to-end query latency drops by a factor near 10x at common settings
+            Net: end-to-end query latency drops by a factor near 10x at common settings
           </div>
           <T color="#80e8a5" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
             The lookup table holds the query-to-centroid distances for every slot. Once it is built, every doc in the
@@ -5817,7 +5817,7 @@ export const HNSWPQ = (ctx) => {
                 HNSW float32
               </div>
               <div style={{ color: C.red, fontWeight: "bold", textAlign: "center", padding: "6px 8px" }}>HNSW + PQ</div>
-              <div style={{ color: C.red, fontWeight: "bold", textAlign: "center", padding: "6px 8px" }}>note</div>
+              <div style={{ color: C.red, fontWeight: "bold", textAlign: "center", padding: "6px 8px" }}>Note</div>
               {[
                 { ef: 50, fp: "0.97", pq: "0.92", note: "baseline, PQ drops 5%" },
                 { ef: 100, fp: "0.98", pq: "0.94", note: "raising ef starts helping" },
@@ -5887,10 +5887,10 @@ export const HNSWPQ = (ctx) => {
               lineHeight: 1.9,
             }}
           >
-            recall<sub>HNSW+PQ</sub> &asymp; recall<sub>HNSW</sub> &minus;{" "}
+            Recall<sub>HNSW+PQ</sub> &asymp; recall<sub>HNSW</sub> &minus;{" "}
             <span style={{ color: C.red }}>1% to 5%</span> (varies with PQ m)
             <br />
-            dial: raise <span style={{ color: C.red }}>ef_search</span> from 50 to 150 to recover most of the gap
+            Dial: raise <span style={{ color: C.red }}>ef_search</span> from 50 to 150 to recover most of the gap
           </div>
           <T color="#ef9a9a" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
             The recall hit is predictable and small; the fix is a one-knob change at query time. Smaller m (more
@@ -5989,7 +5989,7 @@ export const HNSWPQ = (ctx) => {
           >
             <span style={{ color: C.purple }}>HNSW + PQ is the modern production default</span>
             <br />
-            for 100M - 1B scale similarity search
+            For 100M - 1B scale similarity search
           </div>
           <T color="#b8a9ff" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
             One graph engine, one compression switch. Start with plain HNSW for quick prototyping, flip on PQ when
@@ -6140,7 +6140,7 @@ export const CompressionDecision = (ctx) => {
                   MRL pre-step (optional)
                 </text>
                 <text x={320} y={50} fill={C.bright} fontSize={11} textAnchor="middle">
-                  truncate d at embed time
+                  Truncate d at embed time
                 </text>
                 {/* dashed arrow MRL -> Inputs */}
                 <line x1={320} y1={60} x2={320} y2={80} stroke={C.dim} strokeWidth={1} strokeDasharray="4 3" />
@@ -6159,7 +6159,7 @@ export const CompressionDecision = (ctx) => {
                   Inputs: N, d, DB, recall tolerance
                 </text>
                 <text x={320} y={120} fill={C.bright} fontSize={11} textAnchor="middle">
-                  start here
+                  Start here
                 </text>
                 {/* connector down to backbone, then 4 drops */}
                 <line x1={320} y1={130} x2={320} y2={200} stroke={C.dim} strokeWidth={1} />
@@ -6169,7 +6169,7 @@ export const CompressionDecision = (ctx) => {
                 <line x1={400} y1={200} x2={400} y2={240} stroke={C.dim} strokeWidth={1} />
                 <line x1={560} y1={200} x2={560} y2={240} stroke={C.dim} strokeWidth={1} />
                 <text x={320} y={220} fill={C.dim} fontSize={12} textAnchor="middle">
-                  branch on N
+                  Branch on N
                 </text>
                 {[
                   {
@@ -6225,19 +6225,19 @@ export const CompressionDecision = (ctx) => {
                   </g>
                 ))}
                 <text x={320} y={370} fill={C.purple} fontSize={12} fontWeight="bold" textAnchor="middle">
-                  fallback rule for the BQ branch
+                  Fallback rule for the BQ branch
                 </text>
                 <text x={320} y={390} fill={C.dim} fontSize={11} textAnchor="middle">
-                  if d &lt; 768 OR DB lacks BQ+rescore: downgrade to Scalar Q
+                  If d &lt; 768 OR DB lacks BQ+rescore: downgrade to Scalar Q
                 </text>
                 <text x={320} y={425} fill={C.purple} fontSize={12} fontWeight="bold" textAnchor="middle">
-                  recall-tolerance override
+                  Recall-tolerance override
                 </text>
                 <text x={320} y={445} fill={C.dim} fontSize={11} textAnchor="middle">
-                  if recall must exceed 99%: downgrade one step (BQ -&gt; SQ; SQ -&gt; skip; PQ -&gt; raise m)
+                  If recall must exceed 99%: downgrade one step (BQ -&gt; SQ; SQ -&gt; skip; PQ -&gt; raise m)
                 </text>
                 <text x={320} y={480} fill={C.purple} fontSize={12} fontWeight="bold" textAnchor="middle">
-                  fold inputs -&gt; one compression stack
+                  Fold inputs -&gt; one compression stack
                 </text>
               </svg>
             </div>
@@ -6361,7 +6361,7 @@ export const CompressionDecision = (ctx) => {
                 </T>
                 <div>
                   <T color={C.dim} size={11} style={{ textTransform: "uppercase", letterSpacing: 0.5 }}>
-                    stack
+                    Stack
                   </T>
                   <T color={C.bright} size={13} style={{ marginTop: 2, fontFamily: "monospace" }}>
                     {s.stack}
@@ -6369,7 +6369,7 @@ export const CompressionDecision = (ctx) => {
                 </div>
                 <div>
                   <T color={C.dim} size={11} style={{ textTransform: "uppercase", letterSpacing: 0.5 }}>
-                    tree walk
+                    Tree walk
                   </T>
                   <T color={C.bright} size={13} style={{ marginTop: 2 }}>
                     {s.path}
@@ -6383,10 +6383,10 @@ export const CompressionDecision = (ctx) => {
                     textAlign: "center",
                   }}
                 >
-                  <T color={s.color} bold size={14}>
+                  <T color={s.color} bold size={14} center>
                     {s.result}
                   </T>
-                  <T color={C.bright} size={12} style={{ marginTop: 4, fontFamily: "monospace" }}>
+                  <T color={C.bright} size={12} style={{ marginTop: 4, fontFamily: "monospace" }} center>
                     {s.math}
                   </T>
                 </div>
@@ -6536,7 +6536,7 @@ export const CompressionDecision = (ctx) => {
             <span style={{ color: C.green }}>five rules</span> on the left,{" "}
             <span style={{ color: C.red }}>four traps</span> on the right
             <br />
-            together they compress the five compression techniques into a working decision framework
+            Together they compress the five compression techniques into a working decision framework
           </div>
         </Box>
       </Reveal>

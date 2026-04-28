@@ -137,10 +137,10 @@ export const Filtering = (ctx) => {
               }}
             >
               <div style={{ color: C.cyan, fontWeight: "bold", padding: "6px 8px" }}>id</div>
-              <div style={{ color: C.cyan, fontWeight: "bold", padding: "6px 8px" }}>text</div>
-              <div style={{ color: C.cyan, fontWeight: "bold", padding: "6px 8px", textAlign: "center" }}>tenant</div>
-              <div style={{ color: C.cyan, fontWeight: "bold", padding: "6px 8px", textAlign: "center" }}>year</div>
-              <div style={{ color: C.cyan, fontWeight: "bold", padding: "6px 8px", textAlign: "center" }}>passes?</div>
+              <div style={{ color: C.cyan, fontWeight: "bold", padding: "6px 8px" }}>Text</div>
+              <div style={{ color: C.cyan, fontWeight: "bold", padding: "6px 8px", textAlign: "center" }}>Tenant</div>
+              <div style={{ color: C.cyan, fontWeight: "bold", padding: "6px 8px", textAlign: "center" }}>Year</div>
+              <div style={{ color: C.cyan, fontWeight: "bold", padding: "6px 8px", textAlign: "center" }}>Passes?</div>
               {FILTER_CORPUS.map((d) => {
                 const passes = d.tenant === 42 && d.year >= 2024;
                 return (
@@ -267,19 +267,19 @@ export const Filtering = (ctx) => {
                   1M docs
                 </text>
                 <text x={105} y={132} fill={C.bright} fontSize={12} textAnchor="middle">
-                  full corpus
+                  Full corpus
                 </text>
                 <text x={250} y={110} fill={C.yellow} fontSize={16} fontWeight="bold" textAnchor="middle">
                   1,000
                 </text>
                 <text x={250} y={128} fill={C.bright} fontSize={11} textAnchor="middle">
-                  pass predicate
+                  Pass predicate
                 </text>
                 <text x={395} y={110} fill={C.green} fontSize={14} fontWeight="bold" textAnchor="middle">
-                  top-3
+                  Top-3
                 </text>
                 <text x={395} y={128} fill={C.bright} fontSize={11} textAnchor="middle">
-                  brute-force
+                  Brute-force
                 </text>
                 <text x={260} y={22} fill={C.dim} fontSize={11} textAnchor="middle">
                   1. Filter
@@ -289,7 +289,7 @@ export const Filtering = (ctx) => {
                 </text>
                 <line x1={180} y1={205} x2={320} y2={205} stroke={C.dim} strokeWidth={1} />
                 <text x={250} y={216} fill={C.dim} fontSize={10} textAnchor="middle">
-                  metadata index read
+                  Metadata index read
                 </text>
               </svg>
             </div>
@@ -553,7 +553,7 @@ export const Filtering = (ctx) => {
                   </g>
                 ))}
                 <text x={260} y={285} fill={C.orange} fontSize={13} fontWeight="bold" textAnchor="middle">
-                  traversal only counts bright nodes as candidates
+                  Traversal only counts bright nodes as candidates
                 </text>
               </svg>
             </div>
@@ -618,14 +618,14 @@ export const Filtering = (ctx) => {
                 color: C.bright,
               }}
             >
-              <div style={{ color: C.red, fontWeight: "bold", padding: "6px 8px" }}>strategy</div>
+              <div style={{ color: C.red, fontWeight: "bold", padding: "6px 8px" }}>Strategy</div>
               <div style={{ color: C.red, fontWeight: "bold", padding: "6px 8px", textAlign: "center" }}>
-                tight 0.1%
+                Tight 0.1%
               </div>
-              <div style={{ color: C.red, fontWeight: "bold", padding: "6px 8px", textAlign: "center" }}>medium 5%</div>
-              <div style={{ color: C.red, fontWeight: "bold", padding: "6px 8px", textAlign: "center" }}>loose 50%</div>
+              <div style={{ color: C.red, fontWeight: "bold", padding: "6px 8px", textAlign: "center" }}>Medium 5%</div>
+              <div style={{ color: C.red, fontWeight: "bold", padding: "6px 8px", textAlign: "center" }}>Loose 50%</div>
               <div style={{ color: C.red, fontWeight: "bold", padding: "6px 8px", textAlign: "center" }}>
-                universal 100%
+                Universal 100%
               </div>
               {[
                 {
@@ -699,9 +699,9 @@ export const Filtering = (ctx) => {
               lineHeight: 1.9,
             }}
           >
-            inline filtering is the rare &ldquo;no edge case&rdquo; answer
+            Inline filtering is the rare &ldquo;no edge case&rdquo; answer
             <br />
-            every production system that cares about filters converges on it
+            Every production system that cares about filters converges on it
           </div>
           <T color="#ef9a9a" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
             Post-filter is the production footgun: it looks fine in tests on uniform data, then ships and quietly
@@ -804,12 +804,12 @@ export const Filtering = (ctx) => {
               lineHeight: 1.9,
             }}
           >
-            bitmap: <span style={{ color: C.purple }}>O(1)</span> set membership, tiny memory
+            Bitmap: <span style={{ color: C.purple }}>O(1)</span> set membership, tiny memory
             <br />
-            inverted index: <span style={{ color: C.purple }}>O(log N)</span> lookup per term, great for
+            Inverted index: <span style={{ color: C.purple }}>O(log N)</span> lookup per term, great for
             high-cardinality fields
             <br />
-            column store: fastest for range predicates, bigger on disk
+            Column store: fastest for range predicates, bigger on disk
             <br />
             JSONB GIN: most flexible schema, slowest at scale
           </div>
@@ -1059,9 +1059,9 @@ export const UpdatesDeletes = (ctx) => {
           >
             <span style={{ color: C.red }}>hub nodes</span> are high-betweenness - many queries route through them
             <br />
-            remove one and those queries land on suboptimal hops
+            Remove one and those queries land on suboptimal hops
             <br />
-            the index is <span style={{ color: C.red }}>broken</span> even though no query errors are thrown
+            The index is <span style={{ color: C.red }}>broken</span> even though no query errors are thrown
           </div>
           <T color="#ffe082" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
             Most production retrievers do not see this until recall regresses in aggregate - a silent quality drop that
@@ -1137,11 +1137,11 @@ export const UpdatesDeletes = (ctx) => {
               lineHeight: 1.9,
             }}
           >
-            node lives in the graph forever (until rebuild)
+            Node lives in the graph forever (until rebuild)
             <br />
-            query time filter = <span style={{ color: C.green }}>1 bit per node check</span>
+            Query time filter = <span style={{ color: C.green }}>1 bit per node check</span>
             <br />
-            no path breakage today, gradual cost that accumulates
+            No path breakage today, gradual cost that accumulates
           </div>
           <T color="#80e8a5" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
             Tombstones trade the immediate path-break problem for slow bloat. Recall stays fine for the first few
@@ -1170,7 +1170,7 @@ export const UpdatesDeletes = (ctx) => {
             }}
           >
             <T color={C.orange} bold center size={16}>
-              recall@10 vs delete percentage (M = 16, ef_search = 50)
+              Recall@10 vs delete percentage (M = 16, ef_search = 50)
             </T>
             <div style={{ display: "flex", justifyContent: "center", marginTop: 10 }}>
               <svg viewBox="0 0 520 280" style={{ width: "100%", maxWidth: 560, height: "auto" }}>
@@ -1216,7 +1216,7 @@ export const UpdatesDeletes = (ctx) => {
                   opacity={0.6}
                 />
                 <text x={60 + (30 / 50) * 430} y={35} fill={C.red} fontSize={11} textAnchor="middle">
-                  rebuild trigger
+                  Rebuild trigger
                 </text>
                 <polyline
                   points={UD_DELETE_RECALL.map((p) => {
@@ -1241,10 +1241,10 @@ export const UpdatesDeletes = (ctx) => {
                   );
                 })}
                 <text x={275} y={272} fill={C.dim} fontSize={12} textAnchor="middle">
-                  delete percentage of corpus
+                  Delete percentage of corpus
                 </text>
                 <text x={20} y={140} fill={C.dim} fontSize={12} textAnchor="middle" transform="rotate(-90 20 140)">
-                  recall@10
+                  Recall@10
                 </text>
               </svg>
             </div>
@@ -1266,7 +1266,7 @@ export const UpdatesDeletes = (ctx) => {
             <span style={{ color: C.orange }}>0.92</span> &middot; 50% deletes:{" "}
             <span style={{ color: C.red }}>0.85</span>
             <br />
-            graph degrades smoothly but the drop accelerates past ~20% deletes
+            Graph degrades smoothly but the drop accelerates past ~20% deletes
           </div>
           <T color="#ffb74d" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
             Most systems set rebuild alarms at 20-30% tombstoned. Past that the recall loss becomes user-visible and the
@@ -1327,15 +1327,15 @@ export const UpdatesDeletes = (ctx) => {
                   {r.name}
                 </T>
                 <div style={{ marginTop: 6, fontSize: 13, color: C.bright, lineHeight: 1.6 }}>
-                  <div style={{ color: C.green, fontWeight: "bold" }}>pros</div>
+                  <div style={{ color: C.green, fontWeight: "bold" }}>Pros</div>
                   {r.pros.map((p, i) => (
                     <div key={i}>&bull; {p}</div>
                   ))}
-                  <div style={{ color: C.red, fontWeight: "bold", marginTop: 6 }}>cons</div>
+                  <div style={{ color: C.red, fontWeight: "bold", marginTop: 6 }}>Cons</div>
                   {r.cons.map((p, i) => (
                     <div key={i}>&bull; {p}</div>
                   ))}
-                  <div style={{ color: C.dim, fontWeight: "bold", marginTop: 6 }}>when</div>
+                  <div style={{ color: C.dim, fontWeight: "bold", marginTop: 6 }}>When</div>
                   <div>{r.when}</div>
                 </div>
               </div>
@@ -1354,10 +1354,10 @@ export const UpdatesDeletes = (ctx) => {
               lineHeight: 1.9,
             }}
           >
-            every approach trades <span style={{ color: C.red }}>downtime</span> against{" "}
+            Every approach trades <span style={{ color: C.red }}>downtime</span> against{" "}
             <span style={{ color: C.red }}>operational</span> complexity
             <br />
-            production systems mix all three across tiers
+            Production systems mix all three across tiers
           </div>
           <T color="#ef9a9a" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
             The segment-rotation pattern is the industry default for anything above 100M vectors - build the next
@@ -1401,10 +1401,10 @@ export const UpdatesDeletes = (ctx) => {
             >
               <div style={{ color: C.purple, fontWeight: "bold", padding: "6px 8px" }}>index family</div>
               <div style={{ color: C.purple, fontWeight: "bold", padding: "6px 8px", textAlign: "center" }}>
-                delete cost
+                Delete cost
               </div>
-              <div style={{ color: C.purple, fontWeight: "bold", padding: "6px 8px" }}>rebuild trigger</div>
-              <div style={{ color: C.purple, fontWeight: "bold", padding: "6px 8px" }}>example</div>
+              <div style={{ color: C.purple, fontWeight: "bold", padding: "6px 8px" }}>Rebuild trigger</div>
+              <div style={{ color: C.purple, fontWeight: "bold", padding: "6px 8px" }}>Example</div>
               {[
                 {
                   name: "IVF / IVF-PQ",
@@ -1497,9 +1497,9 @@ export const UpdatesDeletes = (ctx) => {
               lineHeight: 1.9,
             }}
           >
-            pick the index family <span style={{ color: C.purple }}>after</span> you know your write/delete pattern
+            Pick the index family <span style={{ color: C.purple }}>after</span> you know your write/delete pattern
             <br />
-            static corpora: IVF-PQ - churn-heavy: HNSW or segment-rotated pgvector
+            Static corpora: IVF-PQ - churn-heavy: HNSW or segment-rotated pgvector
           </div>
           <T color="#b8a9ff" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
             The biggest lesson: capacity plans must include delete pressure, not just insert rate. A system that ships
@@ -1570,9 +1570,9 @@ export const Sharding = (ctx) => {
               <br />
               HNSW graph: 100M &middot; 100 B = <span style={{ color: C.cyan }}>10 GB</span>
               <br />
-              cache + fragmentation headroom: <span style={{ color: C.cyan }}>~60 GB</span>
+              Cache + fragmentation headroom: <span style={{ color: C.cyan }}>~60 GB</span>
               <br />
-              total: <span style={{ color: C.green }}>~370 GB of 768 GB RAM</span> - comfortable
+              Total: <span style={{ color: C.green }}>~370 GB of 768 GB RAM</span> - comfortable
             </div>
           </div>
           <div
@@ -1679,7 +1679,7 @@ export const Sharding = (ctx) => {
                         fontWeight="bold"
                         textAnchor="middle"
                       >
-                        shard {i}
+                        Shard {i}
                       </text>
                       {Array.from({ length: 12 }, (_, k) => (
                         <circle
@@ -1709,11 +1709,11 @@ export const Sharding = (ctx) => {
               lineHeight: 1.9,
             }}
           >
-            shard placement: <span style={{ color: C.yellow }}>shard(id) = hash(id) mod S</span>
+            Shard placement: <span style={{ color: C.yellow }}>shard(id) = hash(id) mod S</span>
             <br />
-            query cost = <span style={{ color: C.yellow }}>S</span> &middot; single-shard query
+            Query cost = <span style={{ color: C.yellow }}>S</span> &middot; single-shard query
             <br />
-            every shard must fan out to reach every query
+            Every shard must fan out to reach every query
           </div>
           <T color="#ffe082" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
             Random sharding gives the best possible load balance and the worst possible query fan-out. For
@@ -1799,7 +1799,7 @@ export const Sharding = (ctx) => {
                         textAnchor="middle"
                         opacity={s.active ? 1 : 0.4}
                       >
-                        cluster {s.cluster}
+                        Cluster {s.cluster}
                       </text>
                     </g>
                   );
@@ -1820,11 +1820,11 @@ export const Sharding = (ctx) => {
               lineHeight: 1.9,
             }}
           >
-            shard placement: <span style={{ color: C.green }}>shard(v) = argmin dist(v, centroid_i)</span>
+            Shard placement: <span style={{ color: C.green }}>shard(v) = argmin dist(v, centroid_i)</span>
             <br />
-            query cost = <span style={{ color: C.green }}>nprobe</span> shards scanned, not S
+            Query cost = <span style={{ color: C.green }}>nprobe</span> shards scanned, not S
             <br />
-            the corpus is partitioned by semantic region, not by id
+            The corpus is partitioned by semantic region, not by id
           </div>
           <T color="#80e8a5" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
             Load balance is worse than random sharding (popular clusters get hotter), but the per-query cost is much
@@ -1897,10 +1897,10 @@ export const Sharding = (ctx) => {
                   textAlign: "center",
                 }}
               >
-                <T color={C.orange} bold size={12}>
-                  shard {i}
+                <T color={C.orange} bold size={12} center>
+                  Shard {i}
                 </T>
-                <div style={{ marginTop: 4, fontFamily: "monospace", fontSize: 11, color: C.bright }}>top-10</div>
+                <div style={{ marginTop: 4, fontFamily: "monospace", fontSize: 11, color: C.bright }}>Top-10</div>
               </div>
             ))}
           </div>
@@ -1917,8 +1917,8 @@ export const Sharding = (ctx) => {
               textAlign: "center",
             }}
           >
-            <T color={C.green} bold size={16}>
-              final top-10 returned to client
+            <T color={C.green} bold size={16} center>
+              Final top-10 returned to client
             </T>
           </div>
           <T color="#ffb74d" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
@@ -1962,12 +1962,12 @@ export const Sharding = (ctx) => {
               }}
             >
               <div style={{ color: C.red, fontWeight: "bold", padding: "6px 8px", textAlign: "center" }}>
-                per-shard limit
+                Per-shard limit
               </div>
               <div style={{ color: C.red, fontWeight: "bold", padding: "6px 8px", textAlign: "center" }}>
-                merged recall@10
+                Merged recall@10
               </div>
-              <div style={{ color: C.red, fontWeight: "bold", padding: "6px 8px", textAlign: "center" }}>note</div>
+              <div style={{ color: C.red, fontWeight: "bold", padding: "6px 8px", textAlign: "center" }}>Note</div>
               {[
                 { k: "top-10", recall: "0.88", note: "buffer too small, misses spread hits" },
                 { k: "top-20", recall: "0.94", note: "typical production buffer" },
@@ -2015,10 +2015,10 @@ export const Sharding = (ctx) => {
               lineHeight: 1.9,
             }}
           >
-            rule of thumb: per-shard buffer = <span style={{ color: C.red }}>k &middot; 2</span> to{" "}
+            Rule of thumb: per-shard buffer = <span style={{ color: C.red }}>k &middot; 2</span> to{" "}
             <span style={{ color: C.red }}>k &middot; 5</span> depending on how clustered your data is
             <br />
-            merged recall &ne; single-node recall unless the buffer is large enough
+            Merged recall &ne; single-node recall unless the buffer is large enough
           </div>
           <T color="#ef9a9a" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
             This is the bug that ships first and gets fixed later. &quot;Sharded recall is lower than benchmarks&quot;
@@ -2068,13 +2068,13 @@ export const Sharding = (ctx) => {
                   lineHeight: 1.8,
                 }}
               >
-                shard key: tenant_id
+                Shard key: tenant_id
                 <br />
-                filter: tenant_id = 42
+                Filter: tenant_id = 42
                 <br />
                 <span style={{ color: C.green }}>fan-out to 1 of 8 shards</span>
                 <br />
-                coordinator prunes the other 7
+                Coordinator prunes the other 7
               </div>
             </div>
             <div
@@ -2101,13 +2101,13 @@ export const Sharding = (ctx) => {
                   lineHeight: 1.8,
                 }}
               >
-                shard key: vector_id (random)
+                Shard key: vector_id (random)
                 <br />
-                filter: tenant_id = 42
+                Filter: tenant_id = 42
                 <br />
                 <span style={{ color: C.red }}>fan-out to all 8 shards</span>
                 <br />
-                cannot prune - tenant spans shards
+                Cannot prune - tenant spans shards
               </div>
             </div>
           </div>
@@ -2124,11 +2124,11 @@ export const Sharding = (ctx) => {
               lineHeight: 1.9,
             }}
           >
-            pick the shard key to match the <span style={{ color: C.purple }}>hottest filter field</span>
+            Pick the shard key to match the <span style={{ color: C.purple }}>hottest filter field</span>
             <br />
-            multi-tenant apps almost always shard by tenant_id
+            Multi-tenant apps almost always shard by tenant_id
             <br />
-            multi-region apps almost always shard by region
+            Multi-region apps almost always shard by region
           </div>
           <T color="#b8a9ff" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
             Shard key choice is a one-way door. Change it later and every vector has to move. Get it right on day one by
@@ -2235,13 +2235,13 @@ export const Replication = (ctx) => {
                         rx={6}
                       />
                       <text x={415} y={y + 25} fill={C.cyan} fontSize={14} fontWeight="bold" textAnchor="middle">
-                        replica R{i + 1}
+                        Replica R{i + 1}
                       </text>
                     </g>
                   );
                 })}
                 <text x={260} y={260} fill={C.dim} fontSize={11} textAnchor="middle">
-                  every replica is an identical copy of the index
+                  Every replica is an identical copy of the index
                 </text>
               </svg>
             </div>
@@ -2261,9 +2261,9 @@ export const Replication = (ctx) => {
           >
             QPS capacity &asymp; <span style={{ color: C.cyan }}>replicas &middot; per-replica QPS</span>
             <br />
-            memory cost &asymp; <span style={{ color: C.cyan }}>replicas &middot; per-replica RAM</span>
+            Memory cost &asymp; <span style={{ color: C.cyan }}>replicas &middot; per-replica RAM</span>
             <br />
-            scale reads cheaply; pay in memory instead of latency
+            Scale reads cheaply; pay in memory instead of latency
           </div>
           <T color="#80deea" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
             Every managed vector DB sells replicas as a knob. The question is how they stay in sync with writes - the
@@ -2341,11 +2341,11 @@ export const Replication = (ctx) => {
               lineHeight: 1.9,
             }}
           >
-            leader accepts write at <span style={{ color: C.yellow }}>t = 0</span>
+            Leader accepts write at <span style={{ color: C.yellow }}>t = 0</span>
             <br />
-            followers apply it at <span style={{ color: C.yellow }}>t = 50 ms to 2 s</span>
+            Followers apply it at <span style={{ color: C.yellow }}>t = 50 ms to 2 s</span>
             <br />
-            queries in the lag window see <span style={{ color: C.red }}>stale results</span>
+            Queries in the lag window see <span style={{ color: C.red }}>stale results</span>
           </div>
           <T color="#ffe082" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
             &quot;I just added a document but the search does not find it&quot; is almost always lag, not a bug. Either
@@ -2515,13 +2515,13 @@ export const Replication = (ctx) => {
                     textAlign: "center",
                   }}
                 >
-                  <T color={r.color} bold size={14}>
+                  <T color={r.color} bold size={14} center>
                     {r.name}
                   </T>
-                  <T color={C.bright} size={13} style={{ marginTop: 6 }}>
+                  <T color={C.bright} size={13} style={{ marginTop: 6 }} center>
                     {r.how}
                   </T>
-                  <T color={C.dim} size={12} style={{ marginTop: 6 }}>
+                  <T color={C.dim} size={12} style={{ marginTop: 6 }} center>
                     {r.rpo}
                   </T>
                 </div>
@@ -2541,12 +2541,12 @@ export const Replication = (ctx) => {
               lineHeight: 1.9,
             }}
           >
-            if every RAM copy dies, the index is only as durable as its{" "}
+            If every RAM copy dies, the index is only as durable as its{" "}
             <span style={{ color: C.orange }}>WAL + snapshot</span>
             <br />
-            the source-of-truth DB is the ultimate recovery path
+            The source-of-truth DB is the ultimate recovery path
             <br />
-            test it before the outage, not during
+            Test it before the outage, not during
           </div>
           <T color="#ffb74d" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
             Many teams never test &quot;full cluster loss&quot;. The first time it happens, they discover the snapshot
@@ -2587,9 +2587,9 @@ export const Replication = (ctx) => {
                 color: C.bright,
               }}
             >
-              <div style={{ color: C.red, fontWeight: "bold", padding: "6px 8px" }}>strategy</div>
-              <div style={{ color: C.red, fontWeight: "bold", padding: "6px 8px", textAlign: "center" }}>time</div>
-              <div style={{ color: C.red, fontWeight: "bold", padding: "6px 8px" }}>why</div>
+              <div style={{ color: C.red, fontWeight: "bold", padding: "6px 8px" }}>Strategy</div>
+              <div style={{ color: C.red, fontWeight: "bold", padding: "6px 8px", textAlign: "center" }}>Time</div>
+              <div style={{ color: C.red, fontWeight: "bold", padding: "6px 8px" }}>Why</div>
               {[
                 {
                   name: "snapshot + WAL replay",
@@ -2665,9 +2665,9 @@ export const Replication = (ctx) => {
           >
             RTO budget = <span style={{ color: C.red }}>snapshot cadence + WAL replay rate</span>
             <br />
-            pick snapshot interval that matches your RTO target
+            Pick snapshot interval that matches your RTO target
             <br />
-            re-embed is the fallback of last resort, measured in days
+            Re-embed is the fallback of last resort, measured in days
           </div>
           <T color="#ef9a9a" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
             Put this math into the runbook before a real outage. The cost of a one-day outage at 10K QPS usually dwarfs
@@ -2744,11 +2744,11 @@ export const HybridSearch = (ctx) => {
                     textAlign: "center",
                   }}
                 >
-                  <T color={C.cyan} bold size={14}>
+                  <T color={C.cyan} bold size={14} center>
                     {r.name}
                   </T>
                   <div style={{ marginTop: 4, fontFamily: "monospace", fontSize: 12, color: C.bright }}>{r.ex}</div>
-                  <T color={C.dim} size={12} style={{ marginTop: 4 }}>
+                  <T color={C.dim} size={12} style={{ marginTop: 4 }} center>
                     {r.loss}
                   </T>
                 </div>
@@ -2768,11 +2768,11 @@ export const HybridSearch = (ctx) => {
               lineHeight: 1.9,
             }}
           >
-            vector search excels at <span style={{ color: C.cyan }}>meaning</span>
+            Vector search excels at <span style={{ color: C.cyan }}>meaning</span>
             <br />
-            vector search misses <span style={{ color: C.red }}>literal tokens</span>
+            Vector search misses <span style={{ color: C.red }}>literal tokens</span>
             <br />
-            hybrid search combines vectors with keyword search to recover both
+            Hybrid search combines vectors with keyword search to recover both
           </div>
           <T color="#80deea" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
             The rescue is classic BM25 lexical search running alongside the vector index. Merge the two ranked lists and
@@ -2849,9 +2849,9 @@ export const HybridSearch = (ctx) => {
               }}
             >
               <div style={{ color: C.yellow, fontWeight: "bold", padding: "6px 8px" }}>id</div>
-              <div style={{ color: C.yellow, fontWeight: "bold", padding: "6px 8px" }}>text</div>
+              <div style={{ color: C.yellow, fontWeight: "bold", padding: "6px 8px" }}>Text</div>
               <div style={{ color: C.yellow, fontWeight: "bold", padding: "6px 8px", textAlign: "center" }}>BM25</div>
-              <div style={{ color: C.yellow, fontWeight: "bold", padding: "6px 8px", textAlign: "center" }}>rank</div>
+              <div style={{ color: C.yellow, fontWeight: "bold", padding: "6px 8px", textAlign: "center" }}>Rank</div>
               {[
                 { id: 1, text: "Cats are small domesticated carnivores", bm25: "4.82", rank: 1 },
                 { id: 5, text: "Tigers are striped cats", bm25: "2.30", rank: 2 },
@@ -2975,7 +2975,7 @@ export const HybridSearch = (ctx) => {
                   rx={6}
                 />
                 <text x={380} y={70} fill={C.cyan} fontSize={12} textAnchor="middle">
-                  top-N ranked list
+                  Top-N ranked list
                 </text>
                 <rect
                   x={320}
@@ -2988,7 +2988,7 @@ export const HybridSearch = (ctx) => {
                   rx={6}
                 />
                 <text x={380} y={170} fill={C.yellow} fontSize={12} textAnchor="middle">
-                  top-N ranked list
+                  Top-N ranked list
                 </text>
                 <line x1={440} y1={65} x2={470} y2={110} stroke={C.green} strokeWidth={2} />
                 <line x1={440} y1={165} x2={470} y2={110} stroke={C.green} strokeWidth={2} />
@@ -3012,11 +3012,11 @@ export const HybridSearch = (ctx) => {
               lineHeight: 1.9,
             }}
           >
-            vector returns top-<span style={{ color: C.cyan }}>N</span> by similarity
+            Vector returns top-<span style={{ color: C.cyan }}>N</span> by similarity
             <br />
             BM25 returns top-<span style={{ color: C.yellow }}>N</span> by lexical score
             <br />
-            merge them in the next step
+            Merge them in the next step
           </div>
           <T color="#80e8a5" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
             The two systems can even live on different nodes. The only shared state is the query itself and the final
@@ -3087,7 +3087,7 @@ export const HybridSearch = (ctx) => {
                 color: C.bright,
               }}
             >
-              <div style={{ color: C.orange, fontWeight: "bold", padding: "6px 8px" }}>doc</div>
+              <div style={{ color: C.orange, fontWeight: "bold", padding: "6px 8px" }}>Doc</div>
               <div style={{ color: C.orange, fontWeight: "bold", padding: "6px 8px", textAlign: "center" }}>
                 vec rank
               </div>
@@ -3115,7 +3115,7 @@ export const HybridSearch = (ctx) => {
                     fontWeight: "bold",
                   }}
                 >
-                  doc {r.id}
+                  Doc {r.id}
                 </div>,
                 <div
                   key={`vr-${r.id}`}
@@ -3269,9 +3269,9 @@ export const HybridSearch = (ctx) => {
               lineHeight: 1.9,
             }}
           >
-            hybrid wins when the query has <span style={{ color: C.red }}>both</span> exact and semantic intent
+            Hybrid wins when the query has <span style={{ color: C.red }}>both</span> exact and semantic intent
             <br />
-            pure vector loses <span style={{ color: C.red }}>tabby</span> - pure BM25 loses{" "}
+            Pure vector loses <span style={{ color: C.red }}>tabby</span> - pure BM25 loses{" "}
             <span style={{ color: C.red }}>cat genetics</span>
           </div>
           <T color="#ef9a9a" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
@@ -3319,9 +3319,9 @@ export const HybridSearch = (ctx) => {
               score(d) = <span style={{ color: C.purple }}>alpha</span> &middot; RRF<sub>vec</sub>(d) +{" "}
               <span style={{ color: C.purple }}>beta</span> &middot; RRF<sub>bm25</sub>(d)
               <br />
-              typical defaults: <span style={{ color: C.purple }}>alpha = 0.7, beta = 0.3</span>
+              Typical defaults: <span style={{ color: C.purple }}>alpha = 0.7, beta = 0.3</span>
               <br />
-              tune via held-out recall on your own data
+              Tune via held-out recall on your own data
             </div>
           </div>
           <div
@@ -3349,19 +3349,19 @@ export const HybridSearch = (ctx) => {
                   name: "Hybrid wins",
                   color: C.green,
                   items: [
-                    "mixed natural-language + SKU queries",
-                    "multi-lingual or technical corpora",
-                    "long-tail identifier lookups",
-                    "retrieval-augmented generation (RAG)",
+                    "Mixed natural-language + SKU queries",
+                    "Multi-lingual or technical corpora",
+                    "Long-tail identifier lookups",
+                    "Retrieval-augmented generation (RAG)",
                   ],
                 },
                 {
                   name: "Hybrid not worth it",
                   color: C.red,
                   items: [
-                    "pure chat or FAQ (vectors already great)",
-                    "very short queries with no identifiers",
-                    "strict latency budgets (< 10 ms)",
+                    "Pure chat or FAQ (vectors already great)",
+                    "Very short queries with no identifiers",
+                    "Strict latency budgets (< 10 ms)",
                     "BM25 index is itself unmaintained",
                   ],
                 },
@@ -3452,13 +3452,13 @@ export const Rerankers = (ctx) => {
                 lineHeight: 1.9,
               }}
             >
-              corpus: <span style={{ color: C.cyan }}>N = 1B</span> vectors
+              Corpus: <span style={{ color: C.cyan }}>N = 1B</span> vectors
               <br />
               ANN latency: <span style={{ color: C.green }}>~5 ms</span> per query (HNSW)
               <br />
-              output: <span style={{ color: C.cyan }}>top-100 candidates</span>, may include some near-misses
+              Output: <span style={{ color: C.cyan }}>top-100 candidates</span>, may include some near-misses
               <br />
-              candidate quality is fine at k=100, not at k=10
+              Candidate quality is fine at k=100, not at k=10
             </div>
           </div>
           <div
@@ -3484,11 +3484,11 @@ export const Rerankers = (ctx) => {
                   textAlign: "center",
                 }}
               >
-                <T color={r.color} bold size={14}>
+                <T color={r.color} bold size={14} center>
                   {r.stage}
                 </T>
                 <div style={{ marginTop: 4, fontFamily: "monospace", fontSize: 13, color: C.bright }}>{r.cost}</div>
-                <T color={C.dim} size={12} style={{ marginTop: 4 }}>
+                <T color={C.dim} size={12} style={{ marginTop: 4 }} center>
                   {r.tech}
                 </T>
                 <div style={{ marginTop: 4, fontFamily: "monospace", fontSize: 12, color: r.color }}>{r.size}</div>
@@ -3585,7 +3585,7 @@ export const Rerankers = (ctx) => {
                 <line x1={274} y1={50} x2={274} y2={30} stroke={C.green} strokeWidth={2} />
                 <circle cx={274} cy={20} r={15} fill={C.green} />
                 <text x={274} y={24} fill={C.bg} fontSize={11} fontWeight="bold" textAnchor="middle">
-                  score
+                  Score
                 </text>
               </svg>
             </div>
@@ -3603,9 +3603,9 @@ export const Rerankers = (ctx) => {
               lineHeight: 1.9,
             }}
           >
-            input = [CLS] query [SEP] doc [SEP]
+            Input = [CLS] query [SEP] doc [SEP]
             <br />
-            one transformer pass &middot; one scalar output
+            One transformer pass &middot; one scalar output
             <br />
             score = P(doc is relevant to query)
           </div>
@@ -3658,13 +3658,13 @@ export const Rerankers = (ctx) => {
                   lineHeight: 1.8,
                 }}
               >
-                query -&gt; encoder -&gt; <span style={{ color: C.red }}>q_vec</span>
+                Query -&gt; encoder -&gt; <span style={{ color: C.red }}>q_vec</span>
                 <br />
-                doc -&gt; encoder -&gt; <span style={{ color: C.red }}>d_vec</span>
+                Doc -&gt; encoder -&gt; <span style={{ color: C.red }}>d_vec</span>
                 <br />
                 score = cosine(q_vec, d_vec)
               </div>
-              <T color={C.dim} size={12} style={{ marginTop: 6 }}>
+              <T color={C.dim} size={12} style={{ marginTop: 6 }} center>
                 No token-level interaction. Everything gets pooled into a single vector first.
               </T>
             </div>
@@ -3694,11 +3694,11 @@ export const Rerankers = (ctx) => {
               >
                 concat(query, doc) -&gt; transformer
                 <br />
-                full attention across all tokens
+                Full attention across all tokens
                 <br />
                 score = one scalar
               </div>
-              <T color={C.dim} size={12} style={{ marginTop: 6 }}>
+              <T color={C.dim} size={12} style={{ marginTop: 6 }} center>
                 Query tokens attend to doc tokens and vice versa. Maximally informed score.
               </T>
             </div>
@@ -3716,7 +3716,7 @@ export const Rerankers = (ctx) => {
               lineHeight: 1.9,
             }}
           >
-            typical quality jump: <span style={{ color: C.green }}>+10 to +20 MRR@10</span> over bi-encoder alone
+            Typical quality jump: <span style={{ color: C.green }}>+10 to +20 MRR@10</span> over bi-encoder alone
             <br />
             MS-MARCO leaderboards: cross-encoders win on almost every benchmark
           </div>
@@ -3761,11 +3761,11 @@ export const Rerankers = (ctx) => {
                 lineHeight: 1.9,
               }}
             >
-              for candidate d in top-100:
+              For candidate d in top-100:
               <br />
               &nbsp;&nbsp;score(d) = <span style={{ color: C.orange }}>cross_encoder(query, d)</span>
               <br />
-              sort candidates by score desc
+              Sort candidates by score desc
               <br />
               return top-<span style={{ color: C.orange }}>10</span>
             </div>
@@ -3793,12 +3793,12 @@ export const Rerankers = (ctx) => {
                 color: C.bright,
               }}
             >
-              <div style={{ color: C.orange, fontWeight: "bold", padding: "6px 8px" }}>doc</div>
-              <div style={{ color: C.orange, fontWeight: "bold", padding: "6px 8px" }}>text</div>
+              <div style={{ color: C.orange, fontWeight: "bold", padding: "6px 8px" }}>Doc</div>
+              <div style={{ color: C.orange, fontWeight: "bold", padding: "6px 8px" }}>Text</div>
               <div style={{ color: C.orange, fontWeight: "bold", padding: "6px 8px", textAlign: "center" }}>
                 ANN rank
               </div>
-              <div style={{ color: C.orange, fontWeight: "bold", padding: "6px 8px", textAlign: "center" }}>rerank</div>
+              <div style={{ color: C.orange, fontWeight: "bold", padding: "6px 8px", textAlign: "center" }}>Rerank</div>
               {[
                 { id: 1, text: "Cats are small domesticated carnivores", ann: 4, rr: 1 },
                 { id: 7, text: "Kittens grow up to be cats", ann: 2, rr: 2 },
@@ -3883,7 +3883,7 @@ export const Rerankers = (ctx) => {
               }}
             >
               <div style={{ color: C.red, fontWeight: "bold", padding: "6px 8px" }}>GPU</div>
-              <div style={{ color: C.red, fontWeight: "bold", padding: "6px 8px", textAlign: "center" }}>per-pair</div>
+              <div style={{ color: C.red, fontWeight: "bold", padding: "6px 8px", textAlign: "center" }}>Per-pair</div>
               <div style={{ color: C.red, fontWeight: "bold", padding: "6px 8px", textAlign: "center" }}>
                 100 candidates
               </div>
@@ -3941,11 +3941,11 @@ export const Rerankers = (ctx) => {
               lineHeight: 1.9,
             }}
           >
-            reranker latency = <span style={{ color: C.red }}>candidates &middot; per-pair cost</span>
+            Reranker latency = <span style={{ color: C.red }}>candidates &middot; per-pair cost</span>
             <br />
-            batch all 100 pairs on one GPU to hit the numbers above
+            Batch all 100 pairs on one GPU to hit the numbers above
             <br />
-            dropping to top-50 halves the latency
+            Dropping to top-50 halves the latency
           </div>
           <T color="#ef9a9a" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
             In RAG, this extra 100 ms usually trades against an LLM call that already costs 500 ms. Rerankers are
@@ -4045,12 +4045,12 @@ export const Rerankers = (ctx) => {
               lineHeight: 1.9,
             }}
           >
-            start with <span style={{ color: C.purple }}>MS-MARCO MiniLM</span> as the cheap baseline
+            Start with <span style={{ color: C.purple }}>MS-MARCO MiniLM</span> as the cheap baseline
             <br />
-            move to <span style={{ color: C.purple }}>BGE-reranker</span> or{" "}
+            Move to <span style={{ color: C.purple }}>BGE-reranker</span> or{" "}
             <span style={{ color: C.purple }}>Cohere</span> when you need quality
             <br />
-            reserve <span style={{ color: C.purple }}>LLM-as-judge</span> for offline evals
+            Reserve <span style={{ color: C.purple }}>LLM-as-judge</span> for offline evals
           </div>
           <T color="#b8a9ff" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
             Swap the reranker without touching stage 1. The interface is always (query, candidates) -&gt; reordered
@@ -4135,7 +4135,7 @@ export const MultiVectorRetrieval = (ctx) => {
               <br />
               <span style={{ color: C.cyan }}>[0.81, 0.12, 0.45, ..., 0.22]</span> (768 dims, one per doc)
               <br />
-              every token&apos;s contribution is <span style={{ color: C.red }}>averaged</span> into that one vector
+              Every token&apos;s contribution is <span style={{ color: C.red }}>averaged</span> into that one vector
             </div>
           </div>
           <div
@@ -4151,11 +4151,11 @@ export const MultiVectorRetrieval = (ctx) => {
               lineHeight: 1.9,
             }}
           >
-            long doc + single vector = <span style={{ color: C.red }}>lossy compression</span>
+            Long doc + single vector = <span style={{ color: C.red }}>lossy compression</span>
             <br />
-            rare terms and specific phrasing blur into the average
+            Rare terms and specific phrasing blur into the average
             <br />
-            multi-vector retrieval keeps one vector per token instead
+            Multi-vector retrieval keeps one vector per token instead
           </div>
           <T color="#80deea" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
             This is the motivation for ColBERT and the whole multi-vector family. Keep more information, rank better,
@@ -4199,13 +4199,13 @@ export const MultiVectorRetrieval = (ctx) => {
                 lineHeight: 1.9,
               }}
             >
-              doc &quot;Cats are small domesticated carnivores ...&quot;
+              Doc &quot;Cats are small domesticated carnivores ...&quot;
               <br />
               &darr; BERT-style encode, keep every token &darr;
               <br />
               <span style={{ color: C.yellow }}>~200 vectors per document</span> (one per token)
               <br />
-              query &quot;where do cats live&quot; &rarr; <span style={{ color: C.yellow }}>~5 query tokens</span>
+              Query &quot;where do cats live&quot; &rarr; <span style={{ color: C.yellow }}>~5 query tokens</span>
             </div>
           </div>
           <div
@@ -4426,9 +4426,9 @@ export const MultiVectorRetrieval = (ctx) => {
               lineHeight: 1.9,
             }}
           >
-            score = 0.94 + 0.28 + 0.26 = <span style={{ color: C.green }}>1.48</span>
+            Score = 0.94 + 0.28 + 0.26 = <span style={{ color: C.green }}>1.48</span>
             <br />
-            strong pick on &quot;cats&quot; drags the overall score up
+            Strong pick on &quot;cats&quot; drags the overall score up
           </div>
           <T color="#ffb74d" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
             Notice that no doc token is perfect for &quot;live&quot; or &quot;outside&quot;, but each query token is
@@ -4506,9 +4506,9 @@ export const MultiVectorRetrieval = (ctx) => {
               lineHeight: 1.9,
             }}
           >
-            multi-vector storage = <span style={{ color: C.red }}>N &middot; tokens &middot; d</span> bytes
+            Multi-vector storage = <span style={{ color: C.red }}>N &middot; tokens &middot; d</span> bytes
             <br />
-            typical 20-100x the single-vector footprint
+            Typical 20-100x the single-vector footprint
             <br />
             PQ and ColBERTv2&apos;s residual compression take it down to 20x at good quality
           </div>
@@ -4605,7 +4605,7 @@ export const MultiVectorRetrieval = (ctx) => {
               lineHeight: 1.9,
             }}
           >
-            multi-vector is table stakes in most production systems now
+            Multi-vector is table stakes in most production systems now
             <br />
             Vespa and Qdrant are the common production picks
             <br />
@@ -4682,10 +4682,10 @@ export const EmbeddingLifecycle = (ctx) => {
               <br />
               2026: ada-002 announced deprecated
               <br />
-              production system runs on two-year-old encoders
+              Production system runs on two-year-old encoders
             </div>
           </div>
-          <T color="#80deea" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
+          <T color="#80deea" size={16} style={{ marginTop: 10, fontStyle: "italic" }} center>
             This is the most common silent pain in production vector search. Models change, and what used to be a
             state-of-the-art embedding decays into yesterday&apos;s encoder.
           </T>
@@ -4696,7 +4696,7 @@ export const EmbeddingLifecycle = (ctx) => {
           <T color={C.yellow} bold center size={22}>
             Dimension mismatch is a hard migration
           </T>
-          <T color="#ffe082" style={{ marginTop: 8 }}>
+          <T color="#ffe082" style={{ marginTop: 8 }} center>
             The new model outputs a different vector dimension. ada-002 emits 1536 dims; text-embedding-3-large emits
             3072. Vector DBs pin the collection to one dimension at creation time - you cannot mix 1536-dim vectors with
             3072-dim vectors in the same index. Every migration path has to deal with this up front.
@@ -4730,12 +4730,12 @@ export const EmbeddingLifecycle = (ctx) => {
                   textAlign: "center",
                 }}
               >
-                <T color={C.red} bold size={14}>
-                  old index
+                <T color={C.red} bold size={14} center>
+                  Old index
                 </T>
                 <div style={{ marginTop: 4, fontFamily: "monospace", fontSize: 18, color: C.red }}>1536 dims</div>
-                <T color={C.dim} size={12} style={{ marginTop: 4 }}>
-                  ada-002
+                <T color={C.dim} size={12} style={{ marginTop: 4 }} center>
+                  Ada-002
                 </T>
               </div>
               <div
@@ -4747,12 +4747,12 @@ export const EmbeddingLifecycle = (ctx) => {
                   textAlign: "center",
                 }}
               >
-                <T color={C.green} bold size={14}>
-                  new index
+                <T color={C.green} bold size={14} center>
+                  New index
                 </T>
                 <div style={{ marginTop: 4, fontFamily: "monospace", fontSize: 18, color: C.green }}>3072 dims</div>
-                <T color={C.dim} size={12} style={{ marginTop: 4 }}>
-                  text-embedding-3-large
+                <T color={C.dim} size={12} style={{ marginTop: 4 }} center>
+                  Text-embedding-3-large
                 </T>
               </div>
             </div>
@@ -4770,11 +4770,11 @@ export const EmbeddingLifecycle = (ctx) => {
               lineHeight: 1.9,
             }}
           >
-            vector DB collections are <span style={{ color: C.yellow }}>dimension-pinned</span>
+            Vector DB collections are <span style={{ color: C.yellow }}>dimension-pinned</span>
             <br />
-            no mixing 1536-dim and 3072-dim in the same index
+            No mixing 1536-dim and 3072-dim in the same index
             <br />
-            any migration starts with creating a new collection
+            Any migration starts with creating a new collection
           </div>
           <T color="#ffe082" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
             Matryoshka embeddings (chapter 11.16) partly ease this: truncating a 3072-dim Matryoshka to 1536 is still a
@@ -4818,11 +4818,11 @@ export const EmbeddingLifecycle = (ctx) => {
             >
               tokens: 500M &middot; 500 = <span style={{ color: C.green }}>250 billion</span>
               <br />
-              price: <span style={{ color: C.green }}>$0.00013</span> per 1K tokens (text-embedding-3-large)
+              Price: <span style={{ color: C.green }}>$0.00013</span> per 1K tokens (text-embedding-3-large)
               <br />
-              total: <span style={{ color: C.green }}>~$32,500</span> one-time bill
+              Total: <span style={{ color: C.green }}>~$32,500</span> one-time bill
               <br />
-              time: ~<span style={{ color: C.green }}>1 week</span> at API rate limits, parallelized
+              Time: ~<span style={{ color: C.green }}>1 week</span> at API rate limits, parallelized
             </div>
           </div>
           <div
@@ -4838,11 +4838,11 @@ export const EmbeddingLifecycle = (ctx) => {
               lineHeight: 1.9,
             }}
           >
-            requires <span style={{ color: C.green }}>retained source text</span> (huge gotcha if you dropped it)
+            Requires <span style={{ color: C.green }}>retained source text</span> (huge gotcha if you dropped it)
             <br />
-            cost scales linearly with N and token budget
+            Cost scales linearly with N and token budget
             <br />
-            clean cut-over, no two versions to maintain
+            Clean cut-over, no two versions to maintain
           </div>
           <T color="#80e8a5" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
             Re-embedding is often the cheapest option measured over a year. The upfront bill is what blocks it -
@@ -4885,15 +4885,15 @@ export const EmbeddingLifecycle = (ctx) => {
                 lineHeight: 1.9,
               }}
             >
-              week 0: create new collection, start dual-write on new docs
+              Week 0: create new collection, start dual-write on new docs
               <br />
-              week 1-3: backfill old corpus into new index in background
+              Week 1-3: backfill old corpus into new index in background
               <br />
-              week 4: shadow-query both, measure recall delta
+              Week 4: shadow-query both, measure recall delta
               <br />
-              week 5: <span style={{ color: C.orange }}>cutover</span> traffic to new index
+              Week 5: <span style={{ color: C.orange }}>cutover</span> traffic to new index
               <br />
-              week 6: retire old index
+              Week 6: retire old index
             </div>
           </div>
           <div
@@ -4909,11 +4909,11 @@ export const EmbeddingLifecycle = (ctx) => {
               lineHeight: 1.9,
             }}
           >
-            traffic stays on the old index the whole time
+            Traffic stays on the old index the whole time
             <br />
-            double storage cost during the overlap window
+            Double storage cost during the overlap window
             <br />
-            quality can be <span style={{ color: C.orange }}>flipped back</span> if the new index underperforms
+            Quality can be <span style={{ color: C.orange }}>flipped back</span> if the new index underperforms
           </div>
           <T color="#ffb74d" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
             This is the standard low-risk path. It costs more - you run two indexes for weeks - but regressions never
@@ -5002,11 +5002,11 @@ export const EmbeddingLifecycle = (ctx) => {
               lineHeight: 1.9,
             }}
           >
-            pinning is <span style={{ color: C.red }}>short-term cheap, long-term expensive</span>
+            Pinning is <span style={{ color: C.red }}>short-term cheap, long-term expensive</span>
             <br />
-            works fine for 6-12 months, pain compounds after
+            Works fine for 6-12 months, pain compounds after
             <br />
-            drift is invisible unless you monitor it
+            Drift is invisible unless you monitor it
           </div>
           <T color="#ef9a9a" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
             Pinning is a valid choice as long as you plan the exit. Shipping without a re-embedding story is the failure
@@ -5094,10 +5094,10 @@ export const EmbeddingLifecycle = (ctx) => {
               lineHeight: 1.9,
             }}
           >
-            monitor <span style={{ color: C.purple }}>recall &middot; drift &middot; eval</span> or discover regression
+            Monitor <span style={{ color: C.purple }}>recall &middot; drift &middot; eval</span> or discover regression
             after users notice
             <br />
-            ground-truth sampling is cheap; a quality regression is not
+            Ground-truth sampling is cheap; a quality regression is not
           </div>
           <T color="#b8a9ff" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
             Whatever migration option you pick, drift monitoring is the common prerequisite. Without it, none of the
@@ -5175,11 +5175,11 @@ export const Observability = (ctx) => {
                     textAlign: "center",
                   }}
                 >
-                  <T color={r.color} bold size={16}>
+                  <T color={r.color} bold size={16} center>
                     {r.name}
                   </T>
                   <div style={{ marginTop: 4, fontFamily: "monospace", fontSize: 18, color: r.color }}>{r.target}</div>
-                  <T color={C.dim} size={12} style={{ marginTop: 4 }}>
+                  <T color={C.dim} size={12} style={{ marginTop: 4 }} center>
                     {r.note}
                   </T>
                 </div>
@@ -5199,9 +5199,9 @@ export const Observability = (ctx) => {
               lineHeight: 1.9,
             }}
           >
-            mean masks the <span style={{ color: C.cyan }}>tail</span>
+            Mean masks the <span style={{ color: C.cyan }}>tail</span>
             <br />
-            alert on P99, watch P99.9, write the SLA against the tail
+            Alert on P99, watch P99.9, write the SLA against the tail
           </div>
           <T color="#80deea" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
             The P99 is usually 5-10x the P50. Investments in caching, SIMD, and index tuning show up in the tail, not
@@ -5363,11 +5363,11 @@ export const Observability = (ctx) => {
               <br />
               y-axis: <span style={{ color: C.orange }}>QPS</span> (log scale, queries per second)
               <br />
-              each curve = one index family (HNSW, IVF-PQ, Vamana)
+              Each curve = one index family (HNSW, IVF-PQ, Vamana)
               <br />
-              each point = one parameter combination
+              Each point = one parameter combination
               <br />
-              winners sit on the Pareto frontier (upper-right)
+              Winners sit on the Pareto frontier (upper-right)
             </div>
           </div>
           <div
@@ -5383,11 +5383,11 @@ export const Observability = (ctx) => {
               lineHeight: 1.9,
             }}
           >
-            methodology: same dataset, same hardware, same recall target
+            Methodology: same dataset, same hardware, same recall target
             <br />
-            fair comparison forces every system to trade QPS for recall
+            Fair comparison forces every system to trade QPS for recall
             <br />
-            run it on <span style={{ color: C.orange }}>your data</span>, not just the public datasets
+            Run it on <span style={{ color: C.orange }}>your data</span>, not just the public datasets
           </div>
           <T color="#ffb74d" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
             ANN-Benchmarks shows up in almost every paper, blog, and vendor comparison. Knowing how to read it is a
@@ -5562,9 +5562,9 @@ export const Observability = (ctx) => {
               lineHeight: 1.9,
             }}
           >
-            every production incident: <span style={{ color: C.purple }}>&quot;we did not measure X&quot;</span>
+            Every production incident: <span style={{ color: C.purple }}>&quot;we did not measure X&quot;</span>
             <br />
-            capture everything now so you can triage fast later
+            Capture everything now so you can triage fast later
           </div>
           <T color="#b8a9ff" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
             Rule of thumb: for every new feature (filtering, sharding, replication), add a monitor before you ship. The
@@ -5643,11 +5643,11 @@ export const CapacityPlanning = (ctx) => {
                     textAlign: "center",
                   }}
                 >
-                  <T color={C.cyan} bold size={14}>
+                  <T color={C.cyan} bold size={14} center>
                     {r.name}
                   </T>
                   <div style={{ marginTop: 4, fontFamily: "monospace", fontSize: 12, color: C.bright }}>{r.value}</div>
-                  <T color={C.dim} size={11} style={{ marginTop: 4 }}>
+                  <T color={C.dim} size={11} style={{ marginTop: 4 }} center>
                     example: {r.example}
                   </T>
                 </div>
@@ -5700,11 +5700,11 @@ export const CapacityPlanning = (ctx) => {
               <span style={{ color: C.yellow }}>cache_factor</span> &middot;{" "}
               <span style={{ color: C.yellow }}>frag_factor</span>
               <br />
-              cache_factor &asymp; 1.2 (20% headroom) &middot; frag_factor &asymp; 1.3 (allocator)
+              Cache_factor &asymp; 1.2 (20% headroom) &middot; frag_factor &asymp; 1.3 (allocator)
               <br />
-              vec_bytes = d &middot; 4 for float32, d for int8, m for PQ m-bytes
+              Vec_bytes = d &middot; 4 for float32, d for int8, m for PQ m-bytes
               <br />
-              graph_bytes &asymp; 100 for HNSW, ~20 for IVF-PQ
+              Graph_bytes &asymp; 100 for HNSW, ~20 for IVF-PQ
             </div>
           </div>
           <div
@@ -5720,10 +5720,10 @@ export const CapacityPlanning = (ctx) => {
               lineHeight: 1.9,
             }}
           >
-            each multiplier matters - undersizing <span style={{ color: C.red }}>cache</span> or{" "}
+            Each multiplier matters - undersizing <span style={{ color: C.red }}>cache</span> or{" "}
             <span style={{ color: C.red }}>fragmentation</span> blows P99
             <br />
-            plan for 1.5x the naive &quot;N times vec_bytes&quot;
+            Plan for 1.5x the naive &quot;N times vec_bytes&quot;
           </div>
           <T color="#ffe082" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
             Every production team eventually learns this the hard way. The cache and fragmentation factors are easy to
@@ -5766,7 +5766,7 @@ export const CapacityPlanning = (ctx) => {
                 lineHeight: 1.9,
               }}
             >
-              per-query CPU = <span style={{ color: C.green }}>hops &middot; us/hop</span>
+              Per-query CPU = <span style={{ color: C.green }}>hops &middot; us/hop</span>
               <br />
               typical: 30 hops &middot; 10 us = 300 us
               <br />
@@ -5774,7 +5774,7 @@ export const CapacityPlanning = (ctx) => {
               <br />
               worked: 300 us &middot; 200 QPS &middot; 2x headroom = 120,000 us = 0.12 core-seconds/sec
               <br />
-              round up to <span style={{ color: C.green }}>8-16 cores</span> per replica with write and merge overhead
+              Round up to <span style={{ color: C.green }}>8-16 cores</span> per replica with write and merge overhead
             </div>
           </div>
           <T color="#80e8a5" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
@@ -5821,13 +5821,13 @@ export const CapacityPlanning = (ctx) => {
               <br />
               HNSW graph: 500M &middot; 100 B = <span style={{ color: C.orange }}>50 GB</span>
               <br />
-              cache + fragmentation (1.2 &middot; 1.3 = 1.56): &asymp; 2.4 TB total
+              Cache + fragmentation (1.2 &middot; 1.3 = 1.56): &asymp; 2.4 TB total
               <br />
-              spread across <span style={{ color: C.orange }}>6 nodes</span> (r7i.24xlarge with 768 GB each)
+              Spread across <span style={{ color: C.orange }}>6 nodes</span> (r7i.24xlarge with 768 GB each)
               <br />
-              each node holds ~100M vectors = <span style={{ color: C.orange }}>400 GB</span> of the working set
+              Each node holds ~100M vectors = <span style={{ color: C.orange }}>400 GB</span> of the working set
               <br />
-              replicate 2x for availability: <span style={{ color: C.orange }}>12 nodes total, 3 TB RAM</span>
+              Replicate 2x for availability: <span style={{ color: C.orange }}>12 nodes total, 3 TB RAM</span>
             </div>
           </div>
           <div
@@ -5908,11 +5908,11 @@ export const CapacityPlanning = (ctx) => {
                 color: C.bright,
               }}
             >
-              <div style={{ color: C.red, fontWeight: "bold", padding: "6px 8px" }}>system</div>
+              <div style={{ color: C.red, fontWeight: "bold", padding: "6px 8px" }}>System</div>
               <div style={{ color: C.red, fontWeight: "bold", padding: "6px 8px", textAlign: "center" }}>
-                est. monthly cost
+                Est. monthly cost
               </div>
-              <div style={{ color: C.red, fontWeight: "bold", padding: "6px 8px" }}>trade</div>
+              <div style={{ color: C.red, fontWeight: "bold", padding: "6px 8px" }}>Trade</div>
               {[
                 {
                   name: "Pinecone (pod-based)",
@@ -5980,9 +5980,9 @@ export const CapacityPlanning = (ctx) => {
               lineHeight: 1.9,
             }}
           >
-            numbers are order-of-magnitude illustrations, not authoritative
+            Numbers are order-of-magnitude illustrations, not authoritative
             <br />
-            ratios are durable: Pinecone ~4x-6x self-host, pgvector cheapest but operationally limited
+            Ratios are durable: Pinecone ~4x-6x self-host, pgvector cheapest but operationally limited
           </div>
           <T color="#ef9a9a" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
             The real decision is ops capacity: a two-engineer team may rationally pay Pinecone&apos;s premium to skip
@@ -6067,11 +6067,11 @@ export const CapacityPlanning = (ctx) => {
               lineHeight: 1.9,
             }}
           >
-            the right decision framework = <span style={{ color: C.purple }}>per-million cost ratios</span>
+            The right decision framework = <span style={{ color: C.purple }}>per-million cost ratios</span>
             <br />
-            adjusted for ops capacity + feature needs
+            Adjusted for ops capacity + feature needs
             <br />
-            numbers change over time; the shape of the decision does not
+            Numbers change over time; the shape of the decision does not
           </div>
           <T color="#b8a9ff" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
             With per-million ratios + ops capacity in hand, the team can reach a defensible vendor decision from first

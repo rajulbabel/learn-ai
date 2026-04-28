@@ -206,6 +206,9 @@
     "Focal Vamana node p at the center surrounded by a mix of short green edges fanning to close neighbors and long orange edges shooting across the plane to distant nodes, showing how one node's 64 edges do double duty as both local-precision and long-range hub edges",
     "Storage hierarchy diagram - top layer shows a RAM cache with a small subset of high-degree entry nodes, bottom layer shows the SSD storing every graph node as 4 KB blocks aligned to NVMe pages"
   ],
+  "11.13": [
+    "Number line with calibrated cyan band from -1.2 to 1.4 and a 0 to 255 bucket scale; green training point at 0.5 maps to bucket 158, red new-vector point at 1.8 sits outside the band with a bent arrow clipping it back to 1.4 = bucket 255, a red gap bar labeled error = 0.4, and a faded tombstone marker for a deleted entry whose int8 row still lives"
+  ],
   "11.14": [
     "A 768-dim vector banded into 96 slot segments, with three stacked document rows aligned at the same slot boundaries to show that slot 0 covers the same dim range across every document",
     "A 2-D scatter projection of slot-0 sub-vectors with 16 highlighted k-means centroid markers labeled c0 to c255, representing the 256 codebook entries that snap each sub-vector to its nearest prototype",

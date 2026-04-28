@@ -901,6 +901,17 @@ describe("ScalarQuantization (11.13) content", () => {
     const { container } = render(fn(makeCtx({ sub: 8 })));
     expect(container.textContent).toMatch(/pgvector|Qdrant|FAISS/);
   });
+
+  it("sub=6 shows insert/update/delete drift the calibrated range", () => {
+    const { container } = render(fn(makeCtx({ sub: 6 })));
+    expect(container.textContent).toMatch(/insert/i);
+    expect(container.textContent).toMatch(/update/i);
+    expect(container.textContent).toMatch(/delete/i);
+    expect(container.textContent).toMatch(/outside|out[- ]of[- ]range|drift/i);
+    expect(container.textContent).toMatch(/clip/i);
+    expect(container.textContent).toMatch(/error\s*=\s*0\.4/i);
+    expect(container.textContent).toMatch(/-?1\.2|1\.4|1\.8/);
+  });
 });
 
 describe("ProductQuantization (11.14) content", () => {

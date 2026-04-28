@@ -938,6 +938,87 @@ export const ScalarQuantization = (ctx) => {
           </T>
         </Box>
       </Reveal>
+      <Reveal when={sub >= 6}>
+        <Box color={C.red} style={{ width: "100%" }}>
+          <T color={C.red} bold center size={22}>
+            New vector arrives: insert / update / delete drift the calibrated range
+          </T>
+          <div style={{ marginTop: 12, display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 10 }}>
+            {[
+              { tag: "INSERT", caption: "new value 1.8 outside [-1.2, 1.4]" },
+              { tag: "UPDATE", caption: "replaced value 1.8 still outside" },
+              { tag: "DELETE", caption: "stale int8 row stays; live min/max drifts" },
+            ].map((op) => (
+              <div
+                key={op.tag}
+                style={{
+                  padding: "10px 12px",
+                  borderRadius: 8,
+                  background: `${C.red}06`,
+                  border: `1px solid ${C.red}12`,
+                  textAlign: "center",
+                }}
+              >
+                <T color={C.red} bold center size={16}>
+                  {op.tag}
+                </T>
+                <T color={C.bright} size={14} style={{ marginTop: 4 }}>
+                  {op.caption}
+                </T>
+              </div>
+            ))}
+          </div>
+          <svg
+            viewBox="0 0 720 220"
+            style={{ width: "100%", maxWidth: 760, height: "auto", display: "block", marginTop: 14 }}
+          >
+            <desc>
+              Number line with calibrated band -1.2 to 1.4 shaded cyan and a 0 to 255 bucket scale below; a green
+              training point at 0.5 maps to bucket 158, a red new-vector point at 1.8 sits outside the band with a bent
+              arrow back to the clip point at 1.4 = bucket 255 and a red gap bar labeled error = 0.4; a faded tombstone
+              marker shows a deleted entry whose int8 row still lives.
+            </desc>
+            <line x1="60" y1="100" x2="700" y2="100" stroke="#666" strokeWidth="1" />
+            <rect x="140" y="80" width="380" height="40" fill={`${C.cyan}1a`} stroke={`${C.cyan}40`} />
+            <text x="140" y="74" fontSize="11" fill={C.cyan} textAnchor="middle">
+              min = -1.2
+            </text>
+            <text x="520" y="74" fontSize="11" fill={C.cyan} textAnchor="middle">
+              max = 1.4
+            </text>
+            <text x="60" y="150" fontSize="11" fill="#999">
+              bucket 0
+            </text>
+            <text x="520" y="150" fontSize="11" fill="#999">
+              bucket 255
+            </text>
+            <circle cx="380" cy="100" r="6" fill={C.green} />
+            <text x="380" y="86" fontSize="11" fill={C.green} textAnchor="middle">
+              0.5 = bucket 158
+            </text>
+            <circle cx="600" cy="100" r="6" fill={C.red} />
+            <text x="600" y="86" fontSize="11" fill={C.red} textAnchor="middle">
+              new = 1.8
+            </text>
+            <path d="M 600 110 Q 560 140 520 110" fill="none" stroke={C.red} strokeWidth="1.5" strokeDasharray="4 3" />
+            <polygon points="520,110 528,106 528,114" fill={C.red} />
+            <text x="560" y="160" fontSize="12" fill={C.red} textAnchor="middle" fontWeight="bold">
+              clipped to 1.4 (bucket 255)
+            </text>
+            <rect x="520" y="180" width="80" height="10" fill={`${C.red}66`} />
+            <text x="560" y="205" fontSize="12" fill={C.red} textAnchor="middle" fontWeight="bold">
+              error = 0.4
+            </text>
+            <g opacity="0.45">
+              <rect x="280" y="92" width="14" height="16" fill="none" stroke="#888" strokeWidth="1" />
+              <line x1="280" y1="92" x2="294" y2="108" stroke="#888" strokeWidth="1" />
+              <text x="287" y="76" fontSize="10" fill="#888" textAnchor="middle">
+                tombstone
+              </text>
+            </g>
+          </svg>
+        </Box>
+      </Reveal>
       <Reveal when={sub >= 8}>
         <Box color={C.purple} style={{ width: "100%" }}>
           <T color={C.purple} bold center size={22}>

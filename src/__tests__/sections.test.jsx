@@ -888,6 +888,19 @@ describe("ScalarQuantization (11.13) content", () => {
     expect(container.textContent).toMatch(/1-3%|recall loss|recall drop/i);
     expect(container.textContent).toMatch(/768|bytes per vector/i);
   });
+
+  it("sub=6 shows SQ pairs with any index (HNSW, IVF, flat)", () => {
+    const { container } = render(fn(makeCtx({ sub: 6 })));
+    expect(container.textContent).toMatch(/HNSW/);
+    expect(container.textContent).toMatch(/IVF|flat/i);
+    expect(container.textContent).toMatch(/drop[- ]?in|payload|swap/i);
+    expect(container.textContent).toMatch(/index.*unchanged|graph.*unchanged|same (graph|index)/i);
+  });
+
+  it("sub=6 names production examples", () => {
+    const { container } = render(fn(makeCtx({ sub: 6 })));
+    expect(container.textContent).toMatch(/pgvector|Qdrant|FAISS/);
+  });
 });
 
 describe("ProductQuantization (11.14) content", () => {
@@ -932,10 +945,10 @@ describe("ProductQuantization (11.14) content", () => {
   it("sub=4 describes asymmetric distance via lookup table", () => {
     const { container } = render(fn(makeCtx({ sub: 4 })));
     expect(container.textContent).toMatch(/asymmetric/i);
-    expect(container.textContent).toMatch(/lookup|table/i);
-    expect(container.textContent).toMatch(/Don.t reconstruct|never reconstruct/i);
-    expect(container.textContent).toMatch(/Once per query|once per query/i);
-    expect(container.textContent).toMatch(/Per document|per doc/i);
+    expect(container.textContent).toMatch(/lookup|LUT|table/i);
+    expect(container.textContent).toMatch(/no float|no multiplies|stays as float/i);
+    expect(container.textContent).toMatch(/once per query/i);
+    expect(container.textContent).toMatch(/per doc/i);
   });
 
   it("sub=5 explains OPQ rotation", () => {
@@ -965,6 +978,19 @@ describe("BinaryQuantization (11.15) content", () => {
     expect(container.textContent).toMatch(/1024/);
     expect(container.textContent).toMatch(/4 KB|4096/);
     expect(container.textContent).toMatch(/float32/i);
+  });
+
+  it("sub=0 shown-dim count matches the rendered cells", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    const labelEl = Array.from(container.querySelectorAll("*")).find((n) =>
+      /first \d+ dims shown/.test(n.textContent || ""),
+    );
+    expect(labelEl, "expected a 'first N dims shown' label").toBeTruthy();
+    const claimed = parseInt(labelEl.textContent.match(/first (\d+) dims shown/)[1], 10);
+    const grid = labelEl.parentElement.querySelector("div[style*='grid-template-columns']");
+    expect(grid, "expected a grid sibling under the label container").toBeTruthy();
+    const cells = grid.children.length;
+    expect(cells, `claim says ${claimed} dims, grid has ${cells} cells`).toBe(claimed);
   });
 
   it("sub=1 takes the sign of each dimension for 1 bit", () => {
@@ -998,6 +1024,32 @@ describe("BinaryQuantization (11.15) content", () => {
     const { container } = render(fn(makeCtx({ sub: 5 })));
     expect(container.textContent).toMatch(/Qdrant|Pinecone/);
     expect(container.textContent).toMatch(/rerank|stage/i);
+  });
+
+  it("sub=5 stage 1 and stage 2 labels are center-aligned", () => {
+    const { container } = render(fn(makeCtx({ sub: 5 })));
+    const labels = Array.from(container.querySelectorAll("div")).filter((n) => {
+      const text = (n.textContent || "").trim();
+      return /^stage [12]: [^]*$/.test(text) && n.children.length === 0;
+    });
+    expect(labels.length, "expected stage 1 and stage 2 leaf labels").toBeGreaterThanOrEqual(2);
+    for (const el of labels) {
+      const ta = el.style.textAlign;
+      expect(ta, `"${el.textContent.trim()}" must be center-aligned (got "${ta}")`).toBe("center");
+    }
+  });
+
+  it("sub=6 pairs BQ with HNSW for graph-accelerated stage 1", () => {
+    const { container } = render(fn(makeCtx({ sub: 6 })));
+    expect(container.textContent).toMatch(/HNSW/);
+    expect(container.textContent).toMatch(/Hamming/i);
+    expect(container.textContent).toMatch(/graph/i);
+    expect(container.textContent).toMatch(/rerank|rescore/i);
+  });
+
+  it("sub=6 explains why BQ does not get its own combo chapter", () => {
+    const { container } = render(fn(makeCtx({ sub: 6 })));
+    expect(container.textContent).toMatch(/two[- ]?stage|stage 1.*stage 2|same.*pattern/i);
   });
 });
 
@@ -1041,6 +1093,33 @@ describe("Matryoshka (11.16) content", () => {
     const { container } = render(fn(makeCtx({ sub: 5 })));
     expect(container.textContent).toMatch(/OpenAI/);
     expect(container.textContent).toMatch(/text-embedding-3|Cohere/i);
+  });
+
+  it("sub=6 shows MRL composes with SQ/PQ/BQ", () => {
+    const { container } = render(fn(makeCtx({ sub: 6 })));
+    expect(container.textContent).toMatch(/SQ|scalar/i);
+    expect(container.textContent).toMatch(/PQ|product/i);
+    expect(container.textContent).toMatch(/BQ|binary/i);
+    expect(container.textContent).toMatch(/orthogonal|stack|compose/i);
+  });
+
+  it("sub=6 shows multiplicative compression numbers", () => {
+    const { container } = render(fn(makeCtx({ sub: 6 })));
+    expect(container.textContent).toMatch(/12[x×]|12 times/i);
+    expect(container.textContent).toMatch(/96[x×]|96 times/i);
+    expect(container.textContent).toMatch(/3072|3,072/);
+  });
+
+  it("sub=6 covers order rule (truncate first, quantize after)", () => {
+    const { container } = render(fn(makeCtx({ sub: 6 })));
+    expect(container.textContent).toMatch(/embed time|truncate first|MRL first|order/i);
+    expect(container.textContent).toMatch(/codebook|index time|after/i);
+  });
+
+  it("sub=6 calls out BQ floor (d >= 768)", () => {
+    const { container } = render(fn(makeCtx({ sub: 6 })));
+    expect(container.textContent).toMatch(/768/);
+    expect(container.textContent).toMatch(/floor|minimum|at least/i);
   });
 });
 
@@ -1089,6 +1168,66 @@ describe("IVFPQ (11.17) content", () => {
     expect(container.textContent).toMatch(/20 bytes|20 GB/);
     expect(container.textContent).toMatch(/1B|1 billion/i);
     expect(container.textContent).toMatch(/FAISS|Milvus/);
+  });
+
+  it("sub=1 cluster labels (C_A, C_B, C_C) clear all doc circles vertically", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    const svg = container.querySelector("svg");
+    const texts = Array.from(svg.querySelectorAll("text"));
+    const labels = texts.filter((t) => /^C_[ABC] \(/.test(t.textContent || ""));
+    expect(labels.length, "expected three centroid labels (C_A, C_B, C_C)").toBe(3);
+    const fontHalfHeight = 7;
+    const docR = 8;
+    const minClearance = 6;
+    const clusterTop = { A: 75, B: 80, C: 245 };
+    for (const label of labels) {
+      const tag = label.textContent.match(/^(C_[ABC])/)[1];
+      const cluster = tag.slice(2);
+      const labelY = parseFloat(label.getAttribute("y"));
+      const labelBottom = labelY + fontHalfHeight;
+      const docTopEdge = clusterTop[cluster] - docR;
+      expect(
+        labelBottom,
+        `${tag} label bottom (${labelBottom}) must be at least ${minClearance}px above the topmost doc circle edge (${docTopEdge})`,
+      ).toBeLessThanOrEqual(docTopEdge - minClearance);
+    }
+  });
+
+  it("sub=1 footer text sits clear of every cluster halo", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    const svg = container.querySelector("svg");
+    const footer = Array.from(svg.querySelectorAll("text")).find((t) =>
+      /nlist = 3 centroids/.test(t.textContent || ""),
+    );
+    expect(footer, "expected the nlist footer text").toBeTruthy();
+    const fy = parseFloat(footer.getAttribute("y"));
+    const halos = Array.from(svg.querySelectorAll("circle")).filter((c) => parseFloat(c.getAttribute("r")) >= 30);
+    expect(halos.length, "expected three cluster halo circles").toBe(3);
+    for (const halo of halos) {
+      const cy = parseFloat(halo.getAttribute("cy"));
+      const r = parseFloat(halo.getAttribute("r"));
+      expect(
+        fy,
+        `footer y (${fy}) must sit below halo bottom edge (cy=${cy}, r=${r}, bottom=${cy + r})`,
+      ).toBeGreaterThan(cy + r);
+    }
+  });
+
+  it("sub=4 query arrow ends outside cluster A halo so it doesn't pierce any doc", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    const lines = Array.from(container.querySelectorAll("line"));
+    const arrow = lines.find((l) => l.getAttribute("x1") === "55" && l.getAttribute("y1") === "55");
+    expect(arrow, "expected query-to-centroid arrow originating at (55, 55)").toBeTruthy();
+    const x2 = parseFloat(arrow.getAttribute("x2"));
+    const y2 = parseFloat(arrow.getAttribute("y2"));
+    const cAx = 130;
+    const cAy = 100;
+    const haloR = 60;
+    const dist = Math.hypot(cAx - x2, cAy - y2);
+    expect(
+      dist,
+      `arrow endpoint distance from C_A (${dist.toFixed(1)}) must exceed halo r=${haloR} so it never crosses an interior doc`,
+    ).toBeGreaterThan(haloR);
   });
 });
 
@@ -1165,27 +1304,49 @@ describe("CompressionDecision (11.19) content", () => {
     expect(svg.querySelector("desc")).toBeTruthy();
   });
 
-  it("sub=1 flowchart SVG has horizontal connector at y=130 and drop-lines to bucket centers", () => {
+  it("sub=1 flowchart SVG has horizontal connector at y=200 and drop-lines to bucket centers", () => {
     const { container } = render(fn(makeCtx({ sub: 1 })));
     const lines = Array.from(container.querySelectorAll("svg line"));
     const horizontalConnector = lines.find(
       (l) =>
-        l.getAttribute("y1") === "130" &&
-        l.getAttribute("y2") === "130" &&
+        l.getAttribute("y1") === "200" &&
+        l.getAttribute("y2") === "200" &&
         l.getAttribute("x1") === "80" &&
         l.getAttribute("x2") === "560",
     );
-    expect(horizontalConnector, "expected a horizontal connector at y=130 from x=80 to x=560").toBeTruthy();
+    expect(horizontalConnector, "expected a horizontal connector at y=200 from x=80 to x=560").toBeTruthy();
     for (const cx of [80, 240, 400, 560]) {
       const dropLine = lines.find(
         (l) =>
           l.getAttribute("x1") === String(cx) &&
           l.getAttribute("x2") === String(cx) &&
-          l.getAttribute("y1") === "130" &&
-          l.getAttribute("y2") === "170",
+          l.getAttribute("y1") === "200" &&
+          l.getAttribute("y2") === "240",
       );
-      expect(dropLine, `expected drop-line from bucket center x=${cx} y=130 to y=170`).toBeTruthy();
+      expect(dropLine, `expected drop-line from bucket center x=${cx} y=200 to y=240`).toBeTruthy();
     }
+  });
+
+  it("sub=1 MRL pre-step is centered horizontally above the Inputs box", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    const svg = container.querySelector("svg");
+    const texts = Array.from(svg.querySelectorAll("text"));
+    const mrlText = texts.find((t) => /MRL pre-step/i.test(t.textContent));
+    const inputsText = texts.find((t) => /Inputs:/.test(t.textContent));
+    expect(mrlText, "expected MRL pre-step label to render").toBeTruthy();
+    expect(inputsText, "expected Inputs label to render").toBeTruthy();
+    const svgCenterX = 320;
+    expect(
+      Math.abs(parseFloat(mrlText.getAttribute("x")) - svgCenterX),
+      "MRL label must sit on the SVG's horizontal center",
+    ).toBeLessThan(5);
+    expect(
+      Math.abs(parseFloat(inputsText.getAttribute("x")) - svgCenterX),
+      "Inputs label must sit on the SVG's horizontal center",
+    ).toBeLessThan(5);
+    expect(parseFloat(mrlText.getAttribute("y")), "MRL must sit above Inputs vertically").toBeLessThan(
+      parseFloat(inputsText.getAttribute("y")),
+    );
   });
 
   it("sub=2 walks four worked scenarios with concrete memory numbers", () => {
@@ -1196,13 +1357,30 @@ describe("CompressionDecision (11.19) content", () => {
     expect(container.textContent).toMatch(/10 GB|10GB|9\.6/);
     expect(container.textContent).toMatch(/300 GB|300GB|307/);
     expect(container.textContent).toMatch(/5M|5,000,000/);
-    expect(container.textContent).toMatch(/3\.8 GB|3\.8GB|halfvec/);
+    expect(container.textContent).toMatch(/20 GB|20GB|5 GB|5GB/);
+    expect(container.textContent).toMatch(/SQ \(int8\)|HNSW \+ SQ/);
     expect(container.textContent).toMatch(/200M|200,000,000/);
     expect(container.textContent).toMatch(/19 GB|19GB|820 GB/);
     expect(container.textContent).toMatch(/OpenAI|text-embedding-3/);
     expect(container.textContent).toMatch(/BGE/);
     expect(container.textContent).toMatch(/Qdrant/);
-    expect(container.textContent).toMatch(/pgvector/);
+  });
+
+  it("sub=2 every scenario result names HNSW so readers don't infer it's only for massive scale", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    const titles = [
+      "Startup - the skip path",
+      "Mid-scale - the SQ default",
+      "Growing product - the high-leverage path",
+      "Massive scale - the HNSW+PQ default",
+    ];
+    titles.forEach((title) => {
+      const titleEl = Array.from(container.querySelectorAll("*")).find((n) => n.textContent === title);
+      expect(titleEl, `expected scenario title to render: ${title}`).toBeTruthy();
+      const card = titleEl.closest("div[style*='border-radius']");
+      expect(card, `scenario card not found for: ${title}`).toBeTruthy();
+      expect(card.textContent, `scenario card should name HNSW: ${title}`).toMatch(/HNSW/);
+    });
   });
 
   it("sub=3 lists five heuristics and four traps to avoid", () => {
@@ -1268,11 +1446,39 @@ describe("Filtering (11.20) content", () => {
     expect(container.textContent).toMatch(/fewer|empty|insufficient/i);
   });
 
+  it("sub=2 post-filter grid uses compact fixed-size cells, not full-width", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    const cells = container.querySelectorAll('[title="dropped"], [title="passes predicate"]');
+    expect(cells.length).toBe(100);
+    const firstCell = cells[0];
+    expect(firstCell.style.width).toBe("32px");
+    expect(firstCell.style.height).toBe("32px");
+    const grid = firstCell.parentElement;
+    expect(grid.style.justifyContent).toBe("center");
+    expect(grid.style.gridTemplateColumns).toMatch(/32px/);
+  });
+
   it("sub=3 inline filtered-HNSW evaluates during traversal", () => {
     const { container } = render(fn(makeCtx({ sub: 3 })));
     expect(container.textContent).toMatch(/inline|filtered[- ]?HNSW/i);
     expect(container.textContent).toMatch(/Qdrant/);
     expect(container.textContent).toMatch(/traversal|graph hop|payload/i);
+  });
+
+  it("sub=3 inline-filter path arrows terminate at node boundary, not center", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    const pathLines = container.querySelectorAll("line[marker-end]");
+    expect(pathLines.length).toBe(3);
+    // First path segment is 1 -> 3. Node 3 center is at x=310. Line should
+    // stop before the center so the arrow tip lands at the circle boundary.
+    const first = pathLines[0];
+    const x2 = parseFloat(first.getAttribute("x2"));
+    expect(x2).toBeLessThan(310);
+    expect(x2).toBeGreaterThan(285);
+    // Source endpoint should also start from the source-node boundary, not its center (x=90).
+    const x1 = parseFloat(first.getAttribute("x1"));
+    expect(x1).toBeGreaterThan(90);
+    expect(x1).toBeLessThan(115);
   });
 
   it("sub=4 compares strategies by selectivity", () => {

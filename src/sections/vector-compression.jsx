@@ -1,3 +1,4 @@
+import React from "react";
 import { Box, T, Reveal, SubBtn } from "../components.jsx";
 import { C } from "../config.js";
 
@@ -937,7 +938,109 @@ export const ScalarQuantization = (ctx) => {
           </T>
         </Box>
       </Reveal>
-      {sub < 5 && (
+      <Reveal when={sub >= 6}>
+        <Box color={C.purple} style={{ width: "100%" }}>
+          <T color={C.purple} bold center size={22}>
+            SQ slots into any index: HNSW, IVF, or flat
+          </T>
+          <T color="#b8a9ff" style={{ marginTop: 8 }}>
+            Scalar quantization is a drop-in replacement for the vector payload. The index structure - HNSW graph, IVF
+            posting lists, or a flat scan - is unchanged; only the per-vector storage swaps from float32 to int8. No new
+            distance algorithm, no rescore stage, no codebook training. The graph still navigates by neighbor distances;
+            those distances are now computed with int8 SIMD instead of float32 SIMD.
+          </T>
+          <div
+            style={{
+              marginTop: 14,
+              display: "grid",
+              gridTemplateColumns: "1fr 1fr 1fr",
+              gap: 12,
+            }}
+          >
+            <div
+              style={{
+                padding: "12px 14px",
+                borderRadius: 8,
+                background: `${C.yellow}06`,
+                border: `1px solid ${C.yellow}12`,
+              }}
+            >
+              <T color={C.yellow} bold center size={16}>
+                HNSW + SQ
+              </T>
+              <div style={{ marginTop: 8, fontSize: 14, color: C.bright, lineHeight: 1.7 }}>
+                <div>&bull; Same multi-layer graph</div>
+                <div>&bull; Node payload: 768 int8 bytes</div>
+                <div>&bull; Edges + traversal unchanged</div>
+                <div>&bull; Distance: int8 dot product</div>
+              </div>
+            </div>
+            <div
+              style={{
+                padding: "12px 14px",
+                borderRadius: 8,
+                background: `${C.green}06`,
+                border: `1px solid ${C.green}12`,
+              }}
+            >
+              <T color={C.green} bold center size={16}>
+                IVF + SQ
+              </T>
+              <div style={{ marginTop: 8, fontSize: 14, color: C.bright, lineHeight: 1.7 }}>
+                <div>&bull; Same nlist centroids (float32)</div>
+                <div>&bull; Posting list payload: int8</div>
+                <div>&bull; Nprobe scan unchanged</div>
+                <div>&bull; Distance: int8 dot product</div>
+              </div>
+            </div>
+            <div
+              style={{
+                padding: "12px 14px",
+                borderRadius: 8,
+                background: `${C.red}06`,
+                border: `1px solid ${C.red}12`,
+              }}
+            >
+              <T color={C.red} bold center size={16}>
+                Flat + SQ
+              </T>
+              <div style={{ marginTop: 8, fontSize: 14, color: C.bright, lineHeight: 1.7 }}>
+                <div>&bull; Brute-force linear scan</div>
+                <div>&bull; Row storage: int8</div>
+                <div>&bull; 4x more vectors per cache line</div>
+                <div>&bull; Distance: int8 dot product</div>
+              </div>
+            </div>
+          </div>
+          <div
+            style={{
+              marginTop: 14,
+              padding: "14px 18px",
+              borderRadius: 8,
+              background: "rgba(0,0,0,0.3)",
+              textAlign: "center",
+              fontFamily: "monospace",
+              fontSize: 15,
+              color: C.bright,
+              lineHeight: 2,
+            }}
+          >
+            pgvector: <span style={{ color: C.cyan }}>halfvec / vector(int8)</span> column type
+            <br />
+            Qdrant: <span style={{ color: C.cyan }}>quantization_config.scalar.type = int8</span>
+            <br />
+            FAISS: <span style={{ color: C.cyan }}>IndexHNSWSQ, IndexIVFScalarQuantizer</span>
+            <br />
+            Milvus: <span style={{ color: C.cyan }}>IVF_SQ8, HNSW_SQ8 index types</span>
+          </div>
+          <T color="#b8a9ff" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
+            Why no dedicated chapter pairing SQ with HNSW or IVF? Because there is nothing new to learn. The graph or
+            posting list is the same; the payload is smaller. PQ has its own combo chapters because its asymmetric
+            lookup table changes how distance is computed. SQ does not change distance, only its precision.
+          </T>
+        </Box>
+      </Reveal>
+      {sub < 6 && (
         <SubBtn
           key={sub}
           onClick={() => {
@@ -1346,173 +1449,193 @@ export const ProductQuantization = (ctx) => {
                   <path d="M0,0 L0,6 L5,3 Z" fill={C.green} />
                 </marker>
               </defs>
-              {/* Top: small scatter */}
-              <rect x="20" y="10" width="320" height="170" fill={`${C.green}05`} stroke={`${C.green}22`} />
-              <text x="180" y="25" textAnchor="middle" fill={C.green} fontSize="11" fontWeight="bold">
-                slot 0 cloud
-              </text>
-              {/* dim points */}
-              {[
-                [60, 60],
-                [90, 80],
-                [130, 50],
-                [165, 90],
-                [210, 70],
-                [255, 110],
-                [300, 60],
-                [275, 145],
-                [220, 145],
-                [165, 145],
-                [100, 130],
-                [60, 110],
-                [240, 90],
-                [195, 105],
-                [110, 95],
-                [90, 155],
-                [310, 130],
-                [285, 90],
-                [180, 60],
-                [240, 160],
-                [125, 110],
-                [70, 145],
-                [305, 100],
-              ].map(([x, y], i) => (
-                <circle key={i} cx={x} cy={y} r="2" fill={`${C.yellow}66`} />
-              ))}
-              {/* centroids */}
-              {[
-                { x: 95, y: 70, id: "c5" },
-                { x: 230, y: 90, id: "c17" },
-                { x: 290, y: 140, id: "c89" },
-                { x: 110, y: 145, id: "c142" },
-              ].map((c, i) => (
-                <g key={i}>
-                  <circle cx={c.x} cy={c.y} r="7" fill={C.yellow} stroke="#08080d" strokeWidth="1" />
-                  <text x={c.x} y={c.y + 18} textAnchor="middle" fill={C.yellow} fontSize="9" fontWeight="bold">
-                    {c.id}
-                  </text>
-                </g>
-              ))}
-              {/* query sub-vector as green diamond */}
-              <polygon points="200,80 215,95 200,110 185,95" fill={C.green} stroke="#08080d" strokeWidth="1" />
-              <text x="170" y="78" textAnchor="end" fill={C.green} fontSize="10" fontWeight="bold">
-                q sub
-              </text>
-              {/* arrow to nearest centroid (c17) */}
-              <line x1="208" y1="90" x2="225" y2="90" stroke={C.green} strokeWidth="2" markerEnd="url(#snap-arrow)" />
-              <text x="225" y="78" textAnchor="middle" fill={C.green} fontSize="10">
-                snap
-              </text>
-              {/* annotation: distances drawn dimly to other centroids */}
-              <line x1="200" y1="95" x2="95" y2="70" stroke={`${C.green}33`} strokeWidth="1" strokeDasharray="3,3" />
-              <line x1="200" y1="95" x2="290" y2="140" stroke={`${C.green}33`} strokeWidth="1" strokeDasharray="3,3" />
-              <line x1="200" y1="95" x2="110" y2="145" stroke={`${C.green}33`} strokeWidth="1" strokeDasharray="3,3" />
-              <text x="180" y="195" textAnchor="middle" fill={C.dim} fontSize="10">
-                closest of all 256 centroids = c17
-              </text>
-              {/* Right side: arrow + result */}
-              <line x1="345" y1="90" x2="395" y2="90" stroke={C.green} strokeWidth="2" markerEnd="url(#snap-arrow)" />
-              <rect
-                x="400"
-                y="68"
-                width="80"
-                height="46"
-                fill={`${C.green}22`}
-                stroke={C.green}
-                strokeWidth="1.5"
-                rx="4"
-              />
-              <text x="440" y="85" textAnchor="middle" fill={C.bright} fontSize="11">
-                store
-              </text>
-              <text x="440" y="102" textAnchor="middle" fill={C.green} fontSize="14" fontWeight="bold">
-                id 17
-              </text>
-              <text x="440" y="128" textAnchor="middle" fill={C.dim} fontSize="10">
-                1 byte
-              </text>
-              {/* Bottom: row of 4 sub-vectors snapping to 4 bytes */}
-              <text x="20" y="215" textAnchor="start" fill={C.green} fontSize="12" fontWeight="bold">
-                doc 1: 4 of 96 slots
-              </text>
-              {[
-                { slot: 0, vals: [0.81, 0.12, 0.45, 0.22], id: 17 },
-                { slot: 1, vals: [0.63, 0.07, 0.38, 0.91], id: 203 },
-                { slot: 2, vals: [0.44, 0.28, 0.56, 0.19], id: 89 },
-                { slot: 3, vals: [0.72, 0.34, 0.15, 0.48], id: 142 },
-              ].map((row, ri) => {
-                const y = 240 + ri * 32;
-                return (
-                  <g key={ri}>
-                    <text x="60" y={y + 14} textAnchor="end" fill={C.dim} fontSize="11">
-                      slot {row.slot}
-                    </text>
-                    {/* sub-vector visualized as 4 small cells */}
-                    {row.vals.map((v, ci) => (
-                      <g key={ci}>
-                        <rect
-                          x={75 + ci * 28}
-                          y={y}
-                          width="26"
-                          height="22"
-                          fill={`${C.green}${Math.floor(v * 99)
-                            .toString(16)
-                            .padStart(2, "0")}`}
-                          stroke={`${C.green}55`}
-                        />
-                        <text
-                          x={75 + ci * 28 + 13}
-                          y={y + 14}
-                          textAnchor="middle"
-                          fill={C.bright}
-                          fontSize="9"
-                          fontFamily="monospace"
-                        >
-                          {v.toFixed(2)}
-                        </text>
-                      </g>
-                    ))}
-                    {/* arrow */}
-                    <line
-                      x1="195"
-                      y1={y + 11}
-                      x2="240"
-                      y2={y + 11}
-                      stroke={C.green}
-                      strokeWidth="1.5"
-                      markerEnd="url(#snap-arrow)"
-                    />
-                    <text x="218" y={y + 7} textAnchor="middle" fill={C.dim} fontSize="9">
-                      snap
-                    </text>
-                    {/* byte box */}
-                    <rect
-                      x="245"
-                      y={y - 1}
-                      width="60"
-                      height="24"
-                      fill={`${C.green}22`}
-                      stroke={C.green}
-                      strokeWidth="1.2"
-                      rx="3"
-                    />
-                    <text
-                      x="275"
-                      y={y + 16}
-                      textAnchor="middle"
-                      fill={C.bright}
-                      fontSize="13"
-                      fontWeight="bold"
-                      fontFamily="monospace"
-                    >
-                      id {row.id}
+              {/* Top: small scatter (translated to center within 720 viewBox) */}
+              <g transform="translate(120, 0)">
+                <rect x="20" y="10" width="320" height="170" fill={`${C.green}05`} stroke={`${C.green}22`} />
+                <text x="180" y="25" textAnchor="middle" fill={C.green} fontSize="11" fontWeight="bold">
+                  slot 0 cloud
+                </text>
+                {/* dim points */}
+                {[
+                  [60, 60],
+                  [90, 80],
+                  [130, 50],
+                  [165, 90],
+                  [210, 70],
+                  [255, 110],
+                  [300, 60],
+                  [275, 145],
+                  [220, 145],
+                  [165, 145],
+                  [100, 130],
+                  [60, 110],
+                  [240, 90],
+                  [195, 105],
+                  [110, 95],
+                  [90, 155],
+                  [310, 130],
+                  [285, 90],
+                  [180, 60],
+                  [240, 160],
+                  [125, 110],
+                  [70, 145],
+                  [305, 100],
+                ].map(([x, y], i) => (
+                  <circle key={i} cx={x} cy={y} r="2" fill={`${C.yellow}66`} />
+                ))}
+                {/* centroids */}
+                {[
+                  { x: 95, y: 70, id: "c5" },
+                  { x: 230, y: 90, id: "c17" },
+                  { x: 290, y: 140, id: "c89" },
+                  { x: 110, y: 145, id: "c142" },
+                ].map((c, i) => (
+                  <g key={i}>
+                    <circle cx={c.x} cy={c.y} r="7" fill={C.yellow} stroke="#08080d" strokeWidth="1" />
+                    <text x={c.x} y={c.y + 18} textAnchor="middle" fill={C.yellow} fontSize="9" fontWeight="bold">
+                      {c.id}
                     </text>
                   </g>
-                );
-              })}
-              <text x="345" y="280" textAnchor="start" fill={C.dim} fontSize="11">
-                ... 92 more slots ...
-              </text>
+                ))}
+                {/* query sub-vector as green diamond */}
+                <polygon points="200,80 215,95 200,110 185,95" fill={C.green} stroke="#08080d" strokeWidth="1" />
+                <text x="170" y="78" textAnchor="end" fill={C.green} fontSize="10" fontWeight="bold">
+                  q sub
+                </text>
+                {/* arrow to nearest centroid (c17) */}
+                <line x1="208" y1="90" x2="225" y2="90" stroke={C.green} strokeWidth="2" markerEnd="url(#snap-arrow)" />
+                <text x="225" y="78" textAnchor="middle" fill={C.green} fontSize="10">
+                  snap
+                </text>
+                {/* annotation: distances drawn dimly to other centroids */}
+                <line x1="200" y1="95" x2="95" y2="70" stroke={`${C.green}33`} strokeWidth="1" strokeDasharray="3,3" />
+                <line
+                  x1="200"
+                  y1="95"
+                  x2="290"
+                  y2="140"
+                  stroke={`${C.green}33`}
+                  strokeWidth="1"
+                  strokeDasharray="3,3"
+                />
+                <line
+                  x1="200"
+                  y1="95"
+                  x2="110"
+                  y2="145"
+                  stroke={`${C.green}33`}
+                  strokeWidth="1"
+                  strokeDasharray="3,3"
+                />
+                <text x="180" y="195" textAnchor="middle" fill={C.dim} fontSize="10">
+                  closest of all 256 centroids = c17
+                </text>
+                {/* Right side: arrow + result */}
+                <line x1="345" y1="90" x2="395" y2="90" stroke={C.green} strokeWidth="2" markerEnd="url(#snap-arrow)" />
+                <rect
+                  x="400"
+                  y="68"
+                  width="80"
+                  height="46"
+                  fill={`${C.green}22`}
+                  stroke={C.green}
+                  strokeWidth="1.5"
+                  rx="4"
+                />
+                <text x="440" y="85" textAnchor="middle" fill={C.bright} fontSize="11">
+                  store
+                </text>
+                <text x="440" y="102" textAnchor="middle" fill={C.green} fontSize="14" fontWeight="bold">
+                  id 17
+                </text>
+                <text x="440" y="128" textAnchor="middle" fill={C.dim} fontSize="10">
+                  1 byte
+                </text>
+              </g>
+              {/* Bottom: row of 4 sub-vectors snapping to 4 bytes (centered group) */}
+              <g transform="translate(215, 0)">
+                <text x="20" y="215" textAnchor="start" fill={C.green} fontSize="12" fontWeight="bold">
+                  doc 1: 4 of 96 slots
+                </text>
+                {[
+                  { slot: 0, vals: [0.81, 0.12, 0.45, 0.22], id: 17 },
+                  { slot: 1, vals: [0.63, 0.07, 0.38, 0.91], id: 203 },
+                  { slot: 2, vals: [0.44, 0.28, 0.56, 0.19], id: 89 },
+                  { slot: 3, vals: [0.72, 0.34, 0.15, 0.48], id: 142 },
+                ].map((row, ri) => {
+                  const y = 240 + ri * 32;
+                  return (
+                    <g key={ri}>
+                      <text x="60" y={y + 14} textAnchor="end" fill={C.dim} fontSize="11">
+                        slot {row.slot}
+                      </text>
+                      {/* sub-vector visualized as 4 small cells */}
+                      {row.vals.map((v, ci) => (
+                        <g key={ci}>
+                          <rect
+                            x={75 + ci * 28}
+                            y={y}
+                            width="26"
+                            height="22"
+                            fill={`${C.green}${Math.floor(v * 99)
+                              .toString(16)
+                              .padStart(2, "0")}`}
+                            stroke={`${C.green}55`}
+                          />
+                          <text
+                            x={75 + ci * 28 + 13}
+                            y={y + 14}
+                            textAnchor="middle"
+                            fill={C.bright}
+                            fontSize="9"
+                            fontFamily="monospace"
+                          >
+                            {v.toFixed(2)}
+                          </text>
+                        </g>
+                      ))}
+                      {/* arrow */}
+                      <line
+                        x1="195"
+                        y1={y + 11}
+                        x2="240"
+                        y2={y + 11}
+                        stroke={C.green}
+                        strokeWidth="1.5"
+                        markerEnd="url(#snap-arrow)"
+                      />
+                      <text x="218" y={y + 7} textAnchor="middle" fill={C.dim} fontSize="9">
+                        snap
+                      </text>
+                      {/* byte box */}
+                      <rect
+                        x="245"
+                        y={y - 1}
+                        width="60"
+                        height="24"
+                        fill={`${C.green}22`}
+                        stroke={C.green}
+                        strokeWidth="1.2"
+                        rx="3"
+                      />
+                      <text
+                        x="275"
+                        y={y + 16}
+                        textAnchor="middle"
+                        fill={C.bright}
+                        fontSize="13"
+                        fontWeight="bold"
+                        fontFamily="monospace"
+                      >
+                        id {row.id}
+                      </text>
+                    </g>
+                  );
+                })}
+                <text x="345" y="280" textAnchor="start" fill={C.dim} fontSize="11">
+                  ... 92 more slots ...
+                </text>
+              </g>
               {/* Assembled byte string (placed below row 3 with 25px clearance) */}
               <rect
                 x="20"
@@ -1668,7 +1791,7 @@ export const ProductQuantization = (ctx) => {
                   textAlign: "center",
                 }}
               >
-                <T color={C.orange} bold size={16}>
+                <T color={C.orange} bold center size={16}>
                   N = {row.n}
                 </T>
                 <div style={{ marginTop: 6, fontFamily: "monospace", fontSize: 14, color: C.dim, lineHeight: 1.7 }}>
@@ -1687,8 +1810,15 @@ export const ProductQuantization = (ctx) => {
       <Reveal when={sub >= 4}>
         <Box color={C.red} style={{ width: "100%" }}>
           <T color={C.red} bold center size={22}>
-            Don&apos;t reconstruct. Look up.
+            Search at query time: 4-frame storyboard for ADC
           </T>
+          <T color="#ef9a9a" size={16} style={{ marginTop: 8 }}>
+            Query arrives as a float vector. Docs are stored only as 96-byte PQ codes (no floats kept). How do we score
+            millions of docs without reconstructing? Walk through one full search below. Showing 8 of 96 slots for
+            clarity.
+          </T>
+
+          {/* Frame A: setup */}
           <div
             style={{
               marginTop: 14,
@@ -1698,25 +1828,123 @@ export const ProductQuantization = (ctx) => {
               border: `1px solid ${C.red}12`,
             }}
           >
-            <T color={C.red} bold center size={16}>
-              ADC: query stays float, doc stays code, distance is a sum of table reads
-            </T>
-            <T color={C.dim} center size={12} style={{ marginTop: 4 }}>
-              showing 8 of 96 slots for clarity
+            <T color={C.red} bold center size={15}>
+              Frame A - what we have at query time
             </T>
             <svg
-              viewBox="0 0 720 420"
-              style={{ width: "100%", maxWidth: 740, height: "auto", display: "block", marginTop: 6 }}
+              viewBox="0 0 720 270"
+              style={{ width: "100%", maxWidth: 740, height: "auto", display: "block", marginTop: 8 }}
             >
               <desc>
-                Asymmetric distance computation diagram: top row shows the float query split into 8 sub-queries; middle
-                row shows 8 vertical lookup tables of 256 rows each with one row highlighted per slot; bottom row shows
-                the document&apos;s PQ code bytes pointing to the highlighted rows; arrows feed all 8 distances into a
-                summation symbol producing the final document distance.
+                Setup frame. Top row: query vector q drawn as a banded bar of 8 sub-queries (8 of 96 shown), each
+                holding a float sub-vector. Below: a stack of doc PQ codes - each row is one doc represented as 96 bytes
+                (centroid IDs). The query stays as float; the docs are codes. No float doc vectors exist on disk.
               </desc>
-              {/* Top: query split into 8 sub-queries */}
-              <text x="20" y="22" textAnchor="start" fill={C.red} fontSize="12" fontWeight="bold">
-                query q (float32, 8 of 96 slots shown)
+              <text x="360" y="22" textAnchor="middle" fill={C.red} fontSize="13" fontWeight="bold">
+                query q (full float, 96 sub-queries; 8 shown)
+              </text>
+              {Array.from({ length: 8 }).map((_, i) => {
+                const x = 70 + i * 81;
+                return (
+                  <g key={i}>
+                    <rect
+                      x={x}
+                      y="32"
+                      width="64"
+                      height="34"
+                      fill={`${C.red}22`}
+                      stroke={C.red}
+                      strokeWidth="1"
+                      rx="3"
+                    />
+                    <text
+                      x={x + 32}
+                      y={48}
+                      textAnchor="middle"
+                      fill={C.bright}
+                      fontSize="11"
+                      fontFamily="monospace"
+                      fontWeight="bold"
+                    >
+                      q_{i}
+                    </text>
+                    <text x={x + 32} y={61} textAnchor="middle" fill={C.dim} fontSize="9" fontFamily="monospace">
+                      8 floats
+                    </text>
+                  </g>
+                );
+              })}
+              <text x="360" y="100" textAnchor="middle" fill={C.red} fontSize="13" fontWeight="bold">
+                doc database: 5 of N docs as 96-byte codes
+              </text>
+              {[
+                { id: 1, code: [17, 203, 89, 142, 88, 17, 250, 61] },
+                { id: 2, code: [12, 200, 87, 140, 90, 18, 248, 60] },
+                { id: 3, code: [4, 30, 99, 12, 200, 5, 7, 250] },
+                { id: 4, code: [80, 90, 200, 30, 40, 100, 60, 70] },
+                { id: 5, code: [11, 195, 90, 138, 95, 14, 245, 58] },
+              ].map((doc, rowIdx) => {
+                const y = 110 + rowIdx * 28;
+                return (
+                  <g key={doc.id}>
+                    <text x="10" y={y + 18} fill={C.green} fontSize="11" fontFamily="monospace" fontWeight="bold">
+                      doc {doc.id}
+                    </text>
+                    {doc.code.map((b, i) => {
+                      const x = 70 + i * 81;
+                      return (
+                        <g key={i}>
+                          <rect x={x} y={y + 4} width="64" height="20" fill={`${C.green}18`} stroke={`${C.green}55`} />
+                          <text
+                            x={x + 32}
+                            y={y + 18}
+                            textAnchor="middle"
+                            fill={C.bright}
+                            fontSize="10"
+                            fontFamily="monospace"
+                          >
+                            {b}
+                          </text>
+                        </g>
+                      );
+                    })}
+                  </g>
+                );
+              })}
+              <text x="360" y="265" textAnchor="middle" fill={C.dim} fontSize="11">
+                no float doc vectors exist on disk - only 96 bytes per doc
+              </text>
+            </svg>
+          </div>
+
+          {/* Frame B: build LUT once per query */}
+          <div
+            style={{
+              marginTop: 12,
+              padding: "12px 14px",
+              borderRadius: 8,
+              background: `${C.red}06`,
+              border: `1px solid ${C.red}12`,
+            }}
+          >
+            <T color={C.red} bold center size={15}>
+              Frame B - build the lookup table (LUT) once per query
+            </T>
+            <T color={C.dim} center size={12} style={{ marginTop: 4 }}>
+              LUT = lookup table. For each slot, pre-compute distance from sub-query to all 256 centroids. Store. Reuse
+              across every doc.
+            </T>
+            <svg
+              viewBox="0 0 720 320"
+              style={{ width: "100%", maxWidth: 740, height: "auto", display: "block", marginTop: 8 }}
+            >
+              <desc>
+                Build-LUT frame. Each sub-query q_s feeds into one column of the lookup table; the column has 256 rows,
+                one per centroid in that slot's codebook. Each cell stores the squared distance from q_s to centroid c.
+                The whole table is 96 columns by 256 rows, computed once per query.
+              </desc>
+              <text x="360" y="22" textAnchor="middle" fill={C.red} fontSize="12" fontWeight="bold">
+                Step 1: 8 sub-queries (8 of 96)
               </text>
               {Array.from({ length: 8 }).map((_, i) => {
                 const x = 30 + i * 82;
@@ -1724,130 +1952,333 @@ export const ProductQuantization = (ctx) => {
                   <g key={i}>
                     <rect
                       x={x}
-                      y="30"
+                      y="32"
                       width="64"
-                      height="28"
+                      height="26"
                       fill={`${C.red}22`}
                       stroke={C.red}
                       strokeWidth="1"
                       rx="3"
                     />
-                    <text x={x + 32} y={48} textAnchor="middle" fill={C.bright} fontSize="11" fontFamily="monospace">
+                    <text
+                      x={x + 32}
+                      y={49}
+                      textAnchor="middle"
+                      fill={C.bright}
+                      fontSize="11"
+                      fontFamily="monospace"
+                      fontWeight="bold"
+                    >
                       q_{i}
                     </text>
-                    {/* down arrow */}
                     <line x1={x + 32} y1="60" x2={x + 32} y2="78" stroke={C.red} strokeWidth="1.5" />
                     <polygon points={`${x + 28},78 ${x + 36},78 ${x + 32},85`} fill={C.red} />
                   </g>
                 );
               })}
-              {/* Middle: 8 lookup tables, each a vertical strip of 8 rows representing 256 */}
-              <text x="20" y="98" textAnchor="start" fill={C.red} fontSize="12" fontWeight="bold">
-                precomputed table[s][c] (96 KB total, fits L2)
+              <text x="360" y="100" textAnchor="middle" fill={C.red} fontSize="12" fontWeight="bold">
+                Step 2: distance to all 256 centroids in that slot &rarr; one column of LUT
               </text>
-              {[17, 203, 89, 142, 88, 17, 250, 61].map((codeId, slotIdx) => {
+              {Array.from({ length: 8 }).map((_, slotIdx) => {
                 const tx = 30 + slotIdx * 82;
-                const highlightRow = codeId % 8; // visual stand-in for the 256 rows
+                const sample = [
+                  [0.05, 0.21, 0.84, 0.42, 0.13, 0.71, 0.35, 0.18],
+                  [0.42, 0.08, 0.31, 0.65, 0.27, 0.93, 0.14, 0.55],
+                  [0.13, 0.74, 0.05, 0.22, 0.61, 0.18, 0.49, 0.33],
+                  [0.61, 0.27, 0.42, 0.09, 0.35, 0.71, 0.18, 0.55],
+                  [0.27, 0.13, 0.61, 0.49, 0.05, 0.84, 0.42, 0.18],
+                  [0.05, 0.42, 0.21, 0.74, 0.13, 0.61, 0.35, 0.27],
+                  [0.31, 0.18, 0.65, 0.27, 0.49, 0.05, 0.84, 0.13],
+                  [0.18, 0.55, 0.27, 0.42, 0.71, 0.13, 0.05, 0.61],
+                ][slotIdx];
                 return (
                   <g key={slotIdx}>
-                    {Array.from({ length: 8 }).map((_, r) => {
-                      const ry = 105 + r * 22;
-                      const fill = r === highlightRow ? `${C.yellow}aa` : `${C.red}10`;
-                      const stroke = r === highlightRow ? C.yellow : `${C.red}33`;
+                    {sample.map((d, r) => {
+                      const ry = 110 + r * 20;
                       return (
                         <g key={r}>
-                          <rect x={tx} y={ry} width="64" height="20" fill={fill} stroke={stroke} strokeWidth="1" />
+                          <rect x={tx} y={ry} width="64" height="18" fill={`${C.red}10`} stroke={`${C.red}33`} />
                           <text
                             x={tx + 32}
-                            y={ry + 14}
+                            y={ry + 13}
                             textAnchor="middle"
-                            fill={r === highlightRow ? "#08080d" : C.dim}
+                            fill={C.dim}
                             fontSize="9"
                             fontFamily="monospace"
                           >
-                            {r === highlightRow ? `d=${(0.05 + r * 0.08).toFixed(2)}` : "."}
+                            d={d.toFixed(2)}
                           </text>
                         </g>
                       );
                     })}
-                    <text x={tx + 32} y="296" textAnchor="middle" fill={C.dim} fontSize="9">
+                    <text x={tx + 32} y={285} textAnchor="middle" fill={C.bright} fontSize="10" fontFamily="monospace">
                       slot {slotIdx}
+                    </text>
+                    <text x={tx + 32} y={300} textAnchor="middle" fill={C.dim} fontSize="9">
+                      256 rows
                     </text>
                   </g>
                 );
               })}
-              {/* Bottom: doc code bytes */}
-              <text x="20" y="320" textAnchor="start" fill={C.red} fontSize="12" fontWeight="bold">
-                doc PQ code (bytes)
+              <text x="360" y="318" textAnchor="middle" fill={C.bright} fontSize="11" fontFamily="monospace">
+                LUT shape: 96 cols &times; 256 rows = 24,576 floats &asymp; 96 KB &middot; computed once per query
               </text>
-              {[17, 203, 89, 142, 88, 17, 250, 61].map((codeId, slotIdx) => {
-                const tx = 30 + slotIdx * 82;
+            </svg>
+          </div>
+
+          {/* Frame C: score one doc */}
+          <div
+            style={{
+              marginTop: 12,
+              padding: "12px 14px",
+              borderRadius: 8,
+              background: `${C.red}06`,
+              border: `1px solid ${C.red}12`,
+            }}
+          >
+            <T color={C.red} bold center size={15}>
+              Frame C - score one doc: 96 lookups, 96 adds
+            </T>
+            <T color={C.dim} center size={12} style={{ marginTop: 4 }}>
+              each byte names a centroid in its slot. The LUT cell already holds the distance from that slot&apos;s
+              sub-query to that centroid - one read per slot.
+            </T>
+            <svg
+              viewBox="0 0 720 360"
+              style={{ width: "100%", maxWidth: 740, height: "auto", display: "block", marginTop: 8 }}
+            >
+              <desc>
+                Score-one-doc frame. Top row shows doc 1's PQ code bytes; each byte is annotated with the centroid id it
+                names in its slot. A yellow dashed arrow drops from each byte into the matching LUT cell labelled dist
+                of sub-query and centroid so the lookup semantics are explicit. Red arrows sum the eight cell values
+                into doc 1's approximate distance.
+              </desc>
+              <text x="360" y="20" textAnchor="middle" fill={C.red} fontSize="12" fontWeight="bold">
+                Step 1 - doc 1 PQ code (8 of 96 bytes)
+              </text>
+              {[17, 203, 89, 142, 88, 17, 250, 61].map((b, i) => {
+                const x = 24 + i * 84;
                 return (
-                  <g key={slotIdx}>
-                    {/* arrow up from code byte to highlighted row */}
-                    <line
-                      x1={tx + 32}
-                      y1="328"
-                      x2={tx + 32}
-                      y2={105 + (codeId % 8) * 22 + 20}
-                      stroke={`${C.yellow}77`}
-                      strokeWidth="1.2"
-                      strokeDasharray="3,3"
-                    />
+                  <g key={i}>
                     <rect
-                      x={tx}
-                      y="332"
-                      width="64"
-                      height="28"
+                      x={x}
+                      y="30"
+                      width="78"
+                      height="30"
                       fill={`${C.green}22`}
                       stroke={C.green}
                       strokeWidth="1.2"
                       rx="3"
                     />
                     <text
-                      x={tx + 32}
-                      y={350}
+                      x={x + 39}
+                      y={50}
                       textAnchor="middle"
                       fill={C.bright}
-                      fontSize="11"
-                      fontWeight="bold"
+                      fontSize="13"
                       fontFamily="monospace"
+                      fontWeight="bold"
                     >
-                      {codeId}
+                      {b}
                     </text>
+                    <text x={x + 39} y={76} textAnchor="middle" fill={C.dim} fontSize="10" fontFamily="monospace">
+                      means c{b}
+                    </text>
+                    <line
+                      x1={x + 39}
+                      y1="84"
+                      x2={x + 39}
+                      y2="106"
+                      stroke={`${C.yellow}cc`}
+                      strokeWidth="1.5"
+                      strokeDasharray="3,3"
+                    />
+                    <polygon points={`${x + 35},106 ${x + 43},106 ${x + 39},112`} fill={C.yellow} />
                   </g>
                 );
               })}
-              {/* Sum at bottom */}
+              <text x="360" y="130" textAnchor="middle" fill={C.red} fontSize="12" fontWeight="bold">
+                Step 2 - read LUT cell at column = slot, row = centroid id
+              </text>
+              {[
+                { byte: 17, d: 0.05 },
+                { byte: 203, d: 0.12 },
+                { byte: 89, d: 0.08 },
+                { byte: 142, d: 0.21 },
+                { byte: 88, d: 0.06 },
+                { byte: 17, d: 0.05 },
+                { byte: 250, d: 0.18 },
+                { byte: 61, d: 0.19 },
+              ].map((cell, i) => {
+                const x = 24 + i * 84;
+                return (
+                  <g key={i}>
+                    <rect
+                      x={x}
+                      y="142"
+                      width="78"
+                      height="56"
+                      fill={`${C.yellow}aa`}
+                      stroke={C.yellow}
+                      strokeWidth="1.2"
+                      rx="3"
+                    />
+                    <text
+                      x={x + 39}
+                      y={161}
+                      textAnchor="middle"
+                      fill="#08080d"
+                      fontSize="11"
+                      fontFamily="monospace"
+                      fontWeight="bold"
+                    >
+                      q_{i} &rarr; c{cell.byte}
+                    </text>
+                    <line x1={x + 8} y1={167} x2={x + 70} y2={167} stroke={`#08080d55`} strokeWidth="1" />
+                    <text
+                      x={x + 39}
+                      y={188}
+                      textAnchor="middle"
+                      fill="#08080d"
+                      fontSize="14"
+                      fontFamily="monospace"
+                      fontWeight="bold"
+                    >
+                      {cell.d.toFixed(2)}
+                    </text>
+                    <text x={x + 39} y={213} textAnchor="middle" fill={C.dim} fontSize="10" fontFamily="monospace">
+                      slot {i}
+                    </text>
+                    <line x1={x + 39} y1="222" x2={x + 39} y2="244" stroke={C.red} strokeWidth="1.5" />
+                    <polygon points={`${x + 35},244 ${x + 43},244 ${x + 39},250`} fill={C.red} />
+                  </g>
+                );
+              })}
+              <text x="360" y="270" textAnchor="middle" fill={C.red} fontSize="12" fontWeight="bold">
+                Step 3 - sum the 8 (in real PQ: 96) cells
+              </text>
+              <rect
+                x="30"
+                y="280"
+                width="660"
+                height="40"
+                fill={`${C.red}18`}
+                stroke={C.red}
+                strokeWidth="1.2"
+                rx="4"
+              />
               <text
                 x="360"
-                y="395"
+                y="305"
                 textAnchor="middle"
-                fill={C.red}
-                fontSize="14"
-                fontWeight="bold"
+                fill={C.bright}
+                fontSize="13"
                 fontFamily="monospace"
+                fontWeight="bold"
               >
-                &Sigma; 8 highlighted distances &rarr; full doc distance (after 96 of these)
+                d(q, doc 1) &asymp; 0.05 + 0.12 + 0.08 + 0.21 + 0.06 + 0.05 + 0.18 + 0.19 = 0.94
+              </text>
+              <text x="360" y="345" textAnchor="middle" fill={C.dim} fontSize="11">
+                no multiplies during the scan - just byte reads, table lookups, and adds
               </text>
             </svg>
           </div>
-          <T color="#ef9a9a" style={{ marginTop: 12 }}>
-            To search, the query stays as full floats. The documents stay as PQ codes. We never reconstruct.
-          </T>
-          <T color="#ef9a9a" style={{ marginTop: 8 }}>
-            <strong>Once per query:</strong> compute the squared distance from each of the query&apos;s 96 sub-vectors
-            to all 256 centroids in that slot&apos;s codebook. Save the results as 96 small lookup tables.
-          </T>
-          <T color="#ef9a9a" style={{ marginTop: 8 }}>
-            <strong>Per document:</strong> read its 96 bytes. Each byte is an index into one of those tables. Sum the 96
-            looked-up distances. That is the document&apos;s distance to the query.
-          </T>
-          <T color="#ef9a9a" style={{ marginTop: 8 }}>
-            No multiplications during the scan. Just memory lookups and adds. This is called{" "}
-            <strong>Asymmetric Distance Computation</strong> - asymmetric because the query is precise but the docs are
-            approximate.
-          </T>
+
+          {/* Frame D: score all docs, top-k */}
+          <div
+            style={{
+              marginTop: 12,
+              padding: "12px 14px",
+              borderRadius: 8,
+              background: `${C.red}06`,
+              border: `1px solid ${C.red}12`,
+            }}
+          >
+            <T color={C.red} bold center size={15}>
+              Frame D - repeat for every doc, sort, return top-k
+            </T>
+            <div style={{ marginTop: 10, display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+              <div>
+                <T color={C.dim} size={12} center style={{ marginBottom: 6, fontFamily: "monospace" }}>
+                  scan: distance for each doc
+                </T>
+                {[
+                  { id: 1, sum: 0.94 },
+                  { id: 2, sum: 0.42 },
+                  { id: 3, sum: 1.21 },
+                  { id: 4, sum: 0.87 },
+                  { id: 5, sum: 0.58 },
+                ].map((row) => (
+                  <div
+                    key={row.id}
+                    style={{
+                      display: "grid",
+                      gridTemplateColumns: "60px 1fr 70px",
+                      gap: 8,
+                      alignItems: "center",
+                      padding: "5px 10px",
+                      borderRadius: 4,
+                      background: `${C.green}10`,
+                      border: `1px solid ${C.green}22`,
+                      marginTop: 4,
+                    }}
+                  >
+                    <T color={C.green} bold size={13} style={{ fontFamily: "monospace" }}>
+                      doc {row.id}
+                    </T>
+                    <div style={{ height: 10, background: "rgba(0,0,0,0.4)", borderRadius: 3, overflow: "hidden" }}>
+                      <div style={{ width: `${(row.sum / 1.5) * 100}%`, height: "100%", background: C.green }} />
+                    </div>
+                    <T color={C.bright} size={12} style={{ fontFamily: "monospace", textAlign: "right" }}>
+                      d={row.sum.toFixed(2)}
+                    </T>
+                  </div>
+                ))}
+              </div>
+              <div>
+                <T color={C.dim} size={12} center style={{ marginBottom: 6, fontFamily: "monospace" }}>
+                  sort ascending - top 3
+                </T>
+                {[
+                  { id: 2, sum: 0.42, rank: 1 },
+                  { id: 5, sum: 0.58, rank: 2 },
+                  { id: 4, sum: 0.87, rank: 3 },
+                ].map((row) => (
+                  <div
+                    key={row.id}
+                    style={{
+                      display: "grid",
+                      gridTemplateColumns: "32px 60px 1fr 70px",
+                      gap: 8,
+                      alignItems: "center",
+                      padding: "6px 10px",
+                      borderRadius: 4,
+                      background: `${C.red}18`,
+                      border: `1px solid ${C.red}55`,
+                      marginTop: 4,
+                    }}
+                  >
+                    <T color={C.red} bold size={13} style={{ fontFamily: "monospace" }}>
+                      #{row.rank}
+                    </T>
+                    <T color={C.red} bold size={13} style={{ fontFamily: "monospace" }}>
+                      doc {row.id}
+                    </T>
+                    <T color={C.bright} size={11}>
+                      nearest neighbor
+                    </T>
+                    <T color={C.bright} size={12} style={{ fontFamily: "monospace", textAlign: "right" }}>
+                      d={row.sum.toFixed(2)}
+                    </T>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <T color={C.dim} size={12} center style={{ marginTop: 10, fontFamily: "monospace" }}>
+              for each doc: 96 lookups + 96 adds &middot; for N = 1M docs: 96M lookups + 96M adds (vs 1.5G float ops)
+            </T>
+          </div>
+
           <div
             style={{
               marginTop: 14,
@@ -1858,17 +2289,83 @@ export const ProductQuantization = (ctx) => {
               fontFamily: "monospace",
               fontSize: 15,
               color: C.bright,
-              lineHeight: 2,
+              lineHeight: 1.9,
             }}
           >
-            precompute: 96 &middot; 256 = 24,576 entries &asymp; <span style={{ color: C.red }}>96 KB (fits L2)</span>
+            <span style={{ color: C.red }}>Asymmetric Distance Computation (ADC):</span>
+            <br />
+            once per query: build LUT (96 &middot; 256 = 24,576 dists &asymp; 96 KB; fits L2)
             <br />
             per doc: <span style={{ color: C.red }}>96 lookups + 96 adds</span> &middot; no multiplies
-            <br />
-            <span style={{ color: C.dim }}>vs float32: 768 multiplies + 768 adds per doc (about 10x slower)</span>
           </div>
-          <T color="#ef9a9a" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
-            PQ wins twice: 32x less memory and roughly 10x faster scans.
+
+          <div
+            style={{
+              marginTop: 14,
+              padding: "12px 14px",
+              borderRadius: 8,
+              background: `${C.red}06`,
+              border: `1px solid ${C.red}12`,
+            }}
+          >
+            <T color={C.red} bold center size={15}>
+              How does the cost compare? Float32 vs Scalar Quantization vs PQ
+            </T>
+            <div
+              style={{
+                marginTop: 10,
+                display: "grid",
+                gridTemplateColumns: "1.1fr 1fr 1fr 1fr",
+                gap: 0,
+                border: `1px solid ${C.red}33`,
+                borderRadius: 6,
+                overflow: "hidden",
+                fontFamily: "monospace",
+                fontSize: 12,
+              }}
+            >
+              {[
+                ["", "float32 brute", "SQ (int8)", "PQ + ADC"],
+                ["bytes / vec", "3,072", "768 (4x ↓)", "96 (32x ↓)"],
+                ["ops / doc", "768 mul + 768 add", "768 byte ops", "96 lookups + 96 adds"],
+                ["multiplies?", "yes", "yes (int)", "no"],
+                ["build cost", "none", "1 scan for min/max", "k-means + LUT per query"],
+                ["scan speed", "1x baseline", "~3-4x faster", "~10x faster"],
+                ["recall loss", "0%", "1-3%", "5-10%"],
+              ].map((row, ri) => (
+                <React.Fragment key={ri}>
+                  {row.map((cell, ci) => {
+                    const isHeader = ri === 0;
+                    const isLabel = ci === 0;
+                    const colColor = ci === 1 ? C.dim : ci === 2 ? C.cyan : ci === 3 ? C.red : C.bright;
+                    return (
+                      <div
+                        key={ci}
+                        style={{
+                          padding: "8px 10px",
+                          borderTop: ri > 0 ? `1px solid ${C.red}22` : "none",
+                          borderLeft: ci > 0 ? `1px solid ${C.red}22` : "none",
+                          background: isHeader ? `${C.red}18` : isLabel ? "rgba(0,0,0,0.25)" : "transparent",
+                          color: isHeader ? C.bright : isLabel ? C.dim : colColor,
+                          fontWeight: isHeader || isLabel ? 700 : 400,
+                          textAlign: "center",
+                        }}
+                      >
+                        {cell}
+                      </div>
+                    );
+                  })}
+                </React.Fragment>
+              ))}
+            </div>
+            <T color={C.dim} size={11} center style={{ marginTop: 8, fontFamily: "monospace" }}>
+              SQ keeps every dim, just shrinks each from 4 B to 1 B. PQ throws away the floats entirely and stores
+              centroid ids per slot.
+            </T>
+          </div>
+          <T color="#ef9a9a" size={15} center style={{ marginTop: 10, fontStyle: "italic" }}>
+            Asymmetric: query stays precise, docs stay approximate. PQ wins on both axes - 8x less memory than SQ and
+            ~3x faster per scan.
           </T>
         </Box>
       </Reveal>
@@ -2350,17 +2847,17 @@ export const BinaryQuantization = (ctx) => {
               style={{
                 marginTop: 10,
                 display: "grid",
-                gridTemplateColumns: "repeat(8, 1fr)",
-                gap: 4,
+                gridTemplateColumns: "repeat(16, 1fr)",
+                gap: 3,
                 fontFamily: "monospace",
-                fontSize: 12,
+                fontSize: 11,
               }}
             >
-              {bqFloatVec.slice(0, 8).map((v, i) => (
+              {bqFloatVec.map((v, i) => (
                 <div
                   key={i}
                   style={{
-                    padding: "6px 4px",
+                    padding: "5px 2px",
                     background: `${C.cyan}10`,
                     border: `1px solid ${C.cyan}20`,
                     borderRadius: 4,
@@ -2804,7 +3301,7 @@ export const BinaryQuantization = (ctx) => {
                   lineHeight: 1.7,
                 }}
               >
-                <T color={C.yellow} bold size={15}>
+                <T color={C.yellow} bold center size={15}>
                   stage 1: binary index
                 </T>
                 <div style={{ marginTop: 6 }}>
@@ -2829,7 +3326,7 @@ export const BinaryQuantization = (ctx) => {
                   lineHeight: 1.7,
                 }}
               >
-                <T color={C.green} bold size={15}>
+                <T color={C.green} bold center size={15}>
                   stage 2: float32 rerank
                 </T>
                 <div style={{ marginTop: 6 }}>
@@ -2867,7 +3364,163 @@ export const BinaryQuantization = (ctx) => {
           </T>
         </Box>
       </Reveal>
-      {sub < 5 && (
+      <Reveal when={sub >= 6}>
+        <Box color={C.purple} style={{ width: "100%" }}>
+          <T color={C.purple} bold center size={22}>
+            HNSW + BQ: graph navigates binary codes, float32 reranks
+          </T>
+          <T color="#b8a9ff" style={{ marginTop: 8 }}>
+            The previous step showed binary plus a flat linear scan for stage 1. That works at 1B docs, but the linear
+            scan still touches every vector. The standard production upgrade is to put an HNSW graph in front of the
+            binary codes: stage 1 becomes a logarithmic-hop graph walk over Hamming distance, stage 2 keeps the float32
+            rerank. Same two-stage pattern, but stage 1 is now sub-linear.
+          </T>
+          <div
+            style={{
+              marginTop: 14,
+              padding: "12px 14px",
+              borderRadius: 8,
+              background: `${C.purple}06`,
+              border: `1px solid ${C.purple}12`,
+            }}
+          >
+            <T color={C.purple} bold center size={16}>
+              HNSW over binary codes, then float32 rerank
+            </T>
+            <div
+              style={{
+                marginTop: 10,
+                display: "grid",
+                gridTemplateColumns: "1fr auto 1fr",
+                gap: 12,
+                alignItems: "center",
+              }}
+            >
+              <div
+                style={{
+                  padding: "12px 14px",
+                  background: `${C.yellow}08`,
+                  border: `1px solid ${C.yellow}18`,
+                  borderRadius: 6,
+                  textAlign: "center",
+                  fontFamily: "monospace",
+                  fontSize: 14,
+                  color: C.bright,
+                  lineHeight: 1.7,
+                }}
+              >
+                <T color={C.yellow} bold center size={15}>
+                  stage 1: HNSW over binary
+                </T>
+                <div style={{ marginTop: 6 }}>
+                  N = 1B docs, 128 B each
+                  <br />
+                  graph edges + Hamming distance
+                  <br />
+                  ef_search = 200, return top 200
+                </div>
+              </div>
+              <div style={{ fontSize: 26, color: C.purple }}>&rarr;</div>
+              <div
+                style={{
+                  padding: "12px 14px",
+                  background: `${C.green}08`,
+                  border: `1px solid ${C.green}18`,
+                  borderRadius: 6,
+                  textAlign: "center",
+                  fontFamily: "monospace",
+                  fontSize: 14,
+                  color: C.bright,
+                  lineHeight: 1.7,
+                }}
+              >
+                <T color={C.green} bold center size={15}>
+                  stage 2: float32 rerank
+                </T>
+                <div style={{ marginTop: 6 }}>
+                  200 candidates
+                  <br />
+                  full float32 dot products
+                  <br />
+                  return final top 10
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            style={{
+              marginTop: 14,
+              display: "grid",
+              gridTemplateColumns: "1fr 1fr",
+              gap: 12,
+            }}
+          >
+            <div
+              style={{
+                padding: "12px 14px",
+                borderRadius: 8,
+                background: `${C.cyan}06`,
+                border: `1px solid ${C.cyan}12`,
+              }}
+            >
+              <T color={C.cyan} bold center size={16}>
+                What changes vs flat + BQ
+              </T>
+              <div style={{ marginTop: 8, fontSize: 14, color: C.bright, lineHeight: 1.7 }}>
+                <div>&bull; Stage 1: O(log N) hops, not O(N) scan</div>
+                <div>&bull; Rerank pool: 200 (vs 100) - graph misses</div>
+                <div>&bull; Need rerank pool 2x bigger to recover recall</div>
+                <div>&bull; Full vectors stored separately for rerank</div>
+              </div>
+            </div>
+            <div
+              style={{
+                padding: "12px 14px",
+                borderRadius: 8,
+                background: `${C.orange}06`,
+                border: `1px solid ${C.orange}12`,
+              }}
+            >
+              <T color={C.orange} bold center size={16}>
+                Memory cost
+              </T>
+              <div style={{ marginTop: 8, fontSize: 14, color: C.bright, lineHeight: 1.7 }}>
+                <div>&bull; Binary codes: 128 B per doc</div>
+                <div>&bull; HNSW edges: ~150 B per doc (M = 16)</div>
+                <div>&bull; Float32 rerank shards: 4 KB on cold tier</div>
+                <div>&bull; Hot RAM: ~280 B per doc total</div>
+              </div>
+            </div>
+          </div>
+          <div
+            style={{
+              marginTop: 14,
+              padding: "14px 18px",
+              borderRadius: 8,
+              background: "rgba(0,0,0,0.3)",
+              textAlign: "center",
+              fontFamily: "monospace",
+              fontSize: 15,
+              color: C.bright,
+              lineHeight: 2,
+            }}
+          >
+            Qdrant: <span style={{ color: C.cyan }}>HNSW + binary quantization + rescore</span> as one config block
+            <br />
+            Weaviate: <span style={{ color: C.cyan }}>HNSW + BQ + rerank flag</span>
+            <br />
+            FAISS: <span style={{ color: C.cyan }}>IndexBinaryHNSW</span> + manual float rerank pass
+            <br />
+            recall after rerank: back to ~98-99% of the float32 baseline
+          </div>
+          <T color="#b8a9ff" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
+            Why no dedicated combo chapter? The mechanism is the same two-stage pattern from the previous step. Only
+            stage 1 swaps a linear scan for an HNSW walk. PQ has its own combo chapters because its asymmetric lookup
+            table changes how distance is computed inside the graph. BQ does not.
+          </T>
+        </Box>
+      </Reveal>
+      {sub < 6 && (
         <SubBtn
           key={sub}
           onClick={() => {
@@ -2921,8 +3574,8 @@ export const Matryoshka = (ctx) => {
               {[
                 { metric: "OpenAI API cost", value: "~$30,000", note: "at $0.13 per 1M tokens, ~2B tokens" },
                 { metric: "wall-clock time", value: "~3-5 days", note: "even with high concurrency + batching" },
-                { metric: "source-text requirement", value: "must retain", note: "many pipelines drop it" },
-                { metric: "index rebuild", value: "on top of that", note: "extra days of HNSW re-construction" },
+                { metric: "Source-text requirement", value: "Must retain", note: "many pipelines drop it" },
+                { metric: "Index rebuild", value: "On top of that", note: "extra days of HNSW re-construction" },
               ].map((row, i) => (
                 <div
                   key={`cost-${i}`}
@@ -2976,38 +3629,38 @@ export const Matryoshka = (ctx) => {
             <T color={C.purple} bold center size={16}>
               One vector, several usable truncations
             </T>
-            <svg viewBox="0 0 600 140" style={{ width: "100%", maxWidth: 620, height: "auto", display: "block" }}>
+            <svg viewBox="0 0 600 150" style={{ width: "100%", maxWidth: 620, height: "auto", display: "block" }}>
               <desc>
                 Long horizontal vector bar divided into colored prefix regions at 256, 512, 1024, and 3072 dimensions;
                 each prefix is labeled as a valid truncation.
               </desc>
-              <rect x="20" y="50" width="80" height="40" fill={C.red} stroke="#08080d" strokeWidth="1" />
-              <rect x="100" y="50" width="80" height="40" fill={C.orange} stroke="#08080d" strokeWidth="1" />
-              <rect x="180" y="50" width="160" height="40" fill={C.yellow} stroke="#08080d" strokeWidth="1" />
-              <rect x="340" y="50" width="240" height="40" fill={C.green} stroke="#08080d" strokeWidth="1" />
-              <text x="60" y="75" textAnchor="middle" fill="#08080d" fontSize="12" fontWeight="bold">
+              <rect x="20" y="60" width="80" height="40" fill={C.red} stroke="#08080d" strokeWidth="1" />
+              <rect x="100" y="60" width="80" height="40" fill={C.orange} stroke="#08080d" strokeWidth="1" />
+              <rect x="180" y="60" width="160" height="40" fill={C.yellow} stroke="#08080d" strokeWidth="1" />
+              <rect x="340" y="60" width="240" height="40" fill={C.green} stroke="#08080d" strokeWidth="1" />
+              <text x="60" y="85" textAnchor="middle" fill="#08080d" fontSize="12" fontWeight="bold">
                 256
               </text>
-              <text x="140" y="75" textAnchor="middle" fill="#08080d" fontSize="12" fontWeight="bold">
+              <text x="140" y="85" textAnchor="middle" fill="#08080d" fontSize="12" fontWeight="bold">
                 512
               </text>
-              <text x="260" y="75" textAnchor="middle" fill="#08080d" fontSize="12" fontWeight="bold">
+              <text x="260" y="85" textAnchor="middle" fill="#08080d" fontSize="12" fontWeight="bold">
                 1024
               </text>
-              <text x="460" y="75" textAnchor="middle" fill="#08080d" fontSize="13" fontWeight="bold">
+              <text x="460" y="85" textAnchor="middle" fill="#08080d" fontSize="13" fontWeight="bold">
                 3072 (full)
               </text>
-              <line x1="20" y1="40" x2="100" y2="40" stroke={C.red} strokeWidth="1" />
-              <text x="60" y="32" textAnchor="middle" fill={C.red} fontSize="11">
+              <line x1="20" y1="20" x2="340" y2="20" stroke={C.yellow} strokeWidth="1" />
+              <text x="180" y="14" textAnchor="middle" fill={C.yellow} fontSize="11">
+                first 1024
+              </text>
+              <line x1="20" y1="50" x2="100" y2="50" stroke={C.red} strokeWidth="1" />
+              <text x="60" y="42" textAnchor="middle" fill={C.red} fontSize="11">
                 first 256
               </text>
-              <line x1="20" y1="110" x2="180" y2="110" stroke={C.orange} strokeWidth="1" />
-              <text x="100" y="122" textAnchor="middle" fill={C.orange} fontSize="11">
+              <line x1="20" y1="118" x2="180" y2="118" stroke={C.orange} strokeWidth="1" />
+              <text x="100" y="132" textAnchor="middle" fill={C.orange} fontSize="11">
                 first 512
-              </text>
-              <line x1="20" y1="25" x2="340" y2="25" stroke={C.yellow} strokeWidth="1" />
-              <text x="180" y="17" textAnchor="middle" fill={C.yellow} fontSize="11">
-                first 1024
               </text>
             </svg>
           </div>
@@ -3129,7 +3782,7 @@ export const Matryoshka = (ctx) => {
                   color: C.bright,
                 }}
               >
-                <T color={C.cyan} bold size={15}>
+                <T color={C.cyan} bold center size={15}>
                   full d = 3072
                 </T>
                 <div style={{ marginTop: 6 }}>
@@ -3148,7 +3801,7 @@ export const Matryoshka = (ctx) => {
                   color: C.bright,
                 }}
               >
-                <T color={C.orange} bold size={15}>
+                <T color={C.orange} bold center size={15}>
                   truncated to 512
                 </T>
                 <div style={{ marginTop: 6 }}>
@@ -3228,7 +3881,7 @@ export const Matryoshka = (ctx) => {
                   lineHeight: 1.7,
                 }}
               >
-                <T color={C.red} bold size={15}>
+                <T color={C.red} bold center size={15}>
                   stage 1: coarse (256-dim)
                 </T>
                 <div style={{ marginTop: 6 }}>
@@ -3255,7 +3908,7 @@ export const Matryoshka = (ctx) => {
                   lineHeight: 1.7,
                 }}
               >
-                <T color={C.green} bold size={15}>
+                <T color={C.green} bold center size={15}>
                   stage 2: fine (3072-dim)
                 </T>
                 <div style={{ marginTop: 6 }}>
@@ -3383,7 +4036,493 @@ export const Matryoshka = (ctx) => {
           </T>
         </Box>
       </Reveal>
-      {sub < 5 && (
+      <Reveal when={sub >= 6}>
+        <Box color={C.purple} style={{ width: "100%" }}>
+          <T color={C.purple} bold center size={22}>
+            Stack MRL with SQ, PQ, or BQ - both cuts apply, bytes multiply down
+          </T>
+          <T color="#b8a9ff" style={{ marginTop: 8 }}>
+            A vector takes up bytes for two reasons: it has many numbers, and each number takes many bits. MRL cuts the
+            count of numbers (chop the row shorter). SQ, PQ, and BQ cut the bits per number (squish each cell flatter).
+            They are different scissors on different parts of the vector, so the compression ratios multiply: a 3x cut
+            from MRL plus a 4x cut from SQ gives 12x total, not 7x.
+          </T>
+
+          <div
+            style={{
+              marginTop: 14,
+              padding: "12px 14px",
+              borderRadius: 8,
+              background: `${C.purple}06`,
+              border: `1px solid ${C.purple}12`,
+            }}
+          >
+            <T color={C.purple} bold center size={16}>
+              Total bytes = dim count &times; bits per dim. Cut either side independently.
+            </T>
+            <svg
+              viewBox="0 0 720 380"
+              style={{ width: "100%", maxWidth: 720, height: "auto", display: "block", marginTop: 10 }}
+            >
+              <desc>
+                Two-axis area chart with x-axis showing dimension count from 0 to 3072 and y-axis showing bits per
+                dimension from 0 to 32. Total vector bytes equals the area of each rectangle. Four nested rectangles
+                show progressive compression: full float32 baseline at 3072 by 32 equals 12,288 bytes (large outer cyan
+                rectangle), MRL truncated at 1024 by 32 equals 4,096 bytes (purple), MRL plus SQ at 1024 by 8 equals
+                1,024 bytes (green), and MRL plus BQ at 1024 by 1 equals 128 bytes (orange sliver). The diagram shows
+                how MRL shrinks width while quantization shrinks height, and the two effects multiply geometrically.
+              </desc>
+              {/* Plot area background */}
+              <rect x={80} y={20} width={600} height={300} fill="rgba(0,0,0,0.25)" />
+              {/* Full float32 baseline rectangle (cyan, dashed outline) */}
+              <rect
+                x={80}
+                y={20}
+                width={600}
+                height={300}
+                fill={`${C.cyan}10`}
+                stroke={C.cyan}
+                strokeWidth={2}
+                strokeDasharray="5 4"
+              />
+              <text x={500} y={50} textAnchor="middle" fill={C.cyan} fontSize={13} fontWeight="bold">
+                full float32: 3072 dims &times; 32 bits = 12,288 B
+              </text>
+              {/* After MRL only (purple solid) - 1024 dims at 32 bits */}
+              <rect x={80} y={20} width={200} height={300} fill={`${C.purple}25`} stroke={C.purple} strokeWidth={2} />
+              <text x={180} y={140} textAnchor="middle" fill={C.purple} fontSize={13} fontWeight="bold">
+                after MRL only
+              </text>
+              <text x={180} y={158} textAnchor="middle" fill={C.bright} fontSize={11}>
+                1024 dims &times; 32 bits = 4,096 B
+              </text>
+              <text x={180} y={174} textAnchor="middle" fill={C.purple} fontSize={11} fontStyle="italic">
+                3x smaller (width cut)
+              </text>
+              {/* After MRL + SQ (green) - 1024 dims at 8 bits */}
+              <rect x={80} y={245} width={200} height={75} fill={`${C.green}50`} stroke={C.green} strokeWidth={2} />
+              <text x={180} y={275} textAnchor="middle" fill={C.green} fontSize={13} fontWeight="bold">
+                + SQ (int8)
+              </text>
+              <text x={180} y={290} textAnchor="middle" fill={C.bright} fontSize={11}>
+                1024 &times; 8 = 1,024 B
+              </text>
+              <text x={180} y={305} textAnchor="middle" fill={C.green} fontSize={10} fontStyle="italic">
+                12x vs baseline
+              </text>
+              {/* After MRL + BQ (orange) - 1024 dims at 1 bit (tiny sliver) */}
+              <rect x={80} y={310.6} width={200} height={9.4} fill={C.orange} stroke={C.orange} strokeWidth={1.5} />
+              {/* Leader line for the tiny BQ sliver - routed to right side inside plot area */}
+              <line x1={280} y1={315} x2={420} y2={285} stroke={C.orange} strokeWidth={1} />
+              <text x={425} y={282} textAnchor="start" fill={C.orange} fontSize={12} fontWeight="bold">
+                + BQ: 1024 &times; 1 = 128 B
+              </text>
+              <text x={425} y={298} textAnchor="start" fill={C.orange} fontSize={11} fontStyle="italic">
+                96x vs baseline (sliver)
+              </text>
+              {/* Y-axis line */}
+              <line x1={80} y1={20} x2={80} y2={320} stroke={C.bright} strokeWidth={1.5} />
+              {/* X-axis line */}
+              <line x1={80} y1={320} x2={680} y2={320} stroke={C.bright} strokeWidth={1.5} />
+              {/* Y-axis ticks: 1, 8, 32 (skip 0 - implied at corner, would overlap with 1 tick) */}
+              <line x1={76} y1={310.6} x2={80} y2={310.6} stroke={C.orange} strokeWidth={1.5} />
+              <text x={72} y={314} textAnchor="end" fill={C.orange} fontSize={11}>
+                1
+              </text>
+              <line x1={76} y1={245} x2={80} y2={245} stroke={C.green} strokeWidth={1.5} />
+              <text x={72} y={249} textAnchor="end" fill={C.green} fontSize={11}>
+                8
+              </text>
+              <line x1={76} y1={20} x2={80} y2={20} stroke={C.cyan} strokeWidth={1.5} />
+              <text x={72} y={24} textAnchor="end" fill={C.cyan} fontSize={11}>
+                32
+              </text>
+              {/* X-axis ticks: 0, 1024, 3072 */}
+              <line x1={80} y1={320} x2={80} y2={324} stroke={C.bright} strokeWidth={1.5} />
+              <text x={80} y={338} textAnchor="middle" fill={C.bright} fontSize={11}>
+                0
+              </text>
+              <line x1={280} y1={320} x2={280} y2={324} stroke={C.purple} strokeWidth={1.5} />
+              <text x={280} y={338} textAnchor="middle" fill={C.purple} fontSize={11}>
+                1024
+              </text>
+              <line x1={680} y1={320} x2={680} y2={324} stroke={C.cyan} strokeWidth={1.5} />
+              <text x={680} y={338} textAnchor="middle" fill={C.cyan} fontSize={11}>
+                3072
+              </text>
+              {/* Axis labels */}
+              <text x={380} y={372} textAnchor="middle" fill={C.bright} fontSize={13} fontWeight="bold">
+                dimensions (d) &rarr; MRL chops here
+              </text>
+              <text
+                x={28}
+                y={170}
+                textAnchor="middle"
+                fill={C.bright}
+                fontSize={13}
+                fontWeight="bold"
+                transform="rotate(-90, 28, 170)"
+              >
+                bits per dim &rarr; SQ/PQ/BQ chop here
+              </text>
+              {/* MRL arrow at top showing the cut */}
+              <line x1={280} y1={10} x2={680} y2={10} stroke={C.purple} strokeWidth={1.5} strokeDasharray="3 3" />
+              <polygon points="280,10 286,7 286,13" fill={C.purple} />
+              <polygon points="680,10 674,7 674,13" fill={C.purple} />
+              <text x={480} y={8} textAnchor="middle" fill={C.purple} fontSize={11} fontWeight="bold">
+                MRL: cut these 2048 dims
+              </text>
+              {/* Quantization arrow on the right showing the cut */}
+              <line x1={700} y1={20} x2={700} y2={245} stroke={C.green} strokeWidth={1.5} strokeDasharray="3 3" />
+              <polygon points="700,20 697,26 703,26" fill={C.green} />
+              <polygon points="700,245 697,239 703,239" fill={C.green} />
+              <text
+                x={715}
+                y={130}
+                textAnchor="middle"
+                fill={C.green}
+                fontSize={11}
+                fontWeight="bold"
+                transform="rotate(90, 715, 130)"
+              >
+                SQ cuts: 32 bits &rarr; 8
+              </text>
+            </svg>
+            <T color="#b8a9ff" size={14} center style={{ marginTop: 8, fontStyle: "italic" }}>
+              Each rectangle&apos;s area = its byte size. The full baseline (dashed cyan, 12,288 B) is the whole plot.
+              MRL alone shrinks the width to 1/3. SQ alone would shrink the height to 1/4. Stack both and you get the
+              tiny green box at 1/12 the area. Stack MRL with BQ and you get a barely-visible orange sliver at 1/96.
+            </T>
+          </div>
+
+          <div
+            style={{
+              marginTop: 14,
+              padding: "12px 14px",
+              borderRadius: 8,
+              background: `${C.cyan}06`,
+              border: `1px solid ${C.cyan}12`,
+            }}
+          >
+            <T color={C.cyan} bold center size={16}>
+              Cell-level view: same vector through each stage
+            </T>
+            <svg
+              viewBox="0 0 720 320"
+              style={{ width: "100%", maxWidth: 720, height: "auto", display: "block", marginTop: 10 }}
+            >
+              <desc>
+                Four horizontal cell-rows showing the same embedding vector progressing through compression. Row 1 shows
+                24 tall float32 cells representing 3072 dimensions at 32 bits each, totaling 12,288 bytes. Row 2 shows
+                the first 8 cells kept at full height (the MRL-truncated 1024 dims) with the remaining 16 cells faded to
+                indicate they were chopped, totaling 4,096 bytes. Row 3 shows the same 8 cells but three-quarters
+                shorter (8 bits each, SQ int8), totaling 1,024 bytes. Row 4 shows the same 8 cells as tiny slivers (1
+                bit each, BQ binary), totaling 128 bytes. Demonstrates that MRL throws away cells from the right while
+                quantization shrinks the height of every remaining cell.
+              </desc>
+              {/* Stage 1: full float32 row of 24 cells, tall */}
+              <text x={10} y={36} textAnchor="start" fill={C.cyan} fontSize={12} fontWeight="bold">
+                full
+              </text>
+              <text x={10} y={52} textAnchor="start" fill={C.dim} fontSize={10}>
+                float32
+              </text>
+              {Array.from({ length: 24 }).map((_, i) => (
+                <rect
+                  key={`s1-${i}`}
+                  x={70 + i * 25}
+                  y={20}
+                  width={22}
+                  height={50}
+                  fill={`${C.cyan}66`}
+                  stroke={C.cyan}
+                  strokeWidth={1}
+                />
+              ))}
+              <text x={690} y={50} textAnchor="end" fill={C.cyan} fontSize={12} fontWeight="bold">
+                12,288 B
+              </text>
+              <text x={380} y={84} textAnchor="middle" fill={C.dim} fontSize={11}>
+                3072 dims (24 cells shown) &middot; each cell = 32 bits tall
+              </text>
+              {/* Stage 2: MRL keeps first 8 cells at full height, fades the rest */}
+              <text x={10} y={116} textAnchor="start" fill={C.purple} fontSize={12} fontWeight="bold">
+                + MRL
+              </text>
+              <text x={10} y={132} textAnchor="start" fill={C.dim} fontSize={10}>
+                truncate
+              </text>
+              {Array.from({ length: 24 }).map((_, i) => {
+                const kept = i < 8;
+                return (
+                  <rect
+                    key={`s2-${i}`}
+                    x={70 + i * 25}
+                    y={100}
+                    width={22}
+                    height={50}
+                    fill={kept ? `${C.purple}66` : "rgba(255,255,255,0.04)"}
+                    stroke={kept ? C.purple : C.dim}
+                    strokeWidth={1}
+                    strokeDasharray={kept ? "0" : "2 3"}
+                  />
+                );
+              })}
+              <text x={690} y={130} textAnchor="end" fill={C.purple} fontSize={12} fontWeight="bold">
+                4,096 B
+              </text>
+              <text x={380} y={164} textAnchor="middle" fill={C.dim} fontSize={11}>
+                first 1024 dims kept (8 cells solid) &middot; last 2048 chopped (16 cells dashed)
+              </text>
+              {/* Stage 3: MRL+SQ - same 8 cells, but 1/4 height */}
+              <text x={10} y={196} textAnchor="start" fill={C.green} fontSize={12} fontWeight="bold">
+                + SQ
+              </text>
+              <text x={10} y={212} textAnchor="start" fill={C.dim} fontSize={10}>
+                int8
+              </text>
+              {Array.from({ length: 8 }).map((_, i) => (
+                <rect
+                  key={`s3-${i}`}
+                  x={70 + i * 25}
+                  y={195}
+                  width={22}
+                  height={12}
+                  fill={`${C.green}80`}
+                  stroke={C.green}
+                  strokeWidth={1}
+                />
+              ))}
+              <text x={690} y={210} textAnchor="end" fill={C.green} fontSize={12} fontWeight="bold">
+                1,024 B
+              </text>
+              <text x={380} y={228} textAnchor="middle" fill={C.dim} fontSize={11}>
+                same 1024 dims &middot; each cell now 8 bits tall (1/4 of float32)
+              </text>
+              {/* Stage 4: MRL+BQ - same 8 cells, 1 bit (tiny sliver) */}
+              <text x={10} y={262} textAnchor="start" fill={C.orange} fontSize={12} fontWeight="bold">
+                + BQ
+              </text>
+              <text x={10} y={278} textAnchor="start" fill={C.dim} fontSize={10}>
+                1 bit
+              </text>
+              {Array.from({ length: 8 }).map((_, i) => (
+                <rect
+                  key={`s4-${i}`}
+                  x={70 + i * 25}
+                  y={258}
+                  width={22}
+                  height={3}
+                  fill={C.orange}
+                  stroke={C.orange}
+                  strokeWidth={1}
+                />
+              ))}
+              <text x={690} y={266} textAnchor="end" fill={C.orange} fontSize={12} fontWeight="bold">
+                128 B
+              </text>
+              <text x={380} y={290} textAnchor="middle" fill={C.dim} fontSize={11}>
+                same 1024 dims &middot; each cell now 1 bit tall (1/32 of float32)
+              </text>
+              <text x={380} y={310} textAnchor="middle" fill={C.bright} fontSize={12} fontStyle="italic">
+                MRL chops cells from the right. Quantization shrinks the cells that remain.
+              </text>
+            </svg>
+          </div>
+
+          <div
+            style={{
+              marginTop: 14,
+              display: "grid",
+              gridTemplateColumns: "1fr 1fr 1fr",
+              gap: 12,
+            }}
+          >
+            <div
+              style={{
+                padding: "12px 14px",
+                borderRadius: 8,
+                background: `${C.green}06`,
+                border: `1px solid ${C.green}12`,
+              }}
+            >
+              <T color={C.green} bold center size={16}>
+                MRL + SQ
+              </T>
+              <div
+                style={{
+                  marginTop: 8,
+                  fontSize: 13,
+                  color: C.bright,
+                  lineHeight: 1.7,
+                  fontFamily: "monospace",
+                  textAlign: "center",
+                }}
+              >
+                <div>12,288 B float32</div>
+                <div>&darr; MRL: 3072 &rarr; 1024</div>
+                <div>4,096 B float32 (3x)</div>
+                <div>&darr; SQ: 32 &rarr; 8 bits</div>
+                <div>1,024 B int8 (4x more)</div>
+              </div>
+              <T color={C.green} bold center size={15} style={{ marginTop: 8 }}>
+                3 &times; 4 = 12x total
+              </T>
+              <T color={C.bright} size={13} center style={{ marginTop: 4 }}>
+                recall ~96-97%
+              </T>
+            </div>
+            <div
+              style={{
+                padding: "12px 14px",
+                borderRadius: 8,
+                background: `${C.yellow}06`,
+                border: `1px solid ${C.yellow}12`,
+              }}
+            >
+              <T color={C.yellow} bold center size={16}>
+                MRL + PQ
+              </T>
+              <div
+                style={{
+                  marginTop: 8,
+                  fontSize: 13,
+                  color: C.bright,
+                  lineHeight: 1.7,
+                  fontFamily: "monospace",
+                  textAlign: "center",
+                }}
+              >
+                <div>12,288 B float32</div>
+                <div>&darr; MRL: 3072 &rarr; 1024</div>
+                <div>4,096 B float32 (3x)</div>
+                <div>&darr; PQ: m=128 codes</div>
+                <div>128 B (32x more)</div>
+              </div>
+              <T color={C.yellow} bold center size={15} style={{ marginTop: 8 }}>
+                3 &times; 32 = 96x total
+              </T>
+              <T color={C.bright} size={13} center style={{ marginTop: 4 }}>
+                recall ~93-95%
+              </T>
+            </div>
+            <div
+              style={{
+                padding: "12px 14px",
+                borderRadius: 8,
+                background: `${C.orange}06`,
+                border: `1px solid ${C.orange}12`,
+              }}
+            >
+              <T color={C.orange} bold center size={16}>
+                MRL + BQ
+              </T>
+              <div
+                style={{
+                  marginTop: 8,
+                  fontSize: 13,
+                  color: C.bright,
+                  lineHeight: 1.7,
+                  fontFamily: "monospace",
+                  textAlign: "center",
+                }}
+              >
+                <div>12,288 B float32</div>
+                <div>&darr; MRL: 3072 &rarr; 1024</div>
+                <div>4,096 B float32 (3x)</div>
+                <div>&darr; BQ: 32 &rarr; 1 bit</div>
+                <div>128 B binary (32x more)</div>
+              </div>
+              <T color={C.orange} bold center size={15} style={{ marginTop: 8 }}>
+                3 &times; 32 = 96x total
+              </T>
+              <T color={C.bright} size={13} center style={{ marginTop: 4 }}>
+                ~94% &rarr; ~98% with rerank
+              </T>
+            </div>
+          </div>
+
+          <div
+            style={{
+              marginTop: 14,
+              padding: "12px 14px",
+              borderRadius: 8,
+              background: `${C.red}06`,
+              border: `1px solid ${C.red}12`,
+            }}
+          >
+            <T color={C.red} bold center size={16}>
+              Two rules that govern the stack
+            </T>
+            <div style={{ marginTop: 10, display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+              <div
+                style={{
+                  padding: "10px 12px",
+                  background: `${C.red}10`,
+                  border: `1px solid ${C.red}22`,
+                  borderRadius: 6,
+                }}
+              >
+                <T color={C.red} bold size={15}>
+                  Order: MRL first, quantize after
+                </T>
+                <T color={C.bright} size={13} style={{ marginTop: 6 }}>
+                  Truncate at embed time, quantize at index time. Reverse breaks: quantized codes have no semantic
+                  prefix structure to truncate. PQ codebook must be trained on already-truncated vectors so centroids
+                  match the truncated dim count.
+                </T>
+              </div>
+              <div
+                style={{
+                  padding: "10px 12px",
+                  background: `${C.red}10`,
+                  border: `1px solid ${C.red}22`,
+                  borderRadius: 6,
+                }}
+              >
+                <T color={C.red} bold size={15}>
+                  Floor: BQ needs d &ge; 768 post-MRL
+                </T>
+                <T color={C.bright} size={13} style={{ marginTop: 6 }}>
+                  Binary quantization recall collapses below d = 768 (per the previous chapter&apos;s recall table). MRL
+                  must keep at least 768 dimensions in the truncation if the next stage is BQ. SQ and PQ have no such
+                  floor - they degrade gracefully at low d.
+                </T>
+              </div>
+            </div>
+          </div>
+
+          <div
+            style={{
+              marginTop: 14,
+              padding: "14px 18px",
+              borderRadius: 8,
+              background: "rgba(0,0,0,0.3)",
+              textAlign: "center",
+              fontFamily: "monospace",
+              fontSize: 15,
+              color: C.bright,
+              lineHeight: 2,
+            }}
+          >
+            real-world stack at N = 1B docs
+            <br />
+            OpenAI text-embedding-3-large &rarr; <span style={{ color: C.cyan }}>MRL to 1024</span> &rarr;{" "}
+            <span style={{ color: C.cyan }}>SQ int8</span> &rarr; <span style={{ color: C.cyan }}>HNSW</span>
+            <br />
+            hot RAM: 1B &middot; 1024 B = <span style={{ color: C.green }}>1 TB</span>
+            <br />
+            vs baseline: 1B &middot; 12,288 B = <span style={{ color: C.red }}>12 TB</span>
+            <br />
+            <span style={{ color: C.green }}>12x compression, ~96% recall, single beefy server territory</span>
+          </div>
+          <T color="#b8a9ff" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
+            MRL is the cheap pre-step that makes every later compression cheaper. Production stacks routinely combine
+            MRL with one quantizer plus an HNSW or IVF index. The decision framework chapter walks the choice in detail.
+          </T>
+        </Box>
+      </Reveal>
+      {sub < 6 && (
         <SubBtn
           key={sub}
           onClick={() => {
@@ -3400,25 +4539,29 @@ export const Matryoshka = (ctx) => {
 
 // 2D scatter positions for the 10-doc cat corpus, re-declared locally so 11.17 stays
 // self-contained (vector-foundations.jsx is a sibling module, not an import here).
-// Cluster A (cats): 1, 3, 4, 5, 7 - upper left. Cluster B (dogs): 2, 8 - upper right.
-// Cluster C (other): 6, 9, 10 - lower right. Query lands inside cluster A.
+// Inverted-triangle layout: A (cats) top-left, B (dogs) top-right,
+// C (other) bottom-center. Each cluster sits inside a 60-radius halo, with
+// halos far enough apart that no two halos touch.
 const IVFPQ_CORPUS_XY = {
-  1: { x: 100, y: 100, cluster: "A", label: "cats domesticated" },
-  7: { x: 150, y: 100, cluster: "A", label: "kittens" },
-  5: { x: 95, y: 135, cluster: "A", label: "tigers striped" },
-  3: { x: 150, y: 140, cluster: "A", label: "lions big cats" },
-  4: { x: 125, y: 155, cluster: "A", label: "cat on mat" },
-  2: { x: 325, y: 80, cluster: "B", label: "dogs loyal" },
-  8: { x: 365, y: 115, cluster: "B", label: "dog chased cat" },
-  10: { x: 405, y: 215, cluster: "C", label: "fish underwater" },
-  9: { x: 410, y: 265, cluster: "C", label: "birds fly" },
-  6: { x: 350, y: 240, cluster: "C", label: "python language" },
+  1: { x: 105, y: 75, cluster: "A", label: "cats domesticated" },
+  7: { x: 155, y: 75, cluster: "A", label: "kittens" },
+  5: { x: 95, y: 110, cluster: "A", label: "tigers striped" },
+  3: { x: 155, y: 115, cluster: "A", label: "lions big cats" },
+  4: { x: 130, y: 135, cluster: "A", label: "cat on mat" },
+  2: { x: 350, y: 80, cluster: "B", label: "dogs loyal" },
+  8: { x: 390, y: 115, cluster: "B", label: "dog chased cat" },
+  10: { x: 280, y: 245, cluster: "C", label: "fish underwater" },
+  9: { x: 260, y: 290, cluster: "C", label: "birds fly" },
+  6: { x: 220, y: 250, cluster: "C", label: "python language" },
 };
 const IVFPQ_QUERY_XY = { x: 55, y: 55 };
+const IVFPQ_HALO_R = 60;
+// labelDy positions each centroid label well above its topmost doc circle so
+// the label never collides with a doc number.
 const IVFPQ_CENTROIDS = {
-  A: { x: 125, y: 125, color: C.purple, label: "C_A (cats)" },
-  B: { x: 345, y: 97, color: C.yellow, label: "C_B (dogs)" },
-  C: { x: 390, y: 240, color: C.cyan, label: "C_C (other)" },
+  A: { x: 130, y: 100, color: C.purple, label: "C_A (cats)", labelDy: -50 },
+  B: { x: 370, y: 100, color: C.yellow, label: "C_B (dogs)", labelDy: -50 },
+  C: { x: 250, y: 260, color: C.cyan, label: "C_C (other)", labelDy: -50 },
 };
 
 // 4-dim vectors for the three docs used in the residual table (sub=2).
@@ -3466,10 +4609,10 @@ export const IVFPQ = (ctx) => {
                 IVF - cluster the space
               </T>
               <div style={{ marginTop: 8, fontSize: 15, color: C.bright, lineHeight: 1.7 }}>
-                <div>&bull; k-means partitions the corpus into nlist cells</div>
-                <div>&bull; typical nlist &asymp; sqrt(N): 4,096 at N = 1M</div>
-                <div>&bull; at query time, probe the nprobe closest cells</div>
-                <div>&bull; nprobe = 8 visits 8 / 4,096 &asymp; 0.2% of the data</div>
+                <div>&bull; K-means partitions the corpus into nlist cells</div>
+                <div>&bull; Typical nlist &asymp; sqrt(N): 4,096 at N = 1M</div>
+                <div>&bull; At query time, probe the nprobe closest cells</div>
+                <div>&bull; Nprobe = 8 visits 8 / 4,096 &asymp; 0.2% of the data</div>
               </div>
               <div
                 style={{
@@ -3498,10 +4641,10 @@ export const IVFPQ = (ctx) => {
                 PQ - compress each vector
               </T>
               <div style={{ marginTop: 8, fontSize: 15, color: C.bright, lineHeight: 1.7 }}>
-                <div>&bull; split a 768-dim vector into m = 96 subvectors</div>
-                <div>&bull; k-means per slot gives 256 centroid codebooks</div>
-                <div>&bull; each subvector becomes a 1-byte code id</div>
-                <div>&bull; whole vector: 96 bytes (32x smaller than float32)</div>
+                <div>&bull; Split a 768-dim vector into m = 96 subvectors</div>
+                <div>&bull; K-means per slot gives 256 centroid codebooks</div>
+                <div>&bull; Each subvector becomes a 1-byte code id</div>
+                <div>&bull; Whole vector: 96 bytes (32x smaller than float32)</div>
               </div>
               <div
                 style={{
@@ -3548,19 +4691,22 @@ export const IVFPQ = (ctx) => {
             <T color={C.yellow} bold center size={16}>
               Cat corpus after k-means, nlist = 3
             </T>
-            <svg viewBox="0 0 500 320" style={{ width: "100%", maxWidth: 540, height: "auto", display: "block" }}>
+            <svg
+              viewBox="0 0 500 370"
+              style={{ width: "100%", maxWidth: 540, height: "auto", display: "block", margin: "0 auto" }}
+            >
               <desc>
-                Scatter of the 10 cat-corpus documents after k-means clustering with nlist = 3: five cat docs form
-                cluster A around the purple centroid C_A in the upper left, two dog docs form cluster B around the
-                yellow centroid C_B in the upper right, and three other docs form cluster C around the cyan centroid C_C
-                in the lower region. The centroids are drawn as colored squares.
+                Scatter of the 10 cat-corpus documents after k-means clustering with nlist = 3, arranged as a balanced
+                inverted triangle: five cat docs form cluster A around the purple centroid C_A in the upper-left, two
+                dog docs form cluster B around the yellow centroid C_B in the upper-right, and three other docs form
+                cluster C around the cyan centroid C_C in the lower-center. The centroids are drawn as colored squares.
               </desc>
               {Object.entries(IVFPQ_CENTROIDS).map(([id, c]) => (
                 <circle
                   key={`halo-${id}`}
                   cx={c.x}
                   cy={c.y}
-                  r={70}
+                  r={IVFPQ_HALO_R}
                   fill={`${c.color}10`}
                   stroke={`${c.color}30`}
                   strokeWidth={1}
@@ -3590,12 +4736,19 @@ export const IVFPQ = (ctx) => {
                     strokeWidth={2}
                     transform={`rotate(45 ${c.x} ${c.y})`}
                   />
-                  <text x={c.x} y={c.y - 22} fill={c.color} fontSize={13} fontWeight="bold" textAnchor="middle">
+                  <text
+                    x={c.x}
+                    y={c.y + (c.labelDy ?? -22)}
+                    fill={c.color}
+                    fontSize={13}
+                    fontWeight="bold"
+                    textAnchor="middle"
+                  >
                     {c.label}
                   </text>
                 </g>
               ))}
-              <text x={250} y={300} fill={C.dim} fontSize={13} textAnchor="middle">
+              <text x={250} y={350} fill={C.dim} fontSize={13} textAnchor="middle">
                 nlist = 3 centroids &middot; each doc assigned to its nearest centroid
               </text>
             </svg>
@@ -3779,9 +4932,9 @@ export const IVFPQ = (ctx) => {
                 Raw PQ (no residuals)
               </T>
               <div style={{ marginTop: 8, fontSize: 14, color: C.bright, lineHeight: 1.7 }}>
-                <div>&bull; encode v directly with m = 96, 256 codes</div>
-                <div>&bull; codebook must cover wide spread: 0 to 1</div>
-                <div>&bull; per-slot clusters are loose, error accumulates</div>
+                <div>&bull; Encode v directly with m = 96, 256 codes</div>
+                <div>&bull; Codebook must cover wide spread: 0 to 1</div>
+                <div>&bull; Per-slot clusters are loose, error accumulates</div>
               </div>
               <div
                 style={{
@@ -3810,9 +4963,9 @@ export const IVFPQ = (ctx) => {
                 Residual PQ (IVF-PQ)
               </T>
               <div style={{ marginTop: 8, fontSize: 14, color: C.bright, lineHeight: 1.7 }}>
-                <div>&bull; encode (v &minus; C_cluster) with m = 96, 256 codes</div>
-                <div>&bull; codebook only covers the residual ball</div>
-                <div>&bull; tighter per-slot k-means, lower error per code</div>
+                <div>&bull; Encode (v &minus; C_cluster) with m = 96, 256 codes</div>
+                <div>&bull; Codebook only covers the residual ball</div>
+                <div>&bull; Tighter per-slot k-means, lower error per code</div>
               </div>
               <div
                 style={{
@@ -3886,12 +5039,15 @@ export const IVFPQ = (ctx) => {
               <T color={C.red} bold center size={15}>
                 Query walks two cells (nprobe = 2)
               </T>
-              <svg viewBox="0 0 500 320" style={{ width: "100%", maxWidth: 500, height: "auto", display: "block" }}>
+              <svg
+                viewBox="0 0 500 370"
+                style={{ width: "100%", maxWidth: 500, height: "auto", display: "block", margin: "0 auto" }}
+              >
                 <desc>
-                  IVF-PQ search trajectory on the 10-doc cat corpus: the query vector sits inside cluster A, the orange
-                  arrow points to the closest centroid C_A, the two nearest cells A (purple) and B (yellow) are
-                  highlighted while cluster C (cyan) is dimmed. Inside each highlighted cell every doc is scanned by its
-                  PQ code.
+                  IVF-PQ search trajectory on the 10-doc cat corpus arranged as an inverted triangle: the query vector
+                  sits in the upper-left, the orange arrow points toward the closest centroid C_A, the two nearest cells
+                  A (purple) and B (yellow) are highlighted while cluster C (cyan) at the bottom is dimmed. Inside each
+                  highlighted cell every doc is scanned by its PQ code.
                 </desc>
                 {Object.entries(IVFPQ_CENTROIDS).map(([id, c]) => {
                   const highlighted = id === "A" || id === "B";
@@ -3900,7 +5056,7 @@ export const IVFPQ = (ctx) => {
                       key={`halo-${id}`}
                       cx={c.x}
                       cy={c.y}
-                      r={70}
+                      r={IVFPQ_HALO_R}
                       fill={highlighted ? `${c.color}18` : `${c.color}06`}
                       stroke={highlighted ? `${c.color}60` : `${c.color}20`}
                       strokeWidth={highlighted ? 2 : 1}
@@ -3908,15 +5064,27 @@ export const IVFPQ = (ctx) => {
                     />
                   );
                 })}
-                <line
-                  x1={IVFPQ_QUERY_XY.x}
-                  y1={IVFPQ_QUERY_XY.y}
-                  x2={IVFPQ_CENTROIDS.A.x - 14}
-                  y2={IVFPQ_CENTROIDS.A.y - 10}
-                  stroke={C.orange}
-                  strokeWidth={2}
-                  markerEnd="url(#ivfpq-arrow)"
-                />
+                {(() => {
+                  // End the arrow just outside cluster A's halo so it never
+                  // crosses any interior doc circle.
+                  const dx = IVFPQ_CENTROIDS.A.x - IVFPQ_QUERY_XY.x;
+                  const dy = IVFPQ_CENTROIDS.A.y - IVFPQ_QUERY_XY.y;
+                  const len = Math.sqrt(dx * dx + dy * dy);
+                  const stopOutsideHalo = IVFPQ_HALO_R + 5;
+                  const tipX = IVFPQ_QUERY_XY.x + ((len - stopOutsideHalo) * dx) / len;
+                  const tipY = IVFPQ_QUERY_XY.y + ((len - stopOutsideHalo) * dy) / len;
+                  return (
+                    <line
+                      x1={IVFPQ_QUERY_XY.x}
+                      y1={IVFPQ_QUERY_XY.y}
+                      x2={tipX}
+                      y2={tipY}
+                      stroke={C.orange}
+                      strokeWidth={2}
+                      markerEnd="url(#ivfpq-arrow)"
+                    />
+                  );
+                })()}
                 <defs>
                   <marker
                     id="ivfpq-arrow"
@@ -3974,7 +5142,7 @@ export const IVFPQ = (ctx) => {
                 >
                   query
                 </text>
-                <text x={250} y={300} fill={C.dim} fontSize={12} textAnchor="middle">
+                <text x={250} y={350} fill={C.dim} fontSize={12} textAnchor="middle">
                   A + B are probed &middot; C is skipped
                 </text>
               </svg>
@@ -4003,19 +5171,19 @@ export const IVFPQ = (ctx) => {
                   lineHeight: 1.9,
                 }}
               >
-                step 1: scan <span style={{ color: C.red }}>4,096</span> centroids
+                Step 1: scan <span style={{ color: C.red }}>4,096</span> centroids
                 <br />
-                step 2: build a <span style={{ color: C.red }}>m &middot; 256 = 24,576</span> entry
+                Step 2: build a <span style={{ color: C.red }}>m &middot; 256 = 24,576</span> entry
                 <br />
                 asymmetric lookup table once per query
                 <br />
-                step 3: scan <span style={{ color: C.red }}>nprobe &middot; (N / nlist)</span>
+                Step 3: scan <span style={{ color: C.red }}>nprobe &middot; (N / nlist)</span>
                 <br />= 8 &middot; 244 &asymp; <span style={{ color: C.red }}>2,000</span> codes
                 <br />
                 each code is <span style={{ color: C.red }}>m = 96</span> table lookups + adds
               </div>
               <div style={{ marginTop: 10, fontSize: 14, color: C.bright, lineHeight: 1.7 }}>
-                <div>&bull; brute force over 1M: 1,000,000 distances</div>
+                <div>&bull; Brute force over 1M: 1,000,000 distances</div>
                 <div>&bull; IVF-PQ: ~6,000 cheap code ops</div>
                 <div>
                   &bull; <span style={{ color: C.red, fontWeight: "bold" }}>~150x faster</span>, tuneable via nprobe
@@ -4091,8 +5259,8 @@ export const IVFPQ = (ctx) => {
               }}
             >
               {[
-                { label: "float32 baseline", size: "3 TB", color: C.red, note: "d &middot; 4 &middot; N" },
-                { label: "raw PQ (m = 96)", size: "96 GB", color: C.yellow, note: "no cluster structure" },
+                { label: "Float32 baseline", size: "3 TB", color: C.red, note: "d &middot; 4 &middot; N" },
+                { label: "Raw PQ (m = 96)", size: "96 GB", color: C.yellow, note: "No cluster structure" },
                 {
                   label: "IVF-PQ (m = 16 residual)",
                   size: "20 GB",
@@ -4110,7 +5278,7 @@ export const IVFPQ = (ctx) => {
                     textAlign: "center",
                   }}
                 >
-                  <T color={row.color} bold size={14}>
+                  <T color={row.color} bold center size={14}>
                     {row.label}
                   </T>
                   <div style={{ marginTop: 4, fontFamily: "monospace", fontSize: 20, color: row.color }}>
@@ -4277,10 +5445,10 @@ export const HNSWPQ = (ctx) => {
                 HNSW - graph navigation
               </T>
               <div style={{ marginTop: 8, fontSize: 15, color: C.bright, lineHeight: 1.7 }}>
-                <div>&bull; multi-layer small-world graph over all N vectors</div>
+                <div>&bull; Multi-layer small-world graph over all N vectors</div>
                 <div>&bull; O(log N) hops from entry point to the beam</div>
                 <div>&bull; M = 16 edges per node at layer 0 (default)</div>
-                <div>&bull; ef_search = 50 candidates at query time</div>
+                <div>&bull; Ef_search = 50 candidates at query time</div>
               </div>
             </div>
             <div
@@ -4295,10 +5463,10 @@ export const HNSWPQ = (ctx) => {
                 PQ - byte-coded vectors
               </T>
               <div style={{ marginTop: 8, fontSize: 15, color: C.bright, lineHeight: 1.7 }}>
-                <div>&bull; m = 96 subvectors, 256 centroids per slot</div>
-                <div>&bull; each vector encoded as m bytes (96 bytes at m = 96)</div>
+                <div>&bull; M = 96 subvectors, 256 centroids per slot</div>
+                <div>&bull; Each vector encoded as m bytes (96 bytes at m = 96)</div>
                 <div>&bull; 32x smaller than the float32 baseline</div>
-                <div>&bull; distances via the asymmetric lookup table</div>
+                <div>&bull; Distances via the asymmetric lookup table</div>
               </div>
             </div>
           </div>
@@ -4887,7 +6055,7 @@ export const CompressionDecision = (ctx) => {
                   axis: "Database capability",
                   role: "Constrains the menu",
                   detail:
-                    "pgvector mainline: halfvec only. Pinecone: abstracted. Qdrant/Weaviate: full suite + rescore.",
+                    "pgvector: halfvec only. Pinecone: abstracted. Qdrant/Weaviate: full suite + rescore.",
                 },
                 {
                   axis: "Recall tolerance",
@@ -4947,18 +6115,39 @@ export const CompressionDecision = (ctx) => {
               The compression decision flowchart
             </T>
             <div style={{ display: "flex", justifyContent: "center", marginTop: 12 }}>
-              <svg viewBox="0 0 640 440" style={{ width: "100%", maxWidth: 640, height: "auto" }}>
+              <svg viewBox="0 0 640 510" style={{ width: "100%", maxWidth: 640, height: "auto" }}>
                 <desc>
-                  Compression-technique decision flowchart. Top box shows the four inputs (corpus size N, embedding
-                  dimension d, database capability, recall tolerance). An orthogonal pre-step on the left notes that
-                  Matryoshka-trained embedding models can be truncated at the API call. The main flow branches on N:
-                  under 1M skips quantization; 1M to 10M uses scalar quantization; 10M to 100M uses binary quantization
-                  plus rescore when d is at least 768 and the DB supports it, otherwise falls back to scalar; 100M and
-                  above uses HNSW plus product quantization as the production default at scale.
+                  Compression-technique decision flowchart. The optional MRL pre-step sits centered at the top: when the
+                  embedding model is Matryoshka-trained the dimension can be truncated at the API call before anything
+                  else runs. A dashed arrow flows down into the main Inputs box (corpus size N, embedding dimension d,
+                  database capability, recall tolerance). The main flow then branches on N: under 1M skips quantization;
+                  1M to 10M uses scalar quantization; 10M to 100M uses binary quantization plus rescore when d is at
+                  least 768 and the DB supports it, otherwise falls back to scalar; 100M and above uses HNSW plus
+                  product quantization as the production default at scale.
                 </desc>
+                {/* MRL pre-step centered above Inputs */}
+                <rect
+                  x={200}
+                  y={10}
+                  width={240}
+                  height={50}
+                  rx={8}
+                  fill={`${C.yellow}18`}
+                  stroke={C.yellow}
+                  strokeWidth={2}
+                />
+                <text x={320} y={32} fill={C.yellow} fontSize={14} fontWeight="bold" textAnchor="middle">
+                  MRL pre-step (optional)
+                </text>
+                <text x={320} y={50} fill={C.bright} fontSize={11} textAnchor="middle">
+                  truncate d at embed time
+                </text>
+                {/* dashed arrow MRL -> Inputs */}
+                <line x1={320} y1={60} x2={320} y2={80} stroke={C.dim} strokeWidth={1} strokeDasharray="4 3" />
+                {/* Inputs */}
                 <rect
                   x={180}
-                  y={10}
+                  y={80}
                   width={280}
                   height={50}
                   rx={8}
@@ -4966,36 +6155,20 @@ export const CompressionDecision = (ctx) => {
                   stroke={C.cyan}
                   strokeWidth={2}
                 />
-                <text x={320} y={32} fill={C.cyan} fontSize={14} fontWeight="bold" textAnchor="middle">
+                <text x={320} y={102} fill={C.cyan} fontSize={14} fontWeight="bold" textAnchor="middle">
                   Inputs: N, d, DB, recall tolerance
                 </text>
-                <text x={320} y={50} fill={C.bright} fontSize={11} textAnchor="middle">
+                <text x={320} y={120} fill={C.bright} fontSize={11} textAnchor="middle">
                   start here
                 </text>
-                <rect
-                  x={10}
-                  y={80}
-                  width={150}
-                  height={48}
-                  rx={8}
-                  fill={`${C.yellow}18`}
-                  stroke={C.yellow}
-                  strokeWidth={2}
-                />
-                <text x={85} y={100} fill={C.yellow} fontSize={12} fontWeight="bold" textAnchor="middle">
-                  MRL pre-step
-                </text>
-                <text x={85} y={118} fill={C.bright} fontSize={10} textAnchor="middle">
-                  truncate d at embed time
-                </text>
-                <line x1={160} y1={104} x2={180} y2={35} stroke={C.dim} strokeWidth={1} strokeDasharray="4 3" />
-                <line x1={320} y1={60} x2={320} y2={130} stroke={C.dim} strokeWidth={1} />
-                <line x1={80} y1={130} x2={560} y2={130} stroke={C.dim} strokeWidth={1} />
-                <line x1={80} y1={130} x2={80} y2={170} stroke={C.dim} strokeWidth={1} />
-                <line x1={240} y1={130} x2={240} y2={170} stroke={C.dim} strokeWidth={1} />
-                <line x1={400} y1={130} x2={400} y2={170} stroke={C.dim} strokeWidth={1} />
-                <line x1={560} y1={130} x2={560} y2={170} stroke={C.dim} strokeWidth={1} />
-                <text x={320} y={148} fill={C.dim} fontSize={12} textAnchor="middle">
+                {/* connector down to backbone, then 4 drops */}
+                <line x1={320} y1={130} x2={320} y2={200} stroke={C.dim} strokeWidth={1} />
+                <line x1={80} y1={200} x2={560} y2={200} stroke={C.dim} strokeWidth={1} />
+                <line x1={80} y1={200} x2={80} y2={240} stroke={C.dim} strokeWidth={1} />
+                <line x1={240} y1={200} x2={240} y2={240} stroke={C.dim} strokeWidth={1} />
+                <line x1={400} y1={200} x2={400} y2={240} stroke={C.dim} strokeWidth={1} />
+                <line x1={560} y1={200} x2={560} y2={240} stroke={C.dim} strokeWidth={1} />
+                <text x={320} y={220} fill={C.dim} fontSize={12} textAnchor="middle">
                   branch on N
                 </text>
                 {[
@@ -5031,7 +6204,7 @@ export const CompressionDecision = (ctx) => {
                   <g key={r.label}>
                     <rect
                       x={r.x}
-                      y={170}
+                      y={240}
                       width={140}
                       height={50}
                       rx={6}
@@ -5039,31 +6212,31 @@ export const CompressionDecision = (ctx) => {
                       stroke={r.color}
                       strokeWidth={2}
                     />
-                    <text x={r.x + 70} y={190} fill={r.color} fontSize={13} fontWeight="bold" textAnchor="middle">
+                    <text x={r.x + 70} y={260} fill={r.color} fontSize={13} fontWeight="bold" textAnchor="middle">
                       {r.label}
                     </text>
-                    <text x={r.x + 70} y={208} fill={C.bright} fontSize={11} textAnchor="middle">
+                    <text x={r.x + 70} y={278} fill={C.bright} fontSize={11} textAnchor="middle">
                       -&gt; {r.pick}
                     </text>
-                    <line x1={r.x + 70} y1={220} x2={r.x + 70} y2={246} stroke={C.dim} strokeWidth={1} />
-                    <text x={r.x + 70} y={260} fill={C.dim} fontSize={11} textAnchor="middle">
+                    <line x1={r.x + 70} y1={290} x2={r.x + 70} y2={316} stroke={C.dim} strokeWidth={1} />
+                    <text x={r.x + 70} y={330} fill={C.dim} fontSize={11} textAnchor="middle">
                       {r.sub}
                     </text>
                   </g>
                 ))}
-                <text x={320} y={300} fill={C.purple} fontSize={12} fontWeight="bold" textAnchor="middle">
+                <text x={320} y={370} fill={C.purple} fontSize={12} fontWeight="bold" textAnchor="middle">
                   fallback rule for the BQ branch
                 </text>
-                <text x={320} y={320} fill={C.dim} fontSize={11} textAnchor="middle">
+                <text x={320} y={390} fill={C.dim} fontSize={11} textAnchor="middle">
                   if d &lt; 768 OR DB lacks BQ+rescore: downgrade to Scalar Q
                 </text>
-                <text x={320} y={355} fill={C.purple} fontSize={12} fontWeight="bold" textAnchor="middle">
+                <text x={320} y={425} fill={C.purple} fontSize={12} fontWeight="bold" textAnchor="middle">
                   recall-tolerance override
                 </text>
-                <text x={320} y={375} fill={C.dim} fontSize={11} textAnchor="middle">
+                <text x={320} y={445} fill={C.dim} fontSize={11} textAnchor="middle">
                   if recall must exceed 99%: downgrade one step (BQ -&gt; SQ; SQ -&gt; skip; PQ -&gt; raise m)
                 </text>
-                <text x={320} y={410} fill={C.purple} fontSize={12} fontWeight="bold" textAnchor="middle">
+                <text x={320} y={480} fill={C.purple} fontSize={12} fontWeight="bold" textAnchor="middle">
                   fold inputs -&gt; one compression stack
                 </text>
               </svg>
@@ -5098,7 +6271,7 @@ export const CompressionDecision = (ctx) => {
               {[
                 ["Qdrant, Weaviate", "yes", "yes", "yes"],
                 ["Milvus", "yes", "yes", "partial"],
-                ["pgvector (mainline)", "halfvec", "no", "no"],
+                ["pgvector", "halfvec", "no", "no"],
                 ["Pinecone", "managed", "managed", "managed"],
               ].map((row) => (
                 <div key={row[0]} style={{ display: "contents" }}>
@@ -5147,20 +6320,20 @@ export const CompressionDecision = (ctx) => {
                 math: "500K x 12 KB = 6 GB RAM. Fits on any dev box.",
               },
               {
+                title: "Mid-scale - the SQ default",
+                color: C.cyan,
+                stack: "Qdrant + BGE-large-en-v1.5 (d=1024, not MRL) + N=5M",
+                path: "No MRL on this model; N in 1M-10M -> SQ default; below BQ's 10M band so rescore not needed",
+                result: "HNSW + SQ (int8).",
+                math: "fp32 = 5M x 1024 x 4 B = ~20 GB. Final = 5M x 1024 B = ~5 GB. 4x smaller, ~1% recall loss.",
+              },
+              {
                 title: "Growing product - the high-leverage path",
                 color: C.yellow,
                 stack: "Qdrant + OpenAI-3-large (d: 3072 -> 1536 via MRL) + N=50M",
                 path: "MRL halves d up front; N in 10M-100M; d>=768; Qdrant supports BQ+rescore",
-                result: "MRL + BQ + rescore.",
+                result: "HNSW + MRL + BQ + rescore.",
                 math: "fp32 baseline = 300 GB. Final = 50M x 192 B = ~10 GB. ~30x smaller, <2% recall loss.",
-              },
-              {
-                title: "pgvector constrained - the menu-is-short path",
-                color: C.cyan,
-                stack: "pgvector + BGE-small (d=384, not MRL) + N=5M",
-                path: "No MRL; N in 1M-10M so default would be SQ; pgvector supports halfvec, not BQ or PQ",
-                result: "halfvec (fp16).",
-                math: "fp32 = 7.7 GB. Final = 3.8 GB. 2x smaller. BQ off-limits anyway since d=384 is below the 768 threshold.",
               },
               {
                 title: "Massive scale - the HNSW+PQ default",

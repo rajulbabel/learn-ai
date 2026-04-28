@@ -282,10 +282,10 @@ export const Filtering = (ctx) => {
                   brute-force
                 </text>
                 <text x={260} y={22} fill={C.dim} fontSize={11} textAnchor="middle">
-                  1. filter
+                  1. Filter
                 </text>
                 <text x={395} y={60} fill={C.dim} fontSize={11} textAnchor="middle">
-                  2. rank
+                  2. Rank
                 </text>
                 <line x1={180} y1={205} x2={320} y2={205} stroke={C.dim} strokeWidth={1} />
                 <text x={250} y={216} fill={C.dim} fontSize={10} textAnchor="middle">
@@ -315,8 +315,8 @@ export const Filtering = (ctx) => {
               </T>
               <div style={{ marginTop: 6, fontSize: 14, color: C.bright, lineHeight: 1.7 }}>
                 <div>&bull; 0.1% selectivity on 1M = 1,000 survivors</div>
-                <div>&bull; brute-force over 1k is cheap (~1 ms)</div>
-                <div>&bull; recall = 100% - it is exact search</div>
+                <div>&bull; Brute-force over 1k is cheap (~1 ms)</div>
+                <div>&bull; Recall = 100% - it is exact search</div>
               </div>
             </div>
             <div
@@ -332,7 +332,7 @@ export const Filtering = (ctx) => {
               </T>
               <div style={{ marginTop: 6, fontSize: 14, color: C.bright, lineHeight: 1.7 }}>
                 <div>&bull; 50% selectivity on 1M = 500k survivors</div>
-                <div>&bull; brute-force over 500k is slow (~500 ms)</div>
+                <div>&bull; Brute-force over 500k is slow (~500 ms)</div>
                 <div>&bull; ANN speed is abandoned entirely</div>
               </div>
             </div>
@@ -379,14 +379,14 @@ export const Filtering = (ctx) => {
               }}
             >
               <div>
-                step 1: ANN returns top-100 nearest by geometry (<span style={{ color: C.green }}>fast</span>)
+                Step 1: ANN returns top-100 nearest by geometry (<span style={{ color: C.green }}>fast</span>)
               </div>
               <div>
-                step 2: evaluate predicate on each - 1 of 100 passes (<span style={{ color: C.red }}>insufficient</span>
+                Step 2: evaluate predicate on each - 1 of 100 passes (<span style={{ color: C.red }}>insufficient</span>
                 )
               </div>
               <div>
-                step 3: return 1 result instead of 10 - <span style={{ color: C.red }}>fewer than k</span>
+                Step 3: return 1 result instead of 10 - <span style={{ color: C.red }}>fewer than k</span>
               </div>
             </div>
           </div>
@@ -394,8 +394,9 @@ export const Filtering = (ctx) => {
             style={{
               marginTop: 14,
               display: "grid",
-              gridTemplateColumns: "repeat(10, 1fr)",
+              gridTemplateColumns: "repeat(10, 32px)",
               gap: 3,
+              justifyContent: "center",
             }}
           >
             {Array.from({ length: 100 }, (_, i) => {
@@ -405,7 +406,8 @@ export const Filtering = (ctx) => {
                   key={`post-${i}`}
                   title={isSurvivor ? "passes predicate" : "dropped"}
                   style={{
-                    aspectRatio: "1 / 1",
+                    width: 32,
+                    height: 32,
                     background: isSurvivor ? C.green : `${C.green}08`,
                     border: `1px solid ${isSurvivor ? C.green : `${C.green}14`}`,
                     borderRadius: 3,
@@ -432,9 +434,9 @@ export const Filtering = (ctx) => {
               The post-filter trap
             </T>
             <div style={{ marginTop: 6, fontSize: 14, color: C.bright, lineHeight: 1.7 }}>
-              <div>&bull; app asks for 10 results, gets 1 (or 0) back - the UI suddenly looks broken</div>
-              <div>&bull; raise the ANN top-k to 1000 to compensate, latency climbs proportionally</div>
-              <div>&bull; still no guarantee with very selective filters</div>
+              <div>&bull; App asks for 10 results, gets 1 (or 0) back - the UI suddenly looks broken</div>
+              <div>&bull; Raise the ANN top-k to 1000 to compensate, latency climbs proportionally</div>
+              <div>&bull; Still no guarantee with very selective filters</div>
             </div>
           </div>
           <T color="#80e8a5" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
@@ -508,13 +510,20 @@ export const Filtering = (ctx) => {
                   const to = FILTERED_HNSW_PATH[i + 1];
                   const nf = nodeById[from];
                   const nt = nodeById[to];
+                  const dx = nt.x - nf.x;
+                  const dy = nt.y - nf.y;
+                  const d = Math.sqrt(dx * dx + dy * dy) || 1;
+                  const ux = dx / d;
+                  const uy = dy / d;
+                  const r = 15;
+                  const tipPad = 4;
                   return (
                     <line
                       key={`path-${i}`}
-                      x1={nf.x}
-                      y1={nf.y}
-                      x2={nt.x}
-                      y2={nt.y}
+                      x1={nf.x + ux * r}
+                      y1={nf.y + uy * r}
+                      x2={nt.x - ux * (r + tipPad)}
+                      y2={nt.y - uy * (r + tipPad)}
                       stroke={C.orange}
                       strokeWidth={3}
                       markerEnd="url(#filt19-arrow)"
@@ -563,11 +572,11 @@ export const Filtering = (ctx) => {
             </T>
             <div style={{ marginTop: 6, fontSize: 14, color: C.bright, lineHeight: 1.7 }}>
               <div>
-                &bull; every payload field (tenant, year, tags) has its own structured index (inverted, range tree)
+                &bull; Every payload field (tenant, year, tags) has its own structured index (inverted, range tree)
               </div>
-              <div>&bull; at each graph hop the predicate is evaluated via a bitset lookup - O(1) per node</div>
-              <div>&bull; non-passing nodes still get traversed (you may have to cross them to reach passing ones)</div>
-              <div>&bull; only passing nodes are added to the top-k candidate heap</div>
+              <div>&bull; At each graph hop the predicate is evaluated via a bitset lookup - O(1) per node</div>
+              <div>&bull; Non-passing nodes still get traversed (you may have to cross them to reach passing ones)</div>
+              <div>&bull; Only passing nodes are added to the top-k candidate heap</div>
             </div>
           </div>
           <T color="#ffb74d" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
@@ -907,13 +916,13 @@ export const UpdatesDeletes = (ctx) => {
                 lineHeight: 1.9,
               }}
             >
-              1. embed the new doc &rarr; vector v
+              1. Embed the new doc &rarr; vector v
               <br />
-              2. assign layer <span style={{ color: C.cyan }}>L = floor(&minus;ln(uniform) &middot; mL)</span>
+              2. Assign layer <span style={{ color: C.cyan }}>L = floor(&minus;ln(uniform) &middot; mL)</span>
               <br />
-              3. search existing graph for <span style={{ color: C.cyan }}>M = 16</span> nearest neighbors
+              3. Search existing graph for <span style={{ color: C.cyan }}>M = 16</span> nearest neighbors
               <br />
-              4. append node, add M edges, done
+              4. Append node, add M edges, done
             </div>
           </div>
           <div
@@ -925,9 +934,9 @@ export const UpdatesDeletes = (ctx) => {
             }}
           >
             {[
-              { label: "work per insert", value: "O(log N)", color: C.cyan },
-              { label: "edges added", value: "M = 16", color: C.cyan },
-              { label: "memory growth", value: "linear in N", color: C.cyan },
+              { label: "Work per insert", value: "O(log N)", color: C.cyan },
+              { label: "Edges added", value: "M = 16", color: C.cyan },
+              { label: "Memory growth", value: "Linear in N", color: C.cyan },
             ].map((m) => (
               <div
                 key={m.label}
@@ -939,7 +948,7 @@ export const UpdatesDeletes = (ctx) => {
                   textAlign: "center",
                 }}
               >
-                <T color={m.color} bold size={14}>
+                <T color={m.color} bold center size={14}>
                   {m.label}
                 </T>
                 <div style={{ marginTop: 4, fontFamily: "monospace", fontSize: 16, color: m.color }}>{m.value}</div>
@@ -1091,9 +1100,9 @@ export const UpdatesDeletes = (ctx) => {
                 Delete pipeline (soft)
               </T>
               <div style={{ marginTop: 8, fontSize: 14, color: C.bright, lineHeight: 1.7 }}>
-                <div>&bull; set node.tombstone = true</div>
-                <div>&bull; node stays in graph, edges untouched</div>
-                <div>&bull; append &quot;deleted&quot; entry to WAL</div>
+                <div>&bull; Set node.tombstone = true</div>
+                <div>&bull; Node stays in graph, edges untouched</div>
+                <div>&bull; Append &quot;deleted&quot; entry to WAL</div>
                 <div>&bull; O(1) per delete</div>
               </div>
             </div>
@@ -1109,9 +1118,9 @@ export const UpdatesDeletes = (ctx) => {
                 Query pipeline
               </T>
               <div style={{ marginTop: 8, fontSize: 14, color: C.bright, lineHeight: 1.7 }}>
-                <div>&bull; greedy descent still hops through tombstoned nodes</div>
-                <div>&bull; tombstoned candidates dropped before the top-k heap</div>
-                <div>&bull; query time filter is a one-bit check per node</div>
+                <div>&bull; Greedy descent still hops through tombstoned nodes</div>
+                <div>&bull; Tombstoned candidates dropped before the top-k heap</div>
+                <div>&bull; Query time filter is a one-bit check per node</div>
               </div>
             </div>
           </div>
@@ -1575,9 +1584,9 @@ export const Sharding = (ctx) => {
             }}
           >
             {[
-              { size: "10M", fit: "trivial on a laptop", color: C.green },
-              { size: "100M", fit: "one r7i.24xlarge", color: C.yellow },
-              { size: "1B+", fit: "must shard", color: C.red },
+              { size: "10M", fit: "Trivial on a laptop", color: C.green },
+              { size: "100M", fit: "One r7i.24xlarge", color: C.yellow },
+              { size: "1B+", fit: "Must shard", color: C.red },
             ].map((r) => (
               <div
                 key={r.size}
@@ -1589,10 +1598,10 @@ export const Sharding = (ctx) => {
                   textAlign: "center",
                 }}
               >
-                <T color={r.color} bold size={16}>
+                <T color={r.color} bold center size={16}>
                   {r.size}
                 </T>
-                <T color={C.bright} size={13} style={{ marginTop: 4 }}>
+                <T color={C.bright} center size={13} style={{ marginTop: 4 }}>
                   {r.fit}
                 </T>
               </div>
@@ -1859,14 +1868,14 @@ export const Sharding = (ctx) => {
                 lineHeight: 1.9,
               }}
             >
-              step 1: coordinator broadcasts query to 8 shards in parallel
+              Step 1: coordinator broadcasts query to 8 shards in parallel
               <br />
-              step 2: each shard runs local ANN, returns <span style={{ color: C.orange }}>top-10</span>
+              Step 2: each shard runs local ANN, returns <span style={{ color: C.orange }}>top-10</span>
               <br />
-              step 3: coordinator receives 80 candidates, merges by score, keeps{" "}
+              Step 3: coordinator receives 80 candidates, merges by score, keeps{" "}
               <span style={{ color: C.orange }}>top-10</span>
               <br />
-              total latency = fan-out tail + merge cost (~ fast)
+              Total latency = fan-out tail + merge cost (~ fast)
             </div>
           </div>
           <div
@@ -2294,9 +2303,9 @@ export const Replication = (ctx) => {
               }}
             >
               {[
-                { label: "steady state", value: "50 ms", color: C.green, note: "p50 under normal load" },
-                { label: "moderate spike", value: "200 ms", color: C.yellow, note: "write burst, healthy pipeline" },
-                { label: "heavy spike / rebuild", value: "2 s", color: C.red, note: "followers fall behind" },
+                { label: "Steady state", value: "50 ms", color: C.green, note: "P50 under normal load" },
+                { label: "Moderate spike", value: "200 ms", color: C.yellow, note: "Write burst, healthy pipeline" },
+                { label: "Heavy spike / rebuild", value: "2 s", color: C.red, note: "Followers fall behind" },
               ].map((r) => (
                 <div
                   key={r.label}
@@ -2308,11 +2317,11 @@ export const Replication = (ctx) => {
                     textAlign: "center",
                   }}
                 >
-                  <T color={r.color} bold size={14}>
+                  <T color={r.color} bold center size={14}>
                     {r.label}
                   </T>
                   <div style={{ marginTop: 4, fontFamily: "monospace", fontSize: 20, color: r.color }}>{r.value}</div>
-                  <T color={C.dim} size={12} style={{ marginTop: 4 }}>
+                  <T color={C.dim} center size={12} style={{ marginTop: 4 }}>
                     {r.note}
                   </T>
                 </div>
@@ -2413,10 +2422,10 @@ export const Replication = (ctx) => {
                 Async replication (default)
               </T>
               <div style={{ marginTop: 6, fontSize: 14, color: C.bright, lineHeight: 1.7 }}>
-                <div>&bull; fast writes: ack at leader</div>
-                <div>&bull; at-most-50-ms lag typical</div>
+                <div>&bull; Fast writes: ack at leader</div>
+                <div>&bull; At-most-50-ms lag typical</div>
                 <div>
-                  &bull; <span style={{ color: C.red }}>possible data loss on failover</span>
+                  &bull; <span style={{ color: C.red }}>Possible data loss on failover</span>
                 </div>
               </div>
             </div>
@@ -2432,10 +2441,10 @@ export const Replication = (ctx) => {
                 Sync replication
               </T>
               <div style={{ marginTop: 6, fontSize: 14, color: C.bright, lineHeight: 1.7 }}>
-                <div>&bull; slower writes: ack after 1 follower applies</div>
-                <div>&bull; zero data loss on failover</div>
+                <div>&bull; Slower writes: ack after 1 follower applies</div>
+                <div>&bull; Zero data loss on failover</div>
                 <div>
-                  &bull; <span style={{ color: C.red }}>write latency &asymp; 2x async</span>
+                  &bull; <span style={{ color: C.red }}>Write latency &asymp; 2x async</span>
                 </div>
               </div>
             </div>
@@ -4220,8 +4229,8 @@ export const MultiVectorRetrieval = (ctx) => {
               </T>
               <div style={{ marginTop: 6, fontSize: 13, color: C.bright, lineHeight: 1.7 }}>
                 <div>&bull; 1 vector per doc</div>
-                <div>&bull; cosine similarity, scalar output</div>
-                <div>&bull; fast and compact</div>
+                <div>&bull; Cosine similarity, scalar output</div>
+                <div>&bull; Fast and compact</div>
               </div>
             </div>
             <div
@@ -4237,8 +4246,8 @@ export const MultiVectorRetrieval = (ctx) => {
               </T>
               <div style={{ marginTop: 6, fontSize: 13, color: C.bright, lineHeight: 1.7 }}>
                 <div>&bull; ~200 vectors per doc (per token)</div>
-                <div>&bull; max-sim aggregation across tokens</div>
-                <div>&bull; more accurate on long text</div>
+                <div>&bull; Max-sim aggregation across tokens</div>
+                <div>&bull; More accurate on long text</div>
               </div>
             </div>
           </div>
@@ -4459,7 +4468,7 @@ export const MultiVectorRetrieval = (ctx) => {
               }}
             >
               {[
-                { label: "single-vector (float32)", size: "3 GB", ratio: "1x baseline", color: C.green },
+                { label: "Single-vector (float32)", size: "3 GB", ratio: "1x baseline", color: C.green },
                 { label: "ColBERT raw (float32)", size: "600 GB", ratio: "~200x larger", color: C.red },
                 { label: "ColBERT compressed (PQ)", size: "~60 GB", ratio: "~20x larger", color: C.yellow },
               ].map((r) => (
@@ -4473,11 +4482,11 @@ export const MultiVectorRetrieval = (ctx) => {
                     textAlign: "center",
                   }}
                 >
-                  <T color={r.color} bold size={14}>
+                  <T color={r.color} bold center size={14}>
                     {r.label}
                   </T>
                   <div style={{ marginTop: 4, fontFamily: "monospace", fontSize: 18, color: r.color }}>{r.size}</div>
-                  <T color={C.dim} size={12} style={{ marginTop: 4 }}>
+                  <T color={C.dim} center size={12} style={{ marginTop: 4 }}>
                     {r.ratio}
                   </T>
                 </div>
@@ -5235,15 +5244,15 @@ export const Observability = (ctx) => {
                 lineHeight: 1.9,
               }}
             >
-              step 1: sample <span style={{ color: C.yellow }}>1,000 queries</span> from production traffic
+              Step 1: sample <span style={{ color: C.yellow }}>1,000 queries</span> from production traffic
               <br />
-              step 2: for each, compute exact top-10 via <span style={{ color: C.yellow }}>brute force</span>
+              Step 2: for each, compute exact top-10 via <span style={{ color: C.yellow }}>brute force</span>
               <br />
-              step 3: compare against ANN top-10 (intersection / 10)
+              Step 3: compare against ANN top-10 (intersection / 10)
               <br />
-              step 4: average over the 1,000 queries = recall@10
+              Step 4: average over the 1,000 queries = recall@10
               <br />
-              step 5: repeat weekly, plot the trend
+              Step 5: repeat weekly, plot the trend
             </div>
           </div>
           <T color="#ffe082" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
@@ -5833,10 +5842,10 @@ export const CapacityPlanning = (ctx) => {
               {
                 label: "Memory",
                 value: "3 TB",
-                note: "across replicas, 1.5 TB primary + replication",
+                note: "Across replicas, 1.5 TB primary + replication",
                 color: C.orange,
               },
-              { label: "Nodes", value: "6 + 6", note: "primary shards + 1 replica each", color: C.orange },
+              { label: "Nodes", value: "6 + 6", note: "Primary shards + 1 replica each", color: C.orange },
               { label: "CPU", value: "~96 cores", note: "16 per node times 6 nodes", color: C.orange },
             ].map((r) => (
               <div
@@ -5849,11 +5858,11 @@ export const CapacityPlanning = (ctx) => {
                   textAlign: "center",
                 }}
               >
-                <T color={r.color} bold size={14}>
+                <T color={r.color} bold center size={14}>
                   {r.label}
                 </T>
                 <div style={{ marginTop: 4, fontFamily: "monospace", fontSize: 18, color: r.color }}>{r.value}</div>
-                <T color={C.dim} size={12} style={{ marginTop: 4 }}>
+                <T color={C.dim} center size={12} style={{ marginTop: 4 }}>
                   {r.note}
                 </T>
               </div>

@@ -31,7 +31,7 @@ const fmtVec = (v) => `[${v.map((x) => x.toFixed(2)).join(", ")}]`;
 // three groups: cats in upper-left, dogs in upper-right, other in lower-right.
 // Each cluster is a compact ~55-pixel blob so it reads as one cloud, not two.
 const CORPUS_XY = {
-  1: { x: 100, y: 100 },
+  1: { x: 80, y: 100 },
   7: { x: 150, y: 100 },
   5: { x: 95, y: 135 },
   3: { x: 150, y: 140 },
@@ -68,13 +68,13 @@ export const RetrievalProblem = (ctx) => {
               textAlign: "center",
             }}
           >
-            <T color={C.yellow} bold size={16}>
+            <T color={C.yellow} bold center size={16}>
               Query
             </T>
-            <T color={C.bright} size={17} style={{ marginTop: 4 }}>
+            <T color={C.bright} center size={17} style={{ marginTop: 4 }}>
               &quot;{QUERY.text}&quot;
             </T>
-            <T color={C.yellow} size={15} style={{ marginTop: 6, fontFamily: "monospace" }}>
+            <T color={C.yellow} center size={15} style={{ marginTop: 6, fontFamily: "monospace" }}>
               {fmtVec(QUERY.vec)}
             </T>
           </div>
@@ -496,10 +496,10 @@ export const RetrievalProblem = (ctx) => {
               textAlign: "center",
             }}
           >
-            <T color={C.red} bold size={17}>
+            <T color={C.red} bold center size={17}>
               This is a systems problem. Not a training problem.
             </T>
-            <T color="#ef9a9a" size={15} style={{ marginTop: 6 }}>
+            <T color="#ef9a9a" center size={15} style={{ marginTop: 6 }}>
               The rest of Section 11 is about storage layouts, index data structures, approximate algorithms, and the
               latency/recall/memory tradeoffs they force.
             </T>
@@ -706,10 +706,10 @@ export const BruteForceKNN = (ctx) => {
               textAlign: "center",
             }}
           >
-            <T color={C.green} bold size={17}>
+            <T color={C.green} bold center size={17}>
               This result is exact
             </T>
-            <T color="#80e8a5" size={15} style={{ marginTop: 6 }}>
+            <T color="#80e8a5" center size={15} style={{ marginTop: 6 }}>
               We compared the query to every single doc in the corpus. No doc was skipped, no shortcut was taken. The
               top-3 returned (docs 1, 3, 7) are guaranteed to be the true three most similar. That is the promise of
               brute force: perfect answers.
@@ -1025,10 +1025,10 @@ export const BruteForceKNN = (ctx) => {
               textAlign: "center",
             }}
           >
-            <T color={C.red} bold size={20}>
+            <T color={C.red} bold center size={20}>
               NOT FEASIBLE
             </T>
-            <T color="#ef9a9a" size={15} style={{ marginTop: 6 }}>
+            <T color="#ef9a9a" center size={15} style={{ marginTop: 6 }}>
               3.072 TB / 50 GB/sec = ~60 seconds per query, just to stream the data past the CPU. Memory bandwidth is
               the bottleneck, not FLOPS. Even with infinite compute, brute force at 1 billion is hopeless for
               interactive search.
@@ -1060,7 +1060,7 @@ export const BruteForceKNN = (ctx) => {
               textAlign: "center",
             }}
           >
-            <T color={C.purple} bold size={17}>
+            <T color={C.purple} bold center size={17}>
               How do we measure what we give up?
             </T>
             <div
@@ -1190,10 +1190,10 @@ export const BruteForceKNN = (ctx) => {
               textAlign: "center",
             }}
           >
-            <T color={C.purple} bold size={17}>
+            <T color={C.purple} bold center size={17}>
               The tradeoff is wildly favorable
             </T>
-            <T color="#b8a9ff" size={15} style={{ marginTop: 6 }}>
+            <T color="#b8a9ff" center size={15} style={{ marginTop: 6 }}>
               Production ANN algorithms hit 99%+ recall while running 100 to 1000 times faster than brute force. You
               give up one neighbor in a hundred and gain orders of magnitude of speed. For search, recommendations, and
               RAG, that is an obvious win - the user never notices the missed result, but they notice the wait.
@@ -1938,10 +1938,10 @@ export const ThreeWayTradeoff = (ctx) => {
               textAlign: "center",
             }}
           >
-            <T color={C.green} bold size={17}>
+            <T color={C.green} bold center size={17}>
               The triangle is the whole architecture
             </T>
-            <T color="#80e8a5" size={15} style={{ marginTop: 6 }}>
+            <T color="#80e8a5" center size={15} style={{ marginTop: 6 }}>
               Every algorithm, every knob, every deployment choice is a move along one edge. When an engineer says
               &quot;HNSW with PQ32 behind two replicas&quot;, they are naming three specific moves on this triangle -
               one on each axis.
@@ -2422,10 +2422,10 @@ export const DistanceMetrics = (ctx) => {
               textAlign: "center",
             }}
           >
-            <T color={C.orange} bold size={15}>
+            <T color={C.orange} bold center size={15}>
               At billions of vectors, that 3x difference is the difference between 100 ms and 300 ms per query.
             </T>
-            <T color="#ffcc99" size={14} style={{ marginTop: 6 }}>
+            <T color="#ffcc99" center size={14} style={{ marginTop: 6 }}>
               Inner product wins by being stripped to the bone. No sqrt, no divide, no branch - just a tight loop of
               multiply-add that GPU and CPU SIMD units love.
             </T>
@@ -2519,13 +2519,13 @@ export const DistanceMetrics = (ctx) => {
               textAlign: "center",
             }}
           >
-            <T color={C.yellow} bold size={17}>
+            <T color={C.yellow} bold center size={17}>
               All three collapse to the same ranking
             </T>
-            <T color="#ffe066" size={15} style={{ marginTop: 6, fontFamily: "monospace" }}>
+            <T color="#ffe066" center size={15} style={{ marginTop: 6, fontFamily: "monospace" }}>
               max cos(q, d) = max (q &middot; d) = min L2(q, d)
             </T>
-            <T color="#ffe066" size={14} style={{ marginTop: 8, fontStyle: "italic" }}>
+            <T color="#ffe066" center size={14} style={{ marginTop: 8, fontStyle: "italic" }}>
               Larger inner product = closer in L2 = higher cosine. The sort order is identical.
             </T>
           </div>
@@ -2684,10 +2684,10 @@ export const DistanceMetrics = (ctx) => {
               textAlign: "center",
             }}
           >
-            <T color={C.green} bold size={16}>
+            <T color={C.green} bold center size={16}>
               The production default
             </T>
-            <T color="#80e8a5" size={15} style={{ marginTop: 6 }}>
+            <T color="#80e8a5" center size={15} style={{ marginTop: 6 }}>
               For text embeddings from SBERT, OpenAI, or Cohere - normalize at ingest, store unit vectors, use inner
               product at query time. Same recall as cosine, but the ranking loop is the fastest code your hardware can
               run.
@@ -2728,7 +2728,6 @@ const IVFScatter = ({
   nprobe = 1,
   desc,
   showQuery = true,
-  highlightTopK = false,
 }) => {
   const probedClusters = IVF_CLUSTERS.slice(0, nprobe).map((c) => c.id);
   return (
@@ -2831,10 +2830,6 @@ const IVFScatter = ({
         if (variant === "clustered" || variant === "cells" || variant === "probe") {
           fill = isProbed ? cl.color : `${cl.color}33`;
           stroke = isProbed ? cl.color : `${cl.color}55`;
-        }
-        if (highlightTopK && [1, 3, 7].includes(Number(id)) && variant === "probe") {
-          fill = C.green;
-          stroke = C.green;
         }
         return (
           <g key={id}>
@@ -3191,7 +3186,7 @@ export const IVF = (ctx) => {
                   lineHeight: 1.7,
                 }}
               >
-                <div style={{ color: "#80e8a5", marginBottom: 4 }}>1. centroid list</div>
+                <div style={{ color: "#80e8a5", marginBottom: 4 }}>1. Centroid list</div>
                 A: [1.3, 1.1]
                 <br />
                 B: [3.1, 1.0]
@@ -3210,7 +3205,7 @@ export const IVF = (ctx) => {
                   lineHeight: 1.7,
                 }}
               >
-                <div style={{ color: "#80e8a5", marginBottom: 4 }}>2. inverted file (posting lists)</div>
+                <div style={{ color: "#80e8a5", marginBottom: 4 }}>2. Inverted file (posting lists)</div>
                 A → [1, 3, 4, 5, 7]
                 <br />
                 B → [2, 8]
@@ -3248,7 +3243,6 @@ export const IVF = (ctx) => {
               variant="probe"
               nprobe={1}
               desc="Query vector with an orange arrow pointing at centroid A, the nearest centroid. Cluster A's docs are highlighted while clusters B and C are dimmed, showing that only cluster A's docs are scanned when nprobe = 1."
-              highlightTopK
             />
           </div>
           <div style={{ marginTop: 14, display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
@@ -3487,10 +3481,10 @@ export const IVF = (ctx) => {
               textAlign: "center",
             }}
           >
-            <T color={C.purple} bold size={17}>
+            <T color={C.purple} bold center size={17}>
               The tradeoff IVF makes
             </T>
-            <T color="#b8a9ff" size={15} style={{ marginTop: 6 }}>
+            <T color="#b8a9ff" center size={15} style={{ marginTop: 6 }}>
               IVF trades a tiny bit of recall (docs near cell boundaries can be missed) and a fixed one-time clustering
               cost for a massive per-query speedup. Memory overhead is trivial. This is why IVF is the FAISS default for
               million-scale static corpora.
@@ -4534,11 +4528,11 @@ export const HNSWIntuition = (ctx) => {
               textAlign: "center",
             }}
           >
-            <T color={C.purple} bold size={17}>
+            <T color={C.purple} bold center size={17}>
               The route a query takes
             </T>
-            <T color="#b8a9ff" size={15} style={{ marginTop: 6 }}>
-              long-haul at international layer &rarr; regional hops once you are over the right continent &rarr; short
+            <T color="#b8a9ff" center size={15} style={{ marginTop: 6 }}>
+              Long-haul at international layer &rarr; regional hops once you are over the right continent &rarr; short
               local hops to the final neighbor. Same strategy planes use. Same strategy HNSW uses.
             </T>
           </div>
@@ -4557,6 +4551,27 @@ export const HNSWIntuition = (ctx) => {
       )}
     </div>
   );
+};
+
+// === 11.8 insertion-storyboard data ===
+
+// 2D position of the hypothetical new doc being inserted in the 11.8 sub=3 storyboard.
+// Sits on the right edge of the cat cluster so its top-4 candidates are visually clean.
+const HNSW_INSERT_NEW_XY = { x: 260, y: 110 };
+
+// Pre-computed Euclidean distances from HNSW_INSERT_NEW_XY to each existing doc, rounded
+// to 1 decimal. ef_construction=4 picks {7, 4, 3, 2}; M=3 picks {7, 4, 3}.
+const HNSW_INSERT_DISTS = {
+  7: 58.3,
+  4: 94.9,
+  3: 111.8,
+  2: 117.0,
+  6: 170.6,
+  8: 171.0,
+  1: 199.0,
+  5: 210.2,
+  10: 213.6,
+  9: 304.0,
 };
 
 // Deterministic per-doc layer assignments for the 11.8 walkthrough.
@@ -4818,13 +4833,13 @@ export const HNSWConstruction = (ctx) => {
       <Reveal when={sub >= 3}>
         <Box color={C.green} style={{ width: "100%" }}>
           <T color={C.green} bold center size={22}>
-            Greedy insert: take the M nearest from the candidate pool
+            Greedy insert: 4-step storyboard for one new doc
           </T>
-          <T color="#80e8a5" style={{ marginTop: 8 }}>
-            Given the rolled L, insert the new node on layers L, L-1, ..., 0. On each layer, start at the current entry
-            point, greedy-descend to the closest existing node, expand a candidate pool of size ef_construction (default
-            200), and connect the new node to its M nearest among the pool by adding edges.
+          <T color="#80e8a5" size={16} style={{ marginTop: 8 }}>
+            Insert one new doc into a graph that already holds docs 1-10. Use M = 3 and ef_construction = 4 for the
+            visualization. Each frame below is one step of HNSW Algorithm 1 from the paper.
           </T>
+
           <div
             style={{
               marginTop: 14,
@@ -4834,62 +4849,486 @@ export const HNSWConstruction = (ctx) => {
               border: `1px solid ${C.green}12`,
             }}
           >
-            <T color={C.green} bold center size={16}>
-              Insertion pseudo-code (HNSW paper, Algorithm 1)
+            <T color={C.green} bold center size={15}>
+              Frame 1 - roll layer L from the exponential formula
             </T>
             <div
               style={{
                 marginTop: 10,
-                padding: "12px 14px",
+                padding: "10px 12px",
                 borderRadius: 6,
                 background: "rgba(0,0,0,0.3)",
+                textAlign: "center",
                 fontFamily: "monospace",
                 fontSize: 14,
                 color: C.bright,
-                lineHeight: 1.9,
+                lineHeight: 1.8,
               }}
             >
-              insert(q, M, ef_construction):
-              <br />
-              &nbsp;&nbsp;L = floor(&minus;ln(uniform()) &middot; mL)
-              <br />
-              &nbsp;&nbsp;ep = entry_point
-              <br />
-              &nbsp;&nbsp;for layer in top_level ... L+1:
-              <br />
-              &nbsp;&nbsp;&nbsp;&nbsp;ep = greedy_descend(q, ep, layer){"  "}
-              <span style={{ color: C.dim }}>// 1 candidate only</span>
-              <br />
-              &nbsp;&nbsp;for layer in L ... 0:
-              <br />
-              &nbsp;&nbsp;&nbsp;&nbsp;candidates = beam_search(q, ep, layer,{" "}
-              <span style={{ color: C.yellow }}>ef_construction</span>)
-              <br />
-              &nbsp;&nbsp;&nbsp;&nbsp;neighbors = select_<span style={{ color: C.green }}>M</span>_nearest(candidates)
-              <br />
-              &nbsp;&nbsp;&nbsp;&nbsp;add_edges(q, neighbors){"  "}
-              <span style={{ color: C.dim }}>// bidirectional, capped at M per node</span>
-              <br />
-              &nbsp;&nbsp;&nbsp;&nbsp;ep = neighbors[0]
+              u = 0.45 &nbsp;&rarr;&nbsp; L = floor(&minus;ln(0.45) &middot; 0.36) = floor(0.288) ={" "}
+              <span style={{ color: C.green, fontSize: 18 }}>L = 0</span>
             </div>
+            <T color="#80e8a5" size={13} center style={{ marginTop: 6 }}>
+              Most rolls land at L = 0. Insert this new doc on layer 0 only.
+            </T>
           </div>
-          <T color="#80e8a5" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
-            ef_construction is the candidate pool size. Larger means better neighbor choice at insert time (and
-            therefore better recall later) but slower builds.
+
+          <div
+            style={{
+              marginTop: 12,
+              padding: "12px 14px",
+              borderRadius: 8,
+              background: `${C.green}06`,
+              border: `1px solid ${C.green}12`,
+            }}
+          >
+            <T color={C.green} bold center size={15}>
+              Frame 2 - greedy descend from top entry down to layer L + 1
+            </T>
+            <div style={{ marginTop: 10 }}>
+              <svg viewBox="0 0 500 230" style={{ width: "100%", maxWidth: 540, height: "auto", display: "block" }}>
+                <desc>
+                  Greedy descent during insertion: starting at the top entry doc 1 at L2, drop along green edges to L1
+                  doc 1, then drop to L0 doc 1. Above the target layer L = 0, every layer keeps just one candidate.
+                </desc>
+                <line x1="10" y1="40" x2="490" y2="40" stroke={C.red} strokeDasharray="2 4" strokeOpacity="0.4" />
+                <line x1="10" y1="115" x2="490" y2="115" stroke={C.yellow} strokeDasharray="2 4" strokeOpacity="0.4" />
+                <line x1="10" y1="190" x2="490" y2="190" stroke={C.cyan} strokeDasharray="2 4" strokeOpacity="0.4" />
+                <text x="16" y="32" fill={C.red} fontSize="11">
+                  layer 2 (top entry)
+                </text>
+                <text x="16" y="107" fill={C.yellow} fontSize="11">
+                  layer 1
+                </text>
+                <text x="16" y="208" fill={C.cyan} fontSize="11">
+                  layer 0 (target = L)
+                </text>
+                <line x1="250" y1="40" x2="250" y2="115" stroke={C.green} strokeWidth="3" />
+                <line x1="250" y1="115" x2="250" y2="190" stroke={C.green} strokeWidth="3" />
+                <g>
+                  <circle cx="250" cy="40" r="11" fill={C.green} stroke={C.red} strokeWidth="1.5" />
+                  <text x="250" y="44" textAnchor="middle" fill="#08080d" fontSize="11" fontWeight="bold">
+                    1
+                  </text>
+                </g>
+                <g>
+                  <circle cx="250" cy="115" r="11" fill={C.green} stroke={C.yellow} strokeWidth="1.5" />
+                  <text x="250" y="119" textAnchor="middle" fill="#08080d" fontSize="11" fontWeight="bold">
+                    1
+                  </text>
+                </g>
+                <g>
+                  <circle cx="250" cy="190" r="11" fill={C.green} stroke={C.cyan} strokeWidth="1.5" />
+                  <text x="250" y="194" textAnchor="middle" fill="#08080d" fontSize="11" fontWeight="bold">
+                    1
+                  </text>
+                </g>
+                <text x="270" y="44" fill={C.bright} fontSize="11" fontFamily="monospace">
+                  ep = doc 1
+                </text>
+                <text x="270" y="119" fill={C.bright} fontSize="11" fontFamily="monospace">
+                  ep = doc 1 (no closer L1 neighbor)
+                </text>
+                <text x="270" y="194" fill={C.bright} fontSize="11" fontFamily="monospace">
+                  ep = doc 1 (start of L0 beam)
+                </text>
+              </svg>
+            </div>
+            <T color="#80e8a5" size={13} center style={{ marginTop: 6, fontFamily: "monospace" }}>
+              above L: 1 candidate per layer (cheap). Stop when we hit layer L.
+            </T>
+          </div>
+
+          <div
+            style={{
+              marginTop: 12,
+              padding: "12px 14px",
+              borderRadius: 8,
+              background: `${C.green}06`,
+              border: `1px solid ${C.green}12`,
+            }}
+          >
+            <T color={C.green} bold center size={15}>
+              Frame 3 - beam search at layer L grows a candidate pool of size ef_construction = 4
+            </T>
+            <div style={{ marginTop: 10 }}>
+              <svg viewBox="0 0 540 360" style={{ width: "100%", maxWidth: 560, height: "auto", display: "block" }}>
+                <desc>
+                  Layer-0 beam search during insertion. The orange star is the new doc at (260, 110). Dashed orange
+                  lines connect it to its top-4 candidates docs 7, 4, 3, 2 - the ef_construction = 4 pool.
+                </desc>
+                {FLAT_GRAPH_EDGES.map(([a, b], i) => (
+                  <line
+                    key={`e${i}`}
+                    x1={HNSW_CORPUS_XY[a].x}
+                    y1={HNSW_CORPUS_XY[a].y}
+                    x2={HNSW_CORPUS_XY[b].x}
+                    y2={HNSW_CORPUS_XY[b].y}
+                    stroke={C.cyan}
+                    strokeWidth="1"
+                    strokeOpacity="0.3"
+                  />
+                ))}
+                {[7, 4, 3, 2].map((id) => {
+                  const p = HNSW_CORPUS_XY[id];
+                  return (
+                    <g key={`pool${id}`}>
+                      <line
+                        x1={HNSW_INSERT_NEW_XY.x}
+                        y1={HNSW_INSERT_NEW_XY.y}
+                        x2={p.x}
+                        y2={p.y}
+                        stroke={C.orange}
+                        strokeWidth="1.5"
+                        strokeDasharray="3 3"
+                        strokeOpacity="0.85"
+                      />
+                      <text
+                        x={(HNSW_INSERT_NEW_XY.x + p.x) / 2 + 8}
+                        y={(HNSW_INSERT_NEW_XY.y + p.y) / 2 - 4}
+                        fill={C.orange}
+                        fontSize="11"
+                        fontFamily="monospace"
+                      >
+                        {HNSW_INSERT_DISTS[id].toFixed(1)}
+                      </text>
+                    </g>
+                  );
+                })}
+                {Object.entries(HNSW_CORPUS_XY).map(([id, p]) => {
+                  const idN = Number(id);
+                  const inPool = [7, 4, 3, 2].includes(idN);
+                  return (
+                    <g key={`n${id}`}>
+                      <circle
+                        cx={p.x}
+                        cy={p.y}
+                        r={inPool ? 12 : 10}
+                        fill={inPool ? C.orange : C.cyan}
+                        stroke={inPool ? C.orange : C.cyan}
+                        strokeWidth="1.5"
+                      />
+                      <text x={p.x} y={p.y + 4} textAnchor="middle" fill="#08080d" fontSize="11" fontWeight="bold">
+                        {id}
+                      </text>
+                    </g>
+                  );
+                })}
+                <g>
+                  <circle
+                    cx={HNSW_INSERT_NEW_XY.x}
+                    cy={HNSW_INSERT_NEW_XY.y}
+                    r="11"
+                    fill={C.green}
+                    stroke={C.bright}
+                    strokeWidth="2"
+                  />
+                  <text
+                    x={HNSW_INSERT_NEW_XY.x}
+                    y={HNSW_INSERT_NEW_XY.y + 4}
+                    textAnchor="middle"
+                    fill="#08080d"
+                    fontSize="11"
+                    fontWeight="bold"
+                  >
+                    ?
+                  </text>
+                  <text
+                    x={HNSW_INSERT_NEW_XY.x}
+                    y={HNSW_INSERT_NEW_XY.y - 16}
+                    textAnchor="middle"
+                    fill={C.green}
+                    fontSize="11"
+                    fontFamily="monospace"
+                    fontWeight="bold"
+                  >
+                    new doc
+                  </text>
+                </g>
+              </svg>
+            </div>
+            <T color="#80e8a5" size={13} center style={{ marginTop: 6, fontFamily: "monospace" }}>
+              ef_construction = 4 candidate pool: doc 7 (58.3), 4 (94.9), 3 (111.8), 2 (117.0)
+            </T>
+          </div>
+
+          <div
+            style={{
+              marginTop: 12,
+              padding: "12px 14px",
+              borderRadius: 8,
+              background: `${C.green}06`,
+              border: `1px solid ${C.green}12`,
+            }}
+          >
+            <T color={C.green} bold center size={15}>
+              Frame 4 - pick M = 3 nearest from the pool, add bidirectional edges
+            </T>
+            <div style={{ marginTop: 10 }}>
+              <svg viewBox="0 0 540 360" style={{ width: "100%", maxWidth: 560, height: "auto", display: "block" }}>
+                <desc>
+                  Final insertion frame. From the ef_construction = 4 candidate pool, the M = 3 nearest docs (7, 4, 3)
+                  are chosen and connected to the new node by solid green bidirectional edges. Doc 2 - in the pool but
+                  not the top M - is left without an edge.
+                </desc>
+                {FLAT_GRAPH_EDGES.map(([a, b], i) => (
+                  <line
+                    key={`e${i}`}
+                    x1={HNSW_CORPUS_XY[a].x}
+                    y1={HNSW_CORPUS_XY[a].y}
+                    x2={HNSW_CORPUS_XY[b].x}
+                    y2={HNSW_CORPUS_XY[b].y}
+                    stroke={C.cyan}
+                    strokeWidth="1"
+                    strokeOpacity="0.3"
+                  />
+                ))}
+                {[7, 4, 3].map((id) => {
+                  const p = HNSW_CORPUS_XY[id];
+                  return (
+                    <line
+                      key={`add${id}`}
+                      x1={HNSW_INSERT_NEW_XY.x}
+                      y1={HNSW_INSERT_NEW_XY.y}
+                      x2={p.x}
+                      y2={p.y}
+                      stroke={C.green}
+                      strokeWidth="3"
+                    />
+                  );
+                })}
+                {Object.entries(HNSW_CORPUS_XY).map(([id, p]) => {
+                  const idN = Number(id);
+                  const isPicked = [7, 4, 3].includes(idN);
+                  const isPoolReject = idN === 2;
+                  let fill = C.cyan;
+                  if (isPicked) fill = C.green;
+                  if (isPoolReject) fill = C.dim;
+                  return (
+                    <g key={`n${id}`}>
+                      <circle cx={p.x} cy={p.y} r="11" fill={fill} stroke={fill} strokeWidth="1.5" />
+                      <text x={p.x} y={p.y + 4} textAnchor="middle" fill="#08080d" fontSize="11" fontWeight="bold">
+                        {id}
+                      </text>
+                    </g>
+                  );
+                })}
+                <g>
+                  <circle
+                    cx={HNSW_INSERT_NEW_XY.x}
+                    cy={HNSW_INSERT_NEW_XY.y}
+                    r="12"
+                    fill={C.green}
+                    stroke={C.bright}
+                    strokeWidth="2"
+                  />
+                  <text
+                    x={HNSW_INSERT_NEW_XY.x}
+                    y={HNSW_INSERT_NEW_XY.y + 4}
+                    textAnchor="middle"
+                    fill="#08080d"
+                    fontSize="11"
+                    fontWeight="bold"
+                  >
+                    N
+                  </text>
+                  <text
+                    x={HNSW_INSERT_NEW_XY.x}
+                    y={HNSW_INSERT_NEW_XY.y - 18}
+                    textAnchor="middle"
+                    fill={C.green}
+                    fontSize="11"
+                    fontFamily="monospace"
+                    fontWeight="bold"
+                  >
+                    new doc N
+                  </text>
+                </g>
+              </svg>
+            </div>
+            <T color="#80e8a5" size={13} center style={{ marginTop: 6, fontFamily: "monospace" }}>
+              edges added: N&harr;7, N&harr;4, N&harr;3 (M = 3). Doc 2 stays out of the picked set.
+            </T>
+          </div>
+
+          <div
+            style={{
+              marginTop: 14,
+              padding: "12px 14px",
+              borderRadius: 8,
+              background: "rgba(0,0,0,0.3)",
+              textAlign: "center",
+              fontFamily: "monospace",
+              fontSize: 14,
+              color: C.bright,
+              lineHeight: 1.8,
+            }}
+          >
+            <span style={{ color: C.dim }}>HNSW Algorithm 1 (paper):</span>
+            <br />
+            roll <span style={{ color: C.green }}>L</span> &rarr; greedy descend top to L + 1 &rarr; beam search at L..0
+            with <span style={{ color: C.yellow }}>ef_construction</span> &rarr; connect{" "}
+            <span style={{ color: C.green }}>M</span> nearest
+          </div>
+          <T color="#80e8a5" size={15} center style={{ marginTop: 10, fontStyle: "italic" }}>
+            ef_construction = 200 in production: bigger pool gives better neighbor choice and better recall later, at
+            the cost of slower builds.
           </T>
         </Box>
       </Reveal>
       <Reveal when={sub >= 4}>
         <Box color={C.orange} style={{ width: "100%" }}>
           <T color={C.orange} bold center size={22}>
-            Insert all 10 cat-corpus docs
+            Insert all 10 cat-corpus docs - watch the graph grow
           </T>
-          <T color="#ffcc80" style={{ marginTop: 8 }}>
-            Roll the layer formula for every doc (deterministic values shown below for the walkthrough), then run the
-            insertion algorithm. Doc 1 &quot;Cats are small domesticated carnivores&quot; gets lucky with u = 0.01 and
-            lands at L = 2, making it the top entry point. Doc 6 &quot;Python is a programming language&quot; lands at L
-            = 1. The other 8 docs stay at layer 0 - the expected 80% in this tiny sample, 94% in the limit.
+          <T color="#ffcc80" size={16} style={{ marginTop: 8 }}>
+            Three snapshots. Each one runs the insert algorithm on the next batch of docs. Doc 1 lands at L = 2 and
+            becomes the top entry. Doc 6 lands at L = 1 and adds a second-tier hub. Everyone else lands at L = 0.
           </T>
+
+          <div style={{ marginTop: 14, display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 12 }}>
+            {[
+              {
+                title: "After doc 1",
+                desc: "HNSW graph state after doc 1 has been inserted. A single red node at the top layer L2 - no edges yet, no L1 or L0 nodes - because doc 1 is the very first vector and rolled L = 2.",
+                nodes: { 2: [1] },
+                l1Edges: [],
+                l0Edges: [],
+                l0Nodes: [],
+              },
+              {
+                title: "After docs 1, 6",
+                desc: "HNSW graph state after docs 1 and 6 have been inserted. Top layer L2 holds doc 1; the L1 hub layer adds doc 6 connected to doc 1; L0 is starting to form with both docs 1 and 6 sitting on the bottom row.",
+                nodes: { 2: [1], 1: [1, 6] },
+                l1Edges: [[1, 6]],
+                l0Edges: [],
+                l0Nodes: [1, 6],
+              },
+              {
+                title: "After all 10 docs",
+                desc: "Final HNSW graph state after all 10 docs have been inserted. L2 holds doc 1 alone; L1 holds the small hub layer of docs 1, 6, 10; L0 holds every doc connected through the dense flat-graph proximity edges.",
+                nodes: { 2: [1], 1: [1, 6, 10] },
+                l1Edges: [
+                  [1, 6],
+                  [6, 10],
+                ],
+                l0Edges: FLAT_GRAPH_EDGES,
+                l0Nodes: [1, 7, 3, 4, 5, 2, 8, 10, 6, 9],
+              },
+            ].map((snap, idx) => {
+              const Y2 = 30,
+                Y1 = 95,
+                Y0 = 165;
+              const layer1Pos = { 1: 80, 6: 165, 10: 250 };
+              const layer0Pos = {
+                5: 30,
+                1: 60,
+                7: 90,
+                3: 120,
+                4: 150,
+                8: 180,
+                2: 210,
+                10: 240,
+                6: 270,
+                9: 300,
+              };
+              return (
+                <div
+                  key={idx}
+                  style={{
+                    padding: "12px 12px",
+                    borderRadius: 8,
+                    background: `${C.orange}06`,
+                    border: `1px solid ${C.orange}12`,
+                  }}
+                >
+                  <T color={C.orange} bold center size={14}>
+                    {snap.title}
+                  </T>
+                  <svg
+                    viewBox="0 0 320 200"
+                    style={{ width: "100%", maxWidth: 320, height: "auto", display: "block", marginTop: 8 }}
+                  >
+                    <desc>{snap.desc}</desc>
+                    <line x1="5" y1={Y2} x2="315" y2={Y2} stroke={C.red} strokeDasharray="2 4" strokeOpacity="0.4" />
+                    <line x1="5" y1={Y1} x2="315" y2={Y1} stroke={C.yellow} strokeDasharray="2 4" strokeOpacity="0.4" />
+                    <line x1="5" y1={Y0} x2="315" y2={Y0} stroke={C.cyan} strokeDasharray="2 4" strokeOpacity="0.4" />
+                    <text x="8" y={Y2 - 6} fill={C.red} fontSize="10">
+                      L2
+                    </text>
+                    <text x="8" y={Y1 - 6} fill={C.yellow} fontSize="10">
+                      L1
+                    </text>
+                    <text x="8" y={Y0 + 14} fill={C.cyan} fontSize="10">
+                      L0
+                    </text>
+                    {snap.l1Edges.map(([a, b], i) => (
+                      <line
+                        key={`l1${i}`}
+                        x1={layer1Pos[a]}
+                        y1={Y1}
+                        x2={layer1Pos[b]}
+                        y2={Y1}
+                        stroke={C.yellow}
+                        strokeWidth="1.5"
+                      />
+                    ))}
+                    {snap.l0Edges.map(([a, b], i) => (
+                      <line
+                        key={`l0${i}`}
+                        x1={layer0Pos[a]}
+                        y1={Y0}
+                        x2={layer0Pos[b]}
+                        y2={Y0}
+                        stroke={C.cyan}
+                        strokeOpacity="0.55"
+                        strokeWidth="1.2"
+                      />
+                    ))}
+                    {(snap.nodes[2] || []).map((id) => (
+                      <g key={`l2${id}`}>
+                        <circle cx="160" cy={Y2} r="9" fill={C.red} stroke={C.red} />
+                        <text x="160" y={Y2 + 3} textAnchor="middle" fill="#08080d" fontSize="10" fontWeight="bold">
+                          {id}
+                        </text>
+                      </g>
+                    ))}
+                    {(snap.nodes[1] || []).map((id) => (
+                      <g key={`l1n${id}`}>
+                        <circle cx={layer1Pos[id]} cy={Y1} r="9" fill={C.yellow} stroke={C.yellow} />
+                        <text
+                          x={layer1Pos[id]}
+                          y={Y1 + 3}
+                          textAnchor="middle"
+                          fill="#08080d"
+                          fontSize="10"
+                          fontWeight="bold"
+                        >
+                          {id}
+                        </text>
+                      </g>
+                    ))}
+                    {snap.l0Nodes.map((id) => (
+                      <g key={`l0n${id}`}>
+                        <circle cx={layer0Pos[id]} cy={Y0} r="8" fill={C.cyan} stroke={C.cyan} />
+                        <text
+                          x={layer0Pos[id]}
+                          y={Y0 + 3}
+                          textAnchor="middle"
+                          fill="#08080d"
+                          fontSize="10"
+                          fontWeight="bold"
+                        >
+                          {id}
+                        </text>
+                      </g>
+                    ))}
+                  </svg>
+                </div>
+              );
+            })}
+          </div>
+
           <div
             style={{
               marginTop: 14,
@@ -4899,8 +5338,12 @@ export const HNSWConstruction = (ctx) => {
               border: `1px solid ${C.orange}12`,
             }}
           >
+            <T color={C.orange} bold center size={14}>
+              Insertion log (deterministic walkthrough values)
+            </T>
             <div
               style={{
+                marginTop: 10,
                 display: "grid",
                 gridTemplateColumns: "48px 2fr 80px 80px 1fr",
                 gap: 10,
@@ -4908,20 +5351,20 @@ export const HNSWConstruction = (ctx) => {
                 borderBottom: `1px solid ${C.orange}22`,
               }}
             >
-              <T color={C.orange} bold size={13}>
+              <T color={C.orange} bold size={12}>
                 doc
               </T>
-              <T color={C.orange} bold size={13}>
+              <T color={C.orange} bold size={12}>
                 text
               </T>
-              <T color={C.orange} bold size={13} style={{ textAlign: "center" }}>
+              <T color={C.orange} bold size={12} style={{ textAlign: "center" }}>
                 u
               </T>
-              <T color={C.orange} bold size={13} style={{ textAlign: "center" }}>
+              <T color={C.orange} bold size={12} style={{ textAlign: "center" }}>
                 L
               </T>
-              <T color={C.orange} bold size={13}>
-                edges added
+              <T color={C.orange} bold size={12}>
+                edges
               </T>
             </div>
             {HNSW_INSERT_ORDER.map((row) => {
@@ -4935,47 +5378,125 @@ export const HNSWConstruction = (ctx) => {
                     gridTemplateColumns: "48px 2fr 80px 80px 1fr",
                     gap: 10,
                     alignItems: "center",
-                    padding: "6px 10px",
+                    padding: "5px 10px",
                     borderRadius: 4,
                     background: layerBg,
-                    marginTop: 4,
+                    marginTop: 3,
                   }}
                 >
-                  <T color={C.bright} bold size={14} style={{ fontFamily: "monospace" }}>
+                  <T color={C.bright} bold size={13} style={{ fontFamily: "monospace" }}>
                     #{row.id}
                   </T>
-                  <T color={C.bright} size={13}>
+                  <T color={C.bright} size={12}>
                     {doc.text}
                   </T>
-                  <T color={C.dim} size={13} style={{ fontFamily: "monospace", textAlign: "center" }}>
+                  <T color={C.dim} size={12} style={{ fontFamily: "monospace", textAlign: "center" }}>
                     {row.u}
                   </T>
-                  <T color={C.orange} bold size={14} style={{ fontFamily: "monospace", textAlign: "center" }}>
+                  <T color={C.orange} bold size={13} style={{ fontFamily: "monospace", textAlign: "center" }}>
                     L = {row.L}
                   </T>
-                  <T color={C.bright} size={13} style={{ fontFamily: "monospace" }}>
-                    {row.neighbors.length === 0 ? "- (entry point)" : `to ${row.neighbors.join(", ")}`}
+                  <T color={C.bright} size={12} style={{ fontFamily: "monospace" }}>
+                    {row.neighbors.length === 0 ? "- (entry)" : `to ${row.neighbors.join(", ")}`}
                   </T>
                 </div>
               );
             })}
           </div>
-          <T color="#ffcc80" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
-            In practice the layer rolls are truly random, but the distribution always looks like this: one or two docs
-            at the top, a handful in the middle, everyone else at the bottom.
+          <T color="#ffcc80" size={15} center style={{ marginTop: 10, fontStyle: "italic" }}>
+            Real layer rolls are random; the distribution still looks like this. One or two top, a handful in the
+            middle, everyone else at the bottom.
           </T>
         </Box>
       </Reveal>
       <Reveal when={sub >= 5}>
         <Box color={C.red} style={{ width: "100%" }}>
           <T color={C.red} bold center size={22}>
-            M = 16 sets quality, cost, and memory all at once
+            M sets edge density: see it visually at M = 4, 8, 16
           </T>
-          <T color="#ef9a9a" style={{ marginTop: 8 }}>
-            M is the single most important construction parameter. Larger M means every node has more edges, which makes
-            the graph navigable from more starting points (better recall) but also burns more memory and slightly slower
-            queries per hop.
+          <T color="#ef9a9a" size={16} style={{ marginTop: 8 }}>
+            M is the most important construction parameter. Larger M = more edges per node = more starting points for
+            search = better recall, but more memory and slightly slower queries per hop. Below: 8 nodes on a ring, each
+            connected to its M nearest along the ring. Watch the density grow.
           </T>
+
+          <div style={{ marginTop: 14, display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 12 }}>
+            {[
+              { M: 4, color: C.green, label: "M = 4 (sparse)", note: "memory-tight; degree = 4 per node" },
+              { M: 8, color: C.yellow, label: "M = 8 (mid)", note: "balanced; degree = 8 per node" },
+              {
+                M: 16,
+                color: C.red,
+                label: "M = 16 (production)",
+                note: "default; degree = 10 per node (capped at N - 1 = 11)",
+              },
+            ].map((cfg) => {
+              const N = 12;
+              const cx = 100;
+              const cy = 100;
+              const r = 75;
+              const positions = Array.from({ length: N }, (_, i) => {
+                const theta = (2 * Math.PI * i) / N - Math.PI / 2;
+                return { x: cx + r * Math.cos(theta), y: cy + r * Math.sin(theta), id: i + 1 };
+              });
+              const halfM = Math.min(Math.floor(cfg.M / 2), Math.floor((N - 1) / 2));
+              const edges = [];
+              for (let i = 0; i < N; i++) {
+                for (let k = 1; k <= halfM; k++) {
+                  const j = (i + k) % N;
+                  edges.push([i, j]);
+                }
+              }
+              return (
+                <div
+                  key={cfg.M}
+                  style={{
+                    padding: "12px 12px",
+                    borderRadius: 8,
+                    background: `${cfg.color}06`,
+                    border: `1px solid ${cfg.color}33`,
+                    textAlign: "center",
+                  }}
+                >
+                  <T color={cfg.color} bold size={15}>
+                    {cfg.label}
+                  </T>
+                  <svg
+                    viewBox="0 0 200 200"
+                    style={{ width: "100%", maxWidth: 200, height: "auto", display: "block", marginTop: 8 }}
+                  >
+                    <desc>
+                      {`A ring of 12 nodes with each node connected to its M = ${cfg.M} nearest neighbors along the ring; ${edges.length} edges total visualize HNSW edge density.`}
+                    </desc>
+                    {edges.map(([a, b], i) => (
+                      <line
+                        key={`e${i}`}
+                        x1={positions[a].x}
+                        y1={positions[a].y}
+                        x2={positions[b].x}
+                        y2={positions[b].y}
+                        stroke={cfg.color}
+                        strokeWidth="1.2"
+                        strokeOpacity="0.65"
+                      />
+                    ))}
+                    {positions.map((p) => (
+                      <g key={`n${p.id}`}>
+                        <circle cx={p.x} cy={p.y} r="7" fill={cfg.color} stroke={cfg.color} />
+                      </g>
+                    ))}
+                  </svg>
+                  <T color={C.bright} size={12} style={{ marginTop: 6, fontFamily: "monospace" }}>
+                    {cfg.note}
+                  </T>
+                  <T color={C.dim} size={11} style={{ marginTop: 2, fontFamily: "monospace" }}>
+                    {edges.length} undirected edges shown
+                  </T>
+                </div>
+              );
+            })}
+          </div>
+
           <div
             style={{
               marginTop: 14,
@@ -4984,21 +5505,21 @@ export const HNSWConstruction = (ctx) => {
               background: "rgba(0,0,0,0.3)",
               textAlign: "center",
               fontFamily: "monospace",
-              fontSize: 16,
+              fontSize: 15,
               color: C.bright,
-              lineHeight: 2,
+              lineHeight: 1.9,
             }}
           >
             <span style={{ color: C.red }}>M = 16</span> <span style={{ color: C.dim }}>(the production default)</span>
             <br />
-            edges per node at layer 0 &le; M = 16{"  "}
-            <span style={{ color: C.dim }}>bidirectional</span>
+            edges per node at layer 0 &le; M = 16 &nbsp;<span style={{ color: C.dim }}>bidirectional</span>
             <br />
-            edges per node at upper layers &le; M/2 = 8
+            edges per node at upper layers &le; M / 2 = 8
             <br />
-            memory per vector &asymp; M &middot; 4 bytes (neighbor ids) + upper layers &asymp;{" "}
+            memory per vector &asymp; M &middot; 4 bytes + upper layers &asymp;{" "}
             <span style={{ color: C.red }}>70 bytes per vector</span>
           </div>
+
           <div style={{ marginTop: 14, display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
             <div
               style={{
@@ -5039,9 +5560,34 @@ export const HNSWConstruction = (ctx) => {
               </T>
             </div>
           </div>
-          <T color="#ef9a9a" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
-            M is the one knob you usually set up front and leave alone. 8 for memory-tight deployments, 16 for typical,
-            32 or 48 for recall-critical workloads.
+
+          <div style={{ marginTop: 14, display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 12 }}>
+            {[
+              { M: 8, label: "Memory-tight", color: C.green },
+              { M: 16, label: "Typical (default)", color: C.yellow },
+              { M: 48, label: "Recall-critical", color: C.red },
+            ].map((row) => (
+              <div
+                key={row.M}
+                style={{
+                  padding: "10px 12px",
+                  borderRadius: 8,
+                  background: `${row.color}10`,
+                  border: `1px solid ${row.color}33`,
+                  textAlign: "center",
+                }}
+              >
+                <T color={row.color} bold center size={18} style={{ fontFamily: "monospace" }}>
+                  M = {row.M}
+                </T>
+                <T color={C.bright} center size={13} style={{ marginTop: 2 }}>
+                  {row.label}
+                </T>
+              </div>
+            ))}
+          </div>
+          <T color="#ef9a9a" size={15} center style={{ marginTop: 10, fontStyle: "italic" }}>
+            M is the one knob you usually set up front and leave alone. The graph is rebuilt to change it.
           </T>
         </Box>
       </Reveal>
@@ -5060,8 +5606,27 @@ export const HNSWConstruction = (ctx) => {
   );
 };
 
-// Miniature 3-tier diagram used throughout 11.9 to animate the search path by stage.
-const SearchPathDiagram = ({ stage, desc }) => {
+// Query position chosen so the top-3 nearest docs in HNSW_CORPUS_XY are {3, 7, 1}.
+const HNSW_QUERY_XY = { x: 149, y: 90 };
+
+// Pre-computed Euclidean distances from HNSW_QUERY_XY to each doc (rounded to 1 decimal).
+// Used by every 11.9 visual so distance numbers are consistent across panels.
+const HNSW_DISTS = {
+  1: 87.1,
+  7: 86.4,
+  3: 40.0,
+  4: 136.6,
+  5: 135.4,
+  2: 221.9,
+  8: 282.6,
+  10: 318.5,
+  6: 267.1,
+  9: 403.0,
+};
+
+// 3-tier hierarchy view. Highlights the active node per layer plus optional descent
+// drops and beam-expansion edges. Reused across 11.9 sub-steps.
+const HnswHierarchy = ({ desc, activeL2 = null, activeL1 = null, activeL0 = null, pathDrops = [] }) => {
   const Y2 = 40;
   const Y1 = 130;
   const Y0 = 230;
@@ -5071,7 +5636,6 @@ const SearchPathDiagram = ({ stage, desc }) => {
     { id: 6, x: 260 },
     { id: 10, x: 390 },
   ];
-  // Evenly spaced across the width so adjacent circles (r=10) never visually touch.
   const layer0 = [
     { id: 5, x: 75 },
     { id: 1, x: 115 },
@@ -5084,26 +5648,35 @@ const SearchPathDiagram = ({ stage, desc }) => {
     { id: 10, x: 410 },
     { id: 9, x: 450 },
   ];
-  // activeL2 always holds the single layer-2 hub once search has entered the graph.
-  // stage never goes negative in practice, so no conditional here.
-  const activeL2 = [1];
-  const activeL1 = stage >= 1 ? [1] : [];
-  const activeL0 = stage >= 3 ? [1, 3, 7] : [];
-  const beamPairs =
-    stage >= 4
-      ? [
-          [1, 7],
-          [7, 3],
-          [3, 4],
-          [1, 3],
-        ]
-      : [];
+  const l1Edges = [
+    [1, 6],
+    [6, 10],
+  ];
+  const l0Edges = [
+    [1, 3],
+    [1, 5],
+    [1, 7],
+    [3, 4],
+    [3, 5],
+    [3, 7],
+    [4, 5],
+    [4, 7],
+    [7, 2],
+    [2, 6],
+    [2, 8],
+    [6, 8],
+    [6, 10],
+    [8, 10],
+    [6, 9],
+    [9, 10],
+  ];
+  const find = (arr, id) => arr.find((n) => n.id === id);
   return (
-    <svg viewBox="0 0 500 300" style={{ width: "100%", maxWidth: 520, height: "auto", display: "block" }}>
+    <svg viewBox="0 0 500 280" style={{ width: "100%", maxWidth: 540, height: "auto", display: "block" }}>
       <desc>{desc}</desc>
       <defs>
         <marker
-          id="searchArrow"
+          id="hsArrow"
           markerWidth="8"
           markerHeight="8"
           refX="7"
@@ -5111,7 +5684,7 @@ const SearchPathDiagram = ({ stage, desc }) => {
           orient="auto"
           markerUnits="userSpaceOnUse"
         >
-          <polygon points="0 0, 8 4, 0 8" fill={C.green} />
+          <polygon points="0 0, 8 4, 0 8" fill={C.yellow} />
         </marker>
       </defs>
       <line x1="10" y1={Y2} x2="490" y2={Y2} stroke={C.red} strokeDasharray="2 4" strokeOpacity="0.4" />
@@ -5126,30 +5699,14 @@ const SearchPathDiagram = ({ stage, desc }) => {
       <text x="16" y={Y0 + 16} fill={C.cyan} fontSize="11">
         layer 0
       </text>
-      {[
-        [1, 6],
-        [6, 10],
-      ].map(([a, b], i) => {
-        const pa = layer1.find((n) => n.id === a);
-        const pb = layer1.find((n) => n.id === b);
+      {l1Edges.map(([a, b], i) => {
+        const pa = find(layer1, a);
+        const pb = find(layer1, b);
         return <line key={`l1e${i}`} x1={pa.x} y1={Y1} x2={pb.x} y2={Y1} stroke={C.yellow} strokeWidth="1.5" />;
       })}
-      {[
-        [1, 5],
-        [1, 7],
-        [1, 3],
-        [3, 4],
-        [3, 7],
-        [4, 5],
-        [7, 5],
-        [2, 8],
-        [8, 4],
-        [6, 10],
-        [8, 6],
-        [9, 10],
-      ].map(([a, b], i) => {
-        const pa = layer0.find((n) => n.id === a);
-        const pb = layer0.find((n) => n.id === b);
+      {l0Edges.map(([a, b], i) => {
+        const pa = find(layer0, a);
+        const pb = find(layer0, b);
         return (
           <line
             key={`l0e${i}`}
@@ -5163,19 +5720,14 @@ const SearchPathDiagram = ({ stage, desc }) => {
           />
         );
       })}
-      {beamPairs.map(([a, b], i) => {
-        const pa = layer0.find((n) => n.id === a);
-        const pb = layer0.find((n) => n.id === b);
-        return <line key={`bp${i}`} x1={pa.x} y1={Y0} x2={pb.x} y2={Y0} stroke={C.purple} strokeWidth="3" />;
-      })}
-      {stage >= 1 && (
-        <line x1={layer2[0].x} y1={Y2} x2={layer1.find((n) => n.id === 1).x} y2={Y1} stroke={C.green} strokeWidth="3" />
+      {pathDrops.includes("L2L1") && (
+        <line x1={layer2[0].x} y1={Y2} x2={find(layer1, activeL1 || 1).x} y2={Y1} stroke={C.green} strokeWidth="3" />
       )}
-      {stage >= 2 && (
+      {pathDrops.includes("L1L0") && (
         <line
-          x1={layer1.find((n) => n.id === 1).x}
+          x1={find(layer1, activeL1 || 1).x}
           y1={Y1}
-          x2={layer0.find((n) => n.id === 1).x}
+          x2={find(layer0, activeL0 || 1).x}
           y2={Y0}
           stroke={C.green}
           strokeWidth="3"
@@ -5183,16 +5735,19 @@ const SearchPathDiagram = ({ stage, desc }) => {
       )}
       <line
         x1="450"
-        y1="20"
+        y1="15"
         x2={layer2[0].x + 10}
         y2={Y2 - 8}
         stroke={C.yellow}
         strokeWidth="2"
-        markerEnd="url(#searchArrow)"
+        markerEnd="url(#hsArrow)"
       />
+      <text x="475" y="12" textAnchor="end" fill={C.yellow} fontSize="11" fontFamily="monospace">
+        query
+      </text>
       {layer2.map((n) => (
         <g key={`l2n${n.id}`}>
-          <circle cx={n.x} cy={Y2} r={12} fill={C.green} stroke={C.red} />
+          <circle cx={n.x} cy={Y2} r={12} fill={activeL2 === n.id ? C.green : C.red} stroke={C.red} strokeWidth="1.5" />
           <text x={n.x} y={Y2 + 4} textAnchor="middle" fill="#08080d" fontSize="12" fontWeight="bold">
             {n.id}
           </text>
@@ -5200,7 +5755,14 @@ const SearchPathDiagram = ({ stage, desc }) => {
       ))}
       {layer1.map((n) => (
         <g key={`l1n${n.id}`}>
-          <circle cx={n.x} cy={Y1} r={12} fill={activeL1.includes(n.id) ? C.green : C.yellow} stroke={C.yellow} />
+          <circle
+            cx={n.x}
+            cy={Y1}
+            r={12}
+            fill={activeL1 === n.id ? C.green : C.yellow}
+            stroke={C.yellow}
+            strokeWidth="1.5"
+          />
           <text x={n.x} y={Y1 + 4} textAnchor="middle" fill="#08080d" fontSize="12" fontWeight="bold">
             {n.id}
           </text>
@@ -5208,16 +5770,228 @@ const SearchPathDiagram = ({ stage, desc }) => {
       ))}
       {layer0.map((n) => (
         <g key={`l0n${n.id}`}>
-          <circle cx={n.x} cy={Y0} r={12} fill={activeL0.includes(n.id) ? C.green : C.cyan} stroke={C.cyan} />
+          <circle
+            cx={n.x}
+            cy={Y0}
+            r={12}
+            fill={activeL0 === n.id ? C.green : C.cyan}
+            stroke={C.cyan}
+            strokeWidth="1.5"
+          />
           <text x={n.x} y={Y0 + 4} textAnchor="middle" fill="#08080d" fontSize="12" fontWeight="bold">
             {n.id}
           </text>
         </g>
       ))}
-      <text x="470" y="15" textAnchor="end" fill={C.yellow} fontSize="11" fontFamily="monospace">
-        query
-      </text>
     </svg>
+  );
+};
+
+// 2D scatter at layer 0 used in 11.9. Renders all 10 docs, the flat-graph edges,
+// the query star, optional dashed distance lines, optional purple expansion arrows
+// from a popped node, and optional green-highlighted nodes (current/top-k).
+const HnswSpatial = ({
+  desc,
+  distLines = [],
+  highlightNodes = [],
+  activeNode = null,
+  poppedNode = null,
+  expansionTo = [],
+  width = 540,
+}) => {
+  const xy = HNSW_CORPUS_XY;
+  const q = HNSW_QUERY_XY;
+  return (
+    <svg viewBox="0 0 540 360" style={{ width: "100%", maxWidth: width, height: "auto", display: "block" }}>
+      <desc>{desc}</desc>
+      {FLAT_GRAPH_EDGES.map(([a, b], i) => (
+        <line
+          key={`e${i}`}
+          x1={xy[a].x}
+          y1={xy[a].y}
+          x2={xy[b].x}
+          y2={xy[b].y}
+          stroke={C.cyan}
+          strokeWidth="1"
+          strokeOpacity="0.3"
+        />
+      ))}
+      {distLines.map((id) => {
+        const p = xy[id];
+        return (
+          <g key={`dl${id}`}>
+            <line
+              x1={q.x}
+              y1={q.y}
+              x2={p.x}
+              y2={p.y}
+              stroke={C.orange}
+              strokeWidth="1.5"
+              strokeDasharray="3 3"
+              strokeOpacity="0.75"
+            />
+            <text x={(q.x + p.x) / 2 + 8} y={(q.y + p.y) / 2 - 4} fill={C.orange} fontSize="11" fontFamily="monospace">
+              {HNSW_DISTS[id].toFixed(1)}
+            </text>
+          </g>
+        );
+      })}
+      {poppedNode != null &&
+        expansionTo.map((id) => {
+          const a = xy[poppedNode];
+          const b = xy[id];
+          return (
+            <line
+              key={`exp${id}`}
+              x1={a.x}
+              y1={a.y}
+              x2={b.x}
+              y2={b.y}
+              stroke={C.purple}
+              strokeWidth="2.5"
+              strokeOpacity="0.85"
+            />
+          );
+        })}
+      {Object.entries(xy).map(([id, p]) => {
+        const idN = Number(id);
+        const isHi = highlightNodes.includes(idN);
+        const isActive = activeNode === idN;
+        const isPopped = poppedNode === idN;
+        let fill = C.cyan;
+        let stroke = C.cyan;
+        let r = 11;
+        if (isHi) {
+          fill = C.green;
+          stroke = C.green;
+        }
+        if (isActive) {
+          fill = C.green;
+          stroke = C.bright;
+          r = 13;
+        }
+        if (isPopped) {
+          fill = C.purple;
+          stroke = C.bright;
+          r = 13;
+        }
+        return (
+          <g key={`n${id}`}>
+            <circle cx={p.x} cy={p.y} r={r} fill={fill} stroke={stroke} strokeWidth="1.5" />
+            <text x={p.x} y={p.y + 4} textAnchor="middle" fill="#08080d" fontSize="11" fontWeight="bold">
+              {id}
+            </text>
+          </g>
+        );
+      })}
+      <g>
+        <circle cx={q.x} cy={q.y} r="9" fill={C.yellow} stroke={C.yellow} />
+        <text
+          x={q.x}
+          y={q.y - 14}
+          textAnchor="middle"
+          fill={C.yellow}
+          fontSize="11"
+          fontFamily="monospace"
+          fontWeight="bold"
+        >
+          query
+        </text>
+      </g>
+    </svg>
+  );
+};
+
+// Horizontal distance bars for current node + candidate neighbors. role drives color:
+// current=neutral, closer=green, farther=red, unchanged=dim.
+const DistanceBars = ({ items, max }) => {
+  const colorFor = (role) =>
+    ({ current: C.bright, closer: C.green, farther: C.red, unchanged: C.dim })[role] || C.bright;
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+      {items.map((it) => {
+        const col = colorFor(it.role);
+        const pct = Math.min(100, (it.dist / max) * 100);
+        return (
+          <div
+            key={`${it.id}-${it.role}`}
+            style={{ display: "grid", gridTemplateColumns: "70px 1fr 70px", gap: 8, alignItems: "center" }}
+          >
+            <T color={col} bold size={13} style={{ fontFamily: "monospace" }}>
+              doc {it.id}
+            </T>
+            <div style={{ height: 12, background: "rgba(0,0,0,0.4)", borderRadius: 3, overflow: "hidden" }}>
+              <div
+                style={{
+                  width: `${pct}%`,
+                  height: "100%",
+                  background: col,
+                  opacity: it.role === "current" ? 1 : 0.85,
+                }}
+              />
+            </div>
+            <T color={col} size={12} style={{ fontFamily: "monospace", textAlign: "right" }}>
+              {it.dist.toFixed(1)}
+            </T>
+          </div>
+        );
+      })}
+    </div>
+  );
+};
+
+// Priority-queue UI for the layer-0 beam. items are sorted by distance ascending and
+// padded to ef capacity. justInserted/justEvicted/popped highlight the action this frame.
+const BeamSlots = ({ items, ef, justInserted = [], justEvicted = [], popped = null }) => {
+  const sorted = [...items].sort((a, b) => a.dist - b.dist);
+  const slots = [...sorted];
+  while (slots.length < ef) slots.push(null);
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+      {slots.map((s, i) => {
+        const empty = s == null;
+        const isInserted = !empty && justInserted.includes(s.id);
+        const isEvicted = !empty && justEvicted.includes(s.id);
+        const isPopped = !empty && popped === s.id;
+        const col = empty ? C.dim : isPopped ? C.orange : isInserted ? C.green : isEvicted ? C.red : C.bright;
+        const bg = isPopped
+          ? `${C.orange}18`
+          : isInserted
+            ? `${C.green}18`
+            : isEvicted
+              ? `${C.red}18`
+              : "rgba(0,0,0,0.3)";
+        const status = empty ? "" : isPopped ? "POPPED" : isInserted ? "INSERTED" : isEvicted ? "EVICTED" : "";
+        return (
+          <div
+            key={i}
+            style={{
+              display: "grid",
+              gridTemplateColumns: "32px 80px 1fr 70px",
+              gap: 8,
+              alignItems: "center",
+              padding: "6px 10px",
+              borderRadius: 6,
+              background: bg,
+              border: `1px solid ${col}33`,
+            }}
+          >
+            <T color={C.dim} bold size={12} style={{ fontFamily: "monospace" }}>
+              #{i + 1}
+            </T>
+            <T color={col} bold size={14} style={{ fontFamily: "monospace" }}>
+              {empty ? "(empty)" : `doc ${s.id}`}
+            </T>
+            <T color={col} size={11} style={{ fontFamily: "monospace" }}>
+              {status}
+            </T>
+            <T color={col} size={12} style={{ fontFamily: "monospace", textAlign: "right" }}>
+              {empty ? "" : `d=${s.dist.toFixed(1)}`}
+            </T>
+          </div>
+        );
+      })}
+    </div>
   );
 };
 
@@ -5228,202 +6002,101 @@ export const HNSWSearch = (ctx) => {
       {sub >= 0 && (
         <Box color={C.cyan} style={{ width: "100%" }}>
           <T color={C.cyan} bold center size={22}>
-            Start at the top-layer entry point
+            Step 0: query lands; enter at the top-layer entry point
           </T>
-          <T color="#80deea" style={{ marginTop: 8 }}>
-            Every HNSW search begins at the graph&apos;s current entry point, which lives in the top layer. The entry
-            point is one specific node - whichever doc won the layer roll during construction. For our cat-corpus graph
-            that is doc 1 at layer 2.
+          <T color="#80deea" size={16} style={{ marginTop: 8 }}>
+            Yellow star is where the query lands in 2D. Brute force would compute 10 distances. HNSW skips that and
+            starts at one fixed node: doc 1 in the top layer.
           </T>
-          <div
-            style={{
-              marginTop: 14,
-              padding: "12px 14px",
-              borderRadius: 8,
-              background: `${C.cyan}06`,
-              border: `1px solid ${C.cyan}12`,
-            }}
-          >
-            <SearchPathDiagram
-              stage={0}
-              desc="Three-tier HNSW diagram. Query vector enters at the top layer's entry-point node (doc 1). Below it, the graph's full layer structure is visible; the yellow query arrow points into the top hub."
-            />
+          <div style={{ marginTop: 14, display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+            <div
+              style={{
+                padding: "12px 14px",
+                borderRadius: 8,
+                background: `${C.cyan}06`,
+                border: `1px solid ${C.cyan}12`,
+              }}
+            >
+              <T color={C.cyan} bold center size={14}>
+                Where the query sits in 2D space
+              </T>
+              <div style={{ marginTop: 8 }}>
+                <HnswSpatial desc="Layer-0 scatter of 10 docs with cyan flat-graph edges drawn faintly. The yellow query star sits in the cat cluster near docs 1, 3, 7." />
+              </div>
+            </div>
+            <div
+              style={{
+                padding: "12px 14px",
+                borderRadius: 8,
+                background: `${C.cyan}06`,
+                border: `1px solid ${C.cyan}12`,
+              }}
+            >
+              <T color={C.cyan} bold center size={14}>
+                Where HNSW starts the search
+              </T>
+              <div style={{ marginTop: 8 }}>
+                <HnswHierarchy
+                  activeL2={1}
+                  desc="Three-tier HNSW hierarchy. The yellow query arrow lands at the top layer's entry node (doc 1 at L2), drawn in green. Lower layers are still untouched."
+                />
+              </div>
+            </div>
           </div>
-          <T color="#80deea" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
-            No matter where in the embedding space the query lands, it starts from this exact node. The upper-tier
-            long-range edges do the initial heavy lifting of getting close.
+          <T color="#80deea" size={15} center style={{ marginTop: 10, fontStyle: "italic" }}>
+            Entry point is fixed: every query starts here. Upper-tier long-range edges close the gap fast.
           </T>
         </Box>
       )}
+
       <Reveal when={sub >= 1}>
         <Box color={C.green} style={{ width: "100%" }}>
           <T color={C.green} bold center size={22}>
-            Greedy descent: move to any neighbor closer to the query
+            Step 1: greedy descent at L2 - no neighbors, drop
           </T>
-          <T color="#80e8a5" style={{ marginTop: 8 }}>
-            At the current layer, look at every neighbor of the current node. Measure the distance from each neighbor to
-            the query. If any neighbor is closer than where we are now, move there and repeat. When no neighbor is
-            closer, we have hit a local minimum on this layer.
+          <T color="#80e8a5" size={16} style={{ marginTop: 8 }}>
+            At each layer, look at every neighbor of the current node. If any neighbor is closer to the query, hop
+            there. Otherwise drop one layer down. L2 has only doc 1 - zero neighbors at this layer - so we drop.
           </T>
-          <div
-            style={{
-              marginTop: 14,
-              padding: "12px 14px",
-              borderRadius: 8,
-              background: `${C.green}06`,
-              border: `1px solid ${C.green}12`,
-            }}
-          >
-            <SearchPathDiagram
-              stage={1}
-              desc="Greedy descent at layer 2 picks the closest hub neighbor to the query and hops there. The green path highlights the hop; remaining layer 1 and 0 are still untouched."
-            />
-          </div>
-          <div
-            style={{
-              marginTop: 14,
-              padding: "14px 18px",
-              borderRadius: 8,
-              background: "rgba(0,0,0,0.3)",
-              textAlign: "center",
-              fontFamily: "monospace",
-              fontSize: 15,
-              color: C.bright,
-              lineHeight: 1.9,
-            }}
-          >
-            <span style={{ color: C.dim }}># greedy step, one layer at a time</span>
-            <br />
-            while any neighbor n of current:
-            <br />
-            &nbsp;&nbsp;if dist(n, q) &lt; dist(current, q): current = n
-            <br />
-            &nbsp;&nbsp;else: stop
-          </div>
-          <T color="#80e8a5" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
-            This is the same local-search move as IVF&apos;s cluster probe, but over graph edges instead of cluster
-            centroids. Each hop shrinks the distance to the query.
-          </T>
-        </Box>
-      </Reveal>
-      <Reveal when={sub >= 2}>
-        <Box color={C.yellow} style={{ width: "100%" }}>
-          <T color={C.yellow} bold center size={22}>
-            Stuck on this layer? Drop down to the next one
-          </T>
-          <T color="#ffe082" style={{ marginTop: 8 }}>
-            When greedy descent hits a local minimum at layer L, drop down to the next layer (L &minus; 1) using the
-            same node. The node also exists down there by construction, and its neighbors on the lower layer are
-            different - more of them, and finer-grained. Resume greedy descent there.
-          </T>
-          <div
-            style={{
-              marginTop: 14,
-              padding: "12px 14px",
-              borderRadius: 8,
-              background: `${C.yellow}06`,
-              border: `1px solid ${C.yellow}12`,
-            }}
-          >
-            <SearchPathDiagram
-              stage={2}
-              desc="Search drops from layer 2 to layer 1 to layer 0 along green vertical edges. Each drop happens when no neighbor on the current layer is closer to the query."
-            />
-          </div>
-          <div
-            style={{
-              marginTop: 14,
-              padding: "12px 14px",
-              borderRadius: 8,
-              background: "rgba(0,0,0,0.3)",
-              textAlign: "center",
-              fontFamily: "monospace",
-              fontSize: 15,
-              color: C.bright,
-              lineHeight: 1.9,
-            }}
-          >
-            <span style={{ color: C.yellow }}>drop</span>: current node persists, we now see its denser neighborhood on
-            layer 0
-            <br />
-            total layer drops = top_level &minus; 0
-          </div>
-          <T color="#ffe082" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
-            Drops are free. The node is already in memory, we just switch which adjacency list we follow. The expensive
-            part is the distance computations themselves.
-          </T>
-        </Box>
-      </Reveal>
-      <Reveal when={sub >= 3}>
-        <Box color={C.orange} style={{ width: "100%" }}>
-          <T color={C.orange} bold center size={22}>
-            At layer 0, switch to beam search with ef_search candidates
-          </T>
-          <T color="#ffcc80" style={{ marginTop: 8 }}>
-            Layer 0 is where greedy breaks: the proximity graph has too many dead-ends, and a pure greedy walk can get
-            stuck in a suboptimal local minimum. Instead of greedy, we keep a priority queue of the top ef_search
-            candidates seen so far. ef_search defaults to 50. Think of it as how wide a net the search casts.
-          </T>
-          <div
-            style={{
-              marginTop: 14,
-              padding: "12px 14px",
-              borderRadius: 8,
-              background: `${C.orange}06`,
-              border: `1px solid ${C.orange}12`,
-            }}
-          >
-            <SearchPathDiagram
-              stage={3}
-              desc="At layer 0, three candidate nodes (docs 1, 3, 7) are highlighted green inside the beam. The search is about to expand their neighbors."
-            />
-          </div>
-          <div
-            style={{
-              marginTop: 14,
-              padding: "12px 14px",
-              borderRadius: 8,
-              background: "rgba(0,0,0,0.3)",
-              textAlign: "center",
-              fontFamily: "monospace",
-              fontSize: 15,
-              color: C.bright,
-              lineHeight: 1.9,
-            }}
-          >
-            beam = priority queue, size = <span style={{ color: C.orange }}>ef_search = 50</span> candidates
-            <br />
-            initial beam = {"{"}current node, its neighbors, sorted by distance to q{"}"}
-          </div>
-          <T color="#ffcc80" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
-            ef_search = 50 is the starting default. Raise to 200 for high-recall workloads, drop to 10 when latency is
-            critical.
-          </T>
-        </Box>
-      </Reveal>
-      <Reveal when={sub >= 4}>
-        <Box color={C.purple} style={{ width: "100%" }}>
-          <T color={C.purple} bold center size={22}>
-            Expand the beam until the top stops changing
-          </T>
-          <T color="#b8a9ff" style={{ marginTop: 8 }}>
-            Repeat: pop the unexplored candidate with the smallest distance, look at its neighbors, insert them into the
-            queue if they are closer than the current worst-in-queue, evict the worst. Stop when a full expansion fails
-            to update the top of the queue. That is the signal we have converged.
-          </T>
-          <div
-            style={{
-              marginTop: 14,
-              padding: "12px 14px",
-              borderRadius: 8,
-              background: `${C.purple}06`,
-              border: `1px solid ${C.purple}12`,
-            }}
-          >
-            <SearchPathDiagram
-              stage={4}
-              desc="Beam expansion at layer 0 shown as purple edges between candidate doc nodes. The priority queue is updated as neighbors are explored; when the best candidate stops changing, the beam has converged."
-            />
+          <div style={{ marginTop: 14, display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+            <div
+              style={{
+                padding: "12px 14px",
+                borderRadius: 8,
+                background: `${C.green}06`,
+                border: `1px solid ${C.green}12`,
+              }}
+            >
+              <HnswHierarchy
+                activeL2={1}
+                activeL1={1}
+                pathDrops={["L2L1"]}
+                desc="Greedy descent at L2 has no neighbors to compare; the current node drops vertically along a green edge from L2 doc 1 to L1 doc 1."
+              />
+            </div>
+            <div
+              style={{
+                padding: "12px 14px",
+                borderRadius: 8,
+                background: `${C.green}06`,
+                border: `1px solid ${C.green}12`,
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                gap: 10,
+              }}
+            >
+              <T color={C.green} bold center size={14}>
+                L2 decision
+              </T>
+              <DistanceBars items={[{ id: 1, dist: HNSW_DISTS[1], role: "current" }]} max={400} />
+              <T color={C.dim} size={13} center style={{ fontFamily: "monospace" }}>
+                L2 neighbors of doc 1: none
+              </T>
+              <T color={C.green} bold size={14} center style={{ fontFamily: "monospace" }}>
+                no closer neighbor &rarr; drop to L1
+              </T>
+            </div>
           </div>
           <div
             style={{
@@ -5435,77 +6108,365 @@ export const HNSWSearch = (ctx) => {
               fontFamily: "monospace",
               fontSize: 14,
               color: C.bright,
-              lineHeight: 1.8,
             }}
           >
-            <span style={{ color: C.dim }}># layer-0 beam expansion</span>
-            <br />
-            while beam has unexplored candidates:
-            <br />
-            &nbsp;&nbsp;pick the closest unexplored node c
-            <br />
-            &nbsp;&nbsp;for neighbor n of c:
-            <br />
-            &nbsp;&nbsp;&nbsp;&nbsp;if dist(n, q) &lt; dist(worst-in-beam, q):
-            <br />
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;beam = push(beam, n); beam = keep_ef_search_closest(beam)
-            <br />
-            &nbsp;&nbsp;if beam top unchanged for one full sweep: stop
+            <span style={{ color: C.dim }}>greedy step:</span> while any neighbor n has dist(n, q) &lt; dist(current,
+            q): current = n
           </div>
-          <T color="#b8a9ff" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
-            Beam search is why HNSW beats greedy-only graph indexes. The priority queue lets the algorithm back out of
-            dead-ends.
+        </Box>
+      </Reveal>
+
+      <Reveal when={sub >= 2}>
+        <Box color={C.yellow} style={{ width: "100%" }}>
+          <T color={C.yellow} bold center size={22}>
+            Step 2: greedy descent at L1 - neighbors farther, drop again
+          </T>
+          <T color="#ffe082" size={16} style={{ marginTop: 8 }}>
+            At L1, doc 1 has one neighbor: doc 6. Compare distances to the query. Doc 6 is far. We stay at doc 1 and
+            drop to L0 (the next layer down).
+          </T>
+          <div style={{ marginTop: 14, display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+            <div
+              style={{
+                padding: "12px 14px",
+                borderRadius: 8,
+                background: `${C.yellow}06`,
+                border: `1px solid ${C.yellow}12`,
+              }}
+            >
+              <HnswHierarchy
+                activeL1={1}
+                activeL0={1}
+                pathDrops={["L2L1", "L1L0"]}
+                desc="Descent continues from L1 to L0 along the green vertical edge at doc 1. The L1 neighbor (doc 6) is farther from the query, so the search does not hop sideways."
+              />
+            </div>
+            <div
+              style={{
+                padding: "12px 14px",
+                borderRadius: 8,
+                background: `${C.yellow}06`,
+                border: `1px solid ${C.yellow}12`,
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                gap: 10,
+              }}
+            >
+              <T color={C.yellow} bold center size={14}>
+                L1 decision
+              </T>
+              <DistanceBars
+                max={400}
+                items={[
+                  { id: 1, dist: HNSW_DISTS[1], role: "current" },
+                  { id: 6, dist: HNSW_DISTS[6], role: "farther" },
+                ]}
+              />
+              <T color={C.yellow} bold size={14} center style={{ fontFamily: "monospace", marginTop: 6 }}>
+                doc 6 farther &rarr; stay at doc 1 &rarr; drop to L0
+              </T>
+            </div>
+          </div>
+          <T color="#ffe082" size={15} center style={{ marginTop: 10, fontStyle: "italic" }}>
+            Drops are free. The same node id sits in every layer it was assigned to; only the adjacency list changes.
           </T>
         </Box>
       </Reveal>
-      <Reveal when={sub >= 5}>
-        <Box color={C.red} style={{ width: "100%" }}>
-          <T color={C.red} bold center size={22}>
-            Return the top-k and trace the full end-to-end path
+
+      <Reveal when={sub >= 3}>
+        <Box color={C.orange} style={{ width: "100%" }}>
+          <T color={C.orange} bold center size={22}>
+            Step 3: at L0, switch to beam search (priority queue)
           </T>
-          <T color="#ef9a9a" style={{ marginTop: 8 }}>
-            When the beam has converged, take its top k entries. For our running example with the query
-            &quot;information about cats&quot; and k = 3, the returned docs are 1, 3, 7 - exactly the cat docs. Here is
-            the full path from the entry point all the way down to the returned neighbors.
+          <T color="#ffcc80" size={16} style={{ marginTop: 8 }}>
+            Layer 0 is dense - pure greedy gets stuck. Instead, keep a priority queue of the closest ef_search
+            candidates seen so far. ef_search defaults to 50 in production. Visualizing with ef_search = 3 below so the
+            queue fits on screen.
           </T>
+          <div style={{ marginTop: 14, display: "grid", gridTemplateColumns: "1.3fr 1fr", gap: 12 }}>
+            <div
+              style={{
+                padding: "12px 14px",
+                borderRadius: 8,
+                background: `${C.orange}06`,
+                border: `1px solid ${C.orange}12`,
+              }}
+            >
+              <T color={C.orange} bold center size={14}>
+                Layer 0 - start at doc 1
+              </T>
+              <div style={{ marginTop: 8 }}>
+                <HnswSpatial
+                  activeNode={1}
+                  desc="Layer-0 scatter with all flat edges visible; doc 1 is highlighted as the entry into the L0 beam search."
+                />
+              </div>
+            </div>
+            <div
+              style={{
+                padding: "12px 14px",
+                borderRadius: 8,
+                background: `${C.orange}06`,
+                border: `1px solid ${C.orange}12`,
+              }}
+            >
+              <T color={C.orange} bold center size={14}>
+                Beam (ef_search = 3 candidates)
+              </T>
+              <div style={{ marginTop: 10 }}>
+                <BeamSlots ef={3} items={[{ id: 1, dist: HNSW_DISTS[1] }]} />
+              </div>
+              <T color={C.bright} size={12} center style={{ marginTop: 8, fontFamily: "monospace" }}>
+                production default: ef_search = 50
+              </T>
+            </div>
+          </div>
+        </Box>
+      </Reveal>
+
+      <Reveal when={sub >= 4}>
+        <Box color={C.purple} style={{ width: "100%" }}>
+          <T color={C.purple} bold center size={22}>
+            Step 4: expand the beam - pop, evaluate neighbors, update queue
+          </T>
+          <T color="#b8a9ff" size={16} style={{ marginTop: 8 }}>
+            Repeat: pop the unexplored candidate with the smallest distance, look at every neighbor, insert any neighbor
+            closer than the worst-in-queue, evict the worst. Stop when a full pass fails to update the top of the queue.
+            The best candidate has stopped changing.
+          </T>
+
           <div
             style={{
               marginTop: 14,
               padding: "12px 14px",
               borderRadius: 8,
-              background: `${C.red}06`,
-              border: `1px solid ${C.red}12`,
+              background: `${C.purple}06`,
+              border: `1px solid ${C.purple}12`,
             }}
           >
-            <SearchPathDiagram
-              stage={4}
-              desc="Complete HNSW search path for the cat-corpus query. Green edges trace the descent from the layer-2 entry through layer 1 down to the layer-0 beam, which converges on docs 1, 3, and 7."
-            />
+            <T color={C.purple} bold center size={15}>
+              Frame A - pop doc 1, expand its neighbors {"{3, 5, 7}"}
+            </T>
+            <div style={{ marginTop: 10, display: "grid", gridTemplateColumns: "1.3fr 1fr", gap: 12 }}>
+              <div>
+                <HnswSpatial
+                  poppedNode={1}
+                  expansionTo={[3, 5, 7]}
+                  highlightNodes={[3, 7]}
+                  distLines={[3, 5, 7]}
+                  desc="Frame A of beam expansion. Doc 1 is popped (purple), purple lines connect it to its three layer-0 neighbors 3, 5, 7. Distance dashes show 3 and 7 are close to the query while 5 is far."
+                />
+              </div>
+              <div>
+                <BeamSlots
+                  ef={3}
+                  items={[
+                    { id: 3, dist: HNSW_DISTS[3] },
+                    { id: 7, dist: HNSW_DISTS[7] },
+                    { id: 1, dist: HNSW_DISTS[1] },
+                  ]}
+                  justInserted={[3, 7]}
+                  popped={1}
+                />
+                <T color="#b8a9ff" size={12} center style={{ marginTop: 8, fontFamily: "monospace" }}>
+                  doc 5 (135.4) rejected: farther than worst-in-queue (87.1)
+                </T>
+              </div>
+            </div>
           </div>
+
           <div
             style={{
-              marginTop: 14,
-              padding: "14px 18px",
+              marginTop: 12,
+              padding: "12px 14px",
               borderRadius: 8,
-              background: "rgba(0,0,0,0.3)",
-              fontFamily: "monospace",
-              fontSize: 15,
-              color: C.bright,
-              lineHeight: 1.9,
-              textAlign: "center",
+              background: `${C.purple}06`,
+              border: `1px solid ${C.purple}12`,
             }}
           >
-            path: <span style={{ color: C.red }}>entry(L2, doc 1)</span> &rarr;{" "}
-            <span style={{ color: C.yellow }}>L1 hub doc 1</span> &rarr; <span style={{ color: C.green }}>L0 beam</span>{" "}
-            &rarr; top-3: <span style={{ color: C.green }}>docs 1, 3, 7</span>{" "}
-            <span style={{ color: C.dim }}>(cat docs)</span>
+            <T color={C.purple} bold center size={15}>
+              Frame B - pop doc 3 (smallest), expand {"{1, 4, 5, 7}"}
+            </T>
+            <div style={{ marginTop: 10, display: "grid", gridTemplateColumns: "1.3fr 1fr", gap: 12 }}>
+              <div>
+                <HnswSpatial
+                  poppedNode={3}
+                  expansionTo={[1, 4, 5, 7]}
+                  highlightNodes={[3, 7, 1]}
+                  distLines={[4]}
+                  desc="Frame B of beam expansion. Doc 3 is popped; its neighbors are doc 1, 4, 5, 7. Doc 4's distance dash shows 136.6, farther than worst-in-queue, so 4 is rejected."
+                />
+              </div>
+              <div>
+                <BeamSlots
+                  ef={3}
+                  items={[
+                    { id: 3, dist: HNSW_DISTS[3] },
+                    { id: 7, dist: HNSW_DISTS[7] },
+                    { id: 1, dist: HNSW_DISTS[1] },
+                  ]}
+                  popped={3}
+                />
+                <T color="#b8a9ff" size={12} center style={{ marginTop: 8, fontFamily: "monospace" }}>
+                  doc 4 (136.6) rejected; doc 1, 7 already in queue
+                </T>
+              </div>
+            </div>
           </div>
-          <T color="#ef9a9a" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
-            Same algorithm scales from 10 docs to 1 billion docs. The only things that change are the number of layers
-            (log N of them) and the size of ef_search.
+
+          <div
+            style={{
+              marginTop: 12,
+              padding: "12px 14px",
+              borderRadius: 8,
+              background: `${C.purple}06`,
+              border: `1px solid ${C.purple}12`,
+            }}
+          >
+            <T color={C.purple} bold center size={15}>
+              Frame C - pop doc 7, expand {"{1, 2, 3, 4}"} - no improvement, converged
+            </T>
+            <div style={{ marginTop: 10, display: "grid", gridTemplateColumns: "1.3fr 1fr", gap: 12 }}>
+              <div>
+                <HnswSpatial
+                  poppedNode={7}
+                  expansionTo={[1, 2, 3, 4]}
+                  highlightNodes={[3, 7, 1]}
+                  distLines={[2]}
+                  desc="Frame C of beam expansion. Doc 7 is popped; its neighbors are docs 1, 2, 3, 4. None beat the current worst-in-queue, so the beam top is unchanged. The search converges."
+                />
+              </div>
+              <div>
+                <BeamSlots
+                  ef={3}
+                  items={[
+                    { id: 3, dist: HNSW_DISTS[3] },
+                    { id: 7, dist: HNSW_DISTS[7] },
+                    { id: 1, dist: HNSW_DISTS[1] },
+                  ]}
+                  popped={7}
+                />
+                <T color={C.green} bold size={13} center style={{ marginTop: 8, fontFamily: "monospace" }}>
+                  beam top unchanged: best top-3 are now stable, converged
+                </T>
+              </div>
+            </div>
+          </div>
+
+          <div
+            style={{
+              marginTop: 12,
+              padding: "12px 14px",
+              borderRadius: 8,
+              background: "rgba(0,0,0,0.3)",
+              textAlign: "center",
+              fontFamily: "monospace",
+              fontSize: 14,
+              color: C.bright,
+            }}
+          >
+            beam = priority queue, capacity = <span style={{ color: C.orange }}>ef_search</span>; expand until best in
+            queue stops changing
+          </div>
+        </Box>
+      </Reveal>
+
+      <Reveal when={sub >= 5}>
+        <Box color={C.red} style={{ width: "100%" }}>
+          <T color={C.red} bold center size={22}>
+            Step 5: return top-k - trace the full path back to the doc text
+          </T>
+          <T color="#ef9a9a" size={16} style={{ marginTop: 8 }}>
+            Take the top k entries of the converged beam. For our query &quot;information about cats&quot; with k = 3,
+            the returned docs are 3, 7, 1 - exactly the cat docs.
+          </T>
+          <div style={{ marginTop: 14, display: "grid", gridTemplateColumns: "1.2fr 1fr", gap: 12 }}>
+            <div
+              style={{
+                padding: "12px 14px",
+                borderRadius: 8,
+                background: `${C.red}06`,
+                border: `1px solid ${C.red}12`,
+              }}
+            >
+              <T color={C.red} bold center size={14}>
+                Final result on the L0 scatter
+              </T>
+              <div style={{ marginTop: 8 }}>
+                <HnswSpatial
+                  highlightNodes={[1, 3, 7]}
+                  distLines={[1, 3, 7]}
+                  desc="Final HNSW search result on the layer-0 scatter. Docs 1, 3, 7 are highlighted in green with their distance dashes from the query, marking the converged top-3."
+                />
+              </div>
+            </div>
+            <div
+              style={{
+                padding: "12px 14px",
+                borderRadius: 8,
+                background: `${C.red}06`,
+                border: `1px solid ${C.red}12`,
+                display: "flex",
+                flexDirection: "column",
+                gap: 10,
+              }}
+            >
+              <T color={C.red} bold center size={14}>
+                End-to-end path &amp; top-3 trace
+              </T>
+              <div
+                style={{
+                  padding: "10px 12px",
+                  borderRadius: 6,
+                  background: "rgba(0,0,0,0.3)",
+                  textAlign: "center",
+                  fontFamily: "monospace",
+                  fontSize: 13,
+                  color: C.bright,
+                  lineHeight: 1.8,
+                }}
+              >
+                <span style={{ color: C.red }}>L2 doc 1</span> &rarr; <span style={{ color: C.yellow }}>L1 doc 1</span>{" "}
+                &rarr; <span style={{ color: C.green }}>L0 beam</span> &rarr; top-3
+              </div>
+              {[
+                { id: 3, dist: HNSW_DISTS[3], text: "Lions are big cats that live in Africa" },
+                { id: 7, dist: HNSW_DISTS[7], text: "Kittens grow up to be cats" },
+                { id: 1, dist: HNSW_DISTS[1], text: "Cats are small domesticated carnivores" },
+              ].map((r, i) => (
+                <div
+                  key={r.id}
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns: "32px 60px 1fr",
+                    gap: 8,
+                    alignItems: "center",
+                    padding: "6px 8px",
+                    borderRadius: 6,
+                    background: `${C.green}10`,
+                    border: `1px solid ${C.green}33`,
+                  }}
+                >
+                  <T color={C.green} bold size={13} style={{ fontFamily: "monospace" }}>
+                    #{i + 1}
+                  </T>
+                  <T color={C.green} bold size={13} style={{ fontFamily: "monospace" }}>
+                    doc {r.id}
+                  </T>
+                  <T color={C.bright} size={13}>
+                    {r.text} <span style={{ color: C.dim, fontFamily: "monospace" }}>(d={r.dist.toFixed(1)})</span>
+                  </T>
+                </div>
+              ))}
+            </div>
+          </div>
+          <T color="#ef9a9a" size={15} center style={{ marginTop: 10, fontStyle: "italic" }}>
+            Same algorithm scales to a billion docs. Only the layer count (about log N) and ef_search change.
           </T>
         </Box>
       </Reveal>
+
       {sub < 5 && (
         <SubBtn
           key={sub}

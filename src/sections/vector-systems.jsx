@@ -152,13 +152,13 @@ export const FAISS = (ctx) => {
                   textAlign: "center",
                 }}
               >
-                <T color={r.color} bold size={17}>
+                <T color={r.color} bold center size={17}>
                   {r.name}
                 </T>
-                <T color={C.bright} size={13} style={{ marginTop: 6 }}>
+                <T color={C.bright} center size={13} style={{ marginTop: 6 }}>
                   {r.blurb}
                 </T>
-                <T color={C.dim} size={12} style={{ marginTop: 6, fontStyle: "italic" }}>
+                <T color={C.dim} center size={12} style={{ marginTop: 6, fontStyle: "italic" }}>
                   {r.use}
                 </T>
               </div>
@@ -255,10 +255,10 @@ export const FAISS = (ctx) => {
                   textAlign: "center",
                 }}
               >
-                <T color={r.color} bold size={16}>
+                <T color={r.color} bold center size={16}>
                   {r.layer}
                 </T>
-                <T color={C.bright} size={13} style={{ marginTop: 4 }}>
+                <T color={C.bright} center size={13} style={{ marginTop: 4 }}>
                   {r.what}
                 </T>
               </div>
@@ -1184,13 +1184,13 @@ export const Qdrant = (ctx) => {
                     textAlign: "center",
                   }}
                 >
-                  <T color={r.color} bold size={15}>
+                  <T color={r.color} bold center size={15}>
                     {r.name}
                   </T>
-                  <T color={C.bright} size={12} style={{ marginTop: 4 }}>
+                  <T color={C.bright} center size={12} style={{ marginTop: 4 }}>
                     {r.what}
                   </T>
-                  <T color={C.dim} size={11} style={{ marginTop: 4, fontStyle: "italic" }}>
+                  <T color={C.dim} center size={11} style={{ marginTop: 4, fontStyle: "italic" }}>
                     {r.pain}
                   </T>
                 </div>
@@ -1390,13 +1390,13 @@ export const Qdrant = (ctx) => {
                   textAlign: "center",
                 }}
               >
-                <T color={r.color} bold size={15}>
+                <T color={r.color} bold center size={15}>
                   {r.name}
                 </T>
-                <T color={C.bright} size={13} style={{ marginTop: 6 }}>
+                <T color={C.bright} center size={13} style={{ marginTop: 6 }}>
                   {r.win}
                 </T>
-                <T color={C.dim} size={12} style={{ marginTop: 6, fontStyle: "italic" }}>
+                <T color={C.dim} center size={12} style={{ marginTop: 6, fontStyle: "italic" }}>
                   {r.note}
                 </T>
               </div>
@@ -1473,13 +1473,13 @@ export const Qdrant = (ctx) => {
                   textAlign: "center",
                 }}
               >
-                <T color={r.color} bold size={15}>
+                <T color={r.color} bold center size={15}>
                   {r.name}
                 </T>
-                <T color={C.bright} size={13} style={{ marginTop: 6, fontFamily: "monospace" }}>
+                <T color={C.bright} center size={13} style={{ marginTop: 6, fontFamily: "monospace" }}>
                   {r.what}
                 </T>
-                <T color={C.dim} size={12} style={{ marginTop: 6, fontStyle: "italic" }}>
+                <T color={C.dim} center size={12} style={{ marginTop: 6, fontStyle: "italic" }}>
                   {r.when}
                 </T>
               </div>
@@ -1740,13 +1740,13 @@ export const Pinecone = (ctx) => {
                     textAlign: "center",
                   }}
                 >
-                  <T color={r.color} bold size={16}>
+                  <T color={r.color} bold center size={16}>
                     {r.tier}
                   </T>
-                  <T color={C.bright} size={13} style={{ marginTop: 4 }}>
+                  <T color={C.bright} center size={13} style={{ marginTop: 4 }}>
                     {r.what}
                   </T>
-                  <T color={C.dim} size={12} style={{ marginTop: 4, fontStyle: "italic" }}>
+                  <T color={C.dim} center size={12} style={{ marginTop: 4, fontStyle: "italic" }}>
                     {r.when}
                   </T>
                 </div>
@@ -2765,10 +2765,10 @@ export const WeaviateMilvusChroma = (ctx) => {
                     textAlign: "center",
                   }}
                 >
-                  <T color={r.color} bold size={15}>
+                  <T color={r.color} bold center size={15}>
                     {r.t}
                   </T>
-                  <T color={C.bright} size={13} style={{ marginTop: 4 }}>
+                  <T color={C.bright} center size={13} style={{ marginTop: 4 }}>
                     {r.d}
                   </T>
                 </div>
@@ -3299,7 +3299,7 @@ export const DecisionFramework = (ctx) => {
                   textAlign: "center",
                 }}
               >
-                <T color={r.color} bold size={15}>
+                <T color={r.color} bold center size={15}>
                   {r.bucket}
                 </T>
                 <div
@@ -3403,7 +3403,7 @@ export const DecisionFramework = (ctx) => {
                     textAlign: "center",
                   }}
                 >
-                  <T color={r.color} bold size={15}>
+                  <T color={r.color} bold center size={15}>
                     {r.posture}
                   </T>
                   <div

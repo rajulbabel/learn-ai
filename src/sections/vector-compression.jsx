@@ -1627,7 +1627,7 @@ export const ProductQuantization = (ctx) => {
                         fontWeight="bold"
                         fontFamily="monospace"
                       >
-                        id {row.id}
+                        ID {row.id}
                       </text>
                     </g>
                   );
@@ -2641,7 +2641,7 @@ export const ProductQuantization = (ctx) => {
                 fontWeight="bold"
                 transform="rotate(90 688 148)"
               >
-                bytes / vec
+                Bytes / vec
               </text>
               {/* Recall y-axis ticks */}
               {[
@@ -4019,9 +4019,9 @@ export const Matryoshka = (ctx) => {
                   <div
                     style={{ marginTop: 4, fontFamily: "monospace", fontSize: 13, color: C.bright, lineHeight: 1.7 }}
                   >
-                    full: {model.full}
+                    Full: {model.full}
                     <br />
-                    truncation: {model.trunc}
+                    Truncation: {model.trunc}
                   </div>
                   <T color={C.dim} size={12} style={{ marginTop: 4 }}>
                     {model.note}
@@ -4163,7 +4163,7 @@ export const Matryoshka = (ctx) => {
                 fontWeight="bold"
                 transform="rotate(-90, 28, 170)"
               >
-                bits per dim &rarr; SQ/PQ/BQ chop here
+                Bits per dim &rarr; SQ/PQ/BQ chop here
               </text>
               {/* MRL arrow at top showing the cut */}
               <line x1={280} y1={10} x2={680} y2={10} stroke={C.purple} strokeWidth={1.5} strokeDasharray="3 3" />

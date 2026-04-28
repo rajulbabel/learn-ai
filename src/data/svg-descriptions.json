@@ -219,7 +219,8 @@
     "Frame B of ADC search: 8 sub-queries feed into 8 columns of a precomputed LUT (256 rows each), showing that once per query we materialize 96 columns by 256 rows of distance values",
     "Frame C of ADC search: doc 1's PQ code bytes index into the LUT, each byte selecting one cell per slot; the 8 looked-up distances sum to doc 1's approximate distance to the query",
     "Two side-by-side scatter plots illustrating OPQ: a left plot with an elongated diagonal cluster awkwardly crossing the slot boundary, and a right plot showing the same data after a learned rotation that aligns clusters with slot axes for tighter k-means fits",
-    "Dual-axis line chart of m versus bytes-per-vector (orange) and recall@10 (green) at m = 8, 48, 96, 192, with a vertical highlight band at m = 96 marking the production sweet spot"
+    "Dual-axis line chart of m versus bytes-per-vector (orange) and recall@10 (green) at m = 8, 48, 96, 192, with a vertical highlight band at m = 96 marking the production sweet spot",
+    "Slot-0 2D scatter showing a tight cluster of 256 gray X centroids around the origin with gray training dots inside, plus a red new-vector dot at (2.1, 1.9) far outside the cluster connected to the nearest centroid by a dashed line labeled distance = 1.8, alongside an inset label training avg distance = 0.3 and faded strikethrough dots indicating deleted training entries"
   ],
   "11.15": [
     "Curve showing binary quantization recall rising sharply with embedding dimension - near zero at d=64, rising past 0.9 around d=512, plateauing around 0.96 at d=1024 and higher, illustrating why binary works for high-dim BERT-style embeddings but collapses at low dimensions"

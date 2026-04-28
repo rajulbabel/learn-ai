@@ -991,6 +991,17 @@ describe("ProductQuantization (11.14) content", () => {
     expect(container.textContent).toMatch(/only knob|knob/i);
     expect(container.textContent).toMatch(/sweet spot/i);
   });
+
+  it("sub=6 shows insert/update/delete drift the codebooks", () => {
+    const { container } = render(fn(makeCtx({ sub: 6 })));
+    expect(container.textContent).toMatch(/insert/i);
+    expect(container.textContent).toMatch(/update/i);
+    expect(container.textContent).toMatch(/delete/i);
+    expect(container.textContent).toMatch(/codebook/i);
+    expect(container.textContent).toMatch(/centroid/i);
+    expect(container.textContent).toMatch(/distance\s*=\s*1\.8/i);
+    expect(container.textContent).toMatch(/0\.3/);
+  });
 });
 
 describe("BinaryQuantization (11.15) content", () => {

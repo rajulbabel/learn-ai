@@ -2755,6 +2755,103 @@ export const ProductQuantization = (ctx) => {
           </T>
         </Box>
       </Reveal>
+      <Reveal when={sub >= 6}>
+        <Box color={C.red} style={{ width: "100%" }}>
+          <T color={C.red} bold center size={22}>
+            New vector arrives: insert / update / delete drift the codebooks
+          </T>
+          <div style={{ marginTop: 12, display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 10 }}>
+            {[
+              { tag: "INSERT", caption: "sub-vec far from every centroid; error 6x baseline" },
+              { tag: "UPDATE", caption: "re-encoded with stale codebooks; same error" },
+              { tag: "DELETE", caption: "orphan PQ code; residual distribution shifts" },
+            ].map((op) => (
+              <div
+                key={op.tag}
+                style={{
+                  padding: "10px 12px",
+                  borderRadius: 8,
+                  background: `${C.red}06`,
+                  border: `1px solid ${C.red}12`,
+                  textAlign: "center",
+                }}
+              >
+                <T color={C.red} bold center size={16}>
+                  {op.tag}
+                </T>
+                <T color={C.bright} size={14} style={{ marginTop: 4 }}>
+                  {op.caption}
+                </T>
+              </div>
+            ))}
+          </div>
+          <svg
+            viewBox="0 0 600 320"
+            style={{ width: "100%", maxWidth: 640, height: "auto", display: "block", marginTop: 14 }}
+          >
+            <desc>
+              2D scatter for slot 0 with a tight cluster of 256 gray X marks for centroids around the origin and gray
+              training-vector dots inside the cluster; a red dot for the new sub-vector at (2.1, 1.9) sits far outside
+              the cluster, with a dashed line to the nearest X labeled distance = 1.8, alongside an inset label
+              training avg distance = 0.3. A few faded gray dots with strikethrough show deleted training entries.
+            </desc>
+            <line x1="50" y1="280" x2="560" y2="280" stroke="#555" strokeWidth="1" />
+            <line x1="50" y1="20" x2="50" y2="280" stroke="#555" strokeWidth="1" />
+            <text x="305" y="305" fontSize="11" fill="#999" textAnchor="middle">
+              slot 0 dim a
+            </text>
+            <text x="20" y="150" fontSize="11" fill="#999" textAnchor="middle" transform="rotate(-90 20 150)">
+              slot 0 dim b
+            </text>
+            {Array.from({ length: 32 }).map((_, i) => {
+              const angle = (i / 32) * Math.PI * 2;
+              const r = 18 + (i % 5) * 4;
+              const cx = 180 + Math.cos(angle) * r;
+              const cy = 180 + Math.sin(angle) * r;
+              return (
+                <g key={i}>
+                  <line x1={cx - 3} y1={cy - 3} x2={cx + 3} y2={cy + 3} stroke="#888" strokeWidth="1" />
+                  <line x1={cx - 3} y1={cy + 3} x2={cx + 3} y2={cy - 3} stroke="#888" strokeWidth="1" />
+                </g>
+              );
+            })}
+            {[
+              [170, 175],
+              [185, 180],
+              [190, 170],
+              [175, 190],
+              [195, 185],
+              [180, 195],
+            ].map(([cx, cy], i) => (
+              <circle key={i} cx={cx} cy={cy} r="3" fill="#999" />
+            ))}
+            {[
+              [160, 165],
+              [205, 195],
+            ].map(([cx, cy], i) => (
+              <g key={i} opacity="0.4">
+                <circle cx={cx} cy={cy} r="3" fill="#666" />
+                <line x1={cx - 5} y1={cy - 5} x2={cx + 5} y2={cy + 5} stroke="#aaa" strokeWidth="1" />
+              </g>
+            ))}
+            <circle cx="450" cy="80" r="6" fill={C.red} />
+            <text x="450" y="68" fontSize="11" fill={C.red} textAnchor="middle">
+              new sub-vec [2.1, 1.9]
+            </text>
+            <line x1="450" y1="80" x2="200" y2="170" stroke={C.red} strokeWidth="1.5" strokeDasharray="5 4" />
+            <text x="320" y="115" fontSize="12" fill={C.red} textAnchor="middle" fontWeight="bold">
+              distance = 1.8
+            </text>
+            <rect x="380" y="220" width="180" height="46" fill={`${C.cyan}10`} stroke={`${C.cyan}30`} rx="6" />
+            <text x="470" y="240" fontSize="11" fill={C.cyan} textAnchor="middle">
+              training avg distance
+            </text>
+            <text x="470" y="258" fontSize="13" fill={C.cyan} textAnchor="middle" fontWeight="bold">
+              = 0.3
+            </text>
+          </svg>
+        </Box>
+      </Reveal>
       <Reveal when={sub >= 8}>
         <Box color={C.pink} style={{ width: "100%" }}>
           <T color={C.pink} bold center size={22}>

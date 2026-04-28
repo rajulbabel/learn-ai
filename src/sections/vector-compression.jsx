@@ -3752,6 +3752,104 @@ export const BinaryQuantization = (ctx) => {
           </T>
         </Box>
       </Reveal>
+      <Reveal when={sub >= 6}>
+        <Box color={C.red} style={{ width: "100%" }}>
+          <T color={C.red} bold center size={22}>
+            New vector arrives: insert / update / delete drift the sign threshold
+          </T>
+          <div style={{ marginTop: 12, display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 10 }}>
+            {[
+              { tag: "INSERT", caption: "new dim 5 batch mean = 0.4, bits collapse 78/22" },
+              { tag: "UPDATE", caption: "re-binarized with stale threshold; same collapse" },
+              { tag: "DELETE", caption: "bit-balance stats decay; old codes linger" },
+            ].map((op) => (
+              <div
+                key={op.tag}
+                style={{
+                  padding: "10px 12px",
+                  borderRadius: 8,
+                  background: `${C.red}06`,
+                  border: `1px solid ${C.red}12`,
+                  textAlign: "center",
+                }}
+              >
+                <T color={C.red} bold center size={16}>
+                  {op.tag}
+                </T>
+                <T color={C.bright} size={14} style={{ marginTop: 4 }}>
+                  {op.caption}
+                </T>
+              </div>
+            ))}
+          </div>
+          <svg
+            viewBox="0 0 720 320"
+            style={{ width: "100%", maxWidth: 760, height: "auto", display: "block", marginTop: 14 }}
+          >
+            <desc>
+              Two side-by-side histograms for dim 5: the left training distribution is centered at 0 with split 51/49
+              labeled in green, the right drifted distribution is centered at 0.4 with split 78/22 labeled in red, and a
+              vertical sign-threshold line at x = 0 cuts both. Below sit two 8-cell bit-grid rows showing training
+              mostly mixed 0/1 vs drifted mostly 1s, with a small tombstone cell.
+            </desc>
+            <text x="160" y="20" fontSize="13" fill={C.green} textAnchor="middle" fontWeight="bold">
+              training (dim 5)
+            </text>
+            <line x1="40" y1="180" x2="280" y2="180" stroke="#666" />
+            <line x1="160" y1="40" x2="160" y2="180" stroke="#888" strokeDasharray="3 3" />
+            <text x="160" y="200" fontSize="11" fill="#888" textAnchor="middle">
+              sign = 0
+            </text>
+            {[20, 40, 70, 95, 80, 50, 30, 15, 8].map((h, i) => (
+              <rect key={i} x={50 + i * 25} y={180 - h} width="22" height={h} fill={`${C.green}aa`} />
+            ))}
+            <text x="160" y="225" fontSize="12" fill={C.green} textAnchor="middle" fontWeight="bold">
+              split 51/49
+            </text>
+            <text x="500" y="20" fontSize="13" fill={C.red} textAnchor="middle" fontWeight="bold">
+              drifted (dim 5, mean 0.4)
+            </text>
+            <line x1="380" y1="180" x2="620" y2="180" stroke="#666" />
+            <line x1="500" y1="40" x2="500" y2="180" stroke="#888" strokeDasharray="3 3" />
+            <text x="500" y="200" fontSize="11" fill="#888" textAnchor="middle">
+              sign = 0
+            </text>
+            {[5, 8, 12, 25, 50, 80, 95, 75, 40].map((h, i) => (
+              <rect key={i} x={390 + i * 25} y={180 - h} width="22" height={h} fill={`${C.red}aa`} />
+            ))}
+            <text x="500" y="225" fontSize="12" fill={C.red} textAnchor="middle" fontWeight="bold">
+              split 78/22
+            </text>
+            <text x="40" y="265" fontSize="11" fill={C.green}>
+              training:
+            </text>
+            {["0", "1", "0", "1", "1", "0", "1", "0"].map((b, i) => (
+              <g key={i}>
+                <rect x={120 + i * 24} y="252" width="20" height="20" fill={`${C.green}30`} stroke={`${C.green}80`} />
+                <text x={130 + i * 24} y="266" fontSize="11" fill={C.bright} textAnchor="middle">
+                  {b}
+                </text>
+              </g>
+            ))}
+            <text x="40" y="300" fontSize="11" fill={C.red}>
+              drifted:
+            </text>
+            {["1", "1", "1", "0", "1", "1", "1", "1"].map((b, i) => (
+              <g key={i}>
+                <rect x={120 + i * 24} y="287" width="20" height="20" fill={`${C.red}30`} stroke={`${C.red}80`} />
+                <text x={130 + i * 24} y="301" fontSize="11" fill={C.bright} textAnchor="middle">
+                  {b}
+                </text>
+              </g>
+            ))}
+            <rect x="320" y="287" width="20" height="20" fill="none" stroke="#888" strokeDasharray="2 2" />
+            <line x1="320" y1="287" x2="340" y2="307" stroke="#888" strokeWidth="1" />
+            <text x="350" y="301" fontSize="10" fill="#888">
+              tombstone
+            </text>
+          </svg>
+        </Box>
+      </Reveal>
       <Reveal when={sub >= 8}>
         <Box color={C.purple} style={{ width: "100%" }}>
           <T color={C.purple} bold center size={22}>

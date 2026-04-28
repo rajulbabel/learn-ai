@@ -224,7 +224,8 @@
     "Line chart of 95th-percentile PQ reconstruction error over time from 0 to 50M vectors with a flat baseline rising into a spike between 10M and 20M, a horizontal dashed retrain threshold crossed at 15M, a vertical dashed line marking retrain triggered at 20M then a return to baseline, plus colored ticks below the x-axis marking inserts, updates, and deletes"
   ],
   "11.15": [
-    "Curve showing binary quantization recall rising sharply with embedding dimension - near zero at d=64, rising past 0.9 around d=512, plateauing around 0.96 at d=1024 and higher, illustrating why binary works for high-dim BERT-style embeddings but collapses at low dimensions"
+    "Curve showing binary quantization recall rising sharply with embedding dimension - near zero at d=64, rising past 0.9 around d=512, plateauing around 0.96 at d=1024 and higher, illustrating why binary works for high-dim BERT-style embeddings but collapses at low dimensions",
+    "Side-by-side histograms for dim 5: a green training distribution centered at 0 with split 51/49 and a red drifted distribution centered at 0.4 with split 78/22, both cut by a dashed sign threshold at x = 0; below are two 8-cell bit-grid rows showing training mostly mixed bits versus drifted mostly 1s plus a small tombstone cell"
   ],
   "11.16": [
     "Long horizontal vector bar divided into colored prefix regions at 256, 512, 1024, and 3072 dimensions, each prefix labeled as a valid Matryoshka truncation so early-dimension subsets are usable embeddings",

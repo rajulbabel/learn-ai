@@ -1093,6 +1093,17 @@ describe("BinaryQuantization (11.15) content", () => {
     expect(container.textContent).toMatch(/rerank|rescore/i);
   });
 
+  it("sub=6 shows insert/update/delete drift the sign threshold", () => {
+    const { container } = render(fn(makeCtx({ sub: 6 })));
+    expect(container.textContent).toMatch(/insert/i);
+    expect(container.textContent).toMatch(/update/i);
+    expect(container.textContent).toMatch(/delete/i);
+    expect(container.textContent).toMatch(/sign/i);
+    expect(container.textContent).toMatch(/51\s*\/\s*49|51\/49/);
+    expect(container.textContent).toMatch(/78\s*\/\s*22|78\/22/);
+    expect(container.textContent).toMatch(/dim 5|dim\s*5/i);
+  });
+
   it("sub=6 explains why BQ does not get its own combo chapter", () => {
     const { container } = render(fn(makeCtx({ sub: 6 })));
     expect(container.textContent).toMatch(/two[- ]?stage|stage 1.*stage 2|same.*pattern/i);

@@ -938,7 +938,7 @@ export const ScalarQuantization = (ctx) => {
           </T>
         </Box>
       </Reveal>
-      <Reveal when={sub >= 6}>
+      <Reveal when={sub >= 8}>
         <Box color={C.purple} style={{ width: "100%" }}>
           <T color={C.purple} bold center size={22}>
             SQ slots into any index: HNSW, IVF, or flat
@@ -1040,7 +1040,7 @@ export const ScalarQuantization = (ctx) => {
           </T>
         </Box>
       </Reveal>
-      {sub < 6 && (
+      {sub < 8 && (
         <SubBtn
           key={sub}
           onClick={() => {

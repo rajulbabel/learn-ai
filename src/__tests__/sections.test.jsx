@@ -1085,8 +1085,8 @@ describe("BinaryQuantization (11.15) content", () => {
     }
   });
 
-  it("sub=6 pairs BQ with HNSW for graph-accelerated stage 1", () => {
-    const { container } = render(fn(makeCtx({ sub: 6 })));
+  it("sub=8 pairs BQ with HNSW for graph-accelerated stage 1", () => {
+    const { container } = render(fn(makeCtx({ sub: 8 })));
     expect(container.textContent).toMatch(/HNSW/);
     expect(container.textContent).toMatch(/Hamming/i);
     expect(container.textContent).toMatch(/graph/i);

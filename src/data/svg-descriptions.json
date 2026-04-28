@@ -225,7 +225,8 @@
   ],
   "11.15": [
     "Curve showing binary quantization recall rising sharply with embedding dimension - near zero at d=64, rising past 0.9 around d=512, plateauing around 0.96 at d=1024 and higher, illustrating why binary works for high-dim BERT-style embeddings but collapses at low dimensions",
-    "Side-by-side histograms for dim 5: a green training distribution centered at 0 with split 51/49 and a red drifted distribution centered at 0.4 with split 78/22, both cut by a dashed sign threshold at x = 0; below are two 8-cell bit-grid rows showing training mostly mixed bits versus drifted mostly 1s plus a small tombstone cell"
+    "Side-by-side histograms for dim 5: a green training distribution centered at 0 with split 51/49 and a red drifted distribution centered at 0.4 with split 78/22, both cut by a dashed sign threshold at x = 0; below are two 8-cell bit-grid rows showing training mostly mixed bits versus drifted mostly 1s plus a small tombstone cell",
+    "Bit-balance bar grid sampling 64 representative dims (of 1024) where each bar height equals the absolute deviation from a 50/50 split; most bars are short and green while a handful are tall and red flagged with small alert badges above, with a horizontal yellow dashed 70 percent imbalance alert line"
   ],
   "11.16": [
     "Long horizontal vector bar divided into colored prefix regions at 256, 512, 1024, and 3072 dimensions, each prefix labeled as a valid Matryoshka truncation so early-dimension subsets are usable embeddings",

@@ -3850,6 +3850,121 @@ export const BinaryQuantization = (ctx) => {
           </svg>
         </Box>
       </Reveal>
+      <Reveal when={sub >= 7}>
+        <Box color={C.green} style={{ width: "100%" }}>
+          <T color={C.green} bold center size={22}>
+            Industry fix: zero-centered models + bit-balance alert + compaction
+          </T>
+          <svg
+            viewBox="0 0 720 220"
+            style={{ width: "100%", maxWidth: 760, height: "auto", display: "block", marginTop: 14 }}
+          >
+            <desc>
+              Bit-balance bar grid: 64 thin vertical bars sample the per-dim deviation from a 50/50 bit split (a
+              representative subset of the 1024 dims). Most bars are short and green; a handful are tall and red,
+              flagged with small alert badges above for dims with greater than 70 percent imbalance. A horizontal
+              yellow dashed line marks the 70% imbalance alert.
+            </desc>
+            <text x="60" y="22" fontSize="11" fill="#aaa">
+              |bit_balance - 50%| per dim
+            </text>
+            <line x1="60" y1="180" x2="700" y2="180" stroke="#666" />
+            <line x1="60" y1="40" x2="60" y2="180" stroke="#666" />
+            {Array.from({ length: 64 }).map((_, i) => {
+              const isDriftDim = i % 11 === 7 || i === 23 || i === 51;
+              const h = isDriftDim ? 110 : 8 + ((i * 17) % 28);
+              return (
+                <g key={i}>
+                  <rect
+                    x={64 + i * 9.7}
+                    y={180 - h}
+                    width="6"
+                    height={h}
+                    fill={isDriftDim ? C.red : C.green}
+                  />
+                  {isDriftDim && (
+                    <text x={67 + i * 9.7} y={180 - h - 4} fontSize="11" fill={C.red} textAnchor="middle">
+                      !
+                    </text>
+                  )}
+                </g>
+              );
+            })}
+            <line x1="60" y1="110" x2="700" y2="110" stroke={C.yellow} strokeDasharray="3 3" />
+            <text x="700" y="105" fontSize="11" fill={C.yellow} textAnchor="end">
+              70% imbalance alert
+            </text>
+          </svg>
+          <div style={{ marginTop: 12, display: "grid", gridTemplateColumns: "1fr", gap: 8 }}>
+            {[
+              {
+                op: "INSERT / UPDATE",
+                text: "sign(x) on a zero-centered model needs no calibration; per-dim mean threshold updated incrementally if not centered",
+              },
+              {
+                op: "DELETE",
+                text: "tombstone bit; compaction job rewrites the bit table and re-counts balances",
+              },
+              {
+                op: "DRIFT",
+                text: "any dim with > 70% same value -> re-binarize that dim or alert",
+              },
+            ].map((row) => (
+              <div
+                key={row.op}
+                style={{
+                  padding: "8px 12px",
+                  borderRadius: 8,
+                  background: `${C.green}06`,
+                  border: `1px solid ${C.green}12`,
+                  display: "flex",
+                  gap: 12,
+                  alignItems: "center",
+                }}
+              >
+                <T color={C.green} bold size={14} style={{ minWidth: 130 }}>
+                  {row.op}
+                </T>
+                <T color={C.bright} size={14}>
+                  {row.text}
+                </T>
+              </div>
+            ))}
+          </div>
+          <div style={{ marginTop: 14, display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 10 }}>
+            {[
+              { name: "Cohere Embed v3", line: "sign-based binary, no calibration" },
+              { name: "Mixedbread mxbai-embed-large-v1", line: "zero-centered, sign threshold" },
+              { name: "OpenAI text-embedding-3", line: "binary mode via sign" },
+              {
+                name: "Milvus / Qdrant",
+                line: "custom per-dim threshold + drift monitor + segment compaction",
+              },
+            ].map((s) => (
+              <div
+                key={s.name}
+                style={{
+                  padding: "10px 12px",
+                  borderRadius: 8,
+                  background: `${C.cyan}06`,
+                  border: `1px solid ${C.cyan}12`,
+                }}
+              >
+                <T color={C.cyan} bold center size={15}>
+                  {s.name}
+                </T>
+                <T
+                  color={C.bright}
+                  size={13}
+                  style={{ marginTop: 4, fontFamily: "monospace", textAlign: "center" }}
+                >
+                  {s.line}
+                </T>
+              </div>
+            ))}
+          </div>
+        </Box>
+      </Reveal>
       <Reveal when={sub >= 8}>
         <Box color={C.purple} style={{ width: "100%" }}>
           <T color={C.purple} bold center size={22}>

@@ -1108,6 +1108,18 @@ describe("BinaryQuantization (11.15) content", () => {
     const { container } = render(fn(makeCtx({ sub: 6 })));
     expect(container.textContent).toMatch(/two[- ]?stage|stage 1.*stage 2|same.*pattern/i);
   });
+
+  it("sub=7 shows zero-centered models + bit-balance alert + compaction", () => {
+    const { container } = render(fn(makeCtx({ sub: 7 })));
+    expect(container.textContent).toMatch(/zero[- ]centered/i);
+    expect(container.textContent).toMatch(/bit[- ]balance/i);
+    expect(container.textContent).toMatch(/compact|tombstone/i);
+    expect(container.textContent).toMatch(/Cohere/);
+    expect(container.textContent).toMatch(/Mixedbread|mxbai/i);
+    expect(container.textContent).toMatch(/OpenAI|text-embedding-3/i);
+    expect(container.textContent).toMatch(/Milvus|Qdrant/);
+    expect(container.textContent).toMatch(/70%|>\s*70/);
+  });
 });
 
 describe("Matryoshka (11.16) content", () => {

@@ -974,7 +974,7 @@ export const ScalarQuantization = (ctx) => {
           >
             <desc>
               Number line with calibrated band -1.2 to 1.4 shaded cyan and a 0 to 255 bucket scale below; a green
-              training point at 0.5 maps to bucket 158, a red new-vector point at 1.8 sits outside the band with a bent
+              training point at 0.5 maps to bucket 167, a red new-vector point at 1.8 sits outside the band with a bent
               arrow back to the clip point at 1.4 = bucket 255 and a red gap bar labeled error = 0.4; a faded tombstone
               marker shows a deleted entry whose int8 row still lives.
             </desc>
@@ -994,7 +994,7 @@ export const ScalarQuantization = (ctx) => {
             </text>
             <circle cx="380" cy="100" r="6" fill={C.green} />
             <text x="380" y="86" fontSize="11" fill={C.green} textAnchor="middle">
-              0.5 = bucket 158
+              0.5 = bucket 167
             </text>
             <circle cx="600" cy="100" r="6" fill={C.red} />
             <text x="600" y="86" fontSize="11" fill={C.red} textAnchor="middle">

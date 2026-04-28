@@ -1102,7 +1102,7 @@ export const ScalarQuantization = (ctx) => {
           <div style={{ marginTop: 14, display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 10 }}>
             {[
               { name: "FAISS", line: "IndexScalarQuantizer(d, QT_8bit_uniform) + custom range" },
-              { name: "Qdrant", line: "quantization_config.scalar.rescaling: true + optimizer.deleted_threshold" },
+              { name: "Qdrant", line: "quantization_config.scalar.quantile = 0.99 + optimizers_config.deleted_threshold" },
               { name: "Pinecone", line: "managed re-quantization on shard rebalance" },
               { name: "Vespa", line: "tensor int8 cell-type with explicit bounds + auto-compact" },
             ].map((s) => (
@@ -2905,7 +2905,7 @@ export const ProductQuantization = (ctx) => {
             {[
               { op: "INSERT / UPDATE", text: "re-encode with current codebooks; track 95p recon error" },
               { op: "DELETE", text: "tombstone in posting list; background compaction reclaims and reshapes residuals" },
-              { op: "DRIFT", text: "95p error breach -> train new codebooks on fresh sample (FAISS default 100x oversample), hot-swap" },
+              { op: "DRIFT", text: "95p error breach -> train new codebooks on fresh sample (~256 * k_per_slot rule of thumb), hot-swap" },
             ].map((row) => (
               <div
                 key={row.op}
@@ -2933,7 +2933,7 @@ export const ProductQuantization = (ctx) => {
               { name: "FAISS", line: "ProductQuantizer.train(new_set) + index rebuild" },
               { name: "Vespa", line: "background re-quantization with hot-swap" },
               { name: "Milvus", line: "scheduled IVF_PQ retraining + segment compaction" },
-              { name: "Qdrant", line: "POST /collections/{name}/quantization + optimizer.deleted_threshold" },
+              { name: "Qdrant", line: "PATCH /collections/{name} quantization_config + optimizers_config.deleted_threshold" },
             ].map((s) => (
               <div
                 key={s.name}
@@ -3935,7 +3935,7 @@ export const BinaryQuantization = (ctx) => {
             {[
               { name: "Cohere Embed v3", line: "sign-based binary, no calibration" },
               { name: "Mixedbread mxbai-embed-large-v1", line: "zero-centered, sign threshold" },
-              { name: "OpenAI text-embedding-3", line: "binary mode via sign" },
+              { name: "OpenAI text-embedding-3", line: "client-side sign() on float output" },
               {
                 name: "Milvus / Qdrant",
                 line: "custom per-dim threshold + drift monitor + segment compaction",

@@ -1005,7 +1005,7 @@ describe("ProductQuantization (11.14) content", () => {
 
   it("sub=7 shows oversample + tombstones + retrain on error spike", () => {
     const { container } = render(fn(makeCtx({ sub: 7 })));
-    expect(container.textContent).toMatch(/oversample|100x|390x/i);
+    expect(container.textContent).toMatch(/oversample|sample|k_per_slot/i);
     expect(container.textContent).toMatch(/retrain/i);
     expect(container.textContent).toMatch(/tombstone|compact/i);
     expect(container.textContent).toMatch(/95p|95th|threshold/i);
@@ -1104,9 +1104,10 @@ describe("BinaryQuantization (11.15) content", () => {
     expect(container.textContent).toMatch(/dim 5|dim\s*5/i);
   });
 
-  it("sub=6 explains why BQ does not get its own combo chapter", () => {
-    const { container } = render(fn(makeCtx({ sub: 6 })));
-    expect(container.textContent).toMatch(/two[- ]?stage|stage 1.*stage 2|same.*pattern/i);
+  it("sub=8 explains how BQ pairs with HNSW for stage 1", () => {
+    const { container } = render(fn(makeCtx({ sub: 8 })));
+    expect(container.textContent).toMatch(/dedicated combo|no.*combo chapter|HNSW \+ BQ/i);
+    expect(container.textContent).toMatch(/HNSW/);
   });
 
   it("sub=7 shows zero-centered models + bit-balance alert + compaction", () => {

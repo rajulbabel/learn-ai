@@ -2790,7 +2790,7 @@ export const ProductQuantization = (ctx) => {
             style={{ width: "100%", maxWidth: 640, height: "auto", display: "block", marginTop: 14 }}
           >
             <desc>
-              2D scatter for slot 0 with a tight cluster of 256 gray X marks for centroids around the origin and gray
+              2D scatter for slot 0 with a tight cluster of 32 representative gray X centroids (of 256 trained per slot) around the origin and gray
               training-vector dots inside the cluster; a red dot for the new sub-vector at (2.1, 1.9) sits far outside
               the cluster, with a dashed line to the nearest X labeled distance = 1.8, alongside an inset label
               training avg distance = 0.3. A few faded gray dots with strikethrough show deleted training entries.

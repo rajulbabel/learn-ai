@@ -889,16 +889,16 @@ describe("ScalarQuantization (11.13) content", () => {
     expect(container.textContent).toMatch(/768|bytes per vector/i);
   });
 
-  it("sub=6 shows SQ pairs with any index (HNSW, IVF, flat)", () => {
-    const { container } = render(fn(makeCtx({ sub: 6 })));
+  it("sub=8 shows SQ pairs with any index (HNSW, IVF, flat)", () => {
+    const { container } = render(fn(makeCtx({ sub: 8 })));
     expect(container.textContent).toMatch(/HNSW/);
     expect(container.textContent).toMatch(/IVF|flat/i);
     expect(container.textContent).toMatch(/drop[- ]?in|payload|swap/i);
     expect(container.textContent).toMatch(/index.*unchanged|graph.*unchanged|same (graph|index)/i);
   });
 
-  it("sub=6 names production examples", () => {
-    const { container } = render(fn(makeCtx({ sub: 6 })));
+  it("sub=8 names production examples", () => {
+    const { container } = render(fn(makeCtx({ sub: 8 })));
     expect(container.textContent).toMatch(/pgvector|Qdrant|FAISS/);
   });
 });

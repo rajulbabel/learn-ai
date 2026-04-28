@@ -20,7 +20,7 @@ const CAT_CORPUS = [
   { id: 10, text: "Fish live underwater", vec: [0.21, 0.29, 0.68, 0.81] },
 ];
 
-const QUERY = { text: "information about cats", vec: [0.85, 0.14, 0.44, 0.21] };
+const QUERY = { text: "Information about cats", vec: [0.85, 0.14, 0.44, 0.21] };
 
 const fmtVec = (v) => `[${v.map((x) => x.toFixed(2)).join(", ")}]`;
 
@@ -1009,7 +1009,7 @@ export const BruteForceKNN = (ctx) => {
                 ~50 GB/sec
               </T>
               <T color={C.bright} size={14} center style={{ marginTop: 6 }}>
-                a single DDR5 channel
+                A single DDR5 channel
                 <br />
                 At peak bandwidth
               </T>
@@ -1594,7 +1594,7 @@ export const ThreeWayTradeoff = (ctx) => {
               {[
                 { p: "P50", val: "8 ms", note: "typical" },
                 { p: "P95", val: "25 ms", note: "5% are slower" },
-                { p: "P99", val: "80 ms", note: "the tail" },
+                { p: "P99", val: "80 ms", note: "The tail" },
               ].map(({ p, val, note }) => (
                 <div
                   key={p}
@@ -1675,7 +1675,7 @@ export const ThreeWayTradeoff = (ctx) => {
                 N
               </T>
               <T color={C.yellow} bold size={13}>
-                vectors (3 KB each)
+                Vectors (3 KB each)
               </T>
               <T color={C.yellow} bold size={13}>
                 + HNSW graph (100 B/vec)
@@ -1759,9 +1759,9 @@ export const ThreeWayTradeoff = (ctx) => {
                 srcColor: C.cyan,
                 srcLighter: "#80deea",
                 srcArrow: "up",
-                srcLabel: "recall up",
+                srcLabel: "Recall up",
                 dstArrow: "up",
-                dstLabel: "latency up",
+                dstLabel: "Latency up",
                 dstColor: C.orange,
                 body: "HNSW (a graph-based index we build later in this section) has a knob called ef_search that controls how many candidate nodes to explore per query. Bigger number = more exploration = higher recall, but linearly more work, so latency rises. Typical tuning: ef_search = 200 gives 0.99 recall, ef_search = 50 gives 0.95 recall at 4x the speed.",
               },
@@ -1771,9 +1771,9 @@ export const ThreeWayTradeoff = (ctx) => {
                 srcColor: C.yellow,
                 srcLighter: "#ffe082",
                 srcArrow: "down",
-                srcLabel: "memory down",
+                srcLabel: "Memory down",
                 dstArrow: "down",
-                dstLabel: "recall down",
+                dstLabel: "Recall down",
                 dstColor: C.cyan,
                 body: "Product Quantization replaces each 3 KB vector with ~96 bytes of codebook indices (small integer codes that look up an approximate version of the real vector) - a 32x memory win. But the stored vectors are approximate, so distances are approximate, so recall drops. Typical cost: 0.98 recall becomes 0.94.",
               },
@@ -1783,9 +1783,9 @@ export const ThreeWayTradeoff = (ctx) => {
                 srcColor: C.purple,
                 srcLighter: "#b8a9ff",
                 srcArrow: "down",
-                srcLabel: "latency down",
+                srcLabel: "Latency down",
                 dstArrow: "up",
-                dstLabel: "memory cost up",
+                dstLabel: "Memory cost up",
                 dstColor: C.yellow,
                 body: "Run three copies of the index on three machines and route each query to the least-loaded one. P99 (the 99th-percentile latency, i.e. the worst 1% of queries) drops because no single node gets a long queue. But you are paying for 3x the RAM. Caching the most frequent queries is a variant - memory for speed.",
               },
@@ -2156,10 +2156,10 @@ export const DistanceMetrics = (ctx) => {
               </T>
               <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 5 }}>
                 {[
-                  { doc: "doc 1 (Cats are small...)", cos: "0.9993", color: C.green },
-                  { doc: "doc 7 (Kittens grow up to be cats)", cos: "0.9984", color: C.green },
-                  { doc: "doc 10 (Fish live underwater)", cos: "0.6229", color: C.yellow },
-                  { doc: "doc 6 (Python is a prog. lang)", cos: "0.3554", color: C.red },
+                  { doc: "Doc 1 (Cats are small...)", cos: "0.9993", color: C.green },
+                  { doc: "Doc 7 (Kittens grow up to be cats)", cos: "0.9984", color: C.green },
+                  { doc: "Doc 10 (Fish live underwater)", cos: "0.6229", color: C.yellow },
+                  { doc: "Doc 6 (Python is a prog. lang)", cos: "0.3554", color: C.red },
                 ].map((row, i) => (
                   <div
                     key={i}
@@ -2294,10 +2294,10 @@ export const DistanceMetrics = (ctx) => {
               </T>
               <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 5 }}>
                 {[
-                  { doc: "doc 1 (Cats are small...)", l2: "0.047", color: C.green },
-                  { doc: "doc 7 (Kittens grow up to be cats)", l2: "0.057", color: C.green },
-                  { doc: "doc 10 (Fish live underwater)", l2: "0.922", color: C.yellow },
-                  { doc: "doc 6 (Python is a prog. lang)", l2: "1.228", color: C.red },
+                  { doc: "Doc 1 (Cats are small...)", l2: "0.047", color: C.green },
+                  { doc: "Doc 7 (Kittens grow up to be cats)", l2: "0.057", color: C.green },
+                  { doc: "Doc 10 (Fish live underwater)", l2: "0.922", color: C.yellow },
+                  { doc: "Doc 6 (Python is a prog. lang)", l2: "1.228", color: C.red },
                 ].map((row, i) => (
                   <div
                     key={i}
@@ -2638,8 +2638,8 @@ export const DistanceMetrics = (ctx) => {
               },
               {
                 family: "Pre-normalized anything",
-                models: "any model after ||v|| = 1 at ingest",
-                metric: "inner product",
+                models: "Any model after ||v|| = 1 at ingest",
+                metric: "Inner product",
                 metricColor: C.orange,
                 why: "Fastest possible similarity. Same ranking as cosine, no sqrt or divide in the hot loop.",
               },
@@ -2994,7 +2994,7 @@ export const IVF = (ctx) => {
                   Docs {cl.docs.join(", ")}
                 </T>
                 <T color={cl.color} size={12} center style={{ marginTop: 4, fontFamily: "monospace" }}>
-                  centroid ({cl.centroid.x}, {cl.centroid.y})
+                  Centroid ({cl.centroid.x}, {cl.centroid.y})
                 </T>
               </div>
             ))}
@@ -3076,7 +3076,7 @@ export const IVF = (ctx) => {
                   lineHeight: 1.6,
                 }}
               >
-                <div style={{ color: "#80e8a5", fontWeight: 700, marginBottom: 4 }}>cell (Voronoi cell)</div>
+                <div style={{ color: "#80e8a5", fontWeight: 700, marginBottom: 4 }}>Cell (Voronoi cell)</div>
                 The geometric view. &quot;The region of space closer to centroid A than any other.&quot;
               </div>
               <div
@@ -3134,7 +3134,7 @@ export const IVF = (ctx) => {
             }}
           >
             <div style={{ fontFamily: "monospace", fontSize: 15, color: C.bright }}>
-              cell(p) = argmin over i of &#124;&#124;p &minus; centroid<sub>i</sub>&#124;&#124;
+              Cell(p) = argmin over i of &#124;&#124;p &minus; centroid<sub>i</sub>&#124;&#124;
             </div>
             <div style={{ fontSize: 14, color: "#80e8a5", marginTop: 4 }}>
               In words: cell of point p is the index of the closest centroid. ||p &minus; centroid<sub>i</sub>|| is the
@@ -3305,7 +3305,7 @@ export const IVF = (ctx) => {
             {[
               { nprobe: 1, label: "probe 1 cell", ratio: "1/3 of corpus" },
               { nprobe: 2, label: "probe 2 cells", ratio: "2/3 of corpus" },
-              { nprobe: 3, label: "probe all cells", ratio: "full corpus" },
+              { nprobe: 3, label: "probe all cells", ratio: "Full corpus" },
             ].map((v) => (
               <div
                 key={v.nprobe}
@@ -5422,13 +5422,13 @@ export const HNSWConstruction = (ctx) => {
 
           <div style={{ marginTop: 14, display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 12 }}>
             {[
-              { M: 4, color: C.green, label: "M = 4 (sparse)", note: "memory-tight; degree = 4 per node" },
-              { M: 8, color: C.yellow, label: "M = 8 (mid)", note: "balanced; degree = 8 per node" },
+              { M: 4, color: C.green, label: "M = 4 (sparse)", note: "Memory-tight; degree = 4 per node" },
+              { M: 8, color: C.yellow, label: "M = 8 (mid)", note: "Balanced; degree = 8 per node" },
               {
                 M: 16,
                 color: C.red,
                 label: "M = 16 (production)",
-                note: "default; degree = 10 per node (capped at N - 1 = 11)",
+                note: "Default; degree = 10 per node (capped at N - 1 = 11)",
               },
             ].map((cfg) => {
               const N = 12;
@@ -6504,24 +6504,24 @@ export const HNSWParameters = (ctx) => {
                 value: "16",
                 color: C.cyan,
                 light: "#80deea",
-                when: "build time (fixed)",
-                trades: "recall vs memory",
+                when: "Build time (fixed)",
+                trades: "Recall vs memory",
               },
               {
                 name: "ef_construction",
                 value: "200",
                 color: C.yellow,
                 light: "#ffe082",
-                when: "build time (one-off)",
-                trades: "recall vs build time",
+                when: "Build time (one-off)",
+                trades: "Recall vs build time",
               },
               {
                 name: "ef_search",
                 value: "50",
                 color: C.green,
                 light: "#80e8a5",
-                when: "query time (per query)",
-                trades: "recall vs latency",
+                when: "Query time (per query)",
+                trades: "Recall vs latency",
               },
             ].map((p) => (
               <div
@@ -6928,22 +6928,22 @@ export const HNSWParameters = (ctx) => {
               {[
                 {
                   symptom: "Recall is too low",
-                  action: "raise ef_search first, then raise M (rebuild required)",
+                  action: "Raise ef_search first, then raise M (rebuild required)",
                   color: C.green,
                 },
                 {
                   symptom: "Memory is too high",
-                  action: "lower M (rebuild), then apply PQ compression",
+                  action: "Lower M (rebuild), then apply PQ compression",
                   color: C.yellow,
                 },
                 {
                   symptom: "Build time is too slow",
-                  action: "lower ef_construction first, then lower M",
+                  action: "Lower ef_construction first, then lower M",
                   color: C.cyan,
                 },
                 {
                   symptom: "Query latency is too high",
-                  action: "lower ef_search - recall drops, queries get faster",
+                  action: "Lower ef_search - recall drops, queries get faster",
                   color: C.orange,
                 },
               ].map((row) => (
@@ -7018,7 +7018,7 @@ export const Vamana = (ctx) => {
           >
             At N = 100M, d = 768, M = 16:
             <br />
-            vectors: 300 GB
+            Vectors: 300 GB
             <br />
             HNSW graph: 20 GB
             <br />
@@ -7528,9 +7528,9 @@ export const Vamana = (ctx) => {
               }}
             >
               {[
-                { label: "RAM hops", value: "~20", detail: "free (nanoseconds each)", color: C.green },
+                { label: "RAM hops", value: "~20", detail: "Free (nanoseconds each)", color: C.green },
                 { label: "SSD reads", value: "40-80", detail: "10 us each on NVMe", color: C.orange },
-                { label: "Distance ops", value: "~80", detail: "about 60 ns each", color: C.yellow },
+                { label: "Distance ops", value: "~80", detail: "About 60 ns each", color: C.yellow },
               ].map((row) => (
                 <div
                   key={row.label}

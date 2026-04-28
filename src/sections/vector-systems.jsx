@@ -119,25 +119,25 @@ export const FAISS = (ctx) => {
             {[
               {
                 name: "IVF",
-                blurb: "cluster space with k-means, probe nprobe cells",
-                use: "medium-scale static corpora",
+                blurb: "Cluster space with k-means, probe nprobe cells",
+                use: "Medium-scale static corpora",
                 color: C.yellow,
               },
               {
                 name: "PQ",
-                blurb: "compress each vector to m bytes via per-slot codebooks",
-                use: "memory-bound workloads",
+                blurb: "Compress each vector to m bytes via per-slot codebooks",
+                use: "Memory-bound workloads",
                 color: C.green,
               },
               {
                 name: "HNSW",
-                blurb: "layered small-world graph, log-N navigation",
-                use: "recall-sensitive, dynamic workloads",
+                blurb: "Layered small-world graph, log-N navigation",
+                use: "Recall-sensitive, dynamic workloads",
                 color: C.purple,
               },
               {
                 name: "IVF-PQ",
-                blurb: "combine: cluster then PQ-encode residuals",
+                blurb: "Combine: cluster then PQ-encode residuals",
                 use: "1B+ static vectors on a node",
                 color: C.orange,
               },
@@ -242,7 +242,7 @@ export const FAISS = (ctx) => {
             }}
           >
             {[
-              { layer: "C++ core", what: "dense kernels, SIMD, CUDA", color: C.green },
+              { layer: "C++ core", what: "Dense kernels, SIMD, CUDA", color: C.green },
               { layer: "Python bindings", what: "numpy-native API, scripting, notebooks", color: C.cyan },
             ].map((r) => (
               <div
@@ -291,23 +291,23 @@ export const FAISS = (ctx) => {
             {[
               {
                 name: "Persistence",
-                blurb: "no WAL, no durable snapshots out of the box",
-                pain: "if process dies, index is gone",
+                blurb: "No WAL, no durable snapshots out of the box",
+                pain: "If process dies, index is gone",
               },
               {
                 name: "REST API",
-                blurb: "no HTTP server, no auth, no rate limits",
-                pain: "you write the serving layer",
+                blurb: "No HTTP server, no auth, no rate limits",
+                pain: "You write the serving layer",
               },
               {
                 name: "Filtering",
-                blurb: "no metadata index, no predicate support",
+                blurb: "No metadata index, no predicate support",
                 pain: "tenant_id queries must be post-filtered",
               },
               {
                 name: "ACID / replication",
-                blurb: "no transactions, no leader-follower, no HA",
-                pain: "single-node only; crashes lose writes",
+                blurb: "No transactions, no leader-follower, no HA",
+                pain: "Single-node only; crashes lose writes",
               },
             ].map((r) => (
               <div
@@ -392,10 +392,10 @@ export const FAISS = (ctx) => {
               <div style={{ color: C.red, fontWeight: "bold", padding: "6px 8px" }}>Relationship</div>
               <div style={{ color: C.red, fontWeight: "bold", padding: "6px 8px" }}>What the wrapper adds</div>
               {[
-                { name: "Milvus", rel: "FAISS inside", add: "distributed cluster, API, metadata, lifecycle" },
+                { name: "Milvus", rel: "FAISS inside", add: "Distributed cluster, API, metadata, lifecycle" },
                 { name: "OpenSearch", rel: "FAISS engine", add: "Lucene index, REST, auth, hybrid with BM25" },
-                { name: "Vespa", rel: "same algorithms", add: "tensor compute, multi-vector, ranking pipelines" },
-                { name: "Azure AI Search", rel: "FAISS / DiskANN variant", add: "managed service, filtering, auth" },
+                { name: "Vespa", rel: "Same algorithms", add: "Tensor compute, multi-vector, ranking pipelines" },
+                { name: "Azure AI Search", rel: "FAISS / DiskANN variant", add: "Managed service, filtering, auth" },
               ].flatMap((r) => [
                 <div
                   key={`n-${r.name}`}
@@ -598,8 +598,8 @@ export const Pgvector = (ctx) => {
             }}
           >
             {[
-              { t: "Same database", d: "one Postgres for rows + vectors, same connection, same user" },
-              { t: "Same operational model", d: "backups, replication, monitoring you already run" },
+              { t: "Same database", d: "One Postgres for rows + vectors, same connection, same user" },
+              { t: "Same operational model", d: "Backups, replication, monitoring you already run" },
             ].map((r) => (
               <div
                 key={r.t}
@@ -684,9 +684,9 @@ export const Pgvector = (ctx) => {
             }}
           >
             {[
-              { op: "<=>", name: "cosine", color: C.yellow, when: "default for text embeddings" },
-              { op: "<->", name: "L2 Euclidean", color: C.green, when: "some vision embeddings" },
-              { op: "<#>", name: "negative inner product", color: C.purple, when: "normalized + fast" },
+              { op: "<=>", name: "cosine", color: C.yellow, when: "Default for text embeddings" },
+              { op: "<->", name: "L2 Euclidean", color: C.green, when: "Some vision embeddings" },
+              { op: "<#>", name: "Negative inner product", color: C.purple, when: "Normalized + fast" },
             ].map((r) => (
               <div
                 key={r.name}
@@ -738,13 +738,13 @@ export const Pgvector = (ctx) => {
               {
                 name: "HNSW",
                 params: ["m = 16", "ef_construction = 64", "ef_search = 40"],
-                note: "better recall + latency, slower to build",
+                note: "Better recall + latency, slower to build",
                 color: C.green,
               },
               {
                 name: "IVFFlat",
                 params: ["lists = sqrt(N)", "probes = sqrt(lists)", "fast to build"],
-                note: "smaller memory, needs tuning per size",
+                note: "Smaller memory, needs tuning per size",
                 color: C.orange,
               },
             ].map((r) => (
@@ -834,10 +834,10 @@ export const Pgvector = (ctx) => {
             }}
           >
             {[
-              { t: "Transactions + ACID", d: "insert a row and its vector in one atomic write" },
-              { t: "SQL joins", d: "join docs to users to permissions to embeddings, same query" },
+              { t: "Transactions + ACID", d: "Insert a row and its vector in one atomic write" },
+              { t: "SQL joins", d: "Join docs to users to permissions to embeddings, same query" },
               { t: "Rich metadata queries", d: "GIN indexes on JSONB, partial indexes, window functions" },
-              { t: "Existing ops", d: "backups, WAL replication, monitoring, PITR already in place" },
+              { t: "Existing ops", d: "Backups, WAL replication, monitoring, PITR already in place" },
             ].map((r) => (
               <div
                 key={r.t}
@@ -918,12 +918,12 @@ export const Pgvector = (ctx) => {
             }}
           >
             {[
-              { t: "Under 10M vectors", d: "fits comfortably on one Postgres instance with HNSW" },
-              { t: "Metadata-heavy queries", d: "complex SQL filters and joins across related tables" },
-              { t: "Existing Postgres team", d: "no new ops paging rotation, no extra vendor contract" },
+              { t: "Under 10M vectors", d: "Fits comfortably on one Postgres instance with HNSW" },
+              { t: "Metadata-heavy queries", d: "Complex SQL filters and joins across related tables" },
+              { t: "Existing Postgres team", d: "No new ops paging rotation, no extra vendor contract" },
               { t: "Moderate QPS (under 1K)", d: "Postgres handles the load without horizontal scale" },
               { t: "Strict consistency", d: "ACID transactions span rows and vectors together" },
-              { t: "Fast prototyping", d: "no new infra: enable the extension and ship today" },
+              { t: "Fast prototyping", d: "No new infra: enable the extension and ship today" },
             ].map((r) => (
               <div
                 key={r.t}
@@ -985,7 +985,7 @@ export const Pgvector = (ctx) => {
             }}
           >
             {[
-              { t: "Over 100M vectors", d: "single-node Postgres RAM stops being realistic" },
+              { t: "Over 100M vectors", d: "Single-node Postgres RAM stops being realistic" },
               { t: "Over 10K QPS", d: "Postgres contention limits vector-search throughput" },
               { t: "Multi-region active-active", d: "PG replication is leader-follower, not active-active" },
               { t: "Heavy filtered-HNSW", d: "pgvector lacks Qdrant-style inline filter pruning" },
@@ -1078,7 +1078,7 @@ export const Qdrant = (ctx) => {
             {[
               { t: "Language", d: "Rust - memory-safe, no GC stalls on query path" },
               { t: "License", d: "Apache 2.0 - free for commercial self-host" },
-              { t: "Deploy", d: "single binary, Docker image, K8s operator" },
+              { t: "Deploy", d: "Single binary, Docker image, K8s operator" },
             ].map((r) => (
               <div
                 key={r.t}
@@ -1157,20 +1157,20 @@ export const Qdrant = (ctx) => {
               {[
                 {
                   name: "Pre-filter",
-                  what: "filter first, brute-force survivors",
-                  pain: "slow for loose filters",
+                  what: "Filter first, brute-force survivors",
+                  pain: "Slow for loose filters",
                   color: C.red,
                 },
                 {
                   name: "Post-filter",
                   what: "ANN then drop misses",
-                  pain: "empty / short results at 0.1%",
+                  pain: "Empty / short results at 0.1%",
                   color: C.orange,
                 },
                 {
                   name: "Qdrant inline",
-                  what: "check predicate during hop",
-                  pain: "best across all selectivities",
+                  what: "Check predicate during hop",
+                  pain: "Best across all selectivities",
                   color: C.green,
                 },
               ].map((r) => (
@@ -1303,12 +1303,12 @@ export const Qdrant = (ctx) => {
             {[
               {
                 t: "Multi-vector support",
-                d: "one point can store several named vectors (title, body, image) in the same record - native support since v1.10 (chapter 11.26)",
+                d: "One point can store several named vectors (title, body, image) in the same record - native support since v1.10 (chapter 11.26)",
                 color: C.green,
               },
               {
                 t: "Payload is just JSON",
-                d: "arbitrary nested metadata, indexed types: keyword, int, float, geo, datetime",
+                d: "Arbitrary nested metadata, indexed types: keyword, int, float, geo, datetime",
                 color: C.cyan,
               },
             ].map((r) => (
@@ -1358,13 +1358,13 @@ export const Qdrant = (ctx) => {
               {
                 name: "Scalar (SQ)",
                 win: "4x memory, ~1-3% recall loss",
-                note: "float32 -> int8 per dim",
+                note: "Float32 -> int8 per dim",
                 color: C.orange,
               },
               {
                 name: "Product (PQ)",
                 win: "~32x memory, recall tuning",
-                note: "m=96 subvectors, 256 codes",
+                note: "M=96 subvectors, 256 codes",
                 color: C.yellow,
               },
               {
@@ -1446,20 +1446,20 @@ export const Qdrant = (ctx) => {
             {[
               {
                 name: "Single binary",
-                what: "download, `./qdrant`, ready in seconds",
-                when: "laptop prototyping, tests, CI",
+                what: "Download, `./qdrant`, ready in seconds",
+                when: "Laptop prototyping, tests, CI",
                 color: C.cyan,
               },
               {
                 name: "Docker image",
                 what: "`docker run qdrant/qdrant`",
-                when: "staging, small production, ops familiarity",
+                when: "Staging, small production, ops familiarity",
                 color: C.yellow,
               },
               {
                 name: "K8s operator",
-                what: "declarative cluster, HA, upgrades",
-                when: "production: multi-node, rolling upgrades",
+                what: "Declarative cluster, HA, upgrades",
+                when: "Production: multi-node, rolling upgrades",
                 color: C.green,
               },
             ].map((r) => (
@@ -1529,15 +1529,15 @@ export const Qdrant = (ctx) => {
             {[
               {
                 t: "Ops burden",
-                d: "you page for incidents, handle upgrades, run backups, design HA - operational cost is real",
+                d: "You page for incidents, handle upgrades, run backups, design HA - operational cost is real",
               },
               {
                 t: "Multi-region story is newer",
-                d: "active-active replication and regional failover are more mature in Pinecone and Elastic",
+                d: "Active-active replication and regional failover are more mature in Pinecone and Elastic",
               },
               {
                 t: "Smaller ecosystem than Elastic",
-                d: "fewer third-party tools, dashboards, plugins; the community is growing but still smaller",
+                d: "Fewer third-party tools, dashboards, plugins; the community is growing but still smaller",
               },
             ].map((r) => (
               <div
@@ -1624,8 +1624,8 @@ export const Pinecone = (ctx) => {
           >
             {[
               { t: "Managed SaaS", d: "Pinecone runs the infrastructure, not you" },
-              { t: "Proprietary", d: "closed-source core, pay-per-use pricing" },
-              { t: "Opinionated defaults", d: "index type, shard count, replication decided for you" },
+              { t: "Proprietary", d: "Closed-source core, pay-per-use pricing" },
+              { t: "Opinionated defaults", d: "Index type, shard count, replication decided for you" },
             ].map((r) => (
               <div
                 key={r.t}
@@ -1718,15 +1718,15 @@ export const Pinecone = (ctx) => {
             >
               {[
                 {
-                  tier: "p1 pod",
+                  tier: "P1 pod",
                   what: "CPU-tuned, cheaper, lower QPS per pod",
-                  when: "cost-sensitive, moderate QPS workloads",
+                  when: "Cost-sensitive, moderate QPS workloads",
                   color: C.yellow,
                 },
                 {
-                  tier: "p2 pod",
-                  what: "memory + performance tuned, higher QPS",
-                  when: "latency-sensitive, high-QPS workloads",
+                  tier: "P2 pod",
+                  what: "Memory + performance tuned, higher QPS",
+                  when: "Latency-sensitive, high-QPS workloads",
                   color: C.orange,
                 },
               ].map((r) => (
@@ -1797,9 +1797,9 @@ export const Pinecone = (ctx) => {
             }}
           >
             {[
-              { phase: "Idle", cost: "storage only", latency: "-", note: "cheap, no compute running" },
-              { phase: "Cold start", cost: "compute spin-up", latency: "~1 s tax", note: "first query after idle" },
-              { phase: "Warm", cost: "per query", latency: "normal", note: "subsequent queries, millisecond" },
+              { phase: "Idle", cost: "Storage only", latency: "-", note: "Cheap, no compute running" },
+              { phase: "Cold start", cost: "Compute spin-up", latency: "~1 s tax", note: "First query after idle" },
+              { phase: "Warm", cost: "Per query", latency: "normal", note: "Subsequent queries, millisecond" },
             ].map((r) => (
               <div
                 key={r.phase}
@@ -1888,17 +1888,17 @@ export const Pinecone = (ctx) => {
             {[
               {
                 t: "Metadata filtering",
-                d: "bitmap-backed, evaluates per query, works with JSON predicates",
+                d: "Bitmap-backed, evaluates per query, works with JSON predicates",
                 color: C.orange,
               },
               {
                 t: "Hybrid search",
-                d: "sparse + dense vector combined, learned sparse available",
+                d: "Sparse + dense vector combined, learned sparse available",
                 color: C.yellow,
               },
               {
                 t: "Namespaces",
-                d: "per-tenant partitions in one index, no extra indexes to manage",
+                d: "Per-tenant partitions in one index, no extra indexes to manage",
                 color: C.cyan,
               },
             ].map((r) => (
@@ -1962,17 +1962,17 @@ export const Pinecone = (ctx) => {
             }}
           >
             {[
-              { t: "No ops team", d: "startups, two-engineer projects, no SRE rotation" },
-              { t: "Variable workloads", d: "bursty traffic benefits from serverless scale-to-zero" },
-              { t: "Fast time-to-market", d: "ship in hours, no infra review, no provisioning" },
-              { t: "Prototype / POC", d: "validate product-market fit before committing ops budget" },
+              { t: "No ops team", d: "Startups, two-engineer projects, no SRE rotation" },
+              { t: "Variable workloads", d: "Bursty traffic benefits from serverless scale-to-zero" },
+              { t: "Fast time-to-market", d: "Ship in hours, no infra review, no provisioning" },
+              { t: "Prototype / POC", d: "Validate product-market fit before committing ops budget" },
               {
                 t: "Compliance off-the-shelf",
                 d: "SOC 2, GDPR pre-arranged as part of the service",
               },
               {
                 t: "Multi-tenant SaaS",
-                d: "namespaces cleanly partition tenant data without extra infra",
+                d: "Namespaces cleanly partition tenant data without extra infra",
               },
             ].map((r) => (
               <div
@@ -2037,7 +2037,7 @@ export const Pinecone = (ctx) => {
             {[
               {
                 t: "Vendor lock-in",
-                d: "proprietary system, migration requires re-indexing, no official Postgres-style portability",
+                d: "Proprietary system, migration requires re-indexing, no official Postgres-style portability",
               },
               {
                 t: "Cost at scale",
@@ -2045,7 +2045,7 @@ export const Pinecone = (ctx) => {
               },
               {
                 t: "Opinionated scaling",
-                d: "you cannot reshape sharding, pick HNSW parameters, or hand-tune the graph",
+                d: "You cannot reshape sharding, pick HNSW parameters, or hand-tune the graph",
               },
             ].map((r) => (
               <div
@@ -2152,12 +2152,12 @@ export const QdrantVsPinecone = (ctx) => {
               <div style={{ color: C.cyan, fontWeight: "bold", padding: "6px 8px", textAlign: "center" }}>Pinecone</div>
               <div style={{ color: C.cyan, fontWeight: "bold", padding: "6px 8px" }}>Comment</div>
               {[
-                { axis: "Ops preference", q: "self-host", p: "managed", n: "who runs it" },
-                { axis: "Filter complexity", q: "inline HNSW", p: "post-filter", n: "Qdrant deeper" },
+                { axis: "Ops preference", q: "self-host", p: "managed", n: "Who runs it" },
+                { axis: "Filter complexity", q: "Inline HNSW", p: "post-filter", n: "Qdrant deeper" },
                 { axis: "Scale-to-zero", q: "no", p: "serverless", n: "Pinecone unique" },
-                { axis: "Cost at steady 1B", q: "cheaper", p: "premium", n: "ops capacity needed" },
-                { axis: "Feature depth", q: "more knobs", p: "fewer, opinionated", n: "pick your poison" },
-                { axis: "Ecosystem maturity", q: "growing", p: "battle-tested", n: "both solid today" },
+                { axis: "Cost at steady 1B", q: "cheaper", p: "premium", n: "Ops capacity needed" },
+                { axis: "Feature depth", q: "More knobs", p: "Fewer, opinionated", n: "Pick your poison" },
+                { axis: "Ecosystem maturity", q: "growing", p: "battle-tested", n: "Both solid today" },
               ].flatMap((r) => [
                 <div
                   key={`a-${r.axis}`}
@@ -2230,7 +2230,7 @@ export const QdrantVsPinecone = (ctx) => {
             >
               {[
                 { t: "Size", v: "<1M vectors" },
-                { t: "Traffic", v: "unknown / bursty" },
+                { t: "Traffic", v: "Unknown / bursty" },
                 { t: "Ops capacity", v: "none" },
               ].map((r) => (
                 <div
@@ -2311,8 +2311,8 @@ export const QdrantVsPinecone = (ctx) => {
             >
               {[
                 { t: "Size", v: "10M vectors" },
-                { t: "Filters", v: "complex compound predicates" },
-                { t: "Ops capacity", v: "one Postgres DBA + SRE on-call" },
+                { t: "Filters", v: "Complex compound predicates" },
+                { t: "Ops capacity", v: "One Postgres DBA + SRE on-call" },
               ].map((r) => (
                 <div
                   key={r.t}
@@ -2392,7 +2392,7 @@ export const QdrantVsPinecone = (ctx) => {
               {[
                 { t: "Size", v: "1B vectors" },
                 { t: "Traffic", v: "10K QPS steady" },
-                { t: "Ops capacity", v: "dedicated platform team" },
+                { t: "Ops capacity", v: "Dedicated platform team" },
               ].map((r) => (
                 <div
                   key={r.t}
@@ -2490,9 +2490,9 @@ export const QdrantVsPinecone = (ctx) => {
               }}
             >
               {[
-                { t: "Traffic", v: "spiky (10:1 daily range)" },
+                { t: "Traffic", v: "Spiky (10:1 daily range)" },
                 { t: "Residency", v: "EU only - GDPR" },
-                { t: "Ops capacity", v: "some SRE but limited" },
+                { t: "Ops capacity", v: "Some SRE but limited" },
               ].map((r) => (
                 <div
                   key={r.t}
@@ -2525,14 +2525,14 @@ export const QdrantVsPinecone = (ctx) => {
             {[
               {
                 name: "Pinecone EU region",
-                pro: "scale-to-zero, pre-approved GDPR, minimal ops",
-                con: "higher $/query, Pinecone holds keys",
+                pro: "Scale-to-zero, pre-approved GDPR, minimal ops",
+                con: "Higher $/query, Pinecone holds keys",
                 color: C.orange,
               },
               {
                 name: "Qdrant Cloud EU",
-                pro: "self-host in your VPC, lower $/query at scale",
-                con: "ops for the VPC side, region is eu-central-1",
+                pro: "Self-host in your VPC, lower $/query at scale",
+                con: "Ops for the VPC side, region is eu-central-1",
                 color: C.green,
               },
             ].map((r) => (
@@ -2752,7 +2752,7 @@ export const WeaviateMilvusChroma = (ctx) => {
             >
               {[
                 { t: "Language", d: "Go - self-hostable, Docker-friendly", color: C.cyan },
-                { t: "Modules", d: "transformers, generative, Q&A, reranker", color: C.purple },
+                { t: "Modules", d: "Transformers, generative, Q&A, reranker", color: C.purple },
                 { t: "API", d: "GraphQL + REST + gRPC", color: C.yellow },
               ].map((r) => (
                 <div
@@ -2855,7 +2855,7 @@ export const WeaviateMilvusChroma = (ctx) => {
             }}
           >
             {[
-              { t: "Distributed-native", d: "built for multi-node from the start, not bolted on" },
+              { t: "Distributed-native", d: "Built for multi-node from the start, not bolted on" },
               { t: "Azure AI Search core", d: "Milvus algorithms power Azure&apos;s managed vector search" },
             ].map((r) => (
               <div
@@ -2933,9 +2933,9 @@ export const WeaviateMilvusChroma = (ctx) => {
             }}
           >
             {[
-              { t: "Python-first", d: "the API is pure Python, not a wrapper over a client" },
-              { t: "Embedded / local", d: "runs in-process, persists to a single directory on disk" },
-              { t: "Prototype + small-scale", d: "perfect for notebooks and small production workloads" },
+              { t: "Python-first", d: "The API is pure Python, not a wrapper over a client" },
+              { t: "Embedded / local", d: "Runs in-process, persists to a single directory on disk" },
+              { t: "Prototype + small-scale", d: "Perfect for notebooks and small production workloads" },
             ].map((r) => (
               <div
                 key={r.t}
@@ -3055,22 +3055,22 @@ export const WeaviateMilvusChroma = (ctx) => {
             {[
               {
                 name: "Weaviate",
-                pick: "modular RAG pipelines where embedding + generation should live with the DB",
+                pick: "Modular RAG pipelines where embedding + generation should live with the DB",
                 color: C.cyan,
               },
               {
                 name: "Milvus",
-                pick: "baseline scale is billions, distributed from day one, often via Azure AI Search",
+                pick: "Baseline scale is billions, distributed from day one, often via Azure AI Search",
                 color: C.yellow,
               },
               {
                 name: "Chroma",
-                pick: "notebooks, prototypes, local dev, tutorial flows, small-scale production",
+                pick: "Notebooks, prototypes, local dev, tutorial flows, small-scale production",
                 color: C.green,
               },
               {
                 name: "Elastic / OpenSearch",
-                pick: "already runs Elastic; vector is an addition, not the main feature",
+                pick: "Already runs Elastic; vector is an addition, not the main feature",
                 color: C.orange,
               },
             ].map((r) => (
@@ -3267,25 +3267,25 @@ export const DecisionFramework = (ctx) => {
               {
                 bucket: "< 1M",
                 defaults: ["pgvector", "Chroma", "any really"],
-                note: "almost anything works, pick by convenience",
+                note: "Almost anything works, pick by convenience",
                 color: C.green,
               },
               {
                 bucket: "1M - 100M",
                 defaults: ["Qdrant", "Pinecone", "pgvector"],
-                note: "real decision space; axes 2-4 matter",
+                note: "Real decision space; axes 2-4 matter",
                 color: C.yellow,
               },
               {
                 bucket: "100M - 1B",
                 defaults: ["Qdrant multi-node", "Milvus"],
-                note: "self-host starts to dominate on cost",
+                note: "Self-host starts to dominate on cost",
                 color: C.orange,
               },
               {
                 bucket: "> 1B",
                 defaults: ["Milvus", "Vespa", "Qdrant at limit"],
-                note: "distributed-native is no longer optional",
+                note: "Distributed-native is no longer optional",
                 color: C.red,
               },
             ].map((r) => (
@@ -3377,19 +3377,19 @@ export const DecisionFramework = (ctx) => {
                 {
                   posture: "None (managed)",
                   picks: ["Pinecone", "Pinecone Serverless", "Weaviate Cloud"],
-                  note: "zero ops; higher $/query",
+                  note: "Zero ops; higher $/query",
                   color: C.orange,
                 },
                 {
                   posture: "Self-host",
                   picks: ["Qdrant", "Milvus", "Weaviate OSS"],
-                  note: "you run it; lower $/query",
+                  note: "You run it; lower $/query",
                   color: C.green,
                 },
                 {
                   posture: "Postgres-native",
                   picks: ["pgvector"],
-                  note: "reuses existing DB; fits up to 10M-100M",
+                  note: "Reuses existing DB; fits up to 10M-100M",
                   color: C.cyan,
                 },
               ].map((r) => (
@@ -3470,12 +3470,12 @@ export const DecisionFramework = (ctx) => {
               {
                 kind: "Simple filter",
                 example: "tenant_id = 42",
-                winner: "all products fine; pick by other axes",
+                winner: "All products fine; pick by other axes",
                 color: C.green,
               },
               {
                 kind: "Complex compound",
-                example: "tenant AND region AND role AND published_after",
+                example: "Tenant AND region AND role AND published_after",
                 winner: "Qdrant inline filtered-HNSW shines",
                 color: C.yellow,
               },
@@ -3557,22 +3557,22 @@ export const DecisionFramework = (ctx) => {
               {
                 q: "Update frequency",
                 ref: "chapter 11.21",
-                what: "inserts/sec, deletes/sec; tombstone tolerance; rebuild cadence",
+                what: "Inserts/sec, deletes/sec; tombstone tolerance; rebuild cadence",
               },
               {
                 q: "Filter selectivity",
                 ref: "chapter 11.20",
-                what: "tight (0.1%) vs loose (50%); compound predicates",
+                what: "Tight (0.1%) vs loose (50%); compound predicates",
               },
               {
                 q: "QPS budget",
                 ref: "chapter 11.29",
-                what: "peak QPS, sustained QPS, ratio, seasonal spikes",
+                what: "Peak QPS, sustained QPS, ratio, seasonal spikes",
               },
               {
                 q: "P99 target",
                 ref: "chapter 11.28",
-                what: "latency budget, tail behavior, cold-start tolerance",
+                what: "Latency budget, tail behavior, cold-start tolerance",
               },
               {
                 q: "Availability target",
@@ -3582,7 +3582,7 @@ export const DecisionFramework = (ctx) => {
               {
                 q: "Embedding model stability",
                 ref: "chapter 11.27",
-                what: "drift plan; re-embedding cost; migration path",
+                what: "Drift plan; re-embedding cost; migration path",
               },
               {
                 q: "Ops capacity",
@@ -3669,27 +3669,27 @@ export const DecisionFramework = (ctx) => {
               {[
                 {
                   t: "Master HNSW parameters",
-                  d: "tune M, ef_construction, ef_search per workload with confidence",
+                  d: "Tune M, ef_construction, ef_search per workload with confidence",
                 },
                 {
                   t: "Reason about compression",
-                  d: "pick scalar, PQ, binary, or Matryoshka for the recall/memory budget at hand",
+                  d: "Pick scalar, PQ, binary, or Matryoshka for the recall/memory budget at hand",
                 },
                 {
                   t: "Predict filtered-search behavior",
-                  d: "explain why pre-filter, post-filter, or inline wins at each selectivity band",
+                  d: "Explain why pre-filter, post-filter, or inline wins at each selectivity band",
                 },
                 {
                   t: "Size a real deployment",
-                  d: "compute RAM, CPU, nodes, cost from N, d, QPS, and filter assumptions",
+                  d: "Compute RAM, CPU, nodes, cost from N, d, QPS, and filter assumptions",
                 },
                 {
                   t: "Answer vendor questions from first principles",
-                  d: "not just Qdrant vs Pinecone; any new system fits into the same framework",
+                  d: "Not just Qdrant vs Pinecone; any new system fits into the same framework",
                 },
                 {
                   t: "Lead a design review",
-                  d: "walk the checklist, defend a pick, and catch future incidents in advance",
+                  d: "Walk the checklist, defend a pick, and catch future incidents in advance",
                 },
               ].map((r) => (
                 <div

@@ -631,7 +631,7 @@ export const Filtering = (ctx) => {
                 {
                   name: "pre-filter",
                   cells: [
-                    { text: "fast + exact", win: true },
+                    { text: "Fast + exact", win: true },
                     { text: "acceptable", win: false },
                     { text: "500 ms", win: false },
                     { text: "1 s, brute force", win: false },
@@ -640,19 +640,19 @@ export const Filtering = (ctx) => {
                 {
                   name: "post-filter",
                   cells: [
-                    { text: "empty results", win: false, bad: true },
-                    { text: "missing some", win: false, bad: true },
+                    { text: "Empty results", win: false, bad: true },
+                    { text: "Missing some", win: false, bad: true },
                     { text: "good", win: false },
-                    { text: "best - ANN speed", win: true },
+                    { text: "Best - ANN speed", win: true },
                   ],
                 },
                 {
-                  name: "inline (Qdrant)",
+                  name: "Inline (Qdrant)",
                   cells: [
                     { text: "great", win: true },
                     { text: "great", win: true },
                     { text: "great", win: true },
-                    { text: "matches post-filter", win: false },
+                    { text: "Matches post-filter", win: false },
                   ],
                 },
               ].flatMap((row) => [
@@ -743,23 +743,23 @@ export const Filtering = (ctx) => {
               {[
                 {
                   system: "Qdrant",
-                  index: "inverted index + bitmap on payload",
-                  note: "integrates tightly with HNSW traversal, per-field tunable",
+                  index: "Inverted index + bitmap on payload",
+                  note: "Integrates tightly with HNSW traversal, per-field tunable",
                 },
                 {
                   system: "Pinecone",
-                  index: "namespaces + metadata index",
-                  note: "namespaces partition physically, metadata via filter DSL",
+                  index: "Namespaces + metadata index",
+                  note: "Namespaces partition physically, metadata via filter DSL",
                 },
                 {
                   system: "Weaviate",
-                  index: "column-store inverted index",
-                  note: "learned from Lucene, BM25 and filter share the column layout",
+                  index: "Column-store inverted index",
+                  note: "Learned from Lucene, BM25 and filter share the column layout",
                 },
                 {
                   system: "pgvector",
                   index: "JSONB GIN or btree on columns",
-                  note: "plain Postgres indexing - familiar to any SQL team",
+                  note: "Plain Postgres indexing - familiar to any SQL team",
                 },
               ].map((row) => (
                 <div
@@ -1297,21 +1297,21 @@ export const UpdatesDeletes = (ctx) => {
                 color: C.yellow,
                 pros: ["simplest code path", "recall back to 0.97"],
                 cons: ["downtime while rebuilding", "full CPU burn"],
-                when: "small indexes, scheduled windows",
+                when: "Small indexes, scheduled windows",
               },
               {
                 name: "Segment rotation",
                 color: C.green,
                 pros: ["no downtime", "new segment swaps in atomically"],
                 cons: ["memory overhead during swap", "operational complexity"],
-                when: "large indexes, 24/7 uptime",
+                when: "Large indexes, 24/7 uptime",
               },
               {
                 name: "Incremental repair",
                 color: C.orange,
                 pros: ["continuous", "no downtime"],
                 cons: ["code is subtle", "partial recall recovery"],
-                when: "streaming workloads with steady delete pressure",
+                when: "Streaming workloads with steady delete pressure",
               },
             ].map((r) => (
               <div
@@ -1399,7 +1399,7 @@ export const UpdatesDeletes = (ctx) => {
                 color: C.bright,
               }}
             >
-              <div style={{ color: C.purple, fontWeight: "bold", padding: "6px 8px" }}>index family</div>
+              <div style={{ color: C.purple, fontWeight: "bold", padding: "6px 8px" }}>Index family</div>
               <div style={{ color: C.purple, fontWeight: "bold", padding: "6px 8px", textAlign: "center" }}>
                 Delete cost
               </div>
@@ -1410,26 +1410,26 @@ export const UpdatesDeletes = (ctx) => {
                   name: "IVF / IVF-PQ",
                   cost: "easy",
                   costColor: C.green,
-                  trigger: "cell-level rebuild at ~50% dead",
+                  trigger: "Cell-level rebuild at ~50% dead",
                   example: "FAISS IVF_PQ, Milvus IVF",
                 },
                 {
                   name: "HNSW",
                   cost: "moderate",
                   costColor: C.yellow,
-                  trigger: "full-graph rebuild at ~30% dead",
+                  trigger: "Full-graph rebuild at ~30% dead",
                   example: "Qdrant HNSW, Weaviate",
                 },
                 {
                   name: "HNSW + PQ",
                   cost: "hardest",
                   costColor: C.red,
-                  trigger: "graph + codebook retrain",
+                  trigger: "Graph + codebook retrain",
                   example: "Qdrant HNSW+PQ, Milvus HNSW_PQ",
                 },
                 {
                   name: "pgvector HNSW",
-                  cost: "historically hard",
+                  cost: "Historically hard",
                   costColor: C.orange,
                   trigger: "VACUUM + REINDEX",
                   example: "pgvector (issue tracked since 0.5)",
@@ -1969,10 +1969,10 @@ export const Sharding = (ctx) => {
               </div>
               <div style={{ color: C.red, fontWeight: "bold", padding: "6px 8px", textAlign: "center" }}>Note</div>
               {[
-                { k: "top-10", recall: "0.88", note: "buffer too small, misses spread hits" },
-                { k: "top-20", recall: "0.94", note: "typical production buffer" },
-                { k: "top-50", recall: "0.97", note: "matches single-node within 0.1%" },
-                { k: "top-100", recall: "0.98", note: "diminishing returns, higher network cost" },
+                { k: "top-10", recall: "0.88", note: "Buffer too small, misses spread hits" },
+                { k: "top-20", recall: "0.94", note: "Typical production buffer" },
+                { k: "top-50", recall: "0.97", note: "Matches single-node within 0.1%" },
+                { k: "top-100", recall: "0.98", note: "Diminishing returns, higher network cost" },
               ].flatMap((r) => [
                 <div
                   key={`pk-${r.k}`}
@@ -2489,19 +2489,19 @@ export const Replication = (ctx) => {
                 {
                   name: "WAL on disk",
                   color: C.green,
-                  how: "every write appended to a log before ack",
+                  how: "Every write appended to a log before ack",
                   rpo: "RPO = 0 (synchronous) or 1 batch",
                 },
                 {
                   name: "Periodic snapshots",
                   color: C.yellow,
-                  how: "dump the index to disk every N minutes",
+                  how: "Dump the index to disk every N minutes",
                   rpo: "RPO = interval, faster startup",
                 },
                 {
                   name: "Rehydrate from source",
                   color: C.red,
-                  how: "re-read every doc from the app DB, re-embed",
+                  how: "Re-read every doc from the app DB, re-embed",
                   rpo: "RPO = 0 but slow",
                 },
               ].map((r) => (
@@ -2592,21 +2592,21 @@ export const Replication = (ctx) => {
               <div style={{ color: C.red, fontWeight: "bold", padding: "6px 8px" }}>Why</div>
               {[
                 {
-                  name: "snapshot + WAL replay",
+                  name: "Snapshot + WAL replay",
                   time: "10 min - 2 hours",
-                  why: "disk I/O bound, graph pages stream in",
+                  why: "Disk I/O bound, graph pages stream in",
                   color: C.green,
                 },
                 {
                   name: "WAL-only replay (no snapshot)",
                   time: "~12 hours",
-                  why: "every insert replayed from scratch",
+                  why: "Every insert replayed from scratch",
                   color: C.yellow,
                 },
                 {
                   name: "Re-embed from source DB",
                   time: "1 - 14 days",
-                  why: "embedding API throughput + $ billed per token",
+                  why: "Embedding API throughput + $ billed per token",
                   color: C.red,
                 },
               ].flatMap((r) => [
@@ -2730,9 +2730,9 @@ export const HybridSearch = (ctx) => {
               }}
             >
               {[
-                { name: "SKUs and IDs", ex: "SKU-A4291, ORD-88213", loss: "exact match required" },
-                { name: "Proper nouns", ex: "Rajul, Mumbai, AlphaFold", loss: "rare in training" },
-                { name: "Rare terms", ex: "tabby, kernel panic, RoPE", loss: "blurred into neighbors" },
+                { name: "SKUs and IDs", ex: "SKU-A4291, ORD-88213", loss: "Exact match required" },
+                { name: "Proper nouns", ex: "Rajul, Mumbai, AlphaFold", loss: "Rare in training" },
+                { name: "Rare terms", ex: "Tabby, kernel panic, RoPE", loss: "Blurred into neighbors" },
               ].map((r) => (
                 <div
                   key={r.name}
@@ -3196,7 +3196,7 @@ export const HybridSearch = (ctx) => {
             >
               {[
                 {
-                  name: "pure vector",
+                  name: "Pure vector",
                   color: C.cyan,
                   results: [
                     "Lions are big cats (near miss)",
@@ -3205,10 +3205,10 @@ export const HybridSearch = (ctx) => {
                     "Kittens grow up to be cats",
                     "My cat sat on the mat",
                   ],
-                  note: "no hit on tabby - the actual topic",
+                  note: "No hit on tabby - the actual topic",
                 },
                 {
-                  name: "pure BM25",
+                  name: "Pure BM25",
                   color: C.yellow,
                   results: [
                     "Tabby cat coat color genetics",
@@ -3217,10 +3217,10 @@ export const HybridSearch = (ctx) => {
                     "Random tabby mention in a tweet",
                     "Tabby bar and grill menu",
                   ],
-                  note: "off-topic exact matches rank high",
+                  note: "Off-topic exact matches rank high",
                 },
                 {
-                  name: "hybrid (RRF)",
+                  name: "Hybrid (RRF)",
                   color: C.green,
                   results: [
                     "Tabby cat coat color genetics",
@@ -3229,7 +3229,7 @@ export const HybridSearch = (ctx) => {
                     "Cats are small carnivores",
                     "Kittens grow up to be cats",
                   ],
-                  note: "tabby + genetics concentrated at the top",
+                  note: "Tabby + genetics concentrated at the top",
                 },
               ].map((s) => (
                 <div
@@ -3767,7 +3767,7 @@ export const Rerankers = (ctx) => {
               <br />
               Sort candidates by score desc
               <br />
-              return top-<span style={{ color: C.orange }}>10</span>
+              Return top-<span style={{ color: C.orange }}>10</span>
             </div>
           </div>
           <div
@@ -3987,27 +3987,27 @@ export const Rerankers = (ctx) => {
               {[
                 {
                   name: "Cohere Rerank 3",
-                  kind: "managed API",
+                  kind: "Managed API",
                   size: "~400M params",
-                  note: "multi-lingual, context 4K tokens, simple REST",
+                  note: "Multi-lingual, context 4K tokens, simple REST",
                 },
                 {
                   name: "BGE-reranker v2",
-                  kind: "open weights",
+                  kind: "Open weights",
                   size: "base 268M / large 560M",
                   note: "BAAI release, self-host on A10/A100, BGE-reranker-m3 is multilingual",
                 },
                 {
                   name: "MS-MARCO cross-encoder",
-                  kind: "open weights",
+                  kind: "Open weights",
                   size: "MiniLM ~33M, BERT-base 110M",
                   note: "Sentence-Transformers, classic baseline, smallest latency",
                 },
                 {
                   name: "RankGPT / LLM-as-judge",
-                  kind: "managed LLM",
+                  kind: "Managed LLM",
                   size: "listwise, LLM-driven",
-                  note: "highest quality, 10x latency, expensive",
+                  note: "Highest quality, 10x latency, expensive",
                 },
               ].map((r) => (
                 <div
@@ -4551,23 +4551,23 @@ export const MultiVectorRetrieval = (ctx) => {
               {[
                 {
                   name: "Vespa",
-                  how: "native tensor fields with max-sim as a built-in ranking expression",
-                  since: "since v7, Yahoo production",
+                  how: "Native tensor fields with max-sim as a built-in ranking expression",
+                  since: "Since v7, Yahoo production",
                 },
                 {
                   name: "Qdrant multi-vector",
-                  how: "multi-vector collections since v1.10, per-vector payload",
-                  since: "v1.10 (Jul 2024)",
+                  how: "Multi-vector collections since v1.10, per-vector payload",
+                  since: "V1.10 (Jul 2024)",
                 },
                 {
                   name: "Elasticsearch nested",
-                  how: "nested dense_vector fields with script-score max-sim",
+                  how: "Nested dense_vector fields with script-score max-sim",
                   since: "8.13+",
                 },
                 {
                   name: "Weaviate",
-                  how: "multi-vector preview via RAG module experiments",
-                  since: "preview since 1.25",
+                  how: "Multi-vector preview via RAG module experiments",
+                  since: "Preview since 1.25",
                 },
               ].map((r) => (
                 <div
@@ -4955,19 +4955,19 @@ export const EmbeddingLifecycle = (ctx) => {
               {[
                 {
                   name: "Provider deprecation",
-                  text: "vendor sunsets the old model, forced migration under a deadline",
+                  text: "Vendor sunsets the old model, forced migration under a deadline",
                 },
                 {
                   name: "Silent drift",
-                  text: "model did not change but the domain did - recall decays over time",
+                  text: "Model did not change but the domain did - recall decays over time",
                 },
                 {
                   name: "New language / domain",
-                  text: "content types the old model never saw are served poorly",
+                  text: "Content types the old model never saw are served poorly",
                 },
                 {
                   name: "Missed capability",
-                  text: "competitors ship features (longer context, better multilingual) that the pinned model cannot match",
+                  text: "Competitors ship features (longer context, better multilingual) that the pinned model cannot match",
                 },
               ].map((r) => (
                 <div
@@ -5051,15 +5051,15 @@ export const EmbeddingLifecycle = (ctx) => {
                 },
                 {
                   name: "Weekly recall@10 run",
-                  note: "run the eval, record the curve, alert on regression",
+                  note: "Run the eval, record the curve, alert on regression",
                 },
                 {
                   name: "Content-change monitor",
-                  note: "track the embedding distribution (mean, variance) per ingest batch",
+                  note: "Track the embedding distribution (mean, variance) per ingest batch",
                 },
                 {
                   name: "Model-change signal",
-                  note: "lock embedding model version, surface drift when you bump it",
+                  note: "Lock embedding model version, surface drift when you bump it",
                 },
               ].map((r) => (
                 <div
@@ -5160,10 +5160,10 @@ export const Observability = (ctx) => {
               }}
             >
               {[
-                { name: "P50", target: "10 ms", color: C.green, note: "median query" },
+                { name: "P50", target: "10 ms", color: C.green, note: "Median query" },
                 { name: "P95", target: "30 ms", color: C.yellow, note: "95% of queries faster" },
                 { name: "P99", target: "80 ms", color: C.orange, note: "99% of queries faster" },
-                { name: "P99.9", target: "200 ms", color: C.red, note: "tail blows up here" },
+                { name: "P99.9", target: "200 ms", color: C.red, note: "Tail blows up here" },
               ].map((r) => (
                 <div
                   key={r.name}
@@ -5293,10 +5293,10 @@ export const Observability = (ctx) => {
               }}
             >
               {[
-                { name: "L3 cache hit rate", what: "fraction of hot graph pages served from CPU cache" },
-                { name: "Memory pages read", what: "how many 4 KB pages touched per query" },
-                { name: "Distance computations", what: "how many candidate comparisons" },
-                { name: "CPU cycles per query", what: "wall-clock profile of a typical query" },
+                { name: "L3 cache hit rate", what: "Fraction of hot graph pages served from CPU cache" },
+                { name: "Memory pages read", what: "How many 4 KB pages touched per query" },
+                { name: "Distance computations", what: "How many candidate comparisons" },
+                { name: "CPU cycles per query", what: "Wall-clock profile of a typical query" },
               ].map((r) => (
                 <div
                   key={r.name}
@@ -5438,21 +5438,21 @@ export const Observability = (ctx) => {
                   kind: "ALERT",
                   threshold: "< 0.95",
                   color: C.red,
-                  why: "quality regression, investigate model or index",
+                  why: "Quality regression, investigate model or index",
                 },
                 {
-                  name: "cache hit rate",
+                  name: "Cache hit rate",
                   kind: "WATCH",
                   threshold: "~0.85",
                   color: C.yellow,
-                  why: "degrades before latency shows symptoms",
+                  why: "Degrades before latency shows symptoms",
                 },
                 {
-                  name: "index memory usage",
+                  name: "Index memory usage",
                   kind: "WATCH",
                   threshold: "60-70% RAM",
                   color: C.yellow,
-                  why: "growth predicts scale-up or shard",
+                  why: "Growth predicts scale-up or shard",
                 },
               ].map((r) => (
                 <div
@@ -5917,13 +5917,13 @@ export const CapacityPlanning = (ctx) => {
                 {
                   name: "Pinecone (pod-based)",
                   cost: "~$30K",
-                  trade: "managed, opinionated scaling, no ops team needed",
+                  trade: "Managed, opinionated scaling, no ops team needed",
                   color: C.red,
                 },
                 {
                   name: "Self-host Qdrant on AWS",
                   cost: "~$8K",
-                  trade: "you run it, ops load but great cost/feature ratio",
+                  trade: "You run it, ops load but great cost/feature ratio",
                   color: C.yellow,
                 },
                 {
@@ -6023,12 +6023,12 @@ export const CapacityPlanning = (ctx) => {
               {[
                 {
                   metric: "$ per million vectors per month",
-                  what: "storage side of the cost - scales with N",
+                  what: "Storage side of the cost - scales with N",
                   example: "Pinecone ~$60 / Qdrant ~$16 / pgvector ~$10",
                 },
                 {
                   metric: "$ per million queries",
-                  what: "compute side - scales with QPS",
+                  what: "Compute side - scales with QPS",
                   example: "Pinecone ~$6 / Qdrant ~$1.5 / pgvector ~$1",
                 },
               ].map((r) => (

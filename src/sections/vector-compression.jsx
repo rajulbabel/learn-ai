@@ -157,10 +157,10 @@ export const MemoryWall = (ctx) => {
                 What that means
               </div>
               {[
-                { n: "10 (cat corpus)", bytes: "30 KB", note: "fits in L1 cache" },
-                { n: "1,000,000 (1M)", bytes: "3 GB", note: "fits on a laptop" },
-                { n: "100,000,000 (100M)", bytes: "300 GB", note: "needs a real server" },
-                { n: "1,000,000,000 (1 billion)", bytes: "3 TB", note: "needs multi-node sharding" },
+                { n: "10 (cat corpus)", bytes: "30 KB", note: "Fits in L1 cache" },
+                { n: "1,000,000 (1M)", bytes: "3 GB", note: "Fits on a laptop" },
+                { n: "100,000,000 (100M)", bytes: "300 GB", note: "Needs a real server" },
+                { n: "1,000,000,000 (1 billion)", bytes: "3 TB", note: "Needs multi-node sharding" },
               ].map((row, i) => (
                 <div key={`${i}-n`} style={{ display: "contents" }}>
                   <div style={{ padding: "8px 10px", textAlign: "center", color: C.bright }}>{row.n}</div>
@@ -366,28 +366,28 @@ export const MemoryWall = (ctx) => {
                 color: C.cyan,
                 compress: "4x",
                 recall: "1-3% drop",
-                how: "float32 to int8, one byte per dimension",
+                how: "Float32 to int8, one byte per dimension",
               },
               {
                 name: "Product quantization (PQ)",
                 color: C.purple,
                 compress: "32x",
                 recall: "3-8% drop",
-                how: "split into subvectors, replace each with a 1-byte codebook id",
+                how: "Split into subvectors, replace each with a 1-byte codebook id",
               },
               {
                 name: "Binary quantization",
                 color: C.yellow,
                 compress: "32x",
                 recall: "5-10% drop",
-                how: "one bit per dimension, XOR and popcount for distance",
+                how: "One bit per dimension, XOR and popcount for distance",
               },
               {
                 name: "Matryoshka embeddings",
                 color: C.pink,
                 compress: "6x",
-                recall: "minimal if trained for it",
-                how: "truncate the vector dimension itself at query time",
+                recall: "Minimal if trained for it",
+                how: "Truncate the vector dimension itself at query time",
               },
             ].map((card) => (
               <div
@@ -1351,7 +1351,7 @@ export const ProductQuantization = (ctx) => {
                 Input: billions of 8-D points
               </text>
               <text x="605" y="120" textAnchor="middle" fill={C.bright} fontSize="11">
-                output: 256 centroids
+                Output: 256 centroids
               </text>
               <text x="605" y="155" textAnchor="middle" fill={C.yellow} fontSize="12" fontWeight="bold">
                 = slot 0 codebook
@@ -2570,7 +2570,7 @@ export const ProductQuantization = (ctx) => {
       <Reveal when={sub >= 6}>
         <Box color={C.pink} style={{ width: "100%" }}>
           <T color={C.pink} bold center size={22}>
-            m is the only knob: bytes-per-vector vs recall
+            M is the only knob: bytes-per-vector vs recall
           </T>
           <div
             style={{
@@ -2762,10 +2762,10 @@ export const ProductQuantization = (ctx) => {
                 </div>
               ))}
               {[
-                { m: "8", bytes: "8", ratio: "384x", recall: "0.81", use: "extreme scale" },
-                { m: "48", bytes: "48", ratio: "64x", recall: "0.91", use: "web-scale search" },
-                { m: "96", bytes: "96", ratio: "32x", recall: "0.96", use: "the production sweet spot" },
-                { m: "192", bytes: "192", ratio: "16x", recall: "0.98", use: "recall-sensitive workloads" },
+                { m: "8", bytes: "8", ratio: "384x", recall: "0.81", use: "Extreme scale" },
+                { m: "48", bytes: "48", ratio: "64x", recall: "0.91", use: "Web-scale search" },
+                { m: "96", bytes: "96", ratio: "32x", recall: "0.96", use: "The production sweet spot" },
+                { m: "192", bytes: "192", ratio: "16x", recall: "0.98", use: "Recall-sensitive workloads" },
               ].map((row, i) => (
                 <div key={`r-${i}`} style={{ display: "contents" }}>
                   {[row.m, row.bytes, row.ratio, row.recall, row.use].map((cell, ci) => (
@@ -3231,7 +3231,7 @@ export const BinaryQuantization = (ctx) => {
                 { d: "128", recall: "0.60", ok: false, note: "unusable" },
                 { d: "256", recall: "0.82", ok: false, note: "borderline" },
                 { d: "512", recall: "0.93", ok: true, note: "OK with rerank" },
-                { d: "768", recall: "0.95", ok: true, note: "production OK" },
+                { d: "768", recall: "0.95", ok: true, note: "Production OK" },
                 { d: "1024+", recall: "0.96+", ok: true, note: "excellent" },
               ].map((row, i) => (
                 <div key={`bc-${i}`} style={{ display: "contents" }}>
@@ -3309,7 +3309,7 @@ export const BinaryQuantization = (ctx) => {
                   <br />
                   Scan with XOR + popcount
                   <br />
-                  return top 100 candidates
+                  Return top 100 candidates
                 </div>
               </div>
               <div style={{ fontSize: 26, color: C.orange }}>&rarr;</div>
@@ -3334,7 +3334,7 @@ export const BinaryQuantization = (ctx) => {
                   <br />
                   Full float32 dot products
                   <br />
-                  return final top 10
+                  Return final top 10
                 </div>
               </div>
             </div>
@@ -3442,7 +3442,7 @@ export const BinaryQuantization = (ctx) => {
                   <br />
                   Full float32 dot products
                   <br />
-                  return final top 10
+                  Return final top 10
                 </div>
               </div>
             </div>
@@ -3572,10 +3572,10 @@ export const Matryoshka = (ctx) => {
               }}
             >
               {[
-                { metric: "OpenAI API cost", value: "~$30,000", note: "at $0.13 per 1M tokens, ~2B tokens" },
-                { metric: "wall-clock time", value: "~3-5 days", note: "even with high concurrency + batching" },
-                { metric: "Source-text requirement", value: "Must retain", note: "many pipelines drop it" },
-                { metric: "Index rebuild", value: "On top of that", note: "extra days of HNSW re-construction" },
+                { metric: "OpenAI API cost", value: "~$30,000", note: "At $0.13 per 1M tokens, ~2B tokens" },
+                { metric: "Wall-clock time", value: "~3-5 days", note: "Even with high concurrency + batching" },
+                { metric: "Source-text requirement", value: "Must retain", note: "Many pipelines drop it" },
+                { metric: "Index rebuild", value: "On top of that", note: "Extra days of HNSW re-construction" },
               ].map((row, i) => (
                 <div
                   key={`cost-${i}`}
@@ -3891,7 +3891,7 @@ export const Matryoshka = (ctx) => {
                   <br />
                   12x smaller index vs full
                   <br />
-                  return top 100
+                  Return top 100
                 </div>
               </div>
               <div style={{ fontSize: 26, color: C.yellow }}>&rarr;</div>
@@ -3918,7 +3918,7 @@ export const Matryoshka = (ctx) => {
                   <br />
                   Cheap: only 100 dot products
                   <br />
-                  return final top 10
+                  Return final top 10
                 </div>
               </div>
             </div>
@@ -3982,26 +3982,26 @@ export const Matryoshka = (ctx) => {
                 {
                   name: "OpenAI text-embedding-3-large",
                   full: "d = 3072",
-                  trunc: "any K <= 3072",
-                  note: "dimensions parameter in API",
+                  trunc: "Any K <= 3072",
+                  note: "Dimensions parameter in API",
                 },
                 {
                   name: "OpenAI text-embedding-3-small",
                   full: "d = 1536",
-                  trunc: "any K <= 1536",
-                  note: "cheaper, same technique",
+                  trunc: "Any K <= 1536",
+                  note: "Cheaper, same technique",
                 },
                 {
                   name: "Cohere Embed v3 (English)",
                   full: "d = 1024",
                   trunc: "256, 384, 512, 1024",
-                  note: "int8 + binary too",
+                  note: "Int8 + binary too",
                 },
                 {
                   name: "Jina Embeddings v3",
                   full: "d = 1024",
                   trunc: "K <= 1024",
-                  note: "open weights + Matryoshka",
+                  note: "Open weights + Matryoshka",
                 },
               ].map((model) => (
                 <div
@@ -5311,9 +5311,9 @@ export const IVFPQ = (ctx) => {
             >
               {[
                 { name: "FAISS IndexIVFPQ", note: "Meta's library, the original" },
-                { name: "Milvus IVF_PQ", note: "distributed billion-scale" },
-                { name: "Weaviate PQ + IVF", note: "toggleable on top of HNSW or flat" },
-                { name: "Vespa hnsw + PQ", note: "same residual recipe on a graph" },
+                { name: "Milvus IVF_PQ", note: "Distributed billion-scale" },
+                { name: "Weaviate PQ + IVF", note: "Toggleable on top of HNSW or flat" },
+                { name: "Vespa HNSW + PQ", note: "Same residual recipe on a graph" },
               ].map((sys) => (
                 <div
                   key={sys.name}
@@ -5819,10 +5819,10 @@ export const HNSWPQ = (ctx) => {
               <div style={{ color: C.red, fontWeight: "bold", textAlign: "center", padding: "6px 8px" }}>HNSW + PQ</div>
               <div style={{ color: C.red, fontWeight: "bold", textAlign: "center", padding: "6px 8px" }}>Note</div>
               {[
-                { ef: 50, fp: "0.97", pq: "0.92", note: "baseline, PQ drops 5%" },
-                { ef: 100, fp: "0.98", pq: "0.94", note: "raising ef starts helping" },
-                { ef: 150, fp: "0.99", pq: "0.96", note: "nearly recovered" },
-                { ef: 200, fp: "0.99", pq: "0.97", note: "matches float within 2%" },
+                { ef: 50, fp: "0.97", pq: "0.92", note: "Baseline, PQ drops 5%" },
+                { ef: 100, fp: "0.98", pq: "0.94", note: "Raising ef starts helping" },
+                { ef: 150, fp: "0.99", pq: "0.96", note: "Nearly recovered" },
+                { ef: 200, fp: "0.99", pq: "0.97", note: "Matches float within 2%" },
               ].flatMap((r) => [
                 <div
                   key={`ef-${r.ef}`}
@@ -5932,21 +5932,21 @@ export const HNSWPQ = (ctx) => {
                 {
                   name: "Qdrant",
                   config: "quantization_config.product",
-                  note: "scalar, product, and binary on top of HNSW",
+                  note: "Scalar, product, and binary on top of HNSW",
                 },
                 {
                   name: "Weaviate",
-                  config: "vectorIndexConfig.pq.enabled: true",
+                  config: "VectorIndexConfig.pq.enabled: true",
                   note: "PQ or BQ layered on HNSW, trainable centroids",
                 },
                 {
                   name: "Milvus",
                   config: "HNSW_PQ / HNSW_SQ index types",
-                  note: "both scalar and product quantization flavors",
+                  note: "Both scalar and product quantization flavors",
                 },
                 {
                   name: "pgvector",
-                  config: "scalar quantization + HNSW",
+                  config: "Scalar quantization + HNSW",
                   note: "SQ is live today; PQ on the roadmap",
                 },
               ].map((sys) => (
@@ -6184,7 +6184,7 @@ export const CompressionDecision = (ctx) => {
                     label: "1M - 10M",
                     color: C.yellow,
                     pick: "Scalar Q",
-                    sub: "int8, 4x",
+                    sub: "Int8, 4x",
                   },
                   {
                     x: 330,
@@ -6198,7 +6198,7 @@ export const CompressionDecision = (ctx) => {
                     label: "N >= 100M",
                     color: C.red,
                     pick: "HNSW + PQ",
-                    sub: "the scale default",
+                    sub: "The scale default",
                   },
                 ].map((r) => (
                   <g key={r.label}>
@@ -6325,7 +6325,7 @@ export const CompressionDecision = (ctx) => {
                 stack: "Qdrant + BGE-large-en-v1.5 (d=1024, not MRL) + N=5M",
                 path: "No MRL on this model; N in 1M-10M -> SQ default; below BQ's 10M band so rescore not needed",
                 result: "HNSW + SQ (int8).",
-                math: "fp32 = 5M x 1024 x 4 B = ~20 GB. Final = 5M x 1024 B = ~5 GB. 4x smaller, ~1% recall loss.",
+                math: "Fp32 = 5M x 1024 x 4 B = ~20 GB. Final = 5M x 1024 B = ~5 GB. 4x smaller, ~1% recall loss.",
               },
               {
                 title: "Growing product - the high-leverage path",
@@ -6333,7 +6333,7 @@ export const CompressionDecision = (ctx) => {
                 stack: "Qdrant + OpenAI-3-large (d: 3072 -> 1536 via MRL) + N=50M",
                 path: "MRL halves d up front; N in 10M-100M; d>=768; Qdrant supports BQ+rescore",
                 result: "HNSW + MRL + BQ + rescore.",
-                math: "fp32 baseline = 300 GB. Final = 50M x 192 B = ~10 GB. ~30x smaller, <2% recall loss.",
+                math: "Fp32 baseline = 300 GB. Final = 50M x 192 B = ~10 GB. ~30x smaller, <2% recall loss.",
               },
               {
                 title: "Massive scale - the HNSW+PQ default",
@@ -6341,7 +6341,7 @@ export const CompressionDecision = (ctx) => {
                 stack: "Qdrant + OpenAI-3-small (d: 1536 -> 1024 via MRL) + N=200M",
                 path: "MRL reduces d; N >= 100M gate hits immediately",
                 result: "HNSW + PQ (m=96).",
-                math: "fp32 = 820 GB. Final = 200M x 96 B = ~19 GB. ~40x smaller. The scale default per 11.18.",
+                math: "Fp32 = 820 GB. Final = 200M x 96 B = ~19 GB. ~40x smaller. The scale default per 11.18.",
               },
             ].map((s) => (
               <div

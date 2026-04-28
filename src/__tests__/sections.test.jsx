@@ -396,10 +396,10 @@ describe("DistanceMetrics (11.4) content", () => {
     // Doc 7 must appear in the cosine table because 11.2's top-3 is {1, 3, 7}
     // and doc 7's real cosine (0.9984) beats doc 3's (0.9867). Featuring doc 3
     // at #2 instead of doc 7 would contradict 11.2's BRUTE_FORCE_SCORES ordering.
-    expect(container.textContent).toContain("doc 7");
+    expect(container.textContent).toMatch(/doc 7/i);
     expect(container.textContent).toContain("Kittens");
     expect(container.textContent).toContain("0.9984");
-    expect(container.textContent).not.toContain("doc 3 (Lions");
+    expect(container.textContent).not.toMatch(/doc 3 \(Lions/i);
   });
 
   it("sub=2 defines L2 as a distance with sqrt", () => {
@@ -411,10 +411,10 @@ describe("DistanceMetrics (11.4) content", () => {
 
   it("sub=2 L2 table uses doc 7 (Kittens) as #2 cat exemplar - matches 11.2 top-3", () => {
     const { container } = render(fn(makeCtx({ sub: 2 })));
-    expect(container.textContent).toContain("doc 7");
+    expect(container.textContent).toMatch(/doc 7/i);
     expect(container.textContent).toContain("Kittens");
     expect(container.textContent).toContain("0.057");
-    expect(container.textContent).not.toContain("doc 3 (Lions");
+    expect(container.textContent).not.toMatch(/doc 3 \(Lions/i);
   });
 
   it("sub=3 highlights inner product speed and SIMD friendliness", () => {

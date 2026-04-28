@@ -136,7 +136,7 @@ export const Filtering = (ctx) => {
                 color: C.bright,
               }}
             >
-              <div style={{ color: C.cyan, fontWeight: "bold", padding: "6px 8px" }}>id</div>
+              <div style={{ color: C.cyan, fontWeight: "bold", padding: "6px 8px" }}>ID</div>
               <div style={{ color: C.cyan, fontWeight: "bold", padding: "6px 8px" }}>Text</div>
               <div style={{ color: C.cyan, fontWeight: "bold", padding: "6px 8px", textAlign: "center" }}>Tenant</div>
               <div style={{ color: C.cyan, fontWeight: "bold", padding: "6px 8px", textAlign: "center" }}>Year</div>
@@ -629,29 +629,29 @@ export const Filtering = (ctx) => {
               </div>
               {[
                 {
-                  name: "pre-filter",
+                  name: "Pre-filter",
                   cells: [
                     { text: "Fast + exact", win: true },
-                    { text: "acceptable", win: false },
+                    { text: "Acceptable", win: false },
                     { text: "500 ms", win: false },
                     { text: "1 s, brute force", win: false },
                   ],
                 },
                 {
-                  name: "post-filter",
+                  name: "Post-filter",
                   cells: [
                     { text: "Empty results", win: false, bad: true },
                     { text: "Missing some", win: false, bad: true },
-                    { text: "good", win: false },
+                    { text: "Good", win: false },
                     { text: "Best - ANN speed", win: true },
                   ],
                 },
                 {
                   name: "Inline (Qdrant)",
                   cells: [
-                    { text: "great", win: true },
-                    { text: "great", win: true },
-                    { text: "great", win: true },
+                    { text: "Great", win: true },
+                    { text: "Great", win: true },
+                    { text: "Great", win: true },
                     { text: "Matches post-filter", win: false },
                   ],
                 },
@@ -1566,7 +1566,7 @@ export const Sharding = (ctx) => {
                 lineHeight: 1.9,
               }}
             >
-              vectors: 100M &middot; 3 KB = <span style={{ color: C.cyan }}>300 GB</span>
+              Vectors: 100M &middot; 3 KB = <span style={{ color: C.cyan }}>300 GB</span>
               <br />
               HNSW graph: 100M &middot; 100 B = <span style={{ color: C.cyan }}>10 GB</span>
               <br />
@@ -2399,7 +2399,7 @@ export const Replication = (ctx) => {
               <br />
               t = 500 ms: new leader promoted, cluster accepts writes again
               <br />
-              <span style={{ color: C.red }}>lost window: writes in-flight at t=0 to t=10 ms</span>
+              <span style={{ color: C.red }}>Lost window: writes in-flight at t=0 to t=10 ms</span>
             </div>
           </div>
           <div
@@ -2848,7 +2848,7 @@ export const HybridSearch = (ctx) => {
                 color: C.bright,
               }}
             >
-              <div style={{ color: C.yellow, fontWeight: "bold", padding: "6px 8px" }}>id</div>
+              <div style={{ color: C.yellow, fontWeight: "bold", padding: "6px 8px" }}>ID</div>
               <div style={{ color: C.yellow, fontWeight: "bold", padding: "6px 8px" }}>Text</div>
               <div style={{ color: C.yellow, fontWeight: "bold", padding: "6px 8px", textAlign: "center" }}>BM25</div>
               <div style={{ color: C.yellow, fontWeight: "bold", padding: "6px 8px", textAlign: "center" }}>Rank</div>
@@ -3089,7 +3089,7 @@ export const HybridSearch = (ctx) => {
             >
               <div style={{ color: C.orange, fontWeight: "bold", padding: "6px 8px" }}>Doc</div>
               <div style={{ color: C.orange, fontWeight: "bold", padding: "6px 8px", textAlign: "center" }}>
-                vec rank
+                Vec rank
               </div>
               <div style={{ color: C.orange, fontWeight: "bold", padding: "6px 8px", textAlign: "center" }}>
                 BM25 rank
@@ -3607,7 +3607,7 @@ export const Rerankers = (ctx) => {
             <br />
             One transformer pass &middot; one scalar output
             <br />
-            score = P(doc is relevant to query)
+            Score = P(doc is relevant to query)
           </div>
           <T color="#ffe082" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
             The architecture is dead simple. The expense is running it per candidate: each doc is a full forward pass
@@ -3662,7 +3662,7 @@ export const Rerankers = (ctx) => {
                 <br />
                 Doc -&gt; encoder -&gt; <span style={{ color: C.red }}>d_vec</span>
                 <br />
-                score = cosine(q_vec, d_vec)
+                Score = cosine(q_vec, d_vec)
               </div>
               <T color={C.dim} size={12} style={{ marginTop: 6 }} center>
                 No token-level interaction. Everything gets pooled into a single vector first.
@@ -3696,7 +3696,7 @@ export const Rerankers = (ctx) => {
                 <br />
                 Full attention across all tokens
                 <br />
-                score = one scalar
+                Score = one scalar
               </div>
               <T color={C.dim} size={12} style={{ marginTop: 6 }} center>
                 Query tokens attend to doc tokens and vice versa. Maximally informed score.
@@ -4296,7 +4296,7 @@ export const MultiVectorRetrieval = (ctx) => {
               score(q, d) = <span style={{ color: C.green }}>&Sigma;</span>
               <sub>i &isin; query tokens</sub> max<sub>j &isin; doc tokens</sub> q<sub>i</sub> &middot; d<sub>j</sub>
               <br />
-              sum of per-query-token max similarities against all doc tokens
+              Sum of per-query-token max similarities against all doc tokens
             </div>
           </div>
           <T color="#80e8a5" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
@@ -4816,7 +4816,7 @@ export const EmbeddingLifecycle = (ctx) => {
                 lineHeight: 1.9,
               }}
             >
-              tokens: 500M &middot; 500 = <span style={{ color: C.green }}>250 billion</span>
+              Tokens: 500M &middot; 500 = <span style={{ color: C.green }}>250 billion</span>
               <br />
               Price: <span style={{ color: C.green }}>$0.00013</span> per 1K tokens (text-embedding-3-large)
               <br />
@@ -5359,9 +5359,9 @@ export const Observability = (ctx) => {
                 lineHeight: 1.9,
               }}
             >
-              x-axis: <span style={{ color: C.orange }}>recall</span> (0.90 to 1.00)
+              X-axis: <span style={{ color: C.orange }}>recall</span> (0.90 to 1.00)
               <br />
-              y-axis: <span style={{ color: C.orange }}>QPS</span> (log scale, queries per second)
+              Y-axis: <span style={{ color: C.orange }}>QPS</span> (log scale, queries per second)
               <br />
               Each curve = one index family (HNSW, IVF-PQ, Vamana)
               <br />
@@ -5768,11 +5768,11 @@ export const CapacityPlanning = (ctx) => {
             >
               Per-query CPU = <span style={{ color: C.green }}>hops &middot; us/hop</span>
               <br />
-              typical: 30 hops &middot; 10 us = 300 us
+              Typical: 30 hops &middot; 10 us = 300 us
               <br />
               cores = <span style={{ color: C.green }}>per-query-cost &middot; QPS &middot; headroom</span>
               <br />
-              worked: 300 us &middot; 200 QPS &middot; 2x headroom = 120,000 us = 0.12 core-seconds/sec
+              Worked: 300 us &middot; 200 QPS &middot; 2x headroom = 120,000 us = 0.12 core-seconds/sec
               <br />
               Round up to <span style={{ color: C.green }}>8-16 cores</span> per replica with write and merge overhead
             </div>
@@ -5817,7 +5817,7 @@ export const CapacityPlanning = (ctx) => {
                 lineHeight: 1.9,
               }}
             >
-              vectors: 500M &middot; 3 KB = <span style={{ color: C.orange }}>1.5 TB</span>
+              Vectors: 500M &middot; 3 KB = <span style={{ color: C.orange }}>1.5 TB</span>
               <br />
               HNSW graph: 500M &middot; 100 B = <span style={{ color: C.orange }}>50 GB</span>
               <br />

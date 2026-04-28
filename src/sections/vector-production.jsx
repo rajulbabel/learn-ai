@@ -1636,34 +1636,29 @@ export const Sharding = (ctx) => {
               Random sharding across 4 shards
             </T>
             <div style={{ display: "flex", justifyContent: "center", marginTop: 10 }}>
-              <svg viewBox="0 0 520 240" style={{ width: "100%", maxWidth: 560, height: "auto" }}>
+              <svg viewBox="0 0 520 220" style={{ width: "100%", maxWidth: 560, height: "auto" }}>
                 <desc>
-                  Four shard rectangles labeled shard 0 through shard 3, each holding a random scatter of colored dots
-                  representing docs. A query icon at the left sends fan-out arrows to all four shards simultaneously,
-                  illustrating that random sharding forces every query to hit every shard.
+                  Centered diagram: query icon q sits at the top, with four shard rectangles arranged in a horizontal
+                  row below it. Each shard holds a random scatter of colored dots representing docs and is labeled Shard
+                  0 through Shard 3 underneath. Yellow lines fan out from q straight down to every shard, illustrating
+                  that random sharding forces every query to hit every shard.
                 </desc>
                 <g>
-                  <circle cx={40} cy={120} r={14} fill={C.yellow} />
-                  <text x={40} y={124} fill={C.bg} fontSize={11} fontWeight="bold" textAnchor="middle">
+                  <circle cx={260} cy={30} r={14} fill={C.yellow} />
+                  <text x={260} y={34} fill={C.bg} fontSize={11} fontWeight="bold" textAnchor="middle">
                     q
                   </text>
                 </g>
                 {[0, 1, 2, 3].map((i) => {
-                  const x = 120 + i * 95;
+                  const x = 70 + i * 100;
+                  const boxY = 80;
+                  const cx = x + 40;
                   return (
                     <g key={`shard-${i}`}>
-                      <line
-                        x1={54}
-                        y1={120}
-                        x2={x + 30}
-                        y2={60 + i * 30}
-                        stroke={C.yellow}
-                        strokeWidth={1.5}
-                        opacity={0.8}
-                      />
+                      <line x1={260} y1={44} x2={cx} y2={boxY} stroke={C.yellow} strokeWidth={1.5} opacity={0.8} />
                       <rect
                         x={x}
-                        y={40 + i * 30}
+                        y={boxY}
                         width={80}
                         height={80}
                         fill={`${C.yellow}08`}
@@ -1671,25 +1666,25 @@ export const Sharding = (ctx) => {
                         strokeWidth={1.5}
                         rx={6}
                       />
+                      {Array.from({ length: 12 }, (_, k) => (
+                        <circle
+                          key={`dot-${i}-${k}`}
+                          cx={x + 13 + (k % 4) * 18}
+                          cy={boxY + 22 + Math.floor(k / 4) * 18}
+                          r={4}
+                          fill={[C.cyan, C.green, C.orange, C.red, C.purple, C.pink][(i + k) % 6]}
+                        />
+                      ))}
                       <text
-                        x={x + 40}
-                        y={35 + i * 30}
+                        x={cx}
+                        y={boxY + 80 + 18}
                         fill={C.yellow}
-                        fontSize={11}
+                        fontSize={12}
                         fontWeight="bold"
                         textAnchor="middle"
                       >
                         Shard {i}
                       </text>
-                      {Array.from({ length: 12 }, (_, k) => (
-                        <circle
-                          key={`dot-${i}-${k}`}
-                          cx={x + 10 + (k % 4) * 18}
-                          cy={50 + i * 30 + Math.floor(k / 4) * 18}
-                          r={4}
-                          fill={[C.cyan, C.green, C.orange, C.red, C.purple, C.pink][(i + k) % 6]}
-                        />
-                      ))}
                     </g>
                   );
                 })}
@@ -1744,16 +1739,17 @@ export const Sharding = (ctx) => {
               Semantic sharding: query routes to 2 of 4 shards (nprobe = 2)
             </T>
             <div style={{ display: "flex", justifyContent: "center", marginTop: 10 }}>
-              <svg viewBox="0 0 520 240" style={{ width: "100%", maxWidth: 560, height: "auto" }}>
+              <svg viewBox="0 0 520 220" style={{ width: "100%", maxWidth: 560, height: "auto" }}>
                 <desc>
-                  Four shard rectangles each labeled with a region of the embedding space: cats, dogs, animals, and
-                  misc. A query icon on the left sends routing arrows to only the two nearest shards (cats and animals);
-                  the other two shards are dimmed. Illustrates semantic sharding where IVF clustering decides which
-                  shards answer a given query.
+                  Centered diagram: query icon q sits at the top, with four shard rectangles arranged in a horizontal
+                  row below it. Each shard is labeled with a region of the embedding space underneath: cats, animals,
+                  dogs, and misc. Green lines drop straight down from q to only the two nearest shards (cats and
+                  animals); the other two shards are dimmed. Illustrates semantic sharding where IVF clustering decides
+                  which shards answer a given query.
                 </desc>
                 <g>
-                  <circle cx={40} cy={120} r={14} fill={C.green} />
-                  <text x={40} y={124} fill={C.bg} fontSize={11} fontWeight="bold" textAnchor="middle">
+                  <circle cx={260} cy={30} r={14} fill={C.green} />
+                  <text x={260} y={34} fill={C.bg} fontSize={11} fontWeight="bold" textAnchor="middle">
                     q
                   </text>
                 </g>
@@ -1763,15 +1759,15 @@ export const Sharding = (ctx) => {
                   { label: "dogs", active: false, color: C.dim, cluster: "C" },
                   { label: "misc", active: false, color: C.dim, cluster: "D" },
                 ].map((s, i) => {
-                  const x = 120 + i * 95;
+                  const x = 70 + i * 100;
+                  const boxY = 80;
+                  const cx = x + 40;
                   return (
                     <g key={`ss-${i}`}>
-                      {s.active && (
-                        <line x1={54} y1={120} x2={x + 30} y2={60 + i * 30} stroke={C.green} strokeWidth={2} />
-                      )}
+                      {s.active && <line x1={260} y1={44} x2={cx} y2={boxY} stroke={C.green} strokeWidth={2} />}
                       <rect
                         x={x}
-                        y={40 + i * 30}
+                        y={boxY}
                         width={80}
                         height={80}
                         fill={s.active ? `${C.green}14` : `${C.dim}06`}
@@ -1781,18 +1777,8 @@ export const Sharding = (ctx) => {
                         opacity={s.active ? 1 : 0.4}
                       />
                       <text
-                        x={x + 40}
-                        y={35 + i * 30}
-                        fill={s.color}
-                        fontSize={11}
-                        fontWeight="bold"
-                        textAnchor="middle"
-                      >
-                        {s.label}
-                      </text>
-                      <text
-                        x={x + 40}
-                        y={80 + i * 30 + 20}
+                        x={cx}
+                        y={boxY + 46}
                         fill={s.color}
                         fontSize={14}
                         fontWeight="bold"
@@ -1800,6 +1786,16 @@ export const Sharding = (ctx) => {
                         opacity={s.active ? 1 : 0.4}
                       >
                         Cluster {s.cluster}
+                      </text>
+                      <text
+                        x={cx}
+                        y={boxY + 80 + 18}
+                        fill={s.color}
+                        fontSize={12}
+                        fontWeight="bold"
+                        textAnchor="middle"
+                      >
+                        {s.label}
                       </text>
                     </g>
                   );

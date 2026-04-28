@@ -1556,10 +1556,36 @@ describe("Sharding (11.22) content", () => {
     expect(container.textContent).toMatch(/fan[- ]?out|all shards/i);
   });
 
+  it("sub=1 random sharding diagram: q on top, 4 shards in a horizontal row below", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    const svg = container.querySelector('svg[viewBox^="0 0 520"]');
+    expect(svg).toBeTruthy();
+    const qCircle = svg.querySelector("circle[r='14']");
+    const shardRects = Array.from(svg.querySelectorAll("rect"));
+    expect(shardRects.length).toBe(4);
+    const ys = shardRects.map((r) => Number(r.getAttribute("y")));
+    expect(new Set(ys).size).toBe(1);
+    const shardY = ys[0];
+    expect(Number(qCircle.getAttribute("cy"))).toBeLessThan(shardY);
+  });
+
   it("sub=2 explains semantic sharding by IVF cluster", () => {
     const { container } = render(fn(makeCtx({ sub: 2 })));
     expect(container.textContent).toMatch(/semantic|cluster/i);
     expect(container.textContent).toMatch(/IVF|region|subset/i);
+  });
+
+  it("sub=2 semantic sharding diagram: q on top, 4 shards in a horizontal row below", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    const svg = container.querySelector('svg[viewBox^="0 0 520"]');
+    expect(svg).toBeTruthy();
+    const qCircle = svg.querySelector("circle[r='14']");
+    const shardRects = Array.from(svg.querySelectorAll("rect"));
+    expect(shardRects.length).toBe(4);
+    const ys = shardRects.map((r) => Number(r.getAttribute("y")));
+    expect(new Set(ys).size).toBe(1);
+    const shardY = ys[0];
+    expect(Number(qCircle.getAttribute("cy"))).toBeLessThan(shardY);
   });
 
   it("sub=3 shows fan-out to shards and coordinator merge", () => {

@@ -8,9 +8,9 @@
  *   5. Stamping every chunk with stable id, chapterTitle, sectionName,
  *      and writing the merged array sorted by (chapterId, sub).
  *
- * Run via: npm run search:index (or npm run search:build).
+ * Run via: node scripts/build-search-index.mjs (or via npm run search:index once Task 6 lands).
  */
-import { readFileSync, writeFileSync, existsSync, mkdirSync } from "fs";
+import { readFileSync, writeFileSync, existsSync, mkdirSync, readdirSync, renameSync } from "fs";
 import { createHash } from "crypto";
 import { join } from "path";
 import { chunkSection } from "./llm-chunk.mjs";
@@ -19,6 +19,12 @@ const CHUNKS_PATH = "src/data/chunks.json";
 const CACHE_PATH = "src/data/chunk-cache.json";
 const SVG_PATH = "src/data/svg-descriptions.json";
 const SECTIONS_DIR = "src/sections";
+
+function atomicWrite(path, contents) {
+  const tmp = `${path}.tmp`;
+  writeFileSync(tmp, contents);
+  renameSync(tmp, path);
+}
 
 function sha256_16(s) {
   return createHash("sha256").update(s).digest("hex").slice(0, 16);
@@ -29,12 +35,18 @@ function chunkId(chapterId, sub, kind, text) {
 }
 
 function chapterCmp(a, b) {
-  // Numeric chapter sort: "1.2" < "1.10" < "2.1"
-  const [as, ac] = a.chapterId.split(".").map(Number);
-  const [bs, bc] = b.chapterId.split(".").map(Number);
+  // Numeric chapter sort: "1.2" < "1.10" < "2.1". Defensive against undefined/NaN.
+  const parse = (id) => {
+    const [s, c] = String(id).split(".").map((p) => Number(p));
+    return [Number.isFinite(s) ? s : 0, Number.isFinite(c) ? c : 0];
+  };
+  const [as, ac] = parse(a.chapterId);
+  const [bs, bc] = parse(b.chapterId);
   if (as !== bs) return as - bs;
   if (ac !== bc) return ac - bc;
-  return a.sub - b.sub;
+  const sa = Number.isFinite(a.sub) ? a.sub : 0;
+  const sb = Number.isFinite(b.sub) ? b.sub : 0;
+  return sa - sb;
 }
 
 export async function runBuild({ rootDir = process.cwd(), chapters, sectionNames, log = console.log }) {
@@ -42,7 +54,15 @@ export async function runBuild({ rootDir = process.cwd(), chapters, sectionNames
   const chunksPath = join(rootDir, CHUNKS_PATH);
   const svgPath = join(rootDir, SVG_PATH);
 
-  const cache = existsSync(cachePath) ? JSON.parse(readFileSync(cachePath, "utf-8")) : {};
+  let cache = {};
+  if (existsSync(cachePath)) {
+    try {
+      cache = JSON.parse(readFileSync(cachePath, "utf-8"));
+    } catch (e) {
+      log(`[warn] ${cachePath} corrupt (${e.message}); rebuilding cache from scratch.`);
+      cache = {};
+    }
+  }
   const svgDescriptionsAll = existsSync(svgPath) ? JSON.parse(readFileSync(svgPath, "utf-8")) : {};
 
   // Group chapters by section file
@@ -81,6 +101,7 @@ export async function runBuild({ rootDir = process.cwd(), chapters, sectionNames
         svgDescriptions: svgForFile,
       });
       cache[fileHash] = chapterChunks;
+      atomicWrite(cachePath, JSON.stringify(cache, null, 2));
     }
 
     for (const ch of chs) {
@@ -106,8 +127,8 @@ export async function runBuild({ rootDir = process.cwd(), chapters, sectionNames
   all.sort(chapterCmp);
 
   mkdirSync(join(rootDir, "src/data"), { recursive: true });
-  writeFileSync(chunksPath, JSON.stringify(all, null, 2));
-  writeFileSync(cachePath, JSON.stringify(cache, null, 2));
+  atomicWrite(chunksPath, JSON.stringify(all, null, 2));
+  atomicWrite(cachePath, JSON.stringify(cache, null, 2));
   log(`Wrote ${chunksPath} (${all.length} chunks)`);
   return all;
 }
@@ -117,41 +138,32 @@ async function main() {
   const cfgUrl = new URL("../src/config.js", import.meta.url).href;
   const { chapters, sectionNames } = await import(cfgUrl);
 
-  // Mirror learn-ai.jsx's section→file mapping.
-  const sectionToFile = {
-    0: "../sections/toc.jsx",
-    1: "neural-foundations.jsx",
-    2: "llm-training.jsx",
-    3: "scaling.jsx",
-    4: "road-to-transformers.jsx",
-    5: "transformer-input.jsx",
-    6: "attention-qkv.jsx",
-    7: "attention-computation.jsx",
-    8: "transformer-block.jsx",
-    9: "encoder-decoder-diagrams.jsx",
-    10: "modern-llm-techniques.jsx",
-    11: ["vector-foundations.jsx", "vector-compression.jsx", "vector-production.jsx", "vector-systems.jsx"],
-  };
-
-  // For sections with multiple files, we need a per-component mapping.
-  // Build it by reading each candidate file once and looking up the export.
+  // Build componentToFile by scanning every section file's exported PascalCase identifiers.
+  // No need to encode section→file mapping by hand: any section file is fair game,
+  // and a chapter's `component` already uniquely identifies its file.
+  const sectionFiles = readdirSync("src/sections").filter((f) => f.endsWith(".jsx"));
   const componentToFile = {};
-  for (const [, fileOrFiles] of Object.entries(sectionToFile)) {
-    const files = Array.isArray(fileOrFiles) ? fileOrFiles : [fileOrFiles];
-    for (const file of files) {
-      const path = `src/sections/${file}`;
-      if (!existsSync(path)) continue;
-      const src = readFileSync(path, "utf-8");
-      // crude but reliable: regex-find every exported PascalCase identifier
-      for (const m of src.matchAll(/export\s+(?:const|function|let|var)\s+([A-Z][A-Za-z0-9_]*)/g)) {
-        componentToFile[m[1]] = file;
+  for (const file of sectionFiles) {
+    const src = readFileSync(`src/sections/${file}`, "utf-8");
+    for (const m of src.matchAll(/export\s+(?:const|function|let|var)\s+([A-Z][A-Za-z0-9_]*)/g)) {
+      const name = m[1];
+      if (componentToFile[name] && componentToFile[name] !== file) {
+        console.warn(`[warn] component ${name} exported by both ${componentToFile[name]} and ${file}; using ${file}.`);
       }
+      componentToFile[name] = file;
     }
   }
 
   const indexable = chapters
     .filter((c) => c.id !== "0" && c.component)
-    .map((c) => ({ ...c, sectionFile: componentToFile[c.component] }));
+    .map((c) => ({ ...c, sectionFile: componentToFile[c.component] }))
+    .filter((c) => {
+      if (!c.sectionFile) {
+        console.warn(`[warn] chapter ${c.id} component ${c.component} not found in src/sections/*.jsx; skipping`);
+        return false;
+      }
+      return true;
+    });
 
   await runBuild({ chapters: indexable, sectionNames });
 }

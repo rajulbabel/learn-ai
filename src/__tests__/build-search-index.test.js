@@ -110,4 +110,30 @@ describe("build-search-index", () => {
       expect(again[0].id).toBe(id1);
     });
   });
+
+  it("recovers from a corrupt chunk-cache.json file", async () => {
+    // seed a corrupt cache file
+    writeFileSync(join(workDir, "src", "data", "chunk-cache.json"), "{not valid json");
+    mockChunk.mockResolvedValue({
+      "1.1": [
+        {
+          sub: 0,
+          kind: "concept",
+          text: "Recovered chunk content",
+          summary: "S",
+          queries: ["q1","q2","q3","q4","q5","q6","q7","q8","q9","q10"],
+          terms: ["t"],
+        },
+      ],
+    });
+    await runBuild({
+      rootDir: workDir,
+      chapters: [{ id: "1.1", title: "T", section: 1, sectionFile: "neural-foundations.jsx" }],
+      sectionNames: { 1: "S1" },
+      log: () => {},
+    });
+    const chunksJson = JSON.parse(readFileSync(join(workDir, "src", "data", "chunks.json"), "utf-8"));
+    expect(chunksJson).toHaveLength(1);
+    expect(mockChunk).toHaveBeenCalledOnce();
+  });
 });

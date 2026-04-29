@@ -1,10 +1,27 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 
+const tenQueries = ["q1", "q2", "q3", "q4", "q5", "q6", "q7", "q8", "q9", "q10"];
+const twelveQueries = [
+  "what is a neural network",
+  "how do nns learn",
+  "neural network basics",
+  "intro to neural networks",
+  "what does an nn do",
+  "nn explained simply",
+  "deep learning intro",
+  "neural net 101",
+  "ai networks overview",
+  "neural network definition",
+  "machine learning networks",
+  "nn beginner guide",
+];
+
 describe("llm-chunk", () => {
   let chunkSection;
   let mockCreate;
 
   beforeEach(async () => {
+    process.env.ANTHROPIC_API_KEY = "test-key";
     mockCreate = vi.fn();
     vi.doMock("@anthropic-ai/sdk", () => ({
       default: vi.fn(function () {
@@ -29,7 +46,7 @@ describe("llm-chunk", () => {
                   kind: "concept",
                   text: "A neural network learns patterns from examples.",
                   summary: "A neural network is a learning system.",
-                  queries: ["what is a neural network", "how do nns learn", "neural network basics", "intro to neural networks", "what does an nn do"],
+                  queries: twelveQueries,
                   terms: ["neural network", "learning"],
                 },
               ],
@@ -69,7 +86,20 @@ describe("llm-chunk", () => {
           {
             type: "tool_use",
             name: "emit_chunks",
-            input: { chunks: { "1.1": [{ sub: 0, kind: "summary", text: "x", summary: "x", queries: ["a","b","c","d","e"], terms: ["t"] }] } },
+            input: {
+              chunks: {
+                "1.1": [
+                  {
+                    sub: 0,
+                    kind: "summary",
+                    text: "Sample chunk text for testing.",
+                    summary: "Sample summary.",
+                    queries: tenQueries,
+                    terms: ["t"],
+                  },
+                ],
+              },
+            },
           },
         ],
       });
@@ -90,7 +120,20 @@ describe("llm-chunk", () => {
         {
           type: "tool_use",
           name: "emit_chunks",
-          input: { chunks: { "1.1": [{ sub: 0, kind: "summary", text: "x", summary: "x", queries: [], terms: [] }] } },
+          input: {
+            chunks: {
+              "1.1": [
+                {
+                  sub: 0,
+                  kind: "summary",
+                  text: "Sample chunk text for testing.",
+                  summary: "Sample summary.",
+                  queries: [],
+                  terms: [],
+                },
+              ],
+            },
+          },
         },
       ],
     });
@@ -103,5 +146,22 @@ describe("llm-chunk", () => {
         svgDescriptions: {},
       }),
     ).rejects.toThrow(/queries/);
+  });
+
+  it("throws clear error when ANTHROPIC_API_KEY is missing", async () => {
+    const orig = process.env.ANTHROPIC_API_KEY;
+    delete process.env.ANTHROPIC_API_KEY;
+    try {
+      await expect(
+        chunkSection({
+          filePath: "f.jsx",
+          source: "x",
+          chapters: [{ id: "1.1", title: "X", section: 1, sectionName: "S" }],
+          svgDescriptions: {},
+        }),
+      ).rejects.toThrow(/ANTHROPIC_API_KEY/);
+    } finally {
+      if (orig !== undefined) process.env.ANTHROPIC_API_KEY = orig;
+    }
   });
 });

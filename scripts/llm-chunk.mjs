@@ -7,7 +7,7 @@ import "dotenv/config";
 import Anthropic from "@anthropic-ai/sdk";
 
 const DEFAULT_MODEL = "claude-sonnet-4-6";
-const MIN_QUERIES = 5;
+const MIN_QUERIES = 10;
 const MAX_RETRIES = 4;
 
 const SYSTEM_PROMPT = `You are a search-index authoring assistant for an interactive learning app about AI.
@@ -49,7 +49,7 @@ const TOOL_SCHEMA = {
               kind: { type: "string", enum: ["concept", "formula", "example", "diagram", "summary"] },
               text: { type: "string", minLength: 10 },
               summary: { type: "string", minLength: 5 },
-              queries: { type: "array", items: { type: "string", minLength: 3 }, minItems: 5, maxItems: 25 },
+              queries: { type: "array", items: { type: "string", minLength: 3 }, minItems: 10, maxItems: 25 },
               terms: { type: "array", items: { type: "string", minLength: 1 }, minItems: 1 },
             },
             required: ["sub", "kind", "text", "summary", "queries", "terms"],
@@ -98,8 +98,8 @@ function validateAndCoerce(raw, expectedChapterIds) {
       if (!Array.isArray(c.terms) || c.terms.length === 0) {
         throw new Error(`Chunk for ${id} sub=${c.sub} has empty terms`);
       }
-      if (typeof c.text !== "string" || c.text.trim().length === 0) {
-        throw new Error(`Chunk for ${id} sub=${c.sub} has empty text`);
+      if (typeof c.text !== "string" || c.text.trim().length < 10) {
+        throw new Error(`Chunk for ${id} sub=${c.sub} has too-short text`);
       }
     }
   }
@@ -107,7 +107,11 @@ function validateAndCoerce(raw, expectedChapterIds) {
 }
 
 export async function chunkSection({ filePath, source, chapters, svgDescriptions }, { model, apiKey } = {}) {
-  const client = new Anthropic({ apiKey: apiKey || process.env.ANTHROPIC_API_KEY });
+  const resolvedKey = apiKey || process.env.ANTHROPIC_API_KEY;
+  if (!resolvedKey) {
+    throw new Error("ANTHROPIC_API_KEY is required (set in .env or pass apiKey option)");
+  }
+  const client = new Anthropic({ apiKey: resolvedKey });
   const chosenModel = model || process.env.LEARN_AI_CHUNK_MODEL || DEFAULT_MODEL;
 
   const userMessage = buildUserMessage({ filePath, source, chapters, svgDescriptions });
@@ -117,7 +121,7 @@ export async function chunkSection({ filePath, source, chapters, svgDescriptions
     try {
       const response = await client.messages.create({
         model: chosenModel,
-        max_tokens: 8192,
+        max_tokens: 16384,
         system: [
           {
             type: "text",
@@ -130,6 +134,12 @@ export async function chunkSection({ filePath, source, chapters, svgDescriptions
         messages: [{ role: "user", content: userMessage }],
       });
 
+      if (response.stop_reason === "max_tokens") {
+        throw new Error("Model output truncated (stop_reason=max_tokens). Increase max_tokens or split the section file.");
+      }
+
+      // If the model returned text instead of calling the tool, retrying the same
+      // prompt is unlikely to help. Surface the error rather than retrying.
       const toolUse = response.content.find((b) => b.type === "tool_use" && b.name === "emit_chunks");
       if (!toolUse) throw new Error("Model did not call emit_chunks");
       return validateAndCoerce(toolUse.input, chapters.map((c) => c.id));

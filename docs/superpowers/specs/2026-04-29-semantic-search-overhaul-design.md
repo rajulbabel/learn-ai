@@ -29,7 +29,7 @@ Current search is "not at all accurate" because:
 
 | Decision | Choice |
 |----------|--------|
-| Build-time chunking | Claude API (Anthropic SDK) on pre-commit |
+| Build-time chunking | Claude Code CLI subprocess (`claude -p --output-format json --json-schema ...`); bills subscription, no API credits |
 | Cache strategy | Hash each section file; reuse cached chunks on hit |
 | Embedding model | `Xenova/bge-base-en-v1.5` q4 (~55 MB, 768d) |
 | Stored vectors | int8 quantized, multi-vector per chunk |

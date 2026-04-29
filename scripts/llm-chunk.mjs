@@ -1,14 +1,15 @@
 /**
- * Anthropic-SDK wrapper that asks Claude to author search chunks
- * for a single section file. Uses prompt caching on the stable
- * preamble (instructions + schema) for cheap re-runs.
+ * Spawn the local `claude` CLI to author search chunks for one section file.
+ * Bills against the user's Claude Code subscription (no API credits needed).
+ * Uses --json-schema for server-validated structured output.
  */
-import "dotenv/config";
-import Anthropic from "@anthropic-ai/sdk";
+import { spawn } from "child_process";
 
-const DEFAULT_MODEL = "claude-sonnet-4-6";
+const DEFAULT_MODEL = "claude-opus-4-7";
+const DEFAULT_EFFORT = "max";
 const MIN_QUERIES = 10;
 const MAX_RETRIES = 4;
+const PER_CALL_BUDGET_USD = "5";
 
 const SYSTEM_PROMPT = `You are a search-index authoring assistant for an interactive learning app about AI.
 
@@ -29,47 +30,41 @@ CRITICAL RULES:
    - "summary": chapter-level summary (use only for sub: -1)
 6. sub: integer matching the chapter sub-step. Use -1 for chapter-level summary, -2 for diagram-only chunks.
 
-Emit your output by calling the emit_chunks tool exactly once with the full result.`;
+Output ONLY a JSON object matching the provided schema. No markdown fences, no commentary.`;
 
-const TOOL_SCHEMA = {
-  name: "emit_chunks",
-  description: "Emit the structured chunk array for every chapter in this section file.",
-  input_schema: {
-    type: "object",
-    properties: {
-      chunks: {
-        type: "object",
-        description: "Map of chapter ID to chunk array. Every chapter passed in must have an entry.",
-        additionalProperties: {
-          type: "array",
-          items: {
-            type: "object",
-            properties: {
-              sub: { type: "integer" },
-              kind: { type: "string", enum: ["concept", "formula", "example", "diagram", "summary"] },
-              text: { type: "string", minLength: 10 },
-              summary: { type: "string", minLength: 5 },
-              queries: { type: "array", items: { type: "string", minLength: 3 }, minItems: 10, maxItems: 25 },
-              terms: { type: "array", items: { type: "string", minLength: 1 }, minItems: 1 },
-            },
-            required: ["sub", "kind", "text", "summary", "queries", "terms"],
+const OUTPUT_SCHEMA = {
+  type: "object",
+  properties: {
+    chunks: {
+      type: "object",
+      description: "Map of chapter ID to chunk array. Every chapter passed in must have an entry.",
+      additionalProperties: {
+        type: "array",
+        items: {
+          type: "object",
+          properties: {
+            sub: { type: "integer" },
+            kind: { type: "string", enum: ["concept", "formula", "example", "diagram", "summary"] },
+            text: { type: "string", minLength: 10 },
+            summary: { type: "string", minLength: 5 },
+            queries: { type: "array", items: { type: "string", minLength: 3 }, minItems: 10, maxItems: 25 },
+            terms: { type: "array", items: { type: "string", minLength: 1 }, minItems: 1 },
           },
+          required: ["sub", "kind", "text", "summary", "queries", "terms"],
         },
       },
     },
-    required: ["chunks"],
   },
+  required: ["chunks"],
 };
 
 function buildUserMessage({ filePath, source, chapters, svgDescriptions }) {
   const chapterList = chapters
     .map((c) => `- ${c.id} | ${c.title} | section ${c.section} (${c.sectionName})`)
     .join("\n");
-
   const svgBlock = Object.keys(svgDescriptions).length
     ? `\n\nSVG descriptions for diagrams in this file:\n${JSON.stringify(svgDescriptions, null, 2)}`
     : "";
-
   return `Section file: ${filePath}
 
 Chapters in this file (you must emit chunks for every one):
@@ -106,47 +101,72 @@ function validateAndCoerce(raw, expectedChapterIds) {
   return raw.chunks;
 }
 
-export async function chunkSection({ filePath, source, chapters, svgDescriptions }, { model, apiKey } = {}) {
-  const resolvedKey = apiKey || process.env.ANTHROPIC_API_KEY;
-  if (!resolvedKey) {
-    throw new Error("ANTHROPIC_API_KEY is required (set in .env or pass apiKey option)");
-  }
-  const client = new Anthropic({ apiKey: resolvedKey });
-  const chosenModel = model || process.env.LEARN_AI_CHUNK_MODEL || DEFAULT_MODEL;
+function spawnClaude(args, userMessage) {
+  return new Promise((resolve, reject) => {
+    const proc = spawn("claude", args, { stdio: ["pipe", "pipe", "pipe"] });
+    let stdout = "";
+    let stderr = "";
+    proc.stdout.on("data", (d) => { stdout += d.toString(); });
+    proc.stderr.on("data", (d) => { stderr += d.toString(); });
+    proc.on("error", reject);
+    proc.on("close", (code) => {
+      if (code !== 0) {
+        const err = new Error(`claude exited ${code}: ${stderr.slice(0, 500)}`);
+        err.exitCode = code;
+        err.stderr = stderr;
+        reject(err);
+        return;
+      }
+      resolve(stdout);
+    });
+    proc.stdin.end(userMessage);
+  });
+}
 
+export async function chunkSection({ filePath, source, chapters, svgDescriptions }, opts = {}) {
+  const model = opts.model || process.env.LEARN_AI_CHUNK_MODEL || DEFAULT_MODEL;
+  const effort = opts.effort || process.env.LEARN_AI_CHUNK_EFFORT || DEFAULT_EFFORT;
   const userMessage = buildUserMessage({ filePath, source, chapters, svgDescriptions });
+
+  const args = [
+    "-p",
+    "--output-format", "json",
+    "--model", model,
+    "--effort", effort,
+    "--json-schema", JSON.stringify(OUTPUT_SCHEMA),
+    "--system-prompt", SYSTEM_PROMPT,
+    "--bare",
+    "--max-budget-usd", PER_CALL_BUDGET_USD,
+  ];
 
   let lastErr;
   for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
     try {
-      const response = await client.messages.create({
-        model: chosenModel,
-        max_tokens: 16384,
-        system: [
-          {
-            type: "text",
-            text: SYSTEM_PROMPT,
-            cache_control: { type: "ephemeral" },
-          },
-        ],
-        tools: [TOOL_SCHEMA],
-        tool_choice: { type: "tool", name: "emit_chunks" },
-        messages: [{ role: "user", content: userMessage }],
-      });
-
-      if (response.stop_reason === "max_tokens") {
-        throw new Error("Model output truncated (stop_reason=max_tokens). Increase max_tokens or split the section file.");
+      const stdout = await spawnClaude(args, userMessage);
+      let wrapper;
+      try {
+        wrapper = JSON.parse(stdout);
+      } catch (e) {
+        throw new Error(`claude output is not valid JSON: ${e.message}; raw: ${stdout.slice(0, 200)}`);
       }
-
-      // If the model returned text instead of calling the tool, retrying the same
-      // prompt is unlikely to help. Surface the error rather than retrying.
-      const toolUse = response.content.find((b) => b.type === "tool_use" && b.name === "emit_chunks");
-      if (!toolUse) throw new Error("Model did not call emit_chunks");
-      return validateAndCoerce(toolUse.input, chapters.map((c) => c.id));
+      if (wrapper.is_error) {
+        throw new Error(`claude reported error: ${wrapper.result || wrapper.subtype || "unknown"}`);
+      }
+      let inner;
+      try {
+        inner = typeof wrapper.result === "string" ? JSON.parse(wrapper.result) : wrapper.result;
+      } catch (e) {
+        throw new Error(`claude inner result is not valid JSON: ${e.message}; raw: ${String(wrapper.result).slice(0, 200)}`);
+      }
+      return validateAndCoerce(inner, chapters.map((c) => c.id));
     } catch (err) {
       lastErr = err;
-      const retryable = err.status === 429 || err.status === 529 || err.status >= 500;
-      if (!retryable || attempt === MAX_RETRIES) throw err;
+      // Retry only on transient subprocess failures or parse errors
+      const transient =
+        err.exitCode !== undefined ||
+        /not valid JSON/.test(err.message) ||
+        /reported error/.test(err.message);
+      if (!transient || attempt === MAX_RETRIES) throw err;
       const wait = Math.min(2 ** attempt * 500, 8000);
       await new Promise((r) => setTimeout(r, wait));
     }

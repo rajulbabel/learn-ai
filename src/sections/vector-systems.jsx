@@ -53,7 +53,7 @@ export const FAISS = (ctx) => {
                 { year: "2017", what: "Meta (Facebook) open-sources FAISS on GitHub" },
                 { year: "2018", what: "Python bindings mature, used across ML teams" },
                 { year: "2020+", what: "Embedded inside Milvus, OpenSearch, Vespa cores" },
-                { year: "today", what: "Still the ANN reference implementation" },
+                { year: "Today", what: "Still the ANN reference implementation" },
               ].map((r) => (
                 <div
                   key={r.year}
@@ -243,7 +243,7 @@ export const FAISS = (ctx) => {
           >
             {[
               { layer: "C++ core", what: "Dense kernels, SIMD, CUDA", color: C.green },
-              { layer: "Python bindings", what: "numpy-native API, scripting, notebooks", color: C.cyan },
+              { layer: "Python bindings", what: "Numpy-native API, scripting, notebooks", color: C.cyan },
             ].map((r) => (
               <div
                 key={r.layer}
@@ -302,7 +302,7 @@ export const FAISS = (ctx) => {
               {
                 name: "Filtering",
                 blurb: "No metadata index, no predicate support",
-                pain: "tenant_id queries must be post-filtered",
+                pain: "Queries on tenant_id must be post-filtered",
               },
               {
                 name: "ACID / replication",
@@ -688,7 +688,7 @@ export const Pgvector = (ctx) => {
             }}
           >
             {[
-              { op: "<=>", name: "cosine", color: C.yellow, when: "Default for text embeddings" },
+              { op: "<=>", name: "Cosine", color: C.yellow, when: "Default for text embeddings" },
               { op: "<->", name: "L2 Euclidean", color: C.green, when: "Some vision embeddings" },
               { op: "<#>", name: "Negative inner product", color: C.purple, when: "Normalized + fast" },
             ].map((r) => (
@@ -747,7 +747,7 @@ export const Pgvector = (ctx) => {
               },
               {
                 name: "IVFFlat",
-                params: ["lists = sqrt(N)", "probes = sqrt(lists)", "fast to build"],
+                params: ["lists = sqrt(N)", "probes = sqrt(lists)", "Fast to build"],
                 note: "Smaller memory, needs tuning per size",
                 color: C.orange,
               },
@@ -1803,7 +1803,7 @@ export const Pinecone = (ctx) => {
             {[
               { phase: "Idle", cost: "Storage only", latency: "-", note: "Cheap, no compute running" },
               { phase: "Cold start", cost: "Compute spin-up", latency: "~1 s tax", note: "First query after idle" },
-              { phase: "Warm", cost: "Per query", latency: "normal", note: "Subsequent queries, millisecond" },
+              { phase: "Warm", cost: "Per query", latency: "Normal", note: "Subsequent queries, millisecond" },
             ].map((r) => (
               <div
                 key={r.phase}
@@ -2156,12 +2156,12 @@ export const QdrantVsPinecone = (ctx) => {
               <div style={{ color: C.cyan, fontWeight: "bold", padding: "6px 8px", textAlign: "center" }}>Pinecone</div>
               <div style={{ color: C.cyan, fontWeight: "bold", padding: "6px 8px", textAlign: "center" }}>Comment</div>
               {[
-                { axis: "Ops preference", q: "self-host", p: "managed", n: "Who runs it" },
-                { axis: "Filter complexity", q: "Inline HNSW", p: "post-filter", n: "Qdrant deeper" },
-                { axis: "Scale-to-zero", q: "no", p: "serverless", n: "Pinecone unique" },
-                { axis: "Cost at steady 1B", q: "cheaper", p: "premium", n: "Ops capacity needed" },
+                { axis: "Ops preference", q: "Self-host", p: "Managed", n: "Who runs it" },
+                { axis: "Filter complexity", q: "Inline HNSW", p: "Post-filter", n: "Qdrant deeper" },
+                { axis: "Scale-to-zero", q: "No", p: "Serverless", n: "Pinecone unique" },
+                { axis: "Cost at steady 1B", q: "Cheaper", p: "Premium", n: "Ops capacity needed" },
                 { axis: "Feature depth", q: "More knobs", p: "Fewer, opinionated", n: "Pick your poison" },
-                { axis: "Ecosystem maturity", q: "growing", p: "battle-tested", n: "Both solid today" },
+                { axis: "Ecosystem maturity", q: "Growing", p: "Battle-tested", n: "Both solid today" },
               ].flatMap((r) => [
                 <div
                   key={`a-${r.axis}`}
@@ -2235,7 +2235,7 @@ export const QdrantVsPinecone = (ctx) => {
               {[
                 { t: "Size", v: "<1M vectors" },
                 { t: "Traffic", v: "Unknown / bursty" },
-                { t: "Ops capacity", v: "none" },
+                { t: "Ops capacity", v: "None" },
               ].map((r) => (
                 <div
                   key={r.t}
@@ -2619,17 +2619,17 @@ export const QdrantVsPinecone = (ctx) => {
                 lineHeight: 1.9,
               }}
             >
-              <span style={{ color: C.purple }}>Q1:</span> can your team run infrastructure?
+              <span style={{ color: C.purple }}>Q1:</span> Can your team run infrastructure?
               <br />
-              &nbsp;&nbsp;no -&gt; <span style={{ color: C.orange }}>Pinecone</span> (serverless if spiky, pods if
+              &nbsp;&nbsp;No -&gt; <span style={{ color: C.orange }}>Pinecone</span> (serverless if spiky, pods if
               steady)
               <br />
-              &nbsp;&nbsp;yes -&gt; proceed to Q2
+              &nbsp;&nbsp;Yes -&gt; proceed to Q2
               <br />
               <br />
-              <span style={{ color: C.purple }}>Q2:</span> scale and filter complexity?
+              <span style={{ color: C.purple }}>Q2:</span> Scale and filter complexity?
               <br />
-              &nbsp;&nbsp;&lt; 10M + simple filters -&gt; <span style={{ color: C.green }}>either</span> works; pgvector
+              &nbsp;&nbsp;&lt; 10M + simple filters -&gt; <span style={{ color: C.green }}>Either</span> works; pgvector
               if Postgres
               <br />
               &nbsp;&nbsp;10M-100M + complex filters -&gt; <span style={{ color: C.green }}>Qdrant</span> self-host
@@ -2639,9 +2639,9 @@ export const QdrantVsPinecone = (ctx) => {
               </span> or <span style={{ color: C.green }}>Milvus</span>
               <br />
               <br />
-              <span style={{ color: C.purple }}>Q3:</span> residency or compliance constraints?
+              <span style={{ color: C.purple }}>Q3:</span> Residency or compliance constraints?
               <br />
-              &nbsp;&nbsp;apply region constraint on top; both vendors offer EU / regional options
+              &nbsp;&nbsp;Apply region constraint on top; both vendors offer EU / regional options
             </div>
           </div>
           <div
@@ -3610,7 +3610,7 @@ export const DecisionFramework = (ctx) => {
                   {r.what}
                 </T>
                 <T color={C.dim} size={12} style={{ marginTop: 4, fontStyle: "italic" }}>
-                  see: {r.ref}
+                  See: {r.ref}
                 </T>
               </div>
             ))}

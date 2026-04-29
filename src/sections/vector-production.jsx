@@ -1418,21 +1418,21 @@ export const UpdatesDeletes = (ctx) => {
               {[
                 {
                   name: "IVF / IVF-PQ",
-                  cost: "easy",
+                  cost: "Easy",
                   costColor: C.green,
                   trigger: "Cell-level rebuild at ~50% dead",
                   example: "FAISS IVF_PQ, Milvus IVF",
                 },
                 {
                   name: "HNSW",
-                  cost: "moderate",
+                  cost: "Moderate",
                   costColor: C.yellow,
                   trigger: "Full-graph rebuild at ~30% dead",
                   example: "Qdrant HNSW, Weaviate",
                 },
                 {
                   name: "HNSW + PQ",
-                  cost: "hardest",
+                  cost: "Hardest",
                   costColor: C.red,
                   trigger: "Graph + codebook retrain",
                   example: "Qdrant HNSW+PQ, Milvus HNSW_PQ",
@@ -3481,8 +3481,8 @@ export const Rerankers = (ctx) => {
           >
             {[
               { stage: "Stage 1 - retrieval", cost: "5 ms", tech: "HNSW / IVF-PQ", size: "1B -> 100", color: C.cyan },
-              { stage: "Stage 2 - rerank", cost: "100 ms", tech: "cross-encoder", size: "100 -> 10", color: C.yellow },
-              { stage: "Final", cost: "~105 ms", tech: "combined", size: "10", color: C.green },
+              { stage: "Stage 2 - rerank", cost: "100 ms", tech: "Cross-encoder", size: "100 -> 10", color: C.yellow },
+              { stage: "Final", cost: "~105 ms", tech: "Combined", size: "10", color: C.green },
             ].map((r) => (
               <div
                 key={r.stage}
@@ -3553,18 +3553,18 @@ export const Rerankers = (ctx) => {
                 <g>
                   {[
                     { label: "[CLS]", color: C.cyan },
-                    { label: "query", color: C.cyan },
-                    { label: "query", color: C.cyan },
+                    { label: "Query", color: C.cyan },
+                    { label: "Query", color: C.cyan },
                     { label: "[SEP]", color: C.dim },
-                    { label: "doc", color: C.yellow },
-                    { label: "doc", color: C.yellow },
-                    { label: "doc", color: C.yellow },
-                    { label: "doc", color: C.yellow },
+                    { label: "Doc", color: C.yellow },
+                    { label: "Doc", color: C.yellow },
+                    { label: "Doc", color: C.yellow },
+                    { label: "Doc", color: C.yellow },
                     { label: "[SEP]", color: C.dim },
                   ].map((t, i) => (
                     <g key={`tok-${i}`}>
                       <rect
-                        x={40 + i * 48}
+                        x={47 + i * 48}
                         y={150}
                         width={42}
                         height={30}
@@ -3573,13 +3573,13 @@ export const Rerankers = (ctx) => {
                         strokeWidth={1}
                         rx={4}
                       />
-                      <text x={40 + i * 48 + 21} y={170} fill={t.color} fontSize={10} textAnchor="middle">
+                      <text x={47 + i * 48 + 21} y={170} fill={t.color} fontSize={10} textAnchor="middle">
                         {t.label}
                       </text>
                       <line
-                        x1={40 + i * 48 + 21}
+                        x1={47 + i * 48 + 21}
                         y1={150}
-                        x2={40 + i * 48 + 21}
+                        x2={47 + i * 48 + 21}
                         y2={120}
                         stroke={C.dim}
                         strokeWidth={1}
@@ -3588,7 +3588,7 @@ export const Rerankers = (ctx) => {
                   ))}
                 </g>
                 <rect
-                  x={40}
+                  x={26}
                   y={50}
                   width={468}
                   height={70}
@@ -3597,12 +3597,12 @@ export const Rerankers = (ctx) => {
                   strokeWidth={2}
                   rx={6}
                 />
-                <text x={274} y={95} fill={C.yellow} fontSize={16} fontWeight="bold" textAnchor="middle">
+                <text x={260} y={95} fill={C.yellow} fontSize={16} fontWeight="bold" textAnchor="middle">
                   Transformer (full attention across all tokens)
                 </text>
-                <line x1={274} y1={50} x2={274} y2={30} stroke={C.green} strokeWidth={2} />
-                <circle cx={274} cy={20} r={15} fill={C.green} />
-                <text x={274} y={24} fill={C.bg} fontSize={11} fontWeight="bold" textAnchor="middle">
+                <line x1={260} y1={50} x2={260} y2={30} stroke={C.green} strokeWidth={2} />
+                <circle cx={260} cy={20} r={15} fill={C.green} />
+                <text x={260} y={24} fill={C.bg} fontSize={11} fontWeight="bold" textAnchor="middle">
                   Score
                 </text>
               </svg>
@@ -3710,7 +3710,7 @@ export const Rerankers = (ctx) => {
                   lineHeight: 1.8,
                 }}
               >
-                concat(query, doc) -&gt; transformer
+                Concat(query, doc) -&gt; transformer
                 <br />
                 Full attention across all tokens
                 <br />
@@ -4012,7 +4012,7 @@ export const Rerankers = (ctx) => {
                 {
                   name: "BGE-reranker v2",
                   kind: "Open weights",
-                  size: "base 268M / large 560M",
+                  size: "Base 268M / large 560M",
                   note: "BAAI release, self-host on A10/A100, BGE-reranker-m3 is multilingual",
                 },
                 {
@@ -4024,7 +4024,7 @@ export const Rerankers = (ctx) => {
                 {
                   name: "RankGPT / LLM-as-judge",
                   kind: "Managed LLM",
-                  size: "listwise, LLM-driven",
+                  size: "Listwise, LLM-driven",
                   note: "Highest quality, 10x latency, expensive",
                 },
               ].map((r) => (
@@ -4035,15 +4035,16 @@ export const Rerankers = (ctx) => {
                     background: `${C.purple}08`,
                     border: `1px solid ${C.purple}18`,
                     borderRadius: 6,
+                    textAlign: "center",
                   }}
                 >
-                  <T color={C.purple} bold size={15}>
+                  <T color={C.purple} bold size={15} center>
                     {r.name}
                   </T>
-                  <div style={{ marginTop: 4, fontFamily: "monospace", fontSize: 12, color: C.bright }}>
+                  <div style={{ marginTop: 4, fontFamily: "monospace", fontSize: 12, color: C.bright, textAlign: "center" }}>
                     {r.kind} &middot; {r.size}
                   </div>
-                  <T color={C.dim} size={12} style={{ marginTop: 4 }}>
+                  <T color={C.dim} size={12} style={{ marginTop: 4 }} center>
                     {r.note}
                   </T>
                 </div>
@@ -4098,8 +4099,8 @@ export const Rerankers = (ctx) => {
 // Token-level similarity grid used in sub=3. Query tokens on one axis, doc
 // tokens on the other. Cell value is the cosine similarity; highlighted cell
 // per row is the max-match for that query token.
-const COLBERT_Q_TOKENS = ["cats", "live", "outside"];
-const COLBERT_D_TOKENS = ["cats", "are", "small", "carnivores", "that"];
+const COLBERT_Q_TOKENS = ["Cats", "Live", "Outside"];
+const COLBERT_D_TOKENS = ["Cats", "Are", "Small", "Carnivores", "That"];
 const COLBERT_SIM = [
   [0.94, 0.22, 0.18, 0.35, 0.21],
   [0.11, 0.17, 0.15, 0.25, 0.28],
@@ -4382,7 +4383,7 @@ export const MultiVectorRetrieval = (ctx) => {
                   fontWeight: "bold",
                 }}
               >
-                max
+                Max
               </div>
               {COLBERT_Q_TOKENS.map((qTok, i) => (
                 <div key={`row-${i}`} style={{ display: "contents" }}>
@@ -4599,15 +4600,16 @@ export const MultiVectorRetrieval = (ctx) => {
                     background: `${C.purple}08`,
                     border: `1px solid ${C.purple}18`,
                     borderRadius: 6,
+                    textAlign: "center",
                   }}
                 >
-                  <T color={C.purple} bold size={15}>
+                  <T color={C.purple} bold size={15} center>
                     {r.name}
                   </T>
-                  <T color={C.bright} size={12} style={{ marginTop: 4 }}>
+                  <T color={C.bright} size={12} style={{ marginTop: 4 }} center>
                     {r.how}
                   </T>
-                  <T color={C.dim} size={11} style={{ marginTop: 4 }}>
+                  <T color={C.dim} size={11} style={{ marginTop: 4 }} center>
                     {r.since}
                   </T>
                 </div>
@@ -4999,12 +5001,13 @@ export const EmbeddingLifecycle = (ctx) => {
                     background: `${C.red}08`,
                     border: `1px solid ${C.red}18`,
                     borderRadius: 6,
+                    textAlign: "center",
                   }}
                 >
-                  <T color={C.red} bold size={14}>
+                  <T color={C.red} bold size={14} center>
                     {r.name}
                   </T>
-                  <T color={C.bright} size={13} style={{ marginTop: 4 }}>
+                  <T color={C.bright} size={13} style={{ marginTop: 4 }} center>
                     {r.text}
                   </T>
                 </div>
@@ -5091,12 +5094,13 @@ export const EmbeddingLifecycle = (ctx) => {
                     background: `${C.purple}08`,
                     border: `1px solid ${C.purple}18`,
                     borderRadius: 6,
+                    textAlign: "center",
                   }}
                 >
-                  <T color={C.purple} bold size={14}>
+                  <T color={C.purple} bold size={14} center>
                     {r.name}
                   </T>
-                  <T color={C.dim} size={12} style={{ marginTop: 4 }}>
+                  <T color={C.dim} size={12} style={{ marginTop: 4 }} center>
                     {r.note}
                   </T>
                 </div>
@@ -5331,12 +5335,13 @@ export const Observability = (ctx) => {
                     background: `${C.green}08`,
                     border: `1px solid ${C.green}18`,
                     borderRadius: 6,
+                    textAlign: "center",
                   }}
                 >
-                  <T color={C.green} bold size={14}>
+                  <T color={C.green} bold size={14} center>
                     {r.name}
                   </T>
-                  <T color={C.bright} size={13} style={{ marginTop: 4 }}>
+                  <T color={C.bright} size={13} style={{ marginTop: 4 }} center>
                     {r.what}
                   </T>
                 </div>
@@ -5460,7 +5465,7 @@ export const Observability = (ctx) => {
                   why: "SLA violation if it stays above for 5 minutes",
                 },
                 {
-                  name: "recall@10",
+                  name: "Recall@10",
                   kind: "ALERT",
                   threshold: "< 0.95",
                   color: C.red,
@@ -5674,7 +5679,7 @@ export const CapacityPlanning = (ctx) => {
                   </T>
                   <div style={{ marginTop: 4, fontFamily: "monospace", fontSize: 12, color: C.bright }}>{r.value}</div>
                   <T color={C.dim} size={11} style={{ marginTop: 4 }} center>
-                    example: {r.example}
+                    Example: {r.example}
                   </T>
                 </div>
               ))}
@@ -5796,7 +5801,7 @@ export const CapacityPlanning = (ctx) => {
               <br />
               Typical: 30 hops &middot; 10 us = 300 us
               <br />
-              cores = <span style={{ color: C.green }}>per-query-cost &middot; QPS &middot; headroom</span>
+              Cores = <span style={{ color: C.green }}>per-query-cost &middot; QPS &middot; headroom</span>
               <br />
               Worked: 300 us &middot; 200 QPS &middot; 2x headroom = 120,000 us = 0.12 core-seconds/sec
               <br />
@@ -6065,15 +6070,16 @@ export const CapacityPlanning = (ctx) => {
                     background: `${C.purple}08`,
                     border: `1px solid ${C.purple}18`,
                     borderRadius: 6,
+                    textAlign: "center",
                   }}
                 >
-                  <T color={C.purple} bold size={14}>
+                  <T color={C.purple} bold size={14} center>
                     {r.metric}
                   </T>
-                  <T color={C.bright} size={13} style={{ marginTop: 4 }}>
+                  <T color={C.bright} size={13} style={{ marginTop: 4 }} center>
                     {r.what}
                   </T>
-                  <T color={C.dim} size={12} style={{ marginTop: 4, fontFamily: "monospace" }}>
+                  <T color={C.dim} size={12} style={{ marginTop: 4, fontFamily: "monospace" }} center>
                     {r.example}
                   </T>
                 </div>

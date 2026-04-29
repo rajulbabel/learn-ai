@@ -6,3 +6,7 @@ coverage
 .idea
 .worktrees
 .env
+
+# Embedding model weights (142 MB, exceeds GitHub's 100 MB limit).
+# Fetched at build time by `npm run search:model`.
+public/models/bge-base-en-v1.5-q4/onnx/*.onnx

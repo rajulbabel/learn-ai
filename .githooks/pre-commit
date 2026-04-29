@@ -4,7 +4,7 @@
 set -e
 
 # Detect whether anything that affects the search index is staged.
-RELEVANT=$(git diff --cached --name-only -- 'src/sections/*.jsx' 'src/sections/*.js' 'src/config.js' 'src/data/svg-descriptions.json' 'public/models/*' || true)
+RELEVANT=$(git diff --cached --name-only -- 'src/sections/*.jsx' 'src/sections/*.js' 'src/config.js' 'src/data/svg-descriptions.json' 'public/models/*/model-meta.json' || true)
 
 if [ -z "$RELEVANT" ]; then
   # Nothing source-side changed: still verify in-tree consistency.

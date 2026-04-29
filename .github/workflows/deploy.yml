@@ -30,6 +30,15 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Cache embedding model (142 MB ONNX)
+        uses: actions/cache@v4
+        with:
+          path: public/models/bge-base-en-v1.5-q4
+          key: bge-base-en-v1.5-q4-${{ hashFiles('scripts/quantize-model.mjs') }}
+
+      - name: Fetch embedding model if not cached
+        run: npm run search:model
+
       - name: Build
         run: npm run build
 

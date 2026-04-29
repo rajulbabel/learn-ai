@@ -36,6 +36,12 @@ function sha256_16(s) {
   return createHash("sha256").update(s).digest("hex").slice(0, 16);
 }
 
+// Hash on whitespace-normalized source. Prettier reformats and indentation
+// changes do NOT invalidate the cache — only real content changes do.
+function contentHash(source) {
+  return sha256_16(source.replace(/\s+/g, " ").trim());
+}
+
 function chunkId(chapterId, sub, kind, text) {
   return sha256_16(`${chapterId}|${sub}|${kind}|${sha256_16(text)}`);
 }
@@ -88,7 +94,7 @@ export async function runBuild({ rootDir = process.cwd(), chapters, sectionNames
   for (const [file, chs] of byFile.entries()) {
     const path = join(rootDir, SECTIONS_DIR, file);
     const source = readFileSync(path, "utf-8");
-    const fileHash = sha256_16(source);
+    const fileHash = contentHash(source);
     fileSourceCache.set(file, { source, fileHash });
     if (!cache[fileHash]) cache[fileHash] = {};
     for (const ch of chs) tasks.push({ ch, file });

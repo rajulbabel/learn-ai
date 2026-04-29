@@ -181,11 +181,7 @@ export default function SearchOverlay({ open, onClose, onGoTo }) {
 
   // Status label + color
   const dotColor = isReady ? "#00e676" : isSearchLoading ? "#ffab40" : "rgba(255,255,255,0.25)";
-  const statusLabel = isReady
-    ? "Semantic Search Active"
-    : isSearchLoading
-      ? "Loading semantic model..."
-      : "Text search";
+  const statusLabel = isReady ? "Semantic Search Active" : "Text search";
   const statusColor = isReady
     ? "rgba(0, 230, 118, 0.7)"
     : isSearchLoading
@@ -194,9 +190,7 @@ export default function SearchOverlay({ open, onClose, onGoTo }) {
 
   // Result count text
   const countText = query.trim()
-    ? loading
-      ? "Searching..."
-      : `${filteredResults.length} result${filteredResults.length !== 1 ? "s" : ""}`
+    ? `${filteredResults.length} result${filteredResults.length !== 1 ? "s" : ""}`
     : "Type to search";
 
   return (

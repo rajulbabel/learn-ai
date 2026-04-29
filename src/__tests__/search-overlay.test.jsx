@@ -518,3 +518,14 @@ describe("SearchOverlay score display and filtering", () => {
     expect(resultButtons.length).toBe(1);
   });
 });
+
+describe("search overlay loading state is invisible", () => {
+  it("does not render the words 'Loading semantic model'", () => {
+    render(<SearchOverlay open={true} onClose={() => {}} onGoTo={() => {}} />);
+    expect(screen.queryByText(/Loading semantic model/i)).toBeNull();
+  });
+  it("does not render 'Searching...' as a result placeholder", () => {
+    render(<SearchOverlay open={true} onClose={() => {}} onGoTo={() => {}} />);
+    expect(screen.queryByText(/^Searching\.\.\.$/)).toBeNull();
+  });
+});

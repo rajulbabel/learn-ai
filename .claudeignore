@@ -1,7 +1,14 @@
+# Secrets
+.env
+
 # Generated data files (large, not useful for Claude)
-src/data/embeddings.json
 src/data/chunks.json
-src/data/embeddings-checksum.json
+src/data/chunk-cache.json
+src/data/embeddings.bin
+src/data/embeddings-manifest.json
+
+# Bundled model weights (huge, binary)
+public/models/
 
 # Build artifacts
 dist/

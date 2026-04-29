@@ -29,9 +29,7 @@ describe("chunks.json schema", () => {
       expect(typeof c.chapterId).toBe("string");
       expect(typeof c.section).toBe("number");
       expect(typeof c.sub).toBe("number");
-      expect(["concept", "formula", "example", "diagram", "summary"]).toContain(
-        c.kind,
-      );
+      expect(["concept", "formula", "example", "diagram", "summary"]).toContain(c.kind);
       expect(c.text.length).toBeGreaterThan(10);
       expect(c.summary.length).toBeGreaterThan(5);
       expect(Array.isArray(c.queries)).toBe(true);

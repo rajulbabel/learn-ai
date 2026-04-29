@@ -90,15 +90,7 @@
           "explain hidden layer math",
           "running hidden layer with x1 1500 x2 3"
         ],
-        "terms": [
-          "hidden layer",
-          "h1",
-          "h2",
-          "ReLU",
-          "multiply sum bias activate",
-          "layer 1 output",
-          "[950, 185]"
-        ]
+        "terms": ["hidden layer", "h1", "h2", "ReLU", "multiply sum bias activate", "layer 1 output", "[950, 185]"]
       },
       {
         "sub": 2,
@@ -122,13 +114,7 @@
           "prediction 807 worked example",
           "how does network produce its number"
         ],
-        "terms": [
-          "output neuron",
-          "layer 2",
-          "prediction",
-          "807",
-          "output layer math"
-        ]
+        "terms": ["output neuron", "layer 2", "prediction", "807", "output layer math"]
       },
       {
         "sub": 3,
@@ -152,14 +138,7 @@
           "comparing prediction with ground truth",
           "off by amount in regression"
         ],
-        "terms": [
-          "prediction vs actual",
-          "error",
-          "loss motivation",
-          "predicted 807",
-          "actual 900",
-          "off by 93k"
-        ]
+        "terms": ["prediction vs actual", "error", "loss motivation", "predicted 807", "actual 900", "off by 93k"]
       },
       {
         "sub": -2,
@@ -249,15 +228,7 @@
           "What is 93 squared loss?",
           "Sample loss calculation neural network"
         ],
-        "terms": [
-          "807",
-          "900",
-          "8649",
-          "93 squared",
-          "loss example",
-          "house price prediction",
-          "worked example"
-        ]
+        "terms": ["807", "900", "8649", "93 squared", "loss example", "house price prediction", "worked example"]
       },
       {
         "sub": 2,
@@ -345,14 +316,7 @@
           "Training loss explained briefly",
           "Quick guide to loss function"
         ],
-        "terms": [
-          "loss function",
-          "squared error",
-          "MSE",
-          "training loss",
-          "prediction error",
-          "loss chapter summary"
-        ]
+        "terms": ["loss function", "squared error", "MSE", "training loss", "prediction error", "loss chapter summary"]
       },
       {
         "sub": -2,
@@ -644,15 +608,7 @@
           "weight close to 0 irrelevant input",
           "input importance in neural net"
         ],
-        "terms": [
-          "weight",
-          "importance",
-          "input",
-          "high weight",
-          "low weight",
-          "flu diagnosis analogy",
-          "shoe color"
-        ]
+        "terms": ["weight", "importance", "input", "high weight", "low weight", "flu diagnosis analogy", "shoe color"]
       },
       {
         "sub": 1,
@@ -676,15 +632,7 @@
           "without bias forces output to zero at zero input",
           "purpose of bias in linear model"
         ],
-        "terms": [
-          "bias",
-          "baseline shift",
-          "house price example",
-          "sqft",
-          "land value",
-          "intercept",
-          "constant offset"
-        ]
+        "terms": ["bias", "baseline shift", "house price example", "sqft", "land value", "intercept", "constant offset"]
       },
       {
         "sub": 2,
@@ -775,14 +723,7 @@
           "core concept of neuron computation",
           "training only updates weights and bias"
         ],
-        "terms": [
-          "learnable parameters",
-          "weights",
-          "bias",
-          "fixed math",
-          "key takeaway",
-          "what the network learns"
-        ]
+        "terms": ["learnable parameters", "weights", "bias", "fixed math", "key takeaway", "what the network learns"]
       }
     ],
     "1.2": [
@@ -808,13 +749,7 @@
           "smallest unit of neural network",
           "neuron weighing evidence"
         ],
-        "terms": [
-          "neuron",
-          "building block",
-          "input",
-          "output",
-          "decision-maker"
-        ]
+        "terms": ["neuron", "building block", "input", "output", "decision-maker"]
       },
       {
         "sub": 1,
@@ -838,14 +773,7 @@
           "real example of neuron inputs",
           "interpreting weights as importance"
         ],
-        "terms": [
-          "fever",
-          "cough",
-          "fatigue",
-          "weight",
-          "symptom",
-          "flu detection"
-        ]
+        "terms": ["fever", "cough", "fatigue", "weight", "symptom", "flu detection"]
       },
       {
         "sub": 2,
@@ -869,14 +797,7 @@
           "neuron arithmetic example",
           "step by step neuron forward calculation"
         ],
-        "terms": [
-          "multiply",
-          "sum",
-          "bias",
-          "activation",
-          "9.48",
-          "weighted sum"
-        ]
+        "terms": ["multiply", "sum", "bias", "activation", "9.48", "weighted sum"]
       },
       {
         "sub": 3,
@@ -900,15 +821,7 @@
           "formal neuron computation formula",
           "Σ symbol in neural network"
         ],
-        "terms": [
-          "formula",
-          "Σ",
-          "sigma",
-          "activation function",
-          "weight",
-          "bias",
-          "output"
-        ]
+        "terms": ["formula", "Σ", "sigma", "activation function", "weight", "bias", "output"]
       },
       {
         "sub": 4,
@@ -932,13 +845,7 @@
           "GPT image gen same neuron",
           "key insight about neurons"
         ],
-        "terms": [
-          "weights",
-          "training",
-          "ChatGPT",
-          "image generator",
-          "learned"
-        ]
+        "terms": ["weights", "training", "ChatGPT", "image generator", "learned"]
       },
       {
         "sub": -1,
@@ -962,14 +869,7 @@
           "why neurons are universal",
           "what gets learned vs fixed in a neuron"
         ],
-        "terms": [
-          "neuron",
-          "weight",
-          "bias",
-          "activation",
-          "forward pass",
-          "weighted sum"
-        ]
+        "terms": ["neuron", "weight", "bias", "activation", "forward pass", "weighted sum"]
       },
       {
         "sub": -2,
@@ -993,13 +893,7 @@
           "central neuron with three inputs",
           "simple neuron visualization"
         ],
-        "terms": [
-          "diagram",
-          "3 inputs",
-          "weights",
-          "neuron",
-          "output"
-        ]
+        "terms": ["diagram", "3 inputs", "weights", "neuron", "output"]
       }
     ],
     "1.5": [
@@ -1123,13 +1017,7 @@
           "fix for stacked linear layers",
           "introduce curves to neural network"
         ],
-        "terms": [
-          "activation function",
-          "bend in line",
-          "nonlinearity",
-          "break linearity",
-          "ReLU preview"
-        ]
+        "terms": ["activation function", "bend in line", "nonlinearity", "break linearity", "ReLU preview"]
       },
       {
         "sub": -1,
@@ -1343,14 +1231,7 @@
           "Reading layer outputs",
           "Score vector from a layer"
         ],
-        "terms": [
-          "output vector",
-          "input vector",
-          "argmax",
-          "prediction",
-          "list of numbers",
-          "layer output"
-        ]
+        "terms": ["output vector", "input vector", "argmax", "prediction", "list of numbers", "layer output"]
       },
       {
         "sub": 3,
@@ -1405,14 +1286,7 @@
           "Math operations of a layer",
           "Hardware execution of a layer"
         ],
-        "terms": [
-          "GPU",
-          "parallel computation",
-          "math operations",
-          "abstraction",
-          "simultaneous",
-          "hardware"
-        ]
+        "terms": ["GPU", "parallel computation", "math operations", "abstraction", "simultaneous", "hardware"]
       },
       {
         "sub": -1,
@@ -1436,14 +1310,7 @@
           "Recap of layers neurons weights",
           "Big picture of a layer"
         ],
-        "terms": [
-          "layer summary",
-          "neurons",
-          "weights",
-          "vector transform",
-          "stacking",
-          "parallel"
-        ]
+        "terms": ["layer summary", "neurons", "weights", "vector transform", "stacking", "parallel"]
       },
       {
         "sub": -2,
@@ -1467,13 +1334,7 @@
           "Layer dashed box illustration",
           "Inputs outputs layer figure"
         ],
-        "terms": [
-          "diagram",
-          "fully connected",
-          "layer visualization",
-          "schematic",
-          "input output mapping"
-        ]
+        "terms": ["diagram", "fully connected", "layer visualization", "schematic", "input output mapping"]
       },
       {
         "sub": -2,
@@ -1497,14 +1358,7 @@
           "Layer with bias diagram",
           "Connection strength visualization"
         ],
-        "terms": [
-          "weight diagram",
-          "9 weights",
-          "bias",
-          "weight labels",
-          "connection diagram",
-          "per-neuron weights"
-        ]
+        "terms": ["weight diagram", "9 weights", "bias", "weight labels", "connection diagram", "per-neuron weights"]
       }
     ],
     "1.6": [
@@ -1563,13 +1417,7 @@
           "why does ReLU output zero for negatives",
           "ReLU concrete numerical examples"
         ],
-        "terms": [
-          "ReLU",
-          "max(0, x)",
-          "rule",
-          "negative clipped",
-          "activation"
-        ]
+        "terms": ["ReLU", "max(0, x)", "rule", "negative clipped", "activation"]
       },
       {
         "sub": 1,
@@ -1593,13 +1441,7 @@
           "ReLU produces bent not straight line",
           "first bend ReLU example"
         ],
-        "terms": [
-          "bent line",
-          "bend point",
-          "piecewise linear",
-          "neuron 1",
-          "flat then rises"
-        ]
+        "terms": ["bent line", "bend point", "piecewise linear", "neuron 1", "flat then rises"]
       },
       {
         "sub": 2,
@@ -1623,13 +1465,7 @@
           "second ReLU neuron bend at input 5",
           "different parameters different ReLU shapes"
         ],
-        "terms": [
-          "different bend",
-          "neuron 2",
-          "weights",
-          "bias",
-          "bend location"
-        ]
+        "terms": ["different bend", "neuron 2", "weights", "bias", "bend location"]
       },
       {
         "sub": 3,
@@ -1653,13 +1489,7 @@
           "ReLU summation produces valley",
           "concrete numbers for combined ReLU output"
         ],
-        "terms": [
-          "valley curve",
-          "two bends",
-          "combined output",
-          "summing neurons",
-          "nonlinear shape"
-        ]
+        "terms": ["valley curve", "two bends", "combined output", "summing neurons", "nonlinear shape"]
       },
       {
         "sub": 4,
@@ -1714,13 +1544,7 @@
           "ReLU activation visual example",
           "graph showing ReLU corner"
         ],
-        "terms": [
-          "graph",
-          "neuron 1",
-          "bend annotation",
-          "flat then rises",
-          "piecewise linear"
-        ]
+        "terms": ["graph", "neuron 1", "bend annotation", "flat then rises", "piecewise linear"]
       },
       {
         "sub": -2,
@@ -1744,13 +1568,7 @@
           "image of ReLU declining then flat",
           "ReLU different parameters diagram"
         ],
-        "terms": [
-          "graph",
-          "neuron 2",
-          "bend at 5",
-          "down then flat",
-          "different weights"
-        ]
+        "terms": ["graph", "neuron 2", "bend at 5", "down then flat", "different weights"]
       },
       {
         "sub": -2,
@@ -1774,14 +1592,7 @@
           "ReLU composition curve graph",
           "combined neuron output diagram"
         ],
-        "terms": [
-          "valley curve",
-          "two bends",
-          "combined",
-          "1st bend",
-          "2nd bend",
-          "ReLU summation"
-        ]
+        "terms": ["valley curve", "two bends", "combined", "1st bend", "2nd bend", "ReLU summation"]
       }
     ],
     "1.9": [
@@ -1807,14 +1618,7 @@
           "why is 807 predicted instead of 900",
           "what is the starting point of training"
         ],
-        "terms": [
-          "random initialization",
-          "weights",
-          "biases",
-          "untrained network",
-          "predictions",
-          "training start"
-        ]
+        "terms": ["random initialization", "weights", "biases", "untrained network", "predictions", "training start"]
       },
       {
         "sub": 1,
@@ -1838,15 +1642,7 @@
           "training loop diagram explained",
           "what happens after computing loss"
         ],
-        "terms": [
-          "training loop",
-          "forward pass",
-          "loss",
-          "backward pass",
-          "weight update",
-          "iteration",
-          "epoch"
-        ]
+        "terms": ["training loop", "forward pass", "loss", "backward pass", "weight update", "iteration", "epoch"]
       },
       {
         "sub": 2,
@@ -1870,14 +1666,7 @@
           "how do gradient descent and backprop work together",
           "step 3 vs step 4 in training"
         ],
-        "terms": [
-          "backpropagation",
-          "gradient descent",
-          "training",
-          "backprop",
-          "blame assignment",
-          "weight update"
-        ]
+        "terms": ["backpropagation", "gradient descent", "training", "backprop", "blame assignment", "weight update"]
       },
       {
         "sub": 3,
@@ -1901,14 +1690,7 @@
           "how big is GPT-3",
           "what is the final product of training"
         ],
-        "terms": [
-          "convergence",
-          "GPT-3",
-          "175 billion parameters",
-          "trained model",
-          "model weights",
-          "tuned weights"
-        ]
+        "terms": ["convergence", "GPT-3", "175 billion parameters", "trained model", "model weights", "tuned weights"]
       },
       {
         "sub": -1,
@@ -2065,14 +1847,7 @@
           "bias update preparation",
           "backward pass for bias"
         ],
-        "terms": [
-          "bias gradient",
-          "∂Loss/∂bias",
-          "-200",
-          "dPred/dBias = 1",
-          "learnable parameter",
-          "bias update"
-        ]
+        "terms": ["bias gradient", "∂Loss/∂bias", "-200", "dPred/dBias = 1", "learnable parameter", "bias update"]
       },
       {
         "sub": -1,
@@ -2160,12 +1935,7 @@
           "why use vectors instead of single numbers",
           "scalar to vector"
         ],
-        "terms": [
-          "vector",
-          "scalar",
-          "list of numbers",
-          "1D array"
-        ]
+        "terms": ["vector", "scalar", "list of numbers", "1D array"]
       },
       {
         "sub": 1,
@@ -2189,13 +1959,7 @@
           "what shape does a layer take",
           "do neurons output vectors"
         ],
-        "terms": [
-          "input vector",
-          "output vector",
-          "hidden layer",
-          "neural network layer",
-          "activations"
-        ]
+        "terms": ["input vector", "output vector", "hidden layer", "neural network layer", "activations"]
       },
       {
         "sub": 2,
@@ -2219,13 +1983,7 @@
           "first dimensions of word embedding cat",
           "why not letters as input"
         ],
-        "terms": [
-          "word embedding",
-          "embedding vector",
-          "512 dimensions",
-          "word as vector",
-          "cat embedding"
-        ]
+        "terms": ["word embedding", "embedding vector", "512 dimensions", "word as vector", "cat embedding"]
       },
       {
         "sub": 3,
@@ -2279,12 +2037,7 @@
           "main point of vectors lesson",
           "vectors recap"
         ],
-        "terms": [
-          "vectors",
-          "embeddings",
-          "neural network representation",
-          "summary"
-        ]
+        "terms": ["vectors", "embeddings", "neural network representation", "summary"]
       }
     ],
     "1.10": [
@@ -2310,13 +2063,7 @@
           "derivative concept neural network training",
           "rate of change explanation"
         ],
-        "terms": [
-          "derivative",
-          "sensitivity",
-          "rate of change",
-          "input nudge",
-          "output change"
-        ]
+        "terms": ["derivative", "sensitivity", "rate of change", "input nudge", "output change"]
       },
       {
         "sub": 1,
@@ -2340,14 +2087,7 @@
           "loss dropped from 10000 to 2500",
           "derivative example with real numbers"
         ],
-        "terms": [
-          "weight = 0.5",
-          "input = 1500",
-          "bias = 50",
-          "loss = 10,000",
-          "weight nudge",
-          "prediction"
-        ]
+        "terms": ["weight = 0.5", "input = 1500", "bias = 50", "loss = 10,000", "weight nudge", "prediction"]
       },
       {
         "sub": 2,
@@ -2371,14 +2111,7 @@
           "how is derivative computed numerically",
           "rise over run for loss vs weight"
         ],
-        "terms": [
-          "∂Loss/∂weight",
-          "partial derivative",
-          "-75,000",
-          "ratio",
-          "∂",
-          "tiny change"
-        ]
+        "terms": ["∂Loss/∂weight", "partial derivative", "-75,000", "ratio", "∂", "tiny change"]
       },
       {
         "sub": 3,
@@ -2433,15 +2166,7 @@
           "partial derivative multiple weights",
           "current point tangent loss curve"
         ],
-        "terms": [
-          "compass",
-          "partial",
-          "∂L/∂w",
-          "tangent line",
-          "slope",
-          "minimum",
-          "loss curve"
-        ]
+        "terms": ["compass", "partial", "∂L/∂w", "tangent line", "slope", "minimum", "loss curve"]
       },
       {
         "sub": -1,
@@ -2465,14 +2190,7 @@
           "derivative ratio loss change weight change",
           "1.10 derivatives the core intuition"
         ],
-        "terms": [
-          "derivative",
-          "partial derivative",
-          "compass",
-          "sensitivity",
-          "gradient direction",
-          "loss change"
-        ]
+        "terms": ["derivative", "partial derivative", "compass", "sensitivity", "gradient direction", "loss change"]
       },
       {
         "sub": -2,
@@ -2493,13 +2211,7 @@
           "simple neuron drawing for derivatives",
           "diagram showing input connected to neuron"
         ],
-        "terms": [
-          "neuron diagram",
-          "weight 0.5",
-          "bias 50",
-          "input 1500",
-          "output 800"
-        ]
+        "terms": ["neuron diagram", "weight 0.5", "bias 50", "input 1500", "output 800"]
       },
       {
         "sub": -2,
@@ -2522,14 +2234,7 @@
           "visualize derivative on parabola",
           "tangent slope direction to minimum"
         ],
-        "terms": [
-          "parabolic loss curve",
-          "tangent line",
-          "slope",
-          "minimum",
-          "current point",
-          "loss landscape"
-        ]
+        "terms": ["parabolic loss curve", "tangent line", "slope", "minimum", "current point", "loss landscape"]
       }
     ],
     "1.12": [
@@ -3031,14 +2736,7 @@
           "what is the backprop chain length for layer 1 of a deep net",
           "comparing shallow vs deep backprop"
         ],
-        "terms": [
-          "120 layers",
-          "GPT-4",
-          "chain rule length",
-          "deep network depth",
-          "multiplication chain",
-          "w11 chain"
-        ]
+        "terms": ["120 layers", "GPT-4", "chain rule length", "deep network depth", "multiplication chain", "w11 chain"]
       },
       {
         "sub": 1,
@@ -3258,13 +2956,7 @@
           "how loss changes when y changes",
           "step 1 backprop calculation"
         ],
-        "terms": [
-          "dLoss/dy",
-          "2(y - target)",
-          "-186",
-          "squared loss derivative",
-          "starting gradient"
-        ]
+        "terms": ["dLoss/dy", "2(y - target)", "-186", "squared loss derivative", "starting gradient"]
       },
       {
         "sub": 3,
@@ -3288,15 +2980,7 @@
           "h1 = 950 multiplier role",
           "computing all three output gradients"
         ],
-        "terms": [
-          "dLoss/dw_o1",
-          "dLoss/dw_o2",
-          "dLoss/db_o",
-          "-176,700",
-          "-34,410",
-          "-186",
-          "output layer gradient"
-        ]
+        "terms": ["dLoss/dw_o1", "dLoss/dw_o2", "dLoss/db_o", "-176,700", "-34,410", "-186", "output layer gradient"]
       },
       {
         "sub": 4,
@@ -3320,13 +3004,7 @@
           "backpropagation hidden activation gradient",
           "carrying gradient backward analogy"
         ],
-        "terms": [
-          "dLoss/dh₁ = -148.8",
-          "dLoss/dh₂ = -37.2",
-          "dy/dh = w_o",
-          "pipe analogy",
-          "gradient flow backward"
-        ]
+        "terms": ["dLoss/dh₁ = -148.8", "dLoss/dh₂ = -37.2", "dy/dh = w_o", "pipe analogy", "gradient flow backward"]
       },
       {
         "sub": 5,
@@ -3350,14 +3028,7 @@
           "dying ReLU problem",
           "step 4 backprop through ReLU"
         ],
-        "terms": [
-          "ReLU derivative",
-          "dead neuron",
-          "z > 0",
-          "gradient blocked",
-          "dReLU/dz",
-          "pre-activation z"
-        ]
+        "terms": ["ReLU derivative", "dead neuron", "z > 0", "gradient blocked", "dReLU/dz", "pre-activation z"]
       },
       {
         "sub": 6,
@@ -3569,12 +3240,7 @@
           "comparing two lists of numbers",
           "vector compare operation"
         ],
-        "terms": [
-          "dot product",
-          "vector comparison",
-          "AI fundamental operation",
-          "vector similarity"
-        ]
+        "terms": ["dot product", "vector comparison", "AI fundamental operation", "vector similarity"]
       },
       {
         "sub": 1,
@@ -3598,13 +3264,7 @@
           "manually computing dot product",
           "vector dot product formula"
         ],
-        "terms": [
-          "dot product formula",
-          "elementwise multiplication",
-          "sum of products",
-          "matching positions",
-          "A · B"
-        ]
+        "terms": ["dot product formula", "elementwise multiplication", "sum of products", "matching positions", "A · B"]
       },
       {
         "sub": 2,
@@ -3722,15 +3382,7 @@
           "define matrix in machine learning",
           "example of a 3 by 3 matrix"
         ],
-        "terms": [
-          "matrix",
-          "vector",
-          "rows",
-          "columns",
-          "3x3",
-          "2D grid",
-          "dimension"
-        ]
+        "terms": ["matrix", "vector", "rows", "columns", "3x3", "2D grid", "dimension"]
       },
       {
         "sub": 1,
@@ -3775,17 +3427,7 @@
           "disease diagnosis matrix example",
           "layer output without bias example"
         ],
-        "terms": [
-          "dot product",
-          "Flu",
-          "Cold",
-          "Allergy",
-          "raw scores",
-          "worked example",
-          "23.48",
-          "4.51",
-          "0.76"
-        ]
+        "terms": ["dot product", "Flu", "Cold", "Allergy", "raw scores", "worked example", "23.48", "4.51", "0.76"]
       },
       {
         "sub": 3,
@@ -3804,13 +3446,7 @@
           "layer computation as linear algebra",
           "matrix multiplication as a layer"
         ],
-        "terms": [
-          "layer",
-          "matrix multiplication",
-          "weights matrix",
-          "forward pass",
-          "matmul"
-        ]
+        "terms": ["layer", "matrix multiplication", "weights matrix", "forward pass", "matmul"]
       }
     ],
     "1.20": [
@@ -3836,15 +3472,7 @@
           "neural network activation overview",
           "what activations are used in transformers"
         ],
-        "terms": [
-          "activation function",
-          "ReLU",
-          "Sigmoid",
-          "Tanh",
-          "Softmax",
-          "nonlinearity",
-          "matrix multiplication"
-        ]
+        "terms": ["activation function", "ReLU", "Sigmoid", "Tanh", "Softmax", "nonlinearity", "matrix multiplication"]
       },
       {
         "sub": 0,
@@ -3867,13 +3495,7 @@
           "need for nonlinearity",
           "activation function role"
         ],
-        "terms": [
-          "matrix multiplication",
-          "linear layer",
-          "nonlinearity",
-          "W · input",
-          "activation function"
-        ]
+        "terms": ["matrix multiplication", "linear layer", "nonlinearity", "W · input", "activation function"]
       },
       {
         "sub": 1,
@@ -3896,12 +3518,7 @@
           "simple definition of ReLU",
           "ReLU function math"
         ],
-        "terms": [
-          "ReLU",
-          "Rectified Linear Unit",
-          "max(0, x)",
-          "activation function"
-        ]
+        "terms": ["ReLU", "Rectified Linear Unit", "max(0, x)", "activation function"]
       },
       {
         "sub": 2,
@@ -3924,13 +3541,7 @@
           "purpose of ReLU in deep network",
           "why ReLU not identity"
         ],
-        "terms": [
-          "ReLU",
-          "linearity",
-          "composition of linear maps",
-          "nonlinear pattern",
-          "W2·W1"
-        ]
+        "terms": ["ReLU", "linearity", "composition of linear maps", "nonlinear pattern", "W2·W1"]
       },
       {
         "sub": 3,
@@ -3954,14 +3565,7 @@
           "when to use sigmoid vs ReLU",
           "tanh squashing function"
         ],
-        "terms": [
-          "Sigmoid",
-          "Tanh",
-          "Softmax",
-          "σ(x)",
-          "1/(1+e^-x)",
-          "probability distribution"
-        ]
+        "terms": ["Sigmoid", "Tanh", "Softmax", "σ(x)", "1/(1+e^-x)", "probability distribution"]
       }
     ],
     "1.19": [
@@ -3986,15 +3590,7 @@
           "weight matrix per layer",
           "matrix multiplication in deep learning"
         ],
-        "terms": [
-          "layer",
-          "matrix multiplication",
-          "matmul",
-          "dot product",
-          "neuron",
-          "weight matrix",
-          "linear layer"
-        ]
+        "terms": ["layer", "matrix multiplication", "matmul", "dot product", "neuron", "weight matrix", "linear layer"]
       },
       {
         "sub": 0,
@@ -4017,13 +3613,7 @@
           "conceptual link between neuron and layer",
           "layer-as-math overview"
         ],
-        "terms": [
-          "layer",
-          "matrix multiplication",
-          "dot product",
-          "neuron",
-          "connect the dots"
-        ]
+        "terms": ["layer", "matrix multiplication", "dot product", "neuron", "connect the dots"]
       },
       {
         "sub": 1,
@@ -4046,15 +3636,7 @@
           "medical symptom layer example",
           "layer rows are neuron weights"
         ],
-        "terms": [
-          "3 neurons",
-          "weight rows",
-          "matrix rows",
-          "Flu",
-          "Cold",
-          "Allergy",
-          "stacking weights"
-        ]
+        "terms": ["3 neurons", "weight rows", "matrix rows", "Flu", "Cold", "Allergy", "stacking weights"]
       },
       {
         "sub": 2,
@@ -4077,14 +3659,7 @@
           "neuron calculation step by step",
           "neuron and dot product equivalence"
         ],
-        "terms": [
-          "neuron",
-          "dot product",
-          "weighted sum",
-          "inputs",
-          "weights",
-          "neuron_output"
-        ]
+        "terms": ["neuron", "dot product", "weighted sum", "inputs", "weights", "neuron_output"]
       },
       {
         "sub": 3,
@@ -4208,12 +3783,7 @@
           "depth versus width neural network",
           "intro to deep networks"
         ],
-        "terms": [
-          "depth",
-          "deep network",
-          "stacked layers",
-          "deep learning"
-        ]
+        "terms": ["depth", "deep network", "stacked layers", "deep learning"]
       },
       {
         "sub": 1,
@@ -4236,14 +3806,7 @@
           "comparing layer counts in networks",
           "simple patterns vs abstract patterns"
         ],
-        "terms": [
-          "shallow network",
-          "deep network",
-          "hidden layer",
-          "abstract features",
-          "1-2 layers",
-          "50 layers"
-        ]
+        "terms": ["shallow network", "deep network", "hidden layer", "abstract features", "1-2 layers", "50 layers"]
       },
       {
         "sub": 2,
@@ -4299,13 +3862,7 @@
           "compositional features benefit",
           "why deep beats shallow"
         ],
-        "terms": [
-          "composability",
-          "efficiency",
-          "expressiveness",
-          "parameters",
-          "depth advantages"
-        ]
+        "terms": ["composability", "efficiency", "expressiveness", "parameters", "depth advantages"]
       },
       {
         "sub": 4,
@@ -4329,15 +3886,7 @@
           "no gradient computation inference",
           "what changes between training and inference"
         ],
-        "terms": [
-          "training",
-          "inference",
-          "frozen weights",
-          "dropout",
-          "backprop",
-          "gradients",
-          "deployment"
-        ]
+        "terms": ["training", "inference", "frozen weights", "dropout", "backprop", "gradients", "deployment"]
       }
     ],
     "1.22": [
@@ -4540,15 +4089,7 @@
           "fixed learning rate issue",
           "what lr to use for whole training"
         ],
-        "terms": [
-          "learning rate",
-          "lr",
-          "constant lr",
-          "NaN",
-          "divergence",
-          "convergence",
-          "schedule"
-        ]
+        "terms": ["learning rate", "lr", "constant lr", "NaN", "divergence", "convergence", "schedule"]
       },
       {
         "sub": 1,
@@ -4572,14 +4113,7 @@
           "warmup neural network training",
           "lr schedule warmup section"
         ],
-        "terms": [
-          "warmup",
-          "linear warmup",
-          "peak LR",
-          "ramp up",
-          "warmup steps",
-          "early training"
-        ]
+        "terms": ["warmup", "linear warmup", "peak LR", "ramp up", "warmup steps", "early training"]
       },
       {
         "sub": 2,
@@ -4603,14 +4137,7 @@
           "lr schedule whole formula",
           "smooth descent learning rate"
         ],
-        "terms": [
-          "cosine decay",
-          "cosine annealing",
-          "lr_max",
-          "lr_min",
-          "decay phase",
-          "cosine schedule"
-        ]
+        "terms": ["cosine decay", "cosine annealing", "lr_max", "lr_min", "decay phase", "cosine schedule"]
       },
       {
         "sub": 3,
@@ -4634,15 +4161,7 @@
           "warmup 375M tokens",
           "production lr schedule LLM"
         ],
-        "terms": [
-          "GPT-3",
-          "175B parameters",
-          "6e-4",
-          "6e-5",
-          "300B tokens",
-          "375M tokens",
-          "cosine vs linear"
-        ]
+        "terms": ["GPT-3", "175B parameters", "6e-4", "6e-5", "300B tokens", "375M tokens", "cosine vs linear"]
       },
       {
         "sub": -1,
@@ -4698,13 +4217,7 @@
           "blue warmup graph",
           "lr increasing linearly"
         ],
-        "terms": [
-          "linear warmup",
-          "warmup graph",
-          "2000 steps",
-          "peak 0.001",
-          "ramp"
-        ]
+        "terms": ["linear warmup", "warmup graph", "2000 steps", "peak 0.001", "ramp"]
       },
       {
         "sub": -2,
@@ -4728,13 +4241,7 @@
           "green lr schedule graph",
           "lr rise and fall"
         ],
-        "terms": [
-          "warmup + cosine decay",
-          "complete schedule",
-          "peak",
-          "cosine descent",
-          "10000 steps"
-        ]
+        "terms": ["warmup + cosine decay", "complete schedule", "peak", "cosine descent", "10000 steps"]
       }
     ],
     "1.26": [
@@ -4820,13 +4327,7 @@
           "blowing up activations",
           "unstable initialization large std"
         ],
-        "terms": [
-          "large initialization",
-          "exploding activations",
-          "NaN training",
-          "saturation",
-          "training instability"
-        ]
+        "terms": ["large initialization", "exploding activations", "NaN training", "saturation", "training instability"]
       },
       {
         "sub": 3,
@@ -4944,12 +4445,7 @@
           "symmetry breaking visual",
           "diagram explaining zero weight failure"
         ],
-        "terms": [
-          "symmetry diagram",
-          "zero init visualization",
-          "identical neurons",
-          "stuck network"
-        ]
+        "terms": ["symmetry diagram", "zero init visualization", "identical neurons", "stuck network"]
       }
     ],
     "1.23": [
@@ -5134,14 +4630,7 @@
           "frozen dropout inference",
           "dropout deployment"
         ],
-        "terms": [
-          "inference",
-          "test time",
-          "eval mode",
-          "inverted dropout",
-          "model.eval",
-          "disabled dropout"
-        ]
+        "terms": ["inference", "test time", "eval mode", "inverted dropout", "model.eval", "disabled dropout"]
       },
       {
         "sub": 6,
@@ -5165,14 +4654,7 @@
           "residual dropout",
           "post-attention dropout"
         ],
-        "terms": [
-          "transformer block",
-          "p=0.1",
-          "attention dropout",
-          "FFN dropout",
-          "Add & Norm",
-          "residual dropout"
-        ]
+        "terms": ["transformer block", "p=0.1", "attention dropout", "FFN dropout", "Add & Norm", "residual dropout"]
       },
       {
         "sub": -1,
@@ -5229,13 +4711,7 @@
           "bar showing data split",
           "train val proportions"
         ],
-        "terms": [
-          "train/val split",
-          "80/20",
-          "dataset split",
-          "validation set size",
-          "split bar"
-        ]
+        "terms": ["train/val split", "80/20", "dataset split", "validation set size", "split bar"]
       },
       {
         "sub": -2,
@@ -5259,13 +4735,7 @@
           "training visibility diagram",
           "watcher eye icon"
         ],
-        "terms": [
-          "open eye",
-          "training data",
-          "visible",
-          "seen data",
-          "green eye"
-        ]
+        "terms": ["open eye", "training data", "visible", "seen data", "green eye"]
       },
       {
         "sub": -2,
@@ -5289,13 +4759,7 @@
           "validation data hidden",
           "masked from training"
         ],
-        "terms": [
-          "closed eye",
-          "validation data",
-          "held-out",
-          "hidden",
-          "unseen"
-        ]
+        "terms": ["closed eye", "validation data", "held-out", "hidden", "unseen"]
       },
       {
         "sub": -2,
@@ -5319,14 +4783,7 @@
           "train val gap arrow",
           "classic overfitting plot"
         ],
-        "terms": [
-          "loss curves",
-          "sweet spot",
-          "overfitting zone",
-          "train-val gap",
-          "epoch",
-          "early stopping"
-        ]
+        "terms": ["loss curves", "sweet spot", "overfitting zone", "train-val gap", "epoch", "early stopping"]
       },
       {
         "sub": -2,
@@ -5350,14 +4807,7 @@
           "dropout cartoon",
           "training-time dropout figure"
         ],
-        "terms": [
-          "6 neurons",
-          "active neurons",
-          "dropped neurons",
-          "p=0.5",
-          "forward pass",
-          "random mask"
-        ]
+        "terms": ["6 neurons", "active neurons", "dropped neurons", "p=0.5", "forward pass", "random mask"]
       },
       {
         "sub": -2,
@@ -5381,13 +4831,7 @@
           "inference vs training neurons",
           "fully connected at test"
         ],
-        "terms": [
-          "inference",
-          "all active",
-          "6 neurons",
-          "dropout off",
-          "test time"
-        ]
+        "terms": ["inference", "all active", "6 neurons", "dropout off", "test time"]
       },
       {
         "sub": -2,
@@ -5411,14 +4855,7 @@
           "sub-layer output dropout",
           "transformer regularization diagram"
         ],
-        "terms": [
-          "transformer block",
-          "p=0.1",
-          "attention dropout",
-          "FFN dropout",
-          "Add & Norm",
-          "sub-layer dropout"
-        ]
+        "terms": ["transformer block", "p=0.1", "attention dropout", "FFN dropout", "Add & Norm", "sub-layer dropout"]
       }
     ],
     "1.24": [
@@ -5731,13 +5168,7 @@
           "tokenization input pipeline",
           "purpose of tokenization in NLP"
         ],
-        "terms": [
-          "tokenization",
-          "vocabulary",
-          "token IDs",
-          "text to numbers",
-          "vocabulary lookup"
-        ]
+        "terms": ["tokenization", "vocabulary", "token IDs", "text to numbers", "vocabulary lookup"]
       },
       {
         "sub": 1,
@@ -5761,14 +5192,7 @@
           "comparison of tokenization methods",
           "advantages of subword tokenization"
         ],
-        "terms": [
-          "character-level",
-          "word-level",
-          "sub-word",
-          "BPE",
-          "OOV",
-          "vocabulary size"
-        ]
+        "terms": ["character-level", "word-level", "sub-word", "BPE", "OOV", "vocabulary size"]
       },
       {
         "sub": 2,
@@ -5792,14 +5216,7 @@
           "step by step subword tokenization",
           "BPE worked example"
         ],
-        "terms": [
-          "BPE",
-          "Byte-Pair Encoding",
-          "merge rules",
-          "adjacent pairs",
-          "token IDs",
-          "subword merges"
-        ]
+        "terms": ["BPE", "Byte-Pair Encoding", "merge rules", "adjacent pairs", "token IDs", "subword merges"]
       },
       {
         "sub": 3,
@@ -5823,14 +5240,7 @@
           "real world vocabulary size for LLM",
           "GPT-3 hidden dimension"
         ],
-        "terms": [
-          "GPT-2",
-          "GPT-3",
-          "50000 tokens",
-          "768-dimensional embedding",
-          "token ID",
-          "learned embedding"
-        ]
+        "terms": ["GPT-2", "GPT-3", "50000 tokens", "768-dimensional embedding", "token ID", "learned embedding"]
       },
       {
         "sub": -1,
@@ -5854,14 +5264,7 @@
           "tokenization fundamentals",
           "input pipeline of an LLM"
         ],
-        "terms": [
-          "tokenization",
-          "BPE",
-          "vocabulary",
-          "token IDs",
-          "embeddings",
-          "subword"
-        ]
+        "terms": ["tokenization", "BPE", "vocabulary", "token IDs", "embeddings", "subword"]
       }
     ],
     "2.2": [
@@ -6114,13 +5517,7 @@
           "loss function for next-token prediction",
           "intro to cross-entropy loss"
         ],
-        "terms": [
-          "cross-entropy loss",
-          "loss function",
-          "LLM grading",
-          "probability distribution",
-          "model evaluation"
-        ]
+        "terms": ["cross-entropy loss", "loss function", "LLM grading", "probability distribution", "model evaluation"]
       },
       {
         "sub": 1,
@@ -6181,12 +5578,7 @@
           "weather example loss values",
           "everyday analogy for LLM training loss"
         ],
-        "terms": [
-          "weather analogy",
-          "forecast loss",
-          "negative log intuition",
-          "probabilistic grading"
-        ]
+        "terms": ["weather analogy", "forecast loss", "negative log intuition", "probabilistic grading"]
       },
       {
         "sub": 3,
@@ -6212,13 +5604,7 @@
           "single-token cross-entropy",
           "bar chart of loss vs probability"
         ],
-        "terms": [
-          "P_correct",
-          "log_e",
-          "loss table",
-          "probability vs loss",
-          "natural logarithm"
-        ]
+        "terms": ["P_correct", "log_e", "loss table", "probability vs loss", "natural logarithm"]
       },
       {
         "sub": 4,
@@ -6243,13 +5629,7 @@
           "comparing 0.81 to 2.30 loss",
           "MSE limitation for classification"
         ],
-        "terms": [
-          "MSE",
-          "Mean Squared Error",
-          "cross-entropy",
-          "regression loss",
-          "classification loss"
-        ]
+        "terms": ["MSE", "Mean Squared Error", "cross-entropy", "regression loss", "classification loss"]
       },
       {
         "sub": 5,
@@ -6273,13 +5653,7 @@
           "training loop loss step",
           "how next batch interacts with previous loss"
         ],
-        "terms": [
-          "batch loss",
-          "mean loss",
-          "minibatch",
-          "weight update",
-          "training loop"
-        ]
+        "terms": ["batch loss", "mean loss", "minibatch", "weight update", "training loop"]
       },
       {
         "sub": -1,
@@ -6301,13 +5675,7 @@
           "chapter recap on log loss",
           "main points about loss in language modeling"
         ],
-        "terms": [
-          "cross-entropy loss",
-          "summary",
-          "LLM loss",
-          "negative log likelihood",
-          "batch averaging"
-        ]
+        "terms": ["cross-entropy loss", "summary", "LLM loss", "negative log likelihood", "batch averaging"]
       },
       {
         "sub": -2,
@@ -6328,13 +5696,7 @@
           "cross-entropy notation breakdown",
           "math notation for log loss"
         ],
-        "terms": [
-          "formula diagram",
-          "annotated equation",
-          "P_correct",
-          "log_e",
-          "Loss"
-        ]
+        "terms": ["formula diagram", "annotated equation", "P_correct", "log_e", "Loss"]
       },
       {
         "sub": -2,
@@ -6358,13 +5720,7 @@
           "plot showing 0.05 0.69 2.30 4.60 losses",
           "why cross-entropy curve looks like that"
         ],
-        "terms": [
-          "loss curve",
-          "-log(P) plot",
-          "exponential penalty",
-          "annotated graph",
-          "probability axis"
-        ]
+        "terms": ["loss curve", "-log(P) plot", "exponential penalty", "annotated graph", "probability axis"]
       }
     ],
     "2.4": [
@@ -6389,13 +5745,7 @@
           "example of small vocab",
           "why simplify the vocabulary"
         ],
-        "terms": [
-          "vocabulary",
-          "token ID",
-          "20 words",
-          "toy example",
-          "word index"
-        ]
+        "terms": ["vocabulary", "token ID", "20 words", "toy example", "word index"]
       },
       {
         "sub": 1,
@@ -6418,13 +5768,7 @@
           "how does an LLM know what to predict",
           "example prompt for prediction"
         ],
-        "terms": [
-          "next-word prediction",
-          "input tokens",
-          "prompt",
-          "The cat sat on",
-          "autoregressive task"
-        ]
+        "terms": ["next-word prediction", "input tokens", "prompt", "The cat sat on", "autoregressive task"]
       },
       {
         "sub": 2,
@@ -6482,13 +5826,7 @@
           "why is multiply add the core of NN",
           "does each word have its own weights"
         ],
-        "terms": [
-          "logit",
-          "dot product",
-          "weighted sum",
-          "output circle",
-          "matrix multiplication"
-        ]
+        "terms": ["logit", "dot product", "weighted sum", "output circle", "matrix multiplication"]
       },
       {
         "sub": 4,
@@ -6512,13 +5850,7 @@
           "why mat has high score",
           "why blue has low score"
         ],
-        "terms": [
-          "logits",
-          "raw scores",
-          "unnormalized scores",
-          "negative logit",
-          "sorted scores"
-        ]
+        "terms": ["logits", "raw scores", "unnormalized scores", "negative logit", "sorted scores"]
       },
       {
         "sub": 5,
@@ -6543,13 +5875,7 @@
           "is softmax the same as normalization",
           "sum of e^logits"
         ],
-        "terms": [
-          "softmax",
-          "exponentiation",
-          "normalization",
-          "e^score",
-          "probability distribution"
-        ]
+        "terms": ["softmax", "exponentiation", "normalization", "e^score", "probability distribution"]
       },
       {
         "sub": 6,
@@ -6573,13 +5899,7 @@
           "what comes after the cat sat on",
           "weight updates from loss"
         ],
-        "terms": [
-          "probability bars",
-          "top prediction",
-          "cross-entropy loss",
-          "-log(P)",
-          "backpropagation"
-        ]
+        "terms": ["probability bars", "top prediction", "cross-entropy loss", "-log(P)", "backpropagation"]
       },
       {
         "sub": 7,
@@ -6604,14 +5924,7 @@
           "is softmax the last step",
           "forward pass overview"
         ],
-        "terms": [
-          "forward pass",
-          "weights",
-          "gradient descent",
-          "multiply and add",
-          "layer stack",
-          "GPT layers"
-        ]
+        "terms": ["forward pass", "weights", "gradient descent", "multiply and add", "layer stack", "GPT layers"]
       },
       {
         "sub": -1,
@@ -6634,14 +5947,7 @@
           "language model forward pass demo",
           "next token prediction full example"
         ],
-        "terms": [
-          "forward pass",
-          "next-token prediction",
-          "logits",
-          "softmax",
-          "toy LLM",
-          "weights"
-        ]
+        "terms": ["forward pass", "next-token prediction", "logits", "softmax", "toy LLM", "weights"]
       },
       {
         "sub": -2,
@@ -6664,13 +5970,7 @@
           "layered network drawing",
           "mini transformer-free LLM diagram"
         ],
-        "terms": [
-          "network diagram",
-          "one-hot encoding",
-          "hidden layers",
-          "output layer",
-          "architecture visualization"
-        ]
+        "terms": ["network diagram", "one-hot encoding", "hidden layers", "output layer", "architecture visualization"]
       }
     ],
     "2.6": [
@@ -6949,14 +6249,7 @@
           "training efficiency at scale",
           "weight update frequency in LLMs"
         ],
-        "terms": [
-          "batch",
-          "online training",
-          "weight update",
-          "trillion tokens",
-          "stability",
-          "efficiency"
-        ]
+        "terms": ["batch", "online training", "weight update", "trillion tokens", "stability", "efficiency"]
       },
       {
         "sub": 1,
@@ -7373,15 +6666,7 @@
           "How does DPO adjust probabilities?",
           "Boost preferred reduce rejected"
         ],
-        "terms": [
-          "preference pair",
-          "winner",
-          "loser",
-          "chosen",
-          "rejected",
-          "DPO step",
-          "preference data"
-        ]
+        "terms": ["preference pair", "winner", "loser", "chosen", "rejected", "DPO step", "preference data"]
       },
       {
         "sub": 3,
@@ -7438,15 +6723,7 @@
           "log sigmoid beta gap meaning",
           "What target does DPO loss minimize?"
         ],
-        "terms": [
-          "DPO loss",
-          "sigmoid",
-          "beta",
-          "gap",
-          "log-sigmoid loss",
-          "-log(sigmoid)",
-          "loss formula"
-        ]
+        "terms": ["DPO loss", "sigmoid", "beta", "gap", "log-sigmoid loss", "-log(sigmoid)", "loss formula"]
       },
       {
         "sub": 5,
@@ -7470,15 +6747,7 @@
           "How does beta keep model close to reference?",
           "Conservative DPO training"
         ],
-        "terms": [
-          "beta",
-          "hyperparameter",
-          "safety leash",
-          "drift",
-          "0.1",
-          "0.5",
-          "reference model"
-        ]
+        "terms": ["beta", "hyperparameter", "safety leash", "drift", "0.1", "0.5", "reference model"]
       },
       {
         "sub": 6,
@@ -7503,16 +6772,7 @@
           "Comparison table RLHF DPO",
           "How many hyperparameters does DPO have?"
         ],
-        "terms": [
-          "DPO",
-          "RLHF",
-          "IPO",
-          "KTO",
-          "ORPO",
-          "variants",
-          "comparison",
-          "alignment methods"
-        ]
+        "terms": ["DPO", "RLHF", "IPO", "KTO", "ORPO", "variants", "comparison", "alignment methods"]
       }
     ],
     "2.7": [
@@ -8079,14 +7339,7 @@
           "What is the role of human judgments in alignment",
           "RLHF four step pipeline introduction"
         ],
-        "terms": [
-          "RLHF",
-          "SFT",
-          "reward model",
-          "alignment",
-          "human feedback",
-          "helpful and safe"
-        ]
+        "terms": ["RLHF", "SFT", "reward model", "alignment", "human feedback", "helpful and safe"]
       },
       {
         "sub": 1,
@@ -8110,14 +7363,7 @@
           "Why temperature matters for response diversity",
           "RLHF data generation step example"
         ],
-        "terms": [
-          "candidate responses",
-          "temperature",
-          "sampling",
-          "SFT model",
-          "prompt",
-          "diversity"
-        ]
+        "terms": ["candidate responses", "temperature", "sampling", "SFT model", "prompt", "diversity"]
       },
       {
         "sub": 2,
@@ -8141,14 +7387,7 @@
           "Why is response B more nuanced than A",
           "Pairwise ranking dataset examples"
         ],
-        "terms": [
-          "pairwise comparison",
-          "human annotators",
-          "preference dataset",
-          "ranking",
-          "winner",
-          "loser"
-        ]
+        "terms": ["pairwise comparison", "human annotators", "preference dataset", "ranking", "winner", "loser"]
       },
       {
         "sub": 3,
@@ -8204,13 +7443,7 @@
           "Reward model inference for new responses",
           "Trained reward model scoring pipeline"
         ],
-        "terms": [
-          "reward score",
-          "trained reward model",
-          "automatic grading",
-          "PPO input",
-          "scalar reward"
-        ]
+        "terms": ["reward score", "trained reward model", "automatic grading", "PPO input", "scalar reward"]
       },
       {
         "sub": 5,
@@ -8404,13 +7637,7 @@
           "why do AI labs trust scaling laws",
           "year scaling laws were published"
         ],
-        "terms": [
-          "scaling laws",
-          "OpenAI",
-          "2020",
-          "predictable patterns",
-          "language model performance"
-        ]
+        "terms": ["scaling laws", "OpenAI", "2020", "predictable patterns", "language model performance"]
       },
       {
         "sub": 1,
@@ -8527,13 +7754,7 @@
           "training cost forecasting",
           "why scaling laws matter to AI labs"
         ],
-        "terms": [
-          "forecast performance",
-          "compute savings",
-          "extrapolation",
-          "small model probe",
-          "predictive scaling"
-        ]
+        "terms": ["forecast performance", "compute savings", "extrapolation", "small model probe", "predictive scaling"]
       },
       {
         "sub": 5,
@@ -8554,14 +7775,7 @@
           "Chinchilla research question",
           "175B params 300B tokens problem"
         ],
-        "terms": [
-          "Chinchilla",
-          "DeepMind",
-          "undertrained",
-          "compute budget",
-          "GPT-3 300B tokens",
-          "tradeoff"
-        ]
+        "terms": ["Chinchilla", "DeepMind", "undertrained", "compute budget", "GPT-3 300B tokens", "tradeoff"]
       },
       {
         "sub": 6,
@@ -8582,15 +7796,7 @@
           "DeepMind benchmark comparison",
           "70B vs 280B model"
         ],
-        "terms": [
-          "Chinchilla",
-          "Gopher",
-          "70B",
-          "280B",
-          "1.4T tokens",
-          "300B tokens",
-          "benchmark winner"
-        ]
+        "terms": ["Chinchilla", "Gopher", "70B", "280B", "1.4T tokens", "300B tokens", "benchmark winner"]
       },
       {
         "sub": 7,
@@ -8684,14 +7890,7 @@
           "neural network parameter definition",
           "LLM parameter count meaning"
         ],
-        "terms": [
-          "parameter",
-          "weight",
-          "bias",
-          "LLaMA-7B",
-          "floating-point number",
-          "7 billion"
-        ]
+        "terms": ["parameter", "weight", "bias", "LLaMA-7B", "floating-point number", "7 billion"]
       },
       {
         "sub": 1,
@@ -8748,15 +7947,7 @@
           "model size comparison table",
           "capacity analogies for LLMs"
         ],
-        "terms": [
-          "LLaMA-7B",
-          "GPT-3",
-          "GPT-4",
-          "175 billion",
-          "1.8 trillion",
-          "7 billion",
-          "model size"
-        ]
+        "terms": ["LLaMA-7B", "GPT-3", "GPT-4", "175 billion", "1.8 trillion", "7 billion", "model size"]
       },
       {
         "sub": 3,
@@ -9078,13 +8269,7 @@
           "Why teach AI to see and read together?",
           "Pixels vs words in machine learning"
         ],
-        "terms": [
-          "pixels",
-          "captions",
-          "image-text matching",
-          "multimodal",
-          "cross-modal"
-        ]
+        "terms": ["pixels", "captions", "image-text matching", "multimodal", "cross-modal"]
       },
       {
         "sub": 1,
@@ -9108,15 +8293,7 @@
           "What is Contrastive Language-Image Pretraining?",
           "Why use separate encoders for images and text?"
         ],
-        "terms": [
-          "image encoder",
-          "text encoder",
-          "CLIP",
-          "vectors",
-          "embeddings",
-          "OpenAI",
-          "shared vector space"
-        ]
+        "terms": ["image encoder", "text encoder", "CLIP", "vectors", "embeddings", "OpenAI", "shared vector space"]
       },
       {
         "sub": 2,
@@ -9172,15 +8349,7 @@
           "How does CLIP score image-text pairs?",
           "Cosine similarity 0.9998 example"
         ],
-        "terms": [
-          "cosine similarity",
-          "dot product",
-          "magnitude",
-          "vector norm",
-          "||A||",
-          "direction",
-          "cos(A,B)"
-        ]
+        "terms": ["cosine similarity", "dot product", "magnitude", "vector norm", "||A||", "direction", "cos(A,B)"]
       },
       {
         "sub": 4,
@@ -9511,16 +8680,7 @@
           "RNN sequence trace",
           "compute h_2 from h_1"
         ],
-        "terms": [
-          "hidden state trace",
-          "h_1",
-          "h_2",
-          "h_3",
-          "word embedding",
-          "x_t",
-          "tanh",
-          "forward pass"
-        ]
+        "terms": ["hidden state trace", "h_1", "h_2", "h_3", "word embedding", "x_t", "tanh", "forward pass"]
       },
       {
         "sub": 2,
@@ -9544,14 +8704,7 @@
           "h_3 for Dog bites man",
           "h_3 for Man bites dog"
         ],
-        "terms": [
-          "word order",
-          "subject",
-          "object",
-          "hidden state",
-          "permutation",
-          "semantic role"
-        ]
+        "terms": ["word order", "subject", "object", "hidden state", "permutation", "semantic role"]
       },
       {
         "sub": 3,
@@ -9605,13 +8758,7 @@
           "why RNN doesn't scale",
           "step dependency in RNN"
         ],
-        "terms": [
-          "sequential processing",
-          "parallelization",
-          "GPU cores",
-          "hidden state dependency",
-          "throughput"
-        ]
+        "terms": ["sequential processing", "parallelization", "GPU cores", "hidden state dependency", "throughput"]
       },
       {
         "sub": -1,
@@ -9635,14 +8782,7 @@
           "RNN before transformers",
           "evolution from CNN to RNN"
         ],
-        "terms": [
-          "RNN summary",
-          "recurrence",
-          "sequential",
-          "hidden state",
-          "parallelism limit",
-          "word order"
-        ]
+        "terms": ["RNN summary", "recurrence", "sequential", "hidden state", "parallelism limit", "word order"]
       }
     ],
     "4.1": [
@@ -9828,13 +8968,7 @@
           "Why need parallel word processing?",
           "What follows CNN failure?"
         ],
-        "terms": [
-          "language modeling",
-          "attention motivation",
-          "distance invariance",
-          "all-to-all",
-          "global context"
-        ]
+        "terms": ["language modeling", "attention motivation", "distance invariance", "all-to-all", "global context"]
       },
       {
         "sub": -1,
@@ -9891,15 +9025,7 @@
           "What did the original Transformer paper propose",
           "How does Transformer differ from RNN and CNN"
         ],
-        "terms": [
-          "Transformer",
-          "Attention Is All You Need",
-          "attention",
-          "2017",
-          "parallel",
-          "RNN",
-          "CNN"
-        ]
+        "terms": ["Transformer", "Attention Is All You Need", "attention", "2017", "parallel", "RNN", "CNN"]
       },
       {
         "sub": 1,
@@ -9923,15 +9049,7 @@
           "Does Transformer process all tokens at once",
           "I love cats example RNN Transformer"
         ],
-        "terms": [
-          "RNN",
-          "Transformer",
-          "parallel",
-          "sequential",
-          "GPU cores",
-          "I love cats",
-          "attention"
-        ]
+        "terms": ["RNN", "Transformer", "parallel", "sequential", "GPU cores", "I love cats", "attention"]
       },
       {
         "sub": 2,
@@ -9955,16 +9073,7 @@
           "How does a word compare to other words",
           "Attention score example with numbers"
         ],
-        "terms": [
-          "Query",
-          "Key",
-          "Value",
-          "Q K V",
-          "attention scores",
-          "self-attention",
-          "context",
-          "parallelization"
-        ]
+        "terms": ["Query", "Key", "Value", "Q K V", "attention scores", "self-attention", "context", "parallelization"]
       },
       {
         "sub": 3,
@@ -9988,15 +9097,7 @@
           "Attention speed advantage",
           "How does GPU core utilization differ"
         ],
-        "terms": [
-          "speed",
-          "1000x",
-          "GPU cores",
-          "parallel",
-          "RNN",
-          "Transformer",
-          "throughput"
-        ]
+        "terms": ["speed", "1000x", "GPU cores", "parallel", "RNN", "Transformer", "throughput"]
       },
       {
         "sub": 4,
@@ -10020,13 +9121,7 @@
           "Gradient degradation in long sequences",
           "Why does attention preserve gradient signal"
         ],
-        "terms": [
-          "vanishing gradient",
-          "long-distance dependencies",
-          "attention",
-          "gradient flow",
-          "long-range"
-        ]
+        "terms": ["vanishing gradient", "long-distance dependencies", "attention", "gradient flow", "long-range"]
       },
       {
         "sub": -1,
@@ -10512,14 +9607,7 @@
           "modern LLMs architecture",
           "why throw away encoder"
         ],
-        "terms": [
-          "decoder-only",
-          "ChatGPT",
-          "Claude",
-          "LLaMA",
-          "Gemini",
-          "encoder removed"
-        ]
+        "terms": ["decoder-only", "ChatGPT", "Claude", "LLaMA", "Gemini", "encoder removed"]
       },
       {
         "sub": 1,
@@ -10543,14 +9631,7 @@
           "single stream LLM",
           "why decoder enough for chat"
         ],
-        "terms": [
-          "translation",
-          "chatting",
-          "prompt",
-          "response",
-          "continuous stream",
-          "two-sided"
-        ]
+        "terms": ["translation", "chatting", "prompt", "response", "continuous stream", "two-sided"]
       },
       {
         "sub": 2,
@@ -10574,14 +9655,7 @@
           "past and present tokens only",
           "token visibility in decoder"
         ],
-        "terms": [
-          "causal masking",
-          "causality",
-          "masked attention",
-          "past tokens",
-          "autoregressive",
-          "future tokens"
-        ]
+        "terms": ["causal masking", "causality", "masked attention", "past tokens", "autoregressive", "future tokens"]
       },
       {
         "sub": 3,
@@ -10605,13 +9679,7 @@
           "single architecture for all tasks",
           "implicit understanding in decoder"
         ],
-        "terms": [
-          "decoder-only",
-          "general-purpose",
-          "implicit encoder",
-          "scalable",
-          "simpler architecture"
-        ]
+        "terms": ["decoder-only", "general-purpose", "implicit encoder", "scalable", "simpler architecture"]
       },
       {
         "sub": 4,
@@ -10670,14 +9738,7 @@
           "AI architecture lineage",
           "transformer family tree"
         ],
-        "terms": [
-          "CNN",
-          "RNN",
-          "Transformer",
-          "decoder-only",
-          "evolution",
-          "architecture history"
-        ]
+        "terms": ["CNN", "RNN", "Transformer", "decoder-only", "evolution", "architecture history"]
       }
     ]
   },
@@ -10890,12 +9951,7 @@
           "word to vector motivation",
           "why embeddings exist"
         ],
-        "terms": [
-          "neural network",
-          "words to numbers",
-          "three stages",
-          "input conversion"
-        ]
+        "terms": ["neural network", "words to numbers", "three stages", "input conversion"]
       },
       {
         "sub": 1,
@@ -10919,14 +9975,7 @@
           "rare word tokenization",
           "word vs token"
         ],
-        "terms": [
-          "tokenization",
-          "token",
-          "subword",
-          "BPE",
-          "I love cats",
-          "unbelievable"
-        ]
+        "terms": ["tokenization", "token", "subword", "BPE", "I love cats", "unbelievable"]
       },
       {
         "sub": 2,
@@ -10950,13 +9999,7 @@
           "lookup table tokens",
           "how indices map to tokens"
         ],
-        "terms": [
-          "token ID",
-          "vocabulary",
-          "lookup",
-          "integer index",
-          "vocab"
-        ]
+        "terms": ["token ID", "vocabulary", "lookup", "integer index", "vocab"]
       },
       {
         "sub": 3,
@@ -10980,14 +10023,7 @@
           "lookup row by ID",
           "learned word vector"
         ],
-        "terms": [
-          "embedding matrix",
-          "learned vector",
-          "512 dimensions",
-          "lookup",
-          "d_model",
-          "semantic similarity"
-        ]
+        "terms": ["embedding matrix", "learned vector", "512 dimensions", "lookup", "d_model", "semantic similarity"]
       },
       {
         "sub": 4,
@@ -11077,17 +10113,7 @@
           "sinusoid formula attention",
           "what is the wavelength formula"
         ],
-        "terms": [
-          "sin",
-          "cos",
-          "pos",
-          "i",
-          "d_model",
-          "10000^(i/d_model)",
-          "even dims",
-          "odd dims",
-          "formula"
-        ]
+        "terms": ["sin", "cos", "pos", "i", "d_model", "10000^(i/d_model)", "even dims", "odd dims", "formula"]
       },
       {
         "sub": 1,
@@ -11111,16 +10137,7 @@
           "how big is d_model",
           "dimensions of position vector"
         ],
-        "terms": [
-          "pos",
-          "i",
-          "d_model",
-          "512",
-          "10000^(i/d)",
-          "wave speed",
-          "bounded",
-          "sin/cos"
-        ]
+        "terms": ["pos", "i", "d_model", "512", "10000^(i/d)", "wave speed", "bounded", "sin/cos"]
       },
       {
         "sub": 2,
@@ -11370,16 +10387,7 @@
           "how big is the step in d0 vs d6",
           "positional encoding small numbers slow dim"
         ],
-        "terms": [
-          "pos 0 baseline",
-          "0.841",
-          "0.909",
-          "fast jump",
-          "slow creep",
-          "sin(0)",
-          "cos(0)",
-          "dimension change"
-        ]
+        "terms": ["pos 0 baseline", "0.841", "0.909", "fast jump", "slow creep", "sin(0)", "cos(0)", "dimension change"]
       },
       {
         "sub": -1,
@@ -11463,14 +10471,7 @@
           "positional encoding counting analogy",
           "decimal counting fast slow"
         ],
-        "terms": [
-          "ones column",
-          "tens column",
-          "hundreds column",
-          "decimal counting",
-          "place value",
-          "change speed"
-        ]
+        "terms": ["ones column", "tens column", "hundreds column", "decimal counting", "place value", "change speed"]
       },
       {
         "sub": 1,
@@ -11489,13 +10490,7 @@
           "limitations of single frequency position encoding",
           "what if only ones digit"
         ],
-        "terms": [
-          "ones column",
-          "wrap around",
-          "fast frequency",
-          "repetition problem",
-          "single frequency"
-        ]
+        "terms": ["ones column", "wrap around", "fast frequency", "repetition problem", "single frequency"]
       },
       {
         "sub": 2,
@@ -11514,13 +10509,7 @@
           "positions 0 through 99 same hundreds",
           "what if only hundreds digit"
         ],
-        "terms": [
-          "hundreds column",
-          "slow frequency",
-          "neighbor problem",
-          "nearby positions",
-          "slow dimension"
-        ]
+        "terms": ["hundreds column", "slow frequency", "neighbor problem", "nearby positions", "slow dimension"]
       },
       {
         "sub": 3,
@@ -11655,13 +10644,7 @@
           "do attention layers see meaning or position",
           "how is information packed in a single vector"
         ],
-        "terms": [
-          "meaning",
-          "position",
-          "embedding dominance",
-          "combined vector",
-          "carries both"
-        ]
+        "terms": ["meaning", "position", "embedding dominance", "combined vector", "carries both"]
       },
       {
         "sub": 2,
@@ -11713,12 +10696,7 @@
           "what does the attention block receive as input",
           "completion of transformer input stage"
         ],
-        "terms": [
-          "transformer input",
-          "ready for attention",
-          "meaning and position",
-          "input pipeline"
-        ]
+        "terms": ["transformer input", "ready for attention", "meaning and position", "input pipeline"]
       },
       {
         "sub": -1,
@@ -11995,16 +10973,7 @@
           "positions 0 to 15 in binary",
           "color coded bit grid"
         ],
-        "terms": [
-          "binary",
-          "bit",
-          "fast bit",
-          "slow bit",
-          "4-bit",
-          "counting grid",
-          "bit pattern",
-          "analogy"
-        ]
+        "terms": ["binary", "bit", "fast bit", "slow bit", "4-bit", "counting grid", "bit pattern", "analogy"]
       }
     ],
     "9.5": [
@@ -12072,14 +11041,7 @@
           "the goal of self attention models",
           "what does it mean to understand context"
         ],
-        "terms": [
-          "context",
-          "ambiguity",
-          "word meaning",
-          "Transformer",
-          "contextual understanding",
-          "I love cats"
-        ]
+        "terms": ["context", "ambiguity", "word meaning", "Transformer", "contextual understanding", "I love cats"]
       },
       {
         "sub": 1,
@@ -12103,14 +11065,7 @@
           "isolation meaning of words",
           "embedding table lookup"
         ],
-        "terms": [
-          "embedding",
-          "embedding table",
-          "token",
-          "vector",
-          "512 dimensions",
-          "isolation meaning"
-        ]
+        "terms": ["embedding", "embedding table", "token", "vector", "512 dimensions", "isolation meaning"]
       },
       {
         "sub": 2,
@@ -12134,13 +11089,7 @@
           "positioned vector calculation",
           "transformer order awareness"
         ],
-        "terms": [
-          "positional encoding",
-          "position",
-          "word order",
-          "vector addition",
-          "positioned embedding"
-        ]
+        "terms": ["positional encoding", "position", "word order", "vector addition", "positioned embedding"]
       },
       {
         "sub": 3,
@@ -12433,14 +11382,7 @@
           "Negative logits meaning",
           "Per-word score in vocabulary projection"
         ],
-        "terms": [
-          "logit",
-          "dot product",
-          "hidden state",
-          "W column",
-          "vocabulary score",
-          "raw scores"
-        ]
+        "terms": ["logit", "dot product", "hidden state", "W column", "vocabulary score", "raw scores"]
       },
       {
         "sub": 3,
@@ -12495,14 +11437,7 @@
           "ChatGPT temperature parameter meaning",
           "How to control randomness in LLM outputs"
         ],
-        "terms": [
-          "temperature",
-          "T",
-          "softmax(logit/T)",
-          "greedy",
-          "creativity",
-          "sampling temperature"
-        ]
+        "terms": ["temperature", "T", "softmax(logit/T)", "greedy", "creativity", "sampling temperature"]
       },
       {
         "sub": 5,
@@ -12824,14 +11759,7 @@
           "0 0.3 0.6 0.9 radians vector",
           "RoPE single vector rotation visual"
         ],
-        "terms": [
-          "clock face",
-          "unit circle",
-          "rotation diagram",
-          "angle progression",
-          "Q vector",
-          "counter-clockwise"
-        ]
+        "terms": ["clock face", "unit circle", "rotation diagram", "angle progression", "Q vector", "counter-clockwise"]
       },
       {
         "sub": -2,
@@ -12851,14 +11779,7 @@
           "Common rotation cancels diagram",
           "Yellow arc gap RoPE"
         ],
-        "terms": [
-          "angular gap",
-          "near and far",
-          "relative gap",
-          "Q-K pair",
-          "attention invariance",
-          "cos(0.9)"
-        ]
+        "terms": ["angular gap", "near and far", "relative gap", "Q-K pair", "attention invariance", "cos(0.9)"]
       },
       {
         "sub": -2,
@@ -12915,14 +11836,7 @@
           "context is everything in NLP",
           "word vectors and ambiguity"
         ],
-        "terms": [
-          "attention",
-          "context",
-          "embedding",
-          "polysemy",
-          "static vector",
-          "contextualized representation"
-        ]
+        "terms": ["attention", "context", "embedding", "polysemy", "static vector", "contextualized representation"]
       },
       {
         "sub": 0,
@@ -12946,13 +11860,7 @@
           "introduction to context problem",
           "static embedding limitation"
         ],
-        "terms": [
-          "embedding",
-          "context",
-          "static vector",
-          "ambiguity",
-          "word meaning"
-        ]
+        "terms": ["embedding", "context", "static vector", "ambiguity", "word meaning"]
       },
       {
         "sub": 1,
@@ -12976,13 +11884,7 @@
           "edge of a river vs financial institution",
           "demonstration of word ambiguity"
         ],
-        "terms": [
-          "bank",
-          "polysemy",
-          "homonym",
-          "context words",
-          "word sense disambiguation"
-        ]
+        "terms": ["bank", "polysemy", "homonym", "context words", "word sense disambiguation"]
       },
       {
         "sub": 2,
@@ -13037,14 +11939,7 @@
           "input vector vs output vector attention",
           "intuition for attention mechanism"
         ],
-        "terms": [
-          "attention",
-          "relevance",
-          "absorb context",
-          "look around",
-          "contextual output",
-          "self-attention"
-        ]
+        "terms": ["attention", "relevance", "absorb context", "look around", "contextual output", "self-attention"]
       }
     ],
     "6.2": [
@@ -13103,13 +11998,7 @@
           "why not weight every word equally",
           "how does the model know 'it' refers to a noun"
         ],
-        "terms": [
-          "relevance score",
-          "attention",
-          "human reading analogy",
-          "noun focus",
-          "pronoun"
-        ]
+        "terms": ["relevance score", "attention", "human reading analogy", "noun focus", "pronoun"]
       },
       {
         "sub": 1,
@@ -13165,13 +12054,7 @@
           "introduction to dot product in attention",
           "mathematical foundation of attention scores"
         ],
-        "terms": [
-          "dot product",
-          "vector similarity",
-          "relevance computation",
-          "attention math",
-          "scoring function"
-        ]
+        "terms": ["dot product", "vector similarity", "relevance computation", "attention math", "scoring function"]
       }
     ],
     "6.3": [
@@ -13234,14 +12117,7 @@
           "what is the goal of the dot product step",
           "why three lists of numbers per word"
         ],
-        "terms": [
-          "dot product",
-          "relevance",
-          "vector comparison",
-          "attention",
-          "word vectors",
-          "similarity score"
-        ]
+        "terms": ["dot product", "relevance", "vector comparison", "attention", "word vectors", "similarity score"]
       },
       {
         "sub": 1,
@@ -13265,15 +12141,7 @@
           "elementwise multiply then sum",
           "tutorial dot product two vectors"
         ],
-        "terms": [
-          "dot product",
-          "[1,2,3]",
-          "[4,5,6]",
-          "32",
-          "multiply pairs",
-          "sum",
-          "elementwise product"
-        ]
+        "terms": ["dot product", "[1,2,3]", "[4,5,6]", "32", "multiply pairs", "sum", "elementwise product"]
       },
       {
         "sub": 2,
@@ -13436,16 +12304,7 @@
           "asking question vs advertising self attention",
           "love verb looking for subject example"
         ],
-        "terms": [
-          "looking for",
-          "offers",
-          "subject",
-          "high match",
-          "different basis",
-          "love",
-          "I",
-          "query offer match"
-        ]
+        "terms": ["looking for", "offers", "subject", "high match", "different basis", "love", "I", "query offer match"]
       },
       {
         "sub": 2,
@@ -13470,15 +12329,7 @@
           "why decompose word into multiple views",
           "setup for QKV creation"
         ],
-        "terms": [
-          "three views",
-          "Query",
-          "Key",
-          "Value",
-          "Q K V",
-          "separate projections",
-          "word views"
-        ]
+        "terms": ["three views", "Query", "Key", "Value", "Q K V", "separate projections", "word views"]
       }
     ],
     "6.6": [
@@ -13664,18 +12515,7 @@
           "matching question to label attention",
           "real-world analogy for attention mechanism"
         ],
-        "terms": [
-          "Query",
-          "Key",
-          "Value",
-          "QKV",
-          "classroom analogy",
-          "Riya",
-          "Aman",
-          "attention",
-          "label",
-          "notes"
-        ]
+        "terms": ["Query", "Key", "Value", "QKV", "classroom analogy", "Riya", "Aman", "attention", "label", "notes"]
       },
       {
         "sub": 0,
@@ -13699,13 +12539,7 @@
           "scanning classmates analogy",
           "introducing query key value via classroom"
         ],
-        "terms": [
-          "Riya",
-          "classroom",
-          "30 students",
-          "question",
-          "yesterday's notes"
-        ]
+        "terms": ["Riya", "classroom", "30 students", "question", "yesterday's notes"]
       },
       {
         "sub": 1,
@@ -13730,18 +12564,7 @@
           "students with different labels QKV",
           "tick mark match attention example"
         ],
-        "terms": [
-          "Riya",
-          "Aman",
-          "Priya",
-          "Rahul",
-          "Query",
-          "Key",
-          "Value",
-          "match",
-          "label",
-          "notes content"
-        ]
+        "terms": ["Riya", "Aman", "Priya", "Rahul", "Query", "Key", "Value", "match", "label", "notes content"]
       },
       {
         "sub": 2,
@@ -13769,16 +12592,7 @@
           "notes handed equals Value",
           "what each of QKV does"
         ],
-        "terms": [
-          "Query",
-          "Key",
-          "Value",
-          "looking for",
-          "found for",
-          "actual info",
-          "mapping",
-          "attention"
-        ]
+        "terms": ["Query", "Key", "Value", "looking for", "found for", "actual info", "mapping", "attention"]
       }
     ],
     "6.8": [
@@ -14078,13 +12892,7 @@
           "trace example setup",
           "input embeddings before Q K V"
         ],
-        "terms": [
-          "embedding vectors",
-          "The cat sat",
-          "word embedding",
-          "4-dim vector",
-          "input embedding"
-        ]
+        "terms": ["embedding vectors", "The cat sat", "word embedding", "4-dim vector", "input embedding"]
       },
       {
         "sub": 1,
@@ -14108,16 +12916,7 @@
           "produce value from embedding",
           "why are Q K V different from embedding"
         ],
-        "terms": [
-          "Q_cat",
-          "K_cat",
-          "V_cat",
-          "W_Q",
-          "W_K",
-          "W_V",
-          "matrix multiplication",
-          "projection"
-        ]
+        "terms": ["Q_cat", "K_cat", "V_cat", "W_Q", "W_K", "W_V", "matrix multiplication", "projection"]
       },
       {
         "sub": 2,
@@ -14141,14 +12940,7 @@
           "weighted sum of values intuition",
           "action performed by cat result"
         ],
-        "terms": [
-          "Q_sat",
-          "attention score",
-          "dot product",
-          "0.39",
-          "Value absorption",
-          "subject matching"
-        ]
+        "terms": ["Q_sat", "attention score", "dot product", "0.39", "Value absorption", "subject matching"]
       }
     ],
     "6.11": [
@@ -14210,14 +13002,7 @@
           "the question of weight initialization",
           "where attention weights come from intuition"
         ],
-        "terms": [
-          "W_Q",
-          "W_K",
-          "W_V",
-          "weight grid",
-          "learned not programmed",
-          "weight matrix entries"
-        ]
+        "terms": ["W_Q", "W_K", "W_V", "weight grid", "learned not programmed", "weight matrix entries"]
       },
       {
         "sub": 1,
@@ -14239,13 +13024,7 @@
           "starting point for W_K W_V",
           "are weights random at first"
         ],
-        "terms": [
-          "random initialization",
-          "garbage Q K V",
-          "untrained model",
-          "day 1",
-          "random number generator"
-        ]
+        "terms": ["random initialization", "garbage Q K V", "untrained model", "day 1", "random number generator"]
       },
       {
         "sub": 2,
@@ -14298,14 +13077,7 @@
           "magnitude of one training step",
           "intuition for gradient update"
         ],
-        "terms": [
-          "nudge",
-          "weight update",
-          "gradient step",
-          "+0.02",
-          "error signal",
-          "single entry update"
-        ]
+        "terms": ["nudge", "weight update", "gradient step", "+0.02", "error signal", "single entry update"]
       },
       {
         "sub": 4,
@@ -14427,16 +13199,7 @@
           "Single input three outputs problem",
           "Why transform embedding into three forms?"
         ],
-        "terms": [
-          "embedding",
-          "Query",
-          "Key",
-          "Value",
-          "transformation",
-          "vector",
-          "one to three",
-          "attention input"
-        ]
+        "terms": ["embedding", "Query", "Key", "Value", "transformation", "vector", "one to three", "attention input"]
       },
       {
         "sub": 1,
@@ -14493,16 +13256,7 @@
           "Why filter approach for attention",
           "Multiply embedding by three grids"
         ],
-        "terms": [
-          "filter analogy",
-          "photo",
-          "W_Q",
-          "W_K",
-          "W_V",
-          "4x2 grid",
-          "linear projection",
-          "embedding"
-        ]
+        "terms": ["filter analogy", "photo", "W_Q", "W_K", "W_V", "4x2 grid", "linear projection", "embedding"]
       },
       {
         "sub": 3,
@@ -14523,13 +13277,7 @@
           "How three matrices act on the same embedding",
           "Embedding flowing through three projection matrices"
         ],
-        "terms": [
-          "three grids",
-          "same embedding",
-          "different outputs",
-          "projection",
-          "in action"
-        ]
+        "terms": ["three grids", "same embedding", "different outputs", "projection", "in action"]
       },
       {
         "sub": 4,
@@ -14585,13 +13333,7 @@
           "Setup for learned during training chapter",
           "How many parameters per head"
         ],
-        "terms": [
-          "512x64",
-          "32768 parameters",
-          "W matrix size",
-          "weight count",
-          "parameters per head"
-        ]
+        "terms": ["512x64", "32768 parameters", "W matrix size", "weight count", "parameters per head"]
       }
     ],
     "6.10": [
@@ -14652,15 +13394,7 @@
           "what is projection in attention",
           "linear projection down embedding"
         ],
-        "terms": [
-          "W_Q",
-          "projection",
-          "4x2 matrix",
-          "rectangular matrix",
-          "input size",
-          "output size",
-          "embedding"
-        ]
+        "terms": ["W_Q", "projection", "4x2 matrix", "rectangular matrix", "input size", "output size", "embedding"]
       },
       {
         "sub": 1,
@@ -14709,13 +13443,7 @@
           "visualizing embedding x W_Q W_K W_V",
           "three arrows attention diagram"
         ],
-        "terms": [
-          "fan-out diagram",
-          "W_Q W_K W_V",
-          "embedding to QKV",
-          "projection diagram",
-          "compressed lens visual"
-        ]
+        "terms": ["fan-out diagram", "W_Q W_K W_V", "embedding to QKV", "projection diagram", "compressed lens visual"]
       },
       {
         "sub": 2,
@@ -14768,12 +13496,7 @@
           "visualizing per-head W_Q matrices",
           "two-head attention picture"
         ],
-        "terms": [
-          "multi-head diagram",
-          "W_Q1 W_Q2",
-          "head split visual",
-          "two-head fan-out"
-        ]
+        "terms": ["multi-head diagram", "W_Q1 W_Q2", "head split visual", "two-head fan-out"]
       },
       {
         "sub": 3,
@@ -14796,14 +13519,7 @@
           "8 heads 64 dims",
           "budget preserved across heads"
         ],
-        "terms": [
-          "GPT",
-          "d_model 512",
-          "num_heads 8",
-          "d_k 64",
-          "W_Q 512x64",
-          "real Transformer dimensions"
-        ]
+        "terms": ["GPT", "d_model 512", "num_heads 8", "d_k 64", "W_Q 512x64", "real Transformer dimensions"]
       },
       {
         "sub": 4,
@@ -14824,15 +13540,7 @@
           "lifetime of embedding vs Q K V",
           "shape recap chapter"
         ],
-        "terms": [
-          "d_model",
-          "d_k",
-          "W_Q",
-          "W_O",
-          "residual stream",
-          "shape recap",
-          "rectangular projection"
-        ]
+        "terms": ["d_model", "d_k", "W_Q", "W_O", "residual stream", "shape recap", "rectangular projection"]
       }
     ]
   },
@@ -14961,14 +13669,7 @@
           "initial word vectors in attention",
           "simplified embedding example for transformer"
         ],
-        "terms": [
-          "embedding",
-          "I love cats",
-          "input vector",
-          "4-dim embedding",
-          "running example",
-          "word vector"
-        ]
+        "terms": ["embedding", "I love cats", "input vector", "4-dim embedding", "running example", "word vector"]
       },
       {
         "sub": 1,
@@ -14992,15 +13693,7 @@
           "learned weight matrices for queries keys values",
           "matrix dimensions 4x2 in attention example"
         ],
-        "terms": [
-          "W_Q",
-          "W_K",
-          "W_V",
-          "weight matrix",
-          "learned weights",
-          "projection matrix",
-          "4x2 matrix"
-        ]
+        "terms": ["W_Q", "W_K", "W_V", "weight matrix", "learned weights", "projection matrix", "4x2 matrix"]
       },
       {
         "sub": 2,
@@ -15059,15 +13752,7 @@
           "d_k vs d_model in attention",
           "real model 64 dim queries from 512 dim embeddings"
         ],
-        "terms": [
-          "Q vector",
-          "K vector",
-          "V vector",
-          "d_k",
-          "d_model",
-          "64D from 512D",
-          "QKV table"
-        ]
+        "terms": ["Q vector", "K vector", "V vector", "d_k", "d_model", "64D from 512D", "QKV table"]
       },
       {
         "sub": -1,
@@ -15153,13 +13838,7 @@
           "does K^T mean K to the power of T",
           "is T in attention an exponent or operation"
         ],
-        "terms": [
-          "score = Q · K^T",
-          "transpose notation",
-          "superscript T",
-          "attention formula",
-          "Q dot K transpose"
-        ]
+        "terms": ["score = Q · K^T", "transpose notation", "superscript T", "attention formula", "Q dot K transpose"]
       },
       {
         "sub": 1,
@@ -15239,14 +13918,7 @@
           "every word every word matrix",
           "output shape of Q dot K^T"
         ],
-        "terms": [
-          "K^T",
-          "2 × 3",
-          "3 × 3 score matrix",
-          "inner dimensions match",
-          "Q · K^T",
-          "every word to every word"
-        ]
+        "terms": ["K^T", "2 × 3", "3 × 3 score matrix", "inner dimensions match", "Q · K^T", "every word to every word"]
       },
       {
         "sub": 4,
@@ -15328,14 +14000,7 @@
           "K^T quick definition",
           "key takeaways K transpose"
         ],
-        "terms": [
-          "K^T",
-          "transpose",
-          "summary",
-          "recap",
-          "word by word score matrix",
-          "rows columns swapped"
-        ]
+        "terms": ["K^T", "transpose", "summary", "recap", "word by word score matrix", "rows columns swapped"]
       }
     ],
     "7.6": [
@@ -15718,14 +14383,7 @@
           "raw scores to weights problem",
           "why need softmax setup"
         ],
-        "terms": [
-          "raw scores",
-          "Values",
-          "V_I V_love V_cats",
-          "weighted sum",
-          "attention output",
-          "blending"
-        ]
+        "terms": ["raw scores", "Values", "V_I V_love V_cats", "weighted sum", "attention output", "blending"]
       },
       {
         "sub": 1,
@@ -15747,14 +14405,7 @@
           "simple division for normalization",
           "ratio of score to total"
         ],
-        "terms": [
-          "budget",
-          "percentage",
-          "shares",
-          "normalization",
-          "sum",
-          "ratio"
-        ]
+        "terms": ["budget", "percentage", "shares", "normalization", "sum", "ratio"]
       },
       {
         "sub": 2,
@@ -15776,14 +14427,7 @@
           "negative dot product handling",
           "problem with raw score division"
         ],
-        "terms": [
-          "negative scores",
-          "simple division",
-          "dot product sign",
-          "broken normalization",
-          "-100%",
-          "167%"
-        ]
+        "terms": ["negative scores", "simple division", "dot product sign", "broken normalization", "-100%", "167%"]
       },
       {
         "sub": 3,
@@ -15805,15 +14449,7 @@
           "K class softmax",
           "exponential normalization formula"
         ],
-        "terms": [
-          "softmax formula",
-          "σ(z)_i",
-          "e^z_i",
-          "Σ e^z_j",
-          "e ≈ 2.718",
-          "Euler",
-          "exponential function"
-        ]
+        "terms": ["softmax formula", "σ(z)_i", "e^z_i", "Σ e^z_j", "e ≈ 2.718", "Euler", "exponential function"]
       },
       {
         "sub": 4,
@@ -15835,15 +14471,7 @@
           "exponential function properties",
           "e to the negative number positive"
         ],
-        "terms": [
-          "e^x",
-          "exponential",
-          "always positive",
-          "amplification",
-          "monotonic",
-          "e^-3 = 0.05",
-          "e^5 = 148.4"
-        ]
+        "terms": ["e^x", "exponential", "always positive", "amplification", "monotonic", "e^-3 = 0.05", "e^5 = 148.4"]
       },
       {
         "sub": 5,
@@ -15863,14 +14491,7 @@
           "denominator of softmax",
           "applying e^x to each score"
         ],
-        "terms": [
-          "e^score",
-          "denominator",
-          "sum of exponentials",
-          "151.17",
-          "step 1",
-          "step 2"
-        ]
+        "terms": ["e^score", "denominator", "sum of exponentials", "151.17", "step 1", "step 2"]
       },
       {
         "sub": 6,
@@ -15890,14 +14511,7 @@
           "softmax dominates highest score example",
           "softmax checks all positive sum 100"
         ],
-        "terms": [
-          "divide by sum",
-          "98.2%",
-          "1.8%",
-          "0.03%",
-          "ranking preserved",
-          "sum = 100%"
-        ]
+        "terms": ["divide by sum", "98.2%", "1.8%", "0.03%", "ranking preserved", "sum = 100%"]
       },
       {
         "sub": 7,
@@ -15918,14 +14532,7 @@
           "why divide by sqrt d_k motivation",
           "exponential amplification gap"
         ],
-        "terms": [
-          "amplification",
-          "domination",
-          "saturation",
-          "99.99%",
-          "scaling",
-          "gap"
-        ]
+        "terms": ["amplification", "domination", "saturation", "99.99%", "scaling", "gap"]
       },
       {
         "sub": 8,
@@ -15971,14 +14578,7 @@
           "softmax fraction diagram",
           "K class softmax notation"
         ],
-        "terms": [
-          "softmax SVG",
-          "σ(z)_i",
-          "numerator",
-          "denominator",
-          "Σ",
-          "formula diagram"
-        ]
+        "terms": ["softmax SVG", "σ(z)_i", "numerator", "denominator", "Σ", "formula diagram"]
       }
     ],
     "7.5": [
@@ -16042,14 +14642,7 @@
           "raw attention score 25 in 64 dim",
           "raw attention score 180 in 512 dim"
         ],
-        "terms": [
-          "dot product",
-          "dimensions",
-          "d_k",
-          "sum of terms",
-          "scale of scores",
-          "2 dim 64 dim 512 dim"
-        ]
+        "terms": ["dot product", "dimensions", "d_k", "sum of terms", "scale of scores", "2 dim 64 dim 512 dim"]
       },
       {
         "sub": 1,
@@ -16104,14 +14697,7 @@
           "step 3 scale by root dk computation",
           "scaled dot product worked example"
         ],
-        "terms": [
-          "sqrt(d_k)",
-          "scale factor",
-          "d_k = 64",
-          "sqrt(64)=8",
-          "scaled scores",
-          "softmax after scaling"
-        ]
+        "terms": ["sqrt(d_k)", "scale factor", "d_k = 64", "sqrt(64)=8", "scaled scores", "softmax after scaling"]
       },
       {
         "sub": 3,
@@ -16135,14 +14721,7 @@
           "mean and variance of dot product attention",
           "probability theory behind scaled attention"
         ],
-        "terms": [
-          "variance",
-          "standard deviation",
-          "sqrt(d_k)",
-          "random vectors",
-          "normalization",
-          "dimension scaling"
-        ]
+        "terms": ["variance", "standard deviation", "sqrt(d_k)", "random vectors", "normalization", "dimension scaling"]
       },
       {
         "sub": 4,
@@ -16166,14 +14745,7 @@
           "real model vs toy model scaling difference",
           "next step softmax on scaled scores"
         ],
-        "terms": [
-          "I love cats",
-          "d_k = 2",
-          "sqrt(2)",
-          "1.41",
-          "scaled score matrix",
-          "Q_I Q_love Q_cats"
-        ]
+        "terms": ["I love cats", "d_k = 2", "sqrt(2)", "1.41", "scaled score matrix", "Q_I Q_love Q_cats"]
       }
     ],
     "7.9": [
@@ -16461,14 +15033,7 @@
           "why one direction is not enough",
           "what motivates multi-head attention"
         ],
-        "terms": [
-          "single head",
-          "Query arrow",
-          "W_Q",
-          "512-dim embedding",
-          "one question",
-          "information loss"
-        ]
+        "terms": ["single head", "Query arrow", "W_Q", "512-dim embedding", "one question", "information loss"]
       },
       {
         "sub": 1,
@@ -16489,14 +15054,7 @@
           "do we run full 512 attention 8 times",
           "what is the 8 x 64 split"
         ],
-        "terms": [
-          "512 dims",
-          "8 heads",
-          "64 dims per head",
-          "split",
-          "chunks",
-          "H1-H8"
-        ]
+        "terms": ["512 dims", "8 heads", "64 dims per head", "split", "chunks", "H1-H8"]
       },
       {
         "sub": 2,
@@ -17011,13 +15569,7 @@
           "attention W_O lifecycle",
           "does W_O depend on input"
         ],
-        "terms": [
-          "W_O",
-          "output projection",
-          "training phase",
-          "usage phase",
-          "inference"
-        ]
+        "terms": ["W_O", "output projection", "training phase", "usage phase", "inference"]
       },
       {
         "sub": 1,
@@ -17041,13 +15593,7 @@
           "trained model weights immutability",
           "W_O updates per batch"
         ],
-        "terms": [
-          "frozen weights",
-          "gradient update",
-          "backprop",
-          "saved model",
-          "inference"
-        ]
+        "terms": ["frozen weights", "gradient update", "backprop", "saved model", "inference"]
       },
       {
         "sub": 2,
@@ -17071,13 +15617,7 @@
           "do weights persist between sessions",
           "is the weight matrix shared globally"
         ],
-        "terms": [
-          "same W_O",
-          "every input",
-          "every user",
-          "retraining",
-          "shared weights"
-        ]
+        "terms": ["same W_O", "every input", "every user", "retraining", "shared weights"]
       },
       {
         "sub": 3,
@@ -17161,13 +15701,7 @@
           "weights are persistent",
           "coffee machine intuition recap"
         ],
-        "terms": [
-          "W_O",
-          "frozen weights",
-          "activations",
-          "training vs inference",
-          "weight matrices"
-        ]
+        "terms": ["W_O", "frozen weights", "activations", "training vs inference", "weight matrices"]
       }
     ],
     "7.15": [
@@ -17627,13 +16161,7 @@
           "is the cat row fully masked except first two positions",
           "what does row 'sat' look like after masking"
         ],
-        "terms": [
-          "masked scores",
-          "-∞",
-          "future positions",
-          "preserved scores",
-          "masked attention matrix"
-        ]
+        "terms": ["masked scores", "-∞", "future positions", "preserved scores", "masked attention matrix"]
       },
       {
         "sub": 4,
@@ -17887,16 +16415,7 @@
           "Q K V weight matrices explained",
           "per-head projection matrices"
         ],
-        "terms": [
-          "Multi-Head Attention",
-          "MHA",
-          "W_Q",
-          "W_K",
-          "W_V",
-          "8 heads",
-          "weight matrices",
-          "24 matrices"
-        ]
+        "terms": ["Multi-Head Attention", "MHA", "W_Q", "W_K", "W_V", "8 heads", "weight matrices", "24 matrices"]
       },
       {
         "sub": 1,
@@ -17982,16 +16501,7 @@
           "160 MB KV cache MQA",
           "which is smallest cache attention"
         ],
-        "terms": [
-          "MHA",
-          "GQA",
-          "MQA",
-          "Multi-Query Attention",
-          "KV cache savings",
-          "GQA-8",
-          "LLaMA 70B",
-          "KV groups"
-        ]
+        "terms": ["MHA", "GQA", "MQA", "Multi-Query Attention", "KV cache savings", "GQA-8", "LLaMA 70B", "KV groups"]
       },
       {
         "sub": 4,
@@ -18318,14 +16828,7 @@
           "diagram with 6 encoder layers feeding decoder",
           "transformer cross-attention architecture image"
         ],
-        "terms": [
-          "architecture diagram",
-          "K V cache",
-          "fan-out",
-          "encoder stack",
-          "decoder stack",
-          "projection box"
-        ]
+        "terms": ["architecture diagram", "K V cache", "fan-out", "encoder stack", "decoder stack", "projection box"]
       }
     ],
     "10.1": [
@@ -18534,15 +17037,7 @@
           "how to verify KV cache correctness",
           "real numbers attention example"
         ],
-        "terms": [
-          "worked example",
-          "d=2",
-          "numerical trace",
-          "softmax",
-          "weighted sum",
-          "cache fill",
-          "output vector"
-        ]
+        "terms": ["worked example", "d=2", "numerical trace", "softmax", "weighted sum", "cache fill", "output vector"]
       },
       {
         "sub": 7,
@@ -18654,13 +17149,7 @@
           "green vs red work blocks LLM",
           "step-by-step generation cost diagram"
         ],
-        "terms": [
-          "work bars",
-          "quadratic growth",
-          "new vs redo",
-          "generation steps",
-          "computation diagram"
-        ]
+        "terms": ["work bars", "quadratic growth", "new vs redo", "generation steps", "computation diagram"]
       },
       {
         "sub": -2,
@@ -18707,14 +17196,7 @@
           "KV append arrow visualization",
           "K and V table per step"
         ],
-        "terms": [
-          "growing notebook",
-          "append arrow",
-          "K cache",
-          "V cache",
-          "row dim",
-          "frame-by-frame"
-        ]
+        "terms": ["growing notebook", "append arrow", "K cache", "V cache", "row dim", "frame-by-frame"]
       },
       {
         "sub": -2,
@@ -18735,14 +17217,7 @@
           "memory growth diagram KV cache",
           "linear scaling of KV cache memory"
         ],
-        "terms": [
-          "memory meter",
-          "sequence length",
-          "LLaMA 70B",
-          "FP16",
-          "gradient bar",
-          "context length"
-        ]
+        "terms": ["memory meter", "sequence length", "LLaMA 70B", "FP16", "gradient bar", "context length"]
       }
     ]
   },
@@ -19129,16 +17604,7 @@
           "FFN forward pass example",
           "tiny FFN demo"
         ],
-        "terms": [
-          "W1",
-          "b1",
-          "expansion",
-          "dot product",
-          "bias",
-          "cats",
-          "[-1.36, -0.55, 0.86, 1.06]",
-          "step 1"
-        ]
+        "terms": ["W1", "b1", "expansion", "dot product", "bias", "cats", "[-1.36, -0.55, 0.86, 1.06]", "step 1"]
       },
       {
         "sub": 4,
@@ -19440,16 +17906,7 @@
           "input output FFN graphic",
           "matrix shape diagram FFN"
         ],
-        "terms": [
-          "FFN diagram",
-          "architecture",
-          "512",
-          "2048",
-          "W1",
-          "W2",
-          "GELU",
-          "fully connected"
-        ]
+        "terms": ["FFN diagram", "architecture", "512", "2048", "W1", "W2", "GELU", "fully connected"]
       },
       {
         "sub": -2,
@@ -19468,14 +17925,7 @@
           "ReLU vs identity for positives",
           "what does ReLU look like"
         ],
-        "terms": [
-          "ReLU",
-          "graph",
-          "activation function",
-          "dead region",
-          "hard kink",
-          "gradient zero"
-        ]
+        "terms": ["ReLU", "graph", "activation function", "dead region", "hard kink", "gradient zero"]
       },
       {
         "sub": -2,
@@ -19494,14 +17944,7 @@
           "what does GELU look like",
           "GELU asymptotic behavior"
         ],
-        "terms": [
-          "GELU",
-          "graph",
-          "smooth S",
-          "leak region",
-          "activation function",
-          "gradient"
-        ]
+        "terms": ["GELU", "graph", "smooth S", "leak region", "activation function", "gradient"]
       }
     ],
     "8.4": [
@@ -19563,15 +18006,7 @@
           "example weights count W1 small case",
           "one word 1x3 by 3x6 result"
         ],
-        "terms": [
-          "1x3",
-          "3x6",
-          "W1",
-          "18 weights",
-          "hidden vector",
-          "one word",
-          "matrix multiply"
-        ]
+        "terms": ["1x3", "3x6", "W1", "18 weights", "hidden vector", "one word", "matrix multiply"]
       },
       {
         "sub": 1,
@@ -19595,14 +18030,7 @@
           "independent rows in matmul",
           "explain why W stays the same with more tokens"
         ],
-        "terms": [
-          "3x3",
-          "3x6",
-          "stacked matrix",
-          "row independence",
-          "same W1",
-          "matrix multiplication"
-        ]
+        "terms": ["3x3", "3x6", "stacked matrix", "row independence", "same W1", "matrix multiplication"]
       },
       {
         "sub": 2,
@@ -19626,14 +18054,7 @@
           "FFN sentence-level matmul example",
           "matrix multiplication 6 rows 3 cols times 3 rows 6 cols"
         ],
-        "terms": [
-          "6x3",
-          "3x6",
-          "6x6",
-          "W1",
-          "row independence",
-          "sentence example"
-        ]
+        "terms": ["6x3", "3x6", "6x6", "W1", "row independence", "sentence example"]
       },
       {
         "sub": 3,
@@ -19657,15 +18078,7 @@
           "GPT-2 d_model 512 d_ff 2048 weights",
           "why W1 is sequence-length agnostic"
         ],
-        "terms": [
-          "num_words",
-          "d_model",
-          "d_ff",
-          "W1",
-          "1,048,576 weights",
-          "free variable",
-          "GPT-2"
-        ]
+        "terms": ["num_words", "d_model", "d_ff", "W1", "1,048,576 weights", "free variable", "GPT-2"]
       },
       {
         "sub": 4,
@@ -19689,15 +18102,7 @@
           "FFN final output shape formula",
           "general pattern (words x d_model) times W1"
         ],
-        "terms": [
-          "W2",
-          "d_ff x d_model",
-          "GELU",
-          "compress",
-          "expand",
-          "FFN formula",
-          "row dimension"
-        ]
+        "terms": ["W2", "d_ff x d_model", "GELU", "compress", "expand", "FFN formula", "row dimension"]
       },
       {
         "sub": 5,
@@ -20017,15 +18422,7 @@
           "deep residual learning shortcut",
           "F(x) plus x interpretation"
         ],
-        "terms": [
-          "F(x) + x",
-          "shortcut",
-          "skip connection",
-          "identity path",
-          "residual block",
-          "bypass",
-          "highway"
-        ]
+        "terms": ["F(x) + x", "shortcut", "skip connection", "identity path", "residual block", "bypass", "highway"]
       },
       {
         "sub": 2,
@@ -20822,14 +19219,7 @@
           "do duplicate words get the same token ID",
           "raw input to token mapping"
         ],
-        "terms": [
-          "tokenization",
-          "token ID",
-          "lookup table",
-          "prefill",
-          "raw input",
-          "integer mapping"
-        ]
+        "terms": ["tokenization", "token ID", "lookup table", "prefill", "raw input", "integer mapping"]
       },
       {
         "sub": 1,
@@ -21013,14 +19403,7 @@
           "decoder reads input sentence",
           "attention bridge in seq2seq"
         ],
-        "terms": [
-          "cross-attention",
-          "encoder K V",
-          "decoder Q",
-          "encoder-decoder bridge",
-          "no mask",
-          "full access"
-        ]
+        "terms": ["cross-attention", "encoder K V", "decoder Q", "encoder-decoder bridge", "no mask", "full access"]
       },
       {
         "sub": 7,
@@ -21044,14 +19427,7 @@
           "what comes after cross attention",
           "final decoder layer output"
         ],
-        "terms": [
-          "decoder FFN",
-          "ReLU",
-          "per-vector",
-          "Add & Norm",
-          "decoder block",
-          "layer repeats"
-        ]
+        "terms": ["decoder FFN", "ReLU", "per-vector", "Add & Norm", "decoder block", "layer repeats"]
       },
       {
         "sub": 8,
@@ -21563,14 +19939,7 @@
           "Top-k expert selection placement",
           "Router as a linear layer"
         ],
-        "terms": [
-          "MoE block",
-          "expert FFN",
-          "router",
-          "top-k experts",
-          "weighted sum",
-          "transformer block"
-        ]
+        "terms": ["MoE block", "expert FFN", "router", "top-k experts", "weighted sum", "transformer block"]
       },
       {
         "sub": 2,
@@ -21593,14 +19962,7 @@
           "d_model x num_experts router matrix",
           "Cost of the router vs an expert"
         ],
-        "terms": [
-          "router",
-          "softmax",
-          "top-2",
-          "W_router",
-          "normalization",
-          "weighted sum"
-        ]
+        "terms": ["router", "softmax", "top-2", "W_router", "normalization", "weighted sum"]
       },
       {
         "sub": 3,
@@ -21623,15 +19985,7 @@
           "Balanced expert routing",
           "MoE training stability"
         ],
-        "terms": [
-          "auxiliary loss",
-          "load balancing",
-          "L_aux",
-          "f_i",
-          "P_i",
-          "router collapse",
-          "expert utilization"
-        ]
+        "terms": ["auxiliary loss", "load balancing", "L_aux", "f_i", "P_i", "router collapse", "expert utilization"]
       },
       {
         "sub": 4,
@@ -21654,15 +20008,7 @@
           "Marketing name 8x7B explanation",
           "Shared attention plus expert FFNs"
         ],
-        "terms": [
-          "Mixtral 8x7B",
-          "shared attention",
-          "GQA",
-          "expert FFN",
-          "46.7B total",
-          "13B active",
-          "32 layers"
-        ]
+        "terms": ["Mixtral 8x7B", "shared attention", "GQA", "expert FFN", "46.7B total", "13B active", "32 layers"]
       },
       {
         "sub": 5,
@@ -21747,14 +20093,7 @@
           "Small-batch inference MoE",
           "Why is MoE not free lunch?"
         ],
-        "terms": [
-          "tradeoff",
-          "high-throughput",
-          "edge deployment",
-          "latency",
-          "data-center",
-          "single-user inference"
-        ]
+        "terms": ["tradeoff", "high-throughput", "edge deployment", "latency", "data-center", "single-user inference"]
       },
       {
         "sub": -2,
@@ -21774,13 +20113,7 @@
           "Show me dense vs MoE diagram",
           "Card layout comparing parameter counts"
         ],
-        "terms": [
-          "dense model",
-          "MoE",
-          "47B",
-          "13B active",
-          "comparison diagram"
-        ]
+        "terms": ["dense model", "MoE", "47B", "13B active", "comparison diagram"]
       },
       {
         "sub": -2,
@@ -21800,13 +20133,7 @@
           "Standard vs MoE block illustration",
           "Show MoE FFN replacement"
         ],
-        "terms": [
-          "transformer block",
-          "router",
-          "top-k experts",
-          "FFN replacement",
-          "weighted sum"
-        ]
+        "terms": ["transformer block", "router", "top-k experts", "FFN replacement", "weighted sum"]
       },
       {
         "sub": -2,
@@ -21826,14 +20153,7 @@
           "How router scores look diagram",
           "E3 and E6 highlighted picture"
         ],
-        "terms": [
-          "softmax",
-          "top-2",
-          "router_scores",
-          "E3",
-          "E6",
-          "normalization"
-        ]
+        "terms": ["softmax", "top-2", "router_scores", "E3", "E6", "normalization"]
       },
       {
         "sub": -2,
@@ -21853,13 +20173,7 @@
           "MoE expert distribution image",
           "Show load balancing impact"
         ],
-        "terms": [
-          "load balancing",
-          "histogram",
-          "auxiliary loss",
-          "router collapse",
-          "expert utilization"
-        ]
+        "terms": ["load balancing", "histogram", "auxiliary loss", "router collapse", "expert utilization"]
       },
       {
         "sub": -2,
@@ -21879,13 +20193,7 @@
           "Parameter table per layer",
           "How 8x7B totals 47B picture"
         ],
-        "terms": [
-          "Mixtral 8x7B",
-          "46.7B total",
-          "13B active",
-          "32 layers",
-          "GQA attention"
-        ]
+        "terms": ["Mixtral 8x7B", "46.7B total", "13B active", "32 layers", "GQA attention"]
       },
       {
         "sub": -2,
@@ -21905,13 +20213,7 @@
           "Picture of 94 GB number",
           "Forward pass compute card image"
         ],
-        "terms": [
-          "94 GB",
-          "26 GFLOPs",
-          "fp16",
-          "memory cost",
-          "compute cost"
-        ]
+        "terms": ["94 GB", "26 GFLOPs", "fp16", "memory cost", "compute cost"]
       },
       {
         "sub": -2,
@@ -21931,15 +20233,7 @@
           "Mixtral 8x22B row",
           "Side-by-side production MoE numbers"
         ],
-        "terms": [
-          "Mixtral",
-          "DeepSeek-V3",
-          "Qwen3-Next",
-          "top-2",
-          "top-8",
-          "top-10",
-          "comparison table"
-        ]
+        "terms": ["Mixtral", "DeepSeek-V3", "Qwen3-Next", "top-2", "top-8", "top-10", "comparison table"]
       },
       {
         "sub": -2,
@@ -21959,14 +20253,7 @@
           "Memory-constrained MoE diagram",
           "Where MoE wins illustration"
         ],
-        "terms": [
-          "wins",
-          "struggles",
-          "edge",
-          "high-throughput",
-          "latency",
-          "tradeoff"
-        ]
+        "terms": ["wins", "struggles", "edge", "high-throughput", "latency", "tradeoff"]
       }
     ],
     "10.4": [
@@ -22062,13 +20349,7 @@
           "is generation mechanism new for reasoning",
           "how transformers produce reasoning"
         ],
-        "terms": [
-          "autoregressive loop",
-          "forward pass",
-          "loop iterations",
-          "generation",
-          "token-by-token"
-        ]
+        "terms": ["autoregressive loop", "forward pass", "loop iterations", "generation", "token-by-token"]
       },
       {
         "sub": 3,
@@ -22189,16 +20470,7 @@
           "RLVR reasoning model",
           "self-discovered reasoning patterns"
         ],
-        "terms": [
-          "rollout",
-          "verifier",
-          "PPO",
-          "GRPO",
-          "reward",
-          "RLVR",
-          "outcome reward",
-          "reinforcement learning"
-        ]
+        "terms": ["rollout", "verifier", "PPO", "GRPO", "reward", "RLVR", "outcome reward", "reinforcement learning"]
       },
       {
         "sub": 7,
@@ -22352,12 +20624,7 @@
           "two cards reasoning vs regular",
           "what does reasoning output look like diagram"
         ],
-        "terms": [
-          "diagram",
-          "regular vs reasoning",
-          "<think> block",
-          "23 x 47"
-        ]
+        "terms": ["diagram", "regular vs reasoning", "<think> block", "23 x 47"]
       },
       {
         "sub": -2,
@@ -22377,12 +20644,7 @@
           "transformer parts checklist visual",
           "no architectural changes reasoning diagram"
         ],
-        "terms": [
-          "component checklist",
-          "unchanged components",
-          "transformer parts",
-          "diagram"
-        ]
+        "terms": ["component checklist", "unchanged components", "transformer parts", "diagram"]
       },
       {
         "sub": -2,
@@ -22402,11 +20664,7 @@
           "loop iteration comparison chart",
           "regular vs reasoning forward passes"
         ],
-        "terms": [
-          "forward pass chain",
-          "loop iterations",
-          "autoregressive diagram"
-        ]
+        "terms": ["forward pass chain", "loop iterations", "autoregressive diagram"]
       },
       {
         "sub": -2,
@@ -22426,12 +20684,7 @@
           "token probability bar chart reasoning",
           "special token probability moments"
         ],
-        "terms": [
-          "softmax distribution",
-          "<think> token",
-          "</think> token",
-          "probability bar"
-        ]
+        "terms": ["softmax distribution", "<think> token", "</think> token", "probability bar"]
       },
       {
         "sub": -2,
@@ -22451,12 +20704,7 @@
           "reasoning budget vs accuracy graph",
           "test time compute graph"
         ],
-        "terms": [
-          "thinking budget chart",
-          "accuracy",
-          "test-time compute",
-          "scaling chart"
-        ]
+        "terms": ["thinking budget chart", "accuracy", "test-time compute", "scaling chart"]
       },
       {
         "sub": -2,
@@ -22476,13 +20724,7 @@
           "pipeline stages reasoning visual",
           "three boxes training pipeline"
         ],
-        "terms": [
-          "training pipeline",
-          "pre-training",
-          "SFT",
-          "RL with verifier",
-          "three stages"
-        ]
+        "terms": ["training pipeline", "pre-training", "SFT", "RL with verifier", "three stages"]
       },
       {
         "sub": -2,
@@ -22502,13 +20744,7 @@
           "RL training reasoning visual",
           "rollout grid diagram reasoning"
         ],
-        "terms": [
-          "rollouts",
-          "PPO update",
-          "GRPO update",
-          "reward +1 -1",
-          "RL diagram"
-        ]
+        "terms": ["rollouts", "PPO update", "GRPO update", "reward +1 -1", "RL diagram"]
       },
       {
         "sub": -2,
@@ -22528,13 +20764,7 @@
           "self generated training data visual",
           "three card diagram data sources"
         ],
-        "terms": [
-          "data sources",
-          "chain-of-thought",
-          "synthetic generation",
-          "rejection sampling",
-          "diagram"
-        ]
+        "terms": ["data sources", "chain-of-thought", "synthetic generation", "rejection sampling", "diagram"]
       },
       {
         "sub": -2,
@@ -22554,13 +20784,7 @@
           "self verification annotation reasoning",
           "DeepSeek R1 aha moment trace"
         ],
-        "terms": [
-          "emergent patterns",
-          "self-correction",
-          "verification",
-          "confidence calibration",
-          "annotated trace"
-        ]
+        "terms": ["emergent patterns", "self-correction", "verification", "confidence calibration", "annotated trace"]
       },
       {
         "sub": -2,
@@ -22580,12 +20804,7 @@
           "when to use reasoning model table",
           "scope table reasoning visual"
         ],
-        "terms": [
-          "domain table",
-          "use cases",
-          "limitations",
-          "verifiable vs creative"
-        ]
+        "terms": ["domain table", "use cases", "limitations", "verifiable vs creative"]
       }
     ]
   },
@@ -23076,13 +21295,7 @@
           "cyan orange yellow vertices",
           "picture of vector DB tradeoffs"
         ],
-        "terms": [
-          "tradeoff triangle",
-          "equilateral",
-          "Recall vertex",
-          "Latency vertex",
-          "Memory vertex"
-        ]
+        "terms": ["tradeoff triangle", "equilateral", "Recall vertex", "Latency vertex", "Memory vertex"]
       },
       {
         "sub": -2,
@@ -23250,13 +21463,7 @@
           "chip waiting on memory illustration",
           "why hardware limits vector search"
         ],
-        "terms": [
-          "chef-warehouse diagram",
-          "memory bandwidth",
-          "FLOPS",
-          "bottleneck",
-          "data starvation"
-        ]
+        "terms": ["chef-warehouse diagram", "memory bandwidth", "FLOPS", "bottleneck", "data starvation"]
       },
       {
         "sub": 4,
@@ -23492,13 +21699,7 @@
           "show cosine theta",
           "2D illustration of vector angle"
         ],
-        "terms": [
-          "theta",
-          "angle",
-          "origin",
-          "vector arrow",
-          "cosine geometry"
-        ]
+        "terms": ["theta", "angle", "origin", "vector arrow", "cosine geometry"]
       },
       {
         "sub": 2,
@@ -23549,13 +21750,7 @@
           "square root of squared differences picture",
           "leg leg hypotenuse vector"
         ],
-        "terms": [
-          "right triangle",
-          "hypotenuse",
-          "Pythagoras",
-          "leg",
-          "L2 hypotenuse"
-        ]
+        "terms": ["right triangle", "hypotenuse", "Pythagoras", "leg", "L2 hypotenuse"]
       },
       {
         "sub": 3,
@@ -23926,15 +22121,7 @@
           "KD-tree quadrant split",
           "drawable KD-tree d=2"
         ],
-        "terms": [
-          "KD-tree",
-          "2D partition",
-          "axis split",
-          "median split",
-          "quadrant",
-          "recursive split",
-          "diagram"
-        ]
+        "terms": ["KD-tree", "2D partition", "axis split", "median split", "quadrant", "recursive split", "diagram"]
       },
       {
         "sub": -2,
@@ -23955,15 +22142,7 @@
           "locality-sensitive hashing picture",
           "hyperplane bit code"
         ],
-        "terms": [
-          "LSH",
-          "hyperplane",
-          "bit code",
-          "hash bucket",
-          "random projection",
-          "SimHash",
-          "3-bit code"
-        ]
+        "terms": ["LSH", "hyperplane", "bit code", "hash bucket", "random projection", "SimHash", "3-bit code"]
       },
       {
         "sub": -2,
@@ -23984,15 +22163,7 @@
           "Voronoi cell partition",
           "query probe diagram"
         ],
-        "terms": [
-          "IVF",
-          "Voronoi",
-          "centroid",
-          "query probe",
-          "nprobe",
-          "cluster",
-          "scatter"
-        ]
+        "terms": ["IVF", "Voronoi", "centroid", "query probe", "nprobe", "cluster", "scatter"]
       },
       {
         "sub": -2,
@@ -24013,15 +22184,7 @@
           "ANN graph hops",
           "green path graph image"
         ],
-        "terms": [
-          "proximity graph",
-          "greedy hop",
-          "search path",
-          "node",
-          "edge",
-          "graph index",
-          "traversal"
-        ]
+        "terms": ["proximity graph", "greedy hop", "search path", "node", "edge", "graph index", "traversal"]
       },
       {
         "sub": -2,
@@ -24077,14 +22240,7 @@
           "3 TB scan per query brute force",
           "IVF chapter motivation"
         ],
-        "terms": [
-          "brute force kNN",
-          "IVF",
-          "inverted file index",
-          "linear scan",
-          "N*d cost",
-          "distance computation"
-        ]
+        "terms": ["brute force kNN", "IVF", "inverted file index", "linear scan", "N*d cost", "distance computation"]
       },
       {
         "sub": 1,
@@ -24108,14 +22264,7 @@
           "cluster A B C IVF",
           "small vs large nlist tradeoff"
         ],
-        "terms": [
-          "k-means",
-          "nlist",
-          "centroid",
-          "cluster",
-          "IVF training",
-          "sqrt(N)"
-        ]
+        "terms": ["k-means", "nlist", "centroid", "cluster", "IVF training", "sqrt(N)"]
       },
       {
         "sub": 2,
@@ -24139,14 +22288,7 @@
           "partition view of IVF",
           "posting list storage view"
         ],
-        "terms": [
-          "Voronoi cell",
-          "posting list",
-          "inverted list",
-          "partition",
-          "cluster",
-          "Inverted File index"
-        ]
+        "terms": ["Voronoi cell", "posting list", "inverted list", "partition", "cluster", "Inverted File index"]
       },
       {
         "sub": 3,
@@ -24170,14 +22312,7 @@
           "two things IVF keeps",
           "training step k-means assignment"
         ],
-        "terms": [
-          "argmin",
-          "Cell(p) formula",
-          "posting list",
-          "centroid list",
-          "inverted file",
-          "training"
-        ]
+        "terms": ["argmin", "Cell(p) formula", "posting list", "centroid list", "inverted file", "training"]
       },
       {
         "sub": 4,
@@ -24201,14 +22336,7 @@
           "cluster A scan only",
           "IVF query cost formula"
         ],
-        "terms": [
-          "nprobe",
-          "nprobe=1",
-          "1000x speedup",
-          "nearest centroid",
-          "cluster scan",
-          "query time"
-        ]
+        "terms": ["nprobe", "nprobe=1", "1000x speedup", "nearest centroid", "cluster scan", "query time"]
       },
       {
         "sub": 5,
@@ -24232,14 +22360,7 @@
           "scan multiple cells IVF",
           "tradeoff triangle IVF move"
         ],
-        "terms": [
-          "nprobe",
-          "Recall@10",
-          "tradeoff triangle",
-          "boundary miss",
-          "tuning knob",
-          "IVF recall sweep"
-        ]
+        "terms": ["nprobe", "Recall@10", "tradeoff triangle", "boundary miss", "tuning knob", "IVF recall sweep"]
       },
       {
         "sub": 6,
@@ -24263,14 +22384,7 @@
           "tuning IVF parameters",
           "FAISS rule for nlist nprobe"
         ],
-        "terms": [
-          "nlist",
-          "sqrt(N)",
-          "FAISS default",
-          "nprobe = 8",
-          "centroid memory",
-          "production sizing"
-        ]
+        "terms": ["nlist", "sqrt(N)", "FAISS default", "nprobe = 8", "centroid memory", "production sizing"]
       },
       {
         "sub": -1,
@@ -24294,15 +22408,7 @@
           "IVF recall latency memory",
           "production IVF guide"
         ],
-        "terms": [
-          "IVF",
-          "Inverted File Index",
-          "nlist",
-          "nprobe",
-          "posting list",
-          "k-means",
-          "Voronoi cell"
-        ]
+        "terms": ["IVF", "Inverted File Index", "nlist", "nprobe", "posting list", "k-means", "Voronoi cell"]
       },
       {
         "sub": -2,
@@ -24326,13 +22432,7 @@
           "brute force nearest neighbor picture",
           "exhaustive search diagram"
         ],
-        "terms": [
-          "brute force diagram",
-          "scatter plot",
-          "query at center",
-          "distance lines",
-          "exhaustive scan visual"
-        ]
+        "terms": ["brute force diagram", "scatter plot", "query at center", "distance lines", "exhaustive scan visual"]
       },
       {
         "sub": -2,
@@ -24356,13 +22456,7 @@
           "clusters after training IVF",
           "IVF preprocessing visual"
         ],
-        "terms": [
-          "k-means clusters",
-          "nlist=3",
-          "centroid A B C",
-          "colored cluster diagram",
-          "IVF training visual"
-        ]
+        "terms": ["k-means clusters", "nlist=3", "centroid A B C", "colored cluster diagram", "IVF training visual"]
       },
       {
         "sub": -2,
@@ -24416,13 +22510,7 @@
           "IVF speedup mechanism diagram",
           "nearest centroid arrow image"
         ],
-        "terms": [
-          "nprobe=1",
-          "probe arrow",
-          "nearest centroid highlight",
-          "cluster A scan",
-          "IVF speedup visual"
-        ]
+        "terms": ["nprobe=1", "probe arrow", "nearest centroid highlight", "cluster A scan", "IVF speedup visual"]
       },
       {
         "sub": -2,
@@ -24446,13 +22534,7 @@
           "nprobe knob first panel",
           "minimum nprobe IVF visual"
         ],
-        "terms": [
-          "nprobe=1 panel",
-          "1/3 corpus",
-          "comparison diagram",
-          "knob aggressive",
-          "small scatter"
-        ]
+        "terms": ["nprobe=1 panel", "1/3 corpus", "comparison diagram", "knob aggressive", "small scatter"]
       },
       {
         "sub": -2,
@@ -24476,13 +22558,7 @@
           "moderate scan IVF picture",
           "nprobe knob second panel"
         ],
-        "terms": [
-          "nprobe=2 panel",
-          "2/3 corpus",
-          "two clusters probed",
-          "balanced setting",
-          "knob middle"
-        ]
+        "terms": ["nprobe=2 panel", "2/3 corpus", "two clusters probed", "balanced setting", "knob middle"]
       },
       {
         "sub": -2,
@@ -24506,13 +22582,7 @@
           "nprobe knob third panel",
           "scanning everything IVF"
         ],
-        "terms": [
-          "nprobe=3 panel",
-          "full scan",
-          "all clusters probed",
-          "brute force equivalent",
-          "knob maximum"
-        ]
+        "terms": ["nprobe=3 panel", "full scan", "all clusters probed", "brute force equivalent", "knob maximum"]
       }
     ],
     "11.7": [
@@ -24740,14 +22810,7 @@
           "neighbor graph cat corpus",
           "before hierarchy diagram"
         ],
-        "terms": [
-          "flat graph",
-          "proximity graph",
-          "M nearest neighbors",
-          "cyan edges",
-          "diagram",
-          "layer 0"
-        ]
+        "terms": ["flat graph", "proximity graph", "M nearest neighbors", "cyan edges", "diagram", "layer 0"]
       },
       {
         "sub": -2,
@@ -24771,14 +22834,7 @@
           "graph traversal example image",
           "search path 8 hops 10 docs"
         ],
-        "terms": [
-          "greedy path",
-          "dashed red path",
-          "meander",
-          "slow greedy",
-          "flat graph traversal",
-          "diagram"
-        ]
+        "terms": ["greedy path", "dashed red path", "meander", "slow greedy", "flat graph traversal", "diagram"]
       },
       {
         "sub": -2,
@@ -24802,14 +22858,7 @@
           "navigable small world two tier",
           "diagram of hub jumps"
         ],
-        "terms": [
-          "two-layer HNSW",
-          "hub nodes",
-          "long-range edges",
-          "yellow hubs",
-          "hub layer",
-          "diagram"
-        ]
+        "terms": ["two-layer HNSW", "hub nodes", "long-range edges", "yellow hubs", "hub layer", "diagram"]
       },
       {
         "sub": -2,
@@ -24833,15 +22882,7 @@
           "HNSW final structure diagram",
           "layer 2 hub of hubs"
         ],
-        "terms": [
-          "three-layer HNSW",
-          "hub of hubs",
-          "entry point",
-          "top layer",
-          "global entry",
-          "pyramid",
-          "diagram"
-        ]
+        "terms": ["three-layer HNSW", "hub of hubs", "entry point", "top layer", "global entry", "pyramid", "diagram"]
       }
     ],
     "11.8": [
@@ -24902,13 +22943,7 @@
           "HNSW one-at-a-time insertion",
           "Empty graph HNSW seed"
         ],
-        "terms": [
-          "entry point",
-          "incremental build",
-          "first insertion",
-          "top layer",
-          "empty graph"
-        ]
+        "terms": ["entry point", "incremental build", "first insertion", "top layer", "empty graph"]
       },
       {
         "sub": 1,
@@ -24965,14 +23000,7 @@
           "HNSW exponential decay layer counts",
           "Storage cost of HNSW upper layers"
         ],
-        "terms": [
-          "93.75%",
-          "exponential decay",
-          "1/M ratio",
-          "hub nodes",
-          "layer counts",
-          "upper tiers"
-        ]
+        "terms": ["93.75%", "exponential decay", "1/M ratio", "hub nodes", "layer counts", "upper tiers"]
       },
       {
         "sub": 3,
@@ -25030,16 +23058,7 @@
           "Snapshot HNSW progression",
           "Cat corpus HNSW build"
         ],
-        "terms": [
-          "L = 2",
-          "L = 1",
-          "L = 0",
-          "build snapshots",
-          "hub layer",
-          "insertion log",
-          "cat corpus",
-          "u values"
-        ]
+        "terms": ["L = 2", "L = 1", "L = 0", "build snapshots", "hub layer", "insertion log", "cat corpus", "u values"]
       },
       {
         "sub": 5,
@@ -25099,13 +23118,7 @@
           "Beginning of HNSW construction",
           "HNSW visualization first step"
         ],
-        "terms": [
-          "empty graph",
-          "first insert",
-          "entry point",
-          "seed state",
-          "single node"
-        ]
+        "terms": ["empty graph", "first insert", "entry point", "seed state", "single node"]
       },
       {
         "sub": -2,
@@ -25129,13 +23142,7 @@
           "Skipping layers in HNSW insert",
           "HNSW descent step diagram"
         ],
-        "terms": [
-          "greedy descent",
-          "one candidate per layer",
-          "top entry",
-          "L2 to L0",
-          "cheap descent"
-        ]
+        "terms": ["greedy descent", "one candidate per layer", "top entry", "L2 to L0", "cheap descent"]
       },
       {
         "sub": -2,
@@ -25159,14 +23166,7 @@
           "Layer-0 beam picture",
           "HNSW build candidate selection"
         ],
-        "terms": [
-          "ef_construction = 4",
-          "candidate pool",
-          "beam search",
-          "layer 0",
-          "new node",
-          "distances"
-        ]
+        "terms": ["ef_construction = 4", "candidate pool", "beam search", "layer 0", "new node", "distances"]
       },
       {
         "sub": -2,
@@ -25190,13 +23190,7 @@
           "M nearest pool reject example",
           "Final neighbor selection HNSW"
         ],
-        "terms": [
-          "M = 3",
-          "bidirectional edges",
-          "pool reject",
-          "final frame",
-          "nearest neighbors"
-        ]
+        "terms": ["M = 3", "bidirectional edges", "pool reject", "final frame", "nearest neighbors"]
       },
       {
         "sub": -2,
@@ -25220,13 +23214,7 @@
           "Just-started HNSW",
           "HNSW after one doc"
         ],
-        "terms": [
-          "snapshot 1",
-          "one insert",
-          "L2 only",
-          "top entry",
-          "isolated node"
-        ]
+        "terms": ["snapshot 1", "one insert", "L2 only", "top entry", "isolated node"]
       },
       {
         "sub": -2,
@@ -25250,13 +23238,7 @@
           "HNSW small graph visualization",
           "HNSW state with 2 docs"
         ],
-        "terms": [
-          "snapshot 2",
-          "two inserts",
-          "L1 hub",
-          "hub edge",
-          "doc 6"
-        ]
+        "terms": ["snapshot 2", "two inserts", "L1 hub", "hub edge", "doc 6"]
       },
       {
         "sub": -2,
@@ -25280,14 +23262,7 @@
           "HNSW final state diagram",
           "Final 10-doc HNSW state"
         ],
-        "terms": [
-          "snapshot 3",
-          "final state",
-          "three tiers",
-          "full L0",
-          "hub layer",
-          "10 docs"
-        ]
+        "terms": ["snapshot 3", "final state", "three tiers", "full L0", "hub layer", "10 docs"]
       },
       {
         "sub": -2,
@@ -25311,13 +23286,7 @@
           "Sparse neighbors HNSW",
           "Tight memory HNSW"
         ],
-        "terms": [
-          "M = 4",
-          "sparse",
-          "ring graph",
-          "memory tight",
-          "low density"
-        ]
+        "terms": ["M = 4", "sparse", "ring graph", "memory tight", "low density"]
       },
       {
         "sub": -2,
@@ -25341,13 +23310,7 @@
           "M=8 dense graph",
           "HNSW balanced mode"
         ],
-        "terms": [
-          "M = 8",
-          "balanced",
-          "ring graph",
-          "mid density",
-          "eight neighbors"
-        ]
+        "terms": ["M = 8", "balanced", "ring graph", "mid density", "eight neighbors"]
       },
       {
         "sub": -2,
@@ -25371,13 +23334,7 @@
           "HNSW M=16 sample",
           "M_max example"
         ],
-        "terms": [
-          "M = 16",
-          "fully meshed",
-          "production default",
-          "N - 1 cap",
-          "sixteen neighbors"
-        ]
+        "terms": ["M = 16", "fully meshed", "production default", "N - 1 cap", "sixteen neighbors"]
       }
     ],
     "11.10": [
@@ -25406,17 +23363,7 @@
           "HNSW M=16 ef_search=50",
           "HNSW parameter defaults explained"
         ],
-        "terms": [
-          "HNSW",
-          "M",
-          "ef_construction",
-          "ef_search",
-          "recall",
-          "latency",
-          "memory",
-          "graph index",
-          "tuning"
-        ]
+        "terms": ["HNSW", "M", "ef_construction", "ef_search", "recall", "latency", "memory", "graph index", "tuning"]
       },
       {
         "sub": 0,
@@ -25472,14 +23419,7 @@
           "layer 0 max neighbors",
           "HNSW M tradeoff recall vs RAM"
         ],
-        "terms": [
-          "M",
-          "layer 0 neighbors",
-          "graph bytes per vector",
-          "recall@10",
-          "RAM",
-          "sweet spot"
-        ]
+        "terms": ["M", "layer 0 neighbors", "graph bytes per vector", "recall@10", "RAM", "sweet spot"]
       },
       {
         "sub": 2,
@@ -25502,14 +23442,7 @@
           "ef_construction vs ef_search difference",
           "is ef_construction needed at query"
         ],
-        "terms": [
-          "ef_construction",
-          "candidate pool",
-          "build time",
-          "recall ceiling",
-          "insertion",
-          "one-time cost"
-        ]
+        "terms": ["ef_construction", "candidate pool", "build time", "recall ceiling", "insertion", "one-time cost"]
       },
       {
         "sub": 3,
@@ -25533,14 +23466,7 @@
           "production HNSW ef_search starting point",
           "HNSW recall 0.97 latency"
         ],
-        "terms": [
-          "ef_search",
-          "beam",
-          "query latency",
-          "recall",
-          "layer 0",
-          "per-query knob"
-        ]
+        "terms": ["ef_search", "beam", "query latency", "recall", "layer 0", "per-query knob"]
       },
       {
         "sub": 4,
@@ -25563,16 +23489,7 @@
           "M curve flattens",
           "picking M before ef_search"
         ],
-        "terms": [
-          "recall@10 curve",
-          "M = 8",
-          "M = 16",
-          "M = 32",
-          "ef_search",
-          "SIFT-1M",
-          "Pareto",
-          "log scale"
-        ]
+        "terms": ["recall@10 curve", "M = 8", "M = 16", "M = 32", "ef_search", "SIFT-1M", "Pareto", "log scale"]
       },
       {
         "sub": 5,
@@ -25628,14 +23545,7 @@
           "SIFT-1M like recall chart",
           "HNSW Pareto frontier visualization"
         ],
-        "terms": [
-          "line chart",
-          "recall@10",
-          "ef_search",
-          "log axis",
-          "M curves",
-          "Pareto"
-        ]
+        "terms": ["line chart", "recall@10", "ef_search", "log axis", "M curves", "Pareto"]
       }
     ],
     "11.9": [
@@ -25696,14 +23606,7 @@
           "what does HNSW do when query arrives",
           "query enters HNSW graph"
         ],
-        "terms": [
-          "entry point",
-          "top layer",
-          "L2",
-          "fixed start node",
-          "HNSW step 0",
-          "query landing"
-        ]
+        "terms": ["entry point", "top layer", "L2", "fixed start node", "HNSW step 0", "query landing"]
       },
       {
         "sub": 1,
@@ -25724,13 +23627,7 @@
           "greedy search neighbor closer than current",
           "HNSW top layer single node behavior"
         ],
-        "terms": [
-          "greedy descent",
-          "layer drop",
-          "L2",
-          "neighbor closer",
-          "greedy rule"
-        ]
+        "terms": ["greedy descent", "layer drop", "L2", "neighbor closer", "greedy rule"]
       },
       {
         "sub": 2,
@@ -25751,13 +23648,7 @@
           "L1 doc 1 doc 6 comparison",
           "greedy descent middle layer"
         ],
-        "terms": [
-          "L1 descent",
-          "layer drop",
-          "doc 6",
-          "adjacency list",
-          "stay-and-drop"
-        ]
+        "terms": ["L1 descent", "layer drop", "doc 6", "adjacency list", "stay-and-drop"]
       },
       {
         "sub": 3,
@@ -25778,14 +23669,7 @@
           "ef_search controls beam width",
           "priority queue ANN search"
         ],
-        "terms": [
-          "beam search",
-          "ef_search",
-          "priority queue",
-          "layer 0",
-          "candidate pool",
-          "HNSW step 3"
-        ]
+        "terms": ["beam search", "ef_search", "priority queue", "layer 0", "candidate pool", "HNSW step 3"]
       },
       {
         "sub": 4,
@@ -25841,14 +23725,7 @@
           "HNSW step 5 result",
           "HNSW worked example top-3"
         ],
-        "terms": [
-          "top-k",
-          "converged beam",
-          "end-to-end path",
-          "scaling to 1B",
-          "doc 3 doc 7 doc 1",
-          "log N layers"
-        ]
+        "terms": ["top-k", "converged beam", "end-to-end path", "scaling to 1B", "doc 3 doc 7 doc 1", "log N layers"]
       },
       {
         "sub": -2,
@@ -25869,12 +23746,7 @@
           "2D scatter cat corpus",
           "HNSW query sits in cluster picture"
         ],
-        "terms": [
-          "layer-0 scatter",
-          "query star",
-          "cat cluster",
-          "flat-graph edges"
-        ]
+        "terms": ["layer-0 scatter", "query star", "cat cluster", "flat-graph edges"]
       },
       {
         "sub": -2,
@@ -25895,12 +23767,7 @@
           "where query enters HNSW",
           "yellow arrow into L2"
         ],
-        "terms": [
-          "three-tier hierarchy",
-          "L2 entry",
-          "query arrow",
-          "doc 1 highlighted"
-        ]
+        "terms": ["three-tier hierarchy", "L2 entry", "query arrow", "doc 1 highlighted"]
       },
       {
         "sub": -2,
@@ -25921,11 +23788,7 @@
           "doc 1 L2 to L1 picture",
           "HNSW greedy fall through"
         ],
-        "terms": [
-          "vertical drop",
-          "L2 to L1",
-          "greedy with no neighbors"
-        ]
+        "terms": ["vertical drop", "L2 to L1", "greedy with no neighbors"]
       },
       {
         "sub": -2,
@@ -25946,12 +23809,7 @@
           "L1 neighbors of doc 1 diagram",
           "drop decision visualization HNSW"
         ],
-        "terms": [
-          "distance bars",
-          "L1 decision",
-          "doc 1 vs doc 6",
-          "drop to L0"
-        ]
+        "terms": ["distance bars", "L1 decision", "doc 1 vs doc 6", "drop to L0"]
       },
       {
         "sub": -2,
@@ -25972,11 +23830,7 @@
           "doc 1 active node L0",
           "beam initialized to doc 1 picture"
         ],
-        "terms": [
-          "L0 entry",
-          "beam start",
-          "doc 1 active"
-        ]
+        "terms": ["L0 entry", "beam start", "doc 1 active"]
       },
       {
         "sub": -2,
@@ -25997,12 +23851,7 @@
           "beam frame A diagram",
           "doc 1 neighbors layer 0 picture"
         ],
-        "terms": [
-          "frame A",
-          "popped node purple",
-          "expansion edges",
-          "rejected doc 5"
-        ]
+        "terms": ["frame A", "popped node purple", "expansion edges", "rejected doc 5"]
       },
       {
         "sub": -2,
@@ -26023,12 +23872,7 @@
           "expansion step 2 picture HNSW",
           "doc 4 too far visualization"
         ],
-        "terms": [
-          "frame B",
-          "doc 3 popped",
-          "doc 4 rejected",
-          "worst-in-queue"
-        ]
+        "terms": ["frame B", "doc 3 popped", "doc 4 rejected", "worst-in-queue"]
       },
       {
         "sub": -2,
@@ -26049,12 +23893,7 @@
           "no neighbor beats worst diagram",
           "doc 7 neighbors 1 2 3 4 picture"
         ],
-        "terms": [
-          "frame C",
-          "doc 7 popped",
-          "convergence",
-          "beam top stable"
-        ]
+        "terms": ["frame C", "doc 7 popped", "convergence", "beam top stable"]
       },
       {
         "sub": -2,
@@ -26075,12 +23914,7 @@
           "top-k visual HNSW",
           "final beam top-3 diagram"
         ],
-        "terms": [
-          "final result",
-          "top-3 highlighted",
-          "converged neighbors",
-          "distance dashes"
-        ]
+        "terms": ["final result", "top-3 highlighted", "converged neighbors", "distance dashes"]
       }
     ],
     "11.11": [
@@ -26140,15 +23974,7 @@
           "When sharding is needed for HNSW",
           "Origin of Vamana algorithm"
         ],
-        "terms": [
-          "RAM wall",
-          "HNSW limitation",
-          "320 GB",
-          "3.2 TB",
-          "Bing",
-          "Microsoft Research 2019",
-          "sharding"
-        ]
+        "terms": ["RAM wall", "HNSW limitation", "320 GB", "3.2 TB", "Bing", "Microsoft Research 2019", "sharding"]
       },
       {
         "sub": 1,
@@ -26169,12 +23995,7 @@
           "Vamana topology",
           "DiskANN graph structure"
         ],
-        "terms": [
-          "flat graph",
-          "single layer",
-          "pyramid",
-          "hierarchy"
-        ]
+        "terms": ["flat graph", "single layer", "pyramid", "hierarchy"]
       },
       {
         "sub": 2,
@@ -26195,13 +24016,7 @@
           "Why Vamana wins on SSD",
           "Hierarchy economics in graph indexes"
         ],
-        "terms": [
-          "10 microseconds",
-          "0.1 microseconds",
-          "SSD hop",
-          "RAM hop",
-          "100x"
-        ]
+        "terms": ["10 microseconds", "0.1 microseconds", "SSD hop", "RAM hop", "100x"]
       },
       {
         "sub": 3,
@@ -26223,14 +24038,7 @@
           "Cross-space jumps in flat graph",
           "Build algorithm for DiskANN"
         ],
-        "terms": [
-          "R=64",
-          "alpha-pruning",
-          "alpha",
-          "short-range edges",
-          "long-range edges",
-          "neighbor diversity"
-        ]
+        "terms": ["R=64", "alpha-pruning", "alpha", "short-range edges", "long-range edges", "neighbor diversity"]
       },
       {
         "sub": 4,
@@ -26253,15 +24061,7 @@
           "SATA SSD speed",
           "Random read latency NVMe vs SATA"
         ],
-        "terms": [
-          "NVMe",
-          "Non-Volatile Memory Express",
-          "PCIe",
-          "SATA",
-          "4 KB page",
-          "10 microseconds",
-          "random read"
-        ]
+        "terms": ["NVMe", "Non-Volatile Memory Express", "PCIe", "SATA", "4 KB page", "10 microseconds", "random read"]
       },
       {
         "sub": 5,
@@ -26312,13 +24112,7 @@
           "How long does one DiskANN search take",
           "SSD reads per ANN query"
         ],
-        "terms": [
-          "40-80 SSD reads",
-          "1 ms",
-          "greedy walk",
-          "RAM hops",
-          "distance ops"
-        ]
+        "terms": ["40-80 SSD reads", "1 ms", "greedy walk", "RAM hops", "distance ops"]
       },
       {
         "sub": 7,
@@ -26372,13 +24166,7 @@
           "HNSW visualization with layers",
           "How is HNSW drawn"
         ],
-        "terms": [
-          "HNSW pyramid",
-          "3 layers",
-          "L0 L1 L2",
-          "hub node",
-          "long arcs"
-        ]
+        "terms": ["HNSW pyramid", "3 layers", "L0 L1 L2", "hub node", "long arcs"]
       },
       {
         "sub": -2,
@@ -26399,12 +24187,7 @@
           "Flat graph picture",
           "Image of Vamana index"
         ],
-        "terms": [
-          "flat layer",
-          "short edges",
-          "long edges",
-          "Vamana graph"
-        ]
+        "terms": ["flat layer", "short edges", "long edges", "Vamana graph"]
       },
       {
         "sub": -2,
@@ -26425,13 +24208,7 @@
           "DiskANN node visualization",
           "Picture of alpha-pruned neighbors"
         ],
-        "terms": [
-          "focal node p",
-          "64 edges",
-          "short greens",
-          "long oranges",
-          "double duty"
-        ]
+        "terms": ["focal node p", "64 edges", "short greens", "long oranges", "double duty"]
       },
       {
         "sub": -2,
@@ -26452,13 +24229,7 @@
           "Visualization of DiskANN disk layout",
           "RAM SSD split Vamana"
         ],
-        "terms": [
-          "RAM cache",
-          "NVMe SSD",
-          "4 KB blocks",
-          "entry-layer",
-          "storage hierarchy"
-        ]
+        "terms": ["RAM cache", "NVMe SSD", "4 KB blocks", "entry-layer", "storage hierarchy"]
       }
     ]
   },
@@ -26521,17 +24292,7 @@
           "Raw vector memory by N",
           "Production vector DB size table"
         ],
-        "terms": [
-          "scaling",
-          "1M",
-          "100M",
-          "1B",
-          "3 GB",
-          "300 GB",
-          "3 TB",
-          "corpus size",
-          "N"
-        ]
+        "terms": ["scaling", "1M", "100M", "1B", "3 GB", "300 GB", "3 TB", "corpus size", "N"]
       },
       {
         "sub": 2,
@@ -26555,15 +24316,7 @@
           "Why 2M times 8 bytes?",
           "HNSW memory at 1B scale"
         ],
-        "terms": [
-          "HNSW",
-          "M = 16",
-          "graph overhead",
-          "100 bytes per vector",
-          "edges per node",
-          "node id",
-          "layer 0"
-        ]
+        "terms": ["HNSW", "M = 16", "graph overhead", "100 bytes per vector", "edges per node", "node id", "layer 0"]
       },
       {
         "sub": 3,
@@ -26587,16 +24340,7 @@
           "Query fan-out latency cost",
           "How big can one machine hold?"
         ],
-        "terms": [
-          "AWS",
-          "r7i.24xlarge",
-          "768 GB RAM",
-          "sharding",
-          "single server",
-          "DDR5",
-          "memory-optimized",
-          "cost"
-        ]
+        "terms": ["AWS", "r7i.24xlarge", "768 GB RAM", "sharding", "single server", "DDR5", "memory-optimized", "cost"]
       },
       {
         "sub": 4,
@@ -26656,15 +24400,7 @@
           "Production vector search economics",
           "Why shrink embeddings?"
         ],
-        "terms": [
-          "memory wall",
-          "compression",
-          "float32",
-          "HNSW",
-          "scaling",
-          "billion vectors",
-          "recall vs memory"
-        ]
+        "terms": ["memory wall", "compression", "float32", "HNSW", "scaling", "billion vectors", "recall vs memory"]
       }
     ],
     "11.13": [
@@ -27115,14 +24851,7 @@
           "Encoder output sizes E5 BGE large",
           "Pre-compression vector footprint"
         ],
-        "terms": [
-          "float32",
-          "d=1024",
-          "4 KB per vector",
-          "E5-large",
-          "BGE-large",
-          "4 TB at 1B"
-        ]
+        "terms": ["float32", "d=1024", "4 KB per vector", "E5-large", "BGE-large", "4 TB at 1B"]
       },
       {
         "sub": 1,
@@ -27177,15 +24906,7 @@
           "Computing similarity for binary embeddings",
           "Bitwise distance for binary quantized vectors"
         ],
-        "terms": [
-          "Hamming distance",
-          "popcount",
-          "XOR",
-          "VPOPCNTQ",
-          "AVX-512",
-          "POPCNT",
-          "bitwise distance"
-        ]
+        "terms": ["Hamming distance", "popcount", "XOR", "VPOPCNTQ", "AVX-512", "POPCNT", "bitwise distance"]
       },
       {
         "sub": 3,
@@ -27273,14 +24994,7 @@
           "Production safe dimension for BQ",
           "Binary near-random low dim"
         ],
-        "terms": [
-          "d<=256",
-          "recall collapse",
-          "d=128 unusable",
-          "d>=768 rule",
-          "near-random",
-          "low-dim collapse"
-        ]
+        "terms": ["d<=256", "recall collapse", "d=128 unusable", "d>=768 rule", "near-random", "low-dim collapse"]
       },
       {
         "sub": 5,
@@ -27538,15 +25252,7 @@
           "how does PQ chop vectors",
           "PQ slot 0 covers which dimensions"
         ],
-        "terms": [
-          "slot",
-          "subvector",
-          "m parameter",
-          "768 dims",
-          "8 dims per slot",
-          "PQ split",
-          "d/m"
-        ]
+        "terms": ["slot", "subvector", "m parameter", "768 dims", "8 dims per slot", "PQ split", "d/m"]
       },
       {
         "sub": 1,
@@ -27569,15 +25275,7 @@
           "why one byte per slot in PQ",
           "PQ centroid count rationale"
         ],
-        "terms": [
-          "codebook",
-          "k-means",
-          "centroid",
-          "256 centroids",
-          "2^8",
-          "L2 cache",
-          "prototype"
-        ]
+        "terms": ["codebook", "k-means", "centroid", "256 centroids", "2^8", "L2 cache", "prototype"]
       },
       {
         "sub": 2,
@@ -27598,14 +25296,7 @@
           "PQ encoding lookup process",
           "do PQ codes replace the float vector"
         ],
-        "terms": [
-          "PQ code",
-          "centroid id",
-          "encoding",
-          "snap",
-          "byte code",
-          "nearest centroid"
-        ]
+        "terms": ["PQ code", "centroid id", "encoding", "snap", "byte code", "nearest centroid"]
       },
       {
         "sub": 3,
@@ -27626,13 +25317,7 @@
           "PQ at 100M vectors",
           "why use product quantization for scale"
         ],
-        "terms": [
-          "32x compression",
-          "96 bytes per vector",
-          "3072 bytes float32",
-          "billion-scale",
-          "compression ratio"
-        ]
+        "terms": ["32x compression", "96 bytes per vector", "3072 bytes float32", "billion-scale", "compression ratio"]
       },
       {
         "sub": 4,
@@ -27768,14 +25453,7 @@
           "PQ compression ratio table",
           "what does increasing m do in PQ"
         ],
-        "terms": [
-          "m parameter",
-          "m=96",
-          "sweet spot",
-          "recall@10",
-          "bytes per vector",
-          "compression ratio"
-        ]
+        "terms": ["m parameter", "m=96", "sweet spot", "recall@10", "bytes per vector", "compression ratio"]
       },
       {
         "sub": -2,
@@ -27794,12 +25472,7 @@
           "stacked document slot alignment",
           "what does a 96-slot vector look like"
         ],
-        "terms": [
-          "slot boundary",
-          "96 slots",
-          "banded vector",
-          "slot alignment"
-        ]
+        "terms": ["slot boundary", "96 slots", "banded vector", "slot alignment"]
       },
       {
         "sub": -2,
@@ -27818,13 +25491,7 @@
           "what does a PQ codebook look like",
           "centroid markers slot 0"
         ],
-        "terms": [
-          "centroid",
-          "codebook",
-          "k-means scatter",
-          "c0-c255",
-          "256 prototypes"
-        ]
+        "terms": ["centroid", "codebook", "k-means scatter", "c0-c255", "256 prototypes"]
       },
       {
         "sub": -2,
@@ -27843,13 +25510,7 @@
           "centroid id byte boxes PQ",
           "encode visualization product quantization"
         ],
-        "terms": [
-          "encoding",
-          "snap",
-          "c17",
-          "PQ code",
-          "byte id"
-        ]
+        "terms": ["encoding", "snap", "c17", "PQ code", "byte id"]
       },
       {
         "sub": -2,
@@ -27868,12 +25529,7 @@
           "PQ shrink visualization",
           "PQ compression ratio diagram"
         ],
-        "terms": [
-          "3072 bytes",
-          "96 bytes",
-          "32x reduction",
-          "scale comparison"
-        ]
+        "terms": ["3072 bytes", "96 bytes", "32x reduction", "scale comparison"]
       },
       {
         "sub": -2,
@@ -27892,12 +25548,7 @@
           "query sub-query split visual",
           "PQ database doc codes diagram"
         ],
-        "terms": [
-          "ADC frame A",
-          "sub-queries",
-          "PQ codes",
-          "asymmetric setup"
-        ]
+        "terms": ["ADC frame A", "sub-queries", "PQ codes", "asymmetric setup"]
       },
       {
         "sub": -2,
@@ -27916,13 +25567,7 @@
           "PQ table 96 by 256",
           "ADC distance table illustration"
         ],
-        "terms": [
-          "LUT",
-          "lookup table",
-          "96x256",
-          "precomputed distances",
-          "frame B"
-        ]
+        "terms": ["LUT", "lookup table", "96x256", "precomputed distances", "frame B"]
       },
       {
         "sub": -2,
@@ -27941,13 +25586,7 @@
           "byte to LUT slot select diagram",
           "PQ doc 1 score example"
         ],
-        "terms": [
-          "frame C",
-          "byte index",
-          "LUT cell",
-          "sum",
-          "approximate distance"
-        ]
+        "terms": ["frame C", "byte index", "LUT cell", "sum", "approximate distance"]
       },
       {
         "sub": -2,
@@ -27966,13 +25605,7 @@
           "OPQ vs plain PQ visualization",
           "OPQ tighter k-means diagram"
         ],
-        "terms": [
-          "OPQ rotation",
-          "slot boundary",
-          "diagonal cluster",
-          "axis-aligned",
-          "k-means fit"
-        ]
+        "terms": ["OPQ rotation", "slot boundary", "diagonal cluster", "axis-aligned", "k-means fit"]
       },
       {
         "sub": -2,
@@ -27991,13 +25624,7 @@
           "production sweet spot PQ chart",
           "PQ tuning chart visual"
         ],
-        "terms": [
-          "dual-axis chart",
-          "m parameter",
-          "bytes-per-vector",
-          "recall@10",
-          "sweet spot"
-        ]
+        "terms": ["dual-axis chart", "m parameter", "bytes-per-vector", "recall@10", "sweet spot"]
       },
       {
         "sub": -2,
@@ -28016,13 +25643,7 @@
           "slot 0 drift diagram",
           "6x reconstruction error PQ illustration"
         ],
-        "terms": [
-          "drift",
-          "reconstruction error",
-          "distance 1.8",
-          "training avg 0.3",
-          "new vector"
-        ]
+        "terms": ["drift", "reconstruction error", "distance 1.8", "training avg 0.3", "new vector"]
       },
       {
         "sub": -2,
@@ -28041,13 +25662,7 @@
           "production PQ retrain chart",
           "PQ 95p error over 50M vectors"
         ],
-        "terms": [
-          "95p error",
-          "retrain threshold",
-          "retrain triggered",
-          "drift over time",
-          "ops ticks"
-        ]
+        "terms": ["95p error", "retrain threshold", "retrain triggered", "drift over time", "ops ticks"]
       }
     ],
     "11.16": [
@@ -28174,14 +25789,7 @@
           "Prefix containment property",
           "Self-contained embedding at every resolution"
         ],
-        "terms": [
-          "Russian doll",
-          "nested",
-          "concentric",
-          "prefix containment",
-          "resolution",
-          "matryoshka analogy"
-        ]
+        "terms": ["Russian doll", "nested", "concentric", "prefix containment", "resolution", "matryoshka analogy"]
       },
       {
         "sub": 3,
@@ -28335,13 +25943,7 @@
           "Which dims to truncate for 512",
           "Brackets showing valid truncations"
         ],
-        "terms": [
-          "prefix bar",
-          "truncation diagram",
-          "256 512 1024 3072",
-          "colored regions",
-          "MRL visualization"
-        ]
+        "terms": ["prefix bar", "truncation diagram", "256 512 1024 3072", "colored regions", "MRL visualization"]
       },
       {
         "sub": -2,
@@ -28762,16 +26364,7 @@
           "32x compression in HNSW",
           "default values M=16 ef_search=50"
         ],
-        "terms": [
-          "HNSW",
-          "PQ",
-          "small-world graph",
-          "M=16",
-          "ef_search",
-          "asymmetric lookup",
-          "subvector",
-          "centroid"
-        ]
+        "terms": ["HNSW", "PQ", "small-world graph", "M=16", "ef_search", "asymmetric lookup", "subvector", "centroid"]
       },
       {
         "sub": 1,
@@ -29394,14 +26987,7 @@
           "Predicate stage diagram",
           "Vector search funnel"
         ],
-        "terms": [
-          "funnel",
-          "pre-filter diagram",
-          "trapezoid",
-          "filter stages",
-          "brute-force survivors",
-          "1M corpus"
-        ]
+        "terms": ["funnel", "pre-filter diagram", "trapezoid", "filter stages", "brute-force survivors", "1M corpus"]
       },
       {
         "sub": -2,
@@ -29458,14 +27044,7 @@
           "HNSW O(log N) insert",
           "HNSW new node connection M=16"
         ],
-        "terms": [
-          "HNSW insert",
-          "M = 16",
-          "layer assignment",
-          "O(log N)",
-          "append-only",
-          "mL parameter"
-        ]
+        "terms": ["HNSW insert", "M = 16", "layer assignment", "O(log N)", "append-only", "mL parameter"]
       },
       {
         "sub": 1,
@@ -29489,14 +27068,7 @@
           "HNSW topology damage from deletes",
           "high-betweenness node removal effect"
         ],
-        "terms": [
-          "hub node",
-          "betweenness",
-          "broken paths",
-          "HNSW deletion",
-          "graph topology",
-          "silent recall drop"
-        ]
+        "terms": ["hub node", "betweenness", "broken paths", "HNSW deletion", "graph topology", "silent recall drop"]
       },
       {
         "sub": 2,
@@ -29520,14 +27092,7 @@
           "1-bit per node deleted check",
           "tombstone tradeoff vector search"
         ],
-        "terms": [
-          "tombstone",
-          "soft delete",
-          "WAL",
-          "lazy deletion",
-          "node.tombstone",
-          "top-k heap filter"
-        ]
+        "terms": ["tombstone", "soft delete", "WAL", "lazy deletion", "node.tombstone", "top-k heap filter"]
       },
       {
         "sub": 3,
@@ -29551,14 +27116,7 @@
           "tombstone bloat threshold",
           "delete pressure vector search recall"
         ],
-        "terms": [
-          "recall@10",
-          "rebuild trigger",
-          "tombstone bloat",
-          "ef_search = 50",
-          "20% threshold",
-          "graph holes"
-        ]
+        "terms": ["recall@10", "rebuild trigger", "tombstone bloat", "ef_search = 50", "20% threshold", "graph holes"]
       },
       {
         "sub": 4,
@@ -29646,14 +27204,7 @@
           "index family delete pain summary",
           "lifecycle of vectors in HNSW"
         ],
-        "terms": [
-          "updates and deletes",
-          "tombstone",
-          "rebuild",
-          "HNSW delete",
-          "segment rotation",
-          "index churn"
-        ]
+        "terms": ["updates and deletes", "tombstone", "rebuild", "HNSW delete", "segment rotation", "index churn"]
       },
       {
         "sub": -2,
@@ -29677,13 +27228,7 @@
           "HNSW path break diagram",
           "central node delete graph"
         ],
-        "terms": [
-          "hub D",
-          "broken edges",
-          "dashed red lines",
-          "graph deletion diagram",
-          "betweenness hub"
-        ]
+        "terms": ["hub D", "broken edges", "dashed red lines", "graph deletion diagram", "betweenness hub"]
       },
       {
         "sub": -2,
@@ -29960,12 +27505,7 @@
           "illustration of round-robin shard placement",
           "Shard 0 to Shard 3 diagram"
         ],
-        "terms": [
-          "random sharding diagram",
-          "fan-out diagram",
-          "shard 0-3",
-          "query fan-out illustration"
-        ]
+        "terms": ["random sharding diagram", "fan-out diagram", "shard 0-3", "query fan-out illustration"]
       },
       {
         "sub": -2,
@@ -30446,15 +27986,7 @@
           "BM25 RRF weighted alpha beta summary",
           "production hybrid search summary"
         ],
-        "terms": [
-          "hybrid search",
-          "BM25",
-          "RRF",
-          "weighted RRF",
-          "vector ANN",
-          "alpha beta",
-          "lexical search"
-        ]
+        "terms": ["hybrid search", "BM25", "RRF", "weighted RRF", "vector ANN", "alpha beta", "lexical search"]
       },
       {
         "sub": -2,
@@ -30478,14 +28010,7 @@
           "visualize BM25 plus vector merge",
           "hybrid pipeline picture"
         ],
-        "terms": [
-          "hybrid search diagram",
-          "RRF node",
-          "parallel rankers",
-          "Vector ANN",
-          "BM25",
-          "flow diagram"
-        ]
+        "terms": ["hybrid search diagram", "RRF node", "parallel rankers", "Vector ANN", "BM25", "flow diagram"]
       }
     ],
     "11.25": [
@@ -30545,16 +28070,7 @@
           "total query latency with rerank",
           "approximate then exact retrieval"
         ],
-        "terms": [
-          "two-stage retrieval",
-          "top-100",
-          "top-10",
-          "stage 1",
-          "stage 2",
-          "ANN",
-          "rerank",
-          "candidate pool"
-        ]
+        "terms": ["two-stage retrieval", "top-100", "top-10", "stage 1", "stage 2", "ANN", "rerank", "candidate pool"]
       },
       {
         "sub": 1,
@@ -30703,16 +28219,7 @@
           "throughput of cross encoder reranker",
           "scaling rerank with candidate count"
         ],
-        "terms": [
-          "A10 GPU",
-          "A100",
-          "H100",
-          "T4",
-          "per-pair latency",
-          "100 ms",
-          "rerank batching",
-          "QPS cap"
-        ]
+        "terms": ["A10 GPU", "A100", "H100", "T4", "per-pair latency", "100 ms", "rerank batching", "QPS cap"]
       },
       {
         "sub": 5,
@@ -31979,14 +29486,7 @@
           "pgvector setup steps",
           "Run pgvector on existing Postgres instance"
         ],
-        "terms": [
-          "pgvector",
-          "Postgres extension",
-          "CREATE EXTENSION vector",
-          "vector column",
-          "ACID",
-          "Postgres"
-        ]
+        "terms": ["pgvector", "Postgres extension", "CREATE EXTENSION vector", "vector column", "ACID", "Postgres"]
       },
       {
         "sub": 1,
@@ -32175,15 +29675,7 @@
           "pgvector limits and strengths",
           "pgvector design tradeoffs"
         ],
-        "terms": [
-          "pgvector",
-          "Postgres extension",
-          "HNSW",
-          "IVFFlat",
-          "cosine operator",
-          "ACID",
-          "scale limit"
-        ]
+        "terms": ["pgvector", "Postgres extension", "HNSW", "IVFFlat", "cosine operator", "ACID", "scale limit"]
       }
     ],
     "11.32": [
@@ -32244,16 +29736,7 @@
           "memory safety in vector databases",
           "Qdrant single binary install"
         ],
-        "terms": [
-          "Rust",
-          "Apache 2.0",
-          "Qdrant Cloud",
-          "REST",
-          "gRPC",
-          "K8s operator",
-          "P99 latency",
-          "no GC stalls"
-        ]
+        "terms": ["Rust", "Apache 2.0", "Qdrant Cloud", "REST", "gRPC", "K8s operator", "P99 latency", "no GC stalls"]
       },
       {
         "sub": 1,
@@ -32477,15 +29960,7 @@
           "Pinecone replicas throughput availability",
           "Pinecone horizontal scaling"
         ],
-        "terms": [
-          "pod",
-          "P1 pod",
-          "P2 pod",
-          "shard",
-          "replicas",
-          "Pinecone scaling",
-          "horizontal scale"
-        ]
+        "terms": ["pod", "P1 pod", "P2 pod", "shard", "replicas", "Pinecone scaling", "horizontal scale"]
       },
       {
         "sub": 2,
@@ -32637,15 +30112,7 @@
           "Pinecone P1 P2 pod tiers",
           "ops hours vs dollars Pinecone"
         ],
-        "terms": [
-          "Pinecone",
-          "pod",
-          "serverless",
-          "namespace",
-          "vendor lock-in",
-          "managed SaaS",
-          "ops capacity"
-        ]
+        "terms": ["Pinecone", "pod", "serverless", "namespace", "vendor lock-in", "managed SaaS", "ops capacity"]
       }
     ],
     "11.34": [

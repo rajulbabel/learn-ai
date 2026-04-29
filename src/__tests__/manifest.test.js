@@ -7,9 +7,7 @@ describe("embeddings manifest", () => {
   let binSize;
 
   it("loads", () => {
-    manifest = JSON.parse(
-      readFileSync("src/data/embeddings-manifest.json", "utf-8"),
-    );
+    manifest = JSON.parse(readFileSync("src/data/embeddings-manifest.json", "utf-8"));
     binSize = statSync("src/data/embeddings.bin").size;
     expect(manifest.dim).toBe(768);
     expect(manifest.modelChecksum.length).toBe(16);
@@ -30,10 +28,7 @@ describe("embeddings manifest", () => {
   it("every vector references a real chunk id", () => {
     const known = new Set(chunks.map((c) => c.id));
     for (const v of manifest.vectors) {
-      expect(
-        known.has(v.chunkId),
-        `manifest references unknown chunk ${v.chunkId}`,
-      ).toBe(true);
+      expect(known.has(v.chunkId), `manifest references unknown chunk ${v.chunkId}`).toBe(true);
     }
   });
 });

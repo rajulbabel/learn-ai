@@ -4,12 +4,7 @@ import { resolve, dirname } from "path";
 import { fileURLToPath } from "url";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const FILES = [
-  "vector-foundations.jsx",
-  "vector-compression.jsx",
-  "vector-production.jsx",
-  "vector-systems.jsx",
-];
+const FILES = ["vector-foundations.jsx", "vector-compression.jsx", "vector-production.jsx", "vector-systems.jsx"];
 
 const read = (rel) => readFileSync(resolve(__dirname, "../sections", rel), "utf8");
 

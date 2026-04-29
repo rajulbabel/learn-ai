@@ -30,19 +30,27 @@ describe("build-search-index", () => {
 
   it("calls chunkSection for changed files and skips unchanged ones via hash cache", async () => {
     mockChunk.mockResolvedValue({
-      "1.1": [
+      1.1: [
         {
           sub: 0,
           kind: "concept",
           text: "NN content explained",
           summary: "Intro to NNs",
-          queries: ["what is a neural network", "intro to nn", "neural network basics", "explain neural networks", "nn primer"],
+          queries: [
+            "what is a neural network",
+            "intro to nn",
+            "neural network basics",
+            "explain neural networks",
+            "nn primer",
+          ],
           terms: ["neural network"],
         },
       ],
     });
 
-    const chapters = [{ id: "1.1", title: "What is a Neural Network?", section: 1, sectionFile: "neural-foundations.jsx" }];
+    const chapters = [
+      { id: "1.1", title: "What is a Neural Network?", section: 1, sectionFile: "neural-foundations.jsx" },
+    ];
     const sectionNames = { 1: "Neural Network Foundations" };
 
     // First run: cache miss, calls Claude
@@ -65,7 +73,7 @@ describe("build-search-index", () => {
 
   it("writes chunks.json with stable IDs and sorted order", async () => {
     mockChunk.mockResolvedValue({
-      "1.1": [
+      1.1: [
         {
           sub: 0,
           kind: "concept",
@@ -115,13 +123,13 @@ describe("build-search-index", () => {
     // seed a corrupt cache file
     writeFileSync(join(workDir, "src", "data", "chunk-cache.json"), "{not valid json");
     mockChunk.mockResolvedValue({
-      "1.1": [
+      1.1: [
         {
           sub: 0,
           kind: "concept",
           text: "Recovered chunk content",
           summary: "S",
-          queries: ["q1","q2","q3","q4","q5","q6","q7","q8","q9","q10"],
+          queries: ["q1", "q2", "q3", "q4", "q5", "q6", "q7", "q8", "q9", "q10"],
           terms: ["t"],
         },
       ],

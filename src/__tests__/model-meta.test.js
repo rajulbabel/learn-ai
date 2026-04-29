@@ -16,9 +16,7 @@ describe("bge-base-en-v1.5 model assets", () => {
   });
 
   it("has the weight file referenced by model-meta", () => {
-    const meta = JSON.parse(
-      readFileSync("public/models/bge-base-en-v1.5-q4/model-meta.json", "utf-8"),
-    );
+    const meta = JSON.parse(readFileSync("public/models/bge-base-en-v1.5-q4/model-meta.json", "utf-8"));
     expect(existsSync(`public/models/bge-base-en-v1.5-q4/${meta.weightFile}`)).toBe(true);
   });
 });

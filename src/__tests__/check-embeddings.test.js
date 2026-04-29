@@ -18,12 +18,32 @@ function setup({ chunks, manifest, bin }) {
 describe("check-embeddings (new format)", () => {
   it("exits 0 when manifest, chunks, and bin are consistent", () => {
     const dir = setup({
-      chunks: [{ id: "a", chapterId: "1.1", sub: 0, kind: "concept", text: "x", summary: "x", queries: ["a","b","c","d","e"], terms: ["t"] }],
+      chunks: [
+        {
+          id: "a",
+          chapterId: "1.1",
+          sub: 0,
+          kind: "concept",
+          text: "x",
+          summary: "x",
+          queries: ["a", "b", "c", "d", "e"],
+          terms: ["t"],
+        },
+      ],
       manifest: {
         modelChecksum: "abc",
         dim: 4,
         count: 8,
-        vectors: Array(8).fill(0).map((_, i) => ({ chunkId: "a", reprKind: i === 0 ? "text" : "query", reprIndex: i, contentHash: "h", vectorIndex: i, scale: 0.1 })),
+        vectors: Array(8)
+          .fill(0)
+          .map((_, i) => ({
+            chunkId: "a",
+            reprKind: i === 0 ? "text" : "query",
+            reprIndex: i,
+            contentHash: "h",
+            vectorIndex: i,
+            scale: 0.1,
+          })),
       },
       bin: Buffer.alloc(8 * 4),
     });
@@ -33,12 +53,32 @@ describe("check-embeddings (new format)", () => {
 
   it("exits 1 when bin size disagrees with manifest", () => {
     const dir = setup({
-      chunks: [{ id: "a", chapterId: "1.1", sub: 0, kind: "concept", text: "x", summary: "x", queries: ["a","b","c","d","e"], terms: ["t"] }],
+      chunks: [
+        {
+          id: "a",
+          chapterId: "1.1",
+          sub: 0,
+          kind: "concept",
+          text: "x",
+          summary: "x",
+          queries: ["a", "b", "c", "d", "e"],
+          terms: ["t"],
+        },
+      ],
       manifest: {
         modelChecksum: "abc",
         dim: 4,
         count: 8,
-        vectors: Array(8).fill(0).map((_, i) => ({ chunkId: "a", reprKind: "query", reprIndex: i, contentHash: "h", vectorIndex: i, scale: 0.1 })),
+        vectors: Array(8)
+          .fill(0)
+          .map((_, i) => ({
+            chunkId: "a",
+            reprKind: "query",
+            reprIndex: i,
+            contentHash: "h",
+            vectorIndex: i,
+            scale: 0.1,
+          })),
       },
       bin: Buffer.alloc(8 * 4 - 1),
     });
@@ -49,8 +89,26 @@ describe("check-embeddings (new format)", () => {
   it("exits 1 when a chunk id has zero vectors in the manifest", () => {
     const dir = setup({
       chunks: [
-        { id: "a", chapterId: "1.1", sub: 0, kind: "concept", text: "x", summary: "x", queries: ["a","b","c","d","e"], terms: ["t"] },
-        { id: "b", chapterId: "1.2", sub: 0, kind: "concept", text: "x", summary: "x", queries: ["a","b","c","d","e"], terms: ["t"] },
+        {
+          id: "a",
+          chapterId: "1.1",
+          sub: 0,
+          kind: "concept",
+          text: "x",
+          summary: "x",
+          queries: ["a", "b", "c", "d", "e"],
+          terms: ["t"],
+        },
+        {
+          id: "b",
+          chapterId: "1.2",
+          sub: 0,
+          kind: "concept",
+          text: "x",
+          summary: "x",
+          queries: ["a", "b", "c", "d", "e"],
+          terms: ["t"],
+        },
       ],
       manifest: {
         modelChecksum: "abc",

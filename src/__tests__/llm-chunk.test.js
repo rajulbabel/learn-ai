@@ -22,7 +22,7 @@ describe("llm-chunk (claude CLI subprocess)", () => {
   let chunkSection;
   let mockSpawn;
 
-  const tenQueries = ["q1","q2","q3","q4","q5","q6","q7","q8","q9","q10"];
+  const tenQueries = ["q1", "q2", "q3", "q4", "q5", "q6", "q7", "q8", "q9", "q10"];
   const sampleText = "Sample chunk text for testing purposes.";
 
   beforeEach(async () => {
@@ -35,7 +35,7 @@ describe("llm-chunk (claude CLI subprocess)", () => {
   it("invokes claude CLI with expected flags and returns parsed chunks", async () => {
     const innerJson = JSON.stringify({
       chunks: {
-        "1.1": [
+        1.1: [
           {
             sub: 0,
             kind: "concept",
@@ -58,7 +58,9 @@ describe("llm-chunk (claude CLI subprocess)", () => {
     const result = await chunkSection({
       filePath: "src/sections/neural-foundations.jsx",
       source: "/* fake source */",
-      chapters: [{ id: "1.1", title: "What is a Neural Network?", section: 1, sectionName: "Neural Network Foundations" }],
+      chapters: [
+        { id: "1.1", title: "What is a Neural Network?", section: 1, sectionName: "Neural Network Foundations" },
+      ],
       svgDescriptions: {},
     });
 
@@ -84,7 +86,9 @@ describe("llm-chunk (claude CLI subprocess)", () => {
 
   it("retries on non-zero exit code then succeeds", async () => {
     const innerJson = JSON.stringify({
-      chunks: { "1.1": [{ sub: 0, kind: "summary", text: sampleText, summary: "x is x", queries: tenQueries, terms: ["t"] }] },
+      chunks: {
+        1.1: [{ sub: 0, kind: "summary", text: sampleText, summary: "x is x", queries: tenQueries, terms: ["t"] }],
+      },
     });
     const wrapperJson = JSON.stringify({ type: "result", subtype: "success", is_error: false, result: innerJson });
 
@@ -104,7 +108,7 @@ describe("llm-chunk (claude CLI subprocess)", () => {
 
   it("throws on schema-invalid response (empty queries)", async () => {
     const innerJson = JSON.stringify({
-      chunks: { "1.1": [{ sub: 0, kind: "summary", text: sampleText, summary: "x is x", queries: [], terms: ["t"] }] },
+      chunks: { 1.1: [{ sub: 0, kind: "summary", text: sampleText, summary: "x is x", queries: [], terms: ["t"] }] },
     });
     const wrapperJson = JSON.stringify({ type: "result", subtype: "success", is_error: false, result: innerJson });
     mockSpawn.mockImplementationOnce(fakeProcFactory({ stdout: wrapperJson }));
@@ -129,9 +133,7 @@ describe("llm-chunk (claude CLI subprocess)", () => {
       result: "",
       structured_output: {
         chunks: {
-          "1.1": [
-            { sub: 0, kind: "concept", text: sampleText, summary: "Intro", queries: tenQueries, terms: ["t"] },
-          ],
+          1.1: [{ sub: 0, kind: "concept", text: sampleText, summary: "Intro", queries: tenQueries, terms: ["t"] }],
         },
       },
     });
@@ -147,7 +149,12 @@ describe("llm-chunk (claude CLI subprocess)", () => {
   });
 
   it("throws on is_error=true wrapper", async () => {
-    const wrapperJson = JSON.stringify({ type: "result", subtype: "error_during_execution", is_error: true, result: "model overloaded" });
+    const wrapperJson = JSON.stringify({
+      type: "result",
+      subtype: "error_during_execution",
+      is_error: true,
+      result: "model overloaded",
+    });
     // Same wrapper repeated 5 times because retries
     for (let i = 0; i <= 4; i++) {
       mockSpawn.mockImplementationOnce(fakeProcFactory({ stdout: wrapperJson }));

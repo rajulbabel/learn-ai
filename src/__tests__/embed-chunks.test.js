@@ -63,9 +63,7 @@ describe("embed-chunks", () => {
 
   it("writes embeddings.bin and manifest with one vector per representation", async () => {
     await runEmbed({ rootDir: workDir, log: () => {} });
-    const manifest = JSON.parse(
-      readFileSync(join(workDir, "src", "data", "embeddings-manifest.json"), "utf-8"),
-    );
+    const manifest = JSON.parse(readFileSync(join(workDir, "src", "data", "embeddings-manifest.json"), "utf-8"));
     expect(manifest.dim).toBe(4);
     expect(manifest.modelChecksum).toBe("abc1234567890def");
     // 1 chunk × (1 text + 1 summary + 3 queries + 1 terms) = 6 vectors
@@ -101,16 +99,11 @@ describe("embed-chunks", () => {
       readFileSync(join(workDir, "public", "models", "bge-base-en-v1.5-q4", "model-meta.json"), "utf-8"),
     );
     meta.checksum = "ffffffffffffffff";
-    writeFileSync(
-      join(workDir, "public", "models", "bge-base-en-v1.5-q4", "model-meta.json"),
-      JSON.stringify(meta),
-    );
+    writeFileSync(join(workDir, "public", "models", "bge-base-en-v1.5-q4", "model-meta.json"), JSON.stringify(meta));
 
     await runEmbed({ rootDir: workDir, log: () => {} });
     expect(pipelineMock.mock.calls.length).toBeGreaterThan(factoryCallsAfterFirst);
-    const manifest = JSON.parse(
-      readFileSync(join(workDir, "src", "data", "embeddings-manifest.json"), "utf-8"),
-    );
+    const manifest = JSON.parse(readFileSync(join(workDir, "src", "data", "embeddings-manifest.json"), "utf-8"));
     expect(manifest.modelChecksum).toBe("ffffffffffffffff");
   });
 
@@ -118,9 +111,7 @@ describe("embed-chunks", () => {
     writeFileSync(join(workDir, "src", "data", "embeddings.bin"), new Uint8Array(0));
     writeFileSync(join(workDir, "src", "data", "embeddings-manifest.json"), "{not valid json");
     await runEmbed({ rootDir: workDir, log: () => {} });
-    const manifest = JSON.parse(
-      readFileSync(join(workDir, "src", "data", "embeddings-manifest.json"), "utf-8"),
-    );
+    const manifest = JSON.parse(readFileSync(join(workDir, "src", "data", "embeddings-manifest.json"), "utf-8"));
     expect(manifest.count).toBe(6);
   });
 
@@ -132,9 +123,7 @@ describe("embed-chunks", () => {
       return { tolist: () => arr.map(() => new Array(4).fill(0)) };
     });
     await runEmbed({ rootDir: workDir, log: () => {} });
-    const manifest = JSON.parse(
-      readFileSync(join(workDir, "src", "data", "embeddings-manifest.json"), "utf-8"),
-    );
+    const manifest = JSON.parse(readFileSync(join(workDir, "src", "data", "embeddings-manifest.json"), "utf-8"));
     // scale must be 1/127 ≈ 0.00787...
     for (const v of manifest.vectors) {
       expect(v.scale).toBeCloseTo(1 / 127, 5);

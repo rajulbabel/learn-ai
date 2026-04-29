@@ -43,10 +43,13 @@ describe("embed-chunks", () => {
     );
 
     let counter = 0;
-    pipelineMock = vi.fn(async () => async (_text) => {
-      counter++;
-      const vec = new Array(4).fill(0).map((_, i) => (counter * (i + 1)) / 100);
-      return { tolist: () => [vec] };
+    pipelineMock = vi.fn(async () => async (input) => {
+      const arr = Array.isArray(input) ? input : [input];
+      const vecs = arr.map(() => {
+        counter++;
+        return new Array(4).fill(0).map((_, i) => (counter * (i + 1)) / 100);
+      });
+      return { tolist: () => vecs };
     });
     vi.doMock("@huggingface/transformers", () => ({ pipeline: pipelineMock }));
 
@@ -76,13 +79,65 @@ describe("embed-chunks", () => {
 
   it("skips unchanged reprs on second run by reusing the prior manifest", async () => {
     await runEmbed({ rootDir: workDir, log: () => {} });
-    const callsBefore = pipelineMock.mock.results[0].value;
-    const before = await callsBefore;
-    const calls1 = before.mock?.calls?.length ?? 0;
+    const factoryCallsAfterFirst = pipelineMock.mock.calls.length;
+    const binBefore = readFileSync(join(workDir, "src", "data", "embeddings.bin"));
 
-    // Re-run with no changes: every repr matches the previous manifest by contentHash, so nothing is re-embedded.
     await runEmbed({ rootDir: workDir, log: () => {} });
-    const calls2 = before.mock?.calls?.length ?? 0;
-    expect(calls2).toBe(calls1);
+    const factoryCallsAfterSecond = pipelineMock.mock.calls.length;
+    const binAfter = readFileSync(join(workDir, "src", "data", "embeddings.bin"));
+
+    // No new pipeline-factory invocation on the second run (everything reused).
+    expect(factoryCallsAfterSecond).toBe(factoryCallsAfterFirst);
+    // Bin bytes must be identical.
+    expect(binAfter.equals(binBefore)).toBe(true);
+  });
+
+  it("rebuilds all vectors when modelChecksum changes", async () => {
+    await runEmbed({ rootDir: workDir, log: () => {} });
+    const factoryCallsAfterFirst = pipelineMock.mock.calls.length;
+
+    // Change the model meta checksum → invalidates cache
+    const meta = JSON.parse(
+      readFileSync(join(workDir, "public", "models", "bge-base-en-v1.5-q4", "model-meta.json"), "utf-8"),
+    );
+    meta.checksum = "ffffffffffffffff";
+    writeFileSync(
+      join(workDir, "public", "models", "bge-base-en-v1.5-q4", "model-meta.json"),
+      JSON.stringify(meta),
+    );
+
+    await runEmbed({ rootDir: workDir, log: () => {} });
+    expect(pipelineMock.mock.calls.length).toBeGreaterThan(factoryCallsAfterFirst);
+    const manifest = JSON.parse(
+      readFileSync(join(workDir, "src", "data", "embeddings-manifest.json"), "utf-8"),
+    );
+    expect(manifest.modelChecksum).toBe("ffffffffffffffff");
+  });
+
+  it("recovers from a corrupt embeddings-manifest.json", async () => {
+    writeFileSync(join(workDir, "src", "data", "embeddings.bin"), new Uint8Array(0));
+    writeFileSync(join(workDir, "src", "data", "embeddings-manifest.json"), "{not valid json");
+    await runEmbed({ rootDir: workDir, log: () => {} });
+    const manifest = JSON.parse(
+      readFileSync(join(workDir, "src", "data", "embeddings-manifest.json"), "utf-8"),
+    );
+    expect(manifest.count).toBe(6);
+  });
+
+  it("uses fallback scale when an embedding is all-zero", async () => {
+    // Override the pipeline factory to return zero vectors
+    pipelineMock.mockImplementationOnce(async () => async (_input) => {
+      // Handle either a single string or an array (batched call)
+      const arr = Array.isArray(_input) ? _input : [_input];
+      return { tolist: () => arr.map(() => new Array(4).fill(0)) };
+    });
+    await runEmbed({ rootDir: workDir, log: () => {} });
+    const manifest = JSON.parse(
+      readFileSync(join(workDir, "src", "data", "embeddings-manifest.json"), "utf-8"),
+    );
+    // scale must be 1/127 ≈ 0.00787...
+    for (const v of manifest.vectors) {
+      expect(v.scale).toBeCloseTo(1 / 127, 5);
+    }
   });
 });

@@ -119,7 +119,10 @@ export async function runEmbed({ rootDir = process.cwd(), log = console.log } = 
   const dim = meta.dim;
   const newBin = Buffer.alloc(desired.length * dim);
   const newVectors = [];
+  const BATCH_SIZE = 32;
 
+  // ── First pass: reuse what we can, queue the rest ──
+  const pending = [];
   for (let i = 0; i < desired.length; i++) {
     const d = desired[i];
     const key = `${d.chunkId}|${d.reprKind}|${d.reprIndex}|${d.contentHash}`;
@@ -135,22 +138,48 @@ export async function runEmbed({ rootDir = process.cwd(), log = console.log } = 
         vectorIndex: i,
         scale: reused.scale,
       });
-      continue;
+    } else {
+      // Reserve a slot in newVectors at position i; we'll fill it during pass 2.
+      newVectors.push(null);
+      pending.push({ index: i, descriptor: d });
     }
+  }
 
-    const result = await embedFn(d.content, { pooling: "mean", normalize: true });
-    const vec = result.tolist()[0];
-    const { bytes, scale } = quantizeInt8(vec);
-    Buffer.from(bytes.buffer).copy(newBin, i * dim);
-    newVectors.push({
-      chunkId: d.chunkId,
-      reprKind: d.reprKind,
-      reprIndex: d.reprIndex,
-      contentHash: d.contentHash,
-      vectorIndex: i,
-      scale,
-    });
-    if ((i + 1) % 200 === 0) log(`  ${i + 1}/${desired.length}`);
+  // ── Second pass: embed pending in batches ──
+  let embedded = 0;
+  for (let bStart = 0; bStart < pending.length; bStart += BATCH_SIZE) {
+    const batch = pending.slice(bStart, bStart + BATCH_SIZE);
+    const texts = batch.map((p) => p.descriptor.content);
+    let results;
+    try {
+      const tensor = await embedFn(texts, { pooling: "mean", normalize: true });
+      results = tensor.tolist();
+    } catch (err) {
+      const culprits = batch
+        .map((p) => `${p.descriptor.chunkId}/${p.descriptor.reprKind}#${p.descriptor.reprIndex}`)
+        .join(", ");
+      throw new Error(`embedding batch failed (${culprits}): ${err.message}`);
+    }
+    for (let bi = 0; bi < batch.length; bi++) {
+      const { index, descriptor: d } = batch[bi];
+      const vec = results[bi];
+      const { bytes, scale } = quantizeInt8(vec);
+      Buffer.from(bytes.buffer, bytes.byteOffset, bytes.byteLength).copy(newBin, index * dim);
+      newVectors[index] = {
+        chunkId: d.chunkId,
+        reprKind: d.reprKind,
+        reprIndex: d.reprIndex,
+        contentHash: d.contentHash,
+        vectorIndex: index,
+        scale,
+      };
+    }
+    embedded += batch.length;
+    log(`  embedded ${embedded}/${pending.length}`);
+  }
+
+  if (newVectors.some((v) => v === null)) {
+    throw new Error("internal: some vectors were not filled");
   }
 
   const newManifest = {

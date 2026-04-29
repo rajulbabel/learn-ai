@@ -459,7 +459,29 @@ user to remind you.
   learner sees how concepts connect across chapters.
 - **Titles always center-aligned** - every Box title, sub-step title, or section
   heading inside a Box MUST use `center` (the T component's center prop). No
-  exceptions. This applies to the first bold T element inside every Box.
+  exceptions. This applies to the first bold T element inside every Box AND to
+  any title T inside grid/flex card layouts (multi-column cards inside a Box).
+  Inside a card div, the title T MUST have `center`, the description T MUST have
+  `center`, and the parent card div MUST also have `textAlign: "center"`. No
+  exceptions for "card-style" layouts - if it has a title, it gets centered.
+- **Capitalize first letter of every visible text fragment** - every line of
+  monospace formula boxes, every cell in tables, every bullet point, every
+  column header, every card name/description/note, every SVG text label MUST
+  start with a capital letter. Examples that MUST be capitalized: `name:
+  "Cosine"`, `latency: "Normal"`, `params: ["Fast to build"]`, `pain: "Queries
+  on tenant_id..."`, `tech: "Cross-encoder"`, `year: "Today"`, SVG `<text>`
+  labels like "Query" / "Doc" / "Score". Exceptions: brand names that are
+  officially lowercase (pgvector, numpy, iPhone), variable identifiers inside a
+  math formula expression (the `q_vec` in `Score = cosine(q_vec, d_vec)`),
+  parameter syntax (`m = 16`, `ef_search = 40`), tokens like `[CLS]` / `[SEP]`.
+  When unsure, capitalize. The first letter of a LINE is what counts -
+  everything after a colon or first word does not need re-capitalization.
+- **SVG diagrams must be horizontally centered in their viewBox** - never
+  hardcode `x = 40` for elements in a `viewBox 0 0 520 ...`. Compute symmetric
+  padding: `x_start = (viewBox_width - element_span) / 2`. Token rows,
+  transformer boxes, score circles, and any element-row layout must have equal
+  left/right margins. After placing, verify visually in Chrome - do not trust
+  the math alone.
 - **Colored boxes, not invisible ones** - always use actual colors for Box
   (`C.cyan`, `C.purple`, `C.red`, `C.yellow`, `C.green`, `C.orange`, `C.blue`).
   NEVER use `Box color={C.card}` - it makes the box invisible against the dark

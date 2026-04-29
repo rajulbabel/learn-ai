@@ -124,6 +124,71 @@ grep -n "\u2014" src/sections/*.jsx
 ```
 Em-dashes are forbidden per style rules. Report any found.
 
+### 7. Lowercase first-letter check (capitalization)
+
+Every visible text fragment must start with a capital letter. Run these greps and triage results:
+
+```bash
+# Object-literal cell fields with lowercase first char in the value
+grep -nE '(name|t|d|tech|size|kind|note|pain|what|when|why|trade|cost|threshold|metric|ref|bucket|posture|side|axis|q|p|n|side|phase|latency|year|loss|ex|side|layer|op|stage|side|item|side):\s*"[a-z]' src/sections/*.jsx \
+  | grep -vE '"\s*(pgvector|numpy|iPhone|none|http|https|cosine|ada-002|tenant_id|np\.|fp\.|db\.|q_vec|d_vec|score\(|the\s)' \
+  | head -50
+
+# Multi-line monospace boxes - lines starting with lowercase right after <br />
+grep -nE '<br\s*/?>\s*$' src/sections/*.jsx -A 1 | grep -E '^\s+[a-z]' | head -30
+
+# Array entries that display as cells/bullets
+grep -nE '(items|results|picks|defaults|params|pros|cons):\s*\[\s*"[a-z]' src/sections/*.jsx | head -30
+
+# SVG text labels with lowercase
+grep -nE '<text[^>]*>\s*[a-z]' src/sections/*.jsx | grep -vE '\[CLS\]|\[SEP\]' | head -30
+```
+
+For each match, decide:
+- Is it user-visible text that renders as a cell/title/bullet/formula-line? \u2192 CAPITALIZE.
+- Is it a brand name (pgvector, numpy)? \u2192 keep.
+- Is it a variable name inside a math expression (q_vec inside `cosine(q_vec, d_vec)`)? \u2192 keep.
+- Is it a code identifier (`m = 16`, `ef_search = 40`)? \u2192 keep.
+
+When unsure, capitalize.
+
+### 8. Card title centering
+
+Inside grid/flex card layouts, the title T must have `center` and parent div must have `textAlign: "center"`. Detect cards missing this:
+
+```bash
+# Pattern: a card div followed by T without `center`
+grep -nB 2 '<T color={[^}]*} bold size={1[0-9]}' src/sections/*.jsx | grep -B 2 -A 0 'bold size={1[0-9]}>' | head -60
+```
+
+Manually verify any T inside a `.map()` over an array of cards has the `center` prop. Inner card descriptions (the second/third T) should also have `center` for visual consistency.
+
+### 9. SVG horizontal balance
+
+For any SVG with a row of elements (tokens, flowchart cells, attention nodes), ensure left/right margins are equal:
+
+```js
+// Run in Chrome dev tools on any SVG
+function checkBalance(svg) {
+  const vb = svg.viewBox.baseVal;
+  const elements = [...svg.querySelectorAll('rect, circle')];
+  if (elements.length === 0) return;
+  const left = Math.min(...elements.map(e => +e.getAttribute('x') ?? +e.getAttribute('cx') - +e.getAttribute('r')));
+  const right = Math.max(...elements.map(e => {
+    const x = +(e.getAttribute('x') ?? (+e.getAttribute('cx') - +e.getAttribute('r')));
+    const w = +(e.getAttribute('width') ?? 2*+e.getAttribute('r'));
+    return x + w;
+  }));
+  const leftMargin = left;
+  const rightMargin = vb.width - right;
+  return { left: leftMargin, right: rightMargin, delta: Math.abs(leftMargin - rightMargin) };
+}
+```
+
+If `delta > 10`, the SVG is visibly skewed. Recompute starting `x` as `(viewBox_width - element_span) / 2`.
+
+Do not trust math alone - take a screenshot in Chrome and verify the rendered layout looks centered.
+
 ## Report Format
 
 For each issue found, report:

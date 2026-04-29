@@ -5,6 +5,7 @@ import SearchOverlay from "../search-overlay.jsx";
 // Mock search.js
 vi.mock("../search.js", () => ({
   initSearch: vi.fn(() => Promise.resolve()),
+  prefetchSearch: vi.fn(() => Promise.resolve()),
   search: vi.fn(() => Promise.resolve([])),
   searchText: vi.fn(() => []),
   getSearchStatus: vi.fn(() => ({ mode: "off", progress: 0 })),

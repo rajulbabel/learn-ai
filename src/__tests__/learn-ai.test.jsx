@@ -42,6 +42,7 @@ vi.mock("../search-overlay.jsx", () => ({
 }));
 vi.mock("../search.js", () => ({
   initSearch: vi.fn(() => Promise.resolve()),
+  prefetchSearch: vi.fn(() => Promise.resolve()),
   getSearchStatus: vi.fn(() => ({ mode: "off", progress: 0 })),
   search: vi.fn(() => Promise.resolve([])),
   searchText: vi.fn(() => []),
@@ -53,6 +54,7 @@ vi.mock("../nav-persistence.js", () => ({
 
 afterEach(async () => {
   cleanup();
+  delete globalThis.requestIdleCallback;
   const navMod = await import("../nav-persistence.js");
   navMod.loadNav.mockReturnValue(null);
   const searchMod = await import("../search.js");
@@ -61,8 +63,11 @@ afterEach(async () => {
 
 // Helper: render LearnAI and wait for async chapter load. Mocks the <main>
 // element's bounding rect so click-position tests have predictable side-band
-// geometry (jsdom returns all-zero rects by default).
+// geometry (jsdom returns all-zero rects by default). Also fires window.load
+// + a synchronous requestIdleCallback shim so search prefetch + poll triggers
+// activate during the test (production defers them until idle).
 async function renderLearnAI({ mainBounds = { left: 200, right: 824 } } = {}) {
+  globalThis.requestIdleCallback = (cb) => setTimeout(cb, 0);
   const mod = await import("../learn-ai.jsx");
   const LearnAI = mod.default;
   let result;
@@ -70,6 +75,7 @@ async function renderLearnAI({ mainBounds = { left: 200, right: 824 } } = {}) {
     result = render(<LearnAI />);
   });
   await act(async () => {
+    window.dispatchEvent(new Event("load"));
     await new Promise((r) => setTimeout(r, 50));
   });
   const main = document.querySelector("main");
@@ -188,6 +194,66 @@ describe("LearnAI search bar", () => {
       await new Promise((r) => setTimeout(r, 50));
     });
     expect(screen.getByTestId("search-overlay")).toBeTruthy();
+  });
+});
+
+describe("LearnAI author footer (SEO)", () => {
+  it("renders a <footer> with author credit", async () => {
+    await renderLearnAI();
+    const footer = document.querySelector("footer");
+    expect(footer).toBeTruthy();
+    expect(footer.textContent).toContain("Rajul Babel");
+  });
+
+  it("footer links to GitHub repo", async () => {
+    await renderLearnAI();
+    const footer = document.querySelector("footer");
+    const link = footer.querySelector('a[href*="github.com/rajulbabel"]');
+    expect(link).toBeTruthy();
+  });
+
+  it("footer link uses rel=author for SEO authorship", async () => {
+    await renderLearnAI();
+    const footer = document.querySelector("footer");
+    const author = footer.querySelector('a[rel*="author"]');
+    expect(author).toBeTruthy();
+    expect(author.textContent).toContain("Rajul Babel");
+  });
+
+  it("footer links to LinkedIn profile", async () => {
+    await renderLearnAI();
+    const footer = document.querySelector("footer");
+    const link = footer.querySelector('a[href*="linkedin.com/in/rajulbabel"]');
+    expect(link).toBeTruthy();
+  });
+
+  it("footer renders author credit and links on separate lines", async () => {
+    await renderLearnAI();
+    const footer = document.querySelector("footer");
+    const lines = footer.querySelectorAll("[data-footer-line]");
+    expect(lines.length).toBe(2);
+    expect(lines[0].textContent).toContain("Built by");
+    expect(lines[0].textContent).toContain("Rajul Babel");
+    expect(lines[1].textContent).toContain("LinkedIn");
+    expect(lines[1].textContent).toContain("GitHub");
+  });
+
+  it("footer divider spans full parent width (no maxWidth cap)", async () => {
+    await renderLearnAI();
+    const footer = document.querySelector("footer");
+    expect(footer.style.maxWidth).toBe("");
+    expect(footer.style.alignSelf).toBe("stretch");
+    expect(footer.style.borderTop).toContain("1px solid");
+  });
+
+  it("renders spacer before footer to enforce min gap above divider", async () => {
+    await renderLearnAI();
+    const footer = document.querySelector("footer");
+    const spacer = footer.previousElementSibling;
+    expect(spacer).toBeTruthy();
+    expect(spacer.getAttribute("data-footer-spacer")).toBe("true");
+    expect(spacer.style.flexGrow).toBe("1");
+    expect(spacer.style.minHeight).toBe("48px");
   });
 });
 

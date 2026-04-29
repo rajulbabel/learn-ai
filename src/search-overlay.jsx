@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import { chapters, sectionColors, C } from "./config.js";
 import { T } from "./components.jsx";
-import { initSearch, search, searchText, getSearchStatus } from "./search.js";
+import { initSearch, search, searchText, getSearchStatus, prefetchSearch } from "./search.js";
 
 /** Minimum relevance (as fraction of top score) to show a result. */
 const RELEVANCE_THRESHOLD = 0.15;
@@ -84,6 +84,7 @@ export default function SearchOverlay({ open, onClose, onGoTo }) {
   useEffect(() => {
     if (open) {
       initSearch().catch(() => {});
+      prefetchSearch?.().catch(() => {});
       setTimeout(() => inputRef.current?.focus(), 100);
       const s = getSearchStatus();
       setSearchMode(s.mode);

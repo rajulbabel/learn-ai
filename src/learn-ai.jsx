@@ -271,10 +271,23 @@ export default function LearnAI() {
       // After the first chapter loads, start downloading semantic search in background
       if (!firstLoadDone.current) {
         firstLoadDone.current = true;
-        getSearchModule().then((mod) => {
-          mod.initSearch().catch(() => {});
-          startSemanticPoll();
-        });
+        // Defer all search work until the page is fully idle so it never competes
+        // with first paint or section/asset loading.
+        const trigger = () => {
+          const idle = (cb) =>
+            typeof requestIdleCallback === "function"
+              ? requestIdleCallback(cb, { timeout: 3000 })
+              : setTimeout(cb, 1000);
+          idle(() => {
+            getSearchModule().then((mod) => {
+              mod.initSearch().catch(() => {});
+              mod.prefetchSearch?.().catch(() => {});
+              startSemanticPoll();
+            });
+          });
+        };
+        if (document.readyState === "complete") trigger();
+        else window.addEventListener("load", trigger, { once: true });
       }
     });
     return () => {
@@ -523,6 +536,7 @@ export default function LearnAI() {
     // In case search hasn't initialized yet (e.g., opened very fast), ensure it starts
     getSearchModule().then((mod) => {
       mod.initSearch().catch(() => {});
+      mod.prefetchSearch?.().catch(() => {});
     });
   }, []);
 
@@ -802,6 +816,62 @@ export default function LearnAI() {
             onHover={(s) => setNavHint(s ? "right" : null)}
           />
         )}
+
+        <div data-footer-spacer="true" aria-hidden="true" style={{ flex: 1, minHeight: 48, alignSelf: "stretch" }} />
+
+        <footer
+          style={{
+            alignSelf: "stretch",
+            marginLeft: "-8%",
+            marginRight: "-8%",
+            marginBottom: -30,
+            minHeight: 58,
+            paddingLeft: "8%",
+            paddingRight: "8%",
+            borderTop: "1px solid transparent",
+            borderImageSource: "linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.13) 50%, rgba(255,255,255,0) 100%)",
+            borderImageSlice: 1,
+            textAlign: "center",
+            fontSize: 12,
+            color: C.dim,
+            fontFamily: "'Segoe UI', system-ui, sans-serif",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <div data-footer-line="author" style={{ marginBottom: 3 }}>
+            Built by{" "}
+            <a
+              href="https://github.com/rajulbabel"
+              rel="author noopener noreferrer"
+              target="_blank"
+              style={{ color: C.bright, textDecoration: "none", fontWeight: 600 }}
+            >
+              Rajul Babel
+            </a>
+          </div>
+          <div data-footer-line="links">
+            <a
+              href="https://www.linkedin.com/in/rajulbabel"
+              rel="noopener noreferrer"
+              target="_blank"
+              style={{ color: C.dim, textDecoration: "none" }}
+            >
+              LinkedIn
+            </a>
+            {" · "}
+            <a
+              href="https://github.com/rajulbabel/learn-ai"
+              rel="noopener noreferrer"
+              target="_blank"
+              style={{ color: C.dim, textDecoration: "none" }}
+            >
+              GitHub
+            </a>
+          </div>
+        </footer>
       </div>
     </>
   );

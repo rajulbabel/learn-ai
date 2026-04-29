@@ -829,7 +829,8 @@ export default function LearnAI() {
             paddingLeft: "8%",
             paddingRight: "8%",
             borderTop: "1px solid transparent",
-            borderImageSource: "linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.13) 50%, rgba(255,255,255,0) 100%)",
+            borderImageSource:
+              "linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.13) 50%, rgba(255,255,255,0) 100%)",
             borderImageSlice: 1,
             textAlign: "center",
             fontSize: 12,

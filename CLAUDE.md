@@ -522,6 +522,26 @@ comparison, or a step-by-step calculation - it is not done yet. Always ask:
 "Can I SHOW this instead of just TELLING it?" and "Is this the REAL formula
 or a dumbed-down version?"
 
+## Discoverability Sync Rules - MANDATORY
+
+The site's discoverability (Google, Bing, ChatGPT search, Claude web, Gemini,
+Perplexity) depends on metadata staying in sync with content. Whenever a code
+change touches any trigger below, update the listed companion files in the SAME
+commit. Apply automatically without asking the user.
+
+| If you change... | You MUST also update... |
+|---|---|
+| `src/config.js` chapters or sectionNames (add / rename / remove / reorder) | `public/llms.txt` "What it covers" topic list, `index.html` JSON-LD `teaches` array, `CLAUDE.md` mapping table |
+| Site title, meta description, author name, or tagline (anywhere) | `index.html` (`<title>`, `<meta name="description">`, `og:title`, `og:description`, `twitter:title`, `twitter:description`, JSON-LD `name` / `description`), `public/llms.txt` heading + summary line, footer in `src/learn-ai.jsx` |
+| Visual identity (logo, hero gradient, primary colors, favicon) | Regenerate `public/og.png` so social shares look right |
+| Site goes from SPA to multi-page routing | `public/sitemap.xml` to list each new URL |
+| Author social links (LinkedIn, GitHub, Twitter, etc.) | `index.html` JSON-LD `sameAs` array, `public/llms.txt` Author section, footer in `src/learn-ai.jsx` |
+
+After any of these changes are pushed, remind the user (one sentence, end of
+turn) to:
+- Request re-indexing in Google Search Console (URL Inspection → Request indexing).
+- Submit URL in Bing Webmaster Tools (URL Submission).
+
 ## Deployment
 
 Pushes to `main` trigger the GitHub Actions workflow which:

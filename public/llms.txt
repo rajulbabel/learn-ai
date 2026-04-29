@@ -1,0 +1,34 @@
+# Learn AI by Rajul Babel
+
+> Learn AI end-to-end: how it works inside, and how to build with it. Covers Model Internals, RAG, Vector Databases, and Agent Frameworks.
+
+**Author:** Rajul Babel
+**Site:** https://rajulbabel.github.io/learn-ai/
+**Source:** https://github.com/rajulbabel/learn-ai
+
+## About
+
+An interactive, visual, free guide to AI built by Rajul Babel. The site teaches AI from first principles to production systems through progressive sub-step reveals, real numbers, real formulas, and side-by-side diagrams. No watered-down explanations - every concept is shown at full depth.
+
+## What it covers
+
+- **Neural Network Foundations** - neurons, layers, weights, biases, activations, forward/backward pass, gradient descent, dropout, Adam, weight init.
+- **How LLMs Train** - tokenization, self-supervised learning, cross-entropy loss, autoregressive generation, SFT, RLHF, DPO.
+- **Scaling & Modern Techniques** - scaling laws, batch training, distillation, CLIP, the full training pipeline.
+- **Road to Transformers** - CNN, RNN, RNN's flaws, the Transformer.
+- **Transformer Input Pipeline** - embeddings, positional encoding (sinusoidal & RoPE).
+- **Attention** - Q, K, V intuition; full attention computation; multi-head attention; masking; cross-attention.
+- **Encoder & Decoder** - Add & Norm, FFN, residuals, pre-norm vs post-norm, batch norm vs layer norm.
+- **Modern LLM Techniques** - KV cache, grouped-query attention, mixture of experts, reasoning models.
+- **Vector Databases** - kNN, ANN, HNSW, IVF, Vamana, scalar/product/binary quantization, Matryoshka, IVF-PQ, HNSW+PQ, hybrid search, rerankers, ColBERT-style multi-vector retrieval, observability, capacity planning, FAISS, pgvector, Qdrant, Pinecone, Weaviate, Milvus, Chroma.
+- **Building with AI** - RAG, Vector DB selection, Agent Frameworks (LangGraph), embedding lifecycle, production deployment.
+
+## Author
+
+Rajul Babel.
+- GitHub: https://github.com/rajulbabel
+- LinkedIn: https://www.linkedin.com/in/rajulbabel
+
+## Citation
+
+If referencing this resource, please credit "Rajul Babel - Learn AI (https://rajulbabel.github.io/learn-ai/)".

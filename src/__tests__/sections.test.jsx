@@ -1003,6 +1003,13 @@ describe("ProductQuantization (11.14) content", () => {
     expect(container.textContent).toMatch(/0\.3/);
   });
 
+  it("sub=6 capitalizes the first letter of every drift caption", () => {
+    const { container } = render(fn(makeCtx({ sub: 6 })));
+    expect(container.textContent).toContain("Sub-vec far from every centroid");
+    expect(container.textContent).toContain("Re-encoded with stale codebooks");
+    expect(container.textContent).toContain("Orphan PQ code");
+  });
+
   it("sub=7 shows oversample + tombstones + retrain on error spike", () => {
     const { container } = render(fn(makeCtx({ sub: 7 })));
     expect(container.textContent).toMatch(/oversample|sample|k_per_slot/i);
@@ -1013,6 +1020,24 @@ describe("ProductQuantization (11.14) content", () => {
     expect(container.textContent).toMatch(/Vespa/);
     expect(container.textContent).toMatch(/Milvus/);
     expect(container.textContent).toMatch(/Qdrant/);
+  });
+
+  it("sub=7 capitalizes the first letter of every fix row and DB card", () => {
+    const { container } = render(fn(makeCtx({ sub: 7 })));
+    expect(container.textContent).toContain("Re-encode with current codebooks");
+    expect(container.textContent).toContain("Tombstone in posting list");
+    expect(container.textContent).toContain("Background re-quantization");
+    expect(container.textContent).toContain("Scheduled IVF_PQ retraining");
+  });
+
+  it("sub=8 capitalizes the table column headers", () => {
+    const { container } = render(fn(makeCtx({ sub: 8 })));
+    const cells = Array.from(container.querySelectorAll("div")).map((n) => (n.textContent || "").trim());
+    expect(cells).toContain("M");
+    expect(cells).toContain("Bytes/vec");
+    expect(cells).toContain("Compression");
+    expect(cells).toContain("Recall@10 (OPQ)");
+    expect(cells).toContain("Typical use");
   });
 });
 
@@ -1104,6 +1129,31 @@ describe("BinaryQuantization (11.15) content", () => {
     expect(container.textContent).toMatch(/dim 5|dim\s*5/i);
   });
 
+  it("sub=6 capitalizes the first letter of every drift caption", () => {
+    const { container } = render(fn(makeCtx({ sub: 6 })));
+    expect(container.textContent).toContain("New dim 5 batch mean");
+    expect(container.textContent).toContain("Re-binarized with stale threshold");
+    expect(container.textContent).toContain("Bit-balance stats decay");
+  });
+
+  it("sub=6 centers the bit-grid block within the SVG", () => {
+    const { container } = render(fn(makeCtx({ sub: 6 })));
+    const svgs = Array.from(container.querySelectorAll("svg"));
+    const distSvg = svgs.find((s) => /Training:/.test(s.textContent || ""));
+    expect(distSvg, "expected distribution SVG").toBeTruthy();
+    const trainingLabel = Array.from(distSvg.querySelectorAll("text")).find(
+      (t) => (t.textContent || "").trim() === "Training:",
+    );
+    const driftedLabel = Array.from(distSvg.querySelectorAll("text")).find(
+      (t) => (t.textContent || "").trim() === "Drifted:",
+    );
+    expect(trainingLabel.getAttribute("text-anchor")).toBe("end");
+    expect(driftedLabel.getAttribute("text-anchor")).toBe("end");
+    const tx = parseFloat(trainingLabel.getAttribute("x"));
+    expect(tx).toBeGreaterThan(150);
+    expect(tx).toBeLessThan(280);
+  });
+
   it("sub=8 explains how BQ pairs with HNSW for stage 1", () => {
     const { container } = render(fn(makeCtx({ sub: 8 })));
     expect(container.textContent).toMatch(/dedicated combo|no.*combo chapter|HNSW \+ BQ/i);
@@ -1120,6 +1170,17 @@ describe("BinaryQuantization (11.15) content", () => {
     expect(container.textContent).toMatch(/OpenAI|text-embedding-3/i);
     expect(container.textContent).toMatch(/Milvus|Qdrant/);
     expect(container.textContent).toMatch(/70%|>\s*70/);
+  });
+
+  it("sub=7 capitalizes the first letter of every fix row and model card", () => {
+    const { container } = render(fn(makeCtx({ sub: 7 })));
+    expect(container.textContent).toContain("Sign(x) on a zero-centered model");
+    expect(container.textContent).toContain("Tombstone bit; compaction job");
+    expect(container.textContent).toContain("Any dim with > 70% same value");
+    expect(container.textContent).toContain("Sign-based binary, no calibration");
+    expect(container.textContent).toContain("Zero-centered, sign threshold");
+    expect(container.textContent).toContain("Client-side sign() on float output");
+    expect(container.textContent).toContain("Custom per-dim threshold");
   });
 });
 

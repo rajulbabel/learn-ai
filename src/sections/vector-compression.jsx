@@ -945,9 +945,9 @@ export const ScalarQuantization = (ctx) => {
           </T>
           <div style={{ marginTop: 12, display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 10 }}>
             {[
-              { tag: "INSERT", caption: "new value 1.8 outside [-1.2, 1.4]" },
-              { tag: "UPDATE", caption: "replaced value 1.8 still outside" },
-              { tag: "DELETE", caption: "stale int8 row stays; live min/max drifts" },
+              { tag: "INSERT", caption: "New value 1.8 outside [-1.2, 1.4]" },
+              { tag: "UPDATE", caption: "Replaced value 1.8 still outside" },
+              { tag: "DELETE", caption: "Stale int8 row stays; live min/max drifts" },
             ].map((op) => (
               <div
                 key={op.tag}
@@ -969,7 +969,7 @@ export const ScalarQuantization = (ctx) => {
             ))}
           </div>
           <svg
-            viewBox="0 0 720 220"
+            viewBox="0 0 720 240"
             style={{ width: "100%", maxWidth: 760, height: "auto", display: "block", marginTop: 14 }}
           >
             <desc>
@@ -980,40 +980,40 @@ export const ScalarQuantization = (ctx) => {
             </desc>
             <line x1="60" y1="100" x2="700" y2="100" stroke="#666" strokeWidth="1" />
             <rect x="140" y="80" width="380" height="40" fill={`${C.cyan}1a`} stroke={`${C.cyan}40`} />
-            <text x="140" y="74" fontSize="11" fill={C.cyan} textAnchor="middle">
-              min = -1.2
+            <text x="140" y="68" fontSize="11" fill={C.cyan} textAnchor="middle">
+              Min = -1.2
             </text>
-            <text x="520" y="74" fontSize="11" fill={C.cyan} textAnchor="middle">
-              max = 1.4
+            <text x="520" y="68" fontSize="11" fill={C.cyan} textAnchor="middle">
+              Max = 1.4
             </text>
-            <text x="60" y="150" fontSize="11" fill="#999">
-              bucket 0
+            <text x="140" y="150" fontSize="11" fill="#999" textAnchor="middle">
+              Bucket 0
             </text>
-            <text x="520" y="150" fontSize="11" fill="#999">
-              bucket 255
+            <text x="520" y="150" fontSize="11" fill="#999" textAnchor="middle">
+              Bucket 255
             </text>
             <circle cx="380" cy="100" r="6" fill={C.green} />
-            <text x="380" y="86" fontSize="11" fill={C.green} textAnchor="middle">
+            <text x="380" y="68" fontSize="11" fill={C.green} textAnchor="middle">
               0.5 = bucket 167
             </text>
-            <circle cx="600" cy="100" r="6" fill={C.red} />
-            <text x="600" y="86" fontSize="11" fill={C.red} textAnchor="middle">
-              new = 1.8
+            <circle cx="620" cy="100" r="6" fill={C.red} />
+            <text x="620" y="68" fontSize="11" fill={C.red} textAnchor="middle">
+              New = 1.8
             </text>
-            <path d="M 600 110 Q 560 140 520 110" fill="none" stroke={C.red} strokeWidth="1.5" strokeDasharray="4 3" />
-            <polygon points="520,110 528,106 528,114" fill={C.red} />
-            <text x="560" y="160" fontSize="12" fill={C.red} textAnchor="middle" fontWeight="bold">
-              clipped to 1.4 (bucket 255)
+            <path d="M 614 100 C 590 130, 545 100, 528 100" fill="none" stroke={C.red} strokeWidth="1.5" strokeDasharray="4 3" />
+            <polygon points="520,100 528,96 528,104" fill={C.red} />
+            <text x="570" y="180" fontSize="12" fill={C.red} textAnchor="middle" fontWeight="bold">
+              Clipped to 1.4
             </text>
-            <rect x="520" y="180" width="80" height="10" fill={`${C.red}66`} />
-            <text x="560" y="205" fontSize="12" fill={C.red} textAnchor="middle" fontWeight="bold">
-              error = 0.4
+            <rect x="530" y="194" width="80" height="10" fill={`${C.red}66`} />
+            <text x="570" y="222" fontSize="12" fill={C.red} textAnchor="middle" fontWeight="bold">
+              Error = 0.4
             </text>
             <g opacity="0.45">
               <rect x="280" y="92" width="14" height="16" fill="none" stroke="#888" strokeWidth="1" />
               <line x1="280" y1="92" x2="294" y2="108" stroke="#888" strokeWidth="1" />
-              <text x="287" y="76" fontSize="10" fill="#888" textAnchor="middle">
-                tombstone
+              <text x="287" y="130" fontSize="10" fill="#888" textAnchor="middle">
+                Tombstone
               </text>
             </g>
           </svg>
@@ -1033,8 +1033,8 @@ export const ScalarQuantization = (ctx) => {
               spans -1.2 to 1.4 and the new value 1.8 clips with a red error bar of 0.4, while the bottom band spans
               -1.4 to 1.7 and the same new value clips with a red error bar of only 0.1.
             </desc>
-            <text x="60" y="40" fontSize="12" fill="#aaa">
-              min/max calibration
+            <text x="60" y="30" fontSize="12" fill="#aaa">
+              Min/max calibration
             </text>
             <line x1="60" y1="70" x2="700" y2="70" stroke="#666" strokeWidth="1" />
             <rect x="160" y="55" width="320" height="30" fill={`${C.cyan}1a`} stroke={`${C.cyan}40`} />
@@ -1050,33 +1050,33 @@ export const ScalarQuantization = (ctx) => {
             </text>
             <rect x="480" y="92" width="80" height="8" fill={`${C.red}66`} />
             <text x="520" y="112" fontSize="11" fill={C.red} textAnchor="middle" fontWeight="bold">
-              error = 0.4
+              Error = 0.4
             </text>
-            <text x="60" y="160" fontSize="12" fill="#aaa">
-              p1 / p99 + 10% headroom
+            <text x="60" y="148" fontSize="12" fill="#aaa">
+              P1 / p99 + 10% headroom
             </text>
             <line x1="60" y1="190" x2="700" y2="190" stroke="#666" strokeWidth="1" />
             <rect x="140" y="175" width="400" height="30" fill={`${C.green}1a`} stroke={`${C.green}40`} />
             <text x="140" y="170" fontSize="10" fill={C.green} textAnchor="middle">
               -1.4
             </text>
-            <text x="540" y="170" fontSize="10" fill={C.green} textAnchor="middle">
+            <text x="540" y="170" fontSize="10" fill={C.green} textAnchor="end">
               1.7
             </text>
             <circle cx="560" cy="190" r="5" fill={C.red} />
-            <text x="560" y="182" fontSize="10" fill={C.red} textAnchor="middle">
+            <text x="572" y="194" fontSize="10" fill={C.red} textAnchor="start">
               1.8
             </text>
             <rect x="540" y="212" width="20" height="8" fill={`${C.red}66`} />
-            <text x="560" y="232" fontSize="11" fill={C.red} textAnchor="middle" fontWeight="bold">
-              error = 0.1
+            <text x="550" y="232" fontSize="11" fill={C.red} textAnchor="middle" fontWeight="bold">
+              Error = 0.1
             </text>
           </svg>
           <div style={{ marginTop: 12, display: "grid", gridTemplateColumns: "1fr", gap: 8 }}>
             {[
-              { op: "INSERT / UPDATE", text: "clip rare; drift counter increments on clip" },
-              { op: "DELETE", text: "tombstone bit set; vacuum job rebuilds row store" },
-              { op: "DRIFT", text: "% clipped > 0.5% triggers scheduled recalibration" },
+              { op: "INSERT / UPDATE", text: "Clip rare; drift counter increments on clip" },
+              { op: "DELETE", text: "Tombstone bit set; vacuum job rebuilds row store" },
+              { op: "DRIFT", text: "Clipped > 0.5% triggers scheduled recalibration" },
             ].map((row) => (
               <div
                 key={row.op}
@@ -1102,9 +1102,9 @@ export const ScalarQuantization = (ctx) => {
           <div style={{ marginTop: 14, display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 10 }}>
             {[
               { name: "FAISS", line: "IndexScalarQuantizer(d, QT_8bit_uniform) + custom range" },
-              { name: "Qdrant", line: "quantization_config.scalar.quantile = 0.99 + optimizers_config.deleted_threshold" },
-              { name: "Pinecone", line: "managed re-quantization on shard rebalance" },
-              { name: "Vespa", line: "tensor int8 cell-type with explicit bounds + auto-compact" },
+              { name: "Qdrant", line: "Quantization_config.scalar.quantile = 0.99 + optimizers_config.deleted_threshold" },
+              { name: "Pinecone", line: "Managed re-quantization on shard rebalance" },
+              { name: "Vespa", line: "Tensor int8 cell-type with explicit bounds + auto-compact" },
             ].map((s) => (
               <div
                 key={s.name}
@@ -2762,9 +2762,9 @@ export const ProductQuantization = (ctx) => {
           </T>
           <div style={{ marginTop: 12, display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 10 }}>
             {[
-              { tag: "INSERT", caption: "sub-vec far from every centroid; error 6x baseline" },
-              { tag: "UPDATE", caption: "re-encoded with stale codebooks; same error" },
-              { tag: "DELETE", caption: "orphan PQ code; residual distribution shifts" },
+              { tag: "INSERT", caption: "Sub-vec far from every centroid; error 6x baseline" },
+              { tag: "UPDATE", caption: "Re-encoded with stale codebooks; same error" },
+              { tag: "DELETE", caption: "Orphan PQ code; residual distribution shifts" },
             ].map((op) => (
               <div
                 key={op.tag}
@@ -2798,10 +2798,10 @@ export const ProductQuantization = (ctx) => {
             <line x1="50" y1="280" x2="560" y2="280" stroke="#555" strokeWidth="1" />
             <line x1="50" y1="20" x2="50" y2="280" stroke="#555" strokeWidth="1" />
             <text x="305" y="305" fontSize="11" fill="#999" textAnchor="middle">
-              slot 0 dim a
+              Slot 0 dim a
             </text>
             <text x="20" y="150" fontSize="11" fill="#999" textAnchor="middle" transform="rotate(-90 20 150)">
-              slot 0 dim b
+              Slot 0 dim b
             </text>
             {Array.from({ length: 32 }).map((_, i) => {
               const angle = (i / 32) * Math.PI * 2;
@@ -2836,15 +2836,15 @@ export const ProductQuantization = (ctx) => {
             ))}
             <circle cx="450" cy="80" r="6" fill={C.red} />
             <text x="450" y="68" fontSize="11" fill={C.red} textAnchor="middle">
-              new sub-vec [2.1, 1.9]
+              New sub-vec [2.1, 1.9]
             </text>
             <line x1="450" y1="80" x2="200" y2="170" stroke={C.red} strokeWidth="1.5" strokeDasharray="5 4" />
-            <text x="320" y="115" fontSize="12" fill={C.red} textAnchor="middle" fontWeight="bold">
-              distance = 1.8
+            <text x="300" y="95" fontSize="12" fill={C.red} textAnchor="middle" fontWeight="bold">
+              Distance = 1.8
             </text>
             <rect x="380" y="220" width="180" height="46" fill={`${C.cyan}10`} stroke={`${C.cyan}30`} rx="6" />
             <text x="470" y="240" fontSize="11" fill={C.cyan} textAnchor="middle">
-              training avg distance
+              Training avg distance
             </text>
             <text x="470" y="258" fontSize="13" fill={C.cyan} textAnchor="middle" fontWeight="bold">
               = 0.3
@@ -2858,7 +2858,7 @@ export const ProductQuantization = (ctx) => {
             Industry fix: oversample + tombstones + retrain when 95p error spikes
           </T>
           <svg
-            viewBox="0 0 720 280"
+            viewBox="0 0 720 300"
             style={{ width: "100%", maxWidth: 760, height: "auto", display: "block", marginTop: 14 }}
           >
             <desc>
@@ -2873,7 +2873,7 @@ export const ProductQuantization = (ctx) => {
             <text x="60" y="240" fontSize="11" fill="#999">0</text>
             <text x="700" y="240" fontSize="11" fill="#999" textAnchor="end">50M vectors</text>
             <line x1="60" y1="120" x2="700" y2="120" stroke={C.yellow} strokeDasharray="4 4" strokeWidth="1" />
-            <text x="700" y="115" fontSize="11" fill={C.yellow} textAnchor="end">retrain threshold</text>
+            <text x="700" y="115" fontSize="11" fill={C.yellow} textAnchor="end">Retrain threshold</text>
             <polyline
               points="60,200 220,200 280,150 320,90 360,200 700,200"
               fill="none"
@@ -2881,8 +2881,8 @@ export const ProductQuantization = (ctx) => {
               strokeWidth="2"
             />
             <line x1="360" y1="40" x2="360" y2="220" stroke={C.green} strokeDasharray="6 4" strokeWidth="1.5" />
-            <text x="360" y="32" fontSize="11" fill={C.green} textAnchor="middle">retrain triggered (20M)</text>
-            <text x="60" y="262" fontSize="11" fill="#999">ops:</text>
+            <text x="360" y="32" fontSize="11" fill={C.green} textAnchor="middle">Retrain triggered (20M)</text>
+            <text x="60" y="262" fontSize="11" fill="#999">Ops:</text>
             {[
               { x: 110, c: C.cyan },
               { x: 150, c: C.cyan },
@@ -2897,14 +2897,14 @@ export const ProductQuantization = (ctx) => {
             ].map((t, i) => (
               <line key={i} x1={t.x} y1="252" x2={t.x} y2="262" stroke={t.c} strokeWidth="2" />
             ))}
-            <text x="650" y="262" fontSize="10" fill={C.cyan}>insert</text>
-            <text x="650" y="274" fontSize="10" fill={C.yellow}>update</text>
-            <text x="700" y="262" fontSize="10" fill={C.red} textAnchor="end">delete</text>
+            <text x="640" y="262" fontSize="10" fill={C.cyan}>Insert</text>
+            <text x="640" y="278" fontSize="10" fill={C.yellow}>Update</text>
+            <text x="640" y="294" fontSize="10" fill={C.red}>Delete</text>
           </svg>
           <div style={{ marginTop: 12, display: "grid", gridTemplateColumns: "1fr", gap: 8 }}>
             {[
-              { op: "INSERT / UPDATE", text: "re-encode with current codebooks; track 95p recon error" },
-              { op: "DELETE", text: "tombstone in posting list; background compaction reclaims and reshapes residuals" },
+              { op: "INSERT / UPDATE", text: "Re-encode with current codebooks; track 95p recon error" },
+              { op: "DELETE", text: "Tombstone in posting list; background compaction reclaims and reshapes residuals" },
               { op: "DRIFT", text: "95p error breach -> train new codebooks on fresh sample (~256 * k_per_slot rule of thumb), hot-swap" },
             ].map((row) => (
               <div
@@ -2931,8 +2931,8 @@ export const ProductQuantization = (ctx) => {
           <div style={{ marginTop: 14, display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 10 }}>
             {[
               { name: "FAISS", line: "ProductQuantizer.train(new_set) + index rebuild" },
-              { name: "Vespa", line: "background re-quantization with hot-swap" },
-              { name: "Milvus", line: "scheduled IVF_PQ retraining + segment compaction" },
+              { name: "Vespa", line: "Background re-quantization with hot-swap" },
+              { name: "Milvus", line: "Scheduled IVF_PQ retraining + segment compaction" },
               { name: "Qdrant", line: "PATCH /collections/{name} quantization_config + optimizers_config.deleted_threshold" },
             ].map((s) => (
               <div
@@ -3134,7 +3134,7 @@ export const ProductQuantization = (ctx) => {
                 fontSize: 13,
               }}
             >
-              {["m", "bytes/vec", "compression", "recall@10 (OPQ)", "typical use"].map((h, i) => (
+              {["M", "Bytes/vec", "Compression", "Recall@10 (OPQ)", "Typical use"].map((h, i) => (
                 <div
                   key={`h-${i}`}
                   style={{
@@ -3759,9 +3759,9 @@ export const BinaryQuantization = (ctx) => {
           </T>
           <div style={{ marginTop: 12, display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 10 }}>
             {[
-              { tag: "INSERT", caption: "new dim 5 batch mean = 0.4, bits collapse 78/22" },
-              { tag: "UPDATE", caption: "re-binarized with stale threshold; same collapse" },
-              { tag: "DELETE", caption: "bit-balance stats decay; old codes linger" },
+              { tag: "INSERT", caption: "New dim 5 batch mean = 0.4, bits collapse 78/22" },
+              { tag: "UPDATE", caption: "Re-binarized with stale threshold; same collapse" },
+              { tag: "DELETE", caption: "Bit-balance stats decay; old codes linger" },
             ].map((op) => (
               <div
                 key={op.tag}
@@ -3792,60 +3792,60 @@ export const BinaryQuantization = (ctx) => {
               vertical sign-threshold line at x = 0 cuts both. Below sit two 8-cell bit-grid rows showing training
               mostly mixed 0/1 vs drifted mostly 1s, with a small tombstone cell.
             </desc>
-            <text x="160" y="20" fontSize="13" fill={C.green} textAnchor="middle" fontWeight="bold">
-              training (dim 5)
+            <text x="190" y="20" fontSize="13" fill={C.green} textAnchor="middle" fontWeight="bold">
+              Training (dim 5)
             </text>
-            <line x1="40" y1="180" x2="280" y2="180" stroke="#666" />
-            <line x1="160" y1="40" x2="160" y2="180" stroke="#888" strokeDasharray="3 3" />
-            <text x="160" y="200" fontSize="11" fill="#888" textAnchor="middle">
-              sign = 0
+            <line x1="70" y1="180" x2="310" y2="180" stroke="#666" />
+            <line x1="190" y1="40" x2="190" y2="180" stroke="#888" strokeDasharray="3 3" />
+            <text x="190" y="200" fontSize="11" fill="#888" textAnchor="middle">
+              Sign = 0
             </text>
             {[20, 40, 70, 95, 80, 50, 30, 15, 8].map((h, i) => (
-              <rect key={i} x={50 + i * 25} y={180 - h} width="22" height={h} fill={`${C.green}aa`} />
+              <rect key={i} x={80 + i * 25} y={180 - h} width="22" height={h} fill={`${C.green}aa`} />
             ))}
-            <text x="160" y="225" fontSize="12" fill={C.green} textAnchor="middle" fontWeight="bold">
-              split 51/49
+            <text x="190" y="225" fontSize="12" fill={C.green} textAnchor="middle" fontWeight="bold">
+              Split 51/49
             </text>
-            <text x="500" y="20" fontSize="13" fill={C.red} textAnchor="middle" fontWeight="bold">
-              drifted (dim 5, mean 0.4)
+            <text x="530" y="20" fontSize="13" fill={C.red} textAnchor="middle" fontWeight="bold">
+              Drifted (dim 5, mean 0.4)
             </text>
-            <line x1="380" y1="180" x2="620" y2="180" stroke="#666" />
-            <line x1="500" y1="40" x2="500" y2="180" stroke="#888" strokeDasharray="3 3" />
-            <text x="500" y="200" fontSize="11" fill="#888" textAnchor="middle">
-              sign = 0
+            <line x1="410" y1="180" x2="650" y2="180" stroke="#666" />
+            <line x1="530" y1="40" x2="530" y2="180" stroke="#888" strokeDasharray="3 3" />
+            <text x="530" y="200" fontSize="11" fill="#888" textAnchor="middle">
+              Sign = 0
             </text>
             {[5, 8, 12, 25, 50, 80, 95, 75, 40].map((h, i) => (
-              <rect key={i} x={390 + i * 25} y={180 - h} width="22" height={h} fill={`${C.red}aa`} />
+              <rect key={i} x={420 + i * 25} y={180 - h} width="22" height={h} fill={`${C.red}aa`} />
             ))}
-            <text x="500" y="225" fontSize="12" fill={C.red} textAnchor="middle" fontWeight="bold">
-              split 78/22
+            <text x="530" y="225" fontSize="12" fill={C.red} textAnchor="middle" fontWeight="bold">
+              Split 78/22
             </text>
-            <text x="40" y="265" fontSize="11" fill={C.green}>
-              training:
+            <text x="240" y="265" fontSize="11" fill={C.green} textAnchor="end">
+              Training:
             </text>
             {["0", "1", "0", "1", "1", "0", "1", "0"].map((b, i) => (
               <g key={i}>
-                <rect x={120 + i * 24} y="252" width="20" height="20" fill={`${C.green}30`} stroke={`${C.green}80`} />
-                <text x={130 + i * 24} y="266" fontSize="11" fill={C.bright} textAnchor="middle">
+                <rect x={250 + i * 24} y="252" width="20" height="20" fill={`${C.green}30`} stroke={`${C.green}80`} />
+                <text x={260 + i * 24} y="266" fontSize="11" fill={C.bright} textAnchor="middle">
                   {b}
                 </text>
               </g>
             ))}
-            <text x="40" y="300" fontSize="11" fill={C.red}>
-              drifted:
+            <text x="240" y="300" fontSize="11" fill={C.red} textAnchor="end">
+              Drifted:
             </text>
             {["1", "1", "1", "0", "1", "1", "1", "1"].map((b, i) => (
               <g key={i}>
-                <rect x={120 + i * 24} y="287" width="20" height="20" fill={`${C.red}30`} stroke={`${C.red}80`} />
-                <text x={130 + i * 24} y="301" fontSize="11" fill={C.bright} textAnchor="middle">
+                <rect x={250 + i * 24} y="287" width="20" height="20" fill={`${C.red}30`} stroke={`${C.red}80`} />
+                <text x={260 + i * 24} y="301" fontSize="11" fill={C.bright} textAnchor="middle">
                   {b}
                 </text>
               </g>
             ))}
-            <rect x="320" y="287" width="20" height="20" fill="none" stroke="#888" strokeDasharray="2 2" />
-            <line x1="320" y1="287" x2="340" y2="307" stroke="#888" strokeWidth="1" />
-            <text x="350" y="301" fontSize="10" fill="#888">
-              tombstone
+            <rect x="446" y="287" width="20" height="20" fill="none" stroke="#888" strokeDasharray="2 2" />
+            <line x1="446" y1="287" x2="466" y2="307" stroke="#888" strokeWidth="1" />
+            <text x="476" y="301" fontSize="10" fill="#888">
+              Tombstone
             </text>
           </svg>
         </Box>
@@ -3866,7 +3866,7 @@ export const BinaryQuantization = (ctx) => {
               yellow dashed line marks the 70% imbalance alert.
             </desc>
             <text x="60" y="22" fontSize="11" fill="#aaa">
-              |bit_balance - 50%| per dim
+              |Bit_balance - 50%| per dim
             </text>
             <line x1="60" y1="180" x2="700" y2="180" stroke="#666" />
             <line x1="60" y1="40" x2="60" y2="180" stroke="#666" />
@@ -3899,15 +3899,15 @@ export const BinaryQuantization = (ctx) => {
             {[
               {
                 op: "INSERT / UPDATE",
-                text: "sign(x) on a zero-centered model needs no calibration; per-dim mean threshold updated incrementally if not centered",
+                text: "Sign(x) on a zero-centered model needs no calibration; per-dim mean threshold updated incrementally if not centered",
               },
               {
                 op: "DELETE",
-                text: "tombstone bit; compaction job rewrites the bit table and re-counts balances",
+                text: "Tombstone bit; compaction job rewrites the bit table and re-counts balances",
               },
               {
                 op: "DRIFT",
-                text: "any dim with > 70% same value -> re-binarize that dim or alert",
+                text: "Any dim with > 70% same value -> re-binarize that dim or alert",
               },
             ].map((row) => (
               <div
@@ -3933,12 +3933,12 @@ export const BinaryQuantization = (ctx) => {
           </div>
           <div style={{ marginTop: 14, display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 10 }}>
             {[
-              { name: "Cohere Embed v3", line: "sign-based binary, no calibration" },
-              { name: "Mixedbread mxbai-embed-large-v1", line: "zero-centered, sign threshold" },
-              { name: "OpenAI text-embedding-3", line: "client-side sign() on float output" },
+              { name: "Cohere Embed v3", line: "Sign-based binary, no calibration" },
+              { name: "Mixedbread mxbai-embed-large-v1", line: "Zero-centered, sign threshold" },
+              { name: "OpenAI text-embedding-3", line: "Client-side sign() on float output" },
               {
                 name: "Milvus / Qdrant",
-                line: "custom per-dim threshold + drift monitor + segment compaction",
+                line: "Custom per-dim threshold + drift monitor + segment compaction",
               },
             ].map((s) => (
               <div

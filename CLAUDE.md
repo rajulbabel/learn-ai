@@ -512,4 +512,3 @@ Pushes to `main` trigger the GitHub Actions workflow which:
 
 - Use imperative mood ("Add chapter", not "Added chapter")
 - Keep subject line under 72 characters
-- **Never** add `Co-Authored-By` or any Claude/Anthropic attribution in commits

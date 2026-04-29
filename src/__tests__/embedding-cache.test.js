@@ -109,20 +109,3 @@ describe("embedding-cache", () => {
   });
 });
 
-describe("embeddings-checksum.json format", () => {
-  it("should be importable and have checksum and count fields", async () => {
-    // This tests the contract: the file must have { checksum: string, count: number }
-    try {
-      const mod = await import("../data/embeddings-checksum.json");
-      const data = mod.default || mod;
-      expect(typeof data.checksum).toBe("string");
-      expect(data.checksum.length).toBeGreaterThan(0);
-      expect(typeof data.count).toBe("number");
-      expect(data.count).toBeGreaterThan(0);
-    } catch {
-      // File might not exist yet if embeddings haven't been generated
-      // This is acceptable - the test documents the expected contract
-      expect(true).toBe(true);
-    }
-  });
-});

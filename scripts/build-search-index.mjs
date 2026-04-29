@@ -2,13 +2,19 @@
  * Build src/data/chunks.json by:
  *   1. Grouping chapters by their section file.
  *   2. For each section file, hashing the source.
- *   3. On cache hit: reuse cached chunks.
- *   4. On cache miss: ask Claude (via llm-chunk.mjs) to author chunks
- *      for every chapter in that file in a single call.
- *   5. Stamping every chunk with stable id, chapterTitle, sectionName,
- *      and writing the merged array sorted by (chapterId, sub).
+ *   3. For each chapter in that file:
+ *      - On cache hit: reuse cached chunks for that chapter.
+ *      - On cache miss: ask Claude (via llm-chunk.mjs) for chunks for that chapter only.
+ *        One LLM call per chapter keeps each call's output well within the 16K token
+ *        budget, so dense chapters never overflow.
+ *   4. Stamping every chunk with stable id, chapterTitle, sectionName, and writing the
+ *      merged array sorted by (chapterId, sub).
  *
- * Run via: node scripts/build-search-index.mjs (or via npm run search:index once Task 6 lands).
+ * Cache shape: { "<sectionFileHash>": { "<chapterId>": Chunk[] } }
+ *   Editing a section file changes its hash, invalidating ALL chapters in it.
+ *   Edits typically affect a whole file's interleaved helpers anyway, so this is fine.
+ *
+ * Run via: node scripts/build-search-index.mjs (or via npm run search:index).
  */
 import { readFileSync, writeFileSync, existsSync, mkdirSync, readdirSync, renameSync } from "fs";
 import { createHash } from "crypto";
@@ -73,54 +79,90 @@ export async function runBuild({ rootDir = process.cwd(), chapters, sectionNames
     byFile.get(ch.sectionFile).push(ch);
   }
 
-  const all = [];
+  // Concurrency limit (default 4). Set LEARN_AI_BUILD_CONCURRENCY=N to override.
+  const concurrency = Number(process.env.LEARN_AI_BUILD_CONCURRENCY) || 4;
+
+  // Pre-resolve every chapter's source + fileHash so the worker pool can grab work freely.
+  const fileSourceCache = new Map();
+  const tasks = [];
   for (const [file, chs] of byFile.entries()) {
     const path = join(rootDir, SECTIONS_DIR, file);
     const source = readFileSync(path, "utf-8");
     const fileHash = sha256_16(source);
+    fileSourceCache.set(file, { source, fileHash });
+    if (!cache[fileHash]) cache[fileHash] = {};
+    for (const ch of chs) tasks.push({ ch, file });
+  }
 
-    let chapterChunks;
-    if (cache[fileHash]) {
-      chapterChunks = cache[fileHash];
-      log(`  [cache hit] ${file}`);
-    } else {
-      log(`  [LLM] ${file} (${chs.length} chapters)`);
-      const svgForFile = {};
-      for (const ch of chs) {
-        if (svgDescriptionsAll[ch.id]) svgForFile[ch.id] = svgDescriptionsAll[ch.id];
-      }
-      chapterChunks = await chunkSection({
-        filePath: file,
-        source,
-        chapters: chs.map((c) => ({
-          id: c.id,
-          title: c.title,
-          section: c.section,
-          sectionName: sectionNames[c.section] || "",
-        })),
-        svgDescriptions: svgForFile,
-      });
-      cache[fileHash] = chapterChunks;
+  // Serialize cache writes via a single-slot promise chain.
+  let cacheWriteChain = Promise.resolve();
+  function writeCache() {
+    cacheWriteChain = cacheWriteChain.then(() => {
       atomicWrite(cachePath, JSON.stringify(cache, null, 2));
-    }
+    });
+    return cacheWriteChain;
+  }
 
-    for (const ch of chs) {
-      const arr = chapterChunks[ch.id] || [];
-      for (const c of arr) {
-        all.push({
-          id: chunkId(ch.id, c.sub, c.kind, c.text),
-          chapterId: ch.id,
-          chapterTitle: ch.title,
-          section: ch.section,
-          sectionName: sectionNames[ch.section] || "",
-          sub: c.sub,
-          kind: c.kind,
-          text: c.text,
-          summary: c.summary,
-          queries: c.queries,
-          terms: c.terms,
+  // Stable index → results slot mapping so output order is deterministic regardless of race.
+  const slot = new Array(tasks.length);
+  let nextIndex = 0;
+
+  async function worker() {
+    while (true) {
+      const i = nextIndex++;
+      if (i >= tasks.length) return;
+      const { ch, file } = tasks[i];
+      const { source, fileHash } = fileSourceCache.get(file);
+      let chunks;
+      if (cache[fileHash][ch.id]) {
+        chunks = cache[fileHash][ch.id];
+        log(`  [cache hit] ${ch.id} ${ch.title}`);
+      } else {
+        log(`  [LLM] ${ch.id} ${ch.title}`);
+        const svgForChapter = svgDescriptionsAll[ch.id]
+          ? { [ch.id]: svgDescriptionsAll[ch.id] }
+          : {};
+        const result = await chunkSection({
+          filePath: file,
+          source,
+          chapters: [
+            {
+              id: ch.id,
+              title: ch.title,
+              section: ch.section,
+              sectionName: sectionNames[ch.section] || "",
+            },
+          ],
+          svgDescriptions: svgForChapter,
         });
+        chunks = result[ch.id] || [];
+        cache[fileHash][ch.id] = chunks;
+        await writeCache();
       }
+      slot[i] = { ch, chunks };
+    }
+  }
+
+  await Promise.all(Array.from({ length: concurrency }, () => worker()));
+
+  const all = [];
+  for (const entry of slot) {
+    if (!entry) continue;
+    const { ch, chunks } = entry;
+    for (const c of chunks) {
+      all.push({
+        id: chunkId(ch.id, c.sub, c.kind, c.text),
+        chapterId: ch.id,
+        chapterTitle: ch.title,
+        section: ch.section,
+        sectionName: sectionNames[ch.section] || "",
+        sub: c.sub,
+        kind: c.kind,
+        text: c.text,
+        summary: c.summary,
+        queries: c.queries,
+        terms: c.terms,
+      });
     }
   }
 

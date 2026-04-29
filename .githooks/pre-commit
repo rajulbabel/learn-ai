@@ -1,42 +1,27 @@
 #!/bin/sh
-# Auto-sync chunks and embeddings with source before committing
+# Auto-rebuild semantic search index + embeddings when source changes.
 
-# Step 1: Always re-extract chunks from source (fast - just runs vitest)
-HASH_BEFORE=""
-if [ -f src/data/chunks.json ]; then
-  HASH_BEFORE=$(shasum src/data/chunks.json | cut -d' ' -f1)
+set -e
+
+# Detect whether anything that affects the search index is staged.
+RELEVANT=$(git diff --cached --name-only -- 'src/sections/*.jsx' 'src/sections/*.js' 'src/config.js' 'src/data/svg-descriptions.json' 'public/models/*' || true)
+
+if [ -z "$RELEVANT" ]; then
+  # Nothing source-side changed: still verify in-tree consistency.
+  node scripts/check-embeddings.mjs
+  exit 0
 fi
 
-npm run search:extract --silent 2>/dev/null
-if [ $? -ne 0 ]; then
-  echo "\033[31m[pre-commit] search:extract failed. Commit aborted.\033[0m"
+if ! command -v claude >/dev/null 2>&1; then
+  echo "\033[31m[pre-commit] claude CLI not found in PATH. Source files changed; cannot rebuild search index.\033[0m"
   exit 1
 fi
 
-HASH_AFTER=$(shasum src/data/chunks.json | cut -d' ' -f1)
+echo "\033[33m[pre-commit] Source changed. Rebuilding search index + embeddings via claude CLI...\033[0m"
+npm run search:build --silent
 
-# Step 2: If chunks changed, or embeddings are out of sync, rebuild embeddings
-if [ "$HASH_BEFORE" != "$HASH_AFTER" ]; then
-  echo "\033[33m[pre-commit] Chunks changed. Regenerating embeddings...\033[0m"
-  npm run search:embed
-  if [ $? -ne 0 ]; then
-    echo "\033[31m[pre-commit] search:embed failed. Commit aborted.\033[0m"
-    exit 1
-  fi
-  echo "\033[32m[pre-commit] Embeddings rebuilt.\033[0m"
-else
-  # Chunks unchanged - just verify embeddings are consistent
-  node scripts/check-embeddings.mjs 2>/dev/null
-  if [ $? -ne 0 ]; then
-    echo "\033[33m[pre-commit] Embeddings out of sync. Rebuilding...\033[0m"
-    npm run search:embed
-    if [ $? -ne 0 ]; then
-      echo "\033[31m[pre-commit] search:embed failed. Commit aborted.\033[0m"
-      exit 1
-    fi
-    echo "\033[32m[pre-commit] Embeddings rebuilt.\033[0m"
-  fi
-fi
+# Stage every regenerated artifact + cache.
+git add src/data/chunks.json src/data/chunk-cache.json src/data/embeddings.bin src/data/embeddings-manifest.json
 
-# Always stage any modified files in src/data/
-git add src/data/ 2>/dev/null
+node scripts/check-embeddings.mjs
+echo "\033[32m[pre-commit] Search index + embeddings up to date.\033[0m"

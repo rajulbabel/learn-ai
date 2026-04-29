@@ -4,9 +4,12 @@
  * Uses --json-schema for server-validated structured output.
  */
 import { spawn } from "child_process";
+import { appendFileSync, openSync, closeSync } from "fs";
+
+const DEBUG_LOG = process.env.LEARN_AI_CHUNK_DEBUG_LOG || "/tmp/claude-chunk-debug.log";
 
 const DEFAULT_MODEL = "claude-opus-4-7";
-const DEFAULT_EFFORT = "max";
+const DEFAULT_EFFORT = "high";
 const MIN_QUERIES = 10;
 const MAX_RETRIES = 4;
 const PER_CALL_BUDGET_USD = "5";
@@ -101,15 +104,35 @@ function validateAndCoerce(raw, expectedChapterIds) {
   return raw.chunks;
 }
 
-function spawnClaude(args, userMessage) {
+function debugAppend(line) {
+  try {
+    appendFileSync(DEBUG_LOG, line);
+  } catch {
+    // Silently ignore log append failures
+  }
+}
+
+function spawnClaude(args, userMessage, label) {
   return new Promise((resolve, reject) => {
+    const startedAt = Date.now();
+    debugAppend(`\n=== [${new Date().toISOString()}] START ${label} ===\n`);
     const proc = spawn("claude", args, { stdio: ["pipe", "pipe", "pipe"] });
     let stdout = "";
     let stderr = "";
     proc.stdout.on("data", (d) => { stdout += d.toString(); });
-    proc.stderr.on("data", (d) => { stderr += d.toString(); });
-    proc.on("error", reject);
+    proc.stderr.on("data", (d) => {
+      const s = d.toString();
+      stderr += s;
+      // Live stream debug output to the persistent log file
+      debugAppend(s);
+    });
+    proc.on("error", (e) => {
+      debugAppend(`[error event] ${e.message}\n`);
+      reject(e);
+    });
     proc.on("close", (code) => {
+      const ms = Date.now() - startedAt;
+      debugAppend(`=== [${new Date().toISOString()}] CLOSE ${label} code=${code} elapsed=${ms}ms ===\n`);
       if (code !== 0) {
         const err = new Error(`claude exited ${code}: ${stderr.slice(0, 500)}`);
         err.exitCode = code;
@@ -128,6 +151,10 @@ export async function chunkSection({ filePath, source, chapters, svgDescriptions
   const effort = opts.effort || process.env.LEARN_AI_CHUNK_EFFORT || DEFAULT_EFFORT;
   const userMessage = buildUserMessage({ filePath, source, chapters, svgDescriptions });
 
+  // Note: we deliberately omit --bare. With --bare, claude requires ANTHROPIC_API_KEY
+  // and never reads OAuth/keychain — which means the user's Claude subscription auth
+  // is bypassed and the call fails with "Not logged in". Without --bare, claude uses
+  // the same subscription credentials as the host shell.
   const args = [
     "-p",
     "--output-format", "json",
@@ -135,14 +162,16 @@ export async function chunkSection({ filePath, source, chapters, svgDescriptions
     "--effort", effort,
     "--json-schema", JSON.stringify(OUTPUT_SCHEMA),
     "--system-prompt", SYSTEM_PROMPT,
-    "--bare",
+    "--no-session-persistence",
     "--max-budget-usd", PER_CALL_BUDGET_USD,
+    "--debug-file", `/tmp/claude-cli-debug-${process.pid}.log`,
   ];
 
   let lastErr;
   for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
     try {
-      const stdout = await spawnClaude(args, userMessage);
+      const label = `${filePath} (attempt ${attempt + 1}/${MAX_RETRIES + 1})`;
+      const stdout = await spawnClaude(args, userMessage, label);
       let wrapper;
       try {
         wrapper = JSON.parse(stdout);
@@ -152,11 +181,17 @@ export async function chunkSection({ filePath, source, chapters, svgDescriptions
       if (wrapper.is_error) {
         throw new Error(`claude reported error: ${wrapper.result || wrapper.subtype || "unknown"}`);
       }
+      // When --json-schema is set, the validated object lands in structured_output;
+      // result is empty. When --json-schema is NOT set, the JSON is in result as a string.
       let inner;
-      try {
-        inner = typeof wrapper.result === "string" ? JSON.parse(wrapper.result) : wrapper.result;
-      } catch (e) {
-        throw new Error(`claude inner result is not valid JSON: ${e.message}; raw: ${String(wrapper.result).slice(0, 200)}`);
+      if (wrapper.structured_output && typeof wrapper.structured_output === "object") {
+        inner = wrapper.structured_output;
+      } else {
+        try {
+          inner = typeof wrapper.result === "string" ? JSON.parse(wrapper.result) : wrapper.result;
+        } catch (e) {
+          throw new Error(`claude inner result is not valid JSON: ${e.message}; raw: ${String(wrapper.result).slice(0, 200)}`);
+        }
       }
       return validateAndCoerce(inner, chapters.map((c) => c.id));
     } catch (err) {

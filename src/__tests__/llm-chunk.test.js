@@ -72,10 +72,13 @@ describe("llm-chunk (claude CLI subprocess)", () => {
     expect(args[args.indexOf("--output-format") + 1]).toBe("json");
     expect(args).toContain("--model");
     expect(args).toContain("--effort");
-    expect(args[args.indexOf("--effort") + 1]).toBe("max");
+    expect(args[args.indexOf("--effort") + 1]).toBe("high");
     expect(args).toContain("--json-schema");
     expect(args).toContain("--system-prompt");
-    expect(args).toContain("--bare");
+    // --bare is intentionally NOT passed: it disables OAuth/keychain auth and
+    // would force ANTHROPIC_API_KEY usage, breaking subscription billing.
+    expect(args).not.toContain("--bare");
+    expect(args).toContain("--no-session-persistence");
     expect(args).toContain("--max-budget-usd");
   });
 
@@ -114,6 +117,33 @@ describe("llm-chunk (claude CLI subprocess)", () => {
         svgDescriptions: {},
       }),
     ).rejects.toThrow(/queries/);
+  });
+
+  it("reads structured_output when present (claude --json-schema mode)", async () => {
+    // When --json-schema is set, claude returns the validated object in
+    // wrapper.structured_output and leaves wrapper.result empty.
+    const wrapperJson = JSON.stringify({
+      type: "result",
+      subtype: "success",
+      is_error: false,
+      result: "",
+      structured_output: {
+        chunks: {
+          "1.1": [
+            { sub: 0, kind: "concept", text: sampleText, summary: "Intro", queries: tenQueries, terms: ["t"] },
+          ],
+        },
+      },
+    });
+    mockSpawn.mockImplementationOnce(fakeProcFactory({ stdout: wrapperJson }));
+    const result = await chunkSection({
+      filePath: "f.jsx",
+      source: "x",
+      chapters: [{ id: "1.1", title: "X", section: 1, sectionName: "S" }],
+      svgDescriptions: {},
+    });
+    expect(result["1.1"]).toHaveLength(1);
+    expect(result["1.1"][0].text).toBe(sampleText);
   });
 
   it("throws on is_error=true wrapper", async () => {

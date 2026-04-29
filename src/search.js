@@ -97,6 +97,7 @@ export async function prefetchSearch() {
     // 3. Lazy-load transformers.js + load model from local path
     const { pipeline, env } = await import("@huggingface/transformers");
     env.allowRemoteModels = false;
+    env.allowLocalModels = true;
     env.localModelPath = `${BASE}models/`;
     embedPipeline = await pipeline("feature-extraction", "bge-base-en-v1.5-q4", {
       dtype: modelMeta.dtype,

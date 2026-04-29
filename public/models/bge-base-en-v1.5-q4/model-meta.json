@@ -1,0 +1,8 @@
+{
+  "repo": "Xenova/bge-base-en-v1.5",
+  "dtype": "q4",
+  "weightFile": "onnx/model_q4.onnx",
+  "dim": 768,
+  "checksum": "a29c61b5ab88f6fb",
+  "queryInstruction": "Represent this sentence for searching relevant passages: "
+}

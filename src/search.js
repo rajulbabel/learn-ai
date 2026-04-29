@@ -165,10 +165,10 @@ function textSearchInternal(query, topK = 30) {
   }));
 }
 
-// 70% vector / 30% BM25. LLM-authored chunks favor semantic match; keyword
+// 80% vector / 20% BM25. LLM-authored chunks favor semantic match; keyword
 // path retained for exact-term queries (HNSW, RoPE, FAISS, etc.).
-const W_TEXT = 0.3;
-const W_VEC = 0.7;
+const W_TEXT = 0.2;
+const W_VEC = 0.8;
 
 function rrfMerge(textResults, vectorResults, k = 60) {
   const score = new Map();

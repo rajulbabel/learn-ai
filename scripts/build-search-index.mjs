@@ -85,8 +85,9 @@ export async function runBuild({ rootDir = process.cwd(), chapters, sectionNames
     byFile.get(ch.sectionFile).push(ch);
   }
 
-  // Concurrency limit (default 4). Set LEARN_AI_BUILD_CONCURRENCY=N to override.
-  const concurrency = Number(process.env.LEARN_AI_BUILD_CONCURRENCY) || 4;
+  // Concurrency limit (default 3, safe under subscription rate limits).
+  // Set LEARN_AI_BUILD_CONCURRENCY=N to override.
+  const concurrency = Number(process.env.LEARN_AI_BUILD_CONCURRENCY) || 3;
 
   // Pre-resolve every chapter's source + fileHash so the worker pool can grab work freely.
   const fileSourceCache = new Map();

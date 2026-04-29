@@ -1199,10 +1199,19 @@ git commit -m "Add multi-vector int8 embed script with manifest cache"
 
 ---
 
-## Task 6: Update `check-embeddings.mjs` for new format
+## Task 6: Atomic cutover (replace pipeline + regenerate data + delete old)
+
+**Why atomic:** the existing `.githooks/pre-commit` calls `npm run search:extract` (the OLD DOM-scrape via `extract-content.test.jsx`). If we commit any partial step that leaves the OLD hook in place but the new check-embeddings or new package.json scripts active, the OLD hook will either clobber the new `chunks.json` or fail entirely. The cleanest path is one carefully ordered task that puts the NEW hook on disk *before* the commit runs, so the commit's hook execution uses the new logic.
 
 **Files:**
 - Modify: `scripts/check-embeddings.mjs`
+- Modify: `.githooks/pre-commit`
+- Modify: `package.json`
+- Create: `src/__tests__/check-embeddings.test.js`
+- Generate: `src/data/chunks.json`, `src/data/chunk-cache.json`, `src/data/embeddings.bin`, `src/data/embeddings-manifest.json`
+- Delete: `src/data/embeddings.json`, `src/data/embeddings-checksum.json`, `scripts/extract-content.test.jsx`, `scripts/generate-embeddings.mjs`
+
+**Important:** `git`'s pre-commit hook reads `.githooks/pre-commit` from the working tree at commit time. If the file on disk is the new version, the new hook runs - even on this very commit. So we must replace the hook on disk BEFORE running `git commit`, not as part of the commit's content.
 
 - [ ] **Step 1: Write the failing test (`src/__tests__/check-embeddings.test.js`)**
 
@@ -1346,22 +1355,7 @@ npx vitest run src/__tests__/check-embeddings.test.js
 
 Expected: 3 tests pass.
 
-- [ ] **Step 5: Commit**
-
-```bash
-git add scripts/check-embeddings.mjs src/__tests__/check-embeddings.test.js
-git commit -m "Rewrite check-embeddings for bin + manifest format"
-```
-
----
-
-## Task 7: Update `package.json` scripts + pre-commit hook
-
-**Files:**
-- Modify: `package.json`
-- Modify: `.githooks/pre-commit`
-
-- [ ] **Step 1: Update `package.json` scripts**
+- [ ] **Step 5: Update `package.json` scripts**
 
 ```json
 "scripts": {
@@ -1383,7 +1377,7 @@ git commit -m "Rewrite check-embeddings for bin + manifest format"
 
 (Remove the old `search:extract` line.)
 
-- [ ] **Step 2: Rewrite `.githooks/pre-commit`**
+- [ ] **Step 6: Rewrite `.githooks/pre-commit`**
 
 ```sh
 #!/bin/sh
@@ -1416,78 +1410,49 @@ node scripts/check-embeddings.mjs
 echo "\033[32m[pre-commit] Search index + embeddings up to date.\033[0m"
 ```
 
-- [ ] **Step 3: Make hook executable**
+- [ ] **Step 7: Make hook executable**
 
 ```bash
 chmod +x .githooks/pre-commit
 ```
 
-- [ ] **Step 4: Verify the hook is wired**
-
-```bash
-git config --get core.hooksPath
-```
-
-Expected: `.githooks`
-
-- [ ] **Step 5: Commit (this commit will trigger the new hook itself)**
-
-```bash
-git add package.json .githooks/pre-commit
-git commit -m "Wire new search:build pipeline into pre-commit"
-```
-
-If the commit fails because no `ANTHROPIC_API_KEY` is set, that means the hook is working as designed — set the key and re-commit, OR temporarily bypass with the source-files-untouched path (this commit only touches `package.json` and `.githooks`, so it should NOT trigger a rebuild and should just run `check-embeddings`).
-
----
-
-## Task 8: Run the pipeline once to generate fresh data
-
-**Files:**
-- Generate: `src/data/chunks.json`
-- Generate: `src/data/chunk-cache.json`
-- Generate: `src/data/embeddings.bin`
-- Generate: `src/data/embeddings-manifest.json`
-- Delete: `src/data/embeddings.json`
-- Delete: `src/data/embeddings-checksum.json`
-
-- [ ] **Step 1: Set the API key**
+- [ ] **Step 8: Set the API key (required for the data regen)**
 
 ```bash
 export ANTHROPIC_API_KEY=sk-ant-...
 ```
 
-- [ ] **Step 2: Run the chunk builder**
+- [ ] **Step 9: Delete the obsolete script files (so the new build can't accidentally pick them up)**
+
+```bash
+rm scripts/extract-content.test.jsx scripts/generate-embeddings.mjs
+```
+
+- [ ] **Step 10: Run the new chunk builder**
 
 ```bash
 npm run search:index
 ```
 
-Expected: prints `[LLM] <file>` lines for every section file (first run = full build), then `Wrote src/data/chunks.json (~700-1100 chunks)`.
+Expected: prints `[LLM] <file>` lines for every section file, then `Wrote src/data/chunks.json (~700-1100 chunks)`.
 
-- [ ] **Step 3: Spot-check Section 11 coverage**
+- [ ] **Step 11: Spot-check Section 11 coverage**
 
 ```bash
-node -e "const c=require('./src/data/chunks.json'); console.log('S11 chunks:', c.filter(x=>x.section===11).length, 'unique chapters:', new Set(c.filter(x=>x.section===11).map(x=>x.chapterId)).size);"
+node -e "const c=JSON.parse(require('fs').readFileSync('./src/data/chunks.json','utf8')); console.log('S11 chunks:', c.filter(x=>x.section===11).length, 'unique chapters:', new Set(c.filter(x=>x.section===11).map(x=>x.chapterId)).size);"
 ```
 
-Expected: `S11 chunks: <large number>` and `unique chapters: 36`.
+Expected: `unique chapters: 36`.
 
-- [ ] **Step 4: Run the embedder**
+- [ ] **Step 12: Run the embedder**
 
 ```bash
 npm run search:embed
 ```
 
-Expected:
-```
-~XXXX reprs total: 0 reused, ~XXXX to embed.
-  200/XXXX
-  ...
-Wrote src/data/embeddings.bin + src/data/embeddings-manifest.json.
-```
+Expected: progress lines and `Wrote src/data/embeddings.bin + src/data/embeddings-manifest.json.`
 
-- [ ] **Step 5: Verify check passes**
+- [ ] **Step 13: Verify check passes**
 
 ```bash
 npm run search:check
@@ -1495,47 +1460,23 @@ npm run search:check
 
 Expected: green `[pre-commit] Embeddings in sync: ...`
 
-- [ ] **Step 6: Delete obsolete files**
+- [ ] **Step 14: Stage everything atomically and commit**
+
+By this point:
+- The NEW pre-commit hook is on disk at `.githooks/pre-commit`. When `git commit` runs, it reads that file from the working tree, so the NEW hook executes.
+- The NEW hook's first action is `git diff --cached --name-only` — it sees that no `src/sections/*` is staged (we only changed scripts, hooks, package.json, and data). It skips the rebuild branch and runs `check-embeddings.mjs`.
+- The NEW `check-embeddings.mjs` reads `embeddings.bin` + `embeddings-manifest.json` (now staged) and passes.
 
 ```bash
-rm src/data/embeddings.json src/data/embeddings-checksum.json
-```
-
-- [ ] **Step 7: Stage and commit**
-
-```bash
+git add scripts/check-embeddings.mjs src/__tests__/check-embeddings.test.js
+git add .githooks/pre-commit package.json
 git add src/data/chunks.json src/data/chunk-cache.json src/data/embeddings.bin src/data/embeddings-manifest.json
 git rm src/data/embeddings.json src/data/embeddings-checksum.json
-git commit -m "Regenerate search data with new pipeline (Section 11 included)"
-```
-
----
-
-## Task 9: Delete obsolete pipeline files
-
-**Files:**
-- Delete: `scripts/extract-content.test.jsx`
-- Delete: `scripts/generate-embeddings.mjs`
-
-- [ ] **Step 1: Confirm nothing imports the old test file**
-
-```bash
-grep -rn "extract-content\|generate-embeddings" src/ scripts/ 2>/dev/null | grep -v "\.test-output"
-```
-
-Expected: empty (the test file's references vanished with the new pipeline).
-
-- [ ] **Step 2: Delete the files**
-
-```bash
 git rm scripts/extract-content.test.jsx scripts/generate-embeddings.mjs
+git commit -m "Atomic cutover: new search pipeline (LLM-authored chunks + multi-vector int8)"
 ```
 
-- [ ] **Step 3: Commit**
-
-```bash
-git commit -m "Remove obsolete extract-content + generate-embeddings scripts"
-```
+If the commit fails: do NOT use `--no-verify`. Read the failure message; the most likely cause is a missing/incorrect file. Fix and retry.
 
 ---
 

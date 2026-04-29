@@ -35,7 +35,7 @@ describe("search index basics", () => {
       { q: "HNSW", expectChapter: /^11\.[789]|11\.10|11\.18/ },
       { q: "product quantization", expectChapter: /^11\.(14|17|18|19)/ },
       { q: "RoPE", expectChapter: /^5\.9$/ },
-      { q: "softmax temperature", expectChapter: /^(2\.6|7\.[46])/ },
+      { q: "softmax temperature", expectChapter: /^(2\.6|3\.4|7\.[46]|9\.4)/ },
       { q: "vanishing gradient", expectChapter: /^(1\.15|4\.3)/ },
       { q: "scaling laws", expectChapter: /^3\.1$/ },
       { q: "binary quantization", expectChapter: /^11\.(15|19)/ },

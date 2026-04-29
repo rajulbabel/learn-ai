@@ -10,7 +10,7 @@ describe("bge-base-en-v1.5 model assets", () => {
     expect(typeof meta.dtype).toBe("string");
     expect(meta.dim).toBe(768);
     expect(typeof meta.checksum).toBe("string");
-    expect(meta.checksum.length).toBe(16);
+    expect(meta.checksum).toMatch(/^[0-9a-f]{16}$/);
     expect(typeof meta.weightFile).toBe("string");
     expect(meta.queryInstruction).toMatch(/^Represent /);
   });

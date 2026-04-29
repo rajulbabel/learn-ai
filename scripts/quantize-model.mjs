@@ -9,7 +9,14 @@
  * try q4f16 then bnb4 then fall back to q8. The chosen dtype is written
  * to model-meta.json so the browser knows which file to load.
  */
-import { mkdirSync, writeFileSync, readFileSync } from "fs";
+import {
+  mkdirSync,
+  writeFileSync,
+  readFileSync,
+  existsSync,
+  statSync,
+  renameSync,
+} from "fs";
 import { createHash } from "crypto";
 import { join } from "path";
 
@@ -44,16 +51,29 @@ async function tryDownload(name) {
   return null;
 }
 
+function atomicWrite(path, buf) {
+  const tmp = `${path}.tmp`;
+  writeFileSync(tmp, buf);
+  renameSync(tmp, path);
+}
+
 async function main() {
   mkdirSync(OUT_DIR, { recursive: true });
   mkdirSync(join(OUT_DIR, "onnx"), { recursive: true });
 
   let chosen = null;
   for (const { name, dtype } of MODEL_CANDIDATES) {
+    const dest = join(OUT_DIR, "onnx", name);
+    // Re-use a previously downloaded ONNX if present
+    if (existsSync(dest) && statSync(dest).size > 0) {
+      chosen = { name, dtype, size: statSync(dest).size };
+      console.log(`  Reusing on-disk ${name} (${(chosen.size / 1024 / 1024).toFixed(1)} MB)`);
+      break;
+    }
     console.log(`Trying ${name}...`);
     const res = await tryDownload(name);
     if (res) {
-      writeFileSync(join(OUT_DIR, "onnx", name), res.buf);
+      atomicWrite(dest, res.buf);
       chosen = { name, dtype, size: res.buf.length };
       console.log(`  Got ${name} (${(res.buf.length / 1024 / 1024).toFixed(1)} MB)`);
       break;
@@ -62,9 +82,11 @@ async function main() {
   if (!chosen) throw new Error("No suitable ONNX model found on HuggingFace");
 
   for (const f of SUPPORT_FILES) {
+    const dest = join(OUT_DIR, f);
+    if (existsSync(dest) && statSync(dest).size > 0) continue;
     const buf = await fetchBuf(`${HF_BASE}/${REPO}/resolve/main/${f}`);
     if (!buf) throw new Error(`Failed to download ${f}`);
-    writeFileSync(join(OUT_DIR, f), buf);
+    atomicWrite(dest, buf);
   }
 
   const files = [join("onnx", chosen.name), ...SUPPORT_FILES];
@@ -82,7 +104,7 @@ async function main() {
     checksum,
     queryInstruction: "Represent this sentence for searching relevant passages: ",
   };
-  writeFileSync(join(OUT_DIR, "model-meta.json"), JSON.stringify(meta, null, 2));
+  atomicWrite(join(OUT_DIR, "model-meta.json"), Buffer.from(JSON.stringify(meta, null, 2)));
   console.log(`\nWrote ${OUT_DIR}/model-meta.json`);
   console.log(`  dtype: ${chosen.dtype}, checksum: ${checksum}`);
 }

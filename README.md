@@ -6,7 +6,7 @@
 
 ## What's inside
 
-11 sections, 130+ chapters. Each chapter uses animations, interactive diagrams, and step-by-step breakdowns to build intuition before showing the math.
+Each chapter uses animations, interactive diagrams, and step-by-step breakdowns to build intuition before showing the math.
 
 1. **Neural Network Foundations** - neurons, weights, biases, activations, forward/backward pass, gradient descent, dropout, Adam, weight init.
 2. **How LLMs Train** - tokenization, self-supervised learning, cross-entropy, SFT, RLHF, DPO.

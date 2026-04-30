@@ -16,6 +16,7 @@
     "search:embed": "node scripts/embed-chunks.mjs",
     "search:build": "npm run search:index && npm run search:embed",
     "search:check": "node scripts/check-embeddings.mjs",
+    "og": "node scripts/generate-og.mjs",
     "prepare": "git config core.hooksPath .githooks"
   },
   "dependencies": {
@@ -27,6 +28,7 @@
     "react-dom": "^18.3.1"
   },
   "devDependencies": {
+    "@resvg/resvg-js": "^2.6.2",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",
     "@vitejs/plugin-react": "^4.3.4",

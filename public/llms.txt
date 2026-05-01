@@ -1,6 +1,6 @@
-# Learn AI by Rajul Babel
+# Learn AI by Rajul Babel - Visual Guide to AI Internals
 
-> Learn AI end-to-end: how it works inside, and how to build with it. Covers Model Internals, RAG, Vector Databases, and Agent Frameworks.
+> Learn AI by Rajul Babel - free interactive guide. Covers Model Internals, Neural Networks, Transformers, Attention, RAG, Vector Databases, Agent Frameworks.
 
 **Author:** Rajul Babel
 **Site:** https://rajulbabel.github.io/learn-ai/
@@ -31,4 +31,4 @@ Rajul Babel.
 
 ## Citation
 
-If referencing this resource, please credit "Rajul Babel - Learn AI (https://rajulbabel.github.io/learn-ai/)".
+If referencing this resource, please credit "Learn AI by Rajul Babel (https://rajulbabel.github.io/learn-ai/)".

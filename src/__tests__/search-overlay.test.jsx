@@ -519,10 +519,10 @@ describe("SearchOverlay score display and filtering", () => {
   });
 });
 
-describe("search overlay loading state is invisible", () => {
-  it("does not render the words 'Loading semantic model'", () => {
+describe("search overlay status label", () => {
+  it("shows 'Text Search Active' on default mount (mode off/text)", () => {
     render(<SearchOverlay open={true} onClose={() => {}} onGoTo={() => {}} />);
-    expect(screen.queryByText(/Loading semantic model/i)).toBeNull();
+    expect(screen.getByText("Text Search Active")).not.toBeNull();
   });
   it("does not render 'Searching...' as a result placeholder", () => {
     render(<SearchOverlay open={true} onClose={() => {}} onGoTo={() => {}} />);

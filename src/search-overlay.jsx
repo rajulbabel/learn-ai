@@ -184,8 +184,8 @@ export default function SearchOverlay({ open, onClose, onGoTo }) {
   const statusLabel = isReady
     ? "Semantic Search Active"
     : isSearchLoading
-      ? "Loading semantic model..."
-      : "Text search";
+      ? "Text Search Active, Loading Semantic Model..."
+      : "Text Search Active";
   const statusColor = isReady
     ? "rgba(0, 230, 118, 0.7)"
     : isSearchLoading

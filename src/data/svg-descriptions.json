@@ -298,5 +298,28 @@
   ],
   "12.9": [
     "Line chart of cosine similarity between adjacent sentences along a 12-sentence document. Similarity stays around 0.85-0.92 within the creating cluster (boundaries 1-2 through 5-6) then drops sharply to 0.41 at boundary 6-7 (the shift to revoking) before climbing back to 0.83-0.91 for the revoking cluster (boundaries 7-8 through 11-12). A red dashed horizontal threshold line at 0.7 marks the chunk-break cutoff."
+  ],
+  "13.5": [
+    "Horizontal data-freshness axis from Never on the left to Daily on the right with four colored markers placing Fine-Tuning, Prompting, RAG, and Agent by how often each approach can refresh its data.",
+    "Vertical capability-gap axis from Already In Base Model at the bottom to Specialized Skill Never Seen at the top, with markers showing where Prompting, RAG, Agent, and Fine-Tuning each unlock new model behavior."
+  ],
+  "13.6": [
+    "Horizontal stacked bar showing how 128k tokens of context window are split across system prompt, conversation history, retrieved docs, user input, and reserved output zones with their respective token counts.",
+    "U-shaped recall-accuracy curve plotted against position in a long context. The curve peaks near 100% at position 0 and at position 128k, and dips to roughly 45% in the middle - the lost-in-the-middle effect."
+  ],
+  "13.7": [
+    "Three-box flow diagram for a tool call: the Model on the left decides to call the function, the Runtime in the middle executes the real function, and the Result returns to the model on the right.",
+    "Triangular agent-loop diagram with three labeled nodes - Reason at the top, Act at the bottom-right, Observe at the bottom-left - with arrows forming a clockwise cycle until the model decides it is done."
+  ],
+  "13.9": [
+    "Six-row swim-lane for the tool-call lifecycle showing the message kinds exchanged between User, Model, Runtime, and Tool actors from user message through tool_use, function call, function return, tool_result, and final assistant message.",
+    "Horizontal timeline showing how tool calls interleave with a streaming assistant response: stream begin, partial text streaming, stream pause, tool_use block emitted whole, runtime execute, tool_result delivered, stream resumes."
+  ],
+  "13.10": [
+    "Serial timeline for ticket T2: LLM call then lookup_customer at 200ms, then a second LLM call then lookup_subscription at 200ms. Total 400ms of tool work plus 2 sequential LLM calls.",
+    "Parallel timeline for ticket T2: one LLM call followed by lookup_customer and lookup_subscription running concurrently (both 200ms). Total 200ms of tool work plus 1 LLM call - half the latency."
+  ],
+  "13.11": [
+    "Validation-layer flow for a tool call: the model emits a tool_use block, the runtime validates the arguments against the schema, and then branches - invalid arguments return a malformed error immediately while valid arguments proceed to execute the real function."
   ]
 }

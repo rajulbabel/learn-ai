@@ -17,6 +17,7 @@ import * as VectorFoundations from "../sections/vector-foundations.jsx";
 import * as VectorCompression from "../sections/vector-compression.jsx";
 import * as VectorProduction from "../sections/vector-production.jsx";
 import * as VectorSystems from "../sections/vector-systems.jsx";
+import * as RagFoundations from "../sections/rag-foundations.jsx";
 
 const lookup = {
   TOC,
@@ -34,6 +35,7 @@ const lookup = {
   ...VectorCompression,
   ...VectorProduction,
   ...VectorSystems,
+  ...RagFoundations,
 };
 
 describe("lookup", () => {
@@ -59,5 +61,12 @@ describe("lookup", () => {
     expect(typeof mod.BruteForceKNN).toBe("function");
     expect(typeof mod.ThreeWayTradeoff).toBe("function");
     expect(typeof mod.DistanceMetrics).toBe("function");
+  });
+
+  it("rag-foundations.jsx exports the Act 1 chapter components", async () => {
+    const mod = await import("../sections/rag-foundations.jsx");
+    expect(typeof mod.WhyLLMsNeedRetrieval).toBe("function");
+    expect(typeof mod.NaiveRAGPipeline).toBe("function");
+    expect(typeof mod.WhereNaiveRAGBreaks).toBe("function");
   });
 });

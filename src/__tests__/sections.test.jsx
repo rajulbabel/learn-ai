@@ -7711,3 +7711,45 @@ describe("CrewAiAutoGen (13.49) content", () => {
     expect(container.textContent).toMatch(/Pick The Abstraction That Matches Your Mental Model/i);
   });
 });
+
+describe("VendorSdks (13.50) content", () => {
+  const fn = AgentProduction.VendorSdks;
+
+  it("sub=0 introduces vendor-native frameworks", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/Claude Agent SDK/);
+    expect(container.textContent).toMatch(/OpenAI Agents|Swarm/);
+    expect(container.textContent).toMatch(/loop|hand.?off|primitive/i);
+    expect(container.textContent).toMatch(/When The Model Vendor Ships The Framework/i);
+  });
+
+  it("sub=1 shows Claude Agent SDK shape", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/AgentLoop|loop/i);
+    expect(container.textContent).toMatch(/system_prompt|tools/);
+    expect(container.textContent).toMatch(/refund|INV.?9924/);
+    expect(container.textContent).toMatch(/Loop Primitive/i);
+  });
+
+  it("sub=2 shows OpenAI Agents shape", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/OpenAI Agents|Runner/);
+    expect(container.textContent).toMatch(/handoffs/);
+    expect(container.textContent).toMatch(/triage|billing/i);
+    expect(container.textContent).toMatch(/Hand-Off Primitive/i);
+  });
+
+  it("sub=3 compares the two side-by-side", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/loop|hand.?off/i);
+    expect(container.textContent).toMatch(/lock.?in|portab/i);
+    expect(container.textContent).toMatch(/Two Primitives, Two Mental Models/i);
+  });
+
+  it("sub=4 lists when to pick vendor SDK", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/vendor|committed/i);
+    expect(container.textContent).toMatch(/multi.?vendor|switch/i);
+    expect(container.textContent).toMatch(/Use The Vendor SDK When/i);
+  });
+});

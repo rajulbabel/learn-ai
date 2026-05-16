@@ -5886,3 +5886,45 @@ describe("ToolUseAsBridge (13.7) content", () => {
     expect(container.textContent).toMatch(/send_email/i);
   });
 });
+
+describe("JsonSchemaForTools (13.8) content", () => {
+  const fn = AgentTools.JsonSchemaForTools;
+
+  it("sub=0 shows the schema as contract", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/schema/i);
+    expect(container.textContent).toMatch(/lookup_customer/i);
+    expect(container.textContent).toMatch(/input_schema|properties/i);
+  });
+
+  it("sub=1 distinguishes required vs optional", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/required/i);
+    expect(container.textContent).toMatch(/optional/i);
+  });
+
+  it("sub=2 shows enum and format constraints", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/enum/i);
+    expect(container.textContent).toMatch(/urgency/i);
+  });
+
+  it("sub=3 lists description-writing rules", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/description/i);
+    expect(container.textContent).toMatch(/side effect|mutate/i);
+  });
+
+  it("sub=4 contrasts bad and good descriptions", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/bad|vague/i);
+    expect(container.textContent).toMatch(/good|specific/i);
+    expect(container.textContent).toMatch(/200|escalate/i);
+  });
+
+  it("sub=5 shows the canonical lookup_customer reference", () => {
+    const { container } = render(fn(makeCtx({ sub: 5 })));
+    expect(container.textContent).toMatch(/lookup_customer/i);
+    expect(container.textContent).toMatch(/canonical|reference/i);
+  });
+});

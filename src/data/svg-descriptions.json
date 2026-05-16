@@ -313,5 +313,8 @@
   ],
   "12.13": [
     "Horizontal cost-budget scale with three tier markers labeled lab, startup, and enterprise, each with a recommended chunking stack listed underneath"
+  ],
+  "12.14": [
+    "Four-step decision flowchart for picking an embedding model: ask whether multilingual is needed, whether the corpus is specialized, whether budget is sensitive, then default to OpenAI text-embedding-3-large or Cohere embed-v3."
   ]
 }

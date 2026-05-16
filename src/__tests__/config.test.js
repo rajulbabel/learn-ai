@@ -264,9 +264,9 @@ describe("Section 11 chapters", () => {
 });
 
 describe("Section 12 chapters", () => {
-  it("has chapters 12.1 through 12.9 in order", () => {
+  it("has chapters 12.1 through 12.10 in order", () => {
     const section12 = chapters.filter((ch) => ch.section === 12);
-    expect(section12.length).toBe(9);
+    expect(section12.length).toBe(10);
     expect(section12[0].id).toBe("12.1");
     expect(section12[0].component).toBe("WhyLLMsNeedRetrieval");
     expect(section12[0].title).toBe("Why LLMs Need Retrieval");
@@ -294,6 +294,9 @@ describe("Section 12 chapters", () => {
     expect(section12[8].id).toBe("12.9");
     expect(section12[8].component).toBe("SemanticChunking");
     expect(section12[8].title).toBe("Semantic Chunking");
+    expect(section12[9].id).toBe("12.10");
+    expect(section12[9].component).toBe("LateChunking");
+    expect(section12[9].title).toBe("Late Chunking (Jina 2024)");
   });
 });
 

@@ -5575,3 +5575,44 @@ describe("SemanticChunking (12.9) content", () => {
     expect(container.textContent).toMatch(/\$|10x|50x|million|M docs/i);
   });
 });
+
+describe("LateChunking (12.10) content", () => {
+  const fn = RagFoundations.LateChunking;
+
+  it("sub=0 frames cross-chunk reference loss on the Sarah doc", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/cross[- ]?chunk/i);
+    expect(container.textContent).toMatch(/Sarah/);
+    expect(container.textContent).toMatch(/pronoun|reference|she/i);
+  });
+
+  it("sub=1 contrasts chunk-then-embed vs embed-then-chunk", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/chunk[- ]?then[- ]?embed/i);
+    expect(container.textContent).toMatch(/embed[- ]?then[- ]?chunk|late chunk/i);
+    expect(container.textContent).toMatch(/attention|whole doc|all tokens/i);
+    expect(container.textContent).toMatch(/pool/i);
+  });
+
+  it("sub=2 traces the late-chunking pass on doc-1", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/Sarah/);
+    expect(container.textContent).toMatch(/attention/i);
+    expect(container.textContent).toMatch(/chunk 3|v_chunk3/i);
+  });
+
+  it("sub=3 shows the retrieval-score reversal", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/0\.\d+/);
+    expect(container.textContent).toMatch(/chunk 3/i);
+    expect(container.textContent).toMatch(/Sarah/);
+  });
+
+  it("sub=4 lists pros, cons, and notes Jina 2024 origin", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/Jina/i);
+    expect(container.textContent).toMatch(/2024/);
+    expect(container.textContent).toMatch(/pronoun|anaphora|reference/i);
+    expect(container.textContent).toMatch(/token[- ]?level|hidden state/i);
+  });
+});

@@ -175,6 +175,7 @@ export const chapters = [
   { id: "12.7", title: "Why Chunk At All + Fixed-Size Baseline", section: 12, component: "WhyChunkFixedSize" },
   { id: "12.8", title: "Recursive Structural Chunking", section: 12, component: "RecursiveStructuralChunking" },
   { id: "12.9", title: "Semantic Chunking", section: 12, component: "SemanticChunking" },
+  { id: "12.10", title: "Late Chunking (Jina 2024)", section: 12, component: "LateChunking" },
 ];
 
 export const sectionNames = {

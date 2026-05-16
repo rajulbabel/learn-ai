@@ -298,5 +298,9 @@
   ],
   "12.9": [
     "Line chart of cosine similarity between adjacent sentences along a 12-sentence document. Similarity stays around 0.85-0.92 within the creating cluster (boundaries 1-2 through 5-6) then drops sharply to 0.41 at boundary 6-7 (the shift to revoking) before climbing back to 0.83-0.91 for the revoking cluster (boundaries 7-8 through 11-12). A red dashed horizontal threshold line at 0.7 marks the chunk-break cutoff."
+  ],
+  "12.10": [
+    "Side-by-side comparison: left shows chunk-then-embed with three independent embedding passes per chunk, right shows late chunking with one whole-doc attention pass followed by chunk-boundary mean pooling",
+    "Token-attention sweep diagram over doc-1 password reset showing a single attention arc covering all tokens, with mean-pool boundaries at token positions 128 and 256 producing three chunk vectors, with annotation that chunk 3's vector still encodes 'Sarah' from chunk 1"
   ]
 }

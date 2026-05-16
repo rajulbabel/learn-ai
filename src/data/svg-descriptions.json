@@ -310,5 +310,8 @@
   ],
   "12.12": [
     "Horizontal bar chart showing four bars of retrieval failure rate from Anthropic's September 2024 Contextual Retrieval benchmark: naive embedding 5.7%, plus contextual embedding 3.7%, plus contextual BM25 2.9%, plus reranking 1.9%, with title-case axis labels"
+  ],
+  "12.13": [
+    "Horizontal cost-budget scale with three tier markers labeled lab, startup, and enterprise, each with a recommended chunking stack listed underneath"
   ]
 }

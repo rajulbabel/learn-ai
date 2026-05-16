@@ -5717,3 +5717,48 @@ describe("ContextualRetrieval (12.12) content", () => {
     expect(container.textContent).toMatch(/67%|combined/);
   });
 });
+
+describe("ChunkingDecision (12.13) content", () => {
+  const fn = RagFoundations.ChunkingDecision;
+
+  it("sub=0 lists at least five of the six chunking strategies", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    const text = container.textContent;
+    const names = [/fixed[- ]?size/i, /recursive structural/i, /semantic/i, /late/i, /hierarchical/i, /contextual/i];
+    const hits = names.filter((re) => re.test(text)).length;
+    expect(hits).toBeGreaterThanOrEqual(5);
+    expect(text).toMatch(/quality|cost|implementation/i);
+  });
+
+  it("sub=1 covers the doc-structure axis (markdown, PDF, code, flat)", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/markdown|HTML/i);
+    expect(container.textContent).toMatch(/PDF/);
+    expect(container.textContent).toMatch(/code/i);
+    expect(container.textContent).toMatch(/flat|narrative/i);
+  });
+
+  it("sub=2 covers the query-type axis (factual, relational, comparative)", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/factual/i);
+    expect(container.textContent).toMatch(/relational/i);
+    expect(container.textContent).toMatch(/comparative/i);
+    expect(container.textContent).toMatch(/hierarchical/i);
+  });
+
+  it("sub=3 covers the cost-budget axis (lab, startup, enterprise)", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/lab|prototype/i);
+    expect(container.textContent).toMatch(/startup/i);
+    expect(container.textContent).toMatch(/enterprise/i);
+    expect(container.textContent).toMatch(/\$|free|cost/i);
+  });
+
+  it("sub=4 walks through strategy choice on the customer support corpus", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/customer support|support corpus/i);
+    expect(container.textContent).toMatch(/Account|Billing/i);
+    expect(container.textContent).toMatch(/Product Features|Troubleshooting/i);
+    expect(container.textContent).toMatch(/mix|rarely one|iterate/i);
+  });
+});

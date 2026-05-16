@@ -178,6 +178,7 @@ export const chapters = [
   { id: "12.10", title: "Late Chunking (Jina 2024)", section: 12, component: "LateChunking" },
   { id: "12.11", title: "Hierarchical / Parent-Child Chunking", section: 12, component: "HierarchicalChunking" },
   { id: "12.12", title: "Contextual Retrieval (Anthropic 2024)", section: 12, component: "ContextualRetrieval" },
+  { id: "12.13", title: "The Chunking Decision", section: 12, component: "ChunkingDecision" },
 ];
 
 export const sectionNames = {

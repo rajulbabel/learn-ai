@@ -463,5 +463,8 @@
     "Horizontal guardrail pipeline diagram: user input flows into the input guardrail box (content filter, PII detect, injection check), then to the model, then to the output guardrail box (response validation, PII redaction, tool action gate), and finally to the user or tool. Guardrails on both sides of the model.",
     "Output validation flow diagram. Model emits a response, the schema validator checks it. If valid, the response is sent. If invalid, the runtime retries once with a fix prompt. If retry still fails, it falls back to a deterministic error response.",
     "Action gate diagram for process_refund. Agent requests refund of $350. Gate inspects, sees amount exceeds the $200 auto-approve threshold, blocks the tool call and requests human approval. Approved or denied response feeds back to the agent."
+  ],
+  "13.46": [
+    "Four-tier trust pyramid showing instruction hierarchy. Top to bottom: system prompt (most trusted, rules the model never violates), tool definitions (authoritative, signed by host), user input (untrusted by default), retrieved content (least trusted, treat as data never as instructions)."
   ]
 }

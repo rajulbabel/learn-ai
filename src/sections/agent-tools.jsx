@@ -4762,3 +4762,84 @@ export const ToolErrorsRetries = (ctx) => {
     </div>
   );
 };
+
+// Section 13 Act 3: Protocols (MCP + A2A)
+// Chapters 13.12 - 13.17
+
+export const WhyProtocols = () => {
+  return (
+    <div>
+      <Box color={C.purple}>
+        <T color={C.purple} bold center size={22}>
+          Why Protocols?
+        </T>
+        <T size={16}>Stub - implemented in Task 7.</T>
+      </Box>
+    </div>
+  );
+};
+
+export const McpArchitecture = () => {
+  return (
+    <div>
+      <Box color={C.purple}>
+        <T color={C.purple} bold center size={22}>
+          MCP Architecture
+        </T>
+        <T size={16}>Stub - implemented in Task 8.</T>
+      </Box>
+    </div>
+  );
+};
+
+export const McpPrimitives = () => {
+  return (
+    <div>
+      <Box color={C.purple}>
+        <T color={C.purple} bold center size={22}>
+          MCP Primitives - Tools, Resources, Prompts
+        </T>
+        <T size={16}>Stub - implemented in Task 9.</T>
+      </Box>
+    </div>
+  );
+};
+
+export const BuildingMcpServer = () => {
+  return (
+    <div>
+      <Box color={C.purple}>
+        <T color={C.purple} bold center size={22}>
+          Building an MCP Server
+        </T>
+        <T size={16}>Stub - implemented in Task 10.</T>
+      </Box>
+    </div>
+  );
+};
+
+export const McpSecurity = () => {
+  return (
+    <div>
+      <Box color={C.purple}>
+        <T color={C.purple} bold center size={22}>
+          MCP Security
+        </T>
+        <T size={16}>Stub - implemented in Task 11.</T>
+      </Box>
+    </div>
+  );
+};
+
+export const A2AProtocol = () => {
+  return (
+    <div>
+      <Box color={C.purple}>
+        <T color={C.purple} bold center size={22}>
+          A2A - Agent-to-Agent Protocol
+        </T>
+        <T size={16}>Stub - implemented in Task 12.</T>
+      </Box>
+    </div>
+  );
+};

@@ -177,3 +177,13 @@ describe("Section 13 Act 8 component presence (AgentProduction)", () => {
     expect(typeof AgentProduction.ToolSecurity).toBe("function");
   });
 });
+
+describe("Section 13 Act 9 component presence (AgentProduction)", () => {
+  it("AgentProduction exports each Act 9 chapter", () => {
+    expect(typeof AgentProduction.LangGraphFramework).toBe("function");
+    expect(typeof AgentProduction.CrewAiAutoGen).toBe("function");
+    expect(typeof AgentProduction.VendorSdks).toBe("function");
+    expect(typeof AgentProduction.CustomNoFramework).toBe("function");
+    expect(typeof AgentProduction.AgentDecisionFramework).toBe("function");
+  });
+});

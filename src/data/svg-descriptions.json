@@ -402,5 +402,8 @@
     "Time-series chart over 30 days showing faithfulness, recall, and refusal rate lines crossing their alert thresholds at different days. Each metric is in a distinct color with its threshold shown as a dashed line.",
     "Faithfulness trend thumbnail panel for the dashboard mock; shows a steady decline from 0.92 to 0.84 crossing the 0.85 alert threshold.",
     "Refusal rate trend thumbnail panel for the dashboard mock; rises from 8 percent to 18 percent crossing the 15 percent alert threshold."
+  ],
+  "12.40": [
+    "Decision tree for choosing a RAG framework: starts with whether RAG is the primary feature, branches on team size, agent complexity, and provider lock-in tolerance to recommend one of six options - No Framework, LlamaIndex, LangChain, LangGraph, Vendor SDK, or Haystack."
   ]
 }

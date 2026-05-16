@@ -6991,3 +6991,49 @@ describe("HallucinationDrift (12.39) content", () => {
     expect(container.textContent).toMatch(/drift|hallucinat/i);
   });
 });
+
+describe("FrameworkChoice (12.40) content", () => {
+  const fn = RagProduction.FrameworkChoice;
+
+  it("sub=0 lists the 6 framework options", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/no framework|raw SDK/i);
+    expect(container.textContent).toMatch(/LlamaIndex/);
+    expect(container.textContent).toMatch(/LangChain/);
+    expect(container.textContent).toMatch(/LangGraph/);
+    expect(container.textContent).toMatch(/Haystack/);
+    expect(container.textContent).toMatch(/vendor SDK|OpenAI Agents|Anthropic/i);
+  });
+
+  it("sub=1 shows the framework decision matrix", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/lock-?in/i);
+    expect(container.textContent).toMatch(/churn|complexity/i);
+    expect(container.textContent).toMatch(/community/i);
+  });
+
+  it("sub=2 gives an honest take on LangChain", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/LangChain/);
+    expect(container.textContent).toMatch(/deprecated|abstraction|churn/i);
+  });
+
+  it("sub=3 maps each framework to when it fits", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/team/i);
+    expect(container.textContent).toMatch(/LlamaIndex|LangChain|Haystack/);
+  });
+
+  it("sub=4 shows the framework decision tree", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/decision|tree/i);
+    expect(container.textContent).toMatch(/LlamaIndex|LangChain|LangGraph/);
+  });
+
+  it("sub=5 emphasizes framework-agnostic decisions", () => {
+    const { container } = render(fn(makeCtx({ sub: 5 })));
+    expect(container.textContent).toMatch(/chunking|embedding|hybrid|reranker/i);
+    expect(container.textContent).toMatch(/framework/i);
+    expect(container.textContent).toMatch(/agnostic|same|replaceable/i);
+  });
+});

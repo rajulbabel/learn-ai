@@ -21,6 +21,8 @@ import * as VectorProduction from "../sections/vector-production.jsx";
 import * as VectorSystems from "../sections/vector-systems.jsx";
 import * as RagFoundations from "../sections/rag-foundations.jsx";
 import * as RagIngestion from "../sections/rag-ingestion.jsx";
+import * as AgentPrompting from "../sections/agent-prompting.jsx";
+import * as AgentTools from "../sections/agent-tools.jsx";
 
 const lookup = {
   TOC,
@@ -40,6 +42,8 @@ const lookup = {
   ...VectorSystems,
   ...RagFoundations,
   ...RagIngestion,
+  ...AgentPrompting,
+  ...AgentTools,
 };
 
 afterEach(() => cleanup());

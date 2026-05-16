@@ -19,6 +19,8 @@ import * as VectorProduction from "../sections/vector-production.jsx";
 import * as VectorSystems from "../sections/vector-systems.jsx";
 import * as RagFoundations from "../sections/rag-foundations.jsx";
 import * as RagIngestion from "../sections/rag-ingestion.jsx";
+import * as AgentPrompting from "../sections/agent-prompting.jsx";
+import * as AgentTools from "../sections/agent-tools.jsx";
 
 const lookup = {
   TOC,
@@ -38,6 +40,8 @@ const lookup = {
   ...VectorSystems,
   ...RagFoundations,
   ...RagIngestion,
+  ...AgentPrompting,
+  ...AgentTools,
 };
 
 describe("lookup", () => {
@@ -82,5 +86,24 @@ describe("RagIngestion exports", () => {
   });
   it("exposes RefreshSync", () => {
     expect(typeof RagIngestion.RefreshSync).toBe("function");
+  });
+});
+
+describe("Section 13 component presence", () => {
+  it("AgentPrompting exports each Act 1 chapter", () => {
+    expect(typeof AgentPrompting.AnatomyOfLlmCall).toBe("function");
+    expect(typeof AgentPrompting.SystemPromptContract).toBe("function");
+    expect(typeof AgentPrompting.FewShotStructuredOutput).toBe("function");
+    expect(typeof AgentPrompting.ChainOfThoughtSelfConsistency).toBe("function");
+    expect(typeof AgentPrompting.PromptVsTuneVsRagVsAgent).toBe("function");
+    expect(typeof AgentPrompting.ContextEngineering).toBe("function");
+  });
+
+  it("AgentTools exports each Act 2 chapter", () => {
+    expect(typeof AgentTools.ToolUseAsBridge).toBe("function");
+    expect(typeof AgentTools.JsonSchemaForTools).toBe("function");
+    expect(typeof AgentTools.ToolCallLifecycle).toBe("function");
+    expect(typeof AgentTools.ParallelToolsAndChoice).toBe("function");
+    expect(typeof AgentTools.ToolErrorsRetries).toBe("function");
   });
 });

@@ -6210,3 +6210,56 @@ describe("LostInTheMiddle (12.23) content", () => {
     expect(container.textContent).toMatch(/12\.25|multi-hop/i);
   });
 });
+
+describe("CitationsRefusal (12.24) content", () => {
+  const fn = RagGeneration.CitationsRefusal;
+
+  it("sub=0 contrasts no-citation vs cited answer for account-locked query", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/citation/i);
+    expect(container.textContent).toMatch(/verify|audit|trace/i);
+    expect(container.textContent).toMatch(/\[doc-?\d+/);
+  });
+
+  it("sub=1 shows a prompt template with [doc-N] citation instruction", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/prompt template/i);
+    expect(container.textContent).toMatch(/\[doc-?N|\[doc/i);
+    expect(container.textContent).toMatch(/\{context\}|\{query\}/);
+  });
+
+  it("sub=2 shows structured citation JSON output", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/structured|JSON/i);
+    expect(container.textContent).toMatch(/doc_id|citations|confidence/i);
+  });
+
+  it("sub=3 shows refusal instruction and 'I don't have enough information' phrase", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/refuse|refusal/i);
+    expect(container.textContent).toMatch(/i don'?t have enough information|don'?t invent/i);
+    expect(container.textContent).toMatch(/hallucinat|guess|invent/i);
+  });
+
+  it("sub=4 introduces faithfulness with claim tracing and RAGAS reference", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/faithfulness/i);
+    expect(container.textContent).toMatch(/claim|trace|cited/i);
+    expect(container.textContent).toMatch(/12\.31-12\.35|RAGAS/i);
+  });
+
+  it("sub=5 explains parsing [doc-N] markers back to chunks", () => {
+    const { container } = render(fn(makeCtx({ sub: 5 })));
+    expect(container.textContent).toMatch(/parse|parser/i);
+    expect(container.textContent).toMatch(/\[doc-?\d+/);
+    expect(container.textContent).toMatch(/footnote|tooltip|UI|regex|extract/i);
+  });
+
+  it("sub=6 shows the production combined template with rules and refusal", () => {
+    const { container } = render(fn(makeCtx({ sub: 6 })));
+    expect(container.textContent).toMatch(/RULES|rules/);
+    expect(container.textContent).toMatch(/\[doc-?N|\[doc/i);
+    expect(container.textContent).toMatch(/i don'?t have enough information/i);
+    expect(container.textContent).toMatch(/\{context\}|\{query\}/);
+  });
+});

@@ -174,6 +174,7 @@ export const chapters = [
   { id: "12.6", title: "Refresh & Sync Schedules", section: 12, component: "RefreshSync" },
   { id: "12.7", title: "Why Chunk At All + Fixed-Size Baseline", section: 12, component: "WhyChunkFixedSize" },
   { id: "12.8", title: "Recursive Structural Chunking", section: 12, component: "RecursiveStructuralChunking" },
+  { id: "12.9", title: "Semantic Chunking", section: 12, component: "SemanticChunking" },
 ];
 
 export const sectionNames = {

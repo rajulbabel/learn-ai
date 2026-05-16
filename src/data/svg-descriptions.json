@@ -387,5 +387,11 @@
   ],
   "13.28": [
     "Recipe retrieval flow: new ticket text is embedded, ANN search runs against the recipe library trigger embeddings, and the top-one match is surfaced for the agent to use as scaffolding."
+  ],
+  "13.29": [
+    "Horizontal context window bar at 8k tokens with turn-by-turn message stacking; by turn thirty the bar is full and the rest of the conversation cannot fit.",
+    "Rolling summary technique in three stages: conversation at fifty percent capacity, oldest half summarized into a small summary block, capacity drops back to twenty five percent so the conversation can continue.",
+    "Hierarchical summary tree: raw turn batches at the bottom layer become per-batch summaries at the middle layer, which combine into a single meta-summary at the top covering the whole conversation.",
+    "Four threshold bands across a context window utilization bar: twenty five percent do nothing, fifty percent compress half, seventy five percent aggressive summarize, ninety percent panic drop with summary plus last five turns."
   ]
 }

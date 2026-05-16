@@ -264,7 +264,7 @@ Only config.js IDs change.
 | 12.2 | NaiveRAGPipeline | The Naive RAG Pipeline |
 | 12.3 | WhereNaiveRAGBreaks | Where Naive RAG Breaks |
 
-**Section 13: AI Agents** (`agent-prompting.jsx` + `agent-tools.jsx` + `agent-loops.jsx` + `multi-agent.jsx` + `agent-evals.jsx` - Milestones 1-4 of 6 complete: Acts 1-7)
+**Section 13: AI Agents** (`agent-prompting.jsx` + `agent-tools.jsx` + `agent-loops.jsx` + `multi-agent.jsx` + `agent-evals.jsx` + `agent-production.jsx` - Milestones 1-5 of 6 complete: Acts 1-8)
 
 | Chapter | Component | Title |
 |---------|-----------|-------|
@@ -309,6 +309,12 @@ Only config.js IDs change.
 | 13.39 | LlmAsJudge | LLM-as-Judge |
 | 13.40 | TraceEvals | Trace Evals |
 | 13.41 | EvalSetsContinuous | Eval Sets + Continuous Eval |
+| 13.42 | ObservabilityTracing | Observability & Tracing |
+| 13.43 | CostControl | Cost Control |
+| 13.44 | LatencyOptimization | Latency Optimization |
+| 13.45 | Guardrails | Guardrails |
+| 13.46 | PromptInjectionDefenses | Prompt Injection Defenses |
+| 13.47 | ToolSecurity | Tool Security |
 
 ## Project Structure
 
@@ -353,7 +359,8 @@ learn-ai/
 │       ├── agent-tools.jsx               # Section 13 (Acts 2+3, chapters 13.7-13.17)
 │       ├── agent-loops.jsx               # Section 13 (Acts 4+5, chapters 13.18-13.29)
 │       ├── multi-agent.jsx               # Section 13 (Act 6, chapters 13.30-13.36)
-│       └── agent-evals.jsx               # Section 13 (Act 7, chapters 13.37-13.41)
+│       ├── agent-evals.jsx               # Section 13 (Act 7, chapters 13.37-13.41)
+│       └── agent-production.jsx          # Section 13 (Acts 8+9, chapters 13.42-13.52 - Act 8 in M5, Act 9 in M6)
 ├── .github/workflows/deploy.yml
 └── CLAUDE.md
 ```

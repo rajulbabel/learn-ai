@@ -51,6 +51,7 @@ const sectionLoaders = {
       import("./sections/agent-loops.jsx"),
       import("./sections/multi-agent.jsx"),
       import("./sections/agent-evals.jsx"),
+      import("./sections/agent-production.jsx"),
     ]).then((mods) => Object.assign({}, ...mods)),
 };
 

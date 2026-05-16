@@ -377,5 +377,8 @@
   ],
   "12.32": [
     "Judge calibration before-and-after line chart. The x-axis is the judge score percentile and the y-axis is agreement with human labels. The before curve sits around 60% agreement with a long divergence tail; the after curve (rubric refined plus position and verbosity mitigations applied) rises to 92% agreement, showing how calibration narrows the gap to human judgement."
+  ],
+  "12.34": [
+    "Two-lane LLM-bootstrapped golden-dataset pipeline. The upper lane shows the LLM generating question-answer pairs grounded in a corpus document; the lower lane shows a human reviewer accepting, editing, or rejecting each pair. Used to illustrate how a small hand-built seed scales into a 500-2000 reviewed set without losing human oversight."
   ]
 }

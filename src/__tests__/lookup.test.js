@@ -21,6 +21,7 @@ import * as RagFoundations from "../sections/rag-foundations.jsx";
 import * as RagIngestion from "../sections/rag-ingestion.jsx";
 import * as RagRetrieval from "../sections/rag-retrieval.jsx";
 import * as RagGeneration from "../sections/rag-generation.jsx";
+import * as RagEvaluation from "../sections/rag-evaluation.jsx";
 
 const lookup = {
   TOC,
@@ -42,6 +43,7 @@ const lookup = {
   ...RagIngestion,
   ...RagRetrieval,
   ...RagGeneration,
+  ...RagEvaluation,
 };
 
 describe("lookup", () => {
@@ -99,6 +101,15 @@ describe("lookup", () => {
     expect(typeof mod.GraphRAG).toBe("function");
     expect(typeof mod.AgenticRAG).toBe("function");
     expect(typeof mod.LongContextVsRAG).toBe("function");
+  });
+
+  it("rag-evaluation.jsx exports the Act 8 chapter components", async () => {
+    const mod = await import("../sections/rag-evaluation.jsx");
+    expect(typeof mod.RAGEvalTriangle).toBe("function");
+    expect(typeof mod.LLMAsJudge).toBe("function");
+    expect(typeof mod.RAGASMetrics).toBe("function");
+    expect(typeof mod.GoldenDatasets).toBe("function");
+    expect(typeof mod.OnlineEvalABTesting).toBe("function");
   });
 });
 

@@ -332,5 +332,8 @@
   ],
   "12.18": [
     "Three-branch interpretation diagram showing the ambiguous query 'How do I export?' fanning out to three doc destinations: export formats, bulk operations, and export failures."
+  ],
+  "12.19": [
+    "Five-box horizontal flow diagram showing the HyDE pipeline: user query, LLM generates hypothetical answer, embed hypothetical answer, vector retrieval, top-K real docs."
   ]
 }

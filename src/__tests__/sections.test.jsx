@@ -5989,3 +5989,48 @@ describe("WhyTransformQueries (12.18) content", () => {
     expect(container.textContent).toMatch(/routing/i);
   });
 });
+
+describe("HyDE (12.19) content", () => {
+  const fn = RagRetrieval.HyDE;
+
+  it("sub=0 frames embed-the-answer not the question with dashboard example", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/HyDE|hypothetical/i);
+    expect(container.textContent).toMatch(/dashboard/i);
+    expect(container.textContent).toMatch(/embed.*answer|answer.*embed/i);
+  });
+
+  it("sub=1 shows the HyDE 5-box flow", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/user query|query/i);
+    expect(container.textContent).toMatch(/hypothetical/i);
+    expect(container.textContent).toMatch(/embed/i);
+    expect(container.textContent).toMatch(/retriev/i);
+  });
+
+  it("sub=2 walks the dashboard-slow worked example with retrieved doc-22", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/dashboard.*slow|slow.*dashboard/i);
+    expect(container.textContent).toMatch(/doc-?22|slow page load|500/i);
+  });
+
+  it("sub=3 explains why HyDE works via vocabulary and mismatch", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/vocabulary/i);
+    expect(container.textContent).toMatch(/mismatch|lexical/i);
+  });
+
+  it("sub=4 contrasts when HyDE helps vs hurts with latency note", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/help|hurt|when/i);
+    expect(container.textContent).toMatch(/descriptive|long|factual|short/i);
+    expect(container.textContent).toMatch(/latency|200|400/i);
+  });
+
+  it("sub=5 shows the HyDE prompt template with {query} placeholder", () => {
+    const { container } = render(fn(makeCtx({ sub: 5 })));
+    expect(container.textContent).toMatch(/prompt template/i);
+    expect(container.textContent).toMatch(/\{query\}/);
+    expect(container.textContent).toMatch(/12\.36|cache|caching/i);
+  });
+});

@@ -45,6 +45,7 @@ const sectionLoaders = {
       import("./sections/rag-ingestion.jsx"),
       import("./sections/rag-retrieval.jsx"),
       import("./sections/rag-generation.jsx"),
+      import("./sections/rag-evaluation.jsx"),
     ]).then((mods) => Object.assign({}, ...mods)),
 };
 

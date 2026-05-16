@@ -6,19 +6,19 @@
 >
 > **Two-stage review per task:** Stage 1 SCOPE - did the subagent modify only the listed files? Are commits clean? Stage 2 CORRECTNESS - do tests pass, does behavior match the spec? Both stages must pass before moving to the next task.
 
-**Goal:** Add Acts 5 (Context & Generation) and 6 (Advanced Retrieval Patterns) of Section 12 "Retrieval-Augmented Generation" - 9 chapters total (12.19 through 12.27). This milestone introduces a new section file `src/sections/rag-generation.jsx` and wires it into the Section 12 loader (which now spans 3 files). The app ships at end of M4 with Section 12 reaching 27 navigable chapters out of 38 total.
+**Goal:** Add Acts 6 (Context & Generation) and 7 (Advanced Retrieval Patterns) of Section 12 "Retrieval-Augmented Generation" - 9 chapters total (12.22 through 12.30). This milestone introduces a new section file `src/sections/rag-generation.jsx` and wires it into the Section 12 loader (which now spans 4 files). The app ships at end of M4 with Section 12 reaching 30 navigable chapters out of 41 total.
 
-**Architecture:** The 9 new chapters live in a brand-new section file `src/sections/rag-generation.jsx`. Section 12 already has loaders for `rag-foundations.jsx` (M1+M2: 12.1-12.10) and `rag-retrieval.jsx` (M3: 12.11-12.18); M4 expands the Section 12 entry in `sectionLoaders` to a 3-file `Promise.all`. Each chapter follows the established Section 12 pattern: ctx-based function component, `{sub >= 0 && ... }` for sub=0 inline, `<Reveal when={sub >= N}>` for subsequent sub-steps, colored `<Box>` per sub-step, center-aligned `<T bold center>` titles, real artifacts (prompt templates as styled monospace text blocks - NOT code blocks), concrete support-corpus examples, plus the two secondary corpora (15-node legal citation network for GraphRAG, single 200-page product manual for Long-Context vs RAG).
+**Architecture:** The 9 new chapters live in a brand-new section file `src/sections/rag-generation.jsx`. Section 12 already has loaders for `rag-foundations.jsx` (M1+M2), `rag-ingestion.jsx` (M2), and `rag-retrieval.jsx` (M3: 12.14-12.21); M4 expands the Section 12 entry in `sectionLoaders` from a 3-file `Promise.all` to a 4-file `Promise.all` by appending `rag-generation.jsx`. Each chapter follows the established Section 12 pattern: ctx-based function component, `{sub >= 0 && ... }` for sub=0 inline, `<Reveal when={sub >= N}>` for subsequent sub-steps, colored `<Box>` per sub-step, center-aligned `<T bold center>` titles, real artifacts (prompt templates as styled monospace text blocks - NOT code blocks), concrete support-corpus examples, plus the two secondary corpora (15-node legal citation network for GraphRAG, single 200-page product manual for Long-Context vs RAG).
 
 **Tech Stack:** React 18 (hooks, inline styles), Vitest, Vite, TDD-first. No new dependencies.
 
-**Spec reference:** `docs/superpowers/specs/2026-05-16-section-12-rag-design.md` - Acts 5 + 6.
+**Spec reference:** `docs/superpowers/specs/2026-05-16-section-12-rag-design.md` - Acts 6 + 7.
 
 **Prior-milestone references:**
 
 - `docs/superpowers/plans/2026-05-16-section-12-milestone-1.md` - full per-chapter task template (Tasks 7-9 are the canonical pattern).
 - `docs/superpowers/plans/2026-05-16-section-12-milestone-2.md` - chunking chapters (continuation pattern inside same section file).
-- `docs/superpowers/plans/2026-05-16-section-12-milestone-3.md` - introduction of `rag-retrieval.jsx` and Section 12 loader expansion to a 2-file `Promise.all` (Task 3 there mirrors Task 3 here, but with 2 files instead of 3).
+- `docs/superpowers/plans/2026-05-16-section-12-milestone-3.md` - introduction of `rag-retrieval.jsx` and Section 12 loader expansion to a 3-file `Promise.all` (Task 3 there mirrors Task 3 here, but with 3 files instead of 4).
 
 **Branch policy:** Per user instruction, work directly on `main`. No feature branch.
 
@@ -27,8 +27,8 @@
 ## Prerequisites
 
 - M1 complete and merged on `main`: `src/sections/rag-foundations.jsx` exists with chapters 12.1-12.3 (Act 1).
-- M2 complete and merged on `main`: `rag-foundations.jsx` extended with chapters 12.4-12.10 (Act 2 - chunking).
-- M3 complete and merged on `main`: `src/sections/rag-retrieval.jsx` exists with chapters 12.11-12.18 (Acts 3 + 4), Section 12 loader in `learn-ai.jsx` is a 2-file `Promise.all`, `sections.test.jsx` and `lookup.test.js` both import `RagFoundations` and `RagRetrieval`.
+- M2 complete and merged on `main`: `rag-foundations.jsx` extended with chapters 12.4-12.10 (Act 3 - chunking).
+- M3 complete and merged on `main`: `src/sections/rag-retrieval.jsx` exists with chapters 12.14-12.21 (Acts 4 + 5), Section 12 loader in `learn-ai.jsx` is a 3-file `Promise.all` (rag-foundations + rag-ingestion + rag-retrieval), `sections.test.jsx` and `lookup.test.js` both import `RagFoundations`, `RagIngestion`, and `RagRetrieval`.
 - `npm run test` green on `main`. Coverage 100% lines / >= 97.7% branches.
 - `npm run lint` clean.
 - Working directly on `main`, clean working tree.
@@ -37,31 +37,32 @@
 
 ### New files
 
-- `src/sections/rag-generation.jsx` - Acts 5 + 6 chapter functions. In Milestone 4 this file contains 9 exports (ContextPacking, LostInTheMiddle, CitationsRefusal, MultiHopRetrieval, SelfRAG, CorrectiveRAG, GraphRAG, AgenticRAG, LongContextVsRAG). M5 introduces a separate `rag-evaluation.jsx`; no further changes to `rag-generation.jsx` planned.
+- `src/sections/rag-generation.jsx` - Acts 6 + 7 chapter functions. In Milestone 4 this file contains 9 exports (ContextPacking, LostInTheMiddle, CitationsRefusal, MultiHopRetrieval, SelfRAG, CorrectiveRAG, GraphRAG, AgenticRAG, LongContextVsRAG). M5 introduces a separate `rag-evaluation.jsx`; no further changes to `rag-generation.jsx` planned.
 
 ### Modified files
 
-- `src/config.js` - append 9 entries to `chapters[]` after the last Section 12 / M3 entry (12.18 QueryRoutingDecomposition).
-- `src/learn-ai.jsx` - expand the Section 12 loader entry from a 2-file `Promise.all` to a 3-file `Promise.all` that also includes `rag-generation.jsx`.
+- `src/config.js` - append 9 entries to `chapters[]` after the last Section 12 / M3 entry (12.21 QueryRoutingDecomposition).
+- `src/learn-ai.jsx` - expand the Section 12 loader entry from a 3-file `Promise.all` to a 4-file `Promise.all` that also includes `rag-generation.jsx`.
 - `src/__tests__/sections.test.jsx` - add `import * as RagGeneration from "../sections/rag-generation.jsx"`, spread into `lookup`, and append content-test blocks for each of the 9 new chapters.
 - `src/__tests__/lookup.test.js` - add `import * as RagGeneration from "../sections/rag-generation.jsx"`, spread into `lookup`, and add a `rag-generation.jsx` presence test mirroring the M3 `rag-retrieval.jsx` presence test.
-- `src/__tests__/config.test.js` - extend the Section 12 chapter-count / chapter-list test to cover the new 12.19-12.27 entries.
-- `src/__tests__/svg-descriptions.test.js` - extend `expectedChapters` to include the new SVG-bearing chapter IDs (any of `"12.19"`-`"12.27"` that introduce an SVG).
+- `src/__tests__/config.test.js` - extend the Section 12 chapter-count / chapter-list test to cover the new 12.22-12.30 entries.
+- `src/__tests__/svg-descriptions.test.js` - extend `expectedChapters` to include the new SVG-bearing chapter IDs (any of `"12.22"`-`"12.30"` that introduce an SVG).
 - `src/data/svg-descriptions.json` - add entries (keyed by chapter ID, value is an array of description strings, each >20 chars) for every new `<svg>` element introduced in any of the 9 new chapters.
-- `CLAUDE.md` - extend Section 12 mapping table to include 12.19-12.27, update milestones annotation, and update project structure tree to include `rag-generation.jsx`.
+- `CLAUDE.md` - extend Section 12 mapping table to include 12.22-12.30, update milestones annotation, and update project structure tree to include `rag-generation.jsx`.
 
 ### Unchanged
 
-- `public/llms.txt` and `index.html` JSON-LD - Section 12 itself was registered in M1. The discoverability sync rule covers "add / rename / remove / reorder" of chapters or sectionNames. Chapter-level additions inside a registered section do not require llms.txt / JSON-LD updates per the existing pattern used in Section 11 milestones (the section's topic summary already enumerates RAG capabilities; no further granularity needed mid-section). A discoverability pass happens in M6 after the full 38-chapter section ships.
-- `src/sections/rag-foundations.jsx` (do not edit; 12.1-12.10 are stable).
-- `src/sections/rag-retrieval.jsx` (do not edit; 12.11-12.18 are stable).
+- `public/llms.txt` and `index.html` JSON-LD - Section 12 itself was registered in M1. The discoverability sync rule covers "add / rename / remove / reorder" of chapters or sectionNames. Chapter-level additions inside a registered section do not require llms.txt / JSON-LD updates per the existing pattern used in Section 11 milestones (the section's topic summary already enumerates RAG capabilities; no further granularity needed mid-section). A discoverability pass happens in M6 after the full 41-chapter section ships.
+- `src/sections/rag-foundations.jsx` (do not edit; 12.1-12.3 + 12.7-12.13 are stable).
+- `src/sections/rag-ingestion.jsx` (do not edit; 12.4-12.6 are stable).
+- `src/sections/rag-retrieval.jsx` (do not edit; 12.14-12.21 are stable).
 - All pre-Section-12 section files.
 
 ---
 
 ## Standard running-example values (reference during implementation)
 
-From the spec. Use consistently across 12.19-12.27 (and the rest of the section):
+From the spec. Use consistently across 12.22-12.30 (and the rest of the section):
 
 - **Primary corpus:** 30-doc customer support knowledge base for fictional SaaS "Habuild Cloud" - 10 account/billing docs, 10 product feature docs, 10 troubleshooting docs.
 - **Standard queries:**
@@ -71,8 +72,8 @@ From the spec. Use consistently across 12.19-12.27 (and the rest of the section)
   - "Cancel my subscription and get a refund" (multi-step)
   - "Compare the Pro and Enterprise plans" (aggregation)
 - **Secondary corpora (this milestone uses both):**
-  - **15-node legal citation network** - used ONLY in chapter 12.25 GraphRAG. Entity-relationship structure that the support corpus lacks. Mention this corpus switch in the chapter intro.
-  - **Single 200-page product manual** - used ONLY in chapter 12.27 LongContextVsRAG. Demonstrates the "fits in context window" tradeoff. Mention this corpus switch in the chapter intro.
+  - **15-node legal citation network** - used ONLY in chapter 12.28 GraphRAG. Entity-relationship structure that the support corpus lacks. Mention this corpus switch in the chapter intro.
+  - **Single 200-page product manual** - used ONLY in chapter 12.30 LongContextVsRAG. Demonstrates the "fits in context window" tradeoff. Mention this corpus switch in the chapter intro.
 - **Embedding dim:** 8 (drawable on screen) / 1024 (production-typical e.g., Cohere v3).
 - **Chunk size (tokens):** 64-128 (visible) / 512 (production typical).
 - **Top-k:** 3-5 (visible) / 20-50 (production before rerank).
@@ -94,12 +95,12 @@ Every chapter at every sub-step MUST satisfy ALL of these. Violations are blocke
 8. **SVG `<desc>` metadata** - every `<svg>` has `<desc>...</desc>` as its first child; corresponding entry in `src/data/svg-descriptions.json` (>20 chars each).
 9. **No "architect" word** in chapter titles or content.
 10. **No em-dashes** anywhere in content.
-11. **No next-chapter hints** - no "Next chapter:", "Coming up:", "Preview:" text. Within-section signposts pointing to later chapter ranges ("Chapters 12.28-12.32 cover the eval triangle") are permitted as past/present-tense statements about section structure, not as forward teasers. Never use the literal phrase "Act N" in chapter-visible content - learners only see chapter numbers.
+11. **No next-chapter hints** - no "Next chapter:", "Coming up:", "Preview:" text. Within-section signposts pointing to later chapter ranges ("Chapters 12.31-12.35 cover the eval triangle") are permitted as past/present-tense statements about section structure, not as forward teasers. Never use the literal phrase "Act N" in chapter-visible content - learners only see chapter numbers.
 12. **Density: less text, more diagrams** - default to "show with a diagram" over "describe in prose". A chapter with 5 paragraphs of text and 1 diagram is failing this rule. A chapter with 1 paragraph and 5 diagrams is succeeding.
 
 ### Prompt-template artifact treatment (Section-12-specific rule)
 
-Several Act 5/6 chapters render prompt-template artifacts (CitationsRefusal especially). Prompt templates are TEXT artifacts, NOT code blocks. Render in styled monospace blocks visually distinct from code:
+Several Act 6/6 chapters render prompt-template artifacts (CitationsRefusal especially). Prompt templates are TEXT artifacts, NOT code blocks. Render in styled monospace blocks visually distinct from code:
 
 - Background tint matching the box color (e.g., `${C.purple}06`).
 - Soft border `1px solid ${C.purple}12`.
@@ -147,18 +148,18 @@ Run `npm run test` (full suite, not just the targeted test). If any unrelated te
 
 1. Task 1 - Verify green baseline
 2. Task 2 - Create `rag-generation.jsx` scaffold with 9 stubs
-3. Task 3 - Update `learn-ai.jsx` Section 12 loader (3-file `Promise.all`)
-4. Task 4 - Add 12.19-12.27 entries to `chapters[]` in `config.js`
+3. Task 3 - Update `learn-ai.jsx` Section 12 loader (4-file `Promise.all`)
+4. Task 4 - Add 12.22-12.30 entries to `chapters[]` in `config.js`
 5. Task 5 - Register `RagGeneration` in `sections.test.jsx`
-6. Task 6 - Chapter 12.19 ContextPacking
-7. Task 7 - Chapter 12.20 LostInTheMiddle
-8. Task 8 - Chapter 12.21 CitationsRefusal
-9. Task 9 - Chapter 12.22 MultiHopRetrieval
-10. Task 10 - Chapter 12.23 SelfRAG
-11. Task 11 - Chapter 12.24 CorrectiveRAG
-12. Task 12 - Chapter 12.25 GraphRAG
-13. Task 13 - Chapter 12.26 AgenticRAG
-14. Task 14 - Chapter 12.27 LongContextVsRAG
+6. Task 6 - Chapter 12.22 ContextPacking
+7. Task 7 - Chapter 12.23 LostInTheMiddle
+8. Task 8 - Chapter 12.24 CitationsRefusal
+9. Task 9 - Chapter 12.25 MultiHopRetrieval
+10. Task 10 - Chapter 12.26 SelfRAG
+11. Task 11 - Chapter 12.27 CorrectiveRAG
+12. Task 12 - Chapter 12.28 GraphRAG
+13. Task 13 - Chapter 12.29 AgenticRAG
+14. Task 14 - Chapter 12.30 LongContextVsRAG
 15. Task 15 - Update CLAUDE.md
 16. Task 16 - Final M4 verification (full suite, coverage, lint, format, build, Chrome visual validation)
 
@@ -199,7 +200,7 @@ If your CLI shows the session title in its title bar or tab, verify it reads `se
   git log --oneline -10
   ```
 
-  Expected: `On branch main`, `nothing to commit, working tree clean`. Most recent commits should include the M3 final commits ("Implement chapter 12.18 Query Routing and Decomposition" or similar).
+  Expected: `On branch main`, `nothing to commit, working tree clean`. Most recent commits should include the M3 final commits ("Implement chapter 12.21 Query Routing and Decomposition" or similar).
 
 - [ ] **Step 2: Run full test suite**
 
@@ -475,12 +476,12 @@ Expected: only files in the **Files:** list show as modified or new. If any file
 
   ```bash
   git add src/sections/rag-generation.jsx src/__tests__/lookup.test.js
-  git commit -m "Add stub exports for rag-generation.jsx (12.19-12.27)"
+  git commit -m "Add stub exports for rag-generation.jsx (12.22-12.30)"
   ```
 
 ---
 
-## Task 3: Update `learn-ai.jsx` Section 12 loader to a 3-file `Promise.all`
+## Task 3: Update `learn-ai.jsx` Section 12 loader to a 4-file `Promise.all`
 
 **Files:**
 
@@ -488,7 +489,7 @@ Expected: only files in the **Files:** list show as modified or new. If any file
 
 - Modify: `src/learn-ai.jsx` (sectionLoaders object)
 
-After M3, the Section 12 loader is a 2-file `Promise.all` of `rag-foundations.jsx` and `rag-retrieval.jsx`. M4 expands it to 3 files by adding `rag-generation.jsx`.
+After M3, the Section 12 loader is a 3-file `Promise.all` of `rag-foundations.jsx`, `rag-ingestion.jsx`, and `rag-retrieval.jsx`. M4 expands it to 4 files by adding `rag-generation.jsx`.
 
 - [ ] **Step 1: Update the section 12 loader entry**
 
@@ -498,6 +499,7 @@ After M3, the Section 12 loader is a 2-file `Promise.all` of `rag-foundations.js
     12: () =>
       Promise.all([
         import("./sections/rag-foundations.jsx"),
+        import("./sections/rag-ingestion.jsx"),
         import("./sections/rag-retrieval.jsx"),
       ]).then((mods) => Object.assign({}, ...mods)),
   ```
@@ -508,6 +510,7 @@ After M3, the Section 12 loader is a 2-file `Promise.all` of `rag-foundations.js
     12: () =>
       Promise.all([
         import("./sections/rag-foundations.jsx"),
+        import("./sections/rag-ingestion.jsx"),
         import("./sections/rag-retrieval.jsx"),
         import("./sections/rag-generation.jsx"),
       ]).then((mods) => Object.assign({}, ...mods)),
@@ -535,7 +538,7 @@ After M3, the Section 12 loader is a 2-file `Promise.all` of `rag-foundations.js
   npm run dev
   ```
 
-  Open `http://localhost:5173/learn-ai/`, navigate to any Section 12 chapter that already exists (e.g., 12.1, 12.5, 12.15). Confirm the app still loads, no console errors. Stop the server (Ctrl-C).
+  Open `http://localhost:5173/learn-ai/`, navigate to any Section 12 chapter that already exists (e.g., 12.1, 12.5, 12.18). Confirm the app still loads, no console errors. Stop the server (Ctrl-C).
 
 - [ ] **Step 5: Full test smoke gate**
 
@@ -563,7 +566,7 @@ Expected: only files in the **Files:** list show as modified or new. If any file
 
 ---
 
-## Task 4: Add 12.19-12.27 entries to chapters array in config.js
+## Task 4: Add 12.22-12.30 entries to chapters array in config.js
 
 **Files:**
 
@@ -574,11 +577,11 @@ Expected: only files in the **Files:** list show as modified or new. If any file
 
 - [ ] **Step 1: Write failing test**
 
-  Find the existing `describe("Section 12 chapters", ...)` block in `src/__tests__/config.test.js` (added in M1, extended in M2 + M3). Extend the test to assert all 27 chapters now present (M1 added 12.1-12.3, M2 added 12.4-12.10, M3 added 12.11-12.18, M4 adds 12.19-12.27). Replace the existing expected array with the full 27-entry list:
+  Find the existing `describe("Section 12 chapters", ...)` block in `src/__tests__/config.test.js` (added in M1, extended in M2 + M3). Extend the test to assert all 30 chapters now present (M1 added 12.1-12.3, M2 added 12.4-12.10, M3 added 12.14-12.21, M4 adds 12.22-12.30). Replace the existing expected array with the full 30-entry list:
 
   ```js
   describe("Section 12 chapters", () => {
-    it("has chapters 12.1 through 12.27 in order", () => {
+    it("has chapters 12.1 through 12.30 in order", () => {
       const section12 = chapters.filter((ch) => ch.section === 12);
       const expected = [
         { id: "12.1", component: "WhyLLMsNeedRetrieval", title: "Why LLMs Need Retrieval" },
@@ -591,23 +594,23 @@ Expected: only files in the **Files:** list show as modified or new. If any file
         { id: "12.8", component: "HierarchicalChunking", title: "Hierarchical / Parent-Child Chunking" },
         { id: "12.9", component: "ContextualRetrieval", title: "Contextual Retrieval (Anthropic 2024)" },
         { id: "12.10", component: "ChunkingDecision", title: "The Chunking Decision" },
-        { id: "12.11", component: "EmbeddingModelChoice", title: "Picking an Embedding Model" },
-        { id: "12.12", component: "DomainAdaptation", title: "Domain Adaptation - Fine-Tuning Embeddings" },
-        { id: "12.13", component: "HybridForRAG", title: "Hybrid Retrieval for RAG" },
-        { id: "12.14", component: "RerankerCascade", title: "The Reranker Cascade" },
-        { id: "12.15", component: "WhyTransformQueries", title: "Why Transform Queries" },
-        { id: "12.16", component: "HyDE", title: "HyDE - Hypothetical Document Embeddings" },
-        { id: "12.17", component: "MultiQueryExpansion", title: "Multi-Query Expansion" },
-        { id: "12.18", component: "QueryRoutingDecomposition", title: "Query Routing & Decomposition" },
-        { id: "12.19", component: "ContextPacking", title: "Context Packing" },
-        { id: "12.20", component: "LostInTheMiddle", title: "The Lost-in-the-Middle Problem" },
-        { id: "12.21", component: "CitationsRefusal", title: "Citations, Refusal & Groundedness" },
-        { id: "12.22", component: "MultiHopRetrieval", title: "Multi-Hop Retrieval" },
-        { id: "12.23", component: "SelfRAG", title: "Self-RAG" },
-        { id: "12.24", component: "CorrectiveRAG", title: "CRAG - Corrective RAG" },
-        { id: "12.25", component: "GraphRAG", title: "GraphRAG (Microsoft 2024)" },
-        { id: "12.26", component: "AgenticRAG", title: "Tool-Augmented & Agentic RAG" },
-        { id: "12.27", component: "LongContextVsRAG", title: "Long-Context vs RAG" },
+        { id: "12.14", component: "EmbeddingModelChoice", title: "Picking an Embedding Model" },
+        { id: "12.15", component: "DomainAdaptation", title: "Domain Adaptation - Fine-Tuning Embeddings" },
+        { id: "12.16", component: "HybridForRAG", title: "Hybrid Retrieval for RAG" },
+        { id: "12.17", component: "RerankerCascade", title: "The Reranker Cascade" },
+        { id: "12.18", component: "WhyTransformQueries", title: "Why Transform Queries" },
+        { id: "12.19", component: "HyDE", title: "HyDE - Hypothetical Document Embeddings" },
+        { id: "12.20", component: "MultiQueryExpansion", title: "Multi-Query Expansion" },
+        { id: "12.21", component: "QueryRoutingDecomposition", title: "Query Routing & Decomposition" },
+        { id: "12.22", component: "ContextPacking", title: "Context Packing" },
+        { id: "12.23", component: "LostInTheMiddle", title: "The Lost-in-the-Middle Problem" },
+        { id: "12.24", component: "CitationsRefusal", title: "Citations, Refusal & Groundedness" },
+        { id: "12.25", component: "MultiHopRetrieval", title: "Multi-Hop Retrieval" },
+        { id: "12.26", component: "SelfRAG", title: "Self-RAG" },
+        { id: "12.27", component: "CorrectiveRAG", title: "CRAG - Corrective RAG" },
+        { id: "12.28", component: "GraphRAG", title: "GraphRAG (Microsoft 2024)" },
+        { id: "12.29", component: "AgenticRAG", title: "Tool-Augmented & Agentic RAG" },
+        { id: "12.30", component: "LongContextVsRAG", title: "Long-Context vs RAG" },
       ];
       expect(section12.length).toBe(expected.length);
       expected.forEach((exp, i) => {
@@ -619,7 +622,7 @@ Expected: only files in the **Files:** list show as modified or new. If any file
   });
   ```
 
-  (If the prior M3 expected array used slightly different titles for 12.1-12.18 verbatim, keep those exact titles. Match the existing config.js text exactly. Only the new 12.19-12.27 lines are M4 additions.)
+  (If the prior M3 expected array used slightly different titles for 12.1-12.21 verbatim, keep those exact titles. Match the existing config.js text exactly. Only the new 12.22-12.30 lines are M4 additions.)
 
 - [ ] **Step 2: Run test to verify it fails**
 
@@ -631,19 +634,19 @@ Expected: only files in the **Files:** list show as modified or new. If any file
 
 - [ ] **Step 3: Add chapter entries to config.js**
 
-  Edit `src/config.js`. Find the last Section 12 entry from M3 (`{ id: "12.18", title: "Query Routing & Decomposition", section: 12, component: "QueryRoutingDecomposition" },`). Add Section 12 M4 entries right after, before the closing `];`:
+  Edit `src/config.js`. Find the last Section 12 entry from M3 (`{ id: "12.21", title: "Query Routing & Decomposition", section: 12, component: "QueryRoutingDecomposition" },`). Add Section 12 M4 entries right after, before the closing `];`:
 
   ```js
-    { id: "12.18", title: "Query Routing & Decomposition", section: 12, component: "QueryRoutingDecomposition" },
-    { id: "12.19", title: "Context Packing", section: 12, component: "ContextPacking" },
-    { id: "12.20", title: "The Lost-in-the-Middle Problem", section: 12, component: "LostInTheMiddle" },
-    { id: "12.21", title: "Citations, Refusal & Groundedness", section: 12, component: "CitationsRefusal" },
-    { id: "12.22", title: "Multi-Hop Retrieval", section: 12, component: "MultiHopRetrieval" },
-    { id: "12.23", title: "Self-RAG", section: 12, component: "SelfRAG" },
-    { id: "12.24", title: "CRAG - Corrective RAG", section: 12, component: "CorrectiveRAG" },
-    { id: "12.25", title: "GraphRAG (Microsoft 2024)", section: 12, component: "GraphRAG" },
-    { id: "12.26", title: "Tool-Augmented & Agentic RAG", section: 12, component: "AgenticRAG" },
-    { id: "12.27", title: "Long-Context vs RAG", section: 12, component: "LongContextVsRAG" },
+    { id: "12.21", title: "Query Routing & Decomposition", section: 12, component: "QueryRoutingDecomposition" },
+    { id: "12.22", title: "Context Packing", section: 12, component: "ContextPacking" },
+    { id: "12.23", title: "The Lost-in-the-Middle Problem", section: 12, component: "LostInTheMiddle" },
+    { id: "12.24", title: "Citations, Refusal & Groundedness", section: 12, component: "CitationsRefusal" },
+    { id: "12.25", title: "Multi-Hop Retrieval", section: 12, component: "MultiHopRetrieval" },
+    { id: "12.26", title: "Self-RAG", section: 12, component: "SelfRAG" },
+    { id: "12.27", title: "CRAG - Corrective RAG", section: 12, component: "CorrectiveRAG" },
+    { id: "12.28", title: "GraphRAG (Microsoft 2024)", section: 12, component: "GraphRAG" },
+    { id: "12.29", title: "Tool-Augmented & Agentic RAG", section: 12, component: "AgenticRAG" },
+    { id: "12.30", title: "Long-Context vs RAG", section: 12, component: "LongContextVsRAG" },
   ];
   ```
 
@@ -676,7 +679,7 @@ Expected: only files in the **Files:** list show as modified or new. If any file
 
   ```bash
   git add src/config.js src/__tests__/config.test.js
-  git commit -m "Add chapter entries 12.19-12.27 to config"
+  git commit -m "Add chapter entries 12.22-12.30 to config"
   ```
 
 ---
@@ -689,7 +692,7 @@ Expected: only files in the **Files:** list show as modified or new. If any file
 
 - Modify: `src/__tests__/sections.test.jsx`
 
-The generic `describe("All chapters - full sub + interaction coverage", ...)` block iterates `chapters[]` and looks up each component in `lookup`. Without registering `RagGeneration`, 12.19-12.27 will fail with "fn is not a function" because the `chapters[]` entries now reference components that aren't in the test-side lookup.
+The generic `describe("All chapters - full sub + interaction coverage", ...)` block iterates `chapters[]` and looks up each component in `lookup`. Without registering `RagGeneration`, 12.22-12.30 will fail with "fn is not a function" because the `chapters[]` entries now reference components that aren't in the test-side lookup.
 
 - [ ] **Step 1: Run sections.test.jsx to confirm failure before change**
 
@@ -697,7 +700,7 @@ The generic `describe("All chapters - full sub + interaction coverage", ...)` bl
   npx vitest run src/__tests__/sections.test.jsx
   ```
 
-  Expected: FAIL - the generic "All chapters" describe block will throw on the new 12.19-12.27 entries.
+  Expected: FAIL - the generic "All chapters" describe block will throw on the new 12.22-12.30 entries.
 
 - [ ] **Step 2: Add the import and spread**
 
@@ -738,7 +741,7 @@ The generic `describe("All chapters - full sub + interaction coverage", ...)` bl
   npx vitest run src/__tests__/sections.test.jsx
   ```
 
-  Expected: PASS. The generic test now runs against 12.19-12.27 stubs which render only sub=0 without crashing.
+  Expected: PASS. The generic test now runs against 12.22-12.30 stubs which render only sub=0 without crashing.
 
 - [ ] **Step 4: Full test smoke gate**
 
@@ -766,7 +769,7 @@ Expected: only files in the **Files:** list show as modified or new. If any file
 
 ---
 
-## Task 6: Implement Chapter 12.19 ContextPacking
+## Task 6: Implement Chapter 12.22 ContextPacking
 
 **Files:**
 
@@ -775,7 +778,7 @@ Expected: only files in the **Files:** list show as modified or new. If any file
 - Modify: `src/sections/rag-generation.jsx` (replace stub `ContextPacking`)
 - Modify: `src/__tests__/sections.test.jsx` (append content tests)
 - Modify: `src/data/svg-descriptions.json` (add new SVG descriptions)
-- Modify: `src/__tests__/svg-descriptions.test.js` (extend `expectedChapters` to include `"12.19"`)
+- Modify: `src/__tests__/svg-descriptions.test.js` (extend `expectedChapters` to include `"12.22"`)
 
 **Chapter purpose (from spec):** Pack the top-k retrieved chunks into the LLM prompt under a fixed token budget. Show the structural template (system prompt + retrieved context + question + reserved completion tokens), three ordering strategies (relevance-first, chronological, deduplicated), and MMR (maximal marginal relevance) for diverse-not-redundant packing. Walk away knowing exactly what goes into the prompt, why ordering matters, and what to drop when the budget overflows.
 
@@ -835,12 +838,12 @@ Expected: only files in the **Files:** list show as modified or new. If any file
   Background tint `${C.pink}06`, border `1px solid ${C.pink}12`, monospace 14-16px. Below the template: total token count "Total: ~4,800 tokens of 8,000 budget (60% used)" and a green "Within budget" badge.
   Key content: "How do I reset my password", "doc-1", "I don't have enough information" or "I don't know", "tokens" / "budget".
 
-- [ ] **Step 1: Write content tests for 12.19**
+- [ ] **Step 1: Write content tests for 12.22**
 
   Append to `src/__tests__/sections.test.jsx`:
 
   ```js
-  describe("ContextPacking (12.19) content", () => {
+  describe("ContextPacking (12.22) content", () => {
     const fn = RagGeneration.ContextPacking;
 
     it("sub=0 shows the token budget breakdown with completion reservation", () => {
@@ -920,15 +923,15 @@ Expected: only files in the **Files:** list show as modified or new. If any file
 
 - [ ] **Step 5: Add SVG description for the token-budget bar**
 
-  In `src/data/svg-descriptions.json`, add a key `"12.19"` with an array of description strings. Example:
+  In `src/data/svg-descriptions.json`, add a key `"12.22"` with an array of description strings. Example:
 
   ```json
-  "12.19": [
+  "12.22": [
     "Stacked horizontal bar visualizing how an 8000-token LLM context budget splits across system prompt, retrieved chunks, user question, and reserved completion tokens."
   ]
   ```
 
-  Then extend `src/__tests__/svg-descriptions.test.js` `expectedChapters` array to include `"12.19"`. Find the existing test `it("covers all chapters known to have SVGs", ...)`, locate the `expectedChapters` array, and add `"12.19"` in section-12 order.
+  Then extend `src/__tests__/svg-descriptions.test.js` `expectedChapters` array to include `"12.22"`. Find the existing test `it("covers all chapters known to have SVGs", ...)`, locate the `expectedChapters` array, and add `"12.22"` in section-12 order.
 
 - [ ] **Step 6: Run svg-descriptions test**
 
@@ -948,9 +951,9 @@ Expected: only files in the **Files:** list show as modified or new. If any file
 
   Expected: all green. Format may modify files; re-stage if so.
 
-- [ ] **Step 8: Chrome visual validation for 12.19**
+- [ ] **Step 8: Chrome visual validation for 12.22**
 
-  Boot `npm run dev`. In Chrome via MCP (load tools via ToolSearch first), navigate to chapter 12.19. Step through sub=0 to sub=5. Check:
+  Boot `npm run dev`. In Chrome via MCP (load tools via ToolSearch first), navigate to chapter 12.22. Step through sub=0 to sub=5. Check:
 
   - No overlap.
   - All boxes have real colors (not C.card).
@@ -982,12 +985,12 @@ Expected: only files in the **Files:** list show as modified or new. If any file
 
   ```bash
   git add src/sections/rag-generation.jsx src/__tests__/sections.test.jsx src/data/svg-descriptions.json src/__tests__/svg-descriptions.test.js
-  git commit -m "Implement chapter 12.19 Context Packing"
+  git commit -m "Implement chapter 12.22 Context Packing"
   ```
 
 ---
 
-## Task 7: Implement Chapter 12.20 LostInTheMiddle
+## Task 7: Implement Chapter 12.23 LostInTheMiddle
 
 **Files:**
 
@@ -996,7 +999,7 @@ Expected: only files in the **Files:** list show as modified or new. If any file
 - Modify: `src/sections/rag-generation.jsx` (replace stub `LostInTheMiddle`)
 - Modify: `src/__tests__/sections.test.jsx` (append content tests)
 - Modify: `src/data/svg-descriptions.json` (add entry)
-- Modify: `src/__tests__/svg-descriptions.test.js` (add `"12.20"` to `expectedChapters`)
+- Modify: `src/__tests__/svg-descriptions.test.js` (add `"12.23"` to `expectedChapters`)
 
 **Chapter purpose (from spec):** The U-shaped attention curve. LLMs attend best to the start and end of a long context window; the middle gets ignored. Empirical finding from Liu et al. 2023 ("Lost in the Middle"). Show the curve, the consequence on retrieval-augmented answers, and two mitigation strategies: highest-relevance-first (front-load) and sandwich (best at start AND end). Walk away knowing why position-of-relevant-chunk matters and what to do about it.
 
@@ -1025,17 +1028,17 @@ Expected: only files in the **Files:** list show as modified or new. If any file
 - **sub=4 (C.purple) - When neither helps**
   Title: "When Reordering Isn't Enough"
   Visual: a 3-card grid of failure modes:
-  - "Truly Long Multi-Fact Queries" - 30 chunks all needed; even sandwich leaves middle facts ignored. Fix: hierarchical summarization or multi-hop retrieval (12.22).
+  - "Truly Long Multi-Fact Queries" - 30 chunks all needed; even sandwich leaves middle facts ignored. Fix: hierarchical summarization or multi-hop retrieval (12.25).
   - "Tail-Buried Critical Detail" - the killer fact is in chunk 18; both strategies miss it. Fix: rerank harder, fetch fewer.
   - "Model-Specific Curve Shape" - some models have flatter curves than others; benchmark on your own model. Caption: "Lost-in-middle is a model fingerprint, not a universal law."
-  Key content: "multi-fact" or "long" or "30 chunks", "rerank" or "fetch fewer", "model" or "benchmark", reference to "12.22" or "multi-hop".
+  Key content: "multi-fact" or "long" or "30 chunks", "rerank" or "fetch fewer", "model" or "benchmark", reference to "12.25" or "multi-hop".
 
-- [ ] **Step 1: Write content tests for 12.20**
+- [ ] **Step 1: Write content tests for 12.23**
 
   Append to `src/__tests__/sections.test.jsx`:
 
   ```js
-  describe("LostInTheMiddle (12.20) content", () => {
+  describe("LostInTheMiddle (12.23) content", () => {
     const fn = RagGeneration.LostInTheMiddle;
 
     it("sub=0 shows the U-shaped accuracy curve with Liu et al reference", () => {
@@ -1063,7 +1066,7 @@ Expected: only files in the **Files:** list show as modified or new. If any file
       expect(container.textContent).toMatch(/start and end|front and back/i);
     });
 
-    it("sub=4 covers failure modes including reference to multi-hop 12.22", () => {
+    it("sub=4 covers failure modes including reference to multi-hop 12.25", () => {
       const { container } = render(fn(makeCtx({ sub: 4 })));
       expect(container.textContent).toMatch(/multi-?fact|multi-?hop|long/i);
       expect(container.textContent).toMatch(/rerank|fetch|benchmark/i);
@@ -1088,7 +1091,7 @@ Expected: only files in the **Files:** list show as modified or new. If any file
   - Colors per sub-step as specified (yellow, red, green, cyan, purple).
   - The U-curve plot in sub=0 MUST be an SVG with proper `viewBox` centering (`x_start = (viewBox_width - element_span) / 2`). Add `<desc>` first child.
   - Axis labels in the U-curve SVG title-case ("Position In Context", "Accuracy (%)").
-  - Forward reference to "12.22 multi-hop retrieval" is permitted as a within-section signpost, NOT a "Next chapter:" hint.
+  - Forward reference to "12.25 multi-hop retrieval" is permitted as a within-section signpost, NOT a "Next chapter:" hint.
   - Standalone formulas / score comparisons centered.
   - Body text 16-19px, titles 22px.
 
@@ -1102,15 +1105,15 @@ Expected: only files in the **Files:** list show as modified or new. If any file
 
 - [ ] **Step 5: Add SVG description**
 
-  In `src/data/svg-descriptions.json`, add `"12.20"`:
+  In `src/data/svg-descriptions.json`, add `"12.23"`:
 
   ```json
-  "12.20": [
+  "12.23": [
     "U-shaped accuracy curve plotting answer correctness against the position of the relevant chunk within a 20-chunk context, showing high accuracy at the start and end and a dip in the middle from the Liu et al. 2023 lost-in-the-middle finding."
   ]
   ```
 
-  Extend `expectedChapters` in `src/__tests__/svg-descriptions.test.js` to include `"12.20"`.
+  Extend `expectedChapters` in `src/__tests__/svg-descriptions.test.js` to include `"12.23"`.
 
 - [ ] **Step 6: Run svg-descriptions test**
 
@@ -1130,9 +1133,9 @@ Expected: only files in the **Files:** list show as modified or new. If any file
 
   Expected: all green.
 
-- [ ] **Step 8: Chrome visual validation for 12.20**
+- [ ] **Step 8: Chrome visual validation for 12.23**
 
-  Boot dev server. Navigate to 12.20. Step sub=0 to sub=4. Check: U-curve SVG centered and readable; axis labels visible; sandwich diagram in sub=3 evenly spaced 10 slots, no overlap; failure-mode cards in sub=4 in 3-column grid no overlap. Stop server.
+  Boot dev server. Navigate to 12.23. Step sub=0 to sub=4. Check: U-curve SVG centered and readable; axis labels visible; sandwich diagram in sub=3 evenly spaced 10 slots, no overlap; failure-mode cards in sub=4 in 3-column grid no overlap. Stop server.
 
 - [ ] **Step 9: Full test smoke gate**
 
@@ -1155,12 +1158,12 @@ Expected: only files in the **Files:** list show as modified or new. If any file
 
   ```bash
   git add src/sections/rag-generation.jsx src/__tests__/sections.test.jsx src/data/svg-descriptions.json src/__tests__/svg-descriptions.test.js
-  git commit -m "Implement chapter 12.20 The Lost-in-the-Middle Problem"
+  git commit -m "Implement chapter 12.23 The Lost-in-the-Middle Problem"
   ```
 
 ---
 
-## Task 8: Implement Chapter 12.21 CitationsRefusal
+## Task 8: Implement Chapter 12.24 CitationsRefusal
 
 **Files:**
 
@@ -1169,7 +1172,7 @@ Expected: only files in the **Files:** list show as modified or new. If any file
 - Modify: `src/sections/rag-generation.jsx` (replace stub `CitationsRefusal`)
 - Modify: `src/__tests__/sections.test.jsx` (append content tests)
 - Modify: `src/data/svg-descriptions.json` (add entry if introduced)
-- Modify: `src/__tests__/svg-descriptions.test.js` (add `"12.21"` if SVG introduced)
+- Modify: `src/__tests__/svg-descriptions.test.js` (add `"12.24"` if SVG introduced)
 
 **Chapter purpose (from spec):** The prompt-template artifact for inline citations and refusal. Show the production-grade template: instruct the model to emit `[doc-N]` markers, output structured citation JSON, and refuse to answer when context is insufficient. Faithfulness measurement preview (each claim must trace to a chunk). Walk away with the exact wording every production RAG should use. NOTE: The prompt-template block MUST be a styled monospace text artifact, NOT a code block.
 
@@ -1238,8 +1241,8 @@ Expected: only files in the **Files:** list show as modified or new. If any file
   - Step 1: Parse model answer into atomic claims (e.g., "5 failed logins" / "24-hour hold").
   - Step 2: For each claim, locate the cited chunk.
   - Step 3: Score: claim_supported = LLM-judge(claim, chunk). Aggregate -> faithfulness score (0-1).
-  Caption: "Chapters 12.28-12.32 cover RAGAS faithfulness in depth."
-  Key content: "faithfulness", "claim" or "claims", "trace" or "cited", "RAGAS" or "score", "12.28-12.32" or "RAGAS".
+  Caption: "Chapters 12.31-12.35 cover RAGAS faithfulness in depth."
+  Key content: "faithfulness", "claim" or "claims", "trace" or "cited", "RAGAS" or "score", "12.31-12.35" or "RAGAS".
 
 - **sub=5 (C.orange) - The citation parser**
   Title: "Parse Citations Back Out Of The Answer"
@@ -1272,12 +1275,12 @@ Expected: only files in the **Files:** list show as modified or new. If any file
   Background tint `${C.pink}06`, border `1px solid ${C.pink}12`. Title T above: "Prompt Template - Production".
   Key content: "RULES" or "rules", "[doc-N]", "I don't have enough information", "{context}" and "{query}", "Production" (title text).
 
-- [ ] **Step 1: Write content tests for 12.21**
+- [ ] **Step 1: Write content tests for 12.24**
 
   Append to `src/__tests__/sections.test.jsx`:
 
   ```js
-  describe("CitationsRefusal (12.21) content", () => {
+  describe("CitationsRefusal (12.24) content", () => {
     const fn = RagGeneration.CitationsRefusal;
 
     it("sub=0 contrasts no-citation vs cited answer for account-locked query", () => {
@@ -1352,7 +1355,7 @@ Expected: only files in the **Files:** list show as modified or new. If any file
     - Title T above the block must be `bold center` and use the label "Prompt Template" or "Prompt Template - Production" (title-case).
   - The JSON-shape block in sub=2 follows the same styled-monospace-text-artifact pattern (NOT a code block).
   - Faithfulness diagram in sub=4 can be plain divs or SVG; if SVG, register description in svg-descriptions.json.
-  - Within-section reference to chapters 12.28-12.32 / RAGAS in sub=4 is a signpost, not a forward "Next" hint.
+  - Within-section reference to chapters 12.31-12.35 / RAGAS in sub=4 is a signpost, not a forward "Next" hint.
   - Standalone formulas and JSON blocks center-aligned with `textAlign: "center"` on the OUTER container; the inner monospace `<pre>` stays `textAlign: "left"` so the text remains readable.
 
 - [ ] **Step 4: Run tests to verify pass**
@@ -1368,12 +1371,12 @@ Expected: only files in the **Files:** list show as modified or new. If any file
   If the faithfulness diagram in sub=4 OR the parser diagram in sub=5 is an SVG, add an entry to `src/data/svg-descriptions.json`:
 
   ```json
-  "12.21": [
+  "12.24": [
     "Three-step faithfulness audit diagram: parse the LLM answer into atomic claims, locate each claim's cited chunk, score support via an LLM judge."
   ]
   ```
 
-  Extend `expectedChapters` in `src/__tests__/svg-descriptions.test.js` to include `"12.21"` only if an SVG was added.
+  Extend `expectedChapters` in `src/__tests__/svg-descriptions.test.js` to include `"12.24"` only if an SVG was added.
 
 - [ ] **Step 6: Run svg-descriptions test if updated**
 
@@ -1393,9 +1396,9 @@ Expected: only files in the **Files:** list show as modified or new. If any file
 
   Expected: all green.
 
-- [ ] **Step 8: Chrome visual validation for 12.21**
+- [ ] **Step 8: Chrome visual validation for 12.24**
 
-  Boot dev server. Navigate to 12.21. Step sub=0 to sub=6. Check:
+  Boot dev server. Navigate to 12.24. Step sub=0 to sub=6. Check:
 
   - Every prompt-template block is monospace and visually distinct from the surrounding paragraphs.
   - Prompt-template title T says "Prompt Template" (title-case) above each artifact.
@@ -1427,12 +1430,12 @@ Expected: only files in the **Files:** list show as modified or new. If any file
 
   ```bash
   git add src/sections/rag-generation.jsx src/__tests__/sections.test.jsx src/data/svg-descriptions.json src/__tests__/svg-descriptions.test.js
-  git commit -m "Implement chapter 12.21 Citations, Refusal and Groundedness"
+  git commit -m "Implement chapter 12.24 Citations, Refusal and Groundedness"
   ```
 
 ---
 
-## Task 9: Implement Chapter 12.22 MultiHopRetrieval
+## Task 9: Implement Chapter 12.25 MultiHopRetrieval
 
 **Files:**
 
@@ -1441,7 +1444,7 @@ Expected: only files in the **Files:** list show as modified or new. If any file
 - Modify: `src/sections/rag-generation.jsx` (replace stub `MultiHopRetrieval`)
 - Modify: `src/__tests__/sections.test.jsx` (append content tests)
 - Modify: `src/data/svg-descriptions.json` (add entry)
-- Modify: `src/__tests__/svg-descriptions.test.js` (add `"12.22"`)
+- Modify: `src/__tests__/svg-descriptions.test.js` (add `"12.25"`)
 
 **Chapter purpose (from spec):** Some queries need a chain of retrievals. "How do I reset my password if I forgot my email?" needs (1) the password-reset doc AND (2) the email-recovery doc. The iterative pattern: retrieve -> evaluate sufficiency -> retrieve again or answer. Walk away knowing the loop structure, when to use it, and the failure modes (infinite loop, divergence, cost blow-up).
 
@@ -1509,12 +1512,12 @@ Expected: only files in the **Files:** list show as modified or new. If any file
   - "Stuck Sufficiency Judge": model always says SUFFICIENT after hop 1 even when context is incomplete (overconfident). Mitigation: separate judge model, calibration via golden dataset.
   Key content: "infinite loop", "divergence" or "drift", "stuck" or "overconfident", "max_hops" or "cap", "original query" or "anchor".
 
-- [ ] **Step 1: Write content tests for 12.22**
+- [ ] **Step 1: Write content tests for 12.25**
 
   Append to `src/__tests__/sections.test.jsx`:
 
   ```js
-  describe("MultiHopRetrieval (12.22) content", () => {
+  describe("MultiHopRetrieval (12.25) content", () => {
     const fn = RagGeneration.MultiHopRetrieval;
 
     it("sub=0 contrasts single-hop with the forgot-email multi-hop case", () => {
@@ -1578,7 +1581,7 @@ Expected: only files in the **Files:** list show as modified or new. If any file
   - Colors per sub-step (blue, cyan, purple, green, orange, red).
   - The 2-hop trace in sub=1 must use a vertical flow with clear "Hop 1" / "Hop 2" labels (title-case).
   - The control loop in sub=2 MUST be an SVG flowchart with proper centering and a `<desc>` first child. Diamond decision shapes labeled "Sufficient?" (title-case).
-  - The sufficiency-check prompt in sub=3 is a styled monospace text artifact, NOT a code block (same pattern as 12.21).
+  - The sufficiency-check prompt in sub=3 is a styled monospace text artifact, NOT a code block (same pattern as 12.24).
   - The 2x2 grid in sub=4 must use `display: grid; gridTemplateColumns: 1fr 1fr; gap: 12` with each cell having `textAlign: "center"`.
   - The 3-card grid in sub=5 must not overlap; use `gridTemplateColumns: repeat(3, 1fr)`.
 
@@ -1592,15 +1595,15 @@ Expected: only files in the **Files:** list show as modified or new. If any file
 
 - [ ] **Step 5: Add SVG description**
 
-  In `src/data/svg-descriptions.json`, add `"12.22"`:
+  In `src/data/svg-descriptions.json`, add `"12.25"`:
 
   ```json
-  "12.22": [
+  "12.25": [
     "Multi-hop retrieval control-loop flowchart: retrieve, check sufficiency, either generate the answer or reformulate the query and loop again until max_hops is reached."
   ]
   ```
 
-  Extend `expectedChapters` in `src/__tests__/svg-descriptions.test.js` to include `"12.22"`.
+  Extend `expectedChapters` in `src/__tests__/svg-descriptions.test.js` to include `"12.25"`.
 
 - [ ] **Step 6: Run svg-descriptions test**
 
@@ -1620,9 +1623,9 @@ Expected: only files in the **Files:** list show as modified or new. If any file
 
   Expected: all green.
 
-- [ ] **Step 8: Chrome visual validation for 12.22**
+- [ ] **Step 8: Chrome visual validation for 12.25**
 
-  Navigate to 12.22 in Chrome. Step sub=0 to sub=5. Check: 2-hop vertical flow in sub=1 has clear top-to-bottom direction with arrows; control loop SVG in sub=2 centered with all diamond/box edges aligned; prompt template in sub=3 properly styled monospace artifact; 2x2 grid in sub=4 and 3-card grid in sub=5 each have no overlap.
+  Navigate to 12.25 in Chrome. Step sub=0 to sub=5. Check: 2-hop vertical flow in sub=1 has clear top-to-bottom direction with arrows; control loop SVG in sub=2 centered with all diamond/box edges aligned; prompt template in sub=3 properly styled monospace artifact; 2x2 grid in sub=4 and 3-card grid in sub=5 each have no overlap.
 
   Stop server.
 
@@ -1647,12 +1650,12 @@ Expected: only files in the **Files:** list show as modified or new. If any file
 
   ```bash
   git add src/sections/rag-generation.jsx src/__tests__/sections.test.jsx src/data/svg-descriptions.json src/__tests__/svg-descriptions.test.js
-  git commit -m "Implement chapter 12.22 Multi-Hop Retrieval"
+  git commit -m "Implement chapter 12.25 Multi-Hop Retrieval"
   ```
 
 ---
 
-## Task 10: Implement Chapter 12.23 SelfRAG
+## Task 10: Implement Chapter 12.26 SelfRAG
 
 **Files:**
 
@@ -1661,7 +1664,7 @@ Expected: only files in the **Files:** list show as modified or new. If any file
 - Modify: `src/sections/rag-generation.jsx` (replace stub `SelfRAG`)
 - Modify: `src/__tests__/sections.test.jsx` (append content tests)
 - Modify: `src/data/svg-descriptions.json` (add entry)
-- Modify: `src/__tests__/svg-descriptions.test.js` (add `"12.23"`)
+- Modify: `src/__tests__/svg-descriptions.test.js` (add `"12.26"`)
 
 **Chapter purpose (from spec):** Self-RAG (Asai et al. 2023): the model itself decides whether to retrieve, how many docs to retrieve, and self-critiques each retrieved doc with special tokens. Token-level decisions: `<retrieve>`, `<no-retrieve>`, `<isrel>`, `<issup>`. Trained via instruction tuning + RL on retrieval decisions. Walk away knowing the token vocabulary, the gate diagram, and when Self-RAG outperforms naive RAG.
 
@@ -1724,12 +1727,12 @@ Expected: only files in the **Files:** list show as modified or new. If any file
   Caption: "Self-RAG is a model contract, not a prompting trick. Use it when you can fine-tune."
   Key content: "wins" or "limits" or "tradeoff", "fine-tune" or "train", "40%" or "latency", "calibration" or "classifier" or "contract".
 
-- [ ] **Step 1: Write content tests for 12.23**
+- [ ] **Step 1: Write content tests for 12.26**
 
   Append to `src/__tests__/sections.test.jsx`:
 
   ```js
-  describe("SelfRAG (12.23) content", () => {
+  describe("SelfRAG (12.26) content", () => {
     const fn = RagGeneration.SelfRAG;
 
     it("sub=0 shows when to retrieve vs not", () => {
@@ -1804,16 +1807,16 @@ Expected: only files in the **Files:** list show as modified or new. If any file
 
 - [ ] **Step 5: Add SVG description**
 
-  In `src/data/svg-descriptions.json`, add `"12.23"`:
+  In `src/data/svg-descriptions.json`, add `"12.26"`:
 
   ```json
-  "12.23": [
+  "12.26": [
     "Self-RAG token-emission timeline showing the model alternating between special control tokens like <retrieve>, <isrel>, and <issup> across the generation sequence.",
     "Retrieve / no-retrieve decision diamond that gates whether the Self-RAG model fetches external context for a given query."
   ]
   ```
 
-  Extend `expectedChapters` in `src/__tests__/svg-descriptions.test.js` to include `"12.23"`.
+  Extend `expectedChapters` in `src/__tests__/svg-descriptions.test.js` to include `"12.26"`.
 
 - [ ] **Step 6: Run svg-descriptions test**
 
@@ -1833,9 +1836,9 @@ Expected: only files in the **Files:** list show as modified or new. If any file
 
   Expected: all green.
 
-- [ ] **Step 8: Chrome visual validation for 12.23**
+- [ ] **Step 8: Chrome visual validation for 12.26**
 
-  Navigate to 12.23. Step sub=0 to sub=5. Check: special tokens visible with angle brackets in monospace; timeline SVG in sub=2 centered with all 6+ markers evenly spaced; decision diamond in sub=3 with clear YES/NO branches; per-doc table in sub=4 with 3 rows and no overlap.
+  Navigate to 12.26. Step sub=0 to sub=5. Check: special tokens visible with angle brackets in monospace; timeline SVG in sub=2 centered with all 6+ markers evenly spaced; decision diamond in sub=3 with clear YES/NO branches; per-doc table in sub=4 with 3 rows and no overlap.
 
   Stop server.
 
@@ -1860,12 +1863,12 @@ Expected: only files in the **Files:** list show as modified or new. If any file
 
   ```bash
   git add src/sections/rag-generation.jsx src/__tests__/sections.test.jsx src/data/svg-descriptions.json src/__tests__/svg-descriptions.test.js
-  git commit -m "Implement chapter 12.23 Self-RAG"
+  git commit -m "Implement chapter 12.26 Self-RAG"
   ```
 
 ---
 
-## Task 11: Implement Chapter 12.24 CorrectiveRAG (CRAG)
+## Task 11: Implement Chapter 12.27 CorrectiveRAG (CRAG)
 
 **Files:**
 
@@ -1874,7 +1877,7 @@ Expected: only files in the **Files:** list show as modified or new. If any file
 - Modify: `src/sections/rag-generation.jsx` (replace stub `CorrectiveRAG`)
 - Modify: `src/__tests__/sections.test.jsx` (append content tests)
 - Modify: `src/data/svg-descriptions.json` (add entry)
-- Modify: `src/__tests__/svg-descriptions.test.js` (add `"12.24"`)
+- Modify: `src/__tests__/svg-descriptions.test.js` (add `"12.27"`)
 
 **Chapter purpose (from spec):** Corrective RAG (CRAG, Yan et al. 2024): a retrieval evaluator scores each retrieved doc as Correct / Ambiguous / Incorrect. If Incorrect: fall back to web search or expanded query. If Ambiguous: combine internal + external. Knowledge refinement: decompose retrieved docs into strips and keep only the relevant strips. Walk away knowing the 3-branch decision tree and when CRAG outperforms baseline.
 
@@ -1929,12 +1932,12 @@ Expected: only files in the **Files:** list show as modified or new. If any file
   Caption: "3 branches. 1 evaluator. Yan et al. 2024."
   Key content: "decision tree", all 3 branches "CORRECT" and "AMBIGUOUS" and "INCORRECT", "evaluator", "Yan" or "2024".
 
-- [ ] **Step 1: Write content tests for 12.24**
+- [ ] **Step 1: Write content tests for 12.27**
 
   Append to `src/__tests__/sections.test.jsx`:
 
   ```js
-  describe("CorrectiveRAG (12.24) content", () => {
+  describe("CorrectiveRAG (12.27) content", () => {
     const fn = RagGeneration.CorrectiveRAG;
 
     it("sub=0 shows retrieval evaluator scoring 3 docs", () => {
@@ -2009,15 +2012,15 @@ Expected: only files in the **Files:** list show as modified or new. If any file
 
 - [ ] **Step 5: Add SVG description**
 
-  In `src/data/svg-descriptions.json`, add `"12.24"`:
+  In `src/data/svg-descriptions.json`, add `"12.27"`:
 
   ```json
-  "12.24": [
+  "12.27": [
     "CRAG three-branch decision tree: an evaluator score routes retrieved docs to a CORRECT path (use directly), an AMBIGUOUS path (combine internal + web), or an INCORRECT path (web-search fallback), all converging into knowledge refinement before generation."
   ]
   ```
 
-  Extend `expectedChapters` in `src/__tests__/svg-descriptions.test.js` to include `"12.24"`.
+  Extend `expectedChapters` in `src/__tests__/svg-descriptions.test.js` to include `"12.27"`.
 
 - [ ] **Step 6: Run svg-descriptions test**
 
@@ -2037,9 +2040,9 @@ Expected: only files in the **Files:** list show as modified or new. If any file
 
   Expected: all green.
 
-- [ ] **Step 8: Chrome visual validation for 12.24**
+- [ ] **Step 8: Chrome visual validation for 12.27**
 
-  Navigate to 12.24. Step sub=0 to sub=5. Check: the 3 scored doc cards in sub=0 visually distinct (green/yellow/red); the strip table in sub=4 has 6 visible rows with no overlap; the 3-branch decision tree in sub=5 is symmetric, equal arrow lengths, all branches converge properly.
+  Navigate to 12.27. Step sub=0 to sub=5. Check: the 3 scored doc cards in sub=0 visually distinct (green/yellow/red); the strip table in sub=4 has 6 visible rows with no overlap; the 3-branch decision tree in sub=5 is symmetric, equal arrow lengths, all branches converge properly.
 
   Stop server.
 
@@ -2064,12 +2067,12 @@ Expected: only files in the **Files:** list show as modified or new. If any file
 
   ```bash
   git add src/sections/rag-generation.jsx src/__tests__/sections.test.jsx src/data/svg-descriptions.json src/__tests__/svg-descriptions.test.js
-  git commit -m "Implement chapter 12.24 CRAG - Corrective RAG"
+  git commit -m "Implement chapter 12.27 CRAG - Corrective RAG"
   ```
 
 ---
 
-## Task 12: Implement Chapter 12.25 GraphRAG
+## Task 12: Implement Chapter 12.28 GraphRAG
 
 **Files:**
 
@@ -2078,7 +2081,7 @@ Expected: only files in the **Files:** list show as modified or new. If any file
 - Modify: `src/sections/rag-generation.jsx` (replace stub `GraphRAG`)
 - Modify: `src/__tests__/sections.test.jsx` (append content tests)
 - Modify: `src/data/svg-descriptions.json` (add entry)
-- Modify: `src/__tests__/svg-descriptions.test.js` (add `"12.25"`)
+- Modify: `src/__tests__/svg-descriptions.test.js` (add `"12.28"`)
 
 **Chapter purpose (from spec):** GraphRAG (Microsoft, Edge et al. 2024): build an entity-relationship graph from the corpus offline (LLM extracts entities + relations), then at query time retrieve a subgraph. Community detection + per-community summarization enables global queries ("what are the main themes?"). This chapter uses the SECONDARY CORPUS: 15-node legal-citation network. Mention in chapter intro that the customer-support corpus does NOT have rich enough relationships, so this chapter switches to the legal-citation secondary corpus where entity-relationship structure exists naturally.
 
@@ -2089,7 +2092,7 @@ Expected: only files in the **Files:** list show as modified or new. If any file
   Visual: a 2-column comparison.
   - Left ("Customer Support Corpus - Won't Fit"): 30 docs, mostly self-contained how-to pages. Relationships are sparse (Account section docs reference each other a bit, but no rich graph). GraphRAG over this corpus would build a thin graph - not enough to demonstrate the technique.
   - Right ("Legal Citation Network - Fits"): 15 case decisions where each cites 2-5 prior cases. Rich entity-relationship structure (Plaintiff, Defendant, Court, Statute, Holding). Citations form a real graph. This is the corpus for this chapter.
-  Caption: "Same support corpus returns in 12.26. This chapter only uses the legal-citation secondary corpus."
+  Caption: "Same support corpus returns in 12.29. This chapter only uses the legal-citation secondary corpus."
   Key content: "legal" or "legal citation", "15" or "fifteen", "citation network" or "graph", "secondary corpus" or "different corpus".
 
 - **sub=1 (C.cyan) - Offline: entity + relation extraction**
@@ -2137,12 +2140,12 @@ Expected: only files in the **Files:** list show as modified or new. If any file
   - "Mitigations": "Cache extractions", "Run community detection nightly not per-query", "Hybrid: GraphRAG for global queries, naive RAG for local".
   Key content: "worth it" or "not worth it", "rich" or "entity" or "biomedical" or "legal", "FAQ" or "self-contained", "cost" or "$0.02".
 
-- [ ] **Step 1: Write content tests for 12.25**
+- [ ] **Step 1: Write content tests for 12.28**
 
   Append to `src/__tests__/sections.test.jsx`:
 
   ```js
-  describe("GraphRAG (12.25) content", () => {
+  describe("GraphRAG (12.28) content", () => {
     const fn = RagGeneration.GraphRAG;
 
     it("sub=0 explains the switch to the legal-citation secondary corpus", () => {
@@ -2224,17 +2227,17 @@ Expected: only files in the **Files:** list show as modified or new. If any file
 
 - [ ] **Step 5: Add SVG description**
 
-  In `src/data/svg-descriptions.json`, add `"12.25"`:
+  In `src/data/svg-descriptions.json`, add `"12.28"`:
 
   ```json
-  "12.25": [
+  "12.28": [
     "Fifteen-node legal citation graph used as the GraphRAG running corpus, with cases as nodes and directed citation edges between them.",
     "Subgraph retrieval highlight on the 15-node citation graph showing how a query selects a 5-node connected component (a precedent chain) as the retrieved context.",
     "Same 15-node citation graph re-colored into three communities (Civil Rights, Contract Law, IP Law) for global-query summarization."
   ]
   ```
 
-  Extend `expectedChapters` in `src/__tests__/svg-descriptions.test.js` to include `"12.25"`.
+  Extend `expectedChapters` in `src/__tests__/svg-descriptions.test.js` to include `"12.28"`.
 
 - [ ] **Step 6: Run svg-descriptions test**
 
@@ -2254,9 +2257,9 @@ Expected: only files in the **Files:** list show as modified or new. If any file
 
   Expected: all green.
 
-- [ ] **Step 8: Chrome visual validation for 12.25**
+- [ ] **Step 8: Chrome visual validation for 12.28**
 
-  Navigate to 12.25. Step sub=0 to sub=6. Check: corpus-switch explanation visible in sub=0; 15-node graph SVG has no overlapping nodes or labels; subgraph highlight in sub=3 visually distinct; community coloring in sub=4 clearly partitions the 15 nodes into 3 groups; global vs local examples in sub=5 side-by-side with no overlap.
+  Navigate to 12.28. Step sub=0 to sub=6. Check: corpus-switch explanation visible in sub=0; 15-node graph SVG has no overlapping nodes or labels; subgraph highlight in sub=3 visually distinct; community coloring in sub=4 clearly partitions the 15 nodes into 3 groups; global vs local examples in sub=5 side-by-side with no overlap.
 
   Stop server.
 
@@ -2281,12 +2284,12 @@ Expected: only files in the **Files:** list show as modified or new. If any file
 
   ```bash
   git add src/sections/rag-generation.jsx src/__tests__/sections.test.jsx src/data/svg-descriptions.json src/__tests__/svg-descriptions.test.js
-  git commit -m "Implement chapter 12.25 GraphRAG (Microsoft 2024)"
+  git commit -m "Implement chapter 12.28 GraphRAG (Microsoft 2024)"
   ```
 
 ---
 
-## Task 13: Implement Chapter 12.26 AgenticRAG
+## Task 13: Implement Chapter 12.29 AgenticRAG
 
 **Files:**
 
@@ -2295,7 +2298,7 @@ Expected: only files in the **Files:** list show as modified or new. If any file
 - Modify: `src/sections/rag-generation.jsx` (replace stub `AgenticRAG`)
 - Modify: `src/__tests__/sections.test.jsx` (append content tests)
 - Modify: `src/data/svg-descriptions.json` (add entry)
-- Modify: `src/__tests__/svg-descriptions.test.js` (add `"12.26"`)
+- Modify: `src/__tests__/svg-descriptions.test.js` (add `"12.29"`)
 
 **Chapter purpose (from spec):** Tool-augmented and agentic RAG. Retrieval is one tool the LLM can call - alongside SQL, calculators, web search, internal APIs. Function-calling pattern. Loop control with max-iterations and termination criteria. Brief mention of LangGraph as one orchestration option (no implementation). Walk away knowing the tool-call loop, the multi-tool decision pattern, and the cost/divergence risks.
 
@@ -2363,15 +2366,15 @@ Expected: only files in the **Files:** list show as modified or new. If any file
   Visual: a 2-column summary.
   - Left ("DIY"): A custom while-loop in your own code. You implement the function-calling parse, tool dispatch, max_iterations check, response merge. Full control. More code.
   - Right ("LangGraph and similar"): A graph-shaped state machine for tool flows. Nodes are tool calls, edges are transitions. Built-in checkpointing, retries, human-in-the-loop. Less code. Framework lock-in.
-  Caption: "Pick orchestration last. The patterns above work without any framework. Frameworks are a productivity choice, not a correctness one. Chapters 12.33-12.37 cover framework choice in depth."
-  Key content: "LangGraph" or "orchestration", "DIY" or "while loop" or "custom", "framework", "12.33-12.37" or "framework choice".
+  Caption: "Pick orchestration last. The patterns above work without any framework. Frameworks are a productivity choice, not a correctness one. Chapters 12.36-12.40 cover framework choice in depth."
+  Key content: "LangGraph" or "orchestration", "DIY" or "while loop" or "custom", "framework", "12.36-12.40" or "framework choice".
 
-- [ ] **Step 1: Write content tests for 12.26**
+- [ ] **Step 1: Write content tests for 12.29**
 
   Append to `src/__tests__/sections.test.jsx`:
 
   ```js
-  describe("AgenticRAG (12.26) content", () => {
+  describe("AgenticRAG (12.29) content", () => {
     const fn = RagGeneration.AgenticRAG;
 
     it("sub=0 lists multiple tools beyond vector search", () => {
@@ -2409,7 +2412,7 @@ Expected: only files in the **Files:** list show as modified or new. If any file
       expect(container.textContent).toMatch(/cost|budget/i);
     });
 
-    it("sub=5 mentions LangGraph as one orchestration option and chapters 12.33-12.37", () => {
+    it("sub=5 mentions LangGraph as one orchestration option and chapters 12.36-12.40", () => {
       const { container } = render(fn(makeCtx({ sub: 5 })));
       expect(container.textContent).toMatch(/LangGraph|orchestration/i);
       expect(container.textContent).toMatch(/framework/i);
@@ -2437,7 +2440,7 @@ Expected: only files in the **Files:** list show as modified or new. If any file
   - The loop diagram in sub=2 MUST be an SVG with `<desc>` first child.
   - The multi-tool trace in sub=3 shows 4 distinct turn-blocks vertically.
   - The 2x2 grid in sub=4 and 2-column in sub=5 must not overlap.
-  - The chapters 12.33-12.37 reference in sub=5 is a within-section signpost, not a forward "Next" hint.
+  - The chapters 12.36-12.40 reference in sub=5 is a within-section signpost, not a forward "Next" hint.
 
 - [ ] **Step 4: Run tests to verify pass**
 
@@ -2449,15 +2452,15 @@ Expected: only files in the **Files:** list show as modified or new. If any file
 
 - [ ] **Step 5: Add SVG description**
 
-  In `src/data/svg-descriptions.json`, add `"12.26"`:
+  In `src/data/svg-descriptions.json`, add `"12.29"`:
 
   ```json
-  "12.26": [
+  "12.29": [
     "Tool-call loop flowchart for agentic RAG: model emits a tool_call, the runtime executes the tool and feeds the response back, looping until the model emits a final answer or hits max_iterations."
   ]
   ```
 
-  Extend `expectedChapters` in `src/__tests__/svg-descriptions.test.js` to include `"12.26"`.
+  Extend `expectedChapters` in `src/__tests__/svg-descriptions.test.js` to include `"12.29"`.
 
 - [ ] **Step 6: Run svg-descriptions test**
 
@@ -2477,9 +2480,9 @@ Expected: only files in the **Files:** list show as modified or new. If any file
 
   Expected: all green.
 
-- [ ] **Step 8: Chrome visual validation for 12.26**
+- [ ] **Step 8: Chrome visual validation for 12.29**
 
-  Navigate to 12.26. Step sub=0 to sub=5. Check: 4-tool card row evenly spaced no overlap; function-calling trace in sub=1 is monospace styled (NOT code block); tool-call loop SVG centered; multi-tool trace in sub=3 has 4 clearly separated turn-blocks.
+  Navigate to 12.29. Step sub=0 to sub=5. Check: 4-tool card row evenly spaced no overlap; function-calling trace in sub=1 is monospace styled (NOT code block); tool-call loop SVG centered; multi-tool trace in sub=3 has 4 clearly separated turn-blocks.
 
   Stop server.
 
@@ -2504,12 +2507,12 @@ Expected: only files in the **Files:** list show as modified or new. If any file
 
   ```bash
   git add src/sections/rag-generation.jsx src/__tests__/sections.test.jsx src/data/svg-descriptions.json src/__tests__/svg-descriptions.test.js
-  git commit -m "Implement chapter 12.26 Tool-Augmented and Agentic RAG"
+  git commit -m "Implement chapter 12.29 Tool-Augmented and Agentic RAG"
   ```
 
 ---
 
-## Task 14: Implement Chapter 12.27 LongContextVsRAG
+## Task 14: Implement Chapter 12.30 LongContextVsRAG
 
 **Files:**
 
@@ -2518,7 +2521,7 @@ Expected: only files in the **Files:** list show as modified or new. If any file
 - Modify: `src/sections/rag-generation.jsx` (replace stub `LongContextVsRAG`)
 - Modify: `src/__tests__/sections.test.jsx` (append content tests)
 - Modify: `src/data/svg-descriptions.json` (add entry)
-- Modify: `src/__tests__/svg-descriptions.test.js` (add `"12.27"`)
+- Modify: `src/__tests__/svg-descriptions.test.js` (add `"12.30"`)
 
 **Chapter purpose (from spec):** When to use long-context-only, when to use RAG, when to use both. Cost x latency x accuracy chart. The "stuff everything in 200k context" failure modes (lost-in-middle, cost, latency, no citation). Hybrid pattern: retrieve broadly, then stuff 50k tokens. Uses the SECONDARY CORPUS: single 200-page product manual. Mention in chapter intro that the support corpus has too many distinct docs - the long-context demo needs a single long document.
 
@@ -2538,8 +2541,8 @@ Expected: only files in the **Files:** list show as modified or new. If any file
   - User query -> Pack ALL 120k tokens of the manual into the prompt -> LLM reads -> answer.
   - Annotate cost: at $3 per 1M input tokens, this is $0.36 per query.
   - Annotate latency: 120k tokens to read in -> 5-8 seconds first-token latency.
-  Caption: "Simple. Expensive. Slow. And subject to lost-in-the-middle (12.20) for facts buried in the middle pages."
-  Key content: "stuff" or "everything", "120k" or "200k" or "long-context", "lost in the middle" or "12.20", "cost" or "$0.36", "latency" or "5" or "8".
+  Caption: "Simple. Expensive. Slow. And subject to lost-in-the-middle (12.23) for facts buried in the middle pages."
+  Key content: "stuff" or "everything", "120k" or "200k" or "long-context", "lost in the middle" or "12.23", "cost" or "$0.36", "latency" or "5" or "8".
 
 - **sub=2 (C.green) - RAG-only: chunk + retrieve + small prompt**
   Title: "RAG Only: Chunk, Retrieve, Pack Small"
@@ -2558,12 +2561,12 @@ Expected: only files in the **Files:** list show as modified or new. If any file
   - Retrieve top-30 chunks (15,000 tokens).
   - Optional rerank to top-50 if more depth needed (25,000 tokens).
   - Pack into 50k context window slot.
-  - Reorder using lost-in-middle strategy (front-load or sandwich, from 12.20).
+  - Reorder using lost-in-middle strategy (front-load or sandwich, from 12.23).
   - Cost: ~$0.15 per query (5x cheaper than long-context-only, 18x more than RAG-only).
   - Latency: 80ms retrieval + 3s generation = ~3s.
   - Accuracy: highest, because more candidate chunks = lower miss rate.
   Caption: "The pragmatic middle. Most production systems land here."
-  Key content: "hybrid", "top-30" or "broadly", "50k" or "rerank", "front-load" or "sandwich" or "12.20", "production".
+  Key content: "hybrid", "top-30" or "broadly", "50k" or "rerank", "front-load" or "sandwich" or "12.23", "production".
 
 - **sub=4 (C.orange) - The cost / latency / accuracy chart**
   Title: "Cost, Latency, Accuracy: Side By Side"
@@ -2583,12 +2586,12 @@ Expected: only files in the **Files:** list show as modified or new. If any file
   Caption: "Hybrid is the production default. Long-context-only is a niche. RAG-only is for high-volume cost-sensitive systems."
   Key content: "decision" or "wins" or "when", at least 2 of "RAG only" / "Hybrid" / "Long-Context", "citation" or "cost" or "latency", "production default" or "default" or "niche".
 
-- [ ] **Step 1: Write content tests for 12.27**
+- [ ] **Step 1: Write content tests for 12.30**
 
   Append to `src/__tests__/sections.test.jsx`:
 
   ```js
-  describe("LongContextVsRAG (12.27) content", () => {
+  describe("LongContextVsRAG (12.30) content", () => {
     const fn = RagGeneration.LongContextVsRAG;
 
     it("sub=0 explains switch to the 200-page product manual corpus", () => {
@@ -2651,9 +2654,9 @@ Expected: only files in the **Files:** list show as modified or new. If any file
 
   - 6 sub-steps (sub >= 0 through sub >= 5).
   - Colors per sub-step (blue, red, green, purple, orange, cyan).
-  - The chapter intro (sub=0) MUST explicitly explain the corpus switch to the 200-page product manual. Same pattern as 12.25.
+  - The chapter intro (sub=0) MUST explicitly explain the corpus switch to the 200-page product manual. Same pattern as 12.28.
   - The cost / latency / accuracy chart in sub=4 MUST be an SVG bar chart with proper viewBox centering and `<desc>`. 3 metric groups (cost, latency, accuracy), each with 3 bars (RAG-only / Hybrid / Long-Context-Only). Each bar annotated with its value.
-  - References to 12.20 (lost-in-middle, front-load, sandwich) are within-section back-references.
+  - References to 12.23 (lost-in-middle, front-load, sandwich) are within-section back-references.
   - 3-card decision layout in sub=5 evenly spaced, each card centered, color-coded.
 
 - [ ] **Step 4: Run tests to verify pass**
@@ -2666,15 +2669,15 @@ Expected: only files in the **Files:** list show as modified or new. If any file
 
 - [ ] **Step 5: Add SVG description**
 
-  In `src/data/svg-descriptions.json`, add `"12.27"`:
+  In `src/data/svg-descriptions.json`, add `"12.30"`:
 
   ```json
-  "12.27": [
+  "12.30": [
     "Grouped bar chart comparing cost, latency, and accuracy across three strategies for the 200-page product manual: RAG-only, hybrid retrieve-broadly, and long-context-only stuffing of the full document."
   ]
   ```
 
-  Extend `expectedChapters` in `src/__tests__/svg-descriptions.test.js` to include `"12.27"`.
+  Extend `expectedChapters` in `src/__tests__/svg-descriptions.test.js` to include `"12.30"`.
 
 - [ ] **Step 6: Run svg-descriptions test**
 
@@ -2694,9 +2697,9 @@ Expected: only files in the **Files:** list show as modified or new. If any file
 
   Expected: all green.
 
-- [ ] **Step 8: Chrome visual validation for 12.27**
+- [ ] **Step 8: Chrome visual validation for 12.30**
 
-  Navigate to 12.27. Step sub=0 to sub=5. Check: corpus-switch explanation visible in sub=0; flow diagrams in sub=1/2/3 evenly proportioned; cost/latency/accuracy chart in sub=4 readable with all 9 bars labeled; 3-card decision layout in sub=5 visually distinct (color-coded green/yellow/red).
+  Navigate to 12.30. Step sub=0 to sub=5. Check: corpus-switch explanation visible in sub=0; flow diagrams in sub=1/2/3 evenly proportioned; cost/latency/accuracy chart in sub=4 readable with all 9 bars labeled; 3-card decision layout in sub=5 visually distinct (color-coded green/yellow/red).
 
   Stop server.
 
@@ -2721,12 +2724,12 @@ Expected: only files in the **Files:** list show as modified or new. If any file
 
   ```bash
   git add src/sections/rag-generation.jsx src/__tests__/sections.test.jsx src/data/svg-descriptions.json src/__tests__/svg-descriptions.test.js
-  git commit -m "Implement chapter 12.27 Long-Context vs RAG"
+  git commit -m "Implement chapter 12.30 Long-Context vs RAG"
   ```
 
 ---
 
-## Task 15: Update CLAUDE.md mapping for Section 12 Acts 5 + 6
+## Task 15: Update CLAUDE.md mapping for Section 12 Acts 6 + 7
 
 **Files:**
 
@@ -2736,26 +2739,26 @@ Expected: only files in the **Files:** list show as modified or new. If any file
 
 - [ ] **Step 1: Extend the Section 12 mapping table**
 
-  In `CLAUDE.md`, find the existing Section 12 mapping table (added/extended in M1+M2+M3). It currently covers 12.1-12.18. Extend it to cover 12.19-12.27. The header line above the table also needs updating to mention the new `rag-generation.jsx` file:
+  In `CLAUDE.md`, find the existing Section 12 mapping table (added/extended in M1+M2+M3). It currently covers 12.1-12.21. Extend it to cover 12.22-12.30. The header line above the table also needs updating to mention the new `rag-generation.jsx` file:
 
   Replace the existing header line for Section 12 with:
 
   ```markdown
-  **Section 12: Retrieval-Augmented Generation** (`rag-foundations.jsx` + `rag-retrieval.jsx` + `rag-generation.jsx` - Milestones 1-4 of 6 complete; Acts 1-6 implemented, Acts 7-9 pending in Milestones 5-6)
+  **Section 12: Retrieval-Augmented Generation** (`rag-foundations.jsx` + `rag-retrieval.jsx` + `rag-generation.jsx` - Milestones 1-4 of 6 complete; Acts 1-7 implemented, Acts 8-10 pending in Milestones 5-6)
   ```
 
-  Append the following rows to the existing table (after 12.18):
+  Append the following rows to the existing table (after 12.21):
 
   ```markdown
-  | 12.19 | ContextPacking | Context Packing |
-  | 12.20 | LostInTheMiddle | The Lost-in-the-Middle Problem |
-  | 12.21 | CitationsRefusal | Citations, Refusal & Groundedness |
-  | 12.22 | MultiHopRetrieval | Multi-Hop Retrieval |
-  | 12.23 | SelfRAG | Self-RAG |
-  | 12.24 | CorrectiveRAG | CRAG - Corrective RAG |
-  | 12.25 | GraphRAG | GraphRAG (Microsoft 2024) |
-  | 12.26 | AgenticRAG | Tool-Augmented & Agentic RAG |
-  | 12.27 | LongContextVsRAG | Long-Context vs RAG |
+  | 12.22 | ContextPacking | Context Packing |
+  | 12.23 | LostInTheMiddle | The Lost-in-the-Middle Problem |
+  | 12.24 | CitationsRefusal | Citations, Refusal & Groundedness |
+  | 12.25 | MultiHopRetrieval | Multi-Hop Retrieval |
+  | 12.26 | SelfRAG | Self-RAG |
+  | 12.27 | CorrectiveRAG | CRAG - Corrective RAG |
+  | 12.28 | GraphRAG | GraphRAG (Microsoft 2024) |
+  | 12.29 | AgenticRAG | Tool-Augmented & Agentic RAG |
+  | 12.30 | LongContextVsRAG | Long-Context vs RAG |
   ```
 
 - [ ] **Step 2: Update the Project Structure tree**
@@ -2763,9 +2766,10 @@ Expected: only files in the **Files:** list show as modified or new. If any file
   Find the `## Project Structure` section. In the `src/sections/` block, add `rag-generation.jsx` after `rag-retrieval.jsx`. The relevant tree lines after this change should look like:
 
   ```
-  │       ├── rag-foundations.jsx          # Section 12 (Acts 1+2, chapters 12.1-12.10)
-  │       ├── rag-retrieval.jsx            # Section 12 (Acts 3+4, chapters 12.11-12.18)
-  │       └── rag-generation.jsx           # Section 12 (Acts 5+6, chapters 12.19-12.27)
+  │       ├── rag-foundations.jsx          # Section 12 (Acts 1+3, chapters 12.1-12.3 + 12.7-12.13)
+  │       ├── rag-ingestion.jsx            # Section 12 (Act 2, chapters 12.4-12.6)
+  │       ├── rag-retrieval.jsx            # Section 12 (Acts 4+5, chapters 12.14-12.21)
+  │       └── rag-generation.jsx           # Section 12 (Acts 6+7, chapters 12.22-12.30)
   ```
 
   (Adjust the `└──` / `├──` glyphs so the LAST section file in the tree uses `└──` and the rest use `├──`. If a future M5 adds `rag-evaluation.jsx`, the `└──` will shift again at that time.)
@@ -2795,7 +2799,7 @@ Expected: only files in the **Files:** list show as modified or new. If any file
 
   ```bash
   git add CLAUDE.md
-  git commit -m "Document Section 12 Acts 5+6 (12.19-12.27) in CLAUDE.md mapping"
+  git commit -m "Document Section 12 Acts 6+7 (12.22-12.30) in CLAUDE.md mapping"
   ```
 
 ---
@@ -2853,7 +2857,7 @@ This is the final acceptance gate for M4. Every check must pass before declaring
 
   Boot `npm run dev`. Open `http://localhost:5173/learn-ai/` in Chrome via MCP. Before using any `mcp__claude-in-chrome__*` tool, load it with ToolSearch (e.g., `select:mcp__claude-in-chrome__tabs_context_mcp`).
 
-  For each chapter 12.19 through 12.27, step through every sub-step and verify the 12-point visual checklist:
+  For each chapter 12.22 through 12.30, step through every sub-step and verify the 12-point visual checklist:
 
   1. Zero overlap.
   2. Edges/nodes/boxes consistently aligned.
@@ -2870,10 +2874,10 @@ This is the final acceptance gate for M4. Every check must pass before declaring
 
   Special checks per chapter:
 
-  - **12.21**: every prompt-template block is monospace-styled, visually distinct from a code block, with "Prompt Template" title.
-  - **12.25**: chapter intro explicitly explains the corpus switch to the 15-node legal-citation network.
-  - **12.27**: chapter intro explicitly explains the corpus switch to the 200-page product manual.
-  - **12.22 / 12.23 / 12.24 / 12.25 / 12.26 / 12.27**: each SVG flowchart/timeline/graph/chart is horizontally centered in its viewBox.
+  - **12.24**: every prompt-template block is monospace-styled, visually distinct from a code block, with "Prompt Template" title.
+  - **12.28**: chapter intro explicitly explains the corpus switch to the 15-node legal-citation network.
+  - **12.30**: chapter intro explicitly explains the corpus switch to the 200-page product manual.
+  - **12.25 / 12.26 / 12.27 / 12.28 / 12.29 / 12.30**: each SVG flowchart/timeline/graph/chart is horizontally centered in its viewBox.
 
   Fix any issues in source. Re-run `npm run test`. Re-validate.
 
@@ -2891,9 +2895,9 @@ This is the final acceptance gate for M4. Every check must pass before declaring
   git commit -m "Add Section 12 M4 visual validation screenshots"
   ```
 
-- [ ] **Step 8: Verify TOC shows all 27 Section 12 chapters**
+- [ ] **Step 8: Verify TOC shows all 30 Section 12 chapters**
 
-  Boot dev server. Open the TOC. Confirm Section 12 lists 27 chapters (12.1-12.27), section color is the deep indigo from M1, every chapter is navigable, every chapter renders without console errors. Stop server.
+  Boot dev server. Open the TOC. Confirm Section 12 lists 30 chapters (12.1-12.30), section color is the deep indigo from M1, every chapter is navigable, every chapter renders without console errors. Stop server.
 
 - [ ] **Step 9: Milestone marker commit (if any drift remains)**
 
@@ -2902,26 +2906,26 @@ This is the final acceptance gate for M4. Every check must pass before declaring
   ```bash
   git status
   git add -p  # carefully review what to stage
-  git commit -m "Section 12 Milestone 4 complete: Acts 5+6 (12.19-12.27) shipped"
+  git commit -m "Section 12 Milestone 4 complete: Acts 6+7 (12.22-12.30) shipped"
   ```
 
 - [ ] **Step 10: Confirm M4 done**
 
   Verify via `git log --oneline -30` that the M4 commit history is clean. Confirm all M4 success criteria are met:
 
-  - [x] 9 chapters implemented in `rag-generation.jsx` (12.19-12.27).
-  - [x] Section 12 loader in `learn-ai.jsx` now references all 3 RAG section files.
+  - [x] 9 chapters implemented in `rag-generation.jsx` (12.22-12.30).
+  - [x] Section 12 loader in `learn-ai.jsx` now references all 4 RAG section files.
   - [x] `rag-generation.jsx` registered in `sections.test.jsx` and `lookup.test.js`.
   - [x] Tests added for every chapter at every sub-level.
   - [x] Coverage 100% lines, branches >= 97.7%.
   - [x] Lint + format clean.
   - [x] Every new SVG has `<desc>` + `svg-descriptions.json` entry.
-  - [x] CLAUDE.md mapping + project tree updated (`rag-generation.jsx` listed, all 27 Section 12 chapters in the table).
+  - [x] CLAUDE.md mapping + project tree updated (`rag-generation.jsx` listed, all 30 Section 12 chapters in the table).
   - [x] Chrome browser visual validation passed for all 9 M4 chapters.
-  - [x] All prompt-template artifacts (notably in 12.19, 12.21, 12.22, 12.23, 12.26) rendered as styled monospace text, NOT code blocks.
-  - [x] Corpus-switch explanations in 12.25 (legal-citation network) and 12.27 (200-page product manual) visible to the user.
+  - [x] All prompt-template artifacts (notably in 12.22, 12.24, 12.25, 12.26, 12.29) rendered as styled monospace text, NOT code blocks.
+  - [x] Corpus-switch explanations in 12.28 (legal-citation network) and 12.30 (200-page product manual) visible to the user.
 
-  M4 complete. Section 12 now spans 27 of 38 chapters. Ready to write Milestone 5 plan (Act 7 - the 5 evaluation chapters).
+  M4 complete. Section 12 now spans 30 of 41 chapters. Ready to write Milestone 5 plan (Act 8 - the 5 evaluation chapters).
 
 ---
 
@@ -3052,10 +3056,10 @@ After this milestone, the remaining Section 12 milestones:
 
 | Milestone | Acts | Chapters | File | When planned |
 |---|---|---|---|---|
-| M5 | Act 7 (Evaluation) | 12.28-12.32 (5 ch) | New: `rag-evaluation.jsx` | After M4 ships |
-| M6 | Acts 8 + 9 (Production Ops + Capstone) | 12.33-12.38 (6 ch) | New: `rag-production.jsx` | After M5 ships |
+| M5 | Act 8 (Evaluation) | 12.31-12.35 (5 ch) | New: `rag-evaluation.jsx` | After M4 ships |
+| M6 | Acts 9 + 10 (Production Ops + Capstone) | 12.36-12.41 (6 ch) | New: `rag-production.jsx` | After M5 ships |
 
-After M6 (when Section 12 is fully complete with all 38 chapters):
+After M6 (when Section 12 is fully complete with all 41 chapters):
 
 - Final discoverability sync: update `public/llms.txt` topic descriptions, `index.html` JSON-LD `teaches` array if any new top-level topic emerged.
 - Apply the title-case-for-diagram-boxes rule from the spec's "CLAUDE.md update flagged" item to CLAUDE.md (carve out diagram-box-text as a special-case stricter rule, or roll it global).

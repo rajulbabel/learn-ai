@@ -6,13 +6,13 @@
 >
 > **Two-stage review per task:** Stage 1 SCOPE - did the subagent modify only the listed files? Are commits clean? Stage 2 CORRECTNESS - do tests pass, does behavior match the spec? Both stages must pass before moving to the next task.
 
-**Goal:** Add Act 7 of Section 12 "Retrieval-Augmented Generation" - the five Evaluation chapters (12.28 RAGEvalTriangle, 12.29 LLMAsJudge, 12.30 RAGASMetrics, 12.31 GoldenDatasets, 12.32 OnlineEvalABTesting). These live in a NEW file `src/sections/rag-evaluation.jsx`. At the end of this milestone the app ships with 32 navigable chapters in Section 12 (12.1 through 12.32), completing Acts 1-7 of the section arc. Acts 8+9 (chapters 12.33-12.38) land in M6.
+**Goal:** Add Act 8 of Section 12 "Retrieval-Augmented Generation" - the five Evaluation chapters (12.31 RAGEvalTriangle, 12.32 LLMAsJudge, 12.33 RAGASMetrics, 12.34 GoldenDatasets, 12.35 OnlineEvalABTesting). These live in a NEW file `src/sections/rag-evaluation.jsx`. At the end of this milestone the app ships with 35 navigable chapters in Section 12 (12.1 through 12.35), completing Acts 1-8 of the section arc. Acts 9+10 (chapters 12.36-12.41) land in M6.
 
-**Architecture:** Create a new section file `src/sections/rag-evaluation.jsx` and register it in `learn-ai.jsx` so Section 12 now loads FOUR files via `Promise.all`: `rag-foundations.jsx` (12.1-12.10), `rag-retrieval.jsx` (12.11-12.18), `rag-generation.jsx` (12.19-12.27), and `rag-evaluation.jsx` (12.28-12.32). Each chapter follows the established learn-ai pattern: ctx-based function component, `{sub >= 0 && ... }` for sub=0 inline, `<Reveal when={sub >= N}>` for subsequent sub-steps, colored `<Box>` per sub-step, center-aligned `<T bold center>` titles, real math, concrete running-example content from the Habuild Cloud customer-support corpus.
+**Architecture:** Create a new section file `src/sections/rag-evaluation.jsx` and register it in `learn-ai.jsx` so Section 12 now loads FIVE files via `Promise.all`: `rag-foundations.jsx`, `rag-ingestion.jsx` (added in M2), `rag-retrieval.jsx` (12.14-12.21), `rag-generation.jsx` (12.22-12.30), and `rag-evaluation.jsx` (12.31-12.35). Each chapter follows the established learn-ai pattern: ctx-based function component, `{sub >= 0 && ... }` for sub=0 inline, `<Reveal when={sub >= N}>` for subsequent sub-steps, colored `<Box>` per sub-step, center-aligned `<T bold center>` titles, real math, concrete running-example content from the Habuild Cloud customer-support corpus.
 
 **Tech Stack:** React 18 (hooks, inline styles), Vitest, Vite, TDD-first. No new dependencies.
 
-**Spec reference:** `docs/superpowers/specs/2026-05-16-section-12-rag-design.md` - chapters 12.28 through 12.32, Act 7 Evaluation.
+**Spec reference:** `docs/superpowers/specs/2026-05-16-section-12-rag-design.md` - chapters 12.31 through 12.35, Act 8 Evaluation.
 
 **Prior-milestone references:**
 - `docs/superpowers/plans/2026-05-16-section-12-milestone-1.md` - established Section 12 scaffold + Act 1.
@@ -25,13 +25,14 @@
 ## Prerequisites
 
 - Milestones 1-4 are complete and merged on `main`. Concretely:
-  - `src/sections/rag-foundations.jsx` exists with exports for chapters 12.1-12.10 (Acts 1+2).
-  - `src/sections/rag-retrieval.jsx` exists with exports for chapters 12.11-12.18 (Acts 3+4).
-  - `src/sections/rag-generation.jsx` exists with exports for chapters 12.19-12.27 (Acts 5+6).
-  - `src/config.js` lists chapters 12.1-12.27 entered sequentially.
+  - `src/sections/rag-foundations.jsx` exists with exports for chapters 12.1-12.3 + 12.7-12.13 (Acts 1+3 - problem + chunking).
+  - `src/sections/rag-ingestion.jsx` exists with exports for chapters 12.4-12.6 (Act 2 - ingestion).
+  - `src/sections/rag-retrieval.jsx` exists with exports for chapters 12.14-12.21 (Acts 4+5).
+  - `src/sections/rag-generation.jsx` exists with exports for chapters 12.22-12.30 (Acts 6+7).
+  - `src/config.js` lists chapters 12.1-12.30 entered sequentially.
   - `sectionNames[12]` is `"Retrieval-Augmented Generation"`; `sectionColors[12]` is `"#7c4dff"`.
-  - `src/learn-ai.jsx`'s `sectionLoaders` for key 12 returns a `Promise.all([...])` that imports the three existing rag section files and merges with `Object.assign`.
-  - `src/__tests__/sections.test.jsx`, `src/__tests__/lookup.test.js`, and `src/__tests__/config.test.js` all reflect the 27-chapter state.
+  - `src/learn-ai.jsx`'s `sectionLoaders` for key 12 returns a `Promise.all([...])` that imports the four existing rag section files (`rag-foundations`, `rag-ingestion`, `rag-retrieval`, `rag-generation`) and merges with `Object.assign`.
+  - `src/__tests__/sections.test.jsx`, `src/__tests__/lookup.test.js`, and `src/__tests__/config.test.js` all reflect the 30-chapter state.
 - All tests currently pass on `main` (verify in Task 1).
 - Working directly on `main` with a clean working tree.
 
@@ -39,18 +40,18 @@
 
 ### New files
 
-- `src/sections/rag-evaluation.jsx` - Act 7 chapter functions. 5 exports: `RAGEvalTriangle`, `LLMAsJudge`, `RAGASMetrics`, `GoldenDatasets`, `OnlineEvalABTesting`. Estimated file size: 2,800-3,800 lines (5 chapters x ~650 lines avg).
+- `src/sections/rag-evaluation.jsx` - Act 8 chapter functions. 5 exports: `RAGEvalTriangle`, `LLMAsJudge`, `RAGASMetrics`, `GoldenDatasets`, `OnlineEvalABTesting`. Estimated file size: 2,800-3,800 lines (5 chapters x ~650 lines avg).
 
 ### Modified files
 
-- `src/config.js` - append 5 entries to `chapters[]` after `{ id: "12.27", ... LongContextVsRAG }` (or whatever the final 12.27 entry is).
-- `src/learn-ai.jsx` - extend the Section 12 loader `Promise.all` to include `rag-evaluation.jsx` as a fourth file.
+- `src/config.js` - append 5 entries to `chapters[]` after `{ id: "12.30", ... LongContextVsRAG }` (or whatever the final 12.30 entry is).
+- `src/learn-ai.jsx` - extend the Section 12 loader `Promise.all` to include `rag-evaluation.jsx` as a fifth file.
 - `src/__tests__/sections.test.jsx` - add `import * as RagEvaluation from "../sections/rag-evaluation.jsx"`, spread it into the `lookup` object, and append five content-test `describe` blocks (one per new chapter).
 - `src/__tests__/lookup.test.js` - add the same import and spread.
-- `src/__tests__/config.test.js` - extend Section 12 entry tests to cover 12.28-12.32.
-- `src/__tests__/svg-descriptions.test.js` - extend `expectedChapters` with the 12.28-12.32 IDs that actually render SVGs.
+- `src/__tests__/config.test.js` - extend Section 12 entry tests to cover 12.31-12.35.
+- `src/__tests__/svg-descriptions.test.js` - extend `expectedChapters` with the 12.31-12.35 IDs that actually render SVGs.
 - `src/data/svg-descriptions.json` - add entries keyed by each new chapter that renders one or more SVGs.
-- `CLAUDE.md` - extend Section 12 mapping table to include 12.28-12.32 and the new file in the project-structure tree; update the milestones annotation to "Milestones 1-5 of 6 complete".
+- `CLAUDE.md` - extend Section 12 mapping table to include 12.31-12.35 and the new file in the project-structure tree; update the milestones annotation to "Milestones 1-5 of 6 complete".
 
 ### Unchanged
 
@@ -78,20 +79,20 @@ From the spec - re-use across all five chapters where possible:
 - **Chunk size:** `64-128` tokens visible / `512` tokens production typical.
 - **LLM context window:** `8k` (visuals) / `200k` (production-typical mention).
 
-**Act 7-specific values (introduced in this milestone, used consistently across the five chapters where cross-referenced):**
+**Act 8-specific values (introduced in this milestone, used consistently across the five chapters where cross-referenced):**
 
 - **Retrieval metric defaults:** `recall@10`, `MRR @ 10`, `nDCG@10`, `precision@5`.
 - **Generation metric defaults:** faithfulness, answer relevancy, both expressed on the 0.0 to 1.0 scale.
 - **End-to-end metric defaults:** correctness (binary), helpfulness (1-5 Likert).
-- **RAGAS worked values** for the password-reset query (used in 12.30):
+- **RAGAS worked values** for the password-reset query (used in 12.33):
   - Faithfulness `= 3 / 4 = 0.75` (3 of 4 claims verifiable in retrieved context).
   - Answer relevancy `= cosine(0.92) = 0.92` (LLM-generated question similar to original).
   - Context precision `= 2 / 3 = 0.667` (2 relevant chunks among top-3).
   - Context recall `= 2 / 2 = 1.0` (all relevant chunks were retrieved).
-- **Judge rubric scale:** 1-5 per criterion (used in 12.29 and 12.32).
-- **LLM-as-judge biases** (named in 12.29): position bias, verbosity bias, self-preference bias.
-- **Golden-dataset sizing** (12.31): hand-written 30-100 initial examples; monthly review.
-- **Online-eval signals** (12.32): thumbs up/down, dwell time, copy-paste rate, follow-up rephrase rate, rating (explicit), shadow eval, A/B comparison.
+- **Judge rubric scale:** 1-5 per criterion (used in 12.32 and 12.35).
+- **LLM-as-judge biases** (named in 12.32): position bias, verbosity bias, self-preference bias.
+- **Golden-dataset sizing** (12.34): hand-written 30-100 initial examples; monthly review.
+- **Online-eval signals** (12.35): thumbs up/down, dwell time, copy-paste rate, follow-up rephrase rate, rating (explicit), shadow eval, A/B comparison.
 
 ---
 
@@ -104,12 +105,12 @@ Every chapter at every sub-step MUST satisfy ALL of these. Violations are blocke
 3. **Title-case for diagram box text** - every WORD inside a diagram box has its first letter capitalized. "Answer Relevancy" not "answer relevancy". Exceptions: officially lowercase brand names (pgvector, numpy), variable identifiers (`q_vec`), parameter syntax (`k = 60`), tokens (`[CLS]`).
 4. **First letter of every line capitalized** - monospace formula lines, table cells, bullets, headers, card text, SVG labels.
 5. **Titles always center-aligned** - `T center bold` for every title; card divs need `textAlign: "center"`.
-6. **Standalone formulas centered** - container div needs `textAlign: "center"`. **Especially important in 12.30**, where the four RAGAS formulas are the headline visual.
+6. **Standalone formulas centered** - container div needs `textAlign: "center"`. **Especially important in 12.33**, where the four RAGAS formulas are the headline visual.
 7. **Colored boxes only** - never `Box color={C.card}`. Use real colors.
 8. **SVG `<desc>` metadata** - every `<svg>` has `<desc>...</desc>` as its first child; corresponding entry in `src/data/svg-descriptions.json`.
 9. **No "architect" word** in chapter titles or content.
 10. **No em-dashes** anywhere in content. Use hyphens or rewrite.
-11. **No next-chapter hints** - no "Next chapter:", "Coming up:", "Preview:" text. Within-section signposts that point to which later chapter range in THIS section solves something are allowed (e.g., "Chapters 12.33-12.37 cover observability") - phrased in present tense. Never use the literal phrase "Act N" in chapter-visible content.
+11. **No next-chapter hints** - no "Next chapter:", "Coming up:", "Preview:" text. Within-section signposts that point to which later chapter range in THIS section solves something are allowed (e.g., "Chapters 12.36-12.40 cover observability") - phrased in present tense. Never use the literal phrase "Act N" in chapter-visible content.
 12. **Density: less text, more diagrams** - default to "show with a diagram" over "describe in prose".
 
 **Section-12-specific rule (re-stated):** prompt templates and eval rubrics are TEXT artifacts, NOT code blocks. Render in styled monospace blocks visually distinct from code: tinted background `${C.X}06`, soft border `1px solid ${C.X}12`, monospace font 14-16px, label "Prompt Template" / "Eval Rubric" / "Judge Prompt" centered. Highlight variable placeholders (`{context}`, `{query}`, `{answer}`) in a distinct color. Never show executable code.
@@ -153,14 +154,14 @@ Run `npm run test` (full suite, not just the targeted test). If any unrelated te
 
 1. Task 1 - Verify green baseline.
 2. Task 2 - Create `rag-evaluation.jsx` scaffold + register file (loader + lookup imports + config stub-test rows + 5 stub exports).
-3. Task 3 - Append 12.28-12.32 entries to `config.js` and the config-test row block.
-4. Task 4 - Update `learn-ai.jsx` Section 12 loader (4-file `Promise.all`).
+3. Task 3 - Append 12.31-12.35 entries to `config.js` and the config-test row block.
+4. Task 4 - Update `learn-ai.jsx` Section 12 loader (5-file `Promise.all`).
 5. Task 5 - Register `RagEvaluation` in `sections.test.jsx` and `lookup.test.js`.
-6. Task 6 - Chapter 12.28 RAGEvalTriangle (5-6 sub-steps).
-7. Task 7 - Chapter 12.29 LLMAsJudge (6-7 sub-steps).
-8. Task 8 - Chapter 12.30 RAGASMetrics (6-7 sub-steps).
-9. Task 9 - Chapter 12.31 GoldenDatasets (5-6 sub-steps).
-10. Task 10 - Chapter 12.32 OnlineEvalABTesting (5-6 sub-steps).
+6. Task 6 - Chapter 12.31 RAGEvalTriangle (5-6 sub-steps).
+7. Task 7 - Chapter 12.32 LLMAsJudge (6-7 sub-steps).
+8. Task 8 - Chapter 12.33 RAGASMetrics (6-7 sub-steps).
+9. Task 9 - Chapter 12.34 GoldenDatasets (5-6 sub-steps).
+10. Task 10 - Chapter 12.35 OnlineEvalABTesting (5-6 sub-steps).
 11. Task 11 - Update CLAUDE.md mapping + project tree + milestones annotation.
 12. Task 12 - Final M5 verification: full test suite, coverage, lint, format, build smoke test.
 
@@ -201,23 +202,23 @@ If your CLI shows the session title in its title bar or tab, verify it reads `se
   git log --oneline -10
   ```
 
-  Expected: `On branch main`, `nothing to commit, working tree clean`. Recent log should include the latest M4 commits ("Implement chapter 12.27 Long-Context vs RAG" or similar).
+  Expected: `On branch main`, `nothing to commit, working tree clean`. Recent log should include the latest M4 commits ("Implement chapter 12.30 Long-Context vs RAG" or similar).
 
 - [ ] **Step 2: Confirm prerequisite files exist**
 
   ```bash
-  ls -1 src/sections/rag-foundations.jsx src/sections/rag-retrieval.jsx src/sections/rag-generation.jsx
+  ls -1 src/sections/rag-foundations.jsx src/sections/rag-ingestion.jsx src/sections/rag-retrieval.jsx src/sections/rag-generation.jsx
   ```
 
-  Expected: all three files present. If any are missing, M5 cannot start - block on completing M2-M4 first.
+  Expected: all four files present. If any are missing, M5 cannot start - block on completing M2-M4 first.
 
-- [ ] **Step 3: Confirm Section 12 has 27 chapters in config**
+- [ ] **Step 3: Confirm Section 12 has 30 chapters in config**
 
   ```bash
   grep -c 'section: 12' src/config.js
   ```
 
-  Expected: `27`. If not, block on M2-M4 completion.
+  Expected: `30`. If not, block on M2-M4 completion.
 
 - [ ] **Step 4: Run full test suite**
 
@@ -269,7 +270,7 @@ If your CLI shows the session title in its title bar or tab, verify it reads `se
   Then append a presence test in the existing `describe` block (mirror the pattern used for prior rag files):
 
   ```js
-  it("rag-evaluation.jsx exports the Act 7 chapter components", async () => {
+  it("rag-evaluation.jsx exports the Act 8 chapter components", async () => {
     const mod = await import("../sections/rag-evaluation.jsx");
     expect(typeof mod.RAGEvalTriangle).toBe("function");
     expect(typeof mod.LLMAsJudge).toBe("function");
@@ -295,11 +296,12 @@ If your CLI shows the session title in its title bar or tab, verify it reads `se
   import { Box, T, Reveal, SubBtn } from "../components.jsx";
   import { C } from "../config.js";
 
-  // Section 12 Act 7: Evaluation (chapters 12.28-12.32).
+  // Section 12 Act 8: Evaluation (chapters 12.31-12.35).
   // Continues the Habuild Cloud customer-support corpus and 5 standard queries
-  // established in 12.1-12.27. Per-act color theme: green (eval).
-  // Files in this section: rag-foundations.jsx (12.1-12.10), rag-retrieval.jsx
-  // (12.11-12.18), rag-generation.jsx (12.19-12.27), rag-evaluation.jsx (here).
+  // established in 12.1-12.30. Per-act color theme: green (eval).
+  // Files in this section: rag-foundations.jsx (12.1-12.3 + 12.7-12.13), rag-ingestion.jsx
+  // (12.4-12.6), rag-retrieval.jsx (12.14-12.21), rag-generation.jsx (12.22-12.30),
+  // rag-evaluation.jsx (here).
 
   export const RAGEvalTriangle = (ctx) => {
     const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx;
@@ -471,12 +473,12 @@ Expected: only files in the **Files:** list show as modified or new. If any file
 
   ```bash
   git add src/sections/rag-evaluation.jsx src/__tests__/lookup.test.js
-  git commit -m "Add stub exports for rag-evaluation.jsx (12.28-12.32)"
+  git commit -m "Add stub exports for rag-evaluation.jsx (12.31-12.35)"
   ```
 
 ---
 
-## Task 3: Add 12.28-12.32 entries to `chapters` array + config test
+## Task 3: Add 12.31-12.35 entries to `chapters` array + config test
 
 **Files:**
 - Modify: `src/config.js` (chapters array, after the last Section 12 entry from M4).
@@ -489,16 +491,16 @@ Expected: only files in the **Files:** list show as modified or new. If any file
   Edit `src/__tests__/config.test.js`. Append (or extend the existing Section 12 entry block, if M1-M4 added one) a test block that asserts the five new chapters land in order with correct ids/components/titles:
 
   ```js
-  describe("Section 12 Act 7 chapters", () => {
-    it("has chapters 12.28 through 12.32 in order", () => {
+  describe("Section 12 Act 8 chapters", () => {
+    it("has chapters 12.31 through 12.35 in order", () => {
       const section12 = chapters.filter((ch) => ch.section === 12);
       const last5 = section12.slice(-5);
       const expected = [
-        { id: "12.28", component: "RAGEvalTriangle", title: "The RAG Eval Triangle" },
-        { id: "12.29", component: "LLMAsJudge", title: "LLM-as-Judge" },
-        { id: "12.30", component: "RAGASMetrics", title: "RAGAS Metrics" },
-        { id: "12.31", component: "GoldenDatasets", title: "Golden Datasets" },
-        { id: "12.32", component: "OnlineEvalABTesting", title: "Online Eval & A/B Testing" },
+        { id: "12.31", component: "RAGEvalTriangle", title: "The RAG Eval Triangle" },
+        { id: "12.32", component: "LLMAsJudge", title: "LLM-as-Judge" },
+        { id: "12.33", component: "RAGASMetrics", title: "RAGAS Metrics" },
+        { id: "12.34", component: "GoldenDatasets", title: "Golden Datasets" },
+        { id: "12.35", component: "OnlineEvalABTesting", title: "Online Eval & A/B Testing" },
       ];
       expect(last5.length).toBe(expected.length);
       expected.forEach((exp, i) => {
@@ -508,9 +510,9 @@ Expected: only files in the **Files:** list show as modified or new. If any file
       });
     });
 
-    it("Section 12 has exactly 32 chapters after M5", () => {
+    it("Section 12 has exactly 35 chapters after M5", () => {
       const section12 = chapters.filter((ch) => ch.section === 12);
-      expect(section12.length).toBe(32);
+      expect(section12.length).toBe(35);
     });
   });
   ```
@@ -518,23 +520,23 @@ Expected: only files in the **Files:** list show as modified or new. If any file
 - [ ] **Step 2: Run test to verify FAIL**
 
   ```bash
-  npx vitest run src/__tests__/config.test.js -t "Section 12 Act 7"
+  npx vitest run src/__tests__/config.test.js -t "Section 12 Act 8"
   ```
 
   Expected: FAIL - the chapters do not exist yet, so `last5` is the last 5 of the 27 currently-present rows.
 
 - [ ] **Step 3: Append entries in `src/config.js`**
 
-  Open `src/config.js`. Find the last `section: 12` row from M4 (likely `{ id: "12.27", ... LongContextVsRAG }`). Insert five new rows immediately after it, before the closing `];` of the `chapters` array:
+  Open `src/config.js`. Find the last `section: 12` row from M4 (likely `{ id: "12.30", ... LongContextVsRAG }`). Insert five new rows immediately after it, before the closing `];` of the `chapters` array:
 
   ```js
-    { id: "12.27", title: "Long-Context vs RAG", section: 12, component: "LongContextVsRAG" },
-    // Section 12 Act 7: Evaluation
-    { id: "12.28", title: "The RAG Eval Triangle", section: 12, component: "RAGEvalTriangle" },
-    { id: "12.29", title: "LLM-as-Judge", section: 12, component: "LLMAsJudge" },
-    { id: "12.30", title: "RAGAS Metrics", section: 12, component: "RAGASMetrics" },
-    { id: "12.31", title: "Golden Datasets", section: 12, component: "GoldenDatasets" },
-    { id: "12.32", title: "Online Eval & A/B Testing", section: 12, component: "OnlineEvalABTesting" },
+    { id: "12.30", title: "Long-Context vs RAG", section: 12, component: "LongContextVsRAG" },
+    // Section 12 Act 8: Evaluation
+    { id: "12.31", title: "The RAG Eval Triangle", section: 12, component: "RAGEvalTriangle" },
+    { id: "12.32", title: "LLM-as-Judge", section: 12, component: "LLMAsJudge" },
+    { id: "12.33", title: "RAGAS Metrics", section: 12, component: "RAGASMetrics" },
+    { id: "12.34", title: "Golden Datasets", section: 12, component: "GoldenDatasets" },
+    { id: "12.35", title: "Online Eval & A/B Testing", section: 12, component: "OnlineEvalABTesting" },
   ];
   ```
 
@@ -544,7 +546,7 @@ Expected: only files in the **Files:** list show as modified or new. If any file
   npx vitest run src/__tests__/config.test.js
   ```
 
-  Expected: PASS. Both the new Act 7 block AND the existing "chapter IDs sequential" test (which lives elsewhere in config.test.js) should be green.
+  Expected: PASS. Both the new Act 8 block AND the existing "chapter IDs sequential" test (which lives elsewhere in config.test.js) should be green.
 
 - [ ] **Step 5: Run the broader chapter-sequence guard**
 
@@ -552,7 +554,7 @@ Expected: only files in the **Files:** list show as modified or new. If any file
   npx vitest run src/__tests__/config.test.js -t "sequential"
   ```
 
-  Expected: PASS. This is the test that asserts every chapter ID within a section is sequential (`section.1` ... `section.N`). The M5 additions of 12.28-12.32 must keep this property.
+  Expected: PASS. This is the test that asserts every chapter ID within a section is sequential (`section.1` ... `section.N`). The M5 additions of 12.31-12.35 must keep this property.
 
 - [ ] **Step 6: Full test smoke gate**
 
@@ -575,12 +577,12 @@ Expected: only files in the **Files:** list show as modified or new. If any file
 
   ```bash
   git add src/config.js src/__tests__/config.test.js
-  git commit -m "Add chapter entries 12.28-12.32 to config"
+  git commit -m "Add chapter entries 12.31-12.35 to config"
   ```
 
 ---
 
-## Task 4: Update `learn-ai.jsx` Section 12 loader to 4-file `Promise.all`
+## Task 4: Update `learn-ai.jsx` Section 12 loader to 5-file `Promise.all`
 
 **Files:**
 - Modify: `src/learn-ai.jsx` (`sectionLoaders` object).
@@ -595,6 +597,7 @@ Expected: only files in the **Files:** list show as modified or new. If any file
     12: () =>
       Promise.all([
         import("./sections/rag-foundations.jsx"),
+        import("./sections/rag-ingestion.jsx"),
         import("./sections/rag-retrieval.jsx"),
         import("./sections/rag-generation.jsx"),
       ]).then((mods) => Object.assign({}, ...mods)),
@@ -602,7 +605,7 @@ Expected: only files in the **Files:** list show as modified or new. If any file
 
   (If M4 produced a different exact shape, adapt - the goal is to add `rag-evaluation.jsx` to the array.)
 
-- [ ] **Step 2: Replace with the 4-file version**
+- [ ] **Step 2: Replace with the 5-file version**
 
   Use Edit to swap the existing loader for:
 
@@ -610,6 +613,7 @@ Expected: only files in the **Files:** list show as modified or new. If any file
     12: () =>
       Promise.all([
         import("./sections/rag-foundations.jsx"),
+        import("./sections/rag-ingestion.jsx"),
         import("./sections/rag-retrieval.jsx"),
         import("./sections/rag-generation.jsx"),
         import("./sections/rag-evaluation.jsx"),
@@ -622,7 +626,7 @@ Expected: only files in the **Files:** list show as modified or new. If any file
   npm run test
   ```
 
-  Expected: all tests pass. The dev-mode validator in `learn-ai.jsx` ("Validate chapter/component mapping in dev mode") confirms every chapter component is reachable. If 12.28-12.32 cannot be looked up, the validator console-errors during the dev import - though tests run in isolation, sections.test.jsx still verifies the lookup (Task 5).
+  Expected: all tests pass. The dev-mode validator in `learn-ai.jsx` ("Validate chapter/component mapping in dev mode") confirms every chapter component is reachable. If 12.31-12.35 cannot be looked up, the validator console-errors during the dev import - though tests run in isolation, sections.test.jsx still verifies the lookup (Task 5).
 
 - [ ] **Step 4: Lint**
 
@@ -638,7 +642,7 @@ Expected: only files in the **Files:** list show as modified or new. If any file
   npm run dev
   ```
 
-  Open `http://localhost:5173/learn-ai/`. Use right-arrow keyboard nav or the TOC to step into Section 12 chapters. The Act 7 stub chapters should render their stub Boxes ("The RAG Eval Triangle (stub)" etc.) without console errors. Stop the server with Ctrl-C.
+  Open `http://localhost:5173/learn-ai/`. Use right-arrow keyboard nav or the TOC to step into Section 12 chapters. The Act 8 stub chapters should render their stub Boxes ("The RAG Eval Triangle (stub)" etc.) without console errors. Stop the server with Ctrl-C.
 
 - [ ] **Step 6: Full test smoke gate**
 
@@ -673,7 +677,7 @@ Expected: only files in the **Files:** list show as modified or new. If any file
 
 **Scope binding:** This task modifies ONLY the files listed in `**Files:**` above. If during implementation you discover other defects in other files, DO NOT fix them in this task - document them as a separate observation and continue with the listed scope. Before committing, run `git status` and `git diff --stat`: if ANY file outside the Files: list shows as modified, abort the commit and either move the change to the right task or revert it.
 
-The generic test block in `sections.test.jsx` iterates over `chapters` and looks up each component in `lookup`. Without this import, the generic "All chapters" describe block will fail for 12.28-12.32 with "fn is not a function".
+The generic test block in `sections.test.jsx` iterates over `chapters` and looks up each component in `lookup`. Without this import, the generic "All chapters" describe block will fail for 12.31-12.35 with "fn is not a function".
 
 - [ ] **Step 1: Run sections.test.jsx to observe the failure**
 
@@ -681,7 +685,7 @@ The generic test block in `sections.test.jsx` iterates over `chapters` and looks
   npx vitest run src/__tests__/sections.test.jsx -t "All chapters"
   ```
 
-  Expected: FAIL on 12.28-12.32 (`fn is not a function`).
+  Expected: FAIL on 12.31-12.35 (`fn is not a function`).
 
 - [ ] **Step 2: Add the import + spread**
 
@@ -725,7 +729,7 @@ The generic test block in `sections.test.jsx` iterates over `chapters` and looks
   npx vitest run src/__tests__/sections.test.jsx -t "All chapters"
   ```
 
-  Expected: PASS. The generic test now renders 12.28-12.32 stubs across sub=0..10 without crashing (sub=0 renders one Box; sub>0 renders nothing, which is allowed).
+  Expected: PASS. The generic test now renders 12.31-12.35 stubs across sub=0..10 without crashing (sub=0 renders one Box; sub>0 renders nothing, which is allowed).
 
 - [ ] **Step 4: Full test smoke gate**
 
@@ -753,17 +757,17 @@ Expected: only files in the **Files:** list show as modified or new. If any file
 
 ---
 
-## Task 6: Implement Chapter 12.28 RAGEvalTriangle (5-6 sub-steps)
+## Task 6: Implement Chapter 12.31 RAGEvalTriangle (5-6 sub-steps)
 
 **Files:**
 - Modify: `src/sections/rag-evaluation.jsx` (replace the `RAGEvalTriangle` stub with full implementation).
 - Modify: `src/__tests__/sections.test.jsx` (append content-test block).
 - Modify: `src/data/svg-descriptions.json` (add entry for the triangle SVG and any others).
-- Modify: `src/__tests__/svg-descriptions.test.js` (append `"12.28"` to `expectedChapters`).
+- Modify: `src/__tests__/svg-descriptions.test.js` (append `"12.31"` to `expectedChapters`).
 
 **Scope binding:** This task modifies ONLY the files listed in `**Files:**` above. If during implementation you discover other defects in other files, DO NOT fix them in this task - document them as a separate observation and continue with the listed scope. Before committing, run `git status` and `git diff --stat`: if ANY file outside the Files: list shows as modified, abort the commit and either move the change to the right task or revert it.
 
-**Chapter purpose (from spec):** Three layers of eval - retrieval, generation, end-to-end. Each layer needs separate eval because a bad final answer can come from bad retrieval OR bad generation; isolating each layer locates the failure. Mention BLEU/ROUGE as DEPRECATED for RAG (covered properly in 12.30 as a side note). Walk away knowing the metric vocabulary needed to talk eval with a team.
+**Chapter purpose (from spec):** Three layers of eval - retrieval, generation, end-to-end. Each layer needs separate eval because a bad final answer can come from bad retrieval OR bad generation; isolating each layer locates the failure. Mention BLEU/ROUGE as DEPRECATED for RAG (covered properly in 12.33 as a side note). Walk away knowing the metric vocabulary needed to talk eval with a team.
 
 **Sub-step structure (6 sub-steps, 0-5):**
 
@@ -810,15 +814,15 @@ Expected: only files in the **Files:** list show as modified or new. If any file
 
 - **sub=5 (C.yellow) - The deprecated metrics (BLEU/ROUGE).**
   Title: "Deprecated For RAG: BLEU & ROUGE".
-  Visual: a single card with a yellow-tinted background and a struck-through "BLEU, ROUGE, METEOR" header. Body explains in 2 short lines: word-overlap metrics measure how many ngrams in the generated answer also appear in the reference answer. They were designed for machine translation and summarisation. **They do not measure faithfulness or groundedness**: a perfectly faithful answer in different wording scores 0; a hallucinated answer that recycles reference words scores high. Use RAGAS (12.30) and LLM-as-judge (12.29) instead.
+  Visual: a single card with a yellow-tinted background and a struck-through "BLEU, ROUGE, METEOR" header. Body explains in 2 short lines: word-overlap metrics measure how many ngrams in the generated answer also appear in the reference answer. They were designed for machine translation and summarisation. **They do not measure faithfulness or groundedness**: a perfectly faithful answer in different wording scores 0; a hallucinated answer that recycles reference words scores high. Use RAGAS (12.33) and LLM-as-judge (12.32) instead.
   Key content: "BLEU" or "ROUGE", "deprecated" or "word overlap" or "do not measure", "faithfulness" or "ground".
 
 - [ ] **Step 1: Append content tests to `src/__tests__/sections.test.jsx`**
 
-  Place after the most recent rag describe block (likely 12.27 LongContextVsRAG):
+  Place after the most recent rag describe block (likely 12.30 LongContextVsRAG):
 
   ```js
-  describe("RAGEvalTriangle (12.28) content", () => {
+  describe("RAGEvalTriangle (12.31) content", () => {
     const fn = RagEvaluation.RAGEvalTriangle;
 
     it("sub=0 names the three eval layers", () => {
@@ -903,12 +907,12 @@ Expected: only files in the **Files:** list show as modified or new. If any file
   Edit `src/data/svg-descriptions.json`. Insert before the closing brace, after the M4 entries:
 
   ```json
-    "12.28": [
+    "12.31": [
       "Three-layer RAG evaluation triangle: retrieval at top (recall, MRR, precision, nDCG), generation lower-left (faithfulness, answer relevancy), end-to-end lower-right (correctness, helpfulness). Each vertex is labeled with a one-line description so a learner sees what each layer measures and why three layers are needed."
     ]
   ```
 
-  Edit `src/__tests__/svg-descriptions.test.js`. Append `"12.28"` to the `expectedChapters` array (place after the most recent rag entry).
+  Edit `src/__tests__/svg-descriptions.test.js`. Append `"12.31"` to the `expectedChapters` array (place after the most recent rag entry).
 
 - [ ] **Step 6: Run the SVG description tests**
 
@@ -920,7 +924,7 @@ Expected: only files in the **Files:** list show as modified or new. If any file
 
 - [ ] **Step 7: Run the SVG `<desc>` presence check**
 
-  The "Every SVG has a `<desc>` element" describe block in sections.test.jsx validates every chapter listed in `svgChapters`. Add `"12.28"` to that array (mirror Step 5).
+  The "Every SVG has a `<desc>` element" describe block in sections.test.jsx validates every chapter listed in `svgChapters`. Add `"12.31"` to that array (mirror Step 5).
 
   ```bash
   npx vitest run src/__tests__/sections.test.jsx -t "Every SVG"
@@ -959,12 +963,12 @@ Expected: only files in the **Files:** list show as modified or new. If any file
 
   ```bash
   git add src/sections/rag-evaluation.jsx src/__tests__/sections.test.jsx src/data/svg-descriptions.json src/__tests__/svg-descriptions.test.js
-  git commit -m "Implement chapter 12.28 The RAG Eval Triangle"
+  git commit -m "Implement chapter 12.31 The RAG Eval Triangle"
   ```
 
 ---
 
-## Task 7: Implement Chapter 12.29 LLMAsJudge (6-7 sub-steps)
+## Task 7: Implement Chapter 12.32 LLMAsJudge (6-7 sub-steps)
 
 **Files:**
 - Modify: `src/sections/rag-evaluation.jsx` (replace `LLMAsJudge` stub).
@@ -1059,7 +1063,7 @@ Expected: only files in the **Files:** list show as modified or new. If any file
 - [ ] **Step 1: Append content tests to sections.test.jsx**
 
   ```js
-  describe("LLMAsJudge (12.29) content", () => {
+  describe("LLMAsJudge (12.32) content", () => {
     const fn = RagEvaluation.LLMAsJudge;
 
     it("sub=0 compares human / heuristic / LLM-as-judge", () => {
@@ -1147,16 +1151,16 @@ Expected: only files in the **Files:** list show as modified or new. If any file
   Edit `src/data/svg-descriptions.json`:
 
   ```json
-    "12.29": [
+    "12.32": [
       "Judge calibration before-and-after line chart. The x-axis is the judge score percentile and the y-axis is agreement with human labels. The before curve sits around 60% agreement with a long divergence tail; the after curve (rubric refined plus position and verbosity mitigations applied) rises to 92% agreement, showing how calibration narrows the gap to human judgement."
     ]
   ```
 
-  Edit `src/__tests__/svg-descriptions.test.js`. Append `"12.29"` to `expectedChapters`.
+  Edit `src/__tests__/svg-descriptions.test.js`. Append `"12.32"` to `expectedChapters`.
 
 - [ ] **Step 6: SVG `<desc>` presence**
 
-  Add `"12.29"` to the `svgChapters` array in sections.test.jsx's "Every SVG has a `<desc>` element" describe block.
+  Add `"12.32"` to the `svgChapters` array in sections.test.jsx's "Every SVG has a `<desc>` element" describe block.
 
   ```bash
   npx vitest run src/__tests__/sections.test.jsx -t "Every SVG"
@@ -1196,12 +1200,12 @@ Expected: only files in the **Files:** list show as modified or new. If any file
 
   ```bash
   git add src/sections/rag-evaluation.jsx src/__tests__/sections.test.jsx src/data/svg-descriptions.json src/__tests__/svg-descriptions.test.js
-  git commit -m "Implement chapter 12.29 LLM-as-Judge"
+  git commit -m "Implement chapter 12.32 LLM-as-Judge"
   ```
 
 ---
 
-## Task 8: Implement Chapter 12.30 RAGASMetrics (6-7 sub-steps)
+## Task 8: Implement Chapter 12.33 RAGASMetrics (6-7 sub-steps)
 
 **Files:**
 - Modify: `src/sections/rag-evaluation.jsx` (replace `RAGASMetrics` stub).
@@ -1301,7 +1305,7 @@ Expected: only files in the **Files:** list show as modified or new. If any file
   - Context Precision: 0.67.
   - Context Recall: 1.00.
   Each row a tinted bar. Average row at the bottom: 0.845.
-  Plus a side card explaining: the 4 split into Retrieval (precision + recall) and Generation (faithfulness + relevancy). The triangle in 12.28 is the same split. RAGAS uses an LLM-judge under the hood for claim extraction and question generation.
+  Plus a side card explaining: the 4 split into Retrieval (precision + recall) and Generation (faithfulness + relevancy). The triangle in 12.31 is the same split. RAGAS uses an LLM-judge under the hood for claim extraction and question generation.
   Key content: at least three of the four metric names + their score, "average" or "report card" or "score card".
 
 - **sub=6 (C.pink) - The deprecated note: BLEU/ROUGE.**
@@ -1310,13 +1314,13 @@ Expected: only files in the **Files:** list show as modified or new. If any file
   - BLEU and ROUGE compute n-gram overlap between the generated answer and a reference answer.
   - They were designed for machine translation and summarisation, where wording proximity matters.
   - They **do not measure faithfulness or groundedness** - a perfectly faithful answer in different wording scores low; a hallucinated answer that recycles reference words scores high.
-  - Use RAGAS or LLM-as-judge instead. See 12.28 for the triangle, 12.29 for judge design.
+  - Use RAGAS or LLM-as-judge instead. See 12.31 for the triangle, 12.32 for judge design.
   Key content: "BLEU" or "ROUGE", "deprecated" or "word overlap" or "n-gram" or "do not measure", "faithful" or "ground".
 
 - [ ] **Step 1: Append content tests to sections.test.jsx**
 
   ```js
-  describe("RAGASMetrics (12.30) content", () => {
+  describe("RAGASMetrics (12.33) content", () => {
     const fn = RagEvaluation.RAGASMetrics;
 
     it("sub=0 introduces RAGAS as reference-free with 4 metrics", () => {
@@ -1410,12 +1414,12 @@ Expected: only files in the **Files:** list show as modified or new. If any file
   This chapter is formula-heavy and is expected to use div-based score cards and worked-example panels. If the implementation introduces no `<svg>` elements, **do not** add an entry to `svg-descriptions.json` or `svg-descriptions.test.js`. If a small worked-example diagram does end up as an SVG (e.g., a per-query report-card bar chart in sub=5), add the corresponding entry:
 
   ```json
-    "12.30": [
+    "12.33": [
       "Per-query RAGAS report card for the password-reset query: four horizontal bars labeled faithfulness 0.80, answer relevancy 0.91, context precision 0.67, context recall 1.00, with an average row at the bottom. Used to show how the four metrics combine into a single per-query score."
     ]
   ```
 
-  And append `"12.30"` to `expectedChapters` AND `svgChapters`. Otherwise skip.
+  And append `"12.33"` to `expectedChapters` AND `svgChapters`. Otherwise skip.
 
 - [ ] **Step 6: Full suite, lint, format**
 
@@ -1449,15 +1453,15 @@ Expected: only files in the **Files:** list show as modified or new. If any file
   ```bash
   git add src/sections/rag-evaluation.jsx src/__tests__/sections.test.jsx
   # Stage svg-descriptions files only if an SVG was added.
-  if grep -q '"12.30"' src/data/svg-descriptions.json; then
+  if grep -q '"12.33"' src/data/svg-descriptions.json; then
     git add src/data/svg-descriptions.json src/__tests__/svg-descriptions.test.js
   fi
-  git commit -m "Implement chapter 12.30 RAGAS Metrics"
+  git commit -m "Implement chapter 12.33 RAGAS Metrics"
   ```
 
 ---
 
-## Task 9: Implement Chapter 12.31 GoldenDatasets (5-6 sub-steps)
+## Task 9: Implement Chapter 12.34 GoldenDatasets (5-6 sub-steps)
 
 **Files:**
 - Modify: `src/sections/rag-evaluation.jsx` (replace `GoldenDatasets` stub).
@@ -1540,7 +1544,7 @@ Expected: only files in the **Files:** list show as modified or new. If any file
 - [ ] **Step 1: Append content tests to sections.test.jsx**
 
   ```js
-  describe("GoldenDatasets (12.31) content", () => {
+  describe("GoldenDatasets (12.34) content", () => {
     const fn = RagEvaluation.GoldenDatasets;
 
     it("sub=0 explains golden datasets as ground truth", () => {
@@ -1624,12 +1628,12 @@ Expected: only files in the **Files:** list show as modified or new. If any file
   If the bootstrap pipeline is rendered as an SVG, add to `src/data/svg-descriptions.json`:
 
   ```json
-    "12.31": [
+    "12.34": [
       "Two-lane LLM-bootstrapped golden-dataset pipeline. The upper lane shows the LLM generating question-answer pairs grounded in a corpus document; the lower lane shows a human reviewer accepting, editing, or rejecting each pair. Used to illustrate how a small hand-built seed scales into a 500-2000 reviewed set without losing human oversight."
     ]
   ```
 
-  Append `"12.31"` to `expectedChapters` and `svgChapters`. Skip if no SVG.
+  Append `"12.34"` to `expectedChapters` and `svgChapters`. Skip if no SVG.
 
 - [ ] **Step 6: Full suite, lint, format**
 
@@ -1662,15 +1666,15 @@ Expected: only files in the **Files:** list show as modified or new. If any file
 
   ```bash
   git add src/sections/rag-evaluation.jsx src/__tests__/sections.test.jsx
-  if grep -q '"12.31"' src/data/svg-descriptions.json; then
+  if grep -q '"12.34"' src/data/svg-descriptions.json; then
     git add src/data/svg-descriptions.json src/__tests__/svg-descriptions.test.js
   fi
-  git commit -m "Implement chapter 12.31 Golden Datasets"
+  git commit -m "Implement chapter 12.34 Golden Datasets"
   ```
 
 ---
 
-## Task 10: Implement Chapter 12.32 OnlineEvalABTesting (5-6 sub-steps)
+## Task 10: Implement Chapter 12.35 OnlineEvalABTesting (5-6 sub-steps)
 
 **Files:**
 - Modify: `src/sections/rag-evaluation.jsx` (replace `OnlineEvalABTesting` stub).
@@ -1737,7 +1741,7 @@ Expected: only files in the **Files:** list show as modified or new. If any file
   Title: "Closing The Loop: Online -> Offline -> Online".
   Visual: a 4-node cycle diagram (or numbered list):
   - 1. Online finds a regression (thumbs-down spike on a query type).
-  - 2. Capture failing cases into the golden regression set (12.31).
+  - 2. Capture failing cases into the golden regression set (12.34).
   - 3. Offline eval reproduces the failure; iterate fix.
   - 4. Shadow + A/B verify fix in production.
   - Back to 1.
@@ -1747,7 +1751,7 @@ Expected: only files in the **Files:** list show as modified or new. If any file
 - [ ] **Step 1: Append content tests to sections.test.jsx**
 
   ```js
-  describe("OnlineEvalABTesting (12.32) content", () => {
+  describe("OnlineEvalABTesting (12.35) content", () => {
     const fn = RagEvaluation.OnlineEvalABTesting;
 
     it("sub=0 contrasts offline vs online eval", () => {
@@ -1830,13 +1834,13 @@ Expected: only files in the **Files:** list show as modified or new. If any file
   Add to `src/data/svg-descriptions.json` (one entry per SVG; at least the shadow-eval pipeline and the closing-loop cycle):
 
   ```json
-    "12.32": [
+    "12.35": [
       "Shadow-eval pipeline diagram. A user query splits into an old pipeline whose answer is served and a new pipeline whose answer is logged but not served. Both answers feed into an LLM-judge that scores them, producing an aggregate comparison without exposing users to the candidate pipeline.",
       "Closing-the-loop cycle diagram with four nodes connected by arrows: online finds a regression, capture failing cases into the golden regression set, offline reproduces and fixes, shadow plus A/B verify in production. The cycle returns to online detection, illustrating the offline-online feedback loop that production-grade RAG eval relies on."
     ]
   ```
 
-  Adjust array length to match the actual `<svg>` count produced by the implementation. Append `"12.32"` to `expectedChapters` and `svgChapters`.
+  Adjust array length to match the actual `<svg>` count produced by the implementation. Append `"12.35"` to `expectedChapters` and `svgChapters`.
 
 - [ ] **Step 6: Run the SVG validation**
 
@@ -1878,12 +1882,12 @@ Expected: only files in the **Files:** list show as modified or new. If any file
 
   ```bash
   git add src/sections/rag-evaluation.jsx src/__tests__/sections.test.jsx src/data/svg-descriptions.json src/__tests__/svg-descriptions.test.js
-  git commit -m "Implement chapter 12.32 Online Eval & A/B Testing"
+  git commit -m "Implement chapter 12.35 Online Eval & A/B Testing"
   ```
 
 ---
 
-## Task 11: Update CLAUDE.md mapping for Act 7
+## Task 11: Update CLAUDE.md mapping for Act 8
 
 **Files:**
 - Modify: `CLAUDE.md`.
@@ -1900,20 +1904,20 @@ Expected: only files in the **Files:** list show as modified or new. If any file
 
 - [ ] **Step 2: Extend the Section 12 mapping table**
 
-  Append the five new rows after the M4 final row (12.27 LongContextVsRAG):
+  Append the five new rows after the M4 final row (12.30 LongContextVsRAG):
 
   ```markdown
-  | 12.28 | RAGEvalTriangle | The RAG Eval Triangle |
-  | 12.29 | LLMAsJudge | LLM-as-Judge |
-  | 12.30 | RAGASMetrics | RAGAS Metrics |
-  | 12.31 | GoldenDatasets | Golden Datasets |
-  | 12.32 | OnlineEvalABTesting | Online Eval & A/B Testing |
+  | 12.31 | RAGEvalTriangle | The RAG Eval Triangle |
+  | 12.32 | LLMAsJudge | LLM-as-Judge |
+  | 12.33 | RAGASMetrics | RAGAS Metrics |
+  | 12.34 | GoldenDatasets | Golden Datasets |
+  | 12.35 | OnlineEvalABTesting | Online Eval & A/B Testing |
   ```
 
   Update any trailing parenthetical to point to remaining work:
 
   ```markdown
-  (M6 will extend this table with chapters 12.33-12.38 for Acts 8+9.)
+  (M6 will extend this table with chapters 12.36-12.41 for Acts 9+10.)
   ```
 
 - [ ] **Step 3: Update the project-structure tree**
@@ -1921,10 +1925,11 @@ Expected: only files in the **Files:** list show as modified or new. If any file
   In the `## Project Structure` section under `src/sections/`, find the rag-related entries (added by M1-M4) and append `rag-evaluation.jsx`. The block should look like:
 
   ```
-  │       ├── rag-foundations.jsx          # Section 12 (Acts 1+2, chapters 12.1-12.10)
-  │       ├── rag-retrieval.jsx            # Section 12 (Acts 3+4, chapters 12.11-12.18)
-  │       ├── rag-generation.jsx           # Section 12 (Acts 5+6, chapters 12.19-12.27)
-  │       └── rag-evaluation.jsx           # Section 12 (Act 7, chapters 12.28-12.32)
+  │       ├── rag-foundations.jsx          # Section 12 (Acts 1+3, chapters 12.1-12.3 + 12.7-12.13)
+  │       ├── rag-ingestion.jsx            # Section 12 (Act 2, chapters 12.4-12.6)
+  │       ├── rag-retrieval.jsx            # Section 12 (Acts 4+5, chapters 12.14-12.21)
+  │       ├── rag-generation.jsx           # Section 12 (Acts 6+7, chapters 12.22-12.30)
+  │       └── rag-evaluation.jsx           # Section 12 (Act 8, chapters 12.31-12.35)
   ```
 
   If the existing block already has `└──` on `rag-generation.jsx`, change that line's connector to `├──` so `rag-evaluation.jsx` becomes the new last entry.
@@ -1952,7 +1957,7 @@ Expected: only files in the **Files:** list show as modified or new. If any file
 
   ```bash
   git add CLAUDE.md
-  git commit -m "Document Section 12 Act 7 in CLAUDE.md mapping"
+  git commit -m "Document Section 12 Act 8 in CLAUDE.md mapping"
   ```
 
 ---
@@ -2024,7 +2029,7 @@ Expected: only files in the **Files:** list show as modified or new. If any file
   grep -in "next chapter\|coming up\|preview:" src/sections/rag-evaluation.jsx
   ```
 
-  Expected: no matches. (Within-section signposts like "Chapters 12.33-12.37 cover observability" are allowed; the grep above will not flag those.)
+  Expected: no matches. (Within-section signposts like "Chapters 12.36-12.40 cover observability" are allowed; the grep above will not flag those.)
 
 - [ ] **Step 9: Production build smoke test**
 
@@ -2034,27 +2039,27 @@ Expected: only files in the **Files:** list show as modified or new. If any file
 
   Expected: build succeeds. No errors in vendor chunking, JSX compilation, or asset processing. New `rag-evaluation.jsx` should appear as part of the Section 12 chunk.
 
-- [ ] **Step 10: Smoke-boot the dev server and walk Section 12 Act 7**
+- [ ] **Step 10: Smoke-boot the dev server and walk Section 12 Act 8**
 
   ```bash
   npm run dev
   ```
 
-  Open `http://localhost:5173/learn-ai/`. Use keyboard arrows to land on chapter 12.28. Step through every sub-step of 12.28-12.32 (use the SubBtn or right-arrow). For each sub-step, eyeball:
+  Open `http://localhost:5173/learn-ai/`. Use keyboard arrows to land on chapter 12.31. Step through every sub-step of 12.31-12.35 (use the SubBtn or right-arrow). For each sub-step, eyeball:
 
   - No element overlaps another.
   - Diagrams centered horizontally + vertically.
   - Title-case for diagram box text.
   - First letter of every line capitalized.
   - All Boxes have real colors (not gray-on-dark from `C.card`).
-  - Standalone formulas (especially the 4 RAGAS formulas in 12.30 sub=1 through sub=4) are centered.
-  - Judge prompt artifact in 12.29 sub=1 is clearly distinct from a code block (monospace, tinted, labelled "Judge Prompt", placeholders in yellow).
+  - Standalone formulas (especially the 4 RAGAS formulas in 12.33 sub=1 through sub=4) are centered.
+  - Judge prompt artifact in 12.32 sub=1 is clearly distinct from a code block (monospace, tinted, labelled "Judge Prompt", placeholders in yellow).
 
   If any defect is found, stop, fix in the chapter source file, re-run `npm run test`, restart this step. Stop the dev server with Ctrl-C after a clean pass.
 
-- [ ] **Step 11: Verify TOC shows 32 Section 12 chapters**
+- [ ] **Step 11: Verify TOC shows 35 Section 12 chapters**
 
-  Boot the dev server (`npm run dev`), open the TOC (typically chapter index 0 / the "Overview"), confirm Section 12 lists 32 chapters ending in "Online Eval & A/B Testing". Stop the server.
+  Boot the dev server (`npm run dev`), open the TOC (typically chapter index 0 / the "Overview"), confirm Section 12 lists 35 chapters ending in "Online Eval & A/B Testing". Stop the server.
 
 - [ ] **Step 12: (Optional) Milestone marker commit**
 
@@ -2063,7 +2068,7 @@ Expected: only files in the **Files:** list show as modified or new. If any file
   ```bash
   git status
   git add -p   # carefully review what to stage
-  git commit -m "Section 12 Milestone 5 complete: Act 7 (12.28-12.32) shipped"
+  git commit -m "Section 12 Milestone 5 complete: Act 8 (12.31-12.35) shipped"
   ```
 
 - [ ] **Step 13: Confirm M5 success criteria**
@@ -2071,17 +2076,17 @@ Expected: only files in the **Files:** list show as modified or new. If any file
   Verify via `git log` that the M5 commit history is clean and well-structured (target 10-12 commits). Confirm:
 
   - [x] 5 chapters implemented in `rag-evaluation.jsx` (RAGEvalTriangle, LLMAsJudge, RAGASMetrics, GoldenDatasets, OnlineEvalABTesting).
-  - [x] Section 12 loader in `learn-ai.jsx` is a 4-file `Promise.all` (rag-foundations, rag-retrieval, rag-generation, rag-evaluation).
-  - [x] `config.js` has 32 Section 12 chapter rows (12.1-12.32), all sequential.
+  - [x] Section 12 loader in `learn-ai.jsx` is a 5-file `Promise.all` (rag-foundations, rag-ingestion, rag-retrieval, rag-generation, rag-evaluation).
+  - [x] `config.js` has 32 Section 12 chapter rows (12.1-12.35), all sequential.
   - [x] `sections.test.jsx`, `lookup.test.js`, `config.test.js` updated and green.
   - [x] Coverage 100% lines for the new file; branches >= 97.7% overall.
   - [x] Lint + format clean.
   - [x] Every new SVG has a `<desc>` child + entry in `svg-descriptions.json` + listing in `expectedChapters` / `svgChapters`.
-  - [x] CLAUDE.md mapping table extended to 12.32; project structure tree updated; milestones annotation reads "1-5 of 6 complete".
+  - [x] CLAUDE.md mapping table extended to 12.35; project structure tree updated; milestones annotation reads "1-5 of 6 complete".
   - [x] Production build smoke test passes.
-  - [x] Dev-server walk through 12.28-12.32 sub-steps is visually clean.
+  - [x] Dev-server walk through 12.31-12.35 sub-steps is visually clean.
 
-  M5 complete. Ready to write Milestone 6 plan (Acts 8+9 - chapters 12.33-12.38).
+  M5 complete. Ready to write Milestone 6 plan (Acts 9+10 - chapters 12.36-12.41).
 
 ---
 
@@ -2212,22 +2217,23 @@ After this milestone, M6 is the final implementation tranche of Section 12:
 
 | Milestone | Acts | Chapters | When planned |
 |---|---|---|---|
-| M6 | Act 8 (Production Operations) + Act 9 (Decision Framework + Capstone) | 12.33-12.38 (6 ch) | After M5 ships |
+| M6 | Act 9 (Production Operations) + Act 10 (Decision Framework + Capstone) | 12.36-12.41 (6 ch) | After M5 ships |
 
 M6 covers:
-- 12.33 Caching - Prompt + Semantic.
-- 12.34 CostModels.
-- 12.35 ObservabilityTracing.
-- 12.36 HallucinationDrift.
-- 12.37 FrameworkChoice.
-- 12.38 RAGDecisionFrameworkCapstone.
+- 12.36 Caching - Prompt + Semantic.
+- 12.37 CostModels.
+- 12.38 ObservabilityTracing.
+- 12.39 HallucinationDrift.
+- 12.40 FrameworkChoice.
+- 12.41 RAGDecisionFrameworkCapstone.
 
-M6 creates a fifth section file `src/sections/rag-production.jsx` and extends the Section 12 loader `Promise.all` to a final 5-file shape:
+M6 creates a sixth section file `src/sections/rag-production.jsx` and extends the Section 12 loader `Promise.all` to a final 6-file shape:
 
 ```js
 12: () =>
   Promise.all([
     import("./sections/rag-foundations.jsx"),
+    import("./sections/rag-ingestion.jsx"),
     import("./sections/rag-retrieval.jsx"),
     import("./sections/rag-generation.jsx"),
     import("./sections/rag-evaluation.jsx"),
@@ -2237,7 +2243,7 @@ M6 creates a fifth section file `src/sections/rag-production.jsx` and extends th
 
 After M6 ships:
 
-- A final pass updates CLAUDE.md mapping with all 38 chapters and changes the milestones annotation to "1-6 of 6 complete".
+- A final pass updates CLAUDE.md mapping with all 41 chapters and changes the milestones annotation to "1-6 of 6 complete".
 - A full discoverability sync runs: `public/llms.txt` topic list reflects the full Section 12 topic span; `index.html` JSON-LD `teaches` array confirms `"Retrieval-Augmented Generation"` is present.
 - The title-case-for-diagram-boxes rule (flagged in the spec) is applied to CLAUDE.md - either added globally or carved out as a diagram-specific exception.
 - The user is reminded to request re-indexing in Google Search Console and Bing Webmaster Tools after the M6 push.

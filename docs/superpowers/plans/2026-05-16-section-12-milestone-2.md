@@ -6,13 +6,13 @@
 >
 > **Two-stage review per task:** Stage 1 SCOPE - did the subagent modify only the listed files? Are commits clean? Stage 2 CORRECTNESS - do tests pass, does behavior match the spec? Both stages must pass before moving to the next task.
 
-**Goal:** Add Act 2 of Section 12 "Retrieval-Augmented Generation" - the seven chunking chapters (12.4 WhyChunkFixedSize, 12.5 RecursiveStructuralChunking, 12.6 SemanticChunking, 12.7 LateChunking, 12.8 HierarchicalChunking, 12.9 ContextualRetrieval, 12.10 ChunkingDecision) - extending the existing `src/sections/rag-foundations.jsx` to hold all of Acts 1+2 (10 chapters total). The app ships at end of this milestone with a Section 12 TOC entry showing 10 navigable chapters.
+**Goal:** Add Act 2 (Ingestion - 3 chapters) and Act 3 (Chunking - 7 chapters) of Section 12. Total 10 new chapters this milestone (12.4-12.13). The app ships at end of this milestone with Section 12 reaching 13 navigable chapters.
 
-**Architecture:** All seven new chapters are appended as named exports in the existing `src/sections/rag-foundations.jsx` (created in M1, currently holds 12.1-12.3). No new section files, no new loader entries - `learn-ai.jsx` already loads this file for section 12 from M1. Each chapter follows the same pattern used in 12.1-12.3: `ctx`-based function component, `{sub >= 0 && ... }` for sub=0 inline, `<Reveal when={sub >= N}>` for subsequent sub-steps, colored `<Box>` per sub-step, center-aligned `<T bold center>` titles, real artifacts (chunk text, prompt augmentation blocks, decision tables), concrete numbers from the Habuild Cloud support corpus.
+**Architecture:** Section 12 now has two files. The existing `src/sections/rag-foundations.jsx` (created in M1, holding 12.1-12.3) is extended with the chunking chapters 12.7-12.13. A NEW file `src/sections/rag-ingestion.jsx` holds the ingestion chapters 12.4-12.6. The Section 12 loader in `learn-ai.jsx` becomes a 2-file `Promise.all` that merges both namespaces. Each chapter follows the same pattern used in 12.1-12.3: `ctx`-based function component, `{sub >= 0 && ... }` for sub=0 inline, `<Reveal when={sub >= N}>` for subsequent sub-steps, colored `<Box>` per sub-step, center-aligned `<T bold center>` titles, real artifacts, concrete numbers from the Habuild Cloud support corpus.
 
 **Tech Stack:** React 18 (hooks, inline styles), Vitest, Vite, TDD-first. No new dependencies.
 
-**Spec reference:** `docs/superpowers/specs/2026-05-16-section-12-rag-design.md` - chapters 12.4 through 12.10, Act 2 (Chunking).
+**Spec reference:** `docs/superpowers/specs/2026-05-16-section-12-rag-design.md` - chapters 12.4 through 12.13, Acts 2 (Ingestion) and 3 (Chunking).
 
 **Milestone 1 reference:** `docs/superpowers/plans/2026-05-16-section-12-milestone-1.md` - same patterns, same testing cadence; this plan assumes M1 is merged on `main` (`rag-foundations.jsx` already contains 12.1-12.3, config has 12.1-12.3 entries, lookup is wired).
 
@@ -37,46 +37,47 @@
 
 ### New files
 
-- **None.** Milestone 2 extends the existing file.
+- `src/sections/rag-ingestion.jsx` - holds the 3 ingestion chapters (12.4 ParsingExtraction, 12.5 DeduplicationCleaning, 12.6 RefreshSync). Created as a scaffold with 3 stub exports in Task 2, then each chapter is implemented in Tasks 3-5.
 
 ### Modified files
 
-- `src/sections/rag-foundations.jsx` - append 7 new exports (WhyChunkFixedSize, RecursiveStructuralChunking, SemanticChunking, LateChunking, HierarchicalChunking, ContextualRetrieval, ChunkingDecision). File grows from ~3 chapters' worth (~900-1500 lines after M1) to roughly double that after M2.
-- `src/config.js` - add 7 entries to `chapters[]` immediately after `{ id: "12.3", component: "WhereNaiveRAGBreaks", ... }`.
-- `src/__tests__/sections.test.jsx` - append content-test `describe` blocks for each of the 7 new chapters (5-7 sub-step tests each = ~40 new test cases).
-- `src/__tests__/config.test.js` - extend the Section 12 chapter-count/id test from 3 to 10 entries.
-- `src/data/svg-descriptions.json` - add entries for new SVGs introduced in 12.4-12.10 (using chapter ID as the key, with an array of descriptions one per SVG in document order).
-- `CLAUDE.md` - extend the Section 12 mapping table from 3 rows to 10 rows. Update the inline annotation on `rag-foundations.jsx` in the Project Structure tree.
+- `src/sections/rag-foundations.jsx` - append 7 new exports for the chunking chapters (WhyChunkFixedSize, RecursiveStructuralChunking, SemanticChunking, LateChunking, HierarchicalChunking, ContextualRetrieval, ChunkingDecision). File grows from ~3 chapters' worth (~900-1500 lines after M1) to roughly double that after the chunking tasks.
+- `src/learn-ai.jsx` - Section 12 entry in `sectionLoaders` becomes a 2-file `Promise.all` over `rag-foundations.jsx` + `rag-ingestion.jsx`, merging the namespaces. (Updated once in Task 2.)
+- `src/config.js` - add 10 entries to `chapters[]`: 3 ingestion entries inserted immediately after `{ id: "12.3", component: "WhereNaiveRAGBreaks", ... }`, then 7 chunking entries immediately after `12.6`.
+- `src/__tests__/lookup.test.js` - add static `import * as RagIngestion from "../sections/rag-ingestion.jsx"`, presence tests asserting each ingestion component is a function, and spread `...RagIngestion` into the lookup object alongside RagFoundations.
+- `src/__tests__/sections.test.jsx` - import `RagIngestion`, spread it into the `lookup` object, append content-test `describe` blocks for each of the 10 new chapters (5-7 sub-step tests each = ~55 new test cases).
+- `src/__tests__/config.test.js` - extend the Section 12 chapter-count/id test from 3 (M1) up to 13 (end of M2) entries, growing one task at a time.
+- `src/data/svg-descriptions.json` - add entries for new SVGs introduced in 12.4-12.13 keyed by chapter ID.
+- `CLAUDE.md` - extend the Section 12 mapping table from 3 rows to 13 rows. Update the inline annotation on `rag-foundations.jsx` and ADD a new line for `rag-ingestion.jsx` in the Project Structure tree.
 
 ### Unchanged
 
 - All prior section files (Sections 1-11) and their tests.
-- `src/learn-ai.jsx` (already wired for section 12 from M1).
 - The Habuild Cloud corpus references and 5 standard queries are reused as-is from M1 - no new shared constants needed at file top. (If a particular chapter benefits from a shared chunk constant, add it locally to that chapter's section.)
 
 ---
 
 ## Standard running-example values (reference during implementation)
 
-From the spec, identical to M1. Use consistently across 12.4-12.10:
+From the spec, identical to M1. Use consistently across 12.4-12.13:
 
 - **Primary corpus:** 30-doc Habuild Cloud customer support knowledge base - 10 account/billing docs, 10 product feature docs, 10 troubleshooting docs.
-- **Running docs (re-used across chunking chapters):**
-  - doc-1: Password reset article (multi-paragraph; chunked in 12.4, 12.5, 12.7, 12.8).
-  - doc-4: Refunds policy (referenced in 12.4 cross-chunk break; used in 12.8 parent-child).
-  - doc-7: Login troubleshooting (used in 12.5 to show structural chunking on a heterogeneous markdown doc).
-  - doc-12: API keys feature (used in 12.6 semantic chunking + 12.9 contextual augmentation).
-  - doc-23: 500 errors troubleshooting (used in 12.10 decision matrix).
+- **Running docs (re-used across chapters):**
+  - doc-1: Password reset article (used in 12.4 parsing, 12.7 fixed-size, 12.8 recursive, 12.10 late chunking, 12.11 hierarchical).
+  - doc-4: Refunds policy (used in 12.11 parent-child).
+  - doc-7: Login troubleshooting (used in 12.8 to show structural chunking on a heterogeneous markdown doc).
+  - doc-12: API keys feature (used in 12.9 semantic chunking + 12.12 contextual augmentation).
+  - doc-23: 500 errors troubleshooting (used in 12.13 decision matrix).
 - **Standard queries:**
   - "How do I reset my password?" (single-doc lookup baseline).
-  - "How do I reset my password if I forgot my email?" (multi-hop - used in 12.7 late chunking, 12.8 hierarchical).
+  - "How do I reset my password if I forgot my email?" (multi-hop - used in 12.10 late chunking, 12.11 hierarchical).
   - "Why is my dashboard slow and showing 500 errors?" (multi-issue).
   - "Cancel my subscription and get a refund" (multi-step).
   - "Compare the Pro and Enterprise plans" (aggregation).
 - **Chunk size (tokens):** 64-128 (visible in diagrams) / 512 (production typical, mentioned in scaling math).
 - **Chunk overlap:** 0 or 16 (visible) / 50-100 (production).
 - **Top-k:** 3-5 (visible) / 20-50 (production before rerank).
-- **Per-act color scheme (from spec):** Act 2 (Chunking) uses cyan as its primary color family. Use `C.cyan` for the "anchor" sub-step in each chapter (typically sub=0 or the title sub-step). Sub-steps within each chapter still rotate through (cyan, green, purple, orange, yellow, pink, red, blue) - cyan just gets first dibs to anchor the act.
+- **Per-act color scheme (from spec):** Act 2 (Ingestion) uses red/cyan as anchors. Act 3 (Chunking) uses cyan as its primary color family. Use `C.cyan` for the "anchor" sub-step in each chunking chapter (typically sub=0 or the title sub-step). Sub-steps within each chapter still rotate through (cyan, green, purple, orange, yellow, pink, red, blue).
 
 ---
 
@@ -84,28 +85,28 @@ From the spec, identical to M1. Use consistently across 12.4-12.10:
 
 Every chapter at every sub-step MUST satisfy ALL of these. Violations are blockers, not nice-to-haves:
 
-1. **Zero overlap** - no diagram/visual element overlaps another in any manner. Earlier sections suffered overlap defects fixed one-by-one. Validate in Chrome (Task 10).
+1. **Zero overlap** - no diagram/visual element overlaps another in any manner. Earlier sections suffered overlap defects fixed one-by-one. Validate in Chrome (Task 14).
 2. **Edges/nodes/boxes consistently aligned** - every diagram element vertically AND horizontally center-aligned. SVG `viewBox` content centered with `x_start = (viewBox_width - element_span) / 2`. No hardcoded `x = 40` left margins.
 3. **Title-case for diagram box text** - every WORD inside a diagram box has its first letter capitalized. "Retrieve Top K Documents" not "retrieve top k documents". Exceptions: lowercase brand names (pgvector, numpy, langchain), variable identifiers (`q_vec`), parameter syntax (`m = 16`), tokens (`[CLS]`).
 4. **First letter of every line capitalized** - all monospace lines, table cells, bullets, headers, card text, SVG labels.
 5. **Titles always center-aligned** - `T center bold` for every title; card divs need `textAlign: "center"`.
 6. **Standalone formulas centered** - container div needs `textAlign: "center"`.
 7. **Colored boxes only** - never `Box color={C.card}`. Use real colors.
-8. **SVG `<desc>` metadata** - every `<svg>` has `<desc>...</desc>` as its first child; corresponding entry in `src/data/svg-descriptions.json` keyed by chapter ID (e.g., `"12.4": ["desc 1", "desc 2"]`).
+8. **SVG `<desc>` metadata** - every `<svg>` has `<desc>...</desc>` as its first child; corresponding entry in `src/data/svg-descriptions.json` keyed by chapter ID.
 9. **No "architect" word** in chapter titles or content.
 10. **No em-dashes** anywhere in content. Use hyphen (`-`) or rewrite the sentence.
-11. **No next-chapter hints** - no "Next chapter:", "Coming up:", "Preview:" text. Within-section signposts like "Chapters 12.19-12.21 fix this" or "covered in chapter 12.10" are allowed; future-tense "next" / "coming" forward-references to chapters not yet on screen are forbidden. Never use the literal phrase "Act N" in chapter-visible content - learners only see chapter numbers like 12.4.
+11. **No next-chapter hints** - no "Next chapter:", "Coming up:", "Preview:" text. Within-section signposts like "Chapters 12.14-12.21 fix this" or "covered in chapter 12.13" are allowed; future-tense "next" / "coming" forward-references to chapters not yet on screen are forbidden. Never use the literal phrase "Act N" in chapter-visible content - learners only see chapter numbers like 12.4.
 12. **Density: less text, more diagrams** - default to "show with a diagram" over "describe in prose". A chapter with 5 paragraphs of text and 1 diagram fails this rule. A chapter with 1 paragraph and 5 diagrams succeeds.
 
-### Prompt-template artifact treatment (Section-12-specific)
+### Prompt-template & metadata-artifact treatment (Section-12-specific)
 
-Prompt templates and contextual-augmentation blocks (12.9 especially) are TEXT artifacts, NOT code blocks. Render in styled monospace blocks visually distinct from any code:
+Prompt templates, metadata schemas, and contextual-augmentation blocks are TEXT artifacts, NOT code blocks. Render in styled monospace blocks visually distinct from any code:
 
 - Background tint matching the box color (e.g., `${C.purple}06`).
 - Soft border `1px solid ${C.purple}12`.
 - Monospace font (`fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace"`), 14-16px.
-- Highlight variable placeholders (`{document_title}`, `{section_heading}`, `{chunk}`) in a distinct accent color.
-- Label the block as "Prompt Template" / "Augmentation Template" / "Eval Rubric" in the title.
+- Highlight variable placeholders (`{document_title}`, `{section_heading}`, `{chunk}`, JSON field names like `source_url`) in a distinct accent color.
+- Label the block as "Prompt Template" / "Augmentation Template" / "Metadata Schema" / "Eval Rubric" in the title.
 - Never show executable code (no Python, no JS, no SDK calls).
 
 ---
@@ -121,21 +122,15 @@ When this milestone adds/modifies certain artifacts, OTHER files iterate over th
 - `src/__tests__/sections.test.jsx` - generic test "All chapters render at every sub-level". The `lookup` object in this file must ALSO include the spread of every section namespace.
 - `src/learn-ai.jsx` - `sectionLoaders` lazy-imports each section file.
 
-### When adding a NEW section file (e.g., `src/sections/rag-foundations.jsx`), you MUST update:
+### When adding a NEW section file (e.g., `src/sections/rag-ingestion.jsx`), you MUST update:
 
 - `src/__tests__/lookup.test.js` - (a) static `import * as NewSection from "../sections/new-section.jsx"`, (b) presence test asserting `typeof mod.ChapterName === "function"`, AND (c) spread `...NewSection` into the test's `lookup` object.
 - `src/__tests__/sections.test.jsx` - (a) static `import * as NewSection`, (b) spread `...NewSection` into the `lookup` object.
 - `src/learn-ai.jsx` - register the new file in `sectionLoaders` (either single import or as part of a Promise.all if section already has multiple files).
 
-### When adding chapters to `chapters[]` (without a new section file):
+### When the section is now multi-file:
 
-- `src/__tests__/config.test.js` - add a "Section N chapters" describe block testing the specific new entries.
-- The relevant section file must already export each new `component`. If it doesn't, the lookup-spread will resolve the symbol as `undefined` and sections.test.jsx generic test fails with "fn is not a function".
-- If the new chapters introduce ANY new SVG, also update `src/data/svg-descriptions.json` AND `src/__tests__/svg-descriptions.test.js` may need adjustment depending on coverage rules.
-
-### When updating `learn-ai.jsx` `sectionLoaders`:
-
-- If the section is now multi-file, the loader becomes `Promise.all([...]).then((mods) => Object.assign({}, ...mods))`. Any earlier single-file loader for that section is REPLACED.
+- The loader becomes `Promise.all([...]).then((mods) => Object.assign({}, ...mods))`. Any earlier single-file loader for that section is REPLACED.
 
 ### Before committing a task that touches any of these artifacts:
 
@@ -145,20 +140,26 @@ Run `npm run test` (full suite, not just the targeted test). If any unrelated te
 
 ## Implementation order
 
-Act 2 is seven chapters. Each chapter is its own task after baseline verification. The ordering mirrors the spec's learner-reading order and accumulates concepts (fixed-size baseline → recursive → semantic → late → hierarchical → contextual → decision synthesis).
+M2 ships ten chapters across two acts. After baseline verification and the new-file scaffold, ingestion chapters come first (they precede chunking in the learner's reading order), then chunking. Each chapter is its own task.
 
-1. Task 1 - Verify green baseline (no commit).
-2. Task 2 - Chapter 12.4 WhyChunkFixedSize.
-3. Task 3 - Chapter 12.5 RecursiveStructuralChunking.
-4. Task 4 - Chapter 12.6 SemanticChunking.
-5. Task 5 - Chapter 12.7 LateChunking.
-6. Task 6 - Chapter 12.8 HierarchicalChunking.
-7. Task 7 - Chapter 12.9 ContextualRetrieval.
-8. Task 8 - Chapter 12.10 ChunkingDecision.
-9. Task 9 - Update CLAUDE.md mapping table.
-10. Task 10 - Final M2 verification (test, coverage, lint, format, build, Chrome visual validation).
+1. Task 0 - Name session.
+2. Task 1 - Verify green baseline (no commit).
+3. Task 2 - Create `rag-ingestion.jsx` scaffold + register 2-file Promise.all loader + update lookup/sections tests.
+4. Task 3 - Chapter 12.4 ParsingExtraction.
+5. Task 4 - Chapter 12.5 DeduplicationCleaning.
+6. Task 5 - Chapter 12.6 RefreshSync.
+7. Task 6 - Chapter 12.7 WhyChunkFixedSize.
+8. Task 7 - Chapter 12.8 RecursiveStructuralChunking.
+9. Task 8 - Chapter 12.9 SemanticChunking.
+10. Task 9 - Chapter 12.10 LateChunking.
+11. Task 10 - Chapter 12.11 HierarchicalChunking.
+12. Task 11 - Chapter 12.12 ContextualRetrieval.
+13. Task 12 - Chapter 12.13 ChunkingDecision.
+14. Task 13 - Update CLAUDE.md mapping table.
+15. Task 14 - Final M2 verification (test, coverage, lint, format, build, Chrome visual validation).
+16. Task 15 - Lessons capture + M3 starter prompt.
 
-Each chapter task internally follows the same 7-step cadence: write content tests → run-fail → implement → run-pass → svg-descriptions update (if SVG added) → full test + lint + format → commit. One commit per chapter.
+Each chapter task internally follows the same 9-step cadence: write content tests → run-fail → implement → run-pass → svg-descriptions update (if SVG added) → full test + lint + format → full smoke gate → scope verify → commit. One commit per chapter.
 
 ---
 
@@ -229,13 +230,832 @@ Expected: no lint errors; format clean (no changes).
 
 ---
 
-## Task 2: Implement Chapter 12.4 WhyChunkFixedSize
+## Task 2: Create rag-ingestion.jsx scaffold and 2-file loader
+
+**Files:**
+- Create: `src/sections/rag-ingestion.jsx` (new file with 3 stub exports).
+- Modify: `src/learn-ai.jsx` (Section 12 loader becomes a 2-file `Promise.all`).
+- Modify: `src/__tests__/lookup.test.js` (static import + presence tests + lookup spread).
+- Modify: `src/__tests__/sections.test.jsx` (static import + lookup spread).
+
+**Scope binding:** This task modifies ONLY the files listed in `**Files:**` above. If during implementation you discover other defects in other files, DO NOT fix them in this task - document them as a separate observation and continue with the listed scope. Before committing, run `git status` and `git diff --stat`: if ANY file outside the Files: list shows as modified, abort the commit and either move the change to the right task or revert it.
+
+**Purpose:** Stand up the second section file for Section 12 with stub exports so the 3 ingestion chapters in Tasks 3-5 can each be a single-file Edit. Also wire the 2-file Promise.all loader once, so chapter tasks don't have to touch `learn-ai.jsx`. Pattern mirrors M1's "Create rag-foundations.jsx scaffold + register loader" infrastructure task.
+
+- [ ] **Step 1: Create `src/sections/rag-ingestion.jsx`**
+
+Create the new file with React imports (matching the pattern used in `rag-foundations.jsx`) and 3 stub exports. Each stub takes `ctx` and returns an empty fragment - just enough for `typeof === "function"` presence tests to pass before chapters are implemented in Tasks 3-5.
+
+```jsx
+import React from "react";
+import { Box, T, Reveal } from "../components.jsx";
+import { C } from "../config.js";
+
+export const ParsingExtraction = (_ctx) => <></>;
+export const DeduplicationCleaning = (_ctx) => <></>;
+export const RefreshSync = (_ctx) => <></>;
+```
+
+(The exact import list should match the imports `rag-foundations.jsx` uses - copy that file's import block. If `Reveal`/`Box`/`T`/`C` are imported from different paths there, mirror it.)
+
+- [ ] **Step 2: Update `src/learn-ai.jsx` Section 12 loader**
+
+Find the `sectionLoaders` mapping in `learn-ai.jsx`. The M1 entry for Section 12 looks something like `12: () => import("./sections/rag-foundations.jsx"),`. Replace it with a 2-file Promise.all that merges both modules' namespaces:
+
+```js
+  12: () =>
+    Promise.all([
+      import("./sections/rag-foundations.jsx"),
+      import("./sections/rag-ingestion.jsx"),
+    ]).then((mods) => Object.assign({}, ...mods)),
+```
+
+This shape is the same one Sections 8, 9, 10, 11 use when they span multiple files. Each `mod` is a module namespace whose own-enumerable properties are the named exports; `Object.assign({}, ...mods)` flattens them into a single lookup-compatible object.
+
+- [ ] **Step 3: Update `src/__tests__/lookup.test.js`**
+
+Add a static import for the new file at the top alongside the other section namespace imports:
+
+```js
+import * as RagIngestion from "../sections/rag-ingestion.jsx";
+```
+
+Find the test's `lookup` object (the spread of all section namespaces). Add `...RagIngestion` immediately after `...RagFoundations` so the generic "every chapter component exists in lookup" test can resolve the future ingestion chapters once they're in config.
+
+Add presence assertions for each ingestion stub (these guarantee the scaffold exposes the three expected names):
+
+```js
+describe("RagIngestion exports", () => {
+  it("exposes ParsingExtraction", () => {
+    expect(typeof RagIngestion.ParsingExtraction).toBe("function");
+  });
+  it("exposes DeduplicationCleaning", () => {
+    expect(typeof RagIngestion.DeduplicationCleaning).toBe("function");
+  });
+  it("exposes RefreshSync", () => {
+    expect(typeof RagIngestion.RefreshSync).toBe("function");
+  });
+});
+```
+
+- [ ] **Step 4: Update `src/__tests__/sections.test.jsx`**
+
+Add a static import at the top:
+
+```js
+import * as RagIngestion from "../sections/rag-ingestion.jsx";
+```
+
+Find the `lookup` object in this test file (which spreads each section namespace for the generic per-chapter render test). Add `...RagIngestion` alongside `...RagFoundations`.
+
+No content-test `describe` blocks for the ingestion chapters yet - those go in Tasks 3-5 once chapters are real. The stubs return `<></>`, which the generic per-chapter render test would normally iterate; however, the generic test iterates `chapters[]` from config and the ingestion chapters are not yet in config, so nothing tries to render the stubs.
+
+- [ ] **Step 5: Run tests to verify pass**
+
+```bash
+npm run test
+```
+
+Expected: PASS. The stubs are valid functions, the lookup includes the new namespace, and no chapter in config references the new names yet, so nothing tries to render an empty fragment.
+
+If any test fails, the most likely cause is the import-path or named-export name mismatching what `learn-ai.jsx` expects. Trace the failure to the right file.
+
+- [ ] **Step 6: Lint and format**
+
+```bash
+npm run lint
+npm run format
+```
+
+Expected: clean. If `npm run format` modifies files, re-stage them.
+
+- [ ] **Step 7: Scope verification (`git diff --stat`)**
+
+```bash
+git status
+git diff --stat
+```
+
+Expected: only files in the **Files:** list show as modified or new (the new `rag-ingestion.jsx`, `learn-ai.jsx`, `lookup.test.js`, `sections.test.jsx`). If any file outside the list appears, abort: either move the change to the correct task or revert it.
+
+- [ ] **Step 8: Full test smoke gate**
+
+```bash
+npm run test
+```
+
+Expected: ALL tests pass, not just the ones touched in this task.
+
+- [ ] **Step 9: Commit**
+
+```bash
+git add src/sections/rag-ingestion.jsx src/learn-ai.jsx src/__tests__/lookup.test.js src/__tests__/sections.test.jsx
+git commit -m "Add rag-ingestion.jsx scaffold and 2-file loader for Section 12"
+```
+
+---
+
+## Task 3: Implement Chapter 12.4 ParsingExtraction
+
+**Files:**
+- Modify: `src/sections/rag-ingestion.jsx` (replace stub `ParsingExtraction` export with full implementation).
+- Modify: `src/config.js` (append chapter entry after `12.3`).
+- Modify: `src/__tests__/config.test.js` (extend Section 12 chapter count to 4).
+- Modify: `src/__tests__/sections.test.jsx` (append content tests for `ParsingExtraction`).
+- Modify: `src/data/svg-descriptions.json` (add entries for any new SVGs).
+
+**Scope binding:** This task modifies ONLY the files listed in `**Files:**` above. If during implementation you discover other defects in other files, DO NOT fix them in this task - document them as a separate observation and continue with the listed scope. Before committing, run `git status` and `git diff --stat`: if ANY file outside the Files: list shows as modified, abort the commit and either move the change to the right task or revert it.
+
+**Chapter purpose (from spec):** Show that before chunking, raw sources (PDFs, HTML, DOCX, Confluence) must be turned into clean text + metadata. Each format has failure modes (PDF 2-column, tables, OCR; HTML boilerplate; missing metadata). Walk away knowing the 5 parsing failure modes that silently kill recall before any chunker runs. Bad parsing is unrecoverable - no chunker, reranker, or LLM fixes garbage text.
+
+**Sub-step structure (6 sub-steps, 0-5):**
+
+- **sub=0 (C.red) - The garbage-in problem**
+  Title: "Bad Parsing Is Unrecoverable - The Garbage-In Problem"
+  Visual: scanned PDF rendered as image. Naive parser returns OCR errors: `"Pgssword resel: cIick the link"`. Show the broken text → chunks of nonsense → embedding vector that doesn't match the query "How do I reset my password?". Red callout: "No chunker, reranker, or LLM fixes this. The recall is gone before chunking starts."
+  Key content: "garbage", "unrecoverable", "OCR", "PDF", "cannot recover" or "broken text".
+
+- **sub=1 (C.cyan) - The source zoo**
+  Title: "Production RAG Ingests From 5+ Format Families"
+  Visual: 5-card horizontal grid. Each card: format name (title-case), one-line description, parser tool example. Cards:
+  - PDFs: "Manuals, contracts, research papers." Tool: "PyMuPDF / Unstructured / Docling"
+  - HTML: "Web pages, wikis, public docs." Tool: "Readability / Trafilatura"
+  - DOCX / PPTX: "Internal docs, slide decks." Tool: "python-docx / Unstructured"
+  - Markdown: "Engineering docs, READMEs, knowledge bases." Tool: "Native parsers (mistletoe, marko)"
+  - Structured APIs: "Confluence, Notion, Salesforce, Zendesk, Jira." Tool: "Vendor SDK or REST connector"
+  Cards use tinted background `${C.cyan}06`, border `1px solid ${C.cyan}12`, `textAlign: "center"`.
+  Key content: "PDF", "HTML", "DOCX", "Markdown", "Confluence" or "Notion", "parser" or "tool" or "connector", "5" or "five".
+
+- **sub=2 (C.purple) - PDF: where parsers go to die**
+  Title: "PDF: Three Failure Modes That Silently Wreck Recall"
+  Visual: 3-row layout. Each row shows a PDF failure with before/after text.
+  Row 1: 2-column physics paper layout. Naive parser reads left col then right col as one stream → jumbled sentences mixing topic A with topic B. "Before: Section 2.1 The model is trained on... Method We use stochastic gradient. After: 'The model is trained on Method We use stochastic gradient...'". Fix: layout-aware parser (Unstructured, Docling).
+  Row 2: 5x3 table in a financial report. Naive parser flattens to `"Q1, Q2, Q3, Revenue, 100, 110, 105, Costs, 80, 75, 78"` losing the column-header relationship. Fix: table-extracting parser (LlamaParse, Unstructured `partition_table`).
+  Row 3: scanned receipt PDF, OCR returns `"rn"` instead of `"m"` and skips diacritics → "amount due" becomes "arnount due". Fix: better OCR (Tesseract 5, AWS Textract, Azure Document Intelligence).
+  Side panel: "Tool choice matters. Production RAG uses layout-aware + table-aware + OCR-aware parsers, not pdf2text."
+  Key content: "two-column" or "2-column", "table", "OCR", at least one of "Unstructured" / "Docling" / "PyMuPDF" / "LlamaParse" / "Tesseract".
+
+- **sub=3 (C.orange) - HTML: strip boilerplate, keep content**
+  Title: "HTML: Strip The Boilerplate Or Dilute Your Chunks"
+  Visual: stylized web page mockup as SVG. 4 zones:
+  - Top nav bar (red overlay, "DROP")
+  - Left sidebar with ads (red, "DROP")
+  - Main article zone (green, "KEEP")
+  - Footer with newsletter signup + © notice (red, "DROP")
+  Below the mockup: 2 chunk comparisons.
+  - Bad chunk (no boilerplate strip): `"Home Products Pricing Subscribe to our newsletter | How do I reset my password? Click the link in your email... © 2024 Acme Inc."`
+  - Good chunk (with Readability): `"How do I reset my password? Click the link in your email within 24 hours to set a new password..."`
+  Side panel: "Tools: Readability, Trafilatura, BoilerNet. They detect main-content zones via DOM heuristics + ML. Without them, retrieval matches 'subscribe' instead of the actual answer."
+  Key content: "HTML" or "web page", "boilerplate" / "nav" / "sidebar" / "footer", "Readability" or "Trafilatura" or "main content", "dilute" or "pollute".
+
+- **sub=4 (C.yellow) - Metadata: not optional**
+  Title: "Metadata Extraction: The Required Sidecar"
+  Visual: a TEXT artifact block (NOT a code block - styled monospace with tinted background `${C.yellow}06`, border `1px solid ${C.yellow}12`, label "Metadata Schema" at top, placeholders highlighted in `${C.cyan}`):
+  ```
+  {
+    "source_url": "https://docs.habuild.com/account/password-reset",
+    "title": "Reset Your Password",
+    "doc_type": "kb_article",
+    "section_path": "Account > Security > Password",
+    "updated_at": "2026-04-12T14:22:00Z",
+    "author": "support-team",
+    "permissions": ["public", "logged-in"],
+    "language": "en",
+    "version": "v3.1"
+  }
+  ```
+  Below the artifact: 4 use cases, each as a labeled row:
+  - "Filtering (covered in Section 11.20): `updated_at > 2026-01-01` to exclude stale docs."
+  - "Citations (covered in chapter 12.24): the source_url lets the LLM cite where the answer came from."
+  - "Permission gating: never retrieve docs whose permissions don't include the current user's role."
+  - "Multilingual routing: detect language at ingest time, route to per-language indexes."
+  Side panel: "Metadata is parsed at ingest, attached to every chunk vector, and queried at retrieval time. Skip it = no filtering, no citations, no permission boundaries."
+  Key content: "metadata", "source_url" or "URL", "updated_at" or "timestamp", "permissions" or "ACL" or "access control", "filtering" or "citation" or "gating".
+
+- **sub=5 (C.green) - The 5 parsing failure modes checklist**
+  Title: "The Five Parsing Failures Every Production RAG Must Handle"
+  Visual: a 5-row decision table. Columns: "Failure Mode" | "Symptom" | "Fix". Rows:
+  1. "Two-Column PDF Layout" | "Sentences jumbled across columns" | "Layout-aware parser (Unstructured, Docling)"
+  2. "Tables Flattened To Prose" | "Lost row/column structure" | "Table-extracting parser (LlamaParse, Unstructured.partition_table)"
+  3. "Scanned PDF / OCR Errors" | "Garbled tokens (rn → m, missing diacritics)" | "Modern OCR (Tesseract 5, AWS Textract)"
+  4. "HTML Boilerplate Not Stripped" | "Chunks polluted with nav/ads/footers" | "Readability / Trafilatura extraction"
+  5. "Missing Or Sparse Metadata" | "No filtering, citations, or permission gating possible" | "Mandatory metadata schema at ingest"
+  Bottom callout (large, centered): "Every production RAG has this checklist. Skip one row = silent recall killer. Bad parsing is the gap reranker cannot fix."
+  Key content: "five" or "5", "checklist" or "failure mode", "silent" or "unrecoverable", "recall".
+
+- [ ] **Step 1: Write content tests for 12.4**
+
+Append to `src/__tests__/sections.test.jsx`:
+
+```js
+describe("ParsingExtraction (12.4) content", () => {
+  const fn = RagIngestion.ParsingExtraction;
+
+  it("sub=0 frames the garbage-in problem", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/garbage|unrecoverable/i);
+    expect(container.textContent).toMatch(/OCR|broken text|PDF/i);
+    expect(container.textContent).toMatch(/password/i);
+  });
+
+  it("sub=1 lists 5+ source format families", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/PDF/);
+    expect(container.textContent).toMatch(/HTML/);
+    expect(container.textContent).toMatch(/DOCX/);
+    expect(container.textContent).toMatch(/Markdown/);
+    expect(container.textContent).toMatch(/Confluence|Notion|API/);
+  });
+
+  it("sub=2 shows three PDF failure modes", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/two[- ]?column|2[- ]?column/i);
+    expect(container.textContent).toMatch(/table/i);
+    expect(container.textContent).toMatch(/OCR/);
+    expect(container.textContent).toMatch(/Unstructured|Docling|PyMuPDF|LlamaParse|Tesseract/);
+  });
+
+  it("sub=3 contrasts HTML boilerplate vs main content", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/boilerplate|nav|sidebar|footer/i);
+    expect(container.textContent).toMatch(/Readability|Trafilatura/);
+    expect(container.textContent).toMatch(/dilut|pollut|main content/i);
+  });
+
+  it("sub=4 shows the metadata schema artifact", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/metadata/i);
+    expect(container.textContent).toMatch(/source_url|URL/i);
+    expect(container.textContent).toMatch(/updated_at|timestamp/i);
+    expect(container.textContent).toMatch(/permissions|ACL/i);
+  });
+
+  it("sub=5 lists the 5 parsing failure modes", () => {
+    const { container } = render(fn(makeCtx({ sub: 5 })));
+    expect(container.textContent).toMatch(/five|5/i);
+    expect(container.textContent).toMatch(/checklist|failure mode/i);
+    expect(container.textContent).toMatch(/silent|recall/i);
+  });
+});
+```
+
+Also extend the Section 12 config test in `src/__tests__/config.test.js`. Update the expected count to 4 and append the new entry:
+
+```js
+describe("Section 12 chapters", () => {
+  it("has chapters 12.1 through 12.4 in order", () => {
+    const section12 = chapters.filter((ch) => ch.section === 12);
+    expect(section12.length).toBe(4);
+    const expected = [
+      { id: "12.1", component: "WhyLLMsNeedRetrieval", title: "Why LLMs Need Retrieval" },
+      { id: "12.2", component: "NaiveRAGPipeline", title: "The Naive RAG Pipeline" },
+      { id: "12.3", component: "WhereNaiveRAGBreaks", title: "Where Naive RAG Breaks" },
+      { id: "12.4", component: "ParsingExtraction", title: "Parsing - Raw Sources to Clean Text" },
+    ];
+    expected.forEach((exp, i) => {
+      expect(section12[i].id).toBe(exp.id);
+      expect(section12[i].component).toBe(exp.component);
+      expect(section12[i].title).toBe(exp.title);
+    });
+  });
+});
+```
+
+- [ ] **Step 2: Run tests to verify failure**
+
+```bash
+npx vitest run src/__tests__/sections.test.jsx -t "ParsingExtraction"
+npx vitest run src/__tests__/config.test.js -t "Section 12"
+```
+
+Expected for `sections.test.jsx`: FAIL - the stub returns `<></>` so no asserted strings appear.
+Expected for `config.test.js`: FAIL - section12.length is 3, not 4.
+
+- [ ] **Step 3: Implement the full ParsingExtraction chapter**
+
+Edit `src/config.js`. Insert the new entry immediately after the 12.3 entry:
+
+```js
+  { id: "12.3", title: "Where Naive RAG Breaks", section: 12, component: "WhereNaiveRAGBreaks" },
+  { id: "12.4", title: "Parsing - Raw Sources to Clean Text", section: 12, component: "ParsingExtraction" },
+```
+
+Edit `src/sections/rag-ingestion.jsx`. Replace the `ParsingExtraction` stub with the full implementation. Required:
+
+- 6 sub-steps total (sub >= 0 through sub >= 5).
+- Sub=0 inline (`{sub >= 0 && ...}`); subs 1-5 wrapped in `<Reveal when={sub >= N}>`.
+- Colors per sub-step as specified above (red, cyan, purple, orange, yellow, green).
+- Center-aligned titles: `<T color={C.X} bold center size={22}>`.
+- Title-case for all diagram box text. "Two-Column PDF Layout", "Tables Flattened To Prose", etc.
+- Inner element tinted backgrounds: `background: \`${C.X}06\`` and `border: \`1px solid ${C.X}12\``.
+- The 5-card grid in sub=1 must use CSS grid: `display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: 12` (or `repeat(auto-fit, minmax(180px, 1fr))` for mobile-safety).
+- The HTML mockup in sub=3 MUST be an SVG with non-overlapping zones for nav/sidebar/main/footer. Add `<desc>` first child + manifest entry.
+- The metadata JSON artifact in sub=4 must be visually distinct from a code block (tinted bg, soft border, monospace 14-16px). Placeholder field names (e.g., `source_url`, `updated_at`) styled in `C.cyan`.
+- The 5-row table in sub=5 may be an HTML `<table>` or a CSS grid. Title-case headers.
+- No em-dashes. No "Preview:" / "Next:" forward refs.
+- Body text 16-19px, titles 22px.
+- Content must include the strings the tests assert on (see test regexes in Step 1).
+
+- [ ] **Step 4: Run tests to verify pass**
+
+```bash
+npx vitest run src/__tests__/sections.test.jsx -t "ParsingExtraction"
+npx vitest run src/__tests__/config.test.js -t "Section 12"
+```
+
+Expected: PASS.
+
+- [ ] **Step 5: Update svg-descriptions.json**
+
+Count SVGs introduced in this chapter:
+
+```bash
+grep -c "<svg" src/sections/rag-ingestion.jsx
+```
+
+Likely 1-2 (the HTML mockup in sub=3; optionally a diagram in sub=0 or sub=5). Add an entry to `src/data/svg-descriptions.json` under key `"12.4"`:
+
+```json
+"12.4": [
+  "Stylized web page mockup showing four colored zones: a top nav bar in red marked DROP, a left sidebar with ads in red marked DROP, a central main article zone in green marked KEEP, and a bottom footer with newsletter signup in red marked DROP"
+]
+```
+
+Add more entries to the array if additional SVGs were used.
+
+Run the SVG-descriptions validation test:
+
+```bash
+npx vitest run src/__tests__/svg-descriptions.test.js
+```
+
+Expected: PASS.
+
+- [ ] **Step 6: Full test, lint, format**
+
+```bash
+npm run test
+npm run lint
+npm run format
+```
+
+Expected: all green. If `npm run format` modifies files, re-stage them.
+
+- [ ] **Step 7: Full test smoke gate**
+
+```bash
+npm run test
+```
+
+Expected: ALL tests pass, not just the ones added in this task.
+
+- [ ] **Step 8: Scope verification (`git diff --stat`)**
+
+```bash
+git status
+git diff --stat
+```
+
+Expected: only files in the **Files:** list show as modified or new.
+
+- [ ] **Step 9: Commit**
+
+```bash
+git add src/sections/rag-ingestion.jsx src/config.js src/__tests__/sections.test.jsx src/__tests__/config.test.js src/data/svg-descriptions.json
+git commit -m "Implement chapter 12.4 Parsing - Raw Sources to Clean Text"
+```
+
+---
+
+## Task 4: Implement Chapter 12.5 DeduplicationCleaning
+
+**Files:**
+- Modify: `src/sections/rag-ingestion.jsx` (replace stub `DeduplicationCleaning` export with full implementation).
+- Modify: `src/config.js` (append chapter entry after `12.4`).
+- Modify: `src/__tests__/config.test.js` (extend Section 12 chapter count to 5).
+- Modify: `src/__tests__/sections.test.jsx` (append content tests).
+- Modify: `src/data/svg-descriptions.json` (add entries for new SVGs).
+
+**Scope binding:** This task modifies ONLY the files listed in `**Files:**` above. If during implementation you discover other defects in other files, DO NOT fix them in this task - document them as a separate observation and continue with the listed scope. Before committing, run `git status` and `git diff --stat`: if ANY file outside the Files: list shows as modified, abort the commit and either move the change to the right task or revert it.
+
+**Chapter purpose (from spec):** Same doc indexed multiple times pollutes top-k results, wastes context-window budget, and kills diversity in retrieval. Show 3 dedup strategies (exact-hash, MinHash+LSH near-dup, embedding-cosine paraphrase) plus the cleaning steps (Unicode, encoding, PII scrubbing, watermark stripping) that decide whether eval scores stabilize. Walk away knowing which dedup strategy to apply per data source.
+
+**Sub-step structure (5 sub-steps, 0-4):**
+
+- **sub=0 (C.red) - The duplicate disaster**
+  Title: "The Same Article In Three Systems Eats Your Context Budget"
+  Visual: 3 source-system icons (Zendesk, Confluence, Notion) each containing the same "Reset Your Password" KB article. Arrow flow: all 3 → ingestion → 3 nearly-identical chunks in the vector DB. Query "How do I reset my password?" → top-5 retrieval returns 3× duplicate-password chunks + 2 unrelated. Visualize a context-window bar: 3 chunks of ~512 tokens each = 1,536 tokens wasted on duplicates, leaving 2,560 tokens for distinct answers. Red callout: "3× same answer = wasted tokens, no diversity, and the LLM has nothing to triangulate against."
+  Key content: "duplicate" or "copies" or "redundant", "Zendesk" / "Confluence" / "Notion", "context" / "tokens" / "budget", "diversity".
+
+- **sub=1 (C.cyan) - Exact-match dedup with SHA-256**
+  Title: "Exact-Hash Dedup: Cheap And Catches The Easy 80%"
+  Visual: 3-step flow shown left-to-right:
+  Step 1 (Normalize): doc text → strip whitespace, lowercase, remove punctuation → `"reset your password click the link"`.
+  Step 2 (Hash): normalized text → SHA-256 → hex digest like `a3f2b9...`.
+  Step 3 (Dedup): hash table lookup. New doc hash matches existing → drop. New hash → keep.
+  Show 3 docs (Zendesk copy, Confluence copy, Notion copy) all producing the same hash `a3f2b9...` → 2 dropped, 1 kept.
+  Centered monospace formula: `hash = sha256(normalize(doc.content))`
+  Tradeoff line: "Cost: O(N) hash compute + O(1) lookup. Misses: 'same content with one typo fixed' produces a different hash."
+  Key content: "exact" or "hash", "SHA-256", "normalize", "byte-identical" or "same hash".
+
+- **sub=2 (C.purple) - Near-dup dedup with MinHash + LSH**
+  Title: "MinHash + LSH: Catching Near-Duplicates"
+  Visual: 2 docs side-by-side.
+  - Doc A: "Reset your password by clicking the link in your email within 24 hours."
+  - Doc B: "Reset the password by clicking the link in your email within 24 hours." (one word different)
+  SHA: different hashes → exact dedup misses.
+  Show the MinHash flow:
+  Step 1: tokenize into 3-gram shingles. Doc A: `{"reset your password", "your password by", "password by clicking", ...}`. Doc B: similar set with one different shingle.
+  Step 2: MinHash signature of K=128 hash functions over each shingle set. Doc A signature ≈ Doc B signature for ~125/128 positions → Jaccard estimate ~0.97.
+  Step 3: LSH banding (bands=16, rows=8). Both docs hash into the SAME bucket because most band-rows match. Bucket query → "candidate near-duplicate pair found".
+  Side panel: "MinHash + LSH = sub-linear near-dup detection at scale (1B docs feasible). Threshold tuneable via Jaccard cutoff (e.g., 0.85)."
+  Key content: "MinHash", "LSH" or "locality-sensitive", "Jaccard", "shingle", "near-dup" or "near.duplicate", a decimal number like "0.85" or "0.97".
+
+- **sub=3 (C.orange) - Embedding-cosine dedup for paraphrases**
+  Title: "Embedding Dedup: The Only Way To Catch Paraphrases"
+  Visual: 2 docs with the same MEANING but different WORDS:
+  - KB article (formal): "To reset your password, click the password reset link delivered to your registered email address."
+  - Forum post (casual): "Yo if you forgot your password just hit the reset thing they sent to your email."
+  MinHash misses (almost no shingles overlap). Embedding cosine = 0.94 → flagged as semantic duplicate.
+  Show a similarity ladder:
+  - cosine ≥ 0.97 → "Definite duplicate, drop one"
+  - 0.90 ≤ cosine < 0.97 → "Near-dup, send for human review"
+  - 0.85 ≤ cosine < 0.90 → "Topically similar, keep both"
+  - cosine < 0.85 → "Distinct, keep"
+  Cost note: embedding pass over the full corpus adds $0.10/1M tokens × corpus size. For 10M docs at 512 tokens each = 5B tokens = $500 just to dedup. Cheaper than embedding twice but real.
+  Side panel: "Use embedding dedup when corpus has paraphrases (KB + forum posts, multi-author docs, translations). Skip when content is byte-stable (PDFs from authoritative sources)."
+  Key content: "embedding" or "cosine", "paraphrase" or "semantic", a decimal number like "0.94" or "0.97", "human review" or "threshold", "$" or "cost".
+
+- **sub=4 (C.green) - Cleaning beyond dedup**
+  Title: "Cleaning: The Unsexy 30% That Decides Whether Eval Stabilizes"
+  Visual: 4-card grid. Each card has title (title-case), one-line description, and a tiny before/after example.
+  Card 1: "Unicode Normalization (NFC)"
+    "Two strings that look identical can have different byte sequences."
+    Before: `café` (composed) vs `café` (decomposed). After NFC: identical bytes.
+  Card 2: "Encoding Fix-Up"
+    "Mojibake from latin-1 / UTF-8 mix breaks tokenization."
+    Before: `"naïve résumé"` rendered as `"naïve résumé"`. After: original characters restored.
+  Card 3: "Strip Headers, Footers, Page Numbers, Watermarks"
+    "Boilerplate per page bloats chunks with noise."
+    Before: every chunk starts with "CONFIDENTIAL - DRAFT 2026 - Page 3 of 47". After: stripped.
+  Card 4: "PII Scrubbing"
+    "Emails, SSNs, phone numbers, credit cards leak into the index."
+    Before: "Contact john@acme.com or call 555-1234". After: "Contact [EMAIL_REDACTED] or call [PHONE_REDACTED]". Tool: regex + LLM-based NER (e.g., Presidio).
+  Bottom callout: "Cleaning is invisible when it works and catastrophic when skipped. Stabilizes eval scores by removing irrelevant tokens that fool similarity metrics."
+  Key content: "Unicode" or "NFC", "encoding" or "mojibake", "header" / "footer" / "watermark" / "page number", "PII" or "redact" or "SSN" or "email" or "Presidio".
+
+- [ ] **Step 1: Write content tests for 12.5**
+
+Append to `src/__tests__/sections.test.jsx`:
+
+```js
+describe("DeduplicationCleaning (12.5) content", () => {
+  const fn = RagIngestion.DeduplicationCleaning;
+
+  it("sub=0 frames the duplicate-disaster context-budget waste", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/duplicate|copies/i);
+    expect(container.textContent).toMatch(/Zendesk|Confluence|Notion/);
+    expect(container.textContent).toMatch(/context|tokens|budget/i);
+    expect(container.textContent).toMatch(/diversity/i);
+  });
+
+  it("sub=1 shows exact-hash dedup with SHA-256", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/SHA[- ]?256/);
+    expect(container.textContent).toMatch(/normalize/i);
+    expect(container.textContent).toMatch(/hash/i);
+  });
+
+  it("sub=2 explains MinHash + LSH for near-duplicates", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/MinHash/i);
+    expect(container.textContent).toMatch(/LSH|locality/i);
+    expect(container.textContent).toMatch(/Jaccard|shingle/i);
+    expect(container.textContent).toMatch(/0\.\d+/);
+  });
+
+  it("sub=3 introduces embedding-cosine dedup for paraphrases", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/embedding|cosine/i);
+    expect(container.textContent).toMatch(/paraphrase|semantic/i);
+    expect(container.textContent).toMatch(/0\.9\d?/);
+  });
+
+  it("sub=4 lists the 4 cleaning steps beyond dedup", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/Unicode|NFC/);
+    expect(container.textContent).toMatch(/encoding|mojibake/i);
+    expect(container.textContent).toMatch(/header|footer|watermark/i);
+    expect(container.textContent).toMatch(/PII|redact|SSN/i);
+  });
+});
+```
+
+Update `src/__tests__/config.test.js` Section-12 test to expect 5 entries:
+
+```js
+expect(section12.length).toBe(5);
+// add to expected:
+{ id: "12.5", component: "DeduplicationCleaning", title: "Deduplication & Cleaning" },
+```
+
+- [ ] **Step 2: Run tests to verify failure**
+
+```bash
+npx vitest run src/__tests__/sections.test.jsx -t "DeduplicationCleaning"
+npx vitest run src/__tests__/config.test.js -t "Section 12"
+```
+
+Expected: FAIL.
+
+- [ ] **Step 3: Implement the full DeduplicationCleaning chapter**
+
+Add config entry after `12.4`:
+
+```js
+  { id: "12.5", title: "Deduplication & Cleaning", section: 12, component: "DeduplicationCleaning" },
+```
+
+Replace the `DeduplicationCleaning` stub in `src/sections/rag-ingestion.jsx`. Required:
+
+- 5 sub-steps (sub >= 0 through sub >= 4).
+- Colors per sub-step (red, cyan, purple, orange, green).
+- The 3-source-system diagram in sub=0 should be SVG (3 system icons → ingestion → 3 chunks → context-window bar). Add `<desc>` + manifest entry.
+- The MinHash + LSH flow in sub=2 should be SVG showing shingles → 128-signature → LSH bucketing. Add `<desc>` + manifest entry.
+- The similarity ladder in sub=3 may be HTML rows or SVG; either way, the 4 cosine bands must be clearly stratified.
+- The 4-card grid in sub=4 uses `gridTemplateColumns: "repeat(2, 1fr)", gap: 12` (2×2 layout) for clean alignment.
+- Tinted artifact for the SHA-256 formula in sub=1 (centered, monospace, `${C.cyan}06` bg).
+- Title-case for all diagram box text. No em-dashes. No forward refs.
+
+- [ ] **Step 4: Run tests to verify pass**
+
+```bash
+npx vitest run src/__tests__/sections.test.jsx -t "DeduplicationCleaning"
+npx vitest run src/__tests__/config.test.js
+```
+
+Expected: PASS.
+
+- [ ] **Step 5: Update svg-descriptions.json**
+
+```json
+"12.5": [
+  "Three source systems (Zendesk, Confluence, Notion) each containing the same password-reset article flowing into an ingestion pipeline that produces three nearly-identical chunks in the vector DB, with a context-window bar below showing 1,536 tokens wasted on duplicates",
+  "MinHash + LSH flow showing two near-duplicate docs being tokenized into 3-gram shingles, processed through a 128-function MinHash signature with Jaccard estimate around 0.97, and bucketed by LSH banding (16 bands, 8 rows) into the same candidate bucket"
+]
+```
+
+```bash
+npx vitest run src/__tests__/svg-descriptions.test.js
+```
+
+Expected: PASS.
+
+- [ ] **Step 6: Full test, lint, format**
+
+```bash
+npm run test
+npm run lint
+npm run format
+```
+
+Expected: all green.
+
+- [ ] **Step 7: Full test smoke gate**
+
+```bash
+npm run test
+```
+
+Expected: ALL tests pass.
+
+- [ ] **Step 8: Scope verification (`git diff --stat`)**
+
+```bash
+git status
+git diff --stat
+```
+
+Expected: only files in the **Files:** list.
+
+- [ ] **Step 9: Commit**
+
+```bash
+git add src/sections/rag-ingestion.jsx src/config.js src/__tests__/sections.test.jsx src/__tests__/config.test.js src/data/svg-descriptions.json
+git commit -m "Implement chapter 12.5 Deduplication & Cleaning"
+```
+
+---
+
+## Task 5: Implement Chapter 12.6 RefreshSync
+
+**Files:**
+- Modify: `src/sections/rag-ingestion.jsx` (replace stub `RefreshSync` export with full implementation).
+- Modify: `src/config.js` (append chapter entry after `12.5`).
+- Modify: `src/__tests__/config.test.js` (extend Section 12 chapter count to 6).
+- Modify: `src/__tests__/sections.test.jsx` (append content tests).
+- Modify: `src/data/svg-descriptions.json` (add entries for new SVGs).
+
+**Scope binding:** This task modifies ONLY the files listed in `**Files:**` above. If during implementation you discover other defects in other files, DO NOT fix them in this task - document them as a separate observation and continue with the listed scope. Before committing, run `git status` and `git diff --stat`: if ANY file outside the Files: list shows as modified, abort the commit and either move the change to the right task or revert it.
+
+**Chapter purpose (from spec):** Docs change. Index goes stale. RAG hallucinates with confidence on outdated content. Show 3 sync strategies (full re-index, webhook-driven incremental, polling on `updated_at`) and the delete-propagation + versioning problem that 90% of in-house RAG systems get wrong on day one.
+
+**Sub-step structure (5 sub-steps, 0-4):**
+
+- **sub=0 (C.red) - The stale-index problem**
+  Title: "Stale RAG Hallucinates With Confidence"
+  Visual: a timeline. 2026-04-12: Habuild support team publishes "Reset Your Password" v1 (no MFA mention). 2026-05-01: they edit to v2 (adds "MFA setup is preserved through password reset"). RAG ingested v1, never re-ingested. 2026-05-10: customer asks "Do I lose my MFA after password reset?". RAG returns v1 chunk → LLM answers "MFA may need re-setup" (WRONG - v2 says it persists). Visualize: source-of-truth doc (green, v2) vs index doc (red, stale v1). Customer trust hit.
+  Bottom callout: "Every doc has an expiry date. Stale answers feel correct because the LLM is confident. There is no automatic stale signal."
+  Key content: "stale" or "outdated", "edit" / "updated" / "version", "MFA" or "password reset", "hallucinate" or "wrong" or "confident".
+
+- **sub=1 (C.cyan) - Full re-index: the heavy hammer**
+  Title: "Strategy 1: Full Re-Index On A Schedule"
+  Visual: 2-panel layout.
+  Left panel (Mechanism): nightly cron at 2 AM → fetch all 10,000 docs from source → re-parse → re-chunk → re-embed → swap into a shadow index → atomic pointer flip at 6 AM. No retrieval gap if shadow-index pattern is used; otherwise 4-hour downtime.
+  Right panel (Math): per-night cost = 10K docs × 1K tokens/doc × $0.10/1M tokens = $1/night ≈ $30/month. At 1M docs scale: $3,000/month just for re-embedding.
+  Decision card at bottom: "Use full re-index if: corpus is small (<10K docs), changes are infrequent (weekly batch updates), simplicity beats freshness. Avoid if: real-time updates needed, corpus large enough for re-embed to dominate budget."
+  Key content: "full re-index" or "rebuild", "nightly" or "cron" or "batch", "shadow" or "atomic", "$" or "cost", "3000" or "30", "simple" or "simplicity".
+
+- **sub=2 (C.purple) - Incremental with webhooks**
+  Title: "Strategy 2: Webhook-Driven Incremental Sync"
+  Visual: sequence diagram (top-to-bottom timeline).
+  T=0:00 - User edits doc-1 password-reset article in Confluence.
+  T=0:01 - Confluence fires webhook POST to ingestion service: `{event: "page.updated", page_id: "doc-1", revision: 42}`.
+  T=0:02 - Ingestion service fetches doc-1 v42 from Confluence API.
+  T=0:05 - Re-parse → re-chunk → re-embed (3 chunks, ~150ms total).
+  T=0:08 - Upsert chunks in vector DB (referencing Section 11.21 deletes/updates). Old chunks dropped, new chunks inserted, same `doc_id`.
+  T=0:10 - Fresh chunks queryable. Total propagation lag: ~10 seconds.
+  Side panel: "Pros: real-time freshness, no wasted re-embedding on unchanged docs. Cons: requires webhook support in source system (Confluence yes, raw S3 no), retry / DLQ handling for webhook failures, idempotent upserts to avoid duplicate writes."
+  Key content: "webhook", "incremental", "upsert", "11.21" or "deletes", "seconds" or "real-time".
+
+- **sub=3 (C.orange) - Polling on updated_at**
+  Title: "Strategy 3: Polling - The Fallback For Webhook-Less Sources"
+  Visual: timeline showing poll cadence.
+  Ingestion service tracks `last_synced_at = 2026-05-10T14:00:00Z` per source.
+  Every 15 minutes: query source API `WHERE updated_at > 2026-05-10T14:00:00Z LIMIT 1000`.
+  Returns 7 changed docs since last poll. Process them. Update `last_synced_at` to the max `updated_at` in the batch.
+  Edge-case visualization: doc-12 edited at t=2 min (between polls). Picked up at t=15 min. Freshness lag = 13 min on average, 15 min worst case.
+  Decision card at bottom: "Use polling when: source has no webhooks but has a queryable `updated_at` field (most REST APIs, SQL databases). Tune the poll interval to your freshness budget. Cost: API calls every interval whether or not anything changed. Throttle to source's rate limits."
+  Key content: "poll" or "polling", "updated_at" or "timestamp", "15" or "interval", "lag" or "delay", "rate limit" or "throttle".
+
+- **sub=4 (C.yellow) - Delete propagation + versioning**
+  Title: "Delete Propagation And Versioning: Where 90% Of In-House RAG Breaks"
+  Visual: 3-row timeline diagram.
+  Row 1 (t=0): doc-1 v1 indexed. Chunks `[c1_v1, c2_v1, c3_v1]` queryable. Tag: `status=active`.
+  Row 2 (t=+1min, during re-embed): doc-1 v2 ingested. Chunks `[c1_v2, c2_v2, c3_v2]` inserted with `status=active`. Old v1 chunks tagged `status=deprecated` but NOT dropped yet (otherwise retrieval has a gap during the re-embed window). Queries still hit v1 OR v2.
+  Row 3 (t=+15min, after grace period): v1 chunks dropped. Only v2 active.
+  Plus a fourth scenario: doc-1 DELETED at source. Webhook fires `event: "page.deleted"` → tombstone in vector DB → propagation to all replicas → 100% remove (covered in Section 11.21).
+  Side panel: "Without delete propagation: deleted docs still served (ghost chunks). Without versioning: retrieval gap during re-embed. Both are silent failures - eval catches them, customers don't."
+  Bottom callout: "Build delete propagation + versioning from day one. Retro-fitting them after launch costs 10x the dev time."
+  Key content: "delete" or "deletion" or "tombstone", "ghost" or "stale", "version" or "v1" or "v2", "grace period" or "propagation", "11.21" or "Section 11".
+
+- [ ] **Step 1: Write content tests for 12.6**
+
+Append to `src/__tests__/sections.test.jsx`:
+
+```js
+describe("RefreshSync (12.6) content", () => {
+  const fn = RagIngestion.RefreshSync;
+
+  it("sub=0 frames the stale-index hallucination problem", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/stale|outdated/i);
+    expect(container.textContent).toMatch(/MFA|password reset/i);
+    expect(container.textContent).toMatch(/hallucinate|wrong|confident/i);
+  });
+
+  it("sub=1 explains full re-index cost and tradeoff", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/full re[- ]?index|rebuild/i);
+    expect(container.textContent).toMatch(/nightly|cron|batch/i);
+    expect(container.textContent).toMatch(/\$|cost/);
+    expect(container.textContent).toMatch(/shadow|atomic|swap/i);
+  });
+
+  it("sub=2 details webhook-driven incremental sync", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/webhook/i);
+    expect(container.textContent).toMatch(/incremental|upsert/i);
+    expect(container.textContent).toMatch(/seconds|real[- ]?time/i);
+    expect(container.textContent).toMatch(/11\.21|deletes/);
+  });
+
+  it("sub=3 details polling on updated_at with interval lag", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/poll/i);
+    expect(container.textContent).toMatch(/updated_at|timestamp/i);
+    expect(container.textContent).toMatch(/15|interval/i);
+    expect(container.textContent).toMatch(/lag|delay/i);
+  });
+
+  it("sub=4 covers delete propagation and versioning", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/delete|tombstone/i);
+    expect(container.textContent).toMatch(/version|v1|v2/i);
+    expect(container.textContent).toMatch(/grace|propagation/i);
+    expect(container.textContent).toMatch(/11\.21|Section 11/);
+  });
+});
+```
+
+Update config test to expect 6 entries (append `{ id: "12.6", component: "RefreshSync", title: "Refresh & Sync Schedules" }`).
+
+- [ ] **Step 2: Run tests to verify failure**
+
+```bash
+npx vitest run src/__tests__/sections.test.jsx -t "RefreshSync"
+npx vitest run src/__tests__/config.test.js
+```
+
+Expected: FAIL.
+
+- [ ] **Step 3: Implement the full RefreshSync chapter**
+
+Add config entry after `12.5`:
+
+```js
+  { id: "12.6", title: "Refresh & Sync Schedules", section: 12, component: "RefreshSync" },
+```
+
+Replace the `RefreshSync` stub in `src/sections/rag-ingestion.jsx`. Required:
+
+- 5 sub-steps (sub >= 0 through sub >= 4).
+- Colors per sub-step (red, cyan, purple, orange, yellow).
+- The stale-timeline visualization in sub=0 should be SVG (3 time markers, v1/v2 side-by-side comparison). Add `<desc>` + manifest entry.
+- The sequence diagram in sub=2 MUST be SVG (top-to-bottom flow with T=0:00, T=0:01, T=0:02, T=0:05, T=0:08, T=0:10 time markers). Add `<desc>` + manifest entry.
+- The polling timeline in sub=3 can be SVG or HTML; the 15-min poll cadence + lag-window must be visible.
+- The 3-row timeline diagram in sub=4 MUST be SVG with clearly stratified rows for t=0, t=+1min, t=+15min. The overlap window must be visually obvious. Add `<desc>` + manifest entry.
+- 2-panel layout in sub=1 uses `gridTemplateColumns: "1fr 1fr", gap: 16`. Decision card centered below.
+- Title-case for all diagram box text. No em-dashes. No forward refs.
+
+- [ ] **Step 4: Run tests to verify pass**
+
+```bash
+npx vitest run src/__tests__/sections.test.jsx -t "RefreshSync"
+npx vitest run src/__tests__/config.test.js
+```
+
+Expected: PASS.
+
+- [ ] **Step 5: Update svg-descriptions.json**
+
+```json
+"12.6": [
+  "Timeline showing a password-reset article version v1 published on 2026-04-12, edited to v2 on 2026-05-01 adding MFA-preservation note, with a stale-index v1 chunk being retrieved on 2026-05-10 causing the LLM to give the wrong answer",
+  "Webhook-driven incremental sync sequence diagram with time markers T=0:00 through T=0:10 showing user edit, Confluence webhook fire, ingestion fetch, re-parse and re-chunk and re-embed, upsert into vector DB referencing Section 11.21 deletes-updates, and final queryable state",
+  "Three-row versioning timeline showing doc-1 v1 chunks active at t=0, both v1 (deprecated) and v2 (active) chunks present during the t=+1min re-embed window for retrieval-gap avoidance, and only v2 active at t=+15min after the grace period"
+]
+```
+
+```bash
+npx vitest run src/__tests__/svg-descriptions.test.js
+```
+
+Expected: PASS.
+
+- [ ] **Step 6: Full test, lint, format**
+
+```bash
+npm run test
+npm run lint
+npm run format
+```
+
+- [ ] **Step 7: Full test smoke gate**
+
+```bash
+npm run test
+```
+
+Expected: ALL tests pass.
+
+- [ ] **Step 8: Scope verification (`git diff --stat`)**
+
+```bash
+git status
+git diff --stat
+```
+
+Expected: only files in the **Files:** list.
+
+- [ ] **Step 9: Commit**
+
+```bash
+git add src/sections/rag-ingestion.jsx src/config.js src/__tests__/sections.test.jsx src/__tests__/config.test.js src/data/svg-descriptions.json
+git commit -m "Implement chapter 12.6 Refresh & Sync Schedules"
+```
+
+---
+
+## Task 6: Implement Chapter 12.7 WhyChunkFixedSize
 
 **Files:**
 - Modify: `src/sections/rag-foundations.jsx` (append new export `WhyChunkFixedSize` at the end of file).
-- Modify: `src/config.js` (append chapter entry after `12.3`).
-- Modify: `src/__tests__/config.test.js` (extend Section 12 chapter count/id test from 3 to 4 entries; will grow further in later tasks).
+- Modify: `src/config.js` (append chapter entry after `12.6`).
+- Modify: `src/__tests__/config.test.js` (extend Section 12 chapter count to 7).
 - Modify: `src/__tests__/sections.test.jsx` (append content tests for `WhyChunkFixedSize`).
+- Modify: `src/data/svg-descriptions.json` (add entries for any new SVGs).
 
 **Scope binding:** This task modifies ONLY the files listed in `**Files:**` above. If during implementation you discover other defects in other files, DO NOT fix them in this task - document them as a separate observation and continue with the listed scope. Before committing, run `git status` and `git diff --stat`: if ANY file outside the Files: list shows as modified, abort the commit and either move the change to the right task or revert it.
 
@@ -279,15 +1099,15 @@ Expected: no lint errors; format clean (no changes).
   Visual: a 2-column "use this if / move to better if" table.
   - Use Fixed-Size If: "Docs are short (< 2K tokens each).", "Content is homogeneous (uniform paragraphs).", "You need a baseline to measure other strategies against.", "Budget = zero engineering time."
   - Move To Structural / Semantic If: "Docs have clear structural markers (markdown, HTML headings).", "Content is heterogeneous (one doc = manual + FAQ + changelog).", "Cross-chunk facts hurt recall in your eval set."
-  A small green check-mark column for the left, a small arrow column for the right, both center-aligned. Below: "Chapters 12.5-12.9 each fix one weakness of fixed-size."
-  Key content: "baseline", "2K" or "2,000", "homogeneous" or "heterogeneous", "12.5" reference or "structural" / "semantic".
+  A small green check-mark column for the left, a small arrow column for the right, both center-aligned. Below: "Chapters 12.8-12.12 each fix one weakness of fixed-size."
+  Key content: "baseline", "2K" or "2,000", "homogeneous" or "heterogeneous", "12.8" reference or "structural" / "semantic".
 
-- [ ] **Step 1: Write content tests for 12.4**
+- [ ] **Step 1: Write content tests for 12.7**
 
 Append to `src/__tests__/sections.test.jsx`:
 
 ```js
-describe("WhyChunkFixedSize (12.4) content", () => {
+describe("WhyChunkFixedSize (12.7) content", () => {
   const fn = RagFoundations.WhyChunkFixedSize;
 
   it("sub=0 shows why a whole-doc embedding is impossible", () => {
@@ -336,18 +1156,21 @@ describe("WhyChunkFixedSize (12.4) content", () => {
 });
 ```
 
-Also extend the Section 12 config test in `src/__tests__/config.test.js`. Find the existing M1 Section-12 chapter test and update it to expect 4 entries:
+Also extend the Section 12 config test in `src/__tests__/config.test.js`. Find the existing Section-12 chapter test and update it to expect 7 entries:
 
 ```js
 describe("Section 12 chapters", () => {
-  it("has chapters 12.1 through 12.4 in order", () => {
+  it("has chapters 12.1 through 12.7 in order", () => {
     const section12 = chapters.filter((ch) => ch.section === 12);
-    expect(section12.length).toBe(4);
+    expect(section12.length).toBe(7);
     const expected = [
       { id: "12.1", component: "WhyLLMsNeedRetrieval", title: "Why LLMs Need Retrieval" },
       { id: "12.2", component: "NaiveRAGPipeline", title: "The Naive RAG Pipeline" },
       { id: "12.3", component: "WhereNaiveRAGBreaks", title: "Where Naive RAG Breaks" },
-      { id: "12.4", component: "WhyChunkFixedSize", title: "Why Chunk At All + Fixed-Size Baseline" },
+      { id: "12.4", component: "ParsingExtraction", title: "Parsing - Raw Sources to Clean Text" },
+      { id: "12.5", component: "DeduplicationCleaning", title: "Deduplication & Cleaning" },
+      { id: "12.6", component: "RefreshSync", title: "Refresh & Sync Schedules" },
+      { id: "12.7", component: "WhyChunkFixedSize", title: "Why Chunk At All + Fixed-Size Baseline" },
     ];
     expected.forEach((exp, i) => {
       expect(section12[i].id).toBe(exp.id);
@@ -358,8 +1181,6 @@ describe("Section 12 chapters", () => {
 });
 ```
 
-(If M1's existing test was structured differently - e.g., one `it()` per chapter - add a fourth `it()` rather than replacing.)
-
 - [ ] **Step 2: Run tests to verify failure**
 
 ```bash
@@ -368,15 +1189,15 @@ npx vitest run src/__tests__/config.test.js -t "Section 12"
 ```
 
 Expected for `sections.test.jsx`: FAIL - "fn is not a function" because the export doesn't exist yet.
-Expected for `config.test.js`: FAIL - section12.length is 3, not 4.
+Expected for `config.test.js`: FAIL - section12.length is 6, not 7.
 
 - [ ] **Step 3: Implement the full WhyChunkFixedSize chapter**
 
-Edit `src/config.js`. Find the last Section 12 entry from M1 (`{ id: "12.3", ...WhereNaiveRAGBreaks ... }`) and add the new entry immediately after, before any closing `];` of the chapters array:
+Edit `src/config.js`. Add the new entry immediately after `12.6`:
 
 ```js
-  { id: "12.3", title: "Where Naive RAG Breaks", section: 12, component: "WhereNaiveRAGBreaks" },
-  { id: "12.4", title: "Why Chunk At All + Fixed-Size Baseline", section: 12, component: "WhyChunkFixedSize" },
+  { id: "12.6", title: "Refresh & Sync Schedules", section: 12, component: "RefreshSync" },
+  { id: "12.7", title: "Why Chunk At All + Fixed-Size Baseline", section: 12, component: "WhyChunkFixedSize" },
 ```
 
 Edit `src/sections/rag-foundations.jsx`. Append a new export at the end of the file. Use the existing pattern from `WhereNaiveRAGBreaks` as the reference. Required:
@@ -389,11 +1210,11 @@ Edit `src/sections/rag-foundations.jsx`. Append a new export at the end of the f
 - Inner element tinted backgrounds: `background: \`${C.X}06\`` and `border: \`1px solid ${C.X}12\``.
 - Body text 16-19px, titles 22px.
 - No em-dashes.
-- No "Preview:" / "Next:" / "Coming up:" forward references. (The "Chapters 12.5-12.9 each fix one weakness" line in sub=5 is allowed: it's a within-section signpost pointing to chapters listed in the visible TOC, not a "coming up" preview.)
+- No "Preview:" / "Next:" / "Coming up:" forward references. (The "Chapters 12.8-12.12 each fix one weakness" line in sub=5 is allowed: it's a within-section signpost pointing to chapters listed in the visible TOC, not a "coming up" preview.)
 - Standalone formulas centered with container `textAlign: "center"`.
-- The fixed-size bar diagram in sub=2 may be implemented as either an SVG (preferred for precise overlap shading) or as nested `<div>`s with flex. If SVG, add `<desc>` first child and add the description to svg-descriptions.json in Step 5.
+- The fixed-size bar diagram in sub=2 may be implemented as either an SVG (preferred for precise overlap shading) or as nested `<div>`s with flex.
 - The mid-sentence break visualization in sub=3 may also be SVG (recommended for the vertical red line slicing the prose) or styled HTML with a red border-left on the second chunk.
-- The 3-card grid in sub=1 must NOT overlap. Use CSS grid: `display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12`. Cards centered horizontally and vertically.
+- The 3-card grid in sub=1 must NOT overlap. Use CSS grid: `display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12`.
 - Content must include the strings the tests assert on (see test regexes in Step 1).
 
 - [ ] **Step 4: Run tests to verify pass**
@@ -403,7 +1224,7 @@ npx vitest run src/__tests__/sections.test.jsx -t "WhyChunkFixedSize"
 npx vitest run src/__tests__/config.test.js -t "Section 12"
 ```
 
-Expected: PASS. Both content tests and the config test pass.
+Expected: PASS.
 
 - [ ] **Step 5: Update svg-descriptions.json if new SVGs added**
 
@@ -413,22 +1234,20 @@ If sub=0, sub=2, sub=3, or sub=4 used `<svg>` elements, list them in document or
 grep -c "<svg" src/sections/rag-foundations.jsx
 ```
 
-If the chapter introduced (say) 2 new SVGs, add an entry to `src/data/svg-descriptions.json` under key `"12.4"`:
+If the chapter introduced (say) 2 new SVGs, add an entry to `src/data/svg-descriptions.json` under key `"12.7"`:
 
 ```json
-"12.4": [
+"12.7": [
   "Horizontal token-count bar showing a 500-page document at 250,000 tokens overflowing the 8,192-token embedding model ceiling, with the overflow region marked in red",
   "Wrapped paragraph of doc-1 password reset prose with four colored chunk bars below indicating 128-token windows and 16-token overlap zones in darker tint"
 ]
 ```
 
-Run the SVG-descriptions validation test:
-
 ```bash
 npx vitest run src/__tests__/svg-descriptions.test.js
 ```
 
-Expected: PASS. If any SVG lacks either `<desc>` or a manifest entry, the test fails - fix and re-run.
+Expected: PASS.
 
 - [ ] **Step 6: Full test, lint, format**
 
@@ -438,7 +1257,7 @@ npm run lint
 npm run format
 ```
 
-Expected: all green. If `npm run format` modifies files, re-stage them.
+Expected: all green.
 
 - [ ] **Step 7: Full test smoke gate**
 
@@ -446,7 +1265,7 @@ Expected: all green. If `npm run format` modifies files, re-stage them.
 npm run test
 ```
 
-Expected: ALL tests pass, not just the ones added in this task. If any unrelated test fails, you missed a cross-file dependency (see "Cross-file dependency map" near the top of this plan). Trace the failure to the missing update before committing.
+Expected: ALL tests pass.
 
 - [ ] **Step 8: Scope verification (`git diff --stat`)**
 
@@ -455,24 +1274,25 @@ git status
 git diff --stat
 ```
 
-Expected: only files in the **Files:** list show as modified or new. If any file outside the list appears, abort: either move the change to the correct task or revert it before committing this task.
+Expected: only files in the **Files:** list.
 
 - [ ] **Step 9: Commit**
 
 ```bash
 git add src/sections/rag-foundations.jsx src/config.js src/__tests__/sections.test.jsx src/__tests__/config.test.js src/data/svg-descriptions.json
-git commit -m "Implement chapter 12.4 Why Chunk At All + Fixed-Size Baseline"
+git commit -m "Implement chapter 12.7 Why Chunk At All + Fixed-Size Baseline"
 ```
 
 ---
 
-## Task 3: Implement Chapter 12.5 RecursiveStructuralChunking
+## Task 7: Implement Chapter 12.8 RecursiveStructuralChunking
 
 **Files:**
 - Modify: `src/sections/rag-foundations.jsx` (append new export `RecursiveStructuralChunking`).
-- Modify: `src/config.js` (append chapter entry after `12.4`).
-- Modify: `src/__tests__/config.test.js` (extend Section 12 chapter count to 5).
+- Modify: `src/config.js` (append chapter entry after `12.7`).
+- Modify: `src/__tests__/config.test.js` (extend Section 12 chapter count to 8).
 - Modify: `src/__tests__/sections.test.jsx` (append content tests).
+- Modify: `src/data/svg-descriptions.json` (add entries for new SVGs).
 
 **Scope binding:** This task modifies ONLY the files listed in `**Files:**` above. If during implementation you discover other defects in other files, DO NOT fix them in this task - document them as a separate observation and continue with the listed scope. Before committing, run `git status` and `git diff --stat`: if ANY file outside the Files: list shows as modified, abort the commit and either move the change to the right task or revert it.
 
@@ -505,15 +1325,15 @@ git commit -m "Implement chapter 12.4 Why Chunk At All + Fixed-Size Baseline"
   Visual: a 2-column comparison table.
   - Left (Pros): "Preserves sentence + paragraph boundaries.", "Respects markdown / HTML structure for free.", "Zero embedding cost at chunk time (just string ops).", "Implemented by every major RAG framework (LangChain `RecursiveCharacterTextSplitter`, LlamaIndex `SentenceSplitter`)."
   - Right (Cons): "Doesn't understand semantic boundaries (a topic spanning 4 paragraphs gets split).", "Heading-aware but not heading-equivalent (two `##` sections on the same theme are split into two chunks).", "Plain-text docs without structural markers fall through to sentence/word splits (closer to fixed-size)."
-  Bottom signpost: "Chapter 12.6 fixes the semantic-boundary gap. Chapter 12.8 fixes the parent-child gap."
+  Bottom signpost: "Chapter 12.9 fixes the semantic-boundary gap. Chapter 12.11 fixes the parent-child gap."
   Key content: "80%" or "eighty percent" or "default", "sentence" + "paragraph", "LangChain" or "LlamaIndex", "semantic" (used in con list).
 
-- [ ] **Step 1: Write content tests for 12.5**
+- [ ] **Step 1: Write content tests for 12.8**
 
 Append to `src/__tests__/sections.test.jsx`:
 
 ```js
-describe("RecursiveStructuralChunking (12.5) content", () => {
+describe("RecursiveStructuralChunking (12.8) content", () => {
   const fn = RagFoundations.RecursiveStructuralChunking;
 
   it("sub=0 shows the priority tree of structural separators", () => {
@@ -555,12 +1375,12 @@ describe("RecursiveStructuralChunking (12.5) content", () => {
 });
 ```
 
-Update `src/__tests__/config.test.js` Section-12 test to expect 5 entries:
+Update `src/__tests__/config.test.js` Section-12 test to expect 8 entries:
 
 ```js
-expect(section12.length).toBe(5);
+expect(section12.length).toBe(8);
 // ... add to the expected array:
-{ id: "12.5", component: "RecursiveStructuralChunking", title: "Recursive Structural Chunking" },
+{ id: "12.8", component: "RecursiveStructuralChunking", title: "Recursive Structural Chunking" },
 ```
 
 - [ ] **Step 2: Run tests to verify failure**
@@ -577,7 +1397,7 @@ Expected: FAIL.
 Add config entry:
 
 ```js
-  { id: "12.5", title: "Recursive Structural Chunking", section: 12, component: "RecursiveStructuralChunking" },
+  { id: "12.8", title: "Recursive Structural Chunking", section: 12, component: "RecursiveStructuralChunking" },
 ```
 
 Append the new export to `src/sections/rag-foundations.jsx`. Required:
@@ -588,7 +1408,7 @@ Append the new export to `src/sections/rag-foundations.jsx`. Required:
 - The doc-7 markdown text shown in sub=1 and sub=2 must be visibly distinct - use a monospace block with section headings rendered in bold + matched colors. Background `${C.X}06`, border `1px solid ${C.X}12`.
 - The recursion-tree diagram in sub=3 may be SVG or nested divs; if SVG, add `<desc>` + manifest entry.
 - Title-case for diagram box text: "Recursive Structural", "Common Login Errors", "Browser Compatibility", "Account Lockout".
-- No em-dashes. No "Preview:" / "Next:" forward refs. (The "Chapter 12.6 fixes ..." signpost is allowed because it references explicit chapter IDs in the published TOC.)
+- No em-dashes. No "Preview:" / "Next:" forward refs. (The "Chapter 12.9 fixes ..." and "Chapter 12.11 fixes ..." signposts are allowed because they reference explicit chapter IDs in the published TOC.)
 - "LangChain" and "LlamaIndex" are case-sensitive brand names; render exactly.
 - Per-element backgrounds tinted, borders tinted, container `textAlign: "center"` for any standalone formula or recursion trace.
 
@@ -603,10 +1423,10 @@ Expected: PASS.
 
 - [ ] **Step 5: Update svg-descriptions.json**
 
-Add `"12.5"` key with descriptions in document order. Example:
+Add `"12.8"` key with descriptions in document order. Example:
 
 ```json
-"12.5": [
+"12.8": [
   "Vertical priority tree of structural separators starting with paragraph break, falling back through line break, sentence break, to word break, each arrow labeled with the fallback condition",
   "Recursion trace tree showing doc-12 API keys section at 300 tokens being split by paragraph break into three sub-chunks of 100, 110, 90 tokens that each fit the 128-token target"
 ]
@@ -634,7 +1454,7 @@ Expected: all green.
 npm run test
 ```
 
-Expected: ALL tests pass, not just the ones added in this task. If any unrelated test fails, you missed a cross-file dependency (see "Cross-file dependency map" near the top of this plan). Trace the failure to the missing update before committing.
+Expected: ALL tests pass.
 
 - [ ] **Step 8: Scope verification (`git diff --stat`)**
 
@@ -643,24 +1463,25 @@ git status
 git diff --stat
 ```
 
-Expected: only files in the **Files:** list show as modified or new. If any file outside the list appears, abort: either move the change to the correct task or revert it before committing this task.
+Expected: only files in the **Files:** list.
 
 - [ ] **Step 9: Commit**
 
 ```bash
 git add src/sections/rag-foundations.jsx src/config.js src/__tests__/sections.test.jsx src/__tests__/config.test.js src/data/svg-descriptions.json
-git commit -m "Implement chapter 12.5 Recursive Structural Chunking"
+git commit -m "Implement chapter 12.8 Recursive Structural Chunking"
 ```
 
 ---
 
-## Task 4: Implement Chapter 12.6 SemanticChunking
+## Task 8: Implement Chapter 12.9 SemanticChunking
 
 **Files:**
 - Modify: `src/sections/rag-foundations.jsx` (append new export `SemanticChunking`).
 - Modify: `src/config.js` (append chapter entry).
-- Modify: `src/__tests__/config.test.js` (extend Section 12 chapter count to 6).
+- Modify: `src/__tests__/config.test.js` (extend Section 12 chapter count to 9).
 - Modify: `src/__tests__/sections.test.jsx` (append content tests).
+- Modify: `src/data/svg-descriptions.json` (add entries for new SVGs).
 
 **Scope binding:** This task modifies ONLY the files listed in `**Files:**` above. If during implementation you discover other defects in other files, DO NOT fix them in this task - document them as a separate observation and continue with the listed scope. Before committing, run `git status` and `git diff --stat`: if ANY file outside the Files: list shows as modified, abort the commit and either move the change to the right task or revert it.
 
@@ -696,12 +1517,12 @@ git commit -m "Implement chapter 12.5 Recursive Structural Chunking"
   Bottom callout: "Use semantic chunking when retrieval quality matters more than indexing budget, and when structural markers are absent."
   Key content: "cost" or "expensive", "embed" + "before" or "first", "$0" + "structural", at least one production-scale figure like "$13,000" or "10M docs" or "10x" / "50x".
 
-- [ ] **Step 1: Write content tests for 12.6**
+- [ ] **Step 1: Write content tests for 12.9**
 
 Append to `src/__tests__/sections.test.jsx`:
 
 ```js
-describe("SemanticChunking (12.6) content", () => {
+describe("SemanticChunking (12.9) content", () => {
   const fn = RagFoundations.SemanticChunking;
 
   it("sub=0 frames the no-structural-markers gap", () => {
@@ -740,7 +1561,7 @@ describe("SemanticChunking (12.6) content", () => {
 });
 ```
 
-Update config test to expect 6 entries (append `{ id: "12.6", component: "SemanticChunking", title: "Semantic Chunking" }`).
+Update config test to expect 9 entries (append `{ id: "12.9", component: "SemanticChunking", title: "Semantic Chunking" }`).
 
 - [ ] **Step 2: Run tests to verify failure**
 
@@ -756,7 +1577,7 @@ Expected: FAIL.
 Add config entry:
 
 ```js
-  { id: "12.6", title: "Semantic Chunking", section: 12, component: "SemanticChunking" },
+  { id: "12.9", title: "Semantic Chunking", section: 12, component: "SemanticChunking" },
 ```
 
 Append the new export. Required:
@@ -781,7 +1602,7 @@ Expected: PASS.
 - [ ] **Step 5: Update svg-descriptions.json**
 
 ```json
-"12.6": [
+"12.9": [
   "Line chart of cosine similarity between adjacent sentences along a 12-sentence document, with similarity staying around 0.85 within topic clusters and dropping to 0.41 at the topic-shift boundary, with a red threshold line at 0.7"
 ]
 ```
@@ -806,7 +1627,7 @@ npm run format
 npm run test
 ```
 
-Expected: ALL tests pass, not just the ones added in this task. If any unrelated test fails, you missed a cross-file dependency (see "Cross-file dependency map" near the top of this plan). Trace the failure to the missing update before committing.
+Expected: ALL tests pass.
 
 - [ ] **Step 8: Scope verification (`git diff --stat`)**
 
@@ -815,24 +1636,25 @@ git status
 git diff --stat
 ```
 
-Expected: only files in the **Files:** list show as modified or new. If any file outside the list appears, abort: either move the change to the correct task or revert it before committing this task.
+Expected: only files in the **Files:** list.
 
 - [ ] **Step 9: Commit**
 
 ```bash
 git add src/sections/rag-foundations.jsx src/config.js src/__tests__/sections.test.jsx src/__tests__/config.test.js src/data/svg-descriptions.json
-git commit -m "Implement chapter 12.6 Semantic Chunking"
+git commit -m "Implement chapter 12.9 Semantic Chunking"
 ```
 
 ---
 
-## Task 5: Implement Chapter 12.7 LateChunking
+## Task 9: Implement Chapter 12.10 LateChunking
 
 **Files:**
 - Modify: `src/sections/rag-foundations.jsx` (append new export `LateChunking`).
 - Modify: `src/config.js` (append chapter entry).
-- Modify: `src/__tests__/config.test.js` (extend Section 12 chapter count to 7).
+- Modify: `src/__tests__/config.test.js` (extend Section 12 chapter count to 10).
 - Modify: `src/__tests__/sections.test.jsx` (append content tests).
+- Modify: `src/data/svg-descriptions.json` (add entries for new SVGs).
 
 **Scope binding:** This task modifies ONLY the files listed in `**Files:**` above. If during implementation you discover other defects in other files, DO NOT fix them in this task - document them as a separate observation and continue with the listed scope. Before committing, run `git status` and `git diff --stat`: if ANY file outside the Files: list shows as modified, abort the commit and either move the change to the right task or revert it.
 
@@ -873,12 +1695,12 @@ git commit -m "Implement chapter 12.6 Semantic Chunking"
   - Card 2 (Limits): "Requires an embedding model that exposes token-level hidden states (most OpenAI / Cohere APIs return only the pooled final vector - you can't late-chunk with them).", "Requires the whole doc to fit in one embedding pass (8K-32K token ceilings).", "Pooling strategy matters (mean-pool vs CLS vs attention-weighted - jina v2 uses mean-pool)."
   Key content: "Jina" + "2024", "anaphora" or "pronoun" or "reference", "token-level" or "hidden state", "8K" or "32K" or "ceiling", "mean-pool".
 
-- [ ] **Step 1: Write content tests for 12.7**
+- [ ] **Step 1: Write content tests for 12.10**
 
 Append to `src/__tests__/sections.test.jsx`:
 
 ```js
-describe("LateChunking (12.7) content", () => {
+describe("LateChunking (12.10) content", () => {
   const fn = RagFoundations.LateChunking;
 
   it("sub=0 frames cross-chunk reference loss on the Sarah doc", () => {
@@ -920,7 +1742,7 @@ describe("LateChunking (12.7) content", () => {
 });
 ```
 
-Update config test to expect 7 entries.
+Update config test to expect 10 entries.
 
 - [ ] **Step 2: Run tests to verify failure**
 
@@ -936,7 +1758,7 @@ Expected: FAIL.
 Add config entry:
 
 ```js
-  { id: "12.7", title: "Late Chunking (Jina 2024)", section: 12, component: "LateChunking" },
+  { id: "12.10", title: "Late Chunking (Jina 2024)", section: 12, component: "LateChunking" },
 ```
 
 Append the new export. Required:
@@ -961,7 +1783,7 @@ Expected: PASS.
 - [ ] **Step 5: Update svg-descriptions.json**
 
 ```json
-"12.7": [
+"12.10": [
   "Side-by-side comparison: left shows chunk-then-embed with three independent embedding passes per chunk, right shows late chunking with one whole-doc attention pass followed by chunk-boundary mean pooling",
   "Token-attention sweep diagram over doc-1 password reset showing a single attention arc covering all tokens, with mean-pool boundaries at token positions 128 and 256 producing three chunk vectors, with annotation that chunk 3's vector still encodes 'Sarah' from chunk 1"
 ]
@@ -987,7 +1809,7 @@ npm run format
 npm run test
 ```
 
-Expected: ALL tests pass, not just the ones added in this task. If any unrelated test fails, you missed a cross-file dependency (see "Cross-file dependency map" near the top of this plan). Trace the failure to the missing update before committing.
+Expected: ALL tests pass.
 
 - [ ] **Step 8: Scope verification (`git diff --stat`)**
 
@@ -996,24 +1818,25 @@ git status
 git diff --stat
 ```
 
-Expected: only files in the **Files:** list show as modified or new. If any file outside the list appears, abort: either move the change to the correct task or revert it before committing this task.
+Expected: only files in the **Files:** list.
 
 - [ ] **Step 9: Commit**
 
 ```bash
 git add src/sections/rag-foundations.jsx src/config.js src/__tests__/sections.test.jsx src/__tests__/config.test.js src/data/svg-descriptions.json
-git commit -m "Implement chapter 12.7 Late Chunking"
+git commit -m "Implement chapter 12.10 Late Chunking"
 ```
 
 ---
 
-## Task 6: Implement Chapter 12.8 HierarchicalChunking
+## Task 10: Implement Chapter 12.11 HierarchicalChunking
 
 **Files:**
 - Modify: `src/sections/rag-foundations.jsx` (append new export `HierarchicalChunking`).
 - Modify: `src/config.js` (append chapter entry).
-- Modify: `src/__tests__/config.test.js` (extend Section 12 chapter count to 8).
+- Modify: `src/__tests__/config.test.js` (extend Section 12 chapter count to 11).
 - Modify: `src/__tests__/sections.test.jsx` (append content tests).
+- Modify: `src/data/svg-descriptions.json` (add entries for new SVGs).
 
 **Scope binding:** This task modifies ONLY the files listed in `**Files:**` above. If during implementation you discover other defects in other files, DO NOT fix them in this task - document them as a separate observation and continue with the listed scope. Before committing, run `git status` and `git diff --stat`: if ANY file outside the Files: list shows as modified, abort the commit and either move the change to the right task or revert it.
 
@@ -1057,12 +1880,12 @@ git commit -m "Implement chapter 12.7 Late Chunking"
   - Card 2 (Cost & Implementation): "Storage: index + parent-text store. Roughly 2-3x raw corpus size.", "Latency: one extra lookup per hit (parent-from-leaf-id). Sub-millisecond.", "Implementation: every major framework has this pattern. LangChain `ParentDocumentRetriever`, LlamaIndex `RecursiveRetriever`."
   Key content: "hierarchical", "parent" + "store" or "storage", "LangChain" or "LlamaIndex" + class name, "section structure" or "manual" or "policy".
 
-- [ ] **Step 1: Write content tests for 12.8**
+- [ ] **Step 1: Write content tests for 12.11**
 
 Append to `src/__tests__/sections.test.jsx`:
 
 ```js
-describe("HierarchicalChunking (12.8) content", () => {
+describe("HierarchicalChunking (12.11) content", () => {
   const fn = RagFoundations.HierarchicalChunking;
 
   it("sub=0 frames the small-vs-large chunk tension", () => {
@@ -1111,7 +1934,7 @@ describe("HierarchicalChunking (12.8) content", () => {
 });
 ```
 
-Update config test to expect 8 entries.
+Update config test to expect 11 entries.
 
 - [ ] **Step 2: Run tests to verify failure**
 
@@ -1127,7 +1950,7 @@ Expected: FAIL.
 Add config entry:
 
 ```js
-  { id: "12.8", title: "Hierarchical / Parent-Child Chunking", section: 12, component: "HierarchicalChunking" },
+  { id: "12.11", title: "Hierarchical / Parent-Child Chunking", section: 12, component: "HierarchicalChunking" },
 ```
 
 Append the new export. Required:
@@ -1152,7 +1975,7 @@ Expected: PASS.
 - [ ] **Step 5: Update svg-descriptions.json**
 
 ```json
-"12.8": [
+"12.11": [
   "Tree hierarchy diagram with doc-4 refunds policy as the root node, three section nodes below for eligibility, process, and edge cases, and four to six leaf chunk nodes below each section, with leaves colored cyan, sections purple, and root green",
   "Leaf-to-parent swap flow diagram showing retrieved leaf L7 with the 'no refunds after 30 days' sentence on the left, a parent-lookup arrow in the middle, and the full 300-token edge-cases section on the right being sent to the LLM"
 ]
@@ -1178,7 +2001,7 @@ npm run format
 npm run test
 ```
 
-Expected: ALL tests pass, not just the ones added in this task. If any unrelated test fails, you missed a cross-file dependency (see "Cross-file dependency map" near the top of this plan). Trace the failure to the missing update before committing.
+Expected: ALL tests pass.
 
 - [ ] **Step 8: Scope verification (`git diff --stat`)**
 
@@ -1187,24 +2010,25 @@ git status
 git diff --stat
 ```
 
-Expected: only files in the **Files:** list show as modified or new. If any file outside the list appears, abort: either move the change to the correct task or revert it before committing this task.
+Expected: only files in the **Files:** list.
 
 - [ ] **Step 9: Commit**
 
 ```bash
 git add src/sections/rag-foundations.jsx src/config.js src/__tests__/sections.test.jsx src/__tests__/config.test.js src/data/svg-descriptions.json
-git commit -m "Implement chapter 12.8 Hierarchical / Parent-Child Chunking"
+git commit -m "Implement chapter 12.11 Hierarchical / Parent-Child Chunking"
 ```
 
 ---
 
-## Task 7: Implement Chapter 12.9 ContextualRetrieval
+## Task 11: Implement Chapter 12.12 ContextualRetrieval
 
 **Files:**
 - Modify: `src/sections/rag-foundations.jsx` (append new export `ContextualRetrieval`).
 - Modify: `src/config.js` (append chapter entry).
-- Modify: `src/__tests__/config.test.js` (extend Section 12 chapter count to 9).
+- Modify: `src/__tests__/config.test.js` (extend Section 12 chapter count to 12).
 - Modify: `src/__tests__/sections.test.jsx` (append content tests).
+- Modify: `src/data/svg-descriptions.json` (add entries for new SVGs).
 
 **Scope binding:** This task modifies ONLY the files listed in `**Files:**` above. If during implementation you discover other defects in other files, DO NOT fix them in this task - document them as a separate observation and continue with the listed scope. Before committing, run `git status` and `git diff --stat`: if ANY file outside the Files: list shows as modified, abort the commit and either move the change to the right task or revert it.
 
@@ -1281,12 +2105,12 @@ git commit -m "Implement chapter 12.8 Hierarchical / Parent-Child Chunking"
   Final box: "Combined: 67% recall improvement over naive (per Anthropic 2024)."
   Key content: "hybrid" + "Section 11.24" or "11.24", "rerank" + "Section 11.25" or "11.25", "67%" or "combined", "stack" or "stacks".
 
-- [ ] **Step 1: Write content tests for 12.9**
+- [ ] **Step 1: Write content tests for 12.12**
 
 Append to `src/__tests__/sections.test.jsx`:
 
 ```js
-describe("ContextualRetrieval (12.9) content", () => {
+describe("ContextualRetrieval (12.12) content", () => {
   const fn = RagFoundations.ContextualRetrieval;
 
   it("sub=0 shows the orphan-chunk identical-text problem", () => {
@@ -1340,7 +2164,7 @@ describe("ContextualRetrieval (12.9) content", () => {
 });
 ```
 
-Update config test to expect 9 entries.
+Update config test to expect 12 entries.
 
 - [ ] **Step 2: Run tests to verify failure**
 
@@ -1356,7 +2180,7 @@ Expected: FAIL.
 Add config entry:
 
 ```js
-  { id: "12.9", title: "Contextual Retrieval (Anthropic 2024)", section: 12, component: "ContextualRetrieval" },
+  { id: "12.12", title: "Contextual Retrieval (Anthropic 2024)", section: 12, component: "ContextualRetrieval" },
 ```
 
 Append the new export. Required:
@@ -1383,7 +2207,7 @@ Expected: PASS.
 - [ ] **Step 5: Update svg-descriptions.json**
 
 ```json
-"12.9": [
+"12.12": [
   "Horizontal bar chart showing four bars of retrieval failure rate from Anthropic's September 2024 Contextual Retrieval benchmark: naive embedding 5.7%, plus contextual embedding 3.7%, plus contextual BM25 2.9%, plus reranking 1.9%, with title-case axis labels"
 ]
 ```
@@ -1410,7 +2234,7 @@ npm run format
 npm run test
 ```
 
-Expected: ALL tests pass, not just the ones added in this task. If any unrelated test fails, you missed a cross-file dependency (see "Cross-file dependency map" near the top of this plan). Trace the failure to the missing update before committing.
+Expected: ALL tests pass.
 
 - [ ] **Step 8: Scope verification (`git diff --stat`)**
 
@@ -1419,28 +2243,29 @@ git status
 git diff --stat
 ```
 
-Expected: only files in the **Files:** list show as modified or new. If any file outside the list appears, abort: either move the change to the correct task or revert it before committing this task.
+Expected: only files in the **Files:** list.
 
 - [ ] **Step 9: Commit**
 
 ```bash
 git add src/sections/rag-foundations.jsx src/config.js src/__tests__/sections.test.jsx src/__tests__/config.test.js src/data/svg-descriptions.json
-git commit -m "Implement chapter 12.9 Contextual Retrieval"
+git commit -m "Implement chapter 12.12 Contextual Retrieval"
 ```
 
 ---
 
-## Task 8: Implement Chapter 12.10 ChunkingDecision
+## Task 12: Implement Chapter 12.13 ChunkingDecision
 
 **Files:**
 - Modify: `src/sections/rag-foundations.jsx` (append new export `ChunkingDecision`).
 - Modify: `src/config.js` (append chapter entry).
-- Modify: `src/__tests__/config.test.js` (extend Section 12 chapter count to 10).
+- Modify: `src/__tests__/config.test.js` (extend Section 12 chapter count to 13).
 - Modify: `src/__tests__/sections.test.jsx` (append content tests).
+- Modify: `src/data/svg-descriptions.json` (add entries for new SVGs if any).
 
 **Scope binding:** This task modifies ONLY the files listed in `**Files:**` above. If during implementation you discover other defects in other files, DO NOT fix them in this task - document them as a separate observation and continue with the listed scope. Before committing, run `git status` and `git diff --stat`: if ANY file outside the Files: list shows as modified, abort the commit and either move the change to the right task or revert it.
 
-**Chapter purpose (from spec):** Synthesize all 6 prior chunking chapters (12.4-12.9) into a decision framework. Decision matrix axes: doc structure (markdown / HTML / PDF / code / flat-text) × query type (factual / relational / comparative) × cost budget (lab / startup / enterprise). End with a worked walkthrough on the Habuild Cloud support corpus where the answer is "Recursive Structural baseline + Hierarchical for long policies + Contextual Retrieval to disambiguate FAQ + Semantic for the runbook narrative". Show how a real production system mixes strategies per doc-type.
+**Chapter purpose (from spec):** Synthesize all 6 prior chunking chapters (12.7-12.12) into a decision framework. Decision matrix axes: doc structure (markdown / HTML / PDF / code / flat-text) × query type (factual / relational / comparative) × cost budget (lab / startup / enterprise). End with a worked walkthrough on the Habuild Cloud support corpus where the answer is "Recursive Structural baseline + Hierarchical for long policies + Contextual Retrieval to disambiguate FAQ + Semantic for the runbook narrative". Show how a real production system mixes strategies per doc-type.
 
 **Sub-step structure (5 sub-steps, 0-4):**
 
@@ -1470,8 +2295,8 @@ git commit -m "Implement chapter 12.9 Contextual Retrieval"
   Visual: a 3-row table.
   - Factual ("What is X?"): "Small chunks are fine. Recursive Structural + Contextual if FAQ-style overlap. Hierarchical optional for context-heavy answers."
   - Relational ("How does X relate to Y?"): "Hierarchical helps (LLM needs the whole relationship section). Late Chunking helps when entities are referenced across chunks."
-  - Comparative ("Compare X and Y."): "Multi-hop retrieval (covered in chapter 12.22) on top of any chunking. Bigger chunks help.  Hierarchical preferred."
-  Key content: "factual" + "relational" + "comparative", "Hierarchical", "12.22" or "multi-hop" reference.
+  - Comparative ("Compare X and Y."): "Multi-hop retrieval (covered in chapter 12.28) on top of any chunking. Bigger chunks help.  Hierarchical preferred."
+  Key content: "factual" + "relational" + "comparative", "Hierarchical", "12.28" or "multi-hop" reference.
 
 - **sub=3 (C.orange) - Cost budget axis**
   Title: "Axis 3: What's Your Indexing Budget?"
@@ -1488,15 +2313,15 @@ git commit -m "Implement chapter 12.9 Contextual Retrieval"
   - Product Features (10 docs, longer technical pages with sections and code samples): "Recursive Structural + Hierarchical. Sections give clean splits; parent-swap gives the LLM context for technical answers."
   - Troubleshooting (10 docs, free-form runbooks, narrative paragraphs): "Recursive Structural + Semantic for the longer narratives. Semantic catches topic shifts within a runbook."
   Below the table: a one-line synthesis: "Production chunking is rarely one strategy. Mix per doc-type, measure recall, iterate."
-  Bottom signpost: "Chapters 12.11-12.14 move to embedding model choice and how chunking interacts with embedding quality."
-  Key content: "Habuild Cloud" or "support corpus", "Account" + "Product Features" + "Troubleshooting", "mix" or "rarely one strategy", "12.11-12.14" or "embedding model" reference (allowed within-section signpost).
+  Bottom signpost: "Chapters 12.14-12.17 move to embedding model choice and how chunking interacts with embedding quality."
+  Key content: "Habuild Cloud" or "support corpus", "Account" + "Product Features" + "Troubleshooting", "mix" or "rarely one strategy", "12.14" or "embedding model" reference (allowed within-section signpost).
 
-- [ ] **Step 1: Write content tests for 12.10**
+- [ ] **Step 1: Write content tests for 12.13**
 
 Append to `src/__tests__/sections.test.jsx`:
 
 ```js
-describe("ChunkingDecision (12.10) content", () => {
+describe("ChunkingDecision (12.13) content", () => {
   const fn = RagFoundations.ChunkingDecision;
 
   it("sub=0 lists at least five of the six chunking strategies", () => {
@@ -1542,7 +2367,7 @@ describe("ChunkingDecision (12.10) content", () => {
 });
 ```
 
-Update config test to expect 10 entries.
+Update config test to expect 13 entries.
 
 - [ ] **Step 2: Run tests to verify failure**
 
@@ -1558,7 +2383,7 @@ Expected: FAIL.
 Add config entry:
 
 ```js
-  { id: "12.10", title: "The Chunking Decision", section: 12, component: "ChunkingDecision" },
+  { id: "12.13", title: "The Chunking Decision", section: 12, component: "ChunkingDecision" },
 ```
 
 Append the new export. Required:
@@ -1570,7 +2395,7 @@ Append the new export. Required:
 - The 3-row query-type table in sub=2 may be an HTML table or a CSS grid table with header row. Title-case column headers.
 - The horizontal cost scale in sub=3 may be SVG (a labeled axis with tier markers) or three tinted vertical cards in a row. If SVG, add `<desc>` + manifest entry.
 - The 3-row walkthrough table in sub=4 follows the same pattern as sub=2.
-- No em-dashes. The "Chapters 12.11-12.14 move to embedding model choice" line is an allowed within-section signpost (it references later chapter numbers in this same section, not a "Next:" or "Coming up:" preview).
+- No em-dashes. The "Chapters 12.14-12.17 move to embedding model choice" line is an allowed within-section signpost (it references later chapter numbers in this same section, not a "Next:" or "Coming up:" preview).
 - All tables centered, all card-grid titles centered (`textAlign: "center"` on card div + `T center` on title).
 
 - [ ] **Step 4: Run tests to verify pass**
@@ -1586,7 +2411,7 @@ Expected: PASS.
 If sub=3 used an SVG for the cost scale, add an entry:
 
 ```json
-"12.10": [
+"12.13": [
   "Horizontal cost-budget scale with three tier markers labeled lab, startup, and enterprise, each with a recommended chunking stack listed underneath"
 ]
 ```
@@ -1613,7 +2438,7 @@ npm run format
 npm run test
 ```
 
-Expected: ALL tests pass, not just the ones added in this task. If any unrelated test fails, you missed a cross-file dependency (see "Cross-file dependency map" near the top of this plan). Trace the failure to the missing update before committing.
+Expected: ALL tests pass.
 
 - [ ] **Step 8: Scope verification (`git diff --stat`)**
 
@@ -1622,52 +2447,58 @@ git status
 git diff --stat
 ```
 
-Expected: only files in the **Files:** list show as modified or new. If any file outside the list appears, abort: either move the change to the correct task or revert it before committing this task.
+Expected: only files in the **Files:** list.
 
 - [ ] **Step 9: Commit**
 
 ```bash
 git add src/sections/rag-foundations.jsx src/config.js src/__tests__/sections.test.jsx src/__tests__/config.test.js src/data/svg-descriptions.json
-git commit -m "Implement chapter 12.10 The Chunking Decision"
+git commit -m "Implement chapter 12.13 The Chunking Decision"
 ```
 
 ---
 
-## Task 9: Update CLAUDE.md mapping table for chapters 12.4-12.10
+## Task 13: Update CLAUDE.md mapping table for chapters 12.4-12.13
 
 **Files:**
 - Modify: `CLAUDE.md`.
 
 **Scope binding:** This task modifies ONLY the files listed in `**Files:**` above. If during implementation you discover other defects in other files, DO NOT fix them in this task - document them as a separate observation and continue with the listed scope. Before committing, run `git status` and `git diff --stat`: if ANY file outside the Files: list shows as modified, abort the commit and either move the change to the right task or revert it.
 
-- [ ] **Step 1: Extend the Section 12 mapping table from 3 to 10 rows**
+- [ ] **Step 1: Extend the Section 12 mapping table from 3 to 13 rows**
 
-Find the existing Section 12 mapping table (added in M1; currently shows 12.1-12.3). Replace the body of the table with the full 10-row version:
+Find the existing Section 12 mapping table (added in M1; currently shows 12.1-12.3). Replace the body of the table with the full 13-row version, AND update the table's heading line so it reflects two section files plus the new act labels:
 
 ```markdown
-**Section 12: Retrieval-Augmented Generation** (`rag-foundations.jsx` - Acts 1+2 complete; Acts 3-9 added in Milestones 3-6)
+**Section 12: Retrieval-Augmented Generation** (`rag-foundations.jsx` + `rag-ingestion.jsx` - Acts 1-3 complete; Acts 4-10 added in Milestones 3-6)
 
 | Chapter | Component | Title |
 |---------|-----------|-------|
 | 12.1 | WhyLLMsNeedRetrieval | Why LLMs Need Retrieval |
 | 12.2 | NaiveRAGPipeline | The Naive RAG Pipeline |
 | 12.3 | WhereNaiveRAGBreaks | Where Naive RAG Breaks |
-| 12.4 | WhyChunkFixedSize | Why Chunk At All + Fixed-Size Baseline |
-| 12.5 | RecursiveStructuralChunking | Recursive Structural Chunking |
-| 12.6 | SemanticChunking | Semantic Chunking |
-| 12.7 | LateChunking | Late Chunking (Jina 2024) |
-| 12.8 | HierarchicalChunking | Hierarchical / Parent-Child Chunking |
-| 12.9 | ContextualRetrieval | Contextual Retrieval (Anthropic 2024) |
-| 12.10 | ChunkingDecision | The Chunking Decision |
+| 12.4 | ParsingExtraction | Parsing - Raw Sources to Clean Text |
+| 12.5 | DeduplicationCleaning | Deduplication & Cleaning |
+| 12.6 | RefreshSync | Refresh & Sync Schedules |
+| 12.7 | WhyChunkFixedSize | Why Chunk At All + Fixed-Size Baseline |
+| 12.8 | RecursiveStructuralChunking | Recursive Structural Chunking |
+| 12.9 | SemanticChunking | Semantic Chunking |
+| 12.10 | LateChunking | Late Chunking (Jina 2024) |
+| 12.11 | HierarchicalChunking | Hierarchical / Parent-Child Chunking |
+| 12.12 | ContextualRetrieval | Contextual Retrieval (Anthropic 2024) |
+| 12.13 | ChunkingDecision | The Chunking Decision |
 ```
 
-- [ ] **Step 2: Update the Project Structure tree annotation**
+- [ ] **Step 2: Update the Project Structure tree**
 
-Find the `## Project Structure` section. The line for `rag-foundations.jsx` was added in M1 with a comment like `# Section 12 (Act 1 only ...)`. Update the comment to reflect Acts 1+2:
+Find the `## Project Structure` section. The line for `rag-foundations.jsx` was added in M1 with a comment like `# Section 12 (Act 1 only ...)`. Update its comment AND add a NEW line for `rag-ingestion.jsx` immediately above or below it (keeping the alphabetical-ish order used in the tree):
 
 ```
-│       └── rag-foundations.jsx           # Section 12 (Acts 1+2, chapters 12.1-12.10)
+│       ├── rag-foundations.jsx           # Section 12 Acts 1+3: Problem + Chunking, 12.1-12.3 + 12.7-12.13
+│       └── rag-ingestion.jsx             # Section 12 Act 2: Ingestion, 12.4-12.6
 ```
+
+(Exact tree-character alignment depends on what's around it in the current CLAUDE.md - mirror the indentation/glyphs of the surrounding entries. The important part is that BOTH files appear and their annotations are accurate.)
 
 - [ ] **Step 3: No automated test required for CLAUDE.md changes** - it's documentation.
 
@@ -1677,7 +2508,7 @@ Find the `## Project Structure` section. The line for `rag-foundations.jsx` was 
 npm run test
 ```
 
-Expected: ALL tests pass, not just the ones added in this task. If any unrelated test fails, you missed a cross-file dependency (see "Cross-file dependency map" near the top of this plan). Trace the failure to the missing update before committing.
+Expected: ALL tests pass.
 
 - [ ] **Step 5: Scope verification (`git diff --stat`)**
 
@@ -1686,18 +2517,18 @@ git status
 git diff --stat
 ```
 
-Expected: only files in the **Files:** list show as modified or new. If any file outside the list appears, abort: either move the change to the correct task or revert it before committing this task.
+Expected: only `CLAUDE.md`.
 
 - [ ] **Step 6: Commit**
 
 ```bash
 git add CLAUDE.md
-git commit -m "Update CLAUDE.md mapping for chapters 12.4-12.10"
+git commit -m "Document Section 12 Acts 2-3 in CLAUDE.md mapping (12.4-12.13)"
 ```
 
 ---
 
-## Task 10: Final M2 verification
+## Task 14: Final M2 verification
 
 **Files:** none (verification only; visual validation via Chrome).
 
@@ -1709,7 +2540,7 @@ This is the MANDATORY validation gate. A chapter that passes tests but fails Chr
 npm run test
 ```
 
-Expected: all tests pass (Section 1-11 tests + M1's 12.1-12.3 tests + M2's new 12.4-12.10 tests).
+Expected: all tests pass (Section 1-11 tests + M1's 12.1-12.3 tests + M2's new 12.4-12.13 tests).
 
 - [ ] **Step 2: Coverage check**
 
@@ -1746,9 +2577,9 @@ Expected: build succeeds. No errors in vendor chunking or asset processing.
 - [ ] **Step 6: Em-dash + C.card guard checks**
 
 ```bash
-grep -n "—" src/sections/rag-foundations.jsx
-grep -n "Box color={C.card}" src/sections/rag-foundations.jsx
-grep -nE "Coming up:|Next chapter:|Preview:" src/sections/rag-foundations.jsx
+grep -n "—" src/sections/rag-foundations.jsx src/sections/rag-ingestion.jsx
+grep -n "Box color={C.card}" src/sections/rag-foundations.jsx src/sections/rag-ingestion.jsx
+grep -nE "Coming up:|Next chapter:|Preview:" src/sections/rag-foundations.jsx src/sections/rag-ingestion.jsx
 ```
 
 Expected: no matches in any of the three greps. If any are found, fix in the chapter source and re-run from Step 1.
@@ -1761,9 +2592,9 @@ npm run dev
 
 Expected: `Local: http://localhost:5173/learn-ai/`. Leave running for the rest of this task.
 
-- [ ] **Step 8: Chrome visual validation of all 7 new chapters**
+- [ ] **Step 8: Chrome visual validation of all 10 new chapters**
 
-For each chapter (12.4 through 12.10), use the claude-in-chrome MCP tools:
+For each chapter (12.4 through 12.13), use the claude-in-chrome MCP tools:
 
 - Use `mcp__claude-in-chrome__tabs_context_mcp` to get current tab context.
 - Use `mcp__claude-in-chrome__tabs_create_mcp` (or navigate an existing tab) to open `http://localhost:5173/learn-ai/`.
@@ -1771,7 +2602,7 @@ For each chapter (12.4 through 12.10), use the claude-in-chrome MCP tools:
 - Step through every sub-step (Continue / Reveal click). For each sub-step:
   - Take a screenshot via the chrome browser tool.
   - Visually check:
-    1. No overlapping elements anywhere on the page (cards, tables, SVGs, prompt-template blocks).
+    1. No overlapping elements anywhere on the page (cards, tables, SVGs, prompt-template blocks, metadata artifacts).
     2. Every diagram horizontally + vertically centered within its container.
     3. Every diagram box label is title-case (every word capitalized).
     4. Every line of text starts with a capital letter.
@@ -1780,17 +2611,22 @@ For each chapter (12.4 through 12.10), use the claude-in-chrome MCP tools:
     7. No em-dashes visible.
     8. No "Next chapter:" / "Coming up:" / "Preview:" text.
 - Read browser console messages via `mcp__claude-in-chrome__read_console_messages` and check for runtime errors.
-- Repeat for 12.5, 12.6, 12.7, 12.8, 12.9, 12.10.
+- Repeat for 12.5 through 12.13.
 
 Particularly scrutinize:
-- **12.4 sub=2 and sub=3:** The sliding-window bar diagram and the mid-sentence break should be pixel-accurate. The red break line in sub=3 must cleanly slice the example sentence.
-- **12.5 sub=0:** The priority tree's arrows should not overlap node text. SVG must be centered in its viewBox.
-- **12.6 sub=2:** The cosine-similarity line chart must show the dip at the right x-position. Threshold line must be visible. Axis labels in title-case.
-- **12.7 sub=1:** The two-panel side-by-side must be equal width with no horizontal scroll. Arrows in both panels visually parallel.
-- **12.8 sub=1:** The hierarchy tree must have no edge crossings. Leaves evenly fanned out below each section.
-- **12.9 sub=2:** The augmentation prompt template must be visually distinct from a code block - tinted background, soft border, monospace, placeholders in accent color. NOT a stark code-block style.
-- **12.9 sub=4:** The bar chart bars must be proportional to the failure rate numbers; labels visible without overlapping bars.
-- **12.10 sub=0:** The 6-card grid must wrap cleanly to 3×2 if width-constrained. Mini-meters consistent across cards.
+- **12.4 sub=3 and sub=4:** The HTML mockup zones must have non-overlapping nav/sidebar/main/footer overlays. The metadata JSON artifact must be visually distinct from a code block (tinted bg, soft border, monospace, placeholder highlighting).
+- **12.5 sub=2:** The MinHash + LSH flow must show shingles → signature → bucket clearly. The Jaccard estimate number visible.
+- **12.5 sub=3:** The 4-row similarity ladder must be clearly stratified by cosine threshold.
+- **12.6 sub=2 and sub=3:** The sequence diagrams must read top-to-bottom cleanly. Time annotations (T=0:00, T=+15min) visible.
+- **12.6 sub=4:** The 3-row timeline for v1/v2/grace period must clearly show the overlap window.
+- **12.7 sub=2 and sub=3:** The sliding-window bar diagram and the mid-sentence break should be pixel-accurate. The red break line in sub=3 must cleanly slice the example sentence.
+- **12.8 sub=0:** The priority tree's arrows should not overlap node text. SVG must be centered in its viewBox.
+- **12.9 sub=2:** The cosine-similarity line chart must show the dip at the right x-position. Threshold line must be visible. Axis labels in title-case.
+- **12.10 sub=1:** The two-panel side-by-side must be equal width with no horizontal scroll. Arrows in both panels visually parallel.
+- **12.11 sub=1:** The hierarchy tree must have no edge crossings. Leaves evenly fanned out below each section.
+- **12.12 sub=2:** The augmentation prompt template must be visually distinct from a code block - tinted background, soft border, monospace, placeholders in accent color. NOT a stark code-block style.
+- **12.12 sub=4:** The bar chart bars must be proportional to the failure rate numbers; labels visible without overlapping bars.
+- **12.13 sub=0:** The 6-card grid must wrap cleanly to 3×2 if width-constrained. Mini-meters consistent across cards.
 
 - [ ] **Step 9: If any visual defect found**
 
@@ -1815,7 +2651,7 @@ git add docs/superpowers/screenshots/section-12-m2/
 git commit -m "Add Section 12 M2 visual validation screenshots"
 ```
 
-- [ ] **Step 12: Verify TOC shows 10 chapters in Section 12**
+- [ ] **Step 12: Verify TOC shows 13 chapters in Section 12**
 
 Boot the dev server again briefly:
 
@@ -1823,21 +2659,23 @@ Boot the dev server again briefly:
 npm run dev
 ```
 
-Open `http://localhost:5173/learn-ai/`, navigate to the table of contents, and confirm Section 12 lists 10 chapters (12.1 through 12.10) with the correct titles. Stop the server.
+Open `http://localhost:5173/learn-ai/`, navigate to the table of contents, and confirm Section 12 lists 13 chapters (12.1 through 12.13) with the correct titles. Stop the server.
 
 - [ ] **Step 13: Confirm M2 success criteria**
 
-Verify via `git log --oneline -15` that M2 commit history is clean and well-structured (one commit per chapter + CLAUDE.md commit):
+Verify via `git log --oneline -20` that M2 commit history is clean and well-structured (one commit per chapter + scaffold + CLAUDE.md commit):
 
-- [x] 7 new chapters (12.4-12.10) implemented in `rag-foundations.jsx`.
-- [x] Section 12 chapter entries 12.4-12.10 added to `config.js`.
+- [x] 10 new chapters (12.4-12.13) implemented: 3 ingestion in `rag-ingestion.jsx`, 7 chunking in `rag-foundations.jsx`.
+- [x] Section 12 chapter entries 12.4-12.13 added to `config.js` in the correct order.
+- [x] New file `rag-ingestion.jsx` exists; `learn-ai.jsx` Section 12 loader merges both files via `Promise.all`.
+- [x] `lookup.test.js` and `sections.test.jsx` both import and spread `RagIngestion`.
 - [x] Tests added for every new chapter at every sub-level.
 - [x] Coverage 100% lines, branches >= 97.7%.
 - [x] Lint + format clean.
 - [x] Every SVG has `<desc>` + entry in `svg-descriptions.json`.
-- [x] CLAUDE.md mapping extended from 3 rows to 10 rows.
-- [x] CLAUDE.md Project Structure annotation updated to "Acts 1+2".
-- [x] Chrome visual validation passed for all 7 new chapters.
+- [x] CLAUDE.md mapping extended from 3 rows to 13 rows.
+- [x] CLAUDE.md Project Structure has two Section-12 file entries (`rag-foundations.jsx` Acts 1+3, `rag-ingestion.jsx` Act 2).
+- [x] Chrome visual validation passed for all 10 new chapters.
 - [x] No em-dashes, no `Box color={C.card}`, no "Next:" / "Coming up:" / "Preview:" forward refs.
 
 - [ ] **Step 14: (No marker commit needed unless drift exists)**
@@ -1847,18 +2685,19 @@ If everything is already committed from earlier tasks, no marker commit is neede
 ```bash
 git status
 git add -p   # carefully review what to stage
-git commit -m "Section 12 Milestone 2 complete: Act 2 (12.4-12.10) shipped"
+git commit -m "Section 12 Milestone 2 complete: Acts 2-3 (12.4-12.13) shipped"
 ```
 
-M2 complete. Section 12 now has 10 navigable chapters (Acts 1+2). Ready to write Milestone 3 plan (Acts 3+4 - embed/index choices + query transformation).
+M2 complete. Section 12 now has 13 navigable chapters (Acts 1-3). Ready to write Milestone 3 plan (Acts 4+5 - embed/index choices + query transformation).
 
 ---
 
-## Task 11: Plan Refinement Checkpoint for M3
+## Task 15: Plan Refinement Checkpoint for M3
 
 **Files:**
 - Create: `docs/superpowers/lessons/section-12-m2-lessons.md` (new lessons file)
 - Modify (if needed): `docs/superpowers/plans/2026-05-16-section-12-milestone-3.md`
+- Create: `docs/superpowers/starter-prompts/section-12-m3-starter.md`
 
 **Scope binding:** This task modifies ONLY the files listed in `**Files:**` above. If during implementation you discover other defects in other files, DO NOT fix them in this task - document them as a separate observation and continue with the listed scope. Before committing, run `git status` and `git diff --stat`: if ANY file outside the Files: list shows as modified, abort the commit and either move the change to the right task or revert it.
 
@@ -1873,7 +2712,8 @@ Create `docs/superpowers/lessons/section-12-m2-lessons.md` with 3-5 honest bulle
 - Which sub-step structures landed clean and which needed re-org during implementation?
 - Anything in the per-chapter task pattern that felt awkward or could be tightened?
 - Anything in the visual rules that proved especially load-bearing or surprisingly easy to violate?
-- Any pattern (color choice, diagram structure, prompt-template treatment, etc.) that worked better than what the plan specified?
+- Any pattern (color choice, diagram structure, prompt-template / metadata-schema treatment, sequence-diagram time markers, etc.) that worked better than what the plan specified?
+- For the new 2-file Section-12 split: did the Promise.all loader interact cleanly with the test harness? Any surprises in the spread-merging of two section namespaces?
 
 The lessons are only useful if they're real. Skip a bullet if it doesn't apply. Add bullets the prompts don't cover if something else stood out.
 
@@ -1898,7 +2738,7 @@ If no edits are warranted, skip and proceed to commit.
 npm run test
 ```
 
-Expected: ALL tests pass, not just the ones added in this task. If any unrelated test fails, you missed a cross-file dependency (see "Cross-file dependency map" near the top of this plan). Trace the failure to the missing update before committing.
+Expected: ALL tests pass.
 
 - [ ] **Step 5: Scope verification (`git diff --stat`)**
 
@@ -1907,7 +2747,7 @@ git status
 git diff --stat
 ```
 
-Expected: only files in the **Files:** list show as modified or new. If any file outside the list appears, abort: either move the change to the correct task or revert it before committing this task.
+Expected: only files in the **Files:** list.
 
 - [ ] **Step 6: Commit the lessons file + any plan edits**
 
@@ -1981,34 +2821,36 @@ After this milestone, remaining sections are planned just-in-time:
 
 | Milestone | Acts | Chapters | When planned |
 |---|---|---|---|
-| M3 | Acts 3+4 (embed/index choices, query transformation) | 12.11-12.18 (8 ch) | After M2 ships |
-| M4 | Acts 5+6 (context/generation, advanced retrieval) | 12.19-12.27 (9 ch) | After M3 ships |
-| M5 | Act 7 (evaluation) | 12.28-12.32 (5 ch) | After M4 ships |
-| M6 | Acts 8+9 (production ops, decision framework + capstone) | 12.33-12.38 (6 ch) | After M5 ships |
+| M3 | Acts 4+5 (embed/index choices, query transformation) | 12.14-12.21 (8 ch) | After M2 ships |
+| M4 | Acts 6+7 (context/generation, advanced retrieval) | 12.22-12.30 (9 ch) | After M3 ships |
+| M5 | Act 8 (evaluation) | 12.31-12.35 (5 ch) | After M4 ships |
+| M6 | Acts 9+10 (production ops, decision framework + capstone) | 12.36-12.41 (6 ch) | After M5 ships |
 
-M3 will introduce a new section file `src/sections/rag-retrieval.jsx` (per spec's file-split plan), register it in `learn-ai.jsx` sectionLoaders (alongside or replacing the single rag-foundations.jsx loader), and import it into `sections.test.jsx`. The M3 plan should mirror M1's "Task 2: register new section file" infrastructure tasks since a new file is being introduced.
+M3 may introduce additional section files per the spec's file-split plan (e.g., `src/sections/rag-retrieval.jsx`). If so, the M3 plan should mirror M2 Task 2's scaffold-and-loader-rewire infrastructure pattern: create the new file with stubs, extend Section 12's Promise.all in `learn-ai.jsx` to a 3-file (or more) merge, update both `lookup.test.js` and `sections.test.jsx` imports + lookup spreads.
 
-After M6: a final pass updates CLAUDE.md mapping with all 38 chapters, runs full discoverability sync (`public/llms.txt` and `index.html` JSON-LD `teaches` array - though M1 already seeded the section-level entries), and applies the title-case-for-diagram-boxes rule globally to CLAUDE.md (per spec's flagged update).
+After M6: a final pass updates CLAUDE.md mapping with all 41 chapters, runs full discoverability sync (`public/llms.txt` and `index.html` JSON-LD `teaches` array - though M1 already seeded the section-level entries), and applies the title-case-for-diagram-boxes rule globally to CLAUDE.md (per spec's flagged update).
 
 ---
 
 ## Self-Review Notes
 
-**Spec coverage:** All seven Act 2 chapters (12.4-12.10) from the spec are implemented as tasks. Sub-step counts match the per-chapter guidance: 12.4=6, 12.5=5, 12.6=5, 12.7=5, 12.8=6, 12.9=7, 12.10=5 (total 39 new sub-steps).
+**Spec coverage:** All 10 new chapters (3 ingestion + 7 chunking) from the spec are implemented as tasks. Sub-step counts: 12.4=6, 12.5=5, 12.6=5 (ingestion subtotal 16); 12.7=6, 12.8=5, 12.9=5, 12.10=5, 12.11=6, 12.12=7, 12.13=5 (chunking subtotal 39); total 55 new sub-steps.
 
 **Component-name consistency:**
-- Component names match spec exactly: `WhyChunkFixedSize`, `RecursiveStructuralChunking`, `SemanticChunking`, `LateChunking`, `HierarchicalChunking`, `ContextualRetrieval`, `ChunkingDecision`.
-- Chapter IDs match spec: 12.4 through 12.10.
-- Titles match spec exactly (including parentheticals: "(Jina 2024)", "(Anthropic 2024)", "/ Parent-Child Chunking").
+- Ingestion component names match spec exactly: `ParsingExtraction`, `DeduplicationCleaning`, `RefreshSync`.
+- Chunking component names match spec exactly: `WhyChunkFixedSize`, `RecursiveStructuralChunking`, `SemanticChunking`, `LateChunking`, `HierarchicalChunking`, `ContextualRetrieval`, `ChunkingDecision`.
+- Chapter IDs match spec: 12.4 through 12.13 with ingestion as 12.4-12.6 and chunking as 12.7-12.13.
+- Titles match spec exactly (including parentheticals: "(Jina 2024)", "(Anthropic 2024)", "/ Parent-Child Chunking", "& Cleaning", "& Sync Schedules").
 - All Box colors used (`C.cyan`, `C.green`, `C.purple`, `C.orange`, `C.yellow`, `C.red`, `C.pink`, `C.blue`) exist in the palette.
-- Cyan is over-represented as the act's anchor color, consistent with the spec's per-act color scheme.
 
-**No placeholders:** Every test contains concrete regex assertions. Every sub-step has a titled color and concrete content spec with key strings/numbers spelled out. Every Step 5 svg-descriptions.json update gives a concrete example JSON entry. Every Step 7 commit has an exact commit message.
+**File split:** Section 12 now has TWO files. `rag-ingestion.jsx` is new in M2 and holds Act 2. `rag-foundations.jsx` retains Acts 1 + 3 (the existing 12.1-12.3 plus the new 12.7-12.13). The 2-file Promise.all loader pattern matches what Sections 8, 9, 10, 11 use.
 
-**Running-example coherence:** All chapters reference the Habuild Cloud corpus. The Sarah-in-doc-1 narrative is introduced in 12.7 and referenced consistently. The doc-1 (password reset), doc-4 (refunds), doc-7 (login troubleshooting), doc-12 (API keys) references are used across chapters. The 5 standard queries from M1 are reused where applicable.
+**No placeholders:** Every test contains concrete regex assertions. Every sub-step has a titled color and concrete content spec with key strings/numbers spelled out. Every Step 5 svg-descriptions.json update gives a concrete example JSON entry. Every Step 9 commit has an exact commit message.
 
-**Prompt-template treatment:** 12.9 explicitly calls out the augmentation prompt template as a styled monospace block (not a code block) per the spec's Section-12-specific rule. Background tint, soft border, monospace font, placeholder highlighting, title labeling.
+**Running-example coherence:** All chapters reference the Habuild Cloud corpus. The Sarah-in-doc-1 narrative is introduced in 12.10 and referenced consistently. The doc-1 (password reset), doc-4 (refunds), doc-7 (login troubleshooting), doc-12 (API keys) references are used across chapters. The 5 standard queries from M1 are reused where applicable. The same password-reset article is the running ingestion example across 12.4 (parsing), 12.5 (dedup across Zendesk/Confluence/Notion), and 12.6 (v1→v2 refresh).
 
-**Within-section signposts:** Several chapters use "Chapter 12.X fixes this" or "Act N of this section moves to" signposts. These are allowed under rule 11 because they reference explicit chapter IDs in the visible TOC, NOT future-tense "next" / "coming up" previews. The plan explicitly forbids "Preview:" / "Next:" / "Coming up:" in Step 3 of every task.
+**Prompt-template / metadata-artifact treatment:** 12.4 sub=4 (metadata JSON) and 12.12 sub=2 (augmentation prompt) explicitly call out their artifacts as styled monospace blocks (not code blocks) per the spec's Section-12-specific rule. Background tint, soft border, monospace font, placeholder highlighting, title labeling.
 
-**Test-suite scale:** M2 adds approximately 40 new content tests (5-7 per chapter × 7 chapters). Combined with M1's content tests (~17) and the generic per-sub render tests automatically added by extending `chapters[]`, the total Section 12 test count after M2 should be roughly 100+ new tests over the pre-Section-12 baseline.
+**Within-section signposts:** Several chapters use "Chapter 12.X fixes this" signposts. These are allowed under rule 11 because they reference explicit chapter IDs in the visible TOC, NOT future-tense "next" / "coming up" previews. The plan explicitly forbids "Preview:" / "Next:" / "Coming up:" in Step 3 of every task.
+
+**Test-suite scale:** M2 adds approximately 55 new content tests (5-7 per chapter × 10 chapters). Combined with M1's content tests (~17) and the generic per-sub render tests automatically added by extending `chapters[]`, the total Section 12 test count after M2 should be roughly 130+ new tests over the pre-Section-12 baseline.

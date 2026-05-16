@@ -8,7 +8,7 @@
 
 **Goal:** Add Section 12 "Retrieval-Augmented Generation" scaffolding plus the first three chapters (Act 1 - The RAG Problem: 12.1 WhyLLMsNeedRetrieval, 12.2 NaiveRAGPipeline, 12.3 WhereNaiveRAGBreaks). The app should ship at end of this milestone with a visible Section 12 in the TOC and 3 navigable chapters.
 
-**Architecture:** Chapters live in a new section file `src/sections/rag-foundations.jsx` (will eventually hold 12.1-12.10 after Milestone 2). Section registration follows the same pattern as Section 11: add entries to `chapters[]`, `sectionNames`, and `sectionColors` in `src/config.js`; register a lazy loader in `src/learn-ai.jsx`; add the import to `src/__tests__/sections.test.jsx`. All chapter content follows the learn-ai visual rules in `CLAUDE.md` (progressive Reveal sub-steps, colored Boxes, real numbers, center-aligned titles, title-case for diagram boxes, zero-overlap diagrams, Chrome visual validation).
+**Architecture:** Chapters live in a new section file `src/sections/rag-foundations.jsx` (will eventually hold chapters 12.1-12.3 + 12.7-12.13 = Acts 1+3 after Milestone 2; Act 2 ingestion chapters 12.4-12.6 live in a separate `rag-ingestion.jsx` added in M2). Section registration follows the same pattern as Section 11: add entries to `chapters[]`, `sectionNames`, and `sectionColors` in `src/config.js`; register a lazy loader in `src/learn-ai.jsx`; add the import to `src/__tests__/sections.test.jsx`. All chapter content follows the learn-ai visual rules in `CLAUDE.md` (progressive Reveal sub-steps, colored Boxes, real numbers, center-aligned titles, title-case for diagram boxes, zero-overlap diagrams, Chrome visual validation).
 
 **Tech Stack:** React 18 (hooks, inline styles), Vitest, Vite, TDD-first. No new dependencies.
 
@@ -1247,7 +1247,7 @@ Find the `## Project Structure` section. In the `src/sections/` block, add `rag-
 
 ```
 │       ├── vector-systems.jsx            # Section 11 (Act 6, chapters 11.29-11.35)
-│       └── rag-foundations.jsx           # Section 12 (Acts 1+2, chapters 12.1-12.10 - in progress)
+│       └── rag-foundations.jsx           # Section 12 (Act 1, chapters 12.1-12.3 - in progress; Acts 2+3 added in M2)
 ```
 
 - [ ] **Step 3: No test required for CLAUDE.md (it's documentation only)**

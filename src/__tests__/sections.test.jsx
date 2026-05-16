@@ -5272,28 +5272,28 @@ describe("WhereNaiveRAGBreaks (12.3) content", () => {
     const { container } = render(fn(makeCtx({ sub: 1 })));
     expect(container.textContent).toMatch(/chunking|chunk/i);
     expect(container.textContent).toMatch(/mid-?sentence|split/i);
-    expect(container.textContent).toMatch(/12\.4-12\.10|chunking/i);
+    expect(container.textContent).toMatch(/12\.7-12\.13|chunking/i);
   });
 
   it("sub=2 shows low recall on sign-in vs log-in lexical mismatch", () => {
     const { container } = render(fn(makeCtx({ sub: 2 })));
     expect(container.textContent).toMatch(/recall/i);
     expect(container.textContent).toMatch(/sign.?in/i);
-    expect(container.textContent).toMatch(/12\.11-12\.18|hybrid|reranker|query.{0,20}transform/i);
+    expect(container.textContent).toMatch(/12\.14-12\.21|hybrid|reranker|query.{0,20}transform/i);
   });
 
   it("sub=3 shows lost-in-the-middle attention U-curve", () => {
     const { container } = render(fn(makeCtx({ sub: 3 })));
     expect(container.textContent).toMatch(/middle/i);
     expect(container.textContent).toMatch(/attention/i);
-    expect(container.textContent).toMatch(/12\.19-12\.21|context packing|lost.?in.?middle/i);
+    expect(container.textContent).toMatch(/12\.22-12\.24|context packing|lost.?in.?middle/i);
   });
 
   it("sub=4 shows missing citation on suspended account query", () => {
     const { container } = render(fn(makeCtx({ sub: 4 })));
     expect(container.textContent).toMatch(/citation/i);
     expect(container.textContent).toMatch(/verify|verifiable/i);
-    expect(container.textContent).toMatch(/12\.19-12\.21|citations|groundedness/i);
+    expect(container.textContent).toMatch(/12\.22-12\.24|citations|groundedness/i);
   });
 
   it("sub=5 shows hallucination on Pro vs Enterprise SSO", () => {
@@ -5303,11 +5303,11 @@ describe("WhereNaiveRAGBreaks (12.3) content", () => {
     expect(container.textContent).toMatch(/Pro|Enterprise/);
   });
 
-  it("sub=6 shows stale index + cost/latency with Section 11.27 + chapter 12.33-12.37 references", () => {
+  it("sub=6 shows stale index + cost/latency with Section 11.27 + chapter 12.36-12.40 references", () => {
     const { container } = render(fn(makeCtx({ sub: 6 })));
     expect(container.textContent).toMatch(/stale/i);
     expect(container.textContent).toMatch(/Section 11\.27|11\.27/);
     expect(container.textContent).toMatch(/cost|latency/i);
-    expect(container.textContent).toMatch(/12\.33-12\.37|caching|observability/i);
+    expect(container.textContent).toMatch(/12\.36-12\.40|caching|observability/i);
   });
 });

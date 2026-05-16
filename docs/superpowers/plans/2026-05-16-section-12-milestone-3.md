@@ -6,13 +6,13 @@
 >
 > **Two-stage review per task:** Stage 1 SCOPE - did the subagent modify only the listed files? Are commits clean? Stage 2 CORRECTNESS - do tests pass, does behavior match the spec? Both stages must pass before moving to the next task.
 
-**Goal:** Add Acts 3 + 4 of Section 12 "Retrieval-Augmented Generation" - the eight chapters covering Embed & Index Choices for RAG (12.11 EmbeddingModelChoice, 12.12 DomainAdaptation, 12.13 HybridForRAG, 12.14 RerankerCascade) plus Query Transformation (12.15 WhyTransformQueries, 12.16 HyDE, 12.17 MultiQueryExpansion, 12.18 QueryRoutingDecomposition). These chapters live in a NEW file `src/sections/rag-retrieval.jsx` (Acts 1+2 already shipped in `rag-foundations.jsx` via Milestones 1 and 2). At end of this milestone the app ships with 18 navigable chapters in Section 12 (12.1 through 12.18).
+**Goal:** Add Acts 4 + 5 of Section 12 "Retrieval-Augmented Generation" - the eight chapters covering Embed & Index Choices for RAG (12.14 EmbeddingModelChoice, 12.15 DomainAdaptation, 12.16 HybridForRAG, 12.17 RerankerCascade) plus Query Transformation (12.18 WhyTransformQueries, 12.19 HyDE, 12.20 MultiQueryExpansion, 12.21 QueryRoutingDecomposition). These chapters live in a NEW file `src/sections/rag-retrieval.jsx` (Acts 1+3 already shipped in `rag-foundations.jsx` via Milestones 1 and 2). At end of this milestone the app ships with 21 navigable chapters in Section 12 (12.1 through 12.21).
 
-**Architecture:** Create a new section file `src/sections/rag-retrieval.jsx` and update the Section 12 loader in `learn-ai.jsx` to load BOTH `rag-foundations.jsx` (12.1-12.10) AND `rag-retrieval.jsx` (12.11-12.18) via `Promise.all` + `Object.assign` (same multi-file loader pattern used for Section 3 scaling+llm-training, Section 8 road-to-transformers+transformer-block, Section 10 attention-computation+modern-llm-techniques, Section 11 vector-*.jsx fan-out). Each chapter follows the established learn-ai pattern: ctx-based function component, `{sub >= 0 && ... }` for sub=0 inline, `<Reveal when={sub >= N}>` for subsequent sub-steps, colored `<Box>` per sub-step, center-aligned `<T bold center>` titles, real math, concrete Habuild-Cloud-corpus examples.
+**Architecture:** Create a new section file `src/sections/rag-retrieval.jsx` and update the Section 12 loader in `learn-ai.jsx` to load `rag-foundations.jsx` (Act 1: 12.1-12.3), `rag-ingestion.jsx` (Act 2: 12.4-12.6, added in M2), `rag-foundations.jsx` chunking content (Act 3: 12.7-12.13, added in M2), AND `rag-retrieval.jsx` (Acts 4+5: 12.14-12.21) via `Promise.all` + `Object.assign` - the loader expands from 2 files (rag-foundations + rag-ingestion after M2) to 3 files by appending rag-retrieval.jsx, following the multi-file loader pattern used for Section 3 scaling+llm-training, Section 8 road-to-transformers+transformer-block, Section 10 attention-computation+modern-llm-techniques, Section 11 vector-*.jsx fan-out. Each chapter follows the established learn-ai pattern: ctx-based function component, `{sub >= 0 && ... }` for sub=0 inline, `<Reveal when={sub >= N}>` for subsequent sub-steps, colored `<Box>` per sub-step, center-aligned `<T bold center>` titles, real math, concrete Habuild-Cloud-corpus examples.
 
 **Tech Stack:** React 18 (hooks, inline styles), Vitest, Vite, TDD-first. No new dependencies.
 
-**Spec reference:** `docs/superpowers/specs/2026-05-16-section-12-rag-design.md` - chapters 12.11 through 12.18, Acts 3 + 4.
+**Spec reference:** `docs/superpowers/specs/2026-05-16-section-12-rag-design.md` - chapters 12.14 through 12.21, Acts 4 + 5.
 
 **Prior-milestone references:**
 - `docs/superpowers/plans/2026-05-16-section-12-milestone-1.md` - full detail template for per-chapter tasks plus the scaffolding pattern for the original `rag-foundations.jsx`.
@@ -25,12 +25,12 @@
 ## Prerequisites
 
 - Milestone 1 (Act 1: 12.1-12.3) is complete and merged on `main`. `rag-foundations.jsx` exists with at least `WhyLLMsNeedRetrieval`, `NaiveRAGPipeline`, `WhereNaiveRAGBreaks`.
-- Milestone 2 (Act 2: 12.4-12.10) is complete and merged on `main`. `rag-foundations.jsx` now exports all 10 chapter components (12.1-12.10), and the M2 chunking content is shipped.
-- `src/config.js` already contains 12.1-12.10 in `chapters[]`, Section 12 in `sectionNames`, and `12: "#7c4dff"` in `sectionColors`.
-- `src/learn-ai.jsx` `sectionLoaders` already has a key `12: () => import("./sections/rag-foundations.jsx"),`.
-- `src/__tests__/sections.test.jsx` already imports `* as RagFoundations` and spreads it into `lookup`.
-- `src/__tests__/lookup.test.js` already imports `RagFoundations` and spreads it into `lookup`.
-- CLAUDE.md Section 12 mapping currently shows 12.1-12.10; this milestone extends it to 12.1-12.18.
+- Milestone 2 (Acts 2+3: 12.4-12.13) is complete and merged on `main`. `rag-foundations.jsx` exports 10 chapter components for Acts 1+3 (12.1-12.3 problem + 12.7-12.13 chunking). `rag-ingestion.jsx` exports 3 chapter components for Act 2 (12.4-12.6 ingestion).
+- `src/config.js` already contains 12.1-12.13 in `chapters[]`, Section 12 in `sectionNames`, and `12: "#7c4dff"` in `sectionColors`.
+- `src/learn-ai.jsx` `sectionLoaders` key `12` is a 2-file `Promise.all` (after M2) importing `rag-foundations.jsx` and `rag-ingestion.jsx`.
+- `src/__tests__/sections.test.jsx` already imports `* as RagFoundations` and `* as RagIngestion` and spreads both into `lookup`.
+- `src/__tests__/lookup.test.js` already imports `RagFoundations` and `RagIngestion` and spreads them into `lookup`.
+- CLAUDE.md Section 12 mapping currently shows 12.1-12.13; this milestone extends it to 12.1-12.21.
 - All tests currently pass on `main` (verify in Task 1).
 - Working directly on `main`.
 
@@ -42,21 +42,22 @@ If any prerequisite is missing, STOP and complete M1/M2 first - this plan assume
 
 ### New files
 
-- `src/sections/rag-retrieval.jsx` - Acts 3 + 4 chapter functions. In Milestone 3 this file contains 8 exports (EmbeddingModelChoice, DomainAdaptation, HybridForRAG, RerankerCascade, WhyTransformQueries, HyDE, MultiQueryExpansion, QueryRoutingDecomposition). No further chapters are added to this file in later milestones (Acts 5+6 live in `rag-generation.jsx`, Act 7 in `rag-evaluation.jsx`, Acts 8+9 in `rag-production.jsx`).
+- `src/sections/rag-retrieval.jsx` - Acts 4 + 5 chapter functions. In Milestone 3 this file contains 8 exports (EmbeddingModelChoice, DomainAdaptation, HybridForRAG, RerankerCascade, WhyTransformQueries, HyDE, MultiQueryExpansion, QueryRoutingDecomposition). No further chapters are added to this file in later milestones (Acts 6+7 live in `rag-generation.jsx`, Act 8 in `rag-evaluation.jsx`, Acts 9+10 in `rag-production.jsx`).
 
 ### Modified files
 
-- `src/config.js` - append 8 entries to `chapters[]` after the last Section 12 entry (`12.10 ChunkingDecision`).
-- `src/learn-ai.jsx` - change the Section 12 loader from a single `import("./sections/rag-foundations.jsx")` to a `Promise.all` of both `rag-foundations.jsx` and `rag-retrieval.jsx`, following the Section 3/8/9/10/11 pattern.
+- `src/config.js` - append 8 entries to `chapters[]` after the last Section 12 entry (`12.13 ChunkingDecision`).
+- `src/learn-ai.jsx` - extend the Section 12 loader from the post-M2 2-file `Promise.all` (`rag-foundations.jsx` + `rag-ingestion.jsx`) to a 3-file `Promise.all` that also includes `rag-retrieval.jsx`, following the Section 3/8/9/10/11 pattern.
 - `src/__tests__/sections.test.jsx` - add `import * as RagRetrieval from "../sections/rag-retrieval.jsx";`, spread it into the `lookup`, and append content-test blocks for each of the 8 new chapters.
 - `src/__tests__/lookup.test.js` - add the same import + spread, plus a presence test that the 8 new components are exported.
-- `src/__tests__/config.test.js` - extend the Section 12 chapters test from 10 entries to 18 entries (or append a new describe block for 12.11-12.18 if M1/M2 used per-act blocks).
+- `src/__tests__/config.test.js` - extend the Section 12 chapters test from 13 entries to 21 entries (or append a new describe block for 12.14-12.21 if M1/M2 used per-act blocks).
 - `src/data/svg-descriptions.json` - add entries for new SVGs (estimate 8-15 SVGs across the 8 chapters; not every chapter introduces an SVG).
-- `CLAUDE.md` - extend Section 12 mapping table to include rows for 12.11-12.18, update project-structure tree to show `rag-retrieval.jsx` alongside `rag-foundations.jsx`, and update the Section 12 file annotation to reflect Acts 1-4 shipped.
+- `CLAUDE.md` - extend Section 12 mapping table to include rows for 12.14-12.21, update project-structure tree to show `rag-retrieval.jsx` alongside `rag-foundations.jsx`, and update the Section 12 file annotation to reflect Acts 1-5 shipped.
 
 ### Unchanged
 
-- `src/sections/rag-foundations.jsx` (do not edit; 12.1-12.10 are stable from M1+M2).
+- `src/sections/rag-foundations.jsx` (do not edit; 12.1-12.3 + 12.7-12.13 are stable from M1+M2).
+- `src/sections/rag-ingestion.jsx` (do not edit; 12.4-12.6 are stable from M2).
 - All section files for Sections 1-11.
 - `public/llms.txt` and `index.html` JSON-LD `teaches` (Section 12 was added in M1; no metadata change needed - chapter-list updates happen at end of M6 per the M1 plan's incremental policy).
 
@@ -71,17 +72,17 @@ Use the same values established in M1/M2 (from the spec). Reuse the Habuild Clou
 - 10 product feature docs (dashboard tour, integrations setup, API keys, webhooks, export formats, custom fields, role permissions, notifications, search filters, bulk operations).
 - 10 troubleshooting docs (common errors, slow page load, 500 errors, sync failures, login issues, browser compatibility, data inconsistency, export failures, rate limits, quota exceeded).
 
-**Standard queries (use across Acts 3+4 chapters):**
+**Standard queries (use across Acts 4+5 chapters):**
 
 | Query | Type | Best chapter to feature |
 |---|---|---|
-| "How do I reset my password?" | Single-doc lookup baseline | 12.13 baseline retrieval |
-| "I can't sign in to my account" | Lexical mismatch (sign-in vs log-in) | 12.13 (BM25 picks up "sign in"), 12.15 (lexical mismatch failure example) |
-| "How do I reset my password if I forgot my email?" | Multi-hop | 12.18 (decomposition split) |
-| "Why is my dashboard slow?" | Long descriptive | 12.16 (HyDE primary example) |
-| "Cancel my subscription and get a refund" | Multi-step / sequential | 12.17 (multi-query expansion), 12.18 (decomposition) |
-| "Compare the Pro and Enterprise plans" | Aggregation | 12.18 (decomposition splits into "What's in Pro?" + "What's in Enterprise?") |
-| "How do I get an API key?" | Exact-term factual | 12.13 (BM25 wins; "API key" is a literal token) |
+| "How do I reset my password?" | Single-doc lookup baseline | 12.16 baseline retrieval |
+| "I can't sign in to my account" | Lexical mismatch (sign-in vs log-in) | 12.16 (BM25 picks up "sign in"), 12.18 (lexical mismatch failure example) |
+| "How do I reset my password if I forgot my email?" | Multi-hop | 12.21 (decomposition split) |
+| "Why is my dashboard slow?" | Long descriptive | 12.19 (HyDE primary example) |
+| "Cancel my subscription and get a refund" | Multi-step / sequential | 12.20 (multi-query expansion), 12.21 (decomposition) |
+| "Compare the Pro and Enterprise plans" | Aggregation | 12.21 (decomposition splits into "What's in Pro?" + "What's in Enterprise?") |
+| "How do I get an API key?" | Exact-term factual | 12.16 (BM25 wins; "API key" is a literal token) |
 
 **Canonical numeric values:**
 
@@ -89,7 +90,7 @@ Use the same values established in M1/M2 (from the spec). Reuse the Habuild Clou
 - Chunk size (tokens): 64-128 (visible) / 512 (production typical).
 - Retrieval top-k: 3-5 (visible) / 50 (production before rerank).
 - Reranked top-k: 2-3 (visible) / 10 (production sent to LLM).
-- RRF constant `k = 60` (standard in literature; use in 12.13 and 12.17).
+- RRF constant `k = 60` (standard in literature; use in 12.16 and 12.20).
 - Reranker latency: ~80ms for cross-encoder on 50 candidates.
 - Vector retrieval latency: ~30ms for HNSW on 1M vectors.
 - LLM generation latency: ~800ms for 200 tokens out.
@@ -102,8 +103,8 @@ The same query gives the same retrieval result across chapters unless the chapte
 
 Use one Box color family per act for visual continuity:
 
-- **Act 3 (12.11-12.14):** purple-leaning color family (`C.purple`, `C.cyan`, `C.pink`, `C.blue`).
-- **Act 4 (12.15-12.18):** orange-leaning color family (`C.orange`, `C.yellow`, `C.red`, `C.green`).
+- **Act 4 (12.14-12.17):** purple-leaning color family (`C.purple`, `C.cyan`, `C.pink`, `C.blue`).
+- **Act 5 (12.18-12.21):** orange-leaning color family (`C.orange`, `C.yellow`, `C.red`, `C.green`).
 
 Each chapter still uses 5-7 different colors across its sub-steps; the family bias is only "one of the chapter's anchor sub-steps uses the act color".
 
@@ -165,17 +166,17 @@ Run `npm run test` (full suite, not just the targeted test). If any unrelated te
 
 1. Task 1 - Verify green baseline (no commit).
 2. Task 2 - Create `rag-retrieval.jsx` scaffold with 8 stub exports.
-3. Task 3 - Update `learn-ai.jsx` Section 12 loader to Promise.all both files.
-4. Task 4 - Add 12.11-12.18 entries to `chapters[]` in `config.js`.
+3. Task 3 - Update `learn-ai.jsx` Section 12 loader to a 3-file `Promise.all` (adding `rag-retrieval.jsx`).
+4. Task 4 - Add 12.14-12.21 entries to `chapters[]` in `config.js`.
 5. Task 5 - Register `RagRetrieval` in `sections.test.jsx` lookup.
-6. Task 6 - Implement chapter 12.11 EmbeddingModelChoice.
-7. Task 7 - Implement chapter 12.12 DomainAdaptation.
-8. Task 8 - Implement chapter 12.13 HybridForRAG.
-9. Task 9 - Implement chapter 12.14 RerankerCascade.
-10. Task 10 - Implement chapter 12.15 WhyTransformQueries.
-11. Task 11 - Implement chapter 12.16 HyDE.
-12. Task 12 - Implement chapter 12.17 MultiQueryExpansion.
-13. Task 13 - Implement chapter 12.18 QueryRoutingDecomposition.
+6. Task 6 - Implement chapter 12.14 EmbeddingModelChoice.
+7. Task 7 - Implement chapter 12.15 DomainAdaptation.
+8. Task 8 - Implement chapter 12.16 HybridForRAG.
+9. Task 9 - Implement chapter 12.17 RerankerCascade.
+10. Task 10 - Implement chapter 12.18 WhyTransformQueries.
+11. Task 11 - Implement chapter 12.19 HyDE.
+12. Task 12 - Implement chapter 12.20 MultiQueryExpansion.
+13. Task 13 - Implement chapter 12.21 QueryRoutingDecomposition.
 14. Task 14 - Update CLAUDE.md (mapping table + project structure).
 15. Task 15 - Final M3 verification (test, coverage, lint, format, build, Chrome visuals).
 
@@ -226,11 +227,12 @@ git log --oneline -20 | grep -i "rag\|section 12\|12\\."
 Expected: see commits for Section 12 M1 (3 chapters) AND M2 (7 chunking chapters). If only M1 is visible, STOP and execute M2 first.
 
 ```bash
-ls src/sections/rag-foundations.jsx
+ls src/sections/rag-foundations.jsx src/sections/rag-ingestion.jsx
 grep -c "^export const" src/sections/rag-foundations.jsx
+grep -c "^export const" src/sections/rag-ingestion.jsx
 ```
 
-Expected: file exists; export count is 10 (12.1-12.10 implementations).
+Expected: both files exist; `rag-foundations.jsx` export count is 10 (12.1-12.3 problem + 12.7-12.13 chunking); `rag-ingestion.jsx` export count is 3 (12.4-12.6 ingestion).
 
 - [ ] **Step 3: Run full test suite to confirm green baseline**
 
@@ -265,7 +267,7 @@ Expected: no errors.
 Append to `src/__tests__/lookup.test.js`, after the existing `vector-foundations.jsx` presence test:
 
 ```js
-  it("rag-retrieval.jsx exports the Act 3+4 chapter components", async () => {
+  it("rag-retrieval.jsx exports the Act 4+5 chapter components", async () => {
     const mod = await import("../sections/rag-retrieval.jsx");
     expect(typeof mod.EmbeddingModelChoice).toBe("function");
     expect(typeof mod.DomainAdaptation).toBe("function");
@@ -295,8 +297,8 @@ import { Box, T } from "../components.jsx";
 import { C } from "../config.js";
 
 // Stub exports - full content added in subsequent tasks (Section 12 Milestone 3).
-// Act 3 (Embed & Index Choices for RAG): 12.11-12.14
-// Act 4 (Query Transformation): 12.15-12.18
+// Act 4 (Embed & Index Choices for RAG): 12.14-12.17
+// Act 5 (Query Transformation): 12.18-12.21
 
 export const EmbeddingModelChoice = (ctx) => {
   const { sub } = ctx;
@@ -457,7 +459,7 @@ const lookup = {
 npx vitest run src/__tests__/lookup.test.js
 ```
 
-Expected: PASS. The presence test passes (all 8 components are functions); the generic "every chapter component exists" test still passes because the 12.11-12.18 entries are not yet in `chapters[]`.
+Expected: PASS. The presence test passes (all 8 components are functions); the generic "every chapter component exists" test still passes because the 12.14-12.21 entries are not yet in `chapters[]`.
 
 - [ ] **Step 6: Full test smoke gate**
 
@@ -480,7 +482,7 @@ Expected: only files in the **Files:** list show as modified or new. If any file
 
 ```bash
 git add src/sections/rag-retrieval.jsx src/__tests__/lookup.test.js
-git commit -m "Scaffold rag-retrieval.jsx with stubs for 12.11-12.18"
+git commit -m "Scaffold rag-retrieval.jsx with stubs for 12.14-12.21"
 ```
 
 ---
@@ -492,13 +494,17 @@ git commit -m "Scaffold rag-retrieval.jsx with stubs for 12.11-12.18"
 
 **Scope binding:** This task modifies ONLY the files listed in `**Files:**` above. If during implementation you discover other defects in other files, DO NOT fix them in this task - document them as a separate observation and continue with the listed scope. Before committing, run `git status` and `git diff --stat`: if ANY file outside the Files: list shows as modified, abort the commit and either move the change to the right task or revert it.
 
-The Section 12 loader currently looks like:
+After M2, the Section 12 loader is a 2-file `Promise.all`:
 
 ```js
-12: () => import("./sections/rag-foundations.jsx"),
+12: () =>
+  Promise.all([
+    import("./sections/rag-foundations.jsx"),
+    import("./sections/rag-ingestion.jsx"),
+  ]).then((mods) => Object.assign({}, ...mods)),
 ```
 
-We need to change it to a `Promise.all` so both files load when Section 12 is opened. Mirrors the Section 8/9/10/11 pattern.
+We need to expand it to a 3-file `Promise.all` by appending `rag-retrieval.jsx`. Mirrors the Section 8/9/10/11 pattern.
 
 - [ ] **Step 1: Make the change in `src/learn-ai.jsx`**
 
@@ -517,6 +523,7 @@ const sectionLoaders = {
   12: () =>
     Promise.all([
       import("./sections/rag-foundations.jsx"),
+      import("./sections/rag-ingestion.jsx"),
       import("./sections/rag-retrieval.jsx"),
     ]).then((mods) => Object.assign({}, ...mods)),
 };
@@ -572,7 +579,7 @@ git commit -m "Load rag-retrieval.jsx alongside rag-foundations.jsx for Section 
 
 ---
 
-## Task 4: Add 12.11-12.18 entries to `chapters[]` in `config.js`
+## Task 4: Add 12.14-12.21 entries to `chapters[]` in `config.js`
 
 **Files:**
 - Modify: `src/config.js` (append 8 entries after the existing 12.10 entry)
@@ -582,11 +589,11 @@ git commit -m "Load rag-retrieval.jsx alongside rag-foundations.jsx for Section 
 
 - [ ] **Step 1: Write failing test**
 
-Append to `src/__tests__/config.test.js` (or extend the existing Section 12 describe block from M1/M2 if it tests the full chapter list - if so, replace the expected array). The simplest approach is a new dedicated describe for Acts 3+4:
+Append to `src/__tests__/config.test.js` (or extend the existing Section 12 describe block from M1/M2 if it tests the full chapter list - if so, replace the expected array). The simplest approach is a new dedicated describe for Acts 4+5:
 
 ```js
-describe("Section 12 Acts 3+4 chapters", () => {
-  it("has chapters 12.11 through 12.18 in order", () => {
+describe("Section 12 Acts 4+5 chapters", () => {
+  it("has chapters 12.14 through 12.21 in order", () => {
     const section12 = chapters.filter((ch) => ch.section === 12);
     expect(section12.length).toBeGreaterThanOrEqual(18);
     const acts34 = section12.filter((c) => {
@@ -594,14 +601,14 @@ describe("Section 12 Acts 3+4 chapters", () => {
       return n >= 11 && n <= 18;
     });
     const expected = [
-      { id: "12.11", component: "EmbeddingModelChoice", title: "Picking an Embedding Model" },
-      { id: "12.12", component: "DomainAdaptation", title: "Domain Adaptation - Fine-Tuning Embeddings" },
-      { id: "12.13", component: "HybridForRAG", title: "Hybrid Retrieval for RAG" },
-      { id: "12.14", component: "RerankerCascade", title: "The Reranker Cascade" },
-      { id: "12.15", component: "WhyTransformQueries", title: "Why Transform Queries" },
-      { id: "12.16", component: "HyDE", title: "HyDE - Hypothetical Document Embeddings" },
-      { id: "12.17", component: "MultiQueryExpansion", title: "Multi-Query Expansion" },
-      { id: "12.18", component: "QueryRoutingDecomposition", title: "Query Routing & Decomposition" },
+      { id: "12.14", component: "EmbeddingModelChoice", title: "Picking an Embedding Model" },
+      { id: "12.15", component: "DomainAdaptation", title: "Domain Adaptation - Fine-Tuning Embeddings" },
+      { id: "12.16", component: "HybridForRAG", title: "Hybrid Retrieval for RAG" },
+      { id: "12.17", component: "RerankerCascade", title: "The Reranker Cascade" },
+      { id: "12.18", component: "WhyTransformQueries", title: "Why Transform Queries" },
+      { id: "12.19", component: "HyDE", title: "HyDE - Hypothetical Document Embeddings" },
+      { id: "12.20", component: "MultiQueryExpansion", title: "Multi-Query Expansion" },
+      { id: "12.21", component: "QueryRoutingDecomposition", title: "Query Routing & Decomposition" },
     ];
     expect(acts34.length).toBe(expected.length);
     expected.forEach((exp, i) => {
@@ -623,20 +630,20 @@ Expected: FAIL - `acts34.length` is 0 (entries not yet added).
 
 - [ ] **Step 3: Add chapter entries to `src/config.js`**
 
-Edit `src/config.js`. Find the last Section 12 entry (the M2 closer `12.10 ChunkingDecision`) and add Section 12 Acts 3+4 entries right after, before the closing `];`:
+Edit `src/config.js`. Find the last Section 12 entry (the M2 closer `12.10 ChunkingDecision`) and add Section 12 Acts 4+5 entries right after, before the closing `];`:
 
 ```js
   { id: "12.10", title: "The Chunking Decision", section: 12, component: "ChunkingDecision" },
-  // Section 12 Act 3: Embed & Index Choices for RAG
-  { id: "12.11", title: "Picking an Embedding Model", section: 12, component: "EmbeddingModelChoice" },
-  { id: "12.12", title: "Domain Adaptation - Fine-Tuning Embeddings", section: 12, component: "DomainAdaptation" },
-  { id: "12.13", title: "Hybrid Retrieval for RAG", section: 12, component: "HybridForRAG" },
-  { id: "12.14", title: "The Reranker Cascade", section: 12, component: "RerankerCascade" },
-  // Section 12 Act 4: Query Transformation
-  { id: "12.15", title: "Why Transform Queries", section: 12, component: "WhyTransformQueries" },
-  { id: "12.16", title: "HyDE - Hypothetical Document Embeddings", section: 12, component: "HyDE" },
-  { id: "12.17", title: "Multi-Query Expansion", section: 12, component: "MultiQueryExpansion" },
-  { id: "12.18", title: "Query Routing & Decomposition", section: 12, component: "QueryRoutingDecomposition" },
+  // Section 12 Act 4: Embed & Index Choices for RAG
+  { id: "12.14", title: "Picking an Embedding Model", section: 12, component: "EmbeddingModelChoice" },
+  { id: "12.15", title: "Domain Adaptation - Fine-Tuning Embeddings", section: 12, component: "DomainAdaptation" },
+  { id: "12.16", title: "Hybrid Retrieval for RAG", section: 12, component: "HybridForRAG" },
+  { id: "12.17", title: "The Reranker Cascade", section: 12, component: "RerankerCascade" },
+  // Section 12 Act 5: Query Transformation
+  { id: "12.18", title: "Why Transform Queries", section: 12, component: "WhyTransformQueries" },
+  { id: "12.19", title: "HyDE - Hypothetical Document Embeddings", section: 12, component: "HyDE" },
+  { id: "12.20", title: "Multi-Query Expansion", section: 12, component: "MultiQueryExpansion" },
+  { id: "12.21", title: "Query Routing & Decomposition", section: 12, component: "QueryRoutingDecomposition" },
 ];
 ```
 
@@ -654,7 +661,7 @@ Expected: PASS.
 npx vitest run src/__tests__/config.test.js src/__tests__/lookup.test.js src/__tests__/sections.test.jsx
 ```
 
-Expected: PASS. The lookup test (every chapter component exists) now resolves 12.11-12.18 to the rag-retrieval.jsx stubs. The generic sections test renders each stub at every sub - stubs are minimal-render safe.
+Expected: PASS. The lookup test (every chapter component exists) now resolves 12.14-12.21 to the rag-retrieval.jsx stubs. The generic sections test renders each stub at every sub - stubs are minimal-render safe.
 
 - [ ] **Step 6: Full test smoke gate**
 
@@ -677,7 +684,7 @@ Expected: only files in the **Files:** list show as modified or new. If any file
 
 ```bash
 git add src/config.js src/__tests__/config.test.js
-git commit -m "Add chapter entries 12.11-12.18 to config"
+git commit -m "Add chapter entries 12.14-12.21 to config"
 ```
 
 ---
@@ -689,7 +696,7 @@ git commit -m "Add chapter entries 12.11-12.18 to config"
 
 **Scope binding:** This task modifies ONLY the files listed in `**Files:**` above. If during implementation you discover other defects in other files, DO NOT fix them in this task - document them as a separate observation and continue with the listed scope. Before committing, run `git status` and `git diff --stat`: if ANY file outside the Files: list shows as modified, abort the commit and either move the change to the right task or revert it.
 
-The generic test block in sections.test.jsx iterates over `chapters` and looks up each component in `lookup`. Without this import, generic tests for 12.11-12.18 will fail with "fn is not a function" (the lookup test already passed because it imports rag-retrieval directly, but sections.test.jsx has its own lookup).
+The generic test block in sections.test.jsx iterates over `chapters` and looks up each component in `lookup`. Without this import, generic tests for 12.14-12.21 will fail with "fn is not a function" (the lookup test already passed because it imports rag-retrieval directly, but sections.test.jsx has its own lookup).
 
 - [ ] **Step 1: Run sections.test.jsx to confirm failure before change**
 
@@ -697,7 +704,7 @@ The generic test block in sections.test.jsx iterates over `chapters` and looks u
 npx vitest run src/__tests__/sections.test.jsx
 ```
 
-Expected: FAIL. The generic "All chapters" describe block will try to call `fn()` for 12.11-12.18 where `fn` is undefined (TypeError: fn is not a function).
+Expected: FAIL. The generic "All chapters" describe block will try to call `fn()` for 12.14-12.21 where `fn` is undefined (TypeError: fn is not a function).
 
 - [ ] **Step 2: Add the import and spread**
 
@@ -737,7 +744,7 @@ const lookup = {
 npx vitest run src/__tests__/sections.test.jsx
 ```
 
-Expected: PASS. The generic test now runs against 12.11-12.18 stubs which render the title in a Box without crashing.
+Expected: PASS. The generic test now runs against 12.14-12.21 stubs which render the title in a Box without crashing.
 
 - [ ] **Step 4: Full test smoke gate**
 
@@ -765,7 +772,7 @@ git commit -m "Register RagRetrieval in sections.test lookup"
 
 ---
 
-## Task 6: Implement Chapter 12.11 EmbeddingModelChoice
+## Task 6: Implement Chapter 12.14 EmbeddingModelChoice
 
 **Files:**
 - Modify: `src/sections/rag-retrieval.jsx` (replace stub `EmbeddingModelChoice`)
@@ -805,8 +812,8 @@ git commit -m "Register RagRetrieval in sections.test lookup"
   - English/Multilingual: "Quality slightly worse, extra capacity wasted"
   - Multilingual/English-only: "Will fail on non-English queries"
   - Multilingual/Multilingual: "Use multilingual"
-  Plus a one-line domain note: "If your corpus is medical / legal / code, off-the-shelf models often underperform a domain-tuned model (covered in chapter 12.12)."
-  Key content: "multilingual", "English-only", "domain", "medical" or "legal" or "code", "12.12".
+  Plus a one-line domain note: "If your corpus is medical / legal / code, off-the-shelf models often underperform a domain-tuned model (covered in chapter 12.15)."
+  Key content: "multilingual", "English-only", "domain", "medical" or "legal" or "code", "12.15".
 
 - **sub=4 (C.yellow) - Cost at scale**
   Title: "Cost Math At 100M Token Ingest"
@@ -818,18 +825,18 @@ git commit -m "Register RagRetrieval in sections.test lookup"
   Visual: a yellow callout box (`background: ${C.yellow}06`, `border: 1px solid ${C.yellow}12`) reading: "MTEB is a public benchmark. Models can be over-fit to it. The leader on MTEB may underperform on YOUR data."
   Below: a short flowchart (4-step SVG) for picking an embedding model:
   1. "Need Multilingual?" -> Yes (use Cohere v3 / Voyage / OpenAI 3-large) -> No (go on)
-  2. "Specialized Domain?" -> Yes (consider domain-tuned BGE or fine-tune; see 12.12) -> No (go on)
+  2. "Specialized Domain?" -> Yes (consider domain-tuned BGE or fine-tune; see 12.15) -> No (go on)
   3. "Budget Sensitive?" -> Yes (self-host BGE) -> No (go on)
   4. "Default" -> OpenAI text-embedding-3-large or Cohere embed-v3
   Add `<desc>` and svg-descriptions.json entry.
   Key content: "MTEB", "benchmark" or "leaderboard", "your data", a decision-tree pattern with at least 2 questions.
 
-- [ ] **Step 1: Write content tests for 12.11**
+- [ ] **Step 1: Write content tests for 12.14**
 
 Append to `src/__tests__/sections.test.jsx` after the existing 12.10 describe block (or at the end of the file - convention from M1/M2 should be followed):
 
 ```js
-describe("EmbeddingModelChoice (12.11) content", () => {
+describe("EmbeddingModelChoice (12.14) content", () => {
   const fn = RagRetrieval.EmbeddingModelChoice;
 
   it("sub=0 frames embedding model as recall ceiling and references Section 5.2", () => {
@@ -859,7 +866,7 @@ describe("EmbeddingModelChoice (12.11) content", () => {
     expect(container.textContent).toMatch(/diminish|marginal/i);
   });
 
-  it("sub=3 contrasts multilingual vs English-only and mentions 12.12 for domain", () => {
+  it("sub=3 contrasts multilingual vs English-only and mentions 12.15 for domain", () => {
     const { container } = render(fn(makeCtx({ sub: 3 })));
     expect(container.textContent).toMatch(/multilingual/i);
     expect(container.textContent).toMatch(/english/i);
@@ -906,9 +913,9 @@ Replace the stub export in `src/sections/rag-retrieval.jsx` with the full implem
 - The MTEB callout in sub=5 is a tinted yellow box inside the green sub-step box.
 - The 4-step decision SVG in sub=5 must have `<desc>` first child; `viewBox` centered.
 - Standalone formulas/computations in sub=4 cost math centered with `textAlign: "center"`.
-- No "Preview:" / "Next:" / "Coming up:" forward references. Forward references to 12.12 are signposts only ("covered in chapter 12.12").
+- No "Preview:" / "Next:" / "Coming up:" forward references. Forward references to 12.15 are signposts only ("covered in chapter 12.15").
 
-Follow the spec's chapter 12.11 description and the sub-step structure above.
+Follow the spec's chapter 12.14 description and the sub-step structure above.
 
 - [ ] **Step 4: Run tests to verify pass**
 
@@ -920,10 +927,10 @@ Expected: PASS.
 
 - [ ] **Step 5: If new SVG was added, update svg-descriptions.json**
 
-If the decision-flow SVG in sub=5 was added, append to `src/data/svg-descriptions.json` under key `"12.11"`:
+If the decision-flow SVG in sub=5 was added, append to `src/data/svg-descriptions.json` under key `"12.14"`:
 
 ```json
-"12.11": [
+"12.14": [
   "Four-step decision flowchart for picking an embedding model: ask whether multilingual is needed, whether the corpus is specialized, whether budget is sensitive, then default to OpenAI text-embedding-3-large or Cohere embed-v3."
 ]
 ```
@@ -967,12 +974,12 @@ Expected: only files in the **Files:** list show as modified or new. If any file
 
 ```bash
 git add src/sections/rag-retrieval.jsx src/__tests__/sections.test.jsx src/data/svg-descriptions.json
-git commit -m "Implement chapter 12.11 Picking an Embedding Model"
+git commit -m "Implement chapter 12.14 Picking an Embedding Model"
 ```
 
 ---
 
-## Task 7: Implement Chapter 12.12 DomainAdaptation
+## Task 7: Implement Chapter 12.15 DomainAdaptation
 
 **Files:**
 - Modify: `src/sections/rag-retrieval.jsx` (replace stub `DomainAdaptation`)
@@ -1027,12 +1034,12 @@ L_triplet = max(0, d(A, P) - d(A, N) + margin)
   Note: "Cost: ~$200 for a 50k-pair fine-tune on BGE-large via a managed service. Quality delta: usually 10-20 points on recall. Re-evaluate every 3-6 months as your corpus drifts."
   Key content: "before" or "off-the-shelf", "after" or "fine-tuned", "recall" or "MRR", a percentage gain like "0.78 -> 0.91" or "10-20 points", "cost" or "$200".
 
-- [ ] **Step 1: Write content tests for 12.12**
+- [ ] **Step 1: Write content tests for 12.15**
 
 Append to `src/__tests__/sections.test.jsx`:
 
 ```js
-describe("DomainAdaptation (12.12) content", () => {
+describe("DomainAdaptation (12.15) content", () => {
   const fn = RagRetrieval.DomainAdaptation;
 
   it("sub=0 shows the off-the-shelf gap on domain pairs", () => {
@@ -1104,10 +1111,10 @@ Expected: PASS.
 
 - [ ] **Step 5: Update svg-descriptions.json if new SVGs introduced**
 
-Add (or update) entries under `"12.12"`:
+Add (or update) entries under `"12.15"`:
 
 ```json
-"12.12": [
+"12.15": [
   "Triplet-loss diagram showing an anchor point in the center with arrows pulling a positive sample close and pushing a negative sample away.",
   "Before-versus-after bar chart comparing recall and MRR for off-the-shelf vs fine-tuned embeddings on the support corpus."
 ]
@@ -1152,12 +1159,12 @@ Expected: only files in the **Files:** list show as modified or new. If any file
 
 ```bash
 git add src/sections/rag-retrieval.jsx src/__tests__/sections.test.jsx src/data/svg-descriptions.json
-git commit -m "Implement chapter 12.12 Domain Adaptation"
+git commit -m "Implement chapter 12.15 Domain Adaptation"
 ```
 
 ---
 
-## Task 8: Implement Chapter 12.13 HybridForRAG
+## Task 8: Implement Chapter 12.16 HybridForRAG
 
 **Files:**
 - Modify: `src/sections/rag-retrieval.jsx` (replace stub `HybridForRAG`)
@@ -1245,12 +1252,12 @@ where alpha in [0, 1]
   Each row first-letter capitalized.
   Key content: "RRF", "alpha" or "weighted", "classifier", "default".
 
-- [ ] **Step 1: Write content tests for 12.13**
+- [ ] **Step 1: Write content tests for 12.16**
 
 Append to `src/__tests__/sections.test.jsx`:
 
 ```js
-describe("HybridForRAG (12.13) content", () => {
+describe("HybridForRAG (12.16) content", () => {
   const fn = RagRetrieval.HybridForRAG;
 
   it("sub=0 shows API key + cancel examples and references Section 11.24", () => {
@@ -1330,7 +1337,7 @@ Expected: PASS.
 If the recall bar chart in sub=3 is an SVG:
 
 ```json
-"12.13": [
+"12.16": [
   "Three-bar recall chart comparing BM25 only, dense only, and hybrid (RRF) retrieval on a 50-query held-out set."
 ]
 ```
@@ -1372,12 +1379,12 @@ Expected: only files in the **Files:** list show as modified or new. If any file
 
 ```bash
 git add src/sections/rag-retrieval.jsx src/__tests__/sections.test.jsx src/data/svg-descriptions.json
-git commit -m "Implement chapter 12.13 Hybrid Retrieval for RAG"
+git commit -m "Implement chapter 12.16 Hybrid Retrieval for RAG"
 ```
 
 ---
 
-## Task 9: Implement Chapter 12.14 RerankerCascade
+## Task 9: Implement Chapter 12.17 RerankerCascade
 
 **Files:**
 - Modify: `src/sections/rag-retrieval.jsx` (replace stub `RerankerCascade`)
@@ -1421,7 +1428,7 @@ LLM generation (200 tokens, top-3):  800 ms
 Total p50 latency:                   910 ms
 ```
 
-  Note: "LLM generation dominates. Optimizing reranker speed alone gives small wins. Caching the LLM call (covered in chapter 12.33) gives the biggest latency win."
+  Note: "LLM generation dominates. Optimizing reranker speed alone gives small wins. Caching the LLM call (covered in chapter 12.36) gives the biggest latency win."
   Key content: "latency", "30" and "80" and "800", "910" or "p50".
 
 - **sub=3 (C.cyan) - Cost per query**
@@ -1450,12 +1457,12 @@ Total:                                 $0.0124
   Note: "Sweet spot is usually 50 -> 10 -> 3. Going wider buys diminishing returns; going narrower trades recall for latency."
   Key content: "top-k", "50" and "10", "diminishing" or "sweet spot", "recall".
 
-- [ ] **Step 1: Write content tests for 12.14**
+- [ ] **Step 1: Write content tests for 12.17**
 
 Append to `src/__tests__/sections.test.jsx`:
 
 ```js
-describe("RerankerCascade (12.14) content", () => {
+describe("RerankerCascade (12.17) content", () => {
   const fn = RagRetrieval.RerankerCascade;
 
   it("sub=0 recaps Section 11.25 cross-encoder", () => {
@@ -1517,7 +1524,7 @@ Replace the stub. Required:
 - The latency and cost stacked bars in sub=2 and sub=3 are best done as inline SVG or styled divs - either way no overlap, centered, with first-letter-capitalized labels.
 - All monospace breakdown blocks centered with `textAlign: "center"`.
 - The 2x3 tradeoff table in sub=4 must be evenly spaced, centered.
-- Forward reference to chapter 12.33 in sub=2 phrased as past/present ("covered in chapter 12.33") - not anticipatory.
+- Forward reference to chapter 12.36 in sub=2 phrased as past/present ("covered in chapter 12.36") - not anticipatory.
 
 - [ ] **Step 4: Run tests to verify pass**
 
@@ -1530,7 +1537,7 @@ Expected: PASS.
 - [ ] **Step 5: Update svg-descriptions.json for any added SVGs**
 
 ```json
-"12.14": [
+"12.17": [
   "Three-stage funnel diagram showing vector retrieval narrowing to a cross-encoder reranker narrowing to the LLM final answer, with candidate counts at each stage.",
   "Horizontal stacked bar chart showing per-query latency budget split into 30 ms vector, 80 ms reranker, and 800 ms LLM generation."
 ]
@@ -1575,12 +1582,12 @@ Expected: only files in the **Files:** list show as modified or new. If any file
 
 ```bash
 git add src/sections/rag-retrieval.jsx src/__tests__/sections.test.jsx src/data/svg-descriptions.json
-git commit -m "Implement chapter 12.14 The Reranker Cascade"
+git commit -m "Implement chapter 12.17 The Reranker Cascade"
 ```
 
 ---
 
-## Task 10: Implement Chapter 12.15 WhyTransformQueries
+## Task 10: Implement Chapter 12.18 WhyTransformQueries
 
 **Files:**
 - Modify: `src/sections/rag-retrieval.jsx` (replace stub `WhyTransformQueries`)
@@ -1588,7 +1595,7 @@ git commit -m "Implement chapter 12.14 The Reranker Cascade"
 
 **Scope binding:** This task modifies ONLY the files listed in `**Files:**` above. If during implementation you discover other defects in other files, DO NOT fix them in this task - document them as a separate observation and continue with the listed scope. Before committing, run `git status` and `git diff --stat`: if ANY file outside the Files: list shows as modified, abort the commit and either move the change to the right task or revert it.
 
-**Chapter purpose:** Open the query-transformation chapters (12.15-12.18). The query the user typed is rarely the optimal query for retrieval. Motivate query transformation with three failure modes (lexical mismatch, ambiguity, multi-intent) and a brief preview of the four strategies (HyDE, multi-query, routing, decomposition - each covered in 12.16-12.18). Walk away knowing WHY we transform queries and WHICH transformation maps to which failure.
+**Chapter purpose:** Open the query-transformation chapters (12.18-12.21). The query the user typed is rarely the optimal query for retrieval. Motivate query transformation with three failure modes (lexical mismatch, ambiguity, multi-intent) and a brief preview of the four strategies (HyDE, multi-query, routing, decomposition - each covered in 12.19-12.21). Walk away knowing WHY we transform queries and WHICH transformation maps to which failure.
 
 **Sub-step structure (5 sub-steps, 0-4):**
 
@@ -1608,8 +1615,8 @@ git commit -m "Implement chapter 12.14 The Reranker Cascade"
   - User: "I can't sign in" | Doc: "Login Troubleshooting" | Mismatch: sign in vs log in
   - User: "How do I cancel?" | Doc: "Account Deletion Flow" | Mismatch: cancel vs delete
   - User: "My screen is frozen" | Doc: "Browser Performance Issues" | Mismatch: screen frozen vs browser performance
-  Note: "Dense embeddings help (sign-in and log-in are close in vector space) but only partially. HyDE (12.16) and multi-query (12.17) help more."
-  Key content: "lexical mismatch" or "mismatch", "sign in" or "log in", "cancel" or "delete", "12.16" and "12.17".
+  Note: "Dense embeddings help (sign-in and log-in are close in vector space) but only partially. HyDE (12.19) and multi-query (12.20) help more."
+  Key content: "lexical mismatch" or "mismatch", "sign in" or "log in", "cancel" or "delete", "12.19" and "12.20".
 
 - **sub=2 (C.yellow) - Failure 2: Ambiguity**
   Title: "Ambiguity: The Query Has Multiple Plausible Intents"
@@ -1617,33 +1624,33 @@ git commit -m "Implement chapter 12.14 The Reranker Cascade"
   - Branch 1: Export data to CSV (doc-9 "Export Formats")
   - Branch 2: Export user list for admin (doc-26 "Bulk Operations")
   - Branch 3: Cancel an export job that failed (doc-29 "Export Failures")
-  Note: "A naive retriever picks one and misses the other two. Multi-query (12.17) and routing (12.18) help."
-  Key content: "ambiguous" or "ambiguity", "export", a list of at least 2 interpretations, "12.17" or "12.18".
+  Note: "A naive retriever picks one and misses the other two. Multi-query (12.20) and routing (12.21) help."
+  Key content: "ambiguous" or "ambiguity", "export", a list of at least 2 interpretations, "12.20" or "12.21".
 
 - **sub=3 (C.green) - Failure 3: Multi-intent**
   Title: "Multi-Intent: One Query Asks Two Or More Questions"
   Visual: a single query "Cancel my subscription and get a refund" annotated with two sub-intents:
   - Sub-intent 1: How to cancel subscription -> doc-15 ("Account Deletion Flow")
   - Sub-intent 2: How to get a refund -> doc-4 ("Refunds")
-  Note: "Naive retrieval finds docs for one intent and misses the other. Decomposition (12.18) splits the query into sub-queries."
-  Key content: "multi-intent" or "two intents", "cancel" and "refund", "12.18".
+  Note: "Naive retrieval finds docs for one intent and misses the other. Decomposition (12.21) splits the query into sub-queries."
+  Key content: "multi-intent" or "two intents", "cancel" and "refund", "12.21".
 
 - **sub=4 (C.blue) - The four strategies preview**
   Title: "Four Strategies Map To Three Failures"
   Visual: a 4-card grid (or 2x2). Each card has a strategy name + the failure it primarily fixes.
-  - HyDE (12.16): Lexical mismatch via hypothetical answer
-  - Multi-Query Expansion (12.17): Ambiguity via multiple paraphrases
-  - Query Decomposition (12.18): Multi-intent via splitting into sub-queries
-  - Query Routing (12.18): Sending each query to the right index / tool
+  - HyDE (12.19): Lexical mismatch via hypothetical answer
+  - Multi-Query Expansion (12.20): Ambiguity via multiple paraphrases
+  - Query Decomposition (12.21): Multi-intent via splitting into sub-queries
+  - Query Routing (12.21): Sending each query to the right index / tool
   Cards centered, title-case, tinted backgrounds.
-  Key content: "HyDE" or "hypothetical", "multi-query", "decomposition", "routing", chapter ids "12.16" and "12.17" and "12.18".
+  Key content: "HyDE" or "hypothetical", "multi-query", "decomposition", "routing", chapter ids "12.19" and "12.20" and "12.21".
 
-- [ ] **Step 1: Write content tests for 12.15**
+- [ ] **Step 1: Write content tests for 12.18**
 
 Append to `src/__tests__/sections.test.jsx`:
 
 ```js
-describe("WhyTransformQueries (12.15) content", () => {
+describe("WhyTransformQueries (12.18) content", () => {
   const fn = RagRetrieval.WhyTransformQueries;
 
   it("sub=0 frames user query as rarely optimal and shows a mismatch example", () => {
@@ -1653,7 +1660,7 @@ describe("WhyTransformQueries (12.15) content", () => {
     expect(container.textContent).toMatch(/0\.\d+/);
   });
 
-  it("sub=1 shows lexical mismatch examples and routes to 12.16 and 12.17", () => {
+  it("sub=1 shows lexical mismatch examples and routes to 12.19 and 12.20", () => {
     const { container } = render(fn(makeCtx({ sub: 1 })));
     expect(container.textContent).toMatch(/lexical|mismatch/i);
     expect(container.textContent).toMatch(/sign in|log in|cancel|delete/i);
@@ -1676,7 +1683,7 @@ describe("WhyTransformQueries (12.15) content", () => {
     expect(container.textContent).toMatch(/12\.18/);
   });
 
-  it("sub=4 previews the four strategies and maps to 12.16-12.18", () => {
+  it("sub=4 previews the four strategies and maps to 12.19-12.21", () => {
     const { container } = render(fn(makeCtx({ sub: 4 })));
     expect(container.textContent).toMatch(/HyDE|hypothetical/i);
     expect(container.textContent).toMatch(/multi-?query/i);
@@ -1703,7 +1710,7 @@ Replace the stub. Required:
 - The 3-example mismatch table in sub=1 evenly spaced, centered, title-case headers.
 - The 3-branch interpretation diagram in sub=2: either an SVG fan-out (if SVG, add `<desc>` + svg-descriptions.json entry) or styled divs.
 - The 4-card preview grid in sub=4: `display: grid; gridTemplateColumns: repeat(2, 1fr); gap: 12`. Each card centered text.
-- Forward references to 12.16/12.17/12.18 are within-section signposts, phrased as "covered in chapter 12.16" or "(12.17) helps more". No "Coming up:" or "Next:".
+- Forward references to 12.19/12.20/12.21 are within-section signposts, phrased as "covered in chapter 12.19" or "(12.20) helps more". No "Coming up:" or "Next:".
 
 - [ ] **Step 4: Run tests to verify pass**
 
@@ -1716,7 +1723,7 @@ Expected: PASS.
 - [ ] **Step 5: Update svg-descriptions.json if SVGs added**
 
 ```json
-"12.15": [
+"12.18": [
   "Three-branch interpretation diagram showing the ambiguous query 'How do I export?' fanning out to three doc destinations: export formats, bulk operations, and export failures."
 ]
 ```
@@ -1758,12 +1765,12 @@ Expected: only files in the **Files:** list show as modified or new. If any file
 
 ```bash
 git add src/sections/rag-retrieval.jsx src/__tests__/sections.test.jsx src/data/svg-descriptions.json
-git commit -m "Implement chapter 12.15 Why Transform Queries"
+git commit -m "Implement chapter 12.18 Why Transform Queries"
 ```
 
 ---
 
-## Task 11: Implement Chapter 12.16 HyDE
+## Task 11: Implement Chapter 12.19 HyDE
 
 **Files:**
 - Modify: `src/sections/rag-retrieval.jsx` (replace stub `HyDE`)
@@ -1836,15 +1843,15 @@ Question: {query}
 Hypothetical Answer:
 ```
 
-  Below: cost note "+1 LLM call per user query (~$0.0005 + ~250ms). Cache the hypothetical answer by query hash to amortize." Plus a one-line reference: "Caching - covered in chapter 12.33."
-  Key content: "prompt template", "hypothetical answer", "{query}", "I don't know" (groundedness contrast), "12.33" or "cache".
+  Below: cost note "+1 LLM call per user query (~$0.0005 + ~250ms). Cache the hypothetical answer by query hash to amortize." Plus a one-line reference: "Caching - covered in chapter 12.36."
+  Key content: "prompt template", "hypothetical answer", "{query}", "I don't know" (groundedness contrast), "12.36" or "cache".
 
-- [ ] **Step 1: Write content tests for 12.16**
+- [ ] **Step 1: Write content tests for 12.19**
 
 Append to `src/__tests__/sections.test.jsx`:
 
 ```js
-describe("HyDE (12.16) content", () => {
+describe("HyDE (12.19) content", () => {
   const fn = RagRetrieval.HyDE;
 
   it("sub=0 frames embed-the-answer not the question with dashboard example", () => {
@@ -1920,7 +1927,7 @@ Expected: PASS.
 - [ ] **Step 5: Update svg-descriptions.json**
 
 ```json
-"12.16": [
+"12.19": [
   "Five-box horizontal flow diagram showing the HyDE pipeline: user query, LLM generates hypothetical answer, embed hypothetical answer, vector retrieval, top-K real docs."
 ]
 ```
@@ -1962,12 +1969,12 @@ Expected: only files in the **Files:** list show as modified or new. If any file
 
 ```bash
 git add src/sections/rag-retrieval.jsx src/__tests__/sections.test.jsx src/data/svg-descriptions.json
-git commit -m "Implement chapter 12.16 HyDE - Hypothetical Document Embeddings"
+git commit -m "Implement chapter 12.19 HyDE - Hypothetical Document Embeddings"
 ```
 
 ---
 
-## Task 12: Implement Chapter 12.17 MultiQueryExpansion
+## Task 12: Implement Chapter 12.20 MultiQueryExpansion
 
 **Files:**
 - Modify: `src/sections/rag-retrieval.jsx` (replace stub `MultiQueryExpansion`)
@@ -2012,7 +2019,7 @@ git commit -m "Implement chapter 12.16 HyDE - Hypothetical Document Embeddings"
   Key content: "cancel", "refund", "doc-15" or doc id, "doc-4", a variant string.
 
 - **sub=3 (C.purple) - The RRF formula**
-  Title: "Fuse With RRF (Same Formula As Chapter 12.13)"
+  Title: "Fuse With RRF (Same Formula As Chapter 12.16)"
   Visual: centered monospace block:
 
 ```
@@ -2020,8 +2027,8 @@ RRF(d) = sum over variants v of: 1 / (k + rank_v(d))
 where k = 60 (standard)
 ```
 
-  Brief note: "Same fusion math as hybrid search (covered in chapter 12.13). Different inputs - here the rankings come from N variants of the same query rather than from BM25 + dense."
-  Key content: "RRF" or "Reciprocal Rank Fusion", "k = 60", "12.13".
+  Brief note: "Same fusion math as hybrid search (covered in chapter 12.16). Different inputs - here the rankings come from N variants of the same query rather than from BM25 + dense."
+  Key content: "RRF" or "Reciprocal Rank Fusion", "k = 60", "12.16".
 
 - **sub=4 (C.green) - Step-back prompting variant**
   Title: "Step-Back Prompting: Add A More General Variant"
@@ -2040,12 +2047,12 @@ where k = 60 (standard)
   Cost note: "Adds ~300 ms (1 LLM call) + N parallel retrievals (cheap). Often pairs well with HyDE for hard cases."
   Key content: "ambiguous" or "complex", "factual" or "short", "latency", "300" or "ms", "HyDE".
 
-- [ ] **Step 1: Write content tests for 12.17**
+- [ ] **Step 1: Write content tests for 12.20**
 
 Append to `src/__tests__/sections.test.jsx`:
 
 ```js
-describe("MultiQueryExpansion (12.17) content", () => {
+describe("MultiQueryExpansion (12.20) content", () => {
   const fn = RagRetrieval.MultiQueryExpansion;
 
   it("sub=0 frames one query becomes many and mentions RAG-Fusion", () => {
@@ -2069,7 +2076,7 @@ describe("MultiQueryExpansion (12.17) content", () => {
     expect(container.textContent).toMatch(/doc-?4/i);
   });
 
-  it("sub=3 shows RRF formula and links to chapter 12.13", () => {
+  it("sub=3 shows RRF formula and links to chapter 12.16", () => {
     const { container } = render(fn(makeCtx({ sub: 3 })));
     expect(container.textContent).toMatch(/RRF|Reciprocal Rank Fusion/i);
     expect(container.textContent).toMatch(/k\s*=\s*60|60/);
@@ -2121,7 +2128,7 @@ Expected: PASS.
 - [ ] **Step 5: Update svg-descriptions.json if SVGs added**
 
 ```json
-"12.17": [
+"12.20": [
   "Fan-out diagram showing a single user query expanding into 3 LLM-generated variants, each retrieving its own top-K, then converging into a single fused ranking via RRF."
 ]
 ```
@@ -2163,12 +2170,12 @@ Expected: only files in the **Files:** list show as modified or new. If any file
 
 ```bash
 git add src/sections/rag-retrieval.jsx src/__tests__/sections.test.jsx src/data/svg-descriptions.json
-git commit -m "Implement chapter 12.17 Multi-Query Expansion"
+git commit -m "Implement chapter 12.20 Multi-Query Expansion"
 ```
 
 ---
 
-## Task 13: Implement Chapter 12.18 QueryRoutingDecomposition
+## Task 13: Implement Chapter 12.21 QueryRoutingDecomposition
 
 **Files:**
 - Modify: `src/sections/rag-retrieval.jsx` (replace stub `QueryRoutingDecomposition`)
@@ -2239,12 +2246,12 @@ git commit -m "Implement chapter 12.17 Multi-Query Expansion"
   Cost summary: "Routing: +10-150 ms / +$0.0001-0.0002. Decomposition: +200-300 ms / +$0.0005. Combined: ~+300-450 ms total query-transformation overhead."
   Key content: "route" and "decompose", "neither" or "default", "complex" or "simple", "$0.0005" or "$0.0002" or cost number.
 
-- [ ] **Step 1: Write content tests for 12.18**
+- [ ] **Step 1: Write content tests for 12.21**
 
 Append to `src/__tests__/sections.test.jsx`:
 
 ```js
-describe("QueryRoutingDecomposition (12.18) content", () => {
+describe("QueryRoutingDecomposition (12.21) content", () => {
   const fn = RagRetrieval.QueryRoutingDecomposition;
 
   it("sub=0 frames routing and decomposition as two complementary strategies", () => {
@@ -2325,7 +2332,7 @@ Expected: PASS.
 - [ ] **Step 5: Update svg-descriptions.json**
 
 ```json
-"12.18": [
+"12.21": [
   "Router decision tree with four leaves: account/billing, product features, troubleshooting, and chitchat (skip retrieval). The root labels classify-query-type.",
   "Three-panel decomposition example splitting 'Compare the Pro and Enterprise plans' into two sub-queries that retrieve from the subscription tiers and team seat docs."
 ]
@@ -2370,12 +2377,12 @@ Expected: only files in the **Files:** list show as modified or new. If any file
 
 ```bash
 git add src/sections/rag-retrieval.jsx src/__tests__/sections.test.jsx src/data/svg-descriptions.json
-git commit -m "Implement chapter 12.18 Query Routing and Decomposition"
+git commit -m "Implement chapter 12.21 Query Routing and Decomposition"
 ```
 
 ---
 
-## Task 14: Update CLAUDE.md mapping table and project structure for Acts 3+4
+## Task 14: Update CLAUDE.md mapping table and project structure for Acts 4+5
 
 **Files:**
 - Modify: `CLAUDE.md`
@@ -2384,42 +2391,46 @@ git commit -m "Implement chapter 12.18 Query Routing and Decomposition"
 
 - [ ] **Step 1: Extend the Section 12 mapping table**
 
-In `CLAUDE.md`, find the Section 12 mapping table (added in M1, extended in M2). Append 8 new rows for Acts 3+4. Also update the file annotation in the section heading to reflect that Section 12 now spans two files. After the existing rows for 12.10:
+In `CLAUDE.md`, find the Section 12 mapping table (added in M1, extended in M2 to include 12.1-12.13). Append 8 new rows for Acts 4+5. Also update the file annotation in the section heading to reflect that Section 12 now spans three files. After the existing rows for 12.13:
 
 ```markdown
-**Section 12: Retrieval-Augmented Generation** (`rag-foundations.jsx` Acts 1+2 + `rag-retrieval.jsx` Acts 3+4 - Milestones 1-3 of 6 complete)
+**Section 12: Retrieval-Augmented Generation** (`rag-foundations.jsx` Acts 1+3 + `rag-ingestion.jsx` Act 2 + `rag-retrieval.jsx` Acts 4+5 - Milestones 1-3 of 6 complete)
 
 | Chapter | Component | Title |
 |---------|-----------|-------|
 | 12.1 | WhyLLMsNeedRetrieval | Why LLMs Need Retrieval |
 | 12.2 | NaiveRAGPipeline | The Naive RAG Pipeline |
 | 12.3 | WhereNaiveRAGBreaks | Where Naive RAG Breaks |
-| 12.4 | WhyChunkFixedSize | Why Chunk At All + Fixed-Size Baseline |
-| 12.5 | RecursiveStructuralChunking | Recursive Structural Chunking |
-| 12.6 | SemanticChunking | Semantic Chunking |
-| 12.7 | LateChunking | Late Chunking (Jina 2024) |
-| 12.8 | HierarchicalChunking | Hierarchical / Parent-Child Chunking |
-| 12.9 | ContextualRetrieval | Contextual Retrieval (Anthropic 2024) |
-| 12.10 | ChunkingDecision | The Chunking Decision |
-| 12.11 | EmbeddingModelChoice | Picking an Embedding Model |
-| 12.12 | DomainAdaptation | Domain Adaptation - Fine-Tuning Embeddings |
-| 12.13 | HybridForRAG | Hybrid Retrieval for RAG |
-| 12.14 | RerankerCascade | The Reranker Cascade |
-| 12.15 | WhyTransformQueries | Why Transform Queries |
-| 12.16 | HyDE | HyDE - Hypothetical Document Embeddings |
-| 12.17 | MultiQueryExpansion | Multi-Query Expansion |
-| 12.18 | QueryRoutingDecomposition | Query Routing & Decomposition |
+| 12.4 | ParsingExtraction | Parsing - Raw Sources to Clean Text |
+| 12.5 | DeduplicationCleaning | Deduplication & Cleaning |
+| 12.6 | RefreshSync | Refresh & Sync Schedules |
+| 12.7 | WhyChunkFixedSize | Why Chunk At All + Fixed-Size Baseline |
+| 12.8 | RecursiveStructuralChunking | Recursive Structural Chunking |
+| 12.9 | SemanticChunking | Semantic Chunking |
+| 12.10 | LateChunking | Late Chunking (Jina 2024) |
+| 12.11 | HierarchicalChunking | Hierarchical / Parent-Child Chunking |
+| 12.12 | ContextualRetrieval | Contextual Retrieval (Anthropic 2024) |
+| 12.13 | ChunkingDecision | The Chunking Decision |
+| 12.14 | EmbeddingModelChoice | Picking an Embedding Model |
+| 12.15 | DomainAdaptation | Domain Adaptation - Fine-Tuning Embeddings |
+| 12.16 | HybridForRAG | Hybrid Retrieval for RAG |
+| 12.17 | RerankerCascade | The Reranker Cascade |
+| 12.18 | WhyTransformQueries | Why Transform Queries |
+| 12.19 | HyDE | HyDE - Hypothetical Document Embeddings |
+| 12.20 | MultiQueryExpansion | Multi-Query Expansion |
+| 12.21 | QueryRoutingDecomposition | Query Routing & Decomposition |
 ```
 
 (If M1/M2 used a different table format - e.g. separate tables per file - mirror that format.)
 
 - [ ] **Step 2: Update the Project Structure tree**
 
-Find the `## Project Structure` section. In the `src/sections/` block, add `rag-retrieval.jsx` immediately after `rag-foundations.jsx`:
+Find the `## Project Structure` section. In the `src/sections/` block, add `rag-retrieval.jsx` after the existing Section 12 files (`rag-foundations.jsx` and `rag-ingestion.jsx`):
 
 ```
-│       ├── rag-foundations.jsx           # Section 12 (Acts 1+2, chapters 12.1-12.10)
-│       └── rag-retrieval.jsx             # Section 12 (Acts 3+4, chapters 12.11-12.18)
+│       ├── rag-foundations.jsx           # Section 12 (Acts 1+3, chapters 12.1-12.3 + 12.7-12.13)
+│       ├── rag-ingestion.jsx             # Section 12 (Act 2, chapters 12.4-12.6)
+│       └── rag-retrieval.jsx             # Section 12 (Acts 4+5, chapters 12.14-12.21)
 ```
 
 If rag-foundations.jsx is currently the last entry (with the └── line-drawing character), demote it to ├── and make rag-retrieval.jsx the new last entry with └──.
@@ -2447,7 +2458,7 @@ Expected: only files in the **Files:** list show as modified or new. If any file
 
 ```bash
 git add CLAUDE.md
-git commit -m "Document Section 12 Acts 3+4 in CLAUDE.md mapping"
+git commit -m "Document Section 12 Acts 4+5 in CLAUDE.md mapping"
 ```
 
 ---
@@ -2506,13 +2517,13 @@ npm run dev
 
 Server should start at `http://localhost:5173/learn-ai/`. Leave it running for the rest of this task.
 
-- [ ] **Step 7: Verify TOC shows Section 12 with 18 chapters**
+- [ ] **Step 7: Verify TOC shows Section 12 with 21 chapters**
 
-Open `http://localhost:5173/learn-ai/`, confirm the TOC lists "Retrieval-Augmented Generation" with chapter rows 12.1 through 12.18.
+Open `http://localhost:5173/learn-ai/`, confirm the TOC lists "Retrieval-Augmented Generation" with chapter rows 12.1 through 12.21.
 
-- [ ] **Step 8: Chrome visual validation of each new chapter (12.11 - 12.18)**
+- [ ] **Step 8: Chrome visual validation of each new chapter (12.14 - 12.21)**
 
-Use the check-visuals skill (or `mcp__claude-in-chrome__*` tools). For each chapter in 12.11-12.18:
+Use the check-visuals skill (or `mcp__claude-in-chrome__*` tools). For each chapter in 12.14-12.21:
 
 1. Navigate to the chapter via the URL / keyboard arrows.
 2. Step through every sub-step (Reveal click), `sub=0` through the chapter's max sub.
@@ -2531,14 +2542,14 @@ Use the check-visuals skill (or `mcp__claude-in-chrome__*` tools). For each chap
 
 Per-chapter focus points:
 
-- **12.11**: 5-column model table no overlap; MTEB callout visible; decision-flow SVG centered.
-- **12.12**: Triplet-loss SVG centered, anchor/positive/negative labels readable; before-vs-after bar chart bars equal width.
-- **12.13**: RRF and weighted-fusion formula blocks centered; recall bar chart bars equal width; per-query-type table evenly spaced.
-- **12.14**: 3-stage funnel diagram trapezoids stacked without overlap; latency bar chart equal-width segments; cost bar chart similar.
-- **12.15**: 4-card preview grid (sub=4) 2x2 grid with no overlap; ambiguity fan-out diagram readable.
-- **12.16**: 5-box HyDE flow SVG evenly spaced; prompt-template block monospace + tinted + label "Prompt Template" centered; `{query}` placeholder highlighted.
-- **12.17**: Fan-out diagram clean; RRF formula centered; 3-column variant rank table evenly spaced.
-- **12.18**: Router decision tree SVG with 4 leaves evenly spaced; 3-panel decomposition example no overlap; 2x2 decision grid.
+- **12.14**: 5-column model table no overlap; MTEB callout visible; decision-flow SVG centered.
+- **12.15**: Triplet-loss SVG centered, anchor/positive/negative labels readable; before-vs-after bar chart bars equal width.
+- **12.16**: RRF and weighted-fusion formula blocks centered; recall bar chart bars equal width; per-query-type table evenly spaced.
+- **12.17**: 3-stage funnel diagram trapezoids stacked without overlap; latency bar chart equal-width segments; cost bar chart similar.
+- **12.18**: 4-card preview grid (sub=4) 2x2 grid with no overlap; ambiguity fan-out diagram readable.
+- **12.19**: 5-box HyDE flow SVG evenly spaced; prompt-template block monospace + tinted + label "Prompt Template" centered; `{query}` placeholder highlighted.
+- **12.20**: Fan-out diagram clean; RRF formula centered; 3-column variant rank table evenly spaced.
+- **12.21**: Router decision tree SVG with 4 leaves evenly spaced; 3-panel decomposition example no overlap; 2x2 decision grid.
 
 - [ ] **Step 9: If any visual defect found**
 
@@ -2567,7 +2578,7 @@ If everything is already committed from earlier tasks, no marker commit is neede
 ```bash
 git status
 git add -p
-git commit -m "Section 12 Milestone 3 complete: Acts 3+4 (12.11-12.18) shipped"
+git commit -m "Section 12 Milestone 3 complete: Acts 4+5 (12.14-12.21) shipped"
 ```
 
 - [ ] **Step 12: Confirm M3 success criteria**
@@ -2576,10 +2587,10 @@ Verify via `git log` that the M3 commit history is clean and well-structured. Co
 
 - [x] 8 chapters implemented in `rag-retrieval.jsx`.
 - [x] Section 12 loader in `learn-ai.jsx` now spreads both `rag-foundations.jsx` and `rag-retrieval.jsx`.
-- [x] Config has 18 Section 12 chapter entries (12.1-12.18).
+- [x] Config has 18 Section 12 chapter entries (12.1-12.21).
 - [x] `sections.test.jsx` imports `RagRetrieval` and spreads it into lookup.
 - [x] `lookup.test.js` imports `RagRetrieval`, spreads it, and asserts the 8 components exist.
-- [x] `config.test.js` asserts the 12.11-12.18 entries are present in order.
+- [x] `config.test.js` asserts the 12.14-12.21 entries are present in order.
 - [x] Tests added for every chapter at every sub-level (TDD per CLAUDE.md mandate).
 - [x] Coverage 100% lines, branches >= 97.7%.
 - [x] Lint + format clean.
@@ -2587,7 +2598,7 @@ Verify via `git log` that the M3 commit history is clean and well-structured. Co
 - [x] CLAUDE.md mapping + project tree updated.
 - [x] Chrome browser visual validation passed for all 8 new chapters.
 
-M3 complete. Ready to write Milestone 4 plan (Acts 5+6 - Context & Generation + Advanced Retrieval Patterns - 9 chapters).
+M3 complete. Ready to write Milestone 4 plan (Acts 6+7 - Context & Generation + Advanced Retrieval Patterns - 9 chapters).
 
 ---
 
@@ -2719,10 +2730,10 @@ After this milestone, the remaining sections of the implementation will be plann
 | Milestone | Acts | Chapters | New file | When planned |
 |---|---|---|---|---|
 | M1 | Act 1 (problem) | 12.1-12.3 (3 ch) | `rag-foundations.jsx` (Act 1 stub + impl) | DONE |
-| M2 | Act 2 (chunking) | 12.4-12.10 (7 ch) | extend `rag-foundations.jsx` | DONE |
-| **M3** | **Acts 3+4 (embed/index + query transform)** | **12.11-12.18 (8 ch)** | **`rag-retrieval.jsx`** | **THIS PLAN** |
-| M4 | Acts 5+6 (context/gen + advanced retrieval) | 12.19-12.27 (9 ch) | `rag-generation.jsx` | After M3 ships |
-| M5 | Act 7 (eval) | 12.28-12.32 (5 ch) | `rag-evaluation.jsx` | After M4 ships |
-| M6 | Acts 8+9 (ops + decision framework) | 12.33-12.38 (6 ch) | `rag-production.jsx` | After M5 ships |
+| M2 | Act 3 (chunking) | 12.4-12.10 (7 ch) | extend `rag-foundations.jsx` | DONE |
+| **M3** | **Acts 4+5 (embed/index + query transform)** | **12.14-12.21 (8 ch)** | **`rag-retrieval.jsx`** | **THIS PLAN** |
+| M4 | Acts 6+7 (context/gen + advanced retrieval) | 12.22-12.30 (9 ch) | `rag-generation.jsx` | After M3 ships |
+| M5 | Act 8 (eval) | 12.31-12.35 (5 ch) | `rag-evaluation.jsx` | After M4 ships |
+| M6 | Acts 9+10 (ops + decision framework) | 12.36-12.41 (6 ch) | `rag-production.jsx` | After M5 ships |
 
-After M6: a final pass updates CLAUDE.md mapping with all 38 chapters, runs full discoverability sync (`public/llms.txt` topic list, `index.html` JSON-LD if needed), and applies the title-case-for-diagram-boxes rule to CLAUDE.md (per spec's flagged update).
+After M6: a final pass updates CLAUDE.md mapping with all 41 chapters, runs full discoverability sync (`public/llms.txt` topic list, `index.html` JSON-LD if needed), and applies the title-case-for-diagram-boxes rule to CLAUDE.md (per spec's flagged update).

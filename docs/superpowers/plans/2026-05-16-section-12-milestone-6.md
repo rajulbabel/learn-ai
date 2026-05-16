@@ -6,9 +6,9 @@
 >
 > **Two-stage review per task:** Stage 1 SCOPE - did the subagent modify only the listed files? Are commits clean? Stage 2 CORRECTNESS - do tests pass, does behavior match the spec? Both stages must pass before moving to the next task.
 
-**Goal:** Ship the FINAL milestone of Section 12 "Retrieval-Augmented Generation": Acts 8 + 9 (Production Operations + Decision Framework + Capstone). Six chapters - 12.33 Caching, 12.34 CostModels, 12.35 ObservabilityTracing, 12.36 HallucinationDrift, 12.37 FrameworkChoice, 12.38 RAGDecisionFrameworkCapstone. After this milestone, all 38 chapters of Section 12 are live, the discoverability metadata is fully synced, and the title-case-for-diagram-box-text rule is applied globally to CLAUDE.md.
+**Goal:** Ship the FINAL milestone of Section 12 "Retrieval-Augmented Generation": Acts 9 + 10 (Production Operations + Decision Framework + Capstone). Six chapters - 12.36 Caching, 12.37 CostModels, 12.38 ObservabilityTracing, 12.39 HallucinationDrift, 12.40 FrameworkChoice, 12.41 RAGDecisionFrameworkCapstone. After this milestone, all 41 chapters of Section 12 are live, the discoverability metadata is fully synced, and the title-case-for-diagram-box-text rule is applied globally to CLAUDE.md.
 
-**Architecture:** Chapters live in a new section file `src/sections/rag-production.jsx` (holds 12.33-12.38 - the 6 ops + decision chapters). This is the fifth and final section file for Section 12. Section registration follows the same pattern as M1-M5: add entries to `chapters[]` in `src/config.js`; extend the section 12 loader in `src/learn-ai.jsx` to a five-file `Promise.all`; add the import to `src/__tests__/sections.test.jsx`. All chapter content follows the learn-ai visual rules in `CLAUDE.md` plus the M6 finalization tasks update CLAUDE.md to apply title-case-for-diagram-box-text globally (per spec's flagged update).
+**Architecture:** Chapters live in a new section file `src/sections/rag-production.jsx` (holds 12.36-12.41 - the 6 ops + decision chapters). This is the sixth and final section file for Section 12. Section registration follows the same pattern as M1-M5: add entries to `chapters[]` in `src/config.js`; extend the section 12 loader in `src/learn-ai.jsx` to a six-file `Promise.all`; add the import to `src/__tests__/sections.test.jsx`. All chapter content follows the learn-ai visual rules in `CLAUDE.md` plus the M6 finalization tasks update CLAUDE.md to apply title-case-for-diagram-box-text globally (per spec's flagged update).
 
 **Tech Stack:** React 18 (hooks, inline styles), Vitest, Vite, TDD-first. No new dependencies.
 
@@ -23,29 +23,29 @@
 - Milestones 1 through 5 are complete and merged to `main`.
   - M1: `rag-foundations.jsx` exists with 12.1-12.3.
   - M2: `rag-foundations.jsx` extended with 12.4-12.10.
-  - M3: `rag-retrieval.jsx` exists with 12.11-12.18.
-  - M4: `rag-generation.jsx` exists with 12.19-12.27.
-  - M5: `rag-evaluation.jsx` exists with 12.28-12.32.
+  - M3: `rag-retrieval.jsx` exists with 12.14-12.21.
+  - M4: `rag-generation.jsx` exists with 12.22-12.30.
+  - M5: `rag-evaluation.jsx` exists with 12.31-12.35.
 - All tests currently pass on `main` (verify in Task 1).
 - Section 12 is registered in `sectionNames` and `sectionColors` (done in M1).
-- Section 12 loader in `learn-ai.jsx` is currently a four-file `Promise.all` (Acts 1-7 ship as four files). M6 extends it to a five-file `Promise.all` by appending `rag-production.jsx`.
+- Section 12 loader in `learn-ai.jsx` is currently a five-file `Promise.all` (rag-foundations, rag-ingestion, rag-retrieval, rag-generation, rag-evaluation - Acts 1-8 shipped). M6 extends it to a six-file `Promise.all` by appending `rag-production.jsx`.
 
 ## File Structure
 
 ### New files
 
-- `src/sections/rag-production.jsx` - Acts 8 + 9. Six exports: Caching, CostModels, ObservabilityTracing, HallucinationDrift, FrameworkChoice, RAGDecisionFrameworkCapstone.
+- `src/sections/rag-production.jsx` - Acts 9 + 10. Six exports: Caching, CostModels, ObservabilityTracing, HallucinationDrift, FrameworkChoice, RAGDecisionFrameworkCapstone.
 
 ### Modified files
 
-- `src/config.js` - add 6 entries to `chapters[]` (12.33-12.38).
-- `src/learn-ai.jsx` - extend section 12 `Promise.all` from four files to five (append `rag-production.jsx`).
+- `src/config.js` - add 6 entries to `chapters[]` (12.36-12.41).
+- `src/learn-ai.jsx` - extend section 12 `Promise.all` from five files to six (append `rag-production.jsx`).
 - `src/__tests__/sections.test.jsx` - import `RagProduction` and add to `lookup`. Add content tests for the 6 new chapters at every sub-level.
 - `src/__tests__/lookup.test.js` - add presence check for `rag-production.jsx` exports.
 - `src/__tests__/config.test.js` - add tests for the 6 new chapter entries.
 - `src/data/svg-descriptions.json` - add entries for every new SVG introduced by the M6 chapters.
-- `CLAUDE.md` - Task 12 adds the FULL Section 12 mapping table (all 38 chapters) and updates project structure tree to include all 5 rag-*.jsx files. Task 13 updates the visual rules section: applies title-case-for-diagram-box-text globally (per spec's flagged update).
-- `public/llms.txt` - Task 14 final discoverability sync: full Section 12 description reflecting all 38 chapters.
+- `CLAUDE.md` - Task 12 adds the FULL Section 12 mapping table (all 41 chapters) and updates project structure tree to include all 5 rag-*.jsx files. Task 13 updates the visual rules section: applies title-case-for-diagram-box-text globally (per spec's flagged update).
+- `public/llms.txt` - Task 14 final discoverability sync: full Section 12 description reflecting all 41 chapters.
 - `index.html` - Task 14 final discoverability sync: JSON-LD `teaches` array confirmed to include "Retrieval-Augmented Generation".
 
 ### Unchanged
@@ -56,7 +56,7 @@ All existing section files for Sections 1-11. The four earlier Section 12 sectio
 
 ## Standard running-example values (reference during implementation)
 
-From the spec. Use consistently across 12.33-12.38:
+From the spec. Use consistently across 12.36-12.41:
 
 - **Primary corpus:** 30-doc customer support knowledge base for fictional SaaS "Habuild Cloud" - 10 account/billing docs, 10 product feature docs, 10 troubleshooting docs.
 - **Standard queries:**
@@ -69,7 +69,7 @@ From the spec. Use consistently across 12.33-12.38:
 - **Chunk size (tokens):** 64-128 (visible) / 512 (production typical).
 - **Top-k:** 3-5 (visible) / 20-50 (production before rerank).
 - **LLM context window:** 8k (visuals) / 200k (model-agnostic mention).
-- **Capstone secondary corpus (12.38 only):** legal case law for "Q&A over case law for a legal research firm" - case citations, jurisdictions, multi-hop "cases citing X about Y".
+- **Capstone secondary corpus (12.41 only):** legal case law for "Q&A over case law for a legal research firm" - case citations, jurisdictions, multi-hop "cases citing X about Y".
 
 ---
 
@@ -90,7 +90,7 @@ Every chapter at every sub-step MUST satisfy ALL of these. Violations are blocke
 11. **No next-chapter hints** - no "Next chapter:", "Coming up:", "Preview:" text. Within-section "Act N fixes this" or "covered in 12.X" past/present-tense back/cross-references are allowed.
 12. **Density: less text, more diagrams** - default to "show with a diagram" over "describe in prose". A chapter with 5 paragraphs of text and 1 diagram is failing this rule.
 
-Act 8 color theme per spec: pink (`C.pink`) is the per-act color family for Act 8. Act 9 (one chapter, the capstone) uses indigo to match the section color `#7c4dff`; in practice the existing palette uses `C.purple` / `C.blue` for indigo-leaning content. The capstone uses a multi-color palette across its 8-10 sub-steps to weave together every prior chapter's visual identity.
+Act 9 color theme per spec: pink (`C.pink`) is the per-act color family for Act 9. Act 10 (one chapter, the capstone) uses indigo to match the section color `#7c4dff`; in practice the existing palette uses `C.purple` / `C.blue` for indigo-leaning content. The capstone uses a multi-color palette across its 8-10 sub-steps to weave together every prior chapter's visual identity.
 
 ---
 
@@ -166,16 +166,16 @@ Expected: `On branch main`, `nothing to commit, working tree clean`.
 - [ ] **Step 2: Verify M1-M5 prerequisites are in place**
 
 ```bash
-ls -la src/sections/rag-foundations.jsx src/sections/rag-retrieval.jsx src/sections/rag-generation.jsx src/sections/rag-evaluation.jsx
+ls -la src/sections/rag-foundations.jsx src/sections/rag-ingestion.jsx src/sections/rag-retrieval.jsx src/sections/rag-generation.jsx src/sections/rag-evaluation.jsx
 ```
 
-Expected: all four files exist. If any is missing, stop and fix prerequisites first.
+Expected: all five files exist. If any is missing, stop and fix prerequisites first.
 
 ```bash
 grep -c "section: 12" src/config.js
 ```
 
-Expected: 32 (chapters 12.1-12.32 already registered after M5).
+Expected: 35 (chapters 12.1-12.35 already registered after M5).
 
 - [ ] **Step 3: Run full test suite to confirm green baseline**
 
@@ -218,7 +218,7 @@ Expected: build succeeds. This catches any pre-existing chunk/asset issue before
 Add to `src/__tests__/lookup.test.js` (follow the existing per-file presence-check pattern - inspect the file first; add the test near where rag-evaluation.jsx is similarly checked):
 
 ```js
-it("rag-production.jsx exports the Act 8+9 chapter components", async () => {
+it("rag-production.jsx exports the Act 9+10 chapter components", async () => {
   const mod = await import("../sections/rag-production.jsx");
   expect(typeof mod.Caching).toBe("function");
   expect(typeof mod.CostModels).toBe("function");
@@ -367,19 +367,19 @@ Expected: only files in the **Files:** list show as modified or new. If any file
 
 ```bash
 git add src/sections/rag-production.jsx src/__tests__/lookup.test.js
-git commit -m "Add stub exports for rag-production.jsx (12.33-12.38)"
+git commit -m "Add stub exports for rag-production.jsx (12.36-12.41)"
 ```
 
 ---
 
-### Task 3: Extend Section 12 loader in learn-ai.jsx to five-file Promise.all
+### Task 3: Extend Section 12 loader in learn-ai.jsx to six-file Promise.all
 
 **Files:**
 - Modify: `src/learn-ai.jsx` (sectionLoaders object)
 
 **Scope binding:** This task modifies ONLY the files listed in `**Files:**` above. If during implementation you discover other defects in other files, DO NOT fix them in this task - document them as a separate observation and continue with the listed scope. Before committing, run `git status` and `git diff --stat`: if ANY file outside the Files: list shows as modified, abort the commit and either move the change to the right task or revert it.
 
-After M5 ships, the section-12 loader entry in `src/learn-ai.jsx` should look like a four-file `Promise.all` (rag-foundations + rag-retrieval + rag-generation + rag-evaluation). M6 appends the fifth file.
+After M5 ships, the section-12 loader entry in `src/learn-ai.jsx` should look like a five-file `Promise.all` (rag-foundations + rag-ingestion + rag-retrieval + rag-generation + rag-evaluation). M6 appends the sixth file.
 
 - [ ] **Step 1: Inspect the current section-12 loader**
 
@@ -387,9 +387,9 @@ After M5 ships, the section-12 loader entry in `src/learn-ai.jsx` should look li
 grep -n "12:" src/learn-ai.jsx
 ```
 
-Confirm the current loader entry is the four-file `Promise.all`. If it's still single-file (M1) or differently shaped, adjust the edit accordingly.
+Confirm the current loader entry is the five-file `Promise.all`. If it's still single-file (M1) or differently shaped, adjust the edit accordingly.
 
-- [ ] **Step 2: Extend the loader to five files**
+- [ ] **Step 2: Extend the loader to six files**
 
 Edit `src/learn-ai.jsx`. Find the section-12 entry and update it to:
 
@@ -397,6 +397,7 @@ Edit `src/learn-ai.jsx`. Find the section-12 entry and update it to:
   12: () =>
     Promise.all([
       import("./sections/rag-foundations.jsx"),
+      import("./sections/rag-ingestion.jsx"),
       import("./sections/rag-retrieval.jsx"),
       import("./sections/rag-generation.jsx"),
       import("./sections/rag-evaluation.jsx"),
@@ -418,7 +419,7 @@ Expected: no errors.
 npm run dev
 ```
 
-Open `http://localhost:5173/learn-ai/` in a browser. The new chapters 12.33-12.38 won't be in `chapters[]` yet (next task), so this is just a smoke check that the app still loads and existing Section 12 chapters (12.1-12.32) still render.
+Open `http://localhost:5173/learn-ai/` in a browser. The new chapters 12.36-12.41 won't be in `chapters[]` yet (next task), so this is just a smoke check that the app still loads and existing Section 12 chapters (12.1-12.35) still render.
 
 Stop the server (Ctrl-C) after verifying.
 
@@ -448,7 +449,7 @@ git commit -m "Extend Section 12 loader to include rag-production.jsx"
 
 ---
 
-### Task 4: Add 12.33-12.38 entries to chapters array in config.js
+### Task 4: Add 12.36-12.41 entries to chapters array in config.js
 
 **Files:**
 - Modify: `src/config.js` (chapters array, after the last Section 12 entry from M5)
@@ -461,27 +462,27 @@ git commit -m "Extend Section 12 loader to include rag-production.jsx"
 Add to `src/__tests__/config.test.js`:
 
 ```js
-describe("Section 12 chapters 12.33-12.38 (M6)", () => {
-  it("appends chapters 12.33 through 12.38 in order", () => {
+describe("Section 12 chapters 12.36-12.41 (M6)", () => {
+  it("appends chapters 12.36 through 12.41 in order", () => {
     const section12 = chapters.filter((ch) => ch.section === 12);
-    expect(section12.length).toBe(38);
+    expect(section12.length).toBe(41);
     const m6 = section12.slice(-6);
-    expect(m6[0].id).toBe("12.33");
+    expect(m6[0].id).toBe("12.36");
     expect(m6[0].component).toBe("Caching");
     expect(m6[0].title).toBe("Caching - Prompt + Semantic");
-    expect(m6[1].id).toBe("12.34");
+    expect(m6[1].id).toBe("12.37");
     expect(m6[1].component).toBe("CostModels");
     expect(m6[1].title).toBe("Cost Models");
-    expect(m6[2].id).toBe("12.35");
+    expect(m6[2].id).toBe("12.38");
     expect(m6[2].component).toBe("ObservabilityTracing");
     expect(m6[2].title).toBe("Observability & Tracing");
-    expect(m6[3].id).toBe("12.36");
+    expect(m6[3].id).toBe("12.39");
     expect(m6[3].component).toBe("HallucinationDrift");
     expect(m6[3].title).toBe("Hallucination Detection & Drift");
-    expect(m6[4].id).toBe("12.37");
+    expect(m6[4].id).toBe("12.40");
     expect(m6[4].component).toBe("FrameworkChoice");
     expect(m6[4].title).toBe("Framework Choice");
-    expect(m6[5].id).toBe("12.38");
+    expect(m6[5].id).toBe("12.41");
     expect(m6[5].component).toBe("RAGDecisionFrameworkCapstone");
     expect(m6[5].title).toBe("The Complete RAG Decision Framework + Capstone");
   });
@@ -498,19 +499,19 @@ Expected: FAIL - section12.length is 32 (M5 state), not 38.
 
 - [ ] **Step 3: Add chapter entries to config.js**
 
-Edit `src/config.js`. Find the last Section 12 entry from M5 (id `"12.32"` with component `"OnlineEvalABTesting"`). Add Section 12 Act 8 + 9 entries right after, before the closing `];`:
+Edit `src/config.js`. Find the last Section 12 entry from M5 (id `"12.35"` with component `"OnlineEvalABTesting"`). Add Section 12 Act 9 + 10 entries right after, before the closing `];`:
 
 ```js
-  { id: "12.32", title: "Online Eval & A/B Testing", section: 12, component: "OnlineEvalABTesting" },
-  // Section 12 Act 8: Production Operations
-  { id: "12.33", title: "Caching - Prompt + Semantic", section: 12, component: "Caching" },
-  { id: "12.34", title: "Cost Models", section: 12, component: "CostModels" },
-  { id: "12.35", title: "Observability & Tracing", section: 12, component: "ObservabilityTracing" },
-  { id: "12.36", title: "Hallucination Detection & Drift", section: 12, component: "HallucinationDrift" },
-  { id: "12.37", title: "Framework Choice", section: 12, component: "FrameworkChoice" },
-  // Section 12 Act 9: Decision Framework + Capstone
+  { id: "12.35", title: "Online Eval & A/B Testing", section: 12, component: "OnlineEvalABTesting" },
+  // Section 12 Act 9: Production Operations
+  { id: "12.36", title: "Caching - Prompt + Semantic", section: 12, component: "Caching" },
+  { id: "12.37", title: "Cost Models", section: 12, component: "CostModels" },
+  { id: "12.38", title: "Observability & Tracing", section: 12, component: "ObservabilityTracing" },
+  { id: "12.39", title: "Hallucination Detection & Drift", section: 12, component: "HallucinationDrift" },
+  { id: "12.40", title: "Framework Choice", section: 12, component: "FrameworkChoice" },
+  // Section 12 Act 10: Decision Framework + Capstone
   {
-    id: "12.38",
+    id: "12.41",
     title: "The Complete RAG Decision Framework + Capstone",
     section: 12,
     component: "RAGDecisionFrameworkCapstone",
@@ -547,7 +548,7 @@ Expected: only files in the **Files:** list show as modified or new. If any file
 
 ```bash
 git add src/config.js src/__tests__/config.test.js
-git commit -m "Add chapter entries 12.33-12.38 to config"
+git commit -m "Add chapter entries 12.36-12.41 to config"
 ```
 
 ---
@@ -559,7 +560,7 @@ git commit -m "Add chapter entries 12.33-12.38 to config"
 
 **Scope binding:** This task modifies ONLY the files listed in `**Files:**` above. If during implementation you discover other defects in other files, DO NOT fix them in this task - document them as a separate observation and continue with the listed scope. Before committing, run `git status` and `git diff --stat`: if ANY file outside the Files: list shows as modified, abort the commit and either move the change to the right task or revert it.
 
-The generic test block in sections.test.jsx iterates over `chapters` and looks up each component in `lookup`. Without this import, generic tests for 12.33-12.38 will fail with "fn is not a function".
+The generic test block in sections.test.jsx iterates over `chapters` and looks up each component in `lookup`. Without this import, generic tests for 12.36-12.41 will fail with "fn is not a function".
 
 - [ ] **Step 1: Run sections.test.jsx to confirm failure before change**
 
@@ -567,7 +568,7 @@ The generic test block in sections.test.jsx iterates over `chapters` and looks u
 npx vitest run src/__tests__/sections.test.jsx
 ```
 
-Expected: FAIL - the generic "All chapters" describe block tries to call `fn()` for 12.33-12.38 where `fn` is undefined.
+Expected: FAIL - the generic "All chapters" describe block tries to call `fn()` for 12.36-12.41 where `fn` is undefined.
 
 - [ ] **Step 2: Add the import and spread**
 
@@ -612,7 +613,7 @@ const lookup = {
 npx vitest run src/__tests__/sections.test.jsx
 ```
 
-Expected: PASS. The generic test now runs against 12.33-12.38 stubs which render empty sub-levels without crashing.
+Expected: PASS. The generic test now runs against 12.36-12.41 stubs which render empty sub-levels without crashing.
 
 - [ ] **Step 4: Full test smoke gate**
 
@@ -640,7 +641,7 @@ git commit -m "Register RagProduction in sections.test lookup"
 
 ---
 
-### Task 6: Implement Chapter 12.33 Caching
+### Task 6: Implement Chapter 12.36 Caching
 
 **Files:**
 - Modify: `src/sections/rag-production.jsx` (replace stub `Caching`)
@@ -710,12 +711,12 @@ git commit -m "Register RagProduction in sections.test lookup"
   Below the chart: a 1-line takeaway: "Prompt cache compounds with semantic cache. Apply both; tune thresholds; monitor false-hit rate."
   Key content: "80%" or "stack" or "combined", a "$0." cost figure, "savings" or "%".
 
-- [ ] **Step 1: Write content tests for 12.33**
+- [ ] **Step 1: Write content tests for 12.36**
 
 Append to `src/__tests__/sections.test.jsx`:
 
 ```js
-describe("Caching (12.33) content", () => {
+describe("Caching (12.36) content", () => {
   const fn = RagProduction.Caching;
 
   it("sub=0 shows per-query cost stack and QPS scale", () => {
@@ -847,12 +848,12 @@ Expected: only files in the **Files:** list show as modified or new. If any file
 
 ```bash
 git add src/sections/rag-production.jsx src/__tests__/sections.test.jsx src/data/svg-descriptions.json
-git commit -m "Implement chapter 12.33 Caching"
+git commit -m "Implement chapter 12.36 Caching"
 ```
 
 ---
 
-### Task 7: Implement Chapter 12.34 CostModels
+### Task 7: Implement Chapter 12.37 CostModels
 
 **Files:**
 - Modify: `src/sections/rag-production.jsx` (replace stub `CostModels`)
@@ -943,12 +944,12 @@ git commit -m "Implement chapter 12.33 Caching"
   Below the chart: a takeaway: "Pick the point on the frontier that matches your minimum acceptable quality."
   Key content: "frontier" or "Pareto", "cost" / "quality" or "faithfulness", at least one cost figure and one faithfulness score.
 
-- [ ] **Step 1: Write content tests for 12.34**
+- [ ] **Step 1: Write content tests for 12.37**
 
 Append to `src/__tests__/sections.test.jsx`:
 
 ```js
-describe("CostModels (12.34) content", () => {
+describe("CostModels (12.37) content", () => {
   const fn = RagProduction.CostModels;
 
   it("sub=0 enumerates the 5 cost lines", () => {
@@ -1082,12 +1083,12 @@ Expected: only files in the **Files:** list show as modified or new. If any file
 
 ```bash
 git add src/sections/rag-production.jsx src/__tests__/sections.test.jsx src/data/svg-descriptions.json
-git commit -m "Implement chapter 12.34 Cost Models"
+git commit -m "Implement chapter 12.37 Cost Models"
 ```
 
 ---
 
-### Task 8: Implement Chapter 12.35 ObservabilityTracing
+### Task 8: Implement Chapter 12.38 ObservabilityTracing
 
 **Files:**
 - Modify: `src/sections/rag-production.jsx` (replace stub `ObservabilityTracing`)
@@ -1162,12 +1163,12 @@ git commit -m "Implement chapter 12.34 Cost Models"
   Below the mock: a takeaway: "A trace is the single source of truth when a user complains. Every stage. Every score. Every model version."
   Key content: "dashboard", "P50" or "P99" or "latency", "model version" or "version".
 
-- [ ] **Step 1: Write content tests for 12.35**
+- [ ] **Step 1: Write content tests for 12.38**
 
 Append to `src/__tests__/sections.test.jsx`:
 
 ```js
-describe("ObservabilityTracing (12.35) content", () => {
+describe("ObservabilityTracing (12.38) content", () => {
   const fn = RagProduction.ObservabilityTracing;
 
   it("sub=0 lists what goes wrong without traces", () => {
@@ -1287,12 +1288,12 @@ Expected: only files in the **Files:** list show as modified or new. If any file
 
 ```bash
 git add src/sections/rag-production.jsx src/__tests__/sections.test.jsx src/data/svg-descriptions.json
-git commit -m "Implement chapter 12.35 Observability & Tracing"
+git commit -m "Implement chapter 12.38 Observability & Tracing"
 ```
 
 ---
 
-### Task 9: Implement Chapter 12.36 HallucinationDrift
+### Task 9: Implement Chapter 12.39 HallucinationDrift
 
 **Files:**
 - Modify: `src/sections/rag-production.jsx` (replace stub `HallucinationDrift`)
@@ -1308,7 +1309,7 @@ git commit -m "Implement chapter 12.35 Observability & Tracing"
 - **sub=0 (C.pink) - Hallucination signals in production**
   Title: "Hallucination Signals In Production"
   Visual: a 4-card grid of signals to monitor:
-  - Card 1 ("Faithfulness Score"): per-generation faithfulness from LLM-as-judge (covered in Section 12.29). Alert if rolling 7-day median drops below 0.85.
+  - Card 1 ("Faithfulness Score"): per-generation faithfulness from LLM-as-judge (covered in Section 12.32). Alert if rolling 7-day median drops below 0.85.
   - Card 2 ("Citation Coverage"): percent of claims with a `[doc-X]` citation. Alert if drops below 80%.
   - Card 3 ("Refusal Rate"): percent of queries the model refused with "I don't know". Alert on either spike (too cautious) or dip (model leaking I-don't-know-when-context-was-sufficient).
   - Card 4 ("Out-Of-Index Mentions"): regex / LLM check for entities mentioned in the answer that don't appear in any retrieved doc. Hard signal of hallucination.
@@ -1379,12 +1380,12 @@ Recommended Action: review recent corpus updates and re-run golden eval.
   Below: a final takeaway: "Hallucination detection + drift monitoring catches what users wouldn't bother to report - the slow leak before the flood."
   Key content: "drift" or "dashboard", "hallucinat" or "faithfulness", "alert" or "WARN" or "OK".
 
-- [ ] **Step 1: Write content tests for 12.36**
+- [ ] **Step 1: Write content tests for 12.39**
 
 Append to `src/__tests__/sections.test.jsx`:
 
 ```js
-describe("HallucinationDrift (12.36) content", () => {
+describe("HallucinationDrift (12.39) content", () => {
   const fn = RagProduction.HallucinationDrift;
 
   it("sub=0 lists hallucination signals", () => {
@@ -1511,12 +1512,12 @@ Expected: only files in the **Files:** list show as modified or new. If any file
 
 ```bash
 git add src/sections/rag-production.jsx src/__tests__/sections.test.jsx src/data/svg-descriptions.json
-git commit -m "Implement chapter 12.36 Hallucination Detection & Drift"
+git commit -m "Implement chapter 12.39 Hallucination Detection & Drift"
 ```
 
 ---
 
-### Task 10: Implement Chapter 12.37 FrameworkChoice
+### Task 10: Implement Chapter 12.40 FrameworkChoice
 
 **Files:**
 - Modify: `src/sections/rag-production.jsx` (replace stub `FrameworkChoice`)
@@ -1585,20 +1586,20 @@ git commit -m "Implement chapter 12.36 Hallucination Detection & Drift"
   Title: "What Stays The Same Regardless Of Framework"
   Visual: a single big card with 6 bullets:
   - Bullet 1: chunking strategy (chapters 12.4-12.10) is a data-pipeline decision, not a framework decision.
-  - Bullet 2: embedding model choice (12.11) is a data-pipeline decision.
-  - Bullet 3: hybrid + reranker cascade (12.13, 12.14) is a retrieval-quality decision.
-  - Bullet 4: prompt template + context packing (12.19) is a generation decision.
-  - Bullet 5: eval (chapters 12.28-12.32) is a measurement decision.
-  - Bullet 6: tracing (12.35) is an ops decision.
+  - Bullet 2: embedding model choice (12.14) is a data-pipeline decision.
+  - Bullet 3: hybrid + reranker cascade (12.16, 12.17) is a retrieval-quality decision.
+  - Bullet 4: prompt template + context packing (12.22) is a generation decision.
+  - Bullet 5: eval (chapters 12.31-12.35) is a measurement decision.
+  - Bullet 6: tracing (12.38) is an ops decision.
   Below: a final takeaway: "Frameworks are wrappers around these decisions. Get the decisions right; the framework is replaceable. Keep production code thin enough that a framework swap is a 2-day job, not a 2-month rewrite."
   Key content: "chunking" or "embedding" or "hybrid" or "reranker" or "eval" or "tracing", "framework", "decisions".
 
-- [ ] **Step 1: Write content tests for 12.37**
+- [ ] **Step 1: Write content tests for 12.40**
 
 Append to `src/__tests__/sections.test.jsx`:
 
 ```js
-describe("FrameworkChoice (12.37) content", () => {
+describe("FrameworkChoice (12.40) content", () => {
   const fn = RagProduction.FrameworkChoice;
 
   it("sub=0 lists the 6 framework options", () => {
@@ -1721,12 +1722,12 @@ Expected: only files in the **Files:** list show as modified or new. If any file
 
 ```bash
 git add src/sections/rag-production.jsx src/__tests__/sections.test.jsx src/data/svg-descriptions.json
-git commit -m "Implement chapter 12.37 Framework Choice"
+git commit -m "Implement chapter 12.40 Framework Choice"
 ```
 
 ---
 
-### Task 11: Implement Chapter 12.38 RAGDecisionFrameworkCapstone
+### Task 11: Implement Chapter 12.41 RAGDecisionFrameworkCapstone
 
 **Files:**
 - Modify: `src/sections/rag-production.jsx` (replace stub `RAGDecisionFrameworkCapstone`)
@@ -1735,7 +1736,7 @@ git commit -m "Implement chapter 12.37 Framework Choice"
 
 **Scope binding:** This task modifies ONLY the files listed in `**Files:**` above. If during implementation you discover other defects in other files, DO NOT fix them in this task - document them as a separate observation and continue with the listed scope. Before committing, run `git status` and `git diff --stat`: if ANY file outside the Files: list shows as modified, abort the commit and either move the change to the right task or revert it.
 
-**Chapter purpose (from spec + M6 guidance):** The FINAL chapter of Section 12. Synthesize every decision taught in chapters 12.1-12.37 into one decision framework, then walk through a complete end-to-end design for a NEW use case the learner has never seen: "Q&A over case law for a legal research firm". Every decision visible. Every choice grounded in a chapter they've read. The learner finishes the section able to do this design exercise themselves on any new domain.
+**Chapter purpose (from spec + M6 guidance):** The FINAL chapter of Section 12. Synthesize every decision taught in chapters 12.1-12.40 into one decision framework, then walk through a complete end-to-end design for a NEW use case the learner has never seen: "Q&A over case law for a legal research firm". Every decision visible. Every choice grounded in a chapter they've read. The learner finishes the section able to do this design exercise themselves on any new domain.
 
 This is a LARGE chapter (8-10 sub-steps acceptable per M6 guidance).
 
@@ -1744,15 +1745,15 @@ This is a LARGE chapter (8-10 sub-steps acceptable per M6 guidance).
 - **sub=0 (C.purple) - The complete RAG decision framework**
   Title: "The Complete RAG Decision Framework"
   Visual: a 9-row decision tree (SVG) covering every act of Section 12:
-  - Row 1 ("Should I Use RAG At All?") - back-references 12.1 + 12.27 (long-context).
+  - Row 1 ("Should I Use RAG At All?") - back-references 12.1 + 12.30 (long-context).
   - Row 2 ("How Do I Chunk?") - back-references 12.4 - 12.10 (chunking decision).
-  - Row 3 ("Which Embedding + How Do I Index?") - back-references 12.11, 12.12, 12.13, 12.14.
-  - Row 4 ("Do I Transform The Query?") - back-references 12.15 - 12.18.
-  - Row 5 ("How Do I Pack Context + Generate?") - back-references 12.19, 12.20, 12.21.
-  - Row 6 ("Do I Need Advanced Retrieval?") - back-references 12.22 - 12.27.
-  - Row 7 ("How Do I Evaluate?") - back-references 12.28 - 12.32.
-  - Row 8 ("How Do I Run Production?") - back-references 12.33 - 12.36.
-  - Row 9 ("Which Framework?") - back-references 12.37.
+  - Row 3 ("Which Embedding + How Do I Index?") - back-references 12.14, 12.15, 12.16, 12.17.
+  - Row 4 ("Do I Transform The Query?") - back-references 12.18 - 12.21.
+  - Row 5 ("How Do I Pack Context + Generate?") - back-references 12.22, 12.23, 12.24.
+  - Row 6 ("Do I Need Advanced Retrieval?") - back-references 12.25 - 12.30.
+  - Row 7 ("How Do I Evaluate?") - back-references 12.31 - 12.35.
+  - Row 8 ("How Do I Run Production?") - back-references 12.36 - 12.39.
+  - Row 9 ("Which Framework?") - back-references 12.40.
   Each row a horizontal block; arrow down between rows. Each row uses a distinct color from the section palette (red for "should I use", cyan for chunking, purple for embedding, orange for query transform, yellow for context, blue for advanced, green for eval, pink for ops, indigo for framework).
   Below the diagram: a 1-line guide: "Every production RAG decision lives on this map. We'll walk it from top to bottom for one new use case."
   Key content: "decision framework" or "framework", at least 4 act names like "chunking", "embedding", "evaluat", "production".
@@ -1786,25 +1787,25 @@ This is a LARGE chapter (8-10 sub-steps acceptable per M6 guidance).
 - **sub=3 (C.purple) - Decision: embedding + index**
   Title: "Decision 2: Embedding + Index"
   Visual: a 3-column card:
-  - Column 1 ("Choice"): domain-adapted embedding (12.12) on top of a base legal-BERT or Cohere Embed Multilingual. HNSW index with hybrid (BM25 + dense, 12.13). Jurisdiction stored as filter metadata (Section 11.20). Re-rank with a cross-encoder cascade (12.14).
+  - Column 1 ("Choice"): domain-adapted embedding (12.15) on top of a base legal-BERT or Cohere Embed Multilingual. HNSW index with hybrid (BM25 + dense, 12.16). Jurisdiction stored as filter metadata (Section 11.20). Re-rank with a cross-encoder cascade (12.17).
   - Column 2 ("Why"): general-purpose embeddings underweight legal jargon ("tortious", "qualified immunity"). Hybrid catches both exact-citation lookups ("Smith v Jones") and semantic queries ("medical negligence cases"). Jurisdiction filter eliminates 96% of irrelevant cases before reranking. Cross-encoder lifts precision on legal-language matching.
   - Column 3 ("Tradeoff"): domain-adapt requires labeled training pairs (expensive but one-time). Cross-encoder adds 50-100ms per query. Latency budget allows it.
   Each cell title-case, tinted background `${C.purple}06`.
-  Key content: "domain[- ]adapt", "hybrid", "jurisdiction" or "filter", "rerank" or "cross-encoder", "12.12" or "12.13" or "12.14" or back-references.
+  Key content: "domain[- ]adapt", "hybrid", "jurisdiction" or "filter", "rerank" or "cross-encoder", "12.15" or "12.16" or "12.17" or back-references.
 
 - **sub=4 (C.orange) - Decision: query transformation**
   Title: "Decision 3: Query Transformation"
   Visual: a 3-column card:
-  - Column 1 ("Choice"): multi-query expansion (12.17) + decomposition for complex multi-hop queries (12.18). HyDE skipped (case law is precise; fake document hurts more than helps).
+  - Column 1 ("Choice"): multi-query expansion (12.20) + decomposition for complex multi-hop queries (12.21). HyDE skipped (case law is precise; fake document hurts more than helps).
   - Column 2 ("Why"): a query like "cases citing X about Y" naturally decomposes into "find X" -> "find cases citing X" -> "filter for cases about Y". Multi-query rewriting (legal synonyms: "negligence" / "duty of care" / "breach of duty") improves recall on lexically-narrow legal language.
   - Column 3 ("Tradeoff"): more retrievals per query (3-5x). Cost goes up linearly. Mitigated by aggressive deduplication after RRF merge.
   Each cell title-case, tinted background `${C.orange}06`.
-  Key content: "multi-query" or "decomposition", "HyDE" (the skip reasoning), "12.17" or "12.18" or back-references.
+  Key content: "multi-query" or "decomposition", "HyDE" (the skip reasoning), "12.20" or "12.21" or back-references.
 
 - **sub=5 (C.yellow) - Decision: context + generation**
   Title: "Decision 4: Context Packing And Generation"
   Visual: a 3-column card:
-  - Column 1 ("Choice"): high token budget (16-30k tokens of retrieved context per query). Relevance-first ordering with sandwich pattern (12.19) to fight lost-in-middle (12.20). Mandatory inline citations via prompt template (12.21). I-don't-know clause if no jurisdiction-matching cases.
+  - Column 1 ("Choice"): high token budget (16-30k tokens of retrieved context per query). Relevance-first ordering with sandwich pattern (12.22) to fight lost-in-middle (12.23). Mandatory inline citations via prompt template (12.24). I-don't-know clause if no jurisdiction-matching cases.
   - Column 2 ("Why"): legal work needs many cases to reason across. Token budget high because cost budget is high. Sandwich (place top hits at start AND end) anchors model attention. Citation mandatory for audit. Refusal preferable to fabrication.
   - Column 3 ("Tradeoff"): higher per-query LLM cost. Accepted given $0.05 budget.
   Below: a styled prompt-template artifact block showing the actual generation template:
@@ -1826,34 +1827,34 @@ Answer:
 ```
 
   Style: monospace 14-16px, tinted `${C.yellow}06`. Title says "Capstone Prompt Template".
-  Key content: "citation" or "cite" or "[case", "token budget" or "16k" or "30k", "12.19" or "12.20" or "12.21" or back-references, "I don't have" or refusal language.
+  Key content: "citation" or "cite" or "[case", "token budget" or "16k" or "30k", "12.22" or "12.23" or "12.24" or back-references, "I don't have" or refusal language.
 
 - **sub=6 (C.blue) - Decision: advanced patterns**
   Title: "Decision 5: Advanced Retrieval Patterns"
   Visual: a 3-column card:
-  - Column 1 ("Choice"): GraphRAG (12.25) for the case-citation graph (cases citing X / cases cited by X). Multi-hop retrieval (12.22) for "cases citing X about Y" decomposition. Long-context skipped (12.27) - 200k cases > any context window, RAG mandatory.
+  - Column 1 ("Choice"): GraphRAG (12.28) for the case-citation graph (cases citing X / cases cited by X). Multi-hop retrieval (12.25) for "cases citing X about Y" decomposition. Long-context skipped (12.30) - 200k cases > any context window, RAG mandatory.
   - Column 2 ("Why"): legal citation is a graph; GraphRAG indexes the relationships. Without it, "cases citing X" requires querying every case in the corpus. With it, follow the citation edges. Multi-hop chains the steps for complex precedent queries.
   - Column 3 ("Tradeoff"): GraphRAG indexing is 10x slower than vector-only. Re-indexing the citation graph on corpus update is a nightly batch. Multi-hop is slower per query but precision gain on multi-hop queries is large.
   Each cell title-case, tinted background `${C.blue}06`.
-  Key content: "GraphRAG", "multi-hop", "12.22" or "12.25" or "12.27" or back-references, "citation graph" or "graph".
+  Key content: "GraphRAG", "multi-hop", "12.25" or "12.28" or "12.30" or back-references, "citation graph" or "graph".
 
 - **sub=7 (C.green) - Decision: evaluation**
   Title: "Decision 6: Evaluation"
   Visual: a 3-column card:
-  - Column 1 ("Choice"): LLM-as-judge (12.29) with a legal-specific rubric. Golden dataset (12.31) of 500 partner-curated query/expected-answer pairs. RAGAS metrics (12.30): faithfulness, citation precision, jurisdiction match. Online A/B (12.32) on partner-rated 4/5 score.
+  - Column 1 ("Choice"): LLM-as-judge (12.32) with a legal-specific rubric. Golden dataset (12.34) of 500 partner-curated query/expected-answer pairs. RAGAS metrics (12.33): faithfulness, citation precision, jurisdiction match. Online A/B (12.35) on partner-rated 4/5 score.
   - Column 2 ("Why"): general-purpose RAG eval misses legal correctness. Partner-curated golden set is the ground truth because no automated metric reaches partner-quality. RAGAS faithfulness catches hallucinations. Citation precision (% of cited cases that are real and on-point) is critical.
   - Column 3 ("Tradeoff"): golden dataset is expensive to build (partner hours). 500 examples covers ~80% of query distribution; remaining 20% caught by online feedback. Rerun golden eval weekly on prod.
   Each cell title-case, tinted background `${C.green}06`.
-  Key content: "LLM-as-judge", "golden dataset" or "golden", "RAGAS" or "faithfulness", "12.29" or "12.30" or "12.31" or back-references.
+  Key content: "LLM-as-judge", "golden dataset" or "golden", "RAGAS" or "faithfulness", "12.32" or "12.33" or "12.34" or back-references.
 
 - **sub=8 (C.pink) - Decision: production operations**
   Title: "Decision 7: Production Operations"
   Visual: a 3-column card:
-  - Column 1 ("Choice"): semantic cache DISABLED (legal queries are too unique; false-hit risk too high). Prompt cache ENABLED for system prompt + few-shot examples (12.33). Full tracing per query (12.35). Hallucination detection with custom legal-fact-check post-process (12.36). Drift monitoring on case-law updates (re-embed on new case ingestion).
+  - Column 1 ("Choice"): semantic cache DISABLED (legal queries are too unique; false-hit risk too high). Prompt cache ENABLED for system prompt + few-shot examples (12.36). Full tracing per query (12.38). Hallucination detection with custom legal-fact-check post-process (12.39). Drift monitoring on case-law updates (re-embed on new case ingestion).
   - Column 2 ("Why"): semantic cache fails when "negligence in CA" and "negligence in NY" cosine to 0.96 - the answers differ entirely. Prompt cache safe because system + few-shot are constant. Tracing every query is non-negotiable for audit.
   - Column 3 ("Tradeoff"): no semantic cache = higher per-query cost. Mitigated by prompt cache. Drift monitoring catches when judicial reasoning shifts (rare but high-impact).
   Each cell title-case, tinted background `${C.pink}06`.
-  Key content: "semantic cache" or "disabled" or "off", "prompt cache" or "enabled", "tracing", "12.33" or "12.35" or "12.36" or back-references.
+  Key content: "semantic cache" or "disabled" or "off", "prompt cache" or "enabled", "tracing", "12.36" or "12.38" or "12.39" or back-references.
 
 - **sub=9 (C.purple) - The complete picture + framework choice + final summary**
   Title: "Putting It All Together: The Capstone Stack"
@@ -1863,17 +1864,17 @@ Answer:
   - Layer 3 ("Generate"): 16-30k token budget; sandwich ordering; mandatory citations; I-don't-know refusal.
   - Layer 4 ("Eval"): partner-curated golden set; LLM-as-judge with legal rubric; RAGAS faithfulness; online A/B.
   - Layer 5 ("Ops"): prompt cache; full tracing; hallucination detection; drift monitoring on case-law updates.
-  - Framework choice: no framework + LlamaIndex retriever for the RAG core (12.37); raw Anthropic SDK for generation.
+  - Framework choice: no framework + LlamaIndex retriever for the RAG core (12.40); raw Anthropic SDK for generation.
   - Cost projection: ~$0.04 / query (under budget); latency: ~6 seconds (within budget); audit: every answer carries [Case Name, Year] citations.
   Below: a final closing message: "You now have everything you need to design production-grade RAG for any new domain. Every choice on this stack maps to a chapter you've worked through. Apply this framework. Adjust per use case. Build."
-  Key content: "stack" or "putting it all together" or "capstone", "no framework" or "LlamaIndex" or "12.37", at least 4 of: "chunking" / "embedding" / "retrieval" / "rerank" / "generate" / "eval" / "production".
+  Key content: "stack" or "putting it all together" or "capstone", "no framework" or "LlamaIndex" or "12.40", at least 4 of: "chunking" / "embedding" / "retrieval" / "rerank" / "generate" / "eval" / "production".
 
-- [ ] **Step 1: Write content tests for 12.38**
+- [ ] **Step 1: Write content tests for 12.41**
 
 Append to `src/__tests__/sections.test.jsx`:
 
 ```js
-describe("RAGDecisionFrameworkCapstone (12.38) content", () => {
+describe("RAGDecisionFrameworkCapstone (12.41) content", () => {
   const fn = RagProduction.RAGDecisionFrameworkCapstone;
 
   it("sub=0 shows the complete decision framework spanning every act", () => {
@@ -2008,7 +2009,7 @@ npm run lint
 npm run format
 ```
 
-Expected: all green. Section 12 now has all 38 chapters live.
+Expected: all green. Section 12 now has all 41 chapters live.
 
 - [ ] **Step 7: Full test smoke gate**
 
@@ -2031,7 +2032,7 @@ Expected: only files in the **Files:** list show as modified or new. If any file
 
 ```bash
 git add src/sections/rag-production.jsx src/__tests__/sections.test.jsx src/data/svg-descriptions.json
-git commit -m "Implement chapter 12.38 The Complete RAG Decision Framework + Capstone"
+git commit -m "Implement chapter 12.41 The Complete RAG Decision Framework + Capstone"
 ```
 
 ---
@@ -2043,11 +2044,11 @@ git commit -m "Implement chapter 12.38 The Complete RAG Decision Framework + Cap
 
 **Scope binding:** This task modifies ONLY the files listed in `**Files:**` above. If during implementation you discover other defects in other files, DO NOT fix them in this task - document them as a separate observation and continue with the listed scope. Before committing, run `git status` and `git diff --stat`: if ANY file outside the Files: list shows as modified, abort the commit and either move the change to the right task or revert it.
 
-After M5 shipped, CLAUDE.md should already have mapping rows for 12.1-12.32 (added incrementally in M1-M5). Task 12 finalizes the table to all 38 chapters and updates the project structure tree to include all five `rag-*.jsx` files.
+After M5 shipped, CLAUDE.md should already have mapping rows for 12.1-12.35 (added incrementally in M1-M5). Task 12 finalizes the table to all 41 chapters and updates the project structure tree to include all five `rag-*.jsx` files.
 
-- [ ] **Step 1: Replace the Section 12 mapping with the final 38-chapter table**
+- [ ] **Step 1: Replace the Section 12 mapping with the final 41-chapter table**
 
-In `CLAUDE.md`, find the "Complete Mapping" section. The Section 12 table currently lists 12.1-12.32 (M1-M5 added them incrementally). Replace the entire Section 12 mapping block with:
+In `CLAUDE.md`, find the "Complete Mapping" section. The Section 12 table currently lists 12.1-12.35 (M1-M5 added them incrementally). Replace the entire Section 12 mapping block with:
 
 ```markdown
 **Section 12: Retrieval-Augmented Generation** (`rag-foundations.jsx` + `rag-retrieval.jsx` + `rag-generation.jsx` + `rag-evaluation.jsx` + `rag-production.jsx`)
@@ -2064,47 +2065,48 @@ In `CLAUDE.md`, find the "Complete Mapping" section. The Section 12 table curren
 | 12.8 | HierarchicalChunking | Hierarchical / Parent-Child Chunking |
 | 12.9 | ContextualRetrieval | Contextual Retrieval (Anthropic 2024) |
 | 12.10 | ChunkingDecision | The Chunking Decision |
-| 12.11 | EmbeddingModelChoice | Picking an Embedding Model |
-| 12.12 | DomainAdaptation | Domain Adaptation - Fine-Tuning Embeddings |
-| 12.13 | HybridForRAG | Hybrid Retrieval for RAG |
-| 12.14 | RerankerCascade | The Reranker Cascade |
-| 12.15 | WhyTransformQueries | Why Transform Queries |
-| 12.16 | HyDE | HyDE - Hypothetical Document Embeddings |
-| 12.17 | MultiQueryExpansion | Multi-Query Expansion |
-| 12.18 | QueryRoutingDecomposition | Query Routing & Decomposition |
-| 12.19 | ContextPacking | Context Packing |
-| 12.20 | LostInTheMiddle | The Lost-in-the-Middle Problem |
-| 12.21 | CitationsRefusal | Citations, Refusal & Groundedness |
-| 12.22 | MultiHopRetrieval | Multi-Hop Retrieval |
-| 12.23 | SelfRAG | Self-RAG |
-| 12.24 | CorrectiveRAG | CRAG - Corrective RAG |
-| 12.25 | GraphRAG | GraphRAG (Microsoft 2024) |
-| 12.26 | AgenticRAG | Tool-Augmented & Agentic RAG |
-| 12.27 | LongContextVsRAG | Long-Context vs RAG |
-| 12.28 | RAGEvalTriangle | The RAG Eval Triangle |
-| 12.29 | LLMAsJudge | LLM-as-Judge |
-| 12.30 | RAGASMetrics | RAGAS Metrics |
-| 12.31 | GoldenDatasets | Golden Datasets |
-| 12.32 | OnlineEvalABTesting | Online Eval & A/B Testing |
-| 12.33 | Caching | Caching - Prompt + Semantic |
-| 12.34 | CostModels | Cost Models |
-| 12.35 | ObservabilityTracing | Observability & Tracing |
-| 12.36 | HallucinationDrift | Hallucination Detection & Drift |
-| 12.37 | FrameworkChoice | Framework Choice |
-| 12.38 | RAGDecisionFrameworkCapstone | The Complete RAG Decision Framework + Capstone |
+| 12.14 | EmbeddingModelChoice | Picking an Embedding Model |
+| 12.15 | DomainAdaptation | Domain Adaptation - Fine-Tuning Embeddings |
+| 12.16 | HybridForRAG | Hybrid Retrieval for RAG |
+| 12.17 | RerankerCascade | The Reranker Cascade |
+| 12.18 | WhyTransformQueries | Why Transform Queries |
+| 12.19 | HyDE | HyDE - Hypothetical Document Embeddings |
+| 12.20 | MultiQueryExpansion | Multi-Query Expansion |
+| 12.21 | QueryRoutingDecomposition | Query Routing & Decomposition |
+| 12.22 | ContextPacking | Context Packing |
+| 12.23 | LostInTheMiddle | The Lost-in-the-Middle Problem |
+| 12.24 | CitationsRefusal | Citations, Refusal & Groundedness |
+| 12.25 | MultiHopRetrieval | Multi-Hop Retrieval |
+| 12.26 | SelfRAG | Self-RAG |
+| 12.27 | CorrectiveRAG | CRAG - Corrective RAG |
+| 12.28 | GraphRAG | GraphRAG (Microsoft 2024) |
+| 12.29 | AgenticRAG | Tool-Augmented & Agentic RAG |
+| 12.30 | LongContextVsRAG | Long-Context vs RAG |
+| 12.31 | RAGEvalTriangle | The RAG Eval Triangle |
+| 12.32 | LLMAsJudge | LLM-as-Judge |
+| 12.33 | RAGASMetrics | RAGAS Metrics |
+| 12.34 | GoldenDatasets | Golden Datasets |
+| 12.35 | OnlineEvalABTesting | Online Eval & A/B Testing |
+| 12.36 | Caching | Caching - Prompt + Semantic |
+| 12.37 | CostModels | Cost Models |
+| 12.38 | ObservabilityTracing | Observability & Tracing |
+| 12.39 | HallucinationDrift | Hallucination Detection & Drift |
+| 12.40 | FrameworkChoice | Framework Choice |
+| 12.41 | RAGDecisionFrameworkCapstone | The Complete RAG Decision Framework + Capstone |
 ```
 
 - [ ] **Step 2: Update the project structure tree**
 
-Find the `## Project Structure` section. In the `src/sections/` block, the M5 state has four `rag-*.jsx` files. Add `rag-production.jsx` after `rag-evaluation.jsx`:
+Find the `## Project Structure` section. In the `src/sections/` block, the M5 state has five `rag-*.jsx` files. Add `rag-production.jsx` after `rag-evaluation.jsx`:
 
 ```
 │       ├── vector-systems.jsx            # Section 11 (Act 6, chapters 11.29-11.35)
-│       ├── rag-foundations.jsx           # Section 12 (Acts 1+2, chapters 12.1-12.10)
-│       ├── rag-retrieval.jsx             # Section 12 (Acts 3+4, chapters 12.11-12.18)
-│       ├── rag-generation.jsx            # Section 12 (Acts 5+6, chapters 12.19-12.27)
-│       ├── rag-evaluation.jsx            # Section 12 (Act 7, chapters 12.28-12.32)
-│       └── rag-production.jsx            # Section 12 (Acts 8+9, chapters 12.33-12.38)
+│       ├── rag-foundations.jsx           # Section 12 (Acts 1+3, chapters 12.1-12.3 + 12.7-12.13)
+│       ├── rag-ingestion.jsx             # Section 12 (Act 2, chapters 12.4-12.6)
+│       ├── rag-retrieval.jsx             # Section 12 (Acts 4+5, chapters 12.14-12.21)
+│       ├── rag-generation.jsx            # Section 12 (Acts 6+7, chapters 12.22-12.30)
+│       ├── rag-evaluation.jsx            # Section 12 (Act 8, chapters 12.31-12.35)
+│       └── rag-production.jsx            # Section 12 (Acts 9+10, chapters 12.36-12.41)
 ```
 
 - [ ] **Step 3: No test required for CLAUDE.md (it's documentation only)**
@@ -2130,7 +2132,7 @@ Expected: only files in the **Files:** list show as modified or new. If any file
 
 ```bash
 git add CLAUDE.md
-git commit -m "Finalize Section 12 mapping with all 38 chapters in CLAUDE.md"
+git commit -m "Finalize Section 12 mapping with all 41 chapters in CLAUDE.md"
 ```
 
 ---
@@ -2213,7 +2215,7 @@ git commit -m "Apply title-case-for-diagram-box-text rule globally in CLAUDE.md"
 
 **Scope binding:** This task modifies ONLY the files listed in `**Files:**` above. If during implementation you discover other defects in other files, DO NOT fix them in this task - document them as a separate observation and continue with the listed scope. Before committing, run `git status` and `git diff --stat`: if ANY file outside the Files: list shows as modified, abort the commit and either move the change to the right task or revert it.
 
-Section 12 has been incrementally referenced in `public/llms.txt` and `index.html` since M1. M6 finalizes both files with the full Section 12 description reflecting all 38 chapters.
+Section 12 has been incrementally referenced in `public/llms.txt` and `index.html` since M1. M6 finalizes both files with the full Section 12 description reflecting all 41 chapters.
 
 - [ ] **Step 1: Inspect current state of llms.txt**
 
@@ -2228,7 +2230,7 @@ Identify the Section 12 entry. M1 added a short description; M2-M5 may have appe
 Edit `public/llms.txt`. Replace the existing Section 12 line in the "What it covers" section with the comprehensive final version:
 
 ```
-- Section 12: Retrieval-Augmented Generation - 38 chapters covering the full production RAG pipeline. The RAG problem (why bare LLMs aren't enough, the canonical pipeline, where naive RAG breaks). Chunking strategies (fixed-size, recursive structural, semantic, late chunking, hierarchical, contextual retrieval, decision matrix). Embed + index choices for RAG (embedding model picking, domain adaptation, hybrid retrieval, reranker cascade). Query transformation (why transform, HyDE, multi-query expansion, routing + decomposition). Context + generation (packing strategies, lost-in-the-middle, citations + refusal + groundedness). Advanced retrieval patterns (multi-hop, Self-RAG, CRAG, GraphRAG, agentic / tool-augmented, long-context vs RAG). Evaluation (the RAG eval triangle, LLM-as-judge, RAGAS metrics, golden datasets, online + A/B testing). Production operations (prompt + semantic caching, cost models, observability + tracing, hallucination detection + drift, framework choice across no-framework / LlamaIndex / LangChain / LangGraph / Haystack / vendor SDK). Decision framework + capstone (synthesizing every decision and walking through a complete legal-case-law RAG design end-to-end).
+- Section 12: Retrieval-Augmented Generation - 41 chapters covering the full production RAG pipeline. The RAG problem (why bare LLMs aren't enough, the canonical pipeline, where naive RAG breaks). Chunking strategies (fixed-size, recursive structural, semantic, late chunking, hierarchical, contextual retrieval, decision matrix). Embed + index choices for RAG (embedding model picking, domain adaptation, hybrid retrieval, reranker cascade). Query transformation (why transform, HyDE, multi-query expansion, routing + decomposition). Context + generation (packing strategies, lost-in-the-middle, citations + refusal + groundedness). Advanced retrieval patterns (multi-hop, Self-RAG, CRAG, GraphRAG, agentic / tool-augmented, long-context vs RAG). Evaluation (the RAG eval triangle, LLM-as-judge, RAGAS metrics, golden datasets, online + A/B testing). Production operations (prompt + semantic caching, cost models, observability + tracing, hallucination detection + drift, framework choice across no-framework / LlamaIndex / LangChain / LangGraph / Haystack / vendor SDK). Decision framework + capstone (synthesizing every decision and walking through a complete legal-case-law RAG design end-to-end).
 ```
 
 (Adjust phrasing to match the existing `llms.txt` style if it uses a different format like bullet lists for sub-sections.)
@@ -2295,7 +2297,7 @@ Expected: only files in the **Files:** list show as modified or new. If any file
 
 ```bash
 git add public/llms.txt index.html
-git commit -m "Finalize discoverability sync for Section 12 (all 38 chapters)"
+git commit -m "Finalize discoverability sync for Section 12 (all 41 chapters)"
 ```
 
 - [ ] **Step 9: Plan a reminder to user (for end-of-task summary)**
@@ -2308,7 +2310,7 @@ After M6 ships, remind the user (one sentence at the end of the M6 final summary
 
 **Files:** none (verification only); may require Bash returns to fix issues found.
 
-This is the MANDATORY validation gate from the spec. A chapter that passes tests but fails Chrome validation is NOT done. Section 12 is not done until all 38 chapters pass Chrome validation - we spot-check across milestones.
+This is the MANDATORY validation gate from the spec. A chapter that passes tests but fails Chrome validation is NOT done. Section 12 is not done until all 41 chapters pass Chrome validation - we spot-check across milestones.
 
 - [ ] **Step 1: Full test suite**
 
@@ -2358,7 +2360,7 @@ npm run dev
 
 Server should start at `http://localhost:5173/learn-ai/`. Leave it running for the rest of this task.
 
-- [ ] **Step 7: Chrome visual validation of all 6 new chapters (12.33-12.38)**
+- [ ] **Step 7: Chrome visual validation of all 6 new chapters (12.36-12.41)**
 
 Use the `mcp__claude-in-chrome__*` tools. For each of the 6 new chapters, step through every sub-step and check:
 
@@ -2372,16 +2374,16 @@ Use the `mcp__claude-in-chrome__*` tools. For each of the 6 new chapters, step t
   - **No "next chapter" / "coming up"** language.
 
 Pay special attention to:
-- **12.33 sub=1**: prompt cache prefix / suffix split clearly visible with distinct background tints.
-- **12.33 sub=3**: semantic cache flow diagram with cosine scores readable.
-- **12.34 sub=1**: cost stack bar chart proportions visually match the percentages stated.
-- **12.34 sub=5**: cost-vs-quality scatter has Pareto frontier clearly marked.
-- **12.35 sub=1**: span tree with proportional latency widths.
-- **12.36 sub=4**: alert payload is a styled monospace block, not a code block.
-- **12.37 sub=4**: framework decision tree branches readable, leaf labels clear.
-- **12.38 sub=0**: 9-row decision framework tree visible end-to-end without scroll-hunting.
-- **12.38 sub=5**: capstone prompt template artifact styled monospace, not code.
-- **12.38 sub=9**: full stack card has all 5 layers visible, no overlap, framework choice noted.
+- **12.36 sub=1**: prompt cache prefix / suffix split clearly visible with distinct background tints.
+- **12.36 sub=3**: semantic cache flow diagram with cosine scores readable.
+- **12.37 sub=1**: cost stack bar chart proportions visually match the percentages stated.
+- **12.37 sub=5**: cost-vs-quality scatter has Pareto frontier clearly marked.
+- **12.38 sub=1**: span tree with proportional latency widths.
+- **12.39 sub=4**: alert payload is a styled monospace block, not a code block.
+- **12.40 sub=4**: framework decision tree branches readable, leaf labels clear.
+- **12.41 sub=0**: 9-row decision framework tree visible end-to-end without scroll-hunting.
+- **12.41 sub=5**: capstone prompt template artifact styled monospace, not code.
+- **12.41 sub=9**: full stack card has all 5 layers visible, no overlap, framework choice noted.
 
 Take screenshots of each chapter at each sub-step for reference. Save them in `docs/superpowers/screenshots/section-12-m6/` (create the directory if needed):
 
@@ -2395,15 +2397,15 @@ Don't re-validate every prior chapter (that's been done in M1-M5). Instead, spot
 
 - M1 spot-check: navigate to 12.2 (NaiveRAGPipeline), step through all sub-steps, verify the pipeline diagram still renders correctly and no console errors.
 - M2 spot-check: navigate to 12.9 (ContextualRetrieval), verify hierarchical chunking diagram still renders.
-- M3 spot-check: navigate to 12.14 (RerankerCascade), verify reranker cascade diagram still renders.
-- M4 spot-check: navigate to 12.25 (GraphRAG), verify entity-relationship subgraph renders.
-- M5 spot-check: navigate to 12.30 (RAGASMetrics), verify the 4 RAGAS metric formulas + worked examples render.
+- M3 spot-check: navigate to 12.17 (RerankerCascade), verify reranker cascade diagram still renders.
+- M4 spot-check: navigate to 12.28 (GraphRAG), verify entity-relationship subgraph renders.
+- M5 spot-check: navigate to 12.33 (RAGASMetrics), verify the 4 RAGAS metric formulas + worked examples render.
 
 If any prior chapter has regressed (visual defect or test failure), STOP and fix before continuing.
 
 - [ ] **Step 9: Verify TOC shows all of Section 12**
 
-In Chrome, navigate to the TOC. Confirm Section 12 lists 38 chapters (12.1 through 12.38). Confirm the section color is `#7c4dff`. Confirm all chapter titles are correct.
+In Chrome, navigate to the TOC. Confirm Section 12 lists 41 chapters (12.1 through 12.41). Confirm the section color is `#7c4dff`. Confirm all chapter titles are correct.
 
 - [ ] **Step 10: Stop dev server**
 
@@ -2443,14 +2445,14 @@ git commit -m "Add Section 12 M6 visual validation screenshots"
 
 Verify the spec's overall Section 12 success criteria:
 
-- [x] All 38 chapters implemented and in config.js.
+- [x] All 41 chapters implemented and in config.js.
 - [x] Each chapter exported from one of 5 section files (rag-foundations, rag-retrieval, rag-generation, rag-evaluation, rag-production).
-- [x] Section 12 loader is a 5-file Promise.all in learn-ai.jsx.
+- [x] Section 12 loader is a 6-file Promise.all in learn-ai.jsx.
 - [x] sections.test.jsx contains tests for every chapter at every sub-level.
 - [x] `npm run test` green, coverage 100% lines, branches >= 97.7%.
 - [x] `npm run lint` clean, `npm run format` clean.
 - [x] Every SVG has `<desc>` + entry in `svg-descriptions.json`.
-- [x] CLAUDE.md mapping table covers all 38 chapters (Task 12).
+- [x] CLAUDE.md mapping table covers all 41 chapters (Task 12).
 - [x] CLAUDE.md visual rules updated to apply title-case-for-diagram-box-text globally (Task 13).
 - [x] `public/llms.txt` updated with the final Section 12 description (Task 14).
 - [x] `index.html` JSON-LD `teaches` array includes "Retrieval-Augmented Generation" (Task 14).
@@ -2480,19 +2482,19 @@ git log --oneline -20
 ```
 
 Expected: a clean sequence of M6 commits:
-1. Add stub exports for rag-production.jsx (12.33-12.38)
+1. Add stub exports for rag-production.jsx (12.36-12.41)
 2. Extend Section 12 loader to include rag-production.jsx
-3. Add chapter entries 12.33-12.38 to config
+3. Add chapter entries 12.36-12.41 to config
 4. Register RagProduction in sections.test lookup
-5. Implement chapter 12.33 Caching
-6. Implement chapter 12.34 Cost Models
-7. Implement chapter 12.35 Observability & Tracing
-8. Implement chapter 12.36 Hallucination Detection & Drift
-9. Implement chapter 12.37 Framework Choice
-10. Implement chapter 12.38 The Complete RAG Decision Framework + Capstone
-11. Finalize Section 12 mapping with all 38 chapters in CLAUDE.md
+5. Implement chapter 12.36 Caching
+6. Implement chapter 12.37 Cost Models
+7. Implement chapter 12.38 Observability & Tracing
+8. Implement chapter 12.39 Hallucination Detection & Drift
+9. Implement chapter 12.40 Framework Choice
+10. Implement chapter 12.41 The Complete RAG Decision Framework + Capstone
+11. Finalize Section 12 mapping with all 41 chapters in CLAUDE.md
 12. Apply title-case-for-diagram-box-text rule globally in CLAUDE.md
-13. Finalize discoverability sync for Section 12 (all 38 chapters)
+13. Finalize discoverability sync for Section 12 (all 41 chapters)
 14. (Optional) Add Section 12 M6 visual validation screenshots
 
 - [ ] **Step 3: Push to main**
@@ -2516,7 +2518,7 @@ When delivering the final M6 summary to the user, include these reminders (per t
 
 - [ ] **Step 5: Final M6 done message**
 
-Confirm: "Section 12 Milestone 6 complete. All 38 chapters of Retrieval-Augmented Generation are live. CLAUDE.md mapping and visual rules updated. Discoverability metadata fully synced. The learn-ai app now ships 12 sections covering the full path from neural network foundations to production RAG."
+Confirm: "Section 12 Milestone 6 complete. All 41 chapters of Retrieval-Augmented Generation are live. CLAUDE.md mapping and visual rules updated. Discoverability metadata fully synced. The learn-ai app now ships 12 sections covering the full path from neural network foundations to production RAG."
 
 ---
 
@@ -2589,19 +2591,20 @@ Create `docs/superpowers/starter-prompts/section-12-done.md` summarizing what wa
 `````markdown
 # Section 12 Complete
 
-Section 12 "Retrieval-Augmented Generation" shipped on [date]. 38 chapters across 6 milestones.
+Section 12 "Retrieval-Augmented Generation" shipped on [date]. 41 chapters across 6 milestones.
 
 ## Verify the section is live
-- TOC shows Section 12 with 38 chapters (12.1-12.38)
+- TOC shows Section 12 with 41 chapters (12.1-12.41)
 - `npm run test` green, coverage 100% lines / >=97.7% branches
 - All Chrome browser visual validation screenshots in `docs/superpowers/screenshots/section-12-*/`
 
 ## Files shipped
-- `src/sections/rag-foundations.jsx` (Acts 1+2, ch 12.1-12.10)
-- `src/sections/rag-retrieval.jsx` (Acts 3+4, ch 12.11-12.18)
-- `src/sections/rag-generation.jsx` (Acts 5+6, ch 12.19-12.27)
-- `src/sections/rag-evaluation.jsx` (Act 7, ch 12.28-12.32)
-- `src/sections/rag-production.jsx` (Acts 8+9, ch 12.33-12.38)
+- `src/sections/rag-foundations.jsx` (Acts 1+3, ch 12.1-12.3 + 12.7-12.13)
+- `src/sections/rag-ingestion.jsx` (Act 2, ch 12.4-12.6)
+- `src/sections/rag-retrieval.jsx` (Acts 4+5, ch 12.14-12.21)
+- `src/sections/rag-generation.jsx` (Acts 6+7, ch 12.22-12.30)
+- `src/sections/rag-evaluation.jsx` (Act 8, ch 12.31-12.35)
+- `src/sections/rag-production.jsx` (Acts 9+10, ch 12.36-12.41)
 
 ## Retrospective
 See `docs/superpowers/lessons/section-12-retrospective.md` for what worked / what did not / suggested backlog for next big section.
@@ -2639,13 +2642,13 @@ git add docs/superpowers/lessons/section-12-m6-lessons.md docs/superpowers/lesso
 git commit -m "Section 12 M6 lessons + section-wide retrospective + done summary"
 ```
 
-- [ ] **Step 7: Section 12 fully complete.** 38 chapters shipped. 6 milestones done. Ready for next section (or stable shipping if no next section planned).
+- [ ] **Step 7: Section 12 fully complete.** 41 chapters shipped. 6 milestones done. Ready for next section (or stable shipping if no next section planned).
 
 ---
 
 ## What Comes Next
 
-Section 12 is complete. With 38 chapters of production RAG content live, the learn-ai app now covers:
+Section 12 is complete. With 41 chapters of production RAG content live, the learn-ai app now covers:
 
 | Section | Topic | Chapters |
 |---|---|---|

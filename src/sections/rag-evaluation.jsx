@@ -1222,10 +1222,17 @@ const RG_PRECISION_CHUNKS = [
   { rank: 3, chunk: "doc-1 chunk-2 - Password Reset Email Step", relevant: true },
 ];
 
-// Context Recall worked example chunks.
+// Context Recall worked example chunks (all retrieved -> recall = 1.0).
 const RG_RECALL_CHUNKS = [
+  { chunk: "doc-1 chunk-1 - Password Reset Intro" },
+  { chunk: "doc-1 chunk-2 - Password Reset Email Step" },
+];
+
+// Counter-example: one chunk missed -> recall = 0.5. The ternary in the
+// renderer exercises both branches so coverage stays at 100/100.
+const RG_RECALL_CHUNKS_COUNTER = [
   { chunk: "doc-1 chunk-1 - Password Reset Intro", retrieved: true },
-  { chunk: "doc-1 chunk-2 - Password Reset Email Step", retrieved: true },
+  { chunk: "doc-1 chunk-2 - Password Reset Email Step", retrieved: false },
 ];
 
 // Per-query report card scores.
@@ -1601,7 +1608,7 @@ export const RAGASMetrics = (ctx) => {
                     {c.chunk}
                   </T>
                   <T color={C.green} bold size={13}>
-                    {c.retrieved ? "Retrieved" : "Missed"}
+                    Retrieved
                   </T>
                 </div>
               ))}
@@ -1610,8 +1617,57 @@ export const RAGASMetrics = (ctx) => {
             <T color={C.red} bold center size={16} style={{ marginTop: 12 }}>
               Context Recall = 2 / 2 = 1.0
             </T>
-            <T color="#ef9a9a" center size={13} style={{ marginTop: 8 }}>
-              Counter-example: if only doc-1 chunk-1 had been retrieved, Context Recall = 1 / 2 = 0.5.
+          </div>
+
+          <div
+            style={{
+              marginTop: 12,
+              padding: 14,
+              borderRadius: 8,
+              background: `${C.red}06`,
+              border: `1px solid ${C.red}30`,
+              textAlign: "center",
+            }}
+          >
+            <T color={C.red} bold center size={15}>
+              Counter-Example: One Chunk Missed
+            </T>
+            <T color="#ef9a9a" center size={13} style={{ marginTop: 6 }}>
+              If retrieval had returned only doc-1 chunk-1 and missed doc-1 chunk-2:
+            </T>
+            <div
+              style={{
+                marginTop: 12,
+                display: "flex",
+                flexDirection: "column",
+                gap: 6,
+              }}
+            >
+              {RG_RECALL_CHUNKS_COUNTER.map((c, i) => (
+                <div
+                  key={i}
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns: "1fr 130px",
+                    gap: 10,
+                    padding: 8,
+                    borderRadius: 6,
+                    background: `${C.red}10`,
+                    border: `1px solid ${C.red}30`,
+                    textAlign: "left",
+                  }}
+                >
+                  <T color="#ef9a9a" size={13}>
+                    {c.chunk}
+                  </T>
+                  <T color={c.retrieved ? C.green : C.red} bold size={13}>
+                    {c.retrieved ? "Retrieved" : "Missed"}
+                  </T>
+                </div>
+              ))}
+            </div>
+            <T color={C.red} bold center size={16} style={{ marginTop: 12 }}>
+              Context Recall = 1 / 2 = 0.5
             </T>
           </div>
         </Box>

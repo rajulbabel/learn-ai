@@ -172,6 +172,7 @@ export const chapters = [
   { id: "12.4", title: "Parsing - Raw Sources to Clean Text", section: 12, component: "ParsingExtraction" },
   { id: "12.5", title: "Deduplication & Cleaning", section: 12, component: "DeduplicationCleaning" },
   { id: "12.6", title: "Refresh & Sync Schedules", section: 12, component: "RefreshSync" },
+  { id: "12.7", title: "Why Chunk At All + Fixed-Size Baseline", section: 12, component: "WhyChunkFixedSize" },
 ];
 
 export const sectionNames = {

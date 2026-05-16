@@ -285,5 +285,11 @@
     "Timeline showing a password-reset article version v1 published on 2026-04-12, edited to v2 on 2026-05-01 adding an MFA-preservation note, and a stale-index v1 chunk being retrieved on 2026-05-10 causing the LLM to give the wrong answer because the index never re-ingested v2",
     "Webhook-driven incremental sync sequence diagram with time markers T=0:00 through T=0:10 showing user edit, Confluence webhook fire, ingestion service fetch, re-parse and re-chunk and re-embed, upsert into vector DB referencing Section 11.21 deletes-updates, and final queryable state with about ten-second propagation lag",
     "Three-row versioning timeline showing doc-1 v1 chunks active at t=0, both v1 (deprecated) and v2 (active) chunks present during the t=+1min re-embed window for retrieval-gap avoidance, and only v2 chunks active at t=+15min after the grace period drops v1"
+  ],
+  "12.7": [
+    "Horizontal token-count bar showing a 500-page product manual at 250,000 tokens overflowing the 8,192-token embedding model ceiling. Green portion marks the 8,192 tokens that fit while the rest of the bar is tinted red as overflow. A second smaller bar below visualizes the ceiling itself, and a callout shows that even if the whole doc fit, a single vector for 500 pages would carry no specific signal.",
+    "Sliding window chunk diagram across doc-1 (the password-reset article) showing four colored 128-token chunk bars stacked vertically along a 0-464 token axis. Each chunk is labeled with its token range (0-128, 112-240, 224-352, 336-464) and the 16-token overlap zones between adjacent chunks are shaded a darker green band.",
+    "Two clean rectangle chunks side by side with no overlap, with a red dashed vertical line at the boundary marking the mid-sentence hard cut between chunk 1 and chunk 2.",
+    "Two chunk rectangles with a darker yellow overlap band shared between them, labeled as the shared 16-token region where the cut sentence appears whole in both adjacent chunks."
   ]
 }

@@ -420,5 +420,9 @@
     "Two agents triage and billing hand off to each other back and forth in an infinite ping pong with arrows curving in both directions and a counter showing the hand-off rate not decreasing.",
     "Two agents A and B locked in a deadlock: A waits on B's result, B waits on A's result, with circular waiting arrows and both agents marked in a WAITING state.",
     "Cost vs iteration chart with normal multi-agent run at fifty cents on a slow flat curve and a runaway scenario climbing exponentially to fifty dollars by iteration twenty."
+  ],
+  "13.36": [
+    "Top row shows naive RAG as a one-shot pipeline from query to retrieve to generate; bottom row shows agentic RAG as a loop from query to retrieve to judge with a conditional rewrite arrow back to retrieve until the judge says done.",
+    "Circular four-station loop: search, judge with a question of whether enough evidence has been collected, refine which rewrites the query, then search again, until judge says done or max iterations is hit."
   ]
 }

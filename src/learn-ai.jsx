@@ -43,6 +43,7 @@ const sectionLoaders = {
     Promise.all([
       import("./sections/rag-foundations.jsx"),
       import("./sections/rag-ingestion.jsx"),
+      import("./sections/rag-retrieval.jsx"),
     ]).then((mods) => Object.assign({}, ...mods)),
 };
 

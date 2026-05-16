@@ -264,7 +264,7 @@ Only config.js IDs change.
 | 12.2 | NaiveRAGPipeline | The Naive RAG Pipeline |
 | 12.3 | WhereNaiveRAGBreaks | Where Naive RAG Breaks |
 
-**Section 13: AI Agents** (`agent-prompting.jsx` + `agent-tools.jsx` + `agent-loops.jsx` + `multi-agent.jsx` - Milestones 1-3 of 6 complete: Acts 1-6)
+**Section 13: AI Agents** (`agent-prompting.jsx` + `agent-tools.jsx` + `agent-loops.jsx` + `multi-agent.jsx` + `agent-evals.jsx` - Milestones 1-4 of 6 complete: Acts 1-7)
 
 | Chapter | Component | Title |
 |---------|-----------|-------|
@@ -304,6 +304,11 @@ Only config.js IDs change.
 | 13.34 | CriticDebate | Critic / Debate / Reflection-as-Multi-Agent |
 | 13.35 | MultiAgentFailures | Multi-Agent Failure Modes |
 | 13.36 | AgenticRag | Agentic RAG |
+| 13.37 | WhyEvalAgents | Why Eval Agents Differently |
+| 13.38 | EvalDimensions | Eval Dimensions |
+| 13.39 | LlmAsJudge | LLM-as-Judge |
+| 13.40 | TraceEvals | Trace Evals |
+| 13.41 | EvalSetsContinuous | Eval Sets + Continuous Eval |
 
 ## Project Structure
 
@@ -347,7 +352,8 @@ learn-ai/
 │       ├── agent-prompting.jsx           # Section 13 (Act 1, chapters 13.1-13.6)
 │       ├── agent-tools.jsx               # Section 13 (Acts 2+3, chapters 13.7-13.17)
 │       ├── agent-loops.jsx               # Section 13 (Acts 4+5, chapters 13.18-13.29)
-│       └── multi-agent.jsx               # Section 13 (Act 6, chapters 13.30-13.36)
+│       ├── multi-agent.jsx               # Section 13 (Act 6, chapters 13.30-13.36)
+│       └── agent-evals.jsx               # Section 13 (Act 7, chapters 13.37-13.41)
 ├── .github/workflows/deploy.yml
 └── CLAUDE.md
 ```

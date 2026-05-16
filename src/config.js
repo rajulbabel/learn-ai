@@ -217,6 +217,11 @@ export const chapters = [
   { id: "13.34", title: "Critic / Debate / Reflection-as-Multi-Agent", section: 13, component: "CriticDebate" },
   { id: "13.35", title: "Multi-Agent Failure Modes", section: 13, component: "MultiAgentFailures" },
   { id: "13.36", title: "Agentic RAG", section: 13, component: "AgenticRag" },
+  { id: "13.37", title: "Why Eval Agents Differently", section: 13, component: "WhyEvalAgents" },
+  { id: "13.38", title: "Eval Dimensions", section: 13, component: "EvalDimensions" },
+  { id: "13.39", title: "LLM-as-Judge", section: 13, component: "LlmAsJudge" },
+  { id: "13.40", title: "Trace Evals", section: 13, component: "TraceEvals" },
+  { id: "13.41", title: "Eval Sets + Continuous Eval", section: 13, component: "EvalSetsContinuous" },
 ];
 
 export const sectionNames = {

@@ -637,3 +637,47 @@ describe("Section 13 Act 5+6 chapter entries", () => {
     expect(c.component).toBe("AgenticRag");
   });
 });
+
+describe("Section 13 Act 7 chapter entries", () => {
+  const findCh = (id) => chapters.find((c) => c.id === id);
+
+  it("has 13.37 WhyEvalAgents", () => {
+    const c = findCh("13.37");
+    expect(c).toBeDefined();
+    expect(c.title).toBe("Why Eval Agents Differently");
+    expect(c.section).toBe(13);
+    expect(c.component).toBe("WhyEvalAgents");
+  });
+
+  it("has 13.38 EvalDimensions", () => {
+    const c = findCh("13.38");
+    expect(c).toBeDefined();
+    expect(c.title).toBe("Eval Dimensions");
+    expect(c.section).toBe(13);
+    expect(c.component).toBe("EvalDimensions");
+  });
+
+  it("has 13.39 LlmAsJudge", () => {
+    const c = findCh("13.39");
+    expect(c).toBeDefined();
+    expect(c.title).toBe("LLM-as-Judge");
+    expect(c.section).toBe(13);
+    expect(c.component).toBe("LlmAsJudge");
+  });
+
+  it("has 13.40 TraceEvals", () => {
+    const c = findCh("13.40");
+    expect(c).toBeDefined();
+    expect(c.title).toBe("Trace Evals");
+    expect(c.section).toBe(13);
+    expect(c.component).toBe("TraceEvals");
+  });
+
+  it("has 13.41 EvalSetsContinuous", () => {
+    const c = findCh("13.41");
+    expect(c).toBeDefined();
+    expect(c.title).toBe("Eval Sets + Continuous Eval");
+    expect(c.section).toBe(13);
+    expect(c.component).toBe("EvalSetsContinuous");
+  });
+});

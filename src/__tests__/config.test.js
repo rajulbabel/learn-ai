@@ -364,6 +364,31 @@ describe("Section 12 Acts 6+7 chapters", () => {
   });
 });
 
+describe("Section 12 Act 8 chapters", () => {
+  it("has chapters 12.31 through 12.35 in order", () => {
+    const section12 = chapters.filter((ch) => ch.section === 12);
+    const last5 = section12.slice(-5);
+    const expected = [
+      { id: "12.31", component: "RAGEvalTriangle", title: "The RAG Eval Triangle" },
+      { id: "12.32", component: "LLMAsJudge", title: "LLM-as-Judge" },
+      { id: "12.33", component: "RAGASMetrics", title: "RAGAS Metrics" },
+      { id: "12.34", component: "GoldenDatasets", title: "Golden Datasets" },
+      { id: "12.35", component: "OnlineEvalABTesting", title: "Online Eval & A/B Testing" },
+    ];
+    expect(last5.length).toBe(expected.length);
+    expected.forEach((exp, i) => {
+      expect(last5[i].id).toBe(exp.id);
+      expect(last5[i].component).toBe(exp.component);
+      expect(last5[i].title).toBe(exp.title);
+    });
+  });
+
+  it("Section 12 has exactly 35 chapters after M5", () => {
+    const section12 = chapters.filter((ch) => ch.section === 12);
+    expect(section12.length).toBe(35);
+  });
+});
+
 describe("HTML entity hygiene", () => {
   it("no source file uses the broken &approx; entity (React does not parse it; use &asymp;)", () => {
     const offenders = [];

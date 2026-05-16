@@ -199,6 +199,12 @@ export const chapters = [
   { id: "12.28", title: "GraphRAG (Microsoft 2024)", section: 12, component: "GraphRAG" },
   { id: "12.29", title: "Tool-Augmented & Agentic RAG", section: 12, component: "AgenticRAG" },
   { id: "12.30", title: "Long-Context vs RAG", section: 12, component: "LongContextVsRAG" },
+  // Section 12 Act 8: Evaluation
+  { id: "12.31", title: "The RAG Eval Triangle", section: 12, component: "RAGEvalTriangle" },
+  { id: "12.32", title: "LLM-as-Judge", section: 12, component: "LLMAsJudge" },
+  { id: "12.33", title: "RAGAS Metrics", section: 12, component: "RAGASMetrics" },
+  { id: "12.34", title: "Golden Datasets", section: 12, component: "GoldenDatasets" },
+  { id: "12.35", title: "Online Eval & A/B Testing", section: 12, component: "OnlineEvalABTesting" },
 ];
 
 export const sectionNames = {

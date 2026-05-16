@@ -405,5 +405,8 @@
   ],
   "13.32": [
     "Three-level agent hierarchy: top supervisor delegates to three middle-level supervisors which each delegate to two leaf specialists, with planar parent-child edges and no crossings."
+  ],
+  "13.33": [
+    "Hand-off ring topology with four agents arranged in a circle, each connected by bidirectional arrows to its neighbors and one diagonal cross-edge, showing peer-to-peer transfer with no central parent."
   ]
 }

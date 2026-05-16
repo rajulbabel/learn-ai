@@ -324,5 +324,10 @@
   ],
   "12.16": [
     "Three-bar chart of recall at five comparing BM25-only at 0.68, dense-only at 0.74, and hybrid RRF at 0.86 on a 50-query held-out set from the support corpus."
+  ],
+  "12.17": [
+    "Three-stage RAG cascade funnel showing vector retrieval narrowing 1M chunks to top-50, a cross-encoder reranker narrowing 50 to top-10, and an LLM reading the top-3 to generate the final answer.",
+    "Horizontal stacked-bar chart showing the latency budget for a 3-stage RAG cascade: 30 ms for vector retrieval, 80 ms for the cross-encoder reranker, and 800 ms for LLM generation, totalling 910 ms p50.",
+    "Horizontal stacked-bar chart of the per-query cost breakdown for a 3-stage RAG cascade: $0.0001 for vector retrieval, $0.0003 for the cross-encoder reranker, and $0.0120 for LLM generation, totalling $0.0124."
   ]
 }

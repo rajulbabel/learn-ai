@@ -360,5 +360,10 @@
   ],
   "12.27": [
     "CRAG three-branch decision tree: an evaluator score routes retrieved docs to a CORRECT path (use directly), an AMBIGUOUS path (combine internal + web), or an INCORRECT path (web-search fallback), all converging into knowledge refinement before generation."
+  ],
+  "12.28": [
+    "Fifteen-node legal citation graph used as the GraphRAG running corpus, with cases as nodes and directed citation edges between them.",
+    "Subgraph retrieval highlight on the 15-node citation graph showing how a query selects a 5-node connected component (a precedent chain) as the retrieved context.",
+    "Same 15-node citation graph re-colored into three communities (Civil Rights, Contract Law, IP Law) for global-query summarization."
   ]
 }

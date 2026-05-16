@@ -263,6 +263,22 @@ describe("Section 11 chapters", () => {
   });
 });
 
+describe("Section 12 chapters", () => {
+  it("has chapters 12.1 through 12.3 in order", () => {
+    const section12 = chapters.filter((ch) => ch.section === 12);
+    expect(section12.length).toBe(3);
+    expect(section12[0].id).toBe("12.1");
+    expect(section12[0].component).toBe("WhyLLMsNeedRetrieval");
+    expect(section12[0].title).toBe("Why LLMs Need Retrieval");
+    expect(section12[1].id).toBe("12.2");
+    expect(section12[1].component).toBe("NaiveRAGPipeline");
+    expect(section12[1].title).toBe("The Naive RAG Pipeline");
+    expect(section12[2].id).toBe("12.3");
+    expect(section12[2].component).toBe("WhereNaiveRAGBreaks");
+    expect(section12[2].title).toBe("Where Naive RAG Breaks");
+  });
+});
+
 describe("HTML entity hygiene", () => {
   it("no source file uses the broken &approx; entity (React does not parse it; use &asymp;)", () => {
     const offenders = [];

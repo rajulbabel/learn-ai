@@ -165,6 +165,10 @@ export const chapters = [
   { id: "11.34", title: "Qdrant vs Pinecone", section: 11, component: "QdrantVsPinecone" },
   { id: "11.35", title: "Weaviate / Milvus / Chroma", section: 11, component: "WeaviateMilvusChroma" },
   { id: "11.36", title: "The Decision Framework", section: 11, component: "DecisionFramework" },
+  // Section 12: Retrieval-Augmented Generation
+  { id: "12.1", title: "Why LLMs Need Retrieval", section: 12, component: "WhyLLMsNeedRetrieval" },
+  { id: "12.2", title: "The Naive RAG Pipeline", section: 12, component: "NaiveRAGPipeline" },
+  { id: "12.3", title: "Where Naive RAG Breaks", section: 12, component: "WhereNaiveRAGBreaks" },
 ];
 
 export const sectionNames = {

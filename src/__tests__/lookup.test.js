@@ -20,6 +20,7 @@ import * as VectorSystems from "../sections/vector-systems.jsx";
 import * as RagFoundations from "../sections/rag-foundations.jsx";
 import * as RagIngestion from "../sections/rag-ingestion.jsx";
 import * as RagRetrieval from "../sections/rag-retrieval.jsx";
+import * as RagGeneration from "../sections/rag-generation.jsx";
 
 const lookup = {
   TOC,
@@ -40,6 +41,7 @@ const lookup = {
   ...RagFoundations,
   ...RagIngestion,
   ...RagRetrieval,
+  ...RagGeneration,
 };
 
 describe("lookup", () => {
@@ -84,6 +86,19 @@ describe("lookup", () => {
     expect(typeof mod.HyDE).toBe("function");
     expect(typeof mod.MultiQueryExpansion).toBe("function");
     expect(typeof mod.QueryRoutingDecomposition).toBe("function");
+  });
+
+  it("rag-generation.jsx exports all Milestone 4 chapter components", async () => {
+    const mod = await import("../sections/rag-generation.jsx");
+    expect(typeof mod.ContextPacking).toBe("function");
+    expect(typeof mod.LostInTheMiddle).toBe("function");
+    expect(typeof mod.CitationsRefusal).toBe("function");
+    expect(typeof mod.MultiHopRetrieval).toBe("function");
+    expect(typeof mod.SelfRAG).toBe("function");
+    expect(typeof mod.CorrectiveRAG).toBe("function");
+    expect(typeof mod.GraphRAG).toBe("function");
+    expect(typeof mod.AgenticRAG).toBe("function");
+    expect(typeof mod.LongContextVsRAG).toBe("function");
   });
 });
 

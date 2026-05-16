@@ -24,6 +24,7 @@ import * as RagIngestion from "../sections/rag-ingestion.jsx";
 import * as RagRetrieval from "../sections/rag-retrieval.jsx";
 import * as RagGeneration from "../sections/rag-generation.jsx";
 import * as RagEvaluation from "../sections/rag-evaluation.jsx";
+import * as RagProduction from "../sections/rag-production.jsx";
 
 const lookup = {
   TOC,
@@ -46,6 +47,7 @@ const lookup = {
   ...RagRetrieval,
   ...RagGeneration,
   ...RagEvaluation,
+  ...RagProduction,
 };
 
 afterEach(() => cleanup());

@@ -388,5 +388,10 @@
   "12.36": [
     "Semantic cache decision flow: an incoming query is embedded, compared by cosine similarity to cached queries, and either returns the cached answer when the score is at or above 0.93 or runs the full RAG pipeline and stores the new answer.",
     "Horizontal bar chart comparing per-query cost across four cache configurations: no cache versus prompt cache only versus semantic cache only versus both stacked. Both stacked delivers the lowest cost at three tenths of a cent per query with 83 percent savings."
+  ],
+  "12.37": [
+    "Horizontal stacked bar chart of per-query cost showing the five cost lines proportionally. LLM tokens (input and output combined) dominate at 94 percent of the bill; embedding, vector search, and reranker make up the rest.",
+    "Downward waterfall chart showing per-query cost reducing as five levers are stacked: prompt cache, semantic cache, fewer chunks, and switching to Haiku. Final cost is one tenth of a cent per query from a starting two cents.",
+    "Scatter plot of cost per query versus faithfulness score with six RAG configurations labeled A through F. A dashed Pareto frontier passes through the cost-efficient points; configuration F sits below the frontier as a dominated choice."
   ]
 }

@@ -6034,3 +6034,48 @@ describe("HyDE (12.19) content", () => {
     expect(container.textContent).toMatch(/12\.36|cache|caching/i);
   });
 });
+
+describe("MultiQueryExpansion (12.20) content", () => {
+  const fn = RagRetrieval.MultiQueryExpansion;
+
+  it("sub=0 frames one query becomes many and mentions RAG-Fusion", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/multi-?query|expansion|variants/i);
+    expect(container.textContent).toMatch(/RAG-?Fusion/i);
+  });
+
+  it("sub=1 shows the 3-step pipeline", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/generate|variants/i);
+    expect(container.textContent).toMatch(/retriev/i);
+    expect(container.textContent).toMatch(/fuse|RRF/i);
+  });
+
+  it("sub=2 walks the cancel-and-refund example with 3 variants and fused ranking", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/cancel/i);
+    expect(container.textContent).toMatch(/refund/i);
+    expect(container.textContent).toMatch(/doc-?15/i);
+    expect(container.textContent).toMatch(/doc-?4/i);
+  });
+
+  it("sub=3 shows RRF formula and links to chapter 12.16", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/RRF|Reciprocal Rank Fusion/i);
+    expect(container.textContent).toMatch(/k\s*=\s*60|60/);
+    expect(container.textContent).toMatch(/12\.16/);
+  });
+
+  it("sub=4 covers step-back prompting variant", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/step-?back/i);
+    expect(container.textContent).toMatch(/general|broader|specific/i);
+  });
+
+  it("sub=5 shows when multi-query helps with latency cost", () => {
+    const { container } = render(fn(makeCtx({ sub: 5 })));
+    expect(container.textContent).toMatch(/ambigu|complex/i);
+    expect(container.textContent).toMatch(/latency|300|ms/i);
+    expect(container.textContent).toMatch(/HyDE/i);
+  });
+});

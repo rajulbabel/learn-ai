@@ -335,5 +335,9 @@
   ],
   "12.19": [
     "Five-box horizontal flow diagram showing the HyDE pipeline: user query, LLM generates hypothetical answer, embed hypothetical answer, vector retrieval, top-K real docs."
+  ],
+  "12.20": [
+    "Fan-out diagram showing a single user query expanding into 3 LLM-generated variants, each retrieving its own top-K, then converging into a single fused ranking via RRF.",
+    "Three-box horizontal pipeline diagram for multi-query expansion: an LLM generates 3-5 query variants, vector retrieval runs for each variant, and the rankings are fused with RRF into one final list."
   ]
 }

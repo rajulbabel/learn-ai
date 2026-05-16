@@ -363,5 +363,11 @@
     "Three node circular flow showing reason then act then observe cycle of the agent loop.",
     "State machine diagram with waiting reasoning acting observing primary states and done failed escalated terminal states.",
     "Three node cycle of reason act observe with a diamond decision node labeled terminate between observe and reason, branching to done escalate or abort."
+  ],
+  "13.22": [
+    "Linear ReAct chain showing four reactive steps connected by question-mark arrows representing the model choosing the next action on the fly each iteration.",
+    "Plan tree topology where a single root node fans out to four leaf nodes representing the full plan written up front before any leaf is executed.",
+    "Four-leaf plan tree for ticket T4 cancel and refund showing lookup_customer, lookup_subscription, cancel, process_refund leaves with refund leaf marked for escalation.",
+    "Plan execution sweep showing four leaves running with their results next to them, the fourth leaf failing with a business_rule error, and a fifth escalate_human leaf appended by the executor to adapt to the error."
   ]
 }

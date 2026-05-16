@@ -443,5 +443,9 @@
     "Freshness timeline showing eval set score holding steady near 0.9 at month zero while real production distribution drifts away over time, causing the gap between eval-set predicted quality and actual production quality to widen by month three.",
     "Online sampling flow showing production traffic being sampled at a one to five percent rate into an async LLM-as-Judge grading stage, with results stored back to the trace store and rendered on the eval quality dashboard.",
     "Time series of composite trace scores plotted over fourteen days, hovering around 0.85 until day ten where the moving average drops to 0.78, crossing the 0.05 drift threshold below the 0.85 baseline and firing an alert that engineers must investigate."
+  ],
+  "13.42": [
+    "Span tree for ticket T2: root agent run with three loop iterations. Iter 1 calls lookup_customer, iter 2 calls change_email, iter 3 emits the final answer. Each span row shows its label and duration in milliseconds.",
+    "Same span tree as sub=0 for ticket T2, with cost values overlaid on each LLM call span. LLM call 1 cost $0.025, call 2 cost $0.03, call 3 cost $0.04. Total trace cost shown at bottom."
   ]
 }

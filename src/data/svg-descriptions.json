@@ -427,5 +427,10 @@
   ],
   "13.37": [
     "Five-stage production eval pipeline with eval set feeding per-trace step grading and end-to-end LLM-as-Judge in parallel, then online sampling and a drift signal that triggers alerting and rollback. Each stage labeled with the Section 13 chapter that covers it."
+  ],
+  "13.38": [
+    "Four-axis radar chart with correctness on top, latency on the right, cost on the bottom, and safety on the left. A green target zone shows the acceptable region and a red polygon shows a single agent run scoring 0.92, 0.78, 0.84, and 0.97.",
+    "Latency histogram showing trace duration distribution with P50 at 3.2 seconds, P95 at 7.5 seconds (just inside the 8 second target line), and P99 at 14 seconds in the long tail.",
+    "Cost breakdown bar for a typical support trace showing input tokens at six cents, output tokens at twenty cents, and tool calls at twelve cents adding up to roughly thirty-eight cents per ticket against a fifty cent target."
   ]
 }

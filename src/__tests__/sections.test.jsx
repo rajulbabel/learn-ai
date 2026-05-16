@@ -6895,3 +6895,45 @@ describe("WhyMultiAgent (13.30) content", () => {
     expect(container.textContent).toMatch(/Don.t Multi-Agent A Small Problem/i);
   });
 });
+
+describe("OrchestratorWorker (13.31) content", () => {
+  const fn = MultiAgent.OrchestratorWorker;
+
+  it("sub=0 shows topology", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/orchestrat|planner/i);
+    expect(container.textContent).toMatch(/worker/i);
+    expect(container.textContent).toMatch(/One Planner, N Workers/i);
+  });
+
+  it("sub=1 shows orchestrator phases", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/plan/i);
+    expect(container.textContent).toMatch(/dispatch|send/i);
+    expect(container.textContent).toMatch(/aggregat|merge/i);
+    expect(container.textContent).toMatch(/Plan, Dispatch, Aggregate/i);
+  });
+
+  it("sub=2 shows worker role", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/sub.?task/i);
+    expect(container.textContent).toMatch(/don't talk|orchestrator/i);
+    expect(container.textContent).toMatch(/Execute One Sub-Task/i);
+  });
+
+  it("sub=3 traces T3", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/T3|ticket t3/i);
+    expect(container.textContent).toMatch(/search_kb/);
+    expect(container.textContent).toMatch(/lookup_customer/);
+    expect(container.textContent).toMatch(/Trace: Ticket T3/i);
+  });
+
+  it("sub=4 lists aggregation patterns", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/concat|stitch/i);
+    expect(container.textContent).toMatch(/vote|majority/i);
+    expect(container.textContent).toMatch(/synthesis/i);
+    expect(container.textContent).toMatch(/Three Ways To Aggregate/i);
+  });
+});

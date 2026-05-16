@@ -398,5 +398,9 @@
     "Single agent loaded with five different jobs, labeled retrieve, classify, refund, troubleshoot, and escalate, visualizing the crowded role assignment that creates a performance ceiling for one agent.",
     "Three independent sub-tasks lookup_customer, lookup_subscription, and search_kb running in parallel on three separate agents with wall-clock time equal to the slowest one rather than the sum of all three.",
     "Two-layer planner and worker architecture: a planner agent at the top decomposes a task and dispatches sub-tasks to two worker agents at the bottom that each execute one sub-task and return results to the planner."
+  ],
+  "13.31": [
+    "Hub and spoke topology: an orchestrator agent at the top center has bidirectional arrows to three worker agents at the bottom, with no edges between workers.",
+    "Single worker card showing the input sub-task description on the left, an internal agent loop in the middle, and the structured result returned to the orchestrator on the right."
   ]
 }

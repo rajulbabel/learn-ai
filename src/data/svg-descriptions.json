@@ -349,5 +349,14 @@
     "Four node directed acyclic graph showing fixed deterministic workflow with predictable edges.",
     "Central decision node with multiple branching options showing an open loop where the model picks different paths each run.",
     "Hybrid workflow showing a four node DAG where the second node is replaced by an agent loop with a question mark indicating the model decides while the other three nodes remain deterministic."
+  ],
+  "13.19": [
+    "Three node chain showing step A flowing to step B flowing to step C as sequential arrows in a horizontal pipeline.",
+    "Routing topology showing an input flowing to a classifier node which then branches out to three different downstream paths based on intent.",
+    "Parallelization topology showing an input fanning out to three concurrent worker nodes that all feed into a single aggregator node.",
+    "Three node chain with JSON output labels above each arrow showing how the structured output of one step becomes the structured input of the next step in a billing ticket example.",
+    "Routing diagram showing a ticket flowing to an intent classifier that branches to billing, product, troubleshooting, and chitchat handler boxes based on classified intent.",
+    "Fan-out diagram showing one query branching to three concurrent workers running in parallel then merging into a single aggregator node with timing bars showing that total latency equals the slowest worker time.",
+    "Composed workflow topology stacking all three primitives where a ticket chains into a classifier that routes to one of three branches, one branch fans out to three parallel retrieval calls that merge before chaining into a final answer node."
   ]
 }

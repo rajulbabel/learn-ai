@@ -24,6 +24,7 @@ import * as RagIngestion from "../sections/rag-ingestion.jsx";
 import * as AgentPrompting from "../sections/agent-prompting.jsx";
 import * as AgentTools from "../sections/agent-tools.jsx";
 import * as AgentLoops from "../sections/agent-loops.jsx";
+import * as MultiAgent from "../sections/multi-agent.jsx";
 
 const lookup = {
   TOC,
@@ -46,6 +47,7 @@ const lookup = {
   ...AgentPrompting,
   ...AgentTools,
   ...AgentLoops,
+  ...MultiAgent,
 };
 
 afterEach(() => cleanup());

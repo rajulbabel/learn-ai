@@ -22,6 +22,7 @@ import * as RagIngestion from "../sections/rag-ingestion.jsx";
 import * as AgentPrompting from "../sections/agent-prompting.jsx";
 import * as AgentTools from "../sections/agent-tools.jsx";
 import * as AgentLoops from "../sections/agent-loops.jsx";
+import * as MultiAgent from "../sections/multi-agent.jsx";
 
 const lookup = {
   TOC,
@@ -44,6 +45,7 @@ const lookup = {
   ...AgentPrompting,
   ...AgentTools,
   ...AgentLoops,
+  ...MultiAgent,
 };
 
 describe("lookup", () => {
@@ -125,5 +127,28 @@ describe("Section 13 component presence", () => {
     expect(typeof AgentLoops.ReActPattern).toBe("function");
     expect(typeof AgentLoops.PlanExecuteReflect).toBe("function");
     expect(typeof AgentLoops.LoopTermination).toBe("function");
+  });
+});
+
+describe("Section 13 Act 5 component presence (AgentLoops)", () => {
+  it("AgentLoops exports each Act 5 chapter", () => {
+    expect(typeof AgentLoops.MemoryTaxonomy).toBe("function");
+    expect(typeof AgentLoops.WorkingMemory).toBe("function");
+    expect(typeof AgentLoops.EpisodicMemory).toBe("function");
+    expect(typeof AgentLoops.SemanticMemory).toBe("function");
+    expect(typeof AgentLoops.ProceduralMemory).toBe("function");
+    expect(typeof AgentLoops.SummaryAndContextMgmt).toBe("function");
+  });
+});
+
+describe("Section 13 Act 6 component presence (MultiAgent)", () => {
+  it("MultiAgent exports each Act 6 chapter", () => {
+    expect(typeof MultiAgent.WhyMultiAgent).toBe("function");
+    expect(typeof MultiAgent.OrchestratorWorker).toBe("function");
+    expect(typeof MultiAgent.SupervisorHierarchy).toBe("function");
+    expect(typeof MultiAgent.AgentHandoffs).toBe("function");
+    expect(typeof MultiAgent.CriticDebate).toBe("function");
+    expect(typeof MultiAgent.MultiAgentFailures).toBe("function");
+    expect(typeof MultiAgent.AgenticRag).toBe("function");
   });
 });

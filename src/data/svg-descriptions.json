@@ -321,5 +321,8 @@
     "Triplet-loss diagram showing an anchor point in the center with arrows pulling a positive sample close and pushing a negative sample away.",
     "Before-versus-after bar chart comparing recall, MRR, and latency for off-the-shelf vs fine-tuned embeddings on the support corpus.",
     "Training loss curve showing triplet loss dropping from 0.5 at epoch 0 to 0.05 at epoch 3 over a fine-tuning run on 50k support-corpus triples."
+  ],
+  "12.16": [
+    "Three-bar chart of recall at five comparing BM25-only at 0.68, dense-only at 0.74, and hybrid RRF at 0.86 on a 50-query held-out set from the support corpus."
   ]
 }

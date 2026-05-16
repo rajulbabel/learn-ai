@@ -49,6 +49,7 @@ const sectionLoaders = {
       import("./sections/agent-prompting.jsx"),
       import("./sections/agent-tools.jsx"),
       import("./sections/agent-loops.jsx"),
+      import("./sections/multi-agent.jsx"),
     ]).then((mods) => Object.assign({}, ...mods)),
 };
 

@@ -1836,6 +1836,60 @@ The generic test block in `sections.test.jsx` iterates over `chapters` and looks
 
 ---
 
+## Task 13: Plan Refinement Checkpoint for M6
+
+**Files:**
+- Create: `docs/superpowers/lessons/section-12-m5-lessons.md` (new lessons file)
+- Modify (if needed): `docs/superpowers/plans/2026-05-16-section-12-milestone-6.md`
+
+Per the section's "lessons-feed-forward" rule, before executing M6, do a quick refinement pass on the M6 plan using what M5 taught us. The plans are editable artifacts, not contracts - this checkpoint is where M5's real-world experience gets folded into M6's plan.
+
+- [ ] **Step 1: Lessons capture from M5 (5-10 minutes, write it down)**
+
+Create `docs/superpowers/lessons/section-12-m5-lessons.md` with 3-5 honest bullet observations from executing M5:
+
+- Which visual patterns rendered cleanly in Chrome and which needed iteration?
+- Which test regexes were too brittle (false fail) or too loose (let bugs through)?
+- Which sub-step structures landed clean and which needed re-org during implementation?
+- Anything in the per-chapter task pattern that felt awkward or could be tightened?
+- Anything in the visual rules that proved especially load-bearing or surprisingly easy to violate?
+- Any pattern (color choice, diagram structure, prompt-template treatment, etc.) that worked better than what the plan specified?
+
+The lessons are only useful if they're real. Skip a bullet if it doesn't apply. Add bullets the prompts don't cover if something else stood out.
+
+- [ ] **Step 2: Read M6 plan with M5 lessons in mind**
+
+Open `docs/superpowers/plans/2026-05-16-section-12-milestone-6.md`. Scan for places where the M5 lessons would apply:
+
+- If M5 showed a visual pattern works better than what M6 specifies, update the relevant sub-step descriptions in M6.
+- If M5 showed a test regex pattern catches more bugs, update M6's test patterns.
+- If M5 showed a task structure was awkward, simplify the equivalent structure in M6.
+- If M5 introduced a useful helper / convention / utility not anticipated in M6, thread it into the M6 plan.
+
+- [ ] **Step 3: Edit M6 plan if needed**
+
+If lessons translate to plan edits, make them inline in `docs/superpowers/plans/2026-05-16-section-12-milestone-6.md`. Keep edits scoped: only change what M5 directly informs. Do NOT rewrite M6 wholesale.
+
+If no edits are warranted, skip and proceed to commit.
+
+- [ ] **Step 4: Commit the lessons file + any plan edits**
+
+```bash
+git add docs/superpowers/lessons/section-12-m5-lessons.md docs/superpowers/plans/2026-05-16-section-12-milestone-6.md
+git commit -m "Capture M5 lessons and refine M6 plan"
+```
+
+If only the lessons file changed and no M6 plan edits were made:
+
+```bash
+git add docs/superpowers/lessons/section-12-m5-lessons.md
+git commit -m "Capture M5 lessons; no M6 plan edits needed"
+```
+
+- [ ] **Step 5: M5 complete. Ready to start M6.**
+
+---
+
 ## What Comes Next
 
 After this milestone, M6 is the final implementation tranche of Section 12:

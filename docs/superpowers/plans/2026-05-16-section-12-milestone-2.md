@@ -1643,6 +1643,60 @@ M2 complete. Section 12 now has 10 navigable chapters (Acts 1+2). Ready to write
 
 ---
 
+## Task 11: Plan Refinement Checkpoint for M3
+
+**Files:**
+- Create: `docs/superpowers/lessons/section-12-m2-lessons.md` (new lessons file)
+- Modify (if needed): `docs/superpowers/plans/2026-05-16-section-12-milestone-3.md`
+
+Per the section's "lessons-feed-forward" rule, before executing M3, do a quick refinement pass on the M3 plan using what M2 taught us. The plans are editable artifacts, not contracts - this checkpoint is where M2's real-world experience gets folded into M3's plan.
+
+- [ ] **Step 1: Lessons capture from M2 (5-10 minutes, write it down)**
+
+Create `docs/superpowers/lessons/section-12-m2-lessons.md` with 3-5 honest bullet observations from executing M2:
+
+- Which visual patterns rendered cleanly in Chrome and which needed iteration?
+- Which test regexes were too brittle (false fail) or too loose (let bugs through)?
+- Which sub-step structures landed clean and which needed re-org during implementation?
+- Anything in the per-chapter task pattern that felt awkward or could be tightened?
+- Anything in the visual rules that proved especially load-bearing or surprisingly easy to violate?
+- Any pattern (color choice, diagram structure, prompt-template treatment, etc.) that worked better than what the plan specified?
+
+The lessons are only useful if they're real. Skip a bullet if it doesn't apply. Add bullets the prompts don't cover if something else stood out.
+
+- [ ] **Step 2: Read M3 plan with M2 lessons in mind**
+
+Open `docs/superpowers/plans/2026-05-16-section-12-milestone-3.md`. Scan for places where the M2 lessons would apply:
+
+- If M2 showed a visual pattern works better than what M3 specifies, update the relevant sub-step descriptions in M3.
+- If M2 showed a test regex pattern catches more bugs, update M3's test patterns.
+- If M2 showed a task structure was awkward, simplify the equivalent structure in M3.
+- If M2 introduced a useful helper / convention / utility not anticipated in M3, thread it into the M3 plan.
+
+- [ ] **Step 3: Edit M3 plan if needed**
+
+If lessons translate to plan edits, make them inline in `docs/superpowers/plans/2026-05-16-section-12-milestone-3.md`. Keep edits scoped: only change what M2 directly informs. Do NOT rewrite M3 wholesale.
+
+If no edits are warranted, skip and proceed to commit.
+
+- [ ] **Step 4: Commit the lessons file + any plan edits**
+
+```bash
+git add docs/superpowers/lessons/section-12-m2-lessons.md docs/superpowers/plans/2026-05-16-section-12-milestone-3.md
+git commit -m "Capture M2 lessons and refine M3 plan"
+```
+
+If only the lessons file changed and no M3 plan edits were made:
+
+```bash
+git add docs/superpowers/lessons/section-12-m2-lessons.md
+git commit -m "Capture M2 lessons; no M3 plan edits needed"
+```
+
+- [ ] **Step 5: M2 complete. Ready to start M3.**
+
+---
+
 ## What Comes Next
 
 After this milestone, remaining sections are planned just-in-time:

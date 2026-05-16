@@ -2600,6 +2600,60 @@ This is the final acceptance gate for M4. Every check must pass before declaring
 
 ---
 
+## Task 17: Plan Refinement Checkpoint for M5
+
+**Files:**
+- Create: `docs/superpowers/lessons/section-12-m4-lessons.md` (new lessons file)
+- Modify (if needed): `docs/superpowers/plans/2026-05-16-section-12-milestone-5.md`
+
+Per the section's "lessons-feed-forward" rule, before executing M5, do a quick refinement pass on the M5 plan using what M4 taught us. The plans are editable artifacts, not contracts - this checkpoint is where M4's real-world experience gets folded into M5's plan.
+
+- [ ] **Step 1: Lessons capture from M4 (5-10 minutes, write it down)**
+
+Create `docs/superpowers/lessons/section-12-m4-lessons.md` with 3-5 honest bullet observations from executing M4:
+
+- Which visual patterns rendered cleanly in Chrome and which needed iteration?
+- Which test regexes were too brittle (false fail) or too loose (let bugs through)?
+- Which sub-step structures landed clean and which needed re-org during implementation?
+- Anything in the per-chapter task pattern that felt awkward or could be tightened?
+- Anything in the visual rules that proved especially load-bearing or surprisingly easy to violate?
+- Any pattern (color choice, diagram structure, prompt-template treatment, etc.) that worked better than what the plan specified?
+
+The lessons are only useful if they're real. Skip a bullet if it doesn't apply. Add bullets the prompts don't cover if something else stood out.
+
+- [ ] **Step 2: Read M5 plan with M4 lessons in mind**
+
+Open `docs/superpowers/plans/2026-05-16-section-12-milestone-5.md`. Scan for places where the M4 lessons would apply:
+
+- If M4 showed a visual pattern works better than what M5 specifies, update the relevant sub-step descriptions in M5.
+- If M4 showed a test regex pattern catches more bugs, update M5's test patterns.
+- If M4 showed a task structure was awkward, simplify the equivalent structure in M5.
+- If M4 introduced a useful helper / convention / utility not anticipated in M5, thread it into the M5 plan.
+
+- [ ] **Step 3: Edit M5 plan if needed**
+
+If lessons translate to plan edits, make them inline in `docs/superpowers/plans/2026-05-16-section-12-milestone-5.md`. Keep edits scoped: only change what M4 directly informs. Do NOT rewrite M5 wholesale.
+
+If no edits are warranted, skip and proceed to commit.
+
+- [ ] **Step 4: Commit the lessons file + any plan edits**
+
+```bash
+git add docs/superpowers/lessons/section-12-m4-lessons.md docs/superpowers/plans/2026-05-16-section-12-milestone-5.md
+git commit -m "Capture M4 lessons and refine M5 plan"
+```
+
+If only the lessons file changed and no M5 plan edits were made:
+
+```bash
+git add docs/superpowers/lessons/section-12-m4-lessons.md
+git commit -m "Capture M4 lessons; no M5 plan edits needed"
+```
+
+- [ ] **Step 5: M4 complete. Ready to start M5.**
+
+---
+
 ## What Comes Next
 
 After this milestone, the remaining Section 12 milestones:

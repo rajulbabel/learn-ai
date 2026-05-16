@@ -2197,6 +2197,77 @@ Confirm: "Section 12 Milestone 6 complete. All 38 chapters of Retrieval-Augmente
 
 ---
 
+### Task 17: Section 12 Retrospective
+
+**Files:**
+- Create: `docs/superpowers/lessons/section-12-m6-lessons.md`
+- Create: `docs/superpowers/lessons/section-12-retrospective.md`
+
+This is the FINAL milestone of Section 12. Do a retrospective on the whole section (not just M6) so future sections benefit.
+
+- [ ] **Step 1: M6 lessons capture (5-10 minutes)**
+
+Create `docs/superpowers/lessons/section-12-m6-lessons.md` with the same 3-5 honest bullet observations format used in prior milestone refinement checkpoints. Specific to M6's 6 chapters and the capstone walkthrough.
+
+- [ ] **Step 2: Section-wide retrospective (15-20 minutes)**
+
+Create `docs/superpowers/lessons/section-12-retrospective.md` with these sections:
+
+````markdown
+# Section 12 (RAG) - Retrospective
+
+## What worked
+
+- Visual patterns that landed cleanly across many chapters
+- Task structures that minimized rework
+- Sub-step pacing that learners would find compelling
+- Test patterns that caught real bugs
+- Section 11 back-reference treatment
+
+## What did not work / what slowed us down
+
+- Patterns we tried that needed multiple rounds in Chrome
+- Test patterns that were too brittle or too loose
+- Sub-step structures that fragmented a single idea
+- Visual rules that were easy to violate
+- Coordination / handoff friction between milestones
+
+## What I would do differently next time
+
+- For the spec phase (brainstorming -> design doc)
+- For the plan phase (plan writing -> bite-sized tasks)
+- For the execution phase (subagent dispatch, review cadence)
+
+## Suggested backlog (what comes after Section 12)
+
+- User-feedback collection on Section 12 specifically
+- A/B testing chapter ordering (e.g., does eval-first work better than eval-late?)
+- Observability of the learn-ai app itself (which chapters get most read, where users drop)
+- Visual-rule enforcement automation (linter for diagram-box title-case, overlap detection)
+- Cross-section integration (do back-references work? are prerequisite chapters being read?)
+
+## Metrics
+
+- Total chapters shipped: 38
+- Total milestone plans: 6
+- Total lines of plan documentation: ~12k
+- Total chapter implementation tasks: ~45 (3+7+8+9+5+6 + infrastructure)
+- Date span (start of M1 to end of M6): [fill at completion]
+````
+
+Fill in real observations - this is the document that informs the next big section's planning.
+
+- [ ] **Step 3: Commit**
+
+```bash
+git add docs/superpowers/lessons/section-12-m6-lessons.md docs/superpowers/lessons/section-12-retrospective.md
+git commit -m "Section 12 M6 lessons + section-wide retrospective"
+```
+
+- [ ] **Step 4: Section 12 fully complete.** 38 chapters shipped. 6 milestones done. Ready for next section (or stable shipping if no next section planned).
+
+---
+
 ## What Comes Next
 
 Section 12 is complete. With 38 chapters of production RAG content live, the learn-ai app now covers:

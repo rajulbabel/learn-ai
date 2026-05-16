@@ -408,5 +408,10 @@
   ],
   "13.33": [
     "Hand-off ring topology with four agents arranged in a circle, each connected by bidirectional arrows to its neighbors and one diagonal cross-edge, showing peer-to-peer transfer with no central parent."
+  ],
+  "13.34": [
+    "Two-agent pair where the worker agent on the left produces a draft answer and the critic agent on the right reads the draft and the original question, then scores or rewrites it.",
+    "Circular flow with four stations: worker drafts, critic scores zero through ten, conditional revise if below seven, then critic re-scores, with a loop arrow back to the worker until score is high enough or retry cap is reached.",
+    "Three-agent debate setup: agent Pro on the left and agent Con on the right both argue toward a Judge agent in the bottom center, which reads both arguments and picks one."
   ]
 }

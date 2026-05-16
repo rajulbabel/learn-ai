@@ -7021,3 +7021,43 @@ describe("AgentHandoffs (13.33) content", () => {
     expect(container.textContent).toMatch(/Ring When All Agents Are Peers/i);
   });
 });
+
+describe("CriticDebate (13.34) content", () => {
+  const fn = MultiAgent.CriticDebate;
+
+  it("sub=0 introduces critic role", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/critic/i);
+    expect(container.textContent).toMatch(/13\.22|reflection/i);
+    expect(container.textContent).toMatch(/A Second Agent Checks The First/i);
+  });
+
+  it("sub=1 shows critique-revise loop", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/critique|score/i);
+    expect(container.textContent).toMatch(/revise/i);
+    expect(container.textContent).toMatch(/Loop: Draft/i);
+  });
+
+  it("sub=2 shows debate pattern", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/debate|argue/i);
+    expect(container.textContent).toMatch(/judge/i);
+    expect(container.textContent).toMatch(/Two Agents Argue/i);
+  });
+
+  it("sub=3 shows refund critic example", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/refund/i);
+    expect(container.textContent).toMatch(/policy/i);
+    expect(container.textContent).toMatch(/30 days|partial/i);
+    expect(container.textContent).toMatch(/Policy Critic/i);
+  });
+
+  it("sub=4 shows critic cost tradeoff", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/cost|battle/i);
+    expect(container.textContent).toMatch(/high.?stakes|contested/i);
+    expect(container.textContent).toMatch(/Pick Battles/i);
+  });
+});

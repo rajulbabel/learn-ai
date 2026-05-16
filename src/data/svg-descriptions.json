@@ -469,5 +469,10 @@
   ],
   "13.47": [
     "Sandbox boundary diagram. The inner cage contains the tool process, its allowed filesystem reads, and its allowed outbound network destinations. Outside the cage are the agent itself, the host OS, and customer data unrelated to this session. If a tool is compromised, the cage limits damage."
+  ],
+  "13.48": [
+    "LangGraph state machine for a customer-support agent. Four nodes (Classify, Lookup, Refund, Respond) connected by directed edges. A shared state object flows along every edge: each node reads it and writes it.",
+    "Conditional edges from the classify node. After classify writes state.intent, the router branches into billing_handler when intent is billing, troubleshooting_handler when intent is troubleshooting, or escalation_handler when intent is escalation.",
+    "Checkpoint and resume sequence. Step 1: agent runs to a long-running tool call. Step 2: state is checkpointed and the graph pauses. Step 3: when the tool result arrives async, the graph resumes from the checkpoint."
   ]
 }

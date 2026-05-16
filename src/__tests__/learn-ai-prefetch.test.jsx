@@ -39,8 +39,10 @@ describe("search prefetch is deferred", () => {
     // Allow chapter useEffect to run and register the load listener.
     await new Promise((r) => setTimeout(r, 50));
     window.dispatchEvent(new Event("load"));
-    // wait for idle + dynamic search.js import + chained promises
-    await new Promise((r) => setTimeout(r, 200));
+    // Poll up to 1s for idle + dynamic search.js import + chained promises.
+    for (let i = 0; i < 50 && prefetchSpy.mock.calls.length === 0; i++) {
+      await new Promise((r) => setTimeout(r, 20));
+    }
     expect(prefetchSpy).toHaveBeenCalled();
   });
 });

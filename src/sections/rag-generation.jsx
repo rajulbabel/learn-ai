@@ -4124,7 +4124,6 @@ export const LongContextVsRAG = (ctx) => {
   const CHART_PLOT_W = CHART_VB_W - CHART_PAD_L - CHART_PAD_R;
   const CHART_PLOT_H = CHART_VB_H - CHART_PAD_T - CHART_PAD_B;
   const X_START = CHART_PAD_L + (CHART_PLOT_W - TOTAL_BARS_W) / 2;
-  const BAR_TOP = CHART_PAD_T;
   const BAR_BOTTOM = CHART_PAD_T + CHART_PLOT_H;
 
   return (

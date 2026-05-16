@@ -374,5 +374,11 @@
     "Horizontal counter from one to ten showing iteration count with the tenth iteration highlighted as the forced termination point.",
     "Horizontal budget bar filling from zero to one hundred percent with markers at thirty sixty and one hundred percent showing iteration cost consumption stopping at budget exhaustion.",
     "Fail-safe escalation flow from any non-success termination to user message and escalate_human call with partial transcript."
+  ],
+  "13.24": [
+    "Memory taxonomy tree with Agent Memory as root, branching into Short-Term Working Memory and Long-Term, then Long-Term splits into Episodic, Semantic, and Procedural."
+  ],
+  "13.25": [
+    "Timeline of working memory: created at task start, updated through N iterations, discarded when task ends, with a promotion arrow pointing to long-term store before discard."
   ]
 }

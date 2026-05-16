@@ -256,6 +256,14 @@ Only config.js IDs change.
 | 11.35 | WeaviateMilvusChroma | Weaviate / Milvus / Chroma |
 | 11.36 | DecisionFramework | The Decision Framework |
 
+**Section 12: Retrieval-Augmented Generation** (`rag-foundations.jsx` - Act 1 only in Milestone 1; Acts 2-9 added in Milestones 2-6)
+
+| Chapter | Component | Title |
+|---------|-----------|-------|
+| 12.1 | WhyLLMsNeedRetrieval | Why LLMs Need Retrieval |
+| 12.2 | NaiveRAGPipeline | The Naive RAG Pipeline |
+| 12.3 | WhereNaiveRAGBreaks | Where Naive RAG Breaks |
+
 ## Project Structure
 
 ```
@@ -293,7 +301,8 @@ learn-ai/
 │       ├── vector-foundations.jsx        # Section 11 (Acts 1+2, chapters 11.1-11.11)
 │       ├── vector-compression.jsx        # Section 11 (Acts 3+4, chapters 11.12-11.18)
 │       ├── vector-production.jsx         # Section 11 (Act 5, chapters 11.19-11.28)
-│       └── vector-systems.jsx            # Section 11 (Act 6, chapters 11.29-11.35)
+│       ├── vector-systems.jsx            # Section 11 (Act 6, chapters 11.29-11.35)
+│       └── rag-foundations.jsx           # Section 12 (Acts 1+2, chapters 12.1-12.10 - in progress)
 ├── .github/workflows/deploy.yml
 └── CLAUDE.md
 ```

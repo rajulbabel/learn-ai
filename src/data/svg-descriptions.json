@@ -478,5 +478,8 @@
   "13.51": [
     "Decision tree for staying custom. Five leaves: three say YES (high-volume traffic over 10K per second, tight latency budget P95 under 2 seconds, multi-vendor strategy required) and two say NO (one-off prototype shipping this week, team of fewer than 3 engineers).",
     "Hybrid layer diagram. Stack of four layers showing what teams typically buy from a framework (scaffolding, schema validation, basic retries) and what they build custom (LLM adapter for vendor swap, observability that integrates with the monitoring stack, domain-specific tool gating)."
+  ],
+  "13.52": [
+    "Nine-layer agent decision stack. From top (strategy) to bottom (operations): Approach (13.5), Loop Pattern (13.18 to 13.22), Memory Layers (13.24 to 13.29), Multi-Agent (13.30 to 13.34), Tools (13.7 to 13.11), Protocols (13.12 to 13.17), Eval (13.37 to 13.41), Production (13.42 to 13.47), Framework (13.48 to 13.51). Each layer references its source chapters."
   ]
 }

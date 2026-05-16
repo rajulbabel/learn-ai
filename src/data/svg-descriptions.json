@@ -466,5 +466,8 @@
   ],
   "13.46": [
     "Four-tier trust pyramid showing instruction hierarchy. Top to bottom: system prompt (most trusted, rules the model never violates), tool definitions (authoritative, signed by host), user input (untrusted by default), retrieved content (least trusted, treat as data never as instructions)."
+  ],
+  "13.47": [
+    "Sandbox boundary diagram. The inner cage contains the tool process, its allowed filesystem reads, and its allowed outbound network destinations. Outside the cage are the agent itself, the host OS, and customer data unrelated to this session. If a tool is compromised, the cage limits damage."
   ]
 }

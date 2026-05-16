@@ -4967,3 +4967,84 @@ export const LoopTermination = (ctx) => {
     </div>
   );
 };
+
+// Section 13 Act 5: Agent Memory
+// Chapters 13.24 - 13.29
+
+export const MemoryTaxonomy = (ctx) => {
+  return (
+    <div>
+      <Box color={C.amber}>
+        <T color={C.amber} bold center size={22}>
+          Memory Taxonomy - Short vs Long
+        </T>
+        <T size={16}>Stub - implemented in Task 7.</T>
+      </Box>
+    </div>
+  );
+};
+
+export const WorkingMemory = (ctx) => {
+  return (
+    <div>
+      <Box color={C.amber}>
+        <T color={C.amber} bold center size={22}>
+          Working Memory - The Scratchpad
+        </T>
+        <T size={16}>Stub - implemented in Task 8.</T>
+      </Box>
+    </div>
+  );
+};
+
+export const EpisodicMemory = (ctx) => {
+  return (
+    <div>
+      <Box color={C.amber}>
+        <T color={C.amber} bold center size={22}>
+          Episodic Memory - Past Events
+        </T>
+        <T size={16}>Stub - implemented in Task 9.</T>
+      </Box>
+    </div>
+  );
+};
+
+export const SemanticMemory = (ctx) => {
+  return (
+    <div>
+      <Box color={C.amber}>
+        <T color={C.amber} bold center size={22}>
+          Semantic Memory - Learned Facts
+        </T>
+        <T size={16}>Stub - implemented in Task 10.</T>
+      </Box>
+    </div>
+  );
+};
+
+export const ProceduralMemory = (ctx) => {
+  return (
+    <div>
+      <Box color={C.amber}>
+        <T color={C.amber} bold center size={22}>
+          Procedural Memory - Learned Skills
+        </T>
+        <T size={16}>Stub - implemented in Task 11.</T>
+      </Box>
+    </div>
+  );
+};
+
+export const SummaryAndContextMgmt = (ctx) => {
+  return (
+    <div>
+      <Box color={C.amber}>
+        <T color={C.amber} bold center size={22}>
+          Summary Memory + Context Window Management
+        </T>
+        <T size={16}>Stub - implemented in Task 12.</T>
+      </Box>
+    </div>
+  );
+};

@@ -342,5 +342,8 @@
   ],
   "12.21": [
     "Router decision tree with four leaves: account/billing, product features, troubleshooting, and chitchat (skip retrieval). The root labels classify-query-type."
+  ],
+  "12.22": [
+    "Stacked horizontal bar visualizing how an 8000-token LLM context budget splits across system prompt, retrieved chunks, user question, and reserved completion tokens."
   ]
 }

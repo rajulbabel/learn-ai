@@ -6130,3 +6130,47 @@ describe("QueryRoutingDecomposition (12.21) content", () => {
     expect(container.textContent).toMatch(/\$0\.0\d+|ms/);
   });
 });
+
+describe("ContextPacking (12.22) content", () => {
+  const fn = RagGeneration.ContextPacking;
+
+  it("sub=0 shows the token budget breakdown with completion reservation", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/token budget|budget/i);
+    expect(container.textContent).toMatch(/system prompt/i);
+    expect(container.textContent).toMatch(/completion|reserved/i);
+    expect(container.textContent).toMatch(/8000|8k|8,000/i);
+  });
+
+  it("sub=1 shows top-3 chunks for the password reset query with scores", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/how do i reset my password|password reset/i);
+    expect(container.textContent).toMatch(/doc-?1/i);
+    expect(container.textContent).toMatch(/0\.\d+/);
+  });
+
+  it("sub=2 explains relevance-first ordering", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/relevance.?first|most relevant/i);
+  });
+
+  it("sub=3 explains chronological ordering", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/chronological|timeline|time.?sensitive/i);
+  });
+
+  it("sub=4 shows MMR deduplication with lambda parameter", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/MMR|maximal marginal/i);
+    expect(container.textContent).toMatch(/lambda/i);
+    expect(container.textContent).toMatch(/duplicate|redundant|diversity/i);
+  });
+
+  it("sub=5 shows the final packed prompt with budget badge", () => {
+    const { container } = render(fn(makeCtx({ sub: 5 })));
+    expect(container.textContent).toMatch(/documentation|context/i);
+    expect(container.textContent).toMatch(/\[doc-?1/i);
+    expect(container.textContent).toMatch(/i don'?t (have|know)|don'?t.{0,10}answer/i);
+    expect(container.textContent).toMatch(/tokens?|budget/i);
+  });
+});

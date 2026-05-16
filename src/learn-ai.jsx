@@ -48,6 +48,7 @@ const sectionLoaders = {
     Promise.all([
       import("./sections/agent-prompting.jsx"),
       import("./sections/agent-tools.jsx"),
+      import("./sections/agent-loops.jsx"),
     ]).then((mods) => Object.assign({}, ...mods)),
 };
 

@@ -1761,7 +1761,7 @@ export const FewShotStructuredOutput = (ctx) => {
               >
                 <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 10 }}>
                   <span style={pill(C.teal)}>TIP {i + 1}</span>
-                  <T color={C.teal} bold size={15}>
+                  <T color={C.teal} bold center size={15}>
                     {tip.title}
                   </T>
                 </div>

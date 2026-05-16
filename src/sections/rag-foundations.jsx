@@ -6881,9 +6881,8 @@ const SUPPORT_WALKTHROUGH = [
 // Renders the 3-bar mini-meter for a given level (1=low .. 4=very high).
 // Three rectangles in a row; the "filled" ones use the axis color.
 function MiniMeter({ label, level, axisColor }) {
-  // Color choice mirrors the section semantics: green=low cost, orange=med, red=high.
-  // For QUALITY meter higher is better; we still use the same fill count but accent
-  // up to 4 (very-high quality only available for Contextual).
+  // axisColor is set at the call site: green for Quality, orange for Cost, red for Implementation Difficulty.
+  // Fill count is the same across axes; level 4 (very-high) is only used for Quality on Contextual.
   const fills = [];
   for (let i = 0; i < 3; i++) {
     const filled = i < Math.min(level, 3);

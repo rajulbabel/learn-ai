@@ -4,7 +4,7 @@ import { C } from "../config.js";
 // Section 13 Act 1: Prompting Foundations
 // Chapters 13.1 - 13.6
 
-// Lighter text shades used inside tinted panels — keyed by C palette name.
+// Lighter text shades used inside tinted panels - keyed by C palette name.
 // Add new entries here when introducing a new accent color in this section file.
 export const SOFT = {
   cyan: "#80deea",
@@ -29,6 +29,19 @@ export const tintedCard = (color) => ({
   border: `1px solid ${color}12`,
   borderRadius: 8,
   textAlign: "center",
+});
+
+// Standard uppercase pill / badge style. Use as `<span style={pill(C.cyan)}>SYSTEM</span>`.
+// The badge text inside should be UPPERCASE for visual rhythm with the chapter pattern.
+export const pill = (color) => ({
+  display: "inline-block",
+  padding: "3px 10px",
+  borderRadius: 4,
+  background: `${color}20`,
+  color,
+  fontSize: 12,
+  fontWeight: 700,
+  letterSpacing: 0.5,
 });
 
 // Back-compat aliases (kept while 13.1 transitions to the SOFT map).

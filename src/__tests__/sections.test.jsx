@@ -5669,5 +5669,6 @@ describe("SystemPromptContract (13.2) content", () => {
     expect(container.textContent).toMatch(/you are/i);
     expect(container.textContent).toMatch(/tools|call/i);
     expect(container.textContent).toMatch(/never/i);
+    expect(container.textContent).toMatch(/prompt template/i);
   });
 });

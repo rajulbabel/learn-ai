@@ -435,5 +435,8 @@
   ],
   "13.39": [
     "Calibration scatter plot of judge scores on the x-axis against human scores on the y-axis with a perfect-agreement diagonal and points clustered close to the diagonal, illustrating a judge calibrated to roughly 0.78 correlation against human annotators."
+  ],
+  "13.40": [
+    "Cost comparison bar chart with end-to-end LLM-as-Judge at one times the unit cost and trace eval growing linearly with steps, reaching eight times for an eight-step trace, plus the production rule to run trace eval on five percent of traffic and end-to-end on the rest."
   ]
 }

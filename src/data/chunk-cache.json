@@ -33572,5 +33572,329 @@
         ]
       }
     ]
+  },
+  "7a1fb1bf2294b9fa": {
+    "12.2": [
+      {
+        "sub": -1,
+        "kind": "summary",
+        "text": "Chapter 12.2 introduces the naive RAG pipeline - the simplest end-to-end Retrieval-Augmented Generation flow where a user question triggers document retrieval and the LLM answers grounded in those retrieved chunks. This chapter is currently a stub placeholder; full content covering the pipeline stages (embed, index, retrieve, prompt-stuff, generate) will be added in subsequent tasks.",
+        "summary": "Chapter-level summary of the naive RAG pipeline chapter, currently a stub.",
+        "queries": [
+          "what is the naive RAG pipeline",
+          "simple RAG architecture overview",
+          "basic retrieval augmented generation flow",
+          "how does naive RAG work end to end",
+          "what are the steps in a basic RAG system",
+          "retrieve then generate pipeline",
+          "default RAG pipeline stages",
+          "RAG pipeline embed index retrieve generate",
+          "introductory RAG architecture",
+          "first version of RAG",
+          "vanilla RAG how it works",
+          "RAG without optimizations",
+          "baseline RAG system",
+          "minimal RAG implementation",
+          "RAG pipeline diagram"
+        ],
+        "terms": [
+          "naive RAG",
+          "RAG pipeline",
+          "retrieval-augmented generation",
+          "retrieve then generate",
+          "baseline RAG",
+          "vanilla RAG"
+        ]
+      },
+      {
+        "sub": 0,
+        "kind": "concept",
+        "text": "The Naive RAG Pipeline (stub). Placeholder section for the simplest Retrieval-Augmented Generation pipeline: take a user question, embed it, search a vector index for the closest document chunks, stuff those chunks into the LLM prompt, and have the model generate an answer grounded in the retrieved text. Full step-by-step content will be added later.",
+        "summary": "Stub introduction to the naive RAG pipeline; full step-by-step content forthcoming.",
+        "queries": [
+          "naive RAG pipeline overview",
+          "stub for RAG pipeline chapter",
+          "what does the naive RAG pipeline do",
+          "basic steps of RAG",
+          "embed question search index stuff prompt generate",
+          "RAG pipeline introduction stub",
+          "placeholder RAG chapter",
+          "simplest possible RAG flow",
+          "RAG pipeline first sub-step",
+          "intro to naive RAG",
+          "RAG retrieve and generate basics",
+          "what is grounded generation",
+          "RAG prompt stuffing basics",
+          "default RAG retrieval pipeline",
+          "RAG pipeline before optimization"
+        ],
+        "terms": [
+          "naive RAG",
+          "pipeline stub",
+          "retrieve",
+          "generate",
+          "grounded answer",
+          "vector index"
+        ]
+      }
+    ],
+    "12.3": [
+      {
+        "sub": -1,
+        "kind": "summary",
+        "text": "Chapter 12.3 Where Naive RAG Breaks introduces the failure modes of a basic retrieve-then-generate pipeline. Content is currently a stub placeholder inside the rag-foundations section and will later enumerate the breakdowns of naive RAG such as poor chunking, weak retrieval, irrelevant context, and brittle prompting.",
+        "summary": "Chapter-level overview that chapter 12.3 covers where naive RAG pipelines fail in practice.",
+        "queries": [
+          "where does naive RAG fail",
+          "what breaks in basic RAG pipeline",
+          "naive RAG limitations",
+          "problems with simple retrieval augmented generation",
+          "RAG failure modes",
+          "why naive RAG is not enough",
+          "common issues with RAG systems",
+          "RAG breakdown reasons",
+          "weaknesses of naive RAG",
+          "what goes wrong in RAG",
+          "RAG retrieval problems",
+          "chunking issues in RAG",
+          "irrelevant context in RAG",
+          "RAG pipeline issues production",
+          "where naive RAG breaks chapter summary"
+        ],
+        "terms": [
+          "naive RAG",
+          "RAG failures",
+          "retrieval augmented generation",
+          "RAG breakdown",
+          "RAG limitations",
+          "production RAG"
+        ]
+      },
+      {
+        "sub": 0,
+        "kind": "concept",
+        "text": "Where Naive RAG Breaks (stub). Placeholder Box introducing the chapter on naive RAG failure modes. Full content to be added in subsequent tasks.",
+        "summary": "Stub introduction Box for the Where Naive RAG Breaks chapter.",
+        "queries": [
+          "where naive RAG breaks intro",
+          "naive RAG failure stub",
+          "intro to RAG breakdown chapter",
+          "naive RAG problems introduction",
+          "what is wrong with naive RAG",
+          "RAG failure modes overview",
+          "basic RAG pipeline issues",
+          "why simple RAG fails",
+          "RAG pitfalls introduction",
+          "stub chapter on RAG breakage",
+          "RAG retrieval failures intro",
+          "starting point for RAG failures",
+          "naive RAG weaknesses overview",
+          "intro slide naive RAG breaks",
+          "RAG limitations placeholder"
+        ],
+        "terms": [
+          "naive RAG",
+          "RAG breaks",
+          "failure modes",
+          "stub",
+          "RAG intro"
+        ]
+      }
+    ],
+    "12.1": [
+      {
+        "sub": 0,
+        "kind": "concept",
+        "text": "Bare LLMs have hard limits when dropped into production apps. Five inherent failure modes appear: Knowledge Cutoff - trained on data through 2023, can't answer about 2025 events. Hallucination - will confidently invent plausible-sounding facts. No Citations - cannot point to sources for verification. Private Data Unknown - knows nothing about your internal docs. Stale Facts - public info from years ago, not last week. These failure modes are inherent to the model alone.",
+        "summary": "Bare LLMs fail in production because of knowledge cutoff, hallucination, no citations, no private data, and stale facts.",
+        "queries": [
+          "Why do bare LLMs fail in production?",
+          "What are the limits of frontier LLMs?",
+          "What is the knowledge cutoff problem?",
+          "Why do LLMs hallucinate facts?",
+          "Can LLMs cite their sources?",
+          "Do LLMs know my private company documents?",
+          "Why are LLM facts stale?",
+          "What inherent problems do LLMs have without retrieval?",
+          "List failure modes of LLMs",
+          "Why can't GPT answer about 2025 events?",
+          "What does knowledge cutoff mean?",
+          "Why do LLMs make up plausible answers?",
+          "Can a model see my internal docs?",
+          "Why no source attribution from LLMs?",
+          "Production weaknesses of bare LLMs"
+        ],
+        "terms": [
+          "knowledge cutoff",
+          "hallucination",
+          "citations",
+          "private data",
+          "stale facts",
+          "bare LLM",
+          "failure modes"
+        ]
+      },
+      {
+        "sub": 1,
+        "kind": "concept",
+        "text": "Fine-tuning doesn't solve the problem. The obvious first answer is 'just fine-tune the model on our data.' In practice fine-tuning is slow, expensive, and untraceable. Comparison table: Cost - Fine-Tuning costs tens of thousands of dollars per refresh, RAG costs cents per query. Freshness - Fine-Tuning is frozen at training time, RAG reflects index updates instantly. Traceability - Fine-Tuning has no source attribution, RAG can cite the chunk used. Fine-tuning bakes knowledge INTO the weights (expensive to update, no audit trail). RAG keeps knowledge OUTSIDE the model in a retrievable index (cheap, fresh, traceable).",
+        "summary": "Fine-tuning is costly, frozen, and untraceable while RAG is cheap, fresh, and citable because it keeps knowledge outside the weights.",
+        "queries": [
+          "Why not just fine-tune the model?",
+          "Fine-tuning vs RAG comparison",
+          "How much does fine-tuning cost?",
+          "Is fine-tuning fresh?",
+          "Can fine-tuned models cite sources?",
+          "Where does fine-tuning store knowledge?",
+          "Why is RAG cheaper than fine-tuning?",
+          "What is the cost of fine-tuning vs RAG?",
+          "Does fine-tuning provide an audit trail?",
+          "How quickly can RAG reflect new data?",
+          "Why is fine-tuning frozen at training time?",
+          "When should I use fine-tuning over RAG?",
+          "What does it mean to bake knowledge into weights?",
+          "RAG keeps knowledge outside the model",
+          "Fine-tuning traceability problem"
+        ],
+        "terms": [
+          "fine-tuning",
+          "RAG",
+          "cost",
+          "freshness",
+          "traceability",
+          "weights",
+          "index",
+          "audit trail"
+        ]
+      },
+      {
+        "sub": 2,
+        "kind": "concept",
+        "text": "RAG grounds the answer in retrieved documents. The fix is a tiny architectural change: before the model answers, fetch the relevant documents and stuff them into the prompt. The model now reads first, answers second. Flow: User Question -> Retrieve Relevant Docs -> LLM Reads Docs + Answers. Instead of asking the model from memory, we ground its answer in retrieved documents. The model reads the docs, then answers, anchored to what the docs say.",
+        "summary": "RAG retrieves relevant docs and injects them into the prompt so the LLM reads first and answers grounded in those docs.",
+        "queries": [
+          "What is RAG?",
+          "What does retrieval augmented generation do?",
+          "How does RAG work step by step?",
+          "What is the RAG pipeline flow?",
+          "How does an LLM use retrieved documents?",
+          "What does grounding an answer mean?",
+          "Does RAG change the model architecture?",
+          "Where does retrieved text go in RAG?",
+          "Why read before answer?",
+          "What is the order: retrieve then generate?",
+          "How does RAG anchor an answer?",
+          "What replaces model memory in RAG?",
+          "RAG three step flow",
+          "User question to retrieved docs to LLM",
+          "What is the simplest definition of RAG?"
+        ],
+        "terms": [
+          "RAG",
+          "retrieval-augmented generation",
+          "grounding",
+          "retrieved documents",
+          "prompt",
+          "pipeline"
+        ]
+      },
+      {
+        "sub": 3,
+        "kind": "example",
+        "text": "Same question, two answers. Question: 'What is our refund policy?' Bare LLM (MADE UP): 'Our standard refund policy offers a 30-day money-back guarantee on all subscriptions. You can request a refund through your account dashboard.' RAG (CITED): 'Per [doc-4] (refunds.md): Refunds are issued for cancellations within 14 days of payment, prorated for annual plans.' Source chunk: [doc-4] Refunds are issued for cancellations within 14 days. Annual plans prorated. Both answers sound confident. Only one is checkable. The bare model invented numbers that look reasonable; the RAG answer is pinned to a real chunk we can show the user.",
+        "summary": "Worked example showing a bare LLM inventing a 30-day refund policy while RAG cites doc-4 with the real 14-day policy.",
+        "queries": [
+          "Example of LLM hallucination on refund policy",
+          "Bare LLM vs RAG side by side example",
+          "Why does the LLM say 30-day refund?",
+          "How does RAG cite a source chunk?",
+          "What does a cited RAG answer look like?",
+          "Refund policy RAG example",
+          "Comparison of made up vs cited answers",
+          "How to spot hallucination in an LLM answer?",
+          "Why is RAG checkable?",
+          "What is doc-4 in a RAG citation?",
+          "Annual plan prorated refund example",
+          "Same prompt different answers bare vs RAG",
+          "Why both answers sound confident",
+          "Concrete RAG vs hallucination demo",
+          "Source attribution in RAG output"
+        ],
+        "terms": [
+          "refund policy",
+          "made up",
+          "cited",
+          "hallucination example",
+          "doc-4",
+          "source chunk",
+          "bare LLM vs RAG"
+        ]
+      },
+      {
+        "sub": 4,
+        "kind": "concept",
+        "text": "5 reasons production systems use RAG. Every failure mode gets a clean answer, plus refresh becomes nearly free. Knowledge Cutoff -> Solved: index is fresh; re-embed when docs change. Hallucination -> Reduced: model is anchored to retrieved text. No Citation -> Solved: cite the exact chunk used. Private Data -> Solved: index your own docs; no fine-tune needed. Cheap To Refresh -> Re-embed only changed docs: update individual chunks; no full retrain.",
+        "summary": "RAG solves cutoff, citation, and private data; reduces hallucination; and makes refresh cheap by re-embedding only changed chunks.",
+        "queries": [
+          "Why do production systems use RAG?",
+          "5 reasons to use RAG in production",
+          "How does RAG solve knowledge cutoff?",
+          "Does RAG eliminate hallucination?",
+          "How does RAG enable citations?",
+          "Can RAG handle private internal docs?",
+          "How cheap is it to refresh a RAG index?",
+          "What changes when a doc updates in RAG?",
+          "Re-embed only changed chunks",
+          "Why is RAG production-ready?",
+          "RAG benefits summary",
+          "Anchoring model output to retrieved text",
+          "Index your own docs without fine-tuning",
+          "How does RAG keep facts fresh?",
+          "Why no full retrain with RAG?"
+        ],
+        "terms": [
+          "production RAG",
+          "re-embed",
+          "anchoring",
+          "private data",
+          "citation",
+          "freshness",
+          "chunks"
+        ]
+      },
+      {
+        "sub": -1,
+        "kind": "summary",
+        "text": "Chapter 12.1 - Why LLMs Need Retrieval. Bare LLMs suffer five inherent failure modes: knowledge cutoff, hallucination, no citations, no knowledge of private data, and stale facts. Fine-tuning does not fix this - it is expensive (tens of thousands per refresh), frozen at training time, and untraceable. RAG (Retrieval-Augmented Generation) changes the architecture: retrieve relevant docs first, then let the LLM read them and answer. A refund-policy example contrasts a made-up bare-LLM answer with a cited RAG answer pinned to doc-4. Production benefits: solves cutoff, citation, and private-data problems; reduces hallucination by anchoring to retrieved text; refresh is cheap because only changed chunks need re-embedding.",
+        "summary": "Bare LLMs fail on freshness, hallucination, citations, and private data; fine-tuning is too costly to fix this, so RAG grounds answers in retrieved documents.",
+        "queries": [
+          "Why do LLMs need retrieval?",
+          "Summary of chapter 12.1",
+          "Why is RAG necessary?",
+          "What problem does RAG solve?",
+          "Limits of bare LLMs and the RAG fix",
+          "Fine-tuning vs RAG production tradeoff",
+          "Knowledge cutoff hallucination citations private data",
+          "What does RAG add to an LLM?",
+          "Why ground LLM answers in documents?",
+          "Introduction to retrieval augmented generation",
+          "Why retrieval before generation",
+          "RAG vs fine-tuning summary",
+          "Production reasons for RAG",
+          "How retrieval reduces hallucination",
+          "RAG architectural change overview"
+        ],
+        "terms": [
+          "RAG",
+          "retrieval",
+          "fine-tuning",
+          "hallucination",
+          "knowledge cutoff",
+          "citations",
+          "private data",
+          "grounding"
+        ]
+      }
+    ]
   }
 }

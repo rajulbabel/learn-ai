@@ -733,3 +733,47 @@ describe("Section 13 Act 8 chapter entries", () => {
     expect(c.component).toBe("ToolSecurity");
   });
 });
+
+describe("Section 13 Act 9 chapter entries", () => {
+  const findCh = (id) => chapters.find((c) => c.id === id);
+
+  it("has 13.48 LangGraphFramework", () => {
+    const c = findCh("13.48");
+    expect(c).toBeDefined();
+    expect(c.title).toBe("LangGraph");
+    expect(c.section).toBe(13);
+    expect(c.component).toBe("LangGraphFramework");
+  });
+
+  it("has 13.49 CrewAiAutoGen", () => {
+    const c = findCh("13.49");
+    expect(c).toBeDefined();
+    expect(c.title).toBe("CrewAI / AutoGen");
+    expect(c.section).toBe(13);
+    expect(c.component).toBe("CrewAiAutoGen");
+  });
+
+  it("has 13.50 VendorSdks", () => {
+    const c = findCh("13.50");
+    expect(c).toBeDefined();
+    expect(c.title).toBe("Claude Agent SDK + OpenAI Agents");
+    expect(c.section).toBe(13);
+    expect(c.component).toBe("VendorSdks");
+  });
+
+  it("has 13.51 CustomNoFramework", () => {
+    const c = findCh("13.51");
+    expect(c).toBeDefined();
+    expect(c.title).toBe("Custom / No-Framework");
+    expect(c.section).toBe(13);
+    expect(c.component).toBe("CustomNoFramework");
+  });
+
+  it("has 13.52 AgentDecisionFramework", () => {
+    const c = findCh("13.52");
+    expect(c).toBeDefined();
+    expect(c.title).toBe("The Complete Agent Decision Framework");
+    expect(c.section).toBe(13);
+    expect(c.component).toBe("AgentDecisionFramework");
+  });
+});

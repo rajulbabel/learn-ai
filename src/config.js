@@ -228,6 +228,21 @@ export const chapters = [
   { id: "13.45", title: "Guardrails", section: 13, component: "Guardrails" },
   { id: "13.46", title: "Prompt Injection Defenses", section: 13, component: "PromptInjectionDefenses" },
   { id: "13.47", title: "Tool Security", section: 13, component: "ToolSecurity" },
+  { id: "13.48", title: "LangGraph", section: 13, component: "LangGraphFramework" },
+  { id: "13.49", title: "CrewAI / AutoGen", section: 13, component: "CrewAiAutoGen" },
+  {
+    id: "13.50",
+    title: "Claude Agent SDK + OpenAI Agents",
+    section: 13,
+    component: "VendorSdks",
+  },
+  { id: "13.51", title: "Custom / No-Framework", section: 13, component: "CustomNoFramework" },
+  {
+    id: "13.52",
+    title: "The Complete Agent Decision Framework",
+    section: 13,
+    component: "AgentDecisionFramework",
+  },
 ];
 
 export const sectionNames = {

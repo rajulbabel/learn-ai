@@ -337,3 +337,95 @@ describe("Act references do not leak into user-visible content", () => {
     expect(offenders).toEqual([]);
   });
 });
+
+describe("Section 13 Act 1+2 chapter entries", () => {
+  const findCh = (id) => chapters.find((c) => c.id === id);
+
+  it("has 13.1 AnatomyOfLlmCall", () => {
+    const c = findCh("13.1");
+    expect(c).toBeDefined();
+    expect(c.title).toBe("Anatomy of an LLM Call");
+    expect(c.section).toBe(13);
+    expect(c.component).toBe("AnatomyOfLlmCall");
+  });
+
+  it("has 13.2 SystemPromptContract", () => {
+    const c = findCh("13.2");
+    expect(c).toBeDefined();
+    expect(c.title).toBe("System Prompts - The Role Contract");
+    expect(c.section).toBe(13);
+    expect(c.component).toBe("SystemPromptContract");
+  });
+
+  it("has 13.3 FewShotStructuredOutput", () => {
+    const c = findCh("13.3");
+    expect(c).toBeDefined();
+    expect(c.title).toBe("Few-Shot + Structured Output");
+    expect(c.section).toBe(13);
+    expect(c.component).toBe("FewShotStructuredOutput");
+  });
+
+  it("has 13.4 ChainOfThoughtSelfConsistency", () => {
+    const c = findCh("13.4");
+    expect(c).toBeDefined();
+    expect(c.title).toBe("Chain of Thought + Self-Consistency");
+    expect(c.section).toBe(13);
+    expect(c.component).toBe("ChainOfThoughtSelfConsistency");
+  });
+
+  it("has 13.5 PromptVsTuneVsRagVsAgent", () => {
+    const c = findCh("13.5");
+    expect(c).toBeDefined();
+    expect(c.title).toBe("Prompt vs Fine-Tune vs RAG vs Agent");
+    expect(c.section).toBe(13);
+    expect(c.component).toBe("PromptVsTuneVsRagVsAgent");
+  });
+
+  it("has 13.6 ContextEngineering", () => {
+    const c = findCh("13.6");
+    expect(c).toBeDefined();
+    expect(c.title).toBe("Context Engineering");
+    expect(c.section).toBe(13);
+    expect(c.component).toBe("ContextEngineering");
+  });
+
+  it("has 13.7 ToolUseAsBridge", () => {
+    const c = findCh("13.7");
+    expect(c).toBeDefined();
+    expect(c.title).toBe("Tool Use - LLM as Orchestrator");
+    expect(c.section).toBe(13);
+    expect(c.component).toBe("ToolUseAsBridge");
+  });
+
+  it("has 13.8 JsonSchemaForTools", () => {
+    const c = findCh("13.8");
+    expect(c).toBeDefined();
+    expect(c.title).toBe("JSON Schemas + Tool Descriptions");
+    expect(c.section).toBe(13);
+    expect(c.component).toBe("JsonSchemaForTools");
+  });
+
+  it("has 13.9 ToolCallLifecycle", () => {
+    const c = findCh("13.9");
+    expect(c).toBeDefined();
+    expect(c.title).toBe("Tool Call Lifecycle");
+    expect(c.section).toBe(13);
+    expect(c.component).toBe("ToolCallLifecycle");
+  });
+
+  it("has 13.10 ParallelToolsAndChoice", () => {
+    const c = findCh("13.10");
+    expect(c).toBeDefined();
+    expect(c.title).toBe("Parallel Tools + Tool Choice");
+    expect(c.section).toBe(13);
+    expect(c.component).toBe("ParallelToolsAndChoice");
+  });
+
+  it("has 13.11 ToolErrorsRetries", () => {
+    const c = findCh("13.11");
+    expect(c).toBeDefined();
+    expect(c.title).toBe("Tool Errors, Retries, Validation");
+    expect(c.section).toBe(13);
+    expect(c.component).toBe("ToolErrorsRetries");
+  });
+});

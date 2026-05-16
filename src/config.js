@@ -175,6 +175,23 @@ export const chapters = [
   { id: "12.7", title: "Why Chunk At All + Fixed-Size Baseline", section: 12, component: "WhyChunkFixedSize" },
   { id: "12.8", title: "Recursive Structural Chunking", section: 12, component: "RecursiveStructuralChunking" },
   { id: "12.9", title: "Semantic Chunking", section: 12, component: "SemanticChunking" },
+  // Section 13: AI Agents
+  { id: "13.1", title: "Anatomy of an LLM Call", section: 13, component: "AnatomyOfLlmCall" },
+  { id: "13.2", title: "System Prompts - The Role Contract", section: 13, component: "SystemPromptContract" },
+  { id: "13.3", title: "Few-Shot + Structured Output", section: 13, component: "FewShotStructuredOutput" },
+  {
+    id: "13.4",
+    title: "Chain of Thought + Self-Consistency",
+    section: 13,
+    component: "ChainOfThoughtSelfConsistency",
+  },
+  { id: "13.5", title: "Prompt vs Fine-Tune vs RAG vs Agent", section: 13, component: "PromptVsTuneVsRagVsAgent" },
+  { id: "13.6", title: "Context Engineering", section: 13, component: "ContextEngineering" },
+  { id: "13.7", title: "Tool Use - LLM as Orchestrator", section: 13, component: "ToolUseAsBridge" },
+  { id: "13.8", title: "JSON Schemas + Tool Descriptions", section: 13, component: "JsonSchemaForTools" },
+  { id: "13.9", title: "Tool Call Lifecycle", section: 13, component: "ToolCallLifecycle" },
+  { id: "13.10", title: "Parallel Tools + Tool Choice", section: 13, component: "ParallelToolsAndChoice" },
+  { id: "13.11", title: "Tool Errors, Retries, Validation", section: 13, component: "ToolErrorsRetries" },
 ];
 
 export const sectionNames = {

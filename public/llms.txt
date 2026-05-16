@@ -21,6 +21,7 @@ An interactive, visual, free guide to AI built by Rajul Babel. The site teaches 
 - **Encoder & Decoder** - Add & Norm, FFN, residuals, pre-norm vs post-norm, batch norm vs layer norm.
 - **Modern LLM Techniques** - KV cache, grouped-query attention, mixture of experts, reasoning models.
 - **Vector Databases** - kNN, ANN, HNSW, IVF, Vamana, scalar/product/binary quantization, Matryoshka, IVF-PQ, HNSW+PQ, hybrid search, rerankers, ColBERT-style multi-vector retrieval, observability, capacity planning, FAISS, pgvector, Qdrant, Pinecone, Weaviate, Milvus, Chroma.
+- **Retrieval-Augmented Generation** - the canonical 5-stage RAG pipeline (chunk, embed, store, retrieve, generate), chunking strategies (fixed, recursive, semantic, late, hierarchical, contextual), query transformation (HyDE, multi-query, routing, decomposition), context construction (packing, lost-in-middle, citations + groundedness), advanced retrieval (Self-RAG, CRAG, GraphRAG, agentic, long-context tradeoff), evaluation (LLM-as-judge, RAGAS, golden datasets, A/B), production operations (caching, cost models, observability, hallucination + drift detection), and decision framework.
 - **Building with AI** - RAG, Vector DB selection, Agent Frameworks (LangGraph), embedding lifecycle, production deployment.
 
 ## Author

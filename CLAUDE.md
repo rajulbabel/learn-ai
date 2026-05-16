@@ -256,13 +256,23 @@ Only config.js IDs change.
 | 11.35 | WeaviateMilvusChroma | Weaviate / Milvus / Chroma |
 | 11.36 | DecisionFramework | The Decision Framework |
 
-**Section 12: Retrieval-Augmented Generation** (`rag-foundations.jsx` - Act 1 only in Milestone 1; Acts 2-9 added in Milestones 2-6)
+**Section 12: Retrieval-Augmented Generation** (`rag-foundations.jsx` + `rag-ingestion.jsx` - Acts 1-3 complete; Acts 4-10 added in Milestones 3-6)
 
 | Chapter | Component | Title |
 |---------|-----------|-------|
 | 12.1 | WhyLLMsNeedRetrieval | Why LLMs Need Retrieval |
 | 12.2 | NaiveRAGPipeline | The Naive RAG Pipeline |
 | 12.3 | WhereNaiveRAGBreaks | Where Naive RAG Breaks |
+| 12.4 | ParsingExtraction | Parsing - Raw Sources to Clean Text |
+| 12.5 | DeduplicationCleaning | Deduplication & Cleaning |
+| 12.6 | RefreshSync | Refresh & Sync Schedules |
+| 12.7 | WhyChunkFixedSize | Why Chunk At All + Fixed-Size Baseline |
+| 12.8 | RecursiveStructuralChunking | Recursive Structural Chunking |
+| 12.9 | SemanticChunking | Semantic Chunking |
+| 12.10 | LateChunking | Late Chunking (Jina 2024) |
+| 12.11 | HierarchicalChunking | Hierarchical / Parent-Child Chunking |
+| 12.12 | ContextualRetrieval | Contextual Retrieval (Anthropic 2024) |
+| 12.13 | ChunkingDecision | The Chunking Decision |
 
 ## Project Structure
 
@@ -302,7 +312,8 @@ learn-ai/
 │       ├── vector-compression.jsx        # Section 11 (Acts 3+4, chapters 11.12-11.18)
 │       ├── vector-production.jsx         # Section 11 (Act 5, chapters 11.19-11.28)
 │       ├── vector-systems.jsx            # Section 11 (Act 6, chapters 11.29-11.35)
-│       └── rag-foundations.jsx           # Section 12 (Acts 1+2, chapters 12.1-12.10 - in progress)
+│       ├── rag-foundations.jsx           # Section 12 Acts 1+3: Problem + Chunking, 12.1-12.3 + 12.7-12.13
+│       └── rag-ingestion.jsx             # Section 12 Act 2: Ingestion, 12.4-12.6
 ├── .github/workflows/deploy.yml
 └── CLAUDE.md
 ```

@@ -273,5 +273,8 @@
   ],
   "12.3": [
     "U-shaped attention curve plotting attention weight against chunk position 1-10. High attention at start (positions 1-2) and end (positions 9-10), dipping in the middle (positions 4-7). Position 5 is highlighted as the relevant chunk that gets missed."
+  ],
+  "12.4": [
+    "Stylized web page mockup with four labeled zones: a top nav bar tinted red marked DROP, a left sidebar tinted red marked DROP, a central main article zone tinted green marked KEEP, and a bottom footer with newsletter signup tinted red marked DROP. Shows which DOM regions a boilerplate-stripping parser keeps versus discards."
   ]
 }

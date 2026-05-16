@@ -5313,3 +5313,53 @@ describe("WhereNaiveRAGBreaks (12.3) content", () => {
     expect(container.textContent).toMatch(/12\.36-12\.40|caching|observability/i);
   });
 });
+
+describe("ParsingExtraction (12.4) content", () => {
+  const fn = RagIngestion.ParsingExtraction;
+
+  it("sub=0 frames the garbage-in problem", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/garbage|unrecoverable/i);
+    expect(container.textContent).toMatch(/OCR|broken text|PDF/i);
+    expect(container.textContent).toMatch(/password/i);
+  });
+
+  it("sub=1 lists 5+ source format families", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/PDF/);
+    expect(container.textContent).toMatch(/HTML/);
+    expect(container.textContent).toMatch(/DOCX/);
+    expect(container.textContent).toMatch(/Markdown/);
+    expect(container.textContent).toMatch(/Confluence|Notion|API/);
+  });
+
+  it("sub=2 shows three PDF failure modes", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/two[- ]?column|2[- ]?column/i);
+    expect(container.textContent).toMatch(/table/i);
+    expect(container.textContent).toMatch(/OCR/);
+    expect(container.textContent).toMatch(/Unstructured|Docling|PyMuPDF|LlamaParse|Tesseract/);
+  });
+
+  it("sub=3 contrasts HTML boilerplate vs main content", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/boilerplate|nav|sidebar|footer/i);
+    expect(container.textContent).toMatch(/Readability|Trafilatura/);
+    expect(container.textContent).toMatch(/dilut|pollut|main content/i);
+  });
+
+  it("sub=4 shows the metadata schema artifact", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/metadata/i);
+    expect(container.textContent).toMatch(/source_url|URL/i);
+    expect(container.textContent).toMatch(/updated_at|timestamp/i);
+    expect(container.textContent).toMatch(/permissions|ACL/i);
+  });
+
+  it("sub=5 lists the 5 parsing failure modes", () => {
+    const { container } = render(fn(makeCtx({ sub: 5 })));
+    expect(container.textContent).toMatch(/five|5/i);
+    expect(container.textContent).toMatch(/checklist|failure mode/i);
+    expect(container.textContent).toMatch(/silent|recall/i);
+  });
+});

@@ -310,6 +310,16 @@ describe("HTML entity hygiene", () => {
   });
 });
 
+describe("Section 13 registration", () => {
+  it("has section 13 in sectionNames", () => {
+    expect(sectionNames[13]).toBe("AI Agents");
+  });
+
+  it("has section 13 in sectionColors", () => {
+    expect(sectionColors[13]).toBe("#00838f");
+  });
+});
+
 describe("Act references do not leak into user-visible content", () => {
   // "Act N" / "Acts N-M" is an internal file-partition name (see CLAUDE.md).
   // Learners only see chapter numbers like 11.14 - they never encounter "Acts".

@@ -191,6 +191,7 @@ export const sectionNames = {
   10: "Modern LLM Techniques",
   11: "Vector Databases",
   12: "Retrieval-Augmented Generation",
+  13: "AI Agents",
 };
 
 // Section colors (one per section, used in progress bar, TOC, etc.)
@@ -207,6 +208,7 @@ export const sectionColors = {
   10: "#26a69a",
   11: "#f06292",
   12: "#7c4dff",
+  13: "#00838f",
 };
 
 // Colors

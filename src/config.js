@@ -246,6 +246,7 @@ export const C = {
   blue: "#42a5f5",
   indigo: "#5c6bc0",
   teal: "#26c6da",
+  amber: "#ffc107",
 };
 
 // Validate config - extracted for testability

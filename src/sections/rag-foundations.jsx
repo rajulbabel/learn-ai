@@ -2763,12 +2763,13 @@ export const RecursiveStructuralChunking = (ctx) => {
                   borderRadius: 6,
                   background: `${C.green}12`,
                   border: `1px solid ${C.green}30`,
+                  textAlign: "center",
                 }}
               >
-                <T color={C.green} bold size={13}>
+                <T color={C.green} bold center size={13}>
                   Chunk 1 (tokens 0-128): All of &quot;Common Login Errors&quot;
                 </T>
-                <T color="#a5d6a7" size={12} style={{ marginTop: 4 }}>
+                <T color="#a5d6a7" center size={12} style={{ marginTop: 4 }}>
                   Wrong password, account locked, session expired - one clean topic.
                 </T>
               </div>
@@ -2778,13 +2779,14 @@ export const RecursiveStructuralChunking = (ctx) => {
                   borderRadius: 6,
                   background: `${C.red}24`,
                   border: `1px solid ${C.red}60`,
+                  textAlign: "center",
                 }}
               >
-                <T color={C.red} bold size={13}>
+                <T color={C.red} bold center size={13}>
                   Chunk 2 (tokens 128-256): Tail of &quot;Browser Compatibility&quot; + head of &quot;Account
                   Lockout&quot;
                 </T>
-                <T color="#ef9a9a" size={12} style={{ marginTop: 4 }}>
+                <T color="#ef9a9a" center size={12} style={{ marginTop: 4 }}>
                   Spans two unrelated topics. A retrieval query for &quot;Safari cookie SSO&quot; matches this chunk,
                   but the answer is half-Safari, half-lockout-admin. Neither topic is retrievable cleanly.
                 </T>
@@ -2795,12 +2797,13 @@ export const RecursiveStructuralChunking = (ctx) => {
                   borderRadius: 6,
                   background: `${C.green}12`,
                   border: `1px solid ${C.green}30`,
+                  textAlign: "center",
                 }}
               >
-                <T color={C.green} bold size={13}>
+                <T color={C.green} bold center size={13}>
                   Chunk 3 (tokens 256-380): Tail of &quot;Resetting Account Lockout&quot;
                 </T>
-                <T color="#a5d6a7" size={12} style={{ marginTop: 4 }}>
+                <T color="#a5d6a7" center size={12} style={{ marginTop: 4 }}>
                   Missing the heading, missing the first sentence - the topic context is gone.
                 </T>
               </div>
@@ -2854,12 +2857,13 @@ export const RecursiveStructuralChunking = (ctx) => {
                 borderRadius: 8,
                 background: `${C.cyan}12`,
                 border: `1px solid ${C.cyan}40`,
+                textAlign: "center",
               }}
             >
-              <T color={C.cyan} bold size={14}>
+              <T color={C.cyan} bold center size={14}>
                 Chunk 1 (~120 tokens) - Common Login Errors
               </T>
-              <T color="#80deea" size={13} style={{ marginTop: 6 }}>
+              <T color="#80deea" center size={13} style={{ marginTop: 6 }}>
                 ## Common Login Errors. Wrong password is the most common cause... Account locked appears after five
                 failed attempts... Session expired shows up when an idle tab is reopened.
               </T>
@@ -2870,12 +2874,13 @@ export const RecursiveStructuralChunking = (ctx) => {
                 borderRadius: 8,
                 background: `${C.orange}12`,
                 border: `1px solid ${C.orange}40`,
+                textAlign: "center",
               }}
             >
-              <T color={C.orange} bold size={14}>
+              <T color={C.orange} bold center size={14}>
                 Chunk 2 (~95 tokens) - Browser Compatibility
               </T>
-              <T color="#ffcc80" size={13} style={{ marginTop: 6 }}>
+              <T color="#ffcc80" center size={13} style={{ marginTop: 6 }}>
                 ## Browser Compatibility. Safari blocks third-party cookies... Chrome with strict tracking protection
                 has the same effect. The fix is to add the auth domain to the site exceptions list.
               </T>
@@ -2886,12 +2891,13 @@ export const RecursiveStructuralChunking = (ctx) => {
                 borderRadius: 8,
                 background: `${C.green}12`,
                 border: `1px solid ${C.green}40`,
+                textAlign: "center",
               }}
             >
-              <T color={C.green} bold size={14}>
+              <T color={C.green} bold center size={14}>
                 Chunk 3 (~115 tokens) - Resetting Account Lockout
               </T>
-              <T color="#a5d6a7" size={13} style={{ marginTop: 6 }}>
+              <T color="#a5d6a7" center size={13} style={{ marginTop: 6 }}>
                 ## Resetting Account Lockout. Open the account-admin panel... click reset lockout and confirm... Audit
                 log captures the admin action with a timestamp.
               </T>
@@ -3094,12 +3100,13 @@ export const RecursiveStructuralChunking = (ctx) => {
                     borderRadius: 6,
                     background: "rgba(0,0,0,0.3)",
                     border: `1px solid ${C.orange}24`,
+                    textAlign: "center",
                   }}
                 >
-                  <T color={C.orange} bold size={13}>
+                  <T color={C.orange} bold center size={13}>
                     Step 1: Try heading split
                   </T>
-                  <T color="#ffcc80" size={12} style={{ marginTop: 4 }}>
+                  <T color="#ffcc80" center size={12} style={{ marginTop: 4 }}>
                     The &quot;Authentication Header Format&quot; section comes out at 300 tokens. Limit is 128. Too big.
                   </T>
                 </div>
@@ -3109,12 +3116,13 @@ export const RecursiveStructuralChunking = (ctx) => {
                     borderRadius: 6,
                     background: "rgba(0,0,0,0.3)",
                     border: `1px solid ${C.orange}24`,
+                    textAlign: "center",
                   }}
                 >
-                  <T color={C.orange} bold size={13}>
+                  <T color={C.orange} bold center size={13}>
                     Step 2: Fall back to paragraph break &quot;\n\n&quot;
                   </T>
-                  <T color="#ffcc80" size={12} style={{ marginTop: 4 }}>
+                  <T color="#ffcc80" center size={12} style={{ marginTop: 4 }}>
                     The section has three paragraphs of 100, 110, and 90 tokens. Each fits under 128.
                   </T>
                 </div>
@@ -3124,12 +3132,13 @@ export const RecursiveStructuralChunking = (ctx) => {
                     borderRadius: 6,
                     background: "rgba(0,0,0,0.3)",
                     border: `1px solid ${C.orange}24`,
+                    textAlign: "center",
                   }}
                 >
-                  <T color={C.orange} bold size={13}>
+                  <T color={C.orange} bold center size={13}>
                     Step 3: Emit three chunks
                   </T>
-                  <T color="#ffcc80" size={12} style={{ marginTop: 4 }}>
+                  <T color="#ffcc80" center size={12} style={{ marginTop: 4 }}>
                     Recursion stops as soon as every produced chunk fits. No need to drop to sentence or word splits.
                   </T>
                 </div>
@@ -3452,12 +3461,13 @@ export const SemanticChunking = (ctx) => {
                     borderRadius: 6,
                     background: "rgba(0,0,0,0.3)",
                     border: `1px solid ${C.red}24`,
+                    textAlign: "center",
                   }}
                 >
-                  <T color={C.red} bold size={13}>
+                  <T color={C.red} bold center size={13}>
                     No Headings
                   </T>
-                  <T color="#ef9a9a" size={12} style={{ marginTop: 4 }}>
+                  <T color="#ef9a9a" center size={12} style={{ marginTop: 4 }}>
                     No ##, no #, no markdown structure to anchor on.
                   </T>
                 </div>
@@ -3467,12 +3477,13 @@ export const SemanticChunking = (ctx) => {
                     borderRadius: 6,
                     background: "rgba(0,0,0,0.3)",
                     border: `1px solid ${C.red}24`,
+                    textAlign: "center",
                   }}
                 >
-                  <T color={C.red} bold size={13}>
+                  <T color={C.red} bold center size={13}>
                     No Blank Lines
                   </T>
-                  <T color="#ef9a9a" size={12} style={{ marginTop: 4 }}>
+                  <T color="#ef9a9a" center size={12} style={{ marginTop: 4 }}>
                     No double newline. Recursive splitter sees one long paragraph.
                   </T>
                 </div>
@@ -3482,12 +3493,13 @@ export const SemanticChunking = (ctx) => {
                     borderRadius: 6,
                     background: "rgba(0,0,0,0.3)",
                     border: `1px solid ${C.red}24`,
+                    textAlign: "center",
                   }}
                 >
-                  <T color={C.red} bold size={13}>
+                  <T color={C.red} bold center size={13}>
                     Topic Shift Is Invisible
                   </T>
-                  <T color="#ef9a9a" size={12} style={{ marginTop: 4 }}>
+                  <T color="#ef9a9a" center size={12} style={{ marginTop: 4 }}>
                     The creating-to-revoking switch is a semantic boundary with no surface marker. Structural splitter
                     cuts mid-topic at the 128-token mark.
                   </T>
@@ -3778,6 +3790,7 @@ export const SemanticChunking = (ctx) => {
                 borderRadius: 8,
                 background: `${C.orange}06`,
                 border: `1px solid ${C.orange}12`,
+                textAlign: "center",
               }}
             >
               <T color={C.orange} bold center size={16}>
@@ -3797,12 +3810,13 @@ export const SemanticChunking = (ctx) => {
                     borderRadius: 8,
                     background: `${C.green}12`,
                     border: `1px solid ${C.green}40`,
+                    textAlign: "center",
                   }}
                 >
                   <T color={C.green} bold center size={14}>
                     Chunk 1 - Creating Cluster (Sentences 1-6)
                   </T>
-                  <T color="#a5d6a7" size={12} style={{ marginTop: 6 }}>
+                  <T color="#a5d6a7" center size={12} style={{ marginTop: 6 }}>
                     Creating an API key starts in the developer settings page. Click the New Key button and provide a
                     label. The label appears in audit logs. Choose a scope. Optional expiry sets a date. Click Generate
                     and the key value is shown one time only.
@@ -3827,12 +3841,13 @@ export const SemanticChunking = (ctx) => {
                     borderRadius: 8,
                     background: `${C.orange}12`,
                     border: `1px solid ${C.orange}40`,
+                    textAlign: "center",
                   }}
                 >
                   <T color={C.orange} bold center size={14}>
                     Chunk 2 - Revoking Cluster (Sentences 7-12)
                   </T>
-                  <T color="#ffcc80" size={12} style={{ marginTop: 6 }}>
+                  <T color="#ffcc80" center size={12} style={{ marginTop: 6 }}>
                     Revoking an API key is done from the same developer settings page. Find the key by its label. Click
                     the trash icon. Revocation takes effect within sixty seconds. In-flight requests return 401 after
                     propagation. Revoked keys remain in the audit log for compliance.
@@ -3850,6 +3865,7 @@ export const SemanticChunking = (ctx) => {
                 display: "flex",
                 flexDirection: "column",
                 justifyContent: "center",
+                textAlign: "center",
               }}
             >
               <T color={C.orange} bold center size={16}>
@@ -3869,10 +3885,10 @@ export const SemanticChunking = (ctx) => {
                   textAlign: "center",
                 }}
               >
-                <T color={C.orange} bold size={13}>
+                <T color={C.orange} bold center size={13}>
                   Retrieval Behavior
                 </T>
-                <T color="#ffcc80" size={12} style={{ marginTop: 6 }}>
+                <T color="#ffcc80" center size={12} style={{ marginTop: 6 }}>
                   A query for &quot;how do I revoke a key&quot; matches chunk 2 cleanly. A query for &quot;creating a
                   scoped key&quot; matches chunk 1. Neither chunk mixes the two sub-topics.
                 </T>

@@ -6769,3 +6769,45 @@ describe("SemanticMemory (13.27) content", () => {
     expect(container.textContent).toMatch(/What Counts As A Fact/i);
   });
 });
+
+describe("ProceduralMemory (13.28) content", () => {
+  const fn = AgentLoops.ProceduralMemory;
+
+  it("sub=0 contrasts skill vs fact", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/skill|recipe|how.?to/i);
+    expect(container.textContent).toMatch(/fact/i);
+    expect(container.textContent).toMatch(/escalate_human|200/);
+    expect(container.textContent).toMatch(/How-To, Not What/i);
+  });
+
+  it("sub=1 shows the recipe library", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/library|cache|recipe/i);
+    expect(container.textContent).toMatch(/refund|password|billing/i);
+    expect(container.textContent).toMatch(/Cached Workflows/i);
+  });
+
+  it("sub=2 shows retrieval by similarity", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/similarity|match|retriev/i);
+    expect(container.textContent).toMatch(/embedding|ANN/);
+    expect(container.textContent).toMatch(/Retrieve The Recipe/i);
+  });
+
+  it("sub=3 shows recipe shape", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/recipe/i);
+    expect(container.textContent).toMatch(/steps/i);
+    expect(container.textContent).toMatch(/success_rate|uses/i);
+    expect(container.textContent).toMatch(/Recipe \(Shape\)/i);
+  });
+
+  it("sub=4 contrasts with prompting", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/prompt/i);
+    expect(container.textContent).toMatch(/external|stored|token/i);
+    expect(container.textContent).toMatch(/learn|update|outcome/i);
+    expect(container.textContent).toMatch(/Why Not Just Prompt/i);
+  });
+});

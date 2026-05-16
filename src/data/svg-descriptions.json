@@ -384,5 +384,8 @@
   "13.26": [
     "Vertical timeline of four past events for Alice the customer, each with a date and a short summary, with the current ticket marked at the bottom.",
     "Two stage flow: stage one embeds each event and stores it in the vector database; stage two embeds a query and runs ANN search to retrieve the top-k matching past events."
+  ],
+  "13.28": [
+    "Recipe retrieval flow: new ticket text is embedded, ANN search runs against the recipe library trigger embeddings, and the top-one match is surfaced for the agent to use as scaffolding."
   ]
 }

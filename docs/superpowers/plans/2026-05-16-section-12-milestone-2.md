@@ -90,7 +90,7 @@ Every chapter at every sub-step MUST satisfy ALL of these. Violations are blocke
 8. **SVG `<desc>` metadata** - every `<svg>` has `<desc>...</desc>` as its first child; corresponding entry in `src/data/svg-descriptions.json` keyed by chapter ID (e.g., `"12.4": ["desc 1", "desc 2"]`).
 9. **No "architect" word** in chapter titles or content.
 10. **No em-dashes** anywhere in content. Use hyphen (`-`) or rewrite the sentence.
-11. **No next-chapter hints** - no "Next chapter:", "Coming up:", "Preview:" text. Within-section signposts like "Act 5 of this section fixes this" or "covered in chapter 12.10" are allowed; future-tense "next" / "coming" forward-references to chapters not yet on screen are forbidden.
+11. **No next-chapter hints** - no "Next chapter:", "Coming up:", "Preview:" text. Within-section signposts like "Chapters 12.19-12.21 fix this" or "covered in chapter 12.10" are allowed; future-tense "next" / "coming" forward-references to chapters not yet on screen are forbidden. Never use the literal phrase "Act N" in chapter-visible content - learners only see chapter numbers like 12.4.
 12. **Density: less text, more diagrams** - default to "show with a diagram" over "describe in prose". A chapter with 5 paragraphs of text and 1 diagram fails this rule. A chapter with 1 paragraph and 5 diagrams succeeds.
 
 ### Prompt-template artifact treatment (Section-12-specific)
@@ -133,7 +133,7 @@ Each chapter task internally follows the same 7-step cadence: write content test
 
 Use the Claude Code session-naming mechanism available in your CLI. Common ways depending on your version:
 
-- Slash command: type `/title section12-milestone2` (if your Claude Code build supports it)
+- Slash command: type `/rename section12-milestone2` (if your Claude Code build supports it)
 - Settings: set the session title via `/config` or the IDE extension's session pane
 - Manual marker: if no rename command is available, write a top-of-conversation marker like "SESSION: section12-milestone2" so future searches catch it
 
@@ -1335,8 +1335,8 @@ git commit -m "Implement chapter 12.9 Contextual Retrieval"
   - Product Features (10 docs, longer technical pages with sections and code samples): "Recursive Structural + Hierarchical. Sections give clean splits; parent-swap gives the LLM context for technical answers."
   - Troubleshooting (10 docs, free-form runbooks, narrative paragraphs): "Recursive Structural + Semantic for the longer narratives. Semantic catches topic shifts within a runbook."
   Below the table: a one-line synthesis: "Production chunking is rarely one strategy. Mix per doc-type, measure recall, iterate."
-  Bottom signpost: "Act 3 of this section moves to embedding model choice and how chunking interacts with embedding quality."
-  Key content: "Habuild Cloud" or "support corpus", "Account" + "Product Features" + "Troubleshooting", "mix" or "rarely one strategy", "Act 3" reference (allowed within-section signpost).
+  Bottom signpost: "Chapters 12.11-12.14 move to embedding model choice and how chunking interacts with embedding quality."
+  Key content: "Habuild Cloud" or "support corpus", "Account" + "Product Features" + "Troubleshooting", "mix" or "rarely one strategy", "12.11-12.14" or "embedding model" reference (allowed within-section signpost).
 
 - [ ] **Step 1: Write content tests for 12.10**
 
@@ -1417,7 +1417,7 @@ Append the new export. Required:
 - The 3-row query-type table in sub=2 may be an HTML table or a CSS grid table with header row. Title-case column headers.
 - The horizontal cost scale in sub=3 may be SVG (a labeled axis with tier markers) or three tinted vertical cards in a row. If SVG, add `<desc>` + manifest entry.
 - The 3-row walkthrough table in sub=4 follows the same pattern as sub=2.
-- No em-dashes. The "Act 3 of this section moves to embedding model choice" line is an allowed within-section signpost (it references the act number visible in the published TOC, not a "Next:" or "Coming up:" preview).
+- No em-dashes. The "Chapters 12.11-12.14 move to embedding model choice" line is an allowed within-section signpost (it references later chapter numbers in this same section, not a "Next:" or "Coming up:" preview).
 - All tables centered, all card-grid titles centered (`textAlign: "center"` on card div + `T center` on title).
 
 - [ ] **Step 4: Run tests to verify pass**

@@ -90,7 +90,7 @@ Every chapter at every sub-step MUST satisfy ALL of these. Violations are blocke
 8. **SVG `<desc>` metadata** - every `<svg>` has `<desc>...</desc>` as its first child; corresponding entry in `src/data/svg-descriptions.json` (>20 chars each).
 9. **No "architect" word** in chapter titles or content.
 10. **No em-dashes** anywhere in content.
-11. **No next-chapter hints** - no "Next chapter:", "Coming up:", "Preview:" text. Within-section signposts pointing to later acts ("Act 7 covers the eval triangle") are permitted as past/present-tense statements about section structure, not as forward teasers.
+11. **No next-chapter hints** - no "Next chapter:", "Coming up:", "Preview:" text. Within-section signposts pointing to later chapter ranges ("Chapters 12.28-12.32 cover the eval triangle") are permitted as past/present-tense statements about section structure, not as forward teasers. Never use the literal phrase "Act N" in chapter-visible content - learners only see chapter numbers.
 12. **Density: less text, more diagrams** - default to "show with a diagram" over "describe in prose". A chapter with 5 paragraphs of text and 1 diagram is failing this rule. A chapter with 1 paragraph and 5 diagrams is succeeding.
 
 ### Prompt-template artifact treatment (Section-12-specific rule)
@@ -137,7 +137,7 @@ Commit cadence: one commit per Task (Tasks 2-15) + one optional cleanup commit i
 
 Use the Claude Code session-naming mechanism available in your CLI. Common ways depending on your version:
 
-- Slash command: type `/title section12-milestone4` (if your Claude Code build supports it)
+- Slash command: type `/rename section12-milestone4` (if your Claude Code build supports it)
 - Settings: set the session title via `/config` or the IDE extension's session pane
 - Manual marker: if no rename command is available, write a top-of-conversation marker like "SESSION: section12-milestone4" so future searches catch it
 
@@ -1085,8 +1085,8 @@ The generic `describe("All chapters - full sub + interaction coverage", ...)` bl
   - Step 1: Parse model answer into atomic claims (e.g., "5 failed logins" / "24-hour hold").
   - Step 2: For each claim, locate the cited chunk.
   - Step 3: Score: claim_supported = LLM-judge(claim, chunk). Aggregate -> faithfulness score (0-1).
-  Caption: "Act 7 of this section covers RAGAS faithfulness in depth."
-  Key content: "faithfulness", "claim" or "claims", "trace" or "cited", "RAGAS" or "score", "Act 7".
+  Caption: "Chapters 12.28-12.32 cover RAGAS faithfulness in depth."
+  Key content: "faithfulness", "claim" or "claims", "trace" or "cited", "RAGAS" or "score", "12.28-12.32" or "RAGAS".
 
 - **sub=5 (C.orange) - The citation parser**
   Title: "Parse Citations Back Out Of The Answer"
@@ -1154,11 +1154,11 @@ The generic `describe("All chapters - full sub + interaction coverage", ...)` bl
       expect(container.textContent).toMatch(/hallucinat|guess|invent/i);
     });
 
-    it("sub=4 introduces faithfulness with claim tracing and Act 7 reference", () => {
+    it("sub=4 introduces faithfulness with claim tracing and RAGAS reference", () => {
       const { container } = render(fn(makeCtx({ sub: 4 })));
       expect(container.textContent).toMatch(/faithfulness/i);
       expect(container.textContent).toMatch(/claim|trace|cited/i);
-      expect(container.textContent).toMatch(/Act 7|RAGAS/i);
+      expect(container.textContent).toMatch(/12\.28-12\.32|RAGAS/i);
     });
 
     it("sub=5 explains parsing [doc-N] markers back to chunks", () => {
@@ -1199,7 +1199,7 @@ The generic `describe("All chapters - full sub + interaction coverage", ...)` bl
     - Title T above the block must be `bold center` and use the label "Prompt Template" or "Prompt Template - Production" (title-case).
   - The JSON-shape block in sub=2 follows the same styled-monospace-text-artifact pattern (NOT a code block).
   - Faithfulness diagram in sub=4 can be plain divs or SVG; if SVG, register description in svg-descriptions.json.
-  - Within-section reference to Act 7 / RAGAS in sub=4 is a signpost, not a forward "Next" hint.
+  - Within-section reference to chapters 12.28-12.32 / RAGAS in sub=4 is a signpost, not a forward "Next" hint.
   - Standalone formulas and JSON blocks center-aligned with `textAlign: "center"` on the OUTER container; the inner monospace `<pre>` stays `textAlign: "left"` so the text remains readable.
 
 - [ ] **Step 4: Run tests to verify pass**
@@ -2115,8 +2115,8 @@ The generic `describe("All chapters - full sub + interaction coverage", ...)` bl
   Visual: a 2-column summary.
   - Left ("DIY"): A custom while-loop in your own code. You implement the function-calling parse, tool dispatch, max_iterations check, response merge. Full control. More code.
   - Right ("LangGraph and similar"): A graph-shaped state machine for tool flows. Nodes are tool calls, edges are transitions. Built-in checkpointing, retries, human-in-the-loop. Less code. Framework lock-in.
-  Caption: "Pick orchestration last. The patterns above work without any framework. Frameworks are a productivity choice, not a correctness one. Act 8 covers framework choice in depth."
-  Key content: "LangGraph" or "orchestration", "DIY" or "while loop" or "custom", "framework", "Act 8".
+  Caption: "Pick orchestration last. The patterns above work without any framework. Frameworks are a productivity choice, not a correctness one. Chapters 12.33-12.37 cover framework choice in depth."
+  Key content: "LangGraph" or "orchestration", "DIY" or "while loop" or "custom", "framework", "12.33-12.37" or "framework choice".
 
 - [ ] **Step 1: Write content tests for 12.26**
 
@@ -2161,11 +2161,11 @@ The generic `describe("All chapters - full sub + interaction coverage", ...)` bl
       expect(container.textContent).toMatch(/cost|budget/i);
     });
 
-    it("sub=5 mentions LangGraph as one orchestration option and Act 8", () => {
+    it("sub=5 mentions LangGraph as one orchestration option and chapters 12.33-12.37", () => {
       const { container } = render(fn(makeCtx({ sub: 5 })));
       expect(container.textContent).toMatch(/LangGraph|orchestration/i);
       expect(container.textContent).toMatch(/framework/i);
-      expect(container.textContent).toMatch(/Act 8/i);
+      expect(container.textContent).toMatch(/12\.33-12\.37|framework choice/i);
     });
   });
   ```
@@ -2189,7 +2189,7 @@ The generic `describe("All chapters - full sub + interaction coverage", ...)` bl
   - The loop diagram in sub=2 MUST be an SVG with `<desc>` first child.
   - The multi-tool trace in sub=3 shows 4 distinct turn-blocks vertically.
   - The 2x2 grid in sub=4 and 2-column in sub=5 must not overlap.
-  - The Act 8 reference in sub=5 is a within-section signpost, not a forward "Next" hint.
+  - The chapters 12.33-12.37 reference in sub=5 is a within-section signpost, not a forward "Next" hint.
 
 - [ ] **Step 4: Run tests to verify pass**
 

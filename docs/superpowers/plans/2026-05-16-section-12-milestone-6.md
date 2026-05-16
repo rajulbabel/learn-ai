@@ -100,7 +100,7 @@ Act 8 color theme per spec: pink (`C.pink`) is the per-act color family for Act 
 
 Use the Claude Code session-naming mechanism available in your CLI. Common ways depending on your version:
 
-- Slash command: type `/title section12-milestone6` (if your Claude Code build supports it)
+- Slash command: type `/rename section12-milestone6` (if your Claude Code build supports it)
 - Settings: set the session title via `/config` or the IDE extension's session pane
 - Manual marker: if no rename command is available, write a top-of-conversation marker like "SESSION: section12-milestone6" so future searches catch it
 
@@ -1393,11 +1393,11 @@ git commit -m "Implement chapter 12.36 Hallucination Detection & Drift"
 - **sub=5 (C.green) - Framework-agnostic core**
   Title: "What Stays The Same Regardless Of Framework"
   Visual: a single big card with 6 bullets:
-  - Bullet 1: chunking strategy (Act 2) is a data-pipeline decision, not a framework decision.
+  - Bullet 1: chunking strategy (chapters 12.4-12.10) is a data-pipeline decision, not a framework decision.
   - Bullet 2: embedding model choice (12.11) is a data-pipeline decision.
   - Bullet 3: hybrid + reranker cascade (12.13, 12.14) is a retrieval-quality decision.
   - Bullet 4: prompt template + context packing (12.19) is a generation decision.
-  - Bullet 5: eval (Act 7) is a measurement decision.
+  - Bullet 5: eval (chapters 12.28-12.32) is a measurement decision.
   - Bullet 6: tracing (12.35) is an ops decision.
   Below: a final takeaway: "Frameworks are wrappers around these decisions. Get the decisions right; the framework is replaceable. Keep production code thin enough that a framework swap is a 2-day job, not a 2-month rewrite."
   Key content: "chunking" or "embedding" or "hybrid" or "reranker" or "eval" or "tracing", "framework", "decisions".

@@ -105,7 +105,7 @@ Every chapter at every sub-step MUST satisfy ALL of these. Violations are blocke
 8. **SVG `<desc>` metadata** - every `<svg>` has `<desc>...</desc>` as its first child; corresponding entry in `src/data/svg-descriptions.json`.
 9. **No "architect" word** in chapter titles or content.
 10. **No em-dashes** anywhere in content. Use hyphens or rewrite.
-11. **No next-chapter hints** - no "Next chapter:", "Coming up:", "Preview:" text. Within-section signposts that point to which act of THIS section solves something are allowed (e.g., "Act 8 covers observability") - phrased in present tense.
+11. **No next-chapter hints** - no "Next chapter:", "Coming up:", "Preview:" text. Within-section signposts that point to which later chapter range in THIS section solves something are allowed (e.g., "Chapters 12.33-12.37 cover observability") - phrased in present tense. Never use the literal phrase "Act N" in chapter-visible content.
 12. **Density: less text, more diagrams** - default to "show with a diagram" over "describe in prose".
 
 **Section-12-specific rule (re-stated):** prompt templates and eval rubrics are TEXT artifacts, NOT code blocks. Render in styled monospace blocks visually distinct from code: tinted background `${C.X}06`, soft border `1px solid ${C.X}12`, monospace font 14-16px, label "Prompt Template" / "Eval Rubric" / "Judge Prompt" centered. Highlight variable placeholders (`{context}`, `{query}`, `{answer}`) in a distinct color. Never show executable code.
@@ -139,7 +139,7 @@ Commit cadence: one commit per chapter (Tasks 6-10), plus one each for Tasks 2, 
 
 Use the Claude Code session-naming mechanism available in your CLI. Common ways depending on your version:
 
-- Slash command: type `/title section12-milestone5` (if your Claude Code build supports it)
+- Slash command: type `/rename section12-milestone5` (if your Claude Code build supports it)
 - Settings: set the session title via `/config` or the IDE extension's session pane
 - Manual marker: if no rename command is available, write a top-of-conversation marker like "SESSION: section12-milestone5" so future searches catch it
 
@@ -1797,7 +1797,7 @@ The generic test block in `sections.test.jsx` iterates over `chapters` and looks
   grep -in "next chapter\|coming up\|preview:" src/sections/rag-evaluation.jsx
   ```
 
-  Expected: no matches. (Within-section signposts like "Act 8 covers observability" are allowed; the grep above will not flag those.)
+  Expected: no matches. (Within-section signposts like "Chapters 12.33-12.37 cover observability" are allowed; the grep above will not flag those.)
 
 - [ ] **Step 9: Production build smoke test**
 

@@ -154,7 +154,7 @@ Commit cadence: one commit per task, except Task 1 (no commit) and Task 15 (veri
 
 Use the Claude Code session-naming mechanism available in your CLI. Common ways depending on your version:
 
-- Slash command: type `/title section12-milestone3` (if your Claude Code build supports it)
+- Slash command: type `/rename section12-milestone3` (if your Claude Code build supports it)
 - Settings: set the session title via `/config` or the IDE extension's session pane
 - Manual marker: if no rename command is available, write a top-of-conversation marker like "SESSION: section12-milestone3" so future searches catch it
 
@@ -1397,7 +1397,7 @@ git commit -m "Implement chapter 12.14 The Reranker Cascade"
 - Modify: `src/sections/rag-retrieval.jsx` (replace stub `WhyTransformQueries`)
 - Modify: `src/__tests__/sections.test.jsx` (append content tests)
 
-**Chapter purpose:** Open Act 4. The query the user typed is rarely the optimal query for retrieval. Motivate query transformation with three failure modes (lexical mismatch, ambiguity, multi-intent) and a brief preview of the four strategies (HyDE, multi-query, routing, decomposition - each covered in 12.16-12.18). Walk away knowing WHY we transform queries and WHICH transformation maps to which failure.
+**Chapter purpose:** Open the query-transformation chapters (12.15-12.18). The query the user typed is rarely the optimal query for retrieval. Motivate query transformation with three failure modes (lexical mismatch, ambiguity, multi-intent) and a brief preview of the four strategies (HyDE, multi-query, routing, decomposition - each covered in 12.16-12.18). Walk away knowing WHY we transform queries and WHICH transformation maps to which failure.
 
 **Sub-step structure (5 sub-steps, 0-4):**
 

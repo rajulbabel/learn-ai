@@ -89,7 +89,7 @@ Every chapter at every sub-step MUST satisfy ALL of these. Violations are blocke
 
 Use the Claude Code session-naming mechanism available in your CLI. Common ways depending on your version:
 
-- Slash command: type `/title section12-milestone1` (if your Claude Code build supports it)
+- Slash command: type `/rename section12-milestone1` (if your Claude Code build supports it)
 - Settings: set the session title via `/config` or the IDE extension's session pane
 - Manual marker: if no rename command is available, write a top-of-conversation marker like "SESSION: section12-milestone1" so future searches catch it
 
@@ -869,42 +869,42 @@ git commit -m "Implement chapter 12.2 The Naive RAG Pipeline"
   Title: "Failure 1: Bad Chunking"
   Visual: take doc-1 (password reset) and show a fixed-size split that lands mid-sentence between "Click the link" and "within 24 hours". Show the retrieved chunk to the LLM ends mid-sentence; the LLM has to guess and produces a confused answer.
   Symptom: query "How long do I have to use the password reset link?" - retrieved chunk is split across two pieces, neither is retrieved together, model says "I don't see a time limit in the docs" (wrong - the limit is in the doc).
-  Brief signpost: "Act 2 of this section fixes this."
-  Key content: "bad chunking" or "chunking", "mid-sentence" or "split", "Act 2".
+  Brief signpost: "Chapters 12.4-12.10 (chunking) fix this."
+  Key content: "bad chunking" or "chunking", "mid-sentence" or "split", "12.4-12.10" or "chunking".
 
 - **sub=2 (C.yellow) - Failure 2: Low Recall**
   Title: "Failure 2: Low Recall"
   Visual: query "I can't sign in to my account" embedded; the most relevant doc is titled "Login Troubleshooting" but uses the word "log in" not "sign in". Embedding-only retrieval scores it lower than less-relevant docs that share "sign in" lexically. The right doc is missed entirely from top-3.
   Symptom: model gets the wrong context, answers the wrong question.
-  Brief signpost: "Act 3 (hybrid + reranker recap) and Act 4 (query transformation) fix this."
-  Key content: "recall", "sign in" or "log in", "missed" or "not retrieved", "Act 3" or "Act 4".
+  Brief signpost: "Chapters 12.11-12.14 (hybrid + reranker recap) and 12.15-12.18 (query transformation) fix this."
+  Key content: "recall", "sign in" or "log in", "missed" or "not retrieved", "12.11-12.14" or "12.15-12.18" or "hybrid" or "reranker" or "query transformation".
 
 - **sub=3 (C.green) - Failure 3: Lost In The Middle**
   Title: "Failure 3: Lost In The Middle"
   Visual: 10 chunks packed into a prompt. Show the U-shaped attention curve: model attends well to chunks 1-2 (start) and 9-10 (end), attention dips for chunks 4-7 (middle). The relevant chunk for the query happens to be chunk 5 - it gets ignored.
   Symptom: model has the answer in context but skips it.
-  Brief signpost: "Act 5 (context packing + lost-in-middle) fixes this."
-  Key content: "lost in the middle", "U-shaped" or "middle", "attention", "Act 5".
+  Brief signpost: "Chapters 12.19-12.21 (context packing + lost-in-middle) fix this."
+  Key content: "lost in the middle", "U-shaped" or "middle", "attention", "12.19-12.21" or "context packing".
 
 - **sub=4 (C.cyan) - Failure 4: No Citation**
   Title: "Failure 4: No Citation"
   Visual: a generated answer with no source attribution. User asks "Why is my account suspended?" - model responds with a paragraph but no `[doc-X]` markers. Reviewer cannot verify which doc the answer came from. If the model hallucinated half of it, no one can tell.
   Symptom: ungrounded, unverifiable answer.
-  Brief signpost: "Act 5 (citations + groundedness) fixes this."
-  Key content: "citation" or "citations", "verify" or "verifiable", "Act 5".
+  Brief signpost: "Chapters 12.19-12.21 (citations + groundedness) fix this."
+  Key content: "citation" or "citations", "verify" or "verifiable", "12.19-12.21" or "citations" or "groundedness".
 
 - **sub=5 (C.purple) - Failure 5: Hallucination On Partial Info**
   Title: "Failure 5: Hallucination On Partial Info"
   Visual: query "Does the Pro plan include SSO?" - retrieved chunks mention SSO is available on Enterprise but say nothing about Pro. Model fills in: "Yes, the Pro plan includes SSO" (wrong - it's Enterprise-only). Side-by-side: retrieved context (no Pro+SSO mention) vs model output (claims Pro+SSO).
-  Brief signpost: "Act 5 (refusal + groundedness instruction) and Act 7 (faithfulness eval) fix this."
-  Key content: "hallucinat", "Pro" and "SSO" and "Enterprise", "Act 5" or "Act 7".
+  Brief signpost: "Chapters 12.19-12.21 (refusal + groundedness instruction) and 12.28-12.32 (faithfulness eval) fix this."
+  Key content: "hallucinat", "Pro" and "SSO" and "Enterprise", "12.19-12.21" or "12.28-12.32" or "groundedness" or "faithfulness".
 
 - **sub=6 (C.pink) - Failures 6 & 7: Stale Index + Cost/Latency**
   Title: "Failures 6 & 7: Stale Index, Cost, Latency"
   Visual: two side-by-side panels.
-  - Left panel (Stale Index): a doc was updated 2 days ago but the embedding index hasn't been refreshed. User asks about the new policy, gets the old answer. "Embedding lifecycle - covered in Section 11.27 - and Act 8 detection of drift fix this."
-  - Right panel (Cost / Latency): a per-query cost breakdown showing embedding ($0.0001) + retrieval ($0.0002) + LLM tokens ($0.012 at 4000 tokens in context). At 1000 QPS this adds up. Latency: 50ms retrieval + 800ms generation = 850ms p50. "Act 8 (caching, cost models, observability) fix this."
-  Key content: "stale" or "stale index", "Section 11.27", "cost", "latency", "Act 8".
+  - Left panel (Stale Index): a doc was updated 2 days ago but the embedding index hasn't been refreshed. User asks about the new policy, gets the old answer. "Embedding lifecycle - covered in Section 11.27 - and chapters 12.33-12.37 detection of drift fix this."
+  - Right panel (Cost / Latency): a per-query cost breakdown showing embedding ($0.0001) + retrieval ($0.0002) + LLM tokens ($0.012 at 4000 tokens in context). At 1000 QPS this adds up. Latency: 50ms retrieval + 800ms generation = 850ms p50. "Chapters 12.33-12.37 (caching, cost models, observability) fix this."
+  Key content: "stale" or "stale index", "Section 11.27", "cost", "latency", "12.33-12.37" or "caching" or "observability".
 
 - [ ] **Step 1: Write content tests for 12.3**
 
@@ -927,28 +927,28 @@ describe("WhereNaiveRAGBreaks (12.3) content", () => {
     const { container } = render(fn(makeCtx({ sub: 1 })));
     expect(container.textContent).toMatch(/chunking|chunk/i);
     expect(container.textContent).toMatch(/mid-?sentence|split/i);
-    expect(container.textContent).toMatch(/Act 2/i);
+    expect(container.textContent).toMatch(/12\.4-12\.10|chunking/i);
   });
 
   it("sub=2 shows low recall on sign-in vs log-in lexical mismatch", () => {
     const { container } = render(fn(makeCtx({ sub: 2 })));
     expect(container.textContent).toMatch(/recall/i);
     expect(container.textContent).toMatch(/sign.?in/i);
-    expect(container.textContent).toMatch(/Act 3|Act 4/i);
+    expect(container.textContent).toMatch(/12\.11-12\.18|hybrid|reranker|query.{0,20}transform/i);
   });
 
   it("sub=3 shows lost-in-the-middle attention U-curve", () => {
     const { container } = render(fn(makeCtx({ sub: 3 })));
     expect(container.textContent).toMatch(/middle/i);
     expect(container.textContent).toMatch(/attention/i);
-    expect(container.textContent).toMatch(/Act 5/i);
+    expect(container.textContent).toMatch(/12\.19-12\.21|context packing|lost.?in.?middle/i);
   });
 
   it("sub=4 shows missing citation on suspended account query", () => {
     const { container } = render(fn(makeCtx({ sub: 4 })));
     expect(container.textContent).toMatch(/citation/i);
     expect(container.textContent).toMatch(/verify|verifiable/i);
-    expect(container.textContent).toMatch(/Act 5/i);
+    expect(container.textContent).toMatch(/12\.19-12\.21|citations|groundedness/i);
   });
 
   it("sub=5 shows hallucination on Pro vs Enterprise SSO", () => {
@@ -958,12 +958,12 @@ describe("WhereNaiveRAGBreaks (12.3) content", () => {
     expect(container.textContent).toMatch(/Pro|Enterprise/);
   });
 
-  it("sub=6 shows stale index + cost/latency with Section 11.27 + Act 8 references", () => {
+  it("sub=6 shows stale index + cost/latency with Section 11.27 + chapter 12.33-12.37 references", () => {
     const { container } = render(fn(makeCtx({ sub: 6 })));
     expect(container.textContent).toMatch(/stale/i);
     expect(container.textContent).toMatch(/Section 11\.27|11\.27/);
     expect(container.textContent).toMatch(/cost|latency/i);
-    expect(container.textContent).toMatch(/Act 8/i);
+    expect(container.textContent).toMatch(/12\.33-12\.37|caching|observability/i);
   });
 });
 ```
@@ -983,7 +983,7 @@ Replace the stub. Required (in addition to the standard rules from Task 7):
 - 7 sub-steps (sub >= 0 through sub >= 6).
 - Colors per sub-step as specified above (red, orange, yellow, green, cyan, purple, pink).
 - The 7-failure overview grid in sub=0 must NOT have overlapping cards. Use CSS grid `display: grid; gridTemplateColumns: repeat(3, 1fr); gap: 12`. Cards centered horizontally + vertically.
-- Forward references to "Act N" are NOT next-chapter hints (those are forbidden). They are within-section signposts pointing to which act later in this same Section 12 will solve each failure. Phrase as "Act 2 of this section fixes this" or "Act 5 (citations + groundedness) fixes this" - past/present tense, not "Coming up:" / "Next:".
+- Forward references to later chapter ranges (e.g., "Chapters 12.4-12.10") are NOT next-chapter hints (those are forbidden). They are within-section signposts pointing to which later chapters in this same Section 12 will solve each failure. Phrase as "Chapters 12.4-12.10 (chunking) fix this" or "Chapters 12.19-12.21 (citations + groundedness) fix this" - past/present tense, not "Coming up:" / "Next:". Never use the literal phrase "Act N" in chapter-visible text; learners only see chapter numbers.
 - The U-curve diagram in sub=3 should be an SVG. Add `<desc>` and svg-descriptions.json entry.
 - Side-by-side panels in sub=5 and sub=6 must use proper centered layout, no overlap.
 

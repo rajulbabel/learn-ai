@@ -7463,3 +7463,42 @@ describe("CostControl (13.43) content", () => {
     expect(container.textContent).toMatch(/Don't Retry Expensive Failures/i);
   });
 });
+
+describe("LatencyOptimization (13.44) content", () => {
+  const fn = AgentProduction.LatencyOptimization;
+
+  it("sub=0 shows latency waterfall", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/latency|waterfall/i);
+    expect(container.textContent).toMatch(/LLM call|tool/i);
+    expect(container.textContent).toMatch(/Where The Seconds Go/i);
+  });
+
+  it("sub=1 explains streaming win", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/stream/i);
+    expect(container.textContent).toMatch(/perceived|first token/i);
+    expect(container.textContent).toMatch(/Show Progress Token By Token/i);
+  });
+
+  it("sub=2 references parallel tools (13.10)", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/parallel|concurrent/i);
+    expect(container.textContent).toMatch(/13\.10/);
+    expect(container.textContent).toMatch(/Run Independent Tools Concurrently/i);
+  });
+
+  it("sub=3 explains speculative execution", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/speculat/i);
+    expect(container.textContent).toMatch(/wasted|tradeoff/i);
+    expect(container.textContent).toMatch(/Run Likely Steps Before Confirming/i);
+  });
+
+  it("sub=4 shows result caching", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/cach/i);
+    expect(container.textContent).toMatch(/TTL|5 minutes|1 hour/i);
+    expect(container.textContent).toMatch(/Cache What Doesn't Change/i);
+  });
+});

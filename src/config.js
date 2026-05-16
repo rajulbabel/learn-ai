@@ -205,6 +205,19 @@ export const chapters = [
   { id: "12.33", title: "RAGAS Metrics", section: 12, component: "RAGASMetrics" },
   { id: "12.34", title: "Golden Datasets", section: 12, component: "GoldenDatasets" },
   { id: "12.35", title: "Online Eval & A/B Testing", section: 12, component: "OnlineEvalABTesting" },
+  // Section 12 Act 9: Production Operations
+  { id: "12.36", title: "Caching - Prompt + Semantic", section: 12, component: "Caching" },
+  { id: "12.37", title: "Cost Models", section: 12, component: "CostModels" },
+  { id: "12.38", title: "Observability & Tracing", section: 12, component: "ObservabilityTracing" },
+  { id: "12.39", title: "Hallucination Detection & Drift", section: 12, component: "HallucinationDrift" },
+  { id: "12.40", title: "Framework Choice", section: 12, component: "FrameworkChoice" },
+  // Section 12 Act 10: Decision Framework + Capstone
+  {
+    id: "12.41",
+    title: "The Complete RAG Decision Framework + Capstone",
+    section: 12,
+    component: "RAGDecisionFrameworkCapstone",
+  },
 ];
 
 export const sectionNames = {

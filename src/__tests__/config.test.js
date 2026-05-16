@@ -367,7 +367,11 @@ describe("Section 12 Acts 6+7 chapters", () => {
 describe("Section 12 Act 8 chapters", () => {
   it("has chapters 12.31 through 12.35 in order", () => {
     const section12 = chapters.filter((ch) => ch.section === 12);
-    const last5 = section12.slice(-5);
+    expect(section12.length).toBeGreaterThanOrEqual(35);
+    const act8 = section12.filter((c) => {
+      const n = Number(c.id.split(".")[1]);
+      return n >= 31 && n <= 35;
+    });
     const expected = [
       { id: "12.31", component: "RAGEvalTriangle", title: "The RAG Eval Triangle" },
       { id: "12.32", component: "LLMAsJudge", title: "LLM-as-Judge" },
@@ -375,17 +379,43 @@ describe("Section 12 Act 8 chapters", () => {
       { id: "12.34", component: "GoldenDatasets", title: "Golden Datasets" },
       { id: "12.35", component: "OnlineEvalABTesting", title: "Online Eval & A/B Testing" },
     ];
-    expect(last5.length).toBe(expected.length);
+    expect(act8.length).toBe(expected.length);
     expected.forEach((exp, i) => {
-      expect(last5[i].id).toBe(exp.id);
-      expect(last5[i].component).toBe(exp.component);
-      expect(last5[i].title).toBe(exp.title);
+      expect(act8[i].id).toBe(exp.id);
+      expect(act8[i].component).toBe(exp.component);
+      expect(act8[i].title).toBe(exp.title);
     });
   });
 
-  it("Section 12 has exactly 35 chapters after M5", () => {
+  it("Section 12 has at least 35 chapters after M5", () => {
     const section12 = chapters.filter((ch) => ch.section === 12);
-    expect(section12.length).toBe(35);
+    expect(section12.length).toBeGreaterThanOrEqual(35);
+  });
+});
+
+describe("Section 12 chapters 12.36-12.41 (M6)", () => {
+  it("appends chapters 12.36 through 12.41 in order", () => {
+    const section12 = chapters.filter((ch) => ch.section === 12);
+    expect(section12.length).toBe(41);
+    const m6 = section12.slice(-6);
+    expect(m6[0].id).toBe("12.36");
+    expect(m6[0].component).toBe("Caching");
+    expect(m6[0].title).toBe("Caching - Prompt + Semantic");
+    expect(m6[1].id).toBe("12.37");
+    expect(m6[1].component).toBe("CostModels");
+    expect(m6[1].title).toBe("Cost Models");
+    expect(m6[2].id).toBe("12.38");
+    expect(m6[2].component).toBe("ObservabilityTracing");
+    expect(m6[2].title).toBe("Observability & Tracing");
+    expect(m6[3].id).toBe("12.39");
+    expect(m6[3].component).toBe("HallucinationDrift");
+    expect(m6[3].title).toBe("Hallucination Detection & Drift");
+    expect(m6[4].id).toBe("12.40");
+    expect(m6[4].component).toBe("FrameworkChoice");
+    expect(m6[4].title).toBe("Framework Choice");
+    expect(m6[5].id).toBe("12.41");
+    expect(m6[5].component).toBe("RAGDecisionFrameworkCapstone");
+    expect(m6[5].title).toBe("The Complete RAG Decision Framework + Capstone");
   });
 });
 

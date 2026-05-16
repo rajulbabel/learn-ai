@@ -344,5 +344,10 @@
     "Two row comparison diagram showing MCP on top where one agent box connects to four separate tool boxes, and A2A on the bottom where one agent box delegates to another agent box that itself contains tool boxes inside its boundary.",
     "Five step delegation flow where triage agent classifies ticket T4 as billing, finds an agent with billing skill, delegates the full ticket context, the billing agent works the ticket and returns result.",
     "Vertical timeline showing triage agent delegates to billing agent which then streams intermediate updates lookup processing approval and final result back to triage."
+  ],
+  "13.18": [
+    "Four node directed acyclic graph showing fixed deterministic workflow with predictable edges.",
+    "Central decision node with multiple branching options showing an open loop where the model picks different paths each run.",
+    "Hybrid workflow showing a four node DAG where the second node is replaced by an agent loop with a question mark indicating the model decides while the other three nodes remain deterministic."
   ]
 }

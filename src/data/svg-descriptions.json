@@ -380,5 +380,9 @@
   ],
   "12.34": [
     "Two-lane LLM-bootstrapped golden-dataset pipeline. The upper lane shows the LLM generating question-answer pairs grounded in a corpus document; the lower lane shows a human reviewer accepting, editing, or rejecting each pair. Used to illustrate how a small hand-built seed scales into a 500-2000 reviewed set without losing human oversight."
+  ],
+  "12.35": [
+    "Shadow-eval pipeline diagram. A user query splits into an old pipeline whose answer is served and a new pipeline whose answer is logged but not served. Both answers feed into an LLM-judge that scores them, producing an aggregate comparison without exposing users to the candidate pipeline.",
+    "Closing-the-loop cycle diagram with four nodes connected by arrows: online finds a regression, capture failing cases into the golden regression set, offline reproduces and fixes, shadow plus A/B verify in production. The cycle returns to online detection, illustrating the offline-online feedback loop that production-grade RAG eval relies on."
   ]
 }

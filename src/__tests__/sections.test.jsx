@@ -5132,6 +5132,7 @@ describe("Every SVG has a <desc> element", () => {
     "12.31",
     "12.32",
     "12.34",
+    "12.35",
   ];
 
   svgChapters.forEach((chId) => {
@@ -6756,5 +6757,51 @@ describe("GoldenDatasets (12.34) content", () => {
     expect(container.textContent).toMatch(/monthly|cadence|review/i);
     expect(container.textContent).toMatch(/archive|obsolete/i);
     expect(container.textContent).toMatch(/coverage|freshness|pass[- ]?rate/i);
+  });
+});
+
+describe("OnlineEvalABTesting (12.35) content", () => {
+  const fn = RagEvaluation.OnlineEvalABTesting;
+
+  it("sub=0 contrasts offline vs online eval", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/offline/i);
+    expect(container.textContent).toMatch(/online/i);
+    expect(container.textContent).toMatch(/production|real user/i);
+  });
+
+  it("sub=1 lists implicit signals", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/implicit/i);
+    expect(container.textContent).toMatch(/thumb|dwell|copy[- ]?paste|rephrase/i);
+  });
+
+  it("sub=2 covers explicit feedback with privacy note", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/explicit/i);
+    expect(container.textContent).toMatch(/rating|thumb|feedback|star/i);
+    expect(container.textContent).toMatch(/privacy|PII|redact|GDPR/i);
+  });
+
+  it("sub=3 explains shadow eval", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/shadow/i);
+    expect(container.textContent).toMatch(/alongside|log|without serving|without affecting/i);
+    expect(container.textContent).toMatch(/judge|rubric|production traffic/i);
+  });
+
+  it("sub=4 explains A/B with rubric judging and guardrails", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/A\/B|split traffic/i);
+    expect(container.textContent).toMatch(/rubric|judge/i);
+    expect(container.textContent).toMatch(/significan|p[- ]?value|statistical/i);
+    expect(container.textContent).toMatch(/guardrail|rollback|monitor/i);
+  });
+
+  it("sub=5 closes the offline-online loop", () => {
+    const { container } = render(fn(makeCtx({ sub: 5 })));
+    expect(container.textContent).toMatch(/loop|cycle|feedback/i);
+    expect(container.textContent).toMatch(/regression|capture/i);
+    expect(container.textContent).toMatch(/shadow|A\/B|golden|RAGAS|judge/i);
   });
 });

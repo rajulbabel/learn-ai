@@ -5579,3 +5579,50 @@ describe("SemanticChunking (12.9) content", () => {
     expect(container.textContent).toMatch(/\$|10x|50x|million|M docs/i);
   });
 });
+
+describe("AnatomyOfLlmCall (13.1) content", () => {
+  const fn = AgentPrompting.AnatomyOfLlmCall;
+
+  it("sub=0 shows three message roles", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/system/i);
+    expect(container.textContent).toMatch(/user/i);
+    expect(container.textContent).toMatch(/assistant/i);
+  });
+
+  it("sub=1 explains tokens and context window", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/token/i);
+    expect(container.textContent).toMatch(/context window/i);
+  });
+
+  it("sub=2 covers temperature / top-p / top-k", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/temperature/i);
+    expect(container.textContent).toMatch(/top.?p/i);
+    expect(container.textContent).toMatch(/top.?k/i);
+  });
+
+  it("sub=3 lists stop conditions and finish_reason", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/max.?tokens/i);
+    expect(container.textContent).toMatch(/stop.?(reason|sequence)/i);
+    expect(container.textContent).toMatch(/end.?turn/i);
+  });
+
+  it("sub=4 shows response shape with content/stop_reason/usage", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/content/i);
+    expect(container.textContent).toMatch(/stop.?reason|finish.?reason/i);
+    expect(container.textContent).toMatch(/usage/i);
+    expect(container.textContent).toMatch(/input.?tokens/i);
+    expect(container.textContent).toMatch(/output.?tokens/i);
+  });
+
+  it("sub=5 traces the complete call cycle", () => {
+    const { container } = render(fn(makeCtx({ sub: 5 })));
+    expect(container.textContent).toMatch(/messages/i);
+    expect(container.textContent).toMatch(/request|send/i);
+    expect(container.textContent).toMatch(/response|stream/i);
+  });
+});

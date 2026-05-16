@@ -170,6 +170,7 @@ export const chapters = [
   { id: "12.2", title: "The Naive RAG Pipeline", section: 12, component: "NaiveRAGPipeline" },
   { id: "12.3", title: "Where Naive RAG Breaks", section: 12, component: "WhereNaiveRAGBreaks" },
   { id: "12.4", title: "Parsing - Raw Sources to Clean Text", section: 12, component: "ParsingExtraction" },
+  { id: "12.5", title: "Deduplication & Cleaning", section: 12, component: "DeduplicationCleaning" },
 ];
 
 export const sectionNames = {

@@ -37619,5 +37619,542 @@
         ]
       }
     ]
+  },
+  "1b793d1d36b83d69": {
+    "12.5": [
+      {
+        "sub": 0,
+        "kind": "concept",
+        "text": "The same knowledge-base article often lives in Zendesk, Confluence, and Notion at the same time. Ingest all three blindly and the same answer becomes three vectors in your index. A top-5 retrieval for 'How do I reset my password?' returns 3 copies of the same chunk plus 2 unrelated docs - no diversity, and most of the context-window budget is wasted on duplicates. Concrete numbers: each duplicate chunk is ~512 tokens, so three duplicates consume 1,536 of a 4,096-token context window, leaving only 2,560 tokens for distinct answers. 3 copies of the same answer equals wasted tokens, zero diversity, and the LLM has nothing distinct to triangulate against. Example sources: Zendesk help center article #4821, Confluence IT runbook page, Notion onboarding doc section - all containing 'Reset Your Password'.",
+        "summary": "Shows how duplicate articles across Zendesk, Confluence, and Notion waste 1,536 of 4,096 context tokens and kill retrieval diversity.",
+        "queries": [
+          "why deduplicate documents in RAG",
+          "what happens if you ingest the same article from multiple systems",
+          "duplicate chunks wasting context window tokens",
+          "Zendesk Confluence Notion same KB article problem",
+          "how many tokens do duplicate chunks waste",
+          "context window budget eaten by duplicates",
+          "retrieval returns 3 copies of the same chunk",
+          "no diversity in top-k retrieval",
+          "why are duplicates bad for LLM grounding",
+          "same answer three vector copies",
+          "context window 4096 tokens duplicate cost",
+          "how duplicates hurt RAG quality",
+          "knowledge base article in multiple systems",
+          "ingestion pipeline without dedup consequences",
+          "top-5 returning redundant chunks"
+        ],
+        "terms": [
+          "deduplication",
+          "duplicate chunks",
+          "context window",
+          "Zendesk",
+          "Confluence",
+          "Notion",
+          "retrieval diversity",
+          "ingestion pipeline"
+        ]
+      },
+      {
+        "sub": 1,
+        "kind": "concept",
+        "text": "The first line of defense is a cryptographic hash. Normalize the text (strip whitespace, lowercase, remove punctuation), run SHA-256, then keep a hash table of every hash already seen. If a new doc's hash matches an existing hash, content is byte-identical, so drop it. Three-step flow: Step 1 Normalize - 'Reset Your Password. Click The Link.' becomes 'reset your password click the link'. Step 2 Hash - sha256(normalized) produces hex digest like a3f2b9... Step 3 Dedup Lookup - hash table check, match equals drop, miss equals keep + store. Formula: hash = sha256(normalize(doc.content)). Worked example: Zendesk hash a3f2b9... kept (first), Confluence hash a3f2b9... dropped, Notion hash a3f2b9... dropped. Cost: O(N) hash compute plus O(1) hash-table lookup. Misses: 'Same article with one typo fixed' produces a different hash, so byte-identical only catches the easy 80%.",
+        "summary": "Exact-hash dedup with SHA-256 on normalized text catches byte-identical copies cheaply but misses any change as small as a typo.",
+        "queries": [
+          "how does exact hash deduplication work",
+          "SHA-256 deduplication for documents",
+          "what is the formula for hash dedup",
+          "normalize text before hashing",
+          "why hash dedup misses near duplicates",
+          "O(N) deduplication cost",
+          "hash table lookup for duplicate detection",
+          "cryptographic hash for RAG dedup",
+          "byte identical duplicate detection",
+          "what percentage of duplicates does exact hash catch",
+          "normalize whitespace lowercase punctuation before hashing",
+          "SHA-256 hex digest deduplication example",
+          "limits of exact hashing for documents",
+          "first line of dedup defense",
+          "how to detect identical documents"
+        ],
+        "terms": [
+          "SHA-256",
+          "exact hash dedup",
+          "normalization",
+          "hash table",
+          "byte-identical",
+          "cryptographic hash",
+          "O(N)"
+        ]
+      },
+      {
+        "sub": 2,
+        "kind": "concept",
+        "text": "One typo fix, one re-worded sentence, or one renamed term flips the SHA-256 digest completely. MinHash estimates Jaccard set overlap between shingle sets cheaply, and locality-sensitive hashing (LSH) groups near-duplicates into the same bucket without an O(N^2) pairwise scan. Example pair exact hash misses: Doc A (Zendesk): 'Reset your password by clicking the link in your email within 24 hours.' SHA-256 a3f2b9... Doc B (Confluence): 'Reset the password by clicking the link in your email within 24 hours.' SHA-256 9e1cd4... One word change ('your' to 'the') flips the hash. MinHash + LSH pipeline: Step 1 - 3-gram shingles {reset your password, your password by, password by clicking, ...}. Step 2 - MinHash signature with K=128 hash functions; 125 of 128 positions match equals Jaccard estimate around 0.97. Step 3 - LSH banding 16 bands x 8 rows; Doc A and Doc B hash into the SAME bucket, candidate near-duplicate pair found via sub-linear scan. MinHash + LSH equals sub-linear near-duplicate detection at scale (1B docs feasible). Jaccard threshold tunable (typically 0.85). Catches typo-fixes, re-words, copy-paste edits exact hashing cannot.",
+        "summary": "MinHash signatures plus LSH banding (16 bands x 8 rows, K=128) detect near-duplicates by estimating Jaccard overlap without O(N^2) pairwise comparison.",
+        "queries": [
+          "what is MinHash deduplication",
+          "how does LSH work for near duplicates",
+          "MinHash plus LSH pipeline explained",
+          "Jaccard similarity estimation with MinHash",
+          "what are 3-gram shingles in deduplication",
+          "MinHash signature 128 hash functions",
+          "LSH banding 16 bands 8 rows",
+          "sub-linear near duplicate detection",
+          "Jaccard threshold for near duplicates 0.85",
+          "how to catch typo fix duplicates",
+          "MinHash vs exact hash dedup",
+          "locality sensitive hashing for document deduplication",
+          "scale dedup to 1 billion documents",
+          "shingling for near duplicate detection",
+          "how does banding LSH avoid pairwise comparison",
+          "Jaccard 0.97 near duplicate example"
+        ],
+        "terms": [
+          "MinHash",
+          "LSH",
+          "locality-sensitive hashing",
+          "Jaccard similarity",
+          "shingling",
+          "banding",
+          "near-duplicate",
+          "3-gram"
+        ]
+      },
+      {
+        "sub": 3,
+        "kind": "concept",
+        "text": "Two docs can say the same thing with almost no shared words. MinHash misses these because no shingles overlap. Only embedding cosine catches paraphrases - the same meaning in different words. Paraphrase example: KB article (formal): 'To reset your password, click the password reset link delivered to your registered email address.' Forum post (casual): 'Yo if you forgot your password just hit the reset thing they sent to your email.' MinHash Jaccard: 0.08 (miss). Embedding cosine: 0.94 (flagged as semantic duplicate). Cosine similarity ladder: Cosine >= 0.97 = definite duplicate, drop one. 0.90 <= Cosine < 0.97 = near-duplicate, human review queue. 0.85 <= Cosine < 0.90 = topically similar, keep both. Cosine < 0.85 = distinct, keep all. Cost reality: embedding a full corpus to dedup adds $0.10 per 1M tokens times corpus size. For 10M docs at 512 tokens each = 5B tokens = about $500 just to dedup. Use embedding dedup when corpus has paraphrases (KB + forum posts, multi-author docs, translations). Skip when content is byte-stable (PDFs from authoritative sources) and exact hashing + MinHash already cover the threshold.",
+        "summary": "Embedding cosine similarity is the only dedup that catches paraphrases (Jaccard 0.08 vs cosine 0.94), with banded thresholds and a ~$500 cost for 10M docs.",
+        "queries": [
+          "how to detect paraphrase duplicates",
+          "embedding deduplication for paraphrases",
+          "cosine similarity thresholds for dedup",
+          "why MinHash misses paraphrases",
+          "cost of embedding deduplication",
+          "cosine 0.97 definite duplicate",
+          "embedding dedup cost per million tokens",
+          "semantic duplicate detection",
+          "when to use embedding dedup vs MinHash",
+          "paraphrase example formal vs casual",
+          "human review queue for near duplicates",
+          "Jaccard 0.08 cosine 0.94 example",
+          "cosine similarity ladder dedup thresholds",
+          "embedding dedup 10 million docs cost",
+          "skip embedding dedup byte stable PDFs"
+        ],
+        "terms": [
+          "embedding dedup",
+          "cosine similarity",
+          "paraphrase",
+          "semantic duplicate",
+          "Jaccard miss",
+          "cosine threshold",
+          "human review"
+        ]
+      },
+      {
+        "sub": 4,
+        "kind": "concept",
+        "text": "Dedup catches duplicates. Cleaning fixes the bytes themselves. Four steps turn raw extracted text into something the embedder and tokenizer can read consistently. (1) Unicode Normalization (NFC): two strings that look identical can have different byte sequences. 'café' composed (5 bytes) vs 'café' decomposed (6 bytes). NFC pass collapses both to the same 5-byte form so hash dedup and embedding lookup agree. (2) Encoding Fix-Up: mojibake from latin-1 / UTF-8 mismatches breaks tokenization. Raw bytes rendered wrong show 'naïve résumé' as 'naïve résumé'. ftfy or chardet detects the mismatch and restores 'naïve résumé'. (3) Strip Headers, Footers, Page Numbers, Watermarks: boilerplate repeated per page bloats chunks. 'CONFIDENTIAL - DRAFT 2026 - Page 3 of 47' on every chunk - layout-aware parser strips the repeating per-page header, footer, and watermark band. (4) PII Scrubbing: emails, SSNs, phone numbers, credit cards leak into the index unless redacted. 'Contact john@acme.com or call 555-1234 with SSN 123-45-6789' becomes 'Contact [EMAIL_REDACTED] or call [PHONE_REDACTED] with SSN [SSN_REDACTED]'. Tool: regex + LLM NER (Presidio). Cleaning is invisible when it works and catastrophic when skipped - stabilizes eval by removing irrelevant tokens that fool similarity metrics, keeps PII out of the index.",
+        "summary": "Four cleaning steps (Unicode NFC, encoding fix-up via ftfy/chardet, per-page boilerplate stripping, PII redaction with Presidio) make text consistent for embedding and keep PII out of the index.",
+        "queries": [
+          "what cleaning steps does RAG ingestion need",
+          "Unicode NFC normalization for deduplication",
+          "how to fix mojibake in document parsing",
+          "ftfy chardet encoding fix up",
+          "strip headers footers page numbers from chunks",
+          "PII scrubbing in RAG pipeline",
+          "Presidio email SSN phone redaction",
+          "why composed vs decomposed Unicode breaks dedup",
+          "café 5 bytes vs 6 bytes Unicode example",
+          "latin-1 UTF-8 mismatch repair",
+          "boilerplate stripping confidential draft watermark",
+          "redact email address chunks",
+          "regex plus LLM NER for PII",
+          "cleaning steps RAG eval stability",
+          "what is mojibake and how to fix it"
+        ],
+        "terms": [
+          "Unicode NFC",
+          "encoding fix-up",
+          "ftfy",
+          "chardet",
+          "mojibake",
+          "PII scrubbing",
+          "Presidio",
+          "boilerplate stripping",
+          "NER"
+        ]
+      },
+      {
+        "sub": -1,
+        "kind": "summary",
+        "text": "Deduplication and cleaning is the layer between parsing and chunking. Three dedup tiers: (1) Exact SHA-256 hash on normalized text catches byte-identical copies, O(N) cost, but misses one-character changes. (2) MinHash + LSH on 3-gram shingles with K=128 hash functions and 16 bands x 8 rows catches near-duplicates via Jaccard estimate ~0.97, sub-linear scale to 1B docs, typical threshold 0.85. (3) Embedding cosine catches paraphrases that share no shingles (cosine 0.94 vs Jaccard 0.08), with thresholds: >=0.97 drop, 0.90-0.97 human review, 0.85-0.90 keep both, <0.85 distinct. Cost about $500 for 10M docs. Cleaning has four required steps: Unicode NFC normalization, encoding fix-up (ftfy/chardet), per-page header/footer/watermark stripping, and PII scrubbing (regex + Presidio NER). Skip dedup and you waste context window (1,536 of 4,096 tokens on identical chunks). Skip cleaning and similarity metrics get fooled and PII leaks into the index.",
+        "summary": "Chapter overview of three-tier dedup (SHA-256, MinHash+LSH, embedding cosine) plus four cleaning steps (NFC, encoding, boilerplate, PII) that prevent wasted context and leaked PII.",
+        "queries": [
+          "RAG deduplication cleaning overview",
+          "three tiers of document deduplication",
+          "exact hash MinHash embedding dedup comparison",
+          "what does dedup and cleaning do in RAG",
+          "cleaning pipeline four steps summary",
+          "when to use each dedup method",
+          "cosine threshold ladder summary",
+          "RAG ingestion dedup checklist",
+          "what happens without dedup and cleaning",
+          "summary of chapter 12.5 deduplication",
+          "dedup cost comparison hash vs MinHash vs embedding",
+          "ingestion pipeline cleaning order",
+          "production RAG dedup tiers",
+          "PII NFC boilerplate encoding cleaning",
+          "how many dedup methods do you need"
+        ],
+        "terms": [
+          "deduplication tiers",
+          "cleaning pipeline",
+          "SHA-256",
+          "MinHash",
+          "LSH",
+          "embedding cosine",
+          "NFC",
+          "PII",
+          "ingestion"
+        ]
+      },
+      {
+        "sub": -2,
+        "kind": "diagram",
+        "text": "Diagram: Three source systems (Zendesk, Confluence, Notion) each containing the same Reset-Your-Password article flow into a single ingestion pipeline that produces three nearly-identical duplicate chunks in the vector database. Below them, a context-window bar of 4,096 tokens shows the first 1,536 tokens consumed by three duplicate chunks tinted red while only 2,560 tokens remain green for distinct answers.",
+        "summary": "Visual showing three source systems collapsing into three duplicate vector chunks that consume 1,536 of 4,096 context tokens.",
+        "queries": [
+          "diagram of duplicate ingestion across systems",
+          "context window bar showing wasted duplicate tokens",
+          "Zendesk Confluence Notion ingestion diagram",
+          "visual showing 1536 of 4096 tokens wasted",
+          "three sources one article duplicate diagram",
+          "ingestion pipeline no dedup diagram",
+          "context budget visualization RAG duplicates",
+          "vector database three duplicate chunks illustration",
+          "how duplicates fill context window picture",
+          "RAG duplicate chunk diagram",
+          "context window 4096 tokens visualization",
+          "wasted tokens diagram for RAG",
+          "diagram showing why dedup matters",
+          "Reset Your Password article duplicate flow",
+          "ingestion without deduplication visual"
+        ],
+        "terms": [
+          "context window diagram",
+          "duplicate chunks",
+          "ingestion pipeline",
+          "Zendesk",
+          "Confluence",
+          "Notion",
+          "4096 tokens",
+          "1536 wasted"
+        ]
+      },
+      {
+        "sub": -2,
+        "kind": "diagram",
+        "text": "Diagram: MinHash plus LSH pipeline with three stacked stages. Stage 1 tokenizes two near-duplicate docs into 3-gram shingle sets like {reset your password, your password by, password by clicking, ...}. Stage 2 reduces each shingle set to a 128-position MinHash signature so 125 of 128 positions match and the Jaccard estimate lands around 0.97. Stage 3 hashes the signatures through LSH banding with 16 bands of 8 rows so both docs land in the same candidate-pair bucket without an O(N squared) pairwise scan.",
+        "summary": "Three-stage pipeline diagram showing shingling, MinHash signature compression to K=128, and LSH banding (16x8) that buckets near-duplicates sub-linearly.",
+        "queries": [
+          "MinHash plus LSH pipeline diagram",
+          "three stage near duplicate detection visual",
+          "3-gram shingles MinHash signature LSH banding picture",
+          "Jaccard 0.97 MinHash diagram",
+          "16 bands 8 rows LSH visualization",
+          "how MinHash signature compresses shingle set",
+          "diagram of sub-linear duplicate detection",
+          "K equals 128 hash functions MinHash",
+          "LSH bucketing candidate pair diagram",
+          "visual explanation of MinHash LSH",
+          "shingle set to MinHash signature pipeline",
+          "near duplicate detection without pairwise scan",
+          "MinHash signature 128 positions diagram",
+          "LSH banding parameters illustration",
+          "Jaccard estimate from MinHash signature picture"
+        ],
+        "terms": [
+          "MinHash diagram",
+          "LSH banding",
+          "shingling",
+          "3-gram",
+          "Jaccard estimate",
+          "signature",
+          "candidate pair",
+          "sub-linear"
+        ]
+      }
+    ],
+    "12.4": [
+      {
+        "sub": -1,
+        "kind": "summary",
+        "text": "Chapter 12.4 covers parsing raw sources into clean text plus metadata for a RAG pipeline. Bad parsing is unrecoverable: no chunker, reranker, or LLM can fix garbage text. Production RAG ingests 5+ format families (PDF, HTML, DOCX/PPTX, Markdown, structured APIs), each needing its own parser. PDFs have three silent failure modes: two-column layout jumbling, tables flattened to prose, and OCR errors on scans. HTML pages must be stripped of nav/sidebar/footer boilerplate using tools like Readability or Trafilatura. Every chunk needs a metadata sidecar (source_url, updated_at, permissions, language, version) for filtering, citations, and permission gating. The chapter closes with a five-row failure-mode checklist every production RAG must own.",
+        "summary": "Chapter-level summary of parsing raw sources into clean text plus metadata, covering format families, PDF/HTML failure modes, metadata schema, and the five-failure checklist.",
+        "queries": [
+          "what is parsing in RAG pipelines",
+          "why bad parsing cannot be fixed downstream",
+          "garbage in garbage out RAG ingestion",
+          "raw documents to clean text",
+          "RAG parsing failure modes overview",
+          "production RAG document ingestion",
+          "parsing PDF HTML DOCX markdown for RAG",
+          "metadata sidecar for RAG chunks",
+          "five parsing failures every RAG must handle",
+          "why parser quality matters for retrieval recall",
+          "RAG ingestion before chunking",
+          "document parsing checklist for RAG",
+          "what tools to use for parsing PDFs and HTML in RAG",
+          "how parsing affects RAG recall",
+          "RAG document preprocessing overview"
+        ],
+        "terms": [
+          "parsing",
+          "RAG",
+          "ingestion",
+          "metadata",
+          "PDF parsing",
+          "HTML boilerplate",
+          "OCR",
+          "recall"
+        ]
+      },
+      {
+        "sub": 0,
+        "kind": "example",
+        "text": "Bad parsing is unrecoverable - the garbage-in problem. The cleanest chunker, the strongest reranker, and the smartest LLM cannot recover what the parser already corrupted. If the text coming out of your parser is garbage, recall is gone before chunking even starts. Worked example: a scanned password-reset PDF. Step 1 - scanned PDF (image): the source page reads 'Password reset: click the link in your email within 24 hours.' but it is a low-resolution scan, not selectable text. Step 2 - naive OCR output: 'Pgssword resel: cIick the Iink in your ernail within 24 hours.' Broken text where rn becomes m, l becomes I, vowels swap. Tokens no longer match. Step 3 - embedding lookup: query is 'How do I reset my password?' The embedding misses the broken 'Pgssword' tokens, cosine similarity drops below threshold, and the doc is never retrieved. No chunker, reranker, or LLM fixes this. The recall is gone before chunking starts.",
+        "summary": "Worked example showing how a naive OCR pass on a scanned password-reset PDF corrupts tokens so that embedding lookup never matches the user query, proving bad parsing is unrecoverable.",
+        "queries": [
+          "why bad parsing cannot be fixed by reranker",
+          "garbage in garbage out for RAG",
+          "scanned PDF OCR breaks retrieval",
+          "OCR errors rn becomes m",
+          "low resolution PDF scan recall problem",
+          "password reset PDF OCR example",
+          "what happens when OCR corrupts tokens",
+          "embedding cosine similarity drops on garbled text",
+          "naive OCR output Pgssword resel",
+          "why parser quality matters more than chunker",
+          "recall lost before chunking",
+          "cIick the Iink OCR mistake",
+          "broken OCR tokens miss embedding",
+          "example of unrecoverable parsing failure",
+          "scanned document RAG retrieval failure"
+        ],
+        "terms": [
+          "OCR",
+          "scanned PDF",
+          "tokens",
+          "cosine similarity",
+          "embedding",
+          "recall",
+          "garbage in garbage out"
+        ]
+      },
+      {
+        "sub": 1,
+        "kind": "concept",
+        "text": "Production RAG ingests from 5+ format families. Before any chunking, embedding, or indexing, raw sources must be turned into clean text plus metadata. Every production RAG handles five or more format families, each with its own parser and its own failure modes. PDFs (manuals, contracts, research papers) - tools: PyMuPDF / Unstructured / Docling. HTML (web pages, wikis, public docs) - tools: Readability / Trafilatura. DOCX / PPTX (internal docs, slide decks) - tools: python-docx / Unstructured. Markdown (engineering docs, READMEs, knowledge bases) - tools: native parsers (mistletoe, marko). Structured APIs (Confluence, Notion, Salesforce, Zendesk, Jira) - tools: vendor SDK or REST connector. One parser per family is the minimum. A single shared 'pdf2text' connector across all formats is the most common silent killer of RAG recall in production.",
+        "summary": "Production RAG must handle five or more source format families - PDF, HTML, DOCX/PPTX, Markdown, structured APIs - each with its own dedicated parser, never a single shared connector.",
+        "queries": [
+          "what document formats does production RAG handle",
+          "parser tools for PDF HTML DOCX markdown",
+          "PyMuPDF Unstructured Docling for PDFs",
+          "Readability Trafilatura for HTML",
+          "python-docx for DOCX parsing",
+          "mistletoe marko markdown parsers",
+          "Confluence Notion Zendesk Jira RAG ingestion",
+          "why one parser per format family",
+          "shared pdf2text connector problem",
+          "format families in RAG ingestion",
+          "best library for parsing PDFs in RAG",
+          "structured API connectors for RAG",
+          "minimum parser stack for production RAG",
+          "silent killer of RAG recall",
+          "how many format families does a RAG need to support"
+        ],
+        "terms": [
+          "PyMuPDF",
+          "Unstructured",
+          "Docling",
+          "Readability",
+          "Trafilatura",
+          "python-docx",
+          "mistletoe",
+          "marko",
+          "format families"
+        ]
+      },
+      {
+        "sub": 2,
+        "kind": "concept",
+        "text": "PDF: three failure modes that silently wreck recall. PDFs are the format where parsers go to die - the same file looks fine to a human and turns into nonsense when read naively. (1) Two-column PDF layout - naive output reads across columns: '...gravitational lensing distorts || ...the Higgs boson decays into ... light from a quasar across two W bosons...' Layout-aware output: 'Gravitational lensing distorts light from a quasar across galaxy clusters.' Fix: layout-aware parser (Unstructured, Docling) reads columns in reading order. (2) Tables flattened to prose - naive output: 'Q1, Q2, Q3, Revenue, 100, 110, 105, Costs, 80, 75, 78'. Structured output: { Q1: { Revenue: 100, Costs: 80 }, Q2: { Revenue: 110, Costs: 75 }, Q3: { Revenue: 105, Costs: 78 } }. Fix: table-extracting parser (LlamaParse, Unstructured.partition_table) keeps row/column relationships. (3) Scanned PDF / OCR errors - naive: 'Pgssword resel: cIick the link. Arnount due: $14O.00'. After: 'Password reset: click the link. Amount due: $140.00'. Fix: modern OCR (Tesseract 5, AWS Textract, Azure Document Intelligence) fixes rn-to-m, l-to-1, O-to-0 confusions. Tool choice matters - production RAG uses layout-aware + table-aware + OCR-aware parsers, not pdf2text.",
+        "summary": "PDFs fail in three silent ways: two-column layouts read across columns, tables flatten to prose, and OCR garbles characters; fixes require layout-aware, table-extracting, and modern OCR parsers.",
+        "queries": [
+          "PDF parsing failure modes for RAG",
+          "two column PDF reading order problem",
+          "layout aware PDF parser tools",
+          "tables flattened to prose in PDF parsing",
+          "LlamaParse Unstructured partition_table",
+          "scanned PDF OCR errors fix",
+          "Tesseract 5 AWS Textract Azure Document Intelligence",
+          "rn becomes m OCR confusion",
+          "Unstructured Docling layout aware parsing",
+          "why pdf2text is not enough",
+          "how to parse PDF tables for RAG",
+          "PDF column ordering issue",
+          "OCR character confusions l 1 O 0",
+          "table extraction from PDFs for RAG",
+          "three PDF failures every RAG must handle"
+        ],
+        "terms": [
+          "layout-aware parser",
+          "Unstructured",
+          "Docling",
+          "LlamaParse",
+          "Tesseract",
+          "AWS Textract",
+          "Azure Document Intelligence",
+          "two-column PDF",
+          "table extraction",
+          "OCR"
+        ]
+      },
+      {
+        "sub": 3,
+        "kind": "concept",
+        "text": "HTML: strip the boilerplate or dilute your chunks. Every HTML web page wraps its main content in nav bars, sidebars, ads, cookie banners, and footers. If your parser ingests the whole DOM, every chunk gets polluted with boilerplate the user did not ask about. Web page zone map: top nav bar DROP, left sidebar ads DROP, main article content KEEP, footer + newsletter signup DROP. Bad chunk (no boilerplate strip): 'Home Products Pricing Subscribe to our newsletter | How do I reset my password? Click the link in your email... (c) 2026 Acme Inc.' - retrieval matches 'Subscribe' instead of the real answer; the chunk is diluted with junk. Good chunk (Readability extract): 'How do I reset my password? Click the link in your email within 24 hours to set a new password...' - only the main content survives; the embedding now matches the user's intent cleanly. Tools: Readability, Trafilatura, BoilerNet. They detect main-content zones via DOM heuristics and ML. Without them, retrieval matches the boilerplate (nav, sidebar, footer) and pollutes every chunk.",
+        "summary": "HTML parsing must strip nav, sidebar, ads, and footer boilerplate using Readability, Trafilatura, or BoilerNet, otherwise chunks get diluted with junk that pollutes retrieval matches.",
+        "queries": [
+          "HTML boilerplate stripping for RAG",
+          "Readability Trafilatura BoilerNet tools",
+          "main content extraction from web pages",
+          "DOM zones to drop in HTML parsing",
+          "why retrieval matches subscribe newsletter junk",
+          "good vs bad HTML chunk example",
+          "how to clean HTML before chunking",
+          "nav sidebar footer boilerplate removal",
+          "DOM heuristics for main content detection",
+          "diluted chunks from HTML boilerplate",
+          "best library for HTML main content extraction",
+          "web page zone map for RAG",
+          "what parts of HTML to drop for RAG",
+          "Readability library purpose",
+          "Trafilatura main content"
+        ],
+        "terms": [
+          "boilerplate stripping",
+          "Readability",
+          "Trafilatura",
+          "BoilerNet",
+          "main content extraction",
+          "DOM heuristics",
+          "HTML parsing"
+        ]
+      },
+      {
+        "sub": -2,
+        "kind": "diagram",
+        "text": "Stylized web page mockup with four labeled zones illustrating which DOM regions a boilerplate-stripping parser keeps versus discards. A top nav bar tinted red is labeled DROP. A left sidebar tinted red is labeled 'Sidebar Ads - DROP'. A central main article zone tinted green is labeled 'Main Article Content - KEEP'. A bottom footer tinted red is labeled 'Footer + Newsletter Signup - DROP'. The diagram visually shows that only the central article content is retained for chunking; all surrounding chrome is dropped before embedding.",
+        "summary": "Diagram of a stylized web page showing four zones - nav, sidebar, main article, footer - colored to indicate which the boilerplate stripper keeps (main article, green) versus drops (nav, sidebar, footer, red).",
+        "queries": [
+          "web page zone map diagram",
+          "HTML DOM zones to drop and keep",
+          "boilerplate stripping visual",
+          "which web page regions go into RAG",
+          "diagram of nav sidebar footer dropped",
+          "main article content kept for chunking",
+          "Readability zone visualization",
+          "what does Trafilatura keep from a web page",
+          "HTML page mockup DROP KEEP",
+          "RAG ingestion HTML region diagram",
+          "web page anatomy for parser",
+          "visual of HTML boilerplate stripping",
+          "main content extraction diagram",
+          "nav bar sidebar ads footer drop diagram",
+          "web page DOM keep drop illustration"
+        ],
+        "terms": [
+          "web page mockup",
+          "nav bar",
+          "sidebar",
+          "main article",
+          "footer",
+          "DROP",
+          "KEEP",
+          "boilerplate"
+        ]
+      },
+      {
+        "sub": 4,
+        "kind": "concept",
+        "text": "Metadata extraction: the required sidecar. Parsing is not just text. Every chunk also needs a structured sidecar of metadata: where the doc came from, when it was updated, who is allowed to see it, what language it is in. Skip this and you lose filtering, citations, and permission boundaries for the whole index. Metadata schema: { \"source_url\": \"https://docs.habuild.com/account/password-reset\", \"title\": \"Reset Your Password\", \"doc_type\": \"kb_article\", \"section_path\": \"Account > Security > Password\", \"updated_at\": \"2026-04-12T14:22:00Z\", \"author\": \"support-team\", \"permissions\": [\"public\", \"logged-in\"], \"language\": \"en\", \"version\": \"v3.1\" }. The three fields production RAG cannot skip are source_url, updated_at, and permissions. Use cases: (1) Filtering - Section 11.20 filtering uses fields like updated_at > 2026-01-01 to exclude stale docs at query time. (2) Citations - Chapter 12.24 uses source_url so the LLM can cite where the answer came from. (3) Permission gating - never retrieve docs whose permissions (ACL list) don't include the current user's role. (4) Multilingual routing - detect language at ingest time, route to per-language indexes for higher recall. Metadata is parsed at ingest, attached to every chunk vector, and queried at retrieval time. Skip it equals no filtering, no citations, no permission boundaries.",
+        "summary": "Every parsed chunk needs a metadata sidecar including source_url, updated_at, permissions, language, version - powering filtering, citations, ACL gating, and multilingual routing at retrieval time.",
+        "queries": [
+          "what metadata to attach to RAG chunks",
+          "metadata schema for RAG ingestion",
+          "source_url updated_at permissions fields",
+          "why metadata matters in RAG",
+          "ACL permission gating in RAG",
+          "citations using source_url in RAG",
+          "filtering stale docs with updated_at",
+          "multilingual RAG routing by language",
+          "metadata sidecar example JSON",
+          "three required metadata fields for production RAG",
+          "how to enable citations in RAG",
+          "permission-aware retrieval with metadata",
+          "metadata at ingest vs query time",
+          "doc_type section_path author version fields",
+          "what happens if you skip metadata extraction"
+        ],
+        "terms": [
+          "metadata",
+          "source_url",
+          "updated_at",
+          "permissions",
+          "ACL",
+          "citations",
+          "filtering",
+          "multilingual routing",
+          "sidecar"
+        ]
+      },
+      {
+        "sub": 5,
+        "kind": "summary",
+        "text": "The five parsing failures every production RAG must handle. Five named failure modes turn clean source documents into garbage text - the checklist every team owns before they touch chunking, embedding, or retrieval. Skip one row and you have a silent recall killer. (1) Two-column PDF layout - symptom: sentences jumbled across columns. Fix: layout-aware parser (Unstructured, Docling). (2) Tables flattened to prose - symptom: lost row/column structure. Fix: table-extracting parser (LlamaParse, Unstructured.partition_table). (3) Scanned PDF / OCR errors - symptom: garbled tokens (rn becomes m, missing diacritics). Fix: modern OCR (Tesseract 5, AWS Textract). (4) HTML boilerplate not stripped - symptom: chunks polluted with nav, ads, footers. Fix: Readability / Trafilatura main-content extraction. (5) Missing or sparse metadata - symptom: no filtering, citations, or permission gating possible. Fix: mandatory metadata schema at ingest. Every production RAG has this checklist. Skip one row equals a silent recall killer. Bad parsing is the gap a reranker cannot fix.",
+        "summary": "Five-row checklist of parsing failures - column jumbling, flattened tables, OCR errors, unstripped HTML boilerplate, missing metadata - with the parser/tool fix for each.",
+        "queries": [
+          "five parsing failures checklist for RAG",
+          "production RAG parsing checklist",
+          "what are the failure modes of document parsing",
+          "symptoms and fixes for RAG parser bugs",
+          "column jumbling fix Unstructured Docling",
+          "table extraction fix LlamaParse",
+          "OCR fix Tesseract Textract",
+          "HTML boilerplate fix Readability Trafilatura",
+          "missing metadata fix schema at ingest",
+          "RAG silent recall killers",
+          "checklist before chunking and embedding",
+          "five failure modes table parsing",
+          "what reranker cannot fix in RAG",
+          "parsing failure symptoms summary",
+          "mandatory parser checks for production"
+        ],
+        "terms": [
+          "failure modes",
+          "checklist",
+          "column jumbling",
+          "table extraction",
+          "OCR",
+          "boilerplate",
+          "metadata",
+          "recall killer"
+        ]
+      }
+    ]
   }
 }

@@ -276,5 +276,9 @@
   ],
   "12.4": [
     "Stylized web page mockup with four labeled zones: a top nav bar tinted red marked DROP, a left sidebar tinted red marked DROP, a central main article zone tinted green marked KEEP, and a bottom footer with newsletter signup tinted red marked DROP. Shows which DOM regions a boilerplate-stripping parser keeps versus discards."
+  ],
+  "12.5": [
+    "Three source systems (Zendesk, Confluence, Notion) each containing the same Reset-Your-Password article flow into a single ingestion pipeline that produces three nearly-identical duplicate chunks in the vector database. Below them, a context-window bar of 4,096 tokens shows the first 1,536 tokens consumed by three duplicate chunks tinted red while only 2,560 tokens remain green for distinct answers.",
+    "MinHash plus LSH pipeline diagram with three stacked stages. Stage 1 tokenizes two near-duplicate docs into 3-gram shingle sets. Stage 2 reduces each shingle set to a 128-position MinHash signature so the Jaccard estimate lands around 0.97. Stage 3 hashes the signatures through LSH banding with 16 bands of 8 rows so both docs land in the same candidate-pair bucket without an O(N squared) pairwise scan."
   ]
 }

@@ -5363,3 +5363,45 @@ describe("ParsingExtraction (12.4) content", () => {
     expect(container.textContent).toMatch(/silent|recall/i);
   });
 });
+
+describe("DeduplicationCleaning (12.5) content", () => {
+  const fn = RagIngestion.DeduplicationCleaning;
+
+  it("sub=0 frames the duplicate-disaster context-budget waste", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/duplicate|copies/i);
+    expect(container.textContent).toMatch(/Zendesk|Confluence|Notion/);
+    expect(container.textContent).toMatch(/context|tokens|budget/i);
+    expect(container.textContent).toMatch(/diversity/i);
+  });
+
+  it("sub=1 shows exact-hash dedup with SHA-256", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/SHA[- ]?256/);
+    expect(container.textContent).toMatch(/normalize/i);
+    expect(container.textContent).toMatch(/hash/i);
+  });
+
+  it("sub=2 explains MinHash + LSH for near-duplicates", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/MinHash/i);
+    expect(container.textContent).toMatch(/LSH|locality/i);
+    expect(container.textContent).toMatch(/Jaccard|shingle/i);
+    expect(container.textContent).toMatch(/0\.\d+/);
+  });
+
+  it("sub=3 introduces embedding-cosine dedup for paraphrases", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/embedding|cosine/i);
+    expect(container.textContent).toMatch(/paraphrase|semantic/i);
+    expect(container.textContent).toMatch(/0\.9\d?/);
+  });
+
+  it("sub=4 lists the 4 cleaning steps beyond dedup", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/Unicode|NFC/);
+    expect(container.textContent).toMatch(/encoding|mojibake/i);
+    expect(container.textContent).toMatch(/header|footer|watermark/i);
+    expect(container.textContent).toMatch(/PII|redact|SSN/i);
+  });
+});

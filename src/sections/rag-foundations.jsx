@@ -5790,7 +5790,6 @@ const CONTEXTUAL_ORPHAN_CHUNKS = [
   {
     id: "Chunk A",
     doc: "Doc-2 Email Change Guide",
-    section: "Step 4 - Verify New Address",
     text: "...verify your new email address, then click Save to confirm.",
     vec: [0.31, 0.42, 0.18, 0.55, 0.27, 0.39, 0.46, 0.22],
     score: 0.71,
@@ -5798,7 +5797,6 @@ const CONTEXTUAL_ORPHAN_CHUNKS = [
   {
     id: "Chunk B",
     doc: "Doc-15 Role Permissions Guide",
-    section: "Step 3 - Assign The New Role",
     text: "...assign the new role to the user, then click Save to confirm.",
     vec: [0.3, 0.41, 0.19, 0.54, 0.29, 0.38, 0.45, 0.23],
     score: 0.71,
@@ -5806,7 +5804,6 @@ const CONTEXTUAL_ORPHAN_CHUNKS = [
   {
     id: "Chunk C",
     doc: "Doc-18 Notifications Settings",
-    section: "Step 2 - Pick Channels",
     text: "...select the channels you want notifications on, then click Save to confirm.",
     vec: [0.32, 0.4, 0.18, 0.55, 0.28, 0.39, 0.47, 0.21],
     score: 0.71,
@@ -5851,13 +5848,13 @@ const CONTEXTUAL_BENCHMARK_BARS = [
     color: "#80deea",
   },
   {
-    label: "+ Contextual Embedding + Contextual BM25",
+    label: "+ Contextual BM25",
     rate: 2.9,
     reduction: "49% Reduction",
     color: "#a5d6a7",
   },
   {
-    label: "+ Contextual Embedding + Contextual BM25 + Reranking",
+    label: "+ Reranking",
     rate: 1.9,
     reduction: "67% Reduction",
     color: "#ffcc80",
@@ -6325,49 +6322,60 @@ export const ContextualRetrieval = (ctx) => {
                 <div
                   key={`af-${ch.id}`}
                   style={{
-                    display: "grid",
-                    gridTemplateColumns: "80px minmax(0, 1fr) 100px 90px",
-                    gap: 10,
-                    alignItems: "center",
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: 6,
                     padding: 10,
                     borderRadius: 8,
                     background: ch.isTop ? `${C.green}18` : "rgba(0,0,0,0.3)",
                     border: ch.isTop ? `1px solid ${C.green}60` : `1px solid ${C.green}24`,
                   }}
                 >
-                  <T color={ch.isTop ? C.green : "#a5d6a7"} bold size={14}>
-                    {ch.id}
-                  </T>
-                  <T color="#a5d6a7" size={13}>
-                    {ch.label}
-                  </T>
                   <div
                     style={{
-                      padding: "6px 10px",
-                      borderRadius: 6,
-                      background: ch.isTop ? `${C.green}24` : `${C.green}10`,
-                      border: ch.isTop ? `1px solid ${C.green}60` : `1px solid ${C.green}24`,
-                      fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace",
-                      textAlign: "center",
+                      display: "grid",
+                      gridTemplateColumns: "80px minmax(0, 1fr) 100px 90px",
+                      gap: 10,
+                      alignItems: "center",
                     }}
                   >
-                    <T color={ch.isTop ? C.green : "#a5d6a7"} size={13} bold={ch.isTop}>
-                      {ch.score.toFixed(2)}
+                    <T color={ch.isTop ? C.green : "#a5d6a7"} bold size={14}>
+                      {ch.id}
                     </T>
-                  </div>
-                  <div
-                    style={{
-                      padding: "6px 10px",
-                      borderRadius: 6,
-                      background: ch.isTop ? `${C.green}24` : "rgba(0,0,0,0.3)",
-                      border: ch.isTop ? `1px solid ${C.green}60` : `1px solid ${C.green}20`,
-                      textAlign: "center",
-                    }}
-                  >
-                    <T color={ch.isTop ? C.green : "#a5d6a7"} size={13} bold={ch.isTop}>
-                      {ch.isTop ? "Top-1" : "-"}
+                    <T color="#a5d6a7" size={13}>
+                      {ch.label}
                     </T>
+                    <div
+                      style={{
+                        padding: "6px 10px",
+                        borderRadius: 6,
+                        background: ch.isTop ? `${C.green}24` : `${C.green}10`,
+                        border: ch.isTop ? `1px solid ${C.green}60` : `1px solid ${C.green}24`,
+                        fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace",
+                        textAlign: "center",
+                      }}
+                    >
+                      <T color={ch.isTop ? C.green : "#a5d6a7"} size={13} bold={ch.isTop}>
+                        {ch.score.toFixed(2)}
+                      </T>
+                    </div>
+                    <div
+                      style={{
+                        padding: "6px 10px",
+                        borderRadius: 6,
+                        background: ch.isTop ? `${C.green}24` : "rgba(0,0,0,0.3)",
+                        border: ch.isTop ? `1px solid ${C.green}60` : `1px solid ${C.green}20`,
+                        textAlign: "center",
+                      }}
+                    >
+                      <T color={ch.isTop ? C.green : "#a5d6a7"} size={13} bold={ch.isTop}>
+                        {ch.isTop ? "Top-1" : "-"}
+                      </T>
+                    </div>
                   </div>
+                  <T color={ch.isTop ? "#a5d6a7" : "rgba(255,255,255,0.6)"} center size={12}>
+                    {ch.note}
+                  </T>
                 </div>
               ))}
             </div>

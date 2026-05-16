@@ -69,24 +69,28 @@ const STOP_CONDITIONS = [
     config: "max_tokens: 1024",
     detail: "Hard ceiling on how many tokens the model is allowed to generate this call.",
     reason: "length",
+    reasonColor: C.orange,
   },
   {
     name: "Stop Sequence Hit",
     config: 'stop: ["</answer>"]',
     detail: "The model produced one of the configured stop strings. Useful for structured output.",
     reason: "stop_sequence",
+    reasonColor: C.pink,
   },
   {
     name: "End-Of-Turn Token",
     config: "Model decides on its own",
     detail: "The model emitted its special end-of-turn token. The natural end of a reply.",
     reason: "end_turn",
+    reasonColor: C.green,
   },
   {
     name: "Tool Call Requested",
     config: "Only with tool use enabled",
     detail: "The model paused to ask for a tool. Generation halts so your code can run the tool.",
     reason: "tool_use",
+    reasonColor: C.cyan,
   },
 ];
 
@@ -94,22 +98,27 @@ const CALL_CYCLE_STEPS = [
   {
     name: "Build Messages",
     detail: "Combine system + history + new user turn into the messages list.",
+    arrowLabel: "Roles assigned",
   },
   {
     name: "Set Parameters",
     detail: "Pick temperature, top-p, top-k, max_tokens, stop.",
+    arrowLabel: "Sampling locked",
   },
   {
     name: "Send Request",
     detail: "POST messages + params to the model endpoint.",
+    arrowLabel: "HTTPS POST",
   },
   {
     name: "Tokens Stream Back",
     detail: "Model emits one token at a time over the wire.",
+    arrowLabel: "SSE chunks",
   },
   {
     name: "Stop Reason Reached",
     detail: "One of: end_turn, length, stop_sequence, tool_use.",
+    arrowLabel: "End_turn fired",
   },
   {
     name: "Final Response",
@@ -310,6 +319,7 @@ export const AnatomyOfLlmCall = (ctx) => {
               borderRadius: 8,
               background: `${C.purple}06`,
               border: `1px solid ${C.purple}12`,
+              textAlign: "center",
             }}
           >
             <T color={C.purple} bold center size={16}>
@@ -396,6 +406,7 @@ export const AnatomyOfLlmCall = (ctx) => {
               borderRadius: 8,
               background: `${C.purple}06`,
               border: `1px solid ${C.purple}12`,
+              textAlign: "center",
             }}
           >
             <T color={C.purple} bold center size={16}>
@@ -419,8 +430,8 @@ export const AnatomyOfLlmCall = (ctx) => {
                     style={{
                       height: 14,
                       borderRadius: 3,
-                      background: `${row.included ? C.green : C.dim}12`,
-                      border: `1px solid ${row.included ? C.green : C.dim}24`,
+                      background: row.included ? `${C.green}12` : "#1b1b22",
+                      border: `1px solid ${row.included ? `${C.green}24` : "#33333a"}`,
                       position: "relative",
                     }}
                   >
@@ -431,7 +442,7 @@ export const AnatomyOfLlmCall = (ctx) => {
                         top: 0,
                         bottom: 0,
                         width: `${row.cum * 100}%`,
-                        background: row.included ? `${C.green}40` : `${C.dim}30`,
+                        background: row.included ? `${C.green}40` : "#33333a",
                         borderRadius: 3,
                       }}
                     />
@@ -467,6 +478,7 @@ export const AnatomyOfLlmCall = (ctx) => {
               borderRadius: 8,
               background: `${C.purple}06`,
               border: `1px solid ${C.purple}12`,
+              textAlign: "center",
             }}
           >
             <T color={C.purple} bold center size={16}>
@@ -487,8 +499,8 @@ export const AnatomyOfLlmCall = (ctx) => {
                   style={{
                     padding: "6px 12px",
                     borderRadius: 14,
-                    background: c.kept ? `${C.green}12` : `${C.dim}10`,
-                    border: `1px solid ${c.kept ? C.green : C.dim}24`,
+                    background: c.kept ? `${C.green}12` : "#1b1b22",
+                    border: `1px solid ${c.kept ? `${C.green}24` : "#33333a"}`,
                     fontFamily: "monospace",
                     fontSize: 14,
                     color: c.kept ? "#a5d6a7" : C.dim,
@@ -560,8 +572,8 @@ export const AnatomyOfLlmCall = (ctx) => {
                       display: "inline-block",
                       padding: "3px 10px",
                       borderRadius: 4,
-                      background: `${C.yellow}20`,
-                      color: C.yellow,
+                      background: `${c.reasonColor}20`,
+                      color: c.reasonColor,
                       fontFamily: "monospace",
                       fontSize: 13,
                       fontWeight: 700,
@@ -730,7 +742,17 @@ export const AnatomyOfLlmCall = (ctx) => {
                   </T>
                 </div>
                 {i < CALL_CYCLE_STEPS.length - 1 && (
-                  <span style={{ color: C.cyan, fontSize: 22, fontWeight: 700 }}>&rarr;</span>
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                      gap: 2,
+                    }}
+                  >
+                    <span style={{ color: C.indigo, fontSize: 11, whiteSpace: "nowrap" }}>{step.arrowLabel}</span>
+                    <span style={{ color: C.cyan, fontSize: 22, fontWeight: 700, lineHeight: 1 }}>&rarr;</span>
+                  </div>
                 )}
               </div>
             ))}

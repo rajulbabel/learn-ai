@@ -264,6 +264,22 @@ Only config.js IDs change.
 | 12.2 | NaiveRAGPipeline | The Naive RAG Pipeline |
 | 12.3 | WhereNaiveRAGBreaks | Where Naive RAG Breaks |
 
+**Section 13: AI Agents** (`agent-prompting.jsx` + `agent-tools.jsx` - Milestone 1 of 6 complete: Acts 1+2)
+
+| Chapter | Component | Title |
+|---------|-----------|-------|
+| 13.1 | AnatomyOfLlmCall | Anatomy of an LLM Call |
+| 13.2 | SystemPromptContract | System Prompts - The Role Contract |
+| 13.3 | FewShotStructuredOutput | Few-Shot + Structured Output |
+| 13.4 | ChainOfThoughtSelfConsistency | Chain of Thought + Self-Consistency |
+| 13.5 | PromptVsTuneVsRagVsAgent | Prompt vs Fine-Tune vs RAG vs Agent |
+| 13.6 | ContextEngineering | Context Engineering |
+| 13.7 | ToolUseAsBridge | Tool Use - LLM as Orchestrator |
+| 13.8 | JsonSchemaForTools | JSON Schemas + Tool Descriptions |
+| 13.9 | ToolCallLifecycle | Tool Call Lifecycle |
+| 13.10 | ParallelToolsAndChoice | Parallel Tools + Tool Choice |
+| 13.11 | ToolErrorsRetries | Tool Errors, Retries, Validation |
+
 ## Project Structure
 
 ```
@@ -302,7 +318,9 @@ learn-ai/
 │       ├── vector-compression.jsx        # Section 11 (Acts 3+4, chapters 11.12-11.18)
 │       ├── vector-production.jsx         # Section 11 (Act 5, chapters 11.19-11.28)
 │       ├── vector-systems.jsx            # Section 11 (Act 6, chapters 11.29-11.35)
-│       └── rag-foundations.jsx           # Section 12 (Acts 1+2, chapters 12.1-12.10 - in progress)
+│       ├── rag-foundations.jsx           # Section 12 (Acts 1+2, chapters 12.1-12.10 - in progress)
+│       ├── agent-prompting.jsx           # Section 13 (Act 1, chapters 13.1-13.6)
+│       └── agent-tools.jsx               # Section 13 (Acts 2+3, chapters 13.7-13.17 - Act 2 in M1, Act 3 in M2)
 ├── .github/workflows/deploy.yml
 └── CLAUDE.md
 ```

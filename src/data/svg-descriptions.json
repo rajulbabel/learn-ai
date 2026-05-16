@@ -316,5 +316,10 @@
   ],
   "12.14": [
     "Four-step decision flowchart for picking an embedding model: ask whether multilingual is needed, whether the corpus is specialized, whether budget is sensitive, then default to OpenAI text-embedding-3-large or Cohere embed-v3."
+  ],
+  "12.15": [
+    "Triplet-loss diagram showing an anchor point in the center with arrows pulling a positive sample close and pushing a negative sample away.",
+    "Before-versus-after bar chart comparing recall, MRR, and latency for off-the-shelf vs fine-tuned embeddings on the support corpus.",
+    "Training loss curve showing triplet loss dropping from 0.5 at epoch 0 to 0.05 at epoch 3 over a fine-tuning run on 50k support-corpus triples."
   ]
 }

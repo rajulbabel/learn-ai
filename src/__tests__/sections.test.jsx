@@ -5816,3 +5816,44 @@ describe("EmbeddingModelChoice (12.14) content", () => {
     expect(container.textContent).toMatch(/your data|own data/i);
   });
 });
+
+describe("DomainAdaptation (12.15) content", () => {
+  const fn = RagRetrieval.DomainAdaptation;
+
+  it("sub=0 shows the off-the-shelf gap on domain pairs", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/off-the-shelf|off the shelf/i);
+    expect(container.textContent).toMatch(/MI|tPA|medical|legal|code/i);
+    expect(container.textContent).toMatch(/0\.\d+/);
+  });
+
+  it("sub=1 shows triplet loss formula with anchor positive negative", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/triplet/i);
+    expect(container.textContent).toMatch(/anchor/i);
+    expect(container.textContent).toMatch(/positive/i);
+    expect(container.textContent).toMatch(/negative/i);
+    expect(container.textContent).toMatch(/margin/i);
+  });
+
+  it("sub=2 shows training pair construction with hard negatives", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/hard negative/i);
+    expect(container.textContent).toMatch(/reset my password|sign in|cancel/i);
+  });
+
+  it("sub=3 names the when-to-fine-tune decision rules", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/specialized|domain/i);
+    expect(container.textContent).toMatch(/80%|0\.80/);
+    expect(container.textContent).toMatch(/5k|5000|5,000/i);
+    expect(container.textContent).toMatch(/fine-?tun/i);
+  });
+
+  it("sub=4 shows before vs after recall/MRR delta on support corpus", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/recall|MRR/i);
+    expect(container.textContent).toMatch(/before|after|off-the-shelf|fine-?tuned/i);
+    expect(container.textContent).toMatch(/cost|\$/);
+  });
+});

@@ -1527,8 +1527,8 @@ export const CriticDebate = (ctx) => {
           </T>
           <T color={SOFT.blue} center size={16} style={{ marginTop: 10 }}>
             Concrete example: a refund agent makes a draft decision; a policy critic catches that
-            the invoice is >30 days old; the refund gets revised down. This is exactly the kind of
-            thing the worker alone would miss.
+            the invoice is &gt;30 days old; the refund gets revised down. This is exactly the kind
+            of thing the worker alone would miss.
           </T>
 
           <div
@@ -1850,7 +1850,7 @@ export const MultiAgentFailures = (ctx) => {
           <T color={SOFT.blue} center size={16} style={{ marginTop: 10 }}>
             Deadlock = circular wait. Agent A is waiting on Agent B&apos;s result. Agent B is
             waiting on Agent A&apos;s result. Neither makes progress. Symptom: both agents in
-            WAITING state simultaneously for > 30 seconds.
+            WAITING state simultaneously for &gt; 30 seconds.
           </T>
 
           <div style={{ ...tintedCard(C.blue), padding: 14, marginTop: 14 }}>
@@ -1891,7 +1891,7 @@ export const MultiAgentFailures = (ctx) => {
               <polygon points="216,82 224,82 220,90" fill={C.red} />
 
               <text x={280} y={144} fill={SOFT.blue} fontSize="11" fontWeight="700" textAnchor="middle">
-                Signal: Both Agents In WAITING State Simultaneously For > 30 Seconds.
+                Signal: Both Agents In WAITING State Simultaneously For &gt; 30 Seconds.
               </text>
             </svg>
           </div>

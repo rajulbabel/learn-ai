@@ -358,5 +358,10 @@
     "Routing diagram showing a ticket flowing to an intent classifier that branches to billing, product, troubleshooting, and chitchat handler boxes based on classified intent.",
     "Fan-out diagram showing one query branching to three concurrent workers running in parallel then merging into a single aggregator node with timing bars showing that total latency equals the slowest worker time.",
     "Composed workflow topology stacking all three primitives where a ticket chains into a classifier that routes to one of three branches, one branch fans out to three parallel retrieval calls that merge before chaining into a final answer node."
+  ],
+  "13.20": [
+    "Three node circular flow showing reason then act then observe cycle of the agent loop.",
+    "State machine diagram with waiting reasoning acting observing primary states and done failed escalated terminal states.",
+    "Three node cycle of reason act observe with a diamond decision node labeled terminate between observe and reason, branching to done escalate or abort."
   ]
 }

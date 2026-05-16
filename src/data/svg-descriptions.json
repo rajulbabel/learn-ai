@@ -447,5 +447,10 @@
   "13.42": [
     "Span tree for ticket T2: root agent run with three loop iterations. Iter 1 calls lookup_customer, iter 2 calls change_email, iter 3 emits the final answer. Each span row shows its label and duration in milliseconds.",
     "Same span tree as sub=0 for ticket T2, with cost values overlaid on each LLM call span. LLM call 1 cost $0.025, call 2 cost $0.03, call 3 cost $0.04. Total trace cost shown at bottom."
+  ],
+  "13.43": [
+    "Stacked horizontal cost bar showing a typical agent run: input tokens 40 percent, output tokens 35 percent, retries 20 percent, tool calls 5 percent. Total cost annotated as 30 cents per ticket. Output tokens are the dominant slice because output is priced 5 times input.",
+    "Before-and-after diagram for prompt caching: before, every iteration is billed for the full 15k token context. After, the 12k prefix is cached and only the 3k new turn is billed fresh, yielding about 80 percent savings on input tokens.",
+    "Budget bar diagram showing a ticket consuming spend across iterations. At 80 percent the bar is yellow. At 100 percent ($1 cap) the bar turns red and the loop terminates with an escalation."
   ]
 }

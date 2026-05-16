@@ -2364,7 +2364,7 @@ export const WhyChunkFixedSize = (ctx) => {
           >
             <T color="#ffe082" center size={14}>
               Overlap fixes the easy case (sentence-level cuts) but not the hard case (a definition on page 3 referenced
-              by &quot;it&quot; on page 17). The next chapters fix what overlap cannot.
+              by &quot;it&quot; on page 17).
             </T>
           </div>
         </Box>

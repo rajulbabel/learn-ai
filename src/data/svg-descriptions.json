@@ -438,5 +438,10 @@
   ],
   "13.40": [
     "Cost comparison bar chart with end-to-end LLM-as-Judge at one times the unit cost and trace eval growing linearly with steps, reaching eight times for an eight-step trace, plus the production rule to run trace eval on five percent of traffic and end-to-end on the rest."
+  ],
+  "13.41": [
+    "Freshness timeline showing eval set score holding steady near 0.9 at month zero while real production distribution drifts away over time, causing the gap between eval-set predicted quality and actual production quality to widen by month three.",
+    "Online sampling flow showing production traffic being sampled at a one to five percent rate into an async LLM-as-Judge grading stage, with results stored back to the trace store and rendered on the eval quality dashboard.",
+    "Time series of composite trace scores plotted over fourteen days, hovering around 0.85 until day ten where the moving average drops to 0.78, crossing the 0.05 drift threshold below the 0.85 baseline and firing an alert that engineers must investigate."
   ]
 }

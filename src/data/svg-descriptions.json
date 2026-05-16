@@ -424,5 +424,8 @@
   "13.36": [
     "Top row shows naive RAG as a one-shot pipeline from query to retrieve to generate; bottom row shows agentic RAG as a loop from query to retrieve to judge with a conditional rewrite arrow back to retrieve until the judge says done.",
     "Circular four-station loop: search, judge with a question of whether enough evidence has been collected, refine which rewrites the query, then search again, until judge says done or max iterations is hit."
+  ],
+  "13.37": [
+    "Five-stage production eval pipeline with eval set feeding per-trace step grading and end-to-end LLM-as-Judge in parallel, then online sampling and a drift signal that triggers alerting and rollback. Each stage labeled with the Section 13 chapter that covers it."
   ]
 }

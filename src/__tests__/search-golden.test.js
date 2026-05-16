@@ -2,9 +2,7 @@ import { describe, it, expect } from "vitest";
 import chunks from "../data/chunks.json";
 
 describe("search index basics", () => {
-  // Temporarily skipped for Section 12 M2 - search index is stale because
-  // pre-commit hook is disabled. Restored at Task 14 via npm run search:build.
-  it.skip("includes every chapter ID from config (except TOC)", async () => {
+  it("includes every chapter ID from config (except TOC)", async () => {
     const { chapters } = await import("../config.js");
     const indexed = new Set(chunks.map((c) => c.chapterId));
     const missing = [];

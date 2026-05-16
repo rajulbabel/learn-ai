@@ -1,10 +1,6 @@
 #!/bin/sh
 # Auto-rebuild semantic search index + embeddings when source changes.
 
-# Temporarily disabled for Section 12 M2 — restored at Task 14 via
-# `git checkout -- .githooks/pre-commit` + `npm run search:build`.
-exit 0
-
 set -e
 
 # Detect whether anything that affects the search index is staged.

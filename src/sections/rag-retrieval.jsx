@@ -1080,7 +1080,13 @@ export const DomainAdaptation = (ctx) => {
                 strokeWidth="2"
                 markerEnd="url(#arrow-pull)"
               />
-              <text x={(ANCHOR_X + POS_X) / 2 - 30} y={(ANCHOR_Y + POS_Y) / 2 - 6} fill="#a5d6a7" fontSize="13">
+              <text
+                x={(ANCHOR_X + POS_X) / 2 - 30}
+                y={(ANCHOR_Y + POS_Y) / 2 + 25}
+                fill="#a5d6a7"
+                fontSize="13"
+                textAnchor="middle"
+              >
                 Pull Close
               </text>
 
@@ -1094,7 +1100,13 @@ export const DomainAdaptation = (ctx) => {
                 strokeWidth="2"
                 markerEnd="url(#arrow-push)"
               />
-              <text x={(ANCHOR_X + NEG_X) / 2 - 20} y={(ANCHOR_Y + NEG_Y) / 2 - 6} fill="#ef9a9a" fontSize="13">
+              <text
+                x={(ANCHOR_X + NEG_X) / 2 + 8}
+                y={(ANCHOR_Y + NEG_Y) / 2 - 35}
+                fill="#ef9a9a"
+                fontSize="13"
+                textAnchor="middle"
+              >
                 Push Away
               </text>
 
@@ -2720,29 +2732,22 @@ export const RerankerCascade = (ctx) => {
                   (acc, seg) => {
                     const segW = (seg.ms / LATENCY_TOTAL) * LBAR_INNER_W;
                     const xStart = LBAR_X_START + acc.cursor;
+                    const isWide = segW >= 60;
                     acc.elems.push(
                       <g key={seg.name}>
                         <rect x={xStart} y={20} width={segW} height={LBAR_H} fill={seg.color} opacity="0.78" />
-                        <text
-                          x={xStart + segW / 2}
-                          y={20 + LBAR_H / 2 + 5}
-                          fill="#ffffff"
-                          fontSize="14"
-                          fontWeight="700"
-                          textAnchor="middle"
-                        >
-                          {seg.ms}ms
-                        </text>
-                        <text
-                          x={xStart + segW / 2}
-                          y={20 + LBAR_H + 18}
-                          fill={seg.accent}
-                          fontSize="13"
-                          fontWeight="700"
-                          textAnchor="middle"
-                        >
-                          {seg.name}
-                        </text>
+                        {isWide && (
+                          <text
+                            x={xStart + segW / 2}
+                            y={20 + LBAR_H / 2 + 5}
+                            fill="#ffffff"
+                            fontSize="14"
+                            fontWeight="700"
+                            textAnchor="middle"
+                          >
+                            {seg.ms}ms
+                          </text>
+                        )}
                       </g>,
                     );
                     acc.cursor += segW;
@@ -2751,6 +2756,39 @@ export const RerankerCascade = (ctx) => {
                   { elems: [], cursor: 0 },
                 ).elems
               }
+
+              {/* Legend below the bar - color swatch + name + value for each segment. */}
+              {(() => {
+                const LEGEND_Y = 20 + LBAR_H + 14;
+                const SWATCH = 11;
+                const ITEM_GAP = 28;
+                const items = LATENCY_SEGMENTS.map((seg) => ({
+                  ...seg,
+                  label: `${seg.name} (${seg.ms} ms)`,
+                  approxW: SWATCH + 6 + `${seg.name} (${seg.ms} ms)`.length * 7,
+                }));
+                const totalW = items.reduce((s, it) => s + it.approxW, 0) + ITEM_GAP * (items.length - 1);
+                let cursor = LBAR_W / 2 - totalW / 2;
+                return items.map((it) => {
+                  const x = cursor;
+                  cursor += it.approxW + ITEM_GAP;
+                  return (
+                    <g key={it.name}>
+                      <rect
+                        x={x}
+                        y={LEGEND_Y - SWATCH + 2}
+                        width={SWATCH}
+                        height={SWATCH}
+                        fill={it.color}
+                        opacity="0.78"
+                      />
+                      <text x={x + SWATCH + 6} y={LEGEND_Y} fill={it.accent} fontSize="13" fontWeight="700">
+                        {it.label}
+                      </text>
+                    </g>
+                  );
+                });
+              })()}
 
               <text x={LBAR_W / 2} y={LBAR_H + 50} fill="rgba(255,255,255,0.6)" fontSize="12" textAnchor="middle">
                 Bar Width Proportional To Milliseconds
@@ -2825,29 +2863,22 @@ export const RerankerCascade = (ctx) => {
                   (acc, seg) => {
                     const segW = (seg.dollars / COST_TOTAL) * CBAR_INNER_W;
                     const xStart = CBAR_X_START + acc.cursor;
+                    const isWide = segW >= 60;
                     acc.elems.push(
                       <g key={seg.name}>
                         <rect x={xStart} y={20} width={segW} height={CBAR_H} fill={seg.color} opacity="0.78" />
-                        <text
-                          x={xStart + segW / 2}
-                          y={20 + CBAR_H / 2 + 5}
-                          fill="#ffffff"
-                          fontSize="13"
-                          fontWeight="700"
-                          textAnchor="middle"
-                        >
-                          ${seg.dollars.toFixed(4)}
-                        </text>
-                        <text
-                          x={xStart + segW / 2}
-                          y={20 + CBAR_H + 18}
-                          fill={seg.accent}
-                          fontSize="13"
-                          fontWeight="700"
-                          textAnchor="middle"
-                        >
-                          {seg.name}
-                        </text>
+                        {isWide && (
+                          <text
+                            x={xStart + segW / 2}
+                            y={20 + CBAR_H / 2 + 5}
+                            fill="#ffffff"
+                            fontSize="13"
+                            fontWeight="700"
+                            textAnchor="middle"
+                          >
+                            ${seg.dollars.toFixed(4)}
+                          </text>
+                        )}
                       </g>,
                     );
                     acc.cursor += segW;
@@ -2856,6 +2887,38 @@ export const RerankerCascade = (ctx) => {
                   { elems: [], cursor: 0 },
                 ).elems
               }
+
+              {/* Legend below the bar - color swatch + name + dollar amount for each segment. */}
+              {(() => {
+                const LEGEND_Y = 20 + CBAR_H + 14;
+                const SWATCH = 11;
+                const ITEM_GAP = 28;
+                const items = COST_SEGMENTS.map((seg) => {
+                  const label = `${seg.name} ($${seg.dollars.toFixed(4)})`;
+                  return { ...seg, label, approxW: SWATCH + 6 + label.length * 7 };
+                });
+                const totalW = items.reduce((s, it) => s + it.approxW, 0) + ITEM_GAP * (items.length - 1);
+                let cursor = CBAR_W / 2 - totalW / 2;
+                return items.map((it) => {
+                  const x = cursor;
+                  cursor += it.approxW + ITEM_GAP;
+                  return (
+                    <g key={it.name}>
+                      <rect
+                        x={x}
+                        y={LEGEND_Y - SWATCH + 2}
+                        width={SWATCH}
+                        height={SWATCH}
+                        fill={it.color}
+                        opacity="0.78"
+                      />
+                      <text x={x + SWATCH + 6} y={LEGEND_Y} fill={it.accent} fontSize="13" fontWeight="700">
+                        {it.label}
+                      </text>
+                    </g>
+                  );
+                });
+              })()}
 
               <text x={CBAR_W / 2} y={CBAR_H + 50} fill="rgba(255,255,255,0.6)" fontSize="12" textAnchor="middle">
                 Bar Width Proportional To Dollars Per Query

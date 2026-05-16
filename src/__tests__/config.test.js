@@ -681,3 +681,55 @@ describe("Section 13 Act 7 chapter entries", () => {
     expect(c.component).toBe("EvalSetsContinuous");
   });
 });
+
+describe("Section 13 Act 8 chapter entries", () => {
+  const findCh = (id) => chapters.find((c) => c.id === id);
+
+  it("has 13.42 ObservabilityTracing", () => {
+    const c = findCh("13.42");
+    expect(c).toBeDefined();
+    expect(c.title).toBe("Observability & Tracing");
+    expect(c.section).toBe(13);
+    expect(c.component).toBe("ObservabilityTracing");
+  });
+
+  it("has 13.43 CostControl", () => {
+    const c = findCh("13.43");
+    expect(c).toBeDefined();
+    expect(c.title).toBe("Cost Control");
+    expect(c.section).toBe(13);
+    expect(c.component).toBe("CostControl");
+  });
+
+  it("has 13.44 LatencyOptimization", () => {
+    const c = findCh("13.44");
+    expect(c).toBeDefined();
+    expect(c.title).toBe("Latency Optimization");
+    expect(c.section).toBe(13);
+    expect(c.component).toBe("LatencyOptimization");
+  });
+
+  it("has 13.45 Guardrails", () => {
+    const c = findCh("13.45");
+    expect(c).toBeDefined();
+    expect(c.title).toBe("Guardrails");
+    expect(c.section).toBe(13);
+    expect(c.component).toBe("Guardrails");
+  });
+
+  it("has 13.46 PromptInjectionDefenses", () => {
+    const c = findCh("13.46");
+    expect(c).toBeDefined();
+    expect(c.title).toBe("Prompt Injection Defenses");
+    expect(c.section).toBe(13);
+    expect(c.component).toBe("PromptInjectionDefenses");
+  });
+
+  it("has 13.47 ToolSecurity", () => {
+    const c = findCh("13.47");
+    expect(c).toBeDefined();
+    expect(c.title).toBe("Tool Security");
+    expect(c.section).toBe(13);
+    expect(c.component).toBe("ToolSecurity");
+  });
+});

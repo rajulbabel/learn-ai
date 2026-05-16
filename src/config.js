@@ -222,6 +222,12 @@ export const chapters = [
   { id: "13.39", title: "LLM-as-Judge", section: 13, component: "LlmAsJudge" },
   { id: "13.40", title: "Trace Evals", section: 13, component: "TraceEvals" },
   { id: "13.41", title: "Eval Sets + Continuous Eval", section: 13, component: "EvalSetsContinuous" },
+  { id: "13.42", title: "Observability & Tracing", section: 13, component: "ObservabilityTracing" },
+  { id: "13.43", title: "Cost Control", section: 13, component: "CostControl" },
+  { id: "13.44", title: "Latency Optimization", section: 13, component: "LatencyOptimization" },
+  { id: "13.45", title: "Guardrails", section: 13, component: "Guardrails" },
+  { id: "13.46", title: "Prompt Injection Defenses", section: 13, component: "PromptInjectionDefenses" },
+  { id: "13.47", title: "Tool Security", section: 13, component: "ToolSecurity" },
 ];
 
 export const sectionNames = {

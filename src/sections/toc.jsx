@@ -59,6 +59,12 @@ export const TOC = (ctx) => {
       color: "#f06292",
       desc: "Why exact search breaks, ANN indexing, compression, production systems",
     },
+    {
+      num: 12,
+      name: "Retrieval-Augmented Generation",
+      color: "#7c4dff",
+      desc: "Chunking, query transformation, citations, eval, production operations for RAG",
+    },
   ];
   const sectionChapters = {};
   chapters.forEach((c, i) => {

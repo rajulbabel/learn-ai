@@ -291,5 +291,9 @@
     "Sliding window chunk diagram across doc-1 (the password-reset article) showing four colored 128-token chunk bars stacked vertically along a 0-464 token axis. Each chunk is labeled with its token range (0-128, 112-240, 224-352, 336-464) and the 16-token overlap zones between adjacent chunks are shaded a darker green band.",
     "Two clean rectangle chunks side by side with no overlap, with a red dashed vertical line at the boundary marking the mid-sentence hard cut between chunk 1 and chunk 2.",
     "Two chunk rectangles with a darker yellow overlap band shared between them, labeled as the shared 16-token region where the cut sentence appears whole in both adjacent chunks."
+  ],
+  "12.8": [
+    "Vertical priority tree of structural separators starting with paragraph break (double newline), falling back through line break (single newline), sentence break (period space), to word break (space), with each downward arrow labeled If chunk too big to mark the fallback condition.",
+    "Recursion trace tree showing the doc-12 Authentication Header Format section at 300 tokens being split by paragraph break into three sub-chunks of 100, 110, and 90 tokens that each fit the 128-token target. The top node marks the oversized section in red, the middle row shows the three paragraph splits in green, and the bottom row shows the three emitted chunks in cyan."
   ]
 }

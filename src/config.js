@@ -173,6 +173,7 @@ export const chapters = [
   { id: "12.5", title: "Deduplication & Cleaning", section: 12, component: "DeduplicationCleaning" },
   { id: "12.6", title: "Refresh & Sync Schedules", section: 12, component: "RefreshSync" },
   { id: "12.7", title: "Why Chunk At All + Fixed-Size Baseline", section: 12, component: "WhyChunkFixedSize" },
+  { id: "12.8", title: "Recursive Structural Chunking", section: 12, component: "RecursiveStructuralChunking" },
 ];
 
 export const sectionNames = {

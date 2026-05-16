@@ -4846,17 +4846,17 @@ export const LateChunking = (ctx) => {
 const HIERARCHY_SECTIONS = [
   {
     id: "Eligibility",
-    summary: "Who Qualifies For A Refund And Within What Window.",
+    summary: "Who Qualifies And Refund Window.",
     leaves: ["L1", "L2", "L3", "L4"],
   },
   {
     id: "Process",
-    summary: "Steps To File A Refund Request And SLAs.",
+    summary: "Filing Steps And SLAs.",
     leaves: ["L5", "L6", "L7", "L8"],
   },
   {
     id: "Edge Cases",
-    summary: "Late Requests, Manual Review, Appeal Path.",
+    summary: "Late Requests And Appeals.",
     leaves: ["L9", "L10", "L11", "L12"],
   },
 ];
@@ -5228,7 +5228,7 @@ export const HierarchicalChunking = (ctx) => {
               color: "#b8a9ff",
             }}
           >
-            Query: &quot;Can I Get A Refund If I Cancel After 30 Days?&quot; &rarr; q_vec
+            Query: &quot;Can I get a refund if I cancel after 30 days?&quot; &rarr; q_vec
           </div>
 
           <div style={{ marginTop: 14, display: "flex", flexDirection: "column", gap: 10 }}>
@@ -5294,8 +5294,8 @@ export const HierarchicalChunking = (ctx) => {
             }}
           >
             <T color="#b8a9ff" center size={14}>
-              L7 wins at 0.89. Its 64-token text reads &quot;...full refunds within 14 days; prorated refunds 15-30
-              days; no refunds after 30 days...&quot; - a precise hit on the 30-day cutoff in the query.
+              L7 wins at 0.89. Its 64-token snippet directly states &quot;no refunds after 30 days&quot; - a precise hit
+              on the 30-day cutoff in the query.
             </T>
           </div>
         </Box>
@@ -5362,7 +5362,7 @@ export const HierarchicalChunking = (ctx) => {
                 Score: 0.89
               </text>
               {/* Middle: parent-lookup arrow */}
-              <line x1="226" y1="110" x2="394" y2="110" stroke={C.orange} strokeWidth="2.4" />
+              <line x1="226" y1="110" x2="408" y2="110" stroke={C.orange} strokeWidth="2.4" />
               <polygon points="394,103 394,117 408,110" fill={C.orange} />
               <text x="320" y="92" textAnchor="middle" fill={C.orange} fontSize="13" fontWeight="bold">
                 Parent Lookup
@@ -5561,7 +5561,7 @@ export const HierarchicalChunking = (ctx) => {
                       Summary (LLM-Made)
                     </text>
                     <text x={cx} y="218" textAnchor="middle" fill="#fff59d" fontSize="10">
-                      {sec.summary.length > 36 ? sec.summary.slice(0, 33) + "..." : sec.summary}
+                      {sec.summary}
                     </text>
                     <text x={cx} y="231" textAnchor="middle" fill="#fff59d" fontSize="9">
                       Indexed - 1 Vector

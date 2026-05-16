@@ -6944,3 +6944,50 @@ describe("ObservabilityTracing (12.38) content", () => {
     expect(container.textContent).toMatch(/P50|P99|latency/i);
   });
 });
+
+describe("HallucinationDrift (12.39) content", () => {
+  const fn = RagProduction.HallucinationDrift;
+
+  it("sub=0 lists hallucination signals", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/faithfulness/i);
+    expect(container.textContent).toMatch(/citation/i);
+    expect(container.textContent).toMatch(/refusal/i);
+    expect(container.textContent).toMatch(/out[- ]of[- ]index|hallucinat/i);
+  });
+
+  it("sub=1 names the 4 drift types", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/data drift/i);
+    expect(container.textContent).toMatch(/embedding drift/i);
+    expect(container.textContent).toMatch(/eval drift/i);
+    expect(container.textContent).toMatch(/distribution drift/i);
+  });
+
+  it("sub=2 shows the hallucination detection pipeline with claim extraction", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/claim/i);
+    expect(container.textContent).toMatch(/supported|unsupported/i);
+    expect(container.textContent).toMatch(/faithfulness/i);
+  });
+
+  it("sub=3 shows metric-over-time chart with thresholds", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/30 days|over time|days/i);
+    expect(container.textContent).toMatch(/threshold|alert/i);
+  });
+
+  it("sub=4 shows an alert payload with example queries", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/alert/i);
+    expect(container.textContent).toMatch(/faithfulness/i);
+    expect(container.textContent).toMatch(/example|query/i);
+    expect(container.textContent).toMatch(/doc-?\d/i);
+  });
+
+  it("sub=5 mocks the full hallucination + drift dashboard", () => {
+    const { container } = render(fn(makeCtx({ sub: 5 })));
+    expect(container.textContent).toMatch(/dashboard|panel/i);
+    expect(container.textContent).toMatch(/drift|hallucinat/i);
+  });
+});

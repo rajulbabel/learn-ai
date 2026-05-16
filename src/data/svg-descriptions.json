@@ -396,5 +396,11 @@
   ],
   "12.38": [
     "Parent/child span tree for a single RAG query: embed query, vector search, rerank, pack prompt, and generate. Each child span is rendered with width proportional to its latency in milliseconds, making the rerank stage visibly the dominant time cost."
+  ],
+  "12.39": [
+    "Hallucination detection flow: extract claims from the answer, check each against retrieved chunks, compute faithfulness score, log to trace, and alert when the rolling median drops below the threshold.",
+    "Time-series chart over 30 days showing faithfulness, recall, and refusal rate lines crossing their alert thresholds at different days. Each metric is in a distinct color with its threshold shown as a dashed line.",
+    "Faithfulness trend thumbnail panel for the dashboard mock; shows a steady decline from 0.92 to 0.84 crossing the 0.85 alert threshold.",
+    "Refusal rate trend thumbnail panel for the dashboard mock; rises from 8 percent to 18 percent crossing the 15 percent alert threshold."
   ]
 }

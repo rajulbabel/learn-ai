@@ -334,5 +334,10 @@
   ],
   "13.15": [
     "Four-stage server lifecycle diagram showing registered then listening then active handling requests then closed shutdown, with transition arrows labeled connect, initialize, and shutdown."
+  ],
+  "13.16": [
+    "Trust boundary diagram showing outer host with user data and model trusted ring surrounding inner untrusted third party server code with protocol arrows crossing the boundary.",
+    "Host process box on top spawns a server process box on the bottom inside a sandbox container, with a labeled spawn arrow and an MCP transport arrow as the only legal channel between them.",
+    "OAuth flow showing user authorizes then host gets access token then token passes to server in each request then server checks scope."
   ]
 }

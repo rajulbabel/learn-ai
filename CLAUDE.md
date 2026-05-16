@@ -264,7 +264,7 @@ Only config.js IDs change.
 | 12.2 | NaiveRAGPipeline | The Naive RAG Pipeline |
 | 12.3 | WhereNaiveRAGBreaks | Where Naive RAG Breaks |
 
-**Section 13: AI Agents** (`agent-prompting.jsx` + `agent-tools.jsx` + `agent-loops.jsx` - Milestones 1-2 of 6 complete: Acts 1-4)
+**Section 13: AI Agents** (`agent-prompting.jsx` + `agent-tools.jsx` + `agent-loops.jsx` + `multi-agent.jsx` - Milestones 1-3 of 6 complete: Acts 1-6)
 
 | Chapter | Component | Title |
 |---------|-----------|-------|
@@ -291,6 +291,19 @@ Only config.js IDs change.
 | 13.21 | ReActPattern | ReAct Pattern |
 | 13.22 | PlanExecuteReflect | Plan-Execute + Reflection |
 | 13.23 | LoopTermination | Loop Termination |
+| 13.24 | MemoryTaxonomy | Memory Taxonomy - Short vs Long |
+| 13.25 | WorkingMemory | Working Memory - The Scratchpad |
+| 13.26 | EpisodicMemory | Episodic Memory - Past Events |
+| 13.27 | SemanticMemory | Semantic Memory - Learned Facts |
+| 13.28 | ProceduralMemory | Procedural Memory - Learned Skills |
+| 13.29 | SummaryAndContextMgmt | Summary Memory + Context Window Management |
+| 13.30 | WhyMultiAgent | Why Multi-Agent? |
+| 13.31 | OrchestratorWorker | Orchestrator-Worker |
+| 13.32 | SupervisorHierarchy | Supervisor / Hierarchical |
+| 13.33 | AgentHandoffs | Hand-Offs |
+| 13.34 | CriticDebate | Critic / Debate / Reflection-as-Multi-Agent |
+| 13.35 | MultiAgentFailures | Multi-Agent Failure Modes |
+| 13.36 | AgenticRag | Agentic RAG |
 
 ## Project Structure
 
@@ -333,7 +346,8 @@ learn-ai/
 │       ├── rag-foundations.jsx           # Section 12 (Acts 1+2, chapters 12.1-12.10 - in progress)
 │       ├── agent-prompting.jsx           # Section 13 (Act 1, chapters 13.1-13.6)
 │       ├── agent-tools.jsx               # Section 13 (Acts 2+3, chapters 13.7-13.17)
-│       └── agent-loops.jsx               # Section 13 (Acts 4+5, chapters 13.18-13.29 - Act 4 in M2, Act 5 in M3)
+│       ├── agent-loops.jsx               # Section 13 (Acts 4+5, chapters 13.18-13.29)
+│       └── multi-agent.jsx               # Section 13 (Act 6, chapters 13.30-13.36)
 ├── .github/workflows/deploy.yml
 └── CLAUDE.md
 ```

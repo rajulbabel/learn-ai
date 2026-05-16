@@ -365,5 +365,8 @@
     "Fifteen-node legal citation graph used as the GraphRAG running corpus, with cases as nodes and directed citation edges between them.",
     "Subgraph retrieval highlight on the 15-node citation graph showing how a query selects a 5-node connected component (a precedent chain) as the retrieved context.",
     "Same 15-node citation graph re-colored into three communities (Civil Rights, Contract Law, IP Law) for global-query summarization."
+  ],
+  "12.29": [
+    "Tool-call loop flowchart for agentic RAG: model emits a tool_call, the runtime executes the tool and feeds the response back, looping until the model emits a final answer or hits max_iterations."
   ]
 }

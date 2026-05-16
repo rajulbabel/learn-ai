@@ -5616,3 +5616,51 @@ describe("LateChunking (12.10) content", () => {
     expect(container.textContent).toMatch(/token[- ]?level|hidden state/i);
   });
 });
+
+describe("HierarchicalChunking (12.11) content", () => {
+  const fn = RagFoundations.HierarchicalChunking;
+
+  it("sub=0 frames the small-vs-large chunk tension", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/small chunks?/i);
+    expect(container.textContent).toMatch(/large chunks?/i);
+    expect(container.textContent).toMatch(/retrieval|precision/i);
+    expect(container.textContent).toMatch(/generation|context/i);
+  });
+
+  it("sub=1 introduces the leaf-and-parent hierarchy on doc-4", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/leaf|leaves/i);
+    expect(container.textContent).toMatch(/parent/i);
+    expect(container.textContent).toMatch(/doc-?4|refund/i);
+    expect(container.textContent).toMatch(/64/);
+    expect(container.textContent).toMatch(/300/);
+  });
+
+  it("sub=2 retrieves a leaf chunk for the refund query", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/refund/i);
+    expect(container.textContent).toMatch(/30 days|L7|leaf/i);
+    expect(container.textContent).toMatch(/0\.\d+/);
+  });
+
+  it("sub=3 swaps leaf for parent before the LLM", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/parent/i);
+    expect(container.textContent).toMatch(/swap|lookup|replace/i);
+    expect(container.textContent).toMatch(/LLM|prompt|context/i);
+  });
+
+  it("sub=4 introduces summary chunks as a variant", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/summary|summaries/i);
+    expect(container.textContent).toMatch(/LLM|generate/i);
+  });
+
+  it("sub=5 explains when and at what cost", () => {
+    const { container } = render(fn(makeCtx({ sub: 5 })));
+    expect(container.textContent).toMatch(/hierarchical/i);
+    expect(container.textContent).toMatch(/storage|cost/i);
+    expect(container.textContent).toMatch(/LangChain|LlamaIndex/i);
+  });
+});

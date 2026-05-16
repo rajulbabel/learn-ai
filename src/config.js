@@ -176,6 +176,7 @@ export const chapters = [
   { id: "12.8", title: "Recursive Structural Chunking", section: 12, component: "RecursiveStructuralChunking" },
   { id: "12.9", title: "Semantic Chunking", section: 12, component: "SemanticChunking" },
   { id: "12.10", title: "Late Chunking (Jina 2024)", section: 12, component: "LateChunking" },
+  { id: "12.11", title: "Hierarchical / Parent-Child Chunking", section: 12, component: "HierarchicalChunking" },
 ];
 
 export const sectionNames = {

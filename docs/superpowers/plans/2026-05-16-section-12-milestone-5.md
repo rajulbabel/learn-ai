@@ -1,6 +1,10 @@
 # Section 12 Milestone 5 Implementation Plan
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+>
+> **Strict scope rule for subagents:** When you dispatch a subagent for a task, the subagent prompt MUST include: (a) the verbatim Files: list from the task, (b) the instruction "modify ONLY files in the Files: list; if you find other defects, document them but do NOT fix them in this task", and (c) the instruction "run `git diff --stat` before committing; abort if any file outside the Files: list shows as modified". The parent reviews `git diff --stat` after each subagent finishes. Scope violations are rejected and the subagent re-dispatched with the same strict prompt.
+>
+> **Two-stage review per task:** Stage 1 SCOPE - did the subagent modify only the listed files? Are commits clean? Stage 2 CORRECTNESS - do tests pass, does behavior match the spec? Both stages must pass before moving to the next task.
 
 **Goal:** Add Act 7 of Section 12 "Retrieval-Augmented Generation" - the five Evaluation chapters (12.28 RAGEvalTriangle, 12.29 LLMAsJudge, 12.30 RAGASMetrics, 12.31 GoldenDatasets, 12.32 OnlineEvalABTesting). These live in a NEW file `src/sections/rag-evaluation.jsx`. At the end of this milestone the app ships with 32 navigable chapters in Section 12 (12.1 through 12.32), completing Acts 1-7 of the section arc. Acts 8+9 (chapters 12.33-12.38) land in M6.
 
@@ -112,6 +116,39 @@ Every chapter at every sub-step MUST satisfy ALL of these. Violations are blocke
 
 ---
 
+## Cross-file dependency map (prevent silent gaps)
+
+When this milestone adds/modifies certain artifacts, OTHER files iterate over them and break silently if not updated. This map prevents plan gaps.
+
+### `chapters[]` in `src/config.js` is iterated by:
+
+- `src/__tests__/config.test.js` - validates ID format, uniqueness, ordering, Section 12 entry shapes.
+- `src/__tests__/lookup.test.js` - generic test "every chapter component exists in lookup". The `lookup` object in this file must include the spread of every section namespace.
+- `src/__tests__/sections.test.jsx` - generic test "All chapters render at every sub-level". The `lookup` object in this file must ALSO include the spread of every section namespace.
+- `src/learn-ai.jsx` - `sectionLoaders` lazy-imports each section file.
+
+### When adding a NEW section file (e.g., `src/sections/rag-foundations.jsx`), you MUST update:
+
+- `src/__tests__/lookup.test.js` - (a) static `import * as NewSection from "../sections/new-section.jsx"`, (b) presence test asserting `typeof mod.ChapterName === "function"`, AND (c) spread `...NewSection` into the test's `lookup` object.
+- `src/__tests__/sections.test.jsx` - (a) static `import * as NewSection`, (b) spread `...NewSection` into the `lookup` object.
+- `src/learn-ai.jsx` - register the new file in `sectionLoaders` (either single import or as part of a Promise.all if section already has multiple files).
+
+### When adding chapters to `chapters[]` (without a new section file):
+
+- `src/__tests__/config.test.js` - add a "Section N chapters" describe block testing the specific new entries.
+- The relevant section file must already export each new `component`. If it doesn't, the lookup-spread will resolve the symbol as `undefined` and sections.test.jsx generic test fails with "fn is not a function".
+- If the new chapters introduce ANY new SVG, also update `src/data/svg-descriptions.json` AND `src/__tests__/svg-descriptions.test.js` may need adjustment depending on coverage rules.
+
+### When updating `learn-ai.jsx` `sectionLoaders`:
+
+- If the section is now multi-file, the loader becomes `Promise.all([...]).then((mods) => Object.assign({}, ...mods))`. Any earlier single-file loader for that section is REPLACED.
+
+### Before committing a task that touches any of these artifacts:
+
+Run `npm run test` (full suite, not just the targeted test). If any unrelated test fails, you missed a dependency. Trace it before committing.
+
+---
+
 ## Implementation order
 
 1. Task 1 - Verify green baseline.
@@ -207,6 +244,8 @@ If your CLI shows the session title in its title bar or tab, verify it reads `se
 **Files:**
 - Create: `src/sections/rag-evaluation.jsx`.
 - Modify: `src/__tests__/lookup.test.js` (add import + content-presence test).
+
+**Scope binding:** This task modifies ONLY the files listed in `**Files:**` above. If during implementation you discover other defects in other files, DO NOT fix them in this task - document them as a separate observation and continue with the listed scope. Before committing, run `git status` and `git diff --stat`: if ANY file outside the Files: list shows as modified, abort the commit and either move the change to the right task or revert it.
 
 - [ ] **Step 1: Write failing test for the new section file**
 
@@ -411,7 +450,24 @@ If your CLI shows the session title in its title bar or tab, verify it reads `se
 
   Expected: 0 errors. The unused `Reveal` import is allowed because per-chapter tasks consume it; if lint flags it as unused, remove it for now and re-add in the first chapter that uses it.
 
-- [ ] **Step 6: Commit**
+- [ ] **Step 6: Full test smoke gate**
+
+```bash
+npm run test
+```
+
+Expected: ALL tests pass, not just the ones added in this task. If any unrelated test fails, you missed a cross-file dependency (see "Cross-file dependency map" near the top of this plan). Trace the failure to the missing update before committing.
+
+- [ ] **Step 7: Scope verification (`git diff --stat`)**
+
+```bash
+git status
+git diff --stat
+```
+
+Expected: only files in the **Files:** list show as modified or new. If any file outside the list appears, abort: either move the change to the correct task or revert it before committing this task.
+
+- [ ] **Step 8: Commit**
 
   ```bash
   git add src/sections/rag-evaluation.jsx src/__tests__/lookup.test.js
@@ -425,6 +481,8 @@ If your CLI shows the session title in its title bar or tab, verify it reads `se
 **Files:**
 - Modify: `src/config.js` (chapters array, after the last Section 12 entry from M4).
 - Modify: `src/__tests__/config.test.js`.
+
+**Scope binding:** This task modifies ONLY the files listed in `**Files:**` above. If during implementation you discover other defects in other files, DO NOT fix them in this task - document them as a separate observation and continue with the listed scope. Before committing, run `git status` and `git diff --stat`: if ANY file outside the Files: list shows as modified, abort the commit and either move the change to the right task or revert it.
 
 - [ ] **Step 1: Write failing test**
 
@@ -496,7 +554,24 @@ If your CLI shows the session title in its title bar or tab, verify it reads `se
 
   Expected: PASS. This is the test that asserts every chapter ID within a section is sequential (`section.1` ... `section.N`). The M5 additions of 12.28-12.32 must keep this property.
 
-- [ ] **Step 6: Commit**
+- [ ] **Step 6: Full test smoke gate**
+
+```bash
+npm run test
+```
+
+Expected: ALL tests pass, not just the ones added in this task. If any unrelated test fails, you missed a cross-file dependency (see "Cross-file dependency map" near the top of this plan). Trace the failure to the missing update before committing.
+
+- [ ] **Step 7: Scope verification (`git diff --stat`)**
+
+```bash
+git status
+git diff --stat
+```
+
+Expected: only files in the **Files:** list show as modified or new. If any file outside the list appears, abort: either move the change to the correct task or revert it before committing this task.
+
+- [ ] **Step 8: Commit**
 
   ```bash
   git add src/config.js src/__tests__/config.test.js
@@ -509,6 +584,8 @@ If your CLI shows the session title in its title bar or tab, verify it reads `se
 
 **Files:**
 - Modify: `src/learn-ai.jsx` (`sectionLoaders` object).
+
+**Scope binding:** This task modifies ONLY the files listed in `**Files:**` above. If during implementation you discover other defects in other files, DO NOT fix them in this task - document them as a separate observation and continue with the listed scope. Before committing, run `git status` and `git diff --stat`: if ANY file outside the Files: list shows as modified, abort the commit and either move the change to the right task or revert it.
 
 - [ ] **Step 1: Find the current Section 12 loader**
 
@@ -563,7 +640,24 @@ If your CLI shows the session title in its title bar or tab, verify it reads `se
 
   Open `http://localhost:5173/learn-ai/`. Use right-arrow keyboard nav or the TOC to step into Section 12 chapters. The Act 7 stub chapters should render their stub Boxes ("The RAG Eval Triangle (stub)" etc.) without console errors. Stop the server with Ctrl-C.
 
-- [ ] **Step 6: Commit**
+- [ ] **Step 6: Full test smoke gate**
+
+```bash
+npm run test
+```
+
+Expected: ALL tests pass, not just the ones added in this task. If any unrelated test fails, you missed a cross-file dependency (see "Cross-file dependency map" near the top of this plan). Trace the failure to the missing update before committing.
+
+- [ ] **Step 7: Scope verification (`git diff --stat`)**
+
+```bash
+git status
+git diff --stat
+```
+
+Expected: only files in the **Files:** list show as modified or new. If any file outside the list appears, abort: either move the change to the correct task or revert it before committing this task.
+
+- [ ] **Step 8: Commit**
 
   ```bash
   git add src/learn-ai.jsx
@@ -576,6 +670,8 @@ If your CLI shows the session title in its title bar or tab, verify it reads `se
 
 **Files:**
 - Modify: `src/__tests__/sections.test.jsx` (add import + spread).
+
+**Scope binding:** This task modifies ONLY the files listed in `**Files:**` above. If during implementation you discover other defects in other files, DO NOT fix them in this task - document them as a separate observation and continue with the listed scope. Before committing, run `git status` and `git diff --stat`: if ANY file outside the Files: list shows as modified, abort the commit and either move the change to the right task or revert it.
 
 The generic test block in `sections.test.jsx` iterates over `chapters` and looks up each component in `lookup`. Without this import, the generic "All chapters" describe block will fail for 12.28-12.32 with "fn is not a function".
 
@@ -631,7 +727,24 @@ The generic test block in `sections.test.jsx` iterates over `chapters` and looks
 
   Expected: PASS. The generic test now renders 12.28-12.32 stubs across sub=0..10 without crashing (sub=0 renders one Box; sub>0 renders nothing, which is allowed).
 
-- [ ] **Step 4: Commit**
+- [ ] **Step 4: Full test smoke gate**
+
+```bash
+npm run test
+```
+
+Expected: ALL tests pass, not just the ones added in this task. If any unrelated test fails, you missed a cross-file dependency (see "Cross-file dependency map" near the top of this plan). Trace the failure to the missing update before committing.
+
+- [ ] **Step 5: Scope verification (`git diff --stat`)**
+
+```bash
+git status
+git diff --stat
+```
+
+Expected: only files in the **Files:** list show as modified or new. If any file outside the list appears, abort: either move the change to the correct task or revert it before committing this task.
+
+- [ ] **Step 6: Commit**
 
   ```bash
   git add src/__tests__/sections.test.jsx
@@ -647,6 +760,8 @@ The generic test block in `sections.test.jsx` iterates over `chapters` and looks
 - Modify: `src/__tests__/sections.test.jsx` (append content-test block).
 - Modify: `src/data/svg-descriptions.json` (add entry for the triangle SVG and any others).
 - Modify: `src/__tests__/svg-descriptions.test.js` (append `"12.28"` to `expectedChapters`).
+
+**Scope binding:** This task modifies ONLY the files listed in `**Files:**` above. If during implementation you discover other defects in other files, DO NOT fix them in this task - document them as a separate observation and continue with the listed scope. Before committing, run `git status` and `git diff --stat`: if ANY file outside the Files: list shows as modified, abort the commit and either move the change to the right task or revert it.
 
 **Chapter purpose (from spec):** Three layers of eval - retrieval, generation, end-to-end. Each layer needs separate eval because a bad final answer can come from bad retrieval OR bad generation; isolating each layer locates the failure. Mention BLEU/ROUGE as DEPRECATED for RAG (covered properly in 12.30 as a side note). Walk away knowing the metric vocabulary needed to talk eval with a team.
 
@@ -823,7 +938,24 @@ The generic test block in `sections.test.jsx` iterates over `chapters` and looks
 
   Expected: all green. `npm run format` may rewrite trivial whitespace; re-stage if needed.
 
-- [ ] **Step 9: Commit**
+- [ ] **Step 9: Full test smoke gate**
+
+```bash
+npm run test
+```
+
+Expected: ALL tests pass, not just the ones added in this task. If any unrelated test fails, you missed a cross-file dependency (see "Cross-file dependency map" near the top of this plan). Trace the failure to the missing update before committing.
+
+- [ ] **Step 10: Scope verification (`git diff --stat`)**
+
+```bash
+git status
+git diff --stat
+```
+
+Expected: only files in the **Files:** list show as modified or new. If any file outside the list appears, abort: either move the change to the correct task or revert it before committing this task.
+
+- [ ] **Step 11: Commit**
 
   ```bash
   git add src/sections/rag-evaluation.jsx src/__tests__/sections.test.jsx src/data/svg-descriptions.json src/__tests__/svg-descriptions.test.js
@@ -838,6 +970,8 @@ The generic test block in `sections.test.jsx` iterates over `chapters` and looks
 - Modify: `src/sections/rag-evaluation.jsx` (replace `LLMAsJudge` stub).
 - Modify: `src/__tests__/sections.test.jsx` (append content-test block).
 - Modify: `src/data/svg-descriptions.json`, `src/__tests__/svg-descriptions.test.js` if new SVG.
+
+**Scope binding:** This task modifies ONLY the files listed in `**Files:**` above. If during implementation you discover other defects in other files, DO NOT fix them in this task - document them as a separate observation and continue with the listed scope. Before committing, run `git status` and `git diff --stat`: if ANY file outside the Files: list shows as modified, abort the commit and either move the change to the right task or revert it.
 
 **Chapter purpose (from spec):** the judge prompt template (artifact - styled monospace block, not code). Rubric design (1-5 per criterion). Three judge biases (position, verbosity, self-preference). Calibration via human spot-check. Judge-model selection (stronger than the one being judged; or same with caveats). Walk away able to write a defensible LLM-as-judge prompt and avoid the famous failure modes.
 
@@ -1041,7 +1175,24 @@ The generic test block in `sections.test.jsx` iterates over `chapters` and looks
 
   Expected: green.
 
-- [ ] **Step 8: Commit**
+- [ ] **Step 8: Full test smoke gate**
+
+```bash
+npm run test
+```
+
+Expected: ALL tests pass, not just the ones added in this task. If any unrelated test fails, you missed a cross-file dependency (see "Cross-file dependency map" near the top of this plan). Trace the failure to the missing update before committing.
+
+- [ ] **Step 9: Scope verification (`git diff --stat`)**
+
+```bash
+git status
+git diff --stat
+```
+
+Expected: only files in the **Files:** list show as modified or new. If any file outside the list appears, abort: either move the change to the correct task or revert it before committing this task.
+
+- [ ] **Step 10: Commit**
 
   ```bash
   git add src/sections/rag-evaluation.jsx src/__tests__/sections.test.jsx src/data/svg-descriptions.json src/__tests__/svg-descriptions.test.js
@@ -1056,6 +1207,8 @@ The generic test block in `sections.test.jsx` iterates over `chapters` and looks
 - Modify: `src/sections/rag-evaluation.jsx` (replace `RAGASMetrics` stub).
 - Modify: `src/__tests__/sections.test.jsx` (append content-test block).
 - Modify: `src/data/svg-descriptions.json`, `src/__tests__/svg-descriptions.test.js` if new SVG.
+
+**Scope binding:** This task modifies ONLY the files listed in `**Files:**` above. If during implementation you discover other defects in other files, DO NOT fix them in this task - document them as a separate observation and continue with the listed scope. Before committing, run `git status` and `git diff --stat`: if ANY file outside the Files: list shows as modified, abort the commit and either move the change to the right task or revert it.
 
 **Chapter purpose (from spec):** the 4 RAGAS metrics with formulas and worked examples. Each metric is grounded in a concrete worked computation on the password-reset query. Walk away able to compute Faithfulness, Answer Relevancy, Context Precision, Context Recall by hand on a small example.
 
@@ -1274,7 +1427,24 @@ The generic test block in `sections.test.jsx` iterates over `chapters` and looks
 
   Expected: green.
 
-- [ ] **Step 7: Commit**
+- [ ] **Step 7: Full test smoke gate**
+
+```bash
+npm run test
+```
+
+Expected: ALL tests pass, not just the ones added in this task. If any unrelated test fails, you missed a cross-file dependency (see "Cross-file dependency map" near the top of this plan). Trace the failure to the missing update before committing.
+
+- [ ] **Step 8: Scope verification (`git diff --stat`)**
+
+```bash
+git status
+git diff --stat
+```
+
+Expected: only files in the **Files:** list show as modified or new. If any file outside the list appears, abort: either move the change to the correct task or revert it before committing this task.
+
+- [ ] **Step 9: Commit**
 
   ```bash
   git add src/sections/rag-evaluation.jsx src/__tests__/sections.test.jsx
@@ -1293,6 +1463,8 @@ The generic test block in `sections.test.jsx` iterates over `chapters` and looks
 - Modify: `src/sections/rag-evaluation.jsx` (replace `GoldenDatasets` stub).
 - Modify: `src/__tests__/sections.test.jsx` (append content-test block).
 - Modify: `src/data/svg-descriptions.json`, `src/__tests__/svg-descriptions.test.js` if new SVG.
+
+**Scope binding:** This task modifies ONLY the files listed in `**Files:**` above. If during implementation you discover other defects in other files, DO NOT fix them in this task - document them as a separate observation and continue with the listed scope. Before committing, run `git status` and `git diff --stat`: if ANY file outside the Files: list shows as modified, abort the commit and either move the change to the right task or revert it.
 
 **Chapter purpose (from spec):** curation strategy (start with hand-written 30-100 examples covering query types). Edge cases (multi-hop, empty-context, ambiguous, refusal-required, time-sensitive). Regression set (any past production failure becomes a golden case). LLM-bootstrapped golden datasets (use LLM to generate question-answer pairs from corpus, then human-review). Refresh cadence (review monthly; archive obsolete cases). Walk away with a concrete recipe to build a defensible golden set.
 
@@ -1469,7 +1641,24 @@ The generic test block in `sections.test.jsx` iterates over `chapters` and looks
 
   Expected: green.
 
-- [ ] **Step 7: Commit**
+- [ ] **Step 7: Full test smoke gate**
+
+```bash
+npm run test
+```
+
+Expected: ALL tests pass, not just the ones added in this task. If any unrelated test fails, you missed a cross-file dependency (see "Cross-file dependency map" near the top of this plan). Trace the failure to the missing update before committing.
+
+- [ ] **Step 8: Scope verification (`git diff --stat`)**
+
+```bash
+git status
+git diff --stat
+```
+
+Expected: only files in the **Files:** list show as modified or new. If any file outside the list appears, abort: either move the change to the correct task or revert it before committing this task.
+
+- [ ] **Step 9: Commit**
 
   ```bash
   git add src/sections/rag-evaluation.jsx src/__tests__/sections.test.jsx
@@ -1487,6 +1676,8 @@ The generic test block in `sections.test.jsx` iterates over `chapters` and looks
 - Modify: `src/sections/rag-evaluation.jsx` (replace `OnlineEvalABTesting` stub).
 - Modify: `src/__tests__/sections.test.jsx` (append content-test block).
 - Modify: `src/data/svg-descriptions.json`, `src/__tests__/svg-descriptions.test.js` if new SVG.
+
+**Scope binding:** This task modifies ONLY the files listed in `**Files:**` above. If during implementation you discover other defects in other files, DO NOT fix them in this task - document them as a separate observation and continue with the listed scope. Before committing, run `git status` and `git diff --stat`: if ANY file outside the Files: list shows as modified, abort the commit and either move the change to the right task or revert it.
 
 **Chapter purpose (from spec):** production feedback loops. Implicit signals (thumbs up/down, dwell time, copy-paste, follow-up rephrase). Explicit feedback (rating, "did this answer help?"). Shadow eval (run new pipeline alongside old, compare without affecting users). A/B testing with rubric-based judging at scale. Privacy considerations for feedback storage. Walk away with a concrete plan for online + A/B that closes the loop with offline eval.
 
@@ -1666,7 +1857,24 @@ The generic test block in `sections.test.jsx` iterates over `chapters` and looks
 
   Expected: green.
 
-- [ ] **Step 8: Commit**
+- [ ] **Step 8: Full test smoke gate**
+
+```bash
+npm run test
+```
+
+Expected: ALL tests pass, not just the ones added in this task. If any unrelated test fails, you missed a cross-file dependency (see "Cross-file dependency map" near the top of this plan). Trace the failure to the missing update before committing.
+
+- [ ] **Step 9: Scope verification (`git diff --stat`)**
+
+```bash
+git status
+git diff --stat
+```
+
+Expected: only files in the **Files:** list show as modified or new. If any file outside the list appears, abort: either move the change to the correct task or revert it before committing this task.
+
+- [ ] **Step 10: Commit**
 
   ```bash
   git add src/sections/rag-evaluation.jsx src/__tests__/sections.test.jsx src/data/svg-descriptions.json src/__tests__/svg-descriptions.test.js
@@ -1679,6 +1887,8 @@ The generic test block in `sections.test.jsx` iterates over `chapters` and looks
 
 **Files:**
 - Modify: `CLAUDE.md`.
+
+**Scope binding:** This task modifies ONLY the files listed in `**Files:**` above. If during implementation you discover other defects in other files, DO NOT fix them in this task - document them as a separate observation and continue with the listed scope. Before committing, run `git status` and `git diff --stat`: if ANY file outside the Files: list shows as modified, abort the commit and either move the change to the right task or revert it.
 
 - [ ] **Step 1: Update Section 12 heading annotation**
 
@@ -1721,7 +1931,24 @@ The generic test block in `sections.test.jsx` iterates over `chapters` and looks
 
 - [ ] **Step 4: No test required for CLAUDE.md (it's documentation)**
 
-- [ ] **Step 5: Commit**
+- [ ] **Step 5: Full test smoke gate**
+
+```bash
+npm run test
+```
+
+Expected: ALL tests pass, not just the ones added in this task. If any unrelated test fails, you missed a cross-file dependency (see "Cross-file dependency map" near the top of this plan). Trace the failure to the missing update before committing.
+
+- [ ] **Step 6: Scope verification (`git diff --stat`)**
+
+```bash
+git status
+git diff --stat
+```
+
+Expected: only files in the **Files:** list show as modified or new. If any file outside the list appears, abort: either move the change to the correct task or revert it before committing this task.
+
+- [ ] **Step 7: Commit**
 
   ```bash
   git add CLAUDE.md
@@ -1864,6 +2091,8 @@ The generic test block in `sections.test.jsx` iterates over `chapters` and looks
 - Create: `docs/superpowers/lessons/section-12-m5-lessons.md` (new lessons file)
 - Modify (if needed): `docs/superpowers/plans/2026-05-16-section-12-milestone-6.md`
 
+**Scope binding:** This task modifies ONLY the files listed in `**Files:**` above. If during implementation you discover other defects in other files, DO NOT fix them in this task - document them as a separate observation and continue with the listed scope. Before committing, run `git status` and `git diff --stat`: if ANY file outside the Files: list shows as modified, abort the commit and either move the change to the right task or revert it.
+
 Per the section's "lessons-feed-forward" rule, before executing M6, do a quick refinement pass on the M6 plan using what M5 taught us. The plans are editable artifacts, not contracts - this checkpoint is where M5's real-world experience gets folded into M6's plan.
 
 - [ ] **Step 1: Lessons capture from M5 (5-10 minutes, write it down)**
@@ -1894,7 +2123,24 @@ If lessons translate to plan edits, make them inline in `docs/superpowers/plans/
 
 If no edits are warranted, skip and proceed to commit.
 
-- [ ] **Step 4: Commit the lessons file + any plan edits**
+- [ ] **Step 4: Full test smoke gate**
+
+```bash
+npm run test
+```
+
+Expected: ALL tests pass, not just the ones added in this task. If any unrelated test fails, you missed a cross-file dependency (see "Cross-file dependency map" near the top of this plan). Trace the failure to the missing update before committing.
+
+- [ ] **Step 5: Scope verification (`git diff --stat`)**
+
+```bash
+git status
+git diff --stat
+```
+
+Expected: only files in the **Files:** list show as modified or new. If any file outside the list appears, abort: either move the change to the correct task or revert it before committing this task.
+
+- [ ] **Step 6: Commit the lessons file + any plan edits**
 
 ```bash
 git add docs/superpowers/lessons/section-12-m5-lessons.md docs/superpowers/plans/2026-05-16-section-12-milestone-6.md
@@ -1908,7 +2154,7 @@ git add docs/superpowers/lessons/section-12-m5-lessons.md
 git commit -m "Capture M5 lessons; no M6 plan edits needed"
 ```
 
-- [ ] **Step 5: Generate beautiful starter prompt for M6**
+- [ ] **Step 7: Generate beautiful starter prompt for M6**
 
 Create `docs/superpowers/starter-prompts/section-12-m6-starter.md` (create the `starter-prompts/` directory if it doesn't exist).
 
@@ -1956,7 +2202,7 @@ git add docs/superpowers/starter-prompts/section-12-m6-starter.md
 git commit -m "Add M6 starter prompt for next session"
 ```
 
-- [ ] **Step 6: M5 complete. Ready to start M6.**
+- [ ] **Step 8: M5 complete. Ready to start M6.**
 
 ---
 

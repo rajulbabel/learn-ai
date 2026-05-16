@@ -1,6 +1,10 @@
 # Section 12 Milestone 3 Implementation Plan
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+>
+> **Strict scope rule for subagents:** When you dispatch a subagent for a task, the subagent prompt MUST include: (a) the verbatim Files: list from the task, (b) the instruction "modify ONLY files in the Files: list; if you find other defects, document them but do NOT fix them in this task", and (c) the instruction "run `git diff --stat` before committing; abort if any file outside the Files: list shows as modified". The parent reviews `git diff --stat` after each subagent finishes. Scope violations are rejected and the subagent re-dispatched with the same strict prompt.
+>
+> **Two-stage review per task:** Stage 1 SCOPE - did the subagent modify only the listed files? Are commits clean? Stage 2 CORRECTNESS - do tests pass, does behavior match the spec? Both stages must pass before moving to the next task.
 
 **Goal:** Add Acts 3 + 4 of Section 12 "Retrieval-Augmented Generation" - the eight chapters covering Embed & Index Choices for RAG (12.11 EmbeddingModelChoice, 12.12 DomainAdaptation, 12.13 HybridForRAG, 12.14 RerankerCascade) plus Query Transformation (12.15 WhyTransformQueries, 12.16 HyDE, 12.17 MultiQueryExpansion, 12.18 QueryRoutingDecomposition). These chapters live in a NEW file `src/sections/rag-retrieval.jsx` (Acts 1+2 already shipped in `rag-foundations.jsx` via Milestones 1 and 2). At end of this milestone the app ships with 18 navigable chapters in Section 12 (12.1 through 12.18).
 
@@ -124,6 +128,39 @@ Every chapter at every sub-step MUST satisfy ALL of these. Violations are blocke
 
 ---
 
+## Cross-file dependency map (prevent silent gaps)
+
+When this milestone adds/modifies certain artifacts, OTHER files iterate over them and break silently if not updated. This map prevents plan gaps.
+
+### `chapters[]` in `src/config.js` is iterated by:
+
+- `src/__tests__/config.test.js` - validates ID format, uniqueness, ordering, Section 12 entry shapes.
+- `src/__tests__/lookup.test.js` - generic test "every chapter component exists in lookup". The `lookup` object in this file must include the spread of every section namespace.
+- `src/__tests__/sections.test.jsx` - generic test "All chapters render at every sub-level". The `lookup` object in this file must ALSO include the spread of every section namespace.
+- `src/learn-ai.jsx` - `sectionLoaders` lazy-imports each section file.
+
+### When adding a NEW section file (e.g., `src/sections/rag-foundations.jsx`), you MUST update:
+
+- `src/__tests__/lookup.test.js` - (a) static `import * as NewSection from "../sections/new-section.jsx"`, (b) presence test asserting `typeof mod.ChapterName === "function"`, AND (c) spread `...NewSection` into the test's `lookup` object.
+- `src/__tests__/sections.test.jsx` - (a) static `import * as NewSection`, (b) spread `...NewSection` into the `lookup` object.
+- `src/learn-ai.jsx` - register the new file in `sectionLoaders` (either single import or as part of a Promise.all if section already has multiple files).
+
+### When adding chapters to `chapters[]` (without a new section file):
+
+- `src/__tests__/config.test.js` - add a "Section N chapters" describe block testing the specific new entries.
+- The relevant section file must already export each new `component`. If it doesn't, the lookup-spread will resolve the symbol as `undefined` and sections.test.jsx generic test fails with "fn is not a function".
+- If the new chapters introduce ANY new SVG, also update `src/data/svg-descriptions.json` AND `src/__tests__/svg-descriptions.test.js` may need adjustment depending on coverage rules.
+
+### When updating `learn-ai.jsx` `sectionLoaders`:
+
+- If the section is now multi-file, the loader becomes `Promise.all([...]).then((mods) => Object.assign({}, ...mods))`. Any earlier single-file loader for that section is REPLACED.
+
+### Before committing a task that touches any of these artifacts:
+
+Run `npm run test` (full suite, not just the targeted test). If any unrelated test fails, you missed a dependency. Trace it before committing.
+
+---
+
 ## Implementation order
 
 1. Task 1 - Verify green baseline (no commit).
@@ -220,6 +257,8 @@ Expected: no errors.
 **Files:**
 - Create: `src/sections/rag-retrieval.jsx`
 - Modify: `src/__tests__/lookup.test.js`
+
+**Scope binding:** This task modifies ONLY the files listed in `**Files:**` above. If during implementation you discover other defects in other files, DO NOT fix them in this task - document them as a separate observation and continue with the listed scope. Before committing, run `git status` and `git diff --stat`: if ANY file outside the Files: list shows as modified, abort the commit and either move the change to the right task or revert it.
 
 - [ ] **Step 1: Write failing test for the new section file**
 
@@ -420,7 +459,24 @@ npx vitest run src/__tests__/lookup.test.js
 
 Expected: PASS. The presence test passes (all 8 components are functions); the generic "every chapter component exists" test still passes because the 12.11-12.18 entries are not yet in `chapters[]`.
 
-- [ ] **Step 6: Commit**
+- [ ] **Step 6: Full test smoke gate**
+
+```bash
+npm run test
+```
+
+Expected: ALL tests pass, not just the ones added in this task. If any unrelated test fails, you missed a cross-file dependency (see "Cross-file dependency map" near the top of this plan). Trace the failure to the missing update before committing.
+
+- [ ] **Step 7: Scope verification (`git diff --stat`)**
+
+```bash
+git status
+git diff --stat
+```
+
+Expected: only files in the **Files:** list show as modified or new. If any file outside the list appears, abort: either move the change to the correct task or revert it before committing this task.
+
+- [ ] **Step 8: Commit**
 
 ```bash
 git add src/sections/rag-retrieval.jsx src/__tests__/lookup.test.js
@@ -433,6 +489,8 @@ git commit -m "Scaffold rag-retrieval.jsx with stubs for 12.11-12.18"
 
 **Files:**
 - Modify: `src/learn-ai.jsx` (sectionLoaders object, section 12 entry)
+
+**Scope binding:** This task modifies ONLY the files listed in `**Files:**` above. If during implementation you discover other defects in other files, DO NOT fix them in this task - document them as a separate observation and continue with the listed scope. Before committing, run `git status` and `git diff --stat`: if ANY file outside the Files: list shows as modified, abort the commit and either move the change to the right task or revert it.
 
 The Section 12 loader currently looks like:
 
@@ -488,7 +546,24 @@ npm run dev
 
 Open `http://localhost:5173/learn-ai/`, navigate to any Section 12 chapter (e.g., 12.5), verify it still loads (the multi-file loader should resolve `rag-foundations.jsx` exports correctly). Stop the server (Ctrl-C) after verifying.
 
-- [ ] **Step 5: Commit**
+- [ ] **Step 5: Full test smoke gate**
+
+```bash
+npm run test
+```
+
+Expected: ALL tests pass, not just the ones added in this task. If any unrelated test fails, you missed a cross-file dependency (see "Cross-file dependency map" near the top of this plan). Trace the failure to the missing update before committing.
+
+- [ ] **Step 6: Scope verification (`git diff --stat`)**
+
+```bash
+git status
+git diff --stat
+```
+
+Expected: only files in the **Files:** list show as modified or new. If any file outside the list appears, abort: either move the change to the correct task or revert it before committing this task.
+
+- [ ] **Step 7: Commit**
 
 ```bash
 git add src/learn-ai.jsx
@@ -502,6 +577,8 @@ git commit -m "Load rag-retrieval.jsx alongside rag-foundations.jsx for Section 
 **Files:**
 - Modify: `src/config.js` (append 8 entries after the existing 12.10 entry)
 - Modify: `src/__tests__/config.test.js`
+
+**Scope binding:** This task modifies ONLY the files listed in `**Files:**` above. If during implementation you discover other defects in other files, DO NOT fix them in this task - document them as a separate observation and continue with the listed scope. Before committing, run `git status` and `git diff --stat`: if ANY file outside the Files: list shows as modified, abort the commit and either move the change to the right task or revert it.
 
 - [ ] **Step 1: Write failing test**
 
@@ -579,7 +656,24 @@ npx vitest run src/__tests__/config.test.js src/__tests__/lookup.test.js src/__t
 
 Expected: PASS. The lookup test (every chapter component exists) now resolves 12.11-12.18 to the rag-retrieval.jsx stubs. The generic sections test renders each stub at every sub - stubs are minimal-render safe.
 
-- [ ] **Step 6: Commit**
+- [ ] **Step 6: Full test smoke gate**
+
+```bash
+npm run test
+```
+
+Expected: ALL tests pass, not just the ones added in this task. If any unrelated test fails, you missed a cross-file dependency (see "Cross-file dependency map" near the top of this plan). Trace the failure to the missing update before committing.
+
+- [ ] **Step 7: Scope verification (`git diff --stat`)**
+
+```bash
+git status
+git diff --stat
+```
+
+Expected: only files in the **Files:** list show as modified or new. If any file outside the list appears, abort: either move the change to the correct task or revert it before committing this task.
+
+- [ ] **Step 8: Commit**
 
 ```bash
 git add src/config.js src/__tests__/config.test.js
@@ -592,6 +686,8 @@ git commit -m "Add chapter entries 12.11-12.18 to config"
 
 **Files:**
 - Modify: `src/__tests__/sections.test.jsx`
+
+**Scope binding:** This task modifies ONLY the files listed in `**Files:**` above. If during implementation you discover other defects in other files, DO NOT fix them in this task - document them as a separate observation and continue with the listed scope. Before committing, run `git status` and `git diff --stat`: if ANY file outside the Files: list shows as modified, abort the commit and either move the change to the right task or revert it.
 
 The generic test block in sections.test.jsx iterates over `chapters` and looks up each component in `lookup`. Without this import, generic tests for 12.11-12.18 will fail with "fn is not a function" (the lookup test already passed because it imports rag-retrieval directly, but sections.test.jsx has its own lookup).
 
@@ -643,7 +739,24 @@ npx vitest run src/__tests__/sections.test.jsx
 
 Expected: PASS. The generic test now runs against 12.11-12.18 stubs which render the title in a Box without crashing.
 
-- [ ] **Step 4: Commit**
+- [ ] **Step 4: Full test smoke gate**
+
+```bash
+npm run test
+```
+
+Expected: ALL tests pass, not just the ones added in this task. If any unrelated test fails, you missed a cross-file dependency (see "Cross-file dependency map" near the top of this plan). Trace the failure to the missing update before committing.
+
+- [ ] **Step 5: Scope verification (`git diff --stat`)**
+
+```bash
+git status
+git diff --stat
+```
+
+Expected: only files in the **Files:** list show as modified or new. If any file outside the list appears, abort: either move the change to the correct task or revert it before committing this task.
+
+- [ ] **Step 6: Commit**
 
 ```bash
 git add src/__tests__/sections.test.jsx
@@ -657,6 +770,8 @@ git commit -m "Register RagRetrieval in sections.test lookup"
 **Files:**
 - Modify: `src/sections/rag-retrieval.jsx` (replace stub `EmbeddingModelChoice`)
 - Modify: `src/__tests__/sections.test.jsx` (append content tests)
+
+**Scope binding:** This task modifies ONLY the files listed in `**Files:**` above. If during implementation you discover other defects in other files, DO NOT fix them in this task - document them as a separate observation and continue with the listed scope. Before committing, run `git status` and `git diff --stat`: if ANY file outside the Files: list shows as modified, abort the commit and either move the change to the right task or revert it.
 
 **Chapter purpose:** Picking an embedding model is the highest-leverage retrieval-quality choice after chunking. Walk a learner through the five common options (OpenAI text-embedding-3-large, Cohere embed-v3, BGE, SBERT, Voyage) along the five axes that matter (dimension, multilingual support, domain fit, cost-per-million-tokens, max context window). Conclude with the MTEB-leaderboard caveat: benchmarks can be gamed and rarely match your actual data distribution. Walk away knowing how to pick an embedding model for a new use case without reading any blog post.
 
@@ -831,7 +946,24 @@ npm run format
 
 Expected: all green. `npm run format` may modify the files; re-add after formatting.
 
-- [ ] **Step 7: Commit**
+- [ ] **Step 7: Full test smoke gate**
+
+```bash
+npm run test
+```
+
+Expected: ALL tests pass, not just the ones added in this task. If any unrelated test fails, you missed a cross-file dependency (see "Cross-file dependency map" near the top of this plan). Trace the failure to the missing update before committing.
+
+- [ ] **Step 8: Scope verification (`git diff --stat`)**
+
+```bash
+git status
+git diff --stat
+```
+
+Expected: only files in the **Files:** list show as modified or new. If any file outside the list appears, abort: either move the change to the correct task or revert it before committing this task.
+
+- [ ] **Step 9: Commit**
 
 ```bash
 git add src/sections/rag-retrieval.jsx src/__tests__/sections.test.jsx src/data/svg-descriptions.json
@@ -845,6 +977,8 @@ git commit -m "Implement chapter 12.11 Picking an Embedding Model"
 **Files:**
 - Modify: `src/sections/rag-retrieval.jsx` (replace stub `DomainAdaptation`)
 - Modify: `src/__tests__/sections.test.jsx` (append content tests)
+
+**Scope binding:** This task modifies ONLY the files listed in `**Files:**` above. If during implementation you discover other defects in other files, DO NOT fix them in this task - document them as a separate observation and continue with the listed scope. Before committing, run `git status` and `git diff --stat`: if ANY file outside the Files: list shows as modified, abort the commit and either move the change to the right task or revert it.
 
 **Chapter purpose:** When off-the-shelf embedding models miss domain-specific semantics, fine-tune them on your own data via contrastive learning. Cover the triplet-loss mechanism (anchor / positive / negative), the decision rule for when fine-tuning is worth the cost (specialized vocabulary, sub-80% recall on your corpus), the before-vs-after delta on the support corpus, and the operational cost. Walk away with the math + a sharp decision rule.
 
@@ -997,7 +1131,24 @@ npm run format
 
 Expected: all green.
 
-- [ ] **Step 7: Commit**
+- [ ] **Step 7: Full test smoke gate**
+
+```bash
+npm run test
+```
+
+Expected: ALL tests pass, not just the ones added in this task. If any unrelated test fails, you missed a cross-file dependency (see "Cross-file dependency map" near the top of this plan). Trace the failure to the missing update before committing.
+
+- [ ] **Step 8: Scope verification (`git diff --stat`)**
+
+```bash
+git status
+git diff --stat
+```
+
+Expected: only files in the **Files:** list show as modified or new. If any file outside the list appears, abort: either move the change to the correct task or revert it before committing this task.
+
+- [ ] **Step 9: Commit**
 
 ```bash
 git add src/sections/rag-retrieval.jsx src/__tests__/sections.test.jsx src/data/svg-descriptions.json
@@ -1011,6 +1162,8 @@ git commit -m "Implement chapter 12.12 Domain Adaptation"
 **Files:**
 - Modify: `src/sections/rag-retrieval.jsx` (replace stub `HybridForRAG`)
 - Modify: `src/__tests__/sections.test.jsx` (append content tests)
+
+**Scope binding:** This task modifies ONLY the files listed in `**Files:**` above. If during implementation you discover other defects in other files, DO NOT fix them in this task - document them as a separate observation and continue with the listed scope. Before committing, run `git status` and `git diff --stat`: if ANY file outside the Files: list shows as modified, abort the commit and either move the change to the right task or revert it.
 
 **Chapter purpose:** Hybrid retrieval (BM25 + dense) is the production default - dense embeddings miss exact-term matches, BM25 misses synonyms, fused they complement. Recap Section 11.24 in one paragraph, then focus on RAG-specific tuning: weight by query type (factual queries lean BM25, conceptual lean dense). Show on the support corpus: "API key" query (BM25 wins) vs "subscription cancel" query (dense wins). Show RRF and weighted-fusion formulas. Walk away with the right fusion strategy + per-query-type weights.
 
@@ -1198,7 +1351,24 @@ npm run format
 
 Expected: all green.
 
-- [ ] **Step 7: Commit**
+- [ ] **Step 7: Full test smoke gate**
+
+```bash
+npm run test
+```
+
+Expected: ALL tests pass, not just the ones added in this task. If any unrelated test fails, you missed a cross-file dependency (see "Cross-file dependency map" near the top of this plan). Trace the failure to the missing update before committing.
+
+- [ ] **Step 8: Scope verification (`git diff --stat`)**
+
+```bash
+git status
+git diff --stat
+```
+
+Expected: only files in the **Files:** list show as modified or new. If any file outside the list appears, abort: either move the change to the correct task or revert it before committing this task.
+
+- [ ] **Step 9: Commit**
 
 ```bash
 git add src/sections/rag-retrieval.jsx src/__tests__/sections.test.jsx src/data/svg-descriptions.json
@@ -1212,6 +1382,8 @@ git commit -m "Implement chapter 12.13 Hybrid Retrieval for RAG"
 **Files:**
 - Modify: `src/sections/rag-retrieval.jsx` (replace stub `RerankerCascade`)
 - Modify: `src/__tests__/sections.test.jsx` (append content tests)
+
+**Scope binding:** This task modifies ONLY the files listed in `**Files:**` above. If during implementation you discover other defects in other files, DO NOT fix them in this task - document them as a separate observation and continue with the listed scope. Before committing, run `git status` and `git diff --stat`: if ANY file outside the Files: list shows as modified, abort the commit and either move the change to the right task or revert it.
 
 **Chapter purpose:** Recap Section 11.25 rerankers in one paragraph, then build the RAG-specific 3-stage cascade: vector top-50 (cheap) -> cross-encoder rerank top-10 (medium) -> LLM final answer with top-3-5 (expensive). Show the latency budget (30 + 80 + 800 ms = ~910 ms). Walk away knowing the right retrieval-to-rerank ratio and what each stage costs.
 
@@ -1382,7 +1554,24 @@ npm run format
 
 Expected: all green.
 
-- [ ] **Step 7: Commit**
+- [ ] **Step 7: Full test smoke gate**
+
+```bash
+npm run test
+```
+
+Expected: ALL tests pass, not just the ones added in this task. If any unrelated test fails, you missed a cross-file dependency (see "Cross-file dependency map" near the top of this plan). Trace the failure to the missing update before committing.
+
+- [ ] **Step 8: Scope verification (`git diff --stat`)**
+
+```bash
+git status
+git diff --stat
+```
+
+Expected: only files in the **Files:** list show as modified or new. If any file outside the list appears, abort: either move the change to the correct task or revert it before committing this task.
+
+- [ ] **Step 9: Commit**
 
 ```bash
 git add src/sections/rag-retrieval.jsx src/__tests__/sections.test.jsx src/data/svg-descriptions.json
@@ -1396,6 +1585,8 @@ git commit -m "Implement chapter 12.14 The Reranker Cascade"
 **Files:**
 - Modify: `src/sections/rag-retrieval.jsx` (replace stub `WhyTransformQueries`)
 - Modify: `src/__tests__/sections.test.jsx` (append content tests)
+
+**Scope binding:** This task modifies ONLY the files listed in `**Files:**` above. If during implementation you discover other defects in other files, DO NOT fix them in this task - document them as a separate observation and continue with the listed scope. Before committing, run `git status` and `git diff --stat`: if ANY file outside the Files: list shows as modified, abort the commit and either move the change to the right task or revert it.
 
 **Chapter purpose:** Open the query-transformation chapters (12.15-12.18). The query the user typed is rarely the optimal query for retrieval. Motivate query transformation with three failure modes (lexical mismatch, ambiguity, multi-intent) and a brief preview of the four strategies (HyDE, multi-query, routing, decomposition - each covered in 12.16-12.18). Walk away knowing WHY we transform queries and WHICH transformation maps to which failure.
 
@@ -1546,7 +1737,24 @@ npm run format
 
 Expected: all green.
 
-- [ ] **Step 7: Commit**
+- [ ] **Step 7: Full test smoke gate**
+
+```bash
+npm run test
+```
+
+Expected: ALL tests pass, not just the ones added in this task. If any unrelated test fails, you missed a cross-file dependency (see "Cross-file dependency map" near the top of this plan). Trace the failure to the missing update before committing.
+
+- [ ] **Step 8: Scope verification (`git diff --stat`)**
+
+```bash
+git status
+git diff --stat
+```
+
+Expected: only files in the **Files:** list show as modified or new. If any file outside the list appears, abort: either move the change to the correct task or revert it before committing this task.
+
+- [ ] **Step 9: Commit**
 
 ```bash
 git add src/sections/rag-retrieval.jsx src/__tests__/sections.test.jsx src/data/svg-descriptions.json
@@ -1560,6 +1768,8 @@ git commit -m "Implement chapter 12.15 Why Transform Queries"
 **Files:**
 - Modify: `src/sections/rag-retrieval.jsx` (replace stub `HyDE`)
 - Modify: `src/__tests__/sections.test.jsx` (append content tests)
+
+**Scope binding:** This task modifies ONLY the files listed in `**Files:**` above. If during implementation you discover other defects in other files, DO NOT fix them in this task - document them as a separate observation and continue with the listed scope. Before committing, run `git status` and `git diff --stat`: if ANY file outside the Files: list shows as modified, abort the commit and either move the change to the right task or revert it.
 
 **Chapter purpose:** HyDE (Hypothetical Document Embeddings): instead of embedding the QUERY, ask an LLM to write a hypothetical ANSWER, then embed THAT and retrieve. The hypothetical answer is text-shape-closer to the actual docs than the question is, so cosine similarity wins. Show the flow on "Why is my dashboard slow?". Show when HyDE helps (long descriptive queries, lexical mismatch) and when it doesn't (short factual queries with good embeddings). Walk away with the mechanism + the right use case.
 
@@ -1731,7 +1941,24 @@ npm run format
 
 Expected: all green.
 
-- [ ] **Step 7: Commit**
+- [ ] **Step 7: Full test smoke gate**
+
+```bash
+npm run test
+```
+
+Expected: ALL tests pass, not just the ones added in this task. If any unrelated test fails, you missed a cross-file dependency (see "Cross-file dependency map" near the top of this plan). Trace the failure to the missing update before committing.
+
+- [ ] **Step 8: Scope verification (`git diff --stat`)**
+
+```bash
+git status
+git diff --stat
+```
+
+Expected: only files in the **Files:** list show as modified or new. If any file outside the list appears, abort: either move the change to the correct task or revert it before committing this task.
+
+- [ ] **Step 9: Commit**
 
 ```bash
 git add src/sections/rag-retrieval.jsx src/__tests__/sections.test.jsx src/data/svg-descriptions.json
@@ -1745,6 +1972,8 @@ git commit -m "Implement chapter 12.16 HyDE - Hypothetical Document Embeddings"
 **Files:**
 - Modify: `src/sections/rag-retrieval.jsx` (replace stub `MultiQueryExpansion`)
 - Modify: `src/__tests__/sections.test.jsx` (append content tests)
+
+**Scope binding:** This task modifies ONLY the files listed in `**Files:**` above. If during implementation you discover other defects in other files, DO NOT fix them in this task - document them as a separate observation and continue with the listed scope. Before committing, run `git status` and `git diff --stat`: if ANY file outside the Files: list shows as modified, abort the commit and either move the change to the right task or revert it.
 
 **Chapter purpose:** Multi-Query Expansion: ask an LLM to rewrite the user's query into 3-5 variants, retrieve top-K for each, fuse the rankings with RRF. Mention RAG-Fusion is the same idea (absorbed here). Mention step-back prompting briefly (a variant: ask a more general query). Show the worked example on "Cancel my subscription and get a refund". Walk away with the formula, when it helps, and when it's overkill.
 
@@ -1913,7 +2142,24 @@ npm run format
 
 Expected: all green.
 
-- [ ] **Step 7: Commit**
+- [ ] **Step 7: Full test smoke gate**
+
+```bash
+npm run test
+```
+
+Expected: ALL tests pass, not just the ones added in this task. If any unrelated test fails, you missed a cross-file dependency (see "Cross-file dependency map" near the top of this plan). Trace the failure to the missing update before committing.
+
+- [ ] **Step 8: Scope verification (`git diff --stat`)**
+
+```bash
+git status
+git diff --stat
+```
+
+Expected: only files in the **Files:** list show as modified or new. If any file outside the list appears, abort: either move the change to the correct task or revert it before committing this task.
+
+- [ ] **Step 9: Commit**
 
 ```bash
 git add src/sections/rag-retrieval.jsx src/__tests__/sections.test.jsx src/data/svg-descriptions.json
@@ -1927,6 +2173,8 @@ git commit -m "Implement chapter 12.17 Multi-Query Expansion"
 **Files:**
 - Modify: `src/sections/rag-retrieval.jsx` (replace stub `QueryRoutingDecomposition`)
 - Modify: `src/__tests__/sections.test.jsx` (append content tests)
+
+**Scope binding:** This task modifies ONLY the files listed in `**Files:**` above. If during implementation you discover other defects in other files, DO NOT fix them in this task - document them as a separate observation and continue with the listed scope. Before committing, run `git status` and `git diff --stat`: if ANY file outside the Files: list shows as modified, abort the commit and either move the change to the right task or revert it.
 
 **Chapter purpose:** Two related strategies in one chapter: (a) ROUTING - a classifier or semantic router decides which retrieval target a query goes to (small index vs large vs SQL vs no-retrieval for chitchat). (b) DECOMPOSITION - an LLM splits a complex query into 2-3 sub-queries, retrieves for each, then assembles. Show worked examples on "Compare the Pro and Enterprise plans" (decomposition) and a router decision tree for chitchat / billing / troubleshooting. Walk away with both patterns + when to use each.
 
@@ -2101,7 +2349,24 @@ npm run format
 
 Expected: all green.
 
-- [ ] **Step 7: Commit**
+- [ ] **Step 7: Full test smoke gate**
+
+```bash
+npm run test
+```
+
+Expected: ALL tests pass, not just the ones added in this task. If any unrelated test fails, you missed a cross-file dependency (see "Cross-file dependency map" near the top of this plan). Trace the failure to the missing update before committing.
+
+- [ ] **Step 8: Scope verification (`git diff --stat`)**
+
+```bash
+git status
+git diff --stat
+```
+
+Expected: only files in the **Files:** list show as modified or new. If any file outside the list appears, abort: either move the change to the correct task or revert it before committing this task.
+
+- [ ] **Step 9: Commit**
 
 ```bash
 git add src/sections/rag-retrieval.jsx src/__tests__/sections.test.jsx src/data/svg-descriptions.json
@@ -2114,6 +2379,8 @@ git commit -m "Implement chapter 12.18 Query Routing and Decomposition"
 
 **Files:**
 - Modify: `CLAUDE.md`
+
+**Scope binding:** This task modifies ONLY the files listed in `**Files:**` above. If during implementation you discover other defects in other files, DO NOT fix them in this task - document them as a separate observation and continue with the listed scope. Before committing, run `git status` and `git diff --stat`: if ANY file outside the Files: list shows as modified, abort the commit and either move the change to the right task or revert it.
 
 - [ ] **Step 1: Extend the Section 12 mapping table**
 
@@ -2159,7 +2426,24 @@ If rag-foundations.jsx is currently the last entry (with the └── line-draw
 
 - [ ] **Step 3: No test required for CLAUDE.md (it's documentation only)**
 
-- [ ] **Step 4: Commit**
+- [ ] **Step 4: Full test smoke gate**
+
+```bash
+npm run test
+```
+
+Expected: ALL tests pass, not just the ones added in this task. If any unrelated test fails, you missed a cross-file dependency (see "Cross-file dependency map" near the top of this plan). Trace the failure to the missing update before committing.
+
+- [ ] **Step 5: Scope verification (`git diff --stat`)**
+
+```bash
+git status
+git diff --stat
+```
+
+Expected: only files in the **Files:** list show as modified or new. If any file outside the list appears, abort: either move the change to the correct task or revert it before committing this task.
+
+- [ ] **Step 6: Commit**
 
 ```bash
 git add CLAUDE.md
@@ -2313,6 +2597,8 @@ M3 complete. Ready to write Milestone 4 plan (Acts 5+6 - Context & Generation + 
 - Create: `docs/superpowers/lessons/section-12-m3-lessons.md` (new lessons file)
 - Modify (if needed): `docs/superpowers/plans/2026-05-16-section-12-milestone-4.md`
 
+**Scope binding:** This task modifies ONLY the files listed in `**Files:**` above. If during implementation you discover other defects in other files, DO NOT fix them in this task - document them as a separate observation and continue with the listed scope. Before committing, run `git status` and `git diff --stat`: if ANY file outside the Files: list shows as modified, abort the commit and either move the change to the right task or revert it.
+
 Per the section's "lessons-feed-forward" rule, before executing M4, do a quick refinement pass on the M4 plan using what M3 taught us. The plans are editable artifacts, not contracts - this checkpoint is where M3's real-world experience gets folded into M4's plan.
 
 - [ ] **Step 1: Lessons capture from M3 (5-10 minutes, write it down)**
@@ -2343,7 +2629,24 @@ If lessons translate to plan edits, make them inline in `docs/superpowers/plans/
 
 If no edits are warranted, skip and proceed to commit.
 
-- [ ] **Step 4: Commit the lessons file + any plan edits**
+- [ ] **Step 4: Full test smoke gate**
+
+```bash
+npm run test
+```
+
+Expected: ALL tests pass, not just the ones added in this task. If any unrelated test fails, you missed a cross-file dependency (see "Cross-file dependency map" near the top of this plan). Trace the failure to the missing update before committing.
+
+- [ ] **Step 5: Scope verification (`git diff --stat`)**
+
+```bash
+git status
+git diff --stat
+```
+
+Expected: only files in the **Files:** list show as modified or new. If any file outside the list appears, abort: either move the change to the correct task or revert it before committing this task.
+
+- [ ] **Step 6: Commit the lessons file + any plan edits**
 
 ```bash
 git add docs/superpowers/lessons/section-12-m3-lessons.md docs/superpowers/plans/2026-05-16-section-12-milestone-4.md
@@ -2357,7 +2660,7 @@ git add docs/superpowers/lessons/section-12-m3-lessons.md
 git commit -m "Capture M3 lessons; no M4 plan edits needed"
 ```
 
-- [ ] **Step 5: Generate beautiful starter prompt for M4**
+- [ ] **Step 7: Generate beautiful starter prompt for M4**
 
 Create `docs/superpowers/starter-prompts/section-12-m4-starter.md` (create the `starter-prompts/` directory if it doesn't exist).
 
@@ -2405,7 +2708,7 @@ git add docs/superpowers/starter-prompts/section-12-m4-starter.md
 git commit -m "Add M4 starter prompt for next session"
 ```
 
-- [ ] **Step 6: M3 complete. Ready to start M4.**
+- [ ] **Step 8: M3 complete. Ready to start M4.**
 
 ---
 

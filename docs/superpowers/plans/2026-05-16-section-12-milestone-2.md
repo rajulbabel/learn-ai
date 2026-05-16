@@ -1,6 +1,10 @@
 # Section 12 Milestone 2 Implementation Plan
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+>
+> **Strict scope rule for subagents:** When you dispatch a subagent for a task, the subagent prompt MUST include: (a) the verbatim Files: list from the task, (b) the instruction "modify ONLY files in the Files: list; if you find other defects, document them but do NOT fix them in this task", and (c) the instruction "run `git diff --stat` before committing; abort if any file outside the Files: list shows as modified". The parent reviews `git diff --stat` after each subagent finishes. Scope violations are rejected and the subagent re-dispatched with the same strict prompt.
+>
+> **Two-stage review per task:** Stage 1 SCOPE - did the subagent modify only the listed files? Are commits clean? Stage 2 CORRECTNESS - do tests pass, does behavior match the spec? Both stages must pass before moving to the next task.
 
 **Goal:** Add Act 2 of Section 12 "Retrieval-Augmented Generation" - the seven chunking chapters (12.4 WhyChunkFixedSize, 12.5 RecursiveStructuralChunking, 12.6 SemanticChunking, 12.7 LateChunking, 12.8 HierarchicalChunking, 12.9 ContextualRetrieval, 12.10 ChunkingDecision) - extending the existing `src/sections/rag-foundations.jsx` to hold all of Acts 1+2 (10 chapters total). The app ships at end of this milestone with a Section 12 TOC entry showing 10 navigable chapters.
 
@@ -106,6 +110,39 @@ Prompt templates and contextual-augmentation blocks (12.9 especially) are TEXT a
 
 ---
 
+## Cross-file dependency map (prevent silent gaps)
+
+When this milestone adds/modifies certain artifacts, OTHER files iterate over them and break silently if not updated. This map prevents plan gaps.
+
+### `chapters[]` in `src/config.js` is iterated by:
+
+- `src/__tests__/config.test.js` - validates ID format, uniqueness, ordering, Section 12 entry shapes.
+- `src/__tests__/lookup.test.js` - generic test "every chapter component exists in lookup". The `lookup` object in this file must include the spread of every section namespace.
+- `src/__tests__/sections.test.jsx` - generic test "All chapters render at every sub-level". The `lookup` object in this file must ALSO include the spread of every section namespace.
+- `src/learn-ai.jsx` - `sectionLoaders` lazy-imports each section file.
+
+### When adding a NEW section file (e.g., `src/sections/rag-foundations.jsx`), you MUST update:
+
+- `src/__tests__/lookup.test.js` - (a) static `import * as NewSection from "../sections/new-section.jsx"`, (b) presence test asserting `typeof mod.ChapterName === "function"`, AND (c) spread `...NewSection` into the test's `lookup` object.
+- `src/__tests__/sections.test.jsx` - (a) static `import * as NewSection`, (b) spread `...NewSection` into the `lookup` object.
+- `src/learn-ai.jsx` - register the new file in `sectionLoaders` (either single import or as part of a Promise.all if section already has multiple files).
+
+### When adding chapters to `chapters[]` (without a new section file):
+
+- `src/__tests__/config.test.js` - add a "Section N chapters" describe block testing the specific new entries.
+- The relevant section file must already export each new `component`. If it doesn't, the lookup-spread will resolve the symbol as `undefined` and sections.test.jsx generic test fails with "fn is not a function".
+- If the new chapters introduce ANY new SVG, also update `src/data/svg-descriptions.json` AND `src/__tests__/svg-descriptions.test.js` may need adjustment depending on coverage rules.
+
+### When updating `learn-ai.jsx` `sectionLoaders`:
+
+- If the section is now multi-file, the loader becomes `Promise.all([...]).then((mods) => Object.assign({}, ...mods))`. Any earlier single-file loader for that section is REPLACED.
+
+### Before committing a task that touches any of these artifacts:
+
+Run `npm run test` (full suite, not just the targeted test). If any unrelated test fails, you missed a dependency. Trace it before committing.
+
+---
+
 ## Implementation order
 
 Act 2 is seven chapters. Each chapter is its own task after baseline verification. The ordering mirrors the spec's learner-reading order and accumulates concepts (fixed-size baseline → recursive → semantic → late → hierarchical → contextual → decision synthesis).
@@ -199,6 +236,8 @@ Expected: no lint errors; format clean (no changes).
 - Modify: `src/config.js` (append chapter entry after `12.3`).
 - Modify: `src/__tests__/config.test.js` (extend Section 12 chapter count/id test from 3 to 4 entries; will grow further in later tasks).
 - Modify: `src/__tests__/sections.test.jsx` (append content tests for `WhyChunkFixedSize`).
+
+**Scope binding:** This task modifies ONLY the files listed in `**Files:**` above. If during implementation you discover other defects in other files, DO NOT fix them in this task - document them as a separate observation and continue with the listed scope. Before committing, run `git status` and `git diff --stat`: if ANY file outside the Files: list shows as modified, abort the commit and either move the change to the right task or revert it.
 
 **Chapter purpose (from spec):** Combine "why chunk at all" (context window limits, retrieval granularity, the impossibility of one giant embedding) with the fixed-size baseline strategy (token-window with overlap, where it breaks). Walk away knowing why chunking is the highest-leverage decision and what the naive baseline gives you.
 
@@ -401,7 +440,24 @@ npm run format
 
 Expected: all green. If `npm run format` modifies files, re-stage them.
 
-- [ ] **Step 7: Commit**
+- [ ] **Step 7: Full test smoke gate**
+
+```bash
+npm run test
+```
+
+Expected: ALL tests pass, not just the ones added in this task. If any unrelated test fails, you missed a cross-file dependency (see "Cross-file dependency map" near the top of this plan). Trace the failure to the missing update before committing.
+
+- [ ] **Step 8: Scope verification (`git diff --stat`)**
+
+```bash
+git status
+git diff --stat
+```
+
+Expected: only files in the **Files:** list show as modified or new. If any file outside the list appears, abort: either move the change to the correct task or revert it before committing this task.
+
+- [ ] **Step 9: Commit**
 
 ```bash
 git add src/sections/rag-foundations.jsx src/config.js src/__tests__/sections.test.jsx src/__tests__/config.test.js src/data/svg-descriptions.json
@@ -417,6 +473,8 @@ git commit -m "Implement chapter 12.4 Why Chunk At All + Fixed-Size Baseline"
 - Modify: `src/config.js` (append chapter entry after `12.4`).
 - Modify: `src/__tests__/config.test.js` (extend Section 12 chapter count to 5).
 - Modify: `src/__tests__/sections.test.jsx` (append content tests).
+
+**Scope binding:** This task modifies ONLY the files listed in `**Files:**` above. If during implementation you discover other defects in other files, DO NOT fix them in this task - document them as a separate observation and continue with the listed scope. Before committing, run `git status` and `git diff --stat`: if ANY file outside the Files: list shows as modified, abort the commit and either move the change to the right task or revert it.
 
 **Chapter purpose (from spec):** Recursive structural chunking - try the most structural split first (`\n\n` paragraph breaks), fall back through `\n` (line) → `. ` (sentence) → ` ` (word). Preserves sentence and paragraph boundaries. This is the 80% baseline that most production RAG systems use as their default. The standard LangChain `RecursiveCharacterTextSplitter` works this way.
 
@@ -570,7 +628,24 @@ npm run format
 
 Expected: all green.
 
-- [ ] **Step 7: Commit**
+- [ ] **Step 7: Full test smoke gate**
+
+```bash
+npm run test
+```
+
+Expected: ALL tests pass, not just the ones added in this task. If any unrelated test fails, you missed a cross-file dependency (see "Cross-file dependency map" near the top of this plan). Trace the failure to the missing update before committing.
+
+- [ ] **Step 8: Scope verification (`git diff --stat`)**
+
+```bash
+git status
+git diff --stat
+```
+
+Expected: only files in the **Files:** list show as modified or new. If any file outside the list appears, abort: either move the change to the correct task or revert it before committing this task.
+
+- [ ] **Step 9: Commit**
 
 ```bash
 git add src/sections/rag-foundations.jsx src/config.js src/__tests__/sections.test.jsx src/__tests__/config.test.js src/data/svg-descriptions.json
@@ -586,6 +661,8 @@ git commit -m "Implement chapter 12.5 Recursive Structural Chunking"
 - Modify: `src/config.js` (append chapter entry).
 - Modify: `src/__tests__/config.test.js` (extend Section 12 chapter count to 6).
 - Modify: `src/__tests__/sections.test.jsx` (append content tests).
+
+**Scope binding:** This task modifies ONLY the files listed in `**Files:**` above. If during implementation you discover other defects in other files, DO NOT fix them in this task - document them as a separate observation and continue with the listed scope. Before committing, run `git status` and `git diff --stat`: if ANY file outside the Files: list shows as modified, abort the commit and either move the change to the right task or revert it.
 
 **Chapter purpose (from spec):** Split a doc where the embedding cosine distance between adjacent sentences jumps above a threshold. Each cluster of consecutive sentences with similar embeddings becomes one chunk. More expensive than structural (you have to embed candidates first) but adapts to semantic boundaries even when no structural markers exist.
 
@@ -723,7 +800,24 @@ npm run lint
 npm run format
 ```
 
-- [ ] **Step 7: Commit**
+- [ ] **Step 7: Full test smoke gate**
+
+```bash
+npm run test
+```
+
+Expected: ALL tests pass, not just the ones added in this task. If any unrelated test fails, you missed a cross-file dependency (see "Cross-file dependency map" near the top of this plan). Trace the failure to the missing update before committing.
+
+- [ ] **Step 8: Scope verification (`git diff --stat`)**
+
+```bash
+git status
+git diff --stat
+```
+
+Expected: only files in the **Files:** list show as modified or new. If any file outside the list appears, abort: either move the change to the correct task or revert it before committing this task.
+
+- [ ] **Step 9: Commit**
 
 ```bash
 git add src/sections/rag-foundations.jsx src/config.js src/__tests__/sections.test.jsx src/__tests__/config.test.js src/data/svg-descriptions.json
@@ -739,6 +833,8 @@ git commit -m "Implement chapter 12.6 Semantic Chunking"
 - Modify: `src/config.js` (append chapter entry).
 - Modify: `src/__tests__/config.test.js` (extend Section 12 chapter count to 7).
 - Modify: `src/__tests__/sections.test.jsx` (append content tests).
+
+**Scope binding:** This task modifies ONLY the files listed in `**Files:**` above. If during implementation you discover other defects in other files, DO NOT fix them in this task - document them as a separate observation and continue with the listed scope. Before committing, run `git status` and `git diff --stat`: if ANY file outside the Files: list shows as modified, abort the commit and either move the change to the right task or revert it.
 
 **Chapter purpose (from spec):** Late chunking (Jina AI, 2024) - embed the full document with the embedding model first so every token's hidden state sees the whole-doc context, THEN mean-pool the token hidden states into chunk vectors at the chunk-boundary positions. The chunk vector for chunk 3 still encodes information from chunk 1, because all the token embeddings saw each other through attention before being pooled. Solves the cross-chunk reference problem.
 
@@ -885,7 +981,24 @@ npm run lint
 npm run format
 ```
 
-- [ ] **Step 7: Commit**
+- [ ] **Step 7: Full test smoke gate**
+
+```bash
+npm run test
+```
+
+Expected: ALL tests pass, not just the ones added in this task. If any unrelated test fails, you missed a cross-file dependency (see "Cross-file dependency map" near the top of this plan). Trace the failure to the missing update before committing.
+
+- [ ] **Step 8: Scope verification (`git diff --stat`)**
+
+```bash
+git status
+git diff --stat
+```
+
+Expected: only files in the **Files:** list show as modified or new. If any file outside the list appears, abort: either move the change to the correct task or revert it before committing this task.
+
+- [ ] **Step 9: Commit**
 
 ```bash
 git add src/sections/rag-foundations.jsx src/config.js src/__tests__/sections.test.jsx src/__tests__/config.test.js src/data/svg-descriptions.json
@@ -901,6 +1014,8 @@ git commit -m "Implement chapter 12.7 Late Chunking"
 - Modify: `src/config.js` (append chapter entry).
 - Modify: `src/__tests__/config.test.js` (extend Section 12 chapter count to 8).
 - Modify: `src/__tests__/sections.test.jsx` (append content tests).
+
+**Scope binding:** This task modifies ONLY the files listed in `**Files:**` above. If during implementation you discover other defects in other files, DO NOT fix them in this task - document them as a separate observation and continue with the listed scope. Before committing, run `git status` and `git diff --stat`: if ANY file outside the Files: list shows as modified, abort the commit and either move the change to the right task or revert it.
 
 **Chapter purpose (from spec):** Two-level chunking - small leaf chunks for retrieval precision, large parent chunks (sections or whole docs) sent to the LLM for context coverage. The index stores leaf vectors; retrieval returns leaf hits; the system swaps each leaf for its parent before LLM generation. Also covers summary chunks (parent-summary vectors as an alternative retrieval target).
 
@@ -1057,7 +1172,24 @@ npm run lint
 npm run format
 ```
 
-- [ ] **Step 7: Commit**
+- [ ] **Step 7: Full test smoke gate**
+
+```bash
+npm run test
+```
+
+Expected: ALL tests pass, not just the ones added in this task. If any unrelated test fails, you missed a cross-file dependency (see "Cross-file dependency map" near the top of this plan). Trace the failure to the missing update before committing.
+
+- [ ] **Step 8: Scope verification (`git diff --stat`)**
+
+```bash
+git status
+git diff --stat
+```
+
+Expected: only files in the **Files:** list show as modified or new. If any file outside the list appears, abort: either move the change to the correct task or revert it before committing this task.
+
+- [ ] **Step 9: Commit**
 
 ```bash
 git add src/sections/rag-foundations.jsx src/config.js src/__tests__/sections.test.jsx src/__tests__/config.test.js src/data/svg-descriptions.json
@@ -1073,6 +1205,8 @@ git commit -m "Implement chapter 12.8 Hierarchical / Parent-Child Chunking"
 - Modify: `src/config.js` (append chapter entry).
 - Modify: `src/__tests__/config.test.js` (extend Section 12 chapter count to 9).
 - Modify: `src/__tests__/sections.test.jsx` (append content tests).
+
+**Scope binding:** This task modifies ONLY the files listed in `**Files:**` above. If during implementation you discover other defects in other files, DO NOT fix them in this task - document them as a separate observation and continue with the listed scope. Before committing, run `git status` and `git diff --stat`: if ANY file outside the Files: list shows as modified, abort the commit and either move the change to the right task or revert it.
 
 **Chapter purpose (from spec):** Contextual Retrieval (Anthropic, 2024). Each chunk gets prepended at index time with an LLM-generated 1-2 sentence "context" describing what doc and section it came from and what it's about. The augmented chunk is then embedded and indexed. Reported by Anthropic to improve retrieval recall by 49% (and stack on top of hybrid search + reranking for combined wins).
 
@@ -1270,7 +1404,24 @@ npm run lint
 npm run format
 ```
 
-- [ ] **Step 7: Commit**
+- [ ] **Step 7: Full test smoke gate**
+
+```bash
+npm run test
+```
+
+Expected: ALL tests pass, not just the ones added in this task. If any unrelated test fails, you missed a cross-file dependency (see "Cross-file dependency map" near the top of this plan). Trace the failure to the missing update before committing.
+
+- [ ] **Step 8: Scope verification (`git diff --stat`)**
+
+```bash
+git status
+git diff --stat
+```
+
+Expected: only files in the **Files:** list show as modified or new. If any file outside the list appears, abort: either move the change to the correct task or revert it before committing this task.
+
+- [ ] **Step 9: Commit**
 
 ```bash
 git add src/sections/rag-foundations.jsx src/config.js src/__tests__/sections.test.jsx src/__tests__/config.test.js src/data/svg-descriptions.json
@@ -1286,6 +1437,8 @@ git commit -m "Implement chapter 12.9 Contextual Retrieval"
 - Modify: `src/config.js` (append chapter entry).
 - Modify: `src/__tests__/config.test.js` (extend Section 12 chapter count to 10).
 - Modify: `src/__tests__/sections.test.jsx` (append content tests).
+
+**Scope binding:** This task modifies ONLY the files listed in `**Files:**` above. If during implementation you discover other defects in other files, DO NOT fix them in this task - document them as a separate observation and continue with the listed scope. Before committing, run `git status` and `git diff --stat`: if ANY file outside the Files: list shows as modified, abort the commit and either move the change to the right task or revert it.
 
 **Chapter purpose (from spec):** Synthesize all 6 prior chunking chapters (12.4-12.9) into a decision framework. Decision matrix axes: doc structure (markdown / HTML / PDF / code / flat-text) × query type (factual / relational / comparative) × cost budget (lab / startup / enterprise). End with a worked walkthrough on the Habuild Cloud support corpus where the answer is "Recursive Structural baseline + Hierarchical for long policies + Contextual Retrieval to disambiguate FAQ + Semantic for the runbook narrative". Show how a real production system mixes strategies per doc-type.
 
@@ -1454,7 +1607,24 @@ npm run lint
 npm run format
 ```
 
-- [ ] **Step 7: Commit**
+- [ ] **Step 7: Full test smoke gate**
+
+```bash
+npm run test
+```
+
+Expected: ALL tests pass, not just the ones added in this task. If any unrelated test fails, you missed a cross-file dependency (see "Cross-file dependency map" near the top of this plan). Trace the failure to the missing update before committing.
+
+- [ ] **Step 8: Scope verification (`git diff --stat`)**
+
+```bash
+git status
+git diff --stat
+```
+
+Expected: only files in the **Files:** list show as modified or new. If any file outside the list appears, abort: either move the change to the correct task or revert it before committing this task.
+
+- [ ] **Step 9: Commit**
 
 ```bash
 git add src/sections/rag-foundations.jsx src/config.js src/__tests__/sections.test.jsx src/__tests__/config.test.js src/data/svg-descriptions.json
@@ -1467,6 +1637,8 @@ git commit -m "Implement chapter 12.10 The Chunking Decision"
 
 **Files:**
 - Modify: `CLAUDE.md`.
+
+**Scope binding:** This task modifies ONLY the files listed in `**Files:**` above. If during implementation you discover other defects in other files, DO NOT fix them in this task - document them as a separate observation and continue with the listed scope. Before committing, run `git status` and `git diff --stat`: if ANY file outside the Files: list shows as modified, abort the commit and either move the change to the right task or revert it.
 
 - [ ] **Step 1: Extend the Section 12 mapping table from 3 to 10 rows**
 
@@ -1499,7 +1671,24 @@ Find the `## Project Structure` section. The line for `rag-foundations.jsx` was 
 
 - [ ] **Step 3: No automated test required for CLAUDE.md changes** - it's documentation.
 
-- [ ] **Step 4: Commit**
+- [ ] **Step 4: Full test smoke gate**
+
+```bash
+npm run test
+```
+
+Expected: ALL tests pass, not just the ones added in this task. If any unrelated test fails, you missed a cross-file dependency (see "Cross-file dependency map" near the top of this plan). Trace the failure to the missing update before committing.
+
+- [ ] **Step 5: Scope verification (`git diff --stat`)**
+
+```bash
+git status
+git diff --stat
+```
+
+Expected: only files in the **Files:** list show as modified or new. If any file outside the list appears, abort: either move the change to the correct task or revert it before committing this task.
+
+- [ ] **Step 6: Commit**
 
 ```bash
 git add CLAUDE.md
@@ -1671,6 +1860,8 @@ M2 complete. Section 12 now has 10 navigable chapters (Acts 1+2). Ready to write
 - Create: `docs/superpowers/lessons/section-12-m2-lessons.md` (new lessons file)
 - Modify (if needed): `docs/superpowers/plans/2026-05-16-section-12-milestone-3.md`
 
+**Scope binding:** This task modifies ONLY the files listed in `**Files:**` above. If during implementation you discover other defects in other files, DO NOT fix them in this task - document them as a separate observation and continue with the listed scope. Before committing, run `git status` and `git diff --stat`: if ANY file outside the Files: list shows as modified, abort the commit and either move the change to the right task or revert it.
+
 Per the section's "lessons-feed-forward" rule, before executing M3, do a quick refinement pass on the M3 plan using what M2 taught us. The plans are editable artifacts, not contracts - this checkpoint is where M2's real-world experience gets folded into M3's plan.
 
 - [ ] **Step 1: Lessons capture from M2 (5-10 minutes, write it down)**
@@ -1701,7 +1892,24 @@ If lessons translate to plan edits, make them inline in `docs/superpowers/plans/
 
 If no edits are warranted, skip and proceed to commit.
 
-- [ ] **Step 4: Commit the lessons file + any plan edits**
+- [ ] **Step 4: Full test smoke gate**
+
+```bash
+npm run test
+```
+
+Expected: ALL tests pass, not just the ones added in this task. If any unrelated test fails, you missed a cross-file dependency (see "Cross-file dependency map" near the top of this plan). Trace the failure to the missing update before committing.
+
+- [ ] **Step 5: Scope verification (`git diff --stat`)**
+
+```bash
+git status
+git diff --stat
+```
+
+Expected: only files in the **Files:** list show as modified or new. If any file outside the list appears, abort: either move the change to the correct task or revert it before committing this task.
+
+- [ ] **Step 6: Commit the lessons file + any plan edits**
 
 ```bash
 git add docs/superpowers/lessons/section-12-m2-lessons.md docs/superpowers/plans/2026-05-16-section-12-milestone-3.md
@@ -1715,7 +1923,7 @@ git add docs/superpowers/lessons/section-12-m2-lessons.md
 git commit -m "Capture M2 lessons; no M3 plan edits needed"
 ```
 
-- [ ] **Step 5: Generate beautiful starter prompt for M3**
+- [ ] **Step 7: Generate beautiful starter prompt for M3**
 
 Create `docs/superpowers/starter-prompts/section-12-m3-starter.md` (create the `starter-prompts/` directory if it doesn't exist).
 
@@ -1763,7 +1971,7 @@ git add docs/superpowers/starter-prompts/section-12-m3-starter.md
 git commit -m "Add M3 starter prompt for next session"
 ```
 
-- [ ] **Step 6: M2 complete. Ready to start M3.**
+- [ ] **Step 8: M2 complete. Ready to start M3.**
 
 ---
 

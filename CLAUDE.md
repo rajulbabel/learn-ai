@@ -256,7 +256,7 @@ Only config.js IDs change.
 | 11.35 | WeaviateMilvusChroma | Weaviate / Milvus / Chroma |
 | 11.36 | DecisionFramework | The Decision Framework |
 
-**Section 12: Retrieval-Augmented Generation** (`rag-foundations.jsx` + `rag-ingestion.jsx` - Acts 1-3 complete; Acts 4-10 added in Milestones 3-6)
+**Section 12: Retrieval-Augmented Generation** (`rag-foundations.jsx` + `rag-ingestion.jsx` + `rag-retrieval.jsx` - Acts 1-5 complete; Acts 6-10 added in Milestones 4-6)
 
 | Chapter | Component | Title |
 |---------|-----------|-------|
@@ -273,6 +273,14 @@ Only config.js IDs change.
 | 12.11 | HierarchicalChunking | Hierarchical / Parent-Child Chunking |
 | 12.12 | ContextualRetrieval | Contextual Retrieval (Anthropic 2024) |
 | 12.13 | ChunkingDecision | The Chunking Decision |
+| 12.14 | EmbeddingModelChoice | Picking an Embedding Model |
+| 12.15 | DomainAdaptation | Domain Adaptation - Fine-Tuning Embeddings |
+| 12.16 | HybridForRAG | Hybrid Retrieval for RAG |
+| 12.17 | RerankerCascade | The Reranker Cascade |
+| 12.18 | WhyTransformQueries | Why Transform Queries |
+| 12.19 | HyDE | HyDE - Hypothetical Document Embeddings |
+| 12.20 | MultiQueryExpansion | Multi-Query Expansion |
+| 12.21 | QueryRoutingDecomposition | Query Routing & Decomposition |
 
 ## Project Structure
 
@@ -313,7 +321,8 @@ learn-ai/
 │       ├── vector-production.jsx         # Section 11 (Act 5, chapters 11.19-11.28)
 │       ├── vector-systems.jsx            # Section 11 (Act 6, chapters 11.29-11.35)
 │       ├── rag-foundations.jsx           # Section 12 Acts 1+3: Problem + Chunking, 12.1-12.3 + 12.7-12.13
-│       └── rag-ingestion.jsx             # Section 12 Act 2: Ingestion, 12.4-12.6
+│       ├── rag-ingestion.jsx             # Section 12 Act 2: Ingestion, 12.4-12.6
+│       └── rag-retrieval.jsx             # Section 12 Acts 4+5: Embed/Index + Query Transformation, 12.14-12.21
 ├── .github/workflows/deploy.yml
 └── CLAUDE.md
 ```

@@ -1,0 +1,62 @@
+#!/bin/sh
+# Auto-rebuild semantic search index + embeddings when commits being pushed
+# touch source files that affect the index. Auto-commits regenerated artifacts.
+#
+# Git limitation: a hook cannot add commits to the in-flight push. So when a
+# rebuild is needed, this hook auto-commits the artifacts on the current branch
+# and aborts the push with a clear message. The user runs `git push` once more
+# to ship both their commits and the artifact commit together.
+
+set -e
+
+remote="$1"
+
+NEEDS_BUILD=0
+ZERO=0000000000000000000000000000000000000000
+
+PATHS="src/sections/*.jsx src/sections/*.js src/config.js src/data/svg-descriptions.json public/models/*/model-meta.json"
+
+while read local_ref local_sha remote_ref remote_sha; do
+  [ "$local_sha" = "$ZERO" ] && continue
+  if [ "$remote_sha" = "$ZERO" ]; then
+    RELEVANT=$(git log --name-only --pretty=format: "$local_sha" --not --remotes="$remote" -- $PATHS 2>/dev/null | sort -u)
+  else
+    RELEVANT=$(git diff --name-only "$remote_sha".."$local_sha" -- $PATHS 2>/dev/null || true)
+  fi
+  if [ -n "$RELEVANT" ]; then
+    NEEDS_BUILD=1
+  fi
+done
+
+if [ "$NEEDS_BUILD" = "0" ]; then
+  node scripts/check-embeddings.mjs
+  exit 0
+fi
+
+if ! command -v claude >/dev/null 2>&1; then
+  printf "\033[31m[pre-push] claude CLI not found in PATH. Source changed; cannot rebuild search index.\033[0m\n"
+  exit 1
+fi
+
+ARTIFACTS="src/data/chunks.json src/data/chunk-cache.json src/data/embeddings.bin src/data/embeddings-manifest.json"
+
+if ! git diff --quiet -- $ARTIFACTS; then
+  printf "\033[31m[pre-push] Uncommitted changes in search artifact files. Commit or stash them first.\033[0m\n"
+  exit 1
+fi
+
+printf "\033[33m[pre-push] Source changed in push range. Rebuilding search index + embeddings...\033[0m\n"
+npm run search:build --silent
+
+if git diff --quiet -- $ARTIFACTS; then
+  printf "\033[32m[pre-push] Rebuild produced no artifact changes.\033[0m\n"
+  node scripts/check-embeddings.mjs
+  exit 0
+fi
+
+git add $ARTIFACTS
+git commit -m "Rebuild search index + embeddings"
+node scripts/check-embeddings.mjs
+
+printf "\033[33m[pre-push] Auto-committed rebuilt artifacts. Run 'git push' again to ship them.\033[0m\n"
+exit 1

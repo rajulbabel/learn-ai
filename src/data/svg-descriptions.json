@@ -357,5 +357,8 @@
   "12.26": [
     "Self-RAG token-emission timeline showing the model alternating between special control tokens like <retrieve>, <isrel>, and <issup> across the generation sequence.",
     "Retrieve / no-retrieve decision diamond that gates whether the Self-RAG model fetches external context for a given query."
+  ],
+  "12.27": [
+    "CRAG three-branch decision tree: an evaluator score routes retrieved docs to a CORRECT path (use directly), an AMBIGUOUS path (combine internal + web), or an INCORRECT path (web-search fallback), all converging into knowledge refinement before generation."
   ]
 }

@@ -19,6 +19,7 @@ import * as VectorProduction from "../sections/vector-production.jsx";
 import * as VectorSystems from "../sections/vector-systems.jsx";
 import * as RagFoundations from "../sections/rag-foundations.jsx";
 import * as RagIngestion from "../sections/rag-ingestion.jsx";
+import * as RagRetrieval from "../sections/rag-retrieval.jsx";
 
 const lookup = {
   TOC,
@@ -38,6 +39,7 @@ const lookup = {
   ...VectorSystems,
   ...RagFoundations,
   ...RagIngestion,
+  ...RagRetrieval,
 };
 
 describe("lookup", () => {
@@ -70,6 +72,18 @@ describe("lookup", () => {
     expect(typeof mod.WhyLLMsNeedRetrieval).toBe("function");
     expect(typeof mod.NaiveRAGPipeline).toBe("function");
     expect(typeof mod.WhereNaiveRAGBreaks).toBe("function");
+  });
+
+  it("rag-retrieval.jsx exports the Act 4+5 chapter components", async () => {
+    const mod = await import("../sections/rag-retrieval.jsx");
+    expect(typeof mod.EmbeddingModelChoice).toBe("function");
+    expect(typeof mod.DomainAdaptation).toBe("function");
+    expect(typeof mod.HybridForRAG).toBe("function");
+    expect(typeof mod.RerankerCascade).toBe("function");
+    expect(typeof mod.WhyTransformQueries).toBe("function");
+    expect(typeof mod.HyDE).toBe("function");
+    expect(typeof mod.MultiQueryExpansion).toBe("function");
+    expect(typeof mod.QueryRoutingDecomposition).toBe("function");
   });
 });
 

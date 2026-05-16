@@ -393,5 +393,10 @@
     "Rolling summary technique in three stages: conversation at fifty percent capacity, oldest half summarized into a small summary block, capacity drops back to twenty five percent so the conversation can continue.",
     "Hierarchical summary tree: raw turn batches at the bottom layer become per-batch summaries at the middle layer, which combine into a single meta-summary at the top covering the whole conversation.",
     "Four threshold bands across a context window utilization bar: twenty five percent do nothing, fifty percent compress half, seventy five percent aggressive summarize, ninety percent panic drop with summary plus last five turns."
+  ],
+  "13.30": [
+    "Single agent loaded with five different jobs, labeled retrieve, classify, refund, troubleshoot, and escalate, visualizing the crowded role assignment that creates a performance ceiling for one agent.",
+    "Three independent sub-tasks lookup_customer, lookup_subscription, and search_kb running in parallel on three separate agents with wall-clock time equal to the slowest one rather than the sum of all three.",
+    "Two-layer planner and worker architecture: a planner agent at the top decomposes a task and dispatches sub-tasks to two worker agents at the bottom that each execute one sub-task and return results to the planner."
   ]
 }

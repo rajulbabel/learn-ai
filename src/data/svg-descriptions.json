@@ -339,5 +339,10 @@
     "Trust boundary diagram showing outer host with user data and model trusted ring surrounding inner untrusted third party server code with protocol arrows crossing the boundary.",
     "Host process box on top spawns a server process box on the bottom inside a sandbox container, with a labeled spawn arrow and an MCP transport arrow as the only legal channel between them.",
     "OAuth flow showing user authorizes then host gets access token then token passes to server in each request then server checks scope."
+  ],
+  "13.17": [
+    "Two row comparison diagram showing MCP on top where one agent box connects to four separate tool boxes, and A2A on the bottom where one agent box delegates to another agent box that itself contains tool boxes inside its boundary.",
+    "Five step delegation flow where triage agent classifies ticket T4 as billing, finds an agent with billing skill, delegates the full ticket context, the billing agent works the ticket and returns result.",
+    "Vertical timeline showing triage agent delegates to billing agent which then streams intermediate updates lookup processing approval and final result back to triage."
   ]
 }

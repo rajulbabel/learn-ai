@@ -7061,3 +7061,49 @@ describe("CriticDebate (13.34) content", () => {
     expect(container.textContent).toMatch(/Pick Battles/i);
   });
 });
+
+describe("MultiAgentFailures (13.35) content", () => {
+  const fn = MultiAgent.MultiAgentFailures;
+
+  it("sub=0 lists four failure modes", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/drift/i);
+    expect(container.textContent).toMatch(/infinite loop/i);
+    expect(container.textContent).toMatch(/deadlock/i);
+    expect(container.textContent).toMatch(/cost runaway|runaway/i);
+    expect(container.textContent).toMatch(/How Multi-Agent Falls Apart/i);
+  });
+
+  it("sub=1 shows drift", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/drift/i);
+    expect(container.textContent).toMatch(/disagree|goal|intent/i);
+    expect(container.textContent).toMatch(/Drift: Agents Pull/i);
+  });
+
+  it("sub=2 shows infinite loop", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/infinite loop|ping.?pong/i);
+    expect(container.textContent).toMatch(/hand.?off/i);
+    expect(container.textContent).toMatch(/Hand-Off Ping-Pong/i);
+  });
+
+  it("sub=3 shows deadlock", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/deadlock|wait/i);
+    expect(container.textContent).toMatch(/Two Agents Wait Forever/i);
+  });
+
+  it("sub=4 shows cost runaway", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/cost runaway|recursion/i);
+    expect(container.textContent).toMatch(/exponential|vertical|spend/i);
+    expect(container.textContent).toMatch(/Unbounded Recursion/i);
+  });
+
+  it("sub=5 maps signals per failure", () => {
+    const { container } = render(fn(makeCtx({ sub: 5 })));
+    expect(container.textContent).toMatch(/signal|alert|threshold/i);
+    expect(container.textContent).toMatch(/What To Alert On/i);
+  });
+});

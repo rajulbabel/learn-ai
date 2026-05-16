@@ -413,5 +413,12 @@
     "Two-agent pair where the worker agent on the left produces a draft answer and the critic agent on the right reads the draft and the original question, then scores or rewrites it.",
     "Circular flow with four stations: worker drafts, critic scores zero through ten, conditional revise if below seven, then critic re-scores, with a loop arrow back to the worker until score is high enough or retry cap is reached.",
     "Three-agent debate setup: agent Pro on the left and agent Con on the right both argue toward a Judge agent in the bottom center, which reads both arguments and picks one."
+  ],
+  "13.35": [
+    "Two-by-two grid of four multi-agent failure modes: drift in top left, infinite loop in top right, deadlock in bottom left, and cost runaway in bottom right, each tinted with its own color.",
+    "Three agents working on the same ticket pulling in three different directions: one interprets it as cancel subscription, another as refund invoice, a third as save the customer, with diverging arrows showing incoherent outcomes.",
+    "Two agents triage and billing hand off to each other back and forth in an infinite ping pong with arrows curving in both directions and a counter showing the hand-off rate not decreasing.",
+    "Two agents A and B locked in a deadlock: A waits on B's result, B waits on A's result, with circular waiting arrows and both agents marked in a WAITING state.",
+    "Cost vs iteration chart with normal multi-agent run at fifty cents on a slow flat curve and a runaway scenario climbing exponentially to fifty dollars by iteration twenty."
   ]
 }

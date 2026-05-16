@@ -129,6 +129,28 @@ Commit cadence: one commit per Task (Tasks 2-15) + one optional cleanup commit i
 
 ---
 
+## Task 0: Name This Session
+
+**Purpose:** Make this session easy to identify in Claude Code history.
+
+- [ ] **Step 1: Set session title to `section12-milestone4`**
+
+Use the Claude Code session-naming mechanism available in your CLI. Common ways depending on your version:
+
+- Slash command: type `/title section12-milestone4` (if your Claude Code build supports it)
+- Settings: set the session title via `/config` or the IDE extension's session pane
+- Manual marker: if no rename command is available, write a top-of-conversation marker like "SESSION: section12-milestone4" so future searches catch it
+
+The exact mechanism varies by Claude Code version. Pick whichever works in your build.
+
+- [ ] **Step 2: Confirm session title shows `section12-milestone4` in the UI**
+
+If your CLI shows the session title in its title bar or tab, verify it reads `section12-milestone4`.
+
+- [ ] **Step 3: No commit.** This is a session-scoped action, not a code change.
+
+---
+
 ## Task 1: Verify green baseline
 
 **Files:** none (git state + run tests).
@@ -2650,7 +2672,55 @@ git add docs/superpowers/lessons/section-12-m4-lessons.md
 git commit -m "Capture M4 lessons; no M5 plan edits needed"
 ```
 
-- [ ] **Step 5: M4 complete. Ready to start M5.**
+- [ ] **Step 5: Generate beautiful starter prompt for M5**
+
+Create `docs/superpowers/starter-prompts/section-12-m5-starter.md` (create the `starter-prompts/` directory if it doesn't exist).
+
+The file content should be a ready-to-paste prompt for starting M5 in a fresh Claude Code session:
+
+`````markdown
+# M5 Starter Prompt - Copy-Paste Into New Claude Code Session
+
+```
+Execute Section 12 Milestone 5 of the learn-ai project (RAG section build).
+
+Plan: docs/superpowers/plans/2026-05-16-section-12-milestone-5.md
+Spec: docs/superpowers/specs/2026-05-16-section-12-rag-design.md
+Prior milestone lessons: docs/superpowers/lessons/section-12-m4-lessons.md (READ FIRST)
+
+Constraints:
+- Work directly on main (no feature branch)
+- Use subagent-driven-development skill, fresh opus subagent per task, two-stage review
+- All agents/subagents must be opus
+- TDD mandatory per CLAUDE.md
+- Chrome browser visual validation gate per chapter (MANDATORY, not skippable)
+- First task: set session title to "section12-milestone5"
+- After M5 ships, execute the final refinement task before starting M6
+
+Begin with Task 0 (session naming), then Task 1 baseline verify.
+
+use superpowers
+ultrathink
+```
+
+(End of starter prompt - copy everything inside the code fence above.)
+
+## Notes for next session executor
+
+Before pasting the starter prompt, the user should ideally have already:
+- Reviewed `docs/superpowers/lessons/section-12-m4-lessons.md` to know what M4 taught
+- Confirmed `git log` shows M4 commits cleanly merged on main
+- Verified `npm run test` is green on main
+`````
+
+Commit the starter prompt file:
+
+```bash
+git add docs/superpowers/starter-prompts/section-12-m5-starter.md
+git commit -m "Add M5 starter prompt for next session"
+```
+
+- [ ] **Step 6: M4 complete. Ready to start M5.**
 
 ---
 

@@ -92,6 +92,28 @@ Act 8 color theme per spec: pink (`C.pink`) is the per-act color family for Act 
 
 ## Tasks
 
+### Task 0: Name This Session
+
+**Purpose:** Make this session easy to identify in Claude Code history.
+
+- [ ] **Step 1: Set session title to `section12-milestone6`**
+
+Use the Claude Code session-naming mechanism available in your CLI. Common ways depending on your version:
+
+- Slash command: type `/title section12-milestone6` (if your Claude Code build supports it)
+- Settings: set the session title via `/config` or the IDE extension's session pane
+- Manual marker: if no rename command is available, write a top-of-conversation marker like "SESSION: section12-milestone6" so future searches catch it
+
+The exact mechanism varies by Claude Code version. Pick whichever works in your build.
+
+- [ ] **Step 2: Confirm session title shows `section12-milestone6` in the UI**
+
+If your CLI shows the session title in its title bar or tab, verify it reads `section12-milestone6`.
+
+- [ ] **Step 3: No commit.** This is a session-scoped action, not a code change.
+
+---
+
 ### Task 1: Verify green baseline
 
 **Files:** none (git state + run tests)
@@ -2257,14 +2279,47 @@ Create `docs/superpowers/lessons/section-12-retrospective.md` with these section
 
 Fill in real observations - this is the document that informs the next big section's planning.
 
-- [ ] **Step 3: Commit**
+- [ ] **Step 3: Generate the "Section 12 Done" summary**
+
+Create `docs/superpowers/starter-prompts/section-12-done.md` summarizing what was built. Content:
+
+`````markdown
+# Section 12 Complete
+
+Section 12 "Retrieval-Augmented Generation" shipped on [date]. 38 chapters across 6 milestones.
+
+## Verify the section is live
+- TOC shows Section 12 with 38 chapters (12.1-12.38)
+- `npm run test` green, coverage 100% lines / >=97.7% branches
+- All Chrome browser visual validation screenshots in `docs/superpowers/screenshots/section-12-*/`
+
+## Files shipped
+- `src/sections/rag-foundations.jsx` (Acts 1+2, ch 12.1-12.10)
+- `src/sections/rag-retrieval.jsx` (Acts 3+4, ch 12.11-12.18)
+- `src/sections/rag-generation.jsx` (Acts 5+6, ch 12.19-12.27)
+- `src/sections/rag-evaluation.jsx` (Act 7, ch 12.28-12.32)
+- `src/sections/rag-production.jsx` (Acts 8+9, ch 12.33-12.38)
+
+## Retrospective
+See `docs/superpowers/lessons/section-12-retrospective.md` for what worked / what did not / suggested backlog for next big section.
+
+## Reminders
+- Request re-indexing in Google Search Console (URL Inspection -> Request indexing)
+- Submit URL in Bing Webmaster Tools (URL Submission)
+- Confirm `public/llms.txt`, `index.html` JSON-LD `teaches`, and `CLAUDE.md` mapping table all reflect Section 12
+
+## Next big project
+TBD - check `docs/superpowers/lessons/section-12-retrospective.md` for backlog items.
+`````
+
+- [ ] **Step 4: Commit**
 
 ```bash
-git add docs/superpowers/lessons/section-12-m6-lessons.md docs/superpowers/lessons/section-12-retrospective.md
-git commit -m "Section 12 M6 lessons + section-wide retrospective"
+git add docs/superpowers/lessons/section-12-m6-lessons.md docs/superpowers/lessons/section-12-retrospective.md docs/superpowers/starter-prompts/section-12-done.md
+git commit -m "Section 12 M6 lessons + section-wide retrospective + done summary"
 ```
 
-- [ ] **Step 4: Section 12 fully complete.** 38 chapters shipped. 6 milestones done. Ready for next section (or stable shipping if no next section planned).
+- [ ] **Step 5: Section 12 fully complete.** 38 chapters shipped. 6 milestones done. Ready for next section (or stable shipping if no next section planned).
 
 ---
 

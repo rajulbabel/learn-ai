@@ -6310,3 +6310,47 @@ describe("MultiHopRetrieval (12.25) content", () => {
     expect(container.textContent).toMatch(/stuck|overconfident/i);
   });
 });
+
+describe("SelfRAG (12.26) content", () => {
+  const fn = RagGeneration.SelfRAG;
+
+  it("sub=0 shows when to retrieve vs not", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/retriev/i);
+    expect(container.textContent).toMatch(/always.?retrieve|never.?retrieve|decide/i);
+  });
+
+  it("sub=1 lists the four Self-RAG special tokens", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/<retrieve>/);
+    expect(container.textContent).toMatch(/<no-retrieve>/);
+    expect(container.textContent).toMatch(/<isrel>/);
+    expect(container.textContent).toMatch(/<issup>/);
+  });
+
+  it("sub=2 shows the token emission timeline", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/timeline|token/i);
+    expect(container.textContent).toMatch(/<(retrieve|isrel|issup)>/);
+  });
+
+  it("sub=3 shows the retrieve/no-retrieve gate with RL/instruction tuning reference", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/gate|decision/i);
+    expect(container.textContent).toMatch(/<retrieve>|<no-retrieve>|retrieve/i);
+    expect(container.textContent).toMatch(/RL|instruction.?tun|reinforcement/i);
+  });
+
+  it("sub=4 shows self-critique with isrel and issup token outputs", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/isrel|<isrel>/i);
+    expect(container.textContent).toMatch(/issup|<issup>/i);
+    expect(container.textContent).toMatch(/RELEVANT|IRRELEVANT|SUPPORTED/);
+  });
+
+  it("sub=5 lists wins and limits including fine-tune requirement", () => {
+    const { container } = render(fn(makeCtx({ sub: 5 })));
+    expect(container.textContent).toMatch(/wins|limits|tradeoff/i);
+    expect(container.textContent).toMatch(/fine-?tune|train/i);
+  });
+});

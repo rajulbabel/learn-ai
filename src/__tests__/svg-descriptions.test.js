@@ -110,6 +110,7 @@ describe("svg-descriptions.json", () => {
       "12.22",
       "12.23",
       "12.25",
+      "12.26",
     ];
     for (const chId of expectedChapters) {
       expect(svgDescriptions[chId], `Missing descriptions for chapter ${chId}`).toBeDefined();

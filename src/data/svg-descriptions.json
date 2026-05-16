@@ -267,5 +267,8 @@
   ],
   "11.36": [
     "Four-branch decision flowchart for picking a vector database. A cyan root node labeled 'New vector-search feature' sits at the top; axis one (data size) splits the flow into four buckets - green under 1M, yellow 1M-100M, orange 100M-1B, red over 1B - with each bucket showing recommended systems below (pgvector/Chroma at small scale, Qdrant/Pinecone/pgvector in the middle band, Qdrant multi-node or Milvus at large scale, Milvus/Vespa at billion-plus). Axis 2 ops capacity, axis 3 filter complexity, and axis 4 cost band are listed as follow-on constraints that narrow the shortlist to a single pick."
+  ],
+  "12.2": [
+    "Horizontal flow diagram of the 5-stage RAG pipeline: Chunk, Embed, Store, Retrieve, Generate. First 3 stages tinted cyan (offline ingest), last 2 stages tinted yellow (online query). Arrows connect adjacent stages."
   ]
 }

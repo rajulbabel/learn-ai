@@ -5202,3 +5202,56 @@ describe("WhyLLMsNeedRetrieval (12.1) content", () => {
     expect(container.textContent).toMatch(/refresh/i);
   });
 });
+
+describe("NaiveRAGPipeline (12.2) content", () => {
+  const fn = RagFoundations.NaiveRAGPipeline;
+
+  it("sub=0 shows the 5-stage pipeline overview", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/chunk/i);
+    expect(container.textContent).toMatch(/embed/i);
+    expect(container.textContent).toMatch(/store/i);
+    expect(container.textContent).toMatch(/retriev/i);
+    expect(container.textContent).toMatch(/generat/i);
+  });
+
+  it("sub=1 demonstrates chunking on doc-1 password reset", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/password reset|reset.*password|doc-?1/i);
+    expect(container.textContent).toMatch(/chunk/i);
+  });
+
+  it("sub=2 references Section 5.2 for embeddings", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/section 5\.2|5\.2/i);
+    expect(container.textContent).toMatch(/embed|vector/i);
+  });
+
+  it("sub=3 references Section 11 for vector storage / HNSW", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/section 11/i);
+    expect(container.textContent).toMatch(/HNSW|vector (database|index)/i);
+  });
+
+  it("sub=4 retrieves top-k for the password reset query", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/how do i reset my password/i);
+    expect(container.textContent).toMatch(/top-?k|top-?3/i);
+    expect(container.textContent).toMatch(/0\.\d+/);
+  });
+
+  it("sub=5 shows a prompt template with citation marker and I-don't-know clause", () => {
+    const { container } = render(fn(makeCtx({ sub: 5 })));
+    expect(container.textContent).toMatch(/i don'?t know|don'?t answer/i);
+    expect(container.textContent).toMatch(/\[doc-?1/i);
+    expect(container.textContent).toMatch(/documentation|context/i);
+  });
+
+  it("sub=6 walks the running query end to end across all 5 stages", () => {
+    const { container } = render(fn(makeCtx({ sub: 6 })));
+    expect(container.textContent).toMatch(/how do i reset my password/i);
+    expect(container.textContent).toMatch(/chunk/i);
+    expect(container.textContent).toMatch(/embed/i);
+    expect(container.textContent).toMatch(/retriev/i);
+  });
+});

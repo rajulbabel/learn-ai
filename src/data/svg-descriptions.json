@@ -368,5 +368,8 @@
   ],
   "12.29": [
     "Tool-call loop flowchart for agentic RAG: model emits a tool_call, the runtime executes the tool and feeds the response back, looping until the model emits a final answer or hits max_iterations."
+  ],
+  "12.30": [
+    "Grouped bar chart comparing cost, latency, and accuracy across three strategies for the 200-page product manual: RAG-only, hybrid retrieve-broadly, and long-context-only stuffing of the full document."
   ]
 }

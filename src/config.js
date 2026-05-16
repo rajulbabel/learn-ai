@@ -204,6 +204,19 @@ export const chapters = [
   { id: "13.21", title: "ReAct Pattern", section: 13, component: "ReActPattern" },
   { id: "13.22", title: "Plan-Execute + Reflection", section: 13, component: "PlanExecuteReflect" },
   { id: "13.23", title: "Loop Termination", section: 13, component: "LoopTermination" },
+  { id: "13.24", title: "Memory Taxonomy - Short vs Long", section: 13, component: "MemoryTaxonomy" },
+  { id: "13.25", title: "Working Memory - The Scratchpad", section: 13, component: "WorkingMemory" },
+  { id: "13.26", title: "Episodic Memory - Past Events", section: 13, component: "EpisodicMemory" },
+  { id: "13.27", title: "Semantic Memory - Learned Facts", section: 13, component: "SemanticMemory" },
+  { id: "13.28", title: "Procedural Memory - Learned Skills", section: 13, component: "ProceduralMemory" },
+  { id: "13.29", title: "Summary Memory + Context Window Management", section: 13, component: "SummaryAndContextMgmt" },
+  { id: "13.30", title: "Why Multi-Agent?", section: 13, component: "WhyMultiAgent" },
+  { id: "13.31", title: "Orchestrator-Worker", section: 13, component: "OrchestratorWorker" },
+  { id: "13.32", title: "Supervisor / Hierarchical", section: 13, component: "SupervisorHierarchy" },
+  { id: "13.33", title: "Hand-Offs", section: 13, component: "AgentHandoffs" },
+  { id: "13.34", title: "Critic / Debate / Reflection-as-Multi-Agent", section: 13, component: "CriticDebate" },
+  { id: "13.35", title: "Multi-Agent Failure Modes", section: 13, component: "MultiAgentFailures" },
+  { id: "13.36", title: "Agentic RAG", section: 13, component: "AgenticRag" },
 ];
 
 export const sectionNames = {

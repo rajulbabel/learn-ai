@@ -529,3 +529,111 @@ describe("Section 13 Act 3+4 chapter entries", () => {
     expect(c.component).toBe("LoopTermination");
   });
 });
+
+describe("Section 13 Act 5+6 chapter entries", () => {
+  const findCh = (id) => chapters.find((c) => c.id === id);
+
+  it("has 13.24 MemoryTaxonomy", () => {
+    const c = findCh("13.24");
+    expect(c).toBeDefined();
+    expect(c.title).toBe("Memory Taxonomy - Short vs Long");
+    expect(c.section).toBe(13);
+    expect(c.component).toBe("MemoryTaxonomy");
+  });
+
+  it("has 13.25 WorkingMemory", () => {
+    const c = findCh("13.25");
+    expect(c).toBeDefined();
+    expect(c.title).toBe("Working Memory - The Scratchpad");
+    expect(c.section).toBe(13);
+    expect(c.component).toBe("WorkingMemory");
+  });
+
+  it("has 13.26 EpisodicMemory", () => {
+    const c = findCh("13.26");
+    expect(c).toBeDefined();
+    expect(c.title).toBe("Episodic Memory - Past Events");
+    expect(c.section).toBe(13);
+    expect(c.component).toBe("EpisodicMemory");
+  });
+
+  it("has 13.27 SemanticMemory", () => {
+    const c = findCh("13.27");
+    expect(c).toBeDefined();
+    expect(c.title).toBe("Semantic Memory - Learned Facts");
+    expect(c.section).toBe(13);
+    expect(c.component).toBe("SemanticMemory");
+  });
+
+  it("has 13.28 ProceduralMemory", () => {
+    const c = findCh("13.28");
+    expect(c).toBeDefined();
+    expect(c.title).toBe("Procedural Memory - Learned Skills");
+    expect(c.section).toBe(13);
+    expect(c.component).toBe("ProceduralMemory");
+  });
+
+  it("has 13.29 SummaryAndContextMgmt", () => {
+    const c = findCh("13.29");
+    expect(c).toBeDefined();
+    expect(c.title).toBe("Summary Memory + Context Window Management");
+    expect(c.section).toBe(13);
+    expect(c.component).toBe("SummaryAndContextMgmt");
+  });
+
+  it("has 13.30 WhyMultiAgent", () => {
+    const c = findCh("13.30");
+    expect(c).toBeDefined();
+    expect(c.title).toBe("Why Multi-Agent?");
+    expect(c.section).toBe(13);
+    expect(c.component).toBe("WhyMultiAgent");
+  });
+
+  it("has 13.31 OrchestratorWorker", () => {
+    const c = findCh("13.31");
+    expect(c).toBeDefined();
+    expect(c.title).toBe("Orchestrator-Worker");
+    expect(c.section).toBe(13);
+    expect(c.component).toBe("OrchestratorWorker");
+  });
+
+  it("has 13.32 SupervisorHierarchy", () => {
+    const c = findCh("13.32");
+    expect(c).toBeDefined();
+    expect(c.title).toBe("Supervisor / Hierarchical");
+    expect(c.section).toBe(13);
+    expect(c.component).toBe("SupervisorHierarchy");
+  });
+
+  it("has 13.33 AgentHandoffs", () => {
+    const c = findCh("13.33");
+    expect(c).toBeDefined();
+    expect(c.title).toBe("Hand-Offs");
+    expect(c.section).toBe(13);
+    expect(c.component).toBe("AgentHandoffs");
+  });
+
+  it("has 13.34 CriticDebate", () => {
+    const c = findCh("13.34");
+    expect(c).toBeDefined();
+    expect(c.title).toBe("Critic / Debate / Reflection-as-Multi-Agent");
+    expect(c.section).toBe(13);
+    expect(c.component).toBe("CriticDebate");
+  });
+
+  it("has 13.35 MultiAgentFailures", () => {
+    const c = findCh("13.35");
+    expect(c).toBeDefined();
+    expect(c.title).toBe("Multi-Agent Failure Modes");
+    expect(c.section).toBe(13);
+    expect(c.component).toBe("MultiAgentFailures");
+  });
+
+  it("has 13.36 AgenticRag", () => {
+    const c = findCh("13.36");
+    expect(c).toBeDefined();
+    expect(c.title).toBe("Agentic RAG");
+    expect(c.section).toBe(13);
+    expect(c.component).toBe("AgenticRag");
+  });
+});

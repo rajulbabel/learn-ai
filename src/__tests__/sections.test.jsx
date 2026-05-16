@@ -6151,3 +6151,44 @@ describe("McpArchitecture (13.13) content", () => {
     expect(container.textContent).toMatch(/search_kb/);
   });
 });
+
+describe("McpPrimitives (13.14) content", () => {
+  const fn = AgentTools.McpPrimitives;
+
+  it("sub=0 names the three primitives", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/tools/i);
+    expect(container.textContent).toMatch(/resources/i);
+    expect(container.textContent).toMatch(/prompts/i);
+    expect(container.textContent).toMatch(/Things The Model Can Do/i);
+  });
+
+  it("sub=1 shows a tool example", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/process_refund/);
+    expect(container.textContent).toMatch(/side effect|mutate/i);
+    expect(container.textContent).toMatch(/invoice_id/);
+  });
+
+  it("sub=2 shows a resource URI", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/kb:\/\/|resource/i);
+    expect(container.textContent).toMatch(/read.?only|read only/i);
+    expect(container.textContent).toMatch(/kb:\/\/articles\/password-reset/);
+  });
+
+  it("sub=3 shows a prompt with arguments", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/summarize_ticket/);
+    expect(container.textContent).toMatch(/argument|parameter|required/i);
+    expect(container.textContent).toMatch(/slash.commands/i);
+  });
+
+  it("sub=4 explains when to use which", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/action|mutate|do/i);
+    expect(container.textContent).toMatch(/read|data/i);
+    expect(container.textContent).toMatch(/template/i);
+    expect(container.textContent).toMatch(/Decision rule:/);
+  });
+});

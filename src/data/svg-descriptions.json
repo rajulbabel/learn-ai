@@ -374,5 +374,8 @@
   ],
   "12.31": [
     "Three-layer RAG evaluation triangle: retrieval at top (recall, MRR, precision, nDCG), generation lower-left (faithfulness, answer relevancy), end-to-end lower-right (correctness, helpfulness). Each vertex is labeled with a one-line description so a learner sees what each layer measures and why three layers are needed."
+  ],
+  "12.32": [
+    "Judge calibration before-and-after line chart. The x-axis is the judge score percentile and the y-axis is agreement with human labels. The before curve sits around 60% agreement with a long divergence tail; the after curve (rubric refined plus position and verbosity mitigations applied) rises to 92% agreement, showing how calibration narrows the gap to human judgement."
   ]
 }

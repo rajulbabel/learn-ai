@@ -5130,6 +5130,7 @@ describe("Every SVG has a <desc> element", () => {
     "11.25",
     "11.36",
     "12.31",
+    "12.32",
   ];
 
   svgChapters.forEach((chId) => {
@@ -6595,5 +6596,57 @@ describe("RAGEvalTriangle (12.31) content", () => {
     expect(container.textContent).toMatch(/ROUGE/);
     expect(container.textContent).toMatch(/deprecated|word.overlap|do not measure/i);
     expect(container.textContent).toMatch(/faithful|ground/i);
+  });
+});
+
+describe("LLMAsJudge (12.32) content", () => {
+  const fn = RagEvaluation.LLMAsJudge;
+
+  it("sub=0 compares human / heuristic / LLM-as-judge", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/human/i);
+    expect(container.textContent).toMatch(/heuristic|BLEU/i);
+    expect(container.textContent).toMatch(/judge/i);
+  });
+
+  it("sub=1 shows the judge prompt artifact with criteria + JSON schema", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/judge prompt/i);
+    expect(container.textContent).toMatch(/faithfulness/i);
+    expect(container.textContent).toMatch(/relevanc/i);
+    expect(container.textContent).toMatch(/helpful/i);
+    expect(container.textContent).toMatch(/\{(question|retrieved_context|generated_answer)\}/);
+  });
+
+  it("sub=2 defines a 1-5 rubric for a criterion", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/rubric/i);
+    expect(container.textContent).toMatch(/1[- ]?5|5[- ]?point|hallucinat|support/i);
+  });
+
+  it("sub=3 names position bias and the swap mitigation", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/position bias|position/i);
+    expect(container.textContent).toMatch(/randomize|swap|order/i);
+  });
+
+  it("sub=4 names verbosity bias and the length mitigation", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/verbosity|length/i);
+    expect(container.textContent).toMatch(/conciseness|normalis|weight/i);
+  });
+
+  it("sub=5 names self-preference bias and cross-family mitigation", () => {
+    const { container } = render(fn(makeCtx({ sub: 5 })));
+    expect(container.textContent).toMatch(/self[- ]?preference|self.bias/i);
+    expect(container.textContent).toMatch(/cross[- ]?family|third[- ]?party|different/i);
+  });
+
+  it("sub=6 covers calibration via human spot-check and judge-model selection", () => {
+    const { container } = render(fn(makeCtx({ sub: 6 })));
+    expect(container.textContent).toMatch(/calibrat/i);
+    expect(container.textContent).toMatch(/spot[- ]?check|50|100|human/i);
+    expect(container.textContent).toMatch(/agreement|correlation|0\.85/i);
+    expect(container.textContent).toMatch(/stronger|cross[- ]?family|judge model/i);
   });
 });

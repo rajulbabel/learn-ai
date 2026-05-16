@@ -402,5 +402,8 @@
   "13.31": [
     "Hub and spoke topology: an orchestrator agent at the top center has bidirectional arrows to three worker agents at the bottom, with no edges between workers.",
     "Single worker card showing the input sub-task description on the left, an internal agent loop in the middle, and the structured result returned to the orchestrator on the right."
+  ],
+  "13.32": [
+    "Three-level agent hierarchy: top supervisor delegates to three middle-level supervisors which each delegate to two leaf specialists, with planar parent-child edges and no crossings."
   ]
 }

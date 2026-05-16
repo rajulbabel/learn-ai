@@ -6937,3 +6937,44 @@ describe("OrchestratorWorker (13.31) content", () => {
     expect(container.textContent).toMatch(/Three Ways To Aggregate/i);
   });
 });
+
+describe("SupervisorHierarchy (13.32) content", () => {
+  const fn = MultiAgent.SupervisorHierarchy;
+
+  it("sub=0 shows the tree", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/tree|hierarch/i);
+    expect(container.textContent).toMatch(/supervisor/i);
+    expect(container.textContent).toMatch(/specialist|leaf/i);
+    expect(container.textContent).toMatch(/Multiple Levels Of Delegation/i);
+  });
+
+  it("sub=1 shows supervisor role per level", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/supervisor/i);
+    expect(container.textContent).toMatch(/route|pick|children/i);
+    expect(container.textContent).toMatch(/Each Supervisor: Plan/i);
+  });
+
+  it("sub=2 decides hierarchical vs orchestrator-worker", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/hierarchical/i);
+    expect(container.textContent).toMatch(/sub.?domain|sub.?specialty/i);
+    expect(container.textContent).toMatch(/Sub-Specialties/i);
+  });
+
+  it("sub=3 shows the support tree", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/billing/i);
+    expect(container.textContent).toMatch(/refund|invoice/i);
+    expect(container.textContent).toMatch(/escalat/i);
+    expect(container.textContent).toMatch(/Support Tree/i);
+  });
+
+  it("sub=4 shows escalation up the tree", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/escalat/i);
+    expect(container.textContent).toMatch(/escalate_human/);
+    expect(container.textContent).toMatch(/When To Escalate Up/i);
+  });
+});

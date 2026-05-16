@@ -8,7 +8,7 @@
 
 **Goal:** Add Act 8 of Section 12 "Retrieval-Augmented Generation" - the five Evaluation chapters (12.31 RAGEvalTriangle, 12.32 LLMAsJudge, 12.33 RAGASMetrics, 12.34 GoldenDatasets, 12.35 OnlineEvalABTesting). These live in a NEW file `src/sections/rag-evaluation.jsx`. At the end of this milestone the app ships with 35 navigable chapters in Section 12 (12.1 through 12.35), completing Acts 1-8 of the section arc. Acts 9+10 (chapters 12.36-12.41) land in M6.
 
-**Architecture:** Create a new section file `src/sections/rag-evaluation.jsx` and register it in `learn-ai.jsx` so Section 12 now loads FIVE files via `Promise.all`: `rag-foundations.jsx`, `rag-ingestion.jsx` (added in M2), `rag-retrieval.jsx` (12.14-12.21), `rag-generation.jsx` (12.22-12.30), and `rag-evaluation.jsx` (12.31-12.35). Each chapter follows the established learn-ai pattern: ctx-based function component, `{sub >= 0 && ... }` for sub=0 inline, `<Reveal when={sub >= N}>` for subsequent sub-steps, colored `<Box>` per sub-step, center-aligned `<T bold center>` titles, real math, concrete running-example content from the Habuild Cloud customer-support corpus.
+**Architecture:** Create a new section file `src/sections/rag-evaluation.jsx` and register it in `learn-ai.jsx` so Section 12 now loads FIVE files via `Promise.all`: `rag-foundations.jsx`, `rag-ingestion.jsx` (added in M2), `rag-retrieval.jsx` (12.14-12.21), `rag-generation.jsx` (12.22-12.30), and `rag-evaluation.jsx` (12.31-12.35). Each chapter follows the established learn-ai pattern: ctx-based function component, `{sub >= 0 && ... }` for sub=0 inline, `<Reveal when={sub >= N}>` for subsequent sub-steps, colored `<Box>` per sub-step, center-aligned `<T bold center>` titles, real math, concrete running-example content from the customer support corpus.
 
 **Tech Stack:** React 18 (hooks, inline styles), Vitest, Vite, TDD-first. No new dependencies.
 
@@ -66,7 +66,7 @@
 
 From the spec - re-use across all five chapters where possible:
 
-- **Primary corpus:** 30-doc customer support knowledge base for fictional SaaS "Habuild Cloud" - 10 account/billing docs, 10 product feature docs, 10 troubleshooting docs.
+- **Primary corpus:** 30-doc customer support knowledge base - 10 account/billing docs, 10 product feature docs, 10 troubleshooting docs.
 - **Standard queries** used in worked examples:
   - "How do I reset my password?" (single-doc lookup baseline).
   - "How do I reset my password if I forgot my email?" (multi-hop).
@@ -297,7 +297,7 @@ If your CLI shows the session title in its title bar or tab, verify it reads `se
   import { C } from "../config.js";
 
   // Section 12 Act 8: Evaluation (chapters 12.31-12.35).
-  // Continues the Habuild Cloud customer-support corpus and 5 standard queries
+  // Continues the customer support corpus and 5 standard queries
   // established in 12.1-12.30. Per-act color theme: green (eval).
   // Files in this section: rag-foundations.jsx (12.1-12.3 + 12.7-12.13), rag-ingestion.jsx
   // (12.4-12.6), rag-retrieval.jsx (12.14-12.21), rag-generation.jsx (12.22-12.30),

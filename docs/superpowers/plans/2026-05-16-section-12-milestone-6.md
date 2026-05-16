@@ -58,7 +58,7 @@ All existing section files for Sections 1-11. The four earlier Section 12 sectio
 
 From the spec. Use consistently across 12.36-12.41:
 
-- **Primary corpus:** 30-doc customer support knowledge base for fictional SaaS "Habuild Cloud" - 10 account/billing docs, 10 product feature docs, 10 troubleshooting docs.
+- **Primary corpus:** 30-doc customer support knowledge base - 10 account/billing docs, 10 product feature docs, 10 troubleshooting docs.
 - **Standard queries:**
   - "How do I reset my password?" (single-doc lookup baseline)
   - "How do I reset my password if I forgot my email?" (multi-hop)

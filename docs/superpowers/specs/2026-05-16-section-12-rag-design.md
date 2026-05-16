@@ -74,7 +74,7 @@ Not assumed: any RAG-specific knowledge, any prior exposure to LlamaIndex/LangCh
 
 ## Running example
 
-**Primary corpus: 30-doc customer support knowledge base** for a fictional SaaS named "Habuild Cloud". Generic enough to feel universal; specific enough that doc names and content can be referenced consistently.
+**Primary corpus: 30-doc customer support knowledge base.** Generic enough to feel universal; specific enough that doc names and content can be referenced consistently.
 
 **Doc categories (10 each):**
 

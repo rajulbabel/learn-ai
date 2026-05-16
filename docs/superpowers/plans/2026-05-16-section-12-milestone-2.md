@@ -8,7 +8,7 @@
 
 **Goal:** Add Act 2 (Ingestion - 3 chapters) and Act 3 (Chunking - 7 chapters) of Section 12. Total 10 new chapters this milestone (12.4-12.13). The app ships at end of this milestone with Section 12 reaching 13 navigable chapters.
 
-**Architecture:** Section 12 now has two files. The existing `src/sections/rag-foundations.jsx` (created in M1, holding 12.1-12.3) is extended with the chunking chapters 12.7-12.13. A NEW file `src/sections/rag-ingestion.jsx` holds the ingestion chapters 12.4-12.6. The Section 12 loader in `learn-ai.jsx` becomes a 2-file `Promise.all` that merges both namespaces. Each chapter follows the same pattern used in 12.1-12.3: `ctx`-based function component, `{sub >= 0 && ... }` for sub=0 inline, `<Reveal when={sub >= N}>` for subsequent sub-steps, colored `<Box>` per sub-step, center-aligned `<T bold center>` titles, real artifacts, concrete numbers from the Habuild Cloud support corpus.
+**Architecture:** Section 12 now has two files. The existing `src/sections/rag-foundations.jsx` (created in M1, holding 12.1-12.3) is extended with the chunking chapters 12.7-12.13. A NEW file `src/sections/rag-ingestion.jsx` holds the ingestion chapters 12.4-12.6. The Section 12 loader in `learn-ai.jsx` becomes a 2-file `Promise.all` that merges both namespaces. Each chapter follows the same pattern used in 12.1-12.3: `ctx`-based function component, `{sub >= 0 && ... }` for sub=0 inline, `<Reveal when={sub >= N}>` for subsequent sub-steps, colored `<Box>` per sub-step, center-aligned `<T bold center>` titles, real artifacts, concrete numbers from the customer support corpus.
 
 **Tech Stack:** React 18 (hooks, inline styles), Vitest, Vite, TDD-first. No new dependencies.
 
@@ -53,7 +53,7 @@
 ### Unchanged
 
 - All prior section files (Sections 1-11) and their tests.
-- The Habuild Cloud corpus references and 5 standard queries are reused as-is from M1 - no new shared constants needed at file top. (If a particular chapter benefits from a shared chunk constant, add it locally to that chapter's section.)
+- The customer support corpus references and 5 standard queries are reused as-is from M1 - no new shared constants needed at file top. (If a particular chapter benefits from a shared chunk constant, add it locally to that chapter's section.)
 
 ---
 
@@ -61,7 +61,7 @@
 
 From the spec, identical to M1. Use consistently across 12.4-12.13:
 
-- **Primary corpus:** 30-doc Habuild Cloud customer support knowledge base - 10 account/billing docs, 10 product feature docs, 10 troubleshooting docs.
+- **Primary corpus:** 30-doc customer support knowledge base - 10 account/billing docs, 10 product feature docs, 10 troubleshooting docs.
 - **Running docs (re-used across chapters):**
   - doc-1: Password reset article (used in 12.4 parsing, 12.7 fixed-size, 12.8 recursive, 12.10 late chunking, 12.11 hierarchical).
   - doc-4: Refunds policy (used in 12.11 parent-child).
@@ -413,7 +413,7 @@ git commit -m "Add rag-ingestion.jsx scaffold and 2-file loader for Section 12"
   Visual: a TEXT artifact block (NOT a code block - styled monospace with tinted background `${C.yellow}06`, border `1px solid ${C.yellow}12`, label "Metadata Schema" at top, placeholders highlighted in `${C.cyan}`):
   ```
   {
-    "source_url": "https://docs.habuild.com/account/password-reset",
+    "source_url": "https://docs.example.com/account/password-reset",
     "title": "Reset Your Password",
     "doc_type": "kb_article",
     "section_path": "Account > Security > Password",
@@ -865,7 +865,7 @@ git commit -m "Implement chapter 12.5 Deduplication & Cleaning"
 
 - **sub=0 (C.red) - The stale-index problem**
   Title: "Stale RAG Hallucinates With Confidence"
-  Visual: a timeline. 2026-04-12: Habuild support team publishes "Reset Your Password" v1 (no MFA mention). 2026-05-01: they edit to v2 (adds "MFA setup is preserved through password reset"). RAG ingested v1, never re-ingested. 2026-05-10: customer asks "Do I lose my MFA after password reset?". RAG returns v1 chunk → LLM answers "MFA may need re-setup" (WRONG - v2 says it persists). Visualize: source-of-truth doc (green, v2) vs index doc (red, stale v1). Customer trust hit.
+  Visual: a timeline. 2026-04-12: customer support team publishes "Reset Your Password" v1 (no MFA mention). 2026-05-01: they edit to v2 (adds "MFA setup is preserved through password reset"). RAG ingested v1, never re-ingested. 2026-05-10: customer asks "Do I lose my MFA after password reset?". RAG returns v1 chunk → LLM answers "MFA may need re-setup" (WRONG - v2 says it persists). Visualize: source-of-truth doc (green, v2) vs index doc (red, stale v1). Customer trust hit.
   Bottom callout: "Every doc has an expiry date. Stale answers feel correct because the LLM is confident. There is no automatic stale signal."
   Key content: "stale" or "outdated", "edit" / "updated" / "version", "MFA" or "password reset", "hallucinate" or "wrong" or "confident".
 
@@ -2038,7 +2038,7 @@ git commit -m "Implement chapter 12.11 Hierarchical / Parent-Child Chunking"
 
 - **sub=0 (C.cyan) - The orphan-chunk problem**
   Title: "Chunks Out Of Context Look Identical To The Embedding Model"
-  Visual: take 3 chunks from 3 different docs of the Habuild Cloud corpus, all of which contain the phrase "click Save to confirm".
+  Visual: take 3 chunks from 3 different docs of the customer support corpus, all of which contain the phrase "click Save to confirm".
   - Chunk A (from doc-2 - email change): "...verify your new email address, then click Save to confirm."
   - Chunk B (from doc-15 - role permissions): "...assign the new role to the user, then click Save to confirm."
   - Chunk C (from doc-18 - notifications): "...select the channels you want notifications on, then click Save to confirm."
@@ -2265,7 +2265,7 @@ git commit -m "Implement chapter 12.12 Contextual Retrieval"
 
 **Scope binding:** This task modifies ONLY the files listed in `**Files:**` above. If during implementation you discover other defects in other files, DO NOT fix them in this task - document them as a separate observation and continue with the listed scope. Before committing, run `git status` and `git diff --stat`: if ANY file outside the Files: list shows as modified, abort the commit and either move the change to the right task or revert it.
 
-**Chapter purpose (from spec):** Synthesize all 6 prior chunking chapters (12.7-12.12) into a decision framework. Decision matrix axes: doc structure (markdown / HTML / PDF / code / flat-text) × query type (factual / relational / comparative) × cost budget (lab / startup / enterprise). End with a worked walkthrough on the Habuild Cloud support corpus where the answer is "Recursive Structural baseline + Hierarchical for long policies + Contextual Retrieval to disambiguate FAQ + Semantic for the runbook narrative". Show how a real production system mixes strategies per doc-type.
+**Chapter purpose (from spec):** Synthesize all 6 prior chunking chapters (12.7-12.12) into a decision framework. Decision matrix axes: doc structure (markdown / HTML / PDF / code / flat-text) × query type (factual / relational / comparative) × cost budget (lab / startup / enterprise). End with a worked walkthrough on the customer support corpus where the answer is "Recursive Structural baseline + Hierarchical for long policies + Contextual Retrieval to disambiguate FAQ + Semantic for the runbook narrative". Show how a real production system mixes strategies per doc-type.
 
 **Sub-step structure (5 sub-steps, 0-4):**
 
@@ -2306,15 +2306,15 @@ git commit -m "Implement chapter 12.12 Contextual Retrieval"
   - Enterprise: "Recursive Structural baseline + Hierarchical + Contextual Retrieval + (Semantic where prose dominates). Stack with hybrid + rerankers. Budget for the one-time $100-$10K augmentation cost."
   Key content: "lab" or "prototype", "startup", "enterprise", at least one cost figure like "$100" or "$10K" or "free".
 
-- **sub=4 (C.red) - Worked walkthrough on the Habuild Cloud support corpus**
-  Title: "Walkthrough: Picking Strategies For The Habuild Cloud Corpus"
+- **sub=4 (C.red) - Worked walkthrough on the customer support corpus**
+  Title: "Walkthrough: Picking Strategies For The Customer Support Corpus"
   Visual: a 3-row recommendation table, one row per corpus category.
   - Account & Billing (10 docs, FAQ-style, lots of repeated phrases like "click Save"): "Recursive Structural + Contextual Retrieval. Contextual disambiguates the duplicate phrases across email/role/notifications docs."
   - Product Features (10 docs, longer technical pages with sections and code samples): "Recursive Structural + Hierarchical. Sections give clean splits; parent-swap gives the LLM context for technical answers."
   - Troubleshooting (10 docs, free-form runbooks, narrative paragraphs): "Recursive Structural + Semantic for the longer narratives. Semantic catches topic shifts within a runbook."
   Below the table: a one-line synthesis: "Production chunking is rarely one strategy. Mix per doc-type, measure recall, iterate."
   Bottom signpost: "Chapters 12.14-12.17 move to embedding model choice and how chunking interacts with embedding quality."
-  Key content: "Habuild Cloud" or "support corpus", "Account" + "Product Features" + "Troubleshooting", "mix" or "rarely one strategy", "12.14" or "embedding model" reference (allowed within-section signpost).
+  Key content: "customer support" or "support corpus", "Account" + "Product Features" + "Troubleshooting", "mix" or "rarely one strategy", "12.14" or "embedding model" reference (allowed within-section signpost).
 
 - [ ] **Step 1: Write content tests for 12.13**
 
@@ -2357,9 +2357,9 @@ describe("ChunkingDecision (12.13) content", () => {
     expect(container.textContent).toMatch(/\$|free|cost/i);
   });
 
-  it("sub=4 walks through strategy choice on the Habuild Cloud corpus", () => {
+  it("sub=4 walks through strategy choice on the customer support corpus", () => {
     const { container } = render(fn(makeCtx({ sub: 4 })));
-    expect(container.textContent).toMatch(/Habuild|support corpus/i);
+    expect(container.textContent).toMatch(/customer support|support corpus/i);
     expect(container.textContent).toMatch(/Account|Billing/i);
     expect(container.textContent).toMatch(/Product Features|Troubleshooting/i);
     expect(container.textContent).toMatch(/mix|rarely one|iterate/i);
@@ -2847,7 +2847,7 @@ After M6: a final pass updates CLAUDE.md mapping with all 41 chapters, runs full
 
 **No placeholders:** Every test contains concrete regex assertions. Every sub-step has a titled color and concrete content spec with key strings/numbers spelled out. Every Step 5 svg-descriptions.json update gives a concrete example JSON entry. Every Step 9 commit has an exact commit message.
 
-**Running-example coherence:** All chapters reference the Habuild Cloud corpus. The Sarah-in-doc-1 narrative is introduced in 12.10 and referenced consistently. The doc-1 (password reset), doc-4 (refunds), doc-7 (login troubleshooting), doc-12 (API keys) references are used across chapters. The 5 standard queries from M1 are reused where applicable. The same password-reset article is the running ingestion example across 12.4 (parsing), 12.5 (dedup across Zendesk/Confluence/Notion), and 12.6 (v1→v2 refresh).
+**Running-example coherence:** All chapters reference the customer support corpus. The Sarah-in-doc-1 narrative is introduced in 12.10 and referenced consistently. The doc-1 (password reset), doc-4 (refunds), doc-7 (login troubleshooting), doc-12 (API keys) references are used across chapters. The 5 standard queries from M1 are reused where applicable. The same password-reset article is the running ingestion example across 12.4 (parsing), 12.5 (dedup across Zendesk/Confluence/Notion), and 12.6 (v1→v2 refresh).
 
 **Prompt-template / metadata-artifact treatment:** 12.4 sub=4 (metadata JSON) and 12.12 sub=2 (augmentation prompt) explicitly call out their artifacts as styled monospace blocks (not code blocks) per the spec's Section-12-specific rule. Background tint, soft border, monospace font, placeholder highlighting, title labeling.
 

@@ -8,7 +8,7 @@
 
 **Goal:** Add Acts 4 + 5 of Section 12 "Retrieval-Augmented Generation" - the eight chapters covering Embed & Index Choices for RAG (12.14 EmbeddingModelChoice, 12.15 DomainAdaptation, 12.16 HybridForRAG, 12.17 RerankerCascade) plus Query Transformation (12.18 WhyTransformQueries, 12.19 HyDE, 12.20 MultiQueryExpansion, 12.21 QueryRoutingDecomposition). These chapters live in a NEW file `src/sections/rag-retrieval.jsx` (Acts 1+3 already shipped in `rag-foundations.jsx` via Milestones 1 and 2). At end of this milestone the app ships with 21 navigable chapters in Section 12 (12.1 through 12.21).
 
-**Architecture:** Create a new section file `src/sections/rag-retrieval.jsx` and update the Section 12 loader in `learn-ai.jsx` to load `rag-foundations.jsx` (Act 1: 12.1-12.3), `rag-ingestion.jsx` (Act 2: 12.4-12.6, added in M2), `rag-foundations.jsx` chunking content (Act 3: 12.7-12.13, added in M2), AND `rag-retrieval.jsx` (Acts 4+5: 12.14-12.21) via `Promise.all` + `Object.assign` - the loader expands from 2 files (rag-foundations + rag-ingestion after M2) to 3 files by appending rag-retrieval.jsx, following the multi-file loader pattern used for Section 3 scaling+llm-training, Section 8 road-to-transformers+transformer-block, Section 10 attention-computation+modern-llm-techniques, Section 11 vector-*.jsx fan-out. Each chapter follows the established learn-ai pattern: ctx-based function component, `{sub >= 0 && ... }` for sub=0 inline, `<Reveal when={sub >= N}>` for subsequent sub-steps, colored `<Box>` per sub-step, center-aligned `<T bold center>` titles, real math, concrete Habuild-Cloud-corpus examples.
+**Architecture:** Create a new section file `src/sections/rag-retrieval.jsx` and update the Section 12 loader in `learn-ai.jsx` to load `rag-foundations.jsx` (Act 1: 12.1-12.3), `rag-ingestion.jsx` (Act 2: 12.4-12.6, added in M2), `rag-foundations.jsx` chunking content (Act 3: 12.7-12.13, added in M2), AND `rag-retrieval.jsx` (Acts 4+5: 12.14-12.21) via `Promise.all` + `Object.assign` - the loader expands from 2 files (rag-foundations + rag-ingestion after M2) to 3 files by appending rag-retrieval.jsx, following the multi-file loader pattern used for Section 3 scaling+llm-training, Section 8 road-to-transformers+transformer-block, Section 10 attention-computation+modern-llm-techniques, Section 11 vector-*.jsx fan-out. Each chapter follows the established learn-ai pattern: ctx-based function component, `{sub >= 0 && ... }` for sub=0 inline, `<Reveal when={sub >= N}>` for subsequent sub-steps, colored `<Box>` per sub-step, center-aligned `<T bold center>` titles, real math, concrete customer support corpus examples.
 
 **Tech Stack:** React 18 (hooks, inline styles), Vitest, Vite, TDD-first. No new dependencies.
 
@@ -65,9 +65,9 @@ If any prerequisite is missing, STOP and complete M1/M2 first - this plan assume
 
 ## Standard running-example values (reference during implementation)
 
-Use the same values established in M1/M2 (from the spec). Reuse the Habuild Cloud support corpus and the 5 standard queries throughout these 8 chapters so the learner sees continuity:
+Use the same values established in M1/M2 (from the spec). Reuse the customer support corpus and the 5 standard queries throughout these 8 chapters so the learner sees continuity:
 
-**Primary corpus:** 30-doc Habuild Cloud customer support knowledge base:
+**Primary corpus:** 30-doc customer support knowledge base:
 - 10 account/billing docs (password reset, email change, subscription tiers, refunds, invoice download, MFA setup, account deletion, payment methods, downgrade flow, team-seat management).
 - 10 product feature docs (dashboard tour, integrations setup, API keys, webhooks, export formats, custom fields, role permissions, notifications, search filters, bulk operations).
 - 10 troubleshooting docs (common errors, slow page load, 500 errors, sync failures, login issues, browser compatibility, data inconsistency, export failures, rate limits, quota exceeded).

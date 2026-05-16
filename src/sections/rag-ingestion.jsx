@@ -59,7 +59,7 @@ const HTML_GOOD_CHUNK =
 
 const METADATA_LINES = [
   { type: "open", text: "{" },
-  { type: "kv", key: '"source_url"', value: '"https://docs.habuild.com/account/password-reset",' },
+  { type: "kv", key: '"source_url"', value: '"https://docs.example.com/account/password-reset",' },
   { type: "kv", key: '"title"', value: '"Reset Your Password",' },
   { type: "kv", key: '"doc_type"', value: '"kb_article",' },
   { type: "kv", key: '"section_path"', value: '"Account > Security > Password",' },

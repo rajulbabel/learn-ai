@@ -179,6 +179,16 @@ export const chapters = [
   { id: "12.11", title: "Hierarchical / Parent-Child Chunking", section: 12, component: "HierarchicalChunking" },
   { id: "12.12", title: "Contextual Retrieval (Anthropic 2024)", section: 12, component: "ContextualRetrieval" },
   { id: "12.13", title: "The Chunking Decision", section: 12, component: "ChunkingDecision" },
+  // Section 12 Act 4: Embed & Index Choices for RAG
+  { id: "12.14", title: "Picking an Embedding Model", section: 12, component: "EmbeddingModelChoice" },
+  { id: "12.15", title: "Domain Adaptation - Fine-Tuning Embeddings", section: 12, component: "DomainAdaptation" },
+  { id: "12.16", title: "Hybrid Retrieval for RAG", section: 12, component: "HybridForRAG" },
+  { id: "12.17", title: "The Reranker Cascade", section: 12, component: "RerankerCascade" },
+  // Section 12 Act 5: Query Transformation
+  { id: "12.18", title: "Why Transform Queries", section: 12, component: "WhyTransformQueries" },
+  { id: "12.19", title: "HyDE - Hypothetical Document Embeddings", section: 12, component: "HyDE" },
+  { id: "12.20", title: "Multi-Query Expansion", section: 12, component: "MultiQueryExpansion" },
+  { id: "12.21", title: "Query Routing & Decomposition", section: 12, component: "QueryRoutingDecomposition" },
 ];
 
 export const sectionNames = {

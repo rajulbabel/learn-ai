@@ -266,7 +266,7 @@ describe("Section 11 chapters", () => {
 describe("Section 12 chapters", () => {
   it("has chapters 12.1 through 12.13 in order", () => {
     const section12 = chapters.filter((ch) => ch.section === 12);
-    expect(section12.length).toBe(13);
+    expect(section12.length).toBeGreaterThanOrEqual(13);
     expect(section12[0].id).toBe("12.1");
     expect(section12[0].component).toBe("WhyLLMsNeedRetrieval");
     expect(section12[0].title).toBe("Why LLMs Need Retrieval");
@@ -306,6 +306,33 @@ describe("Section 12 chapters", () => {
     expect(section12[12].id).toBe("12.13");
     expect(section12[12].component).toBe("ChunkingDecision");
     expect(section12[12].title).toBe("The Chunking Decision");
+  });
+});
+
+describe("Section 12 Acts 4+5 chapters", () => {
+  it("has chapters 12.14 through 12.21 in order", () => {
+    const section12 = chapters.filter((ch) => ch.section === 12);
+    expect(section12.length).toBeGreaterThanOrEqual(21);
+    const acts45 = section12.filter((c) => {
+      const n = Number(c.id.split(".")[1]);
+      return n >= 14 && n <= 21;
+    });
+    const expected = [
+      { id: "12.14", component: "EmbeddingModelChoice", title: "Picking an Embedding Model" },
+      { id: "12.15", component: "DomainAdaptation", title: "Domain Adaptation - Fine-Tuning Embeddings" },
+      { id: "12.16", component: "HybridForRAG", title: "Hybrid Retrieval for RAG" },
+      { id: "12.17", component: "RerankerCascade", title: "The Reranker Cascade" },
+      { id: "12.18", component: "WhyTransformQueries", title: "Why Transform Queries" },
+      { id: "12.19", component: "HyDE", title: "HyDE - Hypothetical Document Embeddings" },
+      { id: "12.20", component: "MultiQueryExpansion", title: "Multi-Query Expansion" },
+      { id: "12.21", component: "QueryRoutingDecomposition", title: "Query Routing & Decomposition" },
+    ];
+    expect(acts45.length).toBe(expected.length);
+    expected.forEach((exp, i) => {
+      expect(acts45[i].id).toBe(exp.id);
+      expect(acts45[i].component).toBe(exp.component);
+      expect(acts45[i].title).toBe(exp.title);
+    });
   });
 });
 

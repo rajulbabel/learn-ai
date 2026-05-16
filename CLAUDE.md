@@ -256,7 +256,7 @@ Only config.js IDs change.
 | 11.35 | WeaviateMilvusChroma | Weaviate / Milvus / Chroma |
 | 11.36 | DecisionFramework | The Decision Framework |
 
-**Section 12: Retrieval-Augmented Generation** (`rag-foundations.jsx` + `rag-ingestion.jsx` + `rag-retrieval.jsx` + `rag-generation.jsx` - Milestones 1-4 of 6 complete; Acts 1-7 implemented, Acts 8-10 pending in Milestones 5-6)
+**Section 12: Retrieval-Augmented Generation** (`rag-foundations.jsx` + `rag-ingestion.jsx` + `rag-retrieval.jsx` + `rag-generation.jsx` + `rag-evaluation.jsx` - Milestones 1-5 of 6 complete; Acts 1-8 implemented, Acts 9-10 pending in Milestone 6)
 
 | Chapter | Component | Title |
 |---------|-----------|-------|
@@ -290,6 +290,13 @@ Only config.js IDs change.
 | 12.28 | GraphRAG | GraphRAG (Microsoft 2024) |
 | 12.29 | AgenticRAG | Tool-Augmented & Agentic RAG |
 | 12.30 | LongContextVsRAG | Long-Context vs RAG |
+| 12.31 | RAGEvalTriangle | The RAG Eval Triangle |
+| 12.32 | LLMAsJudge | LLM-as-Judge |
+| 12.33 | RAGASMetrics | RAGAS Metrics |
+| 12.34 | GoldenDatasets | Golden Datasets |
+| 12.35 | OnlineEvalABTesting | Online Eval & A/B Testing |
+
+(M6 will extend this table with chapters 12.36-12.41 for Acts 9+10.)
 
 ## Project Structure
 
@@ -332,7 +339,8 @@ learn-ai/
 │       ├── rag-foundations.jsx           # Section 12 Acts 1+3: Problem + Chunking, 12.1-12.3 + 12.7-12.13
 │       ├── rag-ingestion.jsx             # Section 12 Act 2: Ingestion, 12.4-12.6
 │       ├── rag-retrieval.jsx             # Section 12 Acts 4+5: Embed/Index + Query Transformation, 12.14-12.21
-│       └── rag-generation.jsx            # Section 12 Acts 6+7: Context+Generation + Advanced Patterns, 12.22-12.30
+│       ├── rag-generation.jsx            # Section 12 Acts 6+7: Context+Generation + Advanced Patterns, 12.22-12.30
+│       └── rag-evaluation.jsx            # Section 12 Act 8: Evaluation, 12.31-12.35
 ├── .github/workflows/deploy.yml
 └── CLAUDE.md
 ```

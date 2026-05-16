@@ -307,5 +307,8 @@
     "Tree hierarchy diagram with doc-4 refunds policy as the root node, three section nodes below for eligibility, process, and edge cases, and four to six leaf chunk nodes below each section, with leaves colored cyan, sections purple, and root green",
     "Leaf-to-parent swap flow diagram showing retrieved leaf L7 with the 'no refunds after 30 days' sentence on the left, a parent-lookup arrow in the middle, and the full 300-token edge-cases section on the right being sent to the LLM",
     "Tree hierarchy diagram extending the doc-4 refunds tree with a small summary card placed beside each section node colored yellow with one-sentence LLM-generated summaries; index now stores summary vectors and retrieval finds a summary then swaps to the full parent section"
+  ],
+  "12.12": [
+    "Horizontal bar chart showing four bars of retrieval failure rate from Anthropic's September 2024 Contextual Retrieval benchmark: naive embedding 5.7%, plus contextual embedding 3.7%, plus contextual BM25 2.9%, plus reranking 1.9%, with title-case axis labels"
   ]
 }

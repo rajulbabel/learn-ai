@@ -326,5 +326,10 @@
     "Five agents top row, six tools bottom row, every agent connects to every tool producing thirty crossed lines that visualize the M times N ad-hoc tool sprawl problem.",
     "Five agents on top connect to six tools on bottom via a single protocol hub in the middle, reducing thirty crossed lines to eleven clean lines and demonstrating M plus N scaling.",
     "Concentric ring diagram showing a trusted host containing user data and the model surrounding an untrusted server tool, with protocol arrows crossing the boundary for capability listing and tool authorization that enforces the sandbox contract."
+  ],
+  "13.13": [
+    "Three vertically stacked role boxes showing MCP host application on top hosting a client connection in the middle that speaks to a tool server at the bottom.",
+    "One host application contains three internal client connections each linked downward to a separate MCP server providing different tools.",
+    "Five step horizontal flow diagram showing host launches client, client connects to server, initialize handshake, list available tools and resources and prompts, then call a tool and get a result."
   ]
 }

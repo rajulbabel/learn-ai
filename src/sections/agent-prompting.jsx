@@ -4,11 +4,8 @@ import { C } from "../config.js";
 // Section 13 Act 1: Prompting Foundations
 // Chapters 13.1 - 13.6
 
-// Local color aliases for hues not in the global C palette
-// (used in 13.1 for the indigo and teal sub-step accents).
-const INDIGO = "#7c4dff";
+// Lighter text shades used inside tinted indigo/teal panels.
 const INDIGO_SOFT = "#b39ddb";
-const TEAL = "#26a69a";
 const TEAL_SOFT = "#80cbc4";
 
 const MESSAGE_ROLES = [
@@ -509,8 +506,8 @@ export const AnatomyOfLlmCall = (ctx) => {
       </Reveal>
 
       <Reveal when={sub >= 3}>
-        <Box color={INDIGO} style={{ width: "100%" }}>
-          <T color={INDIGO} bold center size={22}>
+        <Box color={C.indigo} style={{ width: "100%" }}>
+          <T color={C.indigo} bold center size={22}>
             When Does Generation End?
           </T>
           <T color={INDIGO_SOFT} center size={16} style={{ marginTop: 10 }}>
@@ -531,12 +528,12 @@ export const AnatomyOfLlmCall = (ctx) => {
                 style={{
                   padding: "12px 14px",
                   borderRadius: 8,
-                  background: `${INDIGO}06`,
-                  border: `1px solid ${INDIGO}12`,
+                  background: `${C.indigo}06`,
+                  border: `1px solid ${C.indigo}12`,
                   textAlign: "center",
                 }}
               >
-                <T color={INDIGO} bold center size={15}>
+                <T color={C.indigo} bold center size={15}>
                   {c.name}
                 </T>
                 <div
@@ -544,8 +541,8 @@ export const AnatomyOfLlmCall = (ctx) => {
                     marginTop: 6,
                     padding: "4px 8px",
                     borderRadius: 4,
-                    background: `${INDIGO}12`,
-                    border: `1px solid ${INDIGO}24`,
+                    background: `${C.indigo}12`,
+                    border: `1px solid ${C.indigo}24`,
                     fontFamily: "monospace",
                     fontSize: 13,
                     color: INDIGO_SOFT,
@@ -584,23 +581,23 @@ export const AnatomyOfLlmCall = (ctx) => {
       </Reveal>
 
       <Reveal when={sub >= 4}>
-        <Box color={TEAL} style={{ width: "100%" }}>
-          <T color={TEAL} bold center size={22}>
+        <Box color={C.teal} style={{ width: "100%" }}>
+          <T color={C.teal} bold center size={22}>
             What Comes Back
           </T>
           <T color={TEAL_SOFT} center size={16} style={{ marginTop: 10 }}>
             The response is a small structured object. Three fields matter for almost every call: the generated text,
             why the model stopped, and the token usage you pay for.
           </T>
-          <T color={TEAL} bold center size={15} style={{ marginTop: 14 }}>
+          <T color={C.teal} bold center size={15} style={{ marginTop: 14 }}>
             Response Shape
           </T>
           <div
             style={{
               marginTop: 8,
               padding: 16,
-              background: `${TEAL}06`,
-              border: `1px solid ${TEAL}12`,
+              background: `${C.teal}06`,
+              border: `1px solid ${C.teal}12`,
               borderRadius: 8,
               textAlign: "center",
               fontFamily: "monospace",

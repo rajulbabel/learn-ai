@@ -244,6 +244,8 @@ export const C = {
   pink: "#e040fb",
   orange: "#ffab40",
   blue: "#42a5f5",
+  indigo: "#5c6bc0",
+  teal: "#26c6da",
 };
 
 // Validate config - extracted for testability

@@ -2350,3 +2350,71 @@ Allow this action?
     </div>
   );
 };
+
+// Section 13 Act 9: Frameworks + Decision
+// Chapters 13.48 - 13.52 (final chapters of Section 13)
+
+export const LangGraphFramework = () => {
+  return (
+    <div>
+      <Box color={C.teal}>
+        <T color={C.teal} bold center size={22}>
+          LangGraph
+        </T>
+        <T size={16}>Stub - implemented in Task 5.</T>
+      </Box>
+    </div>
+  );
+};
+
+export const CrewAiAutoGen = () => {
+  return (
+    <div>
+      <Box color={C.teal}>
+        <T color={C.teal} bold center size={22}>
+          CrewAI / AutoGen
+        </T>
+        <T size={16}>Stub - implemented in Task 6.</T>
+      </Box>
+    </div>
+  );
+};
+
+export const VendorSdks = () => {
+  return (
+    <div>
+      <Box color={C.teal}>
+        <T color={C.teal} bold center size={22}>
+          Claude Agent SDK + OpenAI Agents
+        </T>
+        <T size={16}>Stub - implemented in Task 7.</T>
+      </Box>
+    </div>
+  );
+};
+
+export const CustomNoFramework = () => {
+  return (
+    <div>
+      <Box color={C.teal}>
+        <T color={C.teal} bold center size={22}>
+          Custom / No-Framework
+        </T>
+        <T size={16}>Stub - implemented in Task 8.</T>
+      </Box>
+    </div>
+  );
+};
+
+export const AgentDecisionFramework = () => {
+  return (
+    <div>
+      <Box color={C.teal}>
+        <T color={C.teal} bold center size={22}>
+          The Complete Agent Decision Framework
+        </T>
+        <T size={16}>Stub - implemented in Task 9.</T>
+      </Box>
+    </div>
+  );
+};

@@ -18,6 +18,7 @@ import * as VectorCompression from "../sections/vector-compression.jsx";
 import * as VectorProduction from "../sections/vector-production.jsx";
 import * as VectorSystems from "../sections/vector-systems.jsx";
 import * as RagFoundations from "../sections/rag-foundations.jsx";
+import * as RagIngestion from "../sections/rag-ingestion.jsx";
 
 const lookup = {
   TOC,
@@ -36,6 +37,7 @@ const lookup = {
   ...VectorProduction,
   ...VectorSystems,
   ...RagFoundations,
+  ...RagIngestion,
 };
 
 describe("lookup", () => {
@@ -68,5 +70,17 @@ describe("lookup", () => {
     expect(typeof mod.WhyLLMsNeedRetrieval).toBe("function");
     expect(typeof mod.NaiveRAGPipeline).toBe("function");
     expect(typeof mod.WhereNaiveRAGBreaks).toBe("function");
+  });
+});
+
+describe("RagIngestion exports", () => {
+  it("exposes ParsingExtraction", () => {
+    expect(typeof RagIngestion.ParsingExtraction).toBe("function");
+  });
+  it("exposes DeduplicationCleaning", () => {
+    expect(typeof RagIngestion.DeduplicationCleaning).toBe("function");
+  });
+  it("exposes RefreshSync", () => {
+    expect(typeof RagIngestion.RefreshSync).toBe("function");
   });
 });

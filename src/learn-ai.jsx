@@ -39,7 +39,11 @@ const sectionLoaders = {
       import("./sections/vector-production.jsx"),
       import("./sections/vector-systems.jsx"),
     ]).then((mods) => Object.assign({}, ...mods)),
-  12: () => import("./sections/rag-foundations.jsx"),
+  12: () =>
+    Promise.all([
+      import("./sections/rag-foundations.jsx"),
+      import("./sections/rag-ingestion.jsx"),
+    ]).then((mods) => Object.assign({}, ...mods)),
 };
 
 // ── Lazy-loaded search: not loaded until search is opened ──

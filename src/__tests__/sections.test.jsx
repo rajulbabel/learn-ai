@@ -20,6 +20,7 @@ import * as VectorCompression from "../sections/vector-compression.jsx";
 import * as VectorProduction from "../sections/vector-production.jsx";
 import * as VectorSystems from "../sections/vector-systems.jsx";
 import * as RagFoundations from "../sections/rag-foundations.jsx";
+import * as RagIngestion from "../sections/rag-ingestion.jsx";
 
 const lookup = {
   TOC,
@@ -38,6 +39,7 @@ const lookup = {
   ...VectorProduction,
   ...VectorSystems,
   ...RagFoundations,
+  ...RagIngestion,
 };
 
 afterEach(() => cleanup());

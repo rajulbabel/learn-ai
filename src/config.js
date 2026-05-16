@@ -171,6 +171,7 @@ export const chapters = [
   { id: "12.3", title: "Where Naive RAG Breaks", section: 12, component: "WhereNaiveRAGBreaks" },
   { id: "12.4", title: "Parsing - Raw Sources to Clean Text", section: 12, component: "ParsingExtraction" },
   { id: "12.5", title: "Deduplication & Cleaning", section: 12, component: "DeduplicationCleaning" },
+  { id: "12.6", title: "Refresh & Sync Schedules", section: 12, component: "RefreshSync" },
 ];
 
 export const sectionNames = {

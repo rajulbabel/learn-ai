@@ -5405,3 +5405,46 @@ describe("DeduplicationCleaning (12.5) content", () => {
     expect(container.textContent).toMatch(/PII|redact|SSN/i);
   });
 });
+
+describe("RefreshSync (12.6) content", () => {
+  const fn = RagIngestion.RefreshSync;
+
+  it("sub=0 frames the stale-index hallucination problem", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/stale|outdated/i);
+    expect(container.textContent).toMatch(/MFA|password reset/i);
+    expect(container.textContent).toMatch(/hallucinate|wrong|confident/i);
+  });
+
+  it("sub=1 explains full re-index cost and tradeoff", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/full re[- ]?index|rebuild/i);
+    expect(container.textContent).toMatch(/nightly|cron|batch/i);
+    expect(container.textContent).toMatch(/\$|cost/);
+    expect(container.textContent).toMatch(/shadow|atomic|swap/i);
+  });
+
+  it("sub=2 details webhook-driven incremental sync", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/webhook/i);
+    expect(container.textContent).toMatch(/incremental|upsert/i);
+    expect(container.textContent).toMatch(/seconds|real[- ]?time/i);
+    expect(container.textContent).toMatch(/11\.21|deletes/);
+  });
+
+  it("sub=3 details polling on updated_at with interval lag", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/poll/i);
+    expect(container.textContent).toMatch(/updated_at|timestamp/i);
+    expect(container.textContent).toMatch(/15|interval/i);
+    expect(container.textContent).toMatch(/lag|delay/i);
+  });
+
+  it("sub=4 covers delete propagation and versioning", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/delete|tombstone/i);
+    expect(container.textContent).toMatch(/version|v1|v2/i);
+    expect(container.textContent).toMatch(/grace|propagation/i);
+    expect(container.textContent).toMatch(/11\.21|Section 11/);
+  });
+});

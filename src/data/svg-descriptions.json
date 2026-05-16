@@ -280,5 +280,10 @@
   "12.5": [
     "Three source systems (Zendesk, Confluence, Notion) each containing the same Reset-Your-Password article flow into a single ingestion pipeline that produces three nearly-identical duplicate chunks in the vector database. Below them, a context-window bar of 4,096 tokens shows the first 1,536 tokens consumed by three duplicate chunks tinted red while only 2,560 tokens remain green for distinct answers.",
     "MinHash plus LSH pipeline diagram with three stacked stages. Stage 1 tokenizes two near-duplicate docs into 3-gram shingle sets. Stage 2 reduces each shingle set to a 128-position MinHash signature so the Jaccard estimate lands around 0.97. Stage 3 hashes the signatures through LSH banding with 16 bands of 8 rows so both docs land in the same candidate-pair bucket without an O(N squared) pairwise scan."
+  ],
+  "12.6": [
+    "Timeline showing a password-reset article version v1 published on 2026-04-12, edited to v2 on 2026-05-01 adding an MFA-preservation note, and a stale-index v1 chunk being retrieved on 2026-05-10 causing the LLM to give the wrong answer because the index never re-ingested v2",
+    "Webhook-driven incremental sync sequence diagram with time markers T=0:00 through T=0:10 showing user edit, Confluence webhook fire, ingestion service fetch, re-parse and re-chunk and re-embed, upsert into vector DB referencing Section 11.21 deletes-updates, and final queryable state with about ten-second propagation lag",
+    "Three-row versioning timeline showing doc-1 v1 chunks active at t=0, both v1 (deprecated) and v2 (active) chunks present during the t=+1min re-embed window for retrieval-gap avoidance, and only v2 chunks active at t=+15min after the grace period drops v1"
   ]
 }

@@ -270,5 +270,8 @@
   ],
   "12.2": [
     "Horizontal flow diagram of the 5-stage RAG pipeline: Chunk, Embed, Store, Retrieve, Generate. First 3 stages tinted cyan (offline ingest), last 2 stages tinted yellow (online query). Arrows connect adjacent stages."
+  ],
+  "12.3": [
+    "U-shaped attention curve plotting attention weight against chunk position 1-10. High attention at start (positions 1-2) and end (positions 9-10), dipping in the middle (positions 4-7). Position 5 is highlighted as the relevant chunk that gets missed."
   ]
 }

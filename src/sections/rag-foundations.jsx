@@ -594,7 +594,7 @@ export const NaiveRAGPipeline = (ctx) => {
           </div>
           <T color="#a5d6a7" size={16} style={{ marginTop: 12 }}>
             Chunking strategies (fixed-size, sentence-aware, semantic, hierarchical) covered in detail in chapters
-            12.4-12.10.
+            12.7-12.13.
           </T>
         </Box>
       </Reveal>
@@ -648,7 +648,7 @@ export const NaiveRAGPipeline = (ctx) => {
           </div>
           <T color="#b8a9ff" size={16} style={{ marginTop: 14 }}>
             Embeddings - covered in Section 5.2 - turn text into dense vectors. RAG uses retrieval-tuned embeddings
-            (more in chapter 12.11). Production typically uses 1024-dim vectors; we show 8 here for visibility.
+            (more in chapter 12.14). Production typically uses 1024-dim vectors; we show 8 here for visibility.
           </T>
         </Box>
       </Reveal>
@@ -1155,7 +1155,7 @@ export const WhereNaiveRAGBreaks = (ctx) => {
             Wrong. The 24-hour limit IS in the doc, but bad chunking hid it.
           </T>
           <T color="#ffcc80" center size={15} style={{ marginTop: 12 }}>
-            Chapters 12.4-12.10 (chunking strategies) fix this.
+            Chapters 12.7-12.13 (chunking strategies) fix this.
           </T>
         </Box>
       </Reveal>
@@ -1251,7 +1251,7 @@ export const WhereNaiveRAGBreaks = (ctx) => {
             cluster tightly enough. The right doc is missed entirely from top-3.
           </T>
           <T color="#ffe082" center size={15} style={{ marginTop: 12 }}>
-            Chapters 12.11-12.14 (hybrid retrieval + rerankers) and 12.15-12.18 (query transformation) fix this.
+            Chapters 12.16-12.17 (hybrid retrieval + rerankers) and 12.18-12.21 (query transformation) fix this.
           </T>
         </Box>
       </Reveal>
@@ -1385,7 +1385,7 @@ export const WhereNaiveRAGBreaks = (ctx) => {
             relevant chunk at position 5 is in context, but the model skips it.
           </T>
           <T color="#a5d6a7" center size={15} style={{ marginTop: 12 }}>
-            Chapters 12.19-12.21 (context packing + lost-in-middle remedies) fix this.
+            Chapters 12.22-12.24 (context packing + lost-in-middle remedies) fix this.
           </T>
         </Box>
       </Reveal>
@@ -1442,7 +1442,7 @@ export const WhereNaiveRAGBreaks = (ctx) => {
             it, no one can tell.
           </T>
           <T color="#80deea" center size={15} style={{ marginTop: 12 }}>
-            Chapters 12.19-12.21 (citations + groundedness) fix this.
+            Chapters 12.22-12.24 (citations + groundedness) fix this.
           </T>
         </Box>
       </Reveal>
@@ -1523,7 +1523,7 @@ export const WhereNaiveRAGBreaks = (ctx) => {
             </div>
           </div>
           <T color="#b8a9ff" center size={15} style={{ marginTop: 12 }}>
-            Chapters 12.19-12.21 (refusal + groundedness instruction) and 12.28-12.32 (faithfulness eval) fix this.
+            Chapters 12.22-12.24 (refusal + groundedness instruction) and 12.31-12.35 (faithfulness eval) fix this.
           </T>
         </Box>
       </Reveal>
@@ -1596,7 +1596,7 @@ export const WhereNaiveRAGBreaks = (ctx) => {
                 </T>
               </div>
               <T color="#f8bbd0" center size={13} style={{ marginTop: 10 }}>
-                Embedding lifecycle - covered in Section 11.27 - and chapters 12.33-12.37 (drift detection) fix this.
+                Embedding lifecycle - covered in Section 11.27 - and chapters 12.36-12.40 (drift detection) fix this.
               </T>
             </div>
 
@@ -1680,7 +1680,7 @@ export const WhereNaiveRAGBreaks = (ctx) => {
                 At 1000 QPS, costs $12,300/day.
               </T>
               <T color="#f8bbd0" center size={13} style={{ marginTop: 10 }}>
-                Chapters 12.33-12.37 (caching, cost models, observability) fix this.
+                Chapters 12.36-12.40 (caching, cost models, observability) fix this.
               </T>
             </div>
           </div>

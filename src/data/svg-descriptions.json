@@ -369,5 +369,10 @@
     "Plan tree topology where a single root node fans out to four leaf nodes representing the full plan written up front before any leaf is executed.",
     "Four-leaf plan tree for ticket T4 cancel and refund showing lookup_customer, lookup_subscription, cancel, process_refund leaves with refund leaf marked for escalation.",
     "Plan execution sweep showing four leaves running with their results next to them, the fourth leaf failing with a business_rule error, and a fifth escalate_human leaf appended by the executor to adapt to the error."
+  ],
+  "13.23": [
+    "Horizontal counter from one to ten showing iteration count with the tenth iteration highlighted as the forced termination point.",
+    "Horizontal budget bar filling from zero to one hundred percent with markers at thirty sixty and one hundred percent showing iteration cost consumption stopping at budget exhaustion.",
+    "Fail-safe escalation flow from any non-success termination to user message and escalate_human call with partial transcript."
   ]
 }

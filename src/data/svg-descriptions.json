@@ -331,5 +331,8 @@
     "Three vertically stacked role boxes showing MCP host application on top hosting a client connection in the middle that speaks to a tool server at the bottom.",
     "One host application contains three internal client connections each linked downward to a separate MCP server providing different tools.",
     "Five step horizontal flow diagram showing host launches client, client connects to server, initialize handshake, list available tools and resources and prompts, then call a tool and get a result."
+  ],
+  "13.15": [
+    "Four-stage server lifecycle diagram showing registered then listening then active handling requests then closed shutdown, with transition arrows labeled connect, initialize, and shutdown."
   ]
 }

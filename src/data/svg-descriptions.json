@@ -380,5 +380,9 @@
   ],
   "13.25": [
     "Timeline of working memory: created at task start, updated through N iterations, discarded when task ends, with a promotion arrow pointing to long-term store before discard."
+  ],
+  "13.26": [
+    "Vertical timeline of four past events for Alice the customer, each with a date and a short summary, with the current ticket marked at the bottom.",
+    "Two stage flow: stage one embeds each event and stores it in the vector database; stage two embeds a query and runs ANN search to retrieve the top-k matching past events."
   ]
 }

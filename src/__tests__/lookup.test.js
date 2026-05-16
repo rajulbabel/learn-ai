@@ -23,6 +23,7 @@ import * as AgentPrompting from "../sections/agent-prompting.jsx";
 import * as AgentTools from "../sections/agent-tools.jsx";
 import * as AgentLoops from "../sections/agent-loops.jsx";
 import * as MultiAgent from "../sections/multi-agent.jsx";
+import * as AgentEvals from "../sections/agent-evals.jsx";
 
 const lookup = {
   TOC,
@@ -46,6 +47,7 @@ const lookup = {
   ...AgentTools,
   ...AgentLoops,
   ...MultiAgent,
+  ...AgentEvals,
 };
 
 describe("lookup", () => {
@@ -150,5 +152,15 @@ describe("Section 13 Act 6 component presence (MultiAgent)", () => {
     expect(typeof MultiAgent.CriticDebate).toBe("function");
     expect(typeof MultiAgent.MultiAgentFailures).toBe("function");
     expect(typeof MultiAgent.AgenticRag).toBe("function");
+  });
+});
+
+describe("Section 13 Act 7 component presence (AgentEvals)", () => {
+  it("AgentEvals exports each Act 7 chapter", () => {
+    expect(typeof AgentEvals.WhyEvalAgents).toBe("function");
+    expect(typeof AgentEvals.EvalDimensions).toBe("function");
+    expect(typeof AgentEvals.LlmAsJudge).toBe("function");
+    expect(typeof AgentEvals.TraceEvals).toBe("function");
+    expect(typeof AgentEvals.EvalSetsContinuous).toBe("function");
   });
 });

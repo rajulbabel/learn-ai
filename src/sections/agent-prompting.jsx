@@ -17,6 +17,7 @@ export const SOFT = {
   orange: "#ffcc80",
   pink: "#f8bbd0",
   red: "#ef9a9a",
+  amber: "#ffd54f",
 };
 
 // Greyed-out / disabled-state shades. Used when a row/chip is "cut" or "below threshold".

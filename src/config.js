@@ -180,6 +180,7 @@ export const sectionNames = {
   9: "The Decoder",
   10: "Modern LLM Techniques",
   11: "Vector Databases",
+  12: "Retrieval-Augmented Generation",
 };
 
 // Section colors (one per section, used in progress bar, TOC, etc.)
@@ -195,6 +196,7 @@ export const sectionColors = {
   9: "#ef5350",
   10: "#26a69a",
   11: "#f06292",
+  12: "#7c4dff",
 };
 
 // Colors

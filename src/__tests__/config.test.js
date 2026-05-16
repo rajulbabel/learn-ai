@@ -203,6 +203,16 @@ describe("Section 11 registration", () => {
   });
 });
 
+describe("Section 12 registration", () => {
+  it("has section 12 in sectionNames", () => {
+    expect(sectionNames[12]).toBe("Retrieval-Augmented Generation");
+  });
+
+  it("has section 12 in sectionColors", () => {
+    expect(sectionColors[12]).toBe("#7c4dff");
+  });
+});
+
 describe("Section 11 chapters", () => {
   it("has chapters 11.1 through 11.36 in order", () => {
     const section11 = chapters.filter((ch) => ch.section === 11);

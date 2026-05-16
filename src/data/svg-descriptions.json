@@ -371,5 +371,8 @@
   ],
   "12.30": [
     "Grouped bar chart comparing cost, latency, and accuracy across three strategies for the 200-page product manual: RAG-only, hybrid retrieve-broadly, and long-context-only stuffing of the full document."
+  ],
+  "12.31": [
+    "Three-layer RAG evaluation triangle: retrieval at top (recall, MRR, precision, nDCG), generation lower-left (faithfulness, answer relevancy), end-to-end lower-right (correctness, helpfulness). Each vertex is labeled with a one-line description so a learner sees what each layer measures and why three layers are needed."
   ]
 }

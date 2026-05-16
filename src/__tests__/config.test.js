@@ -336,6 +336,34 @@ describe("Section 12 Acts 4+5 chapters", () => {
   });
 });
 
+describe("Section 12 Acts 6+7 chapters", () => {
+  it("has chapters 12.22 through 12.30 in order", () => {
+    const section12 = chapters.filter((ch) => ch.section === 12);
+    expect(section12.length).toBeGreaterThanOrEqual(30);
+    const acts67 = section12.filter((c) => {
+      const n = Number(c.id.split(".")[1]);
+      return n >= 22 && n <= 30;
+    });
+    const expected = [
+      { id: "12.22", component: "ContextPacking", title: "Context Packing" },
+      { id: "12.23", component: "LostInTheMiddle", title: "The Lost-in-the-Middle Problem" },
+      { id: "12.24", component: "CitationsRefusal", title: "Citations, Refusal & Groundedness" },
+      { id: "12.25", component: "MultiHopRetrieval", title: "Multi-Hop Retrieval" },
+      { id: "12.26", component: "SelfRAG", title: "Self-RAG" },
+      { id: "12.27", component: "CorrectiveRAG", title: "CRAG - Corrective RAG" },
+      { id: "12.28", component: "GraphRAG", title: "GraphRAG (Microsoft 2024)" },
+      { id: "12.29", component: "AgenticRAG", title: "Tool-Augmented & Agentic RAG" },
+      { id: "12.30", component: "LongContextVsRAG", title: "Long-Context vs RAG" },
+    ];
+    expect(acts67.length).toBe(expected.length);
+    expected.forEach((exp, i) => {
+      expect(acts67[i].id).toBe(exp.id);
+      expect(acts67[i].component).toBe(exp.component);
+      expect(acts67[i].title).toBe(exp.title);
+    });
+  });
+});
+
 describe("HTML entity hygiene", () => {
   it("no source file uses the broken &approx; entity (React does not parse it; use &asymp;)", () => {
     const offenders = [];

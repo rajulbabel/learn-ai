@@ -189,6 +189,16 @@ export const chapters = [
   { id: "12.19", title: "HyDE - Hypothetical Document Embeddings", section: 12, component: "HyDE" },
   { id: "12.20", title: "Multi-Query Expansion", section: 12, component: "MultiQueryExpansion" },
   { id: "12.21", title: "Query Routing & Decomposition", section: 12, component: "QueryRoutingDecomposition" },
+  // Section 12 Acts 6+7: Context & Generation, Advanced Retrieval Patterns
+  { id: "12.22", title: "Context Packing", section: 12, component: "ContextPacking" },
+  { id: "12.23", title: "The Lost-in-the-Middle Problem", section: 12, component: "LostInTheMiddle" },
+  { id: "12.24", title: "Citations, Refusal & Groundedness", section: 12, component: "CitationsRefusal" },
+  { id: "12.25", title: "Multi-Hop Retrieval", section: 12, component: "MultiHopRetrieval" },
+  { id: "12.26", title: "Self-RAG", section: 12, component: "SelfRAG" },
+  { id: "12.27", title: "CRAG - Corrective RAG", section: 12, component: "CorrectiveRAG" },
+  { id: "12.28", title: "GraphRAG (Microsoft 2024)", section: 12, component: "GraphRAG" },
+  { id: "12.29", title: "Tool-Augmented & Agentic RAG", section: 12, component: "AgenticRAG" },
+  { id: "12.30", title: "Long-Context vs RAG", section: 12, component: "LongContextVsRAG" },
 ];
 
 export const sectionNames = {

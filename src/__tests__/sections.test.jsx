@@ -6174,3 +6174,39 @@ describe("ContextPacking (12.22) content", () => {
     expect(container.textContent).toMatch(/tokens?|budget/i);
   });
 });
+
+describe("LostInTheMiddle (12.23) content", () => {
+  const fn = RagGeneration.LostInTheMiddle;
+
+  it("sub=0 shows the U-shaped accuracy curve with Liu et al reference", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/U-?shaped|middle|position/i);
+    expect(container.textContent).toMatch(/accuracy/i);
+    expect(container.textContent).toMatch(/Liu|2023/i);
+  });
+
+  it("sub=1 shows the Pro+SSO query failing when answer chunk is in middle", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/SSO/);
+    expect(container.textContent).toMatch(/Pro|Enterprise/);
+    expect(container.textContent).toMatch(/position|chunk 5|middle/i);
+  });
+
+  it("sub=2 explains the front-load / relevance-first strategy", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/front-?load|relevance.?first|strategy 1|first strategy/i);
+  });
+
+  it("sub=3 explains the sandwich strategy with best at start and end", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/sandwich/i);
+    expect(container.textContent).toMatch(/start and end|front and back/i);
+  });
+
+  it("sub=4 covers failure modes including reference to multi-hop 12.25", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/multi-?fact|multi-?hop|long/i);
+    expect(container.textContent).toMatch(/rerank|fetch|benchmark/i);
+    expect(container.textContent).toMatch(/12\.25|multi-hop/i);
+  });
+});

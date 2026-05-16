@@ -345,5 +345,10 @@
   ],
   "12.22": [
     "Stacked horizontal bar visualizing how an 8000-token LLM context budget splits across system prompt, retrieved chunks, user question, and reserved completion tokens."
+  ],
+  "12.23": [
+    "U-shaped accuracy curve plotting answer correctness against the position of the relevant chunk within a 20-chunk context, showing high accuracy at the start and end and a dip in the middle from the Liu et al. 2023 lost-in-the-middle finding.",
+    "Front-load strategy strip showing 10 chunk slots with the top-3 scored chunks highlighted in green at positions 1-3 and the lowest scores filling positions 4-10.",
+    "Sandwich strategy strip showing 10 chunk slots with the top-2 chunks at positions 1-2, the next-best 2 chunks at positions 9-10, and lower scores filling the middle dip region."
   ]
 }

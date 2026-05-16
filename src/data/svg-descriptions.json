@@ -321,5 +321,10 @@
   ],
   "13.11": [
     "Validation-layer flow for a tool call: the model emits a tool_use block, the runtime validates the arguments against the schema, and then branches - invalid arguments return a malformed error immediately while valid arguments proceed to execute the real function."
+  ],
+  "13.12": [
+    "Five agents top row, six tools bottom row, every agent connects to every tool producing thirty crossed lines that visualize the M times N ad-hoc tool sprawl problem.",
+    "Five agents on top connect to six tools on bottom via a single protocol hub in the middle, reducing thirty crossed lines to eleven clean lines and demonstrating M plus N scaling.",
+    "Concentric ring diagram showing a trusted host containing user data and the model surrounding an untrusted server tool, with protocol arrows crossing the boundary for capability listing and tool authorization that enforces the sandbox contract."
   ]
 }

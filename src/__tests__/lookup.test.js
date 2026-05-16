@@ -21,6 +21,7 @@ import * as RagFoundations from "../sections/rag-foundations.jsx";
 import * as RagIngestion from "../sections/rag-ingestion.jsx";
 import * as AgentPrompting from "../sections/agent-prompting.jsx";
 import * as AgentTools from "../sections/agent-tools.jsx";
+import * as AgentLoops from "../sections/agent-loops.jsx";
 
 const lookup = {
   TOC,
@@ -42,6 +43,7 @@ const lookup = {
   ...RagIngestion,
   ...AgentPrompting,
   ...AgentTools,
+  ...AgentLoops,
 };
 
 describe("lookup", () => {
@@ -105,5 +107,23 @@ describe("Section 13 component presence", () => {
     expect(typeof AgentTools.ToolCallLifecycle).toBe("function");
     expect(typeof AgentTools.ParallelToolsAndChoice).toBe("function");
     expect(typeof AgentTools.ToolErrorsRetries).toBe("function");
+  });
+
+  it("AgentTools exports each Act 3 chapter", () => {
+    expect(typeof AgentTools.WhyProtocols).toBe("function");
+    expect(typeof AgentTools.McpArchitecture).toBe("function");
+    expect(typeof AgentTools.McpPrimitives).toBe("function");
+    expect(typeof AgentTools.BuildingMcpServer).toBe("function");
+    expect(typeof AgentTools.McpSecurity).toBe("function");
+    expect(typeof AgentTools.A2AProtocol).toBe("function");
+  });
+
+  it("AgentLoops exports each Act 4 chapter", () => {
+    expect(typeof AgentLoops.WorkflowVsAgent).toBe("function");
+    expect(typeof AgentLoops.WorkflowPrimitives).toBe("function");
+    expect(typeof AgentLoops.AgentLoop).toBe("function");
+    expect(typeof AgentLoops.ReActPattern).toBe("function");
+    expect(typeof AgentLoops.PlanExecuteReflect).toBe("function");
+    expect(typeof AgentLoops.LoopTermination).toBe("function");
   });
 });

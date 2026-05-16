@@ -384,5 +384,9 @@
   "12.35": [
     "Shadow-eval pipeline diagram. A user query splits into an old pipeline whose answer is served and a new pipeline whose answer is logged but not served. Both answers feed into an LLM-judge that scores them, producing an aggregate comparison without exposing users to the candidate pipeline.",
     "Closing-the-loop cycle diagram with four nodes connected by arrows: online finds a regression, capture failing cases into the golden regression set, offline reproduces and fixes, shadow plus A/B verify in production. The cycle returns to online detection, illustrating the offline-online feedback loop that production-grade RAG eval relies on."
+  ],
+  "12.36": [
+    "Semantic cache decision flow: an incoming query is embedded, compared by cosine similarity to cached queries, and either returns the cached answer when the score is at or above 0.93 or runs the full RAG pipeline and stores the new answer.",
+    "Horizontal bar chart comparing per-query cost across four cache configurations: no cache versus prompt cache only versus semantic cache only versus both stacked. Both stacked delivers the lowest cost at three tenths of a cent per query with 83 percent savings."
   ]
 }

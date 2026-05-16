@@ -501,14 +501,14 @@ export const NaiveRAGPipeline = (ctx) => {
               <text x="185" y="22" textAnchor="middle" fill={C.cyan} fontSize="12" fontWeight="bold">
                 Ingest (Offline)
               </text>
-              <text x="497.5" y="22" textAnchor="middle" fill={C.yellow} fontSize="12" fontWeight="bold">
+              <text x="547.5" y="22" textAnchor="middle" fill={C.yellow} fontSize="12" fontWeight="bold">
                 Query Time (Online)
               </text>
               {/* Phase divider */}
               <line
-                x1="397.5"
+                x1="422.5"
                 y1="30"
-                x2="397.5"
+                x2="422.5"
                 y2="150"
                 stroke="rgba(255,255,255,0.12)"
                 strokeWidth="1"

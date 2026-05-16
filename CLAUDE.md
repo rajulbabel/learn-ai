@@ -264,7 +264,7 @@ Only config.js IDs change.
 | 12.2 | NaiveRAGPipeline | The Naive RAG Pipeline |
 | 12.3 | WhereNaiveRAGBreaks | Where Naive RAG Breaks |
 
-**Section 13: AI Agents** (`agent-prompting.jsx` + `agent-tools.jsx` + `agent-loops.jsx` + `multi-agent.jsx` + `agent-evals.jsx` + `agent-production.jsx` - Milestones 1-5 of 6 complete: Acts 1-8)
+**Section 13: AI Agents** (`agent-prompting.jsx` + `agent-tools.jsx` + `agent-loops.jsx` + `multi-agent.jsx` + `agent-evals.jsx` + `agent-production.jsx` - complete: all 9 acts, all 52 chapters)
 
 | Chapter | Component | Title |
 |---------|-----------|-------|
@@ -315,6 +315,11 @@ Only config.js IDs change.
 | 13.45 | Guardrails | Guardrails |
 | 13.46 | PromptInjectionDefenses | Prompt Injection Defenses |
 | 13.47 | ToolSecurity | Tool Security |
+| 13.48 | LangGraphFramework | LangGraph |
+| 13.49 | CrewAiAutoGen | CrewAI / AutoGen |
+| 13.50 | VendorSdks | Claude Agent SDK + OpenAI Agents |
+| 13.51 | CustomNoFramework | Custom / No-Framework |
+| 13.52 | AgentDecisionFramework | The Complete Agent Decision Framework |
 
 ## Project Structure
 
@@ -360,7 +365,7 @@ learn-ai/
 │       ├── agent-loops.jsx               # Section 13 (Acts 4+5, chapters 13.18-13.29)
 │       ├── multi-agent.jsx               # Section 13 (Act 6, chapters 13.30-13.36)
 │       ├── agent-evals.jsx               # Section 13 (Act 7, chapters 13.37-13.41)
-│       └── agent-production.jsx          # Section 13 (Acts 8+9, chapters 13.42-13.52 - Act 8 in M5, Act 9 in M6)
+│       └── agent-production.jsx          # Section 13 (Acts 8+9, chapters 13.42-13.52)
 ├── .github/workflows/deploy.yml
 └── CLAUDE.md
 ```

@@ -6263,3 +6263,50 @@ describe("CitationsRefusal (12.24) content", () => {
     expect(container.textContent).toMatch(/\{context\}|\{query\}/);
   });
 });
+
+describe("MultiHopRetrieval (12.25) content", () => {
+  const fn = RagGeneration.MultiHopRetrieval;
+
+  it("sub=0 contrasts single-hop with the forgot-email multi-hop case", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/multi-?hop|multiple retrievals/i);
+    expect(container.textContent).toMatch(/how do i reset my password.*forgot my email/i);
+    expect(container.textContent).toMatch(/doc-?1/i);
+    expect(container.textContent).toMatch(/doc-?3/i);
+  });
+
+  it("sub=1 traces 2 hops with reformulation", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/hop 1/i);
+    expect(container.textContent).toMatch(/hop 2/i);
+    expect(container.textContent).toMatch(/reformulat/i);
+  });
+
+  it("sub=2 shows the control loop with max_hops and refuse branches", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/loop|control/i);
+    expect(container.textContent).toMatch(/max_?hops/i);
+    expect(container.textContent).toMatch(/refuse|i don'?t have/i);
+  });
+
+  it("sub=3 shows the sufficiency-check prompt template", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/prompt template/i);
+    expect(container.textContent).toMatch(/SUFFICIENT/);
+    expect(container.textContent).toMatch(/INSUFFICIENT/);
+  });
+
+  it("sub=4 lists when multi-hop is worth the cost", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/worth it|compound|cross-doc/i);
+    expect(container.textContent).toMatch(/cost|latency/i);
+    expect(container.textContent).toMatch(/max_?hops|cap/i);
+  });
+
+  it("sub=5 covers infinite loop, divergence, and stuck judge failure modes", () => {
+    const { container } = render(fn(makeCtx({ sub: 5 })));
+    expect(container.textContent).toMatch(/infinite loop/i);
+    expect(container.textContent).toMatch(/divergence|drift/i);
+    expect(container.textContent).toMatch(/stuck|overconfident/i);
+  });
+});

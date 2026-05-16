@@ -24,6 +24,7 @@ import * as AgentTools from "../sections/agent-tools.jsx";
 import * as AgentLoops from "../sections/agent-loops.jsx";
 import * as MultiAgent from "../sections/multi-agent.jsx";
 import * as AgentEvals from "../sections/agent-evals.jsx";
+import * as AgentProduction from "../sections/agent-production.jsx";
 
 const lookup = {
   TOC,
@@ -48,6 +49,7 @@ const lookup = {
   ...AgentLoops,
   ...MultiAgent,
   ...AgentEvals,
+  ...AgentProduction,
 };
 
 describe("lookup", () => {
@@ -162,5 +164,16 @@ describe("Section 13 Act 7 component presence (AgentEvals)", () => {
     expect(typeof AgentEvals.LlmAsJudge).toBe("function");
     expect(typeof AgentEvals.TraceEvals).toBe("function");
     expect(typeof AgentEvals.EvalSetsContinuous).toBe("function");
+  });
+});
+
+describe("Section 13 Act 8 component presence (AgentProduction)", () => {
+  it("AgentProduction exports each Act 8 chapter", () => {
+    expect(typeof AgentProduction.ObservabilityTracing).toBe("function");
+    expect(typeof AgentProduction.CostControl).toBe("function");
+    expect(typeof AgentProduction.LatencyOptimization).toBe("function");
+    expect(typeof AgentProduction.Guardrails).toBe("function");
+    expect(typeof AgentProduction.PromptInjectionDefenses).toBe("function");
+    expect(typeof AgentProduction.ToolSecurity).toBe("function");
   });
 });

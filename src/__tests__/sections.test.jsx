@@ -26,6 +26,7 @@ import * as AgentTools from "../sections/agent-tools.jsx";
 import * as AgentLoops from "../sections/agent-loops.jsx";
 import * as MultiAgent from "../sections/multi-agent.jsx";
 import * as AgentEvals from "../sections/agent-evals.jsx";
+import * as AgentProduction from "../sections/agent-production.jsx";
 
 const lookup = {
   TOC,
@@ -50,6 +51,7 @@ const lookup = {
   ...AgentLoops,
   ...MultiAgent,
   ...AgentEvals,
+  ...AgentProduction,
 };
 
 afterEach(() => cleanup());

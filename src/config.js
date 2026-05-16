@@ -192,6 +192,18 @@ export const chapters = [
   { id: "13.9", title: "Tool Call Lifecycle", section: 13, component: "ToolCallLifecycle" },
   { id: "13.10", title: "Parallel Tools + Tool Choice", section: 13, component: "ParallelToolsAndChoice" },
   { id: "13.11", title: "Tool Errors, Retries, Validation", section: 13, component: "ToolErrorsRetries" },
+  { id: "13.12", title: "Why Protocols?", section: 13, component: "WhyProtocols" },
+  { id: "13.13", title: "MCP Architecture", section: 13, component: "McpArchitecture" },
+  { id: "13.14", title: "MCP Primitives - Tools, Resources, Prompts", section: 13, component: "McpPrimitives" },
+  { id: "13.15", title: "Building an MCP Server", section: 13, component: "BuildingMcpServer" },
+  { id: "13.16", title: "MCP Security", section: 13, component: "McpSecurity" },
+  { id: "13.17", title: "A2A - Agent-to-Agent Protocol", section: 13, component: "A2AProtocol" },
+  { id: "13.18", title: "Workflow vs Agent", section: 13, component: "WorkflowVsAgent" },
+  { id: "13.19", title: "Workflow Primitives - Chaining, Routing, Parallelization", section: 13, component: "WorkflowPrimitives" },
+  { id: "13.20", title: "The Agent Loop", section: 13, component: "AgentLoop" },
+  { id: "13.21", title: "ReAct Pattern", section: 13, component: "ReActPattern" },
+  { id: "13.22", title: "Plan-Execute + Reflection", section: 13, component: "PlanExecuteReflect" },
+  { id: "13.23", title: "Loop Termination", section: 13, component: "LoopTermination" },
 ];
 
 export const sectionNames = {

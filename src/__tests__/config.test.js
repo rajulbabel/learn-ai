@@ -429,3 +429,103 @@ describe("Section 13 Act 1+2 chapter entries", () => {
     expect(c.component).toBe("ToolErrorsRetries");
   });
 });
+
+describe("Section 13 Act 3+4 chapter entries", () => {
+  const findCh = (id) => chapters.find((c) => c.id === id);
+
+  it("has 13.12 WhyProtocols", () => {
+    const c = findCh("13.12");
+    expect(c).toBeDefined();
+    expect(c.title).toBe("Why Protocols?");
+    expect(c.section).toBe(13);
+    expect(c.component).toBe("WhyProtocols");
+  });
+
+  it("has 13.13 McpArchitecture", () => {
+    const c = findCh("13.13");
+    expect(c).toBeDefined();
+    expect(c.title).toBe("MCP Architecture");
+    expect(c.section).toBe(13);
+    expect(c.component).toBe("McpArchitecture");
+  });
+
+  it("has 13.14 McpPrimitives", () => {
+    const c = findCh("13.14");
+    expect(c).toBeDefined();
+    expect(c.title).toBe("MCP Primitives - Tools, Resources, Prompts");
+    expect(c.section).toBe(13);
+    expect(c.component).toBe("McpPrimitives");
+  });
+
+  it("has 13.15 BuildingMcpServer", () => {
+    const c = findCh("13.15");
+    expect(c).toBeDefined();
+    expect(c.title).toBe("Building an MCP Server");
+    expect(c.section).toBe(13);
+    expect(c.component).toBe("BuildingMcpServer");
+  });
+
+  it("has 13.16 McpSecurity", () => {
+    const c = findCh("13.16");
+    expect(c).toBeDefined();
+    expect(c.title).toBe("MCP Security");
+    expect(c.section).toBe(13);
+    expect(c.component).toBe("McpSecurity");
+  });
+
+  it("has 13.17 A2AProtocol", () => {
+    const c = findCh("13.17");
+    expect(c).toBeDefined();
+    expect(c.title).toBe("A2A - Agent-to-Agent Protocol");
+    expect(c.section).toBe(13);
+    expect(c.component).toBe("A2AProtocol");
+  });
+
+  it("has 13.18 WorkflowVsAgent", () => {
+    const c = findCh("13.18");
+    expect(c).toBeDefined();
+    expect(c.title).toBe("Workflow vs Agent");
+    expect(c.section).toBe(13);
+    expect(c.component).toBe("WorkflowVsAgent");
+  });
+
+  it("has 13.19 WorkflowPrimitives", () => {
+    const c = findCh("13.19");
+    expect(c).toBeDefined();
+    expect(c.title).toBe("Workflow Primitives - Chaining, Routing, Parallelization");
+    expect(c.section).toBe(13);
+    expect(c.component).toBe("WorkflowPrimitives");
+  });
+
+  it("has 13.20 AgentLoop", () => {
+    const c = findCh("13.20");
+    expect(c).toBeDefined();
+    expect(c.title).toBe("The Agent Loop");
+    expect(c.section).toBe(13);
+    expect(c.component).toBe("AgentLoop");
+  });
+
+  it("has 13.21 ReActPattern", () => {
+    const c = findCh("13.21");
+    expect(c).toBeDefined();
+    expect(c.title).toBe("ReAct Pattern");
+    expect(c.section).toBe(13);
+    expect(c.component).toBe("ReActPattern");
+  });
+
+  it("has 13.22 PlanExecuteReflect", () => {
+    const c = findCh("13.22");
+    expect(c).toBeDefined();
+    expect(c.title).toBe("Plan-Execute + Reflection");
+    expect(c.section).toBe(13);
+    expect(c.component).toBe("PlanExecuteReflect");
+  });
+
+  it("has 13.23 LoopTermination", () => {
+    const c = findCh("13.23");
+    expect(c).toBeDefined();
+    expect(c.title).toBe("Loop Termination");
+    expect(c.section).toBe(13);
+    expect(c.component).toBe("LoopTermination");
+  });
+});

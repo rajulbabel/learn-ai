@@ -6900,3 +6900,47 @@ describe("CostModels (12.37) content", () => {
     expect(container.textContent).toMatch(/cost|\$/i);
   });
 });
+
+describe("ObservabilityTracing (12.38) content", () => {
+  const fn = RagProduction.ObservabilityTracing;
+
+  it("sub=0 lists what goes wrong without traces", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/trace|tracing/i);
+    expect(container.textContent).toMatch(/latency|slow/i);
+    expect(container.textContent).toMatch(/reproduce|model version/i);
+  });
+
+  it("sub=1 shows the canonical span tree", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/span|trace/i);
+    expect(container.textContent).toMatch(/embed/i);
+    expect(container.textContent).toMatch(/rerank/i);
+    expect(container.textContent).toMatch(/generat/i);
+    expect(container.textContent).toMatch(/ms/);
+  });
+
+  it("sub=2 enumerates per-stage attributes", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/doc[-_ ]?id/i);
+    expect(container.textContent).toMatch(/model[ _]?version/i);
+    expect(container.textContent).toMatch(/tokens/i);
+  });
+
+  it("sub=3 lists the tools landscape", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/LangSmith|Helicone|OpenTelemetry|Phoenix/);
+  });
+
+  it("sub=4 covers privacy and what not to log", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/privacy|GDPR|PII|hash|redact/i);
+    expect(container.textContent).toMatch(/raw query|plain text|secret/i);
+  });
+
+  it("sub=5 mocks a production trace dashboard", () => {
+    const { container } = render(fn(makeCtx({ sub: 5 })));
+    expect(container.textContent).toMatch(/dashboard/i);
+    expect(container.textContent).toMatch(/P50|P99|latency/i);
+  });
+});

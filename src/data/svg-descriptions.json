@@ -393,5 +393,8 @@
     "Horizontal stacked bar chart of per-query cost showing the five cost lines proportionally. LLM tokens (input and output combined) dominate at 94 percent of the bill; embedding, vector search, and reranker make up the rest.",
     "Downward waterfall chart showing per-query cost reducing as five levers are stacked: prompt cache, semantic cache, fewer chunks, and switching to Haiku. Final cost is one tenth of a cent per query from a starting two cents.",
     "Scatter plot of cost per query versus faithfulness score with six RAG configurations labeled A through F. A dashed Pareto frontier passes through the cost-efficient points; configuration F sits below the frontier as a dominated choice."
+  ],
+  "12.38": [
+    "Parent/child span tree for a single RAG query: embed query, vector search, rerank, pack prompt, and generate. Each child span is rendered with width proportional to its latency in milliseconds, making the rerank stage visibly the dominant time cost."
   ]
 }

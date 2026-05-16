@@ -44,6 +44,11 @@ const sectionLoaders = {
       import("./sections/rag-foundations.jsx"),
       import("./sections/rag-ingestion.jsx"),
     ]).then((mods) => Object.assign({}, ...mods)),
+  13: () =>
+    Promise.all([
+      import("./sections/agent-prompting.jsx"),
+      import("./sections/agent-tools.jsx"),
+    ]).then((mods) => Object.assign({}, ...mods)),
 };
 
 // ── Lazy-loaded search: not loaded until search is opened ──

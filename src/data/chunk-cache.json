@@ -35778,5 +35778,774 @@
         ]
       }
     ]
+  },
+  "5403a89052c3c8f8": {
+    "12.1": [
+      {
+        "sub": 0,
+        "kind": "concept",
+        "text": "Bare LLMs Have Hard Limits. Drop a frontier model into a production app and the cracks appear fast. It does not know about events after its cutoff, makes up facts, can't show its work, and has never seen your private data. These failure modes are inherent to the model alone. Five failure modes: Knowledge Cutoff - trained on data through 2023; can't answer about 2025 events. Hallucination - will confidently invent plausible-sounding facts. No Citations - cannot point to sources for verification. Private Data Unknown - knows nothing about your internal docs. Stale Facts - public info from years ago, not last week.",
+        "summary": "Bare LLMs without retrieval have five built-in failure modes: knowledge cutoff, hallucination, no citations, no private data access, and stale facts.",
+        "queries": [
+          "why do LLMs need retrieval",
+          "what are limits of bare LLMs",
+          "knowledge cutoff problem",
+          "why does ChatGPT hallucinate",
+          "LLM can't cite sources",
+          "LLM doesn't know my private docs",
+          "stale facts in language model",
+          "what's wrong with using just an LLM in production",
+          "limits of frontier models",
+          "model trained on old data",
+          "LLM made up facts",
+          "why is LLM info outdated",
+          "what does bare LLM mean",
+          "failure modes of language models",
+          "why can't LLM access my company docs",
+          "LLM training cutoff date issue"
+        ],
+        "terms": [
+          "bare LLM",
+          "knowledge cutoff",
+          "hallucination",
+          "citations",
+          "private data",
+          "stale facts",
+          "failure modes"
+        ]
+      },
+      {
+        "sub": 1,
+        "kind": "concept",
+        "text": "Fine-Tuning Doesn't Solve The Problem. The obvious first answer is 'just fine-tune the model on our data.' In practice, fine-tuning is slow, expensive, and untraceable. RAG flips every property. Comparison: Cost - Fine-Tuning: tens of thousands of dollars per refresh; RAG: cents per query. Freshness - Fine-Tuning: frozen at training time; RAG: reflects index updates instantly. Traceability - Fine-Tuning: no source attribution; RAG: cite the chunk used. Fine-tuning bakes knowledge INTO the weights (expensive to update, no audit trail). RAG keeps knowledge OUTSIDE the model in a retrievable index (cheap, fresh, traceable).",
+        "summary": "Fine-tuning fails as a fix because it's expensive, frozen, and untraceable while RAG is cheap, fresh, and citeable.",
+        "queries": [
+          "fine-tuning vs RAG",
+          "should I fine-tune or use RAG",
+          "why not fine-tune for knowledge",
+          "cost of fine-tuning vs retrieval",
+          "fine-tuning is expensive",
+          "is fine-tuning frozen",
+          "RAG cheaper than fine-tuning",
+          "fine-tune for company data",
+          "RAG citation vs fine-tune",
+          "knowledge in weights vs index",
+          "tradeoffs fine-tuning RAG",
+          "when to use RAG over fine-tuning",
+          "fine-tune freshness problem",
+          "audit trail LLM answer",
+          "update LLM knowledge cheap"
+        ],
+        "terms": [
+          "fine-tuning",
+          "RAG",
+          "cost comparison",
+          "freshness",
+          "traceability",
+          "weights",
+          "index"
+        ]
+      },
+      {
+        "sub": 2,
+        "kind": "concept",
+        "text": "RAG: Ground The Answer In Retrieved Documents. The fix is a tiny pipeline change: before the model answers, fetch the relevant documents and stuff them into the prompt. The model now reads first, answers second. Flow: User Question -> Retrieve Relevant Docs -> LLM Reads Docs + Answers. Instead of asking the model from memory, we ground its answer in retrieved documents. The model reads the docs, then answers, anchored to what the docs say.",
+        "summary": "RAG inserts a retrieval step before generation so the LLM answers grounded in fetched documents instead of from memory.",
+        "queries": [
+          "what is RAG",
+          "how does retrieval augmented generation work",
+          "RAG pipeline overview",
+          "grounding LLM in documents",
+          "fetch docs then answer",
+          "RAG flow diagram",
+          "user question to LLM with retrieval",
+          "how to anchor LLM answer",
+          "read first answer second",
+          "stuff documents into prompt",
+          "RAG basic flow three steps",
+          "retrieve then generate",
+          "RAG concept explained simply",
+          "how RAG fixes hallucination"
+        ],
+        "terms": [
+          "RAG",
+          "retrieval augmented generation",
+          "grounding",
+          "retrieve",
+          "prompt augmentation",
+          "documents"
+        ]
+      },
+      {
+        "sub": 3,
+        "kind": "example",
+        "text": "Same Question, Two Answers. Question: 'What is our refund policy?' Bare LLM (MADE UP): 'Our standard refund policy offers a 30-day money-back guarantee on all subscriptions. You can request a refund through your account dashboard.' RAG (CITED): 'Per [doc-4] (refunds.md): Refunds are issued for cancellations within 14 days of payment, prorated for annual plans.' Source chunk: [doc-4] Refunds are issued for cancellations within 14 days. Annual plans prorated. Both answers sound confident. Only one is checkable. The bare model invented numbers that look reasonable; the RAG answer is pinned to a real chunk we can show the user.",
+        "summary": "Worked example contrasts a bare LLM inventing a fake 30-day refund policy against a RAG answer citing the real 14-day chunk.",
+        "queries": [
+          "bare LLM vs RAG example",
+          "refund policy LLM example",
+          "LLM made up answer",
+          "RAG citation example",
+          "confident hallucination example",
+          "checkable answer LLM",
+          "doc-4 refund example",
+          "how RAG cites sources",
+          "side by side comparison LLM RAG",
+          "fabricated 30 day refund",
+          "real chunk vs invented number",
+          "show source for LLM answer",
+          "concrete RAG vs no RAG example"
+        ],
+        "terms": [
+          "refund policy",
+          "made up",
+          "cited",
+          "doc-4",
+          "bare LLM",
+          "RAG answer",
+          "checkable"
+        ]
+      },
+      {
+        "sub": 4,
+        "kind": "concept",
+        "text": "5 Reasons Production Systems Use RAG. Every failure mode from sub-step 1 gets a clean answer, plus refresh becomes nearly free. Knowledge Cutoff -> Solved: index is fresh; re-embed when docs change. Hallucination -> Reduced: model is anchored to retrieved text. No Citation -> Solved: cite the exact chunk used. Private Data -> Solved: index your own docs; no fine-tune needed. Cheap To Refresh -> Re-embed Only Changed Docs: update individual chunks; no full retrain.",
+        "summary": "Five production motivations for RAG: solves cutoff, reduces hallucination, enables citations, handles private data, and refreshes cheaply.",
+        "queries": [
+          "why production uses RAG",
+          "benefits of RAG",
+          "RAG solves which problems",
+          "RAG vs hallucination",
+          "re-embed changed docs",
+          "RAG private data",
+          "cheap to refresh LLM knowledge",
+          "five reasons RAG",
+          "what RAG fixes",
+          "RAG production motivation",
+          "anchor model to retrieved text",
+          "RAG citation benefit",
+          "update knowledge without retraining",
+          "incremental re-embedding"
+        ],
+        "terms": [
+          "production RAG",
+          "knowledge cutoff",
+          "hallucination reduction",
+          "citation",
+          "private data",
+          "re-embed",
+          "refresh"
+        ]
+      },
+      {
+        "sub": -1,
+        "kind": "summary",
+        "text": "Chapter 12.1 motivates RAG by showing five inherent failures of bare LLMs (knowledge cutoff, hallucination, no citations, no private data, stale facts), explains why fine-tuning is a poor fix (expensive, frozen, untraceable) versus RAG (cheap per query, fresh on index update, citeable to chunks), introduces the three-step RAG flow (user question -> retrieve docs -> LLM reads docs and answers), shows a concrete refund-policy example where the bare LLM invents a 30-day policy while RAG cites the real 14-day chunk from [doc-4], and lists five production reasons to adopt RAG including cheap re-embedding of only changed docs.",
+        "summary": "Chapter overview of why production LLM systems need retrieval-augmented generation instead of bare or fine-tuned models.",
+        "queries": [
+          "chapter 12.1 summary",
+          "why LLMs need retrieval overview",
+          "intro to RAG",
+          "motivation for RAG",
+          "bare LLM problems summary",
+          "fine-tuning vs RAG summary",
+          "RAG overview chapter",
+          "what does chapter 12.1 cover",
+          "high level RAG motivation",
+          "production LLM retrieval need",
+          "RAG pitch in one chapter",
+          "why use retrieval augmented generation"
+        ],
+        "terms": [
+          "RAG motivation",
+          "chapter overview",
+          "bare LLM limits",
+          "fine-tuning",
+          "retrieval",
+          "production LLM"
+        ]
+      }
+    ],
+    "12.3": [
+      {
+        "sub": -1,
+        "kind": "summary",
+        "text": "Chapter 12.3 catalogs the seven failure modes of naive RAG that production traffic exposes: bad chunking (mid-sentence splits hide answers), low recall (lexical mismatch like 'sign in' vs 'log in' misses the right doc), lost-in-the-middle (long contexts skip middle chunks due to U-shaped attention), no citation (answers without source markers can't be verified), hallucination on partial info (model fills gaps with confident guesses, e.g. claiming Pro plan includes SSO when only Enterprise does), stale index (doc edits not reflected until re-embed, returning outdated 14-day refund window when policy changed to 30), and cost/latency (~$0.0123 per query, 850ms p50, $12,300/day at 1000 QPS). Each failure points forward to later chapters that fix it.",
+        "summary": "Chapter 12.3 catalogs seven named failure modes of naive RAG: bad chunking, low recall, lost-in-the-middle, no citation, hallucination on partial info, stale index, and cost/latency.",
+        "queries": [
+          "what are the failure modes of naive RAG",
+          "why does RAG fail in production",
+          "seven problems with naive RAG",
+          "RAG failure taxonomy",
+          "where does naive RAG break down",
+          "what goes wrong in RAG systems",
+          "list RAG failure modes",
+          "production RAG problems",
+          "RAG bugs in production",
+          "chunking recall hallucination citation cost",
+          "lost in the middle RAG",
+          "stale index RAG",
+          "RAG cost per query",
+          "how does RAG hallucinate even with retrieval",
+          "why is RAG expensive",
+          "RAG operational issues"
+        ],
+        "terms": [
+          "naive RAG",
+          "failure modes",
+          "bad chunking",
+          "low recall",
+          "lost in the middle",
+          "no citation",
+          "hallucination",
+          "stale index",
+          "cost",
+          "latency"
+        ]
+      },
+      {
+        "sub": 0,
+        "kind": "concept",
+        "text": "Naive RAG has 7 failure modes. The pipeline from chapter 12.2 works on a happy-path query, but production traffic exposes seven named ways it can fail: Bad Chunking (mid-sentence splits hide answers), Low Recall (lexical mismatch hides relevant docs), Lost In Middle (long contexts skip middle chunks), No Citation (answers without source attribution), Hallucination (fills gaps with confident invention), Stale Index (doc edits not reflected until re-embed), and Cost/Latency (per-query LLM tokens add up at scale).",
+        "summary": "Naive RAG has seven named failure modes that production traffic exposes beyond the happy path.",
+        "queries": [
+          "what are the 7 failure modes of RAG",
+          "list naive RAG failures",
+          "how does RAG break in production",
+          "RAG problems overview",
+          "seven ways RAG fails",
+          "name the RAG failure modes",
+          "RAG taxonomy of bugs",
+          "happy path vs production RAG",
+          "what goes wrong with vanilla RAG",
+          "production RAG issues list",
+          "failure modes table RAG",
+          "RAG quality problems",
+          "operational RAG problems",
+          "what's wrong with naive RAG",
+          "summary of RAG failures"
+        ],
+        "terms": [
+          "naive RAG",
+          "failure modes",
+          "production traffic",
+          "happy path",
+          "7 failures"
+        ]
+      },
+      {
+        "sub": 1,
+        "kind": "example",
+        "text": "Failure 1: Bad Chunking. Fixed-size chunking sliced a single sentence across two chunks. User query: 'How long do I have to use the password reset link?' Chunk 1 (mid-sentence split): '...Click the link in the email...' Chunk 2 (mid-sentence split): '...within 24 hours to set a new password...' The 24-hour limit is split across two chunks. Neither contains both 'reset link' AND '24 hours' near each other. Retrieved chunk: '...Click the link in the email...' Model output: 'I don't see a time limit in the docs.' Wrong - the 24-hour limit IS in the doc, but bad chunking hid it. Chapters 12.4-12.10 (chunking strategies) fix this.",
+        "summary": "Fixed-size chunking can split a single answer sentence across chunks so the model says it doesn't know even though the doc has the info.",
+        "queries": [
+          "what is bad chunking in RAG",
+          "fixed size chunking problem",
+          "mid sentence split RAG failure",
+          "how chunking breaks RAG",
+          "why does chunking hide answers",
+          "example of bad chunking",
+          "password reset 24 hours chunking example",
+          "chunking failure mode",
+          "why split sentences hurt retrieval",
+          "chunk boundary problem",
+          "RAG chunking example",
+          "how to chunk documents for RAG",
+          "chunking strategies preview",
+          "where does chunking go wrong",
+          "split sentence retrieval"
+        ],
+        "terms": [
+          "bad chunking",
+          "fixed-size chunking",
+          "mid-sentence split",
+          "chunk boundary",
+          "password reset example"
+        ]
+      },
+      {
+        "sub": 2,
+        "kind": "example",
+        "text": "Failure 2: Low Recall. Embedding-only retrieval is supposed to handle synonyms, but in practice 'sign in' and 'log in' don't always cluster tightly enough and the right doc gets missed. User query: 'I can't sign in to my account.' Expected match (missed from top-3): Doc 'Login Troubleshooting' - 'If you can't log in, check your password. Logging in requires a verified email...' Top-3 retrieved (embedding-only): [doc-12] 'Sign in to view your billing history,' [doc-19] 'Sign in required to access the API console,' [doc-27] 'Sign in with Google or Apple supported.' Embedding-only retrieval scores docs by vector similarity; 'log in' vs 'sign in' don't cluster tightly enough, so the right doc is missed entirely from top-3. Chapters 12.11-12.14 (hybrid retrieval + rerankers) and 12.15-12.18 (query transformation) fix this.",
+        "summary": "Embedding-only retrieval can miss the right doc when synonyms like 'sign in' and 'log in' don't cluster tightly enough in vector space.",
+        "queries": [
+          "what is low recall in RAG",
+          "why does embedding retrieval miss docs",
+          "sign in vs log in synonym problem",
+          "synonym mismatch RAG",
+          "embedding only retrieval failure",
+          "lexical vs semantic retrieval",
+          "hybrid search motivation",
+          "why hybrid retrieval RAG",
+          "recall vs precision RAG",
+          "missing relevant docs RAG",
+          "top-k miss example",
+          "RAG retrieval failure synonym",
+          "why dense embeddings miss",
+          "log in sign in vector similarity",
+          "RAG recall problem"
+        ],
+        "terms": [
+          "low recall",
+          "embedding-only retrieval",
+          "synonym mismatch",
+          "sign in vs log in",
+          "hybrid retrieval",
+          "top-3"
+        ]
+      },
+      {
+        "sub": 3,
+        "kind": "concept",
+        "text": "Failure 3: Lost In The Middle. Even when the answer IS in the retrieved context, long-context models attend more to the start and end than to the middle. A chunk buried at position 5 of 10 can be ignored entirely. The U-shaped attention curve shows attention weight ~0.92 at position 1, ~0.78 at position 2, dropping to ~0.18 at position 5 (the relevant chunk, missed), back up to ~0.95 at position 10. Model attends most to first and last chunks; middle chunks (positions 4-7) get less attention. The relevant chunk at position 5 is in context, but the model skips it. Chapters 12.19-12.21 (context packing + lost-in-middle remedies) fix this.",
+        "summary": "Long-context LLMs follow a U-shaped attention curve - they attend to start and end of context but skip middle chunks, so a relevant chunk buried at position 5 can be ignored.",
+        "queries": [
+          "what is lost in the middle",
+          "U shaped attention curve LLM",
+          "why does LLM ignore middle context",
+          "long context attention bias",
+          "position 5 of 10 attention",
+          "lost in middle remedy",
+          "context packing RAG",
+          "why model skips middle chunks",
+          "primacy recency long context",
+          "attention weight by position",
+          "RAG long context failure",
+          "middle context ignored",
+          "where does LLM attend in long prompt",
+          "lost in middle paper",
+          "context order matters RAG"
+        ],
+        "terms": [
+          "lost in the middle",
+          "U-shaped attention",
+          "long context",
+          "position 5",
+          "context packing"
+        ]
+      },
+      {
+        "sub": -2,
+        "kind": "diagram",
+        "text": "U-shaped attention curve plotting attention weight (0 to 1) against chunk position (1-10). Curve starts high at position 1 (~0.92) and position 2 (~0.78), dips through the middle to a minimum at position 5 (~0.18), and rises back to position 10 (~0.95). Position 5 is highlighted with a red dot labeled 'Position 5 (Relevant)' and 'Missed' - the relevant chunk that gets ignored even though it's in context. The shape demonstrates the lost-in-the-middle phenomenon where long-context models attend most to start and end positions and skip middle chunks.",
+        "summary": "U-shaped attention curve diagram showing how LLM attention drops in the middle of long contexts, with the relevant position-5 chunk highlighted as missed.",
+        "queries": [
+          "U-shaped attention curve diagram",
+          "lost in the middle visualization",
+          "attention weight by chunk position plot",
+          "attention curve long context",
+          "position 5 missed diagram",
+          "RAG context position attention plot",
+          "U curve attention chunks",
+          "visualize lost in middle",
+          "long context attention shape",
+          "chunk position vs attention graph",
+          "diagram of attention drop middle",
+          "primacy recency curve",
+          "attention weight 1 to 10 positions",
+          "graph of LLM attention by position",
+          "lost in middle chart"
+        ],
+        "terms": [
+          "U-shaped curve",
+          "attention weight",
+          "chunk position",
+          "lost in middle diagram",
+          "position 5"
+        ]
+      },
+      {
+        "sub": 4,
+        "kind": "example",
+        "text": "Failure 4: No Citation. The model answered but the answer has no source markers. Reviewers can't tell which chunk the answer came from or whether any chunk supports it at all. User query: 'Why is my account suspended?' Generated answer (no citation): 'Your account may be suspended due to payment failures, terms of service violations, or unusual activity. Contact support for details.' No [doc-X] markers anywhere. Reviewer cannot verify which doc the answer came from; without a citation, if the model hallucinated half of it, no one can tell. Chapters 12.19-12.21 (citations + groundedness) fix this.",
+        "summary": "Without [doc-X] citation markers in the answer, reviewers can't verify which retrieved chunk supports a claim or whether any chunk does.",
+        "queries": [
+          "why citations matter in RAG",
+          "no citation RAG failure",
+          "how to add citations to RAG",
+          "doc-X markers RAG",
+          "source attribution LLM",
+          "verifiable RAG answer",
+          "groundedness RAG",
+          "account suspended citation example",
+          "RAG without citations",
+          "auditable LLM answer",
+          "how to verify RAG answer",
+          "citation prompt template",
+          "source markers in generated answer",
+          "RAG traceability",
+          "why no citation is bad"
+        ],
+        "terms": [
+          "no citation",
+          "source markers",
+          "doc-X",
+          "groundedness",
+          "verifiability"
+        ]
+      },
+      {
+        "sub": 5,
+        "kind": "example",
+        "text": "Failure 5: Hallucination On Partial Info. Retrieved context covers SSO for Enterprise plan but says nothing about Pro plan. The model fills the gap with a confident-sounding guess. User query: 'Does the Pro plan include SSO?' Retrieved context (top-3 chunks): [doc-3] 'SSO is available on Enterprise plan via SAML 2.0,' [doc-3] 'Enterprise plan includes SSO, audit logs, dedicated support,' [doc-5] 'Pricing: Basic $10/mo, Pro $25/mo, Enterprise custom.' No mention of Pro + SSO anywhere. Model output (hallucinated): 'Yes, the Pro plan includes SSO.' This claim is wrong - SSO is Enterprise-only. Model filled a gap with a plausible-sounding guess. Chapters 12.19-12.21 (refusal + groundedness instruction) and 12.28-12.32 (faithfulness eval) fix this.",
+        "summary": "When retrieved chunks don't cover the question, the model fills the gap with a confident hallucination - here claiming Pro plan has SSO when only Enterprise does.",
+        "queries": [
+          "RAG hallucination with retrieval",
+          "why does RAG still hallucinate",
+          "hallucination on partial info",
+          "Pro plan SSO example RAG",
+          "filling gaps in retrieved context",
+          "groundedness instruction RAG",
+          "refusal prompt RAG",
+          "faithfulness evaluation RAG",
+          "I don't know prompt",
+          "RAG confident wrong answer",
+          "SSO Enterprise hallucination example",
+          "model invents when context insufficient",
+          "partial retrieval hallucination",
+          "how to prevent hallucination RAG",
+          "RAG faithfulness"
+        ],
+        "terms": [
+          "hallucination",
+          "partial info",
+          "groundedness",
+          "refusal",
+          "faithfulness",
+          "SSO Pro plan"
+        ]
+      },
+      {
+        "sub": 6,
+        "kind": "example",
+        "text": "Failures 6 & 7: Stale Index, Cost & Latency. Failure 6 (Stale Index): doc-7 (Refund Policy) was updated 2 days ago - sales now allows refunds within 30 days - but the embedding index still has the old 14-day version. User query: 'What's our current refund window?' Answer returned (stale): '14 days.' Embedding lifecycle (Section 11.27) and chapters 12.33-12.37 (drift detection) fix this. Failure 7 (Cost & Latency): per-query cost breakdown - Embedding $0.0001, Retrieval $0.0002, LLM Tokens (4000 ctx) $0.0120, Total Per Query $0.0123. Latency: 50ms retrieval + 800ms generation = 850ms p50. At 1000 QPS, costs $12,300/day. Chapters 12.33-12.37 (caching, cost models, observability) fix this.",
+        "summary": "Stale index returns outdated answers when docs change before re-embed; cost and latency add up to ~$0.0123 and 850ms per query, or $12,300/day at 1000 QPS.",
+        "queries": [
+          "stale index RAG failure",
+          "refund policy stale index example",
+          "how often to re-embed RAG",
+          "embedding drift detection",
+          "RAG cost per query breakdown",
+          "RAG latency p50",
+          "cost of RAG at scale",
+          "1000 QPS RAG cost",
+          "$12,300 per day RAG",
+          "LLM token cost per query",
+          "embedding cost vs LLM cost",
+          "RAG operational cost",
+          "drift detection RAG",
+          "re-embedding lifecycle",
+          "RAG caching motivation",
+          "850ms latency RAG"
+        ],
+        "terms": [
+          "stale index",
+          "cost",
+          "latency",
+          "drift",
+          "re-embed",
+          "QPS",
+          "$0.0123 per query",
+          "embedding lifecycle"
+        ]
+      }
+    ],
+    "12.2": [
+      {
+        "sub": 0,
+        "kind": "concept",
+        "text": "The Naive RAG Pipeline. Naive RAG is five stages glued together. Three run once during ingest (offline): Chunk, Embed, Store. Two run on every query (online): Retrieve, Generate. Once you see the shape, every variant in the field is just a tweak to one of these boxes. Five stages, two phases. Chunk + Embed + Store are done once during ingest (offline). Retrieve + Generate run on every user query (online).",
+        "summary": "Introduces the 5-stage naive RAG pipeline split into offline ingest (Chunk/Embed/Store) and online query (Retrieve/Generate) phases.",
+        "queries": [
+          "what is naive RAG pipeline",
+          "five stages of RAG",
+          "RAG ingest vs query time",
+          "offline vs online RAG stages",
+          "RAG architecture overview",
+          "chunk embed store retrieve generate",
+          "how does retrieval augmented generation work",
+          "RAG pipeline diagram",
+          "what are the steps in RAG",
+          "RAG offline ingest pipeline",
+          "RAG online query pipeline",
+          "basic RAG flow",
+          "stages of retrieval augmented generation",
+          "RAG system architecture",
+          "what is the shape of a RAG system"
+        ],
+        "terms": [
+          "naive RAG",
+          "RAG pipeline",
+          "ingest",
+          "query time",
+          "offline",
+          "online",
+          "Chunk",
+          "Embed",
+          "Store",
+          "Retrieve",
+          "Generate"
+        ]
+      },
+      {
+        "sub": 1,
+        "kind": "example",
+        "text": "Stage 1: Chunk Documents Into Pieces. Docs are usually too long to retrieve as a single unit. We cut them into chunks small enough that one chunk is mostly about one thing. Example: doc-1 is the password reset help page. Sliced into 3 chunks of ~80 tokens each. [doc-1, chunk 1] To reset your password, navigate to Settings > Security in your account dashboard. Click the 'Reset Password' link and enter your current password to verify identity. [doc-1, chunk 2] An email will be sent to your registered address with a one-time reset link. The link is valid for 24 hours and can only be used once before expiring. [doc-1, chunk 3] Click the link in the email within 24 hours to set a new password. Choose a password of at least 12 characters with letters, numbers, and symbols mixed. Chunking strategies (fixed-size, sentence-aware, semantic, hierarchical) covered later.",
+        "summary": "Stage 1 splits long documents into small ~80-token chunks so each chunk focuses on one idea, shown with a password reset doc sliced into 3 chunks.",
+        "queries": [
+          "what is chunking in RAG",
+          "why chunk documents",
+          "how big should a chunk be",
+          "stage 1 RAG chunking",
+          "document splitting for retrieval",
+          "chunk size 80 tokens",
+          "what is a chunk in RAG",
+          "RAG chunking example",
+          "how to split documents for embedding",
+          "chunking strategies overview",
+          "fixed size chunking",
+          "sentence aware chunking",
+          "semantic chunking",
+          "hierarchical chunking",
+          "how many chunks per document"
+        ],
+        "terms": [
+          "chunk",
+          "chunking",
+          "document splitting",
+          "tokens",
+          "fixed-size",
+          "sentence-aware",
+          "semantic chunking",
+          "hierarchical chunking"
+        ]
+      },
+      {
+        "sub": 2,
+        "kind": "example",
+        "text": "Stage 2: Turn Each Chunk Into A Vector. Each chunk becomes a dense vector encoding its meaning. Similar chunks have similar vectors. Example vectors (8-dim shown for visibility): [doc-1, chunk 1] [0.81, 0.12, 0.65, 0.43, 0.07, 0.91, 0.22, 0.58]; [doc-1, chunk 2] [0.74, 0.18, 0.59, 0.51, 0.13, 0.86, 0.27, 0.62]; [doc-1, chunk 3] [0.79, 0.15, 0.61, 0.48, 0.10, 0.88, 0.24, 0.60]. Embeddings turn text into dense vectors. RAG uses retrieval-tuned embeddings. Production typically uses 1024-dim vectors; 8 dims shown here for visibility.",
+        "summary": "Stage 2 embeds each chunk into a dense vector (typically 1024-dim in production) so semantically similar chunks land near each other.",
+        "queries": [
+          "what is embedding in RAG",
+          "stage 2 RAG embed",
+          "chunk to vector",
+          "dense vector embedding",
+          "embedding dimension RAG",
+          "1024 dim embeddings",
+          "retrieval tuned embeddings",
+          "why embed chunks",
+          "how does embedding work in RAG",
+          "vector representation of text",
+          "similar chunks similar vectors",
+          "embedding model RAG",
+          "what is a dense vector",
+          "production embedding size",
+          "chunk vectors example"
+        ],
+        "terms": [
+          "embedding",
+          "dense vector",
+          "vector",
+          "retrieval-tuned embeddings",
+          "1024-dim",
+          "8-dim",
+          "semantic similarity"
+        ]
+      },
+      {
+        "sub": 3,
+        "kind": "example",
+        "text": "Stage 3: Store Vectors In A Vector Database. Once embedded, each chunk-vector goes into a vector index. The index is what makes retrieval fast - without it, every query would compare against every chunk. Vector Index (HNSW): 3 chunks from doc-1 + ~1042 chunks from 29 other docs. 1045 chunks indexed total (30 docs x ~35 chunks each, varies by doc length). [doc-1, chunk 1] [0.81, 0.12, 0.65, ...]; [doc-1, chunk 2] [0.74, 0.18, 0.59, ...]; [doc-1, chunk 3] [0.79, 0.15, 0.61, ...]; ... + 1042 more vectors. Vector indexes (HNSW, IVF, hybrid, compression) turn brute-force kNN into approximate nearest-neighbor search, milliseconds instead of seconds.",
+        "summary": "Stage 3 stores all chunk vectors in a vector index (e.g., HNSW) to enable fast approximate nearest-neighbor search instead of brute-force comparison.",
+        "queries": [
+          "what is a vector database",
+          "stage 3 RAG store",
+          "vector index HNSW",
+          "why use vector database",
+          "approximate nearest neighbor search",
+          "ANN vs brute force kNN",
+          "how vectors stored RAG",
+          "vector index types",
+          "1045 chunks indexed",
+          "vector store explained",
+          "HNSW IVF hybrid compression",
+          "fast retrieval vector index",
+          "milliseconds vector search",
+          "indexed vectors RAG",
+          "what does the vector DB do"
+        ],
+        "terms": [
+          "vector database",
+          "vector index",
+          "HNSW",
+          "IVF",
+          "ANN",
+          "approximate nearest neighbor",
+          "kNN",
+          "brute-force"
+        ]
+      },
+      {
+        "sub": 4,
+        "kind": "example",
+        "text": "Stage 4: Retrieve The Top-K Most Similar Chunks. Query is embedded by the same model. Cosine similarity ranks all chunks; the top-3 score highest. In production, top-k is usually 20-50 before reranking. Query: 'How do I reset my password?' Query vector: [0.78, 0.14, 0.63, 0.46, 0.09, 0.89, 0.25, 0.61]. Top-3 Most Similar Chunks (cosine similarity): [doc-1, chunk 1] score 0.91; [doc-1, chunk 2] score 0.84; [doc-1, chunk 3] score 0.77.",
+        "summary": "Stage 4 embeds the query with the same model and retrieves top-K chunks ranked by cosine similarity, with example scores 0.91/0.84/0.77.",
+        "queries": [
+          "what is top-k retrieval",
+          "stage 4 RAG retrieve",
+          "cosine similarity retrieval",
+          "query embedding RAG",
+          "top-k chunks",
+          "how RAG retrieves documents",
+          "k value in RAG",
+          "top 20-50 before reranking",
+          "similarity score chunks",
+          "how does retrieval rank chunks",
+          "query vector cosine",
+          "RAG retrieval example scores",
+          "what is top-k in retrieval",
+          "RAG retrieve step",
+          "similarity ranking chunks"
+        ],
+        "terms": [
+          "top-k",
+          "retrieve",
+          "cosine similarity",
+          "query embedding",
+          "score",
+          "reranking"
+        ]
+      },
+      {
+        "sub": 5,
+        "kind": "example",
+        "text": "Stage 5: Pack Chunks Into Prompt + LLM Generates Answer. The retrieved chunks are inserted into a prompt template along with the user's question. The 'I don't know' instruction reduces hallucination when retrieved docs are insufficient. Prompt Template: 'You are a helpful support assistant. Use the following documentation to answer the user's question. If the docs don't answer, say \"I don't know\". Documentation: [doc-1, chunk 1] To reset your password, navigate to Settings > Security and click... [doc-1, chunk 2] An email will be sent to your registered address with... [doc-1, chunk 3] Click the link in the email within 24 hours to set a new... Question: How do I reset my password? Answer:' Generated Answer (Grounded): 'To reset your password, go to Settings > Security and click Reset Password. You'll receive a one-time link by email valid for 24 hours. Click it and set a new password of at least 12 characters. [doc-1]'",
+        "summary": "Stage 5 packs retrieved chunks into a prompt template with an 'I don't know' guardrail and the LLM produces a grounded, cited answer.",
+        "queries": [
+          "what is the generation stage RAG",
+          "stage 5 RAG prompt template",
+          "how chunks are inserted into prompt",
+          "RAG prompt example",
+          "grounded LLM answer",
+          "I don't know instruction RAG",
+          "reduce hallucination prompt",
+          "prompt template RAG",
+          "how does LLM use retrieved chunks",
+          "RAG generation step",
+          "RAG answer with citation",
+          "system prompt RAG",
+          "augmented prompt LLM",
+          "what does the LLM see in RAG",
+          "RAG output format"
+        ],
+        "terms": [
+          "prompt template",
+          "generate",
+          "grounded answer",
+          "citation",
+          "I don't know",
+          "hallucination reduction",
+          "LLM"
+        ]
+      },
+      {
+        "sub": 6,
+        "kind": "summary",
+        "text": "End To End: One Query, Five Stages. Same query, all five stages, real data flowing left to right. Query: 'How do I reset my password?' Chunk: [doc-1] split into 3 chunks. Embed: 3 chunks → 3 vectors (8-dim). Store: Indexed in HNSW. Retrieve: Query → Top-3 chunks (scores 0.91, 0.84, 0.77). Generate: Grounded answer with [doc-1] citation. Final Answer: 'To reset your password, go to Settings > Security and click Reset Password. You'll receive a one-time link by email valid for 24 hours. Click it and set a new password. [doc-1]' That's naive RAG end to end. Every variant in the field (rerankers, hybrid, query rewriting, agents) is a tweak to one or more of these five boxes.",
+        "summary": "Walks one query through all 5 stages end-to-end producing a cited answer, and frames every advanced RAG variant as a tweak to these five boxes.",
+        "queries": [
+          "RAG end to end example",
+          "full RAG pipeline walkthrough",
+          "naive RAG complete example",
+          "one query through RAG",
+          "rerankers hybrid query rewriting agents",
+          "RAG variants overview",
+          "advanced RAG techniques",
+          "what comes after naive RAG",
+          "RAG full flow example",
+          "stages of RAG with example data",
+          "five box RAG model",
+          "RAG password example end to end",
+          "complete RAG trace",
+          "RAG summary",
+          "how all RAG stages connect"
+        ],
+        "terms": [
+          "end to end RAG",
+          "rerankers",
+          "hybrid retrieval",
+          "query rewriting",
+          "agents",
+          "RAG variants"
+        ]
+      },
+      {
+        "sub": -1,
+        "kind": "summary",
+        "text": "Naive RAG is a 5-stage pipeline: Chunk documents into pieces, Embed each chunk into a dense vector, Store vectors in a vector index (HNSW etc.), Retrieve top-K chunks by cosine similarity to the query embedding, and Generate an answer by packing retrieved chunks into a prompt for the LLM. Chunk/Embed/Store run once offline during ingest; Retrieve/Generate run on every online query. Production typically uses 1024-dim embeddings, top-k 20-50 before reranking, and an 'I don't know' guardrail in the prompt. Every advanced RAG variant - rerankers, hybrid search, query rewriting, agents - is a tweak to one of these five boxes.",
+        "summary": "Chapter-level summary of the 5-stage naive RAG pipeline and how all variants are tweaks to its boxes.",
+        "queries": [
+          "naive RAG overview",
+          "what is naive RAG",
+          "5 stages of RAG summary",
+          "RAG pipeline chapter summary",
+          "how RAG works in one paragraph",
+          "RAG ingest and query phases",
+          "naive RAG building blocks",
+          "chunk embed store retrieve generate explained",
+          "what does naive RAG look like",
+          "RAG architecture summary",
+          "RAG quick reference",
+          "RAG framework",
+          "basic RAG explained",
+          "RAG core stages",
+          "naive RAG concepts"
+        ],
+        "terms": [
+          "naive RAG",
+          "5-stage pipeline",
+          "ingest",
+          "query",
+          "retrieve",
+          "generate",
+          "vector index"
+        ]
+      },
+      {
+        "sub": -2,
+        "kind": "diagram",
+        "text": "Horizontal flow diagram of the 5-stage RAG pipeline: Chunk, Embed, Store, Retrieve, Generate. First 3 stages tinted cyan and labeled 'Ingest (Offline)', last 2 stages tinted yellow and labeled 'Query Time (Online)'. A dashed divider separates the ingest and query phases. Arrows connect adjacent stages. Each stage box has an annotation: Chunk (Doc → Chunks), Embed (Chunks → Vectors), Store (Vectors → Index), Retrieve (Query → Top-K), Generate (Top-K → Answer).",
+        "summary": "Diagram of the naive RAG pipeline showing 5 stages split into offline ingest (cyan) and online query (yellow) phases with annotated arrows.",
+        "queries": [
+          "RAG pipeline diagram",
+          "5 stage RAG flow chart",
+          "ingest vs query diagram RAG",
+          "RAG architecture visual",
+          "chunk embed store retrieve generate diagram",
+          "offline online RAG phases",
+          "RAG flow visualization",
+          "diagram of naive RAG",
+          "RAG stages picture",
+          "what does RAG pipeline look like",
+          "RAG block diagram",
+          "RAG horizontal flow",
+          "ingest pipeline diagram",
+          "query time pipeline diagram",
+          "annotated RAG stages"
+        ],
+        "terms": [
+          "diagram",
+          "flow",
+          "pipeline",
+          "ingest",
+          "query time",
+          "Chunk",
+          "Embed",
+          "Store",
+          "Retrieve",
+          "Generate"
+        ]
+      }
+    ]
   }
 }

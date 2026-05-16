@@ -232,8 +232,8 @@ export const WhyLLMsNeedRetrieval = (ctx) => {
             RAG: Ground The Answer In Retrieved Documents
           </T>
           <T color="#80deea" center size={16} style={{ marginTop: 10 }}>
-            The fix is a tiny architectural change: before the model answers, fetch the relevant documents and stuff
-            them into the prompt. The model now reads first, answers second.
+            The fix is a tiny pipeline change: before the model answers, fetch the relevant documents and stuff them
+            into the prompt. The model now reads first, answers second.
           </T>
           <div
             style={{

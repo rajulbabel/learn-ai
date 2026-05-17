@@ -1,9 +1,9 @@
 /**
- * Pre-commit guard: verifies embeddings.bin + embeddings-manifest.json are
+ * Pre-push guard: verifies embeddings.bin + embeddings-manifest.json are
  * consistent with chunks.json (every chunk id covered by ≥1 vector; bin
  * size matches count × dim).
  *
- * Exits 0 if in sync, exits 1 (blocking commit) if out of sync.
+ * Exits 0 if in sync, exits 1 (blocking push) if out of sync.
  */
 import { readFileSync, statSync } from "fs";
 
@@ -12,7 +12,7 @@ const BIN_PATH = "src/data/embeddings.bin";
 const MANIFEST_PATH = "src/data/embeddings-manifest.json";
 
 function fail(msg) {
-  console.error(`\x1b[31m[pre-commit] ${msg}\n  Run: npm run search:build\x1b[0m`);
+  console.error(`\x1b[31m[pre-push] ${msg}\n  Run: npm run search:build\x1b[0m`);
   process.exit(1);
 }
 
@@ -42,7 +42,7 @@ try {
   }
 
   console.log(
-    `\x1b[32m[pre-commit] Embeddings in sync: ${chunks.length} chunks, ${manifest.count} vectors, dim ${manifest.dim}, model ${manifest.modelChecksum}.\x1b[0m`,
+    `\x1b[32m[pre-push] Embeddings in sync: ${chunks.length} chunks, ${manifest.count} vectors, dim ${manifest.dim}, model ${manifest.modelChecksum}.\x1b[0m`,
   );
 } catch (err) {
   fail(`Could not verify embeddings: ${err.message}`);

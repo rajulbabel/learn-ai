@@ -1,6 +1,7 @@
 import { describe, it, expect, vi, afterEach } from "vitest";
 import { render, fireEvent, cleanup } from "@testing-library/react";
 import { chapters, sectionNames } from "../config.js";
+import { makeCtx } from "./chapter-test-helpers.js";
 
 // Import all sections
 import { TOC } from "../sections/toc.jsx";
@@ -63,26 +64,6 @@ const lookup = {
 };
 
 afterEach(() => cleanup());
-
-// Default context factory
-function makeCtx(overrides = {}) {
-  return {
-    sub: 0,
-    setSub: vi.fn(),
-    subBtnRipple: 0,
-    setSubBtnRipple: vi.fn(),
-    navigate: vi.fn(),
-    goTo: vi.fn(),
-    bankIdx: 0,
-    setBankIdx: vi.fn(),
-    hovered: 0,
-    setHovered: vi.fn(),
-    expanded: null,
-    setExpanded: vi.fn(),
-    registerSubBtn: vi.fn(),
-    ...overrides,
-  };
-}
 
 // Helper: render a chapter function at a given sub, click SubBtn if present, fire all cursor-pointer clicks
 function renderAndInteract(fn, sub, extraCtx = {}) {

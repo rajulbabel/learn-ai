@@ -74,6 +74,18 @@ async function loadComponent(sectionNum, componentName) {
   return sectionCache[sectionNum][componentName] || null;
 }
 
+// Per-chapter glob: each chapter file becomes a separate Vite chunk.
+const chapterLoaders = import.meta.glob("./chapters/**/*.jsx");
+
+async function loadChapterByFile(file) {
+  if (!file) return null;
+  const key = `./chapters/${file}.jsx`;
+  const loader = chapterLoaders[key];
+  if (!loader) return null;
+  const mod = await loader();
+  return mod.default || null;
+}
+
 // ── Search module: lazy-loaded, cached ──
 let searchModule = null;
 async function getSearchModule() {
@@ -276,14 +288,19 @@ export default function LearnAI() {
     let cancelled = false;
     const sectionNum = entry.section;
     const compName = entry.component;
+    const file = entry.file;
     setRenderChapter(null);
-    loadComponent(sectionNum, compName).then((fn) => {
+    (async () => {
+      let fn = await loadChapterByFile(file);
+      if (!fn) {
+        fn = await loadComponent(sectionNum, compName);
+      }
       if (cancelled) return;
       if (fn) {
         setRenderChapter(() => fn);
       } else if (import.meta.env.DEV) {
         console.error(
-          `[lookup] Failed to resolve chapter "${entry.id}" component "${compName}" for section ${sectionNum}.`,
+          `[lookup] Failed to resolve chapter "${entry.id}" file "${file}" component "${compName}" for section ${sectionNum}.`,
         );
       }
       // After the first chapter loads, start downloading semantic search in background
@@ -307,7 +324,7 @@ export default function LearnAI() {
         if (document.readyState === "complete") trigger();
         else window.addEventListener("load", trigger, { once: true });
       }
-    });
+    })();
     return () => {
       cancelled = true;
     };

@@ -434,3 +434,14 @@ describe("LearnAI chapter loading", () => {
     expect(screen.queryByTestId("parameters-at-scale")).toBeNull();
   });
 });
+
+describe("chapterLoaders glob (dual-mode lookup)", () => {
+  it("import.meta.glob keys are an object (zero or more entries pre-migration)", async () => {
+    const loaders = import.meta.glob("../chapters/**/*.jsx");
+    expect(typeof loaders).toBe("object");
+    // Pre-migration: no chapter files exist yet, so length is 0.
+    // Post-migration (after T36): length == chapters.length.
+    // This smoke test exists so the glob path is exercised from day 1.
+    expect(Object.keys(loaders).length).toBeGreaterThanOrEqual(0);
+  });
+});

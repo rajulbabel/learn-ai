@@ -1,6 +1,9 @@
 import { Box, T, Reveal, SubBtn } from "../components.jsx";
 import { C } from "../config.js";
 import { SOFT, tintedCard, pill, DIM_BG, DIM_BORDER } from "./agent-prompting.jsx";
+import { monoArtifact } from "../shared/agent-helpers.jsx";
+
+export { monoArtifact } from "../shared/agent-helpers.jsx";
 
 // Section 13 Acts 4 + 5: Workflows / Agent Loops + Memory
 // Chapters 13.18 - 13.29. In Milestone 2 only 13.18 - 13.23 are non-stub; Act 5 (13.24 - 13.29) is added in Milestone 3.
@@ -2887,14 +2890,7 @@ const REACT_BLOCK_STACK = [
   },
 ];
 
-// Reusable monospace artifact card.
-const monoArtifact = (color, extra = {}) => ({
-  ...tintedCard(color),
-  padding: 14,
-  fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace",
-  textAlign: "center",
-  ...extra,
-});
+// monoArtifact is imported from ../shared/agent-helpers.jsx (see top of file).
 
 export const ReActPattern = (ctx) => {
   const { sub, setSub, subBtnRipple, setSubBtnRipple, registerSubBtn } = ctx;

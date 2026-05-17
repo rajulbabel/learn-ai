@@ -1,6 +1,9 @@
 import { Box, T, Reveal, SubBtn } from "../components.jsx";
 import { C } from "../config.js";
 import { SOFT, tintedCard, pill, DIM_BG, DIM_BORDER } from "./agent-prompting.jsx";
+import { HighlightedJson } from "../shared/agent-helpers.jsx";
+
+export { HighlightedJson } from "../shared/agent-helpers.jsx";
 
 // Section 13 Acts 2 + 3: Tool Calling + Protocols (MCP + A2A)
 // Chapters 13.7 - 13.17. In Milestone 1 only 13.7 - 13.11 are non-stub; Act 3 (13.12 - 13.17) is added in Milestone 2.
@@ -1836,43 +1839,7 @@ const LATENCY_BUDGET = [
   { label: "LLM call 3 (reads result, emits final answer)", ms: 700, color: C.cyan, soft: SOFT.cyan, kind: "LLM" },
 ];
 
-// Render a styled mono JSON artifact with selected keys highlighted.
-const HighlightedJson = ({ json, fields, soft }) => {
-  // Build segments: walk the string, when we hit a field name in quotes, color the line.
-  const lines = json.split("\n");
-  return (
-    <div
-      style={{
-        padding: "12px 14px",
-        borderRadius: 6,
-        background: DIM_BG,
-        border: `1px solid ${DIM_BORDER}`,
-        fontFamily: "monospace",
-        fontSize: 14,
-        color: soft,
-        whiteSpace: "pre",
-        textAlign: "left",
-        overflowX: "auto",
-      }}
-    >
-      {lines.map((line, i) => {
-        const match = fields.find((f) => line.includes(`"${f.key}"`));
-        if (match) {
-          return (
-            <div key={i} style={{ color: match.soft }}>
-              {line}
-            </div>
-          );
-        }
-        return (
-          <div key={i} style={{ color: soft }}>
-            {line}
-          </div>
-        );
-      })}
-    </div>
-  );
-};
+// HighlightedJson is imported from ../shared/agent-helpers.jsx (see top of file).
 
 export const ToolCallLifecycle = (ctx) => {
   const { sub, setSub, subBtnRipple, setSubBtnRipple, registerSubBtn } = ctx;

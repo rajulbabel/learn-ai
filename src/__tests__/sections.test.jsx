@@ -25,6 +25,12 @@ import * as RagRetrieval from "../sections/rag-retrieval.jsx";
 import * as RagGeneration from "../sections/rag-generation.jsx";
 import * as RagEvaluation from "../sections/rag-evaluation.jsx";
 import * as RagProduction from "../sections/rag-production.jsx";
+import * as AgentPrompting from "../sections/agent-prompting.jsx";
+import * as AgentTools from "../sections/agent-tools.jsx";
+import * as AgentLoops from "../sections/agent-loops.jsx";
+import * as MultiAgent from "../sections/multi-agent.jsx";
+import * as AgentEvals from "../sections/agent-evals.jsx";
+import * as AgentProduction from "../sections/agent-production.jsx";
 
 const lookup = {
   TOC,
@@ -48,6 +54,12 @@ const lookup = {
   ...RagGeneration,
   ...RagEvaluation,
   ...RagProduction,
+  ...AgentPrompting,
+  ...AgentTools,
+  ...AgentLoops,
+  ...MultiAgent,
+  ...AgentEvals,
+  ...AgentProduction,
 };
 
 afterEach(() => cleanup());
@@ -7114,5 +7126,2265 @@ describe("RAGDecisionFrameworkCapstone (12.41) content", () => {
     expect(container.textContent).toMatch(/stack|capstone|putting it all together/i);
     expect(container.textContent).toMatch(/no framework|LlamaIndex|12\.37/i);
     expect(container.textContent).toMatch(/chunking|embedding|retrieval|rerank|generate|eval/i);
+  });
+});
+
+describe("AnatomyOfLlmCall (13.1) content", () => {
+  const fn = AgentPrompting.AnatomyOfLlmCall;
+
+  it("sub=0 shows three message roles", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/system/i);
+    expect(container.textContent).toMatch(/user/i);
+    expect(container.textContent).toMatch(/assistant/i);
+  });
+
+  it("sub=1 explains tokens and context window", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/token/i);
+    expect(container.textContent).toMatch(/context window/i);
+  });
+
+  it("sub=2 covers temperature / top-p / top-k", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/temperature/i);
+    expect(container.textContent).toMatch(/top.?p/i);
+    expect(container.textContent).toMatch(/top.?k/i);
+  });
+
+  it("sub=3 lists stop conditions and finish_reason", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/max.?tokens/i);
+    expect(container.textContent).toMatch(/stop.?(reason|sequence)/i);
+    expect(container.textContent).toMatch(/end.?turn/i);
+  });
+
+  it("sub=4 shows response shape with content/stop_reason/usage", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/content/i);
+    expect(container.textContent).toMatch(/stop.?reason|finish.?reason/i);
+    expect(container.textContent).toMatch(/usage/i);
+    expect(container.textContent).toMatch(/input.?tokens/i);
+    expect(container.textContent).toMatch(/output.?tokens/i);
+  });
+
+  it("sub=5 traces the complete call cycle", () => {
+    const { container } = render(fn(makeCtx({ sub: 5 })));
+    expect(container.textContent).toMatch(/messages/i);
+    expect(container.textContent).toMatch(/request|send/i);
+    expect(container.textContent).toMatch(/response|stream/i);
+  });
+});
+
+describe("SystemPromptContract (13.2) content", () => {
+  const fn = AgentPrompting.SystemPromptContract;
+
+  it("sub=0 frames system prompt as contract with four parts", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/contract/i);
+    expect(container.textContent).toMatch(/persona/i);
+    expect(container.textContent).toMatch(/constraint/i);
+    expect(container.textContent).toMatch(/output rules/i);
+  });
+
+  it("sub=1 contrasts vague vs persona-specific prompt", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/persona/i);
+    expect(container.textContent).toMatch(/customer.support/i);
+  });
+
+  it("sub=2 lists agent capabilities and tools", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/search_kb/i);
+    expect(container.textContent).toMatch(/lookup_customer/i);
+    expect(container.textContent).toMatch(/tools?|capabilit/i);
+  });
+
+  it("sub=3 enumerates constraints", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/never/i);
+    expect(container.textContent).toMatch(/refund|\$200/i);
+    expect(container.textContent).toMatch(/escalat/i);
+  });
+
+  it("sub=4 lists output rules", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/cite|citation/i);
+    expect(container.textContent).toMatch(/greet|follow.?up/i);
+  });
+
+  it("sub=5 shows full prompt template artifact", () => {
+    const { container } = render(fn(makeCtx({ sub: 5 })));
+    expect(container.textContent).toMatch(/you are/i);
+    expect(container.textContent).toMatch(/tools|call/i);
+    expect(container.textContent).toMatch(/never/i);
+    expect(container.textContent).toMatch(/prompt template/i);
+  });
+});
+
+describe("FewShotStructuredOutput (13.3) content", () => {
+  const fn = AgentPrompting.FewShotStructuredOutput;
+
+  it("sub=0 contrasts zero-shot and few-shot", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/few.?shot/i);
+    expect(container.textContent).toMatch(/example/i);
+    expect(container.textContent).toMatch(/classif/i);
+  });
+
+  it("sub=1 shows three examples in the same format", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/input/i);
+    expect(container.textContent).toMatch(/output/i);
+    expect(container.textContent).toMatch(/category|billing|troubleshooting/i);
+  });
+
+  it("sub=2 shows the output schema with enums", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/schema/i);
+    expect(container.textContent).toMatch(/enum/i);
+    expect(container.textContent).toMatch(/urgency/i);
+  });
+
+  it("sub=3 explains few-shot + schema combination", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/structure/i);
+    expect(container.textContent).toMatch(/drift|consistent|every/i);
+  });
+
+  it("sub=4 lists production tips", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/3.?(to|-)? ?5/i);
+    expect(container.textContent).toMatch(/diverse|edge case/i);
+  });
+
+  it("sub=5 shows the assembled classifier artifact", () => {
+    const { container } = render(fn(makeCtx({ sub: 5 })));
+    expect(container.textContent).toMatch(/classif/i);
+    expect(container.textContent).toMatch(/category|schema/i);
+    // Unique-to-sub=5 assertion: the assembled classifier template label.
+    expect(container.textContent).toMatch(/ticket.?classifier|classifier template/i);
+  });
+});
+
+describe("ChainOfThoughtSelfConsistency (13.4) content", () => {
+  const fn = AgentPrompting.ChainOfThoughtSelfConsistency;
+
+  it("sub=0 contrasts direct vs CoT answer", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/chain of thought|cot|step by step/i);
+    expect(container.textContent).toMatch(/refund|prorat/i);
+  });
+
+  it("sub=1 shows the zero-shot CoT trigger", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/step by step/i);
+  });
+
+  it("sub=2 explains few-shot CoT", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/reason/i);
+    expect(container.textContent).toMatch(/example/i);
+  });
+
+  it("sub=3 shows self-consistency vote", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/self.?consistency|vote|majority/i);
+    expect(container.textContent).toMatch(/sample|n.?times|5/i);
+  });
+
+  it("sub=4 lists the cost / latency tradeoff", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/cost|token/i);
+    expect(container.textContent).toMatch(/latency/i);
+    expect(container.textContent).toMatch(/accuracy/i);
+  });
+
+  it("sub=5 indicates when to skip CoT and references Section 10.4", () => {
+    const { container } = render(fn(makeCtx({ sub: 5 })));
+    expect(container.textContent).toMatch(/skip|classif|lookup/i);
+    expect(container.textContent).toMatch(/10\.4|thinking|reasoning model/i);
+  });
+});
+
+describe("PromptVsTuneVsRagVsAgent (13.5) content", () => {
+  const fn = AgentPrompting.PromptVsTuneVsRagVsAgent;
+
+  it("sub=0 lists four approaches", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/prompt/i);
+    expect(container.textContent).toMatch(/fine.?tun/i);
+    expect(container.textContent).toMatch(/rag/i);
+    expect(container.textContent).toMatch(/agent/i);
+  });
+
+  it("sub=1 axes on data freshness", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/fresh/i);
+    expect(container.textContent).toMatch(/data/i);
+  });
+
+  it("sub=2 axes on capability gap", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/capabilit|skill|gap/i);
+  });
+
+  it("sub=3 covers latency and cost", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/latency/i);
+    expect(container.textContent).toMatch(/cost/i);
+  });
+
+  it("sub=4 shows the decision tree", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/decision|tree/i);
+    expect(container.textContent).toMatch(/action|tool/i);
+  });
+
+  it("sub=5 shows the stack pattern", () => {
+    const { container } = render(fn(makeCtx({ sub: 5 })));
+    expect(container.textContent).toMatch(/stack|combine|layer/i);
+  });
+
+  it("sub=6 lists anti-patterns", () => {
+    const { container } = render(fn(makeCtx({ sub: 6 })));
+    expect(container.textContent).toMatch(/anti.?pattern|misuse|wrong/i);
+  });
+});
+
+describe("ContextEngineering (13.6) content", () => {
+  const fn = AgentPrompting.ContextEngineering;
+
+  it("sub=0 shows the context window budget", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/context window/i);
+    expect(container.textContent).toMatch(/128k|budget/i);
+    expect(container.textContent).toMatch(/system/i);
+  });
+
+  it("sub=1 shows prompt assembly stack", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/system/i);
+    expect(container.textContent).toMatch(/history|conversation/i);
+    expect(container.textContent).toMatch(/retriev/i);
+  });
+
+  it("sub=2 compares budget strategies", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/strategy|trim|summar/i);
+  });
+
+  it("sub=3 explains lost-in-the-middle", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/lost in the middle|u.?shape|middle/i);
+  });
+
+  it("sub=4 contrasts relevance-first and recency-first", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/relevance/i);
+    expect(container.textContent).toMatch(/recency/i);
+  });
+
+  it("sub=5 shows the eviction ladder", () => {
+    const { container } = render(fn(makeCtx({ sub: 5 })));
+    expect(container.textContent).toMatch(/evict/i);
+    expect(container.textContent).toMatch(/summar/i);
+  });
+});
+
+describe("ToolUseAsBridge (13.7) content", () => {
+  const fn = AgentTools.ToolUseAsBridge;
+
+  it("sub=0 contrasts pure LLM vs LLM with tools", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/pure llm|llm only|without tools/i);
+    expect(container.textContent).toMatch(/search_kb/i);
+  });
+
+  it("sub=1 defines tool as callable function", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/function/i);
+    expect(container.textContent).toMatch(/runtime|execute/i);
+  });
+
+  it("sub=2 shows the three parts: name / description / parameters", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/name/i);
+    expect(container.textContent).toMatch(/description/i);
+    expect(container.textContent).toMatch(/parameter/i);
+  });
+
+  it("sub=3 explains the model-decides / runtime-executes split", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/tool_use|tool use/i);
+    expect(container.textContent).toMatch(/runtime|execute/i);
+  });
+
+  it("sub=4 sketches the loop and references 13.20", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/loop|reason.?act.?observe/i);
+    expect(container.textContent).toMatch(/13\.20/);
+  });
+
+  it("sub=5 enumerates the 8 canonical tools", () => {
+    const { container } = render(fn(makeCtx({ sub: 5 })));
+    expect(container.textContent).toMatch(/search_kb/i);
+    expect(container.textContent).toMatch(/lookup_customer/i);
+    expect(container.textContent).toMatch(/process_refund/i);
+    expect(container.textContent).toMatch(/escalate_human/i);
+    expect(container.textContent).toMatch(/send_email/i);
+  });
+});
+
+describe("JsonSchemaForTools (13.8) content", () => {
+  const fn = AgentTools.JsonSchemaForTools;
+
+  it("sub=0 shows the schema as contract", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/schema/i);
+    expect(container.textContent).toMatch(/lookup_customer/i);
+    expect(container.textContent).toMatch(/input_schema|properties/i);
+  });
+
+  it("sub=1 distinguishes required vs optional", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/required/i);
+    expect(container.textContent).toMatch(/optional/i);
+  });
+
+  it("sub=2 shows enum and format constraints", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/enum/i);
+    expect(container.textContent).toMatch(/urgency/i);
+  });
+
+  it("sub=3 lists description-writing rules", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/description/i);
+    expect(container.textContent).toMatch(/side effect|mutate/i);
+  });
+
+  it("sub=4 contrasts bad and good descriptions", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/bad|vague/i);
+    expect(container.textContent).toMatch(/good|specific/i);
+    expect(container.textContent).toMatch(/200|escalate/i);
+  });
+
+  it("sub=5 shows the canonical lookup_customer reference", () => {
+    const { container } = render(fn(makeCtx({ sub: 5 })));
+    expect(container.textContent).toMatch(/lookup_customer/i);
+    expect(container.textContent).toMatch(/canonical|reference/i);
+  });
+});
+
+describe("ToolCallLifecycle (13.9) content", () => {
+  const fn = AgentTools.ToolCallLifecycle;
+
+  it("sub=0 shows the swim-lane overview", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/user/i);
+    expect(container.textContent).toMatch(/model/i);
+    expect(container.textContent).toMatch(/runtime/i);
+    expect(container.textContent).toMatch(/tool_use/i);
+    expect(container.textContent).toMatch(/tool_result/i);
+  });
+
+  it("sub=1 shows the tool_use message shape", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/tool_use/i);
+    expect(container.textContent).toMatch(/input/i);
+    expect(container.textContent).toMatch(/reset_password/i);
+  });
+
+  it("sub=2 shows the tool_result message shape", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/tool_result/i);
+    expect(container.textContent).toMatch(/tool_use_id/i);
+    expect(container.textContent).toMatch(/is_error/i);
+  });
+
+  it("sub=3 traces ticket T1 end to end", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/lookup_customer/i);
+    expect(container.textContent).toMatch(/reset_password/i);
+    expect(container.textContent).toMatch(/alice@example\.com|c-9924/i);
+  });
+
+  it("sub=4 explains streaming + tool calls", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/stream/i);
+    expect(container.textContent).toMatch(/tool_use|tool block/i);
+  });
+
+  it("sub=5 shows the latency budget", () => {
+    const { container } = render(fn(makeCtx({ sub: 5 })));
+    expect(container.textContent).toMatch(/latency/i);
+    expect(container.textContent).toMatch(/llm call|model/i);
+  });
+});
+
+describe("ParallelToolsAndChoice (13.10) content", () => {
+  const fn = AgentTools.ParallelToolsAndChoice;
+
+  it("sub=0 contrasts serial vs parallel timeline", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/serial/i);
+    expect(container.textContent).toMatch(/parallel/i);
+    expect(container.textContent).toMatch(/lookup_customer/i);
+  });
+
+  it("sub=1 explains when to parallelize", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/independent/i);
+    expect(container.textContent).toMatch(/dependent/i);
+  });
+
+  it("sub=2 explains tool_choice auto", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/tool.?choice/i);
+    expect(container.textContent).toMatch(/auto/i);
+  });
+
+  it("sub=3 lists all four tool_choice modes", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/auto/i);
+    expect(container.textContent).toMatch(/required/i);
+    expect(container.textContent).toMatch(/none/i);
+    expect(container.textContent).toMatch(/specific|force/i);
+  });
+
+  it("sub=4 shows the latency savings number", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/savings|saving|faster/i);
+  });
+
+  it("sub=5 traces ticket T2 with parallel lookups", () => {
+    const { container } = render(fn(makeCtx({ sub: 5 })));
+    expect(container.textContent).toMatch(/T2|ticket t2/i);
+    expect(container.textContent).toMatch(/parallel/i);
+    expect(container.textContent).toMatch(/lookup_subscription/i);
+  });
+});
+
+describe("ToolErrorsRetries (13.11) content", () => {
+  const fn = AgentTools.ToolErrorsRetries;
+
+  it("sub=0 enumerates the four error classes", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/transient/i);
+    expect(container.textContent).toMatch(/permanent/i);
+    expect(container.textContent).toMatch(/malformed/i);
+    expect(container.textContent).toMatch(/business.?rule/i);
+  });
+
+  it("sub=1 shows the structured error return", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/is_error/i);
+    expect(container.textContent).toMatch(/error_class|business_rule/i);
+    expect(container.textContent).toMatch(/200/);
+  });
+
+  it("sub=2 lists the per-class retry policy", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/retry/i);
+    expect(container.textContent).toMatch(/backoff/i);
+    expect(container.textContent).toMatch(/transient/i);
+  });
+
+  it("sub=3 shows the validation layer", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/validat/i);
+    expect(container.textContent).toMatch(/schema/i);
+  });
+
+  it("sub=4 explains idempotency", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/idempotenc/i);
+    expect(container.textContent).toMatch(/key|double/i);
+  });
+
+  it("sub=5 traces ticket T4 with error recovery", () => {
+    const { container } = render(fn(makeCtx({ sub: 5 })));
+    expect(container.textContent).toMatch(/T4|ticket t4/i);
+    expect(container.textContent).toMatch(/business.?rule/i);
+    expect(container.textContent).toMatch(/escalate_human/i);
+    expect(container.textContent).toMatch(/200|350/);
+  });
+});
+
+describe("WhyProtocols (13.12) content", () => {
+  const fn = AgentTools.WhyProtocols;
+
+  it("sub=0 shows the ad-hoc sprawl", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/ad.?hoc|sprawl|tangle/i);
+    expect(container.textContent).toMatch(/agent/i);
+    expect(container.textContent).toMatch(/tool/i);
+    expect(container.textContent).toMatch(/30/);
+  });
+
+  it("sub=1 explains M+N hub model", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/protocol/i);
+    expect(container.textContent).toMatch(/hub|center/i);
+    expect(container.textContent).toMatch(/m \+ n|m plus n|11|30/i);
+    expect(container.textContent).toMatch(/hub and spoke/i);
+  });
+
+  it("sub=2 lists MCP, A2A, OpenAPI", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/MCP/);
+    expect(container.textContent).toMatch(/A2A/);
+    expect(container.textContent).toMatch(/OpenAPI|HTTP/i);
+    expect(container.textContent).toMatch(/Model Context Protocol/i);
+  });
+
+  it("sub=3 shows when protocol pays off", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/3|few|many/i);
+    expect(container.textContent).toMatch(/decision|production/i);
+    expect(container.textContent).toMatch(/Protocol Mesh/i);
+  });
+
+  it("sub=4 frames protocol as trust boundary", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/trust|sandbox|boundary/i);
+    expect(container.textContent).toMatch(/host/i);
+    expect(container.textContent).toMatch(/server/i);
+    expect(container.textContent).toMatch(/Sandbox Contract/i);
+  });
+});
+
+describe("McpArchitecture (13.13) content", () => {
+  const fn = AgentTools.McpArchitecture;
+
+  it("sub=0 names host, client, server", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/host/i);
+    expect(container.textContent).toMatch(/client/i);
+    expect(container.textContent).toMatch(/server/i);
+    expect(container.textContent).toMatch(/Claude Desktop/i);
+  });
+
+  it("sub=1 shows the one-host many-clients topology", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/topology|hub/i);
+    expect(container.textContent).toMatch(/server/i);
+    expect(container.textContent).toMatch(/Postgres/i);
+  });
+
+  it("sub=2 lists stdio, HTTP, SSE transports", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/stdio/i);
+    expect(container.textContent).toMatch(/http/i);
+    expect(container.textContent).toMatch(/sse|server.sent/i);
+    expect(container.textContent).toMatch(/Server-Sent Events/i);
+  });
+
+  it("sub=3 walks the lifecycle", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/initialize|handshake/i);
+    expect(container.textContent).toMatch(/list/i);
+    expect(container.textContent).toMatch(/call/i);
+    expect(container.textContent).toMatch(/Initialize Handshake/i);
+  });
+
+  it("sub=4 shows the tools/list response shape", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/tools.list|capabilit/i);
+    expect(container.textContent).toMatch(/name/i);
+    expect(container.textContent).toMatch(/description/i);
+    expect(container.textContent).toMatch(/search_kb/);
+  });
+});
+
+describe("McpPrimitives (13.14) content", () => {
+  const fn = AgentTools.McpPrimitives;
+
+  it("sub=0 names the three primitives", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/tools/i);
+    expect(container.textContent).toMatch(/resources/i);
+    expect(container.textContent).toMatch(/prompts/i);
+    expect(container.textContent).toMatch(/Things The Model Can Do/i);
+  });
+
+  it("sub=1 shows a tool example", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/process_refund/);
+    expect(container.textContent).toMatch(/side effect|mutate/i);
+    expect(container.textContent).toMatch(/invoice_id/);
+  });
+
+  it("sub=2 shows a resource URI", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/kb:\/\/|resource/i);
+    expect(container.textContent).toMatch(/read.?only|read only/i);
+    expect(container.textContent).toMatch(/kb:\/\/articles\/password-reset/);
+  });
+
+  it("sub=3 shows a prompt with arguments", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/summarize_ticket/);
+    expect(container.textContent).toMatch(/argument|parameter|required/i);
+    expect(container.textContent).toMatch(/slash.commands/i);
+  });
+
+  it("sub=4 explains when to use which", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/action|mutate|do/i);
+    expect(container.textContent).toMatch(/read|data/i);
+    expect(container.textContent).toMatch(/template/i);
+    expect(container.textContent).toMatch(/Decision rule:/);
+  });
+});
+
+describe("BuildingMcpServer (13.15) content", () => {
+  const fn = AgentTools.BuildingMcpServer;
+
+  it("sub=0 shows the skeleton phases", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/declare|register/i);
+    expect(container.textContent).toMatch(/tools/i);
+    expect(container.textContent).toMatch(/resources/i);
+    expect(container.textContent).toMatch(/prompts/i);
+    expect(container.textContent).toMatch(/Each declaration registers/i);
+  });
+
+  it("sub=1 shows tool registration shape", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/search_kb/);
+    expect(container.textContent).toMatch(/handler/i);
+    expect(container.textContent).toMatch(/Handler runs server-side/i);
+  });
+
+  it("sub=2 shows resource registration", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/kb:\/\/|resource/i);
+    expect(container.textContent).toMatch(/template|uri/i);
+    expect(container.textContent).toMatch(/kb:\/\/articles\/password-reset/);
+  });
+
+  it("sub=3 shows prompt registration", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/summarize_ticket/);
+    expect(container.textContent).toMatch(/argument|prompt/i);
+    expect(container.textContent).toMatch(/resolved prompt string/i);
+  });
+
+  it("sub=4 shows the lifecycle", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/lifecycle|state|listen/i);
+    expect(container.textContent).toMatch(/active/i);
+    expect(container.textContent).toMatch(/Definitions Declared|Transport Open/i);
+  });
+
+  it("sub=5 lists testing strategies", () => {
+    const { container } = render(fn(makeCtx({ sub: 5 })));
+    expect(container.textContent).toMatch(/test/i);
+    expect(container.textContent).toMatch(/handler|unit/i);
+    expect(container.textContent).toMatch(/mock|isolat/i);
+    expect(container.textContent).toMatch(/Mock Host/i);
+  });
+});
+
+describe("McpSecurity (13.16) content", () => {
+  const fn = AgentTools.McpSecurity;
+
+  it("sub=0 frames trust boundary", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/trust|untrusted/i);
+    expect(container.textContent).toMatch(/boundary|host|server/i);
+    expect(container.textContent).toMatch(/Server Code Is Untrusted By Default/i);
+  });
+
+  it("sub=1 describes sandbox isolation", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/sandbox/i);
+    expect(container.textContent).toMatch(/process|isolat/i);
+    expect(container.textContent).toMatch(/Process Isolation/i);
+  });
+
+  it("sub=2 lists capability scope", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/capabilit|scope/i);
+    expect(container.textContent).toMatch(/allow|deny/i);
+    expect(container.textContent).toMatch(/kb:\/\/internal/);
+  });
+
+  it("sub=3 shows OAuth flow", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/oauth/i);
+    expect(container.textContent).toMatch(/token/i);
+    expect(container.textContent).toMatch(/Access Token/i);
+  });
+
+  it("sub=4 explains consent prompts and audit log", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/consent|approval/i);
+    expect(container.textContent).toMatch(/audit|log/i);
+    expect(container.textContent).toMatch(/INV-9924/);
+  });
+});
+
+describe("A2AProtocol (13.17) content", () => {
+  const fn = AgentTools.A2AProtocol;
+
+  it("sub=0 contrasts MCP and A2A scope", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/MCP/);
+    expect(container.textContent).toMatch(/A2A/);
+    expect(container.textContent).toMatch(/delegat|agent.*agent/i);
+    expect(container.textContent).toMatch(/Agent calls function|Agent delegates whole task/i);
+  });
+
+  it("sub=1 shows the agent.json discovery doc", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/agent\.json|discovery/i);
+    expect(container.textContent).toMatch(/skills|endpoint/i);
+    expect(container.textContent).toMatch(/billing/i);
+    expect(container.textContent).toMatch(/billing-specialist-v2/);
+  });
+
+  it("sub=2 traces the delegation flow on T4", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/triage/i);
+    expect(container.textContent).toMatch(/billing/i);
+    expect(container.textContent).toMatch(/T4|ticket t4|delegat/i);
+    expect(container.textContent).toMatch(/conversation history/i);
+  });
+
+  it("sub=3 explains streaming intermediate updates", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/stream/i);
+    expect(container.textContent).toMatch(/progress|update|intermediate/i);
+    expect(container.textContent).toMatch(/Refund.*\$200/);
+  });
+
+  it("sub=4 explains when A2A vs MCP", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/delegat/i);
+    expect(container.textContent).toMatch(/decision|when/i);
+    expect(container.textContent).toMatch(/Two Protocols, Two Roles/i);
+  });
+});
+
+describe("WorkflowVsAgent (13.18) content", () => {
+  const fn = AgentLoops.WorkflowVsAgent;
+
+  it("sub=0 contrasts DAG and loop", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/workflow/i);
+    expect(container.textContent).toMatch(/agent/i);
+    expect(container.textContent).toMatch(/dag|graph|fixed/i);
+    expect(container.textContent).toMatch(/loop|open|variable/i);
+    expect(container.textContent).toMatch(/Two Shapes Of Control/i);
+  });
+
+  it("sub=1 lists when workflow wins", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/workflow/i);
+    expect(container.textContent).toMatch(/known|predict/i);
+    expect(container.textContent).toMatch(/classif|route/i);
+    expect(container.textContent).toMatch(/Always Those 3 Steps/i);
+  });
+
+  it("sub=2 lists when agent wins", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/agent/i);
+    expect(container.textContent).toMatch(/variable|decide/i);
+    expect(container.textContent).toMatch(/2 Calls Or 20/i);
+  });
+
+  it("sub=3 shows the hybrid", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/hybrid/i);
+    expect(container.textContent).toMatch(/Handle Step Is An Agent/i);
+  });
+
+  it("sub=4 shows cost / reliability tradeoff", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/cost/i);
+    expect(container.textContent).toMatch(/predict|bound|variable/i);
+    expect(container.textContent).toMatch(/Workflow When You Can/i);
+  });
+});
+
+describe("WorkflowPrimitives (13.19) content", () => {
+  const fn = AgentLoops.WorkflowPrimitives;
+
+  it("sub=0 names the three primitives", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/chain/i);
+    expect(container.textContent).toMatch(/rout/i);
+    expect(container.textContent).toMatch(/parallel/i);
+    expect(container.textContent).toMatch(/Chain, Route, Parallelize/i);
+  });
+
+  it("sub=1 shows chaining with structured output", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/chain/i);
+    expect(container.textContent).toMatch(/structured|json|output/i);
+    expect(container.textContent).toMatch(/category/i);
+  });
+
+  it("sub=2 explains routing with intent classification", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/rout/i);
+    expect(container.textContent).toMatch(/intent|classif/i);
+    expect(container.textContent).toMatch(/13\.3|few.?shot/i);
+    expect(container.textContent).toMatch(/Section 13\.3|13\.3/);
+  });
+
+  it("sub=3 shows parallelization fan-out", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/parallel|fan.?out/i);
+    expect(container.textContent).toMatch(/aggregat|merge/i);
+    expect(container.textContent).toMatch(/max.*worker/i);
+  });
+
+  it("sub=4 shows composing primitives", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/compos|stack|combine/i);
+    expect(container.textContent).toMatch(/all three/i);
+  });
+
+  it("sub=5 maps support-agent workflow", () => {
+    const { container } = render(fn(makeCtx({ sub: 5 })));
+    expect(container.textContent).toMatch(/billing/i);
+    expect(container.textContent).toMatch(/troubl|escalat/i);
+    expect(container.textContent).toMatch(/search_kb/);
+    expect(container.textContent).toMatch(/lookup_subscription/);
+  });
+});
+
+describe("AgentLoop (13.20) content", () => {
+  const fn = AgentLoops.AgentLoop;
+
+  it("sub=0 names reason / act / observe", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/reason/i);
+    expect(container.textContent).toMatch(/act/i);
+    expect(container.textContent).toMatch(/observ/i);
+    expect(container.textContent).toMatch(/three.?beat/i);
+  });
+
+  it("sub=1 shows state machine view", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/state/i);
+    expect(container.textContent).toMatch(/done|terminal/i);
+    expect(container.textContent).toMatch(/ESCALATED/);
+  });
+
+  it("sub=2 explains termination check", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/terminat|stop/i);
+    expect(container.textContent).toMatch(/max iter|budget/i);
+    expect(container.textContent).toMatch(/13\.23/);
+  });
+
+  it("sub=3 shows per-iteration cost", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/cost/i);
+    expect(container.textContent).toMatch(/llm call|tool call/i);
+    expect(container.textContent).toMatch(/\$0\.02/);
+  });
+
+  it("sub=4 traces ticket T2 as a loop", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/T2|ticket t2/i);
+    expect(container.textContent).toMatch(/lookup_customer/);
+    expect(container.textContent).toMatch(/change_email/);
+    expect(container.textContent).toMatch(/reset_password/);
+    expect(container.textContent).toMatch(/c-9924/);
+  });
+
+  it("sub=5 contrasts single vs loop", () => {
+    const { container } = render(fn(makeCtx({ sub: 5 })));
+    expect(container.textContent).toMatch(/single|loop/i);
+    expect(container.textContent).toMatch(/depend|adapt/i);
+    expect(container.textContent).toMatch(/second tool's input depends/i);
+  });
+});
+
+describe("ReActPattern (13.21) content", () => {
+  const fn = AgentLoops.ReActPattern;
+
+  it("sub=0 names Thought / Action / Observation", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/thought/i);
+    expect(container.textContent).toMatch(/action/i);
+    expect(container.textContent).toMatch(/observation/i);
+    expect(container.textContent).toMatch(/Reasoning \+ Acting|ReAct/);
+  });
+
+  it("sub=1 shows a thought block", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/thought/i);
+    expect(container.textContent).toMatch(/plan|lookup_customer/i);
+    expect(container.textContent).toMatch(/OLD email/i);
+  });
+
+  it("sub=2 shows an action block", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/action/i);
+    expect(container.textContent).toMatch(/lookup_customer/);
+    expect(container.textContent).toMatch(/One Action Per Iteration/i);
+  });
+
+  it("sub=3 shows an observation block", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/observ/i);
+    expect(container.textContent).toMatch(/c-9924|customer_id/i);
+    expect(container.textContent).toMatch(/primary_email/);
+  });
+
+  it("sub=4 traces T2 in ReAct format", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/T2|ticket t2/i);
+    expect(container.textContent).toMatch(/lookup_customer/);
+    expect(container.textContent).toMatch(/reset_password/);
+    expect(container.textContent).toMatch(/change_email/);
+  });
+
+  it("sub=5 explains ReAct vs plain tool-use", () => {
+    const { container } = render(fn(makeCtx({ sub: 5 })));
+    expect(container.textContent).toMatch(/plain|tool.?use/i);
+    expect(container.textContent).toMatch(/audit|debug|trust/i);
+    expect(container.textContent).toMatch(/train a smaller model/i);
+  });
+});
+
+describe("PlanExecuteReflect (13.22) content", () => {
+  const fn = AgentLoops.PlanExecuteReflect;
+
+  it("sub=0 contrasts plan-first vs reactive", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/plan/i);
+    expect(container.textContent).toMatch(/react/i);
+    expect(container.textContent).toMatch(/up front|step by step|first/i);
+    expect(container.textContent).toMatch(/Decide Up Front Or Step By Step/i);
+  });
+
+  it("sub=1 shows the plan tree", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/plan/i);
+    expect(container.textContent).toMatch(/tree/i);
+    expect(container.textContent).toMatch(/lookup_customer/);
+    expect(container.textContent).toMatch(/T4/);
+  });
+
+  it("sub=2 walks the leaves", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/execute|leaf|leaves/i);
+    expect(container.textContent).toMatch(/escalate_human/);
+    expect(container.textContent).toMatch(/business_rule/);
+  });
+
+  it("sub=3 shows reflection critique-revise", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/reflect|critique/i);
+    expect(container.textContent).toMatch(/revise/i);
+    expect(container.textContent).toMatch(/score|grade/i);
+    expect(container.textContent).toMatch(/Score < 7/);
+  });
+
+  it("sub=4 shows the decision matrix", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/complex|simple/i);
+    expect(container.textContent).toMatch(/audit/i);
+    expect(container.textContent).toMatch(/plan|reflect|react/i);
+    expect(container.textContent).toMatch(/Plan-Execute \+ Reflection/);
+  });
+});
+
+describe("LoopTermination (13.23) content", () => {
+  const fn = AgentLoops.LoopTermination;
+
+  it("sub=0 lists the four stop conditions", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/success/i);
+    expect(container.textContent).toMatch(/max.?iter/i);
+    expect(container.textContent).toMatch(/budget/i);
+    expect(container.textContent).toMatch(/explicit stop|halt/i);
+    expect(container.textContent).toMatch(/Four Ways A Loop Ends/i);
+  });
+
+  it("sub=1 shows success detection", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/success/i);
+    expect(container.textContent).toMatch(/final|answer|no more/i);
+    expect(container.textContent).toMatch(/No More Tools Needed/i);
+  });
+
+  it("sub=2 shows max-iter cap", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/max iter/i);
+    expect(container.textContent).toMatch(/10|20/);
+    expect(container.textContent).toMatch(/Pay-To-Think/i);
+  });
+
+  it("sub=3 shows budget exhaustion", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/budget/i);
+    expect(container.textContent).toMatch(/token|cost/i);
+    expect(container.textContent).toMatch(/10x Per Iteration/i);
+  });
+
+  it("sub=4 shows explicit stop signal", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/halt|stop signal/i);
+    expect(container.textContent).toMatch(/escalate_human/);
+    expect(container.textContent).toMatch(/"halt"/);
+  });
+
+  it("sub=5 shows fail-safe escalation", () => {
+    const { container } = render(fn(makeCtx({ sub: 5 })));
+    expect(container.textContent).toMatch(/fail.?safe/i);
+    expect(container.textContent).toMatch(/escalate_human/);
+    expect(container.textContent).toMatch(/No Silent Failures/i);
+  });
+});
+
+describe("MemoryTaxonomy (13.24) content", () => {
+  const fn = AgentLoops.MemoryTaxonomy;
+
+  it("sub=0 distinguishes short and long", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/short.?term/i);
+    expect(container.textContent).toMatch(/long.?term/i);
+    expect(container.textContent).toMatch(/context window|session/i);
+    expect(container.textContent).toMatch(/Two Memory Layers/i);
+  });
+
+  it("sub=1 lists the three long-term types", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/episodic/i);
+    expect(container.textContent).toMatch(/semantic/i);
+    expect(container.textContent).toMatch(/procedural/i);
+    expect(container.textContent).toMatch(/Long-Term Splits Three Ways/i);
+  });
+
+  it("sub=2 shows the full taxonomy tree", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/working/i);
+    expect(container.textContent).toMatch(/episodic/i);
+    expect(container.textContent).toMatch(/semantic/i);
+    expect(container.textContent).toMatch(/procedural/i);
+    expect(container.textContent).toMatch(/Agent Memory Taxonomy/i);
+  });
+
+  it("sub=3 shows the T2 memory snapshot", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/alice@example\.com|c-9924/i);
+    expect(container.textContent).toMatch(/Pro tier|MFA|refund/i);
+    expect(container.textContent).toMatch(/Memory Snapshot: Ticket T2/i);
+  });
+
+  it("sub=4 explains why all four", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/current|task|state/i);
+    expect(container.textContent).toMatch(/past|event/i);
+    expect(container.textContent).toMatch(/facts|stable/i);
+    expect(container.textContent).toMatch(/routine|cache/i);
+    expect(container.textContent).toMatch(/Each Layer Solves/i);
+  });
+});
+
+describe("WorkingMemory (13.25) content", () => {
+  const fn = AgentLoops.WorkingMemory;
+
+  it("sub=0 introduces scratchpad concept", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/scratchpad|note/i);
+    expect(container.textContent).toMatch(/reason|observ|loop/i);
+    expect(container.textContent).toMatch(/A Note Pad The Model Keeps/i);
+  });
+
+  it("sub=1 shows the scratchpad shape", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/current_goal|customer_context/i);
+    expect(container.textContent).toMatch(/completed_steps/i);
+    expect(container.textContent).toMatch(/next_step/i);
+    expect(container.textContent).toMatch(/What Goes In The Scratchpad/i);
+  });
+
+  it("sub=2 shows update across iterations", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/iter|iteration/i);
+    expect(container.textContent).toMatch(/lookup_customer/);
+    expect(container.textContent).toMatch(/change_email/);
+    expect(container.textContent).toMatch(/Updated Every Iteration/i);
+  });
+
+  it("sub=3 explains discard at task end", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/discard|delete|end/i);
+    expect(container.textContent).toMatch(/promote|long.?term/i);
+    expect(container.textContent).toMatch(/Working Memory Dies/i);
+  });
+
+  it("sub=4 compares working vs long-term", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/working|long.?term/i);
+    expect(container.textContent).toMatch(/persist|discard/i);
+    expect(container.textContent).toMatch(/Working vs Long-Term/i);
+  });
+});
+
+describe("EpisodicMemory (13.26) content", () => {
+  const fn = AgentLoops.EpisodicMemory;
+
+  it("sub=0 shows time-stamped events", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/episode|event/i);
+    expect(container.textContent).toMatch(/2026|timestamp|date/i);
+    expect(container.textContent).toMatch(/alice|password reset/i);
+    expect(container.textContent).toMatch(/Episodes: Time-Stamped Events/i);
+  });
+
+  it("sub=1 back-references Section 11 vector storage", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/vector|embedding/i);
+    expect(container.textContent).toMatch(/section 11|11\.6|11\.7|HNSW/i);
+    expect(container.textContent).toMatch(/Stored As Vectors/i);
+  });
+
+  it("sub=2 shows retrieval at conversation start", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/retriev|recall/i);
+    expect(container.textContent).toMatch(/system prompt|top.?3|top.?k/i);
+    expect(container.textContent).toMatch(/Recall Before Reasoning/i);
+  });
+
+  it("sub=3 shows the entry shape", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/customer_id|c-9924/i);
+    expect(container.textContent).toMatch(/timestamp/i);
+    expect(container.textContent).toMatch(/embedding/i);
+    expect(container.textContent).toMatch(/Event Log Entry/i);
+  });
+
+  it("sub=4 explains pruning policy", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/prune|forget/i);
+    expect(container.textContent).toMatch(/12 months|age|summariz/i);
+    expect(container.textContent).toMatch(/Memory Has To Forget/i);
+  });
+});
+
+describe("SemanticMemory (13.27) content", () => {
+  const fn = AgentLoops.SemanticMemory;
+
+  it("sub=0 distinguishes facts from events", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/fact/i);
+    expect(container.textContent).toMatch(/episodic|event/i);
+    expect(container.textContent).toMatch(/alice|prefer/i);
+    expect(container.textContent).toMatch(/Facts I Know About You/i);
+  });
+
+  it("sub=1 shows the profile card", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/customer_id|c-9924/i);
+    expect(container.textContent).toMatch(/tier|Pro/);
+    expect(container.textContent).toMatch(/preferred_contact|preference/i);
+    expect(container.textContent).toMatch(/Customer Profile Card/i);
+  });
+
+  it("sub=2 compares structured vs vector storage", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/structured|key.?value/i);
+    expect(container.textContent).toMatch(/vector|similarity/i);
+    expect(container.textContent).toMatch(/Key-Value Or Vector/i);
+  });
+
+  it("sub=3 shows profile growth across sessions", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/day 1|day 30|day 90|growth/i);
+    expect(container.textContent).toMatch(/How The Profile Fills Up/i);
+  });
+
+  it("sub=4 explains write vs ignore", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/write|store/i);
+    expect(container.textContent).toMatch(/ignore|skip|transient/i);
+    expect(container.textContent).toMatch(/6 months|stable/i);
+    expect(container.textContent).toMatch(/What Counts As A Fact/i);
+  });
+});
+
+describe("ProceduralMemory (13.28) content", () => {
+  const fn = AgentLoops.ProceduralMemory;
+
+  it("sub=0 contrasts skill vs fact", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/skill|recipe|how.?to/i);
+    expect(container.textContent).toMatch(/fact/i);
+    expect(container.textContent).toMatch(/escalate_human|200/);
+    expect(container.textContent).toMatch(/How-To, Not What/i);
+  });
+
+  it("sub=1 shows the recipe library", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/library|cache|recipe/i);
+    expect(container.textContent).toMatch(/refund|password|billing/i);
+    expect(container.textContent).toMatch(/Cached Workflows/i);
+  });
+
+  it("sub=2 shows retrieval by similarity", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/similarity|match|retriev/i);
+    expect(container.textContent).toMatch(/embedding|ANN/);
+    expect(container.textContent).toMatch(/Retrieve The Recipe/i);
+  });
+
+  it("sub=3 shows recipe shape", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/recipe/i);
+    expect(container.textContent).toMatch(/steps/i);
+    expect(container.textContent).toMatch(/success_rate|uses/i);
+    expect(container.textContent).toMatch(/Recipe \(Shape\)/i);
+  });
+
+  it("sub=4 contrasts with prompting", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/prompt/i);
+    expect(container.textContent).toMatch(/external|stored|token/i);
+    expect(container.textContent).toMatch(/learn|update|outcome/i);
+    expect(container.textContent).toMatch(/Why Not Just Prompt/i);
+  });
+});
+
+describe("SummaryAndContextMgmt (13.29) content", () => {
+  const fn = AgentLoops.SummaryAndContextMgmt;
+
+  it("sub=0 shows long conversations pressure the window", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/context window|8k/i);
+    expect(container.textContent).toMatch(/turns?|100|30/i);
+    expect(container.textContent).toMatch(/100 Turns Won/i);
+  });
+
+  it("sub=1 shows rolling summary technique", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/rolling|summary/i);
+    expect(container.textContent).toMatch(/50%|capacity|half/i);
+    expect(container.textContent).toMatch(/Compress The Oldest Half/i);
+  });
+
+  it("sub=2 shows hierarchical summary tree", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/hierarch/i);
+    expect(container.textContent).toMatch(/meta|tree|leaves/i);
+    expect(container.textContent).toMatch(/Summaries Of Summaries/i);
+  });
+
+  it("sub=3 contrasts recency / relevance / hybrid", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/recency/i);
+    expect(container.textContent).toMatch(/relevance/i);
+    expect(container.textContent).toMatch(/hybrid/i);
+    expect(container.textContent).toMatch(/Most Recent vs Most Relevant/i);
+  });
+
+  it("sub=4 shows production thresholds", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/50%|threshold|capacity/i);
+    expect(container.textContent).toMatch(/aggressive|panic|production/i);
+    expect(container.textContent).toMatch(/Summarize At 50% Capacity/i);
+  });
+
+  it("sub=5 ties to 13.6 context engineering", () => {
+    const { container } = render(fn(makeCtx({ sub: 5 })));
+    expect(container.textContent).toMatch(/13\.6|context engineering/i);
+    expect(container.textContent).toMatch(/Context Is Where Real Work Happens/i);
+  });
+});
+
+describe("WhyMultiAgent (13.30) content", () => {
+  const fn = MultiAgent.WhyMultiAgent;
+
+  it("sub=0 shows single-agent ceiling", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/single|one agent|ceiling/i);
+    expect(container.textContent).toMatch(/Why One Agent Sometimes Isn/i);
+  });
+
+  it("sub=1 explains specialization", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/specializ/i);
+    expect(container.textContent).toMatch(/billing|trouble|triage/i);
+    expect(container.textContent).toMatch(/One Agent Per Role/i);
+  });
+
+  it("sub=2 shows parallelism", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/parallel|concurrent/i);
+    expect(container.textContent).toMatch(/lookup_customer|lookup_subscription/);
+    expect(container.textContent).toMatch(/Run Independent Tasks At The Same Time/i);
+  });
+
+  it("sub=3 shows planner / worker", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/planner|worker/i);
+    expect(container.textContent).toMatch(/decompos|break/i);
+    expect(container.textContent).toMatch(/Planner vs Worker/i);
+  });
+
+  it("sub=4 lists when multi-agent hurts", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/hurt|anti.?pattern|not/i);
+    expect(container.textContent).toMatch(/13\.35|failure/);
+    expect(container.textContent).toMatch(/Don.t Multi-Agent A Small Problem/i);
+  });
+});
+
+describe("OrchestratorWorker (13.31) content", () => {
+  const fn = MultiAgent.OrchestratorWorker;
+
+  it("sub=0 shows topology", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/orchestrat|planner/i);
+    expect(container.textContent).toMatch(/worker/i);
+    expect(container.textContent).toMatch(/One Planner, N Workers/i);
+  });
+
+  it("sub=1 shows orchestrator phases", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/plan/i);
+    expect(container.textContent).toMatch(/dispatch|send/i);
+    expect(container.textContent).toMatch(/aggregat|merge/i);
+    expect(container.textContent).toMatch(/Plan, Dispatch, Aggregate/i);
+  });
+
+  it("sub=2 shows worker role", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/sub.?task/i);
+    expect(container.textContent).toMatch(/don't talk|orchestrator/i);
+    expect(container.textContent).toMatch(/Execute One Sub-Task/i);
+  });
+
+  it("sub=3 traces T3", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/T3|ticket t3/i);
+    expect(container.textContent).toMatch(/search_kb/);
+    expect(container.textContent).toMatch(/lookup_customer/);
+    expect(container.textContent).toMatch(/Trace: Ticket T3/i);
+  });
+
+  it("sub=4 lists aggregation patterns", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/concat|stitch/i);
+    expect(container.textContent).toMatch(/vote|majority/i);
+    expect(container.textContent).toMatch(/synthesis/i);
+    expect(container.textContent).toMatch(/Three Ways To Aggregate/i);
+  });
+});
+
+describe("SupervisorHierarchy (13.32) content", () => {
+  const fn = MultiAgent.SupervisorHierarchy;
+
+  it("sub=0 shows the tree", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/tree|hierarch/i);
+    expect(container.textContent).toMatch(/supervisor/i);
+    expect(container.textContent).toMatch(/specialist|leaf/i);
+    expect(container.textContent).toMatch(/Multiple Levels Of Delegation/i);
+  });
+
+  it("sub=1 shows supervisor role per level", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/supervisor/i);
+    expect(container.textContent).toMatch(/route|pick|children/i);
+    expect(container.textContent).toMatch(/Each Supervisor: Plan/i);
+  });
+
+  it("sub=2 decides hierarchical vs orchestrator-worker", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/hierarchical/i);
+    expect(container.textContent).toMatch(/sub.?domain|sub.?specialty/i);
+    expect(container.textContent).toMatch(/Sub-Specialties/i);
+  });
+
+  it("sub=3 shows the support tree", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/billing/i);
+    expect(container.textContent).toMatch(/refund|invoice/i);
+    expect(container.textContent).toMatch(/escalat/i);
+    expect(container.textContent).toMatch(/Support Tree/i);
+  });
+
+  it("sub=4 shows escalation up the tree", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/escalat/i);
+    expect(container.textContent).toMatch(/escalate_human/);
+    expect(container.textContent).toMatch(/When To Escalate Up/i);
+  });
+});
+
+describe("AgentHandoffs (13.33) content", () => {
+  const fn = MultiAgent.AgentHandoffs;
+
+  it("sub=0 contrasts hand-off vs delegation", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/hand.?off/i);
+    expect(container.textContent).toMatch(/delegat/i);
+    expect(container.textContent).toMatch(/switch|return|control/i);
+    expect(container.textContent).toMatch(/Return The Next Agent/i);
+  });
+
+  it("sub=1 shows the swarm shape", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/swarm|hand.?off/i);
+    expect(container.textContent).toMatch(/handoffs/i);
+    expect(container.textContent).toMatch(/triage|billing/i);
+    expect(container.textContent).toMatch(/Agents As Routes/i);
+  });
+
+  it("sub=2 explains context transfer", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/context|history/i);
+    expect(container.textContent).toMatch(/working memory|snapshot/i);
+    expect(container.textContent).toMatch(/What Travels With The Hand-Off/i);
+  });
+
+  it("sub=3 traces T4 hand-off", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/T4|ticket t4/i);
+    expect(container.textContent).toMatch(/triage/i);
+    expect(container.textContent).toMatch(/billing/i);
+    expect(container.textContent).toMatch(/hand.?off|escalation/i);
+    expect(container.textContent).toMatch(/Trace: T4/i);
+  });
+
+  it("sub=4 contrasts ring vs tree", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/ring|peer/i);
+    expect(container.textContent).toMatch(/tree|nested/i);
+    expect(container.textContent).toMatch(/Ring When All Agents Are Peers/i);
+  });
+});
+
+describe("CriticDebate (13.34) content", () => {
+  const fn = MultiAgent.CriticDebate;
+
+  it("sub=0 introduces critic role", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/critic/i);
+    expect(container.textContent).toMatch(/13\.22|reflection/i);
+    expect(container.textContent).toMatch(/A Second Agent Checks The First/i);
+  });
+
+  it("sub=1 shows critique-revise loop", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/critique|score/i);
+    expect(container.textContent).toMatch(/revise/i);
+    expect(container.textContent).toMatch(/Loop: Draft/i);
+  });
+
+  it("sub=2 shows debate pattern", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/debate|argue/i);
+    expect(container.textContent).toMatch(/judge/i);
+    expect(container.textContent).toMatch(/Two Agents Argue/i);
+  });
+
+  it("sub=3 shows refund critic example", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/refund/i);
+    expect(container.textContent).toMatch(/policy/i);
+    expect(container.textContent).toMatch(/30 days|partial/i);
+    expect(container.textContent).toMatch(/Policy Critic/i);
+  });
+
+  it("sub=4 shows critic cost tradeoff", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/cost|battle/i);
+    expect(container.textContent).toMatch(/high.?stakes|contested/i);
+    expect(container.textContent).toMatch(/Pick Battles/i);
+  });
+});
+
+describe("MultiAgentFailures (13.35) content", () => {
+  const fn = MultiAgent.MultiAgentFailures;
+
+  it("sub=0 lists four failure modes", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/drift/i);
+    expect(container.textContent).toMatch(/infinite loop/i);
+    expect(container.textContent).toMatch(/deadlock/i);
+    expect(container.textContent).toMatch(/cost runaway|runaway/i);
+    expect(container.textContent).toMatch(/How Multi-Agent Falls Apart/i);
+  });
+
+  it("sub=1 shows drift", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/drift/i);
+    expect(container.textContent).toMatch(/disagree|goal|intent/i);
+    expect(container.textContent).toMatch(/Drift: Agents Pull/i);
+  });
+
+  it("sub=2 shows infinite loop", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/infinite loop|ping.?pong/i);
+    expect(container.textContent).toMatch(/hand.?off/i);
+    expect(container.textContent).toMatch(/Hand-Off Ping-Pong/i);
+  });
+
+  it("sub=3 shows deadlock", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/deadlock|wait/i);
+    expect(container.textContent).toMatch(/Two Agents Wait Forever/i);
+  });
+
+  it("sub=4 shows cost runaway", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/cost runaway|recursion/i);
+    expect(container.textContent).toMatch(/exponential|vertical|spend/i);
+    expect(container.textContent).toMatch(/Unbounded Recursion/i);
+  });
+
+  it("sub=5 maps signals per failure", () => {
+    const { container } = render(fn(makeCtx({ sub: 5 })));
+    expect(container.textContent).toMatch(/signal|alert|threshold/i);
+    expect(container.textContent).toMatch(/What To Alert On/i);
+  });
+});
+
+describe("AgenticRag (13.36) content", () => {
+  const fn = MultiAgent.AgenticRag;
+
+  it("sub=0 contrasts naive and agentic RAG", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/naive|agentic/i);
+    expect(container.textContent).toMatch(/12\.29|section 12/i);
+    expect(container.textContent).toMatch(/iterative|loop|one.?shot/i);
+    expect(container.textContent).toMatch(/Retrieve Once vs Retrieve In A Loop/i);
+  });
+
+  it("sub=1 shows the iterative loop", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/search/i);
+    expect(container.textContent).toMatch(/judge/i);
+    expect(container.textContent).toMatch(/refine|rewrite/i);
+    expect(container.textContent).toMatch(/Search, Judge, Refine, Repeat/i);
+  });
+
+  it("sub=2 shows query rewriting", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/rewrite/i);
+    expect(container.textContent).toMatch(/customer.?impact|severity/i);
+    expect(container.textContent).toMatch(/Agent Rewrites Its Own Query/i);
+  });
+
+  it("sub=3 traces the 90-day research query", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/90 days|customer.?impact/i);
+    expect(container.textContent).toMatch(/aggregat|summary|table/i);
+    expect(container.textContent).toMatch(/Example: Customer-Impact Issues/i);
+  });
+
+  it("sub=4 decides when agentic vs naive", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/naive|12\.2/);
+    expect(container.textContent).toMatch(/agentic|research|multi.?hop/i);
+    expect(container.textContent).toMatch(/cost|latency/i);
+    expect(container.textContent).toMatch(/When To Iterate Retrieval/i);
+  });
+});
+
+describe("WhyEvalAgents (13.37) content", () => {
+  const fn = AgentEvals.WhyEvalAgents;
+
+  it("sub=0 lists three reasons agents are harder", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/non.?determin/i);
+    expect(container.textContent).toMatch(/multi.?step/i);
+    expect(container.textContent).toMatch(/silent/i);
+    expect(container.textContent).toMatch(/Three Reasons Agents Are Harder To Eval/i);
+  });
+
+  it("sub=1 shows production incident stories", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/production|incident/i);
+    expect(container.textContent).toMatch(/unauthorized|wrong|leak|drift/i);
+    expect(container.textContent).toMatch(/What Breaks When You Don.?t Eval/i);
+  });
+
+  it("sub=2 contrasts offline and online", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/offline/i);
+    expect(container.textContent).toMatch(/online/i);
+    expect(container.textContent).toMatch(/golden|sample|production/i);
+    expect(container.textContent).toMatch(/Offline \(Before Ship\) vs Online \(After Ship\)/i);
+  });
+
+  it("sub=3 lists what humans must review", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/human/i);
+    expect(container.textContent).toMatch(/tone|hallucin|drift/i);
+    expect(container.textContent).toMatch(/Some Failure Modes Need Humans/i);
+  });
+
+  it("sub=4 previews the eval pipeline", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/pipeline|stages/i);
+    expect(container.textContent).toMatch(/13\.(39|40|41)/);
+    expect(container.textContent).toMatch(/What A Full Pipeline Looks Like/i);
+  });
+});
+
+describe("EvalDimensions (13.38) content", () => {
+  const fn = AgentEvals.EvalDimensions;
+
+  it("sub=0 names four axes", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/correctness/i);
+    expect(container.textContent).toMatch(/latency/i);
+    expect(container.textContent).toMatch(/cost/i);
+    expect(container.textContent).toMatch(/safety/i);
+    expect(container.textContent).toMatch(/Correctness, Latency, Cost, Safety/i);
+  });
+
+  it("sub=1 defines correctness", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/correctness|complete/i);
+    expect(container.textContent).toMatch(/resolution rate|90%/i);
+    expect(container.textContent).toMatch(/Did The Task Complete\?/i);
+  });
+
+  it("sub=2 shows latency percentiles", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/latency/i);
+    expect(container.textContent).toMatch(/P50|P95|P99/i);
+    expect(container.textContent).toMatch(/How Long Did It Take\?/i);
+  });
+
+  it("sub=3 shows cost breakdown", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/cost/i);
+    expect(container.textContent).toMatch(/tokens/i);
+    expect(container.textContent).toMatch(/0\.50/);
+    expect(container.textContent).toMatch(/How Much Did Each Trace Consume\?/i);
+  });
+
+  it("sub=4 lists safety metrics", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/safety|refusal/i);
+    expect(container.textContent).toMatch(/escalation/i);
+    expect(container.textContent).toMatch(/prompt.?injection/i);
+    expect(container.textContent).toMatch(/Did The Agent Refuse What It Should\?/i);
+  });
+
+  it("sub=5 shows the composite formula", () => {
+    const { container } = render(fn(makeCtx({ sub: 5 })));
+    expect(container.textContent).toMatch(/composite|formula|score/i);
+    expect(container.textContent).toMatch(/0\.5|0\.2|0\.1/);
+    expect(container.textContent).toMatch(/One Number For The Dashboard/i);
+  });
+});
+
+describe("LlmAsJudge (13.39) content", () => {
+  const fn = AgentEvals.LlmAsJudge;
+
+  it("sub=0 contrasts pairwise and scalar", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/pairwise/i);
+    expect(container.textContent).toMatch(/scalar/i);
+    expect(container.textContent).toMatch(/Two Ways To Grade/i);
+  });
+
+  it("sub=1 shows the rubric", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/rubric|criteria/i);
+    expect(container.textContent).toMatch(/correctness/i);
+    expect(container.textContent).toMatch(/completeness/i);
+    expect(container.textContent).toMatch(/tone/i);
+    expect(container.textContent).toMatch(/Tell The Judge What To Score On/i);
+  });
+
+  it("sub=2 lists three biases", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/length bias/i);
+    expect(container.textContent).toMatch(/position bias/i);
+    expect(container.textContent).toMatch(/self.?preference/i);
+    expect(container.textContent).toMatch(/What The Judge Gets Wrong/i);
+  });
+
+  it("sub=3 shows calibration with humans", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/calibrat|human/i);
+    expect(container.textContent).toMatch(/correlation|0\.7/);
+    expect(container.textContent).toMatch(/Trust But Verify/i);
+  });
+
+  it("sub=4 shows the judge prompt artifact", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/judge|eval rubric/i);
+    expect(container.textContent).toMatch(/JSON|machine.?readable/i);
+    expect(container.textContent).toMatch(/Canonical Judge Prompt/i);
+  });
+
+  it("sub=5 back-references Section 12.32", () => {
+    const { container } = render(fn(makeCtx({ sub: 5 })));
+    expect(container.textContent).toMatch(/12\.32|section 12/i);
+    expect(container.textContent).toMatch(/RAG|faithfulness|answer.relevance/i);
+    expect(container.textContent).toMatch(/Same Technique, Agent Scope/i);
+  });
+});
+
+describe("TraceEvals (13.40) content", () => {
+  const fn = AgentEvals.TraceEvals;
+
+  it("sub=0 shows trace as tree of steps", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/trace|step|grade/i);
+    expect(container.textContent).toMatch(/T2|ticket t2/i);
+    expect(container.textContent).toMatch(/Every Step Gets A Grade/i);
+  });
+
+  it("sub=1 locates the failing step in T4", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/T4|ticket t4/i);
+    expect(container.textContent).toMatch(/process_refund/);
+    expect(container.textContent).toMatch(/FAILED|wrong/i);
+    expect(container.textContent).toMatch(/When A Step Fails, Where\?/i);
+  });
+
+  it("sub=2 shows per-step rubric", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/tool choice|tool input/i);
+    expect(container.textContent).toMatch(/result handling/i);
+    expect(container.textContent).toMatch(/next.?step planning/i);
+    expect(container.textContent).toMatch(/What To Score Per Step/i);
+  });
+
+  it("sub=3 shows the trace eval record shape", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/trace_id|steps/i);
+    expect(container.textContent).toMatch(/failure_mode|missed_escalation/i);
+    expect(container.textContent).toMatch(/Trace Eval Record \(Shape\)/i);
+  });
+
+  it("sub=4 shows the cost of per-step grading", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/cost|N times|8x/i);
+    expect(container.textContent).toMatch(/5%|sample/);
+    expect(container.textContent).toMatch(/Per-Step Grading Is N x Expensive/i);
+  });
+});
+
+describe("EvalSetsContinuous (13.41) content", () => {
+  const fn = AgentEvals.EvalSetsContinuous;
+
+  it("sub=0 lists golden / adversarial / regression", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/golden/i);
+    expect(container.textContent).toMatch(/adversarial/i);
+    expect(container.textContent).toMatch(/regression/i);
+    expect(container.textContent).toMatch(/Golden \+ Adversarial \+ Regression/i);
+  });
+
+  it("sub=1 explains eval-set freshness", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/stale|fresh/i);
+    expect(container.textContent).toMatch(/quarter|month|10.20%/i);
+    expect(container.textContent).toMatch(/Eval Set Goes Stale/i);
+  });
+
+  it("sub=2 shows online sampling", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/online|sample/i);
+    expect(container.textContent).toMatch(/1.5%|sampling/);
+    expect(container.textContent).toMatch(/Grade A Slice Of Production/i);
+  });
+
+  it("sub=3 shows drift detection", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/drift|signal|alert/i);
+    expect(container.textContent).toMatch(/moving average|baseline/i);
+    expect(container.textContent).toMatch(/Trigger When Quality Drops/i);
+  });
+
+  it("sub=4 closes with eval-first principle", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/eval first|ship eval|before/i);
+    expect(container.textContent).toMatch(/20 test cases/);
+    expect(container.textContent).toMatch(/Build The Eval Set Before The Agent/i);
+  });
+});
+
+describe("AgentObservabilityTracing (13.42) content", () => {
+  const fn = AgentProduction.AgentObservabilityTracing;
+
+  it("sub=0 shows span tree", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/span|tree/i);
+    expect(container.textContent).toMatch(/T2|ticket t2/i);
+    expect(container.textContent).toMatch(/lookup_customer/);
+    expect(container.textContent).toMatch(/An Agent Run Is A Tree Of Spans/i);
+  });
+
+  it("sub=1 shows OTel span shape", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/OpenTelemetry|OTel/i);
+    expect(container.textContent).toMatch(/trace_id|span_id/i);
+    expect(container.textContent).toMatch(/Span \(Shape\)/i);
+  });
+
+  it("sub=2 compares LangSmith / Weave / Phoenix", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/LangSmith/);
+    expect(container.textContent).toMatch(/Weave/);
+    expect(container.textContent).toMatch(/Phoenix/);
+    expect(container.textContent).toMatch(/Three Vendors, Same Concepts/i);
+  });
+
+  it("sub=3 lists per-span metadata", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/metadata|attribute/i);
+    expect(container.textContent).toMatch(/tokens|cost|tool name/i);
+    expect(container.textContent).toMatch(/What To Attribute/i);
+  });
+
+  it("sub=4 shows cost overlay", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/cost/i);
+    expect(container.textContent).toMatch(/0\.0[2-9]|0\.09/);
+    expect(container.textContent).toMatch(/Full T2 Trace With Cost/i);
+  });
+
+  it("sub=5 shows alerting from traces", () => {
+    const { container } = render(fn(makeCtx({ sub: 5 })));
+    expect(container.textContent).toMatch(/alert|threshold/i);
+    expect(container.textContent).toMatch(/13\.41|drift/);
+    expect(container.textContent).toMatch(/Turn Traces Into Alerts/i);
+  });
+});
+
+describe("CostControl (13.43) content", () => {
+  const fn = AgentProduction.CostControl;
+
+  it("sub=0 shows cost breakdown", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/input|output|tool|retr/i);
+    expect(container.textContent).toMatch(/0\.30|dominant/);
+    expect(container.textContent).toMatch(/Where The Dollars Go/i);
+  });
+
+  it("sub=1 explains prompt caching with Section 12.36", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/cach/i);
+    expect(container.textContent).toMatch(/12\.36|section 12/i);
+    expect(container.textContent).toMatch(/80%|prefix/i);
+    expect(container.textContent).toMatch(/Cache The Prefix/i);
+  });
+
+  it("sub=2 shows model routing tiers", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/router|routing|tier/i);
+    expect(container.textContent).toMatch(/cheap|small|large/i);
+    expect(container.textContent).toMatch(/Cheap For Easy, Expensive For Hard/i);
+  });
+
+  it("sub=3 shows per-request budget cap", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/budget|cap/i);
+    expect(container.textContent).toMatch(/13\.23|max.?iter/i);
+    expect(container.textContent).toMatch(/Hard Cap Per Ticket/i);
+  });
+
+  it("sub=4 shows cost-aware retries", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/retry/i);
+    expect(container.textContent).toMatch(/transient|permanent|business.?rule/i);
+    expect(container.textContent).toMatch(/13\.11/);
+    expect(container.textContent).toMatch(/Don't Retry Expensive Failures/i);
+  });
+});
+
+describe("LatencyOptimization (13.44) content", () => {
+  const fn = AgentProduction.LatencyOptimization;
+
+  it("sub=0 shows latency waterfall", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/latency|waterfall/i);
+    expect(container.textContent).toMatch(/LLM call|tool/i);
+    expect(container.textContent).toMatch(/Where The Seconds Go/i);
+  });
+
+  it("sub=1 explains streaming win", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/stream/i);
+    expect(container.textContent).toMatch(/perceived|first token/i);
+    expect(container.textContent).toMatch(/Show Progress Token By Token/i);
+  });
+
+  it("sub=2 references parallel tools (13.10)", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/parallel|concurrent/i);
+    expect(container.textContent).toMatch(/13\.10/);
+    expect(container.textContent).toMatch(/Run Independent Tools Concurrently/i);
+  });
+
+  it("sub=3 explains speculative execution", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/speculat/i);
+    expect(container.textContent).toMatch(/wasted|tradeoff/i);
+    expect(container.textContent).toMatch(/Run Likely Steps Before Confirming/i);
+  });
+
+  it("sub=4 shows result caching", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/cach/i);
+    expect(container.textContent).toMatch(/TTL|5 minutes|1 hour/i);
+    expect(container.textContent).toMatch(/Cache What Doesn't Change/i);
+  });
+});
+
+describe("Guardrails (13.45) content", () => {
+  const fn = AgentProduction.Guardrails;
+
+  it("sub=0 shows input/output pipeline", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/guardrail|filter/i);
+    expect(container.textContent).toMatch(/input/i);
+    expect(container.textContent).toMatch(/output/i);
+    expect(container.textContent).toMatch(/Filters Sit On Both Sides Of The Model/i);
+  });
+
+  it("sub=1 shows content classification", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/content|classification/i);
+    expect(container.textContent).toMatch(/block|refuse|allow/i);
+    expect(container.textContent).toMatch(/Block Disallowed Categories Before Model Sees It/i);
+  });
+
+  it("sub=2 explains PII redaction", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/PII|redact/i);
+    expect(container.textContent).toMatch(/SSN|address/i);
+    expect(container.textContent).toMatch(/Strip Personally Identifying Data/i);
+  });
+
+  it("sub=3 shows response validation", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/validat|schema/i);
+    expect(container.textContent).toMatch(/13\.3|structured output/i);
+    expect(container.textContent).toMatch(/Reject Outputs That Fail Schema/i);
+  });
+
+  it("sub=4 shows action gate for destructive tools", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/gate|approval/i);
+    expect(container.textContent).toMatch(/process_refund/);
+    expect(container.textContent).toMatch(/200|350|threshold/i);
+    expect(container.textContent).toMatch(/Require Approval Before Destructive Tools/i);
+  });
+});
+
+describe("PromptInjectionDefenses (13.46) content", () => {
+  const fn = AgentProduction.PromptInjectionDefenses;
+
+  it("sub=0 lists three attack types", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/direct/i);
+    expect(container.textContent).toMatch(/indirect/i);
+    expect(container.textContent).toMatch(/jailbreak/i);
+    expect(container.textContent).toMatch(/Direct, Indirect, Jailbreak/i);
+  });
+
+  it("sub=1 shows direct injection example", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/ignore.*previous|injection/i);
+    expect(container.textContent).toMatch(/1000|refund/);
+    expect(container.textContent).toMatch(/Direct Injection Attempt/i);
+  });
+
+  it("sub=2 shows indirect injection via KB", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/indirect|KB|poison/i);
+    expect(container.textContent).toMatch(/feedback|index/i);
+    expect(container.textContent).toMatch(/Bad Actor Plants Instructions In A Doc/i);
+  });
+
+  it("sub=3 shows instruction hierarchy", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/hierarchy|tier|trust/i);
+    expect(container.textContent).toMatch(/system/i);
+    expect(container.textContent).toMatch(/retrieved/i);
+    expect(container.textContent).toMatch(/Instruction Hierarchy/i);
+  });
+
+  it("sub=4 shows tool whitelisting", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/whitelist|restrict|scope/i);
+    expect(container.textContent).toMatch(/blast radius/i);
+    expect(container.textContent).toMatch(/process_refund/);
+    expect(container.textContent).toMatch(/Restrict What The Agent CAN Do/i);
+  });
+
+  it("sub=5 lists detection signals", () => {
+    const { container } = render(fn(makeCtx({ sub: 5 })));
+    expect(container.textContent).toMatch(/detection|signal/i);
+    expect(container.textContent).toMatch(/pattern|sequence|drift|spike/i);
+    expect(container.textContent).toMatch(/What To Alert On/i);
+  });
+});
+
+describe("ToolSecurity (13.47) content", () => {
+  const fn = AgentProduction.ToolSecurity;
+
+  it("sub=0 shows sandbox boundary", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/sandbox|cage|boundary/i);
+    expect(container.textContent).toMatch(/process|filesystem|network/i);
+    expect(container.textContent).toMatch(/Tools Run In A Cage/i);
+  });
+
+  it("sub=1 shows capability scope per agent", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/capability|scope/i);
+    expect(container.textContent).toMatch(/triage|billing|escalation/i);
+    expect(container.textContent).toMatch(/Different Agents, Different Tool Sets/i);
+  });
+
+  it("sub=2 shows audit log entry", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/audit|log/i);
+    expect(container.textContent).toMatch(/timestamp|tool|consent/i);
+    expect(container.textContent).toMatch(/Audit Log Entry \(Shape\)/i);
+  });
+
+  it("sub=3 shows rate limits", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/rate limit|per hour/i);
+    expect(container.textContent).toMatch(/process_refund|search_kb/);
+    expect(container.textContent).toMatch(/Cap The Frequency/i);
+  });
+
+  it("sub=4 shows consent prompt", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/consent|approval/i);
+    expect(container.textContent).toMatch(/process_refund/);
+    expect(container.textContent).toMatch(/Ask Before Doing Big Things/i);
+  });
+});
+
+describe("LangGraphFramework (13.48) content", () => {
+  const fn = AgentProduction.LangGraphFramework;
+
+  it("sub=0 introduces stateful graph model", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/state|graph/i);
+    expect(container.textContent).toMatch(/LangGraph/);
+    expect(container.textContent).toMatch(/Agents As Stateful Graphs/i);
+  });
+
+  it("sub=1 shows node / edge / state shape", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/add_node|add_edge/);
+    expect(container.textContent).toMatch(/state|ticket|customer/i);
+    expect(container.textContent).toMatch(/Three Primitives/i);
+  });
+
+  it("sub=2 shows conditional edges", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/conditional|branch/i);
+    expect(container.textContent).toMatch(/billing|troubleshooting/i);
+    expect(container.textContent).toMatch(/Branching Based On State/i);
+  });
+
+  it("sub=3 explains checkpoints", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/checkpoint|persist/i);
+    expect(container.textContent).toMatch(/async|long.?running|human.?in.?the.?loop/i);
+    expect(container.textContent).toMatch(/Persistent State Between Calls/i);
+  });
+
+  it("sub=4 lists when LangGraph fits", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/LangGraph/);
+    expect(container.textContent).toMatch(/directed graph|state|visualiz/i);
+    expect(container.textContent).toMatch(/Use LangGraph When/i);
+  });
+});
+
+describe("CrewAiAutoGen (13.49) content", () => {
+  const fn = AgentProduction.CrewAiAutoGen;
+
+  it("sub=0 contrasts role-based and conversational", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/CrewAI/);
+    expect(container.textContent).toMatch(/AutoGen/);
+    expect(container.textContent).toMatch(/role|goal|conversation/i);
+    expect(container.textContent).toMatch(/Two Multi-Agent Styles/i);
+  });
+
+  it("sub=1 shows CrewAI shape", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/CrewAI|Agent|Crew/);
+    expect(container.textContent).toMatch(/Triage|Billing/);
+    expect(container.textContent).toMatch(/role|goal|tools/i);
+    expect(container.textContent).toMatch(/CrewAI: Roles \+ Goals/i);
+  });
+
+  it("sub=2 shows AutoGen shape", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/AutoGen|AssistantAgent|GroupChat/);
+    expect(container.textContent).toMatch(/system_message/i);
+    expect(container.textContent).toMatch(/AutoGen: Conversational Agents/i);
+  });
+
+  it("sub=3 traces T4 in both styles", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/T4|ticket t4/i);
+    expect(container.textContent).toMatch(/triage|billing|escalation/i);
+    expect(container.textContent).toMatch(/Same Ticket, Two Frameworks/i);
+  });
+
+  it("sub=4 explains when each fits", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/CrewAI|AutoGen/);
+    expect(container.textContent).toMatch(/role|conversation/i);
+    expect(container.textContent).toMatch(/Pick The Abstraction That Matches Your Mental Model/i);
+  });
+});
+
+describe("VendorSdks (13.50) content", () => {
+  const fn = AgentProduction.VendorSdks;
+
+  it("sub=0 introduces vendor-native frameworks", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/Claude Agent SDK/);
+    expect(container.textContent).toMatch(/OpenAI Agents|Swarm/);
+    expect(container.textContent).toMatch(/loop|hand.?off|primitive/i);
+    expect(container.textContent).toMatch(/When The Model Vendor Ships The Framework/i);
+  });
+
+  it("sub=1 shows Claude Agent SDK shape", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/AgentLoop|loop/i);
+    expect(container.textContent).toMatch(/system_prompt|tools/);
+    expect(container.textContent).toMatch(/refund|INV.?9924/);
+    expect(container.textContent).toMatch(/Loop Primitive/i);
+  });
+
+  it("sub=2 shows OpenAI Agents shape", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/OpenAI Agents|Runner/);
+    expect(container.textContent).toMatch(/handoffs/);
+    expect(container.textContent).toMatch(/triage|billing/i);
+    expect(container.textContent).toMatch(/Hand-Off Primitive/i);
+  });
+
+  it("sub=3 compares the two side-by-side", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/loop|hand.?off/i);
+    expect(container.textContent).toMatch(/lock.?in|portab/i);
+    expect(container.textContent).toMatch(/Two Primitives, Two Mental Models/i);
+  });
+
+  it("sub=4 lists when to pick vendor SDK", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/vendor|committed/i);
+    expect(container.textContent).toMatch(/multi.?vendor|switch/i);
+    expect(container.textContent).toMatch(/Use The Vendor SDK When/i);
+  });
+});
+
+describe("CustomNoFramework (13.51) content", () => {
+  const fn = AgentProduction.CustomNoFramework;
+
+  it("sub=0 lists three reasons to roll your own", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/control|cost|lock.?in/i);
+    expect(container.textContent).toMatch(/Three Reasons To Roll Your Own/i);
+  });
+
+  it("sub=1 shows the 50-line loop", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/history|loop|max_iter/i);
+    expect(container.textContent).toMatch(/tool_calls|tool_use/);
+    expect(container.textContent).toMatch(/50 Lines Of Loop/i);
+  });
+
+  it("sub=2 lists missing pieces", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/observability/i);
+    expect(container.textContent).toMatch(/retry/i);
+    expect(container.textContent).toMatch(/checkpoint/i);
+    expect(container.textContent).toMatch(/Missing Pieces You Now Own/i);
+  });
+
+  it("sub=3 shows when custom wins", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/high.?volume|tight latency/i);
+    expect(container.textContent).toMatch(/prototype|framework/i);
+    expect(container.textContent).toMatch(/Stay Custom When/i);
+  });
+
+  it("sub=4 shows hybrid approach", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/hybrid|build some|buy some/i);
+    expect(container.textContent).toMatch(/adapter|observability/i);
+    expect(container.textContent).toMatch(/Build Some, Buy Some/i);
+  });
+});
+
+describe("AgentDecisionFramework (13.52) content - CAPSTONE", () => {
+  const fn = AgentProduction.AgentDecisionFramework;
+
+  it("sub=0 shows the full decision stack", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    expect(container.textContent).toMatch(/decision|stack/i);
+    expect(container.textContent).toMatch(/13\.5|13\.18|13\.30/);
+    expect(container.textContent).toMatch(/Every Choice Section 13 Taught You/i);
+  });
+
+  it("sub=1 introduces capstone use case", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    expect(container.textContent).toMatch(/IT support|use case/i);
+    expect(container.textContent).toMatch(/password|software|VPN|hardware/i);
+    expect(container.textContent).toMatch(/Design An Agent For A New Use Case/i);
+  });
+
+  it("sub=2 picks approach / loop / memory", () => {
+    const { container } = render(fn(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/approach|agent/i);
+    expect(container.textContent).toMatch(/workflow|loop/i);
+    expect(container.textContent).toMatch(/working|episodic|semantic/i);
+    expect(container.textContent).toMatch(/Pick Approach, Loop, Memory/i);
+  });
+
+  it("sub=3 picks multi-agent / tools", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/orchestrator|triage/i);
+    expect(container.textContent).toMatch(/capability scope|tools/i);
+    expect(container.textContent).toMatch(/Pick Multi-Agent, Tools/i);
+  });
+
+  it("sub=4 picks protocols / eval", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    expect(container.textContent).toMatch(/MCP/);
+    expect(container.textContent).toMatch(/eval/i);
+    expect(container.textContent).toMatch(/judge|trace/i);
+    expect(container.textContent).toMatch(/Pick Protocols, Eval Strategy/i);
+  });
+
+  it("sub=5 picks production / framework", () => {
+    const { container } = render(fn(makeCtx({ sub: 5 })));
+    expect(container.textContent).toMatch(/OTel|LangSmith|observabilit/i);
+    expect(container.textContent).toMatch(/LangGraph/);
+    expect(container.textContent).toMatch(/Pick Production Hardening, Framework/i);
+  });
+
+  it("sub=6 closes the section", () => {
+    const { container } = render(fn(makeCtx({ sub: 6 })));
+    expect(container.textContent).toMatch(/decide|diagnose|defend/i);
+    expect(container.textContent).toMatch(/section 13|production|ship/i);
+    expect(container.textContent).toMatch(/You Can Lead This Project Now/i);
   });
 });

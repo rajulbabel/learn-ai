@@ -48,6 +48,15 @@ const sectionLoaders = {
       import("./sections/rag-evaluation.jsx"),
       import("./sections/rag-production.jsx"),
     ]).then((mods) => Object.assign({}, ...mods)),
+  13: () =>
+    Promise.all([
+      import("./sections/agent-prompting.jsx"),
+      import("./sections/agent-tools.jsx"),
+      import("./sections/agent-loops.jsx"),
+      import("./sections/multi-agent.jsx"),
+      import("./sections/agent-evals.jsx"),
+      import("./sections/agent-production.jsx"),
+    ]).then((mods) => Object.assign({}, ...mods)),
 };
 
 // ── Lazy-loaded search: not loaded until search is opened ──

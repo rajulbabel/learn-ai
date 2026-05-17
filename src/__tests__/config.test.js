@@ -432,6 +432,16 @@ describe("HTML entity hygiene", () => {
   });
 });
 
+describe("Section 13 registration", () => {
+  it("has section 13 in sectionNames", () => {
+    expect(sectionNames[13]).toBe("AI Agents");
+  });
+
+  it("has section 13 in sectionColors", () => {
+    expect(sectionColors[13]).toBe("#00838f");
+  });
+});
+
 describe("Act references do not leak into user-visible content", () => {
   // "Act N" / "Acts N-M" is an internal file-partition name (see CLAUDE.md).
   // Learners only see chapter numbers like 11.14 - they never encounter "Acts".
@@ -447,5 +457,445 @@ describe("Act references do not leak into user-visible content", () => {
       });
     }
     expect(offenders).toEqual([]);
+  });
+});
+
+describe("Section 13 Act 1+2 chapter entries", () => {
+  const findCh = (id) => chapters.find((c) => c.id === id);
+
+  it("has 13.1 AnatomyOfLlmCall", () => {
+    const c = findCh("13.1");
+    expect(c).toBeDefined();
+    expect(c.title).toBe("Anatomy of an LLM Call");
+    expect(c.section).toBe(13);
+    expect(c.component).toBe("AnatomyOfLlmCall");
+  });
+
+  it("has 13.2 SystemPromptContract", () => {
+    const c = findCh("13.2");
+    expect(c).toBeDefined();
+    expect(c.title).toBe("System Prompts - The Role Contract");
+    expect(c.section).toBe(13);
+    expect(c.component).toBe("SystemPromptContract");
+  });
+
+  it("has 13.3 FewShotStructuredOutput", () => {
+    const c = findCh("13.3");
+    expect(c).toBeDefined();
+    expect(c.title).toBe("Few-Shot + Structured Output");
+    expect(c.section).toBe(13);
+    expect(c.component).toBe("FewShotStructuredOutput");
+  });
+
+  it("has 13.4 ChainOfThoughtSelfConsistency", () => {
+    const c = findCh("13.4");
+    expect(c).toBeDefined();
+    expect(c.title).toBe("Chain of Thought + Self-Consistency");
+    expect(c.section).toBe(13);
+    expect(c.component).toBe("ChainOfThoughtSelfConsistency");
+  });
+
+  it("has 13.5 PromptVsTuneVsRagVsAgent", () => {
+    const c = findCh("13.5");
+    expect(c).toBeDefined();
+    expect(c.title).toBe("Prompt vs Fine-Tune vs RAG vs Agent");
+    expect(c.section).toBe(13);
+    expect(c.component).toBe("PromptVsTuneVsRagVsAgent");
+  });
+
+  it("has 13.6 ContextEngineering", () => {
+    const c = findCh("13.6");
+    expect(c).toBeDefined();
+    expect(c.title).toBe("Context Engineering");
+    expect(c.section).toBe(13);
+    expect(c.component).toBe("ContextEngineering");
+  });
+
+  it("has 13.7 ToolUseAsBridge", () => {
+    const c = findCh("13.7");
+    expect(c).toBeDefined();
+    expect(c.title).toBe("Tool Use - LLM as Orchestrator");
+    expect(c.section).toBe(13);
+    expect(c.component).toBe("ToolUseAsBridge");
+  });
+
+  it("has 13.8 JsonSchemaForTools", () => {
+    const c = findCh("13.8");
+    expect(c).toBeDefined();
+    expect(c.title).toBe("JSON Schemas + Tool Descriptions");
+    expect(c.section).toBe(13);
+    expect(c.component).toBe("JsonSchemaForTools");
+  });
+
+  it("has 13.9 ToolCallLifecycle", () => {
+    const c = findCh("13.9");
+    expect(c).toBeDefined();
+    expect(c.title).toBe("Tool Call Lifecycle");
+    expect(c.section).toBe(13);
+    expect(c.component).toBe("ToolCallLifecycle");
+  });
+
+  it("has 13.10 ParallelToolsAndChoice", () => {
+    const c = findCh("13.10");
+    expect(c).toBeDefined();
+    expect(c.title).toBe("Parallel Tools + Tool Choice");
+    expect(c.section).toBe(13);
+    expect(c.component).toBe("ParallelToolsAndChoice");
+  });
+
+  it("has 13.11 ToolErrorsRetries", () => {
+    const c = findCh("13.11");
+    expect(c).toBeDefined();
+    expect(c.title).toBe("Tool Errors, Retries, Validation");
+    expect(c.section).toBe(13);
+    expect(c.component).toBe("ToolErrorsRetries");
+  });
+});
+
+describe("Section 13 Act 3+4 chapter entries", () => {
+  const findCh = (id) => chapters.find((c) => c.id === id);
+
+  it("has 13.12 WhyProtocols", () => {
+    const c = findCh("13.12");
+    expect(c).toBeDefined();
+    expect(c.title).toBe("Why Protocols?");
+    expect(c.section).toBe(13);
+    expect(c.component).toBe("WhyProtocols");
+  });
+
+  it("has 13.13 McpArchitecture", () => {
+    const c = findCh("13.13");
+    expect(c).toBeDefined();
+    expect(c.title).toBe("MCP Architecture");
+    expect(c.section).toBe(13);
+    expect(c.component).toBe("McpArchitecture");
+  });
+
+  it("has 13.14 McpPrimitives", () => {
+    const c = findCh("13.14");
+    expect(c).toBeDefined();
+    expect(c.title).toBe("MCP Primitives - Tools, Resources, Prompts");
+    expect(c.section).toBe(13);
+    expect(c.component).toBe("McpPrimitives");
+  });
+
+  it("has 13.15 BuildingMcpServer", () => {
+    const c = findCh("13.15");
+    expect(c).toBeDefined();
+    expect(c.title).toBe("Building an MCP Server");
+    expect(c.section).toBe(13);
+    expect(c.component).toBe("BuildingMcpServer");
+  });
+
+  it("has 13.16 McpSecurity", () => {
+    const c = findCh("13.16");
+    expect(c).toBeDefined();
+    expect(c.title).toBe("MCP Security");
+    expect(c.section).toBe(13);
+    expect(c.component).toBe("McpSecurity");
+  });
+
+  it("has 13.17 A2AProtocol", () => {
+    const c = findCh("13.17");
+    expect(c).toBeDefined();
+    expect(c.title).toBe("A2A - Agent-to-Agent Protocol");
+    expect(c.section).toBe(13);
+    expect(c.component).toBe("A2AProtocol");
+  });
+
+  it("has 13.18 WorkflowVsAgent", () => {
+    const c = findCh("13.18");
+    expect(c).toBeDefined();
+    expect(c.title).toBe("Workflow vs Agent");
+    expect(c.section).toBe(13);
+    expect(c.component).toBe("WorkflowVsAgent");
+  });
+
+  it("has 13.19 WorkflowPrimitives", () => {
+    const c = findCh("13.19");
+    expect(c).toBeDefined();
+    expect(c.title).toBe("Workflow Primitives - Chaining, Routing, Parallelization");
+    expect(c.section).toBe(13);
+    expect(c.component).toBe("WorkflowPrimitives");
+  });
+
+  it("has 13.20 AgentLoop", () => {
+    const c = findCh("13.20");
+    expect(c).toBeDefined();
+    expect(c.title).toBe("The Agent Loop");
+    expect(c.section).toBe(13);
+    expect(c.component).toBe("AgentLoop");
+  });
+
+  it("has 13.21 ReActPattern", () => {
+    const c = findCh("13.21");
+    expect(c).toBeDefined();
+    expect(c.title).toBe("ReAct Pattern");
+    expect(c.section).toBe(13);
+    expect(c.component).toBe("ReActPattern");
+  });
+
+  it("has 13.22 PlanExecuteReflect", () => {
+    const c = findCh("13.22");
+    expect(c).toBeDefined();
+    expect(c.title).toBe("Plan-Execute + Reflection");
+    expect(c.section).toBe(13);
+    expect(c.component).toBe("PlanExecuteReflect");
+  });
+
+  it("has 13.23 LoopTermination", () => {
+    const c = findCh("13.23");
+    expect(c).toBeDefined();
+    expect(c.title).toBe("Loop Termination");
+    expect(c.section).toBe(13);
+    expect(c.component).toBe("LoopTermination");
+  });
+});
+
+describe("Section 13 Act 5+6 chapter entries", () => {
+  const findCh = (id) => chapters.find((c) => c.id === id);
+
+  it("has 13.24 MemoryTaxonomy", () => {
+    const c = findCh("13.24");
+    expect(c).toBeDefined();
+    expect(c.title).toBe("Memory Taxonomy - Short vs Long");
+    expect(c.section).toBe(13);
+    expect(c.component).toBe("MemoryTaxonomy");
+  });
+
+  it("has 13.25 WorkingMemory", () => {
+    const c = findCh("13.25");
+    expect(c).toBeDefined();
+    expect(c.title).toBe("Working Memory - The Scratchpad");
+    expect(c.section).toBe(13);
+    expect(c.component).toBe("WorkingMemory");
+  });
+
+  it("has 13.26 EpisodicMemory", () => {
+    const c = findCh("13.26");
+    expect(c).toBeDefined();
+    expect(c.title).toBe("Episodic Memory - Past Events");
+    expect(c.section).toBe(13);
+    expect(c.component).toBe("EpisodicMemory");
+  });
+
+  it("has 13.27 SemanticMemory", () => {
+    const c = findCh("13.27");
+    expect(c).toBeDefined();
+    expect(c.title).toBe("Semantic Memory - Learned Facts");
+    expect(c.section).toBe(13);
+    expect(c.component).toBe("SemanticMemory");
+  });
+
+  it("has 13.28 ProceduralMemory", () => {
+    const c = findCh("13.28");
+    expect(c).toBeDefined();
+    expect(c.title).toBe("Procedural Memory - Learned Skills");
+    expect(c.section).toBe(13);
+    expect(c.component).toBe("ProceduralMemory");
+  });
+
+  it("has 13.29 SummaryAndContextMgmt", () => {
+    const c = findCh("13.29");
+    expect(c).toBeDefined();
+    expect(c.title).toBe("Summary Memory + Context Window Management");
+    expect(c.section).toBe(13);
+    expect(c.component).toBe("SummaryAndContextMgmt");
+  });
+
+  it("has 13.30 WhyMultiAgent", () => {
+    const c = findCh("13.30");
+    expect(c).toBeDefined();
+    expect(c.title).toBe("Why Multi-Agent?");
+    expect(c.section).toBe(13);
+    expect(c.component).toBe("WhyMultiAgent");
+  });
+
+  it("has 13.31 OrchestratorWorker", () => {
+    const c = findCh("13.31");
+    expect(c).toBeDefined();
+    expect(c.title).toBe("Orchestrator-Worker");
+    expect(c.section).toBe(13);
+    expect(c.component).toBe("OrchestratorWorker");
+  });
+
+  it("has 13.32 SupervisorHierarchy", () => {
+    const c = findCh("13.32");
+    expect(c).toBeDefined();
+    expect(c.title).toBe("Supervisor / Hierarchical");
+    expect(c.section).toBe(13);
+    expect(c.component).toBe("SupervisorHierarchy");
+  });
+
+  it("has 13.33 AgentHandoffs", () => {
+    const c = findCh("13.33");
+    expect(c).toBeDefined();
+    expect(c.title).toBe("Hand-Offs");
+    expect(c.section).toBe(13);
+    expect(c.component).toBe("AgentHandoffs");
+  });
+
+  it("has 13.34 CriticDebate", () => {
+    const c = findCh("13.34");
+    expect(c).toBeDefined();
+    expect(c.title).toBe("Critic / Debate / Reflection-as-Multi-Agent");
+    expect(c.section).toBe(13);
+    expect(c.component).toBe("CriticDebate");
+  });
+
+  it("has 13.35 MultiAgentFailures", () => {
+    const c = findCh("13.35");
+    expect(c).toBeDefined();
+    expect(c.title).toBe("Multi-Agent Failure Modes");
+    expect(c.section).toBe(13);
+    expect(c.component).toBe("MultiAgentFailures");
+  });
+
+  it("has 13.36 AgenticRag", () => {
+    const c = findCh("13.36");
+    expect(c).toBeDefined();
+    expect(c.title).toBe("Agentic RAG");
+    expect(c.section).toBe(13);
+    expect(c.component).toBe("AgenticRag");
+  });
+});
+
+describe("Section 13 Act 7 chapter entries", () => {
+  const findCh = (id) => chapters.find((c) => c.id === id);
+
+  it("has 13.37 WhyEvalAgents", () => {
+    const c = findCh("13.37");
+    expect(c).toBeDefined();
+    expect(c.title).toBe("Why Eval Agents Differently");
+    expect(c.section).toBe(13);
+    expect(c.component).toBe("WhyEvalAgents");
+  });
+
+  it("has 13.38 EvalDimensions", () => {
+    const c = findCh("13.38");
+    expect(c).toBeDefined();
+    expect(c.title).toBe("Eval Dimensions");
+    expect(c.section).toBe(13);
+    expect(c.component).toBe("EvalDimensions");
+  });
+
+  it("has 13.39 LlmAsJudge", () => {
+    const c = findCh("13.39");
+    expect(c).toBeDefined();
+    expect(c.title).toBe("LLM-as-Judge");
+    expect(c.section).toBe(13);
+    expect(c.component).toBe("LlmAsJudge");
+  });
+
+  it("has 13.40 TraceEvals", () => {
+    const c = findCh("13.40");
+    expect(c).toBeDefined();
+    expect(c.title).toBe("Trace Evals");
+    expect(c.section).toBe(13);
+    expect(c.component).toBe("TraceEvals");
+  });
+
+  it("has 13.41 EvalSetsContinuous", () => {
+    const c = findCh("13.41");
+    expect(c).toBeDefined();
+    expect(c.title).toBe("Eval Sets + Continuous Eval");
+    expect(c.section).toBe(13);
+    expect(c.component).toBe("EvalSetsContinuous");
+  });
+});
+
+describe("Section 13 Act 8 chapter entries", () => {
+  const findCh = (id) => chapters.find((c) => c.id === id);
+
+  it("has 13.42 AgentObservabilityTracing", () => {
+    const c = findCh("13.42");
+    expect(c).toBeDefined();
+    expect(c.title).toBe("Observability & Tracing");
+    expect(c.section).toBe(13);
+    expect(c.component).toBe("AgentObservabilityTracing");
+  });
+
+  it("has 13.43 CostControl", () => {
+    const c = findCh("13.43");
+    expect(c).toBeDefined();
+    expect(c.title).toBe("Cost Control");
+    expect(c.section).toBe(13);
+    expect(c.component).toBe("CostControl");
+  });
+
+  it("has 13.44 LatencyOptimization", () => {
+    const c = findCh("13.44");
+    expect(c).toBeDefined();
+    expect(c.title).toBe("Latency Optimization");
+    expect(c.section).toBe(13);
+    expect(c.component).toBe("LatencyOptimization");
+  });
+
+  it("has 13.45 Guardrails", () => {
+    const c = findCh("13.45");
+    expect(c).toBeDefined();
+    expect(c.title).toBe("Guardrails");
+    expect(c.section).toBe(13);
+    expect(c.component).toBe("Guardrails");
+  });
+
+  it("has 13.46 PromptInjectionDefenses", () => {
+    const c = findCh("13.46");
+    expect(c).toBeDefined();
+    expect(c.title).toBe("Prompt Injection Defenses");
+    expect(c.section).toBe(13);
+    expect(c.component).toBe("PromptInjectionDefenses");
+  });
+
+  it("has 13.47 ToolSecurity", () => {
+    const c = findCh("13.47");
+    expect(c).toBeDefined();
+    expect(c.title).toBe("Tool Security");
+    expect(c.section).toBe(13);
+    expect(c.component).toBe("ToolSecurity");
+  });
+});
+
+describe("Section 13 Act 9 chapter entries", () => {
+  const findCh = (id) => chapters.find((c) => c.id === id);
+
+  it("has 13.48 LangGraphFramework", () => {
+    const c = findCh("13.48");
+    expect(c).toBeDefined();
+    expect(c.title).toBe("LangGraph");
+    expect(c.section).toBe(13);
+    expect(c.component).toBe("LangGraphFramework");
+  });
+
+  it("has 13.49 CrewAiAutoGen", () => {
+    const c = findCh("13.49");
+    expect(c).toBeDefined();
+    expect(c.title).toBe("CrewAI / AutoGen");
+    expect(c.section).toBe(13);
+    expect(c.component).toBe("CrewAiAutoGen");
+  });
+
+  it("has 13.50 VendorSdks", () => {
+    const c = findCh("13.50");
+    expect(c).toBeDefined();
+    expect(c.title).toBe("Claude Agent SDK + OpenAI Agents");
+    expect(c.section).toBe(13);
+    expect(c.component).toBe("VendorSdks");
+  });
+
+  it("has 13.51 CustomNoFramework", () => {
+    const c = findCh("13.51");
+    expect(c).toBeDefined();
+    expect(c.title).toBe("Custom / No-Framework");
+    expect(c.section).toBe(13);
+    expect(c.component).toBe("CustomNoFramework");
+  });
+
+  it("has 13.52 AgentDecisionFramework", () => {
+    const c = findCh("13.52");
+    expect(c).toBeDefined();
+    expect(c.title).toBe("The Complete Agent Decision Framework");
+    expect(c.section).toBe(13);
+    expect(c.component).toBe("AgentDecisionFramework");
   });
 });

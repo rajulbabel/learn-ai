@@ -1,0 +1,2268 @@
+import { Fragment } from "react";
+import { Box, T, Reveal, SubBtn } from "../components.jsx";
+import { C } from "../config.js";
+import { SOFT, tintedCard, pill } from "./agent-prompting.jsx";
+
+// Section 13 Act 7: Evals
+// Chapters 13.37 - 13.41
+
+// Three reasons agent eval is harder than LLM eval (sub=0 of 13.37)
+const WHY_AGENTS_HARDER = [
+  {
+    name: "Non-Determinism",
+    color: "red",
+    detail:
+      "Same Ticket Can Take Different Traces On Different Runs. You Cannot Compare Outputs Directly.",
+  },
+  {
+    name: "Multi-Step",
+    color: "orange",
+    detail:
+      "Eight Tool Calls In A Row Means Eight Places To Fail. The Final Answer Hides Where The Trace Went Wrong.",
+  },
+  {
+    name: "Silent Failure",
+    color: "purple",
+    detail:
+      "The Agent Does Not Crash. It Calls The Wrong Tool, Sends The Wrong Email, Or Misses An Escalation Without Raising An Error.",
+  },
+];
+
+// Production incident stories (sub=1 of 13.37)
+const PRODUCTION_INCIDENTS = [
+  {
+    title: "Unauthorized Refunds",
+    detail:
+      "A Refund Agent Issued $50K In Unauthorized Refunds Over A Weekend Before Anyone Noticed.",
+  },
+  {
+    title: "Hallucinated Policy",
+    detail:
+      "A Support Agent Confidently Quoted A Non-Existent Refund Policy For 3 Weeks Of Production Traffic.",
+  },
+  {
+    title: "Drift To Chitchat",
+    detail:
+      "A Multi-Agent System Drifted From Billing Questions To Open-Ended Chitchat Over 2 Days.",
+  },
+  {
+    title: "Cross-Tenant Data Leak",
+    detail:
+      "A Tool Security Regression Let One Customer's Profile Leak Into Another's Active Session.",
+  },
+];
+
+// Offline vs online comparison rows (sub=2 of 13.37)
+const OFFLINE_VS_ONLINE = [
+  {
+    aspect: "Input",
+    offline: "Frozen Golden Eval Set",
+    online: "Sampled Live Traffic",
+  },
+  {
+    aspect: "Cadence",
+    offline: "Before Every Deploy",
+    online: "Continuous, 1-5% Sampling",
+  },
+  {
+    aspect: "Cost",
+    offline: "Cheap Per Run (Small Set)",
+    online: "Expensive At Scale",
+  },
+  {
+    aspect: "Catches",
+    offline: "Regressions On Known Cases",
+    online: "Drift, New Failure Modes, Real Distribution",
+  },
+];
+
+// Failure modes that need humans (sub=3 of 13.37)
+const HUMAN_REVIEW_MODES = [
+  {
+    name: "Tone Failures",
+    color: "red",
+    detail: "Rude, Robotic, Condescending Responses. Need Human Spot-Check.",
+  },
+  {
+    name: "Hidden Hallucinations",
+    color: "orange",
+    detail:
+      "Invented Policy The Judge Cannot Detect Because The Judge Does Not Know The Policy Either. Needs A RAG-Grounded Judge + Human.",
+  },
+  {
+    name: "Cross-Session Drift",
+    color: "purple",
+    detail:
+      "Long-Term Personality Or Style Drift Across Many Sessions. Needs A Human Reviewer Looking At The Whole Population.",
+  },
+];
+
+// Pipeline stages (sub=4 of 13.37). Each maps to a later chapter.
+const PIPELINE_STAGES = [
+  { num: 1, name: "Eval Set", detail: "Golden + Adversarial + Regression Cases", ref: "13.41" },
+  { num: 2, name: "Per-Trace Step Grading", detail: "Score Each Tool Call", ref: "13.40" },
+  { num: 3, name: "End-To-End Judge", detail: "Score Final Answer With LLM-As-Judge", ref: "13.39" },
+  { num: 4, name: "Online Sampling", detail: "Grade 1-5% Of Production Traffic + Drift Signal", ref: "13.41" },
+  { num: 5, name: "Alerting + Rollback", detail: "Page Engineer When Quality Drops", ref: "Ops" },
+];
+
+export const WhyEvalAgents = (ctx) => {
+  const { sub, subBtnRipple, setSub, setSubBtnRipple, registerSubBtn } = ctx;
+
+  const onContinue = () => {
+    setSub(sub + 1);
+    setSubBtnRipple(subBtnRipple + 1);
+  };
+
+  return (
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
+      {sub >= 0 && (
+        <Box color={C.red} style={{ width: "100%" }}>
+          <T color={C.red} bold center size={22}>
+            Three Reasons Agents Are Harder To Eval
+          </T>
+          <T color={SOFT.red} center size={16} style={{ marginTop: 10 }}>
+            A pure LLM eval grades input vs output - one shot, one score. Agents are different on
+            three structural axes that make naive eval miss most production failures.
+          </T>
+
+          <div
+            style={{
+              marginTop: 14,
+              display: "grid",
+              gridTemplateColumns: "1fr 1fr 1fr",
+              gap: 12,
+            }}
+          >
+            {WHY_AGENTS_HARDER.map((r) => {
+              const accent = C[r.color];
+              const soft = SOFT[r.color];
+              return (
+                <div key={r.name} style={{ ...tintedCard(accent), padding: 12 }}>
+                  <span style={pill(accent)}>WHY HARDER</span>
+                  <T color={accent} bold center size={16} style={{ marginTop: 8 }}>
+                    {r.name}
+                  </T>
+                  <T color={soft} center size={13} style={{ marginTop: 8 }}>
+                    {r.detail}
+                  </T>
+                </div>
+              );
+            })}
+          </div>
+
+          <T color={SOFT.red} center size={15} style={{ marginTop: 14 }}>
+            Every Section 13 production failure mode (13.35) maps to at least one of these axes.
+            Eval design has to address all three or production incidents slip through.
+          </T>
+        </Box>
+      )}
+
+      <Reveal when={sub >= 1}>
+        <Box color={C.orange} style={{ width: "100%" }}>
+          <T color={C.orange} bold center size={22}>
+            What Breaks When You Don&apos;t Eval
+          </T>
+          <T color={SOFT.orange} center size={16} style={{ marginTop: 10 }}>
+            Real production incidents from teams that shipped agents without an eval pipeline.
+            Every one of these went unnoticed for days or weeks.
+          </T>
+
+          <div
+            style={{
+              marginTop: 14,
+              display: "grid",
+              gridTemplateColumns: "1fr 1fr",
+              gap: 12,
+            }}
+          >
+            {PRODUCTION_INCIDENTS.map((p) => (
+              <div key={p.title} style={{ ...tintedCard(C.red), padding: 12 }}>
+                <span style={pill(C.red)}>INCIDENT</span>
+                <T color={C.red} bold center size={15} style={{ marginTop: 8 }}>
+                  {p.title}
+                </T>
+                <T color={SOFT.red} center size={13} style={{ marginTop: 6 }}>
+                  {p.detail}
+                </T>
+              </div>
+            ))}
+          </div>
+
+          <T color={SOFT.orange} center size={15} style={{ marginTop: 14 }}>
+            Each incident shows the same shape: silent failure + production traffic + late
+            detection. Eval is the only tool that converts &quot;late detection&quot; into
+            &quot;same-day&quot;.
+          </T>
+        </Box>
+      </Reveal>
+
+      <Reveal when={sub >= 2}>
+        <Box color={C.yellow} style={{ width: "100%" }}>
+          <T color={C.yellow} bold center size={22}>
+            Offline (Before Ship) vs Online (After Ship)
+          </T>
+          <T color={SOFT.yellow} center size={16} style={{ marginTop: 10 }}>
+            Two complementary loops. Offline grades a frozen golden set before every deploy. Online
+            samples real production traffic continuously. Production agents need BOTH; either
+            alone leaves a gap.
+          </T>
+
+          <div style={{ ...tintedCard(C.yellow), padding: 14, marginTop: 14 }}>
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "1fr 1.4fr 1.4fr",
+                gap: 0,
+                fontSize: 14,
+              }}
+            >
+              <div style={{ padding: "8px 10px", fontWeight: 700, color: SOFT.yellow }}>Aspect</div>
+              <div style={{ padding: "8px 10px", fontWeight: 700, color: SOFT.cyan }}>
+                Offline Eval
+              </div>
+              <div style={{ padding: "8px 10px", fontWeight: 700, color: SOFT.purple }}>
+                Online Eval
+              </div>
+              {OFFLINE_VS_ONLINE.map((row) => (
+                <Fragment key={row.aspect}>
+                  <div
+                    style={{
+                      padding: "8px 10px",
+                      borderTop: `1px solid ${C.yellow}22`,
+                      color: SOFT.yellow,
+                      fontWeight: 600,
+                    }}
+                  >
+                    {row.aspect}
+                  </div>
+                  <div
+                    style={{
+                      padding: "8px 10px",
+                      borderTop: `1px solid ${C.yellow}22`,
+                      color: SOFT.cyan,
+                    }}
+                  >
+                    {row.offline}
+                  </div>
+                  <div
+                    style={{
+                      padding: "8px 10px",
+                      borderTop: `1px solid ${C.yellow}22`,
+                      color: SOFT.purple,
+                    }}
+                  >
+                    {row.online}
+                  </div>
+                </Fragment>
+              ))}
+            </div>
+          </div>
+
+          <T color={SOFT.yellow} center size={15} style={{ marginTop: 12 }}>
+            Offline tells you if known cases regressed. Online tells you if the actual production
+            distribution shifted. Skip one and you ship blind on that dimension.
+          </T>
+        </Box>
+      </Reveal>
+
+      <Reveal when={sub >= 3}>
+        <Box color={C.amber} style={{ width: "100%" }}>
+          <T color={C.amber} bold center size={22}>
+            Some Failure Modes Need Humans
+          </T>
+          <T color={SOFT.amber} center size={16} style={{ marginTop: 10 }}>
+            Automated judges are cheap but blind on three categories. Plan budget for a small but
+            permanent human review loop on every production agent.
+          </T>
+
+          <div
+            style={{
+              marginTop: 14,
+              display: "grid",
+              gridTemplateColumns: "1fr 1fr 1fr",
+              gap: 12,
+            }}
+          >
+            {HUMAN_REVIEW_MODES.map((m) => {
+              const accent = C[m.color];
+              const soft = SOFT[m.color];
+              return (
+                <div key={m.name} style={{ ...tintedCard(accent), padding: 12 }}>
+                  <span style={pill(accent)}>HUMAN ONLY</span>
+                  <T color={accent} bold center size={15} style={{ marginTop: 8 }}>
+                    {m.name}
+                  </T>
+                  <T color={soft} center size={13} style={{ marginTop: 8 }}>
+                    {m.detail}
+                  </T>
+                </div>
+              );
+            })}
+          </div>
+
+          <T color={SOFT.amber} center size={15} style={{ marginTop: 14 }}>
+            Rule of thumb: 20-50 human-reviewed traces per week per agent. Cheap relative to a
+            single production incident, and the only signal the judge cannot produce.
+          </T>
+        </Box>
+      </Reveal>
+
+      <Reveal when={sub >= 4}>
+        <Box color={C.purple} style={{ width: "100%" }}>
+          <T color={C.purple} bold center size={22}>
+            What A Full Pipeline Looks Like
+          </T>
+          <T color={SOFT.purple} center size={16} style={{ marginTop: 10 }}>
+            Five stages, each handled by a later chapter in this act. Stage 1 builds the eval set.
+            Stages 2-3 grade traces and answers. Stage 4 watches production. Stage 5 acts on the
+            signal.
+          </T>
+
+          <div style={{ ...tintedCard(C.purple), padding: 14, marginTop: 14 }}>
+            <svg
+              viewBox="0 0 720 240"
+              style={{ width: "100%", maxWidth: 720, display: "block", margin: "0 auto" }}
+            >
+              <desc>
+                Five-stage production eval pipeline with eval set feeding per-trace step grading
+                and end-to-end LLM-as-Judge in parallel, then online sampling and a drift signal
+                that triggers alerting and rollback. Each stage labeled with the Section 13
+                chapter that covers it.
+              </desc>
+              {PIPELINE_STAGES.map((s, i) => {
+                const w = 128;
+                const gap = 10;
+                const totalSpan = PIPELINE_STAGES.length * w + (PIPELINE_STAGES.length - 1) * gap;
+                const xStart = (720 - totalSpan) / 2;
+                const x = xStart + i * (w + gap);
+                const y = 60;
+                return (
+                  <g key={`stage-${s.num}`}>
+                    <rect
+                      x={x}
+                      y={y}
+                      width={w}
+                      height={110}
+                      rx={8}
+                      fill={`${C.purple}22`}
+                      stroke={C.purple}
+                      strokeWidth={1.8}
+                    />
+                    <text
+                      x={x + w / 2}
+                      y={y + 22}
+                      fill={SOFT.purple}
+                      fontSize="13"
+                      fontWeight="700"
+                      textAnchor="middle"
+                    >
+                      Stage {s.num}
+                    </text>
+                    <text
+                      x={x + w / 2}
+                      y={y + 44}
+                      fill={SOFT.purple}
+                      fontSize="14"
+                      fontWeight="700"
+                      textAnchor="middle"
+                    >
+                      {s.name}
+                    </text>
+                    <foreignObject x={x + 4} y={y + 52} width={w - 8} height={42}>
+                      <div
+                        style={{
+                          color: SOFT.purple,
+                          fontSize: 11,
+                          textAlign: "center",
+                          lineHeight: 1.3,
+                        }}
+                      >
+                        {s.detail}
+                      </div>
+                    </foreignObject>
+                    <rect
+                      x={x + 18}
+                      y={y + 92}
+                      width={w - 36}
+                      height={16}
+                      rx={3}
+                      fill={`${C.cyan}22`}
+                      stroke={C.cyan}
+                      strokeWidth={1}
+                    />
+                    <text
+                      x={x + w / 2}
+                      y={y + 104}
+                      fill={SOFT.cyan}
+                      fontSize="11"
+                      fontWeight="700"
+                      textAnchor="middle"
+                    >
+                      Chapter {s.ref}
+                    </text>
+                    {i < PIPELINE_STAGES.length - 1 && (
+                      <path
+                        d={`M ${x + w} ${y + 55} L ${x + w + gap} ${y + 55}`}
+                        stroke={SOFT.purple}
+                        strokeWidth={1.6}
+                        markerEnd="url(#evalArrow)"
+                        fill="none"
+                      />
+                    )}
+                  </g>
+                );
+              })}
+              <defs>
+                <marker
+                  id="evalArrow"
+                  viewBox="0 0 10 10"
+                  refX="8"
+                  refY="5"
+                  markerWidth="6"
+                  markerHeight="6"
+                  orient="auto"
+                >
+                  <path d="M 0 0 L 10 5 L 0 10 z" fill={SOFT.purple} />
+                </marker>
+              </defs>
+              <text
+                x={360}
+                y={210}
+                fill={SOFT.cyan}
+                fontSize="13"
+                fontWeight="700"
+                textAnchor="middle"
+              >
+                Stage 2 = 13.40 - Stage 3 = 13.39 - Stage 1 + Stage 4 = 13.41
+              </text>
+            </svg>
+          </div>
+
+          <T color={SOFT.purple} center size={15} style={{ marginTop: 12 }}>
+            The pipeline costs more than a single judge call, but it is the only structure that
+            catches the three failure modes from sub=0 before they reach a customer.
+          </T>
+        </Box>
+      </Reveal>
+
+      {sub < 4 && (
+        <SubBtn onClick={onContinue} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />
+      )}
+    </div>
+  );
+};
+
+// Sub=0: four axes summary cards for the radar chart legend
+const EVAL_AXES = [
+  { name: "Correctness", color: "red", target: "> 90% Resolution", weight: "0.5" },
+  { name: "Latency", color: "yellow", target: "P95 < 8s", weight: "0.2" },
+  { name: "Cost", color: "amber", target: "< $0.50 / Ticket", weight: "0.2" },
+  { name: "Safety", color: "purple", target: "> 99% Refusal", weight: "0.1" },
+];
+
+// Sub=4: safety metrics
+const SAFETY_METRICS = [
+  {
+    name: "Refusal Rate (Prohibited Actions)",
+    target: "> 99%",
+    detail: "Agent Refuses To Issue Refunds Above Policy Limit Without Manager Approval.",
+  },
+  {
+    name: "False Refusal Rate",
+    target: "< 1%",
+    detail: "Agent Should Not Reject Legitimate Requests By Mistake.",
+  },
+  {
+    name: "Escalation Rate (Refund > $200)",
+    target: "100%",
+    detail: "Every Large Refund Must Route To A Human Reviewer.",
+  },
+  {
+    name: "Prompt-Injection Detection",
+    target: "> 95%",
+    detail: "Agent Catches User Inputs Trying To Override The System Prompt.",
+  },
+];
+
+export const EvalDimensions = (ctx) => {
+  const { sub, subBtnRipple, setSub, setSubBtnRipple, registerSubBtn } = ctx;
+
+  const onContinue = () => {
+    setSub(sub + 1);
+    setSubBtnRipple(subBtnRipple + 1);
+  };
+
+  // Radar chart geometry (sub=0)
+  const cx = 280;
+  const cy = 180;
+  const rOuter = 130;
+  // Four axes at 90 degree intervals: top, right, bottom, left
+  const axesGeom = [
+    { label: "Correctness", angle: -Math.PI / 2, score: 0.92 },
+    { label: "Latency", angle: 0, score: 0.78 },
+    { label: "Cost", angle: Math.PI / 2, score: 0.84 },
+    { label: "Safety", angle: Math.PI, score: 0.97 },
+  ];
+  const axisPoint = (angle, r) => ({
+    x: cx + Math.cos(angle) * r,
+    y: cy + Math.sin(angle) * r,
+  });
+  const targetRingR = rOuter * 0.85;
+  const samplePoints = axesGeom
+    .map((a) => {
+      const p = axisPoint(a.angle, rOuter * a.score);
+      return `${p.x},${p.y}`;
+    })
+    .join(" ");
+
+  return (
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
+      {sub >= 0 && (
+        <Box color={C.red} style={{ width: "100%" }}>
+          <T color={C.red} bold center size={22}>
+            Correctness, Latency, Cost, Safety
+          </T>
+          <T color={SOFT.red} center size={16} style={{ marginTop: 10 }}>
+            Production agents are graded on four axes simultaneously. A trace that scores 1.0 on
+            correctness but blew the latency budget or leaked a refund is still a failure. Treat
+            all four as first-class.
+          </T>
+
+          <div style={{ ...tintedCard(C.red), padding: 14, marginTop: 14 }}>
+            <svg
+              viewBox="0 0 560 360"
+              style={{ width: "100%", maxWidth: 640, display: "block", margin: "0 auto" }}
+            >
+              <desc>
+                Four-axis radar chart with correctness on top, latency on the right, cost on the
+                bottom, and safety on the left. A green target zone shows the acceptable region
+                and a red polygon shows a single agent run scoring 0.92, 0.78, 0.84, and 0.97.
+              </desc>
+              {/* Concentric rings */}
+              {[0.33, 0.66, 1].map((r, i) => (
+                <circle
+                  key={`ring-${i}`}
+                  cx={cx}
+                  cy={cy}
+                  r={rOuter * r}
+                  fill="none"
+                  stroke={`${C.red}22`}
+                  strokeWidth={1}
+                />
+              ))}
+              {/* Target zone */}
+              <circle
+                cx={cx}
+                cy={cy}
+                r={targetRingR}
+                fill={`${C.green}10`}
+                stroke={C.green}
+                strokeWidth={1.4}
+                strokeDasharray="3 3"
+              />
+              {/* Axes */}
+              {axesGeom.map((a) => {
+                const p = axisPoint(a.angle, rOuter);
+                return (
+                  <line
+                    key={`ax-${a.label}`}
+                    x1={cx}
+                    y1={cy}
+                    x2={p.x}
+                    y2={p.y}
+                    stroke={`${C.red}44`}
+                    strokeWidth={1}
+                  />
+                );
+              })}
+              {/* Sample run polygon */}
+              <polygon
+                points={samplePoints}
+                fill={`${C.red}20`}
+                stroke={C.red}
+                strokeWidth={2}
+              />
+              {/* Axis labels */}
+              {axesGeom.map((a) => {
+                const labelOffset = 18;
+                const lp = axisPoint(a.angle, rOuter + labelOffset);
+                return (
+                  <text
+                    key={`lab-${a.label}`}
+                    x={lp.x}
+                    y={lp.y + 4}
+                    fill={SOFT.red}
+                    fontSize="14"
+                    fontWeight="700"
+                    textAnchor="middle"
+                  >
+                    {a.label}
+                  </text>
+                );
+              })}
+              {/* Sample run score labels */}
+              {axesGeom.map((a) => {
+                const sp = axisPoint(a.angle, rOuter * a.score);
+                return (
+                  <g key={`score-${a.label}`}>
+                    <circle cx={sp.x} cy={sp.y} r={4} fill={C.red} />
+                    <text
+                      x={sp.x + (a.angle === 0 ? 10 : a.angle === Math.PI ? -10 : 0)}
+                      y={sp.y - 8}
+                      fill={SOFT.red}
+                      fontSize="11"
+                      fontWeight="700"
+                      textAnchor={a.angle === 0 ? "start" : a.angle === Math.PI ? "end" : "middle"}
+                    >
+                      {a.score.toFixed(2)}
+                    </text>
+                  </g>
+                );
+              })}
+              <text
+                x={280}
+                y={335}
+                fill={SOFT.green}
+                fontSize="13"
+                fontWeight="700"
+                textAnchor="middle"
+              >
+                Green Ring = Target Zone (Score &gt; 0.85)
+              </text>
+            </svg>
+          </div>
+
+          <div
+            style={{
+              marginTop: 14,
+              display: "grid",
+              gridTemplateColumns: "1fr 1fr 1fr 1fr",
+              gap: 12,
+            }}
+          >
+            {EVAL_AXES.map((a) => {
+              const accent = C[a.color];
+              const soft = SOFT[a.color];
+              return (
+                <div key={a.name} style={{ ...tintedCard(accent), padding: 12 }}>
+                  <span style={pill(accent)}>AXIS</span>
+                  <T color={accent} bold center size={15} style={{ marginTop: 8 }}>
+                    {a.name}
+                  </T>
+                  <T color={soft} center size={12} style={{ marginTop: 6 }}>
+                    Target: {a.target}
+                  </T>
+                  <T color={soft} center size={12} style={{ marginTop: 4 }}>
+                    Weight: {a.weight}
+                  </T>
+                </div>
+              );
+            })}
+          </div>
+        </Box>
+      )}
+
+      <Reveal when={sub >= 1}>
+        <Box color={C.orange} style={{ width: "100%" }}>
+          <T color={C.orange} bold center size={22}>
+            Did The Task Complete?
+          </T>
+          <T color={SOFT.orange} center size={16} style={{ marginTop: 10 }}>
+            Correctness is binary at the task level. Either the user&apos;s stated goal was
+            achieved with no incorrect side effects, or the trace counts as a failure even if it
+            looked plausible.
+          </T>
+
+          <div style={{ ...tintedCard(C.orange), padding: 14, marginTop: 14 }}>
+            <T color={SOFT.orange} bold center size={15}>
+              Definition
+            </T>
+            <T color={SOFT.orange} center size={14} style={{ marginTop: 6 }}>
+              Task Completed = User Goal Achieved AND No Incorrect Side Effects.
+            </T>
+            <T color={SOFT.orange} bold center size={15} style={{ marginTop: 10 }}>
+              Metric
+            </T>
+            <T color={SOFT.orange} center size={14} style={{ marginTop: 6 }}>
+              Resolution Rate = Correct Traces / Total Traces. Target &gt; 90%.
+            </T>
+          </div>
+
+          <div style={{ ...tintedCard(C.green), padding: 14, marginTop: 12 }}>
+            <span style={pill(C.green)}>EXAMPLE</span>
+            <T color={SOFT.green} bold center size={15} style={{ marginTop: 8 }}>
+              Ticket T2: Reset Password + Update Email
+            </T>
+            <T color={SOFT.green} center size={14} style={{ marginTop: 8 }}>
+              Agent Called reset_password And update_email. Both Effects Persisted. User
+              Confirmation Email Sent. Result: CORRECT.
+            </T>
+          </div>
+
+          <T color={SOFT.orange} center size={14} style={{ marginTop: 12 }}>
+            T4 (refund + cancel) is a counter-example: correctness fails if the agent issued the
+            refund but skipped the cancel, even if the user got a polite response.
+          </T>
+        </Box>
+      </Reveal>
+
+      <Reveal when={sub >= 2}>
+        <Box color={C.yellow} style={{ width: "100%" }}>
+          <T color={C.yellow} bold center size={22}>
+            How Long Did It Take?
+          </T>
+          <T color={SOFT.yellow} center size={16} style={{ marginTop: 10 }}>
+            Latency is the wall-clock time from user message to final answer. Average alone hides
+            the bad tail. Track percentiles: P50, P95, P99. The tail is where users churn.
+          </T>
+
+          <div style={{ ...tintedCard(C.yellow), padding: 14, marginTop: 14 }}>
+            <svg
+              viewBox="0 0 560 240"
+              style={{ width: "100%", maxWidth: 640, display: "block", margin: "0 auto" }}
+            >
+              <desc>
+                Latency histogram showing trace duration distribution with P50 at 3.2 seconds, P95
+                at 7.5 seconds (just inside the 8 second target line), and P99 at 14 seconds in
+                the long tail.
+              </desc>
+              {/* Bars approximating a long-tailed distribution */}
+              {[
+                { x: 60, h: 60, label: "1s" },
+                { x: 110, h: 110, label: "2s" },
+                { x: 160, h: 140, label: "3s" },
+                { x: 210, h: 120, label: "4s" },
+                { x: 260, h: 90, label: "5s" },
+                { x: 310, h: 65, label: "6s" },
+                { x: 360, h: 45, label: "7s" },
+                { x: 410, h: 28, label: "8s" },
+                { x: 460, h: 18, label: "10s" },
+                { x: 510, h: 8, label: "14s" },
+              ].map((b) => (
+                <g key={`bar-${b.label}`}>
+                  <rect
+                    x={b.x - 18}
+                    y={180 - b.h}
+                    width={36}
+                    height={b.h}
+                    fill={`${C.yellow}66`}
+                    stroke={C.yellow}
+                    strokeWidth={1}
+                  />
+                  <text
+                    x={b.x}
+                    y={195}
+                    fill={SOFT.yellow}
+                    fontSize="11"
+                    textAnchor="middle"
+                  >
+                    {b.label}
+                  </text>
+                </g>
+              ))}
+              {/* P50 marker at 3s */}
+              <line x1={160} y1={30} x2={160} y2={180} stroke={C.green} strokeWidth={2} strokeDasharray="4 3" />
+              <text x={160} y={22} fill={SOFT.green} fontSize="12" fontWeight="700" textAnchor="middle">P50 = 3.2s</text>
+              {/* P95 marker at ~7.5s */}
+              <line x1={385} y1={30} x2={385} y2={180} stroke={C.orange} strokeWidth={2} strokeDasharray="4 3" />
+              <text x={385} y={22} fill={SOFT.orange} fontSize="12" fontWeight="700" textAnchor="middle">P95 = 7.5s</text>
+              {/* P99 marker at ~14s */}
+              <line x1={510} y1={30} x2={510} y2={180} stroke={C.red} strokeWidth={2} strokeDasharray="4 3" />
+              <text x={510} y={22} fill={SOFT.red} fontSize="12" fontWeight="700" textAnchor="middle">P99 = 14s</text>
+              {/* Target line at 8s */}
+              <line x1={410} y1={180} x2={410} y2={210} stroke={C.cyan} strokeWidth={2} />
+              <text x={410} y={225} fill={SOFT.cyan} fontSize="12" fontWeight="700" textAnchor="middle">Target: P95 &lt; 8s</text>
+            </svg>
+          </div>
+
+          <T color={SOFT.yellow} center size={14} style={{ marginTop: 12 }}>
+            Latency budget for a support ticket: 1.5s LLM call x 3 iterations + 200ms tool call x
+            6 = 5.7s. The remainder (under 8s P95) absorbs network jitter and retries.
+          </T>
+        </Box>
+      </Reveal>
+
+      <Reveal when={sub >= 3}>
+        <Box color={C.amber} style={{ width: "100%" }}>
+          <T color={C.amber} bold center size={22}>
+            How Much Did Each Trace Consume?
+          </T>
+          <T color={SOFT.amber} center size={16} style={{ marginTop: 10 }}>
+            Cost is the dollar amount per trace. Input tokens are cheap, output tokens cost 5x
+            more, and tool calls add their own infrastructure cost. Runaway iterations are the
+            number-one source of cost overshoots.
+          </T>
+
+          <div style={{ ...tintedCard(C.amber), padding: 14, marginTop: 14 }}>
+            <svg
+              viewBox="0 0 560 200"
+              style={{ width: "100%", maxWidth: 640, display: "block", margin: "0 auto" }}
+            >
+              <desc>
+                Cost breakdown bar for a typical support trace showing input tokens at six cents,
+                output tokens at twenty cents, and tool calls at twelve cents adding up to roughly
+                thirty-eight cents per ticket against a fifty cent target.
+              </desc>
+              {/* Stacked horizontal bar */}
+              {/* Total bar background */}
+              <rect x={60} y={70} width={440} height={50} rx={6} fill={`${C.amber}10`} stroke={C.amber} strokeWidth={1} />
+              {/* Input tokens segment */}
+              <rect x={60} y={70} width={100} height={50} fill={`${C.cyan}66`} stroke={C.cyan} strokeWidth={1} />
+              <text x={110} y={100} fill={SOFT.cyan} fontSize="13" fontWeight="700" textAnchor="middle">Input Tokens</text>
+              <text x={110} y={115} fill={SOFT.cyan} fontSize="11" textAnchor="middle">$0.06</text>
+              {/* Output tokens segment */}
+              <rect x={160} y={70} width={200} height={50} fill={`${C.purple}66`} stroke={C.purple} strokeWidth={1} />
+              <text x={260} y={100} fill={SOFT.purple} fontSize="13" fontWeight="700" textAnchor="middle">Output Tokens</text>
+              <text x={260} y={115} fill={SOFT.purple} fontSize="11" textAnchor="middle">$0.20</text>
+              {/* Tool calls segment */}
+              <rect x={360} y={70} width={120} height={50} fill={`${C.green}66`} stroke={C.green} strokeWidth={1} />
+              <text x={420} y={100} fill={SOFT.green} fontSize="13" fontWeight="700" textAnchor="middle">Tool Calls</text>
+              <text x={420} y={115} fill={SOFT.green} fontSize="11" textAnchor="middle">$0.12</text>
+              {/* Target marker */}
+              <line x1={500} y1={60} x2={500} y2={140} stroke={C.red} strokeWidth={2} strokeDasharray="4 3" />
+              <text x={500} y={50} fill={SOFT.red} fontSize="12" fontWeight="700" textAnchor="middle">Target: $0.50</text>
+              <text x={280} y={160} fill={SOFT.amber} fontSize="14" fontWeight="700" textAnchor="middle">Total = $0.38 / Ticket</text>
+              <text x={280} y={180} fill={SOFT.red} fontSize="12" textAnchor="middle">Runaway Iteration Risk: Each Extra Loop Adds $0.20 In Output Tokens</text>
+            </svg>
+          </div>
+
+          <T color={SOFT.amber} center size={14} style={{ marginTop: 12 }}>
+            Cap max iterations (10-20 per loop termination policy from 13.23) and you cap the
+            worst-case cost. Without the cap, a 100-step runaway can hit $5 on a single trace.
+          </T>
+        </Box>
+      </Reveal>
+
+      <Reveal when={sub >= 4}>
+        <Box color={C.purple} style={{ width: "100%" }}>
+          <T color={C.purple} bold center size={22}>
+            Did The Agent Refuse What It Should?
+          </T>
+          <T color={SOFT.purple} center size={16} style={{ marginTop: 10 }}>
+            Safety has four sub-metrics. Each has a target and a customer-support example.
+            Production agents that fail safety even at 99% will still produce dozens of incidents
+            per million traces.
+          </T>
+
+          <div style={{ ...tintedCard(C.purple), padding: 14, marginTop: 14 }}>
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "1.4fr 0.7fr 2fr",
+                gap: 0,
+                fontSize: 14,
+              }}
+            >
+              <div style={{ padding: "8px 10px", fontWeight: 700, color: SOFT.purple }}>Metric</div>
+              <div style={{ padding: "8px 10px", fontWeight: 700, color: SOFT.cyan }}>Target</div>
+              <div style={{ padding: "8px 10px", fontWeight: 700, color: SOFT.red }}>Example</div>
+              {SAFETY_METRICS.map((m) => (
+                <Fragment key={m.name}>
+                  <div
+                    style={{
+                      padding: "8px 10px",
+                      borderTop: `1px solid ${C.purple}22`,
+                      color: SOFT.purple,
+                      fontWeight: 600,
+                    }}
+                  >
+                    {m.name}
+                  </div>
+                  <div
+                    style={{
+                      padding: "8px 10px",
+                      borderTop: `1px solid ${C.purple}22`,
+                      color: SOFT.cyan,
+                    }}
+                  >
+                    {m.target}
+                  </div>
+                  <div
+                    style={{
+                      padding: "8px 10px",
+                      borderTop: `1px solid ${C.purple}22`,
+                      color: SOFT.red,
+                    }}
+                  >
+                    {m.detail}
+                  </div>
+                </Fragment>
+              ))}
+            </div>
+          </div>
+
+          <T color={SOFT.purple} center size={14} style={{ marginTop: 12 }}>
+            Safety scores need the lowest tolerance: 99% refusal rate still permits 1 in 100
+            prohibited actions to land. For sensitive verticals push to 99.9%+.
+          </T>
+        </Box>
+      </Reveal>
+
+      <Reveal when={sub >= 5}>
+        <Box color={C.red} style={{ width: "100%" }}>
+          <T color={C.red} bold center size={22}>
+            One Number For The Dashboard
+          </T>
+          <T color={SOFT.red} center size={16} style={{ marginTop: 10 }}>
+            Stakeholders want a single trace score. Weight the four axes; correctness dominates
+            for support agents but the weights are tunable per use case. Trigger an alert when the
+            composite drops below the target line.
+          </T>
+
+          <div
+            style={{
+              ...tintedCard(C.red),
+              padding: 18,
+              marginTop: 14,
+              textAlign: "center",
+            }}
+          >
+            <T color={SOFT.red} bold center size={15}>
+              Composite Trace Score Formula
+            </T>
+            <div
+              style={{
+                fontFamily: "monospace",
+                fontSize: 16,
+                color: SOFT.red,
+                marginTop: 12,
+                lineHeight: 1.6,
+              }}
+            >
+              trace_score = 0.5 * correctness
+              <br />
+              {"          "}+ 0.2 * latency_score
+              <br />
+              {"          "}+ 0.2 * cost_score
+              <br />
+              {"          "}+ 0.1 * safety_score
+            </div>
+            <T color={SOFT.red} center size={13} style={{ marginTop: 12 }}>
+              Each component normalized 0-1. Weights tunable per use case. Target composite &gt;
+              0.85.
+            </T>
+          </div>
+
+          <div
+            style={{
+              ...tintedCard(C.green),
+              padding: 14,
+              marginTop: 12,
+            }}
+          >
+            <span style={pill(C.green)}>EXAMPLE</span>
+            <T color={SOFT.green} bold center size={14} style={{ marginTop: 8 }}>
+              Sample Run From Sub=0
+            </T>
+            <T color={SOFT.green} center size={13} style={{ marginTop: 6 }}>
+              0.5 * 0.92 + 0.2 * 0.78 + 0.2 * 0.84 + 0.1 * 0.97 = 0.885 &gt; 0.85 (Passes)
+            </T>
+          </div>
+        </Box>
+      </Reveal>
+
+      {sub < 5 && (
+        <SubBtn onClick={onContinue} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />
+      )}
+    </div>
+  );
+};
+
+// Pairwise vs scalar comparison (sub=0 of 13.39)
+const PAIRWISE_VS_SCALAR = [
+  {
+    name: "Pairwise",
+    color: "cyan",
+    detail: "Judge Sees Answer A And Answer B Side By Side, Picks Which Is Better.",
+    bestFor: "Ranking Two Models Or Two Prompt Variants Head-To-Head.",
+    weakness: "Cannot Express Absolute Quality. Reports Only Relative Wins.",
+  },
+  {
+    name: "Scalar",
+    color: "purple",
+    detail: "Judge Scores One Answer From 0 To 10 With A Written Justification.",
+    bestFor: "Absolute Quality Tracking, Dashboards, Regression Alerts.",
+    weakness: "More Variance Across Runs. Needs A Rubric To Reduce Drift.",
+  },
+];
+
+// Rubric (sub=1 of 13.39)
+const JUDGE_RUBRIC = [
+  {
+    name: "Correctness",
+    range: "0-3",
+    detail: "Answer Matches The Policy / KB. 3 = Exact, 0 = Contradicts Policy.",
+  },
+  {
+    name: "Completeness",
+    range: "0-2",
+    detail: "Answer Addresses Every Part Of The User Question.",
+  },
+  {
+    name: "Tone",
+    range: "0-2",
+    detail: "Friendly + Professional. Penalize Condescension Or Robot-Speak.",
+  },
+  {
+    name: "Citations",
+    range: "0-2",
+    detail: "Policy References Included When Applicable.",
+  },
+  {
+    name: "Escalation",
+    range: "0-1",
+    detail: "Correctly Escalated When Outside Scope (Refund > $200, Account Lock).",
+  },
+];
+
+// Three biases (sub=2 of 13.39)
+const JUDGE_BIASES = [
+  {
+    name: "Length Bias",
+    color: "red",
+    detail: "Longer Answers Get Higher Scores Even When Content Is Identical.",
+    mitigation: "Length-Normalize Scores Or Truncate To A Standard Budget Before Judging.",
+  },
+  {
+    name: "Position Bias",
+    color: "orange",
+    detail: "In Pairwise, The FIRST Answer Is Favored 5-10% Of The Time Regardless Of Quality.",
+    mitigation: "Randomize Position Per Run And Average Across Both Orderings.",
+  },
+  {
+    name: "Self-Preference",
+    color: "amber",
+    detail: "A Judge Using Model X Rates Model X's Outputs Higher Than Other Models.",
+    mitigation: "Use A Judge From A Different Model Family. Diversify Judge Mix Periodically.",
+  },
+];
+
+export const LlmAsJudge = (ctx) => {
+  const { sub, subBtnRipple, setSub, setSubBtnRipple, registerSubBtn } = ctx;
+
+  const onContinue = () => {
+    setSub(sub + 1);
+    setSubBtnRipple(subBtnRipple + 1);
+  };
+
+  // Calibration scatter (sub=3) points
+  const calibPoints = [
+    { judge: 0.55, human: 0.5 },
+    { judge: 0.62, human: 0.58 },
+    { judge: 0.68, human: 0.72 },
+    { judge: 0.7, human: 0.64 },
+    { judge: 0.75, human: 0.77 },
+    { judge: 0.78, human: 0.72 },
+    { judge: 0.82, human: 0.84 },
+    { judge: 0.85, human: 0.79 },
+    { judge: 0.88, human: 0.91 },
+    { judge: 0.9, human: 0.88 },
+    { judge: 0.92, human: 0.94 },
+    { judge: 0.6, human: 0.7 },
+    { judge: 0.95, human: 0.93 },
+    { judge: 0.8, human: 0.74 },
+  ];
+
+  return (
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
+      {sub >= 0 && (
+        <Box color={C.red} style={{ width: "100%" }}>
+          <T color={C.red} bold center size={22}>
+            Two Ways To Grade
+          </T>
+          <T color={SOFT.red} center size={16} style={{ marginTop: 10 }}>
+            LLM-as-Judge means using one LLM to grade another LLM&apos;s output. Two scoring
+            styles dominate production: pairwise and scalar. Pick by what your dashboard needs.
+            Most production setups use scalar.
+          </T>
+
+          <div
+            style={{
+              marginTop: 14,
+              display: "grid",
+              gridTemplateColumns: "1fr 1fr",
+              gap: 12,
+            }}
+          >
+            {PAIRWISE_VS_SCALAR.map((p) => {
+              const accent = C[p.color];
+              const soft = SOFT[p.color];
+              return (
+                <div key={p.name} style={{ ...tintedCard(accent), padding: 14 }}>
+                  <span style={pill(accent)}>SCORING STYLE</span>
+                  <T color={accent} bold center size={17} style={{ marginTop: 8 }}>
+                    {p.name}
+                  </T>
+                  <T color={soft} center size={14} style={{ marginTop: 10 }}>
+                    {p.detail}
+                  </T>
+                  <T color={soft} bold center size={13} style={{ marginTop: 10 }}>
+                    Best For:
+                  </T>
+                  <T color={soft} center size={13} style={{ marginTop: 4 }}>
+                    {p.bestFor}
+                  </T>
+                  <T color={SOFT.red} bold center size={13} style={{ marginTop: 8 }}>
+                    Weakness:
+                  </T>
+                  <T color={SOFT.red} center size={13} style={{ marginTop: 4 }}>
+                    {p.weakness}
+                  </T>
+                </div>
+              );
+            })}
+          </div>
+
+          <T color={SOFT.red} center size={15} style={{ marginTop: 14 }}>
+            Pairwise is great for model selection sprints. Scalar is the production default for
+            ongoing trace quality dashboards.
+          </T>
+        </Box>
+      )}
+
+      <Reveal when={sub >= 1}>
+        <Box color={C.orange} style={{ width: "100%" }}>
+          <T color={C.orange} bold center size={22}>
+            Tell The Judge What To Score On
+          </T>
+          <T color={SOFT.orange} center size={16} style={{ marginTop: 10 }}>
+            Without a rubric, scalar scores drift week over week. With a rubric the judge has
+            anchors. Use five criteria for customer support; total budget = 10 points.
+          </T>
+
+          <div style={{ ...tintedCard(C.orange), padding: 14, marginTop: 14 }}>
+            <T color={SOFT.orange} bold center size={15}>
+              Customer-Support Judge Rubric (Total = 10)
+            </T>
+            <div
+              style={{
+                marginTop: 10,
+                display: "grid",
+                gridTemplateColumns: "1.4fr 0.7fr 2.4fr",
+                gap: 0,
+                fontSize: 14,
+              }}
+            >
+              <div style={{ padding: "8px 10px", fontWeight: 700, color: SOFT.orange }}>
+                Criterion
+              </div>
+              <div style={{ padding: "8px 10px", fontWeight: 700, color: SOFT.cyan }}>Range</div>
+              <div style={{ padding: "8px 10px", fontWeight: 700, color: SOFT.purple }}>
+                Description
+              </div>
+              {JUDGE_RUBRIC.map((r) => (
+                <Fragment key={r.name}>
+                  <div
+                    style={{
+                      padding: "8px 10px",
+                      borderTop: `1px solid ${C.orange}22`,
+                      color: SOFT.orange,
+                      fontWeight: 600,
+                    }}
+                  >
+                    {r.name}
+                  </div>
+                  <div
+                    style={{
+                      padding: "8px 10px",
+                      borderTop: `1px solid ${C.orange}22`,
+                      color: SOFT.cyan,
+                      fontWeight: 700,
+                    }}
+                  >
+                    {r.range}
+                  </div>
+                  <div
+                    style={{
+                      padding: "8px 10px",
+                      borderTop: `1px solid ${C.orange}22`,
+                      color: SOFT.purple,
+                    }}
+                  >
+                    {r.detail}
+                  </div>
+                </Fragment>
+              ))}
+            </div>
+          </div>
+
+          <T color={SOFT.orange} center size={14} style={{ marginTop: 12 }}>
+            Explicit ranges + per-criterion definitions cut judge variance by roughly half
+            compared to &quot;score this 0-10&quot; without anchors. The rubric is the most
+            valuable artifact in the eval pipeline.
+          </T>
+        </Box>
+      </Reveal>
+
+      <Reveal when={sub >= 2}>
+        <Box color={C.yellow} style={{ width: "100%" }}>
+          <T color={C.yellow} bold center size={22}>
+            What The Judge Gets Wrong
+          </T>
+          <T color={SOFT.yellow} center size={16} style={{ marginTop: 10 }}>
+            LLM judges have three known biases. Every production setup should mitigate all three
+            before trusting the dashboard.
+          </T>
+
+          <div
+            style={{
+              marginTop: 14,
+              display: "grid",
+              gridTemplateColumns: "1fr 1fr 1fr",
+              gap: 12,
+            }}
+          >
+            {JUDGE_BIASES.map((b) => {
+              const accent = C[b.color];
+              const soft = SOFT[b.color];
+              return (
+                <div key={b.name} style={{ ...tintedCard(accent), padding: 12 }}>
+                  <span style={pill(accent)}>BIAS</span>
+                  <T color={accent} bold center size={15} style={{ marginTop: 8 }}>
+                    {b.name}
+                  </T>
+                  <T color={soft} center size={13} style={{ marginTop: 8 }}>
+                    {b.detail}
+                  </T>
+                  <T color={SOFT.green} bold center size={12} style={{ marginTop: 10 }}>
+                    Mitigation
+                  </T>
+                  <T color={SOFT.green} center size={12} style={{ marginTop: 4 }}>
+                    {b.mitigation}
+                  </T>
+                </div>
+              );
+            })}
+          </div>
+
+          <T color={SOFT.yellow} center size={14} style={{ marginTop: 14 }}>
+            Three biases, three mitigations. Length normalization, position randomization, judge
+            diversification. None are optional in production.
+          </T>
+        </Box>
+      </Reveal>
+
+      <Reveal when={sub >= 3}>
+        <Box color={C.amber} style={{ width: "100%" }}>
+          <T color={C.amber} bold center size={22}>
+            Trust But Verify
+          </T>
+          <T color={SOFT.amber} center size={16} style={{ marginTop: 10 }}>
+            Calibrate the judge against human annotators. Sample 50-100 traces, have a human
+            grade each one, plot judge score vs human score, compute correlation. Re-tune the
+            judge prompt until correlation &gt; 0.7.
+          </T>
+
+          <div style={{ ...tintedCard(C.amber), padding: 14, marginTop: 14 }}>
+            <svg
+              viewBox="0 0 520 360"
+              style={{ width: "100%", maxWidth: 600, display: "block", margin: "0 auto" }}
+            >
+              <desc>
+                Calibration scatter plot of judge scores on the x-axis against human scores on the
+                y-axis with a perfect-agreement diagonal and points clustered close to the
+                diagonal, illustrating a judge calibrated to roughly 0.78 correlation against
+                human annotators.
+              </desc>
+              {/* Plot area: x [50,470], y [40, 300]. Scores 0-1 map to that range. */}
+              {/* Axes */}
+              <line x1={50} y1={300} x2={470} y2={300} stroke={SOFT.amber} strokeWidth={1.5} />
+              <line x1={50} y1={300} x2={50} y2={40} stroke={SOFT.amber} strokeWidth={1.5} />
+              {/* Diagonal: perfect agreement */}
+              <line
+                x1={50}
+                y1={300}
+                x2={470}
+                y2={40}
+                stroke={C.green}
+                strokeWidth={1.6}
+                strokeDasharray="5 4"
+              />
+              {/* Axis labels */}
+              <text x={260} y={335} fill={SOFT.amber} fontSize="13" fontWeight="700" textAnchor="middle">
+                Judge Score (0-1)
+              </text>
+              <text
+                x={20}
+                y={170}
+                fill={SOFT.amber}
+                fontSize="13"
+                fontWeight="700"
+                textAnchor="middle"
+                transform="rotate(-90 20 170)"
+              >
+                Human Score (0-1)
+              </text>
+              {/* Tick labels */}
+              {[0, 0.25, 0.5, 0.75, 1].map((t) => (
+                <Fragment key={`xt-${t}`}>
+                  <text
+                    x={50 + t * 420}
+                    y={316}
+                    fill={SOFT.amber}
+                    fontSize="11"
+                    textAnchor="middle"
+                  >
+                    {t.toFixed(2)}
+                  </text>
+                  <text x={40} y={300 - t * 260 + 4} fill={SOFT.amber} fontSize="11" textAnchor="end">
+                    {t.toFixed(2)}
+                  </text>
+                </Fragment>
+              ))}
+              {/* Scatter points */}
+              {calibPoints.map((p, i) => (
+                <circle
+                  key={`pt-${i}`}
+                  cx={50 + p.judge * 420}
+                  cy={300 - p.human * 260}
+                  r={5}
+                  fill={`${C.amber}cc`}
+                  stroke={C.amber}
+                  strokeWidth={1.4}
+                />
+              ))}
+              {/* Correlation badge */}
+              <rect x={350} y={50} width={110} height={36} rx={6} fill={`${C.green}22`} stroke={C.green} strokeWidth={1.4} />
+              <text x={405} y={73} fill={SOFT.green} fontSize="13" fontWeight="700" textAnchor="middle">
+                r = 0.78 (Pass)
+              </text>
+            </svg>
+          </div>
+
+          <T color={SOFT.amber} center size={14} style={{ marginTop: 12 }}>
+            Re-calibrate quarterly. Judges drift as the underlying judge LLM updates. Without
+            re-calibration the dashboard slowly stops reflecting human judgment.
+          </T>
+        </Box>
+      </Reveal>
+
+      <Reveal when={sub >= 4}>
+        <Box color={C.purple} style={{ width: "100%" }}>
+          <T color={C.purple} bold center size={22}>
+            Canonical Judge Prompt
+          </T>
+          <T color={SOFT.purple} center size={16} style={{ marginTop: 10 }}>
+            The rubric from sub=1 baked into a runnable judge prompt. Output is forced into
+            machine-readable JSON so a dashboard can parse it and graph the per-criterion scores.
+            This is the canonical artifact reused in 13.40 trace evals.
+          </T>
+
+          <div
+            style={{
+              ...tintedCard(C.purple),
+              padding: 14,
+              marginTop: 14,
+              textAlign: "center",
+            }}
+          >
+            <span style={pill(C.purple)}>EVAL RUBRIC (SHAPE) - CUSTOMER SUPPORT JUDGE</span>
+            <div
+              style={{
+                marginTop: 12,
+                fontFamily: "monospace",
+                whiteSpace: "pre",
+                fontSize: 13,
+                color: SOFT.purple,
+                background: `${C.purple}08`,
+                border: `1px solid ${C.purple}22`,
+                borderRadius: 6,
+                padding: 14,
+                textAlign: "left",
+                lineHeight: 1.55,
+                overflowX: "auto",
+              }}
+            >
+{`System: You Are An Evaluator For A Customer-Support Agent.
+Score The Agent's Response On This Rubric (Total 10):
+  - Correctness (0-3): Answer Matches Policy / KB.
+  - Completeness (0-2): Answer Addresses Every Part Of The Question.
+  - Tone (0-2): Friendly + Professional, No Condescension.
+  - Citations (0-2): Policy References Included When Applicable.
+  - Escalation (0-1): Correctly Escalated When Outside Scope.
+
+User Question: {{user_message}}
+Agent Response: {{agent_response}}
+
+Output ONLY This JSON (No Other Text):
+{
+  "correctness": N,
+  "completeness": N,
+  "tone": N,
+  "citations": N,
+  "escalation": N,
+  "total": N,
+  "reasoning": "Why You Scored Each Field."
+}`}
+            </div>
+          </div>
+
+          <T color={SOFT.purple} center size={14} style={{ marginTop: 12 }}>
+            JSON output is non-negotiable. Free-form prose from the judge cannot land in a
+            dashboard. Lock the field names. Every later eval (13.40 trace, 13.41 online) re-uses
+            this same shape.
+          </T>
+        </Box>
+      </Reveal>
+
+      <Reveal when={sub >= 5}>
+        <Box color={C.red} style={{ width: "100%" }}>
+          <T color={C.red} bold center size={22}>
+            Same Technique, Agent Scope
+          </T>
+          <T color={SOFT.red} center size={16} style={{ marginTop: 10 }}>
+            Section 12.32 used LLM-as-Judge for RAG generation quality - faithfulness and
+            answer-relevance against retrieved chunks. Here we extend the same technique to
+            agent-level evals: full task completion, multi-step trace correctness, safety
+            refusals.
+          </T>
+
+          <div
+            style={{
+              marginTop: 14,
+              display: "grid",
+              gridTemplateColumns: "1fr 1fr",
+              gap: 12,
+            }}
+          >
+            <div style={{ ...tintedCard(C.cyan), padding: 14 }}>
+              <span style={pill(C.cyan)}>SECTION 12.32 (RAG)</span>
+              <T color={C.cyan} bold center size={15} style={{ marginTop: 8 }}>
+                What Section 12 Judged
+              </T>
+              <T color={SOFT.cyan} center size={13} style={{ marginTop: 8 }}>
+                Faithfulness: Did The Generation Stay Grounded In Retrieved Chunks?
+              </T>
+              <T color={SOFT.cyan} center size={13} style={{ marginTop: 6 }}>
+                Answer-Relevance: Did The Generation Address The User Query?
+              </T>
+              <T color={SOFT.cyan} center size={13} style={{ marginTop: 6 }}>
+                One-Shot Input / Output Pair.
+              </T>
+            </div>
+            <div style={{ ...tintedCard(C.purple), padding: 14 }}>
+              <span style={pill(C.purple)}>SECTION 13 (AGENT)</span>
+              <T color={C.purple} bold center size={15} style={{ marginTop: 8 }}>
+                What Section 13 Adds
+              </T>
+              <T color={SOFT.purple} center size={13} style={{ marginTop: 8 }}>
+                Task Completion: Did The Agent Achieve The Goal?
+              </T>
+              <T color={SOFT.purple} center size={13} style={{ marginTop: 6 }}>
+                Trace Correctness: Did Every Tool Call And Response Step Land?
+              </T>
+              <T color={SOFT.purple} center size={13} style={{ marginTop: 6 }}>
+                Multi-Step + Side-Effecting Tools.
+              </T>
+            </div>
+          </div>
+
+          <T color={SOFT.red} center size={15} style={{ marginTop: 14 }}>
+            Mechanics are identical: rubric + JSON output + calibration. Only the rubric content
+            changes. A team running 12.32 already has 80% of the agent eval infrastructure in
+            place.
+          </T>
+        </Box>
+      </Reveal>
+
+      {sub < 5 && (
+        <SubBtn onClick={onContinue} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />
+      )}
+    </div>
+  );
+};
+
+// T2 successful trace (sub=0 of 13.40)
+const T2_TRACE_STEPS = [
+  { step: 1, tool: "classify_intent", result: "Intent: Password Reset + Email Change", status: "pass" },
+  { step: 2, tool: "lookup_customer", result: "Customer c-9924 (Alice) Found, Pro Tier", status: "pass" },
+  { step: 3, tool: "change_email", result: "Email Updated To alice-new@example.com", status: "pass" },
+  { step: 4, tool: "reset_password", result: "Reset Token Emailed To Alice", status: "pass" },
+  { step: 5, tool: "respond", result: "Polite Confirmation, Mentions Both Effects", status: "pass" },
+];
+
+// T4 failure trace (sub=1 of 13.40)
+const T4_TRACE_STEPS = [
+  { step: 1, tool: "classify_intent", result: "Intent: Refund + Cancel Subscription", status: "pass", note: "Correct Read." },
+  { step: 2, tool: "lookup_customer", result: "Customer c-9924, Pro Tier Active", status: "pass", note: "Right Tool, Right Args." },
+  { step: 3, tool: "lookup_subscription", result: "Active, $240 Annual, 9 Months Used", status: "pass", note: "All Good So Far." },
+  {
+    step: 4,
+    tool: "process_refund",
+    result: "Refund Of $60 Issued. Business Rule Fired Correctly.",
+    status: "fail",
+    note: "Judge: Refund Was $60. Policy Requires Escalation > $200. Pass On Threshold But Agent Forgot To Cancel.",
+  },
+  {
+    step: 5,
+    tool: "respond",
+    result: "Told Alice Both Refund AND Cancellation Were Processed.",
+    status: "wrong",
+    note: "Judge: Cancel Tool Was Never Called. Response Lied About Side Effects.",
+  },
+];
+
+// Per-step rubric (sub=2)
+const PER_STEP_RUBRIC = [
+  {
+    name: "Tool Choice",
+    detail: "Did The Agent Pick The Right Tool For The Sub-Goal?",
+    t4Step4: "PASS",
+  },
+  {
+    name: "Tool Input",
+    detail: "Were The Arguments Well-Formed And Correct?",
+    t4Step4: "PASS",
+  },
+  {
+    name: "Result Handling",
+    detail: "Did The Agent Interpret The Tool Result Correctly?",
+    t4Step4: "FAIL",
+  },
+  {
+    name: "Next-Step Planning",
+    detail: "Did This Step's Outcome Feed The Next Planned Action?",
+    t4Step4: "FAIL",
+  },
+];
+
+export const TraceEvals = (ctx) => {
+  const { sub, subBtnRipple, setSub, setSubBtnRipple, registerSubBtn } = ctx;
+
+  const onContinue = () => {
+    setSub(sub + 1);
+    setSubBtnRipple(subBtnRipple + 1);
+  };
+
+  const stepRowColor = (status) => {
+    if (status === "fail") return C.orange;
+    if (status === "wrong") return C.red;
+    return C.green;
+  };
+  const stepRowSoft = (status) => {
+    if (status === "fail") return SOFT.orange;
+    if (status === "wrong") return SOFT.red;
+    return SOFT.green;
+  };
+  const stepBadge = (status) => {
+    if (status === "fail") return "FAILED";
+    if (status === "wrong") return "WRONG";
+    return "PASS";
+  };
+
+  return (
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
+      {sub >= 0 && (
+        <Box color={C.red} style={{ width: "100%" }}>
+          <T color={C.red} bold center size={22}>
+            Every Step Gets A Grade
+          </T>
+          <T color={SOFT.red} center size={16} style={{ marginTop: 10 }}>
+            End-to-end LLM-as-Judge tells you if the final answer was correct. Trace eval grades
+            EACH step independently. When a trace fails, you can locate where. T2 (reset password
+            + email change) is a 5-step trace that passes at every step.
+          </T>
+
+          <div style={{ ...tintedCard(C.red), padding: 14, marginTop: 14 }}>
+            <T color={SOFT.red} bold center size={15}>
+              Trace: Ticket T2 - Reset Password + Update Email
+            </T>
+            <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 8 }}>
+              {T2_TRACE_STEPS.map((s) => (
+                <div
+                  key={`t2-${s.step}`}
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns: "48px 1.6fr 3fr 70px",
+                    gap: 10,
+                    alignItems: "center",
+                    padding: "8px 12px",
+                    background: `${C.green}08`,
+                    border: `1px solid ${C.green}30`,
+                    borderRadius: 6,
+                  }}
+                >
+                  <T color={SOFT.green} bold center size={14}>
+                    {`Step ${s.step}`}
+                  </T>
+                  <T color={C.green} bold size={13} style={{ textAlign: "left" }}>
+                    {s.tool}
+                  </T>
+                  <T color={SOFT.green} size={13} style={{ textAlign: "left" }}>
+                    {s.result}
+                  </T>
+                  <T color={SOFT.green} bold center size={12}>
+                    PASS
+                  </T>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <T color={SOFT.red} center size={15} style={{ marginTop: 14 }}>
+            All 5 steps pass. The trace also passes end-to-end. But trace eval still adds value:
+            it confirms WHY the trace passed (every step was correct), not just that the final
+            output happened to look right.
+          </T>
+        </Box>
+      )}
+
+      <Reveal when={sub >= 1}>
+        <Box color={C.orange} style={{ width: "100%" }}>
+          <T color={C.orange} bold center size={22}>
+            When A Step Fails, Where?
+          </T>
+          <T color={SOFT.orange} center size={16} style={{ marginTop: 10 }}>
+            T4 (refund + cancel subscription) is the diagnostic trace. The final answer says
+            &quot;both processed&quot; but trace eval surfaces TWO failures: step 4 missed the
+            cancel side-effect, and step 5 lied about it.
+          </T>
+
+          <div style={{ ...tintedCard(C.orange), padding: 14, marginTop: 14 }}>
+            <T color={SOFT.orange} bold center size={15}>
+              Trace: Ticket T4 - Refund + Cancel Subscription
+            </T>
+            <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 8 }}>
+              {T4_TRACE_STEPS.map((s) => {
+                const accent = stepRowColor(s.status);
+                const soft = stepRowSoft(s.status);
+                return (
+                  <div
+                    key={`t4-${s.step}`}
+                    style={{
+                      display: "grid",
+                      gridTemplateColumns: "48px 1.6fr 2.4fr 80px",
+                      gap: 10,
+                      alignItems: "center",
+                      padding: "10px 12px",
+                      background: `${accent}10`,
+                      border: `1px solid ${accent}50`,
+                      borderRadius: 6,
+                    }}
+                  >
+                    <T color={soft} bold center size={14}>
+                      {`Step ${s.step}`}
+                    </T>
+                    <T color={accent} bold size={13} style={{ textAlign: "left" }}>
+                      {s.tool}
+                    </T>
+                    <T color={soft} size={12} style={{ textAlign: "left", lineHeight: 1.45 }}>
+                      {s.result}
+                      <br />
+                      <span style={{ fontStyle: "italic" }}>{s.note}</span>
+                    </T>
+                    <T color={soft} bold center size={12}>
+                      {stepBadge(s.status)}
+                    </T>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          <T color={SOFT.orange} center size={14} style={{ marginTop: 12 }}>
+            Insight: Step 4 made the right tool call (process_refund) but the agent did not adapt
+            when it noticed cancel was missing. Step 5 then propagated a false assertion. Trace
+            eval surfaces both, end-to-end eval would only flag the final wrong answer.
+          </T>
+        </Box>
+      </Reveal>
+
+      <Reveal when={sub >= 2}>
+        <Box color={C.yellow} style={{ width: "100%" }}>
+          <T color={C.yellow} bold center size={22}>
+            What To Score Per Step
+          </T>
+          <T color={SOFT.yellow} center size={16} style={{ marginTop: 10 }}>
+            Each step gets graded on four sub-rubric criteria. The T4 step 4 example below shows
+            exactly how trace eval pinpoints where the failure starts: tool choice + tool input
+            both pass, but result handling and next-step planning fail.
+          </T>
+
+          <div style={{ ...tintedCard(C.yellow), padding: 14, marginTop: 14 }}>
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "1.4fr 2.2fr 1fr",
+                gap: 0,
+                fontSize: 14,
+              }}
+            >
+              <div style={{ padding: "8px 10px", fontWeight: 700, color: SOFT.yellow }}>
+                Criterion
+              </div>
+              <div style={{ padding: "8px 10px", fontWeight: 700, color: SOFT.purple }}>
+                Description
+              </div>
+              <div style={{ padding: "8px 10px", fontWeight: 700, color: SOFT.cyan }}>
+                T4 Step 4
+              </div>
+              {PER_STEP_RUBRIC.map((r) => (
+                <Fragment key={r.name}>
+                  <div
+                    style={{
+                      padding: "8px 10px",
+                      borderTop: `1px solid ${C.yellow}22`,
+                      color: SOFT.yellow,
+                      fontWeight: 600,
+                    }}
+                  >
+                    {r.name}
+                  </div>
+                  <div
+                    style={{
+                      padding: "8px 10px",
+                      borderTop: `1px solid ${C.yellow}22`,
+                      color: SOFT.purple,
+                    }}
+                  >
+                    {r.detail}
+                  </div>
+                  <div
+                    style={{
+                      padding: "8px 10px",
+                      borderTop: `1px solid ${C.yellow}22`,
+                      color: r.t4Step4 === "PASS" ? SOFT.green : SOFT.red,
+                      fontWeight: 700,
+                      textAlign: "center",
+                    }}
+                  >
+                    {r.t4Step4}
+                  </div>
+                </Fragment>
+              ))}
+            </div>
+          </div>
+
+          <T color={SOFT.yellow} center size={14} style={{ marginTop: 12 }}>
+            The four sub-criteria mirror an engineer&apos;s mental debug pass: did I pick the
+            right thing, did I call it right, did I read the answer right, did I plan the next
+            step right. Production teams build dashboards keyed on these four columns.
+          </T>
+        </Box>
+      </Reveal>
+
+      <Reveal when={sub >= 3}>
+        <Box color={C.amber} style={{ width: "100%" }}>
+          <T color={C.amber} bold center size={22}>
+            Trace Eval Record (Shape)
+          </T>
+          <T color={SOFT.amber} center size={16} style={{ marginTop: 10 }}>
+            Trace eval output is a structured JSON record: one entry per step, four scores per
+            entry, plus per-step failure-mode tags and an overall_grade summary. This shape
+            powers per-tool dashboards and failure-mode alerts.
+          </T>
+
+          <div
+            style={{
+              ...tintedCard(C.amber),
+              padding: 14,
+              marginTop: 14,
+              textAlign: "center",
+            }}
+          >
+            <span style={pill(C.amber)}>TRACE EVAL RECORD - SHAPE</span>
+            <div
+              style={{
+                marginTop: 12,
+                fontFamily: "monospace",
+                whiteSpace: "pre",
+                fontSize: 13,
+                color: SOFT.amber,
+                background: `${C.amber}08`,
+                border: `1px solid ${C.amber}22`,
+                borderRadius: 6,
+                padding: 14,
+                textAlign: "left",
+                lineHeight: 1.55,
+                overflowX: "auto",
+              }}
+            >
+{`{
+  "trace_id": "tr-8492",
+  "ticket": "T4",
+  "agent_version": "support-agent@v3.1",
+  "steps": [
+    { "step": 1, "tool": "classify_intent",
+      "scores": { "choice": 1, "input": 1, "result": 1, "next": 1 } },
+    { "step": 2, "tool": "lookup_customer",
+      "scores": { "choice": 1, "input": 1, "result": 1, "next": 1 } },
+    { "step": 3, "tool": "lookup_subscription",
+      "scores": { "choice": 1, "input": 1, "result": 1, "next": 1 } },
+    { "step": 4, "tool": "process_refund",
+      "scores": { "choice": 1, "input": 1, "result": 0, "next": 0 },
+      "failure_mode": "missed_escalation" },
+    { "step": 5, "tool": "respond",
+      "scores": { "choice": 0, "input": 0, "result": 0, "next": 0 },
+      "failure_mode": "false_assertion" }
+  ],
+  "overall_grade": "failed_at_step_4_propagated_to_step_5",
+  "judged_at": "2026-05-16T08:14:00Z"
+}`}
+            </div>
+          </div>
+
+          <T color={SOFT.amber} center size={14} style={{ marginTop: 12 }}>
+            failure_mode tags (missed_escalation, false_assertion, hallucinated_tool,
+            wrong_argument_type) are the most useful cross-trace signal. They roll up into a
+            failure-mode dashboard that tells the eng team which class of bug is most common.
+          </T>
+        </Box>
+      </Reveal>
+
+      <Reveal when={sub >= 4}>
+        <Box color={C.purple} style={{ width: "100%" }}>
+          <T color={C.purple} bold center size={22}>
+            Per-Step Grading Is N x Expensive
+          </T>
+          <T color={SOFT.purple} center size={16} style={{ marginTop: 10 }}>
+            End-to-end LLM-as-Judge: 1 judge call per trace. Trace eval: N judge calls per trace
+            (one per step). For an 8-step trace that is 8x the eval cost. Reserve trace eval for
+            a sample of production traffic; run end-to-end on the rest.
+          </T>
+
+          <div style={{ ...tintedCard(C.purple), padding: 14, marginTop: 14 }}>
+            <svg
+              viewBox="0 0 560 220"
+              style={{ width: "100%", maxWidth: 640, display: "block", margin: "0 auto" }}
+            >
+              <desc>
+                Cost comparison bar chart with end-to-end LLM-as-Judge at one times the unit cost
+                and trace eval growing linearly with steps, reaching eight times for an eight-step
+                trace, plus the production rule to run trace eval on five percent of traffic and
+                end-to-end on the rest.
+              </desc>
+              {/* End-to-end bar */}
+              <text x={280} y={30} fill={SOFT.purple} fontSize="14" fontWeight="700" textAnchor="middle">
+                Eval Cost Per Trace (Unit = One Judge Call)
+              </text>
+              <rect x={120} y={60} width={60} height={50} fill={`${C.cyan}66`} stroke={C.cyan} strokeWidth={1.4} />
+              <text x={150} y={92} fill={SOFT.cyan} fontSize="13" fontWeight="700" textAnchor="middle">1x</text>
+              <text x={150} y={130} fill={SOFT.cyan} fontSize="12" textAnchor="middle">End-To-End</text>
+              {/* Trace eval bar */}
+              <rect x={210} y={60} width={300} height={50} fill={`${C.purple}66`} stroke={C.purple} strokeWidth={1.4} />
+              <text x={360} y={92} fill={SOFT.purple} fontSize="13" fontWeight="700" textAnchor="middle">
+                N x (8x For 8-Step Trace)
+              </text>
+              <text x={360} y={130} fill={SOFT.purple} fontSize="12" textAnchor="middle">Trace Eval (Per Step)</text>
+              {/* Production rule */}
+              <rect x={60} y={150} width={440} height={50} rx={8} fill={`${C.green}11`} stroke={C.green} strokeWidth={1.4} />
+              <text x={280} y={172} fill={SOFT.green} fontSize="13" fontWeight="700" textAnchor="middle">
+                Production Rule
+              </text>
+              <text x={280} y={190} fill={SOFT.green} fontSize="12" textAnchor="middle">
+                Trace Eval On 5% Sample. End-To-End LLM-As-Judge On The Rest.
+              </text>
+            </svg>
+          </div>
+
+          <T color={SOFT.purple} center size={14} style={{ marginTop: 12 }}>
+            5% sample is the sweet spot for most production traffic. Higher rates (e.g., 25%) for
+            high-stakes traces (refunds, account changes) where locating the failing step matters
+            more than overall throughput cost.
+          </T>
+        </Box>
+      </Reveal>
+
+      {sub < 4 && (
+        <SubBtn onClick={onContinue} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />
+      )}
+    </div>
+  );
+};
+
+// Three eval set decks (sub=0 of 13.41)
+const EVAL_SET_DECKS = [
+  {
+    name: "Golden",
+    count: 50,
+    color: "yellow",
+    detail: "Typical, Well-Defined Tickets. Reset Password, Refund, Cancel, Status Lookup.",
+    use: "Regression Tests Run Before Every Deploy.",
+  },
+  {
+    name: "Adversarial",
+    count: 20,
+    color: "red",
+    detail:
+      "Edge Cases, Ambiguous Wording, Multi-Intent, Prompt-Injection Attempts.",
+    use: "Catches Failure Modes That Golden Misses.",
+  },
+  {
+    name: "Regression",
+    count: 10,
+    color: "purple",
+    detail: "Past Production Bugs. One Case Per Confirmed Incident.",
+    use: "Grows Permanently. Each New Bug Adds A New Case Here.",
+  },
+];
+
+export const EvalSetsContinuous = (ctx) => {
+  const { sub, subBtnRipple, setSub, setSubBtnRipple, registerSubBtn } = ctx;
+
+  const onContinue = () => {
+    setSub(sub + 1);
+    setSubBtnRipple(subBtnRipple + 1);
+  };
+
+  return (
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
+      {sub >= 0 && (
+        <Box color={C.red} style={{ width: "100%" }}>
+          <T color={C.red} bold center size={22}>
+            Golden + Adversarial + Regression
+          </T>
+          <T color={SOFT.red} center size={16} style={{ marginTop: 10 }}>
+            An eval set is the static portfolio of test cases you grade your agent against. The
+            production composition uses three decks. Each catches a different class of failure.
+            Skip any one and your dashboard has a blind spot.
+          </T>
+
+          <div
+            style={{
+              marginTop: 14,
+              display: "grid",
+              gridTemplateColumns: "1fr 1fr 1fr",
+              gap: 12,
+            }}
+          >
+            {EVAL_SET_DECKS.map((d) => {
+              const accent = C[d.color];
+              const soft = SOFT[d.color];
+              return (
+                <div key={d.name} style={{ ...tintedCard(accent), padding: 12 }}>
+                  <span style={pill(accent)}>{`${d.count} CASES`}</span>
+                  <T color={accent} bold center size={17} style={{ marginTop: 8 }}>
+                    {d.name}
+                  </T>
+                  <T color={soft} center size={13} style={{ marginTop: 10 }}>
+                    {d.detail}
+                  </T>
+                  <T color={soft} bold center size={12} style={{ marginTop: 10 }}>
+                    Use
+                  </T>
+                  <T color={soft} center size={12} style={{ marginTop: 4 }}>
+                    {d.use}
+                  </T>
+                </div>
+              );
+            })}
+          </div>
+
+          <T color={SOFT.red} center size={14} style={{ marginTop: 14 }}>
+            Total eval set: 80 cases. Small enough to run cheaply on every deploy; large enough
+            to capture distribution + adversarial + regression. Most production teams start with
+            this size and grow gradually.
+          </T>
+        </Box>
+      )}
+
+      <Reveal when={sub >= 1}>
+        <Box color={C.orange} style={{ width: "100%" }}>
+          <T color={C.orange} bold center size={22}>
+            Eval Set Goes Stale
+          </T>
+          <T color={SOFT.orange} center size={16} style={{ marginTop: 10 }}>
+            An eval set frozen at month 0 looks great. By month 3 real traffic has shifted:
+            new product features, new customer segments, new attack patterns. Eval pass rate no
+            longer predicts production success. Refresh 10-20% of cases per quarter from recent
+            production traces.
+          </T>
+
+          <div style={{ ...tintedCard(C.orange), padding: 14, marginTop: 14 }}>
+            <svg
+              viewBox="0 0 560 220"
+              style={{ width: "100%", maxWidth: 640, display: "block", margin: "0 auto" }}
+            >
+              <desc>
+                Freshness timeline showing eval set score holding steady near 0.9 at month zero
+                while real production distribution drifts away over time, causing the gap between
+                eval-set predicted quality and actual production quality to widen by month three.
+              </desc>
+              {/* Timeline axis */}
+              <line x1={50} y1={170} x2={510} y2={170} stroke={SOFT.orange} strokeWidth={1.5} />
+              {/* Month ticks */}
+              {[0, 1, 2, 3, 4, 5, 6].map((m) => (
+                <Fragment key={`m-${m}`}>
+                  <line x1={50 + m * 75} y1={166} x2={50 + m * 75} y2={174} stroke={SOFT.orange} strokeWidth={1} />
+                  <text x={50 + m * 75} y={190} fill={SOFT.orange} fontSize="11" textAnchor="middle">
+                    Month {m}
+                  </text>
+                </Fragment>
+              ))}
+              {/* Eval set score line (flat at top, illustrating the score on a frozen set) */}
+              <path
+                d="M 50 60 L 125 62 L 200 60 L 275 63 L 350 61 L 425 60 L 500 62"
+                stroke={C.cyan}
+                strokeWidth={2.5}
+                fill="none"
+              />
+              <text x={500} y={50} fill={SOFT.cyan} fontSize="12" fontWeight="700" textAnchor="end">
+                Eval Set Score (Frozen)
+              </text>
+              {/* Actual production quality drifting down */}
+              <path
+                d="M 50 60 L 125 70 L 200 90 L 275 110 L 350 130 L 425 145 L 500 155"
+                stroke={C.red}
+                strokeWidth={2.5}
+                fill="none"
+                strokeDasharray="4 3"
+              />
+              <text x={500} y={165} fill={SOFT.red} fontSize="12" fontWeight="700" textAnchor="end">
+                Real Production Quality
+              </text>
+              {/* Gap indicator at month 3 */}
+              <line x1={275} y1={63} x2={275} y2={110} stroke={C.amber} strokeWidth={2} />
+              <text x={290} y={90} fill={SOFT.amber} fontSize="12" fontWeight="700" textAnchor="start">
+                Gap = Distribution Shift
+              </text>
+            </svg>
+          </div>
+
+          <T color={SOFT.orange} center size={14} style={{ marginTop: 12 }}>
+            Mitigation: every quarter, replace 10-20% of golden cases with recent production
+            traces (anonymized). Adversarial set grows separately as new attack patterns surface.
+            Regression set only grows.
+          </T>
+        </Box>
+      </Reveal>
+
+      <Reveal when={sub >= 2}>
+        <Box color={C.yellow} style={{ width: "100%" }}>
+          <T color={C.yellow} bold center size={22}>
+            Grade A Slice Of Production
+          </T>
+          <T color={SOFT.yellow} center size={16} style={{ marginTop: 10 }}>
+            Offline eval covers known cases. Online eval samples live production traffic, grades
+            it asynchronously with LLM-as-Judge, and writes the result back to the trace store
+            for the dashboard. Sampling rate is a cost / detection tradeoff.
+          </T>
+
+          <div style={{ ...tintedCard(C.yellow), padding: 14, marginTop: 14 }}>
+            <svg
+              viewBox="0 0 720 200"
+              style={{ width: "100%", maxWidth: 720, display: "block", margin: "0 auto" }}
+            >
+              <desc>
+                Online sampling flow showing production traffic being sampled at a one to five
+                percent rate into an async LLM-as-Judge grading stage, with results stored back
+                to the trace store and rendered on the eval quality dashboard.
+              </desc>
+              {/* Stations */}
+              {[
+                { x: 30, label: "Production Traffic", sub: "100% Of Tickets" },
+                { x: 180, label: "Sampler", sub: "1-5% Selection" },
+                { x: 330, label: "Async Judge", sub: "LLM-As-Judge" },
+                { x: 480, label: "Trace Store", sub: "Results + Scores" },
+                { x: 620, label: "Dashboard", sub: "Drift Signal" },
+              ].map((s, i) => (
+                <g key={`stn-${i}`}>
+                  <rect
+                    x={s.x}
+                    y={60}
+                    width={100}
+                    height={70}
+                    rx={8}
+                    fill={`${C.yellow}22`}
+                    stroke={C.yellow}
+                    strokeWidth={1.6}
+                  />
+                  <text x={s.x + 50} y={88} fill={SOFT.yellow} fontSize="13" fontWeight="700" textAnchor="middle">
+                    {s.label}
+                  </text>
+                  <text x={s.x + 50} y={108} fill={SOFT.yellow} fontSize="11" textAnchor="middle">
+                    {s.sub}
+                  </text>
+                  {i < 4 && (
+                    <path
+                      d={`M ${s.x + 100} 95 L ${s.x + 130} 95`}
+                      stroke={SOFT.yellow}
+                      strokeWidth={2}
+                      markerEnd="url(#flowArrow)"
+                      fill="none"
+                    />
+                  )}
+                </g>
+              ))}
+              <defs>
+                <marker
+                  id="flowArrow"
+                  viewBox="0 0 10 10"
+                  refX="8"
+                  refY="5"
+                  markerWidth="6"
+                  markerHeight="6"
+                  orient="auto"
+                >
+                  <path d="M 0 0 L 10 5 L 0 10 z" fill={SOFT.yellow} />
+                </marker>
+              </defs>
+              <text x={360} y={170} fill={SOFT.green} fontSize="13" fontWeight="700" textAnchor="middle">
+                1% Sample = Cheap But Slow. 5% Sample = Catches Issues In Hours But 5x Cost.
+              </text>
+            </svg>
+          </div>
+
+          <T color={SOFT.yellow} center size={14} style={{ marginTop: 12 }}>
+            Pick 1-5% as the default. Bump to 25% for the first week after a deploy; drop back
+            once dashboard is stable. Async grading means production latency is unchanged - the
+            judge runs after the user already got their answer.
+          </T>
+        </Box>
+      </Reveal>
+
+      <Reveal when={sub >= 3}>
+        <Box color={C.amber} style={{ width: "100%" }}>
+          <T color={C.amber} bold center size={22}>
+            Trigger When Quality Drops
+          </T>
+          <T color={SOFT.amber} center size={16} style={{ marginTop: 10 }}>
+            Online sampling produces a time series of composite scores. A drift detector watches
+            the 7-day moving average against a baseline. Alert if the moving average drops more
+            than 0.05 from the baseline. Page the engineer, freeze the deploy, investigate.
+          </T>
+
+          <div style={{ ...tintedCard(C.amber), padding: 14, marginTop: 14 }}>
+            <svg
+              viewBox="0 0 560 240"
+              style={{ width: "100%", maxWidth: 640, display: "block", margin: "0 auto" }}
+            >
+              <desc>
+                Time series of composite trace scores plotted over fourteen days, hovering around
+                0.85 until day ten where the moving average drops to 0.78, crossing the 0.05
+                drift threshold below the 0.85 baseline and firing an alert that engineers must
+                investigate.
+              </desc>
+              {/* Axes */}
+              <line x1={50} y1={180} x2={510} y2={180} stroke={SOFT.amber} strokeWidth={1.5} />
+              <line x1={50} y1={40} x2={50} y2={180} stroke={SOFT.amber} strokeWidth={1.5} />
+              {/* Y axis label */}
+              <text x={20} y={110} fill={SOFT.amber} fontSize="11" textAnchor="middle" transform="rotate(-90 20 110)">
+                Composite Score
+              </text>
+              {/* Y ticks */}
+              {[
+                { v: 0.7, y: 180 },
+                { v: 0.8, y: 130 },
+                { v: 0.85, y: 105 },
+                { v: 0.9, y: 80 },
+                { v: 1.0, y: 30 },
+              ].map((t) => (
+                <Fragment key={`yt-${t.v}`}>
+                  <line x1={46} y1={t.y} x2={50} y2={t.y} stroke={SOFT.amber} />
+                  <text x={42} y={t.y + 4} fill={SOFT.amber} fontSize="10" textAnchor="end">
+                    {t.v.toFixed(2)}
+                  </text>
+                </Fragment>
+              ))}
+              {/* Baseline line at 0.85 */}
+              <line x1={50} y1={105} x2={510} y2={105} stroke={C.green} strokeWidth={1.8} strokeDasharray="6 3" />
+              <text x={500} y={100} fill={SOFT.green} fontSize="11" fontWeight="700" textAnchor="end">
+                Baseline = 0.85
+              </text>
+              {/* Drift threshold at 0.80 (baseline - 0.05) */}
+              <line x1={50} y1={130} x2={510} y2={130} stroke={C.red} strokeWidth={1.8} strokeDasharray="3 3" />
+              <text x={500} y={125} fill={SOFT.red} fontSize="11" fontWeight="700" textAnchor="end">
+                Alert Floor = 0.80
+              </text>
+              {/* Time series path: hovers near 0.85 until day 10, then drops */}
+              <path
+                d="M 65 110 L 95 102 L 125 108 L 155 100 L 185 106 L 215 103 L 245 108 L 275 105 L 305 110 L 335 108 L 365 120 L 395 130 L 425 138 L 455 140 L 485 140"
+                stroke={C.amber}
+                strokeWidth={2.5}
+                fill="none"
+              />
+              {/* Day labels */}
+              {[1, 4, 7, 10, 13].map((d) => (
+                <text key={`d-${d}`} x={50 + d * 30} y={200} fill={SOFT.amber} fontSize="11" textAnchor="middle">
+                  Day {d}
+                </text>
+              ))}
+              {/* Alert marker */}
+              <circle cx={395} cy={130} r={6} fill={C.red} stroke={SOFT.red} strokeWidth={2} />
+              <text x={395} y={222} fill={SOFT.red} fontSize="12" fontWeight="700" textAnchor="middle">
+                Day 10: Drift Alert Fires
+              </text>
+            </svg>
+          </div>
+
+          <T color={SOFT.amber} center size={14} style={{ marginTop: 12 }}>
+            Real incident shape: an LLM provider rolled a silent model update overnight; the
+            composite score drifted 0.07 from baseline; alert fired the next morning; engineers
+            switched to the pinned-version endpoint within 4 hours. Without continuous eval the
+            drop is invisible for weeks.
+          </T>
+        </Box>
+      </Reveal>
+
+      <Reveal when={sub >= 4}>
+        <Box color={C.purple} style={{ width: "100%" }}>
+          <T color={C.purple} bold center size={22}>
+            Build The Eval Set Before The Agent
+          </T>
+          <T color={SOFT.purple} center size={16} style={{ marginTop: 10 }}>
+            The closing principle. The eval set is not an afterthought; it is the
+            production-readiness gate. Production teams that skip eval ship more agents and watch
+            more of them fail.
+          </T>
+
+          <div
+            style={{
+              ...tintedCard(C.purple),
+              padding: 18,
+              marginTop: 14,
+            }}
+          >
+            <span style={pill(C.purple)}>SECTION 13 CLOSER</span>
+            <T color={C.purple} bold center size={18} style={{ marginTop: 10 }}>
+              The Principle
+            </T>
+            <T color={SOFT.purple} center size={16} style={{ marginTop: 12, fontStyle: "italic" }}>
+              &quot;If you cannot write 20 test cases your agent must pass, you do not know what
+              your agent is supposed to do. Build the eval set FIRST. Build the agent SECOND.&quot;
+            </T>
+
+            <div
+              style={{
+                marginTop: 14,
+                display: "grid",
+                gridTemplateColumns: "1fr 1fr",
+                gap: 12,
+              }}
+            >
+              <div style={{ ...tintedCard(C.red), padding: 12 }}>
+                <T color={C.red} bold center size={14}>
+                  Anti-Pattern
+                </T>
+                <T color={SOFT.red} center size={13} style={{ marginTop: 6 }}>
+                  Ship Agent. See What Breaks In Production. Build Eval Set Reactively. Repeat
+                  Until Customers Churn.
+                </T>
+              </div>
+              <div style={{ ...tintedCard(C.green), padding: 12 }}>
+                <T color={C.green} bold center size={14}>
+                  Section 13 Way
+                </T>
+                <T color={SOFT.green} center size={13} style={{ marginTop: 6 }}>
+                  Write 20 Test Cases Defining Success. Then Iterate Agent Until It Passes All
+                  20. Then Ship. Then Add Continuous Eval On Top.
+                </T>
+              </div>
+            </div>
+          </div>
+
+          <T color={SOFT.purple} center size={14} style={{ marginTop: 12 }}>
+            Every Section 13 chapter (prompting, tools, loops, memory, multi-agent, evals) was
+            structured to give a production-ready playbook. The closing message is the discipline
+            that ties it together: eval before ship.
+          </T>
+        </Box>
+      </Reveal>
+
+      {sub < 4 && (
+        <SubBtn onClick={onContinue} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />
+      )}
+    </div>
+  );
+};

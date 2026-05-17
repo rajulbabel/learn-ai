@@ -17,6 +17,7 @@ export default defineConfig({
     environment: "jsdom",
     globals: true,
     setupFiles: ["./src/__tests__/setup.js"],
+    exclude: ["**/node_modules/**", "**/dist/**", ".claude/**"],
     coverage: {
       provider: "v8",
       include: ["src/config.js", "src/components.jsx", "src/nav-persistence.js", "src/sections/**/*.jsx"],

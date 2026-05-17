@@ -302,6 +302,63 @@ Only config.js IDs change.
 | 12.40 | FrameworkChoice | Framework Choice |
 | 12.41 | RAGDecisionFrameworkCapstone | The Complete RAG Decision Framework + Capstone |
 
+**Section 13: AI Agents** (`agent-prompting.jsx` + `agent-tools.jsx` + `agent-loops.jsx` + `multi-agent.jsx` + `agent-evals.jsx` + `agent-production.jsx` - complete: all 9 acts, all 52 chapters)
+
+| Chapter | Component | Title |
+|---------|-----------|-------|
+| 13.1 | AnatomyOfLlmCall | Anatomy of an LLM Call |
+| 13.2 | SystemPromptContract | System Prompts - The Role Contract |
+| 13.3 | FewShotStructuredOutput | Few-Shot + Structured Output |
+| 13.4 | ChainOfThoughtSelfConsistency | Chain of Thought + Self-Consistency |
+| 13.5 | PromptVsTuneVsRagVsAgent | Prompt vs Fine-Tune vs RAG vs Agent |
+| 13.6 | ContextEngineering | Context Engineering |
+| 13.7 | ToolUseAsBridge | Tool Use - LLM as Orchestrator |
+| 13.8 | JsonSchemaForTools | JSON Schemas + Tool Descriptions |
+| 13.9 | ToolCallLifecycle | Tool Call Lifecycle |
+| 13.10 | ParallelToolsAndChoice | Parallel Tools + Tool Choice |
+| 13.11 | ToolErrorsRetries | Tool Errors, Retries, Validation |
+| 13.12 | WhyProtocols | Why Protocols? |
+| 13.13 | McpArchitecture | MCP Architecture |
+| 13.14 | McpPrimitives | MCP Primitives - Tools, Resources, Prompts |
+| 13.15 | BuildingMcpServer | Building an MCP Server |
+| 13.16 | McpSecurity | MCP Security |
+| 13.17 | A2AProtocol | A2A - Agent-to-Agent Protocol |
+| 13.18 | WorkflowVsAgent | Workflow vs Agent |
+| 13.19 | WorkflowPrimitives | Workflow Primitives - Chaining, Routing, Parallelization |
+| 13.20 | AgentLoop | The Agent Loop |
+| 13.21 | ReActPattern | ReAct Pattern |
+| 13.22 | PlanExecuteReflect | Plan-Execute + Reflection |
+| 13.23 | LoopTermination | Loop Termination |
+| 13.24 | MemoryTaxonomy | Memory Taxonomy - Short vs Long |
+| 13.25 | WorkingMemory | Working Memory - The Scratchpad |
+| 13.26 | EpisodicMemory | Episodic Memory - Past Events |
+| 13.27 | SemanticMemory | Semantic Memory - Learned Facts |
+| 13.28 | ProceduralMemory | Procedural Memory - Learned Skills |
+| 13.29 | SummaryAndContextMgmt | Summary Memory + Context Window Management |
+| 13.30 | WhyMultiAgent | Why Multi-Agent? |
+| 13.31 | OrchestratorWorker | Orchestrator-Worker |
+| 13.32 | SupervisorHierarchy | Supervisor / Hierarchical |
+| 13.33 | AgentHandoffs | Hand-Offs |
+| 13.34 | CriticDebate | Critic / Debate / Reflection-as-Multi-Agent |
+| 13.35 | MultiAgentFailures | Multi-Agent Failure Modes |
+| 13.36 | AgenticRag | Agentic RAG |
+| 13.37 | WhyEvalAgents | Why Eval Agents Differently |
+| 13.38 | EvalDimensions | Eval Dimensions |
+| 13.39 | LlmAsJudge | LLM-as-Judge |
+| 13.40 | TraceEvals | Trace Evals |
+| 13.41 | EvalSetsContinuous | Eval Sets + Continuous Eval |
+| 13.42 | AgentObservabilityTracing | Observability & Tracing |
+| 13.43 | CostControl | Cost Control |
+| 13.44 | LatencyOptimization | Latency Optimization |
+| 13.45 | Guardrails | Guardrails |
+| 13.46 | PromptInjectionDefenses | Prompt Injection Defenses |
+| 13.47 | ToolSecurity | Tool Security |
+| 13.48 | LangGraphFramework | LangGraph |
+| 13.49 | CrewAiAutoGen | CrewAI / AutoGen |
+| 13.50 | VendorSdks | Claude Agent SDK + OpenAI Agents |
+| 13.51 | CustomNoFramework | Custom / No-Framework |
+| 13.52 | AgentDecisionFramework | The Complete Agent Decision Framework |
+
 ## Project Structure
 
 ```
@@ -345,7 +402,13 @@ learn-ai/
 │       ├── rag-retrieval.jsx             # Section 12 Acts 4+5: Embed/Index + Query Transformation, 12.14-12.21
 │       ├── rag-generation.jsx            # Section 12 Acts 6+7: Context+Generation + Advanced Patterns, 12.22-12.30
 │       ├── rag-evaluation.jsx            # Section 12 Act 8: Evaluation, 12.31-12.35
-│       └── rag-production.jsx            # Section 12 Acts 9+10: Production Ops + Decision Framework, 12.36-12.41
+│       ├── rag-production.jsx            # Section 12 Acts 9+10: Production Ops + Decision Framework, 12.36-12.41
+│       ├── agent-prompting.jsx           # Section 13 Act 1: Prompting Foundations, 13.1-13.6
+│       ├── agent-tools.jsx               # Section 13 Acts 2+3: Tools + MCP/A2A, 13.7-13.17
+│       ├── agent-loops.jsx               # Section 13 Acts 4+5: Workflows/Loops + Memory, 13.18-13.29
+│       ├── multi-agent.jsx               # Section 13 Act 6: Multi-Agent, 13.30-13.36
+│       ├── agent-evals.jsx               # Section 13 Act 7: Evaluation, 13.37-13.41
+│       └── agent-production.jsx          # Section 13 Acts 8+9: Production Hardening + Frameworks, 13.42-13.52
 ├── .github/workflows/deploy.yml
 └── CLAUDE.md
 ```

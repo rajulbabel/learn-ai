@@ -23,6 +23,12 @@ import * as RagRetrieval from "../sections/rag-retrieval.jsx";
 import * as RagGeneration from "../sections/rag-generation.jsx";
 import * as RagEvaluation from "../sections/rag-evaluation.jsx";
 import * as RagProduction from "../sections/rag-production.jsx";
+import * as AgentPrompting from "../sections/agent-prompting.jsx";
+import * as AgentTools from "../sections/agent-tools.jsx";
+import * as AgentLoops from "../sections/agent-loops.jsx";
+import * as MultiAgent from "../sections/multi-agent.jsx";
+import * as AgentEvals from "../sections/agent-evals.jsx";
+import * as AgentProduction from "../sections/agent-production.jsx";
 
 const lookup = {
   TOC,
@@ -46,6 +52,12 @@ const lookup = {
   ...RagGeneration,
   ...RagEvaluation,
   ...RagProduction,
+  ...AgentPrompting,
+  ...AgentTools,
+  ...AgentLoops,
+  ...MultiAgent,
+  ...AgentEvals,
+  ...AgentProduction,
 };
 
 describe("lookup", () => {
@@ -134,5 +146,96 @@ describe("RagIngestion exports", () => {
   });
   it("exposes RefreshSync", () => {
     expect(typeof RagIngestion.RefreshSync).toBe("function");
+  });
+});
+
+describe("Section 13 component presence", () => {
+  it("AgentPrompting exports each Act 1 chapter", () => {
+    expect(typeof AgentPrompting.AnatomyOfLlmCall).toBe("function");
+    expect(typeof AgentPrompting.SystemPromptContract).toBe("function");
+    expect(typeof AgentPrompting.FewShotStructuredOutput).toBe("function");
+    expect(typeof AgentPrompting.ChainOfThoughtSelfConsistency).toBe("function");
+    expect(typeof AgentPrompting.PromptVsTuneVsRagVsAgent).toBe("function");
+    expect(typeof AgentPrompting.ContextEngineering).toBe("function");
+  });
+
+  it("AgentTools exports each Act 2 chapter", () => {
+    expect(typeof AgentTools.ToolUseAsBridge).toBe("function");
+    expect(typeof AgentTools.JsonSchemaForTools).toBe("function");
+    expect(typeof AgentTools.ToolCallLifecycle).toBe("function");
+    expect(typeof AgentTools.ParallelToolsAndChoice).toBe("function");
+    expect(typeof AgentTools.ToolErrorsRetries).toBe("function");
+  });
+
+  it("AgentTools exports each Act 3 chapter", () => {
+    expect(typeof AgentTools.WhyProtocols).toBe("function");
+    expect(typeof AgentTools.McpArchitecture).toBe("function");
+    expect(typeof AgentTools.McpPrimitives).toBe("function");
+    expect(typeof AgentTools.BuildingMcpServer).toBe("function");
+    expect(typeof AgentTools.McpSecurity).toBe("function");
+    expect(typeof AgentTools.A2AProtocol).toBe("function");
+  });
+
+  it("AgentLoops exports each Act 4 chapter", () => {
+    expect(typeof AgentLoops.WorkflowVsAgent).toBe("function");
+    expect(typeof AgentLoops.WorkflowPrimitives).toBe("function");
+    expect(typeof AgentLoops.AgentLoop).toBe("function");
+    expect(typeof AgentLoops.ReActPattern).toBe("function");
+    expect(typeof AgentLoops.PlanExecuteReflect).toBe("function");
+    expect(typeof AgentLoops.LoopTermination).toBe("function");
+  });
+});
+
+describe("Section 13 Act 5 component presence (AgentLoops)", () => {
+  it("AgentLoops exports each Act 5 chapter", () => {
+    expect(typeof AgentLoops.MemoryTaxonomy).toBe("function");
+    expect(typeof AgentLoops.WorkingMemory).toBe("function");
+    expect(typeof AgentLoops.EpisodicMemory).toBe("function");
+    expect(typeof AgentLoops.SemanticMemory).toBe("function");
+    expect(typeof AgentLoops.ProceduralMemory).toBe("function");
+    expect(typeof AgentLoops.SummaryAndContextMgmt).toBe("function");
+  });
+});
+
+describe("Section 13 Act 6 component presence (MultiAgent)", () => {
+  it("MultiAgent exports each Act 6 chapter", () => {
+    expect(typeof MultiAgent.WhyMultiAgent).toBe("function");
+    expect(typeof MultiAgent.OrchestratorWorker).toBe("function");
+    expect(typeof MultiAgent.SupervisorHierarchy).toBe("function");
+    expect(typeof MultiAgent.AgentHandoffs).toBe("function");
+    expect(typeof MultiAgent.CriticDebate).toBe("function");
+    expect(typeof MultiAgent.MultiAgentFailures).toBe("function");
+    expect(typeof MultiAgent.AgenticRag).toBe("function");
+  });
+});
+
+describe("Section 13 Act 7 component presence (AgentEvals)", () => {
+  it("AgentEvals exports each Act 7 chapter", () => {
+    expect(typeof AgentEvals.WhyEvalAgents).toBe("function");
+    expect(typeof AgentEvals.EvalDimensions).toBe("function");
+    expect(typeof AgentEvals.LlmAsJudge).toBe("function");
+    expect(typeof AgentEvals.TraceEvals).toBe("function");
+    expect(typeof AgentEvals.EvalSetsContinuous).toBe("function");
+  });
+});
+
+describe("Section 13 Act 8 component presence (AgentProduction)", () => {
+  it("AgentProduction exports each Act 8 chapter", () => {
+    expect(typeof AgentProduction.AgentObservabilityTracing).toBe("function");
+    expect(typeof AgentProduction.CostControl).toBe("function");
+    expect(typeof AgentProduction.LatencyOptimization).toBe("function");
+    expect(typeof AgentProduction.Guardrails).toBe("function");
+    expect(typeof AgentProduction.PromptInjectionDefenses).toBe("function");
+    expect(typeof AgentProduction.ToolSecurity).toBe("function");
+  });
+});
+
+describe("Section 13 Act 9 component presence (AgentProduction)", () => {
+  it("AgentProduction exports each Act 9 chapter", () => {
+    expect(typeof AgentProduction.LangGraphFramework).toBe("function");
+    expect(typeof AgentProduction.CrewAiAutoGen).toBe("function");
+    expect(typeof AgentProduction.VendorSdks).toBe("function");
+    expect(typeof AgentProduction.CustomNoFramework).toBe("function");
+    expect(typeof AgentProduction.AgentDecisionFramework).toBe("function");
   });
 });

@@ -65,6 +65,12 @@ export const TOC = (ctx) => {
       color: "#7c4dff",
       desc: "Chunking, query transformation, citations, eval, production operations for RAG",
     },
+    {
+      num: 13,
+      name: "AI Agents",
+      color: "#00838f",
+      desc: "Prompting foundations, tool calling, MCP/A2A protocols, agent loops, memory, multi-agent, evals, production",
+    },
   ];
   const sectionChapters = {};
   chapters.forEach((c, i) => {

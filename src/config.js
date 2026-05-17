@@ -218,6 +218,74 @@ export const chapters = [
     section: 12,
     component: "RAGDecisionFrameworkCapstone",
   },
+  // Section 13: AI Agents
+  { id: "13.1", title: "Anatomy of an LLM Call", section: 13, component: "AnatomyOfLlmCall" },
+  { id: "13.2", title: "System Prompts - The Role Contract", section: 13, component: "SystemPromptContract" },
+  { id: "13.3", title: "Few-Shot + Structured Output", section: 13, component: "FewShotStructuredOutput" },
+  {
+    id: "13.4",
+    title: "Chain of Thought + Self-Consistency",
+    section: 13,
+    component: "ChainOfThoughtSelfConsistency",
+  },
+  { id: "13.5", title: "Prompt vs Fine-Tune vs RAG vs Agent", section: 13, component: "PromptVsTuneVsRagVsAgent" },
+  { id: "13.6", title: "Context Engineering", section: 13, component: "ContextEngineering" },
+  { id: "13.7", title: "Tool Use - LLM as Orchestrator", section: 13, component: "ToolUseAsBridge" },
+  { id: "13.8", title: "JSON Schemas + Tool Descriptions", section: 13, component: "JsonSchemaForTools" },
+  { id: "13.9", title: "Tool Call Lifecycle", section: 13, component: "ToolCallLifecycle" },
+  { id: "13.10", title: "Parallel Tools + Tool Choice", section: 13, component: "ParallelToolsAndChoice" },
+  { id: "13.11", title: "Tool Errors, Retries, Validation", section: 13, component: "ToolErrorsRetries" },
+  { id: "13.12", title: "Why Protocols?", section: 13, component: "WhyProtocols" },
+  { id: "13.13", title: "MCP Architecture", section: 13, component: "McpArchitecture" },
+  { id: "13.14", title: "MCP Primitives - Tools, Resources, Prompts", section: 13, component: "McpPrimitives" },
+  { id: "13.15", title: "Building an MCP Server", section: 13, component: "BuildingMcpServer" },
+  { id: "13.16", title: "MCP Security", section: 13, component: "McpSecurity" },
+  { id: "13.17", title: "A2A - Agent-to-Agent Protocol", section: 13, component: "A2AProtocol" },
+  { id: "13.18", title: "Workflow vs Agent", section: 13, component: "WorkflowVsAgent" },
+  { id: "13.19", title: "Workflow Primitives - Chaining, Routing, Parallelization", section: 13, component: "WorkflowPrimitives" },
+  { id: "13.20", title: "The Agent Loop", section: 13, component: "AgentLoop" },
+  { id: "13.21", title: "ReAct Pattern", section: 13, component: "ReActPattern" },
+  { id: "13.22", title: "Plan-Execute + Reflection", section: 13, component: "PlanExecuteReflect" },
+  { id: "13.23", title: "Loop Termination", section: 13, component: "LoopTermination" },
+  { id: "13.24", title: "Memory Taxonomy - Short vs Long", section: 13, component: "MemoryTaxonomy" },
+  { id: "13.25", title: "Working Memory - The Scratchpad", section: 13, component: "WorkingMemory" },
+  { id: "13.26", title: "Episodic Memory - Past Events", section: 13, component: "EpisodicMemory" },
+  { id: "13.27", title: "Semantic Memory - Learned Facts", section: 13, component: "SemanticMemory" },
+  { id: "13.28", title: "Procedural Memory - Learned Skills", section: 13, component: "ProceduralMemory" },
+  { id: "13.29", title: "Summary Memory + Context Window Management", section: 13, component: "SummaryAndContextMgmt" },
+  { id: "13.30", title: "Why Multi-Agent?", section: 13, component: "WhyMultiAgent" },
+  { id: "13.31", title: "Orchestrator-Worker", section: 13, component: "OrchestratorWorker" },
+  { id: "13.32", title: "Supervisor / Hierarchical", section: 13, component: "SupervisorHierarchy" },
+  { id: "13.33", title: "Hand-Offs", section: 13, component: "AgentHandoffs" },
+  { id: "13.34", title: "Critic / Debate / Reflection-as-Multi-Agent", section: 13, component: "CriticDebate" },
+  { id: "13.35", title: "Multi-Agent Failure Modes", section: 13, component: "MultiAgentFailures" },
+  { id: "13.36", title: "Agentic RAG", section: 13, component: "AgenticRag" },
+  { id: "13.37", title: "Why Eval Agents Differently", section: 13, component: "WhyEvalAgents" },
+  { id: "13.38", title: "Eval Dimensions", section: 13, component: "EvalDimensions" },
+  { id: "13.39", title: "LLM-as-Judge", section: 13, component: "LlmAsJudge" },
+  { id: "13.40", title: "Trace Evals", section: 13, component: "TraceEvals" },
+  { id: "13.41", title: "Eval Sets + Continuous Eval", section: 13, component: "EvalSetsContinuous" },
+  { id: "13.42", title: "Observability & Tracing", section: 13, component: "AgentObservabilityTracing" },
+  { id: "13.43", title: "Cost Control", section: 13, component: "CostControl" },
+  { id: "13.44", title: "Latency Optimization", section: 13, component: "LatencyOptimization" },
+  { id: "13.45", title: "Guardrails", section: 13, component: "Guardrails" },
+  { id: "13.46", title: "Prompt Injection Defenses", section: 13, component: "PromptInjectionDefenses" },
+  { id: "13.47", title: "Tool Security", section: 13, component: "ToolSecurity" },
+  { id: "13.48", title: "LangGraph", section: 13, component: "LangGraphFramework" },
+  { id: "13.49", title: "CrewAI / AutoGen", section: 13, component: "CrewAiAutoGen" },
+  {
+    id: "13.50",
+    title: "Claude Agent SDK + OpenAI Agents",
+    section: 13,
+    component: "VendorSdks",
+  },
+  { id: "13.51", title: "Custom / No-Framework", section: 13, component: "CustomNoFramework" },
+  {
+    id: "13.52",
+    title: "The Complete Agent Decision Framework",
+    section: 13,
+    component: "AgentDecisionFramework",
+  },
 ];
 
 export const sectionNames = {
@@ -234,6 +302,7 @@ export const sectionNames = {
   10: "Modern LLM Techniques",
   11: "Vector Databases",
   12: "Retrieval-Augmented Generation",
+  13: "AI Agents",
 };
 
 // Section colors (one per section, used in progress bar, TOC, etc.)
@@ -250,6 +319,7 @@ export const sectionColors = {
   10: "#26a69a",
   11: "#f06292",
   12: "#7c4dff",
+  13: "#00838f",
 };
 
 // Colors
@@ -268,6 +338,9 @@ export const C = {
   pink: "#e040fb",
   orange: "#ffab40",
   blue: "#42a5f5",
+  indigo: "#5c6bc0",
+  teal: "#26c6da",
+  amber: "#ffc107",
 };
 
 // Validate config - extracted for testability

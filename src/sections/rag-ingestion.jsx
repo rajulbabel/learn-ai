@@ -1,4 +1,4 @@
-import { Box, T, Reveal } from "../components.jsx";
+import { Box, T, Reveal, SubBtn } from "../components.jsx";
 import { C } from "../config.js";
 
 const SOURCE_FORMATS = [
@@ -121,7 +121,7 @@ const PARSING_FAILURE_TABLE = [
 ];
 
 export const ParsingExtraction = (ctx) => {
-  const { sub } = ctx;
+  const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx;
 
   return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
@@ -681,6 +681,17 @@ export const ParsingExtraction = (ctx) => {
           </div>
         </Box>
       </Reveal>
+      {sub < 5 && (
+        <SubBtn
+          key={sub}
+          onClick={() => {
+            setSubBtnRipple(Date.now());
+            navigate("forward");
+          }}
+          rippleKey={subBtnRipple}
+          registerSubBtn={registerSubBtn}
+        />
+      )}
     </div>
   );
 };
@@ -753,7 +764,7 @@ const CLEANING_STEPS = [
 ];
 
 export const DeduplicationCleaning = (ctx) => {
-  const { sub } = ctx;
+  const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx;
 
   return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
@@ -1523,6 +1534,17 @@ export const DeduplicationCleaning = (ctx) => {
           </div>
         </Box>
       </Reveal>
+      {sub < 4 && (
+        <SubBtn
+          key={sub}
+          onClick={() => {
+            setSubBtnRipple(Date.now());
+            navigate("forward");
+          }}
+          rippleKey={subBtnRipple}
+          registerSubBtn={registerSubBtn}
+        />
+      )}
     </div>
   );
 };
@@ -1622,7 +1644,7 @@ const VERSIONING_ROWS = [
 ];
 
 export const RefreshSync = (ctx) => {
-  const { sub } = ctx;
+  const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx;
 
   return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
@@ -1649,19 +1671,19 @@ export const RefreshSync = (ctx) => {
               border: `1px solid ${C.red}12`,
             }}
           >
-            <svg viewBox="0 0 520 300" style={{ width: "100%", height: "auto", display: "block" }}>
+            <svg viewBox="0 0 520 320" style={{ width: "100%", height: "auto", display: "block" }}>
               <desc>
-                Timeline showing a password-reset article version v1 published on 2026-04-12, edited to v2 on 2026-05-01
-                adding an MFA-preservation note, and a stale-index v1 chunk being retrieved on 2026-05-10 causing the
-                LLM to give the wrong answer because the index never re-ingested v2.
+                Timeline showing a password-reset article v1 published on 2026-04-12, edited to v2 on 2026-05-01 adding
+                an MFA-preservation note, and a stale-index v1 chunk being retrieved on 2026-05-10 causing the LLM to
+                give the wrong answer because the index never re-ingested v2.
               </desc>
               {/* Main timeline axis */}
               <line x1={40} y1={150} x2={480} y2={150} stroke="rgba(255,255,255,0.4)" strokeWidth={1.6} />
               <polygon points="476,146 484,150 476,154" fill="rgba(255,255,255,0.4)" />
-              {/* Three time markers at 100, 260, 420 */}
+              {/* Three time markers at 100, 260, 420 (symmetric around viewBox center 260) */}
               {[
                 { x: 100, label: "2026-04-12", title: "v1 Published", color: C.green },
-                { x: 260, label: "2026-05-01", title: "v2 Edited (Adds MFA Note)", color: C.green },
+                { x: 260, label: "2026-05-01", title: "v2 Edited (Adds MFA)", color: C.green },
                 { x: 420, label: "2026-05-10", title: "Stale Query Hits v1", color: C.red },
               ].map((m, i) => (
                 <g key={i}>
@@ -1675,7 +1697,7 @@ export const RefreshSync = (ctx) => {
                   </text>
                 </g>
               ))}
-              {/* Source-of-truth band (top) showing v1 then v2 */}
+              {/* Source-of-truth band (top): v1 and v2 boxes width 210, gap 20 */}
               <text x={260} y={32} textAnchor="middle" fill={C.green} fontSize={13} fontWeight="bold">
                 Source Of Truth (Confluence)
               </text>
@@ -1693,48 +1715,50 @@ export const RefreshSync = (ctx) => {
                 v1 - No MFA Mention
               </text>
               <text x={145} y={72} textAnchor="middle" fill="#a5d6a7" fontSize={11}>
-                Active 2026-04-12 to 2026-05-01
+                Active 2026-04-12 → 2026-05-01
               </text>
               <rect
-                x={252}
+                x={270}
                 y={42}
-                width={228}
+                width={210}
                 height={36}
                 rx={6}
                 fill={`${C.green}28`}
                 stroke={C.green}
                 strokeWidth={1.4}
               />
-              <text x={366} y={58} textAnchor="middle" fill={C.green} fontSize={12} fontWeight="bold">
-                v2 - "MFA Setup Preserved Through Reset"
+              <text x={375} y={58} textAnchor="middle" fill={C.green} fontSize={12} fontWeight="bold">
+                v2 - MFA Setup Note Added
               </text>
-              <text x={366} y={72} textAnchor="middle" fill="#a5d6a7" fontSize={11}>
-                Active 2026-05-01 onward
+              <text x={375} y={72} textAnchor="middle" fill="#a5d6a7" fontSize={11}>
+                Active 2026-05-01 →
               </text>
-              {/* Index band (bottom) - stale v1 only */}
-              <text x={260} y={208} textAnchor="middle" fill={C.red} fontSize={13} fontWeight="bold">
+              {/* Index band (bottom): single wide rect with 3 stacked text lines */}
+              <text x={260} y={204} textAnchor="middle" fill={C.red} fontSize={13} fontWeight="bold">
                 Vector Index (Never Re-Ingested)
               </text>
               <rect
                 x={40}
-                y={218}
+                y={214}
                 width={440}
-                height={36}
+                height={60}
                 rx={6}
                 fill={`${C.red}25`}
                 stroke={C.red}
                 strokeWidth={1.4}
               />
-              <text x={260} y={234} textAnchor="middle" fill={C.red} fontSize={12} fontWeight="bold">
-                Only v1 Chunks Indexed - Index Is Stale From 2026-05-01 Onward
+              <text x={260} y={232} textAnchor="middle" fill={C.red} fontSize={12} fontWeight="bold">
+                Only v1 Chunks Indexed - Stale From 2026-05-01
               </text>
-              <text x={260} y={248} textAnchor="middle" fill="#ef9a9a" fontSize={11}>
-                Query "Do I lose my MFA after password reset?" retrieves v1 chunk - LLM answers "MFA may need re-setup"
-                (WRONG).
+              <text x={260} y={250} textAnchor="middle" fill="#ef9a9a" fontSize={11}>
+                Query: "Do I Lose My MFA After Password Reset?"
+              </text>
+              <text x={260} y={266} textAnchor="middle" fill="#ef9a9a" fontSize={11}>
+                Returns v1 Chunk → LLM Says "MFA May Need Re-Setup" (Wrong)
               </text>
               {/* Result line */}
-              <text x={260} y={284} textAnchor="middle" fill={C.red} fontSize={12} fontWeight="bold">
-                Hallucinated Answer Looks Confident Because The LLM Has No Stale Signal.
+              <text x={260} y={300} textAnchor="middle" fill={C.red} fontSize={12} fontWeight="bold">
+                Hallucinated Answer Looks Confident - No Stale Signal.
               </text>
             </svg>
           </div>
@@ -2141,64 +2165,62 @@ export const RefreshSync = (ctx) => {
               border: `1px solid ${C.yellow}12`,
             }}
           >
-            <svg viewBox="0 0 520 320" style={{ width: "100%", height: "auto", display: "block" }}>
+            <svg viewBox="0 0 520 340" style={{ width: "100%", height: "auto", display: "block" }}>
               <desc>
-                Three-row versioning timeline showing doc-1 v1 chunks active at t=0, both v1 chunks deprecated and v2
-                chunks active during the t=+1min re-embed window so retrieval has no gap, and only v2 chunks active at
-                t=+15min after the grace period drops the v1 chunks.
+                Three-row versioning timeline showing doc-1 v1 chunks active at t=0, both v1 deprecated and v2 active
+                during the t=+1min re-embed window so retrieval has no gap, and only v2 active at t=+15min after the
+                grace period drops the v1 chunks.
               </desc>
-              {/* Three row bands */}
+              {/* Three row bands - rect frame plus foreignObject for centered HTML */}
               {VERSIONING_ROWS.map((row, i) => {
-                const y = 20 + i * 96;
+                const y = 20 + i * 108;
                 return (
                   <g key={row.label}>
                     <rect
                       x={20}
                       y={y}
                       width={480}
-                      height={80}
+                      height={96}
                       rx={8}
                       fill={`${row.accent}18`}
                       stroke={row.accent}
                       strokeWidth={1.4}
                     />
-                    <text x={32} y={y + 22} fill={row.accent} fontSize={13} fontWeight="bold">
-                      {row.label}
-                    </text>
-                    <text x={32} y={y + 40} fill={row.color} fontSize={12} fontWeight="bold">
-                      {row.state}
-                    </text>
-                    <text
-                      x={32}
-                      y={y + 58}
-                      fill={row.color}
-                      fontSize={11}
-                      fontFamily="ui-monospace, SFMono-Regular, Menlo, monospace"
-                    >
-                      Chunks: {row.chunks}
-                    </text>
-                    <text
-                      x={32}
-                      y={y + 72}
-                      fill={row.color}
-                      fontSize={11}
-                      fontFamily="ui-monospace, SFMono-Regular, Menlo, monospace"
-                    >
-                      {row.status}
-                    </text>
-                    <foreignObject x={300} y={y + 18} width={190} height={58}>
+                    <foreignObject x={20} y={y} width={480} height={96}>
                       <div
                         xmlns="http://www.w3.org/1999/xhtml"
                         style={{
-                          fontFamily: "ui-sans-serif, system-ui, sans-serif",
-                          fontSize: 11,
-                          color: row.color,
+                          boxSizing: "border-box",
+                          width: "100%",
+                          height: "100%",
+                          padding: "8px 14px",
                           textAlign: "center",
+                          color: row.color,
+                          fontFamily: "ui-sans-serif, system-ui, sans-serif",
                           lineHeight: 1.3,
-                          padding: "4px 6px",
                         }}
                       >
-                        {row.note}
+                        <div style={{ color: row.accent, fontSize: 13, fontWeight: 700 }}>{row.label}</div>
+                        <div style={{ fontSize: 12, fontWeight: 700, marginTop: 2 }}>{row.state}</div>
+                        <div
+                          style={{
+                            fontSize: 11,
+                            fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace",
+                            marginTop: 4,
+                          }}
+                        >
+                          Chunks: {row.chunks}
+                        </div>
+                        <div
+                          style={{
+                            fontSize: 11,
+                            fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace",
+                            marginTop: 2,
+                          }}
+                        >
+                          {row.status}
+                        </div>
+                        <div style={{ fontSize: 11, fontStyle: "italic", marginTop: 4, opacity: 0.9 }}>{row.note}</div>
                       </div>
                     </foreignObject>
                   </g>
@@ -2294,6 +2316,17 @@ export const RefreshSync = (ctx) => {
           </div>
         </Box>
       </Reveal>
+      {sub < 4 && (
+        <SubBtn
+          key={sub}
+          onClick={() => {
+            setSubBtnRipple(Date.now());
+            navigate("forward");
+          }}
+          rippleKey={subBtnRipple}
+          registerSubBtn={registerSubBtn}
+        />
+      )}
     </div>
   );
 };

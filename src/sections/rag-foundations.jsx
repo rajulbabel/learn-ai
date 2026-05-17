@@ -1,4 +1,4 @@
-import { Box, T, Reveal } from "../components.jsx";
+import { Box, T, Reveal, SubBtn } from "../components.jsx";
 import { C } from "../config.js";
 
 // Stub exports - full content added in subsequent tasks.
@@ -75,7 +75,7 @@ const PRODUCTION_REASONS = [
 ];
 
 export const WhyLLMsNeedRetrieval = (ctx) => {
-  const { sub } = ctx;
+  const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx;
   return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
       {sub >= 0 && (
@@ -416,6 +416,17 @@ export const WhyLLMsNeedRetrieval = (ctx) => {
           </div>
         </Box>
       </Reveal>
+      {sub < 4 && (
+        <SubBtn
+          key={sub}
+          onClick={() => {
+            setSubBtnRipple(Date.now());
+            navigate("forward");
+          }}
+          rippleKey={subBtnRipple}
+          registerSubBtn={registerSubBtn}
+        />
+      )}
     </div>
   );
 };
@@ -465,7 +476,7 @@ const END_TO_END_STAGES = [
 ];
 
 export const NaiveRAGPipeline = (ctx) => {
-  const { sub } = ctx;
+  const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx;
   return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
       {sub >= 0 && (
@@ -936,6 +947,17 @@ export const NaiveRAGPipeline = (ctx) => {
           </T>
         </Box>
       </Reveal>
+      {sub < 6 && (
+        <SubBtn
+          key={sub}
+          onClick={() => {
+            setSubBtnRipple(Date.now());
+            navigate("forward");
+          }}
+          rippleKey={subBtnRipple}
+          registerSubBtn={registerSubBtn}
+        />
+      )}
     </div>
   );
 };
@@ -983,7 +1005,7 @@ const COST_ROWS = [
 ];
 
 export const WhereNaiveRAGBreaks = (ctx) => {
-  const { sub } = ctx;
+  const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx;
 
   // U-curve SVG geometry
   const svgW = 520;
@@ -1686,6 +1708,17 @@ export const WhereNaiveRAGBreaks = (ctx) => {
           </div>
         </Box>
       </Reveal>
+      {sub < 6 && (
+        <SubBtn
+          key={sub}
+          onClick={() => {
+            setSubBtnRipple(Date.now());
+            navigate("forward");
+          }}
+          rippleKey={subBtnRipple}
+          registerSubBtn={registerSubBtn}
+        />
+      )}
     </div>
   );
 };
@@ -1730,7 +1763,7 @@ const FIXED_SIZE_MOVE_ON_IF = [
 ];
 
 export const WhyChunkFixedSize = (ctx) => {
-  const { sub } = ctx;
+  const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx;
   return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
       {sub >= 0 && (
@@ -2492,6 +2525,17 @@ export const WhyChunkFixedSize = (ctx) => {
           </div>
         </Box>
       </Reveal>
+      {sub < 5 && (
+        <SubBtn
+          key={sub}
+          onClick={() => {
+            setSubBtnRipple(Date.now());
+            navigate("forward");
+          }}
+          rippleKey={subBtnRipple}
+          registerSubBtn={registerSubBtn}
+        />
+      )}
     </div>
   );
 };
@@ -2533,7 +2577,7 @@ const RECURSIVE_CONS = [
 ];
 
 export const RecursiveStructuralChunking = (ctx) => {
-  const { sub } = ctx;
+  const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx;
   return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
       {sub >= 0 && (
@@ -3272,6 +3316,17 @@ export const RecursiveStructuralChunking = (ctx) => {
           </div>
         </Box>
       </Reveal>
+      {sub < 4 && (
+        <SubBtn
+          key={sub}
+          onClick={() => {
+            setSubBtnRipple(Date.now());
+            navigate("forward");
+          }}
+          rippleKey={subBtnRipple}
+          registerSubBtn={registerSubBtn}
+        />
+      )}
     </div>
   );
 };
@@ -3370,7 +3425,7 @@ const SEMANTIC_BOUNDARIES = [
 ];
 
 export const SemanticChunking = (ctx) => {
-  const { sub } = ctx;
+  const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx;
   return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
       {sub >= 0 && (
@@ -4011,6 +4066,17 @@ export const SemanticChunking = (ctx) => {
           </div>
         </Box>
       </Reveal>
+      {sub < 4 && (
+        <SubBtn
+          key={sub}
+          onClick={() => {
+            setSubBtnRipple(Date.now());
+            navigate("forward");
+          }}
+          rippleKey={subBtnRipple}
+          registerSubBtn={registerSubBtn}
+        />
+      )}
     </div>
   );
 };
@@ -4056,7 +4122,7 @@ const LATE_CHUNKING_LIMITS = [
 ];
 
 export const LateChunking = (ctx) => {
-  const { sub } = ctx;
+  const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx;
   return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
       {sub >= 0 && (
@@ -4838,6 +4904,17 @@ export const LateChunking = (ctx) => {
           </div>
         </Box>
       </Reveal>
+      {sub < 4 && (
+        <SubBtn
+          key={sub}
+          onClick={() => {
+            setSubBtnRipple(Date.now());
+            navigate("forward");
+          }}
+          rippleKey={subBtnRipple}
+          registerSubBtn={registerSubBtn}
+        />
+      )}
     </div>
   );
 };
@@ -4891,7 +4968,7 @@ const TREE_LEAF_W = 38;
 const TREE_LEAF_GAP = 4;
 
 export const HierarchicalChunking = (ctx) => {
-  const { sub } = ctx;
+  const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx;
   return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
       {sub >= 0 && (
@@ -5159,16 +5236,6 @@ export const HierarchicalChunking = (ctx) => {
                   );
                 });
               })}
-              {/* Legend / level labels on the right */}
-              <text x={TREE_VIEW_W - 6} y="36" textAnchor="end" fill={C.green} fontSize="10" fontWeight="bold">
-                Root: 900 Tok
-              </text>
-              <text x={TREE_VIEW_W - 6} y="143" textAnchor="end" fill={C.purple} fontSize="10" fontWeight="bold">
-                Section: 300 Tok
-              </text>
-              <text x={TREE_VIEW_W - 6} y="253" textAnchor="end" fill={C.cyan} fontSize="10" fontWeight="bold">
-                Leaf: 64 Tok
-              </text>
               {/* Bottom annotation */}
               <text
                 x={TREE_ROOT_CX}
@@ -5628,19 +5695,6 @@ export const HierarchicalChunking = (ctx) => {
                   );
                 });
               })}
-              {/* Level labels */}
-              <text x={TREE_VIEW_W - 6} y="36" textAnchor="end" fill={C.green} fontSize="10" fontWeight="bold">
-                Root
-              </text>
-              <text x={TREE_VIEW_W - 6} y="143" textAnchor="end" fill={C.purple} fontSize="10" fontWeight="bold">
-                Section
-              </text>
-              <text x={TREE_VIEW_W - 6} y="209" textAnchor="end" fill={C.yellow} fontSize="10" fontWeight="bold">
-                Summary
-              </text>
-              <text x={TREE_VIEW_W - 6} y="289" textAnchor="end" fill={C.cyan} fontSize="10" fontWeight="bold">
-                Leaf (Not Indexed)
-              </text>
               {/* Bottom annotation */}
               <text
                 x={TREE_ROOT_CX}
@@ -5779,6 +5833,17 @@ export const HierarchicalChunking = (ctx) => {
           </div>
         </Box>
       </Reveal>
+      {sub < 5 && (
+        <SubBtn
+          key={sub}
+          onClick={() => {
+            setSubBtnRipple(Date.now());
+            navigate("forward");
+          }}
+          rippleKey={subBtnRipple}
+          registerSubBtn={registerSubBtn}
+        />
+      )}
     </div>
   );
 };
@@ -5909,7 +5974,7 @@ const BENCH_BAR_GAP = 14;
 const BENCH_BAR_Y_START = 32;
 
 export const ContextualRetrieval = (ctx) => {
-  const { sub } = ctx;
+  const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx;
   return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
       {sub >= 0 && (
@@ -6723,6 +6788,17 @@ export const ContextualRetrieval = (ctx) => {
           </div>
         </Box>
       </Reveal>
+      {sub < 6 && (
+        <SubBtn
+          key={sub}
+          onClick={() => {
+            setSubBtnRipple(Date.now());
+            navigate("forward");
+          }}
+          rippleKey={subBtnRipple}
+          registerSubBtn={registerSubBtn}
+        />
+      )}
     </div>
   );
 };
@@ -6933,7 +7009,7 @@ function MiniMeter({ label, level, axisColor }) {
 }
 
 export const ChunkingDecision = (ctx) => {
-  const { sub } = ctx;
+  const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx;
   return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
       {sub >= 0 && (
@@ -7422,6 +7498,17 @@ export const ChunkingDecision = (ctx) => {
           </div>
         </Box>
       </Reveal>
+      {sub < 4 && (
+        <SubBtn
+          key={sub}
+          onClick={() => {
+            setSubBtnRipple(Date.now());
+            navigate("forward");
+          }}
+          rippleKey={subBtnRipple}
+          registerSubBtn={registerSubBtn}
+        />
+      )}
     </div>
   );
 };

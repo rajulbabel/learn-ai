@@ -1,4 +1,4 @@
-import { Box, T, Reveal } from "../components.jsx";
+import { Box, T, Reveal, SubBtn } from "../components.jsx";
 import { C } from "../config.js";
 
 // Section 12 Acts 9+10: Production Operations + Decision Framework + Capstone
@@ -119,7 +119,7 @@ const CACHING_COMBINED_BARS = [
 ];
 
 export const Caching = (ctx) => {
-  const { sub } = ctx;
+  const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx;
   const totalCost = CACHING_COST_STACK.reduce((s, c) => s + c.value, 0);
   const maxCombinedCost = Math.max(...CACHING_COMBINED_BARS.map((b) => b.cost));
   return (
@@ -599,6 +599,17 @@ Assistant:`}
           </T>
         </Box>
       </Reveal>
+      {sub < 5 && (
+        <SubBtn
+          key={sub}
+          onClick={() => {
+            setSubBtnRipple(Date.now());
+            navigate("forward");
+          }}
+          rippleKey={subBtnRipple}
+          registerSubBtn={registerSubBtn}
+        />
+      )}
     </div>
   );
 };
@@ -726,7 +737,7 @@ const CM_FRONTIER_POINTS = [
 ];
 
 export const CostModels = (ctx) => {
-  const { sub } = ctx;
+  const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx;
   const stackTotal = CM_COST_LINES.reduce((s, l) => s + l.perQuery, 0);
   return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
@@ -1130,6 +1141,17 @@ export const CostModels = (ctx) => {
           </T>
         </Box>
       </Reveal>
+      {sub < 5 && (
+        <SubBtn
+          key={sub}
+          onClick={() => {
+            setSubBtnRipple(Date.now());
+            navigate("forward");
+          }}
+          rippleKey={subBtnRipple}
+          registerSubBtn={registerSubBtn}
+        />
+      )}
     </div>
   );
 };
@@ -1272,7 +1294,7 @@ const OT_DASHBOARD_FOOTER = [
 ];
 
 export const ObservabilityTracing = (ctx) => {
-  const { sub } = ctx;
+  const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx;
   const totalLatency = OT_SPAN_TREE.reduce((s, x) => s + x.latency, 0);
   return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
@@ -1678,6 +1700,17 @@ export const ObservabilityTracing = (ctx) => {
           </T>
         </Box>
       </Reveal>
+      {sub < 5 && (
+        <SubBtn
+          key={sub}
+          onClick={() => {
+            setSubBtnRipple(Date.now());
+            navigate("forward");
+          }}
+          rippleKey={subBtnRipple}
+          registerSubBtn={registerSubBtn}
+        />
+      )}
     </div>
   );
 };
@@ -1782,7 +1815,7 @@ const HD_TOP_HALLUCINATED = [
 ];
 
 export const HallucinationDrift = (ctx) => {
-  const { sub } = ctx;
+  const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx;
   return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
       {/* ─── sub=0 ─── Hallucination Signals */}
@@ -2247,6 +2280,17 @@ Recommended Action: Review Recent Corpus Updates And Re-Run Golden Eval.`}
           </T>
         </Box>
       </Reveal>
+      {sub < 5 && (
+        <SubBtn
+          key={sub}
+          onClick={() => {
+            setSubBtnRipple(Date.now());
+            navigate("forward");
+          }}
+          rippleKey={subBtnRipple}
+          registerSubBtn={registerSubBtn}
+        />
+      )}
     </div>
   );
 };
@@ -2364,7 +2408,7 @@ const FC_AGNOSTIC_BULLETS = [
 ];
 
 export const FrameworkChoice = (ctx) => {
-  const { sub } = ctx;
+  const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx;
   return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
       {/* ─── sub=0 ─── Six Options ─── */}
@@ -2773,6 +2817,17 @@ export const FrameworkChoice = (ctx) => {
           </T>
         </Box>
       </Reveal>
+      {sub < 5 && (
+        <SubBtn
+          key={sub}
+          onClick={() => {
+            setSubBtnRipple(Date.now());
+            navigate("forward");
+          }}
+          rippleKey={subBtnRipple}
+          registerSubBtn={registerSubBtn}
+        />
+      )}
     </div>
   );
 };
@@ -2872,7 +2927,7 @@ const CAP_STACK_LAYERS = [
 ];
 
 export const RAGDecisionFrameworkCapstone = (ctx) => {
-  const { sub } = ctx;
+  const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx;
   return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
       {/* ─── sub=0 ─── Complete Decision Framework ─── */}
@@ -3248,6 +3303,17 @@ Answer:`}
           </T>
         </Box>
       </Reveal>
+      {sub < 9 && (
+        <SubBtn
+          key={sub}
+          onClick={() => {
+            setSubBtnRipple(Date.now());
+            navigate("forward");
+          }}
+          rippleKey={subBtnRipple}
+          registerSubBtn={registerSubBtn}
+        />
+      )}
     </div>
   );
 };

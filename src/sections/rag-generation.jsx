@@ -1,4 +1,4 @@
-import { Box, T, Reveal } from "../components.jsx";
+import { Box, T, Reveal, SubBtn } from "../components.jsx";
 import { C } from "../config.js";
 
 // Section 12 Milestone 4 - Acts 6 & 7
@@ -57,7 +57,7 @@ const CP_MMR_AFTER = [
 ];
 
 export const ContextPacking = (ctx) => {
-  const { sub } = ctx;
+  const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx;
 
   // Sub=0 stacked-bar geometry. ViewBox 800x180; the bar is centered with
   // symmetric left/right padding so segment proportions add up to bar_w.
@@ -498,6 +498,17 @@ Answer:`}
           </div>
         </Box>
       </Reveal>
+      {sub < 5 && (
+        <SubBtn
+          key={sub}
+          onClick={() => {
+            setSubBtnRipple(Date.now());
+            navigate("forward");
+          }}
+          rippleKey={subBtnRipple}
+          registerSubBtn={registerSubBtn}
+        />
+      )}
     </div>
   );
 };
@@ -580,7 +591,7 @@ const LITM_FAILURE_CARDS = [
 ];
 
 export const LostInTheMiddle = (ctx) => {
-  const { sub } = ctx;
+  const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx;
 
   // Sub=0 U-curve plot geometry. ViewBox 720x320; symmetric padding.
   const UC_VB_W = 720;
@@ -1007,6 +1018,17 @@ export const LostInTheMiddle = (ctx) => {
           </T>
         </Box>
       </Reveal>
+      {sub < 4 && (
+        <SubBtn
+          key={sub}
+          onClick={() => {
+            setSubBtnRipple(Date.now());
+            navigate("forward");
+          }}
+          rippleKey={subBtnRipple}
+          registerSubBtn={registerSubBtn}
+        />
+      )}
     </div>
   );
 };
@@ -1123,7 +1145,7 @@ const CR_PARSER_ROWS = [
 ];
 
 export const CitationsRefusal = (ctx) => {
-  const { sub } = ctx;
+  const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx;
   return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
       {/* ─── sub=0 ─── Why citations matter */}
@@ -1513,6 +1535,17 @@ export const CitationsRefusal = (ctx) => {
           </T>
         </Box>
       </Reveal>
+      {sub < 6 && (
+        <SubBtn
+          key={sub}
+          onClick={() => {
+            setSubBtnRipple(Date.now());
+            navigate("forward");
+          }}
+          rippleKey={subBtnRipple}
+          registerSubBtn={registerSubBtn}
+        />
+      )}
     </div>
   );
 };
@@ -1614,7 +1647,7 @@ const MH_FAILURE_CARDS = [
 ];
 
 export const MultiHopRetrieval = (ctx) => {
-  const { sub } = ctx;
+  const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx;
 
   // Sub=2 control-loop flowchart geometry.
   const LOOP_VB_W = 720;
@@ -2127,6 +2160,17 @@ export const MultiHopRetrieval = (ctx) => {
           </div>
         </Box>
       </Reveal>
+      {sub < 5 && (
+        <SubBtn
+          key={sub}
+          onClick={() => {
+            setSubBtnRipple(Date.now());
+            navigate("forward");
+          }}
+          rippleKey={subBtnRipple}
+          registerSubBtn={registerSubBtn}
+        />
+      )}
     </div>
   );
 };
@@ -2214,7 +2258,7 @@ const SR_LIMITS = [
 ];
 
 export const SelfRAG = (ctx) => {
-  const { sub } = ctx;
+  const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx;
 
   // Sub=2 timeline geometry.
   const TL_VB_W = 720;
@@ -2634,6 +2678,17 @@ export const SelfRAG = (ctx) => {
           </T>
         </Box>
       </Reveal>
+      {sub < 5 && (
+        <SubBtn
+          key={sub}
+          onClick={() => {
+            setSubBtnRipple(Date.now());
+            navigate("forward");
+          }}
+          rippleKey={subBtnRipple}
+          registerSubBtn={registerSubBtn}
+        />
+      )}
     </div>
   );
 };
@@ -2681,7 +2736,7 @@ const CRAG_STRIPS = [
 ];
 
 export const CorrectiveRAG = (ctx) => {
-  const { sub } = ctx;
+  const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx;
 
   // Sub=5 decision tree geometry.
   const TREE_VB_W = 720;
@@ -3034,6 +3089,17 @@ export const CorrectiveRAG = (ctx) => {
           </T>
         </Box>
       </Reveal>
+      {sub < 5 && (
+        <SubBtn
+          key={sub}
+          onClick={() => {
+            setSubBtnRipple(Date.now());
+            navigate("forward");
+          }}
+          rippleKey={subBtnRipple}
+          registerSubBtn={registerSubBtn}
+        />
+      )}
     </div>
   );
 };
@@ -3192,7 +3258,7 @@ const GRAG_WORTH_CARDS = [
 ];
 
 export const GraphRAG = (ctx) => {
-  const { sub } = ctx;
+  const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx;
   const GR_VB_W = 800;
   const GR_VB_H = 500;
 
@@ -3559,6 +3625,17 @@ export const GraphRAG = (ctx) => {
           </div>
         </Box>
       </Reveal>
+      {sub < 6 && (
+        <SubBtn
+          key={sub}
+          onClick={() => {
+            setSubBtnRipple(Date.now());
+            navigate("forward");
+          }}
+          rippleKey={subBtnRipple}
+          registerSubBtn={registerSubBtn}
+        />
+      )}
     </div>
   );
 };
@@ -3687,7 +3764,7 @@ const AR_CONTROL_CARDS = [
 ];
 
 export const AgenticRAG = (ctx) => {
-  const { sub } = ctx;
+  const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx;
 
   const LOOP_VB_W = 720;
   const LOOP_VB_H = 380;
@@ -4023,6 +4100,17 @@ export const AgenticRAG = (ctx) => {
           </T>
         </Box>
       </Reveal>
+      {sub < 5 && (
+        <SubBtn
+          key={sub}
+          onClick={() => {
+            setSubBtnRipple(Date.now());
+            navigate("forward");
+          }}
+          rippleKey={subBtnRipple}
+          registerSubBtn={registerSubBtn}
+        />
+      )}
     </div>
   );
 };
@@ -4106,7 +4194,7 @@ const LCR_DECISION_CARDS = [
 ];
 
 export const LongContextVsRAG = (ctx) => {
-  const { sub } = ctx;
+  const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx;
 
   // Sub=4 bar chart geometry.
   const CHART_VB_W = 800;
@@ -4561,6 +4649,17 @@ export const LongContextVsRAG = (ctx) => {
           </T>
         </Box>
       </Reveal>
+      {sub < 5 && (
+        <SubBtn
+          key={sub}
+          onClick={() => {
+            setSubBtnRipple(Date.now());
+            navigate("forward");
+          }}
+          rippleKey={subBtnRipple}
+          registerSubBtn={registerSubBtn}
+        />
+      )}
     </div>
   );
 };

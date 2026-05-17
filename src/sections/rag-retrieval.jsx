@@ -1,4 +1,4 @@
-import { Box, T, Reveal } from "../components.jsx";
+import { Box, T, Reveal, SubBtn } from "../components.jsx";
 import { C } from "../config.js";
 
 // Stub exports - full content added in subsequent tasks (Section 12 Milestone 3).
@@ -125,7 +125,7 @@ const DECISION_STEPS = [
 ];
 
 export const EmbeddingModelChoice = (ctx) => {
-  const { sub } = ctx;
+  const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx;
 
   // SVG geometry for the sub=5 decision flowchart.
   // Each step is a horizontal row: question card on left, arrow, yes-branch on right.
@@ -659,6 +659,17 @@ export const EmbeddingModelChoice = (ctx) => {
           </div>
         </Box>
       </Reveal>
+      {sub < 5 && (
+        <SubBtn
+          key={sub}
+          onClick={() => {
+            setSubBtnRipple(Date.now());
+            navigate("forward");
+          }}
+          rippleKey={subBtnRipple}
+          registerSubBtn={registerSubBtn}
+        />
+      )}
     </div>
   );
 };
@@ -832,12 +843,12 @@ const LOSS_CURVE = [
 ];
 
 export const DomainAdaptation = (ctx) => {
-  const { sub } = ctx;
+  const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx;
 
   // SVG geometry for the triplet-loss diagram in sub=1.
   // Three labeled points: anchor (center), positive (near), negative (far).
   const TRIPLET_VIEW_W = 520;
-  const TRIPLET_VIEW_H = 260;
+  const TRIPLET_VIEW_H = 280;
   const ANCHOR_X = TRIPLET_VIEW_W / 2;
   const ANCHOR_Y = TRIPLET_VIEW_H / 2;
   const POS_DX = 90;
@@ -1115,7 +1126,7 @@ export const DomainAdaptation = (ctx) => {
               <text x={ANCHOR_X} y={ANCHOR_Y + 5} fill="#b8a9ff" fontSize="14" fontWeight="700" textAnchor="middle">
                 A
               </text>
-              <text x={ANCHOR_X} y={ANCHOR_Y + 34} fill="#b8a9ff" fontSize="13" textAnchor="middle">
+              <text x={ANCHOR_X} y={ANCHOR_Y + 50} fill="#b8a9ff" fontSize="13" textAnchor="middle">
                 Anchor (Query)
               </text>
 
@@ -1580,6 +1591,17 @@ export const DomainAdaptation = (ctx) => {
           </div>
         </Box>
       </Reveal>
+      {sub < 4 && (
+        <SubBtn
+          key={sub}
+          onClick={() => {
+            setSubBtnRipple(Date.now());
+            navigate("forward");
+          }}
+          rippleKey={subBtnRipple}
+          registerSubBtn={registerSubBtn}
+        />
+      )}
     </div>
   );
 };
@@ -1759,7 +1781,7 @@ const HYBRID_DEFAULTS = [
 ];
 
 export const HybridForRAG = (ctx) => {
-  const { sub } = ctx;
+  const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx;
 
   // SVG geometry for the 3-bar recall chart in sub=3.
   const REC_VIEW_W = 560;
@@ -2345,6 +2367,17 @@ export const HybridForRAG = (ctx) => {
           </div>
         </Box>
       </Reveal>
+      {sub < 5 && (
+        <SubBtn
+          key={sub}
+          onClick={() => {
+            setSubBtnRipple(Date.now());
+            navigate("forward");
+          }}
+          rippleKey={subBtnRipple}
+          registerSubBtn={registerSubBtn}
+        />
+      )}
     </div>
   );
 };
@@ -2491,7 +2524,7 @@ const CASCADE_TUNING = [
 ];
 
 export const RerankerCascade = (ctx) => {
-  const { sub } = ctx;
+  const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx;
 
   // Funnel geometry (sub=1). Each trapezoid narrows; viewBox centered.
   const FUNNEL_W = 560;
@@ -3029,6 +3062,17 @@ export const RerankerCascade = (ctx) => {
           </div>
         </Box>
       </Reveal>
+      {sub < 4 && (
+        <SubBtn
+          key={sub}
+          onClick={() => {
+            setSubBtnRipple(Date.now());
+            navigate("forward");
+          }}
+          rippleKey={subBtnRipple}
+          registerSubBtn={registerSubBtn}
+        />
+      )}
     </div>
   );
 };
@@ -3171,7 +3215,7 @@ const TRANSFORM_STRATEGIES = [
 ];
 
 export const WhyTransformQueries = (ctx) => {
-  const { sub } = ctx;
+  const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx;
 
   // Sub=2 ambiguity diagram geometry. Centered viewBox, one source on the
   // left, three branches on the right.
@@ -3600,6 +3644,17 @@ export const WhyTransformQueries = (ctx) => {
           </div>
         </Box>
       </Reveal>
+      {sub < 4 && (
+        <SubBtn
+          key={sub}
+          onClick={() => {
+            setSubBtnRipple(Date.now());
+            navigate("forward");
+          }}
+          rippleKey={subBtnRipple}
+          registerSubBtn={registerSubBtn}
+        />
+      )}
     </div>
   );
 };
@@ -3690,7 +3745,7 @@ const HYDE_HURTS = [
 ];
 
 export const HyDE = (ctx) => {
-  const { sub } = ctx;
+  const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx;
 
   // Sub=1 flow diagram geometry. Five boxes evenly spaced, centered in viewBox.
   const FLOW_VB_W = 720;
@@ -4209,6 +4264,17 @@ export const HyDE = (ctx) => {
           </div>
         </Box>
       </Reveal>
+      {sub < 5 && (
+        <SubBtn
+          key={sub}
+          onClick={() => {
+            setSubBtnRipple(Date.now());
+            navigate("forward");
+          }}
+          rippleKey={subBtnRipple}
+          registerSubBtn={registerSubBtn}
+        />
+      )}
     </div>
   );
 };
@@ -4279,7 +4345,7 @@ const MQE_SKIP = [
 ];
 
 export const MultiQueryExpansion = (ctx) => {
-  const { sub } = ctx;
+  const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx;
 
   // Sub=0 fan-out diagram geometry. Single query node on the left fans
   // out to 3 variants, each retrieving its own top-K set, all converging
@@ -4980,6 +5046,17 @@ export const MultiQueryExpansion = (ctx) => {
           </div>
         </Box>
       </Reveal>
+      {sub < 5 && (
+        <SubBtn
+          key={sub}
+          onClick={() => {
+            setSubBtnRipple(Date.now());
+            navigate("forward");
+          }}
+          rippleKey={subBtnRipple}
+          registerSubBtn={registerSubBtn}
+        />
+      )}
     </div>
   );
 };
@@ -5147,7 +5224,7 @@ const QRD_DECISION_GRID = [
 ];
 
 export const QueryRoutingDecomposition = (ctx) => {
-  const { sub } = ctx;
+  const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx;
 
   // Sub=1 router decision tree geometry. Root box at top center; 4 leaves
   // evenly spaced along a single row at the bottom. Branch lines fan out
@@ -5738,6 +5815,17 @@ export const QueryRoutingDecomposition = (ctx) => {
           </div>
         </Box>
       </Reveal>
+      {sub < 5 && (
+        <SubBtn
+          key={sub}
+          onClick={() => {
+            setSubBtnRipple(Date.now());
+            navigate("forward");
+          }}
+          rippleKey={subBtnRipple}
+          registerSubBtn={registerSubBtn}
+        />
+      )}
     </div>
   );
 };

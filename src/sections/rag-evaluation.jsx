@@ -1545,6 +1545,25 @@ export const RAGASMetrics = (ctx) => {
               Context Precision = 2 / 3 = 0.667
             </T>
           </div>
+
+          <div
+            style={{
+              marginTop: 14,
+              padding: 12,
+              borderRadius: 8,
+              background: `${C.green}06`,
+              border: `1px solid ${C.green}12`,
+              textAlign: "center",
+            }}
+          >
+            <T color={C.green} bold center size={14}>
+              Naming Note: DeepEval / TruLens Call This ContextualRelevancyScore
+            </T>
+            <T color="#a5d6a7" center size={14} style={{ marginTop: 6 }}>
+              Same idea under a different framework name. Older RAGAS shipped a separate "Context Relevancy" metric; it
+              was deprecated in favor of Context Precision (this) plus Context Recall (next sub-step).
+            </T>
+          </div>
         </Box>
       </Reveal>
 

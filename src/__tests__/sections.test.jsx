@@ -5440,6 +5440,26 @@ describe("RefreshSync (12.6) content", () => {
     expect(container.textContent).toMatch(/hallucinate|wrong|confident/i);
   });
 
+  it("sub=0 SVG v1/v2 source-of-truth rects have visible gap (no overlap)", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    const svg = container.querySelector("svg[viewBox]");
+    const rects = Array.from(svg.querySelectorAll("rect"));
+    const v1 = rects[0];
+    const v2 = rects[1];
+    const v1End = +v1.getAttribute("x") + +v1.getAttribute("width");
+    const v2Start = +v2.getAttribute("x");
+    const gap = v2Start - v1End;
+    expect(gap, `v1/v2 rects gap=${gap}, expected >= 12`).toBeGreaterThanOrEqual(12);
+  });
+
+  it("sub=0 SVG text never exceeds rect width (no overflow)", () => {
+    const { container } = render(fn(makeCtx({ sub: 0 })));
+    const svg = container.querySelector("svg[viewBox]");
+    const texts = Array.from(svg.querySelectorAll("text"));
+    const overlong = texts.map((t) => t.textContent).filter((t) => t.length > 65);
+    expect(overlong, "SVG <text> longer than 65 chars overflows its rect").toEqual([]);
+  });
+
   it("sub=1 explains full re-index cost and tradeoff", () => {
     const { container } = render(fn(makeCtx({ sub: 1 })));
     expect(container.textContent).toMatch(/full re[- ]?index|rebuild/i);
@@ -5470,6 +5490,17 @@ describe("RefreshSync (12.6) content", () => {
     expect(container.textContent).toMatch(/version|v1|v2/i);
     expect(container.textContent).toMatch(/grace|propagation/i);
     expect(container.textContent).toMatch(/11\.21|Section 11/);
+  });
+
+  it("sub=4 versioning rows render in foreignObject with center-aligned content", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    const fObjects = container.querySelectorAll("foreignObject");
+    const rowFOs = Array.from(fObjects).filter((fo) => /Row [123] - t=/.test(fo.textContent));
+    expect(rowFOs.length, "expected 3 row foreignObjects in sub=4 SVG").toBe(3);
+    for (const fo of rowFOs) {
+      const div = fo.querySelector("div");
+      expect(div?.style?.textAlign, `row content not centered: "${fo.textContent.slice(0, 40)}"`).toBe("center");
+    }
   });
 });
 
@@ -5661,6 +5692,17 @@ describe("HierarchicalChunking (12.11) content", () => {
     expect(container.textContent).toMatch(/300/);
   });
 
+  it("sub=1 tree SVG omits right-edge legend labels that overlap nodes", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    const svg = Array.from(container.querySelectorAll("svg")).find((s) =>
+      s.textContent.includes("Doc-4 Refunds Policy (Root)"),
+    );
+    expect(svg).not.toBeNull();
+    expect(svg.textContent).not.toMatch(/Root:\s*900\s*Tok/);
+    expect(svg.textContent).not.toMatch(/Section:\s*300\s*Tok/);
+    expect(svg.textContent).not.toMatch(/Leaf:\s*64\s*Tok/);
+  });
+
   it("sub=2 retrieves a leaf chunk for the refund query", () => {
     const { container } = render(fn(makeCtx({ sub: 2 })));
     expect(container.textContent).toMatch(/refund/i);
@@ -5679,6 +5721,19 @@ describe("HierarchicalChunking (12.11) content", () => {
     const { container } = render(fn(makeCtx({ sub: 4 })));
     expect(container.textContent).toMatch(/summary|summaries/i);
     expect(container.textContent).toMatch(/LLM|generate/i);
+  });
+
+  it("sub=4 summary-variant SVG omits right-edge legend labels that overlap nodes", () => {
+    const { container } = render(fn(makeCtx({ sub: 4 })));
+    const svg = Array.from(container.querySelectorAll("svg")).find((s) => s.textContent.includes("Summary (LLM-Made)"));
+    expect(svg).not.toBeNull();
+    const rightAnchored = Array.from(svg.querySelectorAll("text")).filter(
+      (t) => t.getAttribute("text-anchor") === "end",
+    );
+    expect(
+      rightAnchored.map((t) => t.textContent.trim()),
+      "right-anchored legend labels overlap diagram nodes",
+    ).toEqual([]);
   });
 
   it("sub=5 explains when and at what cost", () => {
@@ -5856,6 +5911,20 @@ describe("DomainAdaptation (12.15) content", () => {
     expect(container.textContent).toMatch(/positive/i);
     expect(container.textContent).toMatch(/negative/i);
     expect(container.textContent).toMatch(/margin/i);
+  });
+
+  it("sub=1 'Anchor (Query)' label sits clear of the Push-Away arrow", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    const svg = Array.from(container.querySelectorAll("svg")).find((s) => s.textContent.includes("Anchor (Query)"));
+    expect(svg).not.toBeNull();
+    const anchorLabel = Array.from(svg.querySelectorAll("text")).find((t) => t.textContent.trim() === "Anchor (Query)");
+    expect(anchorLabel).not.toBeNull();
+    const labelY = +anchorLabel.getAttribute("y");
+    // Push-Away line starts at ANCHOR_Y (130) and slopes down-right. Label sat
+    // at ANCHOR_Y+34=164 which let the arrow path cut over the text. Push it
+    // down to ANCHOR_Y+50=180 (or further) so it stays below the line at its
+    // rightmost extent.
+    expect(labelY, `anchor label y=${labelY}, expected >= 180`).toBeGreaterThanOrEqual(180);
   });
 
   it("sub=2 shows training pair construction with hard negatives", () => {
@@ -6700,6 +6769,12 @@ describe("RAGASMetrics (12.33) content", () => {
     expect(container.textContent).toMatch(/context precision|precision/i);
     expect(container.textContent).toMatch(/relevant/i);
     expect(container.textContent).toMatch(/2\s*\/\s*3|0\.667/);
+  });
+
+  it("sub=3 cross-refs DeepEval/TruLens ContextualRelevancyScore alias", () => {
+    const { container } = render(fn(makeCtx({ sub: 3 })));
+    expect(container.textContent).toMatch(/DeepEval|TruLens/);
+    expect(container.textContent).toMatch(/contextual relevanc|context relevanc/i);
   });
 
   it("sub=4 shows context recall with worked example", () => {
@@ -9387,4 +9462,24 @@ describe("AgentDecisionFramework (13.52) content - CAPSTONE", () => {
     expect(container.textContent).toMatch(/section 13|production|ship/i);
     expect(container.textContent).toMatch(/You Can Lead This Project Now/i);
   });
+});
+
+describe("section 12 chapters mount <SubBtn> for progressive reveal", () => {
+  const sec12Modules = {
+    RagFoundations,
+    RagIngestion,
+    RagRetrieval,
+    RagGeneration,
+    RagEvaluation,
+    RagProduction,
+  };
+  for (const [modName, mod] of Object.entries(sec12Modules)) {
+    for (const [name, fn] of Object.entries(mod)) {
+      if (typeof fn !== "function") continue;
+      it(`${modName}.${name} mounts <SubBtn data-subbtn="true"> at sub=0 (else sub-steps unreachable via keyboard nav)`, () => {
+        const { container } = render(fn(makeCtx({ sub: 0 })));
+        expect(container.querySelector('[data-subbtn="true"]')).not.toBeNull();
+      });
+    }
+  }
 });

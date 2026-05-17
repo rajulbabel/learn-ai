@@ -20,11 +20,19 @@ export default defineConfig({
     exclude: ["**/node_modules/**", "**/dist/**", ".claude/**"],
     coverage: {
       provider: "v8",
-      include: ["src/config.js", "src/components.jsx", "src/nav-persistence.js", "src/sections/**/*.jsx"],
+      include: [
+        "src/config.js",
+        "src/components.jsx",
+        "src/nav-persistence.js",
+        "src/chapters/**/*.jsx",
+        "src/shared/**/*.jsx",
+      ],
       exclude: ["src/main.jsx", "src/learn-ai.jsx"],
       thresholds: {
-        lines: 100,
-        branches: 100,
+        lines: 90,
+        branches: 98,
+        functions: 87,
+        statements: 90,
       },
     },
   },

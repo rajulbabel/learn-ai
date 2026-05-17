@@ -7,6 +7,10 @@ coverage
 .worktrees
 .env
 
+# Claude Code session-scoped scratch
+.claude/scheduled_tasks.lock
+.claude/worktrees/
+
 # Embedding model weights (142 MB, exceeds GitHub's 100 MB limit).
 # Fetched at build time by `npm run search:model`.
 public/models/bge-base-en-v1.5-q4/onnx/*.onnx

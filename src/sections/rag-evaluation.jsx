@@ -1,5 +1,8 @@
 import { Box, T, Reveal, SubBtn } from "../components.jsx";
 import { C } from "../config.js";
+import { FormulaBox } from "../shared/rag-helpers.jsx";
+
+export { FormulaBox } from "../shared/rag-helpers.jsx";
 
 // Section 12 Act 8: Evaluation (chapters 12.31-12.35).
 // Continues the customer support corpus and 5 standard queries
@@ -1248,23 +1251,7 @@ export const RAGASMetrics = (ctx) => {
 
   const reportAverage = RG_REPORT_CARD.reduce((s, r) => s + r.score, 0) / RG_REPORT_CARD.length;
 
-  // Helper to render a centered standalone formula box.
-  const FormulaBox = ({ color, children }) => (
-    <div
-      style={{
-        marginTop: 14,
-        padding: 16,
-        borderRadius: 8,
-        background: `${color}06`,
-        border: `1px solid ${color}12`,
-        fontFamily: "ui-monospace, SFMono-Regular, monospace",
-        fontSize: 16,
-        textAlign: "center",
-      }}
-    >
-      {children}
-    </div>
-  );
+  // FormulaBox is imported from ../shared/rag-helpers.jsx.
 
   return (
     <div

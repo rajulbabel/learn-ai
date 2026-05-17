@@ -1,5 +1,8 @@
 import { Box, T, Reveal, SubBtn } from "../components.jsx";
 import { C } from "../config.js";
+import { FormulaBox, CapstoneDecisionCard } from "../shared/rag-helpers.jsx";
+
+export { FormulaBox, CapstoneDecisionCard } from "../shared/rag-helpers.jsx";
 
 // Section 12 Acts 9+10: Production Operations + Decision Framework + Capstone
 // Chapters 12.36-12.41. Continues the customer support corpus and 5 standard
@@ -7,24 +10,7 @@ import { C } from "../config.js";
 // (production ops); the Act 10 capstone (12.41) uses purple/indigo plus a
 // multi-color palette to weave together every prior chapter's visual identity.
 
-// ─── Shared helper: a centered, tinted, monospace standalone formula box ───
-// Used across multiple chapters in Acts 9+10 where standalone formulas appear.
-const FormulaBox = ({ color, children }) => (
-  <div
-    style={{
-      marginTop: 14,
-      padding: 16,
-      borderRadius: 8,
-      background: `${color}06`,
-      border: `1px solid ${color}12`,
-      fontFamily: "ui-monospace, SFMono-Regular, monospace",
-      fontSize: 16,
-      textAlign: "center",
-    }}
-  >
-    {children}
-  </div>
-);
+// FormulaBox + CapstoneDecisionCard are imported from ../shared/rag-helpers.jsx.
 
 // ─── Chapter 12.36 Caching: module-level data ───
 const CACHING_COST_STACK = [
@@ -2865,33 +2851,7 @@ const CAP_USE_CASE_REQS = [
   { label: "Audit Requirements", value: "Every Answer Cited, Jurisdiction Filter Mandatory" },
 ];
 
-const CapstoneDecisionCard = ({ color, accent, choice, why, tradeoff }) => (
-  <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12 }}>
-    {[
-      { title: "Choice", body: choice },
-      { title: "Why", body: why },
-      { title: "Tradeoff", body: tradeoff },
-    ].map((col) => (
-      <div
-        key={col.title}
-        style={{
-          padding: 14,
-          borderRadius: 8,
-          background: `${color}06`,
-          border: `1px solid ${color}12`,
-          textAlign: "center",
-        }}
-      >
-        <T color={color} bold center size={15}>
-          {col.title}
-        </T>
-        <T color={accent} center size={13} style={{ marginTop: 8 }}>
-          {col.body}
-        </T>
-      </div>
-    ))}
-  </div>
-);
+// CapstoneDecisionCard imported from ../shared/rag-helpers.jsx (see top of file).
 
 const CAP_STACK_LAYERS = [
   {

@@ -9498,9 +9498,15 @@ describe("section 12 chapters mount <SubBtn> for progressive reveal", () => {
     RagEvaluation,
     RagProduction,
   };
+  // Only iterate over actual chapter exports - skip shared helpers that are
+  // re-exported from the section file (e.g. FormulaBox, CapstoneDecisionCard).
+  const sec12ChapterNames = new Set(
+    chapters.filter((c) => c.section === 12).map((c) => c.component),
+  );
   for (const [modName, mod] of Object.entries(sec12Modules)) {
     for (const [name, fn] of Object.entries(mod)) {
       if (typeof fn !== "function") continue;
+      if (!sec12ChapterNames.has(name)) continue;
       it(`${modName}.${name} mounts <SubBtn data-subbtn="true"> at sub=0 (else sub-steps unreachable via keyboard nav)`, () => {
         const { container } = render(fn(makeCtx({ sub: 0 })));
         expect(container.querySelector('[data-subbtn="true"]')).not.toBeNull();

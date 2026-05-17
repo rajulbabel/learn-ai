@@ -405,5 +405,8 @@
   ],
   "12.40": [
     "Decision tree for choosing a RAG framework: starts with whether RAG is the primary feature, branches on team size, agent complexity, and provider lock-in tolerance to recommend one of six options - No Framework, LlamaIndex, LangChain, LangGraph, Vendor SDK, or Haystack."
+  ],
+  "12.41": [
+    "Nine-row decision tree spanning every act of Section 12: should I use RAG, how to chunk, embedding and index, query transformation, context and generation, advanced patterns, evaluation, production operations, and framework choice. Each row maps to the chapters that taught it."
   ]
 }

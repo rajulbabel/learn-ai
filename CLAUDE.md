@@ -25,21 +25,34 @@ The app uses a **section/chapter** hierarchy:
 ### How It Works
 
 **config.js is the single source of truth** for chapter ordering, numbering, and
-section assignments. Each entry has a `component` field that maps to a named export
-in the corresponding section file.
+section assignments. Each entry has a `component` field (the function name, used
+for debugging) and a `file` field that points to the chapter file path under
+`src/chapters/`.
 
 ```js
 // config.js
-{ id: "7.4", title: "Why Do We Need Softmax?", section: 7, component: "WhySoftmax" }
+{ id: "7.4", title: "Why Do We Need Softmax?", section: 7,
+  component: "WhySoftmax", file: "attention-computation/why-softmax" }
 ```
 
-**learn-ai.jsx** builds a lookup object from all section imports and resolves the
-active chapter at render time - there is no manually maintained chapter array.
+**Each chapter lives in its own file** at
+`src/chapters/<topic>/<chapter-kebab>.jsx` and is the file's default export.
+This gives every chapter its own Vite chunk (lazy-loaded on demand) and isolates
+edits to a single small file.
+
+**learn-ai.jsx** uses `import.meta.glob` to register all chapter files and
+loads the active chapter at render time via its `file` path. There is no
+manually maintained chapter array or sections lookup.
 
 ```jsx
-const lookup = { TOC, ...NeuralFoundations, ...LLMTraining, ... };
-const renderChapter = lookup[chapters[ch].component];
-// render: {renderChapter(ctx)}
+// learn-ai.jsx
+const chapterLoaders = import.meta.glob("./chapters/**/*.jsx");
+
+async function loadChapterByFile(file) {
+  const loader = chapterLoaders[`./chapters/${file}.jsx`];
+  const mod = await loader();
+  return mod.default || null;
+}
 ```
 
 ### Naming Convention
@@ -48,8 +61,10 @@ const renderChapter = lookup[chapters[ch].component];
 |---------|-------|-------------|---------|
 | Component file (default export) | `src/` | kebab-case | `learn-ai.jsx` |
 | Multi-export module file | `src/` | lowercase | `components.jsx`, `config.js` |
-| Section file | `src/sections/` | kebab-case, topic name | `attention-computation.jsx` |
-| Chapter function | named export in section file | PascalCase, topic name | `WhySoftmax` |
+| Chapter folder | `src/chapters/` | kebab-case, topic name | `attention-computation/` |
+| Chapter file | `src/chapters/<topic>/` | kebab-case, content name | `why-softmax.jsx` |
+| Chapter function | default export in chapter file | PascalCase, topic name | `WhySoftmax` |
+| Shared helper file | `src/shared/` | kebab-case, topic name | `vector-graphs.jsx` |
 | Chapter ID | `chapters` array in config.js | `section.chapter` number | `"7.4"` |
 | Entry point | `src/` | lowercase | `main.jsx` |
 
@@ -62,304 +77,309 @@ Only config.js IDs change.
 
 ### Complete Mapping
 
-**Section 1: Neural Network Foundations** (`neural-foundations.jsx`)
+**Section 1: Neural Network Foundations** (`src/chapters/neural-foundations/`)
 
-| Chapter | Component | Title |
-|---------|-----------|-------|
-| 1.1 | WhatIsNN | What is a Neural Network? |
-| 1.2 | InsideNeuron | Inside a Single Neuron |
-| 1.3 | WhatIsLayer | What is a Layer? |
-| 1.4 | WeightsBiases | Weights & Biases - The Knobs |
-| 1.5 | WhyLinear | Why Linear Isn't Enough |
-| 1.6 | ReLU | Activation (ReLU) - Why Layers Need a Bend |
-| 1.7 | ForwardPass | The Forward Pass - Full Example |
-| 1.8 | LossFunction | Loss - How Wrong Were We? |
-| 1.9 | WhatIsLearning | Learning - What Does It Mean? |
-| 1.10 | Derivatives | Derivatives - The Core Intuition |
-| 1.11 | BackwardPass | The Backward Pass - The Chain Rule |
-| 1.12 | GradientDescent | Gradient Descent - Fixing the Weights |
-| 1.13 | BackpropRealNetwork | Backprop Through the Real Network |
-| 1.14 | GradientsInAction | Gradients in Action - The Full Training Loop |
-| 1.15 | WhyBackpropHard | Why Deep Backprop Gets Hard |
-| 1.16 | Vectors | Vectors - Numbers That Travel Together |
-| 1.17 | DotProductIntro | The Dot Product - How Vectors Compare |
-| 1.18 | Matrices | Matrices - Grids That Transform Vectors |
-| 1.19 | LayerIsMatMul | A Layer is Matrix Multiplication |
-| 1.20 | ActivationFunctions | Activation Functions - The Full Picture |
-| 1.21 | WhatDeepMeans | What "Deep" Really Means |
-| 1.22 | SameBuildingBlocks | Same Building Blocks, Different Shapes |
-| 1.23 | Dropout | Dropout - The Regularization Trick |
-| 1.24 | AdamOptimizer | Adam - The Real Optimizer |
-| 1.25 | LRWarmupDecay | Learning Rate Warmup & Decay |
-| 1.26 | WeightInit | Weight Initialization - How Random? |
+| Chapter | Component | File | Title |
+|---------|-----------|------|-------|
+| 1.1 | WhatIsNN | `neural-foundations/what-is-nn` | What is a Neural Network? |
+| 1.2 | InsideNeuron | `neural-foundations/inside-neuron` | Inside a Single Neuron |
+| 1.3 | WhatIsLayer | `neural-foundations/what-is-layer` | What is a Layer? |
+| 1.4 | WeightsBiases | `neural-foundations/weights-biases` | Weights & Biases - The Knobs |
+| 1.5 | WhyLinear | `neural-foundations/why-linear` | Why Linear Isn't Enough |
+| 1.6 | ReLU | `neural-foundations/re-lu` | Activation (ReLU) - Why Layers Need a Bend |
+| 1.7 | ForwardPass | `neural-foundations/forward-pass` | The Forward Pass - Full Example |
+| 1.8 | LossFunction | `neural-foundations/loss-function` | Loss - How Wrong Were We? |
+| 1.9 | WhatIsLearning | `neural-foundations/what-is-learning` | Learning - What Does It Mean? |
+| 1.10 | Derivatives | `neural-foundations/derivatives` | Derivatives - The Core Intuition |
+| 1.11 | BackwardPass | `neural-foundations/backward-pass` | The Backward Pass - The Chain Rule |
+| 1.12 | GradientDescent | `neural-foundations/gradient-descent` | Gradient Descent - Fixing the Weights |
+| 1.13 | BackpropRealNetwork | `neural-foundations/backprop-real-network` | Backprop Through the Real Network |
+| 1.14 | GradientsInAction | `neural-foundations/gradients-in-action` | Gradients in Action - The Full Training Loop |
+| 1.15 | WhyBackpropHard | `neural-foundations/why-backprop-hard` | Why Deep Backprop Gets Hard |
+| 1.16 | Vectors | `neural-foundations/vectors` | Vectors - Numbers That Travel Together |
+| 1.17 | DotProductIntro | `neural-foundations/dot-product-intro` | The Dot Product - How Vectors Compare |
+| 1.18 | Matrices | `neural-foundations/matrices` | Matrices - Grids That Transform Vectors |
+| 1.19 | LayerIsMatMul | `neural-foundations/layer-is-mat-mul` | A Layer is Matrix Multiplication |
+| 1.20 | ActivationFunctions | `neural-foundations/activation-functions` | Activation Functions - The Full Picture |
+| 1.21 | WhatDeepMeans | `neural-foundations/what-deep-means` | What "Deep" Really Means |
+| 1.22 | SameBuildingBlocks | `neural-foundations/same-building-blocks` | Same Building Blocks, Different Shapes |
+| 1.23 | Dropout | `neural-foundations/dropout` | Dropout - The Regularization Trick |
+| 1.24 | AdamOptimizer | `neural-foundations/adam-optimizer` | Adam - The Real Optimizer |
+| 1.25 | LRWarmupDecay | `neural-foundations/lr-warmup-decay` | Learning Rate Warmup & Decay |
+| 1.26 | WeightInit | `neural-foundations/weight-init` | Weight Initialization - How Random? |
 
-**Section 2: How LLMs Actually Train** (`llm-training.jsx`)
+**Section 2: How LLMs Actually Train** (`src/chapters/llm-training/`)
 
-| Chapter | Component | Title |
-|---------|-----------|-------|
-| 2.1 | Tokenization | Tokenization - From Words to Numbers |
-| 2.2 | SelfSupervised | Self-Supervised Learning - How GPT Trains |
-| 2.3 | CrossEntropy | Cross-Entropy Loss - The LLM Score |
-| 2.4 | NNInAction | The Neural Network in Action |
-| 2.5 | OutputLayer | The Output Layer - From Hidden State to Words |
-| 2.6 | AutoregressiveGeneration | Autoregressive Generation - One Token at a Time |
-| 2.7 | SFT | Supervised Fine-Tuning (SFT) |
-| 2.8 | RLHF | RLHF - Making AI Helpful & Safe |
-| 2.9 | DPO | DPO - Simpler Alignment |
-| 2.10 | TokenizerDeepDive | Tokenizer Deep Dive - BPE, WordPiece, SentencePiece |
+| Chapter | Component | File | Title |
+|---------|-----------|------|-------|
+| 2.1 | Tokenization | `llm-training/tokenization` | Tokenization - From Words to Numbers |
+| 2.2 | SelfSupervised | `llm-training/self-supervised` | Self-Supervised Learning - How GPT Trains |
+| 2.3 | CrossEntropy | `llm-training/cross-entropy` | Cross-Entropy Loss - The LLM Score |
+| 2.4 | NNInAction | `llm-training/nn-in-action` | The Neural Network in Action |
+| 2.5 | OutputLayer | `llm-training/output-layer` | The Output Layer - From Hidden State to Words |
+| 2.6 | AutoregressiveGeneration | `llm-training/autoregressive-generation` | Autoregressive Generation - One Token at a Time |
+| 2.7 | SFT | `llm-training/sft` | Supervised Fine-Tuning (SFT) |
+| 2.8 | RLHF | `llm-training/rlhf` | RLHF - Making AI Helpful & Safe |
+| 2.9 | DPO | `llm-training/dpo` | DPO - Simpler Alignment |
+| 2.10 | TokenizerDeepDive | `llm-training/tokenizer-deep-dive` | Tokenizer Deep Dive - BPE, WordPiece, SentencePiece |
 
-**Section 3: Scaling & Modern Techniques** (`scaling.jsx` + `llm-training.jsx`)
+**Section 3: Scaling & Modern Techniques** (`src/chapters/scaling/` + `src/chapters/llm-training/batch-training.jsx`)
 
-| Chapter | Component | Title |
-|---------|-----------|-------|
-| 3.1 | ScalingLaws | Scaling Laws - Why Bigger Models Win |
-| 3.2 | ParametersAtScale | Parameters at Scale |
-| 3.3 | BatchTraining | Batch Training - Why Not One Example at a Time? |
-| 3.4 | Distillation | Knowledge Distillation - Teacher to Student |
-| 3.5 | CLIP | CLIP - Teaching AI to See & Read |
-| 3.6 | TrainingPipeline | The Complete Training Pipeline |
+| Chapter | Component | File | Title |
+|---------|-----------|------|-------|
+| 3.1 | ScalingLaws | `scaling/scaling-laws` | Scaling Laws - Why Bigger Models Win |
+| 3.2 | ParametersAtScale | `scaling/parameters-at-scale` | Parameters at Scale |
+| 3.3 | BatchTraining | `llm-training/batch-training` | Batch Training - Why Not One Example at a Time? |
+| 3.4 | Distillation | `scaling/distillation` | Knowledge Distillation - Teacher to Student |
+| 3.5 | CLIP | `scaling/clip` | CLIP - Teaching AI to See & Read |
+| 3.6 | TrainingPipeline | `scaling/training-pipeline` | The Complete Training Pipeline |
 
-**Section 4: The Road to Transformers** (`road-to-transformers.jsx`)
+**Section 4: The Road to Transformers** (`src/chapters/road-to-transformers/`)
 
-| Chapter | Component | Title |
-|---------|-----------|-------|
-| 4.1 | CNN | CNN |
-| 4.2 | RNN | RNN |
-| 4.3 | RNNFlaws | RNN's Fatal Flaws |
-| 4.4 | TransformerArrives | The Transformer Arrives |
+| Chapter | Component | File | Title |
+|---------|-----------|------|-------|
+| 4.1 | CNN | `road-to-transformers/cnn` | CNN |
+| 4.2 | RNN | `road-to-transformers/rnn` | RNN |
+| 4.3 | RNNFlaws | `road-to-transformers/rnn-flaws` | RNN's Fatal Flaws |
+| 4.4 | TransformerArrives | `road-to-transformers/transformer-arrives` | The Transformer Arrives |
 
-**Section 5: Transformer Input Pipeline** (`transformer-input.jsx`)
+**Section 5: Transformer Input Pipeline** (`src/chapters/transformer-input/`)
 
-| Chapter | Component | Title |
-|---------|-----------|-------|
-| 5.1 | FullArchitecture | The Full Architecture |
-| 5.2 | Embeddings | Zoom: Embeddings |
-| 5.3 | PosEncodingProblem | Positional Encoding - The Problem |
-| 5.4 | PosEncodingFormula | Positional Encoding - The Formula |
-| 5.5 | PosEncodingCompute | Positional Encoding - Computing Positions |
-| 5.6 | PosEncodingFastSlow | Positional Encoding - Fast vs Slow |
-| 5.7 | PosEncodingFinal | Positional Encoding - Final Addition |
-| 5.8 | PosEncodingHeatmap | Positional Encoding - The Heatmap |
-| 5.9 | RoPE | RoPE - Rotary Position Embeddings |
+| Chapter | Component | File | Title |
+|---------|-----------|------|-------|
+| 5.1 | FullArchitecture | `transformer-input/full-architecture` | The Full Architecture |
+| 5.2 | Embeddings | `transformer-input/embeddings` | Zoom: Embeddings |
+| 5.3 | PosEncodingProblem | `transformer-input/pos-encoding-problem` | Positional Encoding - The Problem |
+| 5.4 | PosEncodingFormula | `transformer-input/pos-encoding-formula` | Positional Encoding - The Formula |
+| 5.5 | PosEncodingCompute | `transformer-input/pos-encoding-compute` | Positional Encoding - Computing Positions |
+| 5.6 | PosEncodingFastSlow | `transformer-input/pos-encoding-fast-slow` | Positional Encoding - Fast vs Slow |
+| 5.7 | PosEncodingFinal | `transformer-input/pos-encoding-final` | Positional Encoding - Final Addition |
+| 5.8 | PosEncodingHeatmap | `transformer-input/pos-encoding-heatmap` | Positional Encoding - The Heatmap |
+| 5.9 | RoPE | `transformer-input/ro-pe` | RoPE - Rotary Position Embeddings |
 
-**Section 6: Attention - Understanding Q, K, V** (`attention-qkv.jsx`)
+**Section 6: Attention - Understanding Q, K, V** (`src/chapters/attention-qkv/`)
 
-| Chapter | Component | Title |
-|---------|-----------|-------|
-| 6.1 | ContextProblem | The Problem - Context is Everything |
-| 6.2 | WordLookup | How Does a Word Look At Others? |
-| 6.3 | DotProduct | The Dot Product - Measuring Similarity |
-| 6.4 | WhyNotDirectDot | Why Not Dot Product Embeddings Directly? |
-| 6.5 | QKVClassroom | Q, K, V - The Classroom Analogy |
-| 6.6 | AskerAnswerer | Every Word is BOTH Asker and Answerer |
-| 6.7 | WhyKVDifferent | Why Can't Key and Value Be the Same? |
-| 6.8 | GoogleAnalogy | The Google Search Analogy |
-| 6.9 | HowQKVCreated | How Are Q, K, V Created? |
-| 6.10 | QKVShapes | Shapes - Why Q is Smaller Than the Embedding |
-| 6.11 | WMatrices | W Matrices - Learned During Training |
-| 6.12 | TracingExample | Tracing a Complete Example |
+| Chapter | Component | File | Title |
+|---------|-----------|------|-------|
+| 6.1 | ContextProblem | `attention-qkv/context-problem` | The Problem - Context is Everything |
+| 6.2 | WordLookup | `attention-qkv/word-lookup` | How Does a Word Look At Others? |
+| 6.3 | DotProduct | `attention-qkv/dot-product` | The Dot Product - Measuring Similarity |
+| 6.4 | WhyNotDirectDot | `attention-qkv/why-not-direct-dot` | Why Not Dot Product Embeddings Directly? |
+| 6.5 | QKVClassroom | `attention-qkv/qkv-classroom` | Q, K, V - The Classroom Analogy |
+| 6.6 | AskerAnswerer | `attention-qkv/asker-answerer` | Every Word is BOTH Asker and Answerer |
+| 6.7 | WhyKVDifferent | `attention-qkv/why-kv-different` | Why Can't Key and Value Be the Same? |
+| 6.8 | GoogleAnalogy | `attention-qkv/google-analogy` | The Google Search Analogy |
+| 6.9 | HowQKVCreated | `attention-qkv/how-qkv-created` | How Are Q, K, V Created? |
+| 6.10 | QKVShapes | `attention-qkv/qkv-shapes` | Shapes - Why Q is Smaller Than the Embedding |
+| 6.11 | WMatrices | `attention-qkv/w-matrices` | W Matrices - Learned During Training |
+| 6.12 | TracingExample | `attention-qkv/tracing-example` | Tracing a Complete Example |
 
-**Section 7: Attention - The Full Computation** (`attention-computation.jsx`)
+**Section 7: Attention - The Full Computation** (`src/chapters/attention-computation/`)
 
-| Chapter | Component | Title |
-|---------|-----------|-------|
-| 7.1 | ComputeQKV | Step 1 - Compute Q, K, V for Every Word |
-| 7.2 | AttentionScores | Step 2 - Attention Scores (Dot Products) |
-| 7.3 | KTranspose | Why K Transpose? - Making the Shapes Fit |
-| 7.4 | WhySoftmax | Why Do We Need Softmax? |
-| 7.5 | ScaleByRootDk | Step 3 - Scale by sqrt(d_k) |
-| 7.6 | SoftmaxProbs | Step 4 - Softmax to Probabilities |
-| 7.7 | WeightedSum | Step 5 - Weighted Sum of Values |
-| 7.8 | FullFormula | The Full Formula |
-| 7.9 | WhyMultiHead | Why Multi-Head? - The Compromise Problem |
-| 7.10 | HeadSplit | The Split - How 8 Heads Work |
-| 7.11 | InsideEachHead | Inside Each Head - Full Attention in 64 Dims |
-| 7.12 | ConcatWO | Concat + W_O - Blending All Heads |
-| 7.13 | WhyEightHeads | Why 8 Heads? Parameter Count & Big Picture |
-| 7.14 | IsWOConstant | Is W_O Constant? Does It Change? |
-| 7.15 | AttentionShapes | Attention Flow - Shapes at Every Step |
-| 7.16 | CompletePicture | The Complete Picture - In Plain English |
+| Chapter | Component | File | Title |
+|---------|-----------|------|-------|
+| 7.1 | ComputeQKV | `attention-computation/compute-qkv` | Step 1 - Compute Q, K, V for Every Word |
+| 7.2 | AttentionScores | `attention-computation/attention-scores` | Step 2 - Attention Scores (Dot Products) |
+| 7.3 | KTranspose | `attention-computation/k-transpose` | Why K Transpose? - Making the Shapes Fit |
+| 7.4 | WhySoftmax | `attention-computation/why-softmax` | Why Do We Need Softmax? |
+| 7.5 | ScaleByRootDk | `attention-computation/scale-by-root-dk` | Step 3 - Scale by sqrt(d_k) |
+| 7.6 | SoftmaxProbs | `attention-computation/softmax-probs` | Step 4 - Softmax to Probabilities |
+| 7.7 | WeightedSum | `attention-computation/weighted-sum` | Step 5 - Weighted Sum of Values |
+| 7.8 | FullFormula | `attention-computation/full-formula` | The Full Formula |
+| 7.9 | WhyMultiHead | `attention-computation/why-multi-head` | Why Multi-Head? - The Compromise Problem |
+| 7.10 | HeadSplit | `attention-computation/head-split` | The Split - How 8 Heads Work |
+| 7.11 | InsideEachHead | `attention-computation/inside-each-head` | Inside Each Head - Full Attention in 64 Dims |
+| 7.12 | ConcatWO | `attention-computation/concat-wo` | Concat + W_O - Blending All Heads |
+| 7.13 | WhyEightHeads | `attention-computation/why-eight-heads` | Why 8 Heads? Parameter Count & Big Picture |
+| 7.14 | IsWOConstant | `attention-computation/is-wo-constant` | Is W_O Constant? Does It Change? |
+| 7.15 | AttentionShapes | `attention-computation/attention-shapes` | Attention Flow - Shapes at Every Step |
+| 7.16 | CompletePicture | `attention-computation/complete-picture` | The Complete Picture - In Plain English |
 
-**Section 8: The Encoder** (`road-to-transformers.jsx` + `transformer-block.jsx`)
+**Section 8: The Encoder** (`src/chapters/road-to-transformers/encoder-decoder.jsx` + `src/chapters/transformer-block/`)
 
-| Chapter | Component | Title |
-|---------|-----------|-------|
-| 8.1 | EncoderDecoder | Encoder & Decoder - The Two Halves |
-| 8.2 | AddNorm | Add & Norm - The Stabilizer |
-| 8.3 | FeedForwardNetwork | FFN - The Feed-Forward Network |
-| 8.4 | FFNParallelTrick | FFN - Why Word Count Doesn't Matter |
-| 8.5 | AddNormTwo | Add & Norm (Again) - The Second Stabilizer |
-| 8.6 | TransformerBlockRepeats | Nx - The Transformer Block Repeats |
-| 8.7 | ResidualHighway | Residual Connections - The Gradient Highway |
-| 8.8 | PreNormVsPostNorm | Pre-Norm vs Post-Norm |
-| 8.9 | BatchNormVsLayerNorm | Batch Norm vs Layer Norm |
+| Chapter | Component | File | Title |
+|---------|-----------|------|-------|
+| 8.1 | EncoderDecoder | `road-to-transformers/encoder-decoder` | Encoder & Decoder - The Two Halves |
+| 8.2 | AddNorm | `transformer-block/add-norm` | Add & Norm - The Stabilizer |
+| 8.3 | FeedForwardNetwork | `transformer-block/feed-forward-network` | FFN - The Feed-Forward Network |
+| 8.4 | FFNParallelTrick | `transformer-block/ffn-parallel-trick` | FFN - Why Word Count Doesn't Matter |
+| 8.5 | AddNormTwo | `transformer-block/add-norm-two` | Add & Norm (Again) - The Second Stabilizer |
+| 8.6 | TransformerBlockRepeats | `transformer-block/transformer-block-repeats` | Nx - The Transformer Block Repeats |
+| 8.7 | ResidualHighway | `transformer-block/residual-highway` | Residual Connections - The Gradient Highway |
+| 8.8 | PreNormVsPostNorm | `transformer-block/pre-norm-vs-post-norm` | Pre-Norm vs Post-Norm |
+| 8.9 | BatchNormVsLayerNorm | `transformer-block/batch-norm-vs-layer-norm` | Batch Norm vs Layer Norm |
 
-**Section 9: The Decoder** (`road-to-transformers.jsx` + `attention-computation.jsx` + `transformer-input.jsx` + `encoder-decoder-diagrams.jsx`)
+**Section 9: The Decoder** (`src/chapters/road-to-transformers/decoder-only.jsx` + `src/chapters/attention-computation/{causal-mask,cross-attention}.jsx` + `src/chapters/transformer-input/{output-head,what-transformer-does}.jsx` + `src/chapters/encoder-decoder-diagrams/`)
 
-| Chapter | Component | Title |
-|---------|-----------|-------|
-| 9.1 | DecoderOnly | Decoder-Only - How Modern LLMs Work |
-| 9.2 | CausalMask | Causal Masking - Hiding the Future |
-| 9.3 | CrossAttention | Cross-Attention - The Encoder-Decoder Bridge |
-| 9.4 | OutputHead | The Output Head - Linear + Softmax |
-| 9.5 | WhatTransformerDoes | What is a Transformer Actually Doing? |
-| 9.6 | EncoderDecoderTraining | Encoder-Decoder: The Training Flow |
-| 9.7 | EncoderDecoderInference | Encoder-Decoder: The Inference Flow |
+| Chapter | Component | File | Title |
+|---------|-----------|------|-------|
+| 9.1 | DecoderOnly | `road-to-transformers/decoder-only` | Decoder-Only - How Modern LLMs Work |
+| 9.2 | CausalMask | `attention-computation/causal-mask` | Causal Masking - Hiding the Future |
+| 9.3 | CrossAttention | `attention-computation/cross-attention` | Cross-Attention - The Encoder-Decoder Bridge |
+| 9.4 | OutputHead | `transformer-input/output-head` | The Output Head - Linear + Softmax |
+| 9.5 | WhatTransformerDoes | `transformer-input/what-transformer-does` | What is a Transformer Actually Doing? |
+| 9.6 | EncoderDecoderTraining | `encoder-decoder-diagrams/encoder-decoder-training` | Encoder-Decoder: The Training Flow |
+| 9.7 | EncoderDecoderInference | `encoder-decoder-diagrams/encoder-decoder-inference` | Encoder-Decoder: The Inference Flow |
 
-**Section 10: Modern LLM Techniques** (`attention-computation.jsx` + `modern-llm-techniques.jsx`)
+**Section 10: Modern LLM Techniques** (`src/chapters/attention-computation/{kv-cache,grouped-query-attention}.jsx` + `src/chapters/modern-llm-techniques/`)
 
-| Chapter | Component | Title |
-|---------|-----------|-------|
-| 10.1 | KVCache | KV Cache - Why Inference is Fast |
-| 10.2 | GroupedQueryAttention | Grouped-Query Attention - Shrinking the KV Cache |
-| 10.3 | MixtureOfExperts | Mixture of Experts - Bigger Model, Same Compute |
-| 10.4 | Thinking | Thinking - How Reasoning Models Work |
+| Chapter | Component | File | Title |
+|---------|-----------|------|-------|
+| 10.1 | KVCache | `attention-computation/kv-cache` | KV Cache - Why Inference is Fast |
+| 10.2 | GroupedQueryAttention | `attention-computation/grouped-query-attention` | Grouped-Query Attention - Shrinking the KV Cache |
+| 10.3 | MixtureOfExperts | `modern-llm-techniques/mixture-of-experts` | Mixture of Experts - Bigger Model, Same Compute |
+| 10.4 | Thinking | `modern-llm-techniques/thinking` | Thinking - How Reasoning Models Work |
 
-**Section 11: Vector Databases** (`vector-foundations.jsx` + `vector-compression.jsx` + `vector-production.jsx` + `vector-systems.jsx` - Milestones 1-6 of 6 complete)
+**Section 11: Vector Databases** (`src/chapters/vector-foundations/` + `src/chapters/vector-compression/` + `src/chapters/vector-production/` + `src/chapters/vector-systems/`)
 
-| Chapter | Component | Title |
-|---------|-----------|-------|
-| 11.1 | RetrievalProblem | The Retrieval Problem |
-| 11.2 | BruteForceKNN | Brute-Force kNN |
-| 11.3 | ThreeWayTradeoff | The Three-Way Tradeoff |
-| 11.4 | DistanceMetrics | Distance Metrics |
-| 11.5 | ANNFamilyTree | The ANN Family Tree |
-| 11.6 | IVF | IVF (Inverted File Index) |
-| 11.7 | HNSWIntuition | HNSW - The Small-World Intuition |
-| 11.8 | HNSWConstruction | HNSW Construction |
-| 11.9 | HNSWSearch | HNSW Search |
-| 11.10 | HNSWParameters | HNSW Parameters |
-| 11.11 | Vamana | Vamana / DiskANN |
-| 11.12 | MemoryWall | The Memory Wall |
-| 11.13 | ScalarQuantization | Scalar Quantization |
-| 11.14 | ProductQuantization | Product Quantization (+ OPQ) |
-| 11.15 | BinaryQuantization | Binary Quantization |
-| 11.16 | Matryoshka | Matryoshka Embeddings |
-| 11.17 | IVFPQ | IVF-PQ |
-| 11.18 | HNSWPQ | HNSW + PQ |
-| 11.19 | CompressionDecision | The Compression Decision |
-| 11.20 | Filtering | Filtering |
-| 11.21 | UpdatesDeletes | Updates & Deletes |
-| 11.22 | Sharding | Sharding & Partitioning |
-| 11.23 | Replication | Replication & High Availability |
-| 11.24 | HybridSearch | Hybrid Search |
-| 11.25 | Rerankers | Rerankers |
-| 11.26 | MultiVectorRetrieval | Multi-vector Retrieval (ColBERT-style) |
-| 11.27 | EmbeddingLifecycle | Embedding Lifecycle & Re-embedding |
-| 11.28 | Observability | Observability |
-| 11.29 | CapacityPlanning | Capacity Planning & Cost Models |
-| 11.30 | FAISS | FAISS |
-| 11.31 | Pgvector | pgvector |
-| 11.32 | Qdrant | Qdrant |
-| 11.33 | Pinecone | Pinecone |
-| 11.34 | QdrantVsPinecone | Qdrant vs Pinecone |
-| 11.35 | WeaviateMilvusChroma | Weaviate / Milvus / Chroma |
-| 11.36 | DecisionFramework | The Decision Framework |
+| Chapter | Component | File | Title |
+|---------|-----------|------|-------|
+| 11.1 | RetrievalProblem | `vector-foundations/retrieval-problem` | The Retrieval Problem |
+| 11.2 | BruteForceKNN | `vector-foundations/brute-force-knn` | Brute-Force kNN |
+| 11.3 | ThreeWayTradeoff | `vector-foundations/three-way-tradeoff` | The Three-Way Tradeoff |
+| 11.4 | DistanceMetrics | `vector-foundations/distance-metrics` | Distance Metrics |
+| 11.5 | ANNFamilyTree | `vector-foundations/ann-family-tree` | The ANN Family Tree |
+| 11.6 | IVF | `vector-foundations/ivf` | IVF (Inverted File Index) |
+| 11.7 | HNSWIntuition | `vector-foundations/hnsw-intuition` | HNSW - The Small-World Intuition |
+| 11.8 | HNSWConstruction | `vector-foundations/hnsw-construction` | HNSW Construction |
+| 11.9 | HNSWSearch | `vector-foundations/hnsw-search` | HNSW Search |
+| 11.10 | HNSWParameters | `vector-foundations/hnsw-parameters` | HNSW Parameters |
+| 11.11 | Vamana | `vector-foundations/vamana` | Vamana / DiskANN |
+| 11.12 | MemoryWall | `vector-compression/memory-wall` | The Memory Wall |
+| 11.13 | ScalarQuantization | `vector-compression/scalar-quantization` | Scalar Quantization |
+| 11.14 | ProductQuantization | `vector-compression/product-quantization` | Product Quantization (+ OPQ) |
+| 11.15 | BinaryQuantization | `vector-compression/binary-quantization` | Binary Quantization |
+| 11.16 | Matryoshka | `vector-compression/matryoshka` | Matryoshka Embeddings |
+| 11.17 | IVFPQ | `vector-compression/ivf-pq` | IVF-PQ |
+| 11.18 | HNSWPQ | `vector-compression/hnsw-pq` | HNSW + PQ |
+| 11.19 | CompressionDecision | `vector-compression/compression-decision` | The Compression Decision |
+| 11.20 | Filtering | `vector-production/filtering` | Filtering |
+| 11.21 | UpdatesDeletes | `vector-production/updates-deletes` | Updates & Deletes |
+| 11.22 | Sharding | `vector-production/sharding` | Sharding & Partitioning |
+| 11.23 | Replication | `vector-production/replication` | Replication & High Availability |
+| 11.24 | HybridSearch | `vector-production/hybrid-search` | Hybrid Search |
+| 11.25 | Rerankers | `vector-production/rerankers` | Rerankers |
+| 11.26 | MultiVectorRetrieval | `vector-production/multi-vector-retrieval` | Multi-vector Retrieval (ColBERT-style) |
+| 11.27 | EmbeddingLifecycle | `vector-production/embedding-lifecycle` | Embedding Lifecycle & Re-embedding |
+| 11.28 | Observability | `vector-production/observability` | Observability |
+| 11.29 | CapacityPlanning | `vector-production/capacity-planning` | Capacity Planning & Cost Models |
+| 11.30 | FAISS | `vector-systems/faiss` | FAISS |
+| 11.31 | Pgvector | `vector-systems/pgvector` | pgvector |
+| 11.32 | Qdrant | `vector-systems/qdrant` | Qdrant |
+| 11.33 | Pinecone | `vector-systems/pinecone` | Pinecone |
+| 11.34 | QdrantVsPinecone | `vector-systems/qdrant-vs-pinecone` | Qdrant vs Pinecone |
+| 11.35 | WeaviateMilvusChroma | `vector-systems/weaviate-milvus-chroma` | Weaviate / Milvus / Chroma |
+| 11.36 | DecisionFramework | `vector-systems/decision-framework` | The Decision Framework |
 
-**Section 12: Retrieval-Augmented Generation** (`rag-foundations.jsx` + `rag-ingestion.jsx` + `rag-retrieval.jsx` + `rag-generation.jsx` + `rag-evaluation.jsx` + `rag-production.jsx` - all 6 milestones complete; 41 chapters across Acts 1-10)
+**Section 12: Retrieval-Augmented Generation** (`src/chapters/rag-foundations/` + `src/chapters/rag-ingestion/` + `src/chapters/rag-retrieval/` + `src/chapters/rag-generation/` + `src/chapters/rag-evaluation/` + `src/chapters/rag-production/` - 41 chapters across Acts 1-10)
 
-| Chapter | Component | Title |
-|---------|-----------|-------|
-| 12.1 | WhyLLMsNeedRetrieval | Why LLMs Need Retrieval |
-| 12.2 | NaiveRAGPipeline | The Naive RAG Pipeline |
-| 12.3 | WhereNaiveRAGBreaks | Where Naive RAG Breaks |
-| 12.4 | ParsingExtraction | Parsing - Raw Sources to Clean Text |
-| 12.5 | DeduplicationCleaning | Deduplication & Cleaning |
-| 12.6 | RefreshSync | Refresh & Sync Schedules |
-| 12.7 | WhyChunkFixedSize | Why Chunk At All + Fixed-Size Baseline |
-| 12.8 | RecursiveStructuralChunking | Recursive Structural Chunking |
-| 12.9 | SemanticChunking | Semantic Chunking |
-| 12.10 | LateChunking | Late Chunking (Jina 2024) |
-| 12.11 | HierarchicalChunking | Hierarchical / Parent-Child Chunking |
-| 12.12 | ContextualRetrieval | Contextual Retrieval (Anthropic 2024) |
-| 12.13 | ChunkingDecision | The Chunking Decision |
-| 12.14 | EmbeddingModelChoice | Picking an Embedding Model |
-| 12.15 | DomainAdaptation | Domain Adaptation - Fine-Tuning Embeddings |
-| 12.16 | HybridForRAG | Hybrid Retrieval for RAG |
-| 12.17 | RerankerCascade | The Reranker Cascade |
-| 12.18 | WhyTransformQueries | Why Transform Queries |
-| 12.19 | HyDE | HyDE - Hypothetical Document Embeddings |
-| 12.20 | MultiQueryExpansion | Multi-Query Expansion |
-| 12.21 | QueryRoutingDecomposition | Query Routing & Decomposition |
-| 12.22 | ContextPacking | Context Packing |
-| 12.23 | LostInTheMiddle | The Lost-in-the-Middle Problem |
-| 12.24 | CitationsRefusal | Citations, Refusal & Groundedness |
-| 12.25 | MultiHopRetrieval | Multi-Hop Retrieval |
-| 12.26 | SelfRAG | Self-RAG |
-| 12.27 | CorrectiveRAG | CRAG - Corrective RAG |
-| 12.28 | GraphRAG | GraphRAG (Microsoft 2024) |
-| 12.29 | AgenticRAG | Tool-Augmented & Agentic RAG |
-| 12.30 | LongContextVsRAG | Long-Context vs RAG |
-| 12.31 | RAGEvalTriangle | The RAG Eval Triangle |
-| 12.32 | LLMAsJudge | LLM-as-Judge |
-| 12.33 | RAGASMetrics | RAGAS Metrics |
-| 12.34 | GoldenDatasets | Golden Datasets |
-| 12.35 | OnlineEvalABTesting | Online Eval & A/B Testing |
-| 12.36 | Caching | Caching - Prompt + Semantic |
-| 12.37 | CostModels | Cost Models |
-| 12.38 | ObservabilityTracing | Observability & Tracing |
-| 12.39 | HallucinationDrift | Hallucination Detection & Drift |
-| 12.40 | FrameworkChoice | Framework Choice |
-| 12.41 | RAGDecisionFrameworkCapstone | The Complete RAG Decision Framework + Capstone |
+| Chapter | Component | File | Title |
+|---------|-----------|------|-------|
+| 12.1 | WhyLLMsNeedRetrieval | `rag-foundations/why-llms-need-retrieval` | Why LLMs Need Retrieval |
+| 12.2 | NaiveRAGPipeline | `rag-foundations/naive-rag-pipeline` | The Naive RAG Pipeline |
+| 12.3 | WhereNaiveRAGBreaks | `rag-foundations/where-naive-rag-breaks` | Where Naive RAG Breaks |
+| 12.4 | ParsingExtraction | `rag-ingestion/parsing-extraction` | Parsing - Raw Sources to Clean Text |
+| 12.5 | DeduplicationCleaning | `rag-ingestion/deduplication-cleaning` | Deduplication & Cleaning |
+| 12.6 | RefreshSync | `rag-ingestion/refresh-sync` | Refresh & Sync Schedules |
+| 12.7 | WhyChunkFixedSize | `rag-foundations/why-chunk-fixed-size` | Why Chunk At All + Fixed-Size Baseline |
+| 12.8 | RecursiveStructuralChunking | `rag-foundations/recursive-structural-chunking` | Recursive Structural Chunking |
+| 12.9 | SemanticChunking | `rag-foundations/semantic-chunking` | Semantic Chunking |
+| 12.10 | LateChunking | `rag-foundations/late-chunking` | Late Chunking (Jina 2024) |
+| 12.11 | HierarchicalChunking | `rag-foundations/hierarchical-chunking` | Hierarchical / Parent-Child Chunking |
+| 12.12 | ContextualRetrieval | `rag-foundations/contextual-retrieval` | Contextual Retrieval (Anthropic 2024) |
+| 12.13 | ChunkingDecision | `rag-foundations/chunking-decision` | The Chunking Decision |
+| 12.14 | EmbeddingModelChoice | `rag-retrieval/embedding-model-choice` | Picking an Embedding Model |
+| 12.15 | DomainAdaptation | `rag-retrieval/domain-adaptation` | Domain Adaptation - Fine-Tuning Embeddings |
+| 12.16 | HybridForRAG | `rag-retrieval/hybrid-for-rag` | Hybrid Retrieval for RAG |
+| 12.17 | RerankerCascade | `rag-retrieval/reranker-cascade` | The Reranker Cascade |
+| 12.18 | WhyTransformQueries | `rag-retrieval/why-transform-queries` | Why Transform Queries |
+| 12.19 | HyDE | `rag-retrieval/hy-de` | HyDE - Hypothetical Document Embeddings |
+| 12.20 | MultiQueryExpansion | `rag-retrieval/multi-query-expansion` | Multi-Query Expansion |
+| 12.21 | QueryRoutingDecomposition | `rag-retrieval/query-routing-decomposition` | Query Routing & Decomposition |
+| 12.22 | ContextPacking | `rag-generation/context-packing` | Context Packing |
+| 12.23 | LostInTheMiddle | `rag-generation/lost-in-the-middle` | The Lost-in-the-Middle Problem |
+| 12.24 | CitationsRefusal | `rag-generation/citations-refusal` | Citations, Refusal & Groundedness |
+| 12.25 | MultiHopRetrieval | `rag-generation/multi-hop-retrieval` | Multi-Hop Retrieval |
+| 12.26 | SelfRAG | `rag-generation/self-rag` | Self-RAG |
+| 12.27 | CorrectiveRAG | `rag-generation/corrective-rag` | CRAG - Corrective RAG |
+| 12.28 | GraphRAG | `rag-generation/graph-rag` | GraphRAG (Microsoft 2024) |
+| 12.29 | AgenticRAG | `rag-generation/agentic-rag` | Tool-Augmented & Agentic RAG |
+| 12.30 | LongContextVsRAG | `rag-generation/long-context-vs-rag` | Long-Context vs RAG |
+| 12.31 | RAGEvalTriangle | `rag-evaluation/rag-eval-triangle` | The RAG Eval Triangle |
+| 12.32 | LLMAsJudge | `rag-evaluation/llm-as-judge` | LLM-as-Judge |
+| 12.33 | RAGASMetrics | `rag-evaluation/ragas-metrics` | RAGAS Metrics |
+| 12.34 | GoldenDatasets | `rag-evaluation/golden-datasets` | Golden Datasets |
+| 12.35 | OnlineEvalABTesting | `rag-evaluation/online-eval-ab-testing` | Online Eval & A/B Testing |
+| 12.36 | Caching | `rag-production/caching` | Caching - Prompt + Semantic |
+| 12.37 | CostModels | `rag-production/cost-models` | Cost Models |
+| 12.38 | ObservabilityTracing | `rag-production/observability-tracing` | Observability & Tracing |
+| 12.39 | HallucinationDrift | `rag-production/hallucination-drift` | Hallucination Detection & Drift |
+| 12.40 | FrameworkChoice | `rag-production/framework-choice` | Framework Choice |
+| 12.41 | RAGDecisionFrameworkCapstone | `rag-production/rag-decision-framework-capstone` | The Complete RAG Decision Framework + Capstone |
 
-**Section 13: AI Agents** (`agent-prompting.jsx` + `agent-tools.jsx` + `agent-loops.jsx` + `multi-agent.jsx` + `agent-evals.jsx` + `agent-production.jsx` - complete: all 9 acts, all 52 chapters)
+**Section 13: AI Agents** (`src/chapters/agent-prompting/` + `src/chapters/agent-tools/` + `src/chapters/agent-loops/` + `src/chapters/multi-agent/` + `src/chapters/agent-evals/` + `src/chapters/agent-production/` - 52 chapters across 9 acts)
 
-| Chapter | Component | Title |
-|---------|-----------|-------|
-| 13.1 | AnatomyOfLlmCall | Anatomy of an LLM Call |
-| 13.2 | SystemPromptContract | System Prompts - The Role Contract |
-| 13.3 | FewShotStructuredOutput | Few-Shot + Structured Output |
-| 13.4 | ChainOfThoughtSelfConsistency | Chain of Thought + Self-Consistency |
-| 13.5 | PromptVsTuneVsRagVsAgent | Prompt vs Fine-Tune vs RAG vs Agent |
-| 13.6 | ContextEngineering | Context Engineering |
-| 13.7 | ToolUseAsBridge | Tool Use - LLM as Orchestrator |
-| 13.8 | JsonSchemaForTools | JSON Schemas + Tool Descriptions |
-| 13.9 | ToolCallLifecycle | Tool Call Lifecycle |
-| 13.10 | ParallelToolsAndChoice | Parallel Tools + Tool Choice |
-| 13.11 | ToolErrorsRetries | Tool Errors, Retries, Validation |
-| 13.12 | WhyProtocols | Why Protocols? |
-| 13.13 | McpArchitecture | MCP Architecture |
-| 13.14 | McpPrimitives | MCP Primitives - Tools, Resources, Prompts |
-| 13.15 | BuildingMcpServer | Building an MCP Server |
-| 13.16 | McpSecurity | MCP Security |
-| 13.17 | A2AProtocol | A2A - Agent-to-Agent Protocol |
-| 13.18 | WorkflowVsAgent | Workflow vs Agent |
-| 13.19 | WorkflowPrimitives | Workflow Primitives - Chaining, Routing, Parallelization |
-| 13.20 | AgentLoop | The Agent Loop |
-| 13.21 | ReActPattern | ReAct Pattern |
-| 13.22 | PlanExecuteReflect | Plan-Execute + Reflection |
-| 13.23 | LoopTermination | Loop Termination |
-| 13.24 | MemoryTaxonomy | Memory Taxonomy - Short vs Long |
-| 13.25 | WorkingMemory | Working Memory - The Scratchpad |
-| 13.26 | EpisodicMemory | Episodic Memory - Past Events |
-| 13.27 | SemanticMemory | Semantic Memory - Learned Facts |
-| 13.28 | ProceduralMemory | Procedural Memory - Learned Skills |
-| 13.29 | SummaryAndContextMgmt | Summary Memory + Context Window Management |
-| 13.30 | WhyMultiAgent | Why Multi-Agent? |
-| 13.31 | OrchestratorWorker | Orchestrator-Worker |
-| 13.32 | SupervisorHierarchy | Supervisor / Hierarchical |
-| 13.33 | AgentHandoffs | Hand-Offs |
-| 13.34 | CriticDebate | Critic / Debate / Reflection-as-Multi-Agent |
-| 13.35 | MultiAgentFailures | Multi-Agent Failure Modes |
-| 13.36 | AgenticRag | Agentic RAG |
-| 13.37 | WhyEvalAgents | Why Eval Agents Differently |
-| 13.38 | EvalDimensions | Eval Dimensions |
-| 13.39 | LlmAsJudge | LLM-as-Judge |
-| 13.40 | TraceEvals | Trace Evals |
-| 13.41 | EvalSetsContinuous | Eval Sets + Continuous Eval |
-| 13.42 | AgentObservabilityTracing | Observability & Tracing |
-| 13.43 | CostControl | Cost Control |
-| 13.44 | LatencyOptimization | Latency Optimization |
-| 13.45 | Guardrails | Guardrails |
-| 13.46 | PromptInjectionDefenses | Prompt Injection Defenses |
-| 13.47 | ToolSecurity | Tool Security |
-| 13.48 | LangGraphFramework | LangGraph |
-| 13.49 | CrewAiAutoGen | CrewAI / AutoGen |
-| 13.50 | VendorSdks | Claude Agent SDK + OpenAI Agents |
-| 13.51 | CustomNoFramework | Custom / No-Framework |
-| 13.52 | AgentDecisionFramework | The Complete Agent Decision Framework |
+| Chapter | Component | File | Title |
+|---------|-----------|------|-------|
+| 13.1 | AnatomyOfLlmCall | `agent-prompting/anatomy-of-llm-call` | Anatomy of an LLM Call |
+| 13.2 | SystemPromptContract | `agent-prompting/system-prompt-contract` | System Prompts - The Role Contract |
+| 13.3 | FewShotStructuredOutput | `agent-prompting/few-shot-structured-output` | Few-Shot + Structured Output |
+| 13.4 | ChainOfThoughtSelfConsistency | `agent-prompting/chain-of-thought-self-consistency` | Chain of Thought + Self-Consistency |
+| 13.5 | PromptVsTuneVsRagVsAgent | `agent-prompting/prompt-vs-tune-vs-rag-vs-agent` | Prompt vs Fine-Tune vs RAG vs Agent |
+| 13.6 | ContextEngineering | `agent-prompting/context-engineering` | Context Engineering |
+| 13.7 | ToolUseAsBridge | `agent-tools/tool-use-as-bridge` | Tool Use - LLM as Orchestrator |
+| 13.8 | JsonSchemaForTools | `agent-tools/json-schema-for-tools` | JSON Schemas + Tool Descriptions |
+| 13.9 | ToolCallLifecycle | `agent-tools/tool-call-lifecycle` | Tool Call Lifecycle |
+| 13.10 | ParallelToolsAndChoice | `agent-tools/parallel-tools-and-choice` | Parallel Tools + Tool Choice |
+| 13.11 | ToolErrorsRetries | `agent-tools/tool-errors-retries` | Tool Errors, Retries, Validation |
+| 13.12 | WhyProtocols | `agent-tools/why-protocols` | Why Protocols? |
+| 13.13 | McpArchitecture | `agent-tools/mcp-architecture` | MCP Architecture |
+| 13.14 | McpPrimitives | `agent-tools/mcp-primitives` | MCP Primitives - Tools, Resources, Prompts |
+| 13.15 | BuildingMcpServer | `agent-tools/building-mcp-server` | Building an MCP Server |
+| 13.16 | McpSecurity | `agent-tools/mcp-security` | MCP Security |
+| 13.17 | A2AProtocol | `agent-tools/a2a-protocol` | A2A - Agent-to-Agent Protocol |
+| 13.18 | WorkflowVsAgent | `agent-loops/workflow-vs-agent` | Workflow vs Agent |
+| 13.19 | WorkflowPrimitives | `agent-loops/workflow-primitives` | Workflow Primitives - Chaining, Routing, Parallelization |
+| 13.20 | AgentLoop | `agent-loops/agent-loop` | The Agent Loop |
+| 13.21 | ReActPattern | `agent-loops/re-act-pattern` | ReAct Pattern |
+| 13.22 | PlanExecuteReflect | `agent-loops/plan-execute-reflect` | Plan-Execute + Reflection |
+| 13.23 | LoopTermination | `agent-loops/loop-termination` | Loop Termination |
+| 13.24 | MemoryTaxonomy | `agent-loops/memory-taxonomy` | Memory Taxonomy - Short vs Long |
+| 13.25 | WorkingMemory | `agent-loops/working-memory` | Working Memory - The Scratchpad |
+| 13.26 | EpisodicMemory | `agent-loops/episodic-memory` | Episodic Memory - Past Events |
+| 13.27 | SemanticMemory | `agent-loops/semantic-memory` | Semantic Memory - Learned Facts |
+| 13.28 | ProceduralMemory | `agent-loops/procedural-memory` | Procedural Memory - Learned Skills |
+| 13.29 | SummaryAndContextMgmt | `agent-loops/summary-and-context-mgmt` | Summary Memory + Context Window Management |
+| 13.30 | WhyMultiAgent | `multi-agent/why-multi-agent` | Why Multi-Agent? |
+| 13.31 | OrchestratorWorker | `multi-agent/orchestrator-worker` | Orchestrator-Worker |
+| 13.32 | SupervisorHierarchy | `multi-agent/supervisor-hierarchy` | Supervisor / Hierarchical |
+| 13.33 | AgentHandoffs | `multi-agent/agent-handoffs` | Hand-Offs |
+| 13.34 | CriticDebate | `multi-agent/critic-debate` | Critic / Debate / Reflection-as-Multi-Agent |
+| 13.35 | MultiAgentFailures | `multi-agent/multi-agent-failures` | Multi-Agent Failure Modes |
+| 13.36 | AgenticRag | `multi-agent/agentic-rag` | Agentic RAG |
+| 13.37 | WhyEvalAgents | `agent-evals/why-eval-agents` | Why Eval Agents Differently |
+| 13.38 | EvalDimensions | `agent-evals/eval-dimensions` | Eval Dimensions |
+| 13.39 | LlmAsJudge | `agent-evals/llm-as-judge` | LLM-as-Judge |
+| 13.40 | TraceEvals | `agent-evals/trace-evals` | Trace Evals |
+| 13.41 | EvalSetsContinuous | `agent-evals/eval-sets-continuous` | Eval Sets + Continuous Eval |
+| 13.42 | AgentObservabilityTracing | `agent-production/agent-observability-tracing` | Observability & Tracing |
+| 13.43 | CostControl | `agent-production/cost-control` | Cost Control |
+| 13.44 | LatencyOptimization | `agent-production/latency-optimization` | Latency Optimization |
+| 13.45 | Guardrails | `agent-production/guardrails` | Guardrails |
+| 13.46 | PromptInjectionDefenses | `agent-production/prompt-injection-defenses` | Prompt Injection Defenses |
+| 13.47 | ToolSecurity | `agent-production/tool-security` | Tool Security |
+| 13.48 | LangGraphFramework | `agent-production/lang-graph-framework` | LangGraph |
+| 13.49 | CrewAiAutoGen | `agent-production/crew-ai-auto-gen` | CrewAI / AutoGen |
+| 13.50 | VendorSdks | `agent-production/vendor-sdks` | Claude Agent SDK + OpenAI Agents |
+| 13.51 | CustomNoFramework | `agent-production/custom-no-framework` | Custom / No-Framework |
+| 13.52 | AgentDecisionFramework | `agent-production/agent-decision-framework` | The Complete Agent Decision Framework |
 
 ## Project Structure
+
+Each chapter lives in its own file under `src/chapters/<topic>/<chapter>.jsx`
+(one default-export function per file). Cross-chapter helpers live in
+`src/shared/`. Tests mirror this layout under `src/__tests__/chapters/` and
+`src/__tests__/shared/`.
 
 ```
 learn-ai/
@@ -369,86 +389,128 @@ learn-ai/
 ├── .prettierrc
 ├── package.json
 ├── src/
-│   ├── main.jsx                          # React entry point
-│   ├── learn-ai.jsx                       # Shell: state, navigation, layout
-│   ├── components.jsx                    # Shared components (Box, T, Reveal, SubBtn, Tag, ErrorBoundary)
-│   ├── config.js                         # chapters array, sectionNames, sectionColors, colors (C)
-│   ├── nav-persistence.js               # saveNav/loadNav - localStorage persistence with config fingerprint
-│   ├── __tests__/                        # Unit tests (vitest)
-│   │   ├── config.test.js               # Config validation tests
-│   │   ├── lookup.test.js               # Component lookup tests
-│   │   ├── components.test.jsx          # Shared component tests
-│   │   ├── nav-persistence.test.js      # Nav persistence tests (save, load, edge cases)
-│   │   ├── sections.test.jsx             # All chapter function tests
-│   │   └── svg-descriptions.test.js     # SVG description manifest validation
-│   └── sections/
-│       ├── toc.jsx                       # Table of Contents
-│       ├── neural-foundations.jsx         # Section 1
-│       ├── llm-training.jsx              # Section 2 (+ BatchTraining used in Section 3)
-│       ├── scaling.jsx                   # Section 3
-│       ├── road-to-transformers.jsx      # Section 4 (+ EncoderDecoder in 8, DecoderOnly in 9)
-│       ├── transformer-input.jsx         # Section 5 (+ WhatTransformerDoes in 9)
-│       ├── attention-qkv.jsx             # Section 6
-│       ├── attention-computation.jsx     # Section 7 (+ CausalMask/CrossAttention in 9)
-│       ├── transformer-block.jsx        # Section 8 (Add&Norm, FFN, block repeats)
-│       ├── encoder-decoder-diagrams.jsx # Section 9 (Training/Inference flow diagrams)
-│       ├── modern-llm-techniques.jsx    # Section 10 (MoE, Thinking)
-│       ├── vector-foundations.jsx        # Section 11 (Acts 1+2, chapters 11.1-11.11)
-│       ├── vector-compression.jsx        # Section 11 (Acts 3+4, chapters 11.12-11.18)
-│       ├── vector-production.jsx         # Section 11 (Act 5, chapters 11.19-11.28)
-│       ├── vector-systems.jsx            # Section 11 (Act 6, chapters 11.29-11.35)
-│       ├── rag-foundations.jsx           # Section 12 Acts 1+3: Problem + Chunking, 12.1-12.3 + 12.7-12.13
-│       ├── rag-ingestion.jsx             # Section 12 Act 2: Ingestion, 12.4-12.6
-│       ├── rag-retrieval.jsx             # Section 12 Acts 4+5: Embed/Index + Query Transformation, 12.14-12.21
-│       ├── rag-generation.jsx            # Section 12 Acts 6+7: Context+Generation + Advanced Patterns, 12.22-12.30
-│       ├── rag-evaluation.jsx            # Section 12 Act 8: Evaluation, 12.31-12.35
-│       ├── rag-production.jsx            # Section 12 Acts 9+10: Production Ops + Decision Framework, 12.36-12.41
-│       ├── agent-prompting.jsx           # Section 13 Act 1: Prompting Foundations, 13.1-13.6
-│       ├── agent-tools.jsx               # Section 13 Acts 2+3: Tools + MCP/A2A, 13.7-13.17
-│       ├── agent-loops.jsx               # Section 13 Acts 4+5: Workflows/Loops + Memory, 13.18-13.29
-│       ├── multi-agent.jsx               # Section 13 Act 6: Multi-Agent, 13.30-13.36
-│       ├── agent-evals.jsx               # Section 13 Act 7: Evaluation, 13.37-13.41
-│       └── agent-production.jsx          # Section 13 Acts 8+9: Production Hardening + Frameworks, 13.42-13.52
+│   ├── main.jsx                              # React entry point
+│   ├── learn-ai.jsx                          # Shell: state, navigation, layout, chapter loader (via import.meta.glob)
+│   ├── components.jsx                        # Shared components (Box, T, Reveal, SubBtn, Tag, ErrorBoundary)
+│   ├── config.js                             # chapters array (with file field), sectionNames, sectionColors, colors (C)
+│   ├── nav-persistence.js                    # saveNav/loadNav - localStorage persistence with config fingerprint
+│   ├── search-overlay.jsx                    # Lazy-loaded search UI
+│   ├── search.js                             # Search index loader / query logic
+│   ├── embedding-cache.js                    # Cached embeddings for semantic search
+│   ├── data/                                 # chunks.json, embeddings.bin, chunk-cache.json, etc.
+│   ├── chapters/                             # 233 chapter files, one default-export function per file
+│   │   ├── table-of-contents/                #   1 chapter (Overview)
+│   │   │   └── toc.jsx
+│   │   ├── neural-foundations/               #  26 chapters (Section 1)
+│   │   ├── llm-training/                     #  11 chapters (Section 2 + batch-training.jsx used for 3.3)
+│   │   ├── scaling/                          #   5 chapters (Section 3, minus 3.3)
+│   │   ├── road-to-transformers/             #   6 chapters (Section 4 + encoder-decoder.jsx for 8.1 + decoder-only.jsx for 9.1)
+│   │   ├── transformer-input/                #  11 chapters (Section 5 + output-head.jsx for 9.4 + what-transformer-does.jsx for 9.5)
+│   │   ├── attention-qkv/                    #  12 chapters (Section 6)
+│   │   ├── attention-computation/            #  20 chapters (Section 7 + causal-mask.jsx for 9.2 + cross-attention.jsx for 9.3 + kv-cache.jsx for 10.1 + grouped-query-attention.jsx for 10.2)
+│   │   ├── transformer-block/                #   8 chapters (Section 8 minus 8.1)
+│   │   ├── encoder-decoder-diagrams/         #   2 chapters (9.6, 9.7)
+│   │   ├── modern-llm-techniques/            #   2 chapters (10.3, 10.4)
+│   │   ├── vector-foundations/               #  11 chapters (Section 11 Acts 1+2)
+│   │   ├── vector-compression/               #   8 chapters (Section 11 Acts 3+4, includes compression-decision.jsx for 11.19)
+│   │   ├── vector-production/                #  10 chapters (Section 11 Act 5, includes capacity-planning.jsx for 11.29)
+│   │   ├── vector-systems/                   #   7 chapters (Section 11 Act 6)
+│   │   ├── rag-foundations/                  #  10 chapters (Section 12 Acts 1+3)
+│   │   ├── rag-ingestion/                    #   3 chapters (Section 12 Act 2)
+│   │   ├── rag-retrieval/                    #   8 chapters (Section 12 Acts 4+5)
+│   │   ├── rag-generation/                   #   9 chapters (Section 12 Acts 6+7)
+│   │   ├── rag-evaluation/                   #   5 chapters (Section 12 Act 8)
+│   │   ├── rag-production/                   #   6 chapters (Section 12 Acts 9+10)
+│   │   ├── agent-prompting/                  #   6 chapters (Section 13 Act 1)
+│   │   ├── agent-tools/                      #  11 chapters (Section 13 Acts 2+3)
+│   │   ├── agent-loops/                      #  12 chapters (Section 13 Acts 4+5)
+│   │   ├── multi-agent/                      #   7 chapters (Section 13 Act 6)
+│   │   ├── agent-evals/                      #   5 chapters (Section 13 Act 7)
+│   │   └── agent-production/                 #  11 chapters (Section 13 Acts 8+9)
+│   ├── shared/                               # Cross-chapter helpers (reused by many chapter files)
+│   │   ├── plot.jsx                          # Graph
+│   │   ├── agent-styles.jsx                  # SOFT, tintedCard, pill, DIM_BG, DIM_BORDER
+│   │   ├── agent-helpers.jsx                 # HighlightedJson, monoArtifact
+│   │   ├── vector-graphs.jsx                 # Triangle, IVFScatter, HNSWLayeredGraph, fmtVec, docCluster, computeFlatEdges, IVF_CLUSTERS, HNSW_CORPUS_XY, FLAT_GRAPH_EDGES, HNSW_LAYER_1, HNSW_LAYER_2
+│   │   ├── rag-helpers.jsx                   # FormulaBox, CapstoneDecisionCard
+│   │   └── llm-training-helpers.jsx          # SCORES, EXP_SCORES, EXP_SUM, SORTED_SCORES, SORTED_PROBS
+│   └── __tests__/                            # Unit tests (vitest)
+│       ├── setup.js
+│       ├── chapter-test-helpers.js           # makeCtx factory used by every per-chapter test
+│       ├── config.test.js                    # Config validation tests (unique IDs, required fields, file paths)
+│       ├── lookup.test.js                    # Every config component resolves to a chapter file
+│       ├── components.test.jsx               # Shared component tests
+│       ├── nav-persistence.test.js           # Nav persistence tests
+│       ├── learn-ai.test.jsx                 # Shell rendering, navigation, keyboard
+│       ├── learn-ai-prefetch.test.jsx        # Chapter prefetch behavior
+│       ├── search-overlay.test.jsx           # Search overlay UI
+│       ├── search-golden.test.js             # Search relevance golden tests
+│       ├── svg-descriptions.test.js          # SVG description manifest validation
+│       ├── chapters/                         # 233 per-chapter test files mirroring src/chapters/
+│       │   ├── cross-chapter.test.jsx        # Cross-cutting assertions (no overlap, ID uniqueness)
+│       │   ├── neural-foundations/
+│       │   ├── llm-training/
+│       │   ├── ...                           # one folder per chapter topic
+│       │   └── agent-production/
+│       └── shared/                           # Per-helper tests
+│           ├── plot.test.jsx
+│           ├── agent-styles.test.jsx
+│           ├── agent-helpers.test.jsx
+│           ├── vector-graphs.test.jsx
+│           ├── rag-helpers.test.jsx
+│           └── llm-training-helpers.test.js
 ├── .github/workflows/deploy.yml
 └── CLAUDE.md
 ```
 
 ## How To: Add a New Chapter
 
-Example: insert a new chapter between 7.2 and 7.3.
+Example: insert a new chapter "Score Normalization" between 7.2 and 7.3.
 
-1. **Write the function** in `attention-computation.jsx`:
+1. **Create the chapter file** at
+   `src/chapters/attention-computation/score-normalization.jsx` with a default
+   export:
    ```jsx
-   export const ScoreNormalization = (ctx) => { ... };
+   const ScoreNormalization = (ctx) => { ... };
+   export default ScoreNormalization;
    ```
-2. **Add one line to config.js** and renumber the IDs that follow:
+2. **Add one entry to `chapters` in `config.js`** and renumber the IDs that follow:
    ```js
-   { id: "7.2", ..., component: "AttentionScores" },
-   { id: "7.3", title: "Score Normalization", section: 7, component: "ScoreNormalization" },  // NEW
-   { id: "7.4", ..., component: "KTranspose" },  // was 7.3
+   { id: "7.2", ..., component: "AttentionScores", file: "attention-computation/attention-scores" },
+   { id: "7.3", title: "Score Normalization", section: 7,
+     component: "ScoreNormalization", file: "attention-computation/score-normalization" },  // NEW
+   { id: "7.4", ..., component: "KTranspose", file: "attention-computation/k-transpose" },  // was 7.3
    ```
-3. **Update the mapping table in this file** (CLAUDE.md) for the affected section.
-4. **No other files change.** learn-ai.jsx auto-resolves from config.
+3. **Add a per-chapter test file** at
+   `src/__tests__/chapters/attention-computation/score-normalization.test.jsx`
+   covering every sub-step and interaction. Use the `makeCtx` factory in
+   `src/__tests__/chapter-test-helpers.js`.
+4. **Update the mapping table in this file** (CLAUDE.md) for the affected section.
+5. **No other files change.** learn-ai.jsx auto-resolves the chapter via
+   `import.meta.glob` using the `file` field.
 
 ## How To: Add a New Section
 
-Example: insert a new Section 5 between current Sections 4 and 5.
+Example: insert a new Section 5 "Layer Normalization" between current Sections 4 and 5.
 
-1. **Create the file** (e.g., `src/sections/layer-norm.jsx`) with exported functions.
-2. **Add one import + spread** in learn-ai.jsx's lookup object:
-   ```jsx
-   import * as LayerNorm from "./sections/layer-norm.jsx";
-   const lookup = { ..., ...LayerNorm, ... };
-   ```
-3. **Add entries to config.js**, renumber section numbers and chapter IDs for
-   all sections that shifted.
-4. **Update the mapping tables and project structure in this file** (CLAUDE.md).
-5. **No existing section files are renamed or modified.**
+1. **Create the folder** `src/chapters/layer-norm/` and add one file per chapter
+   inside (each with a default-export function).
+2. **Add chapter entries to `chapters` in `config.js`** with `section: 5` and
+   `file: "layer-norm/<chapter-kebab>"`. Renumber the IDs and `section`
+   numbers for chapters in later sections.
+3. **Update `sectionNames` and `sectionColors`** in `config.js` with the new
+   section number and any renumbered higher sections.
+4. **Add per-chapter test files** under `src/__tests__/chapters/layer-norm/`.
+5. **Update the mapping tables and project structure in this file** (CLAUDE.md).
+6. **No other source files change.** learn-ai.jsx picks up the new chapter
+   folder automatically via `import.meta.glob`.
 
 ## How To: Reorder Chapters
 
-Just reorder the entries in the `chapters` array in config.js. Update the mapping
-table in this file (CLAUDE.md) to reflect the new order. Nothing else changes.
+Just reorder the entries in the `chapters` array in config.js (and update IDs
+to match the new order). Update the mapping table in this file (CLAUDE.md) to
+reflect the new order. Chapter files and test files stay where they are -
+nothing else changes.
 
 ## Keeping CLAUDE.md in Sync
 
@@ -496,22 +558,34 @@ character change. ALWAYS: test first, code second. No exceptions.**
 
 ### Coverage targets
 
-Current real coverage (no v8 ignore exclusions):
-- **Lines: 100%** across all files
-- **Branches: 97.7%** (remaining 2.3% are structurally unreachable defensive
-  branches in config validation, Graph helper, and demo data ternaries)
+Coverage thresholds (enforced by `vite.config.js`) over `src/config.js`,
+`src/components.jsx`, `src/nav-persistence.js`, `src/chapters/**/*.jsx`, and
+`src/shared/**/*.jsx` (excluding `src/main.jsx` and `src/learn-ai.jsx`):
 
-Coverage must not decrease. Any new code must have corresponding tests.
+- **Lines: 90%**
+- **Branches: 98%**
+- **Functions: 87%**
+- **Statements: 90%**
+
+Coverage must not drop below these thresholds. Any new code must have
+corresponding tests. The per-chapter file layout means each chapter file has
+its own focused test file under `src/__tests__/chapters/<topic>/`, which keeps
+coverage local and easy to reason about.
 
 ### Test file organization
 
-| Test file | What it covers |
-|-----------|---------------|
-| `config.test.js` | Config data integrity (unique IDs, required fields, section names) |
-| `lookup.test.js` | Every config component exists as an exported function |
+| Test file / folder | What it covers |
+|--------------------|---------------|
+| `config.test.js` | Config data integrity (unique IDs, required fields, section names, `file` paths resolve) |
+| `lookup.test.js` | Every config `file` path resolves to a chapter module with a default export |
 | `components.test.jsx` | ErrorBoundary, Box, T, Reveal, SubBtn, Tag |
 | `nav-persistence.test.js` | saveNav/loadNav: config match, config change, corrupted data, localStorage errors |
-| `sections.test.jsx` | All chapter functions at every sub level with interaction coverage |
+| `learn-ai.test.jsx` | Shell rendering, navigation, keyboard shortcuts |
+| `learn-ai-prefetch.test.jsx` | Chapter prefetching behavior |
+| `chapter-test-helpers.js` | `makeCtx` factory used by every per-chapter test (NOT a test file) |
+| `chapters/<topic>/<chapter>.test.jsx` | Per-chapter test, one per chapter file - covers every sub-step and interaction |
+| `chapters/cross-chapter.test.jsx` | Cross-cutting assertions (no overlap, ID uniqueness, etc.) |
+| `shared/<helper>.test.jsx` | One test file per shared helper (plot, agent-styles, agent-helpers, vector-graphs, rag-helpers, llm-training-helpers) |
 | `svg-descriptions.test.js` | SVG description manifest: valid IDs, non-empty descriptions, full coverage |
 
 ## Key Design Decisions

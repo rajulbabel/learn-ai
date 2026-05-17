@@ -97,9 +97,9 @@ export const chapters = [
   { id: "7.9", title: "Why Multi-Head? - The Compromise Problem", section: 7, component: "WhyMultiHead", file: "attention-computation/why-multi-head" },
   { id: "7.10", title: "The Split - How 8 Heads Work", section: 7, component: "HeadSplit", file: "attention-computation/head-split" },
   { id: "7.11", title: "Inside Each Head - Full Attention in 64 Dims", section: 7, component: "InsideEachHead", file: "attention-computation/inside-each-head" },
-  { id: "7.12", title: "Concat + W_O - Blending All Heads", section: 7, component: "ConcatWO", file: "attention-computation/concat-w-o" },
+  { id: "7.12", title: "Concat + W_O - Blending All Heads", section: 7, component: "ConcatWO", file: "attention-computation/concat-wo" },
   { id: "7.13", title: "Why 8 Heads? Parameter Count & Big Picture", section: 7, component: "WhyEightHeads", file: "attention-computation/why-eight-heads" },
-  { id: "7.14", title: "Is W_O Constant? Does It Change?", section: 7, component: "IsWOConstant", file: "attention-computation/is-w-o-constant" },
+  { id: "7.14", title: "Is W_O Constant? Does It Change?", section: 7, component: "IsWOConstant", file: "attention-computation/is-wo-constant" },
   { id: "7.15", title: "Attention Flow - Shapes at Every Step", section: 7, component: "AttentionShapes", file: "attention-computation/attention-shapes" },
   { id: "7.16", title: "The Complete Picture - In Plain English", section: 7, component: "CompletePicture", file: "attention-computation/complete-picture" },
   // Section 8: The Encoder (EncoderDecoder opens, then Add&Norm/FFN/block repeats)

@@ -169,7 +169,7 @@ export const chapters = [
   { id: "11.35", title: "Weaviate / Milvus / Chroma", section: 11, component: "WeaviateMilvusChroma", file: "vector-systems/weaviate-milvus-chroma" },
   { id: "11.36", title: "The Decision Framework", section: 11, component: "DecisionFramework", file: "vector-systems/decision-framework" },
   // Section 12: Retrieval-Augmented Generation
-  { id: "12.1", title: "Why LLMs Need Retrieval", section: 12, component: "WhyLLMsNeedRetrieval", file: "rag-foundations/why-ll-ms-need-retrieval" },
+  { id: "12.1", title: "Why LLMs Need Retrieval", section: 12, component: "WhyLLMsNeedRetrieval", file: "rag-foundations/why-llms-need-retrieval" },
   { id: "12.2", title: "The Naive RAG Pipeline", section: 12, component: "NaiveRAGPipeline", file: "rag-foundations/naive-rag-pipeline" },
   { id: "12.3", title: "Where Naive RAG Breaks", section: 12, component: "WhereNaiveRAGBreaks", file: "rag-foundations/where-naive-rag-breaks" },
   { id: "12.4", title: "Parsing - Raw Sources to Clean Text", section: 12, component: "ParsingExtraction", file: "rag-ingestion/parsing-extraction" },

@@ -56,7 +56,7 @@ describe("llm-chunk (claude CLI subprocess)", () => {
     mockSpawn.mockImplementationOnce(fakeProcFactory({ stdout: wrapperJson }));
 
     const result = await chunkSection({
-      filePath: "src/sections/neural-foundations.jsx",
+      filePath: "src/chapters/neural-foundations/what-is-nn.jsx",
       source: "/* fake source */",
       chapters: [
         { id: "1.1", title: "What is a Neural Network?", section: 1, sectionName: "Neural Network Foundations" },

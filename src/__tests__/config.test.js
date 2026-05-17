@@ -147,11 +147,10 @@ describe("config.js", () => {
   });
 
   it("no JSX content references the old chapter IDs 11.19-11.35 after renumber", () => {
-    const sectionFiles = [
-      path.join(SRC_DIR, "sections/vector-systems.jsx"),
-      path.join(SRC_DIR, "sections/vector-production.jsx"),
-      path.join(SRC_DIR, "sections/vector-compression.jsx"),
-    ];
+    const chapterTopics = ["vector-systems", "vector-production", "vector-compression"];
+    const chapterFiles = chapters
+      .filter((c) => chapterTopics.includes(c.file.split("/")[0]))
+      .map((c) => path.join(SRC_DIR, "chapters", `${c.file}.jsx`));
     const stalePatterns = [
       /Recall from 11\.19/,
       /chapter 11\.19[^0-9]/,
@@ -161,7 +160,7 @@ describe("config.js", () => {
       /chapters 11\.30 - 11\.34/,
       /the system comparison \(11\.29-11\.34\)/,
     ];
-    for (const file of sectionFiles) {
+    for (const file of chapterFiles) {
       const content = fs.readFileSync(file, "utf8");
       for (const pattern of stalePatterns) {
         expect(content, `${file} still contains ${pattern}`).not.toMatch(pattern);
@@ -923,37 +922,19 @@ describe("chapter.file field", () => {
     }
   });
 
-  it("file topic prefix matches the section file currently exporting the component", async () => {
-    const { readdirSync, readFileSync } = await import("node:fs");
+  it("every chapter file exists at src/chapters/<file>.jsx and default-exports the configured component", async () => {
+    const { readFileSync, existsSync } = await import("node:fs");
     const { join } = await import("node:path");
-    const sectionsDir = join(process.cwd(), "src/sections");
-    const componentToTopic = new Map();
-    for (const fname of readdirSync(sectionsDir)) {
-      if (!fname.endsWith(".jsx")) continue;
-      const topic = fname.replace(/\.jsx$/, "");
-      const src = readFileSync(join(sectionsDir, fname), "utf-8");
-      for (const m of src.matchAll(/^export const (\w+)\s*=/gm)) {
-        componentToTopic.set(m[1], topic);
-      }
-      // toc.jsx exports TOC as named export too
-      for (const m of src.matchAll(/^export function (\w+)/gm)) {
-        componentToTopic.set(m[1], topic);
-      }
-    }
-    // TOC may be exported differently; handle by explicit override if needed.
-    if (!componentToTopic.has("TOC")) componentToTopic.set("TOC", "toc");
-
+    const chaptersDir = join(process.cwd(), "src/chapters");
     for (const ch of chapters) {
-      const expectedTopic = componentToTopic.get(ch.component);
-      const actualTopic = ch.file.split("/")[0];
-      // TOC is the one exception: it lives in src/sections/toc.jsx (topic "toc"),
-      // but its destination folder is "table-of-contents" per the plan.
-      if (ch.component === "TOC") {
-        expect(actualTopic).toBe("table-of-contents");
-        continue;
-      }
-      expect(expectedTopic, `Component ${ch.component} (chapter ${ch.id}) not found in any section file`).toBeDefined();
-      expect(actualTopic).toBe(expectedTopic);
+      const filePath = join(chaptersDir, `${ch.file}.jsx`);
+      expect(existsSync(filePath), `chapter file missing for ${ch.id}: ${filePath}`).toBe(true);
+      const src = readFileSync(filePath, "utf-8");
+      const defaultExportPattern = new RegExp(`export default function ${ch.component}\\b`);
+      expect(
+        defaultExportPattern.test(src),
+        `${filePath} does not default-export function ${ch.component}`,
+      ).toBe(true);
     }
   });
 });

@@ -1,6 +1,5 @@
 // Shared cross-chapter helpers for Section 12 (Retrieval-Augmented Generation).
-// Extracted from src/sections/rag-*.jsx so they can be imported by both the
-// current monolithic section files and the future per-chapter files.
+// Extracted from the rag chapter files so they can be imported across chapters.
 
 import { T } from "../components.jsx";
 

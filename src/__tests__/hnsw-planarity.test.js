@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { HNSW_CORPUS_XY, FLAT_GRAPH_EDGES } from "../sections/vector-foundations.jsx";
+import { HNSW_CORPUS_XY, FLAT_GRAPH_EDGES } from "../shared/vector-graphs.jsx";
 
 // Segment-segment intersection test that ignores shared endpoints.
 function segmentsCross(a, b) {

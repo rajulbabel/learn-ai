@@ -1,6 +1,5 @@
 // Shared cross-chapter helpers for Section 13 (AI Agents).
-// Extracted from src/sections/agent-*.jsx so they can be imported by both the
-// current monolithic section files and the future per-chapter files.
+// Extracted from the agent chapter files so they can be imported across chapters.
 //
 // Pure data constants used by exactly one chapter intentionally stay local
 // in their origin file. Only component-style helpers and cross-chapter symbols

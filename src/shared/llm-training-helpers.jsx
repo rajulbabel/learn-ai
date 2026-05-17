@@ -1,6 +1,5 @@
 // Shared data constants for llm-training section chapters.
-// Extracted from src/sections/llm-training.jsx so they can be imported
-// by both the current monolithic section file and the future per-chapter files.
+// Extracted from the llm-training chapter files so they can be imported across chapters.
 
 export const SCORES = {
   the: 4.2,

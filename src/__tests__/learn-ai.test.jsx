@@ -3,11 +3,11 @@ import { render, screen, fireEvent, cleanup, act } from "@testing-library/react"
 import { chapters } from "../config.js";
 
 // Mock all dynamic imports so the component renders synchronously in tests
-vi.mock("../sections/toc.jsx", () => ({
-  TOC: () => <div data-testid="toc">TOC</div>,
+vi.mock("../chapters/table-of-contents/toc.jsx", () => ({
+  default: () => <div data-testid="toc">TOC</div>,
 }));
-vi.mock("../sections/neural-foundations.jsx", () => ({
-  WhatIsNN: (ctx) => (
+vi.mock("../chapters/neural-foundations/what-is-nn.jsx", () => ({
+  default: (ctx) => (
     <div>
       <div>WhatIsNN</div>
       {ctx.sub >= 1 && (
@@ -26,17 +26,12 @@ vi.mock("../sections/neural-foundations.jsx", () => ({
     </div>
   ),
 }));
-vi.mock("../sections/llm-training.jsx", () => ({
-  BatchTraining: () => <div data-testid="batch-training">BatchTraining</div>,
+vi.mock("../chapters/llm-training/batch-training.jsx", () => ({
+  default: () => <div data-testid="batch-training">BatchTraining</div>,
 }));
-vi.mock("../sections/scaling.jsx", () => ({
-  ParametersAtScale: () => <div data-testid="parameters-at-scale">ParametersAtScale</div>,
+vi.mock("../chapters/scaling/parameters-at-scale.jsx", () => ({
+  default: () => <div data-testid="parameters-at-scale">ParametersAtScale</div>,
 }));
-vi.mock("../sections/road-to-transformers.jsx", () => ({}));
-vi.mock("../sections/transformer-input.jsx", () => ({}));
-vi.mock("../sections/attention-qkv.jsx", () => ({}));
-vi.mock("../sections/attention-computation.jsx", () => ({}));
-vi.mock("../sections/transformer-block.jsx", () => ({}));
 vi.mock("../search-overlay.jsx", () => ({
   default: () => <div data-testid="search-overlay">Search Overlay</div>,
 }));
@@ -435,13 +430,10 @@ describe("LearnAI chapter loading", () => {
   });
 });
 
-describe("chapterLoaders glob (dual-mode lookup)", () => {
-  it("import.meta.glob keys are an object (zero or more entries pre-migration)", async () => {
+describe("chapterLoaders glob", () => {
+  it("import.meta.glob resolves one loader per configured chapter", async () => {
     const loaders = import.meta.glob("../chapters/**/*.jsx");
     expect(typeof loaders).toBe("object");
-    // Pre-migration: no chapter files exist yet, so length is 0.
-    // Post-migration (after T36): length == chapters.length.
-    // This smoke test exists so the glob path is exercised from day 1.
-    expect(Object.keys(loaders).length).toBeGreaterThanOrEqual(0);
+    expect(Object.keys(loaders).length).toBe(chapters.length);
   });
 });

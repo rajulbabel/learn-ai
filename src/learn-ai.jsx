@@ -3,76 +3,8 @@ import { chapters, sectionNames, sectionColors, C } from "./config.js";
 import { T, ErrorBoundary } from "./components.jsx";
 import { saveNav, loadNav } from "./nav-persistence.js";
 
-// ── Lazy-loaded sections: only the current section is fetched ──
-// Each import() becomes a separate Vite chunk, downloaded on demand.
-const sectionLoaders = {
-  0: () => import("./sections/toc.jsx"),
-  1: () => import("./sections/neural-foundations.jsx"),
-  2: () => import("./sections/llm-training.jsx"),
-  3: () =>
-    Promise.all([import("./sections/scaling.jsx"), import("./sections/llm-training.jsx")]).then((mods) =>
-      Object.assign({}, ...mods),
-    ),
-  4: () => import("./sections/road-to-transformers.jsx"),
-  5: () => import("./sections/transformer-input.jsx"),
-  6: () => import("./sections/attention-qkv.jsx"),
-  7: () => import("./sections/attention-computation.jsx"),
-  8: () =>
-    Promise.all([import("./sections/road-to-transformers.jsx"), import("./sections/transformer-block.jsx")]).then(
-      (mods) => Object.assign({}, ...mods),
-    ),
-  9: () =>
-    Promise.all([
-      import("./sections/road-to-transformers.jsx"),
-      import("./sections/attention-computation.jsx"),
-      import("./sections/transformer-input.jsx"),
-      import("./sections/encoder-decoder-diagrams.jsx"),
-    ]).then((mods) => Object.assign({}, ...mods)),
-  10: () =>
-    Promise.all([import("./sections/attention-computation.jsx"), import("./sections/modern-llm-techniques.jsx")]).then(
-      (mods) => Object.assign({}, ...mods),
-    ),
-  11: () =>
-    Promise.all([
-      import("./sections/vector-foundations.jsx"),
-      import("./sections/vector-compression.jsx"),
-      import("./sections/vector-production.jsx"),
-      import("./sections/vector-systems.jsx"),
-    ]).then((mods) => Object.assign({}, ...mods)),
-  12: () =>
-    Promise.all([
-      import("./sections/rag-foundations.jsx"),
-      import("./sections/rag-ingestion.jsx"),
-      import("./sections/rag-retrieval.jsx"),
-      import("./sections/rag-generation.jsx"),
-      import("./sections/rag-evaluation.jsx"),
-      import("./sections/rag-production.jsx"),
-    ]).then((mods) => Object.assign({}, ...mods)),
-  13: () =>
-    Promise.all([
-      import("./sections/agent-prompting.jsx"),
-      import("./sections/agent-tools.jsx"),
-      import("./sections/agent-loops.jsx"),
-      import("./sections/multi-agent.jsx"),
-      import("./sections/agent-evals.jsx"),
-      import("./sections/agent-production.jsx"),
-    ]).then((mods) => Object.assign({}, ...mods)),
-};
-
 // ── Lazy-loaded search: not loaded until search is opened ──
 const SearchOverlay = lazy(() => import("./search-overlay.jsx"));
-
-// Cache for loaded section modules (avoids re-importing on every chapter change within same section)
-const sectionCache = {};
-
-async function loadComponent(sectionNum, componentName) {
-  if (!sectionCache[sectionNum]) {
-    const loader = sectionLoaders[sectionNum];
-    if (!loader) return null;
-    sectionCache[sectionNum] = await loader();
-  }
-  return sectionCache[sectionNum][componentName] || null;
-}
 
 // Per-chapter glob: each chapter file becomes a separate Vite chunk.
 const chapterLoaders = import.meta.glob("./chapters/**/*.jsx");
@@ -97,20 +29,11 @@ async function getSearchModule() {
 
 // Validate chapter/component mapping in dev mode
 if (import.meta.env.DEV) {
-  Promise.all(
-    Object.entries(sectionLoaders).map(([sec, loader]) => loader().then((mod) => ({ sec: Number(sec), mod }))),
-  ).then((sections) => {
-    const allExports = {};
-    for (const { mod } of sections) {
-      Object.assign(allExports, mod);
+  chapters.forEach((c) => {
+    const key = `./chapters/${c.file}.jsx`;
+    if (!chapterLoaders[key]) {
+      console.error(`[lookup] Chapter "${c.id}" file "${c.file}" not found in chapter glob.`);
     }
-    chapters.forEach((c) => {
-      if (c.component && !allExports[c.component]) {
-        console.error(
-          `[lookup] Chapter "${c.id}" references component "${c.component}" which is not exported by any section file.`,
-        );
-      }
-    });
   });
 }
 
@@ -286,22 +209,13 @@ export default function LearnAI() {
     const entry = chapters[ch];
     if (!entry) return;
     let cancelled = false;
-    const sectionNum = entry.section;
-    const compName = entry.component;
-    const file = entry.file;
     setRenderChapter(null);
-    (async () => {
-      let fn = await loadChapterByFile(file);
-      if (!fn) {
-        fn = await loadComponent(sectionNum, compName);
-      }
+    loadChapterByFile(entry.file).then((fn) => {
       if (cancelled) return;
       if (fn) {
         setRenderChapter(() => fn);
       } else if (import.meta.env.DEV) {
-        console.error(
-          `[lookup] Failed to resolve chapter "${entry.id}" file "${file}" component "${compName}" for section ${sectionNum}.`,
-        );
+        console.error(`[lookup] Failed to resolve chapter "${entry.id}" file "${entry.file}".`);
       }
       // After the first chapter loads, start downloading semantic search in background
       if (!firstLoadDone.current) {
@@ -324,7 +238,7 @@ export default function LearnAI() {
         if (document.readyState === "complete") trigger();
         else window.addEventListener("load", trigger, { once: true });
       }
-    })();
+    });
     return () => {
       cancelled = true;
     };

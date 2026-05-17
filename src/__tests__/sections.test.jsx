@@ -5927,6 +5927,31 @@ describe("DomainAdaptation (12.15) content", () => {
     expect(labelY, `anchor label y=${labelY}, expected >= 180`).toBeGreaterThanOrEqual(180);
   });
 
+  it("sub=1 Pull/Push lines start at A circle boundary, not its center", () => {
+    const { container } = render(fn(makeCtx({ sub: 1 })));
+    const svg = Array.from(container.querySelectorAll("svg")).find((s) => s.textContent.includes("Anchor (Query)"));
+    const aCircle = Array.from(svg.querySelectorAll("circle")).find(
+      (c) => c.getAttribute("r") === "14" && c.getAttribute("cx") === "260",
+    );
+    expect(aCircle).not.toBeNull();
+    const cx = +aCircle.getAttribute("cx");
+    const cy = +aCircle.getAttribute("cy");
+    const r = +aCircle.getAttribute("r");
+    const lines = Array.from(svg.querySelectorAll("line")).filter((l) =>
+      ["#a5d6a7", "#ef9a9a"].includes(l.getAttribute("stroke")),
+    );
+    expect(lines.length).toBe(2);
+    for (const l of lines) {
+      const dx = +l.getAttribute("x1") - cx;
+      const dy = +l.getAttribute("y1") - cy;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      expect(
+        dist,
+        `line (${l.getAttribute("stroke")}) starts ${dist.toFixed(1)}vb from A center, expected ~${r}`,
+      ).toBeGreaterThanOrEqual(r - 0.5);
+    }
+  });
+
   it("sub=2 shows training pair construction with hard negatives", () => {
     const { container } = render(fn(makeCtx({ sub: 2 })));
     expect(container.textContent).toMatch(/hard negative/i);

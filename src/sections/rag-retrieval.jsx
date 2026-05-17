@@ -859,6 +859,19 @@ export const DomainAdaptation = (ctx) => {
   const POS_Y = ANCHOR_Y + POS_DY;
   const NEG_X = ANCHOR_X + NEG_DX;
   const NEG_Y = ANCHOR_Y + NEG_DY;
+  // Each line endpoint must sit on a circle's perimeter, not its center,
+  // otherwise the arrow visibly cuts through the node body.
+  const TRIPLET_NODE_R = 14;
+  const POS_LEN = Math.hypot(POS_X - ANCHOR_X, POS_Y - ANCHOR_Y);
+  const NEG_LEN = Math.hypot(NEG_X - ANCHOR_X, NEG_Y - ANCHOR_Y);
+  const PULL_START_X = ANCHOR_X + (TRIPLET_NODE_R * (POS_X - ANCHOR_X)) / POS_LEN;
+  const PULL_START_Y = ANCHOR_Y + (TRIPLET_NODE_R * (POS_Y - ANCHOR_Y)) / POS_LEN;
+  const PULL_END_X = POS_X - (TRIPLET_NODE_R * (POS_X - ANCHOR_X)) / POS_LEN;
+  const PULL_END_Y = POS_Y - (TRIPLET_NODE_R * (POS_Y - ANCHOR_Y)) / POS_LEN;
+  const PUSH_START_X = ANCHOR_X + (TRIPLET_NODE_R * (NEG_X - ANCHOR_X)) / NEG_LEN;
+  const PUSH_START_Y = ANCHOR_Y + (TRIPLET_NODE_R * (NEG_Y - ANCHOR_Y)) / NEG_LEN;
+  const PUSH_END_X = NEG_X - (TRIPLET_NODE_R * (NEG_X - ANCHOR_X)) / NEG_LEN;
+  const PUSH_END_Y = NEG_Y - (TRIPLET_NODE_R * (NEG_Y - ANCHOR_Y)) / NEG_LEN;
 
   // SVG geometry for the before/after bar chart in sub=4.
   const BAR_VIEW_W = 600;
@@ -1083,10 +1096,10 @@ export const DomainAdaptation = (ctx) => {
 
               {/* Pull (anchor -> positive): green */}
               <line
-                x1={ANCHOR_X}
-                y1={ANCHOR_Y}
-                x2={POS_X + 18}
-                y2={POS_Y + 8}
+                x1={PULL_START_X}
+                y1={PULL_START_Y}
+                x2={PULL_END_X}
+                y2={PULL_END_Y}
                 stroke="#a5d6a7"
                 strokeWidth="2"
                 markerEnd="url(#arrow-pull)"
@@ -1103,10 +1116,10 @@ export const DomainAdaptation = (ctx) => {
 
               {/* Push (anchor -> negative): red */}
               <line
-                x1={ANCHOR_X}
-                y1={ANCHOR_Y}
-                x2={NEG_X - 18}
-                y2={NEG_Y - 8}
+                x1={PUSH_START_X}
+                y1={PUSH_START_Y}
+                x2={PUSH_END_X}
+                y2={PUSH_END_Y}
                 stroke="#ef9a9a"
                 strokeWidth="2"
                 markerEnd="url(#arrow-push)"

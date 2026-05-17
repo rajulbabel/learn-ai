@@ -61,14 +61,14 @@ export default function TOC(ctx) {
     },
     {
       num: 12,
-      name: "Retrieval-Augmented Generation",
-      color: "#7c4dff",
+      name: "RAG - Retrieval-Augmented Generation",
+      color: "#00e676",
       desc: "Chunking, query transformation, citations, eval, production operations for RAG",
     },
     {
       num: 13,
-      name: "AI Agents",
-      color: "#00838f",
+      name: "Agents - Tools, MCP, Loops & Memory",
+      color: "#ff6b6b",
       desc: "Prompting foundations, tool calling, MCP/A2A protocols, agent loops, memory, multi-agent, evals, production",
     },
   ];

@@ -204,11 +204,11 @@ describe("Section 11 registration", () => {
 
 describe("Section 12 registration", () => {
   it("has section 12 in sectionNames", () => {
-    expect(sectionNames[12]).toBe("Retrieval-Augmented Generation");
+    expect(sectionNames[12]).toBe("RAG - Retrieval-Augmented Generation");
   });
 
   it("has section 12 in sectionColors", () => {
-    expect(sectionColors[12]).toBe("#7c4dff");
+    expect(sectionColors[12]).toBe("#00e676");
   });
 });
 
@@ -433,11 +433,11 @@ describe("HTML entity hygiene", () => {
 
 describe("Section 13 registration", () => {
   it("has section 13 in sectionNames", () => {
-    expect(sectionNames[13]).toBe("AI Agents");
+    expect(sectionNames[13]).toBe("Agents - Tools, MCP, Loops & Memory");
   });
 
   it("has section 13 in sectionColors", () => {
-    expect(sectionColors[13]).toBe("#00838f");
+    expect(sectionColors[13]).toBe("#ff6b6b");
   });
 });
 

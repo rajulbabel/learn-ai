@@ -271,7 +271,7 @@ Only config.js IDs change.
 | 11.35 | WeaviateMilvusChroma | `vector-systems/weaviate-milvus-chroma` | Weaviate / Milvus / Chroma |
 | 11.36 | DecisionFramework | `vector-systems/decision-framework` | The Decision Framework |
 
-**Section 12: Retrieval-Augmented Generation** (`src/chapters/rag-foundations/` + `src/chapters/rag-ingestion/` + `src/chapters/rag-retrieval/` + `src/chapters/rag-generation/` + `src/chapters/rag-evaluation/` + `src/chapters/rag-production/` - 41 chapters across Acts 1-10)
+**Section 12: RAG - Retrieval-Augmented Generation** (`src/chapters/rag-foundations/` + `src/chapters/rag-ingestion/` + `src/chapters/rag-retrieval/` + `src/chapters/rag-generation/` + `src/chapters/rag-evaluation/` + `src/chapters/rag-production/` - 41 chapters across Acts 1-10)
 
 | Chapter | Component | File | Title |
 |---------|-----------|------|-------|
@@ -317,7 +317,7 @@ Only config.js IDs change.
 | 12.40 | FrameworkChoice | `rag-production/framework-choice` | Framework Choice |
 | 12.41 | RAGDecisionFrameworkCapstone | `rag-production/rag-decision-framework-capstone` | The Complete RAG Decision Framework + Capstone |
 
-**Section 13: AI Agents** (`src/chapters/agent-prompting/` + `src/chapters/agent-tools/` + `src/chapters/agent-loops/` + `src/chapters/multi-agent/` + `src/chapters/agent-evals/` + `src/chapters/agent-production/` - 52 chapters across 9 acts)
+**Section 13: Agents - Tools, MCP, Loops & Memory** (`src/chapters/agent-prompting/` + `src/chapters/agent-tools/` + `src/chapters/agent-loops/` + `src/chapters/multi-agent/` + `src/chapters/agent-evals/` + `src/chapters/agent-production/` - 52 chapters across 9 acts)
 
 | Chapter | Component | File | Title |
 |---------|-----------|------|-------|

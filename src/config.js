@@ -308,8 +308,8 @@ export const sectionNames = {
   9: "The Decoder",
   10: "Modern LLM Techniques",
   11: "Vector Databases",
-  12: "Retrieval-Augmented Generation",
-  13: "AI Agents",
+  12: "RAG - Retrieval-Augmented Generation",
+  13: "Agents - Tools, MCP, Loops & Memory",
 };
 
 // Section colors (one per section, used in progress bar, TOC, etc.)
@@ -325,8 +325,8 @@ export const sectionColors = {
   9: "#ef5350",
   10: "#26a69a",
   11: "#f06292",
-  12: "#7c4dff",
-  13: "#00838f",
+  12: "#00e676",
+  13: "#ff6b6b",
 };
 
 // Colors

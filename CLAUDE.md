@@ -528,6 +528,22 @@ user to remind you.
   parameter syntax (`m = 16`, `ef_search = 40`), tokens like `[CLS]` / `[SEP]`.
   When unsure, capitalize. The first letter of a LINE is what counts -
   everything after a colon or first word does not need re-capitalization.
+- **Title-case for diagram box text** - inside any diagram box, decision-tree
+  node, flow-chart node, matrix cell, or named card, EVERY WORD has its first
+  letter capitalized, not just the first word of the line. Example: a diagram
+  box labeled "Retrieve Top K Documents" not "Retrieve top k documents".
+  Examples that MUST be title-case: "Cache Hits", "Vector Search", "Prompt
+  Cache Only", "Lock-In Risk", "Smaller Embedding", "User Question", "Cosine
+  Search In Cache Store", "Eviction", "False-Hit Risk". This rule is stricter
+  than the previous "first letter of line" rule and supersedes it specifically
+  inside diagram boxes. Exceptions: officially lowercase brand names
+  (pgvector, numpy, iPhone, LlamaIndex/LangChain/LangGraph use their official
+  capitalizations), variable identifiers in formulas (`q_vec`,
+  `embedding_model_version`), parameter syntax (`m = 16`, `ef_search = 40`),
+  tokens like `[CLS]` / `[SEP]`. The "first letter of line" rule still
+  applies outside diagram boxes (monospace formula lines, bullet text,
+  paragraph fragments). When unsure: in a diagram box, capitalize every word;
+  outside a diagram box, capitalize only the first word.
 - **SVG diagrams must be horizontally centered in their viewBox** - never
   hardcode `x = 40` for elements in a `viewBox 0 0 520 ...`. Compute symmetric
   padding: `x_start = (viewBox_width - element_span) / 2`. Token rows,

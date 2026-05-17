@@ -899,3 +899,27 @@ describe("Section 13 Act 9 chapter entries", () => {
     expect(c.component).toBe("AgentDecisionFramework");
   });
 });
+
+describe("chapter.file field", () => {
+  it("every chapter has a non-empty string file field", () => {
+    for (const ch of chapters) {
+      expect(typeof ch.file).toBe("string");
+      expect(ch.file.length).toBeGreaterThan(0);
+    }
+  });
+
+  it("file values are kebab-case path of form 'topic/chapter' (no .jsx, no leading slash)", () => {
+    const pattern = /^[a-z0-9]+(-[a-z0-9]+)*\/[a-z0-9]+(-[a-z0-9]+)*$/;
+    for (const ch of chapters) {
+      expect(ch.file).toMatch(pattern);
+    }
+  });
+
+  it("file values are unique per chapter (no two chapters point at the same file)", () => {
+    const seen = new Set();
+    for (const ch of chapters) {
+      expect(seen.has(ch.file)).toBe(false);
+      seen.add(ch.file);
+    }
+  });
+});

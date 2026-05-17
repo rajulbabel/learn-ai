@@ -10,10 +10,10 @@ describe("build-search-index", () => {
 
   beforeEach(async () => {
     workDir = mkdtempSync(join(tmpdir(), "build-search-"));
-    mkdirSync(join(workDir, "src", "sections"), { recursive: true });
+    mkdirSync(join(workDir, "src", "chapters", "neural-foundations"), { recursive: true });
     mkdirSync(join(workDir, "src", "data"), { recursive: true });
     writeFileSync(
-      join(workDir, "src", "sections", "neural-foundations.jsx"),
+      join(workDir, "src", "chapters", "neural-foundations", "what-is-nn.jsx"),
       "export const WhatIsNN = () => <div>NN content</div>;",
     );
     writeFileSync(join(workDir, "src", "data", "svg-descriptions.json"), "{}");
@@ -49,7 +49,7 @@ describe("build-search-index", () => {
     });
 
     const chapters = [
-      { id: "1.1", title: "What is a Neural Network?", section: 1, sectionFile: "neural-foundations.jsx" },
+      { id: "1.1", title: "What is a Neural Network?", section: 1, file: "neural-foundations/what-is-nn" },
     ];
     const sectionNames = { 1: "Neural Network Foundations" };
 
@@ -64,7 +64,7 @@ describe("build-search-index", () => {
 
     // Edit source: cache miss again
     writeFileSync(
-      join(workDir, "src", "sections", "neural-foundations.jsx"),
+      join(workDir, "src", "chapters", "neural-foundations", "what-is-nn.jsx"),
       "export const WhatIsNN = () => <div>EDITED</div>;",
     );
     await runBuild({ rootDir: workDir, chapters, sectionNames });
@@ -95,7 +95,7 @@ describe("build-search-index", () => {
 
     await runBuild({
       rootDir: workDir,
-      chapters: [{ id: "1.1", title: "T", section: 1, sectionFile: "neural-foundations.jsx" }],
+      chapters: [{ id: "1.1", title: "T", section: 1, file: "neural-foundations/what-is-nn" }],
       sectionNames: { 1: "S1" },
     });
 
@@ -111,12 +111,40 @@ describe("build-search-index", () => {
     const id1 = chunksJson[0].id;
     return runBuild({
       rootDir: workDir,
-      chapters: [{ id: "1.1", title: "T", section: 1, sectionFile: "neural-foundations.jsx" }],
+      chapters: [{ id: "1.1", title: "T", section: 1, file: "neural-foundations/what-is-nn" }],
       sectionNames: { 1: "S1" },
     }).then(() => {
       const again = JSON.parse(readFileSync(join(workDir, "src", "data", "chunks.json"), "utf-8"));
       expect(again[0].id).toBe(id1);
     });
+  });
+
+  it("uses flat cache shape keyed by per-chapter file hash", async () => {
+    mockChunk.mockResolvedValue({
+      1.1: [
+        {
+          sub: 0,
+          kind: "concept",
+          text: "Flat cache test",
+          summary: "S",
+          queries: ["q1", "q2", "q3", "q4", "q5"],
+          terms: ["t"],
+        },
+      ],
+    });
+
+    await runBuild({
+      rootDir: workDir,
+      chapters: [{ id: "1.1", title: "T", section: 1, file: "neural-foundations/what-is-nn" }],
+      sectionNames: { 1: "S1" },
+    });
+
+    const cache = JSON.parse(readFileSync(join(workDir, "src", "data", "chunk-cache.json"), "utf-8"));
+    const keys = Object.keys(cache);
+    expect(keys).toHaveLength(1);
+    // Each cache value must be a flat array of chunks (not a nested chapter-id map)
+    expect(Array.isArray(cache[keys[0]])).toBe(true);
+    expect(cache[keys[0]][0]).toMatchObject({ sub: 0, kind: "concept", text: "Flat cache test" });
   });
 
   it("recovers from a corrupt chunk-cache.json file", async () => {
@@ -136,7 +164,7 @@ describe("build-search-index", () => {
     });
     await runBuild({
       rootDir: workDir,
-      chapters: [{ id: "1.1", title: "T", section: 1, sectionFile: "neural-foundations.jsx" }],
+      chapters: [{ id: "1.1", title: "T", section: 1, file: "neural-foundations/what-is-nn" }],
       sectionNames: { 1: "S1" },
       log: () => {},
     });

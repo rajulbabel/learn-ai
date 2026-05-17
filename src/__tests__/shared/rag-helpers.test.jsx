@@ -4,9 +4,7 @@ import { FormulaBox, CapstoneDecisionCard } from "../../shared/rag-helpers.jsx";
 
 describe("rag-helpers", () => {
   it("FormulaBox renders a div with the children inside", () => {
-    const { container, getByText } = render(
-      <FormulaBox color="#80deea">formula content</FormulaBox>,
-    );
+    const { container, getByText } = render(<FormulaBox color="#80deea">formula content</FormulaBox>);
     expect(container.firstChild).not.toBeNull();
     expect(container.firstChild.tagName).toBe("DIV");
     expect(getByText("formula content")).toBeDefined();

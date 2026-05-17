@@ -498,7 +498,7 @@ export default function Filtering(ctx) {
                   const nt = nodeById[to];
                   const dx = nt.x - nf.x;
                   const dy = nt.y - nf.y;
-                  const d = Math.sqrt(dx * dx + dy * dy) || 1;
+                  const d = Math.sqrt(dx * dx + dy * dy);
                   const ux = dx / d;
                   const uy = dy / d;
                   const r = 15;

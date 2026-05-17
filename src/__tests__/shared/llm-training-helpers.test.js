@@ -1,11 +1,5 @@
 import { describe, it, expect } from "vitest";
-import {
-  SCORES,
-  SORTED_SCORES,
-  SORTED_PROBS,
-  EXP_SCORES,
-  EXP_SUM,
-} from "../../shared/llm-training-helpers.jsx";
+import { SCORES, SORTED_SCORES, SORTED_PROBS, EXP_SCORES, EXP_SUM } from "../../shared/llm-training-helpers.jsx";
 
 describe("llm-training-helpers", () => {
   it("SCORES is an object with at least one entry", () => {

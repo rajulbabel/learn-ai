@@ -742,7 +742,7 @@ export default function HNSWConstruction(ctx) {
                         strokeWidth="1.2"
                       />
                     ))}
-                    {(snap.nodes[2] || []).map((id) => (
+                    {snap.nodes[2].map((id) => (
                       <g key={`l2${id}`}>
                         <circle cx="160" cy={Y2} r="9" fill={C.red} stroke={C.red} />
                         <text x="160" y={Y2 + 3} textAnchor="middle" fill="#08080d" fontSize="10" fontWeight="bold">

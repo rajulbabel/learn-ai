@@ -115,13 +115,13 @@ const HnswHierarchy = ({ desc, activeL2 = null, activeL1 = null, activeL0 = null
         );
       })}
       {pathDrops.includes("L2L1") && (
-        <line x1={layer2[0].x} y1={Y2} x2={find(layer1, activeL1 || 1).x} y2={Y1} stroke={C.green} strokeWidth="3" />
+        <line x1={layer2[0].x} y1={Y2} x2={find(layer1, activeL1).x} y2={Y1} stroke={C.green} strokeWidth="3" />
       )}
       {pathDrops.includes("L1L0") && (
         <line
-          x1={find(layer1, activeL1 || 1).x}
+          x1={find(layer1, activeL1).x}
           y1={Y1}
-          x2={find(layer0, activeL0 || 1).x}
+          x2={find(layer0, activeL0).x}
           y2={Y0}
           stroke={C.green}
           strokeWidth="3"
@@ -295,9 +295,9 @@ const HnswSpatial = ({
 };
 
 // Horizontal distance bars
+const DISTANCE_BAR_COLORS = { current: C.bright, closer: C.green, farther: C.red, unchanged: C.dim };
 const DistanceBars = ({ items, max }) => {
-  const colorFor = (role) =>
-    ({ current: C.bright, closer: C.green, farther: C.red, unchanged: C.dim })[role] || C.bright;
+  const colorFor = (role) => DISTANCE_BAR_COLORS[role];
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
       {items.map((it) => {
@@ -332,7 +332,7 @@ const DistanceBars = ({ items, max }) => {
 };
 
 // Priority-queue UI for the layer-0 beam.
-const BeamSlots = ({ items, ef, justInserted = [], justEvicted = [], popped = null }) => {
+const BeamSlots = ({ items, ef, justInserted = [], popped = null }) => {
   const sorted = [...items].sort((a, b) => a.dist - b.dist);
   const slots = [...sorted];
   while (slots.length < ef) slots.push(null);
@@ -341,17 +341,10 @@ const BeamSlots = ({ items, ef, justInserted = [], justEvicted = [], popped = nu
       {slots.map((s, i) => {
         const empty = s == null;
         const isInserted = !empty && justInserted.includes(s.id);
-        const isEvicted = !empty && justEvicted.includes(s.id);
         const isPopped = !empty && popped === s.id;
-        const col = empty ? C.dim : isPopped ? C.orange : isInserted ? C.green : isEvicted ? C.red : C.bright;
-        const bg = isPopped
-          ? `${C.orange}18`
-          : isInserted
-            ? `${C.green}18`
-            : isEvicted
-              ? `${C.red}18`
-              : "rgba(0,0,0,0.3)";
-        const status = empty ? "" : isPopped ? "POPPED" : isInserted ? "INSERTED" : isEvicted ? "EVICTED" : "";
+        const col = empty ? C.dim : isPopped ? C.orange : isInserted ? C.green : C.bright;
+        const bg = isPopped ? `${C.orange}18` : isInserted ? `${C.green}18` : "rgba(0,0,0,0.3)";
+        const status = empty ? "" : isPopped ? "POPPED" : isInserted ? "INSERTED" : "";
         return (
           <div
             key={i}

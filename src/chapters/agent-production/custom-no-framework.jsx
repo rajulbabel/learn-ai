@@ -125,9 +125,9 @@ export default function CustomNoFramework(ctx) {
             Three Reasons To Roll Your Own
           </T>
           <T color={SOFT.teal} center size={16} style={{ marginTop: 10 }}>
-            No-framework agents exist for three reasons: total control over behavior,
-            stripping framework overhead, and side-stepping vendor lock-in. Each reason is
-            a real production trade-off, not a "we like writing code" excuse.
+            No-framework agents exist for three reasons: total control over behavior, stripping framework overhead, and
+            side-stepping vendor lock-in. Each reason is a real production trade-off, not a "we like writing code"
+            excuse.
           </T>
 
           <div
@@ -142,10 +142,7 @@ export default function CustomNoFramework(ctx) {
               const accent = C[r.accent];
               const soft = SOFT[r.accent];
               return (
-                <div
-                  key={r.name}
-                  style={{ ...tintedCard(accent), padding: 14, textAlign: "center" }}
-                >
+                <div key={r.name} style={{ ...tintedCard(accent), padding: 14, textAlign: "center" }}>
                   <T color={accent} center bold size={17}>
                     {r.name}
                   </T>
@@ -170,9 +167,8 @@ export default function CustomNoFramework(ctx) {
           </div>
 
           <T color={SOFT.teal} center size={15} style={{ marginTop: 14 }}>
-            Custom is not a default. Custom is what you reach for when one of these three
-            reasons applies and you can afford the engineering cost. Otherwise: pick a
-            framework and ship.
+            Custom is not a default. Custom is what you reach for when one of these three reasons applies and you can
+            afford the engineering cost. Otherwise: pick a framework and ship.
           </T>
         </Box>
       )}
@@ -183,10 +179,9 @@ export default function CustomNoFramework(ctx) {
             50 Lines Of Loop
           </T>
           <T color={SOFT.cyan} center size={16} style={{ marginTop: 10 }}>
-            The minimum-viable agent loop is short. A history list. A while loop. Tool
-            dispatch when the model asks. Final text when the model stops. Termination on
-            max iterations. Everything else (retries, observability, caching) is built on
-            top of this skeleton.
+            The minimum-viable agent loop is short. A history list. A while loop. Tool dispatch when the model asks.
+            Final text when the model stops. Termination on max iterations. Everything else (retries, observability,
+            caching) is built on top of this skeleton.
           </T>
 
           <div style={{ ...tintedCard(C.cyan), padding: 14, marginTop: 14 }}>
@@ -207,7 +202,7 @@ export default function CustomNoFramework(ctx) {
                 display: "inline-block",
               }}
             >
-{`history = [system_prompt, user_msg]
+              {`history = [system_prompt, user_msg]
 for i in range(max_iter):
   response = llm.call(history, tools=TOOLS)
   history.append(response)
@@ -222,9 +217,8 @@ return "Max iterations reached - escalating to human."`}
           </div>
 
           <T color={SOFT.cyan} center size={15} style={{ marginTop: 14 }}>
-            This is the entire reason-act-observe loop in 11 lines. Tool dispatch lives in
-            the TOOLS dict. Termination is either a no-tool-call response or the
-            max_iter cap with an escalation message. You own every line.
+            This is the entire reason-act-observe loop in 11 lines. Tool dispatch lives in the TOOLS dict. Termination
+            is either a no-tool-call response or the max_iter cap with an escalation message. You own every line.
           </T>
         </Box>
       </Reveal>
@@ -235,15 +229,16 @@ return "Max iterations reached - escalating to human."`}
             Missing Pieces You Now Own
           </T>
           <T color={SOFT.purple} center size={16} style={{ marginTop: 10 }}>
-            Frameworks ship a lot more than the loop. When you go custom, every framework
-            feature is on your build list. Some are non-negotiable for production. Others
-            you can defer until you actually need them.
+            Frameworks ship a lot more than the loop. When you go custom, every framework feature is on your build list.
+            Some are non-negotiable for production. Others you can defer until you actually need them.
           </T>
 
           <div style={{ ...tintedCard(C.purple), padding: 14, marginTop: 14 }}>
             <div style={{ display: "grid", gridTemplateColumns: "1.8fr 0.7fr 1.6fr", gap: 0, fontSize: 14 }}>
               <div style={{ padding: "8px 10px", fontWeight: 700, color: SOFT.purple }}>Piece</div>
-              <div style={{ padding: "8px 10px", fontWeight: 700, color: SOFT.purple, textAlign: "center" }}>Status</div>
+              <div style={{ padding: "8px 10px", fontWeight: 700, color: SOFT.purple, textAlign: "center" }}>
+                Status
+              </div>
               <div style={{ padding: "8px 10px", fontWeight: 700, color: SOFT.purple }}>Why</div>
               {CUSTOM_MISSING_ROWS.map((row, i) => {
                 const statusColor = row.status === "MUST BUILD" ? C.red : C.green;
@@ -288,9 +283,9 @@ return "Max iterations reached - escalating to human."`}
           </div>
 
           <T color={SOFT.purple} center size={15} style={{ marginTop: 14 }}>
-            "Must build" is the floor for a production custom agent. "Can skip" is the
-            ceiling you can defer until traffic justifies it. Misjudge the floor and you
-            ship a fragile agent that breaks the first time a flaky tool surfaces.
+            "Must build" is the floor for a production custom agent. "Can skip" is the ceiling you can defer until
+            traffic justifies it. Misjudge the floor and you ship a fragile agent that breaks the first time a flaky
+            tool surfaces.
           </T>
         </Box>
       </Reveal>
@@ -301,27 +296,32 @@ return "Max iterations reached - escalating to human."`}
             Stay Custom When...
           </T>
           <T color={SOFT.green} center size={16} style={{ marginTop: 10 }}>
-            The decision tree is short. Three signals say "go custom". Two signals say
-            "use a framework". When the signals conflict, default to a framework and
-            optimize only when you can prove framework overhead is the bottleneck.
+            The decision tree is short. Three signals say "go custom". Two signals say "use a framework". When the
+            signals conflict, default to a framework and optimize only when you can prove framework overhead is the
+            bottleneck.
           </T>
 
           <div style={{ ...tintedCard(C.green), padding: 14, marginTop: 14 }}>
-            <svg
-              viewBox="0 0 720 320"
-              style={{ width: "100%", maxWidth: 720, display: "block", margin: "0 auto" }}
-            >
+            <svg viewBox="0 0 720 320" style={{ width: "100%", maxWidth: 720, display: "block", margin: "0 auto" }}>
               <desc>
-                Decision tree for staying custom. Five leaves: three say YES (high-volume
-                traffic over 10K per second, tight latency budget P95 under 2 seconds,
-                multi-vendor strategy required) and two say NO (one-off prototype shipping
-                this week, team of fewer than 3 engineers).
+                Decision tree for staying custom. Five leaves: three say YES (high-volume traffic over 10K per second,
+                tight latency budget P95 under 2 seconds, multi-vendor strategy required) and two say NO (one-off
+                prototype shipping this week, team of fewer than 3 engineers).
               </desc>
               <text x={360} y={22} fill={SOFT.green} fontSize="13" fontWeight="700" textAnchor="middle">
                 Custom Or Framework?
               </text>
               {/* root */}
-              <rect x={290} y={36} width={140} height={36} rx={8} fill={`${C.green}18`} stroke={C.green} strokeWidth={1.4} />
+              <rect
+                x={290}
+                y={36}
+                width={140}
+                height={36}
+                rx={8}
+                fill={`${C.green}18`}
+                stroke={C.green}
+                strokeWidth={1.4}
+              />
               <text x={360} y={59} fill={SOFT.green} fontSize="13" fontWeight="700" textAnchor="middle">
                 Five Signals
               </text>
@@ -371,9 +371,8 @@ return "Max iterations reached - escalating to human."`}
           </div>
 
           <T color={SOFT.green} center size={15} style={{ marginTop: 14 }}>
-            One-off prototypes and small teams are the most common "frame your work in a
-            framework" cases. Production scale and vendor portability are the most common
-            "go custom" cases. Match the path to your real constraint.
+            One-off prototypes and small teams are the most common "frame your work in a framework" cases. Production
+            scale and vendor portability are the most common "go custom" cases. Match the path to your real constraint.
           </T>
         </Box>
       </Reveal>
@@ -384,22 +383,17 @@ return "Max iterations reached - escalating to human."`}
             Build Some, Buy Some
           </T>
           <T color={SOFT.amber} center size={16} style={{ marginTop: 10 }}>
-            Most production teams end up hybrid. They lean on a framework for scaffolding
-            and schema validation, then build custom for the parts the framework cannot
-            do well: a vendor-agnostic LLM adapter, observability that integrates with the
-            existing monitoring stack, and domain-specific tool gating.
+            Most production teams end up hybrid. They lean on a framework for scaffolding and schema validation, then
+            build custom for the parts the framework cannot do well: a vendor-agnostic LLM adapter, observability that
+            integrates with the existing monitoring stack, and domain-specific tool gating.
           </T>
 
           <div style={{ ...tintedCard(C.amber), padding: 14, marginTop: 14 }}>
-            <svg
-              viewBox="0 0 720 270"
-              style={{ width: "100%", maxWidth: 720, display: "block", margin: "0 auto" }}
-            >
+            <svg viewBox="0 0 720 270" style={{ width: "100%", maxWidth: 720, display: "block", margin: "0 auto" }}>
               <desc>
-                Hybrid layer diagram. Stack of four layers showing what teams typically buy
-                from a framework (scaffolding, schema validation, basic retries) and what
-                they build custom (LLM adapter for vendor swap, observability that
-                integrates with the monitoring stack, domain-specific tool gating).
+                Hybrid layer diagram. Stack of four layers showing what teams typically buy from a framework
+                (scaffolding, schema validation, basic retries) and what they build custom (LLM adapter for vendor swap,
+                observability that integrates with the monitoring stack, domain-specific tool gating).
               </desc>
               <text x={360} y={22} fill={SOFT.amber} fontSize="13" fontWeight="700" textAnchor="middle">
                 Hybrid Stack - Most Production Teams Live Here
@@ -436,16 +430,13 @@ return "Max iterations reached - escalating to human."`}
           </div>
 
           <T color={SOFT.amber} center size={15} style={{ marginTop: 14 }}>
-            Hybrid is the smart default once you have one production agent and a working
-            team. Buy what the framework does well. Build what differentiates you. Skip
-            the rebuild-from-scratch trap.
+            Hybrid is the smart default once you have one production agent and a working team. Buy what the framework
+            does well. Build what differentiates you. Skip the rebuild-from-scratch trap.
           </T>
         </Box>
       </Reveal>
 
-      {sub < 4 && (
-        <SubBtn onClick={onContinue} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />
-      )}
+      {sub < 4 && <SubBtn onClick={onContinue} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
     </div>
   );
 }

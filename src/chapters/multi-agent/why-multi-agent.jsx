@@ -59,20 +59,16 @@ export default function WhyMultiAgent(ctx) {
             Why One Agent Sometimes Isn&apos;t Enough
           </T>
           <T color={SOFT.green} center size={16} style={{ marginTop: 10 }}>
-            A single agent loaded with all customer-support roles - retrieve, classify, refund,
-            troubleshoot, escalate - has a crowded system prompt. Each role pulls the prompt in a
-            different direction. Performance ceiling appears.
+            A single agent loaded with all customer-support roles - retrieve, classify, refund, troubleshoot, escalate -
+            has a crowded system prompt. Each role pulls the prompt in a different direction. Performance ceiling
+            appears.
           </T>
 
           <div style={{ ...tintedCard(C.green), padding: 14, marginTop: 14 }}>
-            <svg
-              viewBox="0 0 560 200"
-              style={{ width: "100%", maxWidth: 640, display: "block", margin: "0 auto" }}
-            >
+            <svg viewBox="0 0 560 200" style={{ width: "100%", maxWidth: 640, display: "block", margin: "0 auto" }}>
               <desc>
-                Single agent loaded with five different jobs, labeled retrieve, classify, refund,
-                troubleshoot, and escalate, visualizing the crowded role assignment that creates a
-                performance ceiling for one agent.
+                Single agent loaded with five different jobs, labeled retrieve, classify, refund, troubleshoot, and
+                escalate, visualizing the crowded role assignment that creates a performance ceiling for one agent.
               </desc>
               {/* Single big agent in center */}
               <rect
@@ -120,9 +116,8 @@ export default function WhyMultiAgent(ctx) {
           </div>
 
           <T color={SOFT.green} center size={15} style={{ marginTop: 12 }}>
-            Each new role added to the system prompt costs precision on every other role. The
-            ceiling is real: at some point, splitting roles into separate agents beats stuffing
-            them into one.
+            Each new role added to the system prompt costs precision on every other role. The ceiling is real: at some
+            point, splitting roles into separate agents beats stuffing them into one.
           </T>
         </Box>
       )}
@@ -133,9 +128,8 @@ export default function WhyMultiAgent(ctx) {
             Specialization: One Agent Per Role
           </T>
           <T color={SOFT.teal} center size={16} style={{ marginTop: 10 }}>
-            Replace the crowded single agent with 3 focused agents. Each has a tighter system
-            prompt, a smaller tool set, a clearer goal. Each does its job better than a generalist
-            would.
+            Replace the crowded single agent with 3 focused agents. Each has a tighter system prompt, a smaller tool
+            set, a clearer goal. Each does its job better than a generalist would.
           </T>
 
           <div
@@ -167,8 +161,8 @@ export default function WhyMultiAgent(ctx) {
           </div>
 
           <T color={SOFT.teal} center size={15} style={{ marginTop: 14 }}>
-            Notice each specialist has 1-2 tools, not the full 8-tool inventory. Smaller surface =
-            fewer wrong-tool errors. The triage router picks which specialist a ticket goes to.
+            Notice each specialist has 1-2 tools, not the full 8-tool inventory. Smaller surface = fewer wrong-tool
+            errors. The triage router picks which specialist a ticket goes to.
           </T>
         </Box>
       </Reveal>
@@ -179,22 +173,27 @@ export default function WhyMultiAgent(ctx) {
             Run Independent Tasks At The Same Time
           </T>
           <T color={SOFT.cyan} center size={16} style={{ marginTop: 10 }}>
-            Some sub-tasks have no data dependencies. Run them on separate agents concurrently. The
-            wall-clock cost is max(sub-task latency), not the sum.
+            Some sub-tasks have no data dependencies. Run them on separate agents concurrently. The wall-clock cost is
+            max(sub-task latency), not the sum.
           </T>
 
           <div style={{ ...tintedCard(C.cyan), padding: 14, marginTop: 14 }}>
-            <svg
-              viewBox="0 0 560 180"
-              style={{ width: "100%", maxWidth: 640, display: "block", margin: "0 auto" }}
-            >
+            <svg viewBox="0 0 560 180" style={{ width: "100%", maxWidth: 640, display: "block", margin: "0 auto" }}>
               <desc>
-                Three independent sub-tasks lookup_customer, lookup_subscription, and search_kb
-                running in parallel on three separate agents with wall-clock time equal to the
-                slowest one rather than the sum of all three.
+                Three independent sub-tasks lookup_customer, lookup_subscription, and search_kb running in parallel on
+                three separate agents with wall-clock time equal to the slowest one rather than the sum of all three.
               </desc>
               {/* Top hub */}
-              <rect x={230} y={20} width={100} height={36} rx={8} fill={`${C.cyan}24`} stroke={C.cyan} strokeWidth={2} />
+              <rect
+                x={230}
+                y={20}
+                width={100}
+                height={36}
+                rx={8}
+                fill={`${C.cyan}24`}
+                stroke={C.cyan}
+                strokeWidth={2}
+              />
               <text x={280} y={42} fill={SOFT.cyan} fontSize="13" fontWeight="700" textAnchor="middle">
                 Dispatcher
               </text>
@@ -207,7 +206,16 @@ export default function WhyMultiAgent(ctx) {
               ].map((a, i) => (
                 <g key={`pa-${i}`}>
                   <line x1={280} y1={56} x2={a.x} y2={90} stroke={C.cyan} strokeWidth={1.5} />
-                  <rect x={a.x - 70} y={90} width={140} height={50} rx={8} fill={`${C.cyan}1a`} stroke={C.cyan} strokeWidth={1.6} />
+                  <rect
+                    x={a.x - 70}
+                    y={90}
+                    width={140}
+                    height={50}
+                    rx={8}
+                    fill={`${C.cyan}1a`}
+                    stroke={C.cyan}
+                    strokeWidth={1.6}
+                  />
                   <text x={a.x} y={108} fill={SOFT.cyan} fontSize="13" fontWeight="700" textAnchor="middle">
                     {a.label}
                   </text>
@@ -223,8 +231,8 @@ export default function WhyMultiAgent(ctx) {
           </div>
 
           <T color={SOFT.cyan} center size={15} style={{ marginTop: 12 }}>
-            Sequential = 1.2 + 1.4 + 1.6 = 4.2s. Parallel = max(1.2, 1.4, 1.6) = 1.6s. Almost 3x
-            faster. The win compounds as you add more independent sub-tasks.
+            Sequential = 1.2 + 1.4 + 1.6 = 4.2s. Parallel = max(1.2, 1.4, 1.6) = 1.6s. Almost 3x faster. The win
+            compounds as you add more independent sub-tasks.
           </T>
         </Box>
       </Reveal>
@@ -235,22 +243,28 @@ export default function WhyMultiAgent(ctx) {
             Planner vs Worker
           </T>
           <T color={SOFT.blue} center size={16} style={{ marginTop: 10 }}>
-            Some agents are good at decomposing tasks; others are good at executing single steps.
-            Separating these roles produces a 2-layer setup where each agent only does its own job.
+            Some agents are good at decomposing tasks; others are good at executing single steps. Separating these roles
+            produces a 2-layer setup where each agent only does its own job.
           </T>
 
           <div style={{ ...tintedCard(C.blue), padding: 14, marginTop: 14 }}>
-            <svg
-              viewBox="0 0 560 200"
-              style={{ width: "100%", maxWidth: 640, display: "block", margin: "0 auto" }}
-            >
+            <svg viewBox="0 0 560 200" style={{ width: "100%", maxWidth: 640, display: "block", margin: "0 auto" }}>
               <desc>
-                Two-layer planner and worker architecture: a planner agent at the top decomposes a
-                task and dispatches sub-tasks to two worker agents at the bottom that each execute
-                one sub-task and return results to the planner.
+                Two-layer planner and worker architecture: a planner agent at the top decomposes a task and dispatches
+                sub-tasks to two worker agents at the bottom that each execute one sub-task and return results to the
+                planner.
               </desc>
               {/* Planner top */}
-              <rect x={210} y={20} width={140} height={50} rx={10} fill={`${C.purple}22`} stroke={C.purple} strokeWidth={2} />
+              <rect
+                x={210}
+                y={20}
+                width={140}
+                height={50}
+                rx={10}
+                fill={`${C.purple}22`}
+                stroke={C.purple}
+                strokeWidth={2}
+              />
               <text x={280} y={42} fill={SOFT.purple} fontSize="14" fontWeight="700" textAnchor="middle">
                 Planner Agent
               </text>
@@ -266,7 +280,16 @@ export default function WhyMultiAgent(ctx) {
                 <g key={`wk-${i}`}>
                   <line x1={280} y1={70} x2={w.x} y2={120} stroke={C.blue} strokeWidth={1.6} />
                   <polygon points={`${w.x - 4},116 ${w.x + 4},116 ${w.x},124`} fill={C.blue} />
-                  <rect x={w.x - 70} y={130} width={140} height={50} rx={10} fill={`${C.blue}22`} stroke={C.blue} strokeWidth={1.8} />
+                  <rect
+                    x={w.x - 70}
+                    y={130}
+                    width={140}
+                    height={50}
+                    rx={10}
+                    fill={`${C.blue}22`}
+                    stroke={C.blue}
+                    strokeWidth={1.8}
+                  />
                   <text x={w.x} y={152} fill={SOFT.blue} fontSize="13" fontWeight="700" textAnchor="middle">
                     {w.label}
                   </text>
@@ -279,8 +302,8 @@ export default function WhyMultiAgent(ctx) {
           </div>
 
           <T color={SOFT.blue} center size={15} style={{ marginTop: 12 }}>
-            The planner does NOT execute steps. The workers do NOT decompose. Each agent stays on
-            its layer. This separation makes both layers more reliable than one mixed agent.
+            The planner does NOT execute steps. The workers do NOT decompose. Each agent stays on its layer. This
+            separation makes both layers more reliable than one mixed agent.
           </T>
         </Box>
       </Reveal>
@@ -291,8 +314,8 @@ export default function WhyMultiAgent(ctx) {
             Don&apos;t Multi-Agent A Small Problem
           </T>
           <T color={SOFT.indigo} center size={16} style={{ marginTop: 10 }}>
-            Multi-agent costs something. More LLM calls, more state to track, more places for
-            failure. Four anti-patterns where one agent is the right answer.
+            Multi-agent costs something. More LLM calls, more state to track, more places for failure. Four
+            anti-patterns where one agent is the right answer.
           </T>
 
           <div
@@ -321,16 +344,14 @@ export default function WhyMultiAgent(ctx) {
               Decision Rule
             </T>
             <T color={SOFT.indigo} center size={14} style={{ marginTop: 8 }}>
-              Multi-Agent IF Specialization OR Parallelism OR Planner / Worker Fits The Workload.
-              Otherwise Single Agent. Cost Of Multi-Agent Failure Modes Covered In 13.35.
+              Multi-Agent IF Specialization OR Parallelism OR Planner / Worker Fits The Workload. Otherwise Single
+              Agent. Cost Of Multi-Agent Failure Modes Covered In 13.35.
             </T>
           </div>
         </Box>
       </Reveal>
 
-      {sub < 4 && (
-        <SubBtn onClick={onContinue} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />
-      )}
+      {sub < 4 && <SubBtn onClick={onContinue} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
     </div>
   );
 }

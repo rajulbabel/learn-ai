@@ -64,9 +64,9 @@ export default function AgentHandoffs(ctx) {
             Return The Next Agent
           </T>
           <T color={SOFT.green} center size={16} style={{ marginTop: 10 }}>
-            The Swarm pattern (now in the OpenAI Agents SDK): instead of an orchestrator routing
-            sub-tasks, an agent finishes its part and RETURNS the next agent. The runtime then
-            switches control directly. No central coordinator.
+            The Swarm pattern (now in the OpenAI Agents SDK): instead of an orchestrator routing sub-tasks, an agent
+            finishes its part and RETURNS the next agent. The runtime then switches control directly. No central
+            coordinator.
           </T>
 
           <div
@@ -83,8 +83,7 @@ export default function AgentHandoffs(ctx) {
                 Orchestrator-Worker Style
               </T>
               <T color={SOFT.purple} center size={13} style={{ marginTop: 8 }}>
-                Orchestrator Picks Who Handles Next, Waits For Result, Picks Again. Central
-                Control.
+                Orchestrator Picks Who Handles Next, Waits For Result, Picks Again. Central Control.
               </T>
             </div>
 
@@ -94,15 +93,14 @@ export default function AgentHandoffs(ctx) {
                 Swarm Style
               </T>
               <T color={SOFT.green} center size={13} style={{ marginTop: 8 }}>
-                Agent A Returns &quot;next = agent B&quot;. Loop Switches Control Directly. No
-                Central Coordinator.
+                Agent A Returns &quot;next = agent B&quot;. Loop Switches Control Directly. No Central Coordinator.
               </T>
             </div>
           </div>
 
           <T color={SOFT.green} center size={15} style={{ marginTop: 14 }}>
-            Hand-off is decentralized; orchestration is centralized. Both ship to production - the
-            pick depends on whether you want a single "brain" or peer-to-peer routing.
+            Hand-off is decentralized; orchestration is centralized. Both ship to production - the pick depends on
+            whether you want a single "brain" or peer-to-peer routing.
           </T>
         </Box>
       )}
@@ -113,8 +111,8 @@ export default function AgentHandoffs(ctx) {
             Agents As Routes
           </T>
           <T color={SOFT.teal} center size={16} style={{ marginTop: 10 }}>
-            In the Swarm pattern, each agent declares which other agents it can hand off to. The
-            handoffs field is a list - similar to routes in a web framework.
+            In the Swarm pattern, each agent declares which other agents it can hand off to. The handoffs field is a
+            list - similar to routes in a web framework.
           </T>
 
           <div style={{ ...tintedCard(C.teal), padding: 14, marginTop: 14 }}>
@@ -142,9 +140,8 @@ export default function AgentHandoffs(ctx) {
           </div>
 
           <T color={SOFT.teal} center size={15} style={{ marginTop: 12 }}>
-            `name` and `instructions` are this agent&apos;s own identity. `handoffs` is the set of
-            other agents this agent can transfer control to - basically a small DAG of allowed
-            transitions.
+            `name` and `instructions` are this agent&apos;s own identity. `handoffs` is the set of other agents this
+            agent can transfer control to - basically a small DAG of allowed transitions.
           </T>
         </Box>
       </Reveal>
@@ -155,8 +152,8 @@ export default function AgentHandoffs(ctx) {
             What Travels With The Hand-Off
           </T>
           <T color={SOFT.cyan} center size={16} style={{ marginTop: 10 }}>
-            When agent A hands off to agent B, B does not start fresh. It receives a hand-off
-            package with everything it needs to pick up cleanly.
+            When agent A hands off to agent B, B does not start fresh. It receives a hand-off package with everything it
+            needs to pick up cleanly.
           </T>
 
           <div
@@ -181,9 +178,8 @@ export default function AgentHandoffs(ctx) {
           </div>
 
           <T color={SOFT.cyan} center size={15} style={{ marginTop: 14 }}>
-            The receiving agent reads the entire package before its first reasoning step. No
-            "re-litigation from scratch". The conversation history plus working memory plus reason
-            is the contract.
+            The receiving agent reads the entire package before its first reasoning step. No "re-litigation from
+            scratch". The conversation history plus working memory plus reason is the contract.
           </T>
         </Box>
       </Reveal>
@@ -194,8 +190,8 @@ export default function AgentHandoffs(ctx) {
             Trace: T4 With Triage And Billing Hand-Off
           </T>
           <T color={SOFT.blue} center size={16} style={{ marginTop: 10 }}>
-            Ticket T4 = "Cancel my subscription + refund last invoice." Watch the hand-off ring
-            move control across three agents.
+            Ticket T4 = "Cancel my subscription + refund last invoice." Watch the hand-off ring move control across
+            three agents.
           </T>
 
           <div
@@ -221,9 +217,8 @@ export default function AgentHandoffs(ctx) {
           </div>
 
           <T color={SOFT.blue} center size={15} style={{ marginTop: 14 }}>
-            Three agents, three hand-offs, one ticket. Each agent did its specialty. Hand-off
-            package carried full context so the escalation_agent did not need to ask "what
-            happened before".
+            Three agents, three hand-offs, one ticket. Each agent did its specialty. Hand-off package carried full
+            context so the escalation_agent did not need to ask "what happened before".
           </T>
         </Box>
       </Reveal>
@@ -234,20 +229,15 @@ export default function AgentHandoffs(ctx) {
             Ring When All Agents Are Peers
           </T>
           <T color={SOFT.indigo} center size={16} style={{ marginTop: 10 }}>
-            Hand-off topology is a ring (or general graph) - any agent can transfer to any other,
-            subject to the handoffs list. Different from tree topology, which has fixed parent-
-            child relationships.
+            Hand-off topology is a ring (or general graph) - any agent can transfer to any other, subject to the
+            handoffs list. Different from tree topology, which has fixed parent- child relationships.
           </T>
 
           <div style={{ ...tintedCard(C.indigo), padding: 14, marginTop: 14 }}>
-            <svg
-              viewBox="0 0 560 220"
-              style={{ width: "100%", maxWidth: 640, display: "block", margin: "0 auto" }}
-            >
+            <svg viewBox="0 0 560 220" style={{ width: "100%", maxWidth: 640, display: "block", margin: "0 auto" }}>
               <desc>
-                Hand-off ring topology with four agents arranged in a circle, each connected by
-                bidirectional arrows to its neighbors and one diagonal cross-edge, showing peer-to-
-                peer transfer with no central parent.
+                Hand-off ring topology with four agents arranged in a circle, each connected by bidirectional arrows to
+                its neighbors and one diagonal cross-edge, showing peer-to- peer transfer with no central parent.
               </desc>
               {/* 4 peer agents in a ring */}
               {[
@@ -257,7 +247,16 @@ export default function AgentHandoffs(ctx) {
                 { x: 100, y: 110, label: "Troubleshooting" },
               ].map((a, i) => (
                 <g key={`peer-${i}`}>
-                  <rect x={a.x - 50} y={a.y - 18} width={100} height={36} rx={8} fill={`${C.indigo}1f`} stroke={C.indigo} strokeWidth={1.8} />
+                  <rect
+                    x={a.x - 50}
+                    y={a.y - 18}
+                    width={100}
+                    height={36}
+                    rx={8}
+                    fill={`${C.indigo}1f`}
+                    stroke={C.indigo}
+                    strokeWidth={1.8}
+                  />
                   <text x={a.x} y={a.y + 5} fill={SOFT.indigo} fontSize="12" fontWeight="700" textAnchor="middle">
                     {a.label}
                   </text>
@@ -269,21 +268,27 @@ export default function AgentHandoffs(ctx) {
               <line x1={230} y1={175} x2={140} y2={120} stroke={C.indigo} strokeWidth={1.5} />
               <line x1={140} y1={100} x2={230} y2={45} stroke={C.indigo} strokeWidth={1.5} />
               {/* Cross-edge */}
-              <line x1={330} y1={45} x2={140} y2={120} stroke={`${C.indigo}80`} strokeWidth={1.2} strokeDasharray="4,4" />
+              <line
+                x1={330}
+                y1={45}
+                x2={140}
+                y2={120}
+                stroke={`${C.indigo}80`}
+                strokeWidth={1.2}
+                strokeDasharray="4,4"
+              />
             </svg>
           </div>
 
           <T color={SOFT.indigo} center size={15} style={{ marginTop: 12 }}>
-            Tree topology fits when domains are nested (billing has refund/invoice as sub-areas).
-            Ring topology fits when domains are equal peers (triage, billing, troubleshooting,
-            escalation are at the same level, no nesting).
+            Tree topology fits when domains are nested (billing has refund/invoice as sub-areas). Ring topology fits
+            when domains are equal peers (triage, billing, troubleshooting, escalation are at the same level, no
+            nesting).
           </T>
         </Box>
       </Reveal>
 
-      {sub < 4 && (
-        <SubBtn onClick={onContinue} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />
-      )}
+      {sub < 4 && <SubBtn onClick={onContinue} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
     </div>
   );
 }

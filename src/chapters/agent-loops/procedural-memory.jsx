@@ -82,8 +82,8 @@ export default function ProceduralMemory(ctx) {
             How-To, Not What
           </T>
           <T color={SOFT.amber} center size={16} style={{ marginTop: 10 }}>
-            Procedural memory encodes skills - HOW to do something - not facts about the world.
-            Compare a semantic fact to a procedural recipe.
+            Procedural memory encodes skills - HOW to do something - not facts about the world. Compare a semantic fact
+            to a procedural recipe.
           </T>
 
           <div
@@ -110,16 +110,15 @@ export default function ProceduralMemory(ctx) {
                 How-To Recipe
               </T>
               <T color={SOFT.amber} center size={13} style={{ marginTop: 8 }}>
-                When A Refund &gt; $200 Is Requested, Look Up Customer Tier First. Enterprise
-                Customers Self-Approve Up To $500. Otherwise Call escalate_human With
-                Urgency=Medium.
+                When A Refund &gt; $200 Is Requested, Look Up Customer Tier First. Enterprise Customers Self-Approve Up
+                To $500. Otherwise Call escalate_human With Urgency=Medium.
               </T>
             </div>
           </div>
 
           <T color={SOFT.amber} center size={15} style={{ marginTop: 14 }}>
-            Facts encode WHAT is true. Procedures encode WHAT TO DO. The agent uses both: fact says
-            "$200 cap"; procedure says "if cap exceeded, escalate".
+            Facts encode WHAT is true. Procedures encode WHAT TO DO. The agent uses both: fact says "$200 cap";
+            procedure says "if cap exceeded, escalate".
           </T>
         </Box>
       )}
@@ -130,8 +129,8 @@ export default function ProceduralMemory(ctx) {
             Cached Workflows The Agent Reuses
           </T>
           <T color={SOFT.yellow} center size={16} style={{ marginTop: 10 }}>
-            The recipe library is a small set of named workflows the customer-support agent
-            reuses. Each recipe has a trigger condition and an ordered step list.
+            The recipe library is a small set of named workflows the customer-support agent reuses. Each recipe has a
+            trigger condition and an ordered step list.
           </T>
 
           <div
@@ -163,8 +162,8 @@ export default function ProceduralMemory(ctx) {
           </div>
 
           <T color={SOFT.yellow} center size={15} style={{ marginTop: 14 }}>
-            Four recipes cover the common customer-support workflows. Each one used to be a
-            prompt-engineering exercise; once it stabilized, it got moved into procedural memory.
+            Four recipes cover the common customer-support workflows. Each one used to be a prompt-engineering exercise;
+            once it stabilized, it got moved into procedural memory.
           </T>
         </Box>
       </Reveal>
@@ -175,20 +174,15 @@ export default function ProceduralMemory(ctx) {
             Retrieve The Recipe That Matches
           </T>
           <T color={SOFT.orange} center size={16} style={{ marginTop: 10 }}>
-            A new ticket gets embedded; ANN search runs against the recipe library&apos;s
-            trigger_embedding field; the top-1 match is surfaced (or "no match" if similarity is
-            below threshold).
+            A new ticket gets embedded; ANN search runs against the recipe library&apos;s trigger_embedding field; the
+            top-1 match is surfaced (or "no match" if similarity is below threshold).
           </T>
 
           <div style={{ ...tintedCard(C.orange), padding: 14, marginTop: 14 }}>
-            <svg
-              viewBox="0 0 560 160"
-              style={{ width: "100%", maxWidth: 640, display: "block", margin: "0 auto" }}
-            >
+            <svg viewBox="0 0 560 160" style={{ width: "100%", maxWidth: 640, display: "block", margin: "0 auto" }}>
               <desc>
-                Recipe retrieval flow: new ticket text is embedded, ANN search runs against the
-                recipe library trigger embeddings, and the top-one match is surfaced for the agent
-                to use as scaffolding.
+                Recipe retrieval flow: new ticket text is embedded, ANN search runs against the recipe library trigger
+                embeddings, and the top-one match is surfaced for the agent to use as scaffolding.
               </desc>
               {/* 5-stage horizontal pipeline */}
               {[
@@ -209,14 +203,7 @@ export default function ProceduralMemory(ctx) {
                     stroke={C.orange}
                     strokeWidth={1.6}
                   />
-                  <text
-                    x={s.x + 50}
-                    y={74}
-                    fill={SOFT.orange}
-                    fontSize="13"
-                    fontWeight="700"
-                    textAnchor="middle"
-                  >
+                  <text x={s.x + 50} y={74} fill={SOFT.orange} fontSize="13" fontWeight="700" textAnchor="middle">
                     {s.label}
                   </text>
                   <text x={s.x + 50} y={90} fill={SOFT.orange} fontSize="11" textAnchor="middle">
@@ -224,14 +211,7 @@ export default function ProceduralMemory(ctx) {
                   </text>
                   {i < 4 && (
                     <>
-                      <line
-                        x1={s.x + 100}
-                        y1={75}
-                        x2={s.x + 130}
-                        y2={75}
-                        stroke={C.orange}
-                        strokeWidth={1.6}
-                      />
+                      <line x1={s.x + 100} y1={75} x2={s.x + 130} y2={75} stroke={C.orange} strokeWidth={1.6} />
                       <polygon
                         points={`${s.x + 126},72 ${s.x + 134},72 ${s.x + 130},68 ${s.x + 130},82 ${s.x + 126},78`}
                         fill={C.orange}
@@ -244,9 +224,9 @@ export default function ProceduralMemory(ctx) {
           </div>
 
           <T color={SOFT.orange} center size={15} style={{ marginTop: 12 }}>
-            The agent uses the retrieved recipe as a scaffold, then adapts to the specifics of the
-            current ticket. If no recipe matches, the agent falls back to first-principles
-            reasoning - and the run becomes a candidate to mine for a new recipe.
+            The agent uses the retrieved recipe as a scaffold, then adapts to the specifics of the current ticket. If no
+            recipe matches, the agent falls back to first-principles reasoning - and the run becomes a candidate to mine
+            for a new recipe.
           </T>
         </Box>
       </Reveal>
@@ -257,8 +237,8 @@ export default function ProceduralMemory(ctx) {
             Recipe (Shape)
           </T>
           <T color={SOFT.red} center size={16} style={{ marginTop: 10 }}>
-            A recipe is a structured record. Trigger embedding for retrieval; steps for execution;
-            success_rate and uses for analytics and self-improvement.
+            A recipe is a structured record. Trigger embedding for retrieval; steps for execution; success_rate and uses
+            for analytics and self-improvement.
           </T>
 
           <div style={{ ...tintedCard(C.red), padding: 14, marginTop: 14 }}>
@@ -286,9 +266,9 @@ export default function ProceduralMemory(ctx) {
           </div>
 
           <T color={SOFT.red} center size={15} style={{ marginTop: 12 }}>
-            success_rate = 0.92 means 92% of times this recipe ran, it produced a clean outcome.
-            uses = 187 says the agent has run this recipe 187 times. These numbers drive
-            improvement: a falling success_rate triggers a rewrite review.
+            success_rate = 0.92 means 92% of times this recipe ran, it produced a clean outcome. uses = 187 says the
+            agent has run this recipe 187 times. These numbers drive improvement: a falling success_rate triggers a
+            rewrite review.
           </T>
         </Box>
       </Reveal>
@@ -299,8 +279,8 @@ export default function ProceduralMemory(ctx) {
             Why Not Just Prompt The Recipe Every Time?
           </T>
           <T color={SOFT.purple} center size={16} style={{ marginTop: 10 }}>
-            Prompting and procedural memory both encode "how to do X". They differ in where the
-            recipe lives, what it costs, and whether it can learn from outcomes.
+            Prompting and procedural memory both encode "how to do X". They differ in where the recipe lives, what it
+            costs, and whether it can learn from outcomes.
           </T>
 
           <div
@@ -358,16 +338,13 @@ export default function ProceduralMemory(ctx) {
           </div>
 
           <T color={SOFT.purple} center size={15} style={{ marginTop: 14 }}>
-            Prompting stays great for universal rules - tone, format, safety constraints.
-            Procedural memory wins for task-specific recipes that change with real-world outcomes.
-            Use both, deliberately.
+            Prompting stays great for universal rules - tone, format, safety constraints. Procedural memory wins for
+            task-specific recipes that change with real-world outcomes. Use both, deliberately.
           </T>
         </Box>
       </Reveal>
 
-      {sub < 4 && (
-        <SubBtn onClick={onContinue} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />
-      )}
+      {sub < 4 && <SubBtn onClick={onContinue} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
     </div>
   );
 }

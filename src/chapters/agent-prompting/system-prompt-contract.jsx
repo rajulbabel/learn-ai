@@ -473,8 +473,8 @@ export default function SystemPromptContract(ctx) {
             </div>
           </div>
           <T color={SOFT.cyan} center size={15} style={{ marginTop: 12 }}>
-            Ten lines, four parts, zero ambiguity. The agent&apos;s behavior in production is mostly the quality of this one
-            block of text.
+            Ten lines, four parts, zero ambiguity. The agent&apos;s behavior in production is mostly the quality of this
+            one block of text.
           </T>
         </Box>
       </Reveal>

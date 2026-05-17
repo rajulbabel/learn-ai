@@ -43,8 +43,7 @@ export default function CompressionDecision(ctx) {
                 {
                   axis: "Database capability",
                   role: "Constrains the menu",
-                  detail:
-                    "pgvector: halfvec only. Pinecone: abstracted. Qdrant/Weaviate: full suite + rescore.",
+                  detail: "pgvector: halfvec only. Pinecone: abstracted. Qdrant/Weaviate: full suite + rescore.",
                 },
                 {
                   axis: "Recall tolerance",

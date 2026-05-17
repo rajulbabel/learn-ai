@@ -413,7 +413,7 @@ export default function PosEncodingHeatmap(ctx) {
                       padding: "4px",
                       borderRadius: 4,
                       background: peColor(v),
-                      color: Math.abs(v) > 0.5 ? "#fff" : "#000",
+                      color: "#fff",
                       fontWeight: 700,
                       fontSize: 12,
                     }}

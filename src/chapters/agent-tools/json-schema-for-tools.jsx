@@ -99,7 +99,7 @@ const DESC_RULES = [
     color: C.red,
     soft: SOFT.red,
     rule: "State when NOT to use the tool.",
-    detail: "Negative examples prevent over-eager calls. \"Do not use for refunds over $200\" saves real dollars.",
+    detail: 'Negative examples prevent over-eager calls. "Do not use for refunds over $200" saves real dollars.',
   },
   {
     n: 4,
@@ -174,9 +174,9 @@ export default function JsonSchemaForTools(ctx) {
             Schema First, Implementation Second
           </T>
           <T color={SOFT.cyan} center size={16} style={{ marginTop: 10 }}>
-            The schema is the contract between you and the model. Before you write one line of the
-            real function, you write the schema. The model only ever sees the schema - never the
-            implementation - so the schema must say everything that matters.
+            The schema is the contract between you and the model. Before you write one line of the real function, you
+            write the schema. The model only ever sees the schema - never the implementation - so the schema must say
+            everything that matters.
           </T>
 
           <div
@@ -291,9 +291,9 @@ export default function JsonSchemaForTools(ctx) {
             Schema is what the model sees. Implementation is what your runtime runs.
           </div>
           <T color={SOFT.cyan} center size={15} style={{ marginTop: 12 }}>
-            The model has never seen your real lookup_customer function. It only sees this
-            JSON-Schema document. Everything you want it to know - the input shape, the required
-            fields, when to call - must live inside these four pieces.
+            The model has never seen your real lookup_customer function. It only sees this JSON-Schema document.
+            Everything you want it to know - the input shape, the required fields, when to call - must live inside these
+            four pieces.
           </T>
         </Box>
       )}
@@ -304,9 +304,8 @@ export default function JsonSchemaForTools(ctx) {
             What&apos;s Required, What&apos;s Optional?
           </T>
           <T color={SOFT.teal} center size={16} style={{ marginTop: 10 }}>
-            JSON-Schema splits arguments into two buckets: required (must be present) and optional
-            (may be omitted). The model reads the required list and treats it as non-negotiable.
-            Everything else is its judgment call.
+            JSON-Schema splits arguments into two buckets: required (must be present) and optional (may be omitted). The
+            model reads the required list and treats it as non-negotiable. Everything else is its judgment call.
           </T>
 
           <div
@@ -418,9 +417,9 @@ export default function JsonSchemaForTools(ctx) {
             Required = model MUST provide. Optional = model decides.
           </div>
           <T color={SOFT.teal} center size={15} style={{ marginTop: 12 }}>
-            Mark fewer fields required. Every required field is a chance for the model to give up
-            and answer in plain text instead of calling. Make invoice_id required, but let reason
-            be optional - the refund still works without a reason string.
+            Mark fewer fields required. Every required field is a chance for the model to give up and answer in plain
+            text instead of calling. Make invoice_id required, but let reason be optional - the refund still works
+            without a reason string.
           </T>
         </Box>
       </Reveal>
@@ -431,9 +430,8 @@ export default function JsonSchemaForTools(ctx) {
             Narrowing The Allowed Values
           </T>
           <T color={SOFT.blue} center size={16} style={{ marginTop: 10 }}>
-            A free-form string is a footgun. The model can invent any value it likes. Use enum to
-            lock a parameter to a fixed set of strings, and format to hint at the expected shape
-            for things like emails, dates, and URIs.
+            A free-form string is a footgun. The model can invent any value it likes. Use enum to lock a parameter to a
+            fixed set of strings, and format to hint at the expected shape for things like emails, dates, and URIs.
           </T>
 
           <div
@@ -567,9 +565,9 @@ export default function JsonSchemaForTools(ctx) {
             Enum locks the value. Format hints the shape. Both shrink the model&apos;s mistake surface.
           </div>
           <T color={SOFT.blue} center size={15} style={{ marginTop: 12 }}>
-            Without the enum, the model might emit urgency: &quot;urgent&quot; or &quot;critical&quot; and your
-            ticket router would drop the request. With the enum, low / medium / high are the only
-            legal values - the model is forced into your schema.
+            Without the enum, the model might emit urgency: &quot;urgent&quot; or &quot;critical&quot; and your ticket
+            router would drop the request. With the enum, low / medium / high are the only legal values - the model is
+            forced into your schema.
           </T>
         </Box>
       </Reveal>
@@ -580,9 +578,9 @@ export default function JsonSchemaForTools(ctx) {
             Descriptions Are Read By The Model
           </T>
           <T color={SOFT.green} center size={16} style={{ marginTop: 10 }}>
-            The description field is plain language for the model. It is the most important text in
-            your whole tool definition. Treat it like a manual entry the model will skim every
-            turn. Five rules turn a bad description into a great one.
+            The description field is plain language for the model. It is the most important text in your whole tool
+            definition. Treat it like a manual entry the model will skim every turn. Five rules turn a bad description
+            into a great one.
           </T>
 
           <div
@@ -641,13 +639,12 @@ export default function JsonSchemaForTools(ctx) {
               color: SOFT.green,
             }}
           >
-            Description is the model&apos;s manual. Write it like you would write a runbook for a
-            new hire.
+            Description is the model&apos;s manual. Write it like you would write a runbook for a new hire.
           </div>
           <T color={SOFT.green} center size={15} style={{ marginTop: 12 }}>
-            Spend ten times longer on the description than on the parameter names. A great
-            description prevents wrong-tool calls, prevents the model from inventing arguments, and
-            tells the model exactly when to call escalate_human instead of process_refund.
+            Spend ten times longer on the description than on the parameter names. A great description prevents
+            wrong-tool calls, prevents the model from inventing arguments, and tells the model exactly when to call
+            escalate_human instead of process_refund.
           </T>
         </Box>
       </Reveal>
@@ -658,9 +655,8 @@ export default function JsonSchemaForTools(ctx) {
             One Sentence Changes Everything
           </T>
           <T color={SOFT.purple} center size={16} style={{ marginTop: 10 }}>
-            Same tool, same parameters. The only difference between a refund that goes wrong and
-            one that goes right is the description string. Read both versions of process_refund
-            below.
+            Same tool, same parameters. The only difference between a refund that goes wrong and one that goes right is
+            the description string. Read both versions of process_refund below.
           </T>
 
           <div
@@ -732,13 +728,12 @@ export default function JsonSchemaForTools(ctx) {
               color: SOFT.purple,
             }}
           >
-            Bad description: model refunds a $500 invoice. Good description: model calls
-            escalate_human instead.
+            Bad description: model refunds a $500 invoice. Good description: model calls escalate_human instead.
           </div>
           <T color={SOFT.purple} center size={15} style={{ marginTop: 12 }}>
-            The vague version costs you real dollars in mis-refunds. The specific version threads
-            the $200 ceiling and the escalation fallback right into the model&apos;s prompt - so the
-            model is choosing escalate_human before it ever attempts the refund.
+            The vague version costs you real dollars in mis-refunds. The specific version threads the $200 ceiling and
+            the escalation fallback right into the model&apos;s prompt - so the model is choosing escalate_human before
+            it ever attempts the refund.
           </T>
         </Box>
       </Reveal>
@@ -749,9 +744,9 @@ export default function JsonSchemaForTools(ctx) {
             Our Reference Tool: lookup_customer
           </T>
           <T color={SOFT.cyan} center size={16} style={{ marginTop: 10 }}>
-            This is the canonical reference shape every later chapter in Section 13 builds on. The
-            full schema below is the contract; the tool_use block underneath shows exactly what the
-            model emits when it decides to call this tool. Bookmark this slide.
+            This is the canonical reference shape every later chapter in Section 13 builds on. The full schema below is
+            the contract; the tool_use block underneath shows exactly what the model emits when it decides to call this
+            tool. Bookmark this slide.
           </T>
 
           <div
@@ -866,10 +861,9 @@ export default function JsonSchemaForTools(ctx) {
             Reference shape. Every later chapter assumes this exact lookup_customer contract.
           </div>
           <T color={SOFT.cyan} center size={15} style={{ marginTop: 12 }}>
-            Notice how every part of the previous slides shows up here: a clear name, a description
-            that states the side-effect profile, an input_schema with a format constraint, and a
-            required list with one element. When you see lookup_customer in later chapters, this is
-            the schema we mean.
+            Notice how every part of the previous slides shows up here: a clear name, a description that states the
+            side-effect profile, an input_schema with a format constraint, and a required list with one element. When
+            you see lookup_customer in later chapters, this is the schema we mean.
           </T>
         </Box>
       </Reveal>

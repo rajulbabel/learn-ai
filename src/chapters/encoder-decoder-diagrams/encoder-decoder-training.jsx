@@ -17,21 +17,21 @@ function B(svg) {
   };
   const node = (cx, cy, fill, stroke, lbl, lblColor, r = R) => {
     el("circle", { cx, cy, r, fill, stroke, "stroke-width": 1.5 });
-    if (lbl !== undefined && lbl !== "")
+    if (lbl !== "")
       el("text", {
         x: cx,
         y: cy + 4,
-        fill: lblColor || "#fff",
-        "font-size": r >= 14 ? 10 : 7,
+        fill: lblColor,
+        "font-size": 10,
         "text-anchor": "middle",
         "font-family": "monospace",
         "font-weight": "600",
       }).textContent = lbl;
   };
-  const edge = (x1, y1, x2, y2, color = "rgba(255,255,255,0.08)", width = 1) => {
+  const edge = (x1, y1, x2, y2, color, width = 1) => {
     el("line", { x1, y1, x2, y2, stroke: color, "stroke-width": width });
   };
-  const label = (x, y, text, color = "rgba(255,255,255,0.4)", size = 17, weight = "600", anchor = "middle") => {
+  const label = (x, y, text, color, size = 17, weight = "600", anchor = "middle") => {
     el("text", {
       x,
       y,
@@ -42,8 +42,7 @@ function B(svg) {
       "font-family": "sans-serif",
     }).textContent = text;
   };
-  // Centered label: y = visual center (uses dominant-baseline for perfect box centering)
-  const clabel = (x, y, text, color = "rgba(255,255,255,0.4)", size = 17, weight = "600", anchor = "middle") => {
+  const clabel = (x, y, text, color, size = 17, weight = "600", anchor = "middle") => {
     el("text", {
       x,
       y,
@@ -55,19 +54,6 @@ function B(svg) {
       "dominant-baseline": "central",
     }).textContent = text;
   };
-  const sectionBox = (x, y, w, h, color = "rgba(255,255,255,0.06)", strokeColor = "rgba(255,255,255,0.1)") => {
-    el("rect", {
-      x,
-      y,
-      width: w,
-      height: h,
-      rx: 12,
-      fill: color,
-      stroke: strokeColor,
-      "stroke-width": 1.5,
-      "stroke-dasharray": "6,4",
-    });
-  };
   const layerLabel = (y, text, color) => {
     const w = Math.max(260, text.length * 10 + 40);
     const x = CX - w / 2;
@@ -78,10 +64,10 @@ function B(svg) {
       height: 34,
       rx: 6,
       fill: "#08080d",
-      stroke: color || "rgba(255,255,255,0.15)",
+      stroke: color,
       "stroke-width": 1,
     });
-    clabel(CX, y, text, color || "rgba(255,255,255,0.45)", 16, "700");
+    clabel(CX, y, text, color, 16, "700");
   };
   const tNodes = (cx, y) => DIMX.map((dx) => ({ x: cx + dx, y }));
   const fcEdges = (from, to, color, width = 0.8) => {
@@ -90,7 +76,7 @@ function B(svg) {
   const o2oEdges = (from, to, color, width = 1) => {
     for (let i = 0; i < from.length; i++) edge(from[i].x, from[i].y + R, to[i].x, to[i].y - R, color, width);
   };
-  const callout = (x, y, text, color = "rgba(0,188,212,0.7)", bg = "rgba(0,188,212,0.06)") => {
+  const callout = (x, y, text, color, bg) => {
     const w = text.length * 8.5 + 32;
     el("rect", { x: x - w / 2, y: y - 15, width: w, height: 30, rx: 10, fill: bg, stroke: color, "stroke-width": 0.8 });
     clabel(x, y, text, color, 15, "600");
@@ -101,9 +87,8 @@ function B(svg) {
   const explainBox = (x, y, w, lines, bc = "rgba(255,152,0,0.6)", bg = "rgba(255,152,0,0.04)") => {
     const h = lines.length * 26 + 24;
     el("rect", { x: x - w / 2, y: y - 6, width: w, height: h, rx: 8, fill: bg, stroke: bc, "stroke-width": 2.5 });
-    lines.forEach((line, i) => {
-      const [t, c, s, wt] = Array.isArray(line) ? line : [line, "rgba(255,255,255,0.4)", 13, "400"];
-      label(x, y + 16 + i * 26, t, c, s || 13, wt || "400");
+    lines.forEach(([t, c, s, wt], i) => {
+      label(x, y + 16 + i * 26, t, c, s, wt);
     });
     return h;
   };
@@ -118,7 +103,6 @@ function B(svg) {
     edge,
     label,
     clabel,
-    sectionBox,
     layerLabel,
     tNodes,
     fcEdges,
@@ -134,7 +118,6 @@ function TrainingDiagram({ sub, setSub, subBtnRipple, setSubBtnRipple, registerS
   const ref = useRef(null);
   useEffect(() => {
     const svg = ref.current;
-    if (!svg) return;
     while (svg.firstChild) svg.removeChild(svg.firstChild);
     const {
       el,
@@ -142,7 +125,6 @@ function TrainingDiagram({ sub, setSub, subBtnRipple, setSubBtnRipple, registerS
       edge,
       label,
       clabel,
-      sectionBox,
       layerLabel,
       tNodes,
       fcEdges,

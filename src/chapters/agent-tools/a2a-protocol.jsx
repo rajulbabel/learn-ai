@@ -66,9 +66,9 @@ export default function A2AProtocol(ctx) {
             Agent To Tool, Agent To Agent
           </T>
           <T color={SOFT.purple} center size={16} style={{ marginTop: 10 }}>
-            MCP handles one direction: an agent reaches out to a tool and gets a value back. A2A
-            handles the other: an agent hands an entire problem to a different agent and lets that
-            agent run its own loop. Same wire idea, very different scope.
+            MCP handles one direction: an agent reaches out to a tool and gets a value back. A2A handles the other: an
+            agent hands an entire problem to a different agent and lets that agent run its own loop. Same wire idea,
+            very different scope.
           </T>
 
           {/* Two-row comparison: MCP vs A2A */}
@@ -81,9 +81,9 @@ export default function A2AProtocol(ctx) {
               style={{ width: "100%", maxWidth: 620, display: "block", margin: "12px auto 0" }}
             >
               <desc>
-                Two row comparison diagram showing MCP on top where one agent box connects to four
-                separate tool boxes, and A2A on the bottom where one agent box delegates to another
-                agent box that itself contains tool boxes inside its boundary.
+                Two row comparison diagram showing MCP on top where one agent box connects to four separate tool boxes,
+                and A2A on the bottom where one agent box delegates to another agent box that itself contains tool boxes
+                inside its boundary.
               </desc>
 
               {/* Row 1: MCP - Agent -> 4 tools. Row spans y 20-120. */}
@@ -101,14 +101,7 @@ export default function A2AProtocol(ctx) {
                 stroke={C.purple}
                 strokeWidth="2"
               />
-              <text
-                x="85"
-                y="85"
-                fill={SOFT.purple}
-                fontSize="13"
-                fontWeight="700"
-                textAnchor="middle"
-              >
+              <text x="85" y="85" fill={SOFT.purple} fontSize="13" fontWeight="700" textAnchor="middle">
                 Agent
               </text>
               {/* 4 tool boxes on the right. Width 70, gap 12 -> span 70*4 + 12*3 = 316. Start x = 560 - 316 - 40 = 204. */}
@@ -126,14 +119,7 @@ export default function A2AProtocol(ctx) {
                       stroke={C.blue}
                       strokeWidth="1.5"
                     />
-                    <text
-                      x={tx + 35}
-                      y="85"
-                      fill={SOFT.blue}
-                      fontSize="12"
-                      fontWeight="700"
-                      textAnchor="middle"
-                    >
+                    <text x={tx + 35} y="85" fill={SOFT.blue} fontSize="12" fontWeight="700" textAnchor="middle">
                       Tool {i + 1}
                     </text>
                   </g>
@@ -155,14 +141,7 @@ export default function A2AProtocol(ctx) {
                   />
                 );
               })}
-              <text
-                x="280"
-                y="125"
-                fill={SOFT.purple}
-                fontSize="11"
-                fontStyle="italic"
-                textAnchor="middle"
-              >
+              <text x="280" y="125" fill={SOFT.purple} fontSize="11" fontStyle="italic" textAnchor="middle">
                 Agent calls function
               </text>
 
@@ -174,35 +153,12 @@ export default function A2AProtocol(ctx) {
                 A2A
               </text>
               {/* Triage agent box */}
-              <rect
-                x="40"
-                y="195"
-                width="90"
-                height="50"
-                rx="8"
-                fill={`${C.cyan}24`}
-                stroke={C.cyan}
-                strokeWidth="2"
-              />
-              <text
-                x="85"
-                y="225"
-                fill={SOFT.cyan}
-                fontSize="13"
-                fontWeight="700"
-                textAnchor="middle"
-              >
+              <rect x="40" y="195" width="90" height="50" rx="8" fill={`${C.cyan}24`} stroke={C.cyan} strokeWidth="2" />
+              <text x="85" y="225" fill={SOFT.cyan} fontSize="13" fontWeight="700" textAnchor="middle">
                 Agent
               </text>
               {/* Delegation arrow */}
-              <line
-                x1="130"
-                y1="220"
-                x2="225"
-                y2="220"
-                stroke={C.cyan}
-                strokeWidth="2"
-              />
+              <line x1="130" y1="220" x2="225" y2="220" stroke={C.cyan} strokeWidth="2" />
               <polygon points="230,220 222,216 222,224" fill={C.cyan} />
               {/* Other agent box - bigger, contains tools */}
               <rect
@@ -216,14 +172,7 @@ export default function A2AProtocol(ctx) {
                 strokeWidth="2"
                 strokeDasharray="5 3"
               />
-              <text
-                x="380"
-                y="200"
-                fill={SOFT.indigo}
-                fontSize="13"
-                fontWeight="700"
-                textAnchor="middle"
-              >
+              <text x="380" y="200" fill={SOFT.indigo} fontSize="13" fontWeight="700" textAnchor="middle">
                 Other Agent
               </text>
               {/* 3 mini tools inside the other agent box */}
@@ -241,35 +190,21 @@ export default function A2AProtocol(ctx) {
                       stroke={C.blue}
                       strokeWidth="1.2"
                     />
-                    <text
-                      x={tx + 40}
-                      y="240"
-                      fill={SOFT.blue}
-                      fontSize="11"
-                      fontWeight="700"
-                      textAnchor="middle"
-                    >
+                    <text x={tx + 40} y="240" fill={SOFT.blue} fontSize="11" fontWeight="700" textAnchor="middle">
                       Tool {i + 1}
                     </text>
                   </g>
                 );
               })}
-              <text
-                x="280"
-                y="278"
-                fill={SOFT.cyan}
-                fontSize="11"
-                fontStyle="italic"
-                textAnchor="middle"
-              >
+              <text x="280" y="278" fill={SOFT.cyan} fontSize="11" fontStyle="italic" textAnchor="middle">
                 Agent delegates whole task to another agent
               </text>
             </svg>
           </div>
 
           <T color={SOFT.purple} center size={15} style={{ marginTop: 12 }}>
-            With MCP, the agent stays in charge and just borrows a tool. With A2A, the agent hands
-            the wheel to a peer that runs its own model, memory, and tools to finish the job.
+            With MCP, the agent stays in charge and just borrows a tool. With A2A, the agent hands the wheel to a peer
+            that runs its own model, memory, and tools to finish the job.
           </T>
         </Box>
       )}
@@ -280,10 +215,9 @@ export default function A2AProtocol(ctx) {
             Agent.json - The Agent&apos;s Card
           </T>
           <T color={SOFT.indigo} center size={16} style={{ marginTop: 10 }}>
-            Before one agent can delegate to another, it has to find a peer with the right skill.
-            A2A solves discovery with a small JSON document each agent publishes at a known URL:
-            its name, what it does, what skills it claims, where to reach it, and how to
-            authenticate.
+            Before one agent can delegate to another, it has to find a peer with the right skill. A2A solves discovery
+            with a small JSON document each agent publishes at a known URL: its name, what it does, what skills it
+            claims, where to reach it, and how to authenticate.
           </T>
 
           <div
@@ -328,9 +262,8 @@ export default function A2AProtocol(ctx) {
             }}
           >
             <T color={SOFT.indigo} center size={14}>
-              Name identifies the agent. Description and skills are what other agents read to
-              decide if this peer can help. Endpoint is the URL to call. Auth tells the caller how
-              to prove they were granted access.
+              Name identifies the agent. Description and skills are what other agents read to decide if this peer can
+              help. Endpoint is the URL to call. Auth tells the caller how to prove they were granted access.
             </T>
             <T color={SOFT.indigo} center size={14} style={{ marginTop: 8 }}>
               Other agents discover this and decide whether to delegate.
@@ -345,9 +278,8 @@ export default function A2AProtocol(ctx) {
             Triage Delegates To Billing
           </T>
           <T color={SOFT.blue} center size={16} style={{ marginTop: 10 }}>
-            A real delegation has a shape: a triage agent classifies an incoming ticket, looks up
-            who has the right skill, packages the context, sends the request, and waits for the
-            specialist to come back with a result.
+            A real delegation has a shape: a triage agent classifies an incoming ticket, looks up who has the right
+            skill, packages the context, sends the request, and waits for the specialist to come back with a result.
           </T>
 
           <div style={{ ...tintedCard(C.blue), padding: 14, marginTop: 14 }}>
@@ -359,9 +291,8 @@ export default function A2AProtocol(ctx) {
               style={{ width: "100%", maxWidth: 620, display: "block", margin: "12px auto 0" }}
             >
               <desc>
-                Five step delegation flow where triage agent classifies ticket T4 as billing,
-                finds an agent with billing skill, delegates the full ticket context, the billing
-                agent works the ticket and returns result.
+                Five step delegation flow where triage agent classifies ticket T4 as billing, finds an agent with
+                billing skill, delegates the full ticket context, the billing agent works the ticket and returns result.
               </desc>
               {/* Each step is a horizontal box. Box width 440, height 50, gap 16. Container width 560 -> padding (560-440)/2 = 60 */}
               {A2A_DELEGATION_STEPS.map((s, i) => {
@@ -379,49 +310,19 @@ export default function A2AProtocol(ctx) {
                       strokeWidth="1.5"
                     />
                     {/* Number circle */}
-                    <circle
-                      cx="88"
-                      cy={y + 25}
-                      r="14"
-                      fill={`${C.blue}40`}
-                      stroke={C.blue}
-                      strokeWidth="1.5"
-                    />
-                    <text
-                      x="88"
-                      y={y + 30}
-                      fill={SOFT.blue}
-                      fontSize="13"
-                      fontWeight="700"
-                      textAnchor="middle"
-                    >
+                    <circle cx="88" cy={y + 25} r="14" fill={`${C.blue}40`} stroke={C.blue} strokeWidth="1.5" />
+                    <text x="88" y={y + 30} fill={SOFT.blue} fontSize="13" fontWeight="700" textAnchor="middle">
                       {s.n}
                     </text>
                     {/* Label */}
-                    <text
-                      x="115"
-                      y={y + 30}
-                      fill={SOFT.blue}
-                      fontSize="13"
-                      fontWeight="600"
-                    >
+                    <text x="115" y={y + 30} fill={SOFT.blue} fontSize="13" fontWeight="600">
                       {s.label}
                     </text>
                     {/* Arrow down to next */}
                     {i < A2A_DELEGATION_STEPS.length - 1 && (
                       <g>
-                        <line
-                          x1="280"
-                          y1={y + 50}
-                          x2="280"
-                          y2={y + 64}
-                          stroke={C.cyan}
-                          strokeWidth="2"
-                        />
-                        <polygon
-                          points={`280,${y + 66} 276,${y + 58} 284,${y + 58}`}
-                          fill={C.cyan}
-                        />
+                        <line x1="280" y1={y + 50} x2="280" y2={y + 64} stroke={C.cyan} strokeWidth="2" />
+                        <polygon points={`280,${y + 66} 276,${y + 58} 284,${y + 58}`} fill={C.cyan} />
                       </g>
                     )}
                   </g>
@@ -453,10 +354,9 @@ export default function A2AProtocol(ctx) {
             Long Tasks Stream Progress
           </T>
           <T color={SOFT.cyan} center size={16} style={{ marginTop: 10 }}>
-            A delegated task is not a single function call. The receiving agent may need minutes,
-            human approval, or several tool calls of its own. A2A solves this by letting the
-            receiving agent stream intermediate updates back instead of going silent until the
-            final result is ready.
+            A delegated task is not a single function call. The receiving agent may need minutes, human approval, or
+            several tool calls of its own. A2A solves this by letting the receiving agent stream intermediate updates
+            back instead of going silent until the final result is ready.
           </T>
 
           <div style={{ ...tintedCard(C.cyan), padding: 14, marginTop: 14 }}>
@@ -468,9 +368,8 @@ export default function A2AProtocol(ctx) {
               style={{ width: "100%", maxWidth: 620, display: "block", margin: "12px auto 0" }}
             >
               <desc>
-                Vertical timeline showing triage agent delegates to billing agent which then
-                streams intermediate updates lookup processing approval and final result back to
-                triage.
+                Vertical timeline showing triage agent delegates to billing agent which then streams intermediate
+                updates lookup processing approval and final result back to triage.
               </desc>
               {/* Triage box at top. Width 160, x = (560-160)/2 = 200 */}
               <rect
@@ -483,27 +382,14 @@ export default function A2AProtocol(ctx) {
                 stroke={C.cyan}
                 strokeWidth="2"
               />
-              <text
-                x="280"
-                y="40"
-                fill={SOFT.cyan}
-                fontSize="13"
-                fontWeight="700"
-                textAnchor="middle"
-              >
+              <text x="280" y="40" fill={SOFT.cyan} fontSize="13" fontWeight="700" textAnchor="middle">
                 Triage Agent
               </text>
 
               {/* Delegate arrow down */}
               <line x1="280" y1="55" x2="280" y2="78" stroke={C.cyan} strokeWidth="2" />
               <polygon points="280,80 276,72 284,72" fill={C.cyan} />
-              <text
-                x="298"
-                y="73"
-                fill={SOFT.cyan}
-                fontSize="11"
-                fontStyle="italic"
-              >
+              <text x="298" y="73" fill={SOFT.cyan} fontSize="11" fontStyle="italic">
                 Delegate
               </text>
 
@@ -518,14 +404,7 @@ export default function A2AProtocol(ctx) {
                 stroke={C.indigo}
                 strokeWidth="2"
               />
-              <text
-                x="280"
-                y="110"
-                fill={SOFT.indigo}
-                fontSize="13"
-                fontWeight="700"
-                textAnchor="middle"
-              >
+              <text x="280" y="110" fill={SOFT.indigo} fontSize="13" fontWeight="700" textAnchor="middle">
                 Billing Agent
               </text>
 
@@ -549,14 +428,7 @@ export default function A2AProtocol(ctx) {
                       stroke={stroke}
                       strokeWidth="1.5"
                     />
-                    <text
-                      x="280"
-                      y={y + 22}
-                      fill={soft}
-                      fontSize="13"
-                      fontWeight="600"
-                      textAnchor="middle"
-                    >
+                    <text x="280" y={y + 22} fill={soft} fontSize="13" fontWeight="600" textAnchor="middle">
                       {label}
                     </text>
                     {/* Stream arrow back up to triage column (left side) */}
@@ -569,10 +441,7 @@ export default function A2AProtocol(ctx) {
                       strokeWidth="1.5"
                       strokeDasharray="3 3"
                     />
-                    <polygon
-                      points={`110,${y + 17} 118,${y + 13} 118,${y + 21}`}
-                      fill={stroke}
-                    />
+                    <polygon points={`110,${y + 17} 118,${y + 13} 118,${y + 21}`} fill={stroke} />
                     {/* Label */}
                     {i === 0 && (
                       <text x="56" y={y + 21} fill={SOFT.cyan} fontSize="11" fontStyle="italic">
@@ -584,14 +453,7 @@ export default function A2AProtocol(ctx) {
               })}
 
               {/* Footer caption */}
-              <text
-                x="280"
-                y="350"
-                fill={SOFT.cyan}
-                fontSize="11"
-                fontStyle="italic"
-                textAnchor="middle"
-              >
+              <text x="280" y="350" fill={SOFT.cyan} fontSize="11" fontStyle="italic" textAnchor="middle">
                 Triage stays informed without polling
               </text>
             </svg>
@@ -608,8 +470,8 @@ export default function A2AProtocol(ctx) {
             }}
           >
             <T color={SOFT.cyan} center size={14}>
-              Streaming lets triage show the user progress in real time and react if an
-              intermediate update needs human approval before the long task finishes.
+              Streaming lets triage show the user progress in real time and react if an intermediate update needs human
+              approval before the long task finishes.
             </T>
           </div>
         </Box>
@@ -621,8 +483,8 @@ export default function A2AProtocol(ctx) {
             Two Protocols, Two Roles
           </T>
           <T color={SOFT.teal} center size={16} style={{ marginTop: 10 }}>
-            MCP and A2A live side by side, not in competition. The decision is about what you need
-            from the other side: a function, a document, or an entire collaborator.
+            MCP and A2A live side by side, not in competition. The decision is about what you need from the other side:
+            a function, a document, or an entire collaborator.
           </T>
 
           <div style={{ display: "flex", flexDirection: "column", gap: 10, marginTop: 14 }}>
@@ -663,16 +525,14 @@ export default function A2AProtocol(ctx) {
             }}
           >
             <T color={SOFT.teal} center size={15}>
-              A2A is heavier than MCP. Use it when the delegated work needs the receiving
-              agent&apos;s own loop, memory, and tools - not just a single function call.
+              A2A is heavier than MCP. Use it when the delegated work needs the receiving agent&apos;s own loop, memory,
+              and tools - not just a single function call.
             </T>
           </div>
         </Box>
       </Reveal>
 
-      {sub < 4 && (
-        <SubBtn onClick={onContinue} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />
-      )}
+      {sub < 4 && <SubBtn onClick={onContinue} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
     </div>
   );
 }

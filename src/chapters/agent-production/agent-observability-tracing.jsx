@@ -47,35 +47,17 @@ const OBS_METADATA = [
   {
     name: "LLM Call Span",
     color: "red",
-    fields: [
-      "Model Name",
-      "Input Tokens, Output Tokens",
-      "Cost ($)",
-      "Latency (ms)",
-      "Prompt Fingerprint",
-    ],
+    fields: ["Model Name", "Input Tokens, Output Tokens", "Cost ($)", "Latency (ms)", "Prompt Fingerprint"],
   },
   {
     name: "Tool Call Span",
     color: "orange",
-    fields: [
-      "Tool Name",
-      "Input Args (Hashed)",
-      "Output Or Error",
-      "Status: Success / Failure",
-      "Retry Count",
-    ],
+    fields: ["Tool Name", "Input Args (Hashed)", "Output Or Error", "Status: Success / Failure", "Retry Count"],
   },
   {
     name: "Loop Iteration Span",
     color: "yellow",
-    fields: [
-      "Iteration Number",
-      "Reason Summary",
-      "State Transition",
-      "Decision Reached",
-      "Halt Signal If Final",
-    ],
+    fields: ["Iteration Number", "Reason Summary", "State Transition", "Decision Reached", "Halt Signal If Final"],
   },
 ];
 
@@ -136,10 +118,9 @@ export default function AgentObservabilityTracing(ctx) {
             An Agent Run Is A Tree Of Spans
           </T>
           <T color={SOFT.pink} center size={16} style={{ marginTop: 10 }}>
-            One ticket = one trace = one tree of spans. Every operation worth measuring becomes a
-            span. The root span covers the whole run. Each loop iteration is a child. Inside each
-            iteration, the LLM call and tool call are leaves. This is the spine of every
-            production agent debugger.
+            One ticket = one trace = one tree of spans. Every operation worth measuring becomes a span. The root span
+            covers the whole run. Each loop iteration is a child. Inside each iteration, the LLM call and tool call are
+            leaves. This is the spine of every production agent debugger.
           </T>
 
           <div style={{ ...tintedCard(C.pink), padding: 14, marginTop: 14 }}>
@@ -148,9 +129,9 @@ export default function AgentObservabilityTracing(ctx) {
               style={{ width: "100%", maxWidth: treeViewW, display: "block", margin: "0 auto" }}
             >
               <desc>
-                Span tree for ticket T2: root agent run with three loop iterations. Iter 1 calls
-                lookup_customer, iter 2 calls change_email, iter 3 emits the final answer. Each
-                span row shows its label and duration in milliseconds.
+                Span tree for ticket T2: root agent run with three loop iterations. Iter 1 calls lookup_customer, iter 2
+                calls change_email, iter 3 emits the final answer. Each span row shows its label and duration in
+                milliseconds.
               </desc>
               {OBS_SPAN_TREE.map((s, i) => {
                 const y = 16 + i * rowH;
@@ -200,12 +181,7 @@ export default function AgentObservabilityTracing(ctx) {
                       stroke={C.pink}
                       strokeWidth={1.2}
                     />
-                    <text
-                      x={barX + barW + 6}
-                      y={y + rowH / 2 - 1}
-                      fill={SOFT.pink}
-                      fontSize="12"
-                    >
+                    <text x={barX + barW + 6} y={y + rowH / 2 - 1} fill={SOFT.pink} fontSize="12">
                       {s.ms}ms
                     </text>
                   </g>
@@ -215,9 +191,8 @@ export default function AgentObservabilityTracing(ctx) {
           </div>
 
           <T color={SOFT.pink} center size={15} style={{ marginTop: 14 }}>
-            The tree is the answer to every &quot;why was that ticket slow / wrong / expensive?&quot;
-            Click into a span, read its attributes, jump to the parent or sibling. No tree = no
-            debugger.
+            The tree is the answer to every &quot;why was that ticket slow / wrong / expensive?&quot; Click into a span,
+            read its attributes, jump to the parent or sibling. No tree = no debugger.
           </T>
         </Box>
       )}
@@ -228,9 +203,9 @@ export default function AgentObservabilityTracing(ctx) {
             OTel: The Open Standard
           </T>
           <T color={SOFT.red} center size={16} style={{ marginTop: 10 }}>
-            OpenTelemetry (OTel) is the vendor-neutral standard for spans. Every modern agent
-            tracer speaks OTel underneath. The span shape below is what every vendor stores
-            (with their own UI on top). Learn the shape once, read traces in any vendor.
+            OpenTelemetry (OTel) is the vendor-neutral standard for spans. Every modern agent tracer speaks OTel
+            underneath. The span shape below is what every vendor stores (with their own UI on top). Learn the shape
+            once, read traces in any vendor.
           </T>
 
           <div
@@ -273,8 +248,8 @@ export default function AgentObservabilityTracing(ctx) {
           </div>
 
           <T color={SOFT.red} center size={15} style={{ marginTop: 12 }}>
-            trace_id ties together every span in the whole run. parent_span_id builds the tree.
-            attributes carry the per-span detail (who, what, how long, success or failure).
+            trace_id ties together every span in the whole run. parent_span_id builds the tree. attributes carry the
+            per-span detail (who, what, how long, success or failure).
           </T>
         </Box>
       </Reveal>
@@ -285,9 +260,8 @@ export default function AgentObservabilityTracing(ctx) {
             Three Vendors, Same Concepts
           </T>
           <T color={SOFT.orange} center size={16} style={{ marginTop: 10 }}>
-            Three production-grade observability stacks. All store the same OTel-shaped spans
-            underneath. Pick by integration fit, not by feature list, since the core capabilities
-            converge.
+            Three production-grade observability stacks. All store the same OTel-shaped spans underneath. Pick by
+            integration fit, not by feature list, since the core capabilities converge.
           </T>
 
           <div
@@ -325,8 +299,8 @@ export default function AgentObservabilityTracing(ctx) {
           </div>
 
           <T color={SOFT.orange} center size={15} style={{ marginTop: 14 }}>
-            All three accept OTel-format spans, so swapping vendors later is mostly a config
-            change, not a rewrite. Lock in the OTel shape today.
+            All three accept OTel-format spans, so swapping vendors later is mostly a config change, not a rewrite. Lock
+            in the OTel shape today.
           </T>
         </Box>
       </Reveal>
@@ -337,9 +311,8 @@ export default function AgentObservabilityTracing(ctx) {
             What To Attribute
           </T>
           <T color={SOFT.yellow} center size={16} style={{ marginTop: 10 }}>
-            Per-span metadata makes the tree searchable, gradable, and replayable. Capture
-            inputs (so you can replay) AND outputs (so you can grade). Three span classes, three
-            metadata profiles.
+            Per-span metadata makes the tree searchable, gradable, and replayable. Capture inputs (so you can replay)
+            AND outputs (so you can grade). Three span classes, three metadata profiles.
           </T>
 
           <div
@@ -372,8 +345,8 @@ export default function AgentObservabilityTracing(ctx) {
           </div>
 
           <T color={SOFT.yellow} center size={15} style={{ marginTop: 14 }}>
-            Production rule: capture inputs for replay AND outputs for grading. Without both,
-            you cannot reproduce a bad trace OR score it later.
+            Production rule: capture inputs for replay AND outputs for grading. Without both, you cannot reproduce a bad
+            trace OR score it later.
           </T>
         </Box>
       </Reveal>
@@ -384,9 +357,9 @@ export default function AgentObservabilityTracing(ctx) {
             Full T2 Trace With Cost
           </T>
           <T color={SOFT.purple} center size={16} style={{ marginTop: 10 }}>
-            Same tree as sub=0, now with cost overlaid on each LLM call span. Tool calls
-            themselves are nearly free (compute only). LLM calls dominate. Sum across all LLM
-            spans = total trace cost. This is what every cost dashboard reduces to.
+            Same tree as sub=0, now with cost overlaid on each LLM call span. Tool calls themselves are nearly free
+            (compute only). LLM calls dominate. Sum across all LLM spans = total trace cost. This is what every cost
+            dashboard reduces to.
           </T>
 
           <div style={{ ...tintedCard(C.purple), padding: 14, marginTop: 14 }}>
@@ -395,9 +368,8 @@ export default function AgentObservabilityTracing(ctx) {
               style={{ width: "100%", maxWidth: treeViewW, display: "block", margin: "0 auto" }}
             >
               <desc>
-                Same span tree as sub=0 for ticket T2, with cost values overlaid on each LLM
-                call span. LLM call 1 cost $0.025, call 2 cost $0.03, call 3 cost $0.04. Total
-                trace cost shown at bottom.
+                Same span tree as sub=0 for ticket T2, with cost values overlaid on each LLM call span. LLM call 1 cost
+                $0.025, call 2 cost $0.03, call 3 cost $0.04. Total trace cost shown at bottom.
               </desc>
               {OBS_SPAN_TREE.map((s, i) => {
                 const y = 16 + i * rowH;
@@ -448,12 +420,7 @@ export default function AgentObservabilityTracing(ctx) {
                       stroke={C.purple}
                       strokeWidth={1.2}
                     />
-                    <text
-                      x={barX + barW + 6}
-                      y={y + rowH / 2 - 1}
-                      fill={SOFT.purple}
-                      fontSize="12"
-                    >
+                    <text x={barX + barW + 6} y={y + rowH / 2 - 1} fill={SOFT.purple} fontSize="12">
                       {s.ms}ms
                     </text>
                     {cost && (
@@ -478,8 +445,8 @@ export default function AgentObservabilityTracing(ctx) {
           </div>
 
           <T color={SOFT.purple} center size={15} style={{ marginTop: 12 }}>
-            The same tree powers latency dashboards (bar widths) AND cost dashboards (per-LLM
-            span values). One trace, many views, all from the same OTel spans.
+            The same tree powers latency dashboards (bar widths) AND cost dashboards (per-LLM span values). One trace,
+            many views, all from the same OTel spans.
           </T>
         </Box>
       </Reveal>
@@ -490,9 +457,8 @@ export default function AgentObservabilityTracing(ctx) {
             Turn Traces Into Alerts
           </T>
           <T color={SOFT.pink} center size={16} style={{ marginTop: 10 }}>
-            Traces are great for debugging one ticket. Alerts are how traces protect production.
-            Every alert rule converts a per-span aggregate into a paging signal. These four
-            cover most agent incidents.
+            Traces are great for debugging one ticket. Alerts are how traces protect production. Every alert rule
+            converts a per-span aggregate into a paging signal. These four cover most agent incidents.
           </T>
 
           <div style={{ ...tintedCard(C.pink), padding: 14, marginTop: 14 }}>
@@ -505,9 +471,7 @@ export default function AgentObservabilityTracing(ctx) {
               }}
             >
               <div style={{ padding: "8px 10px", fontWeight: 700, color: SOFT.pink }}>Metric</div>
-              <div style={{ padding: "8px 10px", fontWeight: 700, color: SOFT.pink }}>
-                Threshold
-              </div>
+              <div style={{ padding: "8px 10px", fontWeight: 700, color: SOFT.pink }}>Threshold</div>
               <div style={{ padding: "8px 10px", fontWeight: 700, color: SOFT.pink }}>Action</div>
               {OBS_ALERTS.map((a) => {
                 const accent = C[a.color];
@@ -549,16 +513,13 @@ export default function AgentObservabilityTracing(ctx) {
           </div>
 
           <T color={SOFT.pink} center size={15} style={{ marginTop: 14 }}>
-            The drift rule chains back to 13.41: when the composite eval score drops past a
-            threshold, alerting kicks in BEFORE end-users notice. Tracing + eval together close
-            the production loop.
+            The drift rule chains back to 13.41: when the composite eval score drops past a threshold, alerting kicks in
+            BEFORE end-users notice. Tracing + eval together close the production loop.
           </T>
         </Box>
       </Reveal>
 
-      {sub < 5 && (
-        <SubBtn onClick={onContinue} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />
-      )}
+      {sub < 5 && <SubBtn onClick={onContinue} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
     </div>
   );
 }

@@ -201,8 +201,8 @@ export default function FewShotStructuredOutput(ctx) {
             </div>
           </div>
           <T color={SOFT.cyan} center size={15} style={{ marginTop: 12 }}>
-            Showing beats telling. The same model, the same task, but examples raise classification accuracy from
-            wobbly to reliable.
+            Showing beats telling. The same model, the same task, but examples raise classification accuracy from wobbly
+            to reliable.
           </T>
         </Box>
       )}
@@ -213,8 +213,8 @@ export default function FewShotStructuredOutput(ctx) {
             Three Examples, Same Format
           </T>
           <T color={SOFT.blue} center size={16} style={{ marginTop: 10 }}>
-            The anatomy of a few-shot block: a list of input-output pairs in identical format. The format is the
-            lesson - the model learns the shape from these three, then applies it to the real query.
+            The anatomy of a few-shot block: a list of input-output pairs in identical format. The format is the lesson
+            - the model learns the shape from these three, then applies it to the real query.
           </T>
           <div
             style={{
@@ -399,8 +399,8 @@ export default function FewShotStructuredOutput(ctx) {
                 Zero Drift
               </T>
               <T color={SOFT.indigo} center size={13} style={{ marginTop: 6 }}>
-                Same shape, consistent labels, every single call. Safe to feed straight into a database or a
-                downstream tool.
+                Same shape, consistent labels, every single call. Safe to feed straight into a database or a downstream
+                tool.
               </T>
             </div>
           </div>
@@ -421,8 +421,8 @@ export default function FewShotStructuredOutput(ctx) {
             &quot;confidence&quot;: 0.85 {" }"}
           </div>
           <T color={SOFT.indigo} center size={15} style={{ marginTop: 10 }}>
-            Belt and suspenders. Each technique catches a different failure mode, so together they leave almost
-            nothing to chance.
+            Belt and suspenders. Each technique catches a different failure mode, so together they leave almost nothing
+            to chance.
           </T>
         </Box>
       </Reveal>
@@ -468,8 +468,8 @@ export default function FewShotStructuredOutput(ctx) {
             ))}
           </div>
           <T color={SOFT.teal} center size={15} style={{ marginTop: 12 }}>
-            Diverse, edge-case-heavy, enum-spanning, hardest-last. That ordering rule is the one teams forget most -
-            and it matters more than the count of examples.
+            Diverse, edge-case-heavy, enum-spanning, hardest-last. That ordering rule is the one teams forget most - and
+            it matters more than the count of examples.
           </T>
         </Box>
       </Reveal>

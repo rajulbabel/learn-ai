@@ -24,7 +24,12 @@ const LLM_VS_TOOLS = [
     color: C.green,
     soft: SOFT.green,
     note: "Calls search_kb to fetch the live comparison doc, then answers from that source.",
-    flow: ["User asks T5", "LLM calls search_kb('Pro vs Enterprise')", "KB returns current doc", "LLM answers from doc"],
+    flow: [
+      "User asks T5",
+      "LLM calls search_kb('Pro vs Enterprise')",
+      "KB returns current doc",
+      "LLM answers from doc",
+    ],
     answer: "Pro: 10 seats, $49/mo, email support. Enterprise: unlimited seats, SSO, dedicated CSM.",
     verdict: "Grounded: cites live docs, traceable to source.",
   },
@@ -61,7 +66,7 @@ const DECIDE_EXECUTE_STEPS = [
     actor: "User",
     color: C.purple,
     soft: SOFT.purple,
-    detail: "Sends a message: \"Refund my last invoice, the charge was wrong.\"",
+    detail: 'Sends a message: "Refund my last invoice, the charge was wrong."',
   },
   {
     actor: "Model Reads",
@@ -73,7 +78,7 @@ const DECIDE_EXECUTE_STEPS = [
     actor: "Model Decides",
     color: C.cyan,
     soft: SOFT.cyan,
-    detail: "Thinks: \"User asked for a refund - I should call process_refund.\" Or chooses NOT to call any tool.",
+    detail: 'Thinks: "User asked for a refund - I should call process_refund." Or chooses NOT to call any tool.',
   },
   {
     actor: "Model Emits Tool_Use",
@@ -193,9 +198,9 @@ export default function ToolUseAsBridge(ctx) {
             Pure LLM vs LLM With Tools
           </T>
           <T color={SOFT.cyan} center size={16} style={{ marginTop: 10 }}>
-            A bare LLM only knows what was in its training data. The moment your support agent has to look at the
-            live knowledge base, your customer record, or trigger a real refund - text generation alone is not
-            enough. Tools are how the model reaches out and touches the real world.
+            A bare LLM only knows what was in its training data. The moment your support agent has to look at the live
+            knowledge base, your customer record, or trigger a real refund - text generation alone is not enough. Tools
+            are how the model reaches out and touches the real world.
           </T>
           <div
             style={{
@@ -298,8 +303,8 @@ export default function ToolUseAsBridge(ctx) {
             A Tool Is A Function The Model Can Call
           </T>
           <T color={SOFT.teal} center size={16} style={{ marginTop: 10 }}>
-            A tool is exactly one thing: a function. You declare its signature. The model decides when to call it.
-            Your runtime executes the function for real. The result flows back into the conversation.
+            A tool is exactly one thing: a function. You declare its signature. The model decides when to call it. Your
+            runtime executes the function for real. The result flows back into the conversation.
           </T>
 
           <div
@@ -335,11 +340,20 @@ export default function ToolUseAsBridge(ctx) {
               style={{ width: "100%", maxWidth: 600, display: "block", margin: "16px auto 0" }}
             >
               <desc>
-                Three-box flow diagram showing how a tool call moves through the system: the Model on the left
-                decides to call the function, the Runtime in the middle executes the real function, and the Result
-                on the right flows back into the model's next turn. Arrows are labeled Decide, Execute, and Return.
+                Three-box flow diagram showing how a tool call moves through the system: the Model on the left decides
+                to call the function, the Runtime in the middle executes the real function, and the Result on the right
+                flows back into the model's next turn. Arrows are labeled Decide, Execute, and Return.
               </desc>
-              <rect x="20" y="60" width="140" height="80" rx="8" fill={`${C.cyan}12`} stroke={C.cyan} strokeWidth="1.5" />
+              <rect
+                x="20"
+                y="60"
+                width="140"
+                height="80"
+                rx="8"
+                fill={`${C.cyan}12`}
+                stroke={C.cyan}
+                strokeWidth="1.5"
+              />
               <text x="90" y="92" fill={SOFT.cyan} fontSize="14" fontWeight="700" textAnchor="middle">
                 Model
               </text>
@@ -350,7 +364,16 @@ export default function ToolUseAsBridge(ctx) {
                 to call
               </text>
 
-              <rect x="210" y="60" width="140" height="80" rx="8" fill={`${C.orange}12`} stroke={C.orange} strokeWidth="1.5" />
+              <rect
+                x="210"
+                y="60"
+                width="140"
+                height="80"
+                rx="8"
+                fill={`${C.orange}12`}
+                stroke={C.orange}
+                strokeWidth="1.5"
+              />
               <text x="280" y="92" fill={SOFT.orange} fontSize="14" fontWeight="700" textAnchor="middle">
                 Runtime
               </text>
@@ -361,7 +384,16 @@ export default function ToolUseAsBridge(ctx) {
                 real function
               </text>
 
-              <rect x="400" y="60" width="140" height="80" rx="8" fill={`${C.green}12`} stroke={C.green} strokeWidth="1.5" />
+              <rect
+                x="400"
+                y="60"
+                width="140"
+                height="80"
+                rx="8"
+                fill={`${C.green}12`}
+                stroke={C.green}
+                strokeWidth="1.5"
+              />
               <text x="470" y="92" fill={SOFT.green} fontSize="14" fontWeight="700" textAnchor="middle">
                 Result
               </text>
@@ -418,8 +450,8 @@ export default function ToolUseAsBridge(ctx) {
             Model = brain. Runtime = hands. The brain never touches the database directly.
           </div>
           <T color={SOFT.teal} center size={15} style={{ marginTop: 12 }}>
-            Critical separation: the LLM never executes code itself. It only emits a tool_use block. Your runtime
-            does the actual call. This boundary is what makes tool use safe enough to ship.
+            Critical separation: the LLM never executes code itself. It only emits a tool_use block. Your runtime does
+            the actual call. This boundary is what makes tool use safe enough to ship.
           </T>
         </Box>
       </Reveal>
@@ -507,8 +539,8 @@ export default function ToolUseAsBridge(ctx) {
             Description is the most important field. Spend most of your editing time there.
           </div>
           <T color={SOFT.blue} center size={15} style={{ marginTop: 12 }}>
-            The model has never seen your codebase. The description is its only manual. If the description is vague,
-            the model guesses; if it is specific, the model rarely misfires.
+            The model has never seen your codebase. The description is its only manual. If the description is vague, the
+            model guesses; if it is specific, the model rarely misfires.
           </T>
         </Box>
       </Reveal>
@@ -519,8 +551,8 @@ export default function ToolUseAsBridge(ctx) {
             The Model Decides, The Runtime Executes
           </T>
           <T color={SOFT.green} center size={16} style={{ marginTop: 10 }}>
-            Two distinct roles. The model is in charge of decisions - which tool, what arguments. Your code is in
-            charge of side effects - reading the DB, charging the card, sending the email. Never mix them.
+            Two distinct roles. The model is in charge of decisions - which tool, what arguments. Your code is in charge
+            of side effects - reading the DB, charging the card, sending the email. Never mix them.
           </T>
 
           <div
@@ -582,9 +614,9 @@ export default function ToolUseAsBridge(ctx) {
             The model can also choose NOT to call any tool and just answer. That is a valid outcome.
           </div>
           <T color={SOFT.green} center size={15} style={{ marginTop: 12 }}>
-            Notice step 4: the model halts at tool_use. It does not execute anything itself. The runtime is the
-            single chokepoint where every real-world side effect happens - which is exactly where you place auth,
-            logging, and rate limits.
+            Notice step 4: the model halts at tool_use. It does not execute anything itself. The runtime is the single
+            chokepoint where every real-world side effect happens - which is exactly where you place auth, logging, and
+            rate limits.
           </T>
         </Box>
       </Reveal>
@@ -595,8 +627,8 @@ export default function ToolUseAsBridge(ctx) {
             One Call, Or A Loop Of Calls?
           </T>
           <T color={SOFT.purple} center size={16} style={{ marginTop: 10 }}>
-            A single tool call is the atom. An agent is what you get when you put that atom in a loop: reason,
-            act, observe, then reason again with the new evidence.
+            A single tool call is the atom. An agent is what you get when you put that atom in a loop: reason, act,
+            observe, then reason again with the new evidence.
           </T>
 
           <div
@@ -616,9 +648,9 @@ export default function ToolUseAsBridge(ctx) {
               style={{ width: "100%", maxWidth: 600, display: "block", margin: "10px auto 0" }}
             >
               <desc>
-                Triangular loop diagram with three labeled nodes: Reason at the top, Act on the bottom-right,
-                Observe on the bottom-left. Arrows form a clockwise cycle Reason -&gt; Act -&gt; Observe -&gt;
-                Reason. A small label in the center reads loop until done.
+                Triangular loop diagram with three labeled nodes: Reason at the top, Act on the bottom-right, Observe on
+                the bottom-left. Arrows form a clockwise cycle Reason -&gt; Act -&gt; Observe -&gt; Reason. A small
+                label in the center reads loop until done.
               </desc>
               <circle cx="280" cy="55" r="40" fill={`${C.cyan}24`} stroke={C.cyan} strokeWidth="2" />
               <text x="280" y="50" fill={SOFT.cyan} fontSize="14" fontWeight="700" textAnchor="middle">
@@ -644,23 +676,13 @@ export default function ToolUseAsBridge(ctx) {
                 Read result
               </text>
 
-              <path
-                d="M 312 78 Q 380 105 405 138"
-                fill="none"
-                stroke={C.purple}
-                strokeWidth="2"
-              />
+              <path d="M 312 78 Q 380 105 405 138" fill="none" stroke={C.purple} strokeWidth="2" />
               <polygon points="405,138 397,134 401,144" fill={C.purple} />
 
               <line x1="390" y1="165" x2="170" y2="165" stroke={C.green} strokeWidth="2" />
               <polygon points="170,165 178,161 178,169" fill={C.green} />
 
-              <path
-                d="M 155 138 Q 200 105 248 78"
-                fill="none"
-                stroke={C.cyan}
-                strokeWidth="2"
-              />
+              <path d="M 155 138 Q 200 105 248 78" fill="none" stroke={C.cyan} strokeWidth="2" />
               <polygon points="248,78 244,86 254,82" fill={C.cyan} />
 
               <text x="280" y="125" fill={SOFT.purple} fontSize="12" textAnchor="middle" fontWeight="700">
@@ -717,8 +739,8 @@ export default function ToolUseAsBridge(ctx) {
             The 8 Tools Our Support Agent Has
           </T>
           <T color={SOFT.cyan} center size={16} style={{ marginTop: 10 }}>
-            For the rest of this section we work with one fixed inventory. Every example uses these eight tools -
-            the shape of the schemas, the lifecycle of a call, the retry strategy when one fails.
+            For the rest of this section we work with one fixed inventory. Every example uses these eight tools - the
+            shape of the schemas, the lifecycle of a call, the retry strategy when one fails.
           </T>
 
           <div
@@ -777,9 +799,9 @@ export default function ToolUseAsBridge(ctx) {
             8 tools, 3 read-only (search, lookup, lookup), 5 side-effectful (reset, change, refund, escalate, send).
           </div>
           <T color={SOFT.cyan} center size={15} style={{ marginTop: 12 }}>
-            Notice the split: read-only tools are cheap to retry; side-effectful tools must be guarded with
-            auth, validation, and approvals. process_refund is the canary - any refund over $200 escalates instead
-            of executing.
+            Notice the split: read-only tools are cheap to retry; side-effectful tools must be guarded with auth,
+            validation, and approvals. process_refund is the canary - any refund over $200 escalates instead of
+            executing.
           </T>
         </Box>
       </Reveal>

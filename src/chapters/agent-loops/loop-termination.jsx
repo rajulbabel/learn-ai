@@ -42,7 +42,7 @@ const ESCALATION_STEPS = [
   },
   {
     label: "Agent Emits Final Message To User",
-    note: "\"I Wasn't Able To Fully Resolve This. A Human Agent Will Follow Up.\"",
+    note: '"I Wasn\'t Able To Fully Resolve This. A Human Agent Will Follow Up."',
     color: "amber",
   },
   {
@@ -68,9 +68,9 @@ export default function LoopTermination(ctx) {
             Four Ways A Loop Ends
           </T>
           <T color={SOFT.orange} center size={16} style={{ marginTop: 10 }}>
-            An agent loop is a process that must stop. There are exactly four reasons it does. Three
-            of them are non-success: the loop ran out of room, ran out of money, or was told to
-            halt. Knowing which one fired tells you what to do next.
+            An agent loop is a process that must stop. There are exactly four reasons it does. Three of them are
+            non-success: the loop ran out of room, ran out of money, or was told to halt. Knowing which one fired tells
+            you what to do next.
           </T>
 
           <div
@@ -99,9 +99,8 @@ export default function LoopTermination(ctx) {
           </div>
 
           <T color={SOFT.orange} center size={15} style={{ marginTop: 14 }}>
-            One of these four conditions fires on every agent run. Every production agent must
-            detect each one and respond differently. The remaining sub-steps walk through detection
-            and the fail-safe pattern.
+            One of these four conditions fires on every agent run. Every production agent must detect each one and
+            respond differently. The remaining sub-steps walk through detection and the fail-safe pattern.
           </T>
         </Box>
       )}
@@ -112,9 +111,8 @@ export default function LoopTermination(ctx) {
             Success: The Model Stops Calling Tools
           </T>
           <T color={SOFT.yellow} center size={16} style={{ marginTop: 10 }}>
-            The happy path is also the subtlest. The model never says "I'm done" out loud. It just
-            stops asking for tools. The runtime watches the most recent response and detects the
-            absence of any tool_use block.
+            The happy path is also the subtlest. The model never says "I'm done" out loud. It just stops asking for
+            tools. The runtime watches the most recent response and detects the absence of any tool_use block.
           </T>
 
           <div
@@ -138,8 +136,8 @@ export default function LoopTermination(ctx) {
             <div style={{ ...tintedCard(C.green), padding: 14 }}>
               <span style={pill(C.green)}>ITERATION N</span>
               <T color={C.green} bold center size={15} style={{ marginTop: 8 }}>
-                Iteration N: Model Emits ONLY Text (No tool_use). That&apos;s Success - The Model
-                Decided No More Tools Needed.
+                Iteration N: Model Emits ONLY Text (No tool_use). That&apos;s Success - The Model Decided No More Tools
+                Needed.
               </T>
               <T color={SOFT.green} center size={14} style={{ marginTop: 6 }}>
                 Stop Reason From The API Is &quot;end_turn&quot; Instead Of &quot;tool_use&quot;.
@@ -154,8 +152,8 @@ export default function LoopTermination(ctx) {
           </div>
 
           <T color={SOFT.yellow} center size={15} style={{ marginTop: 12 }}>
-            This is the only stop condition that does not require an escalation message. Everything
-            else is partial completion and the user needs to be told what happened.
+            This is the only stop condition that does not require an escalation message. Everything else is partial
+            completion and the user needs to be told what happened.
           </T>
         </Box>
       </Reveal>
@@ -166,19 +164,16 @@ export default function LoopTermination(ctx) {
             Hard Cap: 10-20 Iterations
           </T>
           <T color={SOFT.red} center size={16} style={{ marginTop: 10 }}>
-            The max iter cap (also called max-iters) is the dumbest safety net but also the most
-            important. A counter ticks up every loop pass. When it hits the cap, the runtime
-            force-terminates the loop without asking the model.
+            The max iter cap (also called max-iters) is the dumbest safety net but also the most important. A counter
+            ticks up every loop pass. When it hits the cap, the runtime force-terminates the loop without asking the
+            model.
           </T>
 
           <div style={{ ...tintedCard(C.red), padding: 14, marginTop: 14 }}>
-            <svg
-              viewBox="0 0 560 140"
-              style={{ width: "100%", maxWidth: 640, display: "block", margin: "0 auto" }}
-            >
+            <svg viewBox="0 0 560 140" style={{ width: "100%", maxWidth: 640, display: "block", margin: "0 auto" }}>
               <desc>
-                Horizontal counter from one to ten showing iteration count with the tenth iteration
-                highlighted as the forced termination point.
+                Horizontal counter from one to ten showing iteration count with the tenth iteration highlighted as the
+                forced termination point.
               </desc>
 
               {/* 10 cells width 40, gap 12. Total = 10*40 + 9*12 = 508. Pad = (560-508)/2 = 26 */}
@@ -199,14 +194,7 @@ export default function LoopTermination(ctx) {
                       stroke={accent}
                       strokeWidth={isLast ? 2.5 : 1.4}
                     />
-                    <text
-                      x={x + 20}
-                      y={64}
-                      fill={soft}
-                      fontSize="14"
-                      fontWeight="700"
-                      textAnchor="middle"
-                    >
+                    <text x={x + 20} y={64} fill={soft} fontSize="14" fontWeight="700" textAnchor="middle">
                       {i + 1}
                     </text>
                     {isLast && (
@@ -222,33 +210,12 @@ export default function LoopTermination(ctx) {
                           stroke={C.red}
                           strokeWidth="1"
                         />
-                        <text
-                          x={x + 20}
-                          y={27}
-                          fill="#08080d"
-                          fontSize="11"
-                          fontWeight="800"
-                          textAnchor="middle"
-                        >
+                        <text x={x + 20} y={27} fill="#08080d" fontSize="11" fontWeight="800" textAnchor="middle">
                           STOP
                         </text>
                         {/* Bold X mark over the cell */}
-                        <line
-                          x1={x + 8}
-                          y1={48}
-                          x2={x + 32}
-                          y2={72}
-                          stroke={C.red}
-                          strokeWidth="2.5"
-                        />
-                        <line
-                          x1={x + 32}
-                          y1={48}
-                          x2={x + 8}
-                          y2={72}
-                          stroke={C.red}
-                          strokeWidth="2.5"
-                        />
+                        <line x1={x + 8} y1={48} x2={x + 32} y2={72} stroke={C.red} strokeWidth="2.5" />
+                        <line x1={x + 32} y1={48} x2={x + 8} y2={72} stroke={C.red} strokeWidth="2.5" />
                       </>
                     )}
                   </g>
@@ -272,14 +239,7 @@ export default function LoopTermination(ctx) {
                 );
               })}
 
-              <text
-                x={280}
-                y={108}
-                fill={SOFT.red}
-                fontSize="12"
-                fontWeight="700"
-                textAnchor="middle"
-              >
+              <text x={280} y={108} fill={SOFT.red} fontSize="12" fontWeight="700" textAnchor="middle">
                 Iteration Counter - Force-Terminate At Iter 10
               </text>
             </svg>
@@ -288,15 +248,13 @@ export default function LoopTermination(ctx) {
           <div style={{ ...tintedCard(C.red), padding: 12, marginTop: 12 }}>
             <span style={pill(C.red)}>PRODUCTION RULE</span>
             <T color={SOFT.red} center size={14} style={{ marginTop: 8 }}>
-              Production Rule: 10-20 Typical Max-Iter Cap. Higher = Pay-To-Think; Lower = Miss
-              Answers.
+              Production Rule: 10-20 Typical Max-Iter Cap. Higher = Pay-To-Think; Lower = Miss Answers.
             </T>
           </div>
 
           <T color={SOFT.red} center size={15} style={{ marginTop: 12 }}>
-            The cap protects against runaway loops where the model can&apos;t make progress and
-            keeps re-trying the same tool. Without a cap a single buggy ticket can bill thousands of
-            dollars in an hour.
+            The cap protects against runaway loops where the model can&apos;t make progress and keeps re-trying the same
+            tool. Without a cap a single buggy ticket can bill thousands of dollars in an hour.
           </T>
         </Box>
       </Reveal>
@@ -307,20 +265,16 @@ export default function LoopTermination(ctx) {
             Token / Cost Budget
           </T>
           <T color={SOFT.amber} center size={16} style={{ marginTop: 10 }}>
-            Iteration count is a proxy for cost; the real number is dollars. A budget cap measures
-            the total tokens (or dollars) spent across all iterations and stops the loop when the
-            wallet is empty. Sample budget: $0.50 per agent run.
+            Iteration count is a proxy for cost; the real number is dollars. A budget cap measures the total tokens (or
+            dollars) spent across all iterations and stops the loop when the wallet is empty. Sample budget: $0.50 per
+            agent run.
           </T>
 
           <div style={{ ...tintedCard(C.amber), padding: 14, marginTop: 14 }}>
-            <svg
-              viewBox="0 0 560 180"
-              style={{ width: "100%", maxWidth: 640, display: "block", margin: "0 auto" }}
-            >
+            <svg viewBox="0 0 560 180" style={{ width: "100%", maxWidth: 640, display: "block", margin: "0 auto" }}>
               <desc>
-                Horizontal budget bar filling from zero to one hundred percent with markers at
-                thirty sixty and one hundred percent showing iteration cost consumption stopping at
-                budget exhaustion.
+                Horizontal budget bar filling from zero to one hundred percent with markers at thirty sixty and one
+                hundred percent showing iteration cost consumption stopping at budget exhaustion.
               </desc>
 
               {/* Budget bar: width 440, x_start = (560-440)/2 = 60. height 28 at y=60 */}
@@ -336,15 +290,7 @@ export default function LoopTermination(ctx) {
               />
 
               {/* Filled portion all the way to 100% (showing exhausted state) */}
-              <rect
-                x={60}
-                y={60}
-                width={440}
-                height={28}
-                rx={6}
-                fill={`${C.red}40`}
-                stroke="none"
-              />
+              <rect x={60} y={60} width={440} height={28} rx={6} fill={`${C.red}40`} stroke="none" />
 
               {/* Gradient-ish fill: green 0-30, amber 30-60, red 60-100 */}
               <rect x={60} y={60} width={132} height={28} fill={`${C.green}30`} />
@@ -352,16 +298,7 @@ export default function LoopTermination(ctx) {
               <rect x={324} y={60} width={176} height={28} fill={`${C.red}40`} />
 
               {/* Bar outline on top */}
-              <rect
-                x={60}
-                y={60}
-                width={440}
-                height={28}
-                rx={6}
-                fill="none"
-                stroke={C.amber}
-                strokeWidth="1.5"
-              />
+              <rect x={60} y={60} width={440} height={28} rx={6} fill="none" stroke={C.amber} strokeWidth="1.5" />
 
               {/* Stop markers at 30%, 60%, 100% */}
               {[
@@ -378,23 +315,9 @@ export default function LoopTermination(ctx) {
                 const soft = SOFT[m.color];
                 return (
                   <g key={`mark-${i}`}>
-                    <line
-                      x1={m.x}
-                      y1={56}
-                      x2={m.x}
-                      y2={94}
-                      stroke={accent}
-                      strokeWidth="2"
-                    />
+                    <line x1={m.x} y1={56} x2={m.x} y2={94} stroke={accent} strokeWidth="2" />
                     <circle cx={m.x} cy={74} r={5} fill={accent} stroke={C.bg} strokeWidth="1.5" />
-                    <text
-                      x={m.x}
-                      y={46}
-                      fill={accent}
-                      fontSize="11"
-                      fontWeight="800"
-                      textAnchor="middle"
-                    >
+                    <text x={m.x} y={46} fill={accent} fontSize="11" fontWeight="800" textAnchor="middle">
                       {m.pct}%
                     </text>
                     <text
@@ -412,35 +335,14 @@ export default function LoopTermination(ctx) {
               })}
 
               {/* Y-axis label */}
-              <text
-                x={60}
-                y={46}
-                fill={SOFT.amber}
-                fontSize="11"
-                fontWeight="700"
-                textAnchor="start"
-              >
+              <text x={60} y={46} fill={SOFT.amber} fontSize="11" fontWeight="700" textAnchor="start">
                 $0
               </text>
-              <text
-                x={500}
-                y={46}
-                fill={SOFT.red}
-                fontSize="11"
-                fontWeight="700"
-                textAnchor="end"
-              >
+              <text x={500} y={46} fill={SOFT.red} fontSize="11" fontWeight="700" textAnchor="end">
                 $0.50
               </text>
 
-              <text
-                x={280}
-                y={148}
-                fill={SOFT.amber}
-                fontSize="12"
-                fontWeight="700"
-                textAnchor="middle"
-              >
+              <text x={280} y={148} fill={SOFT.amber} fontSize="12" fontWeight="700" textAnchor="middle">
                 Budget Bar - Loop Terminates When Bar Hits 100%
               </text>
             </svg>
@@ -487,8 +389,8 @@ export default function LoopTermination(ctx) {
           </div>
 
           <T color={SOFT.amber} center size={15} style={{ marginTop: 12 }}>
-            One iteration that triggers a thinking burst can spend 10k tokens; the next might spend
-            500. Iteration count doesn&apos;t see that. A dollar budget does.
+            One iteration that triggers a thinking burst can spend 10k tokens; the next might spend 500. Iteration count
+            doesn&apos;t see that. A dollar budget does.
           </T>
         </Box>
       </Reveal>
@@ -499,9 +401,9 @@ export default function LoopTermination(ctx) {
             Tools Can Say Stop
           </T>
           <T color={SOFT.cyan} center size={16} style={{ marginTop: 10 }}>
-            Some tools are terminal by design. An escalate_human tool, for example, hands the
-            conversation to a human and there is nothing left for the agent to do. The tool result
-            includes a halt flag, and the runtime respects it.
+            Some tools are terminal by design. An escalate_human tool, for example, hands the conversation to a human
+            and there is nothing left for the agent to do. The tool result includes a halt flag, and the runtime
+            respects it.
           </T>
 
           <div
@@ -558,8 +460,8 @@ export default function LoopTermination(ctx) {
           </div>
 
           <T color={SOFT.cyan} center size={15} style={{ marginTop: 12 }}>
-            Explicit stops are the cleanest non-success case. The model doesn&apos;t get confused,
-            the runtime doesn&apos;t guess, and there is a clear handoff record in the transcript.
+            Explicit stops are the cleanest non-success case. The model doesn&apos;t get confused, the runtime
+            doesn&apos;t guess, and there is a clear handoff record in the transcript.
           </T>
         </Box>
       </Reveal>
@@ -570,19 +472,16 @@ export default function LoopTermination(ctx) {
             When The Loop Gives Up, Escalate
           </T>
           <T color={SOFT.orange} center size={16} style={{ marginTop: 10 }}>
-            Any non-success termination (max-iters, budget, or explicit halt that wasn&apos;t a
-            successful resolution) must trigger the same fail-safe pattern. The user gets a clear
-            message, and a human gets the transcript to pick up where the agent stopped.
+            Any non-success termination (max-iters, budget, or explicit halt that wasn&apos;t a successful resolution)
+            must trigger the same fail-safe pattern. The user gets a clear message, and a human gets the transcript to
+            pick up where the agent stopped.
           </T>
 
           <div style={{ ...tintedCard(C.orange), padding: 14, marginTop: 14 }}>
-            <svg
-              viewBox="0 0 560 280"
-              style={{ width: "100%", maxWidth: 640, display: "block", margin: "0 auto" }}
-            >
+            <svg viewBox="0 0 560 280" style={{ width: "100%", maxWidth: 640, display: "block", margin: "0 auto" }}>
               <desc>
-                Fail-safe escalation flow from any non-success termination to user message and
-                escalate_human call with partial transcript.
+                Fail-safe escalation flow from any non-success termination to user message and escalate_human call with
+                partial transcript.
               </desc>
 
               {/* 3 stacked boxes, width 400, x_start = (560-400)/2 = 80 */}
@@ -604,65 +503,27 @@ export default function LoopTermination(ctx) {
                     />
                     {/* Step number badge */}
                     <circle cx={108} cy={y + 30} r={14} fill={accent} />
-                    <text
-                      x={108}
-                      y={y + 35}
-                      fill="#08080d"
-                      fontSize="13"
-                      fontWeight="800"
-                      textAnchor="middle"
-                    >
+                    <text x={108} y={y + 35} fill="#08080d" fontSize="13" fontWeight="800" textAnchor="middle">
                       {i + 1}
                     </text>
-                    <text
-                      x={280}
-                      y={y + 24}
-                      fill={accent}
-                      fontSize="13"
-                      fontWeight="700"
-                      textAnchor="middle"
-                    >
+                    <text x={280} y={y + 24} fill={accent} fontSize="13" fontWeight="700" textAnchor="middle">
                       {step.label}
                     </text>
-                    <text
-                      x={280}
-                      y={y + 46}
-                      fill={soft}
-                      fontSize="11"
-                      fontWeight="500"
-                      textAnchor="middle"
-                    >
+                    <text x={280} y={y + 46} fill={soft} fontSize="11" fontWeight="500" textAnchor="middle">
                       {step.note}
                     </text>
                     {/* Down arrow connecting to next step */}
                     {i < ESCALATION_STEPS.length - 1 && (
                       <>
-                        <line
-                          x1={280}
-                          y1={y + 60}
-                          x2={280}
-                          y2={y + 76}
-                          stroke={SOFT.orange}
-                          strokeWidth="1.6"
-                        />
-                        <polygon
-                          points={`280,${y + 80} 276,${y + 74} 284,${y + 74}`}
-                          fill={SOFT.orange}
-                        />
+                        <line x1={280} y1={y + 60} x2={280} y2={y + 76} stroke={SOFT.orange} strokeWidth="1.6" />
+                        <polygon points={`280,${y + 80} 276,${y + 74} 284,${y + 74}`} fill={SOFT.orange} />
                       </>
                     )}
                   </g>
                 );
               })}
 
-              <text
-                x={280}
-                y={268}
-                fill={SOFT.orange}
-                fontSize="12"
-                fontWeight="700"
-                textAnchor="middle"
-              >
+              <text x={280} y={268} fill={SOFT.orange} fontSize="12" fontWeight="700" textAnchor="middle">
                 Fail-Safe Pattern - Triggered By ANY Non-Success Termination
               </text>
             </svg>
@@ -681,23 +542,19 @@ export default function LoopTermination(ctx) {
               No Silent Failures.
             </T>
             <T color={SOFT.red} center size={14} style={{ marginTop: 8 }}>
-              Every non-success termination produces a user-visible message AND an escalate_human
-              call with the full partial transcript. Silent failures are how agent bugs hide in
-              production for weeks.
+              Every non-success termination produces a user-visible message AND an escalate_human call with the full
+              partial transcript. Silent failures are how agent bugs hide in production for weeks.
             </T>
           </div>
 
           <T color={SOFT.orange} center size={15} style={{ marginTop: 12 }}>
-            The transcript is the load-bearing artifact: it carries the agent&apos;s reasoning,
-            every tool call, every result, so the human picking up the ticket has full context. No
-            re-litigating from scratch.
+            The transcript is the load-bearing artifact: it carries the agent&apos;s reasoning, every tool call, every
+            result, so the human picking up the ticket has full context. No re-litigating from scratch.
           </T>
         </Box>
       </Reveal>
 
-      {sub < 5 && (
-        <SubBtn onClick={onContinue} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />
-      )}
+      {sub < 5 && <SubBtn onClick={onContinue} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
     </div>
   );
 }

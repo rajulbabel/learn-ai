@@ -44,20 +44,12 @@ const COT_TRIGGERS = [
 const FEW_SHOT_COT_EXAMPLES = [
   {
     q: "Ticket T1: annual plan $120, cancelled month 3. No fee. What is the refund?",
-    reason: [
-      "9 months remain out of 12.",
-      "Prorated refund = 120 x 9 / 12 = $90.",
-      "No fee applied.",
-    ],
+    reason: ["9 months remain out of 12.", "Prorated refund = 120 x 9 / 12 = $90.", "No fee applied."],
     a: "$90",
   },
   {
     q: "Ticket T4: annual plan $120, cancelled month 7. 10% cancellation fee. What is the refund?",
-    reason: [
-      "5 months remain out of 12.",
-      "Prorated refund = 120 x 5 / 12 = $50.",
-      "Fee = 10% of $50 = $5.",
-    ],
+    reason: ["5 months remain out of 12.", "Prorated refund = 120 x 5 / 12 = $50.", "Fee = 10% of $50 = $5."],
     a: "$45",
   },
 ];
@@ -522,8 +514,8 @@ export default function ChainOfThoughtSelfConsistency(ctx) {
             What CoT Buys And What It Costs
           </T>
           <T color={SOFT.teal} center size={16} style={{ marginTop: 10 }}>
-            Reasoning isn&apos;t free. CoT generates extra tokens. Self-consistency multiplies that by N. The accuracy gain
-            is real but the bill is real too.
+            Reasoning isn&apos;t free. CoT generates extra tokens. Self-consistency multiplies that by N. The accuracy
+            gain is real but the bill is real too.
           </T>
           <div
             style={{
@@ -606,8 +598,8 @@ export default function ChainOfThoughtSelfConsistency(ctx) {
             When Chain-Of-Thought Wins
           </T>
           <T color={SOFT.cyan} center size={16} style={{ marginTop: 10 }}>
-            CoT is a Decision Matrix problem. The technique helps when there is real reasoning to do. It hurts when
-            the task is a lookup or a one-step classification - extra tokens, extra latency, no payoff.
+            CoT is a Decision Matrix problem. The technique helps when there is real reasoning to do. It hurts when the
+            task is a lookup or a one-step classification - extra tokens, extra latency, no payoff.
           </T>
           <div
             style={{
@@ -689,14 +681,14 @@ export default function ChainOfThoughtSelfConsistency(ctx) {
               Reasoning Models Change The Calculus
             </T>
             <T color={SOFT.indigo} center size={14} style={{ marginTop: 6 }}>
-              Reasoning models like the ones from Section 10.4 Thinking do CoT internally before replying. You no
-              longer prompt for &quot;step by step&quot; - the model thinks first, then emits the answer. CoT prompts
-              still help on non-reasoning models, but with a reasoning model the technique often becomes redundant.
+              Reasoning models like the ones from Section 10.4 Thinking do CoT internally before replying. You no longer
+              prompt for &quot;step by step&quot; - the model thinks first, then emits the answer. CoT prompts still
+              help on non-reasoning models, but with a reasoning model the technique often becomes redundant.
             </T>
           </div>
           <T color={SOFT.cyan} center size={15} style={{ marginTop: 12 }}>
-            Match the technique to the task. Multi-step math gets CoT. A category lookup gets a direct answer. And
-            when the model already reasons internally, save the tokens.
+            Match the technique to the task. Multi-step math gets CoT. A category lookup gets a direct answer. And when
+            the model already reasons internally, save the tokens.
           </T>
         </Box>
       </Reveal>

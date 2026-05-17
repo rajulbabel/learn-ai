@@ -14,9 +14,27 @@ const T2_TRACE_STEPS = [
 
 // T4 failure trace (sub=1 of 13.40)
 const T4_TRACE_STEPS = [
-  { step: 1, tool: "classify_intent", result: "Intent: Refund + Cancel Subscription", status: "pass", note: "Correct Read." },
-  { step: 2, tool: "lookup_customer", result: "Customer c-9924, Pro Tier Active", status: "pass", note: "Right Tool, Right Args." },
-  { step: 3, tool: "lookup_subscription", result: "Active, $240 Annual, 9 Months Used", status: "pass", note: "All Good So Far." },
+  {
+    step: 1,
+    tool: "classify_intent",
+    result: "Intent: Refund + Cancel Subscription",
+    status: "pass",
+    note: "Correct Read.",
+  },
+  {
+    step: 2,
+    tool: "lookup_customer",
+    result: "Customer c-9924, Pro Tier Active",
+    status: "pass",
+    note: "Right Tool, Right Args.",
+  },
+  {
+    step: 3,
+    tool: "lookup_subscription",
+    result: "Active, $240 Annual, 9 Months Used",
+    status: "pass",
+    note: "All Good So Far.",
+  },
   {
     step: 4,
     tool: "process_refund",
@@ -89,9 +107,9 @@ export default function TraceEvals(ctx) {
             Every Step Gets A Grade
           </T>
           <T color={SOFT.red} center size={16} style={{ marginTop: 10 }}>
-            End-to-end LLM-as-Judge tells you if the final answer was correct. Trace eval grades
-            EACH step independently. When a trace fails, you can locate where. T2 (reset password
-            + email change) is a 5-step trace that passes at every step.
+            End-to-end LLM-as-Judge tells you if the final answer was correct. Trace eval grades EACH step
+            independently. When a trace fails, you can locate where. T2 (reset password + email change) is a 5-step
+            trace that passes at every step.
           </T>
 
           <div style={{ ...tintedCard(C.red), padding: 14, marginTop: 14 }}>
@@ -131,9 +149,8 @@ export default function TraceEvals(ctx) {
           </div>
 
           <T color={SOFT.red} center size={15} style={{ marginTop: 14 }}>
-            All 5 steps pass. The trace also passes end-to-end. But trace eval still adds value:
-            it confirms WHY the trace passed (every step was correct), not just that the final
-            output happened to look right.
+            All 5 steps pass. The trace also passes end-to-end. But trace eval still adds value: it confirms WHY the
+            trace passed (every step was correct), not just that the final output happened to look right.
           </T>
         </Box>
       )}
@@ -144,9 +161,8 @@ export default function TraceEvals(ctx) {
             When A Step Fails, Where?
           </T>
           <T color={SOFT.orange} center size={16} style={{ marginTop: 10 }}>
-            T4 (refund + cancel subscription) is the diagnostic trace. The final answer says
-            &quot;both processed&quot; but trace eval surfaces TWO failures: step 4 missed the
-            cancel side-effect, and step 5 lied about it.
+            T4 (refund + cancel subscription) is the diagnostic trace. The final answer says &quot;both processed&quot;
+            but trace eval surfaces TWO failures: step 4 missed the cancel side-effect, and step 5 lied about it.
           </T>
 
           <div style={{ ...tintedCard(C.orange), padding: 14, marginTop: 14 }}>
@@ -192,9 +208,9 @@ export default function TraceEvals(ctx) {
           </div>
 
           <T color={SOFT.orange} center size={14} style={{ marginTop: 12 }}>
-            Insight: Step 4 made the right tool call (process_refund) but the agent did not adapt
-            when it noticed cancel was missing. Step 5 then propagated a false assertion. Trace
-            eval surfaces both, end-to-end eval would only flag the final wrong answer.
+            Insight: Step 4 made the right tool call (process_refund) but the agent did not adapt when it noticed cancel
+            was missing. Step 5 then propagated a false assertion. Trace eval surfaces both, end-to-end eval would only
+            flag the final wrong answer.
           </T>
         </Box>
       </Reveal>
@@ -205,9 +221,9 @@ export default function TraceEvals(ctx) {
             What To Score Per Step
           </T>
           <T color={SOFT.yellow} center size={16} style={{ marginTop: 10 }}>
-            Each step gets graded on four sub-rubric criteria. The T4 step 4 example below shows
-            exactly how trace eval pinpoints where the failure starts: tool choice + tool input
-            both pass, but result handling and next-step planning fail.
+            Each step gets graded on four sub-rubric criteria. The T4 step 4 example below shows exactly how trace eval
+            pinpoints where the failure starts: tool choice + tool input both pass, but result handling and next-step
+            planning fail.
           </T>
 
           <div style={{ ...tintedCard(C.yellow), padding: 14, marginTop: 14 }}>
@@ -219,15 +235,9 @@ export default function TraceEvals(ctx) {
                 fontSize: 14,
               }}
             >
-              <div style={{ padding: "8px 10px", fontWeight: 700, color: SOFT.yellow }}>
-                Criterion
-              </div>
-              <div style={{ padding: "8px 10px", fontWeight: 700, color: SOFT.purple }}>
-                Description
-              </div>
-              <div style={{ padding: "8px 10px", fontWeight: 700, color: SOFT.cyan }}>
-                T4 Step 4
-              </div>
+              <div style={{ padding: "8px 10px", fontWeight: 700, color: SOFT.yellow }}>Criterion</div>
+              <div style={{ padding: "8px 10px", fontWeight: 700, color: SOFT.purple }}>Description</div>
+              <div style={{ padding: "8px 10px", fontWeight: 700, color: SOFT.cyan }}>T4 Step 4</div>
               {PER_STEP_RUBRIC.map((r) => (
                 <Fragment key={r.name}>
                   <div
@@ -266,9 +276,9 @@ export default function TraceEvals(ctx) {
           </div>
 
           <T color={SOFT.yellow} center size={14} style={{ marginTop: 12 }}>
-            The four sub-criteria mirror an engineer&apos;s mental debug pass: did I pick the
-            right thing, did I call it right, did I read the answer right, did I plan the next
-            step right. Production teams build dashboards keyed on these four columns.
+            The four sub-criteria mirror an engineer&apos;s mental debug pass: did I pick the right thing, did I call it
+            right, did I read the answer right, did I plan the next step right. Production teams build dashboards keyed
+            on these four columns.
           </T>
         </Box>
       </Reveal>
@@ -279,9 +289,9 @@ export default function TraceEvals(ctx) {
             Trace Eval Record (Shape)
           </T>
           <T color={SOFT.amber} center size={16} style={{ marginTop: 10 }}>
-            Trace eval output is a structured JSON record: one entry per step, four scores per
-            entry, plus per-step failure-mode tags and an overall_grade summary. This shape
-            powers per-tool dashboards and failure-mode alerts.
+            Trace eval output is a structured JSON record: one entry per step, four scores per entry, plus per-step
+            failure-mode tags and an overall_grade summary. This shape powers per-tool dashboards and failure-mode
+            alerts.
           </T>
 
           <div
@@ -309,7 +319,7 @@ export default function TraceEvals(ctx) {
                 overflowX: "auto",
               }}
             >
-{`{
+              {`{
   "trace_id": "tr-8492",
   "ticket": "T4",
   "agent_version": "support-agent@v3.1",
@@ -334,9 +344,9 @@ export default function TraceEvals(ctx) {
           </div>
 
           <T color={SOFT.amber} center size={14} style={{ marginTop: 12 }}>
-            failure_mode tags (missed_escalation, false_assertion, hallucinated_tool,
-            wrong_argument_type) are the most useful cross-trace signal. They roll up into a
-            failure-mode dashboard that tells the eng team which class of bug is most common.
+            failure_mode tags (missed_escalation, false_assertion, hallucinated_tool, wrong_argument_type) are the most
+            useful cross-trace signal. They roll up into a failure-mode dashboard that tells the eng team which class of
+            bug is most common.
           </T>
         </Box>
       </Reveal>
@@ -347,37 +357,48 @@ export default function TraceEvals(ctx) {
             Per-Step Grading Is N x Expensive
           </T>
           <T color={SOFT.purple} center size={16} style={{ marginTop: 10 }}>
-            End-to-end LLM-as-Judge: 1 judge call per trace. Trace eval: N judge calls per trace
-            (one per step). For an 8-step trace that is 8x the eval cost. Reserve trace eval for
-            a sample of production traffic; run end-to-end on the rest.
+            End-to-end LLM-as-Judge: 1 judge call per trace. Trace eval: N judge calls per trace (one per step). For an
+            8-step trace that is 8x the eval cost. Reserve trace eval for a sample of production traffic; run end-to-end
+            on the rest.
           </T>
 
           <div style={{ ...tintedCard(C.purple), padding: 14, marginTop: 14 }}>
-            <svg
-              viewBox="0 0 560 220"
-              style={{ width: "100%", maxWidth: 640, display: "block", margin: "0 auto" }}
-            >
+            <svg viewBox="0 0 560 220" style={{ width: "100%", maxWidth: 640, display: "block", margin: "0 auto" }}>
               <desc>
-                Cost comparison bar chart with end-to-end LLM-as-Judge at one times the unit cost
-                and trace eval growing linearly with steps, reaching eight times for an eight-step
-                trace, plus the production rule to run trace eval on five percent of traffic and
-                end-to-end on the rest.
+                Cost comparison bar chart with end-to-end LLM-as-Judge at one times the unit cost and trace eval growing
+                linearly with steps, reaching eight times for an eight-step trace, plus the production rule to run trace
+                eval on five percent of traffic and end-to-end on the rest.
               </desc>
               {/* End-to-end bar */}
               <text x={280} y={30} fill={SOFT.purple} fontSize="14" fontWeight="700" textAnchor="middle">
                 Eval Cost Per Trace (Unit = One Judge Call)
               </text>
               <rect x={120} y={60} width={60} height={50} fill={`${C.cyan}66`} stroke={C.cyan} strokeWidth={1.4} />
-              <text x={150} y={92} fill={SOFT.cyan} fontSize="13" fontWeight="700" textAnchor="middle">1x</text>
-              <text x={150} y={130} fill={SOFT.cyan} fontSize="12" textAnchor="middle">End-To-End</text>
+              <text x={150} y={92} fill={SOFT.cyan} fontSize="13" fontWeight="700" textAnchor="middle">
+                1x
+              </text>
+              <text x={150} y={130} fill={SOFT.cyan} fontSize="12" textAnchor="middle">
+                End-To-End
+              </text>
               {/* Trace eval bar */}
               <rect x={210} y={60} width={300} height={50} fill={`${C.purple}66`} stroke={C.purple} strokeWidth={1.4} />
               <text x={360} y={92} fill={SOFT.purple} fontSize="13" fontWeight="700" textAnchor="middle">
                 N x (8x For 8-Step Trace)
               </text>
-              <text x={360} y={130} fill={SOFT.purple} fontSize="12" textAnchor="middle">Trace Eval (Per Step)</text>
+              <text x={360} y={130} fill={SOFT.purple} fontSize="12" textAnchor="middle">
+                Trace Eval (Per Step)
+              </text>
               {/* Production rule */}
-              <rect x={60} y={150} width={440} height={50} rx={8} fill={`${C.green}11`} stroke={C.green} strokeWidth={1.4} />
+              <rect
+                x={60}
+                y={150}
+                width={440}
+                height={50}
+                rx={8}
+                fill={`${C.green}11`}
+                stroke={C.green}
+                strokeWidth={1.4}
+              />
               <text x={280} y={172} fill={SOFT.green} fontSize="13" fontWeight="700" textAnchor="middle">
                 Production Rule
               </text>
@@ -388,16 +409,13 @@ export default function TraceEvals(ctx) {
           </div>
 
           <T color={SOFT.purple} center size={14} style={{ marginTop: 12 }}>
-            5% sample is the sweet spot for most production traffic. Higher rates (e.g., 25%) for
-            high-stakes traces (refunds, account changes) where locating the failing step matters
-            more than overall throughput cost.
+            5% sample is the sweet spot for most production traffic. Higher rates (e.g., 25%) for high-stakes traces
+            (refunds, account changes) where locating the failing step matters more than overall throughput cost.
           </T>
         </Box>
       </Reveal>
 
-      {sub < 4 && (
-        <SubBtn onClick={onContinue} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />
-      )}
+      {sub < 4 && <SubBtn onClick={onContinue} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
     </div>
   );
 }

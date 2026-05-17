@@ -77,9 +77,7 @@ describe("vector-graphs", () => {
   });
 
   it("Triangle renders annotations when provided", () => {
-    const { container } = render(
-      <Triangle annotations={[{ x: 100, y: 100, color: "#fff", label: "TestLabel" }]} />,
-    );
+    const { container } = render(<Triangle annotations={[{ x: 100, y: 100, color: "#fff", label: "TestLabel" }]} />);
     expect(container.textContent).toContain("TestLabel");
   });
 

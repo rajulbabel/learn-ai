@@ -931,10 +931,7 @@ describe("chapter.file field", () => {
       expect(existsSync(filePath), `chapter file missing for ${ch.id}: ${filePath}`).toBe(true);
       const src = readFileSync(filePath, "utf-8");
       const defaultExportPattern = new RegExp(`export default function ${ch.component}\\b`);
-      expect(
-        defaultExportPattern.test(src),
-        `${filePath} does not default-export function ${ch.component}`,
-      ).toBe(true);
+      expect(defaultExportPattern.test(src), `${filePath} does not default-export function ${ch.component}`).toBe(true);
     }
   });
 });

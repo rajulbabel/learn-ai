@@ -59,18 +59,15 @@ export default function SummaryAndContextMgmt(ctx) {
             100 Turns Won&apos;t Fit
           </T>
           <T color={SOFT.amber} center size={16} style={{ marginTop: 10 }}>
-            Long conversations are not free. With an 8k token context window and ~250 tokens per
-            turn, the window fills by turn 30. Past that, something has to give.
+            Long conversations are not free. With an 8k token context window and ~250 tokens per turn, the window fills
+            by turn 30. Past that, something has to give.
           </T>
 
           <div style={{ ...tintedCard(C.amber), padding: 14, marginTop: 14 }}>
-            <svg
-              viewBox="0 0 560 140"
-              style={{ width: "100%", maxWidth: 640, display: "block", margin: "0 auto" }}
-            >
+            <svg viewBox="0 0 560 140" style={{ width: "100%", maxWidth: 640, display: "block", margin: "0 auto" }}>
               <desc>
-                Horizontal context window bar at 8k tokens with turn-by-turn message stacking; by
-                turn thirty the bar is full and the rest of the conversation cannot fit.
+                Horizontal context window bar at 8k tokens with turn-by-turn message stacking; by turn thirty the bar is
+                full and the rest of the conversation cannot fit.
               </desc>
               {/* Bar from x=40 to x=520; width 480 = 100 turns. 1 turn = 4.8px */}
               <line x1={40} y1={20} x2={40} y2={120} stroke={SOFT.amber} strokeWidth={1.4} />
@@ -107,8 +104,8 @@ export default function SummaryAndContextMgmt(ctx) {
           </div>
 
           <T color={SOFT.amber} center size={15} style={{ marginTop: 12 }}>
-            Past turn 30, the agent must compress old turns, drop them, or both. The rest of this
-            chapter is about HOW to manage that ceiling.
+            Past turn 30, the agent must compress old turns, drop them, or both. The rest of this chapter is about HOW
+            to manage that ceiling.
           </T>
         </Box>
       )}
@@ -119,33 +116,47 @@ export default function SummaryAndContextMgmt(ctx) {
             Compress The Oldest Half
           </T>
           <T color={SOFT.yellow} center size={16} style={{ marginTop: 10 }}>
-            The rolling-summary technique: when the window hits 50% capacity, summarize the oldest
-            half into a 2-paragraph block. The summary replaces the raw turns. Capacity drops to
-            25%. Repeat every 50%.
+            The rolling-summary technique: when the window hits 50% capacity, summarize the oldest half into a
+            2-paragraph block. The summary replaces the raw turns. Capacity drops to 25%. Repeat every 50%.
           </T>
 
           <div style={{ ...tintedCard(C.yellow), padding: 14, marginTop: 14 }}>
-            <svg
-              viewBox="0 0 560 200"
-              style={{ width: "100%", maxWidth: 640, display: "block", margin: "0 auto" }}
-            >
+            <svg viewBox="0 0 560 200" style={{ width: "100%", maxWidth: 640, display: "block", margin: "0 auto" }}>
               <desc>
-                Rolling summary technique in three stages: conversation at fifty percent capacity,
-                oldest half summarized into a small summary block, capacity drops back to twenty
-                five percent so the conversation can continue.
+                Rolling summary technique in three stages: conversation at fifty percent capacity, oldest half
+                summarized into a small summary block, capacity drops back to twenty five percent so the conversation
+                can continue.
               </desc>
               {/* Stage 1 - 50% */}
               <text x={90} y={20} fill={SOFT.yellow} fontSize="12" fontWeight="700" textAnchor="middle">
                 Stage 1: 50% Capacity
               </text>
-              <rect x={20} y={35} width={140} height={30} rx={6} fill={`${C.yellow}10`} stroke={C.yellow} strokeWidth={1.4} />
+              <rect
+                x={20}
+                y={35}
+                width={140}
+                height={30}
+                rx={6}
+                fill={`${C.yellow}10`}
+                stroke={C.yellow}
+                strokeWidth={1.4}
+              />
               <rect x={20} y={35} width={70} height={30} fill={`${C.yellow}50`} />
 
               {/* Stage 2 - Summarize */}
               <text x={280} y={20} fill={SOFT.yellow} fontSize="12" fontWeight="700" textAnchor="middle">
                 Stage 2: Summarize Oldest Half
               </text>
-              <rect x={210} y={35} width={140} height={30} rx={6} fill={`${C.yellow}10`} stroke={C.yellow} strokeWidth={1.4} />
+              <rect
+                x={210}
+                y={35}
+                width={140}
+                height={30}
+                rx={6}
+                fill={`${C.yellow}10`}
+                stroke={C.yellow}
+                strokeWidth={1.4}
+              />
               <rect x={210} y={35} width={14} height={30} fill={`${C.purple}80`} />
               <rect x={224} y={35} width={56} height={30} fill={`${C.yellow}50`} />
               <text x={217} y={80} fill={SOFT.purple} fontSize="10" textAnchor="middle">
@@ -156,7 +167,16 @@ export default function SummaryAndContextMgmt(ctx) {
               <text x={470} y={20} fill={SOFT.yellow} fontSize="12" fontWeight="700" textAnchor="middle">
                 Stage 3: Back To 25%
               </text>
-              <rect x={400} y={35} width={140} height={30} rx={6} fill={`${C.yellow}10`} stroke={C.yellow} strokeWidth={1.4} />
+              <rect
+                x={400}
+                y={35}
+                width={140}
+                height={30}
+                rx={6}
+                fill={`${C.yellow}10`}
+                stroke={C.yellow}
+                strokeWidth={1.4}
+              />
               <rect x={400} y={35} width={14} height={30} fill={`${C.purple}80`} />
               <rect x={414} y={35} width={21} height={30} fill={`${C.yellow}50`} />
 
@@ -176,9 +196,8 @@ export default function SummaryAndContextMgmt(ctx) {
           </div>
 
           <T color={SOFT.yellow} center size={15} style={{ marginTop: 12 }}>
-            The model itself usually generates the summary (a 2-paragraph LLM call per compression
-            cycle). The summary lives in the conversation history at the spot where the raw turns
-            used to be.
+            The model itself usually generates the summary (a 2-paragraph LLM call per compression cycle). The summary
+            lives in the conversation history at the spot where the raw turns used to be.
           </T>
         </Box>
       </Reveal>
@@ -189,23 +208,27 @@ export default function SummaryAndContextMgmt(ctx) {
             Summaries Of Summaries
           </T>
           <T color={SOFT.orange} center size={16} style={{ marginTop: 10 }}>
-            For week-long conversations, flat rolling summary degrades. The hierarchical approach
-            organizes raw turns into batches (leaves), per-batch summaries (mid), and a meta-summary
-            of the whole conversation (top).
+            For week-long conversations, flat rolling summary degrades. The hierarchical approach organizes raw turns
+            into batches (leaves), per-batch summaries (mid), and a meta-summary of the whole conversation (top).
           </T>
 
           <div style={{ ...tintedCard(C.orange), padding: 14, marginTop: 14 }}>
-            <svg
-              viewBox="0 0 560 240"
-              style={{ width: "100%", maxWidth: 640, display: "block", margin: "0 auto" }}
-            >
+            <svg viewBox="0 0 560 240" style={{ width: "100%", maxWidth: 640, display: "block", margin: "0 auto" }}>
               <desc>
-                Hierarchical summary tree: raw turn batches at the bottom layer become per-batch
-                summaries at the middle layer, which combine into a single meta-summary at the top
-                covering the whole conversation.
+                Hierarchical summary tree: raw turn batches at the bottom layer become per-batch summaries at the middle
+                layer, which combine into a single meta-summary at the top covering the whole conversation.
               </desc>
               {/* Top - Meta-Summary */}
-              <rect x={230} y={20} width={100} height={36} rx={8} fill={`${C.orange}24`} stroke={C.orange} strokeWidth={2} />
+              <rect
+                x={230}
+                y={20}
+                width={100}
+                height={36}
+                rx={8}
+                fill={`${C.orange}24`}
+                stroke={C.orange}
+                strokeWidth={2}
+              />
               <text x={280} y={42} fill={SOFT.orange} fontSize="13" fontWeight="700" textAnchor="middle">
                 Meta-Summary
               </text>
@@ -214,7 +237,16 @@ export default function SummaryAndContextMgmt(ctx) {
               {[140, 280, 420].map((x, i) => (
                 <g key={`mid-${i}`}>
                   <line x1={280} y1={56} x2={x} y2={100} stroke={C.orange} strokeWidth={1.4} />
-                  <rect x={x - 60} y={100} width={120} height={36} rx={8} fill={`${C.orange}18`} stroke={C.orange} strokeWidth={1.6} />
+                  <rect
+                    x={x - 60}
+                    y={100}
+                    width={120}
+                    height={36}
+                    rx={8}
+                    fill={`${C.orange}18`}
+                    stroke={C.orange}
+                    strokeWidth={1.6}
+                  />
                   <text x={x} y={122} fill={SOFT.orange} fontSize="12" fontWeight="700" textAnchor="middle">
                     Batch Summary {i + 1}
                   </text>
@@ -228,13 +260,22 @@ export default function SummaryAndContextMgmt(ctx) {
                   return (
                     <g key={`leaf-${p}-${leafIdx}`}>
                       <line x1={parentX} y1={136} x2={x} y2={180} stroke={C.orange} strokeWidth={1} />
-                      <rect x={x - 12} y={180} width={24} height={24} rx={4} fill={`${C.orange}10`} stroke={C.orange} strokeWidth={1.2} />
+                      <rect
+                        x={x - 12}
+                        y={180}
+                        width={24}
+                        height={24}
+                        rx={4}
+                        fill={`${C.orange}10`}
+                        stroke={C.orange}
+                        strokeWidth={1.2}
+                      />
                       <text x={x} y={196} fill={SOFT.orange} fontSize="10" textAnchor="middle">
                         T{p * 10 + leafIdx * 2 + 1}
                       </text>
                     </g>
                   );
-                })
+                }),
               )}
 
               <text x={280} y={224} fill={SOFT.orange} fontSize="12" textAnchor="middle">
@@ -244,8 +285,8 @@ export default function SummaryAndContextMgmt(ctx) {
           </div>
 
           <T color={SOFT.orange} center size={15} style={{ marginTop: 12 }}>
-            Hierarchical wins for week-long conversations because the meta-summary stays small while
-            you can still zoom into specific batches when needed.
+            Hierarchical wins for week-long conversations because the meta-summary stays small while you can still zoom
+            into specific batches when needed.
           </T>
         </Box>
       </Reveal>
@@ -256,8 +297,8 @@ export default function SummaryAndContextMgmt(ctx) {
             Most Recent vs Most Relevant
           </T>
           <T color={SOFT.red} center size={16} style={{ marginTop: 10 }}>
-            After summarization, what stays in the prompt? Three strategies, each with a different
-            tradeoff between continuity and topical fit.
+            After summarization, what stays in the prompt? Three strategies, each with a different tradeoff between
+            continuity and topical fit.
           </T>
 
           <div
@@ -292,9 +333,8 @@ export default function SummaryAndContextMgmt(ctx) {
           </div>
 
           <T color={SOFT.red} center size={15} style={{ marginTop: 14 }}>
-            Hybrid wins in production because most conversations have BOTH continuity needs (the
-            user said "this" earlier) AND topical recall needs (the user asked a similar thing 80
-            turns ago).
+            Hybrid wins in production because most conversations have BOTH continuity needs (the user said "this"
+            earlier) AND topical recall needs (the user asked a similar thing 80 turns ago).
           </T>
         </Box>
       </Reveal>
@@ -305,22 +345,28 @@ export default function SummaryAndContextMgmt(ctx) {
             Summarize At 50% Capacity
           </T>
           <T color={SOFT.purple} center size={16} style={{ marginTop: 10 }}>
-            Production agents trigger compression at fixed thresholds, not on demand. Four bands
-            cover the production rule.
+            Production agents trigger compression at fixed thresholds, not on demand. Four bands cover the production
+            rule.
           </T>
 
           <div style={{ ...tintedCard(C.purple), padding: 14, marginTop: 14 }}>
-            <svg
-              viewBox="0 0 560 160"
-              style={{ width: "100%", maxWidth: 640, display: "block", margin: "0 auto" }}
-            >
+            <svg viewBox="0 0 560 160" style={{ width: "100%", maxWidth: 640, display: "block", margin: "0 auto" }}>
               <desc>
-                Four threshold bands across a context window utilization bar: twenty five percent
-                do nothing, fifty percent compress half, seventy five percent aggressive summarize,
-                ninety percent panic drop with summary plus last five turns.
+                Four threshold bands across a context window utilization bar: twenty five percent do nothing, fifty
+                percent compress half, seventy five percent aggressive summarize, ninety percent panic drop with summary
+                plus last five turns.
               </desc>
               {/* Bar */}
-              <rect x={40} y={50} width={480} height={40} rx={8} fill={`${C.purple}10`} stroke={C.purple} strokeWidth={1.4} />
+              <rect
+                x={40}
+                y={50}
+                width={480}
+                height={40}
+                rx={8}
+                fill={`${C.purple}10`}
+                stroke={C.purple}
+                strokeWidth={1.4}
+              />
               {/* Bands - each band 25% of 480 = 120px */}
               {CONTEXT_THRESHOLDS.map((b, i) => {
                 const accent = C[b.color];
@@ -329,10 +375,24 @@ export default function SummaryAndContextMgmt(ctx) {
                 return (
                   <g key={`band-${i}`}>
                     <rect x={xStart} y={50} width={w} height={40} fill={`${accent}40`} />
-                    <text x={xStart + w / 2} y={42} fill={SOFT[b.color]} fontSize="12" fontWeight="700" textAnchor="middle">
+                    <text
+                      x={xStart + w / 2}
+                      y={42}
+                      fill={SOFT[b.color]}
+                      fontSize="12"
+                      fontWeight="700"
+                      textAnchor="middle"
+                    >
                       {b.pct}%
                     </text>
-                    <text x={xStart + w / 2} y={108} fill={SOFT[b.color]} fontSize="11" fontWeight="700" textAnchor="middle">
+                    <text
+                      x={xStart + w / 2}
+                      y={108}
+                      fill={SOFT[b.color]}
+                      fontSize="11"
+                      fontWeight="700"
+                      textAnchor="middle"
+                    >
                       {b.label}
                     </text>
                     <text x={xStart + w / 2} y={124} fill={SOFT[b.color]} fontSize="10" textAnchor="middle">
@@ -345,9 +405,8 @@ export default function SummaryAndContextMgmt(ctx) {
           </div>
 
           <T color={SOFT.purple} center size={15} style={{ marginTop: 12 }}>
-            Threshold-based compression is production-friendly because the cost is predictable.
-            On-demand compression can hide behind a single user turn that suddenly explodes the
-            window.
+            Threshold-based compression is production-friendly because the cost is predictable. On-demand compression
+            can hide behind a single user turn that suddenly explodes the window.
           </T>
         </Box>
       </Reveal>
@@ -358,9 +417,8 @@ export default function SummaryAndContextMgmt(ctx) {
             Context Is Where Real Work Happens
           </T>
           <T color={SOFT.amber} center size={16} style={{ marginTop: 10 }}>
-            Memory plus context-engineering decide what the model sees on EVERY turn. Chapter 13.6
-            covered the prompt-assembly stack. This chapter closes out by tying the memory layers
-            into that stack.
+            Memory plus context-engineering decide what the model sees on EVERY turn. Chapter 13.6 covered the
+            prompt-assembly stack. This chapter closes out by tying the memory layers into that stack.
           </T>
 
           <div style={{ ...tintedCard(C.amber), padding: 14, marginTop: 14 }}>
@@ -394,16 +452,14 @@ export default function SummaryAndContextMgmt(ctx) {
           </div>
 
           <T color={SOFT.amber} center size={15} style={{ marginTop: 12 }}>
-            Every layer comes from somewhere. Memory chapters 13.24-13.28 supplied the sources;
-            13.6&apos;s assembly stack joins them into a single prompt; this chapter closes the
-            loop with summarization that keeps it all under the token budget.
+            Every layer comes from somewhere. Memory chapters 13.24-13.28 supplied the sources; 13.6&apos;s assembly
+            stack joins them into a single prompt; this chapter closes the loop with summarization that keeps it all
+            under the token budget.
           </T>
         </Box>
       </Reveal>
 
-      {sub < 5 && (
-        <SubBtn onClick={onContinue} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />
-      )}
+      {sub < 5 && <SubBtn onClick={onContinue} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
     </div>
   );
 }

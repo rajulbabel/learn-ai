@@ -72,10 +72,9 @@ export default function CrewAiAutoGen(ctx) {
             Two Multi-Agent Styles
           </T>
           <T color={SOFT.teal} center size={16} style={{ marginTop: 10 }}>
-            CrewAI and AutoGen tackle the same problem (multiple agents working together)
-            with two different abstractions. CrewAI is role-based: each agent has a role,
-            goal, backstory, and tools. AutoGen is conversational: agents talk to each
-            other through a manager that routes messages.
+            CrewAI and AutoGen tackle the same problem (multiple agents working together) with two different
+            abstractions. CrewAI is role-based: each agent has a role, goal, backstory, and tools. AutoGen is
+            conversational: agents talk to each other through a manager that routes messages.
           </T>
 
           <div
@@ -90,10 +89,7 @@ export default function CrewAiAutoGen(ctx) {
               const accent = C[card.accent];
               const soft = SOFT[card.accent];
               return (
-                <div
-                  key={card.name}
-                  style={{ ...tintedCard(accent), padding: 14, textAlign: "center" }}
-                >
+                <div key={card.name} style={{ ...tintedCard(accent), padding: 14, textAlign: "center" }}>
                   <T color={accent} center bold size={18}>
                     {card.name}
                   </T>
@@ -141,8 +137,8 @@ export default function CrewAiAutoGen(ctx) {
           </div>
 
           <T color={SOFT.teal} center size={15} style={{ marginTop: 14 }}>
-            Same problem, two different abstractions. The pick depends on whether your
-            mental model is "team of specialists" or "group chat with a moderator".
+            Same problem, two different abstractions. The pick depends on whether your mental model is "team of
+            specialists" or "group chat with a moderator".
           </T>
         </Box>
       )}
@@ -153,9 +149,9 @@ export default function CrewAiAutoGen(ctx) {
             CrewAI: Roles + Goals
           </T>
           <T color={SOFT.cyan} center size={16} style={{ marginTop: 10 }}>
-            A CrewAI agent looks like a job description. Role names the position. Goal
-            states the outcome. Tools is the kit. The Crew object ties agents to tasks and
-            runs them. The runtime tries to match each task to the best-fit agent.
+            A CrewAI agent looks like a job description. Role names the position. Goal states the outcome. Tools is the
+            kit. The Crew object ties agents to tasks and runs them. The runtime tries to match each task to the
+            best-fit agent.
           </T>
 
           <div style={{ ...tintedCard(C.cyan), padding: 14, marginTop: 14 }}>
@@ -176,7 +172,7 @@ export default function CrewAiAutoGen(ctx) {
                 display: "inline-block",
               }}
             >
-{`triage_agent = Agent(
+              {`triage_agent = Agent(
   role="Support Triage Specialist",
   goal="Classify the ticket and route to the right specialist.",
   tools=[classify_intent]
@@ -191,9 +187,8 @@ crew = Crew(agents=[triage_agent, billing_agent], tasks=[handle_ticket_task])`}
           </div>
 
           <T color={SOFT.cyan} center size={15} style={{ marginTop: 14 }}>
-            The role and goal fields are not cosmetic. The runtime feeds them into the
-            agent's system prompt and uses them to pick which agent to delegate a task to.
-            Backstory is optional flavor that shapes voice.
+            The role and goal fields are not cosmetic. The runtime feeds them into the agent's system prompt and uses
+            them to pick which agent to delegate a task to. Backstory is optional flavor that shapes voice.
           </T>
         </Box>
       </Reveal>
@@ -204,10 +199,9 @@ crew = Crew(agents=[triage_agent, billing_agent], tasks=[handle_ticket_task])`}
             AutoGen: Conversational Agents
           </T>
           <T color={SOFT.purple} center size={16} style={{ marginTop: 10 }}>
-            AutoGen models agents as participants in a chat room. Each AssistantAgent has a
-            name and system_message. A UserProxyAgent stands in for the human or upstream
-            system. A GroupChatManager moderates: it sees every message and picks who
-            speaks next.
+            AutoGen models agents as participants in a chat room. Each AssistantAgent has a name and system_message. A
+            UserProxyAgent stands in for the human or upstream system. A GroupChatManager moderates: it sees every
+            message and picks who speaks next.
           </T>
 
           <div style={{ ...tintedCard(C.purple), padding: 14, marginTop: 14 }}>
@@ -228,7 +222,7 @@ crew = Crew(agents=[triage_agent, billing_agent], tasks=[handle_ticket_task])`}
                 display: "inline-block",
               }}
             >
-{`triage = AssistantAgent(
+              {`triage = AssistantAgent(
   name="triage",
   system_message="You classify support tickets and tag the right handler."
 )
@@ -245,9 +239,8 @@ manager = GroupChatManager(
           </div>
 
           <T color={SOFT.purple} center size={15} style={{ marginTop: 14 }}>
-            The manager is the orchestration core. It reads message context to choose the
-            next speaker. This makes back-and-forth conversation natural (debate, review,
-            brainstorm) but adds a routing layer you have to tune.
+            The manager is the orchestration core. It reads message context to choose the next speaker. This makes
+            back-and-forth conversation natural (debate, review, brainstorm) but adds a routing layer you have to tune.
           </T>
         </Box>
       </Reveal>
@@ -258,8 +251,8 @@ manager = GroupChatManager(
             Same Ticket, Two Frameworks
           </T>
           <T color={SOFT.green} center size={16} style={{ marginTop: 10 }}>
-            Ticket T4 (cancel and refund) runs through both frameworks. Same outcome.
-            Different orchestration shape. CrewAI hands tasks. AutoGen routes messages.
+            Ticket T4 (cancel and refund) runs through both frameworks. Same outcome. Different orchestration shape.
+            CrewAI hands tasks. AutoGen routes messages.
           </T>
 
           <div
@@ -315,10 +308,9 @@ manager = GroupChatManager(
           </div>
 
           <T color={SOFT.green} center size={15} style={{ marginTop: 14 }}>
-            CrewAI feels like "the triage agent passes a baton to the billing agent".
-            AutoGen feels like "they discuss it in chat with a moderator". Both arrive at
-            the same resolution. Pick the one that matches how you describe the work in
-            English.
+            CrewAI feels like "the triage agent passes a baton to the billing agent". AutoGen feels like "they discuss
+            it in chat with a moderator". Both arrive at the same resolution. Pick the one that matches how you describe
+            the work in English.
           </T>
         </Box>
       </Reveal>
@@ -329,9 +321,8 @@ manager = GroupChatManager(
             Pick The Abstraction That Matches Your Mental Model
           </T>
           <T color={SOFT.amber} center size={16} style={{ marginTop: 10 }}>
-            Framework choice matters less than agent design quality. A well-designed
-            CrewAI agent beats a poorly-designed AutoGen agent every time. Pick whichever
-            abstraction makes your team faster.
+            Framework choice matters less than agent design quality. A well-designed CrewAI agent beats a
+            poorly-designed AutoGen agent every time. Pick whichever abstraction makes your team faster.
           </T>
 
           <div style={{ ...tintedCard(C.amber), padding: 14, marginTop: 14 }}>
@@ -378,16 +369,13 @@ manager = GroupChatManager(
           </div>
 
           <T color={SOFT.amber} center size={15} style={{ marginTop: 14 }}>
-            Framework choice matters less than agent design quality. Pick the abstraction
-            your team can reason about fastest and ship a working agent before debating
-            the perfect runtime.
+            Framework choice matters less than agent design quality. Pick the abstraction your team can reason about
+            fastest and ship a working agent before debating the perfect runtime.
           </T>
         </Box>
       </Reveal>
 
-      {sub < 4 && (
-        <SubBtn onClick={onContinue} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />
-      )}
+      {sub < 4 && <SubBtn onClick={onContinue} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
     </div>
   );
 }

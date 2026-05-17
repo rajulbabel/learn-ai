@@ -161,23 +161,18 @@ export default function AgentDecisionFramework(ctx) {
             Every Choice Section 13 Taught You
           </T>
           <T color={SOFT.teal} center size={16} style={{ marginTop: 10 }}>
-            Designing a production agent is nine decisions, top to bottom. Strategy at the
-            top (what approach? what loop?). Operations at the bottom (which framework?
-            which observability stack?). Each layer is a chapter you have already worked
-            through. The stack is the synthesis.
+            Designing a production agent is nine decisions, top to bottom. Strategy at the top (what approach? what
+            loop?). Operations at the bottom (which framework? which observability stack?). Each layer is a chapter you
+            have already worked through. The stack is the synthesis.
           </T>
 
           <div style={{ ...tintedCard(C.teal), padding: 14, marginTop: 14 }}>
-            <svg
-              viewBox="0 0 720 510"
-              style={{ width: "100%", maxWidth: 720, display: "block", margin: "0 auto" }}
-            >
+            <svg viewBox="0 0 720 510" style={{ width: "100%", maxWidth: 720, display: "block", margin: "0 auto" }}>
               <desc>
-                Nine-layer agent decision stack. From top (strategy) to bottom (operations):
-                Approach (13.5), Loop Pattern (13.18 to 13.22), Memory Layers (13.24 to 13.29),
-                Multi-Agent (13.30 to 13.34), Tools (13.7 to 13.11), Protocols (13.12 to 13.17),
-                Eval (13.37 to 13.41), Production (13.42 to 13.47), Framework (13.48 to 13.51).
-                Each layer references its source chapters.
+                Nine-layer agent decision stack. From top (strategy) to bottom (operations): Approach (13.5), Loop
+                Pattern (13.18 to 13.22), Memory Layers (13.24 to 13.29), Multi-Agent (13.30 to 13.34), Tools (13.7 to
+                13.11), Protocols (13.12 to 13.17), Eval (13.37 to 13.41), Production (13.42 to 13.47), Framework (13.48
+                to 13.51). Each layer references its source chapters.
               </desc>
               <text x={360} y={22} fill={SOFT.teal} fontSize="13" fontWeight="700" textAnchor="middle">
                 The Full Decision Stack
@@ -226,9 +221,8 @@ export default function AgentDecisionFramework(ctx) {
           </div>
 
           <T color={SOFT.teal} center size={15} style={{ marginTop: 14 }}>
-            Nine layers. Each chapter you completed answers one of them. Read the stack as
-            a checklist: any agent that ships needs a concrete pick at every layer, with a
-            reason that traces back to the chapter that taught it.
+            Nine layers. Each chapter you completed answers one of them. Read the stack as a checklist: any agent that
+            ships needs a concrete pick at every layer, with a reason that traces back to the chapter that taught it.
           </T>
         </Box>
       )}
@@ -239,8 +233,8 @@ export default function AgentDecisionFramework(ctx) {
             Design An Agent For A New Use Case
           </T>
           <T color={SOFT.cyan} center size={16} style={{ marginTop: 10 }}>
-            The customer-support agent is behind us. Now apply the stack to a new use case
-            you have not seen in this section.
+            The customer-support agent is behind us. Now apply the stack to a new use case you have not seen in this
+            section.
           </T>
 
           <div style={{ ...tintedCard(C.cyan), padding: 16, marginTop: 14 }}>
@@ -262,18 +256,12 @@ export default function AgentDecisionFramework(ctx) {
                 fontSize: 14,
               }}
             >
-              <div style={{ padding: "8px 10px", color: SOFT.cyan, textAlign: "center" }}>
-                Password Resets
-              </div>
+              <div style={{ padding: "8px 10px", color: SOFT.cyan, textAlign: "center" }}>Password Resets</div>
               <div style={{ padding: "8px 10px", color: SOFT.cyan, textAlign: "center" }}>
                 Software Install Requests
               </div>
-              <div style={{ padding: "8px 10px", color: SOFT.cyan, textAlign: "center" }}>
-                VPN Issues
-              </div>
-              <div style={{ padding: "8px 10px", color: SOFT.cyan, textAlign: "center" }}>
-                Hardware Orders
-              </div>
+              <div style={{ padding: "8px 10px", color: SOFT.cyan, textAlign: "center" }}>VPN Issues</div>
+              <div style={{ padding: "8px 10px", color: SOFT.cyan, textAlign: "center" }}>Hardware Orders</div>
             </div>
             <T color={C.cyan} center size={14} bold style={{ marginTop: 14 }}>
               Constraints
@@ -287,9 +275,8 @@ export default function AgentDecisionFramework(ctx) {
           </div>
 
           <T color={SOFT.cyan} center size={15} style={{ marginTop: 14 }}>
-            This is a different shape than customer support: internal users, smaller
-            blast radius, dollar threshold for escalation, integration with internal
-            systems. The next sub-steps walk every decision layer for this case.
+            This is a different shape than customer support: internal users, smaller blast radius, dollar threshold for
+            escalation, integration with internal systems. The next sub-steps walk every decision layer for this case.
           </T>
         </Box>
       </Reveal>
@@ -300,9 +287,8 @@ export default function AgentDecisionFramework(ctx) {
             Pick Approach, Loop, Memory
           </T>
           <T color={SOFT.purple} center size={16} style={{ marginTop: 10 }}>
-            The top three layers set the agent's shape. Approach picks the agent versus
-            non-agent path. Loop pattern picks the runtime control flow. Memory layers
-            pick what state survives across tickets.
+            The top three layers set the agent's shape. Approach picks the agent versus non-agent path. Loop pattern
+            picks the runtime control flow. Memory layers pick what state survives across tickets.
           </T>
 
           <div style={{ ...tintedCard(C.purple), padding: 14, marginTop: 14 }}>
@@ -350,10 +336,9 @@ export default function AgentDecisionFramework(ctx) {
           </div>
 
           <T color={SOFT.purple} center size={15} style={{ marginTop: 14 }}>
-            Approach is "agent" because the IT support work mutates state (resets, orders,
-            installs). Loop is "workflow with an agent step" because most tickets are
-            deterministic routes, and only the handler step is an agent. Memory is all
-            three layers because employees have stable profiles and recurring patterns.
+            Approach is "agent" because the IT support work mutates state (resets, orders, installs). Loop is "workflow
+            with an agent step" because most tickets are deterministic routes, and only the handler step is an agent.
+            Memory is all three layers because employees have stable profiles and recurring patterns.
           </T>
         </Box>
       </Reveal>
@@ -364,9 +349,8 @@ export default function AgentDecisionFramework(ctx) {
             Pick Multi-Agent, Tools
           </T>
           <T color={SOFT.green} center size={16} style={{ marginTop: 10 }}>
-            Multi-agent shape and tool inventory both flow from the work decomposition.
-            Triage routes. Specialist handlers do the work. Capability scope keeps each
-            specialist confined to its own toolkit.
+            Multi-agent shape and tool inventory both flow from the work decomposition. Triage routes. Specialist
+            handlers do the work. Capability scope keeps each specialist confined to its own toolkit.
           </T>
 
           <div style={{ ...tintedCard(C.green), padding: 14, marginTop: 14 }}>
@@ -414,10 +398,9 @@ export default function AgentDecisionFramework(ctx) {
           </div>
 
           <T color={SOFT.green} center size={15} style={{ marginTop: 14 }}>
-            Orchestrator-Worker is the right multi-agent shape because the routes are
-            well-defined and bounded. The capability scope per handler keeps the password
-            agent from ever calling order_hardware - bounded blast radius even under
-            jailbreak attempts.
+            Orchestrator-Worker is the right multi-agent shape because the routes are well-defined and bounded. The
+            capability scope per handler keeps the password agent from ever calling order_hardware - bounded blast
+            radius even under jailbreak attempts.
           </T>
         </Box>
       </Reveal>
@@ -428,9 +411,8 @@ export default function AgentDecisionFramework(ctx) {
             Pick Protocols, Eval Strategy
           </T>
           <T color={SOFT.amber} center size={16} style={{ marginTop: 10 }}>
-            Protocols decide how the agent connects to the rest of the company's systems.
-            Eval strategy decides how you know the agent works before it ships and stays
-            working after.
+            Protocols decide how the agent connects to the rest of the company's systems. Eval strategy decides how you
+            know the agent works before it ships and stays working after.
           </T>
 
           <div style={{ ...tintedCard(C.amber), padding: 14, marginTop: 14 }}>
@@ -478,9 +460,9 @@ export default function AgentDecisionFramework(ctx) {
           </div>
 
           <T color={SOFT.amber} center size={15} style={{ marginTop: 14 }}>
-            MCP gives clean separation between agent and IT-system internals. The eval set
-            sizes (50 golden + 20 adversarial) are small enough to ship this quarter and
-            growable as production traffic exposes new failure modes.
+            MCP gives clean separation between agent and IT-system internals. The eval set sizes (50 golden + 20
+            adversarial) are small enough to ship this quarter and growable as production traffic exposes new failure
+            modes.
           </T>
         </Box>
       </Reveal>
@@ -491,9 +473,8 @@ export default function AgentDecisionFramework(ctx) {
             Pick Production Hardening, Framework
           </T>
           <T color={SOFT.teal} center size={16} style={{ marginTop: 10 }}>
-            The last two layers turn the design into a shippable system. Production
-            hardening picks the observability and safety stack. Framework picks the
-            runtime that holds it all together.
+            The last two layers turn the design into a shippable system. Production hardening picks the observability
+            and safety stack. Framework picks the runtime that holds it all together.
           </T>
 
           <div style={{ ...tintedCard(C.teal), padding: 14, marginTop: 14 }}>
@@ -541,10 +522,9 @@ export default function AgentDecisionFramework(ctx) {
           </div>
 
           <T color={SOFT.teal} center size={15} style={{ marginTop: 14 }}>
-            LangGraph wins here because the workflow-with-agent-step shape is exactly a
-            graph: classify node, route node, handler node, escalation node, respond node.
-            Conditional edges handle the routing. Checkpoints handle hardware-order
-            manager-approval async waits.
+            LangGraph wins here because the workflow-with-agent-step shape is exactly a graph: classify node, route
+            node, handler node, escalation node, respond node. Conditional edges handle the routing. Checkpoints handle
+            hardware-order manager-approval async waits.
           </T>
         </Box>
       </Reveal>
@@ -555,9 +535,8 @@ export default function AgentDecisionFramework(ctx) {
             You Can Lead This Project Now
           </T>
           <T color={SOFT.teal} center size={16} style={{ marginTop: 10 }}>
-            Section 13 walked from the anatomy of a single LLM call to a complete
-            production agent decision framework. What you have now is not opinions. It is
-            three concrete capabilities:
+            Section 13 walked from the anatomy of a single LLM call to a complete production agent decision framework.
+            What you have now is not opinions. It is three concrete capabilities:
           </T>
 
           <div
@@ -572,10 +551,7 @@ export default function AgentDecisionFramework(ctx) {
               const accent = C[c.accent];
               const soft = SOFT[c.accent];
               return (
-                <div
-                  key={c.word}
-                  style={{ ...tintedCard(accent), padding: 16, textAlign: "center" }}
-                >
+                <div key={c.word} style={{ ...tintedCard(accent), padding: 16, textAlign: "center" }}>
                   <T color={accent} center bold size={20}>
                     {c.word}
                   </T>
@@ -592,16 +568,14 @@ export default function AgentDecisionFramework(ctx) {
               Section 13 Done. The Production Agent Is Yours To Ship.
             </T>
             <T color={SOFT.teal} center size={14} style={{ marginTop: 8 }}>
-              Every layer above traces back to a chapter you have worked through. The
-              decision stack is the map. The chapters are the terrain. You can walk it.
+              Every layer above traces back to a chapter you have worked through. The decision stack is the map. The
+              chapters are the terrain. You can walk it.
             </T>
           </div>
         </Box>
       </Reveal>
 
-      {sub < 6 && (
-        <SubBtn onClick={onContinue} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />
-      )}
+      {sub < 6 && <SubBtn onClick={onContinue} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
     </div>
   );
 }

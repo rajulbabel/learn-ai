@@ -39,7 +39,7 @@ const ERROR_CLASSES = [
     color: C.orange,
     soft: SOFT.orange,
     examples: ["Refund $350 > $200 auto-approve cap", "Blocked customer", "Outside policy window"],
-    handling: "Return structured \"rule violated\" reason. Model adapts or escalates.",
+    handling: 'Return structured "rule violated" reason. Model adapts or escalates.',
     why: "The call is syntactically valid but policy says no. The model needs the WHY to pick a different path.",
   },
 ];
@@ -48,11 +48,11 @@ const ERROR_CLASSES = [
 // is_error + error_class fields impossible to miss.
 const ERROR_RESULT_LINES = [
   "{",
-  "  \"type\": \"tool_result\",",
-  "  \"tool_use_id\": \"toolu_01xyz...\",",
-  "  \"content\": \"Refund denied: amount $350 exceeds $200 auto-approve cap.\",",
-  "  \"is_error\": true,",
-  "  \"error_class\": \"business_rule\"",
+  '  "type": "tool_result",',
+  '  "tool_use_id": "toolu_01xyz...",',
+  '  "content": "Refund denied: amount $350 exceeds $200 auto-approve cap.",',
+  '  "is_error": true,',
+  '  "error_class": "business_rule"',
   "}",
 ];
 
@@ -150,7 +150,7 @@ const T4_ERROR_TRACE = [
     actor: "User",
     color: C.purple,
     soft: SOFT.purple,
-    msg: "\"Cancel my subscription and refund my last invoice ($350).\"",
+    msg: '"Cancel my subscription and refund my last invoice ($350)."',
     note: "Ticket T4 - one user message contains two intents and a refund amount over policy.",
   },
   {
@@ -158,7 +158,7 @@ const T4_ERROR_TRACE = [
     actor: "Model (turn 1)",
     color: C.cyan,
     soft: SOFT.cyan,
-    msg: "tool_use { name: lookup_customer, input: { email: \"...\" } }",
+    msg: 'tool_use { name: lookup_customer, input: { email: "..." } }',
     note: "Read first. Need customer_id before any mutation.",
   },
   {
@@ -166,7 +166,7 @@ const T4_ERROR_TRACE = [
     actor: "Runtime",
     color: C.green,
     soft: SOFT.green,
-    msg: "tool_result { content: \"customer_id: c-7741\", is_error: false }",
+    msg: 'tool_result { content: "customer_id: c-7741", is_error: false }',
     note: "Clean read. customer_id appended to the conversation.",
   },
   {
@@ -174,7 +174,7 @@ const T4_ERROR_TRACE = [
     actor: "Model (turn 2)",
     color: C.cyan,
     soft: SOFT.cyan,
-    msg: "tool_use { name: process_refund, input: { invoice_id: \"inv-882\", reason: \"customer requested\" } }",
+    msg: 'tool_use { name: process_refund, input: { invoice_id: "inv-882", reason: "customer requested" } }',
     note: "Model attempts the refund directly. Amount is $350 - over the $200 auto-approve cap, but the model does not know that yet.",
   },
   {
@@ -182,7 +182,7 @@ const T4_ERROR_TRACE = [
     actor: "Runtime",
     color: C.orange,
     soft: SOFT.orange,
-    msg: "tool_result { is_error: true, error_class: \"business_rule\", content: \"Refund $350 exceeds $200 auto-approve cap.\" }",
+    msg: 'tool_result { is_error: true, error_class: "business_rule", content: "Refund $350 exceeds $200 auto-approve cap." }',
     note: "Business-rule error. No retry. The structured reason is the signal the model uses to adapt.",
     isError: true,
     adapt: true,
@@ -192,7 +192,7 @@ const T4_ERROR_TRACE = [
     actor: "Model (turn 3)",
     color: C.cyan,
     soft: SOFT.cyan,
-    msg: "tool_use { name: escalate_human, input: { customer_id: \"c-7741\", reason: \"refund $350 over policy cap\", urgency: \"medium\" } }",
+    msg: 'tool_use { name: escalate_human, input: { customer_id: "c-7741", reason: "refund $350 over policy cap", urgency: "medium" } }',
     note: "Adapts: switches plan to escalate_human with full context (amount, reason, urgency).",
   },
   {
@@ -200,7 +200,7 @@ const T4_ERROR_TRACE = [
     actor: "Runtime",
     color: C.green,
     soft: SOFT.green,
-    msg: "tool_result { content: \"Escalation queued: ticket-9921 assigned to billing-team.\" }",
+    msg: 'tool_result { content: "Escalation queued: ticket-9921 assigned to billing-team." }',
     note: "Successful escalation. Human will review and approve the $350.",
   },
   {
@@ -229,10 +229,9 @@ export default function ToolErrorsRetries(ctx) {
             Tools Fail In Four Ways
           </T>
           <T color={SOFT.cyan} center size={16} style={{ marginTop: 10 }}>
-            Production tools fail. The retry strategy depends on WHY the call failed. A rate limit
-            is not the same as a missing record, and a schema typo is not the same as a policy
-            violation. Group every failure into one of four classes and the rest of the runtime
-            falls out.
+            Production tools fail. The retry strategy depends on WHY the call failed. A rate limit is not the same as a
+            missing record, and a schema typo is not the same as a policy violation. Group every failure into one of
+            four classes and the rest of the runtime falls out.
           </T>
 
           <div
@@ -330,9 +329,8 @@ export default function ToolErrorsRetries(ctx) {
             Transient | Permanent | Malformed | Business-rule
           </div>
           <T color={SOFT.cyan} center size={15} style={{ marginTop: 12 }}>
-            Every tool error your agent will ever see fits one of these four buckets. Classify on
-            the way out of the tool, attach the class to the tool_result, and the rest of the
-            agent loop knows what to do.
+            Every tool error your agent will ever see fits one of these four buckets. Classify on the way out of the
+            tool, attach the class to the tool_result, and the rest of the agent loop knows what to do.
           </T>
         </Box>
       )}
@@ -343,10 +341,10 @@ export default function ToolErrorsRetries(ctx) {
             Errors Are Data, Not Exceptions
           </T>
           <T color={SOFT.teal} center size={16} style={{ marginTop: 10 }}>
-            The runtime does not throw a Python exception up the stack. It returns a structured
-            tool_result with is_error set to true and an error_class field. The model reads those
-            same fields it reads on a successful call and adapts. This is the whole reason an
-            agent can recover from a business-rule violation without you writing special code.
+            The runtime does not throw a Python exception up the stack. It returns a structured tool_result with
+            is_error set to true and an error_class field. The model reads those same fields it reads on a successful
+            call and adapts. This is the whole reason an agent can recover from a business-rule violation without you
+            writing special code.
           </T>
 
           <div
@@ -377,9 +375,7 @@ export default function ToolErrorsRetries(ctx) {
               }}
             >
               {ERROR_RESULT_LINES.map((line, i) => {
-                const isHighlighted = ERROR_RESULT_HIGHLIGHTS.some((key) =>
-                  line.includes(`"${key}"`),
-                );
+                const isHighlighted = ERROR_RESULT_HIGHLIGHTS.some((key) => line.includes(`"${key}"`));
                 return (
                   <div
                     key={i}
@@ -410,8 +406,8 @@ export default function ToolErrorsRetries(ctx) {
                 is_error: true
               </T>
               <T color={SOFT.orange} center size={13} style={{ marginTop: 6 }}>
-                The model reads this flag the same way it reads any other field. If true, treat
-                content as the failure reason, not the answer.
+                The model reads this flag the same way it reads any other field. If true, treat content as the failure
+                reason, not the answer.
               </T>
             </div>
             <div style={{ ...tintedCard(C.orange), padding: "12px 14px" }}>
@@ -419,8 +415,8 @@ export default function ToolErrorsRetries(ctx) {
                 error_class: &quot;business_rule&quot;
               </T>
               <T color={SOFT.orange} center size={13} style={{ marginTop: 6 }}>
-                The class tells the model whether to wait and retry, fix its arguments, escalate,
-                or apologize. Same payload shape, different next action.
+                The class tells the model whether to wait and retry, fix its arguments, escalate, or apologize. Same
+                payload shape, different next action.
               </T>
             </div>
           </div>
@@ -441,9 +437,9 @@ export default function ToolErrorsRetries(ctx) {
             $350 over the $200 cap = structured business_rule error, not a stack trace.
           </div>
           <T color={SOFT.teal} center size={15} style={{ marginTop: 12 }}>
-            Because the error is data, the model can route on it. The next assistant turn picks a
-            different tool (escalate_human) on its own. You did not write &quot;if business_rule
-            then escalate&quot; - the model inferred it from the message.
+            Because the error is data, the model can route on it. The next assistant turn picks a different tool
+            (escalate_human) on its own. You did not write &quot;if business_rule then escalate&quot; - the model
+            inferred it from the message.
           </T>
         </Box>
       </Reveal>
@@ -454,9 +450,9 @@ export default function ToolErrorsRetries(ctx) {
             Match The Retry To The Error
           </T>
           <T color={SOFT.blue} center size={16} style={{ marginTop: 10 }}>
-            One retry policy across all errors is wrong. Retrying a permanent auth failure burns
-            three round-trips for no reason. Not retrying a transient 503 fails a perfectly good
-            call. The class drives the retry budget, the backoff schedule, and who handles it.
+            One retry policy across all errors is wrong. Retrying a permanent auth failure burns three round-trips for
+            no reason. Not retrying a transient 503 fails a perfectly good call. The class drives the retry budget, the
+            backoff schedule, and who handles it.
           </T>
 
           <div
@@ -541,9 +537,8 @@ export default function ToolErrorsRetries(ctx) {
             Transient retry budget: 3 attempts with exponential backoff (200ms, 400ms, 800ms).
           </div>
           <T color={SOFT.blue} center size={15} style={{ marginTop: 12 }}>
-            Exponential backoff matters because thundering-herd retries amplify outages. Each
-            retry waits twice as long, which spreads load and gives the dependency a chance to
-            recover before you slam it again.
+            Exponential backoff matters because thundering-herd retries amplify outages. Each retry waits twice as long,
+            which spreads load and gives the dependency a chance to recover before you slam it again.
           </T>
         </Box>
       </Reveal>
@@ -554,10 +549,9 @@ export default function ToolErrorsRetries(ctx) {
             Validate Before Calling
           </T>
           <T color={SOFT.green} center size={16} style={{ marginTop: 10 }}>
-            Most malformed errors never need to hit the tool function. The runtime already has
-            the JSON schema from the tool definition - it can check the model&apos;s arguments
-            against required fields, types, enums, and formats in microseconds, before it ever
-            opens an HTTP socket or starts a transaction.
+            Most malformed errors never need to hit the tool function. The runtime already has the JSON schema from the
+            tool definition - it can check the model&apos;s arguments against required fields, types, enums, and formats
+            in microseconds, before it ever opens an HTTP socket or starts a transaction.
           </T>
 
           <div
@@ -577,22 +571,13 @@ export default function ToolErrorsRetries(ctx) {
               style={{ width: "100%", maxWidth: 520, display: "block", margin: "10px auto 0" }}
             >
               <desc>
-                Validation flow for a tool call. The model emits a tool_use block, the runtime
-                validates the arguments against the schema, and then branches: invalid arguments
-                return a malformed error without executing, valid arguments call the tool
-                function. The diagram highlights that schema validation is cheap and saves the
-                expensive tool execution.
+                Validation flow for a tool call. The model emits a tool_use block, the runtime validates the arguments
+                against the schema, and then branches: invalid arguments return a malformed error without executing,
+                valid arguments call the tool function. The diagram highlights that schema validation is cheap and saves
+                the expensive tool execution.
               </desc>
               {/* Step 1: Model */}
-              <rect
-                x="180"
-                y="14"
-                width="160"
-                height="40"
-                rx="6"
-                fill={`${C.cyan}24`}
-                stroke={C.cyan}
-              />
+              <rect x="180" y="14" width="160" height="40" rx="6" fill={`${C.cyan}24`} stroke={C.cyan} />
               <text x="260" y="32" fill={SOFT.cyan} fontSize="13" textAnchor="middle" fontWeight="700">
                 Model
               </text>
@@ -603,15 +588,7 @@ export default function ToolErrorsRetries(ctx) {
               <line x1="260" y1="54" x2="260" y2="84" stroke="#888" strokeWidth="1" />
               <polygon points="260,86 256,80 264,80" fill="#888" />
               {/* Step 2: Runtime validates */}
-              <rect
-                x="160"
-                y="88"
-                width="200"
-                height="44"
-                rx="6"
-                fill={`${C.green}24`}
-                stroke={C.green}
-              />
+              <rect x="160" y="88" width="200" height="44" rx="6" fill={`${C.green}24`} stroke={C.green} />
               <text x="260" y="106" fill={SOFT.green} fontSize="13" textAnchor="middle" fontWeight="700">
                 Runtime: Schema Validation
               </text>
@@ -630,15 +607,7 @@ export default function ToolErrorsRetries(ctx) {
                 Valid
               </text>
               {/* Step 3a: Malformed error (left branch) */}
-              <rect
-                x="20"
-                y="176"
-                width="200"
-                height="60"
-                rx="6"
-                fill={`${C.purple}24`}
-                stroke={C.purple}
-              />
+              <rect x="20" y="176" width="200" height="60" rx="6" fill={`${C.purple}24`} stroke={C.purple} />
               <text x="120" y="196" fill={SOFT.purple} fontSize="13" textAnchor="middle" fontWeight="700">
                 Return Malformed Error
               </text>
@@ -649,15 +618,7 @@ export default function ToolErrorsRetries(ctx) {
                 error_class: &quot;malformed&quot;
               </text>
               {/* Step 3b: Execute (right branch) */}
-              <rect
-                x="300"
-                y="176"
-                width="200"
-                height="60"
-                rx="6"
-                fill={`${C.cyan}24`}
-                stroke={C.cyan}
-              />
+              <rect x="300" y="176" width="200" height="60" rx="6" fill={`${C.cyan}24`} stroke={C.cyan} />
               <text x="400" y="196" fill={SOFT.cyan} fontSize="13" textAnchor="middle" fontWeight="700">
                 Execute Tool Function
               </text>
@@ -720,9 +681,8 @@ export default function ToolErrorsRetries(ctx) {
             Schema check (microseconds) gates the tool call (hundreds of milliseconds).
           </div>
           <T color={SOFT.green} center size={15} style={{ marginTop: 12 }}>
-            Schema-level validation also gives the model a precise reason - &quot;missing required
-            field invoice_id&quot; - which is much easier to fix than a generic 400 from the API.
-            One retry usually does it.
+            Schema-level validation also gives the model a precise reason - &quot;missing required field
+            invoice_id&quot; - which is much easier to fix than a generic 400 from the API. One retry usually does it.
           </T>
         </Box>
       </Reveal>
@@ -733,10 +693,9 @@ export default function ToolErrorsRetries(ctx) {
             Safe-To-Retry Tools Need Idempotency Keys
           </T>
           <T color={SOFT.purple} center size={16} style={{ marginTop: 10 }}>
-            Reads are naturally safe to retry - they just return the same data. Mutations are
-            different. process_refund without an idempotency key can double-refund if the runtime
-            retries on a flaky 503 that actually succeeded. The fix is a key derived from a
-            stable input so the backend can detect and dedupe the retry.
+            Reads are naturally safe to retry - they just return the same data. Mutations are different. process_refund
+            without an idempotency key can double-refund if the runtime retries on a flaky 503 that actually succeeded.
+            The fix is a key derived from a stable input so the backend can detect and dedupe the retry.
           </T>
 
           <div
@@ -823,10 +782,9 @@ export default function ToolErrorsRetries(ctx) {
             idempotency_key = hash(invoice_id) - retries collide, no double refund.
           </div>
           <T color={SOFT.purple} center size={15} style={{ marginTop: 12 }}>
-            The pattern is universal: any mutation that can be retried needs a deterministic key.
-            For refunds, invoice_id works. For password resets, request_id. For new orders, a
-            client-generated UUID. Without it, retries are unsafe and you must either give up
-            retries or risk double-spending.
+            The pattern is universal: any mutation that can be retried needs a deterministic key. For refunds,
+            invoice_id works. For password resets, request_id. For new orders, a client-generated UUID. Without it,
+            retries are unsafe and you must either give up retries or risk double-spending.
           </T>
         </Box>
       </Reveal>
@@ -837,10 +795,9 @@ export default function ToolErrorsRetries(ctx) {
             Trace: Ticket T4 With Errors And Recovery
           </T>
           <T color={SOFT.cyan} center size={16} style={{ marginTop: 10 }}>
-            Ticket T4: cancel + refund over the policy cap. Watch how the structured business_rule
-            error in step 5 changes the model&apos;s plan in step 6. No exception handling code,
-            no special-case routing - the model reads the error_class and switches to
-            escalate_human on its own.
+            Ticket T4: cancel + refund over the policy cap. Watch how the structured business_rule error in step 5
+            changes the model&apos;s plan in step 6. No exception handling code, no special-case routing - the model
+            reads the error_class and switches to escalate_human on its own.
           </T>
 
           <div
@@ -886,9 +843,7 @@ export default function ToolErrorsRetries(ctx) {
                     padding: "10px 14px",
                     borderRadius: 8,
                     background: `${row.color}06`,
-                    border: row.isError
-                      ? `2px solid ${row.color}80`
-                      : `1px solid ${row.color}24`,
+                    border: row.isError ? `2px solid ${row.color}80` : `1px solid ${row.color}24`,
                     textAlign: "center",
                   }}
                 >
@@ -975,9 +930,9 @@ export default function ToolErrorsRetries(ctx) {
             Step 5 business_rule error -&gt; step 6 escalate_human. Same loop, structured recovery.
           </div>
           <T color={SOFT.cyan} center size={15} style={{ marginTop: 12 }}>
-            The user never sees the raw policy error. They see a calm escalation message. That is
-            the agent loop working as designed: errors are returned as data, the model classifies
-            and adapts, and the human only sees the resolution.
+            The user never sees the raw policy error. They see a calm escalation message. That is the agent loop working
+            as designed: errors are returned as data, the model classifies and adapts, and the human only sees the
+            resolution.
           </T>
         </Box>
       </Reveal>

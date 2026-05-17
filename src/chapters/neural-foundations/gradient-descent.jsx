@@ -687,6 +687,6 @@ export default function GradientDescent(ctx) {
       )}
     </div>
   );
-};
+}
 
 // ═══════ 1.13 Backprop Through the Real Network ═══════

@@ -555,7 +555,13 @@ export default function ScalarQuantization(ctx) {
             <text x="620" y="68" fontSize="11" fill={C.red} textAnchor="middle">
               New = 1.8
             </text>
-            <path d="M 614 100 C 590 130, 545 100, 528 100" fill="none" stroke={C.red} strokeWidth="1.5" strokeDasharray="4 3" />
+            <path
+              d="M 614 100 C 590 130, 545 100, 528 100"
+              fill="none"
+              stroke={C.red}
+              strokeWidth="1.5"
+              strokeDasharray="4 3"
+            />
             <polygon points="520,100 528,96 528,104" fill={C.red} />
             <text x="570" y="180" fontSize="12" fill={C.red} textAnchor="middle" fontWeight="bold">
               Clipped to 1.4
@@ -657,7 +663,10 @@ export default function ScalarQuantization(ctx) {
           <div style={{ marginTop: 14, display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 10 }}>
             {[
               { name: "FAISS", line: "IndexScalarQuantizer(d, QT_8bit_uniform) + custom range" },
-              { name: "Qdrant", line: "Quantization_config.scalar.quantile = 0.99 + optimizers_config.deleted_threshold" },
+              {
+                name: "Qdrant",
+                line: "Quantization_config.scalar.quantile = 0.99 + optimizers_config.deleted_threshold",
+              },
               { name: "Pinecone", line: "Managed re-quantization on shard rebalance" },
               { name: "Vespa", line: "Tensor int8 cell-type with explicit bounds + auto-compact" },
             ].map((s) => (

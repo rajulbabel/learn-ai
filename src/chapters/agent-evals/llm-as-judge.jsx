@@ -106,9 +106,8 @@ export default function LlmAsJudge(ctx) {
             Two Ways To Grade
           </T>
           <T color={SOFT.red} center size={16} style={{ marginTop: 10 }}>
-            LLM-as-Judge means using one LLM to grade another LLM&apos;s output. Two scoring
-            styles dominate production: pairwise and scalar. Pick by what your dashboard needs.
-            Most production setups use scalar.
+            LLM-as-Judge means using one LLM to grade another LLM&apos;s output. Two scoring styles dominate production:
+            pairwise and scalar. Pick by what your dashboard needs. Most production setups use scalar.
           </T>
 
           <div
@@ -149,8 +148,8 @@ export default function LlmAsJudge(ctx) {
           </div>
 
           <T color={SOFT.red} center size={15} style={{ marginTop: 14 }}>
-            Pairwise is great for model selection sprints. Scalar is the production default for
-            ongoing trace quality dashboards.
+            Pairwise is great for model selection sprints. Scalar is the production default for ongoing trace quality
+            dashboards.
           </T>
         </Box>
       )}
@@ -161,8 +160,8 @@ export default function LlmAsJudge(ctx) {
             Tell The Judge What To Score On
           </T>
           <T color={SOFT.orange} center size={16} style={{ marginTop: 10 }}>
-            Without a rubric, scalar scores drift week over week. With a rubric the judge has
-            anchors. Use five criteria for customer support; total budget = 10 points.
+            Without a rubric, scalar scores drift week over week. With a rubric the judge has anchors. Use five criteria
+            for customer support; total budget = 10 points.
           </T>
 
           <div style={{ ...tintedCard(C.orange), padding: 14, marginTop: 14 }}>
@@ -178,13 +177,9 @@ export default function LlmAsJudge(ctx) {
                 fontSize: 14,
               }}
             >
-              <div style={{ padding: "8px 10px", fontWeight: 700, color: SOFT.orange }}>
-                Criterion
-              </div>
+              <div style={{ padding: "8px 10px", fontWeight: 700, color: SOFT.orange }}>Criterion</div>
               <div style={{ padding: "8px 10px", fontWeight: 700, color: SOFT.cyan }}>Range</div>
-              <div style={{ padding: "8px 10px", fontWeight: 700, color: SOFT.purple }}>
-                Description
-              </div>
+              <div style={{ padding: "8px 10px", fontWeight: 700, color: SOFT.purple }}>Description</div>
               {JUDGE_RUBRIC.map((r) => (
                 <Fragment key={r.name}>
                   <div
@@ -222,9 +217,8 @@ export default function LlmAsJudge(ctx) {
           </div>
 
           <T color={SOFT.orange} center size={14} style={{ marginTop: 12 }}>
-            Explicit ranges + per-criterion definitions cut judge variance by roughly half
-            compared to &quot;score this 0-10&quot; without anchors. The rubric is the most
-            valuable artifact in the eval pipeline.
+            Explicit ranges + per-criterion definitions cut judge variance by roughly half compared to &quot;score this
+            0-10&quot; without anchors. The rubric is the most valuable artifact in the eval pipeline.
           </T>
         </Box>
       </Reveal>
@@ -235,8 +229,8 @@ export default function LlmAsJudge(ctx) {
             What The Judge Gets Wrong
           </T>
           <T color={SOFT.yellow} center size={16} style={{ marginTop: 10 }}>
-            LLM judges have three known biases. Every production setup should mitigate all three
-            before trusting the dashboard.
+            LLM judges have three known biases. Every production setup should mitigate all three before trusting the
+            dashboard.
           </T>
 
           <div
@@ -271,8 +265,8 @@ export default function LlmAsJudge(ctx) {
           </div>
 
           <T color={SOFT.yellow} center size={14} style={{ marginTop: 14 }}>
-            Three biases, three mitigations. Length normalization, position randomization, judge
-            diversification. None are optional in production.
+            Three biases, three mitigations. Length normalization, position randomization, judge diversification. None
+            are optional in production.
           </T>
         </Box>
       </Reveal>
@@ -283,36 +277,23 @@ export default function LlmAsJudge(ctx) {
             Trust But Verify
           </T>
           <T color={SOFT.amber} center size={16} style={{ marginTop: 10 }}>
-            Calibrate the judge against human annotators. Sample 50-100 traces, have a human
-            grade each one, plot judge score vs human score, compute correlation. Re-tune the
-            judge prompt until correlation &gt; 0.7.
+            Calibrate the judge against human annotators. Sample 50-100 traces, have a human grade each one, plot judge
+            score vs human score, compute correlation. Re-tune the judge prompt until correlation &gt; 0.7.
           </T>
 
           <div style={{ ...tintedCard(C.amber), padding: 14, marginTop: 14 }}>
-            <svg
-              viewBox="0 0 520 360"
-              style={{ width: "100%", maxWidth: 600, display: "block", margin: "0 auto" }}
-            >
+            <svg viewBox="0 0 520 360" style={{ width: "100%", maxWidth: 600, display: "block", margin: "0 auto" }}>
               <desc>
-                Calibration scatter plot of judge scores on the x-axis against human scores on the
-                y-axis with a perfect-agreement diagonal and points clustered close to the
-                diagonal, illustrating a judge calibrated to roughly 0.78 correlation against
-                human annotators.
+                Calibration scatter plot of judge scores on the x-axis against human scores on the y-axis with a
+                perfect-agreement diagonal and points clustered close to the diagonal, illustrating a judge calibrated
+                to roughly 0.78 correlation against human annotators.
               </desc>
               {/* Plot area: x [50,470], y [40, 300]. Scores 0-1 map to that range. */}
               {/* Axes */}
               <line x1={50} y1={300} x2={470} y2={300} stroke={SOFT.amber} strokeWidth={1.5} />
               <line x1={50} y1={300} x2={50} y2={40} stroke={SOFT.amber} strokeWidth={1.5} />
               {/* Diagonal: perfect agreement */}
-              <line
-                x1={50}
-                y1={300}
-                x2={470}
-                y2={40}
-                stroke={C.green}
-                strokeWidth={1.6}
-                strokeDasharray="5 4"
-              />
+              <line x1={50} y1={300} x2={470} y2={40} stroke={C.green} strokeWidth={1.6} strokeDasharray="5 4" />
               {/* Axis labels */}
               <text x={260} y={335} fill={SOFT.amber} fontSize="13" fontWeight="700" textAnchor="middle">
                 Judge Score (0-1)
@@ -331,13 +312,7 @@ export default function LlmAsJudge(ctx) {
               {/* Tick labels */}
               {[0, 0.25, 0.5, 0.75, 1].map((t) => (
                 <Fragment key={`xt-${t}`}>
-                  <text
-                    x={50 + t * 420}
-                    y={316}
-                    fill={SOFT.amber}
-                    fontSize="11"
-                    textAnchor="middle"
-                  >
+                  <text x={50 + t * 420} y={316} fill={SOFT.amber} fontSize="11" textAnchor="middle">
                     {t.toFixed(2)}
                   </text>
                   <text x={40} y={300 - t * 260 + 4} fill={SOFT.amber} fontSize="11" textAnchor="end">
@@ -358,7 +333,16 @@ export default function LlmAsJudge(ctx) {
                 />
               ))}
               {/* Correlation badge */}
-              <rect x={350} y={50} width={110} height={36} rx={6} fill={`${C.green}22`} stroke={C.green} strokeWidth={1.4} />
+              <rect
+                x={350}
+                y={50}
+                width={110}
+                height={36}
+                rx={6}
+                fill={`${C.green}22`}
+                stroke={C.green}
+                strokeWidth={1.4}
+              />
               <text x={405} y={73} fill={SOFT.green} fontSize="13" fontWeight="700" textAnchor="middle">
                 r = 0.78 (Pass)
               </text>
@@ -366,8 +350,8 @@ export default function LlmAsJudge(ctx) {
           </div>
 
           <T color={SOFT.amber} center size={14} style={{ marginTop: 12 }}>
-            Re-calibrate quarterly. Judges drift as the underlying judge LLM updates. Without
-            re-calibration the dashboard slowly stops reflecting human judgment.
+            Re-calibrate quarterly. Judges drift as the underlying judge LLM updates. Without re-calibration the
+            dashboard slowly stops reflecting human judgment.
           </T>
         </Box>
       </Reveal>
@@ -378,9 +362,9 @@ export default function LlmAsJudge(ctx) {
             Canonical Judge Prompt
           </T>
           <T color={SOFT.purple} center size={16} style={{ marginTop: 10 }}>
-            The rubric from sub=1 baked into a runnable judge prompt. Output is forced into
-            machine-readable JSON so a dashboard can parse it and graph the per-criterion scores.
-            This is the canonical artifact reused in 13.40 trace evals.
+            The rubric from sub=1 baked into a runnable judge prompt. Output is forced into machine-readable JSON so a
+            dashboard can parse it and graph the per-criterion scores. This is the canonical artifact reused in 13.40
+            trace evals.
           </T>
 
           <div
@@ -408,7 +392,7 @@ export default function LlmAsJudge(ctx) {
                 overflowX: "auto",
               }}
             >
-{`System: You Are An Evaluator For A Customer-Support Agent.
+              {`System: You Are An Evaluator For A Customer-Support Agent.
 Score The Agent's Response On This Rubric (Total 10):
   - Correctness (0-3): Answer Matches Policy / KB.
   - Completeness (0-2): Answer Addresses Every Part Of The Question.
@@ -433,9 +417,8 @@ Output ONLY This JSON (No Other Text):
           </div>
 
           <T color={SOFT.purple} center size={14} style={{ marginTop: 12 }}>
-            JSON output is non-negotiable. Free-form prose from the judge cannot land in a
-            dashboard. Lock the field names. Every later eval (13.40 trace, 13.41 online) re-uses
-            this same shape.
+            JSON output is non-negotiable. Free-form prose from the judge cannot land in a dashboard. Lock the field
+            names. Every later eval (13.40 trace, 13.41 online) re-uses this same shape.
           </T>
         </Box>
       </Reveal>
@@ -446,10 +429,9 @@ Output ONLY This JSON (No Other Text):
             Same Technique, Agent Scope
           </T>
           <T color={SOFT.red} center size={16} style={{ marginTop: 10 }}>
-            Section 12.32 used LLM-as-Judge for RAG generation quality - faithfulness and
-            answer-relevance against retrieved chunks. Here we extend the same technique to
-            agent-level evals: full task completion, multi-step trace correctness, safety
-            refusals.
+            Section 12.32 used LLM-as-Judge for RAG generation quality - faithfulness and answer-relevance against
+            retrieved chunks. Here we extend the same technique to agent-level evals: full task completion, multi-step
+            trace correctness, safety refusals.
           </T>
 
           <div
@@ -493,16 +475,13 @@ Output ONLY This JSON (No Other Text):
           </div>
 
           <T color={SOFT.red} center size={15} style={{ marginTop: 14 }}>
-            Mechanics are identical: rubric + JSON output + calibration. Only the rubric content
-            changes. A team running 12.32 already has 80% of the agent eval infrastructure in
-            place.
+            Mechanics are identical: rubric + JSON output + calibration. Only the rubric content changes. A team running
+            12.32 already has 80% of the agent eval infrastructure in place.
           </T>
         </Box>
       </Reveal>
 
-      {sub < 5 && (
-        <SubBtn onClick={onContinue} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />
-      )}
+      {sub < 5 && <SubBtn onClick={onContinue} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
     </div>
   );
 }

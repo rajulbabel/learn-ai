@@ -237,8 +237,8 @@ export default function PromptVsTuneVsRagVsAgent(ctx) {
             Four Tools In The Toolbox
           </T>
           <T color={SOFT.cyan} center size={16} style={{ marginTop: 10 }}>
-            Every customer-support feature you ship is one of four things: a prompt change, a weight change, a
-            retrieval change, or a tool loop. Knowing which is which prevents months of wasted work.
+            Every customer-support feature you ship is one of four things: a prompt change, a weight change, a retrieval
+            change, or a tool loop. Knowing which is which prevents months of wasted work.
           </T>
           <div
             style={{
@@ -288,8 +288,8 @@ export default function PromptVsTuneVsRagVsAgent(ctx) {
             Does The Data Change?
           </T>
           <T color={SOFT.blue} center size={16} style={{ marginTop: 10 }}>
-            Data freshness is the first filter. If the answer depends on facts that move - prices, inventory, the
-            ticket the user just filed - those facts cannot live inside the model weights.
+            Data freshness is the first filter. If the answer depends on facts that move - prices, inventory, the ticket
+            the user just filed - those facts cannot live inside the model weights.
           </T>
           <div
             style={{
@@ -303,7 +303,10 @@ export default function PromptVsTuneVsRagVsAgent(ctx) {
             <T color={SOFT.blue} center size={13}>
               Data freshness axis
             </T>
-            <svg viewBox="0 0 520 140" style={{ width: "100%", maxWidth: 560, display: "block", margin: "10px auto 0" }}>
+            <svg
+              viewBox="0 0 520 140"
+              style={{ width: "100%", maxWidth: 560, display: "block", margin: "10px auto 0" }}
+            >
               <desc>
                 Horizontal axis labeled Never on the left and Daily on the right, with four colored markers placed by
                 how often each approach can refresh its data: Fine-Tuning and Prompting on the left, RAG in the
@@ -365,8 +368,8 @@ export default function PromptVsTuneVsRagVsAgent(ctx) {
             ))}
           </div>
           <T color={SOFT.blue} center size={15} style={{ marginTop: 12 }}>
-            Rule of thumb: data that moves fast belongs OUTSIDE the model. Prompt and weights are frozen between
-            calls; retrieval and tools are not.
+            Rule of thumb: data that moves fast belongs OUTSIDE the model. Prompt and weights are frozen between calls;
+            retrieval and tools are not.
           </T>
         </Box>
       </Reveal>
@@ -392,11 +395,14 @@ export default function PromptVsTuneVsRagVsAgent(ctx) {
             <T color={SOFT.purple} center size={13}>
               Capability gap axis (bottom = base model already does it, top = specialized skill)
             </T>
-            <svg viewBox="0 0 520 280" style={{ width: "100%", maxWidth: 560, display: "block", margin: "10px auto 0" }}>
+            <svg
+              viewBox="0 0 520 280"
+              style={{ width: "100%", maxWidth: 560, display: "block", margin: "10px auto 0" }}
+            >
               <desc>
                 Vertical axis showing how much new capability each approach unlocks. Bottom anchor is Already In Base
-                Model, top anchor is Specialized Skill Never Seen. Prompting sits near the bottom; RAG and Agent in
-                the middle; Fine-Tuning at the top.
+                Model, top anchor is Specialized Skill Never Seen. Prompting sits near the bottom; RAG and Agent in the
+                middle; Fine-Tuning at the top.
               </desc>
               {/* Axis line */}
               <line x1="260" y1="30" x2="260" y2="250" stroke={C.dim} strokeWidth="2" />
@@ -457,8 +463,8 @@ export default function PromptVsTuneVsRagVsAgent(ctx) {
             ))}
           </div>
           <T color={SOFT.purple} center size={15} style={{ marginTop: 12 }}>
-            RAG fills factual gaps. Agent fills action gaps. Fine-tuning fills skill gaps. Prompting only works when
-            the skill is already inside the model and you just need to point at it.
+            RAG fills factual gaps. Agent fills action gaps. Fine-tuning fills skill gaps. Prompting only works when the
+            skill is already inside the model and you just need to point at it.
           </T>
         </Box>
       </Reveal>
@@ -469,8 +475,8 @@ export default function PromptVsTuneVsRagVsAgent(ctx) {
             Latency And Cost Budget
           </T>
           <T color={SOFT.indigo} center size={16} style={{ marginTop: 10 }}>
-            The third and fourth axes are budgets. A real-time chat reply has a latency budget; a nightly batch job
-            has a cost budget. The four approaches land in different quadrants.
+            The third and fourth axes are budgets. A real-time chat reply has a latency budget; a nightly batch job has
+            a cost budget. The four approaches land in different quadrants.
           </T>
           <div
             style={{
@@ -509,8 +515,8 @@ export default function PromptVsTuneVsRagVsAgent(ctx) {
             balloon.
           </div>
           <T color={SOFT.indigo} center size={15} style={{ marginTop: 12 }}>
-            Budgets break ties. If two approaches both work technically, the one that fits your latency floor and
-            cost ceiling wins.
+            Budgets break ties. If two approaches both work technically, the one that fits your latency floor and cost
+            ceiling wins.
           </T>
         </Box>
       </Reveal>
@@ -606,8 +612,8 @@ export default function PromptVsTuneVsRagVsAgent(ctx) {
             Most Production Systems Stack Them
           </T>
           <T color={SOFT.cyan} center size={16} style={{ marginTop: 10 }}>
-            A real customer-support assistant rarely uses one technique. The shipping pattern is a stack: each
-            layer covers what the layer below cannot.
+            A real customer-support assistant rarely uses one technique. The shipping pattern is a stack: each layer
+            covers what the layer below cannot.
           </T>
           <div
             style={{
@@ -719,8 +725,8 @@ export default function PromptVsTuneVsRagVsAgent(ctx) {
             ))}
           </div>
           <T color={SOFT.cyan} center size={15} style={{ marginTop: 12 }}>
-            The pattern under every misuse is the same: someone picked their favorite tool instead of walking the
-            four axes. Walk the tree first, then build.
+            The pattern under every misuse is the same: someone picked their favorite tool instead of walking the four
+            axes. Walk the tree first, then build.
           </T>
         </Box>
       </Reveal>

@@ -10,7 +10,7 @@ const LIFECYCLE_STEPS = [
     color: C.purple,
     soft: SOFT.purple,
     msg: "User message",
-    detail: "Sends a request. \"I can't log in - reset my password.\"",
+    detail: 'Sends a request. "I can\'t log in - reset my password."',
   },
   {
     actor: "Model",
@@ -51,10 +51,30 @@ const LIFECYCLE_STEPS = [
 
 // Highlighted fields of the canonical tool_use message (sub=1).
 const TOOL_USE_FIELDS = [
-  { key: "type", color: C.cyan, soft: SOFT.cyan, note: "Always the literal string \"tool_use\". Tells your runtime this block is a call request." },
-  { key: "id", color: C.purple, soft: SOFT.purple, note: "Unique per call. The matching tool_result must carry this same id back." },
-  { key: "name", color: C.green, soft: SOFT.green, note: "Which tool to call. Must match one of the schema names you registered." },
-  { key: "input", color: C.orange, soft: SOFT.orange, note: "The arguments. Validated against the input_schema before the runtime executes." },
+  {
+    key: "type",
+    color: C.cyan,
+    soft: SOFT.cyan,
+    note: 'Always the literal string "tool_use". Tells your runtime this block is a call request.',
+  },
+  {
+    key: "id",
+    color: C.purple,
+    soft: SOFT.purple,
+    note: "Unique per call. The matching tool_result must carry this same id back.",
+  },
+  {
+    key: "name",
+    color: C.green,
+    soft: SOFT.green,
+    note: "Which tool to call. Must match one of the schema names you registered.",
+  },
+  {
+    key: "input",
+    color: C.orange,
+    soft: SOFT.orange,
+    note: "The arguments. Validated against the input_schema before the runtime executes.",
+  },
 ];
 
 const TOOL_USE_MSG = `{
@@ -66,10 +86,30 @@ const TOOL_USE_MSG = `{
 
 // Highlighted fields of the canonical tool_result message (sub=2).
 const TOOL_RESULT_FIELDS = [
-  { key: "type", color: C.cyan, soft: SOFT.cyan, note: "Always \"tool_result\". Tells the model this block carries a return value." },
-  { key: "tool_use_id", color: C.purple, soft: SOFT.purple, note: "MUST match the id from the tool_use. This is how the model pairs request to response." },
-  { key: "content", color: C.green, soft: SOFT.green, note: "The return value. Usually a string; can be structured. This is what the model reads next." },
-  { key: "is_error", color: C.red, soft: SOFT.red, note: "Flag. true means the runtime failed - the model should recover, not pretend it worked." },
+  {
+    key: "type",
+    color: C.cyan,
+    soft: SOFT.cyan,
+    note: 'Always "tool_result". Tells the model this block carries a return value.',
+  },
+  {
+    key: "tool_use_id",
+    color: C.purple,
+    soft: SOFT.purple,
+    note: "MUST match the id from the tool_use. This is how the model pairs request to response.",
+  },
+  {
+    key: "content",
+    color: C.green,
+    soft: SOFT.green,
+    note: "The return value. Usually a string; can be structured. This is what the model reads next.",
+  },
+  {
+    key: "is_error",
+    color: C.red,
+    soft: SOFT.red,
+    note: "Flag. true means the runtime failed - the model should recover, not pretend it worked.",
+  },
 ];
 
 const TOOL_RESULT_MSG = `{
@@ -86,7 +126,7 @@ const T1_TRACE_ROWS = [
     actor: "User",
     color: C.purple,
     soft: SOFT.purple,
-    msg: "\"I can't log in - reset my password.\"",
+    msg: '"I can\'t log in - reset my password."',
     note: "Plain English. No customer_id, just an intent.",
   },
   {
@@ -94,7 +134,7 @@ const T1_TRACE_ROWS = [
     actor: "Model",
     color: C.cyan,
     soft: SOFT.cyan,
-    msg: "tool_use { name: lookup_customer, input: { email: \"alice@example.com\" } }",
+    msg: 'tool_use { name: lookup_customer, input: { email: "alice@example.com" } }',
     note: "Email comes from the conversation header. Model needs the customer_id before it can reset.",
   },
   {
@@ -102,7 +142,7 @@ const T1_TRACE_ROWS = [
     actor: "Runtime",
     color: C.orange,
     soft: SOFT.orange,
-    msg: "tool_result { content: { customer_id: \"c-9924\", plan: \"Pro\" } }",
+    msg: 'tool_result { content: { customer_id: "c-9924", plan: "Pro" } }',
     note: "DB hit. The runtime turns the function return into a tool_result message.",
   },
   {
@@ -110,7 +150,7 @@ const T1_TRACE_ROWS = [
     actor: "Model",
     color: C.cyan,
     soft: SOFT.cyan,
-    msg: "tool_use { name: reset_password, input: { customer_id: \"c-9924\" } }",
+    msg: 'tool_use { name: reset_password, input: { customer_id: "c-9924" } }',
     note: "Now it has c-9924 from step 3. Second turn of the loop.",
   },
   {
@@ -118,7 +158,7 @@ const T1_TRACE_ROWS = [
     actor: "Runtime",
     color: C.orange,
     soft: SOFT.orange,
-    msg: "tool_result { content: \"Email sent.\" }",
+    msg: 'tool_result { content: "Email sent." }',
     note: "Side effect happens here. The runtime is the single chokepoint.",
   },
   {
@@ -126,7 +166,7 @@ const T1_TRACE_ROWS = [
     actor: "Model",
     color: C.green,
     soft: SOFT.green,
-    msg: "\"Done - check alice@example.com for the reset link.\"",
+    msg: '"Done - check alice@example.com for the reset link."',
     note: "Final assistant message. No more tool_use - the model is satisfied.",
   },
 ];
@@ -134,12 +174,42 @@ const T1_TRACE_ROWS = [
 // Streaming timeline events (sub=4).
 const STREAM_PHASES = [
   { phase: "Stream begins", color: C.cyan, soft: SOFT.cyan, note: "Assistant tokens start arriving one by one." },
-  { phase: "Partial text streams", color: C.cyan, soft: SOFT.cyan, note: "\"Let me look that up for you...\" appears word by word." },
-  { phase: "Stream pauses", color: C.yellow, soft: SOFT.yellow, note: "Model decides to call a tool. Token stream halts." },
-  { phase: "tool_use block emitted", color: C.purple, soft: SOFT.purple, note: "The block arrives as one complete JSON object, NOT token-by-token." },
-  { phase: "Runtime executes", color: C.orange, soft: SOFT.orange, note: "Your code runs the real function. Could take 200ms or 2s." },
-  { phase: "tool_result delivered", color: C.green, soft: SOFT.green, note: "Result message appended; model re-invoked to continue." },
-  { phase: "Stream resumes", color: C.cyan, soft: SOFT.cyan, note: "New assistant tokens start flowing again, building the final answer." },
+  {
+    phase: "Partial text streams",
+    color: C.cyan,
+    soft: SOFT.cyan,
+    note: '"Let me look that up for you..." appears word by word.',
+  },
+  {
+    phase: "Stream pauses",
+    color: C.yellow,
+    soft: SOFT.yellow,
+    note: "Model decides to call a tool. Token stream halts.",
+  },
+  {
+    phase: "tool_use block emitted",
+    color: C.purple,
+    soft: SOFT.purple,
+    note: "The block arrives as one complete JSON object, NOT token-by-token.",
+  },
+  {
+    phase: "Runtime executes",
+    color: C.orange,
+    soft: SOFT.orange,
+    note: "Your code runs the real function. Could take 200ms or 2s.",
+  },
+  {
+    phase: "tool_result delivered",
+    color: C.green,
+    soft: SOFT.green,
+    note: "Result message appended; model re-invoked to continue.",
+  },
+  {
+    phase: "Stream resumes",
+    color: C.cyan,
+    soft: SOFT.cyan,
+    note: "New assistant tokens start flowing again, building the final answer.",
+  },
 ];
 
 // Stacked latency-budget rows for ticket T1 (sub=5).
@@ -169,9 +239,9 @@ export default function ToolCallLifecycle(ctx) {
             From Request To Final Answer
           </T>
           <T color={SOFT.cyan} center size={16} style={{ marginTop: 10 }}>
-            One tool call passes through six actors. The user starts it, the model decides, the runtime executes,
-            the tool returns, the runtime wraps the result, the model writes the answer. Every arrow is a message
-            of a specific kind.
+            One tool call passes through six actors. The user starts it, the model decides, the runtime executes, the
+            tool returns, the runtime wraps the result, the model writes the answer. Every arrow is a message of a
+            specific kind.
           </T>
 
           <div
@@ -191,10 +261,10 @@ export default function ToolCallLifecycle(ctx) {
               style={{ width: "100%", maxWidth: 760, display: "block", margin: "10px auto 0" }}
             >
               <desc>
-                Six-row horizontal swim-lane for the tool-call lifecycle. Rows from top to bottom: User, Model,
-                Runtime, Tool, Runtime, Model. Each row shows the actor on the left and the message kind it
-                emits (user message, tool_use, function call, function return, tool_result, assistant message).
-                Arrows connect each row to the next.
+                Six-row horizontal swim-lane for the tool-call lifecycle. Rows from top to bottom: User, Model, Runtime,
+                Tool, Runtime, Model. Each row shows the actor on the left and the message kind it emits (user message,
+                tool_use, function call, function return, tool_result, assistant message). Arrows connect each row to
+                the next.
               </desc>
               {LIFECYCLE_STEPS.map((step, i) => {
                 const y = 15 + i * 60;
@@ -210,28 +280,14 @@ export default function ToolCallLifecycle(ctx) {
                       stroke={step.color}
                       strokeWidth="1.5"
                     />
-                    <text
-                      x="100"
-                      y={y + 20}
-                      fill={step.soft}
-                      fontSize="13"
-                      fontWeight="700"
-                      textAnchor="middle"
-                    >
+                    <text x="100" y={y + 20} fill={step.soft} fontSize="13" fontWeight="700" textAnchor="middle">
                       {step.actor}
                     </text>
                     <text x="100" y={y + 36} fill={step.soft} fontSize="11" textAnchor="middle">
                       Step {i + 1}
                     </text>
 
-                    <line
-                      x1="180"
-                      y1={y + 22}
-                      x2="225"
-                      y2={y + 22}
-                      stroke={step.color}
-                      strokeWidth="2"
-                    />
+                    <line x1="180" y1={y + 22} x2="225" y2={y + 22} stroke={step.color} strokeWidth="2" />
                     <polygon points={`225,${y + 22} 217,${y + 18} 217,${y + 26}`} fill={step.color} />
 
                     <rect
@@ -314,8 +370,8 @@ export default function ToolCallLifecycle(ctx) {
             Six actors. Two messages (tool_use, tool_result) carry the call from model to runtime and back.
           </div>
           <T color={SOFT.cyan} center size={15} style={{ marginTop: 12 }}>
-            The model never touches the tool directly - it only emits tool_use blocks. The runtime is the
-            single boundary where every real-world effect (DB read, email send, refund) actually happens.
+            The model never touches the tool directly - it only emits tool_use blocks. The runtime is the single
+            boundary where every real-world effect (DB read, email send, refund) actually happens.
           </T>
         </Box>
       )}
@@ -326,9 +382,9 @@ export default function ToolCallLifecycle(ctx) {
             Tool-Use: Model Asks Runtime To Call
           </T>
           <T color={SOFT.teal} center size={16} style={{ marginTop: 10 }}>
-            When the model decides to call a tool, generation halts and it emits a single tool_use block. This
-            is the exact shape - four fields, every field is load-bearing. Your runtime parses this block to
-            decide what to execute.
+            When the model decides to call a tool, generation halts and it emits a single tool_use block. This is the
+            exact shape - four fields, every field is load-bearing. Your runtime parses this block to decide what to
+            execute.
           </T>
 
           <div
@@ -344,11 +400,7 @@ export default function ToolCallLifecycle(ctx) {
               Tool-Use Message
             </T>
             <div style={{ marginTop: 10 }}>
-              <HighlightedJson
-                json={TOOL_USE_MSG}
-                fields={TOOL_USE_FIELDS}
-                soft={SOFT.teal}
-              />
+              <HighlightedJson json={TOOL_USE_MSG} fields={TOOL_USE_FIELDS} soft={SOFT.teal} />
             </div>
           </div>
 
@@ -395,8 +447,8 @@ export default function ToolCallLifecycle(ctx) {
             tool_use = type + id + name + input. That is the whole contract.
           </div>
           <T color={SOFT.teal} center size={15} style={{ marginTop: 12 }}>
-            Notice the customer_id c-9924 inside input - it came from a previous tool_result in this same
-            conversation. The model carries values forward between turns just like it carries words.
+            Notice the customer_id c-9924 inside input - it came from a previous tool_result in this same conversation.
+            The model carries values forward between turns just like it carries words.
           </T>
         </Box>
       </Reveal>
@@ -407,9 +459,9 @@ export default function ToolCallLifecycle(ctx) {
             Tool-Result: Runtime Returns The Outcome
           </T>
           <T color={SOFT.blue} center size={16} style={{ marginTop: 10 }}>
-            After the runtime executes the real function, it wraps the return value into a tool_result block
-            and appends it to the conversation. The model then re-reads everything (user, prior assistant
-            messages, tool_use, tool_result) and continues.
+            After the runtime executes the real function, it wraps the return value into a tool_result block and appends
+            it to the conversation. The model then re-reads everything (user, prior assistant messages, tool_use,
+            tool_result) and continues.
           </T>
 
           <div
@@ -425,11 +477,7 @@ export default function ToolCallLifecycle(ctx) {
               Tool-Result Message
             </T>
             <div style={{ marginTop: 10 }}>
-              <HighlightedJson
-                json={TOOL_RESULT_MSG}
-                fields={TOOL_RESULT_FIELDS}
-                soft={SOFT.blue}
-              />
+              <HighlightedJson json={TOOL_RESULT_MSG} fields={TOOL_RESULT_FIELDS} soft={SOFT.blue} />
             </div>
           </div>
 
@@ -476,9 +524,8 @@ export default function ToolCallLifecycle(ctx) {
             tool_use_id pairs the response to the request. Same id in, same id out.
           </div>
           <T color={SOFT.blue} center size={15} style={{ marginTop: 12 }}>
-            If the tool failed - DB down, validation error, network blip - your runtime still produces a
-            tool_result, but flips is_error to true. The model reads the failure and adapts, instead of
-            assuming success.
+            If the tool failed - DB down, validation error, network blip - your runtime still produces a tool_result,
+            but flips is_error to true. The model reads the failure and adapts, instead of assuming success.
           </T>
         </Box>
       </Reveal>
@@ -489,9 +536,8 @@ export default function ToolCallLifecycle(ctx) {
             Trace: Ticket T1 Password Reset
           </T>
           <T color={SOFT.green} center size={16} style={{ marginTop: 10 }}>
-            Now we play the whole lifecycle on a real ticket. T1 is &quot;I can&apos;t log in - reset my
-            password.&quot; The model loops twice (lookup_customer, then reset_password) before it can
-            answer.
+            Now we play the whole lifecycle on a real ticket. T1 is &quot;I can&apos;t log in - reset my password.&quot;
+            The model loops twice (lookup_customer, then reset_password) before it can answer.
           </T>
 
           <div
@@ -580,8 +626,8 @@ export default function ToolCallLifecycle(ctx) {
             T1: 2 tool calls (lookup_customer + reset_password), 3 LLM turns, 1 final answer.
           </div>
           <T color={SOFT.green} center size={15} style={{ marginTop: 12 }}>
-            The model never has c-9924 in step 2 - it only learns the id from step 3&apos;s tool_result.
-            That is why the loop matters: each turn unlocks the next call by giving the model new evidence.
+            The model never has c-9924 in step 2 - it only learns the id from step 3&apos;s tool_result. That is why the
+            loop matters: each turn unlocks the next call by giving the model new evidence.
           </T>
         </Box>
       </Reveal>
@@ -592,9 +638,8 @@ export default function ToolCallLifecycle(ctx) {
             Tools While Streaming
           </T>
           <T color={SOFT.purple} center size={16} style={{ marginTop: 10 }}>
-            In production you usually stream assistant tokens to the UI for that typewriter effect. Tool
-            calls fit cleanly inside a stream - but with one twist. Text streams token by token; tool blocks
-            arrive whole.
+            In production you usually stream assistant tokens to the UI for that typewriter effect. Tool calls fit
+            cleanly inside a stream - but with one twist. Text streams token by token; tool blocks arrive whole.
           </T>
 
           <div
@@ -614,10 +659,10 @@ export default function ToolCallLifecycle(ctx) {
               style={{ width: "100%", maxWidth: 760, display: "block", margin: "10px auto 0" }}
             >
               <desc>
-                Horizontal timeline showing how tool calls interleave with a streaming assistant response.
-                Time flows left to right. Phases include stream begin, partial text streaming, stream pause,
-                tool_use block emitted whole, runtime executes, tool_result delivered, and stream resume.
-                Each phase is a colored segment along a single horizontal bar.
+                Horizontal timeline showing how tool calls interleave with a streaming assistant response. Time flows
+                left to right. Phases include stream begin, partial text streaming, stream pause, tool_use block emitted
+                whole, runtime executes, tool_result delivered, and stream resume. Each phase is a colored segment along
+                a single horizontal bar.
               </desc>
               <line x1="20" y1="180" x2="740" y2="180" stroke="#444" strokeWidth="1" />
               <text x="20" y="205" fill="#aaa" fontSize="11" textAnchor="start">
@@ -642,41 +687,15 @@ export default function ToolCallLifecycle(ctx) {
                       stroke={p.color}
                       strokeWidth="1.5"
                     />
-                    <text
-                      x={x + segWidth / 2}
-                      y="108"
-                      fill={p.soft}
-                      fontSize="11"
-                      fontWeight="700"
-                      textAnchor="middle"
-                    >
+                    <text x={x + segWidth / 2} y="108" fill={p.soft} fontSize="11" fontWeight="700" textAnchor="middle">
                       {p.phase.split(" ")[0]}
                     </text>
-                    <text
-                      x={x + segWidth / 2}
-                      y="124"
-                      fill={p.soft}
-                      fontSize="10"
-                      textAnchor="middle"
-                    >
+                    <text x={x + segWidth / 2} y="124" fill={p.soft} fontSize="10" textAnchor="middle">
                       {p.phase.split(" ").slice(1).join(" ")}
                     </text>
 
-                    <line
-                      x1={x + segWidth / 2}
-                      y1="170"
-                      x2={x + segWidth / 2}
-                      y2="180"
-                      stroke="#666"
-                      strokeWidth="1"
-                    />
-                    <text
-                      x={x + segWidth / 2}
-                      y="165"
-                      fill={p.soft}
-                      fontSize="10"
-                      textAnchor="middle"
-                    >
+                    <line x1={x + segWidth / 2} y1="170" x2={x + segWidth / 2} y2="180" stroke="#666" strokeWidth="1" />
+                    <text x={x + segWidth / 2} y="165" fill={p.soft} fontSize="10" textAnchor="middle">
                       {i + 1}
                     </text>
                   </g>
@@ -735,9 +754,9 @@ export default function ToolCallLifecycle(ctx) {
             Tool blocks aren&apos;t streamed token-by-token; they arrive complete.
           </div>
           <T color={SOFT.purple} center size={15} style={{ marginTop: 12 }}>
-            Your UI shows the partial text as it streams, but holds the spinner during tool execution. When
-            the tool_result lands and the stream resumes, the next batch of assistant tokens picks up where
-            it left off and writes the answer that uses the result.
+            Your UI shows the partial text as it streams, but holds the spinner during tool execution. When the
+            tool_result lands and the stream resumes, the next batch of assistant tokens picks up where it left off and
+            writes the answer that uses the result.
           </T>
         </Box>
       </Reveal>
@@ -748,9 +767,8 @@ export default function ToolCallLifecycle(ctx) {
             Where The Seconds Go
           </T>
           <T color={SOFT.cyan} center size={16} style={{ marginTop: 10 }}>
-            Ticket T1 took 3.4 seconds end-to-end. Where did the time go? Most of it lives in the LLM calls,
-            not the tool calls. This is the most useful number to internalize when you start optimizing an
-            agent.
+            Ticket T1 took 3.4 seconds end-to-end. Where did the time go? Most of it lives in the LLM calls, not the
+            tool calls. This is the most useful number to internalize when you start optimizing an agent.
           </T>
 
           <div
@@ -783,8 +801,7 @@ export default function ToolCallLifecycle(ctx) {
                   style={{
                     width: `${(row.ms / totalMs) * 100}%`,
                     background: `${row.color}40`,
-                    borderRight:
-                      i < LATENCY_BUDGET.length - 1 ? `1px solid ${row.color}80` : "none",
+                    borderRight: i < LATENCY_BUDGET.length - 1 ? `1px solid ${row.color}80` : "none",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
@@ -878,9 +895,9 @@ export default function ToolCallLifecycle(ctx) {
             Total: {(totalMs / 1000).toFixed(1)} seconds. Every extra LLM call adds about 1 second.
           </div>
           <T color={SOFT.cyan} center size={15} style={{ marginTop: 12 }}>
-            Speeding up T1 means cutting LLM turns, not tool latency. Parallel tool calls (next chapter) let
-            you fire lookup_customer and lookup_subscription in one turn instead of two - shaving a whole
-            LLM call from the budget.
+            Speeding up T1 means cutting LLM turns, not tool latency. Parallel tool calls (next chapter) let you fire
+            lookup_customer and lookup_subscription in one turn instead of two - shaving a whole LLM call from the
+            budget.
           </T>
         </Box>
       </Reveal>

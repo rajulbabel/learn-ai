@@ -669,8 +669,8 @@ export default function BinaryQuantization(ctx) {
             <desc>
               Bit-balance bar grid: 64 thin vertical bars sample the per-dim deviation from a 50/50 bit split (a
               representative subset of the 1024 dims). Most bars are short and green; a handful are tall and red,
-              flagged with small alert badges above for dims with greater than 70 percent imbalance. A horizontal
-              yellow dashed line marks the 70% imbalance alert.
+              flagged with small alert badges above for dims with greater than 70 percent imbalance. A horizontal yellow
+              dashed line marks the 70% imbalance alert.
             </desc>
             <text x="60" y="22" fontSize="11" fill="#aaa">
               |Bit_balance - 50%| per dim
@@ -682,13 +682,7 @@ export default function BinaryQuantization(ctx) {
               const h = isDriftDim ? 110 : 8 + ((i * 17) % 28);
               return (
                 <g key={i}>
-                  <rect
-                    x={64 + i * 9.7}
-                    y={180 - h}
-                    width="6"
-                    height={h}
-                    fill={isDriftDim ? C.red : C.green}
-                  />
+                  <rect x={64 + i * 9.7} y={180 - h} width="6" height={h} fill={isDriftDim ? C.red : C.green} />
                   {isDriftDim && (
                     <text x={67 + i * 9.7} y={180 - h - 4} fontSize="11" fill={C.red} textAnchor="middle">
                       !
@@ -760,11 +754,7 @@ export default function BinaryQuantization(ctx) {
                 <T color={C.cyan} bold center size={15}>
                   {s.name}
                 </T>
-                <T
-                  color={C.bright}
-                  size={13}
-                  style={{ marginTop: 4, fontFamily: "monospace", textAlign: "center" }}
-                >
+                <T color={C.bright} size={13} style={{ marginTop: 4, fontFamily: "monospace", textAlign: "center" }}>
                   {s.line}
                 </T>
               </div>

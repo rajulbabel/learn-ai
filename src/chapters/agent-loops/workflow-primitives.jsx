@@ -141,9 +141,9 @@ export default function WorkflowPrimitives(ctx) {
             Chain, Route, Parallelize
           </T>
           <T color={SOFT.orange} center size={16} style={{ marginTop: 10 }}>
-            Workflows are built from three composable primitives. Chaining wires step A's output into
-            step B. Routing classifies the input and picks one branch. Parallelization fans out N
-            workers and merges their results. Every production workflow stacks these three.
+            Workflows are built from three composable primitives. Chaining wires step A's output into step B. Routing
+            classifies the input and picks one branch. Parallelization fans out N workers and merges their results.
+            Every production workflow stacks these three.
           </T>
 
           <div
@@ -165,25 +165,15 @@ export default function WorkflowPrimitives(ctx) {
                 style={{ width: "100%", maxWidth: 260, display: "block", margin: "10px auto 0" }}
               >
                 <desc>
-                  Three node chain showing step A flowing to step B flowing to step C as sequential
-                  arrows in a horizontal pipeline.
+                  Three node chain showing step A flowing to step B flowing to step C as sequential arrows in a
+                  horizontal pipeline.
                 </desc>
                 {CHAIN_MINI_NODES.slice(0, -1).map((n, i) => {
                   const next = CHAIN_MINI_NODES[i + 1];
                   return (
                     <g key={`ce-${i}`}>
-                      <line
-                        x1={n.x + 32}
-                        y1={60}
-                        x2={next.x}
-                        y2={60}
-                        stroke={SOFT.yellow}
-                        strokeWidth="1.5"
-                      />
-                      <polygon
-                        points={`${next.x},60 ${next.x - 6},56 ${next.x - 6},64`}
-                        fill={SOFT.yellow}
-                      />
+                      <line x1={n.x + 32} y1={60} x2={next.x} y2={60} stroke={SOFT.yellow} strokeWidth="1.5" />
+                      <polygon points={`${next.x},60 ${next.x - 6},56 ${next.x - 6},64`} fill={SOFT.yellow} />
                     </g>
                   );
                 })}
@@ -199,14 +189,7 @@ export default function WorkflowPrimitives(ctx) {
                       stroke={C.yellow}
                       strokeWidth="1.5"
                     />
-                    <text
-                      x={n.x + 16}
-                      y={64}
-                      fill={SOFT.yellow}
-                      fontSize="13"
-                      fontWeight="700"
-                      textAnchor="middle"
-                    >
+                    <text x={n.x + 16} y={64} fill={SOFT.yellow} fontSize="13" fontWeight="700" textAnchor="middle">
                       {n.label}
                     </text>
                   </g>
@@ -228,8 +211,8 @@ export default function WorkflowPrimitives(ctx) {
                 style={{ width: "100%", maxWidth: 260, display: "block", margin: "10px auto 0" }}
               >
                 <desc>
-                  Routing topology showing an input flowing to a classifier node which then branches
-                  out to three different downstream paths based on intent.
+                  Routing topology showing an input flowing to a classifier node which then branches out to three
+                  different downstream paths based on intent.
                 </desc>
                 {/* Input -> Classifier */}
                 <line
@@ -316,14 +299,7 @@ export default function WorkflowPrimitives(ctx) {
                       stroke={C.red}
                       strokeWidth="1.2"
                     />
-                    <text
-                      x={b.x}
-                      y={b.y + 4}
-                      fill={SOFT.red}
-                      fontSize="11"
-                      fontWeight="700"
-                      textAnchor="middle"
-                    >
+                    <text x={b.x} y={b.y + 4} fill={SOFT.red} fontSize="11" fontWeight="700" textAnchor="middle">
                       {b.label}
                     </text>
                   </g>
@@ -345,8 +321,8 @@ export default function WorkflowPrimitives(ctx) {
                 style={{ width: "100%", maxWidth: 260, display: "block", margin: "10px auto 0" }}
               >
                 <desc>
-                  Parallelization topology showing an input fanning out to three concurrent worker
-                  nodes that all feed into a single aggregator node.
+                  Parallelization topology showing an input fanning out to three concurrent worker nodes that all feed
+                  into a single aggregator node.
                 </desc>
                 {/* Input -> workers */}
                 {PARALLEL_MINI_NODES.workers.map((w, i) => (
@@ -416,14 +392,7 @@ export default function WorkflowPrimitives(ctx) {
                       stroke={C.amber}
                       strokeWidth="1.2"
                     />
-                    <text
-                      x={w.x}
-                      y={w.y + 4}
-                      fill={SOFT.amber}
-                      fontSize="11"
-                      fontWeight="700"
-                      textAnchor="middle"
-                    >
+                    <text x={w.x} y={w.y + 4} fill={SOFT.amber} fontSize="11" fontWeight="700" textAnchor="middle">
                       {w.label}
                     </text>
                   </g>
@@ -457,8 +426,8 @@ export default function WorkflowPrimitives(ctx) {
           </div>
 
           <T color={SOFT.orange} center size={15} style={{ marginTop: 14 }}>
-            These are the lego bricks. Chaining is a sequence. Routing is a fork. Parallelization is a
-            fan-out plus merge. Real workflows stack them in layers.
+            These are the lego bricks. Chaining is a sequence. Routing is a fork. Parallelization is a fan-out plus
+            merge. Real workflows stack them in layers.
           </T>
         </Box>
       )}
@@ -469,9 +438,8 @@ export default function WorkflowPrimitives(ctx) {
             Step A's Output Is Step B's Input
           </T>
           <T color={SOFT.yellow} center size={16} style={{ marginTop: 10 }}>
-            Chaining is the simplest primitive: the structured output of one LLM call becomes the
-            structured input of the next. The glue is JSON. Step A returns a typed object, your code
-            reads it, and feeds the next step.
+            Chaining is the simplest primitive: the structured output of one LLM call becomes the structured input of
+            the next. The glue is JSON. Step A returns a typed object, your code reads it, and feeds the next step.
           </T>
 
           <div style={{ ...tintedCard(C.yellow), padding: 14, marginTop: 14 }}>
@@ -483,9 +451,8 @@ export default function WorkflowPrimitives(ctx) {
               style={{ width: "100%", maxWidth: 640, display: "block", margin: "12px auto 0" }}
             >
               <desc>
-                Three node chain with JSON output labels above each arrow showing how the structured
-                output of one step becomes the structured input of the next step in a billing ticket
-                example.
+                Three node chain with JSON output labels above each arrow showing how the structured output of one step
+                becomes the structured input of the next step in a billing ticket example.
               </desc>
               {/* Edges with JSON labels */}
               {CHAIN_DETAIL_NODES.slice(0, -1).map((n, i) => {
@@ -500,10 +467,7 @@ export default function WorkflowPrimitives(ctx) {
                 return (
                   <g key={`cd-${i}`}>
                     <line x1={x1} y1={120} x2={x2} y2={120} stroke={SOFT.yellow} strokeWidth="1.5" />
-                    <polygon
-                      points={`${x2},120 ${x2 - 6},116 ${x2 - 6},124`}
-                      fill={SOFT.yellow}
-                    />
+                    <polygon points={`${x2},120 ${x2 - 6},116 ${x2 - 6},124`} fill={SOFT.yellow} />
                     {/* JSON label box above arrow */}
                     <rect
                       x={labelX - 60}
@@ -515,24 +479,10 @@ export default function WorkflowPrimitives(ctx) {
                       stroke={SOFT.yellow}
                       strokeWidth="1"
                     />
-                    <text
-                      x={labelX}
-                      y={82}
-                      fill={SOFT.yellow}
-                      fontSize="11"
-                      fontFamily="monospace"
-                      textAnchor="middle"
-                    >
+                    <text x={labelX} y={82} fill={SOFT.yellow} fontSize="11" fontFamily="monospace" textAnchor="middle">
                       {labels[i].line1}
                     </text>
-                    <text
-                      x={labelX}
-                      y={96}
-                      fill={SOFT.yellow}
-                      fontSize="11"
-                      fontFamily="monospace"
-                      textAnchor="middle"
-                    >
+                    <text x={labelX} y={96} fill={SOFT.yellow} fontSize="11" fontFamily="monospace" textAnchor="middle">
                       {labels[i].line2}
                     </text>
                     {/* Vertical hint line from label to arrow */}
@@ -561,23 +511,10 @@ export default function WorkflowPrimitives(ctx) {
                     stroke={C.yellow}
                     strokeWidth="1.5"
                   />
-                  <text
-                    x={n.x + 60}
-                    y={128}
-                    fill={C.yellow}
-                    fontSize="14"
-                    fontWeight="700"
-                    textAnchor="middle"
-                  >
+                  <text x={n.x + 60} y={128} fill={C.yellow} fontSize="14" fontWeight="700" textAnchor="middle">
                     {n.label}
                   </text>
-                  <text
-                    x={n.x + 60}
-                    y={166}
-                    fill={SOFT.yellow}
-                    fontSize="11"
-                    textAnchor="middle"
-                  >
+                  <text x={n.x + 60} y={166} fill={SOFT.yellow} fontSize="11" textAnchor="middle">
                     {n.note}
                   </text>
                 </g>
@@ -596,15 +533,14 @@ export default function WorkflowPrimitives(ctx) {
               textAlign: "center",
             }}
           >
-            Step A Output: { '{ "category": "billing", "confidence": 0.92 }' }
+            Step A Output: {'{ "category": "billing", "confidence": 0.92 }'}
             <br />
-            Step B Input: { '{ "category": "billing", "ticket": "Can\'t bill my card." }' }
+            Step B Input: {'{ "category": "billing", "ticket": "Can\'t bill my card." }'}
           </div>
 
           <T color={SOFT.yellow} center size={15} style={{ marginTop: 12 }}>
-            Because each step returns a typed object (the JSON schema from chapter 13.8), the next
-            step can read fields like ticket.category by name. Chaining is just normal function
-            composition with LLM calls as the functions.
+            Because each step returns a typed object (the JSON schema from chapter 13.8), the next step can read fields
+            like ticket.category by name. Chaining is just normal function composition with LLM calls as the functions.
           </T>
         </Box>
       </Reveal>
@@ -615,9 +551,8 @@ export default function WorkflowPrimitives(ctx) {
             Route By Intent
           </T>
           <T color={SOFT.red} center size={16} style={{ marginTop: 10 }}>
-            Routing classifies the input and picks one branch. The classifier is itself an LLM call
-            that returns a typed label. Your code then dispatches to the matching handler. Only the
-            chosen branch runs.
+            Routing classifies the input and picks one branch. The classifier is itself an LLM call that returns a typed
+            label. Your code then dispatches to the matching handler. Only the chosen branch runs.
           </T>
 
           <div style={{ ...tintedCard(C.red), padding: 14, marginTop: 14 }}>
@@ -629,9 +564,8 @@ export default function WorkflowPrimitives(ctx) {
               style={{ width: "100%", maxWidth: 680, display: "block", margin: "12px auto 0" }}
             >
               <desc>
-                Routing diagram showing a ticket flowing to an intent classifier that branches to
-                billing, product, troubleshooting, and chitchat handler boxes based on classified
-                intent.
+                Routing diagram showing a ticket flowing to an intent classifier that branches to billing, product,
+                troubleshooting, and chitchat handler boxes based on classified intent.
               </desc>
               {/* Input -> classifier */}
               <line
@@ -718,14 +652,7 @@ export default function WorkflowPrimitives(ctx) {
                     stroke={C.red}
                     strokeWidth="1.2"
                   />
-                  <text
-                    x={b.x}
-                    y={b.y + 5}
-                    fill={SOFT.red}
-                    fontSize="13"
-                    fontWeight="700"
-                    textAnchor="middle"
-                  >
+                  <text x={b.x} y={b.y + 5} fill={SOFT.red} fontSize="13" fontWeight="700" textAnchor="middle">
                     {b.label}
                   </text>
                 </g>
@@ -740,9 +667,9 @@ export default function WorkflowPrimitives(ctx) {
           </div>
 
           <T color={SOFT.red} center size={15} style={{ marginTop: 12 }}>
-            One classification call replaces a hand-written if/else tree. The model labels the input,
-            your code dispatches the matching branch handler. Adding a new branch is one new few-shot
-            example plus one new handler.
+            One classification call replaces a hand-written if/else tree. The model labels the input, your code
+            dispatches the matching branch handler. Adding a new branch is one new few-shot example plus one new
+            handler.
           </T>
         </Box>
       </Reveal>
@@ -753,9 +680,8 @@ export default function WorkflowPrimitives(ctx) {
             Run N In Parallel, Then Merge
           </T>
           <T color={SOFT.amber} center size={16} style={{ marginTop: 10 }}>
-            Parallelization runs N independent calls concurrently and aggregates the results. The
-            total latency is the time of the slowest worker, not the sum. This is the cheapest way to
-            cut wait time on independent sub-tasks.
+            Parallelization runs N independent calls concurrently and aggregates the results. The total latency is the
+            time of the slowest worker, not the sum. This is the cheapest way to cut wait time on independent sub-tasks.
           </T>
 
           <div style={{ ...tintedCard(C.amber), padding: 14, marginTop: 14 }}>
@@ -767,9 +693,9 @@ export default function WorkflowPrimitives(ctx) {
               style={{ width: "100%", maxWidth: 700, display: "block", margin: "12px auto 0" }}
             >
               <desc>
-                Fan-out diagram showing one query branching to three concurrent workers running in
-                parallel then merging into a single aggregator node with timing bars showing that
-                total latency equals the slowest worker time.
+                Fan-out diagram showing one query branching to three concurrent workers running in parallel then merging
+                into a single aggregator node with timing bars showing that total latency equals the slowest worker
+                time.
               </desc>
               {/* Input -> workers */}
               {PARALLEL_DETAIL.workers.map((w, i) => (
@@ -839,23 +765,10 @@ export default function WorkflowPrimitives(ctx) {
                     stroke={C.amber}
                     strokeWidth="1.2"
                   />
-                  <text
-                    x={w.x}
-                    y={w.y}
-                    fill={SOFT.amber}
-                    fontSize="13"
-                    fontWeight="700"
-                    textAnchor="middle"
-                  >
+                  <text x={w.x} y={w.y} fill={SOFT.amber} fontSize="13" fontWeight="700" textAnchor="middle">
                     {w.label}
                   </text>
-                  <text
-                    x={w.x}
-                    y={w.y + 14}
-                    fill={SOFT.amber}
-                    fontSize="11"
-                    textAnchor="middle"
-                  >
+                  <text x={w.x} y={w.y + 14} fill={SOFT.amber} fontSize="11" textAnchor="middle">
                     {w.time}
                   </text>
                 </g>
@@ -946,9 +859,8 @@ export default function WorkflowPrimitives(ctx) {
           </div>
 
           <T color={SOFT.amber} center size={15} style={{ marginTop: 12 }}>
-            If three retrieval calls each take 150-210ms, running them in series costs ~540ms.
-            Running them concurrently costs ~210ms, the slowest one. The aggregator then merges all
-            results into one structured object.
+            If three retrieval calls each take 150-210ms, running them in series costs ~540ms. Running them concurrently
+            costs ~210ms, the slowest one. The aggregator then merges all results into one structured object.
           </T>
         </Box>
       </Reveal>
@@ -959,9 +871,9 @@ export default function WorkflowPrimitives(ctx) {
             Real Workflows Stack Primitives
           </T>
           <T color={SOFT.cyan} center size={16} style={{ marginTop: 10 }}>
-            Production workflows compose all three. A typical pipeline is: chain into a classifier,
-            route to one of several branches, parallelize the heavy retrieval inside one branch, then
-            chain the merged result into a final answer step.
+            Production workflows compose all three. A typical pipeline is: chain into a classifier, route to one of
+            several branches, parallelize the heavy retrieval inside one branch, then chain the merged result into a
+            final answer step.
           </T>
 
           <div style={{ ...tintedCard(C.cyan), padding: 14, marginTop: 14 }}>
@@ -973,9 +885,9 @@ export default function WorkflowPrimitives(ctx) {
               style={{ width: "100%", maxWidth: 760, display: "block", margin: "12px auto 0" }}
             >
               <desc>
-                Composed workflow topology stacking all three primitives where a ticket chains into
-                a classifier that routes to one of three branches, one branch fans out to three
-                parallel retrieval calls that merge before chaining into a final answer node.
+                Composed workflow topology stacking all three primitives where a ticket chains into a classifier that
+                routes to one of three branches, one branch fans out to three parallel retrieval calls that merge before
+                chaining into a final answer node.
               </desc>
               {/* Stage 1: Ticket -> Classifier (chain) */}
               <line
@@ -1104,14 +1016,7 @@ export default function WorkflowPrimitives(ctx) {
                     stroke={C.cyan}
                     strokeWidth={i === 1 ? "1.5" : "1.2"}
                   />
-                  <text
-                    x={b.x}
-                    y={b.y + 4}
-                    fill={SOFT.cyan}
-                    fontSize="12"
-                    fontWeight="700"
-                    textAnchor="middle"
-                  >
+                  <text x={b.x} y={b.y + 4} fill={SOFT.cyan} fontSize="12" fontWeight="700" textAnchor="middle">
                     {b.label}
                   </text>
                 </g>
@@ -1129,14 +1034,7 @@ export default function WorkflowPrimitives(ctx) {
                     stroke={C.cyan}
                     strokeWidth="1.2"
                   />
-                  <text
-                    x={r.x}
-                    y={r.y + 4}
-                    fill={SOFT.cyan}
-                    fontSize="11"
-                    fontWeight="700"
-                    textAnchor="middle"
-                  >
+                  <text x={r.x} y={r.y + 4} fill={SOFT.cyan} fontSize="11" fontWeight="700" textAnchor="middle">
                     {r.label}
                   </text>
                 </g>
@@ -1193,8 +1091,8 @@ export default function WorkflowPrimitives(ctx) {
           </div>
 
           <T color={SOFT.cyan} center size={15} style={{ marginTop: 12 }}>
-            Every primitive does one thing well. The real power comes from stacking them. You combine
-            sequence, branch, and fan-out the same way you combine if, switch, and map in normal code.
+            Every primitive does one thing well. The real power comes from stacking them. You combine sequence, branch,
+            and fan-out the same way you combine if, switch, and map in normal code.
           </T>
         </Box>
       </Reveal>
@@ -1205,9 +1103,8 @@ export default function WorkflowPrimitives(ctx) {
             Support Agent Workflow
           </T>
           <T color={SOFT.orange} center size={16} style={{ marginTop: 10 }}>
-            Here is the support ticket workflow we keep referencing, written out as the actual
-            primitive stack. Notice how chaining, routing, and parallelization each show up at the
-            level they fit.
+            Here is the support ticket workflow we keep referencing, written out as the actual primitive stack. Notice
+            how chaining, routing, and parallelization each show up at the level they fit.
           </T>
 
           <div style={{ ...tintedCard(C.orange), padding: 14, marginTop: 14 }}>
@@ -1216,10 +1113,8 @@ export default function WorkflowPrimitives(ctx) {
             </T>
             <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 8 }}>
               {SUPPORT_WORKFLOW_STEPS.map((s) => {
-                const kindColor =
-                  s.kind === "route" ? C.red : s.kind === "parallel" ? C.amber : C.yellow;
-                const kindSoft =
-                  s.kind === "route" ? SOFT.red : s.kind === "parallel" ? SOFT.amber : SOFT.yellow;
+                const kindColor = s.kind === "route" ? C.red : s.kind === "parallel" ? C.amber : C.yellow;
+                const kindSoft = s.kind === "route" ? SOFT.red : s.kind === "parallel" ? SOFT.amber : SOFT.yellow;
                 return (
                   <div
                     key={s.n}
@@ -1268,22 +1163,19 @@ export default function WorkflowPrimitives(ctx) {
           <div style={{ ...tintedCard(C.green), padding: 12, marginTop: 12 }}>
             <span style={pill(C.green)}>READING</span>
             <T color={SOFT.green} center size={14} style={{ marginTop: 8 }}>
-              Step 2 Routes. Step 3 Chains Three Tools. Step 4 Parallelizes search_kb. Each Branch
-              Picks The Primitive That Fits Its Shape.
+              Step 2 Routes. Step 3 Chains Three Tools. Step 4 Parallelizes search_kb. Each Branch Picks The Primitive
+              That Fits Its Shape.
             </T>
           </div>
 
           <T color={SOFT.orange} center size={15} style={{ marginTop: 12 }}>
-            This is a workflow, not an agent. Every step is wired in advance. The only LLM
-            decision-making is inside the classifier in step 2. The model is a smart cell inside a
-            graph you fully control.
+            This is a workflow, not an agent. Every step is wired in advance. The only LLM decision-making is inside the
+            classifier in step 2. The model is a smart cell inside a graph you fully control.
           </T>
         </Box>
       </Reveal>
 
-      {sub < 5 && (
-        <SubBtn onClick={onContinue} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />
-      )}
+      {sub < 5 && <SubBtn onClick={onContinue} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
     </div>
   );
 }

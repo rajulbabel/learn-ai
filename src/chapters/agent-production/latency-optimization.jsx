@@ -52,9 +52,9 @@ export default function LatencyOptimization(ctx) {
             Where The Seconds Go
           </T>
           <T color={SOFT.pink} center size={16} style={{ marginTop: 10 }}>
-            Ticket T2 takes 3.4 seconds end-to-end. Break it down into spans and the story is
-            blunt: LLM calls are the bulk. Tool calls are nearly free. If you want T2 faster,
-            shorten LLM time first. Tool optimization is third or fourth on the list.
+            Ticket T2 takes 3.4 seconds end-to-end. Break it down into spans and the story is blunt: LLM calls are the
+            bulk. Tool calls are nearly free. If you want T2 faster, shorten LLM time first. Tool optimization is third
+            or fourth on the list.
           </T>
 
           <div style={{ ...tintedCard(C.pink), padding: 14, marginTop: 14 }}>
@@ -63,9 +63,9 @@ export default function LatencyOptimization(ctx) {
               style={{ width: "100%", maxWidth: wfViewW, display: "block", margin: "0 auto" }}
             >
               <desc>
-                Gantt-style latency waterfall for ticket T2 with 5 spans summing to 3400
-                milliseconds: LLM call 1 1200ms, lookup_customer tool 200ms, LLM call 2 1100ms,
-                reset_password tool 200ms, LLM call 3 700ms. LLM calls dominate the timeline.
+                Gantt-style latency waterfall for ticket T2 with 5 spans summing to 3400 milliseconds: LLM call 1
+                1200ms, lookup_customer tool 200ms, LLM call 2 1100ms, reset_password tool 200ms, LLM call 3 700ms. LLM
+                calls dominate the timeline.
               </desc>
               {(() => {
                 const innerW = wfViewW - 200;
@@ -81,7 +81,16 @@ export default function LatencyOptimization(ctx) {
                       <text x={170} y={y + 20} fill={SOFT[s.color]} fontSize="13" fontWeight="700" textAnchor="end">
                         {s.name}
                       </text>
-                      <rect x={x} y={y + 4} width={w} height={26} fill={`${accent}55`} stroke={accent} strokeWidth={1.4} rx={3} />
+                      <rect
+                        x={x}
+                        y={y + 4}
+                        width={w}
+                        height={26}
+                        fill={`${accent}55`}
+                        stroke={accent}
+                        strokeWidth={1.4}
+                        rx={3}
+                      />
                       <text x={x + w + 6} y={y + 22} fill={SOFT[s.color]} fontSize="12">
                         {s.ms}ms
                       </text>
@@ -99,8 +108,8 @@ export default function LatencyOptimization(ctx) {
           </div>
 
           <T color={SOFT.pink} center size={15} style={{ marginTop: 14 }}>
-            Three LLM calls = 3000ms of the 3400ms. Two tool calls = 400ms. The optimization
-            order is forced by the numbers: shorten LLM time first.
+            Three LLM calls = 3000ms of the 3400ms. Two tool calls = 400ms. The optimization order is forced by the
+            numbers: shorten LLM time first.
           </T>
         </Box>
       )}
@@ -111,28 +120,32 @@ export default function LatencyOptimization(ctx) {
             Show Progress Token By Token
           </T>
           <T color={SOFT.red} center size={16} style={{ marginTop: 10 }}>
-            Streaming doesn&apos;t make the answer arrive faster. It makes the user FEEL faster.
-            Without streaming, the user stares at a spinner for 1.5 seconds. With streaming,
-            the first token appears at 200ms and text scrolls in. Same total time. Different
-            perceived latency.
+            Streaming doesn&apos;t make the answer arrive faster. It makes the user FEEL faster. Without streaming, the
+            user stares at a spinner for 1.5 seconds. With streaming, the first token appears at 200ms and text scrolls
+            in. Same total time. Different perceived latency.
           </T>
 
           <div style={{ ...tintedCard(C.red), padding: 14, marginTop: 14 }}>
-            <svg
-              viewBox="0 0 640 200"
-              style={{ width: "100%", maxWidth: 640, display: "block", margin: "0 auto" }}
-            >
+            <svg viewBox="0 0 640 200" style={{ width: "100%", maxWidth: 640, display: "block", margin: "0 auto" }}>
               <desc>
-                Two side-by-side timelines comparing perceived latency. Without streaming, the
-                user sees nothing for 1500 milliseconds then the full response. With streaming,
-                the user sees the first token at 200 milliseconds with text scrolling in until
-                1500 milliseconds. Same total time, very different perception.
+                Two side-by-side timelines comparing perceived latency. Without streaming, the user sees nothing for
+                1500 milliseconds then the full response. With streaming, the user sees the first token at 200
+                milliseconds with text scrolling in until 1500 milliseconds. Same total time, very different perception.
               </desc>
               {/* Without streaming */}
               <text x={20} y={40} fill={SOFT.red} fontSize="14" fontWeight="700">
                 Without Streaming
               </text>
-              <rect x={20} y={50} width={500} height={28} fill={`${C.red}22`} stroke={`${C.red}55`} strokeWidth={1.2} rx={3} />
+              <rect
+                x={20}
+                y={50}
+                width={500}
+                height={28}
+                fill={`${C.red}22`}
+                stroke={`${C.red}55`}
+                strokeWidth={1.2}
+                rx={3}
+              />
               <rect x={500} y={50} width={20} height={28} fill={`${C.red}88`} stroke={C.red} strokeWidth={1.4} rx={3} />
               <text x={270} y={70} fill={SOFT.red} fontSize="12" textAnchor="middle">
                 User Sees Spinner For 1.5s, Then Full Answer
@@ -141,8 +154,26 @@ export default function LatencyOptimization(ctx) {
               <text x={20} y={120} fill={SOFT.green} fontSize="14" fontWeight="700">
                 With Streaming
               </text>
-              <rect x={20} y={130} width={66} height={28} fill={`${C.green}22`} stroke={`${C.green}55`} strokeWidth={1.2} rx={3} />
-              <rect x={86} y={130} width={434} height={28} fill={`${C.green}55`} stroke={C.green} strokeWidth={1.4} rx={3} />
+              <rect
+                x={20}
+                y={130}
+                width={66}
+                height={28}
+                fill={`${C.green}22`}
+                stroke={`${C.green}55`}
+                strokeWidth={1.2}
+                rx={3}
+              />
+              <rect
+                x={86}
+                y={130}
+                width={434}
+                height={28}
+                fill={`${C.green}55`}
+                stroke={C.green}
+                strokeWidth={1.4}
+                rx={3}
+              />
               <text x={300} y={150} fill={SOFT.green} fontSize="12" textAnchor="middle">
                 First Token At 200ms, Text Scrolls In Through 1.5s
               </text>
@@ -153,8 +184,8 @@ export default function LatencyOptimization(ctx) {
           </div>
 
           <T color={SOFT.red} center size={15} style={{ marginTop: 12 }}>
-            Cheap win, large UX impact. Always stream the final answer. Stream intermediate
-            tool-call narration too when the agent is multi-step.
+            Cheap win, large UX impact. Always stream the final answer. Stream intermediate tool-call narration too when
+            the agent is multi-step.
           </T>
         </Box>
       </Reveal>
@@ -165,32 +196,45 @@ export default function LatencyOptimization(ctx) {
             Run Independent Tools Concurrently
           </T>
           <T color={SOFT.orange} center size={16} style={{ marginTop: 10 }}>
-            Ticket T4 (cancel + refund) needs two lookups before deciding. Serial: 400ms total
-            tool latency. Parallel: 200ms total. Same outputs. Half the time. Section 13.10
-            covers the tool_choice setting that lets the model emit multiple tool calls in one
-            response.
+            Ticket T4 (cancel + refund) needs two lookups before deciding. Serial: 400ms total tool latency. Parallel:
+            200ms total. Same outputs. Half the time. Section 13.10 covers the tool_choice setting that lets the model
+            emit multiple tool calls in one response.
           </T>
 
           <div style={{ ...tintedCard(C.orange), padding: 14, marginTop: 14 }}>
-            <svg
-              viewBox="0 0 640 220"
-              style={{ width: "100%", maxWidth: 640, display: "block", margin: "0 auto" }}
-            >
+            <svg viewBox="0 0 640 220" style={{ width: "100%", maxWidth: 640, display: "block", margin: "0 auto" }}>
               <desc>
-                Serial vs parallel tool call timelines for ticket T4. Serial timeline: 200ms
-                lookup_customer followed by 200ms lookup_subscription, 400ms total. Parallel
-                timeline: both tool calls run concurrently in 200ms total. Half the time for
-                identical results.
+                Serial vs parallel tool call timelines for ticket T4. Serial timeline: 200ms lookup_customer followed by
+                200ms lookup_subscription, 400ms total. Parallel timeline: both tool calls run concurrently in 200ms
+                total. Half the time for identical results.
               </desc>
               {/* Serial */}
               <text x={20} y={40} fill={SOFT.orange} fontSize="14" fontWeight="700">
                 Serial (T4)
               </text>
-              <rect x={20} y={50} width={200} height={28} fill={`${C.orange}55`} stroke={C.orange} strokeWidth={1.4} rx={3} />
+              <rect
+                x={20}
+                y={50}
+                width={200}
+                height={28}
+                fill={`${C.orange}55`}
+                stroke={C.orange}
+                strokeWidth={1.4}
+                rx={3}
+              />
               <text x={120} y={70} fill={SOFT.orange} fontSize="12" textAnchor="middle">
                 lookup_customer (200ms)
               </text>
-              <rect x={220} y={50} width={200} height={28} fill={`${C.orange}55`} stroke={C.orange} strokeWidth={1.4} rx={3} />
+              <rect
+                x={220}
+                y={50}
+                width={200}
+                height={28}
+                fill={`${C.orange}55`}
+                stroke={C.orange}
+                strokeWidth={1.4}
+                rx={3}
+              />
               <text x={320} y={70} fill={SOFT.orange} fontSize="12" textAnchor="middle">
                 lookup_subscription (200ms)
               </text>
@@ -201,11 +245,29 @@ export default function LatencyOptimization(ctx) {
               <text x={20} y={130} fill={SOFT.green} fontSize="14" fontWeight="700">
                 Parallel (T4)
               </text>
-              <rect x={20} y={140} width={200} height={28} fill={`${C.green}55`} stroke={C.green} strokeWidth={1.4} rx={3} />
+              <rect
+                x={20}
+                y={140}
+                width={200}
+                height={28}
+                fill={`${C.green}55`}
+                stroke={C.green}
+                strokeWidth={1.4}
+                rx={3}
+              />
               <text x={120} y={160} fill={SOFT.green} fontSize="12" textAnchor="middle">
                 lookup_customer (200ms)
               </text>
-              <rect x={20} y={172} width={200} height={28} fill={`${C.green}55`} stroke={C.green} strokeWidth={1.4} rx={3} />
+              <rect
+                x={20}
+                y={172}
+                width={200}
+                height={28}
+                fill={`${C.green}55`}
+                stroke={C.green}
+                strokeWidth={1.4}
+                rx={3}
+              />
               <text x={120} y={192} fill={SOFT.green} fontSize="12" textAnchor="middle">
                 lookup_subscription (200ms)
               </text>
@@ -216,9 +278,8 @@ export default function LatencyOptimization(ctx) {
           </div>
 
           <T color={SOFT.orange} center size={15} style={{ marginTop: 14 }}>
-            Section 13.10 (Parallel Tools + Tool Choice) is the API-level mechanism. The latency
-            payoff: 200ms saved per applicable turn. In multi-tool tickets like T4 this adds up
-            fast.
+            Section 13.10 (Parallel Tools + Tool Choice) is the API-level mechanism. The latency payoff: 200ms saved per
+            applicable turn. In multi-tool tickets like T4 this adds up fast.
           </T>
         </Box>
       </Reveal>
@@ -229,35 +290,49 @@ export default function LatencyOptimization(ctx) {
             Run Likely Steps Before Confirming
           </T>
           <T color={SOFT.yellow} center size={16} style={{ marginTop: 10 }}>
-            Speculative execution starts the next probable tool call BEFORE the LLM finishes its
-            decision. While the model is still generating &quot;I&apos;ll look up your account...&quot;
-            the runtime speculatively kicks off lookup_customer for the customer already
-            referenced earlier. If the model ends up requesting it, the result is already in
-            cache. If not, the work is discarded.
+            Speculative execution starts the next probable tool call BEFORE the LLM finishes its decision. While the
+            model is still generating &quot;I&apos;ll look up your account...&quot; the runtime speculatively kicks off
+            lookup_customer for the customer already referenced earlier. If the model ends up requesting it, the result
+            is already in cache. If not, the work is discarded.
           </T>
 
           <div style={{ ...tintedCard(C.yellow), padding: 14, marginTop: 14 }}>
-            <svg
-              viewBox="0 0 640 220"
-              style={{ width: "100%", maxWidth: 640, display: "block", margin: "0 auto" }}
-            >
+            <svg viewBox="0 0 640 220" style={{ width: "100%", maxWidth: 640, display: "block", margin: "0 auto" }}>
               <desc>
-                Speculative execution timeline showing the LLM generating its decision in 1.2
-                seconds while a speculative lookup_customer tool call runs in parallel and
-                completes at 200 milliseconds. When the LLM finishes, the tool result is
-                already available with zero added wait.
+                Speculative execution timeline showing the LLM generating its decision in 1.2 seconds while a
+                speculative lookup_customer tool call runs in parallel and completes at 200 milliseconds. When the LLM
+                finishes, the tool result is already available with zero added wait.
               </desc>
               <text x={20} y={40} fill={SOFT.yellow} fontSize="14" fontWeight="700">
                 LLM Generating Decision
               </text>
-              <rect x={20} y={50} width={520} height={28} fill={`${C.yellow}55`} stroke={C.yellow} strokeWidth={1.4} rx={3} />
+              <rect
+                x={20}
+                y={50}
+                width={520}
+                height={28}
+                fill={`${C.yellow}55`}
+                stroke={C.yellow}
+                strokeWidth={1.4}
+                rx={3}
+              />
               <text x={280} y={70} fill={SOFT.yellow} fontSize="12" textAnchor="middle">
                 &quot;I&apos;ll look up your account...&quot; (1200ms)
               </text>
               <text x={20} y={120} fill={SOFT.purple} fontSize="14" fontWeight="700">
                 Speculative Tool Call
               </text>
-              <rect x={20} y={130} width={87} height={28} fill={`${C.purple}55`} stroke={C.purple} strokeWidth={1.4} rx={3} strokeDasharray="4 3" />
+              <rect
+                x={20}
+                y={130}
+                width={87}
+                height={28}
+                fill={`${C.purple}55`}
+                stroke={C.purple}
+                strokeWidth={1.4}
+                rx={3}
+                strokeDasharray="4 3"
+              />
               <text x={63} y={150} fill={SOFT.purple} fontSize="11" textAnchor="middle">
                 lookup_customer (200ms)
               </text>
@@ -271,9 +346,9 @@ export default function LatencyOptimization(ctx) {
           </div>
 
           <T color={SOFT.yellow} center size={15} style={{ marginTop: 14 }}>
-            The tradeoff is real: speculative calls pay for sometimes-wasted work in exchange
-            for real-time response. Use only on tool calls where the wasted-work cost is small
-            (read-only lookups). Never speculate on mutation tools.
+            The tradeoff is real: speculative calls pay for sometimes-wasted work in exchange for real-time response.
+            Use only on tool calls where the wasted-work cost is small (read-only lookups). Never speculate on mutation
+            tools.
           </T>
         </Box>
       </Reveal>
@@ -284,9 +359,8 @@ export default function LatencyOptimization(ctx) {
             Cache What Doesn&apos;t Change
           </T>
           <T color={SOFT.purple} center size={16} style={{ marginTop: 10 }}>
-            Result caching is the last latency lever. Three categories of result are stable
-            enough to cache safely with conservative TTLs. Pair every cache with an invalidate
-            hook on the matching mutation event.
+            Result caching is the last latency lever. Three categories of result are stable enough to cache safely with
+            conservative TTLs. Pair every cache with an invalidate hook on the matching mutation event.
           </T>
 
           <div
@@ -318,16 +392,14 @@ export default function LatencyOptimization(ctx) {
           </div>
 
           <T color={SOFT.purple} center size={15} style={{ marginTop: 14 }}>
-            Cache invalidation is the hard part. Pick conservative TTLs (5 minutes for profile,
-            1 hour for KB) and invalidate on mutation events (profile-updated, kb-doc-edited).
-            Better to miss the cache than to serve a stale answer.
+            Cache invalidation is the hard part. Pick conservative TTLs (5 minutes for profile, 1 hour for KB) and
+            invalidate on mutation events (profile-updated, kb-doc-edited). Better to miss the cache than to serve a
+            stale answer.
           </T>
         </Box>
       </Reveal>
 
-      {sub < 4 && (
-        <SubBtn onClick={onContinue} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />
-      )}
+      {sub < 4 && <SubBtn onClick={onContinue} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
     </div>
   );
 }

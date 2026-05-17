@@ -16,30 +16,17 @@ const PROFILE_GROWTH = [
   {
     day: "Day 1 (Signup)",
     color: "amber",
-    fields: [
-      "customer_id: c-9924",
-      "tier: Pro",
-      "signed_up: 2024-08",
-      "primary_email: alice@example.com",
-    ],
+    fields: ["customer_id: c-9924", "tier: Pro", "signed_up: 2024-08", "primary_email: alice@example.com"],
   },
   {
     day: "Day 30",
     color: "yellow",
-    fields: [
-      "(All Day-1 Fields)",
-      "+ preferred_contact: email",
-      'Learned From: "Please Email Me At..."',
-    ],
+    fields: ["(All Day-1 Fields)", "+ preferred_contact: email", 'Learned From: "Please Email Me At..."'],
   },
   {
     day: "Day 90",
     color: "orange",
-    fields: [
-      "(All Day-30 Fields)",
-      "+ preferences.skip_onboarding_emails: true",
-      'Learned From: User Opt-Out Click.',
-    ],
+    fields: ["(All Day-30 Fields)", "+ preferences.skip_onboarding_emails: true", "Learned From: User Opt-Out Click."],
   },
 ];
 
@@ -80,8 +67,8 @@ export default function SemanticMemory(ctx) {
             Facts I Know About You
           </T>
           <T color={SOFT.amber} center size={16} style={{ marginTop: 10 }}>
-            Semantic memory holds stable facts about a customer. Different from episodic memory:
-            an episode is "this happened on this date"; a fact is "this is currently true".
+            Semantic memory holds stable facts about a customer. Different from episodic memory: an episode is "this
+            happened on this date"; a fact is "this is currently true".
           </T>
 
           <div
@@ -114,9 +101,8 @@ export default function SemanticMemory(ctx) {
           </div>
 
           <T color={SOFT.amber} center size={15} style={{ marginTop: 14 }}>
-            Same person, different memory layer. Episodic answers "what happened?", semantic
-            answers "what is true?". Both are needed; they live in different stores with different
-            update rules.
+            Same person, different memory layer. Episodic answers "what happened?", semantic answers "what is true?".
+            Both are needed; they live in different stores with different update rules.
           </T>
         </Box>
       )}
@@ -127,8 +113,8 @@ export default function SemanticMemory(ctx) {
             The Customer Profile Card
           </T>
           <T color={SOFT.yellow} center size={16} style={{ marginTop: 10 }}>
-            Each customer has a profile card. Stable fields, queried by exact key, updated on
-            confirmed observations. Here is Alice&apos;s.
+            Each customer has a profile card. Stable fields, queried by exact key, updated on confirmed observations.
+            Here is Alice&apos;s.
           </T>
 
           <div style={{ ...tintedCard(C.yellow), padding: 14, marginTop: 14 }}>
@@ -156,9 +142,8 @@ export default function SemanticMemory(ctx) {
           </div>
 
           <T color={SOFT.yellow} center size={15} style={{ marginTop: 12 }}>
-            `customer_id` is the join key. `tier`, `preferred_contact`, `billing_currency` are
-            typed fields the agent can query directly. `preferences` is a nested bag for
-            arbitrarily-shaped opt-ins.
+            `customer_id` is the join key. `tier`, `preferred_contact`, `billing_currency` are typed fields the agent
+            can query directly. `preferences` is a nested bag for arbitrarily-shaped opt-ins.
           </T>
         </Box>
       </Reveal>
@@ -169,8 +154,8 @@ export default function SemanticMemory(ctx) {
             Key-Value Or Vector
           </T>
           <T color={SOFT.orange} center size={16} style={{ marginTop: 10 }}>
-            Two storage substrates serve different fact shapes. Most production agents use BOTH:
-            structured for the spine, vector for the long-tail freetext.
+            Two storage substrates serve different fact shapes. Most production agents use BOTH: structured for the
+            spine, vector for the long-tail freetext.
           </T>
 
           <div
@@ -209,8 +194,8 @@ export default function SemanticMemory(ctx) {
           </div>
 
           <T color={SOFT.orange} center size={15} style={{ marginTop: 14 }}>
-            The spine (typed profile) is small and exact. The long-tail (free-form preferences and
-            constraints) is large and fuzzy. Use the right tool for each shape.
+            The spine (typed profile) is small and exact. The long-tail (free-form preferences and constraints) is large
+            and fuzzy. Use the right tool for each shape.
           </T>
         </Box>
       </Reveal>
@@ -221,8 +206,8 @@ export default function SemanticMemory(ctx) {
             How The Profile Fills Up
           </T>
           <T color={SOFT.red} center size={16} style={{ marginTop: 10 }}>
-            Semantic memory grows over time. Alice&apos;s profile at signup has 4 fields. By day 30
-            it has 5. By day 90 it has nested preferences. Growth comes from confirmed observations.
+            Semantic memory grows over time. Alice&apos;s profile at signup has 4 fields. By day 30 it has 5. By day 90
+            it has nested preferences. Growth comes from confirmed observations.
           </T>
 
           <div
@@ -259,8 +244,8 @@ export default function SemanticMemory(ctx) {
           </div>
 
           <T color={SOFT.red} center size={15} style={{ marginTop: 12 }}>
-            Profile fills only on CONFIRMED observations. A guess from one ambiguous message does
-            not get written. A repeated preference observed across sessions does.
+            Profile fills only on CONFIRMED observations. A guess from one ambiguous message does not get written. A
+            repeated preference observed across sessions does.
           </T>
         </Box>
       </Reveal>
@@ -271,8 +256,8 @@ export default function SemanticMemory(ctx) {
             What Counts As A Fact?
           </T>
           <T color={SOFT.purple} center size={16} style={{ marginTop: 10 }}>
-            The rule of thumb: if it would still be true in 6 months, write it to semantic memory.
-            Otherwise leave it in the working scratchpad or skip it entirely.
+            The rule of thumb: if it would still be true in 6 months, write it to semantic memory. Otherwise leave it in
+            the working scratchpad or skip it entirely.
           </T>
 
           <div
@@ -305,15 +290,13 @@ export default function SemanticMemory(ctx) {
           </div>
 
           <T color={SOFT.purple} center size={15} style={{ marginTop: 14 }}>
-            6-Months Test: would knowing this still help six months from now? If yes, write it. If
-            no, it belongs in working memory or the chat history and should expire naturally.
+            6-Months Test: would knowing this still help six months from now? If yes, write it. If no, it belongs in
+            working memory or the chat history and should expire naturally.
           </T>
         </Box>
       </Reveal>
 
-      {sub < 4 && (
-        <SubBtn onClick={onContinue} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />
-      )}
+      {sub < 4 && <SubBtn onClick={onContinue} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
     </div>
   );
 }

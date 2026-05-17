@@ -88,4 +88,13 @@ describe("EncoderDecoderInference spacing fixes", () => {
     expect(text).toContain("KV Cache: Memory vs Speed Tradeoff");
     expect(text).toContain("What Happens Next");
   });
+
+  it("re-rendering at a new sub clears prior svg children before rebuilding", () => {
+    const { rerender, container } = render(EncoderDecoderInference(makeCtx({ sub: 0 })));
+    const initialChildren = container.querySelector("svg").childElementCount;
+    expect(initialChildren).toBeGreaterThan(0);
+    rerender(EncoderDecoderInference(makeCtx({ sub: 3 })));
+    const afterChildren = container.querySelector("svg").childElementCount;
+    expect(afterChildren).toBeGreaterThan(0);
+  });
 });

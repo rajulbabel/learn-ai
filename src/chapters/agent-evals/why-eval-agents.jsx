@@ -8,14 +8,12 @@ const WHY_AGENTS_HARDER = [
   {
     name: "Non-Determinism",
     color: "red",
-    detail:
-      "Same Ticket Can Take Different Traces On Different Runs. You Cannot Compare Outputs Directly.",
+    detail: "Same Ticket Can Take Different Traces On Different Runs. You Cannot Compare Outputs Directly.",
   },
   {
     name: "Multi-Step",
     color: "orange",
-    detail:
-      "Eight Tool Calls In A Row Means Eight Places To Fail. The Final Answer Hides Where The Trace Went Wrong.",
+    detail: "Eight Tool Calls In A Row Means Eight Places To Fail. The Final Answer Hides Where The Trace Went Wrong.",
   },
   {
     name: "Silent Failure",
@@ -29,23 +27,19 @@ const WHY_AGENTS_HARDER = [
 const PRODUCTION_INCIDENTS = [
   {
     title: "Unauthorized Refunds",
-    detail:
-      "A Refund Agent Issued $50K In Unauthorized Refunds Over A Weekend Before Anyone Noticed.",
+    detail: "A Refund Agent Issued $50K In Unauthorized Refunds Over A Weekend Before Anyone Noticed.",
   },
   {
     title: "Hallucinated Policy",
-    detail:
-      "A Support Agent Confidently Quoted A Non-Existent Refund Policy For 3 Weeks Of Production Traffic.",
+    detail: "A Support Agent Confidently Quoted A Non-Existent Refund Policy For 3 Weeks Of Production Traffic.",
   },
   {
     title: "Drift To Chitchat",
-    detail:
-      "A Multi-Agent System Drifted From Billing Questions To Open-Ended Chitchat Over 2 Days.",
+    detail: "A Multi-Agent System Drifted From Billing Questions To Open-Ended Chitchat Over 2 Days.",
   },
   {
     title: "Cross-Tenant Data Leak",
-    detail:
-      "A Tool Security Regression Let One Customer's Profile Leak Into Another's Active Session.",
+    detail: "A Tool Security Regression Let One Customer's Profile Leak Into Another's Active Session.",
   },
 ];
 
@@ -119,8 +113,8 @@ export default function WhyEvalAgents(ctx) {
             Three Reasons Agents Are Harder To Eval
           </T>
           <T color={SOFT.red} center size={16} style={{ marginTop: 10 }}>
-            A pure LLM eval grades input vs output - one shot, one score. Agents are different on
-            three structural axes that make naive eval miss most production failures.
+            A pure LLM eval grades input vs output - one shot, one score. Agents are different on three structural axes
+            that make naive eval miss most production failures.
           </T>
 
           <div
@@ -149,8 +143,8 @@ export default function WhyEvalAgents(ctx) {
           </div>
 
           <T color={SOFT.red} center size={15} style={{ marginTop: 14 }}>
-            Every Section 13 production failure mode (13.35) maps to at least one of these axes.
-            Eval design has to address all three or production incidents slip through.
+            Every Section 13 production failure mode (13.35) maps to at least one of these axes. Eval design has to
+            address all three or production incidents slip through.
           </T>
         </Box>
       )}
@@ -161,8 +155,8 @@ export default function WhyEvalAgents(ctx) {
             What Breaks When You Don&apos;t Eval
           </T>
           <T color={SOFT.orange} center size={16} style={{ marginTop: 10 }}>
-            Real production incidents from teams that shipped agents without an eval pipeline.
-            Every one of these went unnoticed for days or weeks.
+            Real production incidents from teams that shipped agents without an eval pipeline. Every one of these went
+            unnoticed for days or weeks.
           </T>
 
           <div
@@ -187,9 +181,8 @@ export default function WhyEvalAgents(ctx) {
           </div>
 
           <T color={SOFT.orange} center size={15} style={{ marginTop: 14 }}>
-            Each incident shows the same shape: silent failure + production traffic + late
-            detection. Eval is the only tool that converts &quot;late detection&quot; into
-            &quot;same-day&quot;.
+            Each incident shows the same shape: silent failure + production traffic + late detection. Eval is the only
+            tool that converts &quot;late detection&quot; into &quot;same-day&quot;.
           </T>
         </Box>
       </Reveal>
@@ -200,9 +193,8 @@ export default function WhyEvalAgents(ctx) {
             Offline (Before Ship) vs Online (After Ship)
           </T>
           <T color={SOFT.yellow} center size={16} style={{ marginTop: 10 }}>
-            Two complementary loops. Offline grades a frozen golden set before every deploy. Online
-            samples real production traffic continuously. Production agents need BOTH; either
-            alone leaves a gap.
+            Two complementary loops. Offline grades a frozen golden set before every deploy. Online samples real
+            production traffic continuously. Production agents need BOTH; either alone leaves a gap.
           </T>
 
           <div style={{ ...tintedCard(C.yellow), padding: 14, marginTop: 14 }}>
@@ -215,12 +207,8 @@ export default function WhyEvalAgents(ctx) {
               }}
             >
               <div style={{ padding: "8px 10px", fontWeight: 700, color: SOFT.yellow }}>Aspect</div>
-              <div style={{ padding: "8px 10px", fontWeight: 700, color: SOFT.cyan }}>
-                Offline Eval
-              </div>
-              <div style={{ padding: "8px 10px", fontWeight: 700, color: SOFT.purple }}>
-                Online Eval
-              </div>
+              <div style={{ padding: "8px 10px", fontWeight: 700, color: SOFT.cyan }}>Offline Eval</div>
+              <div style={{ padding: "8px 10px", fontWeight: 700, color: SOFT.purple }}>Online Eval</div>
               {OFFLINE_VS_ONLINE.map((row) => (
                 <Fragment key={row.aspect}>
                   <div
@@ -257,8 +245,8 @@ export default function WhyEvalAgents(ctx) {
           </div>
 
           <T color={SOFT.yellow} center size={15} style={{ marginTop: 12 }}>
-            Offline tells you if known cases regressed. Online tells you if the actual production
-            distribution shifted. Skip one and you ship blind on that dimension.
+            Offline tells you if known cases regressed. Online tells you if the actual production distribution shifted.
+            Skip one and you ship blind on that dimension.
           </T>
         </Box>
       </Reveal>
@@ -269,8 +257,8 @@ export default function WhyEvalAgents(ctx) {
             Some Failure Modes Need Humans
           </T>
           <T color={SOFT.amber} center size={16} style={{ marginTop: 10 }}>
-            Automated judges are cheap but blind on three categories. Plan budget for a small but
-            permanent human review loop on every production agent.
+            Automated judges are cheap but blind on three categories. Plan budget for a small but permanent human review
+            loop on every production agent.
           </T>
 
           <div
@@ -299,8 +287,8 @@ export default function WhyEvalAgents(ctx) {
           </div>
 
           <T color={SOFT.amber} center size={15} style={{ marginTop: 14 }}>
-            Rule of thumb: 20-50 human-reviewed traces per week per agent. Cheap relative to a
-            single production incident, and the only signal the judge cannot produce.
+            Rule of thumb: 20-50 human-reviewed traces per week per agent. Cheap relative to a single production
+            incident, and the only signal the judge cannot produce.
           </T>
         </Box>
       </Reveal>
@@ -311,21 +299,16 @@ export default function WhyEvalAgents(ctx) {
             What A Full Pipeline Looks Like
           </T>
           <T color={SOFT.purple} center size={16} style={{ marginTop: 10 }}>
-            Five stages, each handled by a later chapter in this act. Stage 1 builds the eval set.
-            Stages 2-3 grade traces and answers. Stage 4 watches production. Stage 5 acts on the
-            signal.
+            Five stages, each handled by a later chapter in this act. Stage 1 builds the eval set. Stages 2-3 grade
+            traces and answers. Stage 4 watches production. Stage 5 acts on the signal.
           </T>
 
           <div style={{ ...tintedCard(C.purple), padding: 14, marginTop: 14 }}>
-            <svg
-              viewBox="0 0 720 240"
-              style={{ width: "100%", maxWidth: 720, display: "block", margin: "0 auto" }}
-            >
+            <svg viewBox="0 0 720 240" style={{ width: "100%", maxWidth: 720, display: "block", margin: "0 auto" }}>
               <desc>
-                Five-stage production eval pipeline with eval set feeding per-trace step grading
-                and end-to-end LLM-as-Judge in parallel, then online sampling and a drift signal
-                that triggers alerting and rollback. Each stage labeled with the Section 13
-                chapter that covers it.
+                Five-stage production eval pipeline with eval set feeding per-trace step grading and end-to-end
+                LLM-as-Judge in parallel, then online sampling and a drift signal that triggers alerting and rollback.
+                Each stage labeled with the Section 13 chapter that covers it.
               </desc>
               {PIPELINE_STAGES.map((s, i) => {
                 const w = 128;
@@ -388,14 +371,7 @@ export default function WhyEvalAgents(ctx) {
                       stroke={C.cyan}
                       strokeWidth={1}
                     />
-                    <text
-                      x={x + w / 2}
-                      y={y + 104}
-                      fill={SOFT.cyan}
-                      fontSize="11"
-                      fontWeight="700"
-                      textAnchor="middle"
-                    >
+                    <text x={x + w / 2} y={y + 104} fill={SOFT.cyan} fontSize="11" fontWeight="700" textAnchor="middle">
                       Chapter {s.ref}
                     </text>
                     {i < PIPELINE_STAGES.length - 1 && (
@@ -423,29 +399,20 @@ export default function WhyEvalAgents(ctx) {
                   <path d="M 0 0 L 10 5 L 0 10 z" fill={SOFT.purple} />
                 </marker>
               </defs>
-              <text
-                x={360}
-                y={210}
-                fill={SOFT.cyan}
-                fontSize="13"
-                fontWeight="700"
-                textAnchor="middle"
-              >
+              <text x={360} y={210} fill={SOFT.cyan} fontSize="13" fontWeight="700" textAnchor="middle">
                 Stage 2 = 13.40 - Stage 3 = 13.39 - Stage 1 + Stage 4 = 13.41
               </text>
             </svg>
           </div>
 
           <T color={SOFT.purple} center size={15} style={{ marginTop: 12 }}>
-            The pipeline costs more than a single judge call, but it is the only structure that
-            catches the three failure modes from sub=0 before they reach a customer.
+            The pipeline costs more than a single judge call, but it is the only structure that catches the three
+            failure modes from sub=0 before they reach a customer.
           </T>
         </Box>
       </Reveal>
 
-      {sub < 4 && (
-        <SubBtn onClick={onContinue} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />
-      )}
+      {sub < 4 && <SubBtn onClick={onContinue} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
     </div>
   );
 }

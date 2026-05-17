@@ -131,4 +131,13 @@ describe("EncoderDecoderTraining spacing fixes", () => {
     expect(text).toContain("Decoder:");
     expect(text).toContain("Cross-Attention:");
   });
+
+  it("re-rendering at a new sub clears prior svg children before rebuilding", () => {
+    const { rerender, container } = render(EncoderDecoderTraining(makeCtx({ sub: 0 })));
+    const initialChildren = container.querySelector("svg").childElementCount;
+    expect(initialChildren).toBeGreaterThan(0);
+    rerender(EncoderDecoderTraining(makeCtx({ sub: 3 })));
+    const afterChildren = container.querySelector("svg").childElementCount;
+    expect(afterChildren).toBeGreaterThan(0);
+  });
 });

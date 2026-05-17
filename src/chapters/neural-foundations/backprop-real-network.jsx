@@ -1022,6 +1022,6 @@ export default function BackpropRealNetwork(ctx) {
       )}
     </div>
   );
-};
+}
 
 // ═══════ 1.14 Gradients in Action - The Full Training Loop ═══════

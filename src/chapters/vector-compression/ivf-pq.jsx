@@ -200,14 +200,7 @@ export default function IVFPQ(ctx) {
                     strokeWidth={2}
                     transform={`rotate(45 ${c.x} ${c.y})`}
                   />
-                  <text
-                    x={c.x}
-                    y={c.y + (c.labelDy ?? -22)}
-                    fill={c.color}
-                    fontSize={13}
-                    fontWeight="bold"
-                    textAnchor="middle"
-                  >
+                  <text x={c.x} y={c.y + c.labelDy} fill={c.color} fontSize={13} fontWeight="bold" textAnchor="middle">
                     {c.label}
                   </text>
                 </g>

@@ -40,7 +40,8 @@ const PARALLEL_DECISION_CARDS = [
     color: C.orange,
     soft: SOFT.orange,
     pair: ["lookup_customer(email)", "process_refund(customer_id, ...)"],
-    reason: "process_refund needs customer_id from lookup_customer's result. The second call cannot be formed until the first returns.",
+    reason:
+      "process_refund needs customer_id from lookup_customer's result. The second call cannot be formed until the first returns.",
     rule: "Two assistant turns are required. Turn 1 = lookup. Turn 2 = refund (after the tool_result is appended).",
   },
 ];
@@ -48,21 +49,21 @@ const PARALLEL_DECISION_CARDS = [
 // sub=2 - tool_choice auto scenarios.
 const TOOL_CHOICE_AUTO_SCENARIOS = [
   {
-    user: "Ticket T5: \"Pro vs Enterprise - what's different?\"",
-    pick: "search_kb(query=\"Pro vs Enterprise\")",
+    user: 'Ticket T5: "Pro vs Enterprise - what\'s different?"',
+    pick: 'search_kb(query="Pro vs Enterprise")',
     note: "Knowledge question. Model picks the docs tool.",
     color: C.blue,
     soft: SOFT.blue,
   },
   {
-    user: "User: \"Hey, good morning!\"",
+    user: 'User: "Hey, good morning!"',
     pick: "No tool. Plain assistant reply.",
     note: "Chitchat. Calling a tool would be wasted latency.",
     color: C.indigo,
     soft: SOFT.indigo,
   },
   {
-    user: "Ticket T2: \"Reset my password and email also changed.\"",
+    user: 'Ticket T2: "Reset my password and email also changed."',
     pick: "lookup_customer AND lookup_subscription",
     note: "Two tool_use blocks in one turn. Auto still picks - and it can pick more than one.",
     color: C.teal,
@@ -78,15 +79,15 @@ const TOOL_CHOICE_MODES = [
     soft: SOFT.cyan,
     behavior: "Model decides whether to call a tool, and which one(s).",
     whenToUse: "Default. Use for most flows - chitchat, mixed Q&A, anything where the next step depends on the input.",
-    config: "tool_choice: \"auto\"",
+    config: 'tool_choice: "auto"',
   },
   {
     mode: "required",
     color: C.yellow,
     soft: SOFT.yellow,
     behavior: "Model MUST call at least one tool. Plain-text replies are blocked.",
-    whenToUse: "When intent is already routed (e.g., user clicked \"Run a search\"). Forces the tool path.",
-    config: "tool_choice: \"required\"",
+    whenToUse: 'When intent is already routed (e.g., user clicked "Run a search"). Forces the tool path.',
+    config: 'tool_choice: "required"',
   },
   {
     mode: "none",
@@ -94,15 +95,16 @@ const TOOL_CHOICE_MODES = [
     soft: SOFT.red,
     behavior: "Model MUST NOT call any tool. It can only emit plain text.",
     whenToUse: "Final summarization, drafting a reply from already-gathered context, or pure chitchat.",
-    config: "tool_choice: \"none\"",
+    config: 'tool_choice: "none"',
   },
   {
     mode: "specific",
     color: C.purple,
     soft: SOFT.purple,
     behavior: "Force a specific tool. Model can ONLY call this one named tool.",
-    whenToUse: "Deterministic routing - your classifier already decided which API to call. The model fills in the arguments.",
-    config: "tool_choice: { type: \"tool\", name: \"search_kb\" }",
+    whenToUse:
+      "Deterministic routing - your classifier already decided which API to call. The model fills in the arguments.",
+    config: 'tool_choice: { type: "tool", name: "search_kb" }',
   },
 ];
 
@@ -158,7 +160,7 @@ const T2_TRACE_ROWS = [
     actor: "User",
     color: C.purple,
     soft: SOFT.purple,
-    msg: "\"Reset my password but my email also changed to new@example.com\"",
+    msg: '"Reset my password but my email also changed to new@example.com"',
     note: "Two intents in one ticket: change email AND reset password.",
   },
   {
@@ -184,7 +186,7 @@ const T2_TRACE_ROWS = [
     actor: "Model (turn 2)",
     color: C.cyan,
     soft: SOFT.cyan,
-    msg: "tool_use { name: change_email, input: { customer_id: \"c-9924\", new_email: \"new@example.com\" } }",
+    msg: 'tool_use { name: change_email, input: { customer_id: "c-9924", new_email: "new@example.com" } }',
     note: "change_email must complete before reset_password (the reset link goes to the NEW email).",
   },
   {
@@ -192,7 +194,7 @@ const T2_TRACE_ROWS = [
     actor: "Runtime",
     color: C.orange,
     soft: SOFT.orange,
-    msg: "tool_result { content: \"Email updated.\" }",
+    msg: 'tool_result { content: "Email updated." }',
     note: "Side effect: customer record mutated. Now reset_password can use the new email.",
   },
   {
@@ -200,7 +202,7 @@ const T2_TRACE_ROWS = [
     actor: "Model (turn 3)",
     color: C.cyan,
     soft: SOFT.cyan,
-    msg: "tool_use { name: reset_password, input: { customer_id: \"c-9924\" } }",
+    msg: 'tool_use { name: reset_password, input: { customer_id: "c-9924" } }',
     note: "Reset link is sent to new@example.com because the prior turn already updated the record.",
   },
   {
@@ -208,7 +210,7 @@ const T2_TRACE_ROWS = [
     actor: "Runtime",
     color: C.orange,
     soft: SOFT.orange,
-    msg: "tool_result { content: \"Reset email sent.\" }",
+    msg: 'tool_result { content: "Reset email sent." }',
     note: "Single chokepoint - the runtime is where every real-world effect actually happens.",
   },
   {
@@ -216,7 +218,7 @@ const T2_TRACE_ROWS = [
     actor: "Model (turn 4)",
     color: C.green,
     soft: SOFT.green,
-    msg: "\"Updated your email to new@example.com and sent a reset link there.\"",
+    msg: '"Updated your email to new@example.com and sent a reset link there."',
     note: "Final assistant message. No more tool_use.",
   },
 ];
@@ -237,9 +239,9 @@ export default function ParallelToolsAndChoice(ctx) {
             Two Lookups, Two Strategies
           </T>
           <T color={SOFT.cyan} center size={16} style={{ marginTop: 10 }}>
-            Ticket T2 needs two facts before it can act: who is this customer, and what is their
-            subscription. The naive runtime asks one tool, waits, asks the next, waits again. A parallel
-            runtime emits both tool_use blocks in the same assistant turn and runs them at the same time.
+            Ticket T2 needs two facts before it can act: who is this customer, and what is their subscription. The naive
+            runtime asks one tool, waits, asks the next, waits again. A parallel runtime emits both tool_use blocks in
+            the same assistant turn and runs them at the same time.
           </T>
 
           <div
@@ -278,9 +280,9 @@ export default function ParallelToolsAndChoice(ctx) {
                 style={{ width: "100%", maxWidth: 320, display: "block", margin: "10px auto 0" }}
               >
                 <desc>
-                  Serial timeline for ticket T2: an LLM call followed by lookup_customer (200ms), then a
-                  second LLM call followed by lookup_subscription (200ms). Total 400ms of tool work plus 2
-                  LLM calls. Bars are stacked left to right with time labels.
+                  Serial timeline for ticket T2: an LLM call followed by lookup_customer (200ms), then a second LLM call
+                  followed by lookup_subscription (200ms). Total 400ms of tool work plus 2 LLM calls. Bars are stacked
+                  left to right with time labels.
                 </desc>
                 {/* Row 1: LLM call 1 */}
                 <rect x="10" y="20" width="80" height="22" rx="4" fill={`${C.cyan}30`} stroke={C.cyan} />
@@ -330,9 +332,9 @@ export default function ParallelToolsAndChoice(ctx) {
                 style={{ width: "100%", maxWidth: 320, display: "block", margin: "10px auto 0" }}
               >
                 <desc>
-                  Parallel timeline for ticket T2: one LLM call followed by lookup_customer and
-                  lookup_subscription running concurrently (both 200ms). Total 200ms of tool work plus 1
-                  LLM call. The two tool bars are stacked vertically to show they share the same time slot.
+                  Parallel timeline for ticket T2: one LLM call followed by lookup_customer and lookup_subscription
+                  running concurrently (both 200ms). Total 200ms of tool work plus 1 LLM call. The two tool bars are
+                  stacked vertically to show they share the same time slot.
                 </desc>
                 {/* Row 1: LLM call 1 */}
                 <rect x="10" y="20" width="80" height="22" rx="4" fill={`${C.cyan}30`} stroke={C.cyan} />
@@ -348,15 +350,7 @@ export default function ParallelToolsAndChoice(ctx) {
                   lookup_customer
                 </text>
                 {/* Row 1: lookup_subscription (parallel, bottom) */}
-                <rect
-                  x="92"
-                  y="34"
-                  width="40"
-                  height="22"
-                  rx="4"
-                  fill={`${C.green}30`}
-                  stroke={C.green}
-                />
+                <rect x="92" y="34" width="40" height="22" rx="4" fill={`${C.green}30`} stroke={C.green} />
                 <text x="112" y="48" fill={SOFT.green} fontSize="10" textAnchor="middle">
                   200ms
                 </text>
@@ -464,8 +458,8 @@ export default function ParallelToolsAndChoice(ctx) {
           </div>
 
           <T color={SOFT.cyan} center size={15} style={{ marginTop: 12 }}>
-            Parallel only works when the two calls do not read each other&apos;s output. For independent
-            lookups, parallel halves the tool latency and cuts an entire LLM turn.
+            Parallel only works when the two calls do not read each other&apos;s output. For independent lookups,
+            parallel halves the tool latency and cuts an entire LLM turn.
           </T>
         </Box>
       )}
@@ -476,9 +470,8 @@ export default function ParallelToolsAndChoice(ctx) {
             Independent? Parallel. Dependent? Serial.
           </T>
           <T color={SOFT.teal} center size={16} style={{ marginTop: 10 }}>
-            The rule is simple: if call B needs an argument from call A&apos;s result, you cannot
-            parallelize. The model has to wait for A before it can even form B. If neither call reads
-            the other, fan out.
+            The rule is simple: if call B needs an argument from call A&apos;s result, you cannot parallelize. The model
+            has to wait for A before it can even form B. If neither call reads the other, fan out.
           </T>
 
           <div
@@ -570,9 +563,8 @@ export default function ParallelToolsAndChoice(ctx) {
             Parallelize when calls don&apos;t read each other&apos;s outputs.
           </div>
           <T color={SOFT.teal} center size={15} style={{ marginTop: 12 }}>
-            process_refund needs customer_id - so lookup_customer must run first, in its own turn. But
-            lookup_customer and lookup_subscription both take the same email and return independent
-            records, so they can share one turn.
+            process_refund needs customer_id - so lookup_customer must run first, in its own turn. But lookup_customer
+            and lookup_subscription both take the same email and return independent records, so they can share one turn.
           </T>
         </Box>
       </Reveal>
@@ -583,9 +575,9 @@ export default function ParallelToolsAndChoice(ctx) {
             Tool Choice = Auto (Default)
           </T>
           <T color={SOFT.blue} center size={16} style={{ marginTop: 10 }}>
-            By default, the model decides whether to call a tool, which tool, and how many tools. You
-            set tool_choice to &quot;auto&quot; (or leave it unset) and let the model route. For a
-            customer-support agent, this covers most flows.
+            By default, the model decides whether to call a tool, which tool, and how many tools. You set tool_choice to
+            &quot;auto&quot; (or leave it unset) and let the model route. For a customer-support agent, this covers most
+            flows.
           </T>
 
           <div
@@ -683,9 +675,8 @@ export default function ParallelToolsAndChoice(ctx) {
           </div>
 
           <T color={SOFT.blue} center size={15} style={{ marginTop: 12 }}>
-            Auto is the default for a reason - it covers chitchat (no tool), single lookups, and parallel
-            lookups all from one config. You only switch modes when you need to control the model&apos;s
-            hand.
+            Auto is the default for a reason - it covers chitchat (no tool), single lookups, and parallel lookups all
+            from one config. You only switch modes when you need to control the model&apos;s hand.
           </T>
         </Box>
       </Reveal>
@@ -696,9 +687,8 @@ export default function ParallelToolsAndChoice(ctx) {
             Four Modes Of Tool Choice
           </T>
           <T color={SOFT.green} center size={16} style={{ marginTop: 10 }}>
-            tool_choice is a single field with four shapes. Each shape locks down the model&apos;s
-            behavior a different amount. The right choice depends on how much control you already have
-            from the calling code.
+            tool_choice is a single field with four shapes. Each shape locks down the model&apos;s behavior a different
+            amount. The right choice depends on how much control you already have from the calling code.
           </T>
 
           <div
@@ -783,8 +773,8 @@ export default function ParallelToolsAndChoice(ctx) {
             auto = decide. required = must call something. none = must not call. specific = force this tool.
           </div>
           <T color={SOFT.green} center size={15} style={{ marginTop: 12 }}>
-            The specific shape - {`{type: "tool", name: "X"}`} - is how you wire a deterministic router
-            into the agent. Your classifier picks the API, and the model just fills the arguments.
+            The specific shape - {`{type: "tool", name: "X"}`} - is how you wire a deterministic router into the agent.
+            Your classifier picks the API, and the model just fills the arguments.
           </T>
         </Box>
       </Reveal>
@@ -795,10 +785,9 @@ export default function ParallelToolsAndChoice(ctx) {
             Numbers: How Much Does Parallel Save?
           </T>
           <T color={SOFT.purple} center size={16} style={{ marginTop: 10 }}>
-            Ticket T4: a customer wants to cancel, get a refund, and escalate to a human. Three
-            independent lookups (customer, subscription, refund policy) feed one mutation
-            (process_refund). Serial takes 4 LLM turns. Parallel collapses the three lookups into one
-            turn.
+            Ticket T4: a customer wants to cancel, get a refund, and escalate to a human. Three independent lookups
+            (customer, subscription, refund policy) feed one mutation (process_refund). Serial takes 4 LLM turns.
+            Parallel collapses the three lookups into one turn.
           </T>
 
           <div
@@ -843,10 +832,7 @@ export default function ParallelToolsAndChoice(ctx) {
                 {T4_LATENCY_COMPARE.serial.bars.map((b, i) => {
                   const widthPct = Math.max(6, Math.round((b.ms / 1700) * 100));
                   return (
-                    <div
-                      key={i}
-                      style={{ display: "flex", alignItems: "center", gap: 8 }}
-                    >
+                    <div key={i} style={{ display: "flex", alignItems: "center", gap: 8 }}>
                       <div
                         style={{
                           flex: "0 0 120px",
@@ -935,10 +921,7 @@ export default function ParallelToolsAndChoice(ctx) {
                 {T4_LATENCY_COMPARE.parallel.bars.map((b, i) => {
                   const widthPct = Math.max(6, Math.round((b.ms / 1700) * 100));
                   return (
-                    <div
-                      key={i}
-                      style={{ display: "flex", alignItems: "center", gap: 8 }}
-                    >
+                    <div key={i} style={{ display: "flex", alignItems: "center", gap: 8 }}>
                       <div
                         style={{
                           flex: "0 0 120px",
@@ -1026,9 +1009,9 @@ export default function ParallelToolsAndChoice(ctx) {
             Savings: 6.8s &rarr; 4.7s ({T4_LATENCY_COMPARE.savingsPct}% faster, one fewer LLM call)
           </div>
           <T color={SOFT.purple} center size={15} style={{ marginTop: 12 }}>
-            The savings compound: each LLM turn costs ~1.5s, and you also save the tool latency that
-            would have stacked. For a busy support agent firing thousands of tickets a day, that 31% is
-            real money - and real customer wait time.
+            The savings compound: each LLM turn costs ~1.5s, and you also save the tool latency that would have stacked.
+            For a busy support agent firing thousands of tickets a day, that 31% is real money - and real customer wait
+            time.
           </T>
         </Box>
       </Reveal>
@@ -1039,9 +1022,8 @@ export default function ParallelToolsAndChoice(ctx) {
             Trace: Ticket T2 With Parallel Lookups
           </T>
           <T color={SOFT.cyan} center size={16} style={{ marginTop: 10 }}>
-            Same ticket T2 from sub=0, end to end. Turn 1 is parallel (two lookups). Turns 2 and 3 are
-            sequential because change_email must complete before reset_password sends the link to the
-            new address.
+            Same ticket T2 from sub=0, end to end. Turn 1 is parallel (two lookups). Turns 2 and 3 are sequential
+            because change_email must complete before reset_password sends the link to the new address.
           </T>
 
           <div
@@ -1071,9 +1053,7 @@ export default function ParallelToolsAndChoice(ctx) {
                     padding: "10px 14px",
                     borderRadius: 8,
                     background: `${row.color}06`,
-                    border: row.parallel
-                      ? `2px solid ${row.color}80`
-                      : `1px solid ${row.color}24`,
+                    border: row.parallel ? `2px solid ${row.color}80` : `1px solid ${row.color}24`,
                     textAlign: "center",
                   }}
                 >
@@ -1145,9 +1125,8 @@ export default function ParallelToolsAndChoice(ctx) {
             First turn parallel; second turn sequential.
           </div>
           <T color={SOFT.cyan} center size={15} style={{ marginTop: 12 }}>
-            The split is determined by the data flow, not the model. Independent reads share one turn.
-            Dependent mutations - change_email then reset_password - must serialize so each one acts on
-            the latest record.
+            The split is determined by the data flow, not the model. Independent reads share one turn. Dependent
+            mutations - change_email then reset_password - must serialize so each one acts on the latest record.
           </T>
         </Box>
       </Reveal>

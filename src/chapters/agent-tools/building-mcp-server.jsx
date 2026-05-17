@@ -129,9 +129,9 @@ export default function BuildingMcpServer(ctx) {
             What An MCP Server Declares
           </T>
           <T color={SOFT.purple} center size={16} style={{ marginTop: 10 }}>
-            An MCP server is mostly a sequence of declarations followed by a start. You give it a
-            name and version, then register tools, resources, and prompts, then call start. The
-            server itself is short. The handlers do the real work.
+            An MCP server is mostly a sequence of declarations followed by a start. You give it a name and version, then
+            register tools, resources, and prompts, then call start. The server itself is short. The handlers do the
+            real work.
           </T>
 
           <div style={{ display: "flex", flexDirection: "column", gap: 10, marginTop: 14 }}>
@@ -200,9 +200,9 @@ export default function BuildingMcpServer(ctx) {
             Tool: search_kb
           </T>
           <T color={SOFT.indigo} center size={16} style={{ marginTop: 10 }}>
-            Registering a tool means giving it a name, a description the model will read, an input
-            schema for arguments, and a handler that does the work on the server side. Everything
-            but the handler is shipped to the host; the handler stays on the server.
+            Registering a tool means giving it a name, a description the model will read, an input schema for arguments,
+            and a handler that does the work on the server side. Everything but the handler is shipped to the host; the
+            handler stays on the server.
           </T>
 
           <div
@@ -237,9 +237,8 @@ export default function BuildingMcpServer(ctx) {
           </div>
 
           <T color={SOFT.indigo} center size={15} style={{ marginTop: 12 }}>
-            Name and description are what the model sees; inputSchema is the contract for the
-            arguments. The handler is the real function. Handler runs server-side, NOT in the
-            model&apos;s context.
+            Name and description are what the model sees; inputSchema is the contract for the arguments. The handler is
+            the real function. Handler runs server-side, NOT in the model&apos;s context.
           </T>
         </Box>
       </Reveal>
@@ -250,9 +249,8 @@ export default function BuildingMcpServer(ctx) {
             Resource: kb://articles/{"{id}"}
           </T>
           <T color={SOFT.blue} center size={16} style={{ marginTop: 10 }}>
-            Resources are addressed by URI patterns. The server registers a template like
-            kb://articles/{"{id}"}; the host requests a concrete URI; the server matches the
-            template and runs the handler to produce the content.
+            Resources are addressed by URI patterns. The server registers a template like kb://articles/{"{id}"}; the
+            host requests a concrete URI; the server matches the template and runs the handler to produce the content.
           </T>
 
           <div
@@ -312,9 +310,8 @@ export default function BuildingMcpServer(ctx) {
             Prompt: summarize_ticket
           </T>
           <T color={SOFT.cyan} center size={16} style={{ marginTop: 10 }}>
-            Registering a prompt means declaring a named template and the arguments it needs. The
-            host collects argument values from the user, then asks the server to materialize the
-            final prompt text.
+            Registering a prompt means declaring a named template and the arguments it needs. The host collects argument
+            values from the user, then asks the server to materialize the final prompt text.
           </T>
 
           <div
@@ -360,9 +357,8 @@ export default function BuildingMcpServer(ctx) {
             Server Lifecycle
           </T>
           <T color={SOFT.teal} center size={16} style={{ marginTop: 10 }}>
-            From the moment the server boots until it shuts down, it moves through four states.
-            Most of the lifetime is spent in ACTIVE, where it handles list and call requests from
-            the host.
+            From the moment the server boots until it shuts down, it moves through four states. Most of the lifetime is
+            spent in ACTIVE, where it handles list and call requests from the host.
           </T>
 
           <div style={{ ...tintedCard(C.teal), padding: 14, marginTop: 14 }}>
@@ -374,8 +370,8 @@ export default function BuildingMcpServer(ctx) {
               style={{ width: "100%", maxWidth: 720, display: "block", margin: "12px auto 0" }}
             >
               <desc>
-                Four-stage server lifecycle diagram showing registered then listening then active
-                handling requests then closed shutdown.
+                Four-stage server lifecycle diagram showing registered then listening then active handling requests then
+                closed shutdown.
               </desc>
 
               {/* Four state boxes. viewBox 720 wide; 4 boxes of 150 wide with 3 gaps of 30 +
@@ -394,23 +390,10 @@ export default function BuildingMcpServer(ctx) {
                       stroke={s.color}
                       strokeWidth="2"
                     />
-                    <text
-                      x={x + 75}
-                      y="92"
-                      fill={s.color}
-                      fontSize="15"
-                      fontWeight="700"
-                      textAnchor="middle"
-                    >
+                    <text x={x + 75} y="92" fill={s.color} fontSize="15" fontWeight="700" textAnchor="middle">
                       {s.label}
                     </text>
-                    <text
-                      x={x + 75}
-                      y="116"
-                      fill={s.soft}
-                      fontSize="12"
-                      textAnchor="middle"
-                    >
+                    <text x={x + 75} y="116" fill={s.soft} fontSize="12" textAnchor="middle">
                       {s.note}
                     </text>
                   </g>
@@ -425,26 +408,9 @@ export default function BuildingMcpServer(ctx) {
                 const mid = (x1 + x2) / 2;
                 return (
                   <g key={label}>
-                    <line
-                      x1={x1}
-                      y1="100"
-                      x2={x2 - 6}
-                      y2="100"
-                      stroke={SOFT.teal}
-                      strokeWidth="1.5"
-                    />
-                    <polygon
-                      points={`${x2},100 ${x2 - 6},96 ${x2 - 6},104`}
-                      fill={SOFT.teal}
-                    />
-                    <text
-                      x={mid}
-                      y="88"
-                      fill={SOFT.teal}
-                      fontSize="11"
-                      fontFamily="monospace"
-                      textAnchor="middle"
-                    >
+                    <line x1={x1} y1="100" x2={x2 - 6} y2="100" stroke={SOFT.teal} strokeWidth="1.5" />
+                    <polygon points={`${x2},100 ${x2 - 6},96 ${x2 - 6},104`} fill={SOFT.teal} />
+                    <text x={mid} y="88" fill={SOFT.teal} fontSize="11" fontFamily="monospace" textAnchor="middle">
                       {label}
                     </text>
                   </g>
@@ -476,8 +442,8 @@ export default function BuildingMcpServer(ctx) {
             Test Before Connecting
           </T>
           <T color={SOFT.purple} center size={16} style={{ marginTop: 10 }}>
-            An MCP server is just a process with handlers and a transport. You can - and should -
-            test every piece in isolation before plugging it into a real host with a real model.
+            An MCP server is just a process with handlers and a transport. You can - and should - test every piece in
+            isolation before plugging it into a real host with a real model.
           </T>
 
           <div style={{ display: "flex", flexDirection: "column", gap: 10, marginTop: 14 }}>

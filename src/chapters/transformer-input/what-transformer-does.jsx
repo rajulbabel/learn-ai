@@ -448,8 +448,7 @@ export default function WhatTransformerDoes(ctx) {
             }}
           >
             <T color={C.dim} size={15} center>
-              <strong style={{ color: C.red }}>Linear:</strong> 512 dims {"→"} 50,257 (one score per word in
-              vocabulary)
+              <strong style={{ color: C.red }}>Linear:</strong> 512 dims {"→"} 50,257 (one score per word in vocabulary)
             </T>
             <T color={C.dim} size={15} center style={{ marginTop: 4 }}>
               <strong style={{ color: C.red }}>Softmax:</strong> converts raw scores into probabilities that sum to 1

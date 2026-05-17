@@ -483,15 +483,15 @@ export default function RoPE(ctx) {
               }}
             >
               <T color={C.dim} size={13}>
-                Q at position m is rotated by angle m{"·"}f. K at position n is rotated by n{"·"}f. Their dot
-                product becomes:
+                Q at position m is rotated by angle m{"·"}f. K at position n is rotated by n{"·"}f. Their dot product
+                becomes:
               </T>
               <T color={C.bright} size={13} center style={{ marginTop: 6 }}>
                 (R(m{"·"}f) Q) {"·"} (R(n{"·"}f) K) = Q {"·"} R((n - m){"·"}f) K
               </T>
               <T color={C.dim} size={13} style={{ marginTop: 6 }}>
-                Rotation matrices are orthogonal, so R(a){"ᵀ"} R(b) = R(b - a). Only the gap (n - m) survives. For
-                unit vectors at angular gap {"Δ"}, the dot product is exactly cos({"Δ"}).
+                Rotation matrices are orthogonal, so R(a){"ᵀ"} R(b) = R(b - a). Only the gap (n - m) survives. For unit
+                vectors at angular gap {"Δ"}, the dot product is exactly cos({"Δ"}).
               </T>
             </div>
           </details>

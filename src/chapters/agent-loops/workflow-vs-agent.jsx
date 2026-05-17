@@ -56,9 +56,8 @@ export default function WorkflowVsAgent(ctx) {
             Two Shapes Of Control
           </T>
           <T color={SOFT.orange} center size={16} style={{ marginTop: 10 }}>
-            A workflow is a fixed DAG: you wire the steps and the model follows the wires. An agent is
-            an open loop: the model picks the next step every iteration. Same building blocks, very
-            different control flow.
+            A workflow is a fixed DAG: you wire the steps and the model follows the wires. An agent is an open loop: the
+            model picks the next step every iteration. Same building blocks, very different control flow.
           </T>
 
           <div
@@ -80,25 +79,14 @@ export default function WorkflowVsAgent(ctx) {
                 style={{ width: "100%", maxWidth: 320, display: "block", margin: "10px auto 0" }}
               >
                 <desc>
-                  Four node directed acyclic graph showing fixed deterministic workflow with
-                  predictable edges.
+                  Four node directed acyclic graph showing fixed deterministic workflow with predictable edges.
                 </desc>
                 {WORKFLOW_NODES_SUB0.slice(0, -1).map((n, i) => {
                   const next = WORKFLOW_NODES_SUB0[i + 1];
                   return (
                     <g key={`edge-${i}`}>
-                      <line
-                        x1={n.x + 36}
-                        y1={90}
-                        x2={next.x}
-                        y2={90}
-                        stroke={SOFT.yellow}
-                        strokeWidth="1.5"
-                      />
-                      <polygon
-                        points={`${next.x},90 ${next.x - 6},86 ${next.x - 6},94`}
-                        fill={SOFT.yellow}
-                      />
+                      <line x1={n.x + 36} y1={90} x2={next.x} y2={90} stroke={SOFT.yellow} strokeWidth="1.5" />
+                      <polygon points={`${next.x},90 ${next.x - 6},86 ${next.x - 6},94`} fill={SOFT.yellow} />
                     </g>
                   );
                 })}
@@ -114,14 +102,7 @@ export default function WorkflowVsAgent(ctx) {
                       stroke={C.yellow}
                       strokeWidth="1.5"
                     />
-                    <text
-                      x={n.x + 18}
-                      y={95}
-                      fill={SOFT.yellow}
-                      fontSize="14"
-                      fontWeight="700"
-                      textAnchor="middle"
-                    >
+                    <text x={n.x + 18} y={95} fill={SOFT.yellow} fontSize="14" fontWeight="700" textAnchor="middle">
                       {n.label}
                     </text>
                   </g>
@@ -143,8 +124,8 @@ export default function WorkflowVsAgent(ctx) {
                 style={{ width: "100%", maxWidth: 320, display: "block", margin: "10px auto 0" }}
               >
                 <desc>
-                  Central decision node with multiple branching options showing an open loop where the
-                  model picks different paths each run.
+                  Central decision node with multiple branching options showing an open loop where the model picks
+                  different paths each run.
                 </desc>
                 {AGENT_OPTIONS_SUB0.map((o, i) => (
                   <line
@@ -159,23 +140,11 @@ export default function WorkflowVsAgent(ctx) {
                   />
                 ))}
 
-                <path
-                  d="M 140 60 A 26 26 0 1 1 139.5 60"
-                  fill="none"
-                  stroke={SOFT.red}
-                  strokeWidth="1.5"
-                />
+                <path d="M 140 60 A 26 26 0 1 1 139.5 60" fill="none" stroke={SOFT.red} strokeWidth="1.5" />
                 <polygon points="139.5,60 134,55 138,68" fill={SOFT.red} />
 
                 <circle cx={140} cy={90} r={26} fill={`${C.red}28`} stroke={C.red} strokeWidth="2" />
-                <text
-                  x={140}
-                  y={94}
-                  fill={SOFT.red}
-                  fontSize="13"
-                  fontWeight="700"
-                  textAnchor="middle"
-                >
+                <text x={140} y={94} fill={SOFT.red} fontSize="13" fontWeight="700" textAnchor="middle">
                   Decide
                 </text>
 
@@ -191,14 +160,7 @@ export default function WorkflowVsAgent(ctx) {
                       stroke={C.red}
                       strokeWidth="1.2"
                     />
-                    <text
-                      x={o.x}
-                      y={o.y + 4}
-                      fill={SOFT.red}
-                      fontSize="11"
-                      fontWeight="700"
-                      textAnchor="middle"
-                    >
+                    <text x={o.x} y={o.y + 4} fill={SOFT.red} fontSize="11" fontWeight="700" textAnchor="middle">
                       {o.label}
                     </text>
                   </g>
@@ -211,8 +173,8 @@ export default function WorkflowVsAgent(ctx) {
           </div>
 
           <T color={SOFT.orange} center size={15} style={{ marginTop: 14 }}>
-            Workflow is a fixed graph you draw. Agent is an open loop where the model picks the next
-            move. Choose the shape that matches how much variance the task actually has.
+            Workflow is a fixed graph you draw. Agent is an open loop where the model picks the next move. Choose the
+            shape that matches how much variance the task actually has.
           </T>
         </Box>
       )}
@@ -223,9 +185,9 @@ export default function WorkflowVsAgent(ctx) {
             Workflow: Known Inputs, Known Steps
           </T>
           <T color={SOFT.yellow} center size={16} style={{ marginTop: 10 }}>
-            Workflow is the right shape when you already know what to do. The model is a smart cell
-            inside a bigger pipeline you wrote, not the conductor. Pick this when the task is
-            repeatable and the steps are knowable in advance.
+            Workflow is the right shape when you already know what to do. The model is a smart cell inside a bigger
+            pipeline you wrote, not the conductor. Pick this when the task is repeatable and the steps are knowable in
+            advance.
           </T>
 
           <div style={{ ...tintedCard(C.yellow), padding: 14, marginTop: 14 }}>
@@ -260,8 +222,8 @@ export default function WorkflowVsAgent(ctx) {
           </div>
 
           <T color={SOFT.yellow} center size={15} style={{ marginTop: 12 }}>
-            The model still calls tools and writes text. But you, not the model, decide which step
-            runs in which order. The output of each step is predictable enough to wire to the next.
+            The model still calls tools and writes text. But you, not the model, decide which step runs in which order.
+            The output of each step is predictable enough to wire to the next.
           </T>
         </Box>
       </Reveal>
@@ -272,9 +234,8 @@ export default function WorkflowVsAgent(ctx) {
             Agent: Variable Steps, Variable Tools
           </T>
           <T color={SOFT.red} center size={16} style={{ marginTop: 10 }}>
-            Agent is the right shape when you can't pre-draw the graph. The model is the conductor:
-            it decides which tool to call, in what order, and when to stop. You pay for that
-            flexibility with cost and unpredictability.
+            Agent is the right shape when you can't pre-draw the graph. The model is the conductor: it decides which
+            tool to call, in what order, and when to stop. You pay for that flexibility with cost and unpredictability.
           </T>
 
           <div style={{ ...tintedCard(C.red), padding: 14, marginTop: 14 }}>
@@ -309,9 +270,8 @@ export default function WorkflowVsAgent(ctx) {
           </div>
 
           <T color={SOFT.red} center size={15} style={{ marginTop: 12 }}>
-            One ticket might need 2 tool calls. The next might need 20. You can't draw that graph in
-            advance because the shape of the task only becomes visible after the model starts
-            digging. That is the whole point of an agent.
+            One ticket might need 2 tool calls. The next might need 20. You can't draw that graph in advance because the
+            shape of the task only becomes visible after the model starts digging. That is the whole point of an agent.
           </T>
         </Box>
       </Reveal>
@@ -322,9 +282,9 @@ export default function WorkflowVsAgent(ctx) {
             Most Production Systems Are Hybrid
           </T>
           <T color={SOFT.amber} center size={16} style={{ marginTop: 10 }}>
-            Real systems are rarely pure. The common pattern is a workflow with one agent step inside.
-            You keep the outer skeleton deterministic and let the model loose only inside the one node
-            that actually needs creativity.
+            Real systems are rarely pure. The common pattern is a workflow with one agent step inside. You keep the
+            outer skeleton deterministic and let the model loose only inside the one node that actually needs
+            creativity.
           </T>
 
           <div style={{ ...tintedCard(C.amber), padding: 14, marginTop: 14 }}>
@@ -336,9 +296,8 @@ export default function WorkflowVsAgent(ctx) {
               style={{ width: "100%", maxWidth: 620, display: "block", margin: "12px auto 0" }}
             >
               <desc>
-                Hybrid workflow showing a four node DAG where the second node is replaced by an agent
-                loop with a question mark indicating the model decides while the other three nodes
-                remain deterministic.
+                Hybrid workflow showing a four node DAG where the second node is replaced by an agent loop with a
+                question mark indicating the model decides while the other three nodes remain deterministic.
               </desc>
 
               {HYBRID_NODES.slice(0, -1).map((n, i) => {
@@ -358,51 +317,21 @@ export default function WorkflowVsAgent(ctx) {
                 if (n.kind === "agent") {
                   return (
                     <g key={n.label}>
-                      <circle
-                        cx={cx}
-                        cy={90}
-                        r={36}
-                        fill={`${C.red}28`}
-                        stroke={C.red}
-                        strokeWidth="2"
-                      />
+                      <circle cx={cx} cy={90} r={36} fill={`${C.red}28`} stroke={C.red} strokeWidth="2" />
                       <path
                         d={`M ${cx} 54 A 18 18 0 1 1 ${cx - 0.5} 54`}
                         fill="none"
                         stroke={SOFT.red}
                         strokeWidth="1.5"
                       />
-                      <polygon
-                        points={`${cx - 0.5},54 ${cx - 6},49 ${cx - 2},62`}
-                        fill={SOFT.red}
-                      />
-                      <text
-                        x={cx}
-                        y={97}
-                        fill={SOFT.red}
-                        fontSize="22"
-                        fontWeight="700"
-                        textAnchor="middle"
-                      >
+                      <polygon points={`${cx - 0.5},54 ${cx - 6},49 ${cx - 2},62`} fill={SOFT.red} />
+                      <text x={cx} y={97} fill={SOFT.red} fontSize="22" fontWeight="700" textAnchor="middle">
                         ?
                       </text>
-                      <text
-                        x={cx}
-                        y={148}
-                        fill={C.red}
-                        fontSize="12"
-                        fontWeight="700"
-                        textAnchor="middle"
-                      >
+                      <text x={cx} y={148} fill={C.red} fontSize="12" fontWeight="700" textAnchor="middle">
                         {n.label}
                       </text>
-                      <text
-                        x={cx}
-                        y={164}
-                        fill={SOFT.red}
-                        fontSize="11"
-                        textAnchor="middle"
-                      >
+                      <text x={cx} y={164} fill={SOFT.red} fontSize="11" textAnchor="middle">
                         {n.note}
                       </text>
                     </g>
@@ -420,23 +349,10 @@ export default function WorkflowVsAgent(ctx) {
                       stroke={C.yellow}
                       strokeWidth="1.5"
                     />
-                    <text
-                      x={cx}
-                      y={94}
-                      fill={C.yellow}
-                      fontSize="13"
-                      fontWeight="700"
-                      textAnchor="middle"
-                    >
+                    <text x={cx} y={94} fill={C.yellow} fontSize="13" fontWeight="700" textAnchor="middle">
                       {n.label}
                     </text>
-                    <text
-                      x={cx}
-                      y={148}
-                      fill={SOFT.yellow}
-                      fontSize="11"
-                      textAnchor="middle"
-                    >
+                    <text x={cx} y={148} fill={SOFT.yellow} fontSize="11" textAnchor="middle">
                       {n.note}
                     </text>
                   </g>
@@ -447,15 +363,13 @@ export default function WorkflowVsAgent(ctx) {
 
           <div style={{ ...tintedCard(C.amber), padding: 12, marginTop: 12 }}>
             <T color={SOFT.amber} center size={14}>
-              The Classify Step Is Deterministic. The Handle Step Is An Agent. Reply And Log Are
-              Deterministic Again.
+              The Classify Step Is Deterministic. The Handle Step Is An Agent. Reply And Log Are Deterministic Again.
             </T>
           </div>
 
           <T color={SOFT.amber} center size={15} style={{ marginTop: 12 }}>
-            This is the hybrid shape almost every production agent ships with. You get the safety
-            and predictability of a workflow around the parts you can fully spec, and the freedom of
-            an agent only where you actually need it.
+            This is the hybrid shape almost every production agent ships with. You get the safety and predictability of
+            a workflow around the parts you can fully spec, and the freedom of an agent only where you actually need it.
           </T>
         </Box>
       </Reveal>
@@ -466,9 +380,9 @@ export default function WorkflowVsAgent(ctx) {
             Predictable Cost vs Variable Cost
           </T>
           <T color={SOFT.cyan} center size={16} style={{ marginTop: 10 }}>
-            The biggest practical difference between workflow and agent is the shape of failure.
-            Workflow failures are loud and bounded. Agent failures are quiet and unbounded - the
-            agent keeps trying and the bill keeps climbing.
+            The biggest practical difference between workflow and agent is the shape of failure. Workflow failures are
+            loud and bounded. Agent failures are quiet and unbounded - the agent keeps trying and the bill keeps
+            climbing.
           </T>
 
           <div style={{ marginTop: 16, display: "flex", flexDirection: "column", gap: 12 }}>
@@ -570,9 +484,9 @@ export default function WorkflowVsAgent(ctx) {
           </div>
 
           <T color={SOFT.cyan} center size={15} style={{ marginTop: 12 }}>
-            The cost of an extra workflow node is one more tool call. The cost of an extra agent
-            iteration is an unbounded number of tool calls. That asymmetry is why teams default to
-            workflow and reach for an agent only on the steps that genuinely need it.
+            The cost of an extra workflow node is one more tool call. The cost of an extra agent iteration is an
+            unbounded number of tool calls. That asymmetry is why teams default to workflow and reach for an agent only
+            on the steps that genuinely need it.
           </T>
         </Box>
       </Reveal>

@@ -1549,10 +1549,11 @@ export default function ProductQuantization(ctx) {
             style={{ width: "100%", maxWidth: 640, height: "auto", display: "block", marginTop: 14 }}
           >
             <desc>
-              2D scatter for slot 0 with a tight cluster of 32 representative gray X centroids (of 256 trained per slot) around the origin and gray
-              training-vector dots inside the cluster; a red dot for the new sub-vector at (2.1, 1.9) sits far outside
-              the cluster, with a dashed line to the nearest X labeled distance = 1.8, alongside an inset label
-              training avg distance = 0.3. A few faded gray dots with strikethrough show deleted training entries.
+              2D scatter for slot 0 with a tight cluster of 32 representative gray X centroids (of 256 trained per slot)
+              around the origin and gray training-vector dots inside the cluster; a red dot for the new sub-vector at
+              (2.1, 1.9) sits far outside the cluster, with a dashed line to the nearest X labeled distance = 1.8,
+              alongside an inset label training avg distance = 0.3. A few faded gray dots with strikethrough show
+              deleted training entries.
             </desc>
             <line x1="50" y1="280" x2="560" y2="280" stroke="#555" strokeWidth="1" />
             <line x1="50" y1="20" x2="50" y2="280" stroke="#555" strokeWidth="1" />
@@ -1628,11 +1629,19 @@ export default function ProductQuantization(ctx) {
             </desc>
             <line x1="60" y1="40" x2="60" y2="220" stroke="#666" strokeWidth="1" />
             <line x1="60" y1="220" x2="700" y2="220" stroke="#666" strokeWidth="1" />
-            <text x="40" y="125" fontSize="11" fill="#999" textAnchor="middle" transform="rotate(-90 40 125)">95p recon error</text>
-            <text x="60" y="240" fontSize="11" fill="#999">0</text>
-            <text x="700" y="240" fontSize="11" fill="#999" textAnchor="end">50M vectors</text>
+            <text x="40" y="125" fontSize="11" fill="#999" textAnchor="middle" transform="rotate(-90 40 125)">
+              95p recon error
+            </text>
+            <text x="60" y="240" fontSize="11" fill="#999">
+              0
+            </text>
+            <text x="700" y="240" fontSize="11" fill="#999" textAnchor="end">
+              50M vectors
+            </text>
             <line x1="60" y1="120" x2="700" y2="120" stroke={C.yellow} strokeDasharray="4 4" strokeWidth="1" />
-            <text x="700" y="115" fontSize="11" fill={C.yellow} textAnchor="end">Retrain threshold</text>
+            <text x="700" y="115" fontSize="11" fill={C.yellow} textAnchor="end">
+              Retrain threshold
+            </text>
             <polyline
               points="60,200 220,200 280,150 320,90 360,200 700,200"
               fill="none"
@@ -1640,8 +1649,12 @@ export default function ProductQuantization(ctx) {
               strokeWidth="2"
             />
             <line x1="360" y1="40" x2="360" y2="220" stroke={C.green} strokeDasharray="6 4" strokeWidth="1.5" />
-            <text x="360" y="32" fontSize="11" fill={C.green} textAnchor="middle">Retrain triggered (20M)</text>
-            <text x="60" y="262" fontSize="11" fill="#999">Ops:</text>
+            <text x="360" y="32" fontSize="11" fill={C.green} textAnchor="middle">
+              Retrain triggered (20M)
+            </text>
+            <text x="60" y="262" fontSize="11" fill="#999">
+              Ops:
+            </text>
             {[
               { x: 110, c: C.cyan },
               { x: 150, c: C.cyan },
@@ -1656,15 +1669,27 @@ export default function ProductQuantization(ctx) {
             ].map((t, i) => (
               <line key={i} x1={t.x} y1="252" x2={t.x} y2="262" stroke={t.c} strokeWidth="2" />
             ))}
-            <text x="640" y="262" fontSize="10" fill={C.cyan}>Insert</text>
-            <text x="640" y="278" fontSize="10" fill={C.yellow}>Update</text>
-            <text x="640" y="294" fontSize="10" fill={C.red}>Delete</text>
+            <text x="640" y="262" fontSize="10" fill={C.cyan}>
+              Insert
+            </text>
+            <text x="640" y="278" fontSize="10" fill={C.yellow}>
+              Update
+            </text>
+            <text x="640" y="294" fontSize="10" fill={C.red}>
+              Delete
+            </text>
           </svg>
           <div style={{ marginTop: 12, display: "grid", gridTemplateColumns: "1fr", gap: 8 }}>
             {[
               { op: "INSERT / UPDATE", text: "Re-encode with current codebooks; track 95p recon error" },
-              { op: "DELETE", text: "Tombstone in posting list; background compaction reclaims and reshapes residuals" },
-              { op: "DRIFT", text: "95p error breach -> train new codebooks on fresh sample (~256 * k_per_slot rule of thumb), hot-swap" },
+              {
+                op: "DELETE",
+                text: "Tombstone in posting list; background compaction reclaims and reshapes residuals",
+              },
+              {
+                op: "DRIFT",
+                text: "95p error breach -> train new codebooks on fresh sample (~256 * k_per_slot rule of thumb), hot-swap",
+              },
             ].map((row) => (
               <div
                 key={row.op}
@@ -1692,7 +1717,10 @@ export default function ProductQuantization(ctx) {
               { name: "FAISS", line: "ProductQuantizer.train(new_set) + index rebuild" },
               { name: "Vespa", line: "Background re-quantization with hot-swap" },
               { name: "Milvus", line: "Scheduled IVF_PQ retraining + segment compaction" },
-              { name: "Qdrant", line: "PATCH /collections/{name} quantization_config + optimizers_config.deleted_threshold" },
+              {
+                name: "Qdrant",
+                line: "PATCH /collections/{name} quantization_config + optimizers_config.deleted_threshold",
+              },
             ].map((s) => (
               <div
                 key={s.name}

@@ -120,9 +120,9 @@ export default function McpArchitecture(ctx) {
             Host, Client, Server
           </T>
           <T color={SOFT.purple} center size={16} style={{ marginTop: 10 }}>
-            MCP splits the agent stack into three roles. The host is the application the user opens.
-            Inside that host runs a client for each tool server it wants to talk to. The server is a
-            separate process that exposes tools, resources, and prompts for the host to discover.
+            MCP splits the agent stack into three roles. The host is the application the user opens. Inside that host
+            runs a client for each tool server it wants to talk to. The server is a separate process that exposes tools,
+            resources, and prompts for the host to discover.
           </T>
 
           <div style={{ ...tintedCard(C.purple), padding: 14, marginTop: 14 }}>
@@ -134,8 +134,8 @@ export default function McpArchitecture(ctx) {
               style={{ width: "100%", maxWidth: 560, display: "block", margin: "12px auto 0" }}
             >
               <desc>
-                Three vertically stacked role boxes showing MCP host application on top hosting a
-                client connection in the middle that speaks to a tool server at the bottom.
+                Three vertically stacked role boxes showing MCP host application on top hosting a client connection in
+                the middle that speaks to a tool server at the bottom.
               </desc>
 
               {/* Host (top) */}
@@ -243,8 +243,8 @@ export default function McpArchitecture(ctx) {
           </div>
 
           <T color={SOFT.purple} center size={15} style={{ marginTop: 12 }}>
-            Three roles, one wire format. The host always owns the trust boundary; the server always
-            sits on the other side; the client is the in-process adapter that connects them.
+            Three roles, one wire format. The host always owns the trust boundary; the server always sits on the other
+            side; the client is the in-process adapter that connects them.
           </T>
         </Box>
       )}
@@ -255,10 +255,9 @@ export default function McpArchitecture(ctx) {
             One Host, Many Clients, Many Servers
           </T>
           <T color={SOFT.indigo} center size={16} style={{ marginTop: 10 }}>
-            The typical MCP topology is a hub. 1 host launches many clients - one per server it wants
-            to talk to. Each client maintains its own connection. The host stitches all the listed
-            tools into a single catalog the model can pick from. Here a single host hosts 3 clients,
-            each wired to a different server.
+            The typical MCP topology is a hub. 1 host launches many clients - one per server it wants to talk to. Each
+            client maintains its own connection. The host stitches all the listed tools into a single catalog the model
+            can pick from. Here a single host hosts 3 clients, each wired to a different server.
           </T>
 
           <div style={{ ...tintedCard(C.indigo), padding: 14, marginTop: 14 }}>
@@ -273,8 +272,8 @@ export default function McpArchitecture(ctx) {
               style={{ width: "100%", maxWidth: 620, display: "block", margin: "12px auto 0" }}
             >
               <desc>
-                One host application contains three internal client connections each linked downward
-                to a separate MCP server providing different tools.
+                One host application contains three internal client connections each linked downward to a separate MCP
+                server providing different tools.
               </desc>
 
               {/* Host outer rectangle wrapping all 3 clients */}
@@ -305,14 +304,7 @@ export default function McpArchitecture(ctx) {
                     stroke={C.indigo}
                     strokeWidth="1.5"
                   />
-                  <text
-                    x={c.cx}
-                    y="82"
-                    fill={C.indigo}
-                    fontSize="13"
-                    fontWeight="700"
-                    textAnchor="middle"
-                  >
+                  <text x={c.cx} y="82" fill={C.indigo} fontSize="13" fontWeight="700" textAnchor="middle">
                     {c.label}
                   </text>
                   <text x={c.cx} y="100" fill={SOFT.indigo} fontSize="10" textAnchor="middle">
@@ -324,14 +316,7 @@ export default function McpArchitecture(ctx) {
               {/* Transport lines from each client to its server */}
               {TOPOLOGY_CLIENTS.map((c) => (
                 <g key={`line-${c.label}`}>
-                  <line
-                    x1={c.cx}
-                    y1="110"
-                    x2={c.server.cx}
-                    y2="220"
-                    stroke={SOFT.blue}
-                    strokeWidth="1.5"
-                  />
+                  <line x1={c.cx} y1="110" x2={c.server.cx} y2="220" stroke={SOFT.blue} strokeWidth="1.5" />
                 </g>
               ))}
 
@@ -348,27 +333,13 @@ export default function McpArchitecture(ctx) {
                     stroke={C.blue}
                     strokeWidth="1.5"
                   />
-                  <text
-                    x={c.server.cx}
-                    y="246"
-                    fill={C.blue}
-                    fontSize="13"
-                    fontWeight="700"
-                    textAnchor="middle"
-                  >
+                  <text x={c.server.cx} y="246" fill={C.blue} fontSize="13" fontWeight="700" textAnchor="middle">
                     {c.server.name}
                   </text>
                   <text x={c.server.cx} y="266" fill={SOFT.blue} fontSize="12" textAnchor="middle">
                     {c.server.desc}
                   </text>
-                  <text
-                    x={c.server.cx}
-                    y="284"
-                    fill={SOFT.blue}
-                    fontSize="10"
-                    fontStyle="italic"
-                    textAnchor="middle"
-                  >
+                  <text x={c.server.cx} y="284" fill={SOFT.blue} fontSize="10" fontStyle="italic" textAnchor="middle">
                     Separate process
                   </text>
                 </g>
@@ -382,9 +353,9 @@ export default function McpArchitecture(ctx) {
           </div>
 
           <T color={SOFT.indigo} center size={15} style={{ marginTop: 12 }}>
-            This is the standard topology. The host is the hub - it adds or drops servers without the
-            servers ever talking to each other. The Postgres server has no idea the Linear server is
-            also connected, and the model sees one merged toolset from all three.
+            This is the standard topology. The host is the hub - it adds or drops servers without the servers ever
+            talking to each other. The Postgres server has no idea the Linear server is also connected, and the model
+            sees one merged toolset from all three.
           </T>
         </Box>
       </Reveal>
@@ -395,10 +366,10 @@ export default function McpArchitecture(ctx) {
             Stdio, HTTP, SSE
           </T>
           <T color={SOFT.blue} center size={16} style={{ marginTop: 10 }}>
-            The MCP wire format is the same JSON-RPC regardless of how the bytes travel. There are
-            three transports in common use. Stdio is local-only and runs the server as a child
-            process. HTTP is the network workhorse for remote servers. SSE (Server-Sent Events) adds
-            a streaming channel on top of HTTP so the server can push intermediate updates.
+            The MCP wire format is the same JSON-RPC regardless of how the bytes travel. There are three transports in
+            common use. Stdio is local-only and runs the server as a child process. HTTP is the network workhorse for
+            remote servers. SSE (Server-Sent Events) adds a streaming channel on top of HTTP so the server can push
+            intermediate updates.
           </T>
 
           <div
@@ -451,10 +422,9 @@ export default function McpArchitecture(ctx) {
           </div>
 
           <T color={SOFT.blue} center size={15} style={{ marginTop: 14 }}>
-            Pick stdio when the server runs on the same machine and you want zero network surface.
-            Pick HTTP when the server is hosted somewhere else. Pick SSE on top of HTTP when the
-            server needs to stream progress back, like a long-running build or a search that returns
-            partial results.
+            Pick stdio when the server runs on the same machine and you want zero network surface. Pick HTTP when the
+            server is hosted somewhere else. Pick SSE on top of HTTP when the server needs to stream progress back, like
+            a long-running build or a search that returns partial results.
           </T>
         </Box>
       </Reveal>
@@ -465,9 +435,9 @@ export default function McpArchitecture(ctx) {
             How A Session Begins And Runs
           </T>
           <T color={SOFT.cyan} center size={16} style={{ marginTop: 10 }}>
-            An MCP session follows a fixed lifecycle: connect, then negotiate, then discover, then
-            call. The Initialize Handshake exchanges protocol version and capabilities; the list step
-            tells the host what is available; only then do tool calls flow.
+            An MCP session follows a fixed lifecycle: connect, then negotiate, then discover, then call. The Initialize
+            Handshake exchanges protocol version and capabilities; the list step tells the host what is available; only
+            then do tool calls flow.
           </T>
 
           <div style={{ ...tintedCard(C.cyan), padding: 14, marginTop: 14 }}>
@@ -479,9 +449,8 @@ export default function McpArchitecture(ctx) {
               style={{ width: "100%", maxWidth: 720, display: "block", margin: "12px auto 0" }}
             >
               <desc>
-                Five step horizontal flow diagram showing host launches client, client connects to
-                server, initialize handshake, list available tools and resources and prompts, then
-                call a tool and get a result.
+                Five step horizontal flow diagram showing host launches client, client connects to server, initialize
+                handshake, list available tools and resources and prompts, then call a tool and get a result.
               </desc>
 
               {/* Five step boxes laid out left to right. viewBox is 720 wide; 5 boxes of 130 wide
@@ -500,14 +469,7 @@ export default function McpArchitecture(ctx) {
                       stroke={C.cyan}
                       strokeWidth="1.5"
                     />
-                    <text
-                      x={x + 65}
-                      y="58"
-                      fill={C.cyan}
-                      fontSize="12"
-                      fontWeight="700"
-                      textAnchor="middle"
-                    >
+                    <text x={x + 65} y="58" fill={C.cyan} fontSize="12" fontWeight="700" textAnchor="middle">
                       {i + 1}.
                     </text>
                     {/* Wrap label in two lines if long. Use tspan-friendly split on whitespace. */}
@@ -544,18 +506,8 @@ export default function McpArchitecture(ctx) {
                     {/* Arrow between boxes (skip after last) */}
                     {i < MCP_LIFECYCLE_STEPS.length - 1 && (
                       <g>
-                        <line
-                          x1={x + 130}
-                          y1="70"
-                          x2={x + 130 + 12}
-                          y2="70"
-                          stroke={SOFT.cyan}
-                          strokeWidth="1.5"
-                        />
-                        <polygon
-                          points={`${x + 130 + 12},70 ${x + 130 + 6},66 ${x + 130 + 6},74`}
-                          fill={SOFT.cyan}
-                        />
+                        <line x1={x + 130} y1="70" x2={x + 130 + 12} y2="70" stroke={SOFT.cyan} strokeWidth="1.5" />
+                        <polygon points={`${x + 130 + 12},70 ${x + 130 + 6},66 ${x + 130 + 6},74`} fill={SOFT.cyan} />
                       </g>
                     )}
                   </g>
@@ -565,10 +517,9 @@ export default function McpArchitecture(ctx) {
           </div>
 
           <T color={SOFT.cyan} center size={15} style={{ marginTop: 12 }}>
-            The lifecycle matters because the host cannot just call a tool blind. It must finish the
-            Initialize Handshake (so both sides agree on protocol version) and then call list before
-            it knows any tool names. Only after list returns does the model see a populated tool
-            catalog.
+            The lifecycle matters because the host cannot just call a tool blind. It must finish the Initialize
+            Handshake (so both sides agree on protocol version) and then call list before it knows any tool names. Only
+            after list returns does the model see a populated tool catalog.
           </T>
         </Box>
       </Reveal>
@@ -579,10 +530,9 @@ export default function McpArchitecture(ctx) {
             Listing Capabilities
           </T>
           <T color={SOFT.teal} center size={16} style={{ marginTop: 10 }}>
-            Discovery is what makes MCP plug-and-play. The host sends a tools/list request; the
-            server responds with the full catalog: each tool&apos;s name, human-readable description,
-            and JSON schema for its input. The host hands this list to the model as the tool
-            definitions for the next call.
+            Discovery is what makes MCP plug-and-play. The host sends a tools/list request; the server responds with the
+            full catalog: each tool&apos;s name, human-readable description, and JSON schema for its input. The host
+            hands this list to the model as the tool definitions for the next call.
           </T>
 
           <div
@@ -616,9 +566,9 @@ export default function McpArchitecture(ctx) {
           </div>
 
           <T color={SOFT.teal} center size={15} style={{ marginTop: 12 }}>
-            The host takes this list, merges it with any other servers&apos; catalogs, and passes the
-            combined set as the model&apos;s tool definitions on the next turn. That is how an agent
-            built on MCP picks up new capabilities without code changes on the host.
+            The host takes this list, merges it with any other servers&apos; catalogs, and passes the combined set as
+            the model&apos;s tool definitions on the next turn. That is how an agent built on MCP picks up new
+            capabilities without code changes on the host.
           </T>
         </Box>
       </Reveal>

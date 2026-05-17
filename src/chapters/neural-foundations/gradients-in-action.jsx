@@ -375,6 +375,6 @@ export default function GradientsInAction(ctx) {
       )}
     </div>
   );
-};
+}
 
 // ═══════ 1.15 Why Deep Backprop Gets Hard ═══════

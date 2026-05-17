@@ -20,8 +20,7 @@ const REFUND_CRITIC_TRACE = [
     step: 3,
     actor: "Policy Critic",
     color: "red",
-    detail:
-      '"Hold. Check If Invoice Was Paid > 30 Days Ago. If Yes, Partial Refund Only (60% Policy For >30 Days).",',
+    detail: '"Hold. Check If Invoice Was Paid > 30 Days Ago. If Yes, Partial Refund Only (60% Policy For >30 Days).",',
   },
   {
     step: 4,
@@ -71,22 +70,27 @@ export default function CriticDebate(ctx) {
             A Second Agent Checks The First
           </T>
           <T color={SOFT.green} center size={16} style={{ marginTop: 10 }}>
-            Critic is reflection-as-multi-agent: instead of one agent self-critiquing (13.22), a
-            separate critic agent reviews the worker&apos;s draft. Same idea, more isolation - the
-            critic does not share working memory with the worker.
+            Critic is reflection-as-multi-agent: instead of one agent self-critiquing (13.22), a separate critic agent
+            reviews the worker&apos;s draft. Same idea, more isolation - the critic does not share working memory with
+            the worker.
           </T>
 
           <div style={{ ...tintedCard(C.green), padding: 14, marginTop: 14 }}>
-            <svg
-              viewBox="0 0 560 180"
-              style={{ width: "100%", maxWidth: 640, display: "block", margin: "0 auto" }}
-            >
+            <svg viewBox="0 0 560 180" style={{ width: "100%", maxWidth: 640, display: "block", margin: "0 auto" }}>
               <desc>
-                Two-agent pair where the worker agent on the left produces a draft answer and the
-                critic agent on the right reads the draft and the original question, then scores or
-                rewrites it.
+                Two-agent pair where the worker agent on the left produces a draft answer and the critic agent on the
+                right reads the draft and the original question, then scores or rewrites it.
               </desc>
-              <rect x={40} y={50} width={180} height={80} rx={10} fill={`${C.cyan}1f`} stroke={C.cyan} strokeWidth={1.8} />
+              <rect
+                x={40}
+                y={50}
+                width={180}
+                height={80}
+                rx={10}
+                fill={`${C.cyan}1f`}
+                stroke={C.cyan}
+                strokeWidth={1.8}
+              />
               <text x={130} y={80} fill={SOFT.cyan} fontSize="14" fontWeight="700" textAnchor="middle">
                 Worker Agent
               </text>
@@ -103,7 +107,16 @@ export default function CriticDebate(ctx) {
                 Draft
               </text>
 
-              <rect x={340} y={50} width={180} height={80} rx={10} fill={`${C.red}1f`} stroke={C.red} strokeWidth={1.8} />
+              <rect
+                x={340}
+                y={50}
+                width={180}
+                height={80}
+                rx={10}
+                fill={`${C.red}1f`}
+                stroke={C.red}
+                strokeWidth={1.8}
+              />
               <text x={430} y={80} fill={SOFT.red} fontSize="14" fontWeight="700" textAnchor="middle">
                 Critic Agent
               </text>
@@ -117,9 +130,8 @@ export default function CriticDebate(ctx) {
           </div>
 
           <T color={SOFT.green} center size={15} style={{ marginTop: 12 }}>
-            The critic has a different system prompt - it is told to be SKEPTICAL of the
-            worker&apos;s draft. The separation makes it less likely the model just rubber-stamps
-            its own earlier output.
+            The critic has a different system prompt - it is told to be SKEPTICAL of the worker&apos;s draft. The
+            separation makes it less likely the model just rubber-stamps its own earlier output.
           </T>
         </Box>
       )}
@@ -130,20 +142,17 @@ export default function CriticDebate(ctx) {
             Loop: Draft - Critique - Revise
           </T>
           <T color={SOFT.teal} center size={16} style={{ marginTop: 10 }}>
-            The critic-revise loop is bounded. Worker drafts; critic scores 0-10 with reasoning;
-            if below threshold, worker revises with critic&apos;s feedback; critic re-scores. Loop
-            until score is high enough OR the retry cap is hit.
+            The critic-revise loop is bounded. Worker drafts; critic scores 0-10 with reasoning; if below threshold,
+            worker revises with critic&apos;s feedback; critic re-scores. Loop until score is high enough OR the retry
+            cap is hit.
           </T>
 
           <div style={{ ...tintedCard(C.teal), padding: 14, marginTop: 14 }}>
-            <svg
-              viewBox="0 0 560 200"
-              style={{ width: "100%", maxWidth: 640, display: "block", margin: "0 auto" }}
-            >
+            <svg viewBox="0 0 560 200" style={{ width: "100%", maxWidth: 640, display: "block", margin: "0 auto" }}>
               <desc>
-                Circular flow with four stations: worker drafts, critic scores zero through ten,
-                conditional revise if below seven, then critic re-scores, with a loop arrow back to
-                the worker until score is high enough or retry cap is reached.
+                Circular flow with four stations: worker drafts, critic scores zero through ten, conditional revise if
+                below seven, then critic re-scores, with a loop arrow back to the worker until score is high enough or
+                retry cap is reached.
               </desc>
               {/* 4 stations in a circle */}
               {[
@@ -153,7 +162,16 @@ export default function CriticDebate(ctx) {
                 { x: 90, y: 100, label: "Critic Re-Scores" },
               ].map((s, i) => (
                 <g key={`stn-${i}`}>
-                  <rect x={s.x - 70} y={s.y - 16} width={140} height={32} rx={8} fill={`${C.teal}1f`} stroke={C.teal} strokeWidth={1.6} />
+                  <rect
+                    x={s.x - 70}
+                    y={s.y - 16}
+                    width={140}
+                    height={32}
+                    rx={8}
+                    fill={`${C.teal}1f`}
+                    stroke={C.teal}
+                    strokeWidth={1.6}
+                  />
                   <text x={s.x} y={s.y + 4} fill={SOFT.teal} fontSize="12" fontWeight="700" textAnchor="middle">
                     {s.label}
                   </text>
@@ -172,8 +190,8 @@ export default function CriticDebate(ctx) {
           </div>
 
           <T color={SOFT.teal} center size={15} style={{ marginTop: 12 }}>
-            The retry cap matters. Without it, a worker that can&apos;t please the critic loops
-            forever - one of the cost-runaway failure modes covered in 13.35.
+            The retry cap matters. Without it, a worker that can&apos;t please the critic loops forever - one of the
+            cost-runaway failure modes covered in 13.35.
           </T>
         </Box>
       </Reveal>
@@ -184,23 +202,28 @@ export default function CriticDebate(ctx) {
             Two Agents Argue, Judge Decides
           </T>
           <T color={SOFT.cyan} center size={16} style={{ marginTop: 10 }}>
-            Debate is a 3-agent variant. Agent Pro argues for a position; Agent Con argues against;
-            Judge agent reads both arguments and the original question and picks. Useful when the
-            answer is contested or high-stakes enough to be worth two views.
+            Debate is a 3-agent variant. Agent Pro argues for a position; Agent Con argues against; Judge agent reads
+            both arguments and the original question and picks. Useful when the answer is contested or high-stakes
+            enough to be worth two views.
           </T>
 
           <div style={{ ...tintedCard(C.cyan), padding: 14, marginTop: 14 }}>
-            <svg
-              viewBox="0 0 560 200"
-              style={{ width: "100%", maxWidth: 640, display: "block", margin: "0 auto" }}
-            >
+            <svg viewBox="0 0 560 200" style={{ width: "100%", maxWidth: 640, display: "block", margin: "0 auto" }}>
               <desc>
-                Three-agent debate setup: agent Pro on the left and agent Con on the right both
-                argue toward a Judge agent in the bottom center, which reads both arguments and
-                picks one.
+                Three-agent debate setup: agent Pro on the left and agent Con on the right both argue toward a Judge
+                agent in the bottom center, which reads both arguments and picks one.
               </desc>
               {/* Pro left */}
-              <rect x={40} y={40} width={140} height={50} rx={10} fill={`${C.green}1f`} stroke={C.green} strokeWidth={1.8} />
+              <rect
+                x={40}
+                y={40}
+                width={140}
+                height={50}
+                rx={10}
+                fill={`${C.green}1f`}
+                stroke={C.green}
+                strokeWidth={1.8}
+              />
               <text x={110} y={62} fill={SOFT.green} fontSize="13" fontWeight="700" textAnchor="middle">
                 Agent Pro
               </text>
@@ -209,7 +232,16 @@ export default function CriticDebate(ctx) {
               </text>
 
               {/* Con right */}
-              <rect x={380} y={40} width={140} height={50} rx={10} fill={`${C.red}1f`} stroke={C.red} strokeWidth={1.8} />
+              <rect
+                x={380}
+                y={40}
+                width={140}
+                height={50}
+                rx={10}
+                fill={`${C.red}1f`}
+                stroke={C.red}
+                strokeWidth={1.8}
+              />
               <text x={450} y={62} fill={SOFT.red} fontSize="13" fontWeight="700" textAnchor="middle">
                 Agent Con
               </text>
@@ -218,7 +250,16 @@ export default function CriticDebate(ctx) {
               </text>
 
               {/* Judge bottom center */}
-              <rect x={200} y={140} width={160} height={50} rx={10} fill={`${C.purple}24`} stroke={C.purple} strokeWidth={2} />
+              <rect
+                x={200}
+                y={140}
+                width={160}
+                height={50}
+                rx={10}
+                fill={`${C.purple}24`}
+                stroke={C.purple}
+                strokeWidth={2}
+              />
               <text x={280} y={162} fill={SOFT.purple} fontSize="14" fontWeight="700" textAnchor="middle">
                 Judge Agent
               </text>
@@ -235,8 +276,8 @@ export default function CriticDebate(ctx) {
           </div>
 
           <T color={SOFT.cyan} center size={15} style={{ marginTop: 12 }}>
-            Debate triples the LLM bill vs single-agent. Use it sparingly - high-stakes contested
-            decisions where you genuinely want two voices, not noise-reduction on a routine task.
+            Debate triples the LLM bill vs single-agent. Use it sparingly - high-stakes contested decisions where you
+            genuinely want two voices, not noise-reduction on a routine task.
           </T>
         </Box>
       </Reveal>
@@ -247,9 +288,8 @@ export default function CriticDebate(ctx) {
             Policy Critic For The Refund Agent
           </T>
           <T color={SOFT.blue} center size={16} style={{ marginTop: 10 }}>
-            Concrete example: a refund agent makes a draft decision; a policy critic catches that
-            the invoice is &gt;30 days old; the refund gets revised down. This is exactly the kind
-            of thing the worker alone would miss.
+            Concrete example: a refund agent makes a draft decision; a policy critic catches that the invoice is &gt;30
+            days old; the refund gets revised down. This is exactly the kind of thing the worker alone would miss.
           </T>
 
           <div
@@ -275,8 +315,8 @@ export default function CriticDebate(ctx) {
           </div>
 
           <T color={SOFT.blue} center size={15} style={{ marginTop: 14 }}>
-            The critic caught $60 the worker would have over-refunded. Multiplied across thousands
-            of refunds per month, the policy critic pays for its own LLM bill many times over.
+            The critic caught $60 the worker would have over-refunded. Multiplied across thousands of refunds per month,
+            the policy critic pays for its own LLM bill many times over.
           </T>
         </Box>
       </Reveal>
@@ -287,8 +327,8 @@ export default function CriticDebate(ctx) {
             Critic Adds Cost; Pick Battles
           </T>
           <T color={SOFT.indigo} center size={16} style={{ marginTop: 10 }}>
-            Critic and debate are not free. Each extra agent doubles or triples the LLM bill and
-            adds latency. Pick where they earn their cost, skip where they do not.
+            Critic and debate are not free. Each extra agent doubles or triples the LLM bill and adds latency. Pick
+            where they earn their cost, skip where they do not.
           </T>
 
           <div
@@ -323,16 +363,13 @@ export default function CriticDebate(ctx) {
           </div>
 
           <T color={SOFT.indigo} center size={15} style={{ marginTop: 14 }}>
-            Rule of thumb: if a wrong answer is worth less than the extra LLM cost, skip the
-            critic. If a wrong answer can cost $200 in refund overage, paying $0.01 for a critic
-            call is the easiest trade you will ever make.
+            Rule of thumb: if a wrong answer is worth less than the extra LLM cost, skip the critic. If a wrong answer
+            can cost $200 in refund overage, paying $0.01 for a critic call is the easiest trade you will ever make.
           </T>
         </Box>
       </Reveal>
 
-      {sub < 4 && (
-        <SubBtn onClick={onContinue} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />
-      )}
+      {sub < 4 && <SubBtn onClick={onContinue} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
     </div>
   );
 }

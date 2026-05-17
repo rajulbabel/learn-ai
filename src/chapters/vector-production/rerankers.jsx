@@ -620,7 +620,15 @@ export default function Rerankers(ctx) {
                   <T color={C.purple} bold size={15} center>
                     {r.name}
                   </T>
-                  <div style={{ marginTop: 4, fontFamily: "monospace", fontSize: 12, color: C.bright, textAlign: "center" }}>
+                  <div
+                    style={{
+                      marginTop: 4,
+                      fontFamily: "monospace",
+                      fontSize: 12,
+                      color: C.bright,
+                      textAlign: "center",
+                    }}
+                  >
                     {r.kind} &middot; {r.size}
                   </div>
                   <T color={C.dim} size={12} style={{ marginTop: 4 }} center>

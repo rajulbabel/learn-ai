@@ -737,7 +737,7 @@ export default function ForwardPass(ctx) {
       )}
     </div>
   );
-};
+}
 
 // Section 1, Chapters 1.8-1.12
 // Loss Function, Learning, Derivatives, Backward Pass, Gradient Descent

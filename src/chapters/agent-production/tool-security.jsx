@@ -48,30 +48,44 @@ export default function ToolSecurity(ctx) {
             Tools Run In A Cage
           </T>
           <T color={SOFT.pink} center size={16} style={{ marginTop: 10 }}>
-            Every tool runs inside a sandbox boundary. Inside the cage: the tool process, its
-            allowed filesystem reads, its allowed outbound network destinations. Outside the
-            cage: everything else - the agent itself, the host OS, customer data unrelated to
-            this session. If the tool gets compromised, the cage limits the damage.
+            Every tool runs inside a sandbox boundary. Inside the cage: the tool process, its allowed filesystem reads,
+            its allowed outbound network destinations. Outside the cage: everything else - the agent itself, the host
+            OS, customer data unrelated to this session. If the tool gets compromised, the cage limits the damage.
           </T>
 
           <div style={{ ...tintedCard(C.pink), padding: 14, marginTop: 14 }}>
-            <svg
-              viewBox="0 0 720 240"
-              style={{ width: "100%", maxWidth: 720, display: "block", margin: "0 auto" }}
-            >
+            <svg viewBox="0 0 720 240" style={{ width: "100%", maxWidth: 720, display: "block", margin: "0 auto" }}>
               <desc>
-                Sandbox boundary diagram. The inner cage contains the tool process, its allowed
-                filesystem reads, and its allowed outbound network destinations. Outside the
-                cage are the agent itself, the host OS, and customer data unrelated to this
-                session. If a tool is compromised, the cage limits damage.
+                Sandbox boundary diagram. The inner cage contains the tool process, its allowed filesystem reads, and
+                its allowed outbound network destinations. Outside the cage are the agent itself, the host OS, and
+                customer data unrelated to this session. If a tool is compromised, the cage limits damage.
               </desc>
               {/* Outer world */}
-              <rect x={30} y={20} width={660} height={200} fill={`${C.pink}11`} stroke={`${C.pink}33`} strokeWidth={1.4} strokeDasharray="6 4" rx={10} />
+              <rect
+                x={30}
+                y={20}
+                width={660}
+                height={200}
+                fill={`${C.pink}11`}
+                stroke={`${C.pink}33`}
+                strokeWidth={1.4}
+                strokeDasharray="6 4"
+                rx={10}
+              />
               <text x={360} y={42} fill={SOFT.pink} fontSize="13" fontWeight="700" textAnchor="middle">
                 Host Environment (Outside The Cage)
               </text>
               {/* Inside cage */}
-              <rect x={220} y={70} width={280} height={130} fill={`${C.green}11`} stroke={C.green} strokeWidth={1.6} rx={10} />
+              <rect
+                x={220}
+                y={70}
+                width={280}
+                height={130}
+                fill={`${C.green}11`}
+                stroke={C.green}
+                strokeWidth={1.6}
+                rx={10}
+              />
               <text x={360} y={92} fill={SOFT.green} fontSize="14" fontWeight="700" textAnchor="middle">
                 Sandbox / Cage
               </text>
@@ -110,9 +124,9 @@ export default function ToolSecurity(ctx) {
           </div>
 
           <T color={SOFT.pink} center size={15} style={{ marginTop: 14 }}>
-            The cage is a runtime contract enforced by the platform (container, VM, process
-            isolation). The tool author declares what it needs; the runtime grants only that.
-            Compromised tools cannot escape what they were never given.
+            The cage is a runtime contract enforced by the platform (container, VM, process isolation). The tool author
+            declares what it needs; the runtime grants only that. Compromised tools cannot escape what they were never
+            given.
           </T>
         </Box>
       )}
@@ -123,10 +137,9 @@ export default function ToolSecurity(ctx) {
             Different Agents, Different Tool Sets
           </T>
           <T color={SOFT.red} center size={16} style={{ marginTop: 10 }}>
-            Capability scope is per-role. The triage agent reads. The billing specialist
-            mutates with caps. The escalation agent only hands off. Even if any one agent is
-            compromised, the blast radius is bounded. This is defense in depth at the
-            capability layer.
+            Capability scope is per-role. The triage agent reads. The billing specialist mutates with caps. The
+            escalation agent only hands off. Even if any one agent is compromised, the blast radius is bounded. This is
+            defense in depth at the capability layer.
           </T>
 
           <div style={{ ...tintedCard(C.red), padding: 14, marginTop: 14 }}>
@@ -139,7 +152,14 @@ export default function ToolSecurity(ctx) {
                 const soft = SOFT[cap.color];
                 return (
                   <Fragment key={cap.role}>
-                    <div style={{ padding: "10px 10px", borderTop: `1px solid ${C.red}22`, color: accent, fontWeight: 700 }}>
+                    <div
+                      style={{
+                        padding: "10px 10px",
+                        borderTop: `1px solid ${C.red}22`,
+                        color: accent,
+                        fontWeight: 700,
+                      }}
+                    >
                       {cap.role}
                     </div>
                     <div style={{ padding: "10px 10px", borderTop: `1px solid ${C.red}22`, color: soft }}>
@@ -155,8 +175,8 @@ export default function ToolSecurity(ctx) {
           </div>
 
           <T color={SOFT.red} center size={15} style={{ marginTop: 14 }}>
-            Capability tokens travel with the agent identity. The runtime verifies the agent&apos;s
-            role against the tool registry before executing any tool call. No role, no call.
+            Capability tokens travel with the agent identity. The runtime verifies the agent&apos;s role against the
+            tool registry before executing any tool call. No role, no call.
           </T>
         </Box>
       </Reveal>
@@ -167,10 +187,9 @@ export default function ToolSecurity(ctx) {
             Every Tool Call Logged
           </T>
           <T color={SOFT.orange} center size={16} style={{ marginTop: 10 }}>
-            Audit logging is non-negotiable. Every tool call produces one entry with timestamp,
-            agent identity, customer, tool name, input args, result, and consent metadata.
-            Logs are immutable. Retention: 7 years for financial actions, per typical
-            SOC 2 / financial-services rule.
+            Audit logging is non-negotiable. Every tool call produces one entry with timestamp, agent identity,
+            customer, tool name, input args, result, and consent metadata. Logs are immutable. Retention: 7 years for
+            financial actions, per typical SOC 2 / financial-services rule.
           </T>
 
           <div
@@ -218,9 +237,9 @@ export default function ToolSecurity(ctx) {
           </div>
 
           <T color={SOFT.orange} center size={15} style={{ marginTop: 14 }}>
-            Logs are append-only and signed. They feed three downstream systems: incident
-            response (recent tool calls per customer), compliance audits (retention proof), and
-            anomaly detection (deviations from normal call patterns).
+            Logs are append-only and signed. They feed three downstream systems: incident response (recent tool calls
+            per customer), compliance audits (retention proof), and anomaly detection (deviations from normal call
+            patterns).
           </T>
         </Box>
       </Reveal>
@@ -231,10 +250,9 @@ export default function ToolSecurity(ctx) {
             Cap The Frequency
           </T>
           <T color={SOFT.yellow} center size={16} style={{ marginTop: 10 }}>
-            Even within scope, rate-limit each tool. Cheap reads can be generous. Expensive
-            mutations need tight caps. Escalations need a moderate cap so spam-escalation
-            doesn&apos;t overwhelm the human queue. Hitting the limit forces a hard stop or
-            re-routes to a different agent.
+            Even within scope, rate-limit each tool. Cheap reads can be generous. Expensive mutations need tight caps.
+            Escalations need a moderate cap so spam-escalation doesn&apos;t overwhelm the human queue. Hitting the limit
+            forces a hard stop or re-routes to a different agent.
           </T>
 
           <div style={{ ...tintedCard(C.yellow), padding: 14, marginTop: 14 }}>
@@ -244,7 +262,15 @@ export default function ToolSecurity(ctx) {
               <div style={{ padding: "8px 10px", fontWeight: 700, color: SOFT.yellow }}>Why</div>
               {TOOL_SEC_RATE_LIMITS.map((row) => (
                 <Fragment key={row.tool}>
-                  <div style={{ padding: "10px 10px", borderTop: `1px solid ${C.yellow}22`, color: C.yellow, fontWeight: 700, fontFamily: "monospace" }}>
+                  <div
+                    style={{
+                      padding: "10px 10px",
+                      borderTop: `1px solid ${C.yellow}22`,
+                      color: C.yellow,
+                      fontWeight: 700,
+                      fontFamily: "monospace",
+                    }}
+                  >
                     {row.tool}
                   </div>
                   <div style={{ padding: "10px 10px", borderTop: `1px solid ${C.yellow}22`, color: SOFT.yellow }}>
@@ -259,9 +285,9 @@ export default function ToolSecurity(ctx) {
           </div>
 
           <T color={SOFT.yellow} center size={15} style={{ marginTop: 14 }}>
-            Rate limits live in the runtime, not in the agent. The model cannot raise them by
-            asking. When the limit is hit, the runtime returns a tool_error result so the agent
-            can adapt: escalate to human, queue for later, or refuse politely.
+            Rate limits live in the runtime, not in the agent. The model cannot raise them by asking. When the limit is
+            hit, the runtime returns a tool_error result so the agent can adapt: escalate to human, queue for later, or
+            refuse politely.
           </T>
         </Box>
       </Reveal>
@@ -272,9 +298,8 @@ export default function ToolSecurity(ctx) {
             Ask Before Doing Big Things
           </T>
           <T color={SOFT.purple} center size={16} style={{ marginTop: 10 }}>
-            For any tool that mutates state above a threshold, the runtime asks for human
-            consent before executing. The agent waits. The human approves or denies. The
-            decision goes into the audit log alongside the request.
+            For any tool that mutates state above a threshold, the runtime asks for human consent before executing. The
+            agent waits. The human approves or denies. The decision goes into the audit log alongside the request.
           </T>
 
           <div
@@ -317,17 +342,14 @@ Allow this action?
           </div>
 
           <T color={SOFT.purple} center size={15} style={{ marginTop: 14 }}>
-            Consent prompts close the production-hardening loop: sandboxing limits damage,
-            capability scope limits reach, audit logs preserve the record, rate limits cap
-            volume, and consent prompts keep a human in the loop for the highest-stakes calls.
-            Five layers, one safe agent.
+            Consent prompts close the production-hardening loop: sandboxing limits damage, capability scope limits
+            reach, audit logs preserve the record, rate limits cap volume, and consent prompts keep a human in the loop
+            for the highest-stakes calls. Five layers, one safe agent.
           </T>
         </Box>
       </Reveal>
 
-      {sub < 4 && (
-        <SubBtn onClick={onContinue} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />
-      )}
+      {sub < 4 && <SubBtn onClick={onContinue} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
     </div>
   );
 }

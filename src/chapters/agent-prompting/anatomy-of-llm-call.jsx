@@ -141,8 +141,8 @@ export default function AnatomyOfLlmCall(ctx) {
             Every LLM Call Is A List Of Messages
           </T>
           <T color="#80deea" center size={16} style={{ marginTop: 10 }}>
-            You don&apos;t &quot;chat&quot; with the model. You send it an ordered list of messages, each with a role. The
-            model reads the whole list and writes the next assistant turn.
+            You don&apos;t &quot;chat&quot; with the model. You send it an ordered list of messages, each with a role.
+            The model reads the whole list and writes the next assistant turn.
           </T>
           <div
             style={{
@@ -214,8 +214,8 @@ export default function AnatomyOfLlmCall(ctx) {
             Tokens, Not Words
           </T>
           <T color="#90caf9" center size={16} style={{ marginTop: 10 }}>
-            The model doesn&apos;t see characters or words. It sees tokens - sub-word chunks from the tokenizer. Both your
-            input and the model&apos;s output are billed and limited in tokens.
+            The model doesn&apos;t see characters or words. It sees tokens - sub-word chunks from the tokenizer. Both
+            your input and the model&apos;s output are billed and limited in tokens.
           </T>
 
           <T color={C.blue} bold center size={15} style={{ marginTop: 14 }}>

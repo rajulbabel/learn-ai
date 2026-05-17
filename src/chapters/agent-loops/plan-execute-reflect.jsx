@@ -135,9 +135,9 @@ export default function PlanExecuteReflect(ctx) {
             Decide Up Front Or Step By Step
           </T>
           <T color={SOFT.orange} center size={16} style={{ marginTop: 10 }}>
-            ReAct chooses the next move iteration by iteration. Plan-Execute does the opposite: the
-            model writes the full plan tree up front, then a simple executor walks the leaves. Same
-            tools, same model, very different control shape.
+            ReAct chooses the next move iteration by iteration. Plan-Execute does the opposite: the model writes the
+            full plan tree up front, then a simple executor walks the leaves. Same tools, same model, very different
+            control shape.
           </T>
 
           <div
@@ -159,8 +159,8 @@ export default function PlanExecuteReflect(ctx) {
                 style={{ width: "100%", maxWidth: 320, display: "block", margin: "10px auto 0" }}
               >
                 <desc>
-                  Linear ReAct chain showing four reactive steps connected by question-mark arrows
-                  representing the model choosing the next action on the fly each iteration.
+                  Linear ReAct chain showing four reactive steps connected by question-mark arrows representing the
+                  model choosing the next action on the fly each iteration.
                 </desc>
 
                 {/* 4 step nodes spaced symmetrically. Width 44, gap 32. Total = 4*44+3*32 = 272. Pad=(280-272)/2=4. */}
@@ -179,14 +179,7 @@ export default function PlanExecuteReflect(ctx) {
                         stroke={C.red}
                         strokeWidth="1.5"
                       />
-                      <text
-                        x={x + 22}
-                        y={cy + 4}
-                        fill={SOFT.red}
-                        fontSize="12"
-                        fontWeight="700"
-                        textAnchor="middle"
-                      >
+                      <text x={x + 22} y={cy + 4} fill={SOFT.red} fontSize="12" fontWeight="700" textAnchor="middle">
                         {`S${i + 1}`}
                       </text>
                     </g>
@@ -209,32 +202,15 @@ export default function PlanExecuteReflect(ctx) {
                         strokeWidth="1.4"
                         strokeDasharray="4 3"
                       />
-                      <polygon
-                        points={`${x2 - 4},90 ${x2 - 10},86 ${x2 - 10},94`}
-                        fill={SOFT.red}
-                      />
-                      <text
-                        x={midX}
-                        y={78}
-                        fill={SOFT.red}
-                        fontSize="13"
-                        fontWeight="700"
-                        textAnchor="middle"
-                      >
+                      <polygon points={`${x2 - 4},90 ${x2 - 10},86 ${x2 - 10},94`} fill={SOFT.red} />
+                      <text x={midX} y={78} fill={SOFT.red} fontSize="13" fontWeight="700" textAnchor="middle">
                         ?
                       </text>
                     </g>
                   );
                 })}
 
-                <text
-                  x={140}
-                  y={140}
-                  fill={`${SOFT.red}b3`}
-                  fontSize="11"
-                  fontWeight="600"
-                  textAnchor="middle"
-                >
+                <text x={140} y={140} fill={`${SOFT.red}b3`} fontSize="11" fontWeight="600" textAnchor="middle">
                   Model Picks Next Action Each Turn
                 </text>
               </svg>
@@ -254,8 +230,8 @@ export default function PlanExecuteReflect(ctx) {
                 style={{ width: "100%", maxWidth: 320, display: "block", margin: "10px auto 0" }}
               >
                 <desc>
-                  Plan tree topology where a single root node fans out to four leaf nodes
-                  representing the full plan written up front before any leaf is executed.
+                  Plan tree topology where a single root node fans out to four leaf nodes representing the full plan
+                  written up front before any leaf is executed.
                 </desc>
 
                 {/* Root node centered */}
@@ -269,14 +245,7 @@ export default function PlanExecuteReflect(ctx) {
                   stroke={C.cyan}
                   strokeWidth="1.5"
                 />
-                <text
-                  x={140}
-                  y={38}
-                  fill={SOFT.cyan}
-                  fontSize="12"
-                  fontWeight="700"
-                  textAnchor="middle"
-                >
+                <text x={140} y={38} fill={SOFT.cyan} fontSize="12" fontWeight="700" textAnchor="middle">
                   Root Plan
                 </text>
 
@@ -286,14 +255,7 @@ export default function PlanExecuteReflect(ctx) {
                   return (
                     <g key={`plan-leaf-${i}`}>
                       {/* Connector from root */}
-                      <line
-                        x1={140}
-                        y1={48}
-                        x2={x + 22}
-                        y2={108}
-                        stroke={`${SOFT.cyan}99`}
-                        strokeWidth="1.2"
-                      />
+                      <line x1={140} y1={48} x2={x + 22} y2={108} stroke={`${SOFT.cyan}99`} strokeWidth="1.2" />
                       <rect
                         x={x}
                         y={108}
@@ -304,28 +266,14 @@ export default function PlanExecuteReflect(ctx) {
                         stroke={C.cyan}
                         strokeWidth="1.2"
                       />
-                      <text
-                        x={x + 22}
-                        y={126}
-                        fill={SOFT.cyan}
-                        fontSize="11"
-                        fontWeight="700"
-                        textAnchor="middle"
-                      >
+                      <text x={x + 22} y={126} fill={SOFT.cyan} fontSize="11" fontWeight="700" textAnchor="middle">
                         {`L${i + 1}`}
                       </text>
                     </g>
                   );
                 })}
 
-                <text
-                  x={140}
-                  y={162}
-                  fill={`${SOFT.cyan}b3`}
-                  fontSize="11"
-                  fontWeight="600"
-                  textAnchor="middle"
-                >
+                <text x={140} y={162} fill={`${SOFT.cyan}b3`} fontSize="11" fontWeight="600" textAnchor="middle">
                   Whole Plan Drawn Before Any Leaf Runs
                 </text>
               </svg>
@@ -336,9 +284,8 @@ export default function PlanExecuteReflect(ctx) {
           </div>
 
           <T color={SOFT.orange} center size={15} style={{ marginTop: 14 }}>
-            Use ReAct when the next step truly depends on what just happened. Use Plan-Execute when
-            you can name all the steps up front and just want them ordered, parallelized, or
-            audited.
+            Use ReAct when the next step truly depends on what just happened. Use Plan-Execute when you can name all the
+            steps up front and just want them ordered, parallelized, or audited.
           </T>
         </Box>
       )}
@@ -349,9 +296,8 @@ export default function PlanExecuteReflect(ctx) {
             What A Plan Looks Like
           </T>
           <T color={SOFT.yellow} center size={16} style={{ marginTop: 10 }}>
-            A plan is a tree. The root names the overall goal. Each leaf names a concrete tool call
-            with the data it needs. Below is the plan the model writes for ticket T4: a customer
-            wants to cancel and get a refund.
+            A plan is a tree. The root names the overall goal. Each leaf names a concrete tool call with the data it
+            needs. Below is the plan the model writes for ticket T4: a customer wants to cancel and get a refund.
           </T>
 
           <div style={{ ...tintedCard(C.yellow), padding: 14, marginTop: 14 }}>
@@ -363,9 +309,8 @@ export default function PlanExecuteReflect(ctx) {
               style={{ width: "100%", maxWidth: 640, display: "block", margin: "12px auto 0" }}
             >
               <desc>
-                Four-leaf plan tree for ticket T4 cancel and refund showing lookup_customer,
-                lookup_subscription, cancel, process_refund leaves with refund leaf marked for
-                escalation.
+                Four-leaf plan tree for ticket T4 cancel and refund showing lookup_customer, lookup_subscription,
+                cancel, process_refund leaves with refund leaf marked for escalation.
               </desc>
 
               {/* Root node centered at x = 280 (560/2). Width 200. */}
@@ -379,24 +324,10 @@ export default function PlanExecuteReflect(ctx) {
                 stroke={C.yellow}
                 strokeWidth="2"
               />
-              <text
-                x={280}
-                y={36}
-                fill={C.yellow}
-                fontSize="14"
-                fontWeight="700"
-                textAnchor="middle"
-              >
+              <text x={280} y={36} fill={C.yellow} fontSize="14" fontWeight="700" textAnchor="middle">
                 Resolve T4: Cancel + Refund
               </text>
-              <text
-                x={280}
-                y={52}
-                fill={SOFT.yellow}
-                fontSize="11"
-                fontWeight="500"
-                textAnchor="middle"
-              >
+              <text x={280} y={52} fill={SOFT.yellow} fontSize="11" fontWeight="500" textAnchor="middle">
                 Root Goal
               </text>
 
@@ -429,14 +360,7 @@ export default function PlanExecuteReflect(ctx) {
                       stroke={accent}
                       strokeWidth="1.6"
                     />
-                    <text
-                      x={leaf.x + 58}
-                      y={142}
-                      fill={accent}
-                      fontSize="12"
-                      fontWeight="700"
-                      textAnchor="middle"
-                    >
+                    <text x={leaf.x + 58} y={142} fill={accent} fontSize="12" fontWeight="700" textAnchor="middle">
                       {leaf.label}
                     </text>
                     {leaf.note.split(/ -> /).map((line, j, arr) => (
@@ -457,14 +381,7 @@ export default function PlanExecuteReflect(ctx) {
               })}
 
               {/* Caption */}
-              <text
-                x={280}
-                y={228}
-                fill={`${SOFT.yellow}b3`}
-                fontSize="11"
-                fontWeight="600"
-                textAnchor="middle"
-              >
+              <text x={280} y={228} fill={`${SOFT.yellow}b3`} fontSize="11" fontWeight="600" textAnchor="middle">
                 Tree Drawn Before Any Tool Fires
               </text>
             </svg>
@@ -478,9 +395,9 @@ export default function PlanExecuteReflect(ctx) {
           </div>
 
           <T color={SOFT.yellow} center size={15} style={{ marginTop: 12 }}>
-            The plan is structured output, not free text. The model emits four leaf objects, each
-            with a tool name, an argument template, and a note about which earlier leaf supplies
-            each argument. The fourth leaf flags a known business_rule snag the planner anticipates.
+            The plan is structured output, not free text. The model emits four leaf objects, each with a tool name, an
+            argument template, and a note about which earlier leaf supplies each argument. The fourth leaf flags a known
+            business_rule snag the planner anticipates.
           </T>
         </Box>
       </Reveal>
@@ -491,9 +408,9 @@ export default function PlanExecuteReflect(ctx) {
             Walk The Leaves
           </T>
           <T color={SOFT.red} center size={16} style={{ marginTop: 10 }}>
-            Once the plan is set, a thin executor walks the leaves in order. Each leaf calls its
-            tool, captures the result, and feeds the result into the next leaf's arguments. The
-            model only re-enters the loop when something the plan did not anticipate happens.
+            Once the plan is set, a thin executor walks the leaves in order. Each leaf calls its tool, captures the
+            result, and feeds the result into the next leaf's arguments. The model only re-enters the loop when
+            something the plan did not anticipate happens.
           </T>
 
           <div style={{ ...tintedCard(C.red), padding: 14, marginTop: 14 }}>
@@ -505,9 +422,9 @@ export default function PlanExecuteReflect(ctx) {
               style={{ width: "100%", maxWidth: 680, display: "block", margin: "12px auto 0" }}
             >
               <desc>
-                Plan execution sweep showing four leaves running with their results next to them,
-                the fourth leaf failing with a business_rule error, and a fifth escalate_human leaf
-                appended by the executor to adapt to the error.
+                Plan execution sweep showing four leaves running with their results next to them, the fourth leaf
+                failing with a business_rule error, and a fifth escalate_human leaf appended by the executor to adapt to
+                the error.
               </desc>
 
               {/* Top row: 4 original leaves */}
@@ -526,24 +443,10 @@ export default function PlanExecuteReflect(ctx) {
                       stroke={accent}
                       strokeWidth="1.6"
                     />
-                    <text
-                      x={leaf.x + 55}
-                      y={42}
-                      fill={accent}
-                      fontSize="12"
-                      fontWeight="700"
-                      textAnchor="middle"
-                    >
+                    <text x={leaf.x + 55} y={42} fill={accent} fontSize="12" fontWeight="700" textAnchor="middle">
                       {leaf.label}
                     </text>
-                    <text
-                      x={leaf.x + 55}
-                      y={62}
-                      fill={soft}
-                      fontSize="10"
-                      fontWeight="500"
-                      textAnchor="middle"
-                    >
+                    <text x={leaf.x + 55} y={62} fill={soft} fontSize="10" fontWeight="500" textAnchor="middle">
                       {leaf.result}
                     </text>
                     {/* Status badge */}
@@ -557,14 +460,7 @@ export default function PlanExecuteReflect(ctx) {
                       stroke={accent}
                       strokeWidth="1"
                     />
-                    <text
-                      x={leaf.x + 55}
-                      y={82}
-                      fill={accent}
-                      fontSize="10"
-                      fontWeight="700"
-                      textAnchor="middle"
-                    >
+                    <text x={leaf.x + 55} y={82} fill={accent} fontSize="10" fontWeight="700" textAnchor="middle">
                       {leaf.status}
                     </text>
                   </g>
@@ -577,18 +473,8 @@ export default function PlanExecuteReflect(ctx) {
                 const x2 = WALK_LEAVES[i + 1].x;
                 return (
                   <g key={`arrow-top-${i}`}>
-                    <line
-                      x1={x1}
-                      y1={56}
-                      x2={x2 - 4}
-                      y2={56}
-                      stroke={`${SOFT.green}99`}
-                      strokeWidth="1.4"
-                    />
-                    <polygon
-                      points={`${x2 - 4},56 ${x2 - 10},52 ${x2 - 10},60`}
-                      fill={SOFT.green}
-                    />
+                    <line x1={x1} y1={56} x2={x2 - 4} y2={56} stroke={`${SOFT.green}99`} strokeWidth="1.4" />
+                    <polygon points={`${x2 - 4},56 ${x2 - 10},52 ${x2 - 10},60`} fill={SOFT.green} />
                   </g>
                 );
               })}
@@ -613,18 +499,8 @@ export default function PlanExecuteReflect(ctx) {
                 strokeWidth="1.6"
                 strokeDasharray="4 3"
               />
-              <polygon
-                points={`300,200 296,194 304,194`}
-                fill={SOFT.purple}
-              />
-              <text
-                x={400}
-                y={150}
-                fill={SOFT.purple}
-                fontSize="11"
-                fontWeight="600"
-                textAnchor="middle"
-              >
+              <polygon points={`300,200 296,194 304,194`} fill={SOFT.purple} />
+              <text x={400} y={150} fill={SOFT.purple} fontSize="11" fontWeight="600" textAnchor="middle">
                 Executor Adapts -&gt; Adds A Leaf
               </text>
 
@@ -639,24 +515,10 @@ export default function PlanExecuteReflect(ctx) {
                 stroke={C.purple}
                 strokeWidth="2"
               />
-              <text
-                x={300}
-                y={230}
-                fill={C.purple}
-                fontSize="12"
-                fontWeight="700"
-                textAnchor="middle"
-              >
+              <text x={300} y={230} fill={C.purple} fontSize="12" fontWeight="700" textAnchor="middle">
                 5. escalate_human
               </text>
-              <text
-                x={300}
-                y={250}
-                fill={SOFT.purple}
-                fontSize="10"
-                fontWeight="500"
-                textAnchor="middle"
-              >
+              <text x={300} y={250} fill={SOFT.purple} fontSize="10" fontWeight="500" textAnchor="middle">
                 Reason: business_rule
               </text>
               <rect
@@ -669,25 +531,11 @@ export default function PlanExecuteReflect(ctx) {
                 stroke={C.purple}
                 strokeWidth="1"
               />
-              <text
-                x={300}
-                y={270}
-                fill={C.purple}
-                fontSize="10"
-                fontWeight="700"
-                textAnchor="middle"
-              >
+              <text x={300} y={270} fill={C.purple} fontSize="10" fontWeight="700" textAnchor="middle">
                 Done
               </text>
 
-              <text
-                x={300}
-                y={304}
-                fill={`${SOFT.red}b3`}
-                fontSize="11"
-                fontWeight="600"
-                textAnchor="middle"
-              >
+              <text x={300} y={304} fill={`${SOFT.red}b3`} fontSize="11" fontWeight="600" textAnchor="middle">
                 Adapted Plan Closes The Loop
               </text>
             </svg>
@@ -701,9 +549,9 @@ export default function PlanExecuteReflect(ctx) {
           </div>
 
           <T color={SOFT.red} center size={15} style={{ marginTop: 12 }}>
-            Notice the executor did not throw the entire plan away. Leaves 1, 2, and 3 already
-            succeeded - their results are kept. Only the failed leaf triggers a replan, and the
-            replan appends one new leaf instead of rebuilding the tree from scratch.
+            Notice the executor did not throw the entire plan away. Leaves 1, 2, and 3 already succeeded - their results
+            are kept. Only the failed leaf triggers a replan, and the replan appends one new leaf instead of rebuilding
+            the tree from scratch.
           </T>
         </Box>
       </Reveal>
@@ -714,10 +562,9 @@ export default function PlanExecuteReflect(ctx) {
             Reflection: Did That Answer Land?
           </T>
           <T color={SOFT.amber} center size={16} style={{ marginTop: 10 }}>
-            Reflection sits on top of any loop. After the model writes a draft, the same model (or
-            a separate critic call) grades it. If the grade is low, the model revises. It is a
-            cheap, model-only feedback loop that catches confidently wrong answers before they
-            ship.
+            Reflection sits on top of any loop. After the model writes a draft, the same model (or a separate critic
+            call) grades it. If the grade is low, the model revises. It is a cheap, model-only feedback loop that
+            catches confidently wrong answers before they ship.
           </T>
 
           <div
@@ -798,7 +645,7 @@ export default function PlanExecuteReflect(ctx) {
                 fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace",
               }}
             >
-{`Critic: Grade the draft 0-10 on accuracy, format, completeness.
+              {`Critic: Grade the draft 0-10 on accuracy, format, completeness.
 Return JSON: { "score": int, "reasoning": str, "fix_list": [str] }.
 
 If Score < 7, the orchestrator runs the model again with the
@@ -808,10 +655,9 @@ Two failed revisions in a row escalate_human.`}
           </div>
 
           <T color={SOFT.amber} center size={15} style={{ marginTop: 12 }}>
-            The cost is one extra model call per draft, plus another full call if a revision is
-            needed. The win is catching bugs the original pass missed: math errors, missing fields,
-            tone mismatches. Bound revisions so reflection cannot spiral into an infinite revise
-            loop.
+            The cost is one extra model call per draft, plus another full call if a revision is needed. The win is
+            catching bugs the original pass missed: math errors, missing fields, tone mismatches. Bound revisions so
+            reflection cannot spiral into an infinite revise loop.
           </T>
         </Box>
       </Reveal>
@@ -822,9 +668,8 @@ Two failed revisions in a row escalate_human.`}
             Pick The Right Loop Pattern
           </T>
           <T color={SOFT.cyan} center size={16} style={{ marginTop: 10 }}>
-            Four shapes, one decision matrix. Plot the task on two axes: how complex is the task,
-            and how much do you need to audit the reasoning. The right loop falls out of the cell
-            you land in.
+            Four shapes, one decision matrix. Plot the task on two axes: how complex is the task, and how much do you
+            need to audit the reasoning. The right loop falls out of the cell you land in.
           </T>
 
           <div style={{ ...tintedCard(C.cyan), padding: 14, marginTop: 14 }}>
@@ -982,16 +827,13 @@ Two failed revisions in a row escalate_human.`}
           </div>
 
           <T color={SOFT.cyan} center size={15} style={{ marginTop: 12 }}>
-            Loops are not a ladder where bigger is always better. Each extra structure costs
-            tokens, latency, and review surface. Pick the smallest shape that handles the task and
-            graduate only when the task forces you to.
+            Loops are not a ladder where bigger is always better. Each extra structure costs tokens, latency, and review
+            surface. Pick the smallest shape that handles the task and graduate only when the task forces you to.
           </T>
         </Box>
       </Reveal>
 
-      {sub < 4 && (
-        <SubBtn onClick={onContinue} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />
-      )}
+      {sub < 4 && <SubBtn onClick={onContinue} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
     </div>
   );
 }

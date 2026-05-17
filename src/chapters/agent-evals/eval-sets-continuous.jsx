@@ -16,8 +16,7 @@ const EVAL_SET_DECKS = [
     name: "Adversarial",
     count: 20,
     color: "red",
-    detail:
-      "Edge Cases, Ambiguous Wording, Multi-Intent, Prompt-Injection Attempts.",
+    detail: "Edge Cases, Ambiguous Wording, Multi-Intent, Prompt-Injection Attempts.",
     use: "Catches Failure Modes That Golden Misses.",
   },
   {
@@ -45,9 +44,9 @@ export default function EvalSetsContinuous(ctx) {
             Golden + Adversarial + Regression
           </T>
           <T color={SOFT.red} center size={16} style={{ marginTop: 10 }}>
-            An eval set is the static portfolio of test cases you grade your agent against. The
-            production composition uses three decks. Each catches a different class of failure.
-            Skip any one and your dashboard has a blind spot.
+            An eval set is the static portfolio of test cases you grade your agent against. The production composition
+            uses three decks. Each catches a different class of failure. Skip any one and your dashboard has a blind
+            spot.
           </T>
 
           <div
@@ -82,9 +81,8 @@ export default function EvalSetsContinuous(ctx) {
           </div>
 
           <T color={SOFT.red} center size={14} style={{ marginTop: 14 }}>
-            Total eval set: 80 cases. Small enough to run cheaply on every deploy; large enough
-            to capture distribution + adversarial + regression. Most production teams start with
-            this size and grow gradually.
+            Total eval set: 80 cases. Small enough to run cheaply on every deploy; large enough to capture distribution
+            + adversarial + regression. Most production teams start with this size and grow gradually.
           </T>
         </Box>
       )}
@@ -95,21 +93,17 @@ export default function EvalSetsContinuous(ctx) {
             Eval Set Goes Stale
           </T>
           <T color={SOFT.orange} center size={16} style={{ marginTop: 10 }}>
-            An eval set frozen at month 0 looks great. By month 3 real traffic has shifted:
-            new product features, new customer segments, new attack patterns. Eval pass rate no
-            longer predicts production success. Refresh 10-20% of cases per quarter from recent
-            production traces.
+            An eval set frozen at month 0 looks great. By month 3 real traffic has shifted: new product features, new
+            customer segments, new attack patterns. Eval pass rate no longer predicts production success. Refresh 10-20%
+            of cases per quarter from recent production traces.
           </T>
 
           <div style={{ ...tintedCard(C.orange), padding: 14, marginTop: 14 }}>
-            <svg
-              viewBox="0 0 560 220"
-              style={{ width: "100%", maxWidth: 640, display: "block", margin: "0 auto" }}
-            >
+            <svg viewBox="0 0 560 220" style={{ width: "100%", maxWidth: 640, display: "block", margin: "0 auto" }}>
               <desc>
-                Freshness timeline showing eval set score holding steady near 0.9 at month zero
-                while real production distribution drifts away over time, causing the gap between
-                eval-set predicted quality and actual production quality to widen by month three.
+                Freshness timeline showing eval set score holding steady near 0.9 at month zero while real production
+                distribution drifts away over time, causing the gap between eval-set predicted quality and actual
+                production quality to widen by month three.
               </desc>
               {/* Timeline axis */}
               <line x1={50} y1={170} x2={510} y2={170} stroke={SOFT.orange} strokeWidth={1.5} />
@@ -152,9 +146,8 @@ export default function EvalSetsContinuous(ctx) {
           </div>
 
           <T color={SOFT.orange} center size={14} style={{ marginTop: 12 }}>
-            Mitigation: every quarter, replace 10-20% of golden cases with recent production
-            traces (anonymized). Adversarial set grows separately as new attack patterns surface.
-            Regression set only grows.
+            Mitigation: every quarter, replace 10-20% of golden cases with recent production traces (anonymized).
+            Adversarial set grows separately as new attack patterns surface. Regression set only grows.
           </T>
         </Box>
       </Reveal>
@@ -165,20 +158,17 @@ export default function EvalSetsContinuous(ctx) {
             Grade A Slice Of Production
           </T>
           <T color={SOFT.yellow} center size={16} style={{ marginTop: 10 }}>
-            Offline eval covers known cases. Online eval samples live production traffic, grades
-            it asynchronously with LLM-as-Judge, and writes the result back to the trace store
-            for the dashboard. Sampling rate is a cost / detection tradeoff.
+            Offline eval covers known cases. Online eval samples live production traffic, grades it asynchronously with
+            LLM-as-Judge, and writes the result back to the trace store for the dashboard. Sampling rate is a cost /
+            detection tradeoff.
           </T>
 
           <div style={{ ...tintedCard(C.yellow), padding: 14, marginTop: 14 }}>
-            <svg
-              viewBox="0 0 720 200"
-              style={{ width: "100%", maxWidth: 720, display: "block", margin: "0 auto" }}
-            >
+            <svg viewBox="0 0 720 200" style={{ width: "100%", maxWidth: 720, display: "block", margin: "0 auto" }}>
               <desc>
-                Online sampling flow showing production traffic being sampled at a one to five
-                percent rate into an async LLM-as-Judge grading stage, with results stored back
-                to the trace store and rendered on the eval quality dashboard.
+                Online sampling flow showing production traffic being sampled at a one to five percent rate into an
+                async LLM-as-Judge grading stage, with results stored back to the trace store and rendered on the eval
+                quality dashboard.
               </desc>
               {/* Stations */}
               {[
@@ -236,9 +226,9 @@ export default function EvalSetsContinuous(ctx) {
           </div>
 
           <T color={SOFT.yellow} center size={14} style={{ marginTop: 12 }}>
-            Pick 1-5% as the default. Bump to 25% for the first week after a deploy; drop back
-            once dashboard is stable. Async grading means production latency is unchanged - the
-            judge runs after the user already got their answer.
+            Pick 1-5% as the default. Bump to 25% for the first week after a deploy; drop back once dashboard is stable.
+            Async grading means production latency is unchanged - the judge runs after the user already got their
+            answer.
           </T>
         </Box>
       </Reveal>
@@ -249,21 +239,17 @@ export default function EvalSetsContinuous(ctx) {
             Trigger When Quality Drops
           </T>
           <T color={SOFT.amber} center size={16} style={{ marginTop: 10 }}>
-            Online sampling produces a time series of composite scores. A drift detector watches
-            the 7-day moving average against a baseline. Alert if the moving average drops more
-            than 0.05 from the baseline. Page the engineer, freeze the deploy, investigate.
+            Online sampling produces a time series of composite scores. A drift detector watches the 7-day moving
+            average against a baseline. Alert if the moving average drops more than 0.05 from the baseline. Page the
+            engineer, freeze the deploy, investigate.
           </T>
 
           <div style={{ ...tintedCard(C.amber), padding: 14, marginTop: 14 }}>
-            <svg
-              viewBox="0 0 560 240"
-              style={{ width: "100%", maxWidth: 640, display: "block", margin: "0 auto" }}
-            >
+            <svg viewBox="0 0 560 240" style={{ width: "100%", maxWidth: 640, display: "block", margin: "0 auto" }}>
               <desc>
-                Time series of composite trace scores plotted over fourteen days, hovering around
-                0.85 until day ten where the moving average drops to 0.78, crossing the 0.05
-                drift threshold below the 0.85 baseline and firing an alert that engineers must
-                investigate.
+                Time series of composite trace scores plotted over fourteen days, hovering around 0.85 until day ten
+                where the moving average drops to 0.78, crossing the 0.05 drift threshold below the 0.85 baseline and
+                firing an alert that engineers must investigate.
               </desc>
               {/* Axes */}
               <line x1={50} y1={180} x2={510} y2={180} stroke={SOFT.amber} strokeWidth={1.5} />
@@ -319,10 +305,9 @@ export default function EvalSetsContinuous(ctx) {
           </div>
 
           <T color={SOFT.amber} center size={14} style={{ marginTop: 12 }}>
-            Real incident shape: an LLM provider rolled a silent model update overnight; the
-            composite score drifted 0.07 from baseline; alert fired the next morning; engineers
-            switched to the pinned-version endpoint within 4 hours. Without continuous eval the
-            drop is invisible for weeks.
+            Real incident shape: an LLM provider rolled a silent model update overnight; the composite score drifted
+            0.07 from baseline; alert fired the next morning; engineers switched to the pinned-version endpoint within 4
+            hours. Without continuous eval the drop is invisible for weeks.
           </T>
         </Box>
       </Reveal>
@@ -333,9 +318,8 @@ export default function EvalSetsContinuous(ctx) {
             Build The Eval Set Before The Agent
           </T>
           <T color={SOFT.purple} center size={16} style={{ marginTop: 10 }}>
-            The closing principle. The eval set is not an afterthought; it is the
-            production-readiness gate. Production teams that skip eval ship more agents and watch
-            more of them fail.
+            The closing principle. The eval set is not an afterthought; it is the production-readiness gate. Production
+            teams that skip eval ship more agents and watch more of them fail.
           </T>
 
           <div
@@ -350,8 +334,8 @@ export default function EvalSetsContinuous(ctx) {
               The Principle
             </T>
             <T color={SOFT.purple} center size={16} style={{ marginTop: 12, fontStyle: "italic" }}>
-              &quot;If you cannot write 20 test cases your agent must pass, you do not know what
-              your agent is supposed to do. Build the eval set FIRST. Build the agent SECOND.&quot;
+              &quot;If you cannot write 20 test cases your agent must pass, you do not know what your agent is supposed
+              to do. Build the eval set FIRST. Build the agent SECOND.&quot;
             </T>
 
             <div
@@ -367,8 +351,7 @@ export default function EvalSetsContinuous(ctx) {
                   Anti-Pattern
                 </T>
                 <T color={SOFT.red} center size={13} style={{ marginTop: 6 }}>
-                  Ship Agent. See What Breaks In Production. Build Eval Set Reactively. Repeat
-                  Until Customers Churn.
+                  Ship Agent. See What Breaks In Production. Build Eval Set Reactively. Repeat Until Customers Churn.
                 </T>
               </div>
               <div style={{ ...tintedCard(C.green), padding: 12 }}>
@@ -376,24 +359,21 @@ export default function EvalSetsContinuous(ctx) {
                   Section 13 Way
                 </T>
                 <T color={SOFT.green} center size={13} style={{ marginTop: 6 }}>
-                  Write 20 Test Cases Defining Success. Then Iterate Agent Until It Passes All
-                  20. Then Ship. Then Add Continuous Eval On Top.
+                  Write 20 Test Cases Defining Success. Then Iterate Agent Until It Passes All 20. Then Ship. Then Add
+                  Continuous Eval On Top.
                 </T>
               </div>
             </div>
           </div>
 
           <T color={SOFT.purple} center size={14} style={{ marginTop: 12 }}>
-            Every Section 13 chapter (prompting, tools, loops, memory, multi-agent, evals) was
-            structured to give a production-ready playbook. The closing message is the discipline
-            that ties it together: eval before ship.
+            Every Section 13 chapter (prompting, tools, loops, memory, multi-agent, evals) was structured to give a
+            production-ready playbook. The closing message is the discipline that ties it together: eval before ship.
           </T>
         </Box>
       </Reveal>
 
-      {sub < 4 && (
-        <SubBtn onClick={onContinue} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />
-      )}
+      {sub < 4 && <SubBtn onClick={onContinue} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
     </div>
   );
 }

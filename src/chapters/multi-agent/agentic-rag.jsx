@@ -38,7 +38,7 @@ const RESEARCH_QUERY_STEPS = [
     step: 3,
     actor: "Judge",
     color: "blue",
-    detail: 'Only 2 Are Customer-Impact. Need Broader Retrieval With Severity Filter.',
+    detail: "Only 2 Are Customer-Impact. Need Broader Retrieval With Severity Filter.",
   },
   {
     step: 4,
@@ -87,21 +87,17 @@ export default function AgenticRag(ctx) {
             Retrieve Once vs Retrieve In A Loop
           </T>
           <T color={SOFT.green} center size={16} style={{ marginTop: 10 }}>
-            Naive RAG retrieves once and generates an answer. Agentic RAG puts retrieval inside an
-            agent loop: search, judge the results, refine the query, search again. Iterative
-            instead of one-shot. Mechanics covered in Section 12.29; here we frame it as a multi-
-            agent pattern.
+            Naive RAG retrieves once and generates an answer. Agentic RAG puts retrieval inside an agent loop: search,
+            judge the results, refine the query, search again. Iterative instead of one-shot. Mechanics covered in
+            Section 12.29; here we frame it as a multi- agent pattern.
           </T>
 
           <div style={{ ...tintedCard(C.green), padding: 14, marginTop: 14 }}>
-            <svg
-              viewBox="0 0 560 240"
-              style={{ width: "100%", maxWidth: 640, display: "block", margin: "0 auto" }}
-            >
+            <svg viewBox="0 0 560 240" style={{ width: "100%", maxWidth: 640, display: "block", margin: "0 auto" }}>
               <desc>
-                Top row shows naive RAG as a one-shot pipeline from query to retrieve to generate;
-                bottom row shows agentic RAG as a loop from query to retrieve to judge with a
-                conditional rewrite arrow back to retrieve until the judge says done.
+                Top row shows naive RAG as a one-shot pipeline from query to retrieve to generate; bottom row shows
+                agentic RAG as a loop from query to retrieve to judge with a conditional rewrite arrow back to retrieve
+                until the judge says done.
               </desc>
               {/* Naive RAG row */}
               <text x={40} y={20} fill={SOFT.green} fontSize="12" fontWeight="700">
@@ -113,14 +109,26 @@ export default function AgenticRag(ctx) {
                 { x: 360, label: "Generate" },
               ].map((n, i) => (
                 <g key={`naive-${i}`}>
-                  <rect x={n.x} y={30} width={120} height={40} rx={8} fill={`${C.green}1f`} stroke={C.green} strokeWidth={1.6} />
+                  <rect
+                    x={n.x}
+                    y={30}
+                    width={120}
+                    height={40}
+                    rx={8}
+                    fill={`${C.green}1f`}
+                    stroke={C.green}
+                    strokeWidth={1.6}
+                  />
                   <text x={n.x + 60} y={55} fill={SOFT.green} fontSize="13" fontWeight="700" textAnchor="middle">
                     {n.label}
                   </text>
                   {i < 2 && (
                     <>
                       <line x1={n.x + 120} y1={50} x2={n.x + 160} y2={50} stroke={C.green} strokeWidth={1.6} />
-                      <polygon points={`${n.x + 156},47 ${n.x + 164},47 ${n.x + 160},43 ${n.x + 160},57 ${n.x + 156},53`} fill={C.green} />
+                      <polygon
+                        points={`${n.x + 156},47 ${n.x + 164},47 ${n.x + 160},43 ${n.x + 160},57 ${n.x + 156},53`}
+                        fill={C.green}
+                      />
                     </>
                   )}
                 </g>
@@ -137,14 +145,26 @@ export default function AgenticRag(ctx) {
                 { x: 460, label: "Done" },
               ].map((n, i) => (
                 <g key={`agentic-${i}`}>
-                  <rect x={n.x} y={120} width={100} height={40} rx={8} fill={`${C.cyan}1f`} stroke={C.cyan} strokeWidth={1.6} />
+                  <rect
+                    x={n.x}
+                    y={120}
+                    width={100}
+                    height={40}
+                    rx={8}
+                    fill={`${C.cyan}1f`}
+                    stroke={C.cyan}
+                    strokeWidth={1.6}
+                  />
                   <text x={n.x + 50} y={145} fill={SOFT.cyan} fontSize="13" fontWeight="700" textAnchor="middle">
                     {n.label}
                   </text>
                   {i < 3 && (
                     <>
                       <line x1={n.x + 100} y1={140} x2={n.x + 140} y2={140} stroke={C.cyan} strokeWidth={1.6} />
-                      <polygon points={`${n.x + 136},137 ${n.x + 144},137 ${n.x + 140},133 ${n.x + 140},147 ${n.x + 136},143`} fill={C.cyan} />
+                      <polygon
+                        points={`${n.x + 136},137 ${n.x + 144},137 ${n.x + 140},133 ${n.x + 140},147 ${n.x + 136},143`}
+                        fill={C.cyan}
+                      />
                     </>
                   )}
                 </g>
@@ -159,9 +179,9 @@ export default function AgenticRag(ctx) {
           </div>
 
           <T color={SOFT.green} center size={15} style={{ marginTop: 12 }}>
-            Naive RAG is a pipeline; agentic RAG is a loop with retrieval inside. Section 12.2
-            covers the naive pipeline; Section 12.29 covers the loop mechanics. Here we close Act
-            6 by framing it as multi-agent.
+            Naive RAG is a pipeline; agentic RAG is a loop with retrieval inside. Section 12.2 covers the naive
+            pipeline; Section 12.29 covers the loop mechanics. Here we close the multi-agent chapters by framing
+            agentic RAG as a multi-agent pattern.
           </T>
         </Box>
       )}
@@ -172,20 +192,16 @@ export default function AgenticRag(ctx) {
             Search, Judge, Refine, Repeat
           </T>
           <T color={SOFT.teal} center size={16} style={{ marginTop: 10 }}>
-            The agentic RAG loop has four stations. Search returns candidates; Judge asks "do I
-            have enough? what is missing?"; Refine rewrites the query with the gap in mind; Search
-            again. Loop until Judge says "done" or max iterations is hit.
+            The agentic RAG loop has four stations. Search returns candidates; Judge asks "do I have enough? what is
+            missing?"; Refine rewrites the query with the gap in mind; Search again. Loop until Judge says "done" or max
+            iterations is hit.
           </T>
 
           <div style={{ ...tintedCard(C.teal), padding: 14, marginTop: 14 }}>
-            <svg
-              viewBox="0 0 560 200"
-              style={{ width: "100%", maxWidth: 640, display: "block", margin: "0 auto" }}
-            >
+            <svg viewBox="0 0 560 200" style={{ width: "100%", maxWidth: 640, display: "block", margin: "0 auto" }}>
               <desc>
-                Circular four-station loop: search, judge with a question of whether enough
-                evidence has been collected, refine which rewrites the query, then search again,
-                until judge says done or max iterations is hit.
+                Circular four-station loop: search, judge with a question of whether enough evidence has been collected,
+                refine which rewrites the query, then search again, until judge says done or max iterations is hit.
               </desc>
               {[
                 { x: 280, y: 30, label: "Search" },
@@ -194,7 +210,16 @@ export default function AgenticRag(ctx) {
                 { x: 80, y: 100, label: "Done?" },
               ].map((s, i) => (
                 <g key={`loop-${i}`}>
-                  <rect x={s.x - 60} y={s.y - 16} width={120} height={32} rx={8} fill={`${C.teal}1f`} stroke={C.teal} strokeWidth={1.6} />
+                  <rect
+                    x={s.x - 60}
+                    y={s.y - 16}
+                    width={120}
+                    height={32}
+                    rx={8}
+                    fill={`${C.teal}1f`}
+                    stroke={C.teal}
+                    strokeWidth={1.6}
+                  />
                   <text x={s.x} y={s.y + 4} fill={SOFT.teal} fontSize="13" fontWeight="700" textAnchor="middle">
                     {s.label}
                   </text>
@@ -212,9 +237,8 @@ export default function AgenticRag(ctx) {
           </div>
 
           <T color={SOFT.teal} center size={15} style={{ marginTop: 12 }}>
-            Each station is its own LLM call (or its own internal agent). The Judge is the most
-            critical - if it always says "I have enough", you have naive RAG with extra steps. If
-            it never says "enough", you have cost runaway.
+            Each station is its own LLM call (or its own internal agent). The Judge is the most critical - if it always
+            says "I have enough", you have naive RAG with extra steps. If it never says "enough", you have cost runaway.
           </T>
         </Box>
       </Reveal>
@@ -225,9 +249,8 @@ export default function AgenticRag(ctx) {
             The Agent Rewrites Its Own Query
           </T>
           <T color={SOFT.cyan} center size={16} style={{ marginTop: 10 }}>
-            Query rewriting is the smartest part of the loop. The Judge identifies what is missing;
-            the Refine step turns that gap into a sharper next query. Three iterations on a real
-            research question.
+            Query rewriting is the smartest part of the loop. The Judge identifies what is missing; the Refine step
+            turns that gap into a sharper next query. Three iterations on a real research question.
           </T>
 
           <div
@@ -252,9 +275,8 @@ export default function AgenticRag(ctx) {
           </div>
 
           <T color={SOFT.cyan} center size={15} style={{ marginTop: 14 }}>
-            Each iteration narrows toward what the Judge wanted. By iteration 3, the query is so
-            specific that the top-K results are all relevant. The agent has effectively learned the
-            query specification by doing the search.
+            Each iteration narrows toward what the Judge wanted. By iteration 3, the query is so specific that the top-K
+            results are all relevant. The agent has effectively learned the query specification by doing the search.
           </T>
         </Box>
       </Reveal>
@@ -265,8 +287,8 @@ export default function AgenticRag(ctx) {
             Example: Customer-Impact Issues Past 90 Days
           </T>
           <T color={SOFT.blue} center size={16} style={{ marginTop: 10 }}>
-            The research-style query the agent answers across the full loop. Trace through 5 steps
-            from initial query to final aggregated summary table.
+            The research-style query the agent answers across the full loop. Trace through 5 steps from initial query to
+            final aggregated summary table.
           </T>
 
           <div
@@ -292,9 +314,9 @@ export default function AgenticRag(ctx) {
           </div>
 
           <T color={SOFT.blue} center size={15} style={{ marginTop: 14 }}>
-            The final aggregation is a structured artifact: 8 incidents with dates, severity
-            ratings, and resolution summaries. Naive RAG could not have produced this - it has no
-            way to broaden a search when the first attempt is too narrow.
+            The final aggregation is a structured artifact: 8 incidents with dates, severity ratings, and resolution
+            summaries. Naive RAG could not have produced this - it has no way to broaden a search when the first attempt
+            is too narrow.
           </T>
         </Box>
       </Reveal>
@@ -305,8 +327,8 @@ export default function AgenticRag(ctx) {
             When To Iterate Retrieval
           </T>
           <T color={SOFT.indigo} center size={16} style={{ marginTop: 10 }}>
-            Agentic RAG costs 3-10x more than naive RAG. Use it when the answer quality matters
-            more than the latency. Otherwise stick with the naive pipeline (Section 12.2).
+            Agentic RAG costs 3-10x more than naive RAG. Use it when the answer quality matters more than the latency.
+            Otherwise stick with the naive pipeline (Section 12.2).
           </T>
 
           <div
@@ -341,16 +363,14 @@ export default function AgenticRag(ctx) {
           </div>
 
           <T color={SOFT.indigo} center size={15} style={{ marginTop: 14 }}>
-            Naive RAG pipeline - covered in Section 12.2 - here we contrast with the iterative
-            loop. Agentic RAG mechanics covered in Section 12.29 - here we frame it as a multi-
-            agent pattern that closes out the multi-agent chapters.
+            Naive RAG pipeline - covered in Section 12.2 - here we contrast with the iterative loop. Agentic RAG
+            mechanics covered in Section 12.29 - here we frame it as a multi- agent pattern that closes out the
+            multi-agent chapters.
           </T>
         </Box>
       </Reveal>
 
-      {sub < 4 && (
-        <SubBtn onClick={onContinue} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />
-      )}
+      {sub < 4 && <SubBtn onClick={onContinue} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
     </div>
   );
 }

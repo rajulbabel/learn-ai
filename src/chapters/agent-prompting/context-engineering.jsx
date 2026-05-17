@@ -9,7 +9,13 @@ const CONTEXT_BUDGET_ZONES = [
   { name: "Conversation History", tokens: 50, color: C.blue, soft: SOFT.blue, role: "Prior turns. Grows every turn." },
   { name: "Retrieved Docs", tokens: 69, color: C.purple, soft: SOFT.purple, role: "RAG chunks. Refilled per query." },
   { name: "User Input", tokens: 1, color: C.green, soft: SOFT.green, role: "The new question. Capped at 1k." },
-  { name: "Reserved For Output", tokens: 4, color: C.orange, soft: SOFT.orange, role: "Headroom the model writes into." },
+  {
+    name: "Reserved For Output",
+    tokens: 4,
+    color: C.orange,
+    soft: SOFT.orange,
+    role: "Headroom the model writes into.",
+  },
 ];
 
 const ASSEMBLY_STACK = [
@@ -187,8 +193,8 @@ export default function ContextEngineering(ctx) {
             Tokens In, Tokens Out, Hard Cap
           </T>
           <T color={SOFT.cyan} center size={16} style={{ marginTop: 10 }}>
-            Every model has a context window: a hard token budget the call has to live inside. A frontier model
-            today is 128k tokens. Every prompt is a packing problem against that ceiling.
+            Every model has a context window: a hard token budget the call has to live inside. A frontier model today is
+            128k tokens. Every prompt is a packing problem against that ceiling.
           </T>
           <div
             style={{
@@ -208,8 +214,8 @@ export default function ContextEngineering(ctx) {
             >
               <desc>
                 Horizontal stacked bar showing how 128k tokens of context window are split across system prompt,
-                conversation history, retrieved docs, user input, and reserved output. Each zone is labeled with
-                its token count.
+                conversation history, retrieved docs, user input, and reserved output. Each zone is labeled with its
+                token count.
               </desc>
               {/* Outer frame for the budget bar */}
               <rect x="20" y="30" width="520" height="40" rx="6" fill="none" stroke={C.dim} strokeWidth="1.5" />
@@ -278,8 +284,8 @@ export default function ContextEngineering(ctx) {
             What Goes In, In Which Order
           </T>
           <T color={SOFT.blue} center size={16} style={{ marginTop: 10 }}>
-            The model reads top-to-bottom. Order is not cosmetic - it changes what the model attends to. The
-            assembly stack is the same every call: system at the top, the user query at the bottom.
+            The model reads top-to-bottom. Order is not cosmetic - it changes what the model attends to. The assembly
+            stack is the same every call: system at the top, the user query at the bottom.
           </T>
           <div
             style={{
@@ -335,8 +341,8 @@ export default function ContextEngineering(ctx) {
             Recency = bottom. Whatever you want the model to weight most goes nearest the user query.
           </div>
           <T color={SOFT.blue} center size={15} style={{ marginTop: 12 }}>
-            Same five layers every turn. The conversation history grows, the retrieved chunks rotate, the system
-            prompt stays - but the order does not change.
+            Same five layers every turn. The conversation history grows, the retrieved chunks rotate, the system prompt
+            stays - but the order does not change.
           </T>
         </Box>
       </Reveal>
@@ -347,8 +353,8 @@ export default function ContextEngineering(ctx) {
             Same Window, Different Strategies
           </T>
           <T color={SOFT.purple} center size={16} style={{ marginTop: 10 }}>
-            128k is a fixed pie. Every call is a tradeoff between more retrieval, more history, or more output.
-            The same long support ticket can be packed three very different ways.
+            128k is a fixed pie. Every call is a tradeoff between more retrieval, more history, or more output. The same
+            long support ticket can be packed three very different ways.
           </T>
           <div
             style={{
@@ -455,8 +461,7 @@ export default function ContextEngineering(ctx) {
             Rule: summarize what you can compress, evict what you cannot, never starve the output.
           </div>
           <T color={SOFT.purple} center size={15} style={{ marginTop: 12 }}>
-            The trim and summarize moves are the two levers. Which one wins depends on the ticket type, not on
-            taste.
+            The trim and summarize moves are the two levers. Which one wins depends on the ticket type, not on taste.
           </T>
         </Box>
       </Reveal>
@@ -467,9 +472,8 @@ export default function ContextEngineering(ctx) {
             Models Forget The Middle
           </T>
           <T color={SOFT.indigo} center size={16} style={{ marginTop: 10 }}>
-            Even with a 128k window, the model does not attend evenly. Recall drops in the middle and spikes at
-            the start and end. This is the lost-in-the-middle effect, and it is the single biggest reason long
-            prompts fail.
+            Even with a 128k window, the model does not attend evenly. Recall drops in the middle and spikes at the
+            start and end. This is the lost-in-the-middle effect, and it is the single biggest reason long prompts fail.
           </T>
           <div
             style={{
@@ -488,9 +492,9 @@ export default function ContextEngineering(ctx) {
               style={{ width: "100%", maxWidth: 600, display: "block", margin: "10px auto 0" }}
             >
               <desc>
-                U-shaped curve plotting recall accuracy against position in a long context. The curve peaks near
-                100% at position 0 and at position 128k, and dips to roughly 45% in the middle. Annotations mark
-                the Start, Middle, and End positions.
+                U-shaped curve plotting recall accuracy against position in a long context. The curve peaks near 100% at
+                position 0 and at position 128k, and dips to roughly 45% in the middle. Annotations mark the Start,
+                Middle, and End positions.
               </desc>
               {/* Plot area */}
               {(() => {
@@ -501,7 +505,9 @@ export default function ContextEngineering(ctx) {
                 const height = yBot - yTop;
                 const toX = (p) => xPad + p * width;
                 const toY = (r) => yBot - r * height;
-                const path = LOST_IN_MIDDLE_SAMPLES.map((s, i) => `${i === 0 ? "M" : "L"} ${toX(s.pos).toFixed(1)} ${toY(s.recall).toFixed(1)}`).join(" ");
+                const path = LOST_IN_MIDDLE_SAMPLES.map(
+                  (s, i) => `${i === 0 ? "M" : "L"} ${toX(s.pos).toFixed(1)} ${toY(s.recall).toFixed(1)}`,
+                ).join(" ");
                 return (
                   <g>
                     {/* Axes */}
@@ -592,8 +598,8 @@ export default function ContextEngineering(ctx) {
             Rule: put the most important info at the START or END of context, never in the middle.
           </div>
           <T color={SOFT.indigo} center size={15} style={{ marginTop: 12 }}>
-            Buried in the middle is buried full stop. If a fact has to land, place it next to the user query or
-            inside the system prompt - those are the two recall peaks.
+            Buried in the middle is buried full stop. If a fact has to land, place it next to the user query or inside
+            the system prompt - those are the two recall peaks.
           </T>
         </Box>
       </Reveal>
@@ -604,8 +610,8 @@ export default function ContextEngineering(ctx) {
             Relevance-First vs Recency-First
           </T>
           <T color={SOFT.teal} center size={16} style={{ marginTop: 10 }}>
-            Inside the retrieved-chunks and history layers, ordering is its own choice. Two strategies cover the
-            common cases, and they answer different question shapes.
+            Inside the retrieved-chunks and history layers, ordering is its own choice. Two strategies cover the common
+            cases, and they answer different question shapes.
           </T>
           <div
             style={{
@@ -662,8 +668,7 @@ export default function ContextEngineering(ctx) {
             recency-bias the last 2 turns.
           </div>
           <T color={SOFT.teal} center size={15} style={{ marginTop: 12 }}>
-            Same chunks, different order, different answer. Order is a free knob and it routinely costs nothing
-            to flip.
+            Same chunks, different order, different answer. Order is a free knob and it routinely costs nothing to flip.
           </T>
         </Box>
       </Reveal>
@@ -674,8 +679,8 @@ export default function ContextEngineering(ctx) {
             Eviction Order: Cheapest Loss First
           </T>
           <T color={SOFT.cyan} center size={16} style={{ marginTop: 10 }}>
-            When the packed prompt exceeds 128k, something has to leave. Eviction is not random - there is a
-            ladder. Drop the things whose loss costs the least, keep the things whose loss breaks the call.
+            When the packed prompt exceeds 128k, something has to leave. Eviction is not random - there is a ladder.
+            Drop the things whose loss costs the least, keep the things whose loss breaks the call.
           </T>
           <div
             style={{
@@ -751,12 +756,12 @@ export default function ContextEngineering(ctx) {
               color: SOFT.cyan,
             }}
           >
-            Summarize before you evict. A 50-turn history compresses to a few hundred tokens with most of its
-            signal intact.
+            Summarize before you evict. A 50-turn history compresses to a few hundred tokens with most of its signal
+            intact.
           </div>
           <T color={SOFT.cyan} center size={15} style={{ marginTop: 12 }}>
-            Context engineering closes the loop on prompting. Pick the layers, set the order, evict in the right
-            order - and the same model behaves very differently call to call.
+            Context engineering closes the loop on prompting. Pick the layers, set the order, evict in the right order -
+            and the same model behaves very differently call to call.
           </T>
         </Box>
       </Reveal>

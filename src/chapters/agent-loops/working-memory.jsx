@@ -67,9 +67,8 @@ export default function WorkingMemory(ctx) {
             A Note Pad The Model Keeps
           </T>
           <T color={SOFT.amber} center size={16} style={{ marginTop: 10 }}>
-            Working memory is the in-context scratchpad. The agent reads it on every REASON step and
-            updates it after every OBSERVE step. It lives inside the prompt context window itself,
-            not in any external store.
+            Working memory is the in-context scratchpad. The agent reads it on every REASON step and updates it after
+            every OBSERVE step. It lives inside the prompt context window itself, not in any external store.
           </T>
 
           <div style={{ ...tintedCard(C.amber), padding: 16, marginTop: 14 }}>
@@ -102,8 +101,8 @@ export default function WorkingMemory(ctx) {
           </div>
 
           <T color={SOFT.amber} center size={15} style={{ marginTop: 12 }}>
-            The scratchpad is the agent&apos;s short-term reasoning trace. Lose it, and the agent
-            has to re-derive what it was doing from scratch.
+            The scratchpad is the agent&apos;s short-term reasoning trace. Lose it, and the agent has to re-derive what
+            it was doing from scratch.
           </T>
         </Box>
       )}
@@ -114,8 +113,8 @@ export default function WorkingMemory(ctx) {
             What Goes In The Scratchpad
           </T>
           <T color={SOFT.yellow} center size={16} style={{ marginTop: 10 }}>
-            The scratchpad is not free-form text. It is a structured object with stable field names
-            so the model can read and write specific slots. Five fields anchor the running task.
+            The scratchpad is not free-form text. It is a structured object with stable field names so the model can
+            read and write specific slots. Five fields anchor the running task.
           </T>
 
           <div style={{ ...tintedCard(C.yellow), padding: 14, marginTop: 14 }}>
@@ -143,9 +142,9 @@ export default function WorkingMemory(ctx) {
           </div>
 
           <T color={SOFT.yellow} center size={15} style={{ marginTop: 12 }}>
-            `customer_context` answers "who", `current_goal` answers "what", `completed_steps`
-            answers "what so far", `next_step` answers "what next", and `constraints` keep the
-            agent within policy. Same five fields appear in 13.42 observability traces.
+            `customer_context` answers "who", `current_goal` answers "what", `completed_steps` answers "what so far",
+            `next_step` answers "what next", and `constraints` keep the agent within policy. Same five fields appear in
+            13.42 observability traces.
           </T>
         </Box>
       </Reveal>
@@ -156,8 +155,8 @@ export default function WorkingMemory(ctx) {
             Updated Every Iteration
           </T>
           <T color={SOFT.orange} center size={16} style={{ marginTop: 10 }}>
-            Watch the scratchpad evolve across four loop turns of ticket T2 (Alice: password reset +
-            email change). Each row is the state right after the iteration&apos;s OBSERVE step.
+            Watch the scratchpad evolve across four loop turns of ticket T2 (Alice: password reset + email change). Each
+            row is the state right after the iteration&apos;s OBSERVE step.
           </T>
 
           <div
@@ -192,8 +191,8 @@ next_step       : ${it.next_step}`}
           </div>
 
           <T color={SOFT.orange} center size={15} style={{ marginTop: 12 }}>
-            By iteration 4, `next_step` is null and the task is done. The scratchpad terminated
-            cleanly, which is how loop termination (13.23) detects success.
+            By iteration 4, `next_step` is null and the task is done. The scratchpad terminated cleanly, which is how
+            loop termination (13.23) detects success.
           </T>
         </Box>
       </Reveal>
@@ -204,19 +203,15 @@ next_step       : ${it.next_step}`}
             Working Memory Dies When The Task Ends
           </T>
           <T color={SOFT.red} center size={16} style={{ marginTop: 10 }}>
-            When the loop terminates, the scratchpad is discarded. Anything worth keeping must be
-            promoted to long-term memory BEFORE that discard. Otherwise it is gone.
+            When the loop terminates, the scratchpad is discarded. Anything worth keeping must be promoted to long-term
+            memory BEFORE that discard. Otherwise it is gone.
           </T>
 
           <div style={{ ...tintedCard(C.red), padding: 14, marginTop: 14 }}>
-            <svg
-              viewBox="0 0 560 130"
-              style={{ width: "100%", maxWidth: 640, display: "block", margin: "0 auto" }}
-            >
+            <svg viewBox="0 0 560 130" style={{ width: "100%", maxWidth: 640, display: "block", margin: "0 auto" }}>
               <desc>
-                Timeline of working memory: created at task start, updated through N iterations,
-                discarded when task ends, with a promotion arrow pointing to long-term store before
-                discard.
+                Timeline of working memory: created at task start, updated through N iterations, discarded when task
+                ends, with a promotion arrow pointing to long-term store before discard.
               </desc>
               {/* Horizontal timeline: 4 stops + final discard X. Total span 480; pad = (560-480)/2 = 40. */}
               <line x1={40} y1={70} x2={520} y2={70} stroke={C.red} strokeWidth={1.6} />
@@ -235,14 +230,7 @@ next_step       : ${it.next_step}`}
                     stroke={C.red}
                     strokeWidth={2}
                   />
-                  <text
-                    x={stop.x}
-                    y={50}
-                    fill={SOFT.red}
-                    fontSize="12"
-                    fontWeight="700"
-                    textAnchor="middle"
-                  >
+                  <text x={stop.x} y={50} fill={SOFT.red} fontSize="12" fontWeight="700" textAnchor="middle">
                     {stop.label}
                   </text>
                   <text x={stop.x} y={100} fill={SOFT.red} fontSize="11" textAnchor="middle">
@@ -260,9 +248,8 @@ next_step       : ${it.next_step}`}
           </div>
 
           <T color={SOFT.red} center size={15} style={{ marginTop: 12 }}>
-            "Resolved by email reset link" is a working memory entry. After promotion to episodic
-            memory, the next session can recall it. Skip the promote, and the next session asks
-            Alice the same question from scratch.
+            "Resolved by email reset link" is a working memory entry. After promotion to episodic memory, the next
+            session can recall it. Skip the promote, and the next session asks Alice the same question from scratch.
           </T>
         </Box>
       </Reveal>
@@ -273,8 +260,8 @@ next_step       : ${it.next_step}`}
             Working vs Long-Term
           </T>
           <T color={SOFT.purple} center size={16} style={{ marginTop: 10 }}>
-            Side-by-side: what is different between the in-context scratchpad and the external
-            long-term store. Different lifespan, different capacity, different writer.
+            Side-by-side: what is different between the in-context scratchpad and the external long-term store.
+            Different lifespan, different capacity, different writer.
           </T>
 
           <div
@@ -304,17 +291,26 @@ next_step       : ${it.next_step}`}
               </T>
             </div>
             {WORKING_VS_LONG.flatMap((row) => [
-              <div key={`f-${row.field}`} style={{ padding: 10, borderTop: `1px solid ${C.purple}18`, textAlign: "center" }}>
+              <div
+                key={`f-${row.field}`}
+                style={{ padding: 10, borderTop: `1px solid ${C.purple}18`, textAlign: "center" }}
+              >
                 <T color={SOFT.purple} center size={13}>
                   {row.field}
                 </T>
               </div>,
-              <div key={`w-${row.field}`} style={{ padding: 10, borderTop: `1px solid ${C.amber}18`, textAlign: "center" }}>
+              <div
+                key={`w-${row.field}`}
+                style={{ padding: 10, borderTop: `1px solid ${C.amber}18`, textAlign: "center" }}
+              >
                 <T color={SOFT.amber} center size={13}>
                   {row.working}
                 </T>
               </div>,
-              <div key={`l-${row.field}`} style={{ padding: 10, borderTop: `1px solid ${C.purple}18`, textAlign: "center" }}>
+              <div
+                key={`l-${row.field}`}
+                style={{ padding: 10, borderTop: `1px solid ${C.purple}18`, textAlign: "center" }}
+              >
                 <T color={SOFT.purple} center size={13}>
                   {row.longterm}
                 </T>
@@ -323,16 +319,13 @@ next_step       : ${it.next_step}`}
           </div>
 
           <T color={SOFT.purple} center size={15} style={{ marginTop: 14 }}>
-            Working memory is fast, cheap, and ephemeral. Long-term memory is slower, more
-            expensive, but persistent. Agents need both - and the bridge between them is the promote
-            step covered in the next chapters.
+            Working memory is fast, cheap, and ephemeral. Long-term memory is slower, more expensive, but persistent.
+            Agents need both - and the bridge between them is the promote step covered in the next chapters.
           </T>
         </Box>
       </Reveal>
 
-      {sub < 4 && (
-        <SubBtn onClick={onContinue} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />
-      )}
+      {sub < 4 && <SubBtn onClick={onContinue} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
     </div>
   );
 }

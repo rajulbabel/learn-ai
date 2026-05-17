@@ -9,33 +9,25 @@ import { monoArtifact } from "../../shared/agent-helpers.jsx";
 const REACT_T2_TRACE = [
   {
     n: 1,
-    thought:
-      "Customer wants reset, mentioned old email. Look them up first.",
+    thought: "Customer wants reset, mentioned old email. Look them up first.",
     action: 'lookup_customer({"email": "alice@example.com"})',
-    observation:
-      '{ customer_id: "c-9924", tier: "pro", primary_email: "alice@example.com" }',
+    observation: '{ customer_id: "c-9924", tier: "pro", primary_email: "alice@example.com" }',
   },
   {
     n: 2,
-    thought:
-      "Email on record is outdated. Update it before the reset link goes to the wrong inbox.",
-    action:
-      'change_email({"customer_id": "c-9924", "new_email": "alice+new@example.com"})',
-    observation:
-      '{ ok: true, primary_email: "alice+new@example.com", verification: "pending" }',
+    thought: "Email on record is outdated. Update it before the reset link goes to the wrong inbox.",
+    action: 'change_email({"customer_id": "c-9924", "new_email": "alice+new@example.com"})',
+    observation: '{ ok: true, primary_email: "alice+new@example.com", verification: "pending" }',
   },
   {
     n: 3,
-    thought:
-      "Email is fixed. Trigger the password reset now so the link lands at the new address.",
+    thought: "Email is fixed. Trigger the password reset now so the link lands at the new address.",
     action: 'reset_password({"customer_id": "c-9924"})',
-    observation:
-      '{ ok: true, reset_link_sent_to: "alice+new@example.com" }',
+    observation: '{ ok: true, reset_link_sent_to: "alice+new@example.com" }',
   },
   {
     n: 4,
-    thought:
-      "All steps done. Write the user-facing reply and stop the loop.",
+    thought: "All steps done. Write the user-facing reply and stop the loop.",
     action: null,
     answer:
       'Answer: "I updated your email to alice+new@example.com and sent a fresh reset link there. Click it within 30 minutes to set a new password."',
@@ -79,10 +71,10 @@ export default function ReActPattern(ctx) {
             Make The Reasoning Visible
           </T>
           <T color={SOFT.orange} center size={16} style={{ marginTop: 10 }}>
-            ReAct stands for Reasoning + Acting. Instead of hiding the model's reasoning inside its
-            head and only emitting a tool call, ReAct asks the model to write the thought out loud,
-            then the action, then the observation, in that order, every iteration. The loop is the
-            same; what changes is that each block is now visible structured output.
+            ReAct stands for Reasoning + Acting. Instead of hiding the model's reasoning inside its head and only
+            emitting a tool call, ReAct asks the model to write the thought out loud, then the action, then the
+            observation, in that order, every iteration. The loop is the same; what changes is that each block is now
+            visible structured output.
           </T>
 
           <div
@@ -136,9 +128,9 @@ export default function ReActPattern(ctx) {
           </div>
 
           <T color={SOFT.orange} center size={15} style={{ marginTop: 12 }}>
-            Same three beats as the agent loop. The difference is that the Thought is no longer an
-            internal step the model performs silently. It becomes a written block in the response, so
-            evaluators, debuggers, and downstream tools can read it directly.
+            Same three beats as the agent loop. The difference is that the Thought is no longer an internal step the
+            model performs silently. It becomes a written block in the response, so evaluators, debuggers, and
+            downstream tools can read it directly.
           </T>
         </Box>
       )}
@@ -149,9 +141,9 @@ export default function ReActPattern(ctx) {
             Thought: Why The Next Action
           </T>
           <T color={SOFT.yellow} center size={16} style={{ marginTop: 10 }}>
-            The Thought block answers one question: why is the next action the right next action?
-            It names the plan in plain language before any tool fires. A good Thought references the
-            user's request, the state so far, and the order of remaining steps.
+            The Thought block answers one question: why is the next action the right next action? It names the plan in
+            plain language before any tool fires. A good Thought references the user's request, the state so far, and
+            the order of remaining steps.
           </T>
 
           <div
@@ -170,7 +162,7 @@ export default function ReActPattern(ctx) {
                 lineHeight: 1.6,
               }}
             >
-{`Thought: The user asked to reset their password but mentioned the email changed.
+              {`Thought: The user asked to reset their password but mentioned the email changed.
 I should first lookup_customer with the OLD email, then change_email to the NEW one,
 then reset_password.`}
             </pre>
@@ -184,9 +176,9 @@ then reset_password.`}
           </div>
 
           <T color={SOFT.yellow} center size={15} style={{ marginTop: 12 }}>
-            When a reset later goes wrong, you can open the trace and read the model's plan in
-            English. You learn whether the failure was bad reasoning (wrong plan) or bad execution
-            (right plan, wrong tool argument). That split is impossible without a written Thought.
+            When a reset later goes wrong, you can open the trace and read the model's plan in English. You learn
+            whether the failure was bad reasoning (wrong plan) or bad execution (right plan, wrong tool argument). That
+            split is impossible without a written Thought.
           </T>
         </Box>
       </Reveal>
@@ -197,9 +189,8 @@ then reset_password.`}
             Action: The Concrete Step
           </T>
           <T color={SOFT.red} center size={16} style={{ marginTop: 10 }}>
-            After the Thought, the model emits exactly one Action. It is a tool name plus an argument
-            object that matches the tool's JSON schema. No second tool, no batching - one call, one
-            step.
+            After the Thought, the model emits exactly one Action. It is a tool name plus an argument object that
+            matches the tool's JSON schema. No second tool, no batching - one call, one step.
           </T>
 
           <div
@@ -218,7 +209,7 @@ then reset_password.`}
                 lineHeight: 1.6,
               }}
             >
-{`Action: lookup_customer({"email": "alice@example.com"})`}
+              {`Action: lookup_customer({"email": "alice@example.com"})`}
             </pre>
           </div>
 
@@ -230,10 +221,9 @@ then reset_password.`}
           </div>
 
           <T color={SOFT.red} center size={15} style={{ marginTop: 12 }}>
-            Why only one? Because the next Thought must be free to react to whatever this Action
-            returned. Batching two tool calls into one Action makes the model commit to a second
-            step before it has seen the first result, which is exactly the trap the loop is supposed
-            to avoid.
+            Why only one? Because the next Thought must be free to react to whatever this Action returned. Batching two
+            tool calls into one Action makes the model commit to a second step before it has seen the first result,
+            which is exactly the trap the loop is supposed to avoid.
           </T>
         </Box>
       </Reveal>
@@ -244,9 +234,9 @@ then reset_password.`}
             Observation: What Came Back
           </T>
           <T color={SOFT.amber} center size={16} style={{ marginTop: 10 }}>
-            The Observation block holds the result the runtime received from the tool. The runtime
-            writes this in - the model does not invent it. The Observation is appended to the
-            conversation so the next Thought has the new ground truth to reason over.
+            The Observation block holds the result the runtime received from the tool. The runtime writes this in - the
+            model does not invent it. The Observation is appended to the conversation so the next Thought has the new
+            ground truth to reason over.
           </T>
 
           <div
@@ -265,7 +255,7 @@ then reset_password.`}
                 lineHeight: 1.6,
               }}
             >
-{`Observation: { customer_id: "c-9924", tier: "pro", primary_email: "alice@example.com" }`}
+              {`Observation: { customer_id: "c-9924", tier: "pro", primary_email: "alice@example.com" }`}
             </pre>
           </div>
 
@@ -277,10 +267,9 @@ then reset_password.`}
           </div>
 
           <T color={SOFT.amber} center size={15} style={{ marginTop: 12 }}>
-            Notice the structure - keys like customer_id, tier, primary_email. The model is reading
-            a JSON-shaped result, not a free-text paragraph. Keeping the Observation strictly
-            structured is what lets the next Thought pull out specific fields like c-9924 instead of
-            paraphrasing them.
+            Notice the structure - keys like customer_id, tier, primary_email. The model is reading a JSON-shaped
+            result, not a free-text paragraph. Keeping the Observation strictly structured is what lets the next Thought
+            pull out specific fields like c-9924 instead of paraphrasing them.
           </T>
         </Box>
       </Reveal>
@@ -291,9 +280,9 @@ then reset_password.`}
             ReAct Trace: Ticket T2
           </T>
           <T color={SOFT.cyan} center size={16} style={{ marginTop: 10 }}>
-            Same ticket T2 from the agent loop chapter, now written out in full ReAct format. Read
-            top to bottom: Thought - Action - Observation, repeat. Four cycles, then the model
-            decides the loop is done and writes the final answer instead of a fifth Action.
+            Same ticket T2 from the agent loop chapter, now written out in full ReAct format. Read top to bottom:
+            Thought - Action - Observation, repeat. Four cycles, then the model decides the loop is done and writes the
+            final answer instead of a fifth Action.
           </T>
 
           <div
@@ -318,29 +307,28 @@ then reset_password.`}
                 fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace",
               }}
             >
-{REACT_T2_TRACE.map((c) => {
-  const header = `# Cycle ${c.n}`;
-  const t = `Thought: ${c.thought}`;
-  const a = c.action ? `Action: ${c.action}` : null;
-  const o = c.observation ? `Observation: ${c.observation}` : null;
-  const ans = c.answer ? c.answer : null;
-  return [header, t, a, o, ans].filter(Boolean).join("\n");
-}).join("\n\n")}
+              {REACT_T2_TRACE.map((c) => {
+                const header = `# Cycle ${c.n}`;
+                const t = `Thought: ${c.thought}`;
+                const a = c.action ? `Action: ${c.action}` : null;
+                const o = c.observation ? `Observation: ${c.observation}` : null;
+                const ans = c.answer ? c.answer : null;
+                return [header, t, a, o, ans].filter(Boolean).join("\n");
+              }).join("\n\n")}
             </pre>
           </div>
 
           <div style={{ ...tintedCard(C.cyan), padding: 12, marginTop: 12 }}>
             <span style={pill(C.cyan)}>OUTCOME</span>
             <T color={SOFT.cyan} center size={14} style={{ marginTop: 8 }}>
-              4 Cycles. 3 Tool Calls. Cycle 4 Ends With An Answer Instead Of An Action, So The Loop
-              Stops.
+              4 Cycles. 3 Tool Calls. Cycle 4 Ends With An Answer Instead Of An Action, So The Loop Stops.
             </T>
           </div>
 
           <T color={SOFT.cyan} center size={15} style={{ marginTop: 12 }}>
-            The trace reads almost like a transcript of someone thinking aloud while doing the
-            work. That is the point - a human reviewer can audit every decision, and a downstream
-            evaluator can score the Thoughts independently from whether the final answer was right.
+            The trace reads almost like a transcript of someone thinking aloud while doing the work. That is the point -
+            a human reviewer can audit every decision, and a downstream evaluator can score the Thoughts independently
+            from whether the final answer was right.
           </T>
         </Box>
       </Reveal>
@@ -351,9 +339,9 @@ then reset_password.`}
             When To Force ReAct
           </T>
           <T color={SOFT.orange} center size={16} style={{ marginTop: 10 }}>
-            ReAct is not free. Each Thought costs tokens and slows the response. Modern tool-use
-            APIs already produce structured tool_use blocks without forcing the reasoning to be
-            written out. Use ReAct when you specifically need the reasoning surface.
+            ReAct is not free. Each Thought costs tokens and slows the response. Modern tool-use APIs already produce
+            structured tool_use blocks without forcing the reasoning to be written out. Use ReAct when you specifically
+            need the reasoning surface.
           </T>
 
           <div style={{ marginTop: 14, display: "flex", flexDirection: "column", gap: 12 }}>
@@ -369,8 +357,7 @@ then reset_password.`}
                 Reasoning Stays In The Model's Head
               </T>
               <T color={SOFT.red} center size={14} style={{ marginTop: 8 }}>
-                Model Emits tool_use Blocks. Reasoning In Model's Head. Invisible To User /
-                Observability.
+                Model Emits tool_use Blocks. Reasoning In Model's Head. Invisible To User / Observability.
               </T>
             </div>
 
@@ -426,17 +413,14 @@ then reset_password.`}
           </div>
 
           <T color={SOFT.orange} center size={15} style={{ marginTop: 14 }}>
-            Once the trace is written down, it becomes a teaching signal. You can fine-tune a smaller
-            model on big-model traces, you can show the Thoughts in a UI to make the agent feel
-            transparent, and you can write evals that score the plan separately from the final
-            answer.
+            Once the trace is written down, it becomes a teaching signal. You can fine-tune a smaller model on big-model
+            traces, you can show the Thoughts in a UI to make the agent feel transparent, and you can write evals that
+            score the plan separately from the final answer.
           </T>
         </Box>
       </Reveal>
 
-      {sub < 5 && (
-        <SubBtn onClick={onContinue} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />
-      )}
+      {sub < 5 && <SubBtn onClick={onContinue} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
     </div>
   );
 }

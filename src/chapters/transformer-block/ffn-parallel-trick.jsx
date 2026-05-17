@@ -2,7 +2,7 @@ import { C } from "../../config.js";
 import { Box, T, Reveal, SubBtn } from "../../components.jsx";
 
 // Module-private helper: render a matrix as a colored grid
-const MatrixGrid = ({ rows, label, color, dimLabel, highlight = null }) => (
+const MatrixGrid = ({ rows, label, color, dimLabel }) => (
   <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4 }}>
     {label && (
       <T color={color} bold center size={13}>
@@ -21,12 +21,12 @@ const MatrixGrid = ({ rows, label, color, dimLabel, highlight = null }) => (
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                background: highlight === ri ? `${color}18` : `${color}06`,
+                background: `${color}06`,
                 borderRight: ci < row.length - 1 ? `1px solid ${color}12` : "none",
                 borderBottom: ri < rows.length - 1 ? `1px solid ${color}12` : "none",
               }}
             >
-              <T color={highlight === ri ? color : `${color}cc`} size={11} bold={highlight === ri}>
+              <T color={`${color}cc`} size={11}>
                 {val}
               </T>
             </div>

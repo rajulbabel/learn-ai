@@ -75,20 +75,16 @@ export default function MultiAgentFailures(ctx) {
             How Multi-Agent Falls Apart
           </T>
           <T color={SOFT.green} center size={16} style={{ marginTop: 10 }}>
-            Four failure modes show up in production multi-agent systems. Each has a distinct
-            signature, a distinct signal, and a distinct fix. Knowing them is the difference
-            between shipping multi-agent and leaving it in the lab.
+            Four failure modes show up in production multi-agent systems. Each has a distinct signature, a distinct
+            signal, and a distinct fix. Knowing them is the difference between shipping multi-agent and leaving it in
+            the lab.
           </T>
 
           <div style={{ ...tintedCard(C.green), padding: 14, marginTop: 14 }}>
-            <svg
-              viewBox="0 0 560 200"
-              style={{ width: "100%", maxWidth: 640, display: "block", margin: "0 auto" }}
-            >
+            <svg viewBox="0 0 560 200" style={{ width: "100%", maxWidth: 640, display: "block", margin: "0 auto" }}>
               <desc>
-                Two-by-two grid of four multi-agent failure modes: drift in top left, infinite loop
-                in top right, deadlock in bottom left, and cost runaway in bottom right, each
-                tinted with its own color.
+                Two-by-two grid of four multi-agent failure modes: drift in top left, infinite loop in top right,
+                deadlock in bottom left, and cost runaway in bottom right, each tinted with its own color.
               </desc>
               {FOUR_FAILURE_MODES.map((m, i) => {
                 const col = i % 2;
@@ -99,7 +95,16 @@ export default function MultiAgentFailures(ctx) {
                 const soft = SOFT[m.color];
                 return (
                   <g key={`mode-${i}`}>
-                    <rect x={x} y={y} width={230} height={70} rx={10} fill={`${accent}1f`} stroke={accent} strokeWidth={1.8} />
+                    <rect
+                      x={x}
+                      y={y}
+                      width={230}
+                      height={70}
+                      rx={10}
+                      fill={`${accent}1f`}
+                      stroke={accent}
+                      strokeWidth={1.8}
+                    />
                     <text x={x + 115} y={y + 30} fill={soft} fontSize="15" fontWeight="700" textAnchor="middle">
                       {m.name}
                     </text>
@@ -113,8 +118,8 @@ export default function MultiAgentFailures(ctx) {
           </div>
 
           <T color={SOFT.green} center size={15} style={{ marginTop: 12 }}>
-            Each subsequent sub-step zooms into one failure mode. The final sub-step maps each
-            failure to a production alerting threshold.
+            Each subsequent sub-step zooms into one failure mode. The final sub-step maps each failure to a production
+            alerting threshold.
           </T>
         </Box>
       )}
@@ -125,23 +130,28 @@ export default function MultiAgentFailures(ctx) {
             Drift: Agents Pull In Different Directions
           </T>
           <T color={SOFT.teal} center size={16} style={{ marginTop: 10 }}>
-            Drift = different agents in the same run interpret the user&apos;s intent differently.
-            They each work hard toward their own version of the goal. The final answer is
-            incoherent.
+            Drift = different agents in the same run interpret the user&apos;s intent differently. They each work hard
+            toward their own version of the goal. The final answer is incoherent.
           </T>
 
           <div style={{ ...tintedCard(C.teal), padding: 14, marginTop: 14 }}>
-            <svg
-              viewBox="0 0 560 200"
-              style={{ width: "100%", maxWidth: 640, display: "block", margin: "0 auto" }}
-            >
+            <svg viewBox="0 0 560 200" style={{ width: "100%", maxWidth: 640, display: "block", margin: "0 auto" }}>
               <desc>
-                Three agents working on the same ticket pulling in three different directions: one
-                interprets it as cancel subscription, another as refund invoice, a third as save
-                the customer, with diverging arrows showing incoherent outcomes.
+                Three agents working on the same ticket pulling in three different directions: one interprets it as
+                cancel subscription, another as refund invoice, a third as save the customer, with diverging arrows
+                showing incoherent outcomes.
               </desc>
               {/* User ticket center */}
-              <rect x={210} y={20} width={140} height={36} rx={8} fill={`${C.teal}24`} stroke={C.teal} strokeWidth={2} />
+              <rect
+                x={210}
+                y={20}
+                width={140}
+                height={36}
+                rx={8}
+                fill={`${C.teal}24`}
+                stroke={C.teal}
+                strokeWidth={2}
+              />
               <text x={280} y={42} fill={SOFT.teal} fontSize="13" fontWeight="700" textAnchor="middle">
                 Ticket T4
               </text>
@@ -155,7 +165,16 @@ export default function MultiAgentFailures(ctx) {
                   <g key={`drift-${i}`}>
                     <line x1={280} y1={56} x2={x} y2={120} stroke={accent} strokeWidth={1.6} />
                     <polygon points={`${x - 4},116 ${x + 4},116 ${x},124`} fill={accent} />
-                    <rect x={x - 80} y={130} width={160} height={50} rx={8} fill={`${accent}1f`} stroke={accent} strokeWidth={1.6} />
+                    <rect
+                      x={x - 80}
+                      y={130}
+                      width={160}
+                      height={50}
+                      rx={8}
+                      fill={`${accent}1f`}
+                      stroke={accent}
+                      strokeWidth={1.6}
+                    />
                     <text x={x} y={152} fill={soft} fontSize="12" fontWeight="700" textAnchor="middle">
                       {d.agent}
                     </text>
@@ -169,9 +188,8 @@ export default function MultiAgentFailures(ctx) {
           </div>
 
           <T color={SOFT.teal} center size={15} style={{ marginTop: 12 }}>
-            Fix drift with a shared "plan summary" output that every agent must read before its
-            first reasoning step. If two agents disagree about the goal, the alert fires before
-            any tools run.
+            Fix drift with a shared "plan summary" output that every agent must read before its first reasoning step. If
+            two agents disagree about the goal, the alert fires before any tools run.
           </T>
         </Box>
       </Reveal>
@@ -182,27 +200,41 @@ export default function MultiAgentFailures(ctx) {
             Hand-Off Ping-Pong
           </T>
           <T color={SOFT.cyan} center size={16} style={{ marginTop: 10 }}>
-            Infinite loop = hand-off ring spins forever. Triage hands off to billing; billing
-            hands off back to triage; triage hands off to billing again. No agent commits to
-            handling the ticket. Symptom: hand-off rate per turn does not decrease.
+            Infinite loop = hand-off ring spins forever. Triage hands off to billing; billing hands off back to triage;
+            triage hands off to billing again. No agent commits to handling the ticket. Symptom: hand-off rate per turn
+            does not decrease.
           </T>
 
           <div style={{ ...tintedCard(C.cyan), padding: 14, marginTop: 14 }}>
-            <svg
-              viewBox="0 0 560 180"
-              style={{ width: "100%", maxWidth: 640, display: "block", margin: "0 auto" }}
-            >
+            <svg viewBox="0 0 560 180" style={{ width: "100%", maxWidth: 640, display: "block", margin: "0 auto" }}>
               <desc>
-                Two agents triage and billing hand off to each other back and forth in an infinite
-                ping pong with arrows curving in both directions and a counter showing the hand-off
-                rate not decreasing.
+                Two agents triage and billing hand off to each other back and forth in an infinite ping pong with arrows
+                curving in both directions and a counter showing the hand-off rate not decreasing.
               </desc>
-              <rect x={60} y={50} width={160} height={50} rx={10} fill={`${C.cyan}1f`} stroke={C.cyan} strokeWidth={1.8} />
+              <rect
+                x={60}
+                y={50}
+                width={160}
+                height={50}
+                rx={10}
+                fill={`${C.cyan}1f`}
+                stroke={C.cyan}
+                strokeWidth={1.8}
+              />
               <text x={140} y={80} fill={SOFT.cyan} fontSize="14" fontWeight="700" textAnchor="middle">
                 Triage
               </text>
 
-              <rect x={340} y={50} width={160} height={50} rx={10} fill={`${C.cyan}1f`} stroke={C.cyan} strokeWidth={1.8} />
+              <rect
+                x={340}
+                y={50}
+                width={160}
+                height={50}
+                rx={10}
+                fill={`${C.cyan}1f`}
+                stroke={C.cyan}
+                strokeWidth={1.8}
+              />
               <text x={420} y={80} fill={SOFT.cyan} fontSize="14" fontWeight="700" textAnchor="middle">
                 Billing
               </text>
@@ -223,8 +255,8 @@ export default function MultiAgentFailures(ctx) {
           </div>
 
           <T color={SOFT.cyan} center size={15} style={{ marginTop: 12 }}>
-            Fix infinite loop with a hand-off counter per turn + a hand-off chain history. If the
-            same edge fires twice in a row, halt and escalate to human.
+            Fix infinite loop with a hand-off counter per turn + a hand-off chain history. If the same edge fires twice
+            in a row, halt and escalate to human.
           </T>
         </Box>
       </Reveal>
@@ -235,21 +267,26 @@ export default function MultiAgentFailures(ctx) {
             Two Agents Wait Forever
           </T>
           <T color={SOFT.blue} center size={16} style={{ marginTop: 10 }}>
-            Deadlock = circular wait. Agent A is waiting on Agent B&apos;s result. Agent B is
-            waiting on Agent A&apos;s result. Neither makes progress. Symptom: both agents in
-            WAITING state simultaneously for &gt; 30 seconds.
+            Deadlock = circular wait. Agent A is waiting on Agent B&apos;s result. Agent B is waiting on Agent A&apos;s
+            result. Neither makes progress. Symptom: both agents in WAITING state simultaneously for &gt; 30 seconds.
           </T>
 
           <div style={{ ...tintedCard(C.blue), padding: 14, marginTop: 14 }}>
-            <svg
-              viewBox="0 0 560 160"
-              style={{ width: "100%", maxWidth: 640, display: "block", margin: "0 auto" }}
-            >
+            <svg viewBox="0 0 560 160" style={{ width: "100%", maxWidth: 640, display: "block", margin: "0 auto" }}>
               <desc>
-                Two agents A and B locked in a deadlock: A waits on B's result, B waits on A's
-                result, with circular waiting arrows and both agents marked in a WAITING state.
+                Two agents A and B locked in a deadlock: A waits on B's result, B waits on A's result, with circular
+                waiting arrows and both agents marked in a WAITING state.
               </desc>
-              <rect x={60} y={40} width={160} height={70} rx={10} fill={`${C.blue}1f`} stroke={C.blue} strokeWidth={1.8} />
+              <rect
+                x={60}
+                y={40}
+                width={160}
+                height={70}
+                rx={10}
+                fill={`${C.blue}1f`}
+                stroke={C.blue}
+                strokeWidth={1.8}
+              />
               <text x={140} y={70} fill={SOFT.blue} fontSize="14" fontWeight="700" textAnchor="middle">
                 Agent A
               </text>
@@ -260,7 +297,16 @@ export default function MultiAgentFailures(ctx) {
                 State Unchanged 30s
               </text>
 
-              <rect x={340} y={40} width={160} height={70} rx={10} fill={`${C.blue}1f`} stroke={C.blue} strokeWidth={1.8} />
+              <rect
+                x={340}
+                y={40}
+                width={160}
+                height={70}
+                rx={10}
+                fill={`${C.blue}1f`}
+                stroke={C.blue}
+                strokeWidth={1.8}
+              />
               <text x={420} y={70} fill={SOFT.blue} fontSize="14" fontWeight="700" textAnchor="middle">
                 Agent B
               </text>
@@ -284,8 +330,8 @@ export default function MultiAgentFailures(ctx) {
           </div>
 
           <T color={SOFT.blue} center size={15} style={{ marginTop: 12 }}>
-            Fix deadlock with timeouts on every inter-agent wait. If A doesn&apos;t hear from B
-            within N seconds, A surfaces "timeout waiting on B" and the runtime breaks the cycle.
+            Fix deadlock with timeouts on every inter-agent wait. If A doesn&apos;t hear from B within N seconds, A
+            surfaces "timeout waiting on B" and the runtime breaks the cycle.
           </T>
         </Box>
       </Reveal>
@@ -296,20 +342,16 @@ export default function MultiAgentFailures(ctx) {
             Unbounded Recursion: Cost Goes Vertical
           </T>
           <T color={SOFT.indigo} center size={16} style={{ marginTop: 10 }}>
-            Cost runaway = a parent agent spawns sub-agents; each sub-agent spawns more; cost grows
-            exponentially. By iteration 20, a normal $0.50 run is $50. The signal is brutal: spend
-            rate climbing per turn without a corresponding answer-quality gain.
+            Cost runaway = a parent agent spawns sub-agents; each sub-agent spawns more; cost grows exponentially. By
+            iteration 20, a normal $0.50 run is $50. The signal is brutal: spend rate climbing per turn without a
+            corresponding answer-quality gain.
           </T>
 
           <div style={{ ...tintedCard(C.indigo), padding: 14, marginTop: 14 }}>
-            <svg
-              viewBox="0 0 560 200"
-              style={{ width: "100%", maxWidth: 640, display: "block", margin: "0 auto" }}
-            >
+            <svg viewBox="0 0 560 200" style={{ width: "100%", maxWidth: 640, display: "block", margin: "0 auto" }}>
               <desc>
-                Cost vs iteration chart with normal multi-agent run at fifty cents on a slow flat
-                curve and a runaway scenario climbing exponentially to fifty dollars by iteration
-                twenty.
+                Cost vs iteration chart with normal multi-agent run at fifty cents on a slow flat curve and a runaway
+                scenario climbing exponentially to fifty dollars by iteration twenty.
               </desc>
               {/* X axis */}
               <line x1={40} y1={170} x2={520} y2={170} stroke={SOFT.indigo} strokeWidth={1.4} />
@@ -346,9 +388,8 @@ export default function MultiAgentFailures(ctx) {
           </div>
 
           <T color={SOFT.indigo} center size={15} style={{ marginTop: 12 }}>
-            Fix cost runaway with a recursion depth cap, a per-turn spend cap, and a circuit
-            breaker that halts when either is hit. If the agent decides to spawn 12 sub-agents,
-            something is wrong with the planner prompt.
+            Fix cost runaway with a recursion depth cap, a per-turn spend cap, and a circuit breaker that halts when
+            either is hit. If the agent decides to spawn 12 sub-agents, something is wrong with the planner prompt.
           </T>
         </Box>
       </Reveal>
@@ -359,9 +400,8 @@ export default function MultiAgentFailures(ctx) {
             What To Alert On
           </T>
           <T color={SOFT.purple} center size={16} style={{ marginTop: 10 }}>
-            Each failure mode has a production signal. Each signal has a threshold. Each threshold
-            crossing should page a human. This table is the entire reason multi-agent ships safely
-            or doesn&apos;t.
+            Each failure mode has a production signal. Each signal has a threshold. Each threshold crossing should page
+            a human. This table is the entire reason multi-agent ships safely or doesn&apos;t.
           </T>
 
           <div
@@ -390,16 +430,14 @@ export default function MultiAgentFailures(ctx) {
           </div>
 
           <T color={SOFT.purple} center size={15} style={{ marginTop: 14 }}>
-            Every multi-agent system in production must monitor all four. Skipping any one is a
-            bet that the corresponding failure mode will never bite - and it always eventually
-            does. Alert thresholds are the price of multi-agent.
+            Every multi-agent system in production must monitor all four. Skipping any one is a bet that the
+            corresponding failure mode will never bite - and it always eventually does. Alert thresholds are the price
+            of multi-agent.
           </T>
         </Box>
       </Reveal>
 
-      {sub < 5 && (
-        <SubBtn onClick={onContinue} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />
-      )}
+      {sub < 5 && <SubBtn onClick={onContinue} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
     </div>
   );
 }

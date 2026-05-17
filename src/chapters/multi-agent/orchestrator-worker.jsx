@@ -31,7 +31,12 @@ const T3_ORCHESTRATOR_TRACE = [
   },
   { step: 2, actor: "Worker A", color: "cyan", detail: "Returns Top-3 KB Articles On Dashboard Performance." },
   { step: 3, actor: "Worker B", color: "cyan", detail: "Returns Top-3 KB Articles On 500 Errors." },
-  { step: 4, actor: "Worker C", color: "cyan", detail: "Returns Alice's Tier (Pro) + Usage Stats (Heavy Dashboard User)." },
+  {
+    step: 4,
+    actor: "Worker C",
+    color: "cyan",
+    detail: "Returns Alice's Tier (Pro) + Usage Stats (Heavy Dashboard User).",
+  },
   {
     step: 5,
     actor: "Orchestrator",
@@ -57,8 +62,7 @@ const AGGREGATION_PATTERNS = [
   {
     name: "Synthesis",
     color: "red",
-    detail:
-      "Orchestrator Reads All Worker Outputs And Writes A Single Coherent Answer. Most Common, Most Expensive.",
+    detail: "Orchestrator Reads All Worker Outputs And Writes A Single Coherent Answer. Most Common, Most Expensive.",
     best: "Production Default For Natural-Language Answers.",
   },
 ];
@@ -79,22 +83,28 @@ export default function OrchestratorWorker(ctx) {
             One Planner, N Workers
           </T>
           <T color={SOFT.green} center size={16} style={{ marginTop: 10 }}>
-            The orchestrator-worker pattern is the most common production multi-agent shape. A
-            central orchestrator plans and aggregates; workers each handle one sub-task. Hub and
-            spoke topology - workers only talk to the orchestrator, never to each other.
+            The orchestrator-worker pattern is the most common production multi-agent shape. A central orchestrator
+            plans and aggregates; workers each handle one sub-task. Hub and spoke topology - workers only talk to the
+            orchestrator, never to each other.
           </T>
 
           <div style={{ ...tintedCard(C.green), padding: 14, marginTop: 14 }}>
-            <svg
-              viewBox="0 0 560 200"
-              style={{ width: "100%", maxWidth: 640, display: "block", margin: "0 auto" }}
-            >
+            <svg viewBox="0 0 560 200" style={{ width: "100%", maxWidth: 640, display: "block", margin: "0 auto" }}>
               <desc>
-                Hub and spoke topology: an orchestrator agent at the top center has bidirectional
-                arrows to three worker agents at the bottom, with no edges between workers.
+                Hub and spoke topology: an orchestrator agent at the top center has bidirectional arrows to three worker
+                agents at the bottom, with no edges between workers.
               </desc>
               {/* Orchestrator at top */}
-              <rect x={220} y={20} width={120} height={50} rx={10} fill={`${C.green}24`} stroke={C.green} strokeWidth={2} />
+              <rect
+                x={220}
+                y={20}
+                width={120}
+                height={50}
+                rx={10}
+                fill={`${C.green}24`}
+                stroke={C.green}
+                strokeWidth={2}
+              />
               <text x={280} y={42} fill={SOFT.green} fontSize="14" fontWeight="700" textAnchor="middle">
                 Orchestrator
               </text>
@@ -112,9 +122,26 @@ export default function OrchestratorWorker(ctx) {
                   {/* Two-way arrow */}
                   <line x1={280} y1={70} x2={w.x} y2={130} stroke={C.green} strokeWidth={1.6} />
                   <polygon points={`${w.x - 4},126 ${w.x + 4},126 ${w.x},134`} fill={C.green} />
-                  <line x1={w.x - 4} y1={134} x2={280 - 4} y2={74} stroke={`${C.green}80`} strokeWidth={1} strokeDasharray="3,3" />
+                  <line
+                    x1={w.x - 4}
+                    y1={134}
+                    x2={280 - 4}
+                    y2={74}
+                    stroke={`${C.green}80`}
+                    strokeWidth={1}
+                    strokeDasharray="3,3"
+                  />
 
-                  <rect x={w.x - 60} y={140} width={120} height={50} rx={10} fill={`${C.green}1a`} stroke={C.green} strokeWidth={1.6} />
+                  <rect
+                    x={w.x - 60}
+                    y={140}
+                    width={120}
+                    height={50}
+                    rx={10}
+                    fill={`${C.green}1a`}
+                    stroke={C.green}
+                    strokeWidth={1.6}
+                  />
                   <text x={w.x} y={162} fill={SOFT.green} fontSize="13" fontWeight="700" textAnchor="middle">
                     {w.label}
                   </text>
@@ -127,9 +154,8 @@ export default function OrchestratorWorker(ctx) {
           </div>
 
           <T color={SOFT.green} center size={15} style={{ marginTop: 12 }}>
-            The hub-and-spoke shape means the orchestrator owns coordination cost; workers stay
-            simple. No edges between workers means no peer-to-peer chatter, no shared-state
-            corruption.
+            The hub-and-spoke shape means the orchestrator owns coordination cost; workers stay simple. No edges between
+            workers means no peer-to-peer chatter, no shared-state corruption.
           </T>
         </Box>
       )}
@@ -140,9 +166,8 @@ export default function OrchestratorWorker(ctx) {
             Plan, Dispatch, Aggregate
           </T>
           <T color={SOFT.teal} center size={16} style={{ marginTop: 10 }}>
-            The orchestrator runs three phases per task. Each phase is a separate LLM call with a
-            distinct system prompt - the same agent loops the model through three different
-            mindsets.
+            The orchestrator runs three phases per task. Each phase is a separate LLM call with a distinct system prompt
+            - the same agent loops the model through three different mindsets.
           </T>
 
           <div
@@ -171,8 +196,8 @@ export default function OrchestratorWorker(ctx) {
           </div>
 
           <T color={SOFT.teal} center size={15} style={{ marginTop: 14 }}>
-            The 3 phases give the orchestrator 3 separate "minds": one to plan, one to dispatch,
-            one to aggregate. Each is simpler than a single "do everything" prompt.
+            The 3 phases give the orchestrator 3 separate "minds": one to plan, one to dispatch, one to aggregate. Each
+            is simpler than a single "do everything" prompt.
           </T>
         </Box>
       </Reveal>
@@ -183,23 +208,27 @@ export default function OrchestratorWorker(ctx) {
             Execute One Sub-Task
           </T>
           <T color={SOFT.cyan} center size={16} style={{ marginTop: 10 }}>
-            Each worker takes one sub-task description, runs its own agent loop within its tool
-            set, and returns a structured result. Workers do NOT talk to each other - only to the
-            orchestrator.
+            Each worker takes one sub-task description, runs its own agent loop within its tool set, and returns a
+            structured result. Workers do NOT talk to each other - only to the orchestrator.
           </T>
 
           <div style={{ ...tintedCard(C.cyan), padding: 14, marginTop: 14 }}>
-            <svg
-              viewBox="0 0 560 160"
-              style={{ width: "100%", maxWidth: 640, display: "block", margin: "0 auto" }}
-            >
+            <svg viewBox="0 0 560 160" style={{ width: "100%", maxWidth: 640, display: "block", margin: "0 auto" }}>
               <desc>
-                Single worker card showing the input sub-task description on the left, an internal
-                agent loop in the middle, and the structured result returned to the orchestrator on
-                the right.
+                Single worker card showing the input sub-task description on the left, an internal agent loop in the
+                middle, and the structured result returned to the orchestrator on the right.
               </desc>
               {/* Input */}
-              <rect x={20} y={50} width={140} height={60} rx={8} fill={`${C.cyan}1a`} stroke={C.cyan} strokeWidth={1.6} />
+              <rect
+                x={20}
+                y={50}
+                width={140}
+                height={60}
+                rx={8}
+                fill={`${C.cyan}1a`}
+                stroke={C.cyan}
+                strokeWidth={1.6}
+              />
               <text x={90} y={75} fill={SOFT.cyan} fontSize="12" fontWeight="700" textAnchor="middle">
                 Sub-Task
               </text>
@@ -215,7 +244,16 @@ export default function OrchestratorWorker(ctx) {
               <polygon points="196,77 204,77 200,73 200,87 196,83" fill={C.cyan} />
 
               {/* Worker (agent loop) */}
-              <rect x={200} y={30} width={160} height={100} rx={10} fill={`${C.cyan}24`} stroke={C.cyan} strokeWidth={2} />
+              <rect
+                x={200}
+                y={30}
+                width={160}
+                height={100}
+                rx={10}
+                fill={`${C.cyan}24`}
+                stroke={C.cyan}
+                strokeWidth={2}
+              />
               <text x={280} y={52} fill={SOFT.cyan} fontSize="13" fontWeight="700" textAnchor="middle">
                 Worker Agent
               </text>
@@ -234,7 +272,16 @@ export default function OrchestratorWorker(ctx) {
               <polygon points="396,77 404,77 400,73 400,87 396,83" fill={C.cyan} />
 
               {/* Output */}
-              <rect x={400} y={50} width={140} height={60} rx={8} fill={`${C.cyan}1a`} stroke={C.cyan} strokeWidth={1.6} />
+              <rect
+                x={400}
+                y={50}
+                width={140}
+                height={60}
+                rx={8}
+                fill={`${C.cyan}1a`}
+                stroke={C.cyan}
+                strokeWidth={1.6}
+              />
               <text x={470} y={75} fill={SOFT.cyan} fontSize="12" fontWeight="700" textAnchor="middle">
                 Structured Result
               </text>
@@ -248,8 +295,8 @@ export default function OrchestratorWorker(ctx) {
           </div>
 
           <T color={SOFT.cyan} center size={15} style={{ marginTop: 12 }}>
-            Workers don&apos;t talk to each other. If Worker A&apos;s result feeds Worker B&apos;s
-            input, the orchestrator does that chaining. This is what makes parallel dispatch safe.
+            Workers don&apos;t talk to each other. If Worker A&apos;s result feeds Worker B&apos;s input, the
+            orchestrator does that chaining. This is what makes parallel dispatch safe.
           </T>
         </Box>
       </Reveal>
@@ -260,8 +307,8 @@ export default function OrchestratorWorker(ctx) {
             Trace: Ticket T3 With Orchestrator-Worker
           </T>
           <T color={SOFT.blue} center size={16} style={{ marginTop: 10 }}>
-            Ticket T3 = "Dashboard slow + 500 errors". The orchestrator plans 3 parallel sub-tasks,
-            dispatches them to workers, then aggregates.
+            Ticket T3 = "Dashboard slow + 500 errors". The orchestrator plans 3 parallel sub-tasks, dispatches them to
+            workers, then aggregates.
           </T>
 
           <div
@@ -287,8 +334,8 @@ export default function OrchestratorWorker(ctx) {
           </div>
 
           <T color={SOFT.blue} center size={15} style={{ marginTop: 14 }}>
-            Workers A and B and C ran in parallel - steps 2-4 happened roughly at the same time.
-            Total latency = max(worker time) + plan + aggregate, not sum.
+            Workers A and B and C ran in parallel - steps 2-4 happened roughly at the same time. Total latency =
+            max(worker time) + plan + aggregate, not sum.
           </T>
         </Box>
       </Reveal>
@@ -299,8 +346,8 @@ export default function OrchestratorWorker(ctx) {
             Three Ways To Aggregate
           </T>
           <T color={SOFT.indigo} center size={16} style={{ marginTop: 10 }}>
-            Aggregation - merging worker outputs into a single answer - has three common patterns,
-            each with a sweet spot.
+            Aggregation - merging worker outputs into a single answer - has three common patterns, each with a sweet
+            spot.
           </T>
 
           <div
@@ -332,16 +379,13 @@ export default function OrchestratorWorker(ctx) {
           </div>
 
           <T color={SOFT.indigo} center size={15} style={{ marginTop: 14 }}>
-            Synthesis is the production default for natural-language answers. Voting wins when
-            workers are doing classification. Concatenation is fine for structured outputs that
-            need no rephrasing.
+            Synthesis is the production default for natural-language answers. Voting wins when workers are doing
+            classification. Concatenation is fine for structured outputs that need no rephrasing.
           </T>
         </Box>
       </Reveal>
 
-      {sub < 4 && (
-        <SubBtn onClick={onContinue} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />
-      )}
+      {sub < 4 && <SubBtn onClick={onContinue} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
     </div>
   );
 }

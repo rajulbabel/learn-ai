@@ -77,10 +77,9 @@ export default function VendorSdks(ctx) {
             When The Model Vendor Ships The Framework
           </T>
           <T color={SOFT.teal} center size={16} style={{ marginTop: 10 }}>
-            Vendor-native SDKs are tightly integrated with one model provider. Claude Agent
-            SDK is built around the Claude API and exposes a loop primitive. OpenAI Agents
-            (the successor to Swarm) is built around OpenAI tool-calling and exposes a
-            hand-off primitive. Both ship native support for that vendor's other features.
+            Vendor-native SDKs are tightly integrated with one model provider. Claude Agent SDK is built around the
+            Claude API and exposes a loop primitive. OpenAI Agents (the successor to Swarm) is built around OpenAI
+            tool-calling and exposes a hand-off primitive. Both ship native support for that vendor's other features.
           </T>
 
           <div
@@ -95,10 +94,7 @@ export default function VendorSdks(ctx) {
               const accent = C[card.accent];
               const soft = SOFT[card.accent];
               return (
-                <div
-                  key={card.name}
-                  style={{ ...tintedCard(accent), padding: 14, textAlign: "center" }}
-                >
+                <div key={card.name} style={{ ...tintedCard(accent), padding: 14, textAlign: "center" }}>
                   <T color={accent} center bold size={18}>
                     {card.name}
                   </T>
@@ -146,9 +142,9 @@ export default function VendorSdks(ctx) {
           </div>
 
           <T color={SOFT.teal} center size={15} style={{ marginTop: 14 }}>
-            Both vendors ship the abstractions they think their model is best at. Claude
-            invests in long iterative loops with deep tool use. OpenAI invests in multi-agent
-            hand-off chains. Pick the one whose abstractions match your agent shape.
+            Both vendors ship the abstractions they think their model is best at. Claude invests in long iterative loops
+            with deep tool use. OpenAI invests in multi-agent hand-off chains. Pick the one whose abstractions match
+            your agent shape.
           </T>
         </Box>
       )}
@@ -159,10 +155,9 @@ export default function VendorSdks(ctx) {
             Loop Primitive
           </T>
           <T color={SOFT.cyan} center size={16} style={{ marginTop: 10 }}>
-            The Claude Agent SDK exposes AgentLoop: a configured loop that takes a system
-            prompt, a tool inventory, an iteration cap, and an on-message callback. Inside
-            the loop, the SDK runs reason-act-observe for you and returns the final
-            message once the model stops asking for tools.
+            The Claude Agent SDK exposes AgentLoop: a configured loop that takes a system prompt, a tool inventory, an
+            iteration cap, and an on-message callback. Inside the loop, the SDK runs reason-act-observe for you and
+            returns the final message once the model stops asking for tools.
           </T>
 
           <div style={{ ...tintedCard(C.cyan), padding: 14, marginTop: 14 }}>
@@ -183,7 +178,7 @@ export default function VendorSdks(ctx) {
                 display: "inline-block",
               }}
             >
-{`loop = AgentLoop(
+              {`loop = AgentLoop(
   system_prompt=SYSTEM,
   tools=[lookup_customer, process_refund, escalate_human],
   max_iterations=10,
@@ -194,9 +189,8 @@ result = loop.run(user_message="I want a refund for INV-9924")`}
           </div>
 
           <T color={SOFT.cyan} center size={15} style={{ marginTop: 14 }}>
-            The loop is the abstraction. You hand the SDK the model, tools, and a cap, then
-            call run. Reason-act-observe lives inside the SDK. You never write the while
-            loop yourself.
+            The loop is the abstraction. You hand the SDK the model, tools, and a cap, then call run. Reason-act-observe
+            lives inside the SDK. You never write the while loop yourself.
           </T>
         </Box>
       </Reveal>
@@ -207,10 +201,9 @@ result = loop.run(user_message="I want a refund for INV-9924")`}
             Hand-Off Primitive
           </T>
           <T color={SOFT.purple} center size={16} style={{ marginTop: 10 }}>
-            OpenAI Agents (the successor to Swarm) exposes hand-offs. Each agent declares
-            which other agents it can hand off to. The Runner walks the chain: each agent
-            either resolves the request or returns the next agent. The chain terminates
-            when an agent returns a final response.
+            OpenAI Agents (the successor to Swarm) exposes hand-offs. Each agent declares which other agents it can hand
+            off to. The Runner walks the chain: each agent either resolves the request or returns the next agent. The
+            chain terminates when an agent returns a final response.
           </T>
 
           <div style={{ ...tintedCard(C.purple), padding: 14, marginTop: 14 }}>
@@ -231,7 +224,7 @@ result = loop.run(user_message="I want a refund for INV-9924")`}
                 display: "inline-block",
               }}
             >
-{`triage = Agent(
+              {`triage = Agent(
   name="triage",
   instructions="Classify and route.",
   handoffs=[billing_agent, troubleshooting_agent]
@@ -241,9 +234,8 @@ result = Runner.run_sync(triage, "Refund my last invoice")`}
           </div>
 
           <T color={SOFT.purple} center size={15} style={{ marginTop: 14 }}>
-            The handoffs field is the routing graph. The Runner reads each agent's response
-            to decide if it is a final answer or a hand-off to the next agent. No loop on
-            your side. Just declare who can pass the baton to whom.
+            The handoffs field is the routing graph. The Runner reads each agent's response to decide if it is a final
+            answer or a hand-off to the next agent. No loop on your side. Just declare who can pass the baton to whom.
           </T>
         </Box>
       </Reveal>
@@ -254,9 +246,8 @@ result = Runner.run_sync(triage, "Refund my last invoice")`}
             Two Primitives, Two Mental Models
           </T>
           <T color={SOFT.green} center size={16} style={{ marginTop: 10 }}>
-            Loop versus hand-off is the headline difference. Lock-in and portability are
-            the production trade-offs you carry forever. Moving to another vendor means
-            rewriting the agent harness, not just swapping a model.
+            Loop versus hand-off is the headline difference. Lock-in and portability are the production trade-offs you
+            carry forever. Moving to another vendor means rewriting the agent harness, not just swapping a model.
           </T>
 
           <div style={{ ...tintedCard(C.green), padding: 14, marginTop: 14 }}>
@@ -303,9 +294,9 @@ result = Runner.run_sync(triage, "Refund my last invoice")`}
           </div>
 
           <T color={SOFT.green} center size={15} style={{ marginTop: 14 }}>
-            High lock-in is not automatic disqualification. If you are sure about the
-            vendor for the next 18 months, lock-in is the price of native features. If
-            you are not sure, the price is rewriting the agent harness later.
+            High lock-in is not automatic disqualification. If you are sure about the vendor for the next 18 months,
+            lock-in is the price of native features. If you are not sure, the price is rewriting the agent harness
+            later.
           </T>
         </Box>
       </Reveal>
@@ -316,10 +307,9 @@ result = Runner.run_sync(triage, "Refund my last invoice")`}
             Use The Vendor SDK When...
           </T>
           <T color={SOFT.amber} center size={16} style={{ marginTop: 10 }}>
-            Vendor SDKs are the right pick when the vendor relationship is long-term and
-            its abstractions fit your shape. Avoid them when you need multi-vendor support
-            or features the SDK does not ship (LangGraph-style checkpointing, for
-            example).
+            Vendor SDKs are the right pick when the vendor relationship is long-term and its abstractions fit your
+            shape. Avoid them when you need multi-vendor support or features the SDK does not ship (LangGraph-style
+            checkpointing, for example).
           </T>
 
           <div style={{ ...tintedCard(C.amber), padding: 14, marginTop: 14 }}>
@@ -358,23 +348,19 @@ result = Runner.run_sync(triage, "Refund my last invoice")`}
               Avoid Vendor SDK When
             </T>
             <T color={SOFT.amber} center size={14} style={{ marginTop: 8 }}>
-              A multi-vendor strategy is required, you anticipate switching models, or you
-              need framework features the vendor does not ship (e.g. LangGraph-style
-              checkpointing across long-running calls).
+              A multi-vendor strategy is required, you anticipate switching models, or you need framework features the
+              vendor does not ship (e.g. LangGraph-style checkpointing across long-running calls).
             </T>
           </div>
 
           <T color={SOFT.amber} center size={15} style={{ marginTop: 14 }}>
-            Lock-in is a deliberate trade. You buy speed and native features. You pay in
-            portability. Make the trade once, eyes open, before you have 50 agents in
-            production.
+            Lock-in is a deliberate trade. You buy speed and native features. You pay in portability. Make the trade
+            once, eyes open, before you have 50 agents in production.
           </T>
         </Box>
       </Reveal>
 
-      {sub < 4 && (
-        <SubBtn onClick={onContinue} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />
-      )}
+      {sub < 4 && <SubBtn onClick={onContinue} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
     </div>
   );
 }

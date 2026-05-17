@@ -38,8 +38,7 @@ const T2_MEMORY_SNAPSHOT = [
   {
     layer: "Episodic",
     color: "yellow",
-    content:
-      "2026-03-04: Past ticket #4521 for failed password reset; escalated due to legacy MFA bug.",
+    content: "2026-03-04: Past ticket #4521 for failed password reset; escalated due to legacy MFA bug.",
   },
   {
     layer: "Semantic",
@@ -92,9 +91,8 @@ export default function MemoryTaxonomy(ctx) {
             Two Memory Layers
           </T>
           <T color={SOFT.amber} center size={16} style={{ marginTop: 10 }}>
-            An agent has memory in two very different places. Short-term memory lives inside the
-            active context window of the current conversation. Long-term memory lives outside that
-            window and persists across sessions.
+            An agent has memory in two very different places. Short-term memory lives inside the active context window
+            of the current conversation. Long-term memory lives outside that window and persists across sessions.
           </T>
 
           <div
@@ -111,8 +109,8 @@ export default function MemoryTaxonomy(ctx) {
                 Working Memory
               </T>
               <T color={SOFT.amber} center size={14} style={{ marginTop: 8 }}>
-                Lives In The Active Context Window. The Model Reads And Writes It Every Loop Turn.
-                Discarded When The Session Ends.
+                Lives In The Active Context Window. The Model Reads And Writes It Every Loop Turn. Discarded When The
+                Session Ends.
               </T>
             </div>
 
@@ -122,15 +120,15 @@ export default function MemoryTaxonomy(ctx) {
                 Persistent Memory
               </T>
               <T color={SOFT.purple} center size={14} style={{ marginTop: 8 }}>
-                Lives Outside The Context Window In An External Store. Persists Across Sessions And
-                Conversations. Gets Loaded Back In On Demand.
+                Lives Outside The Context Window In An External Store. Persists Across Sessions And Conversations. Gets
+                Loaded Back In On Demand.
               </T>
             </div>
           </div>
 
           <T color={SOFT.amber} center size={15} style={{ marginTop: 14 }}>
-            Short = this conversation. Long = everything before. The rest of the memory chapters
-            walk the taxonomy and show how each piece fits the agent loop.
+            Short = this conversation. Long = everything before. The rest of the memory chapters walk the taxonomy and
+            show how each piece fits the agent loop.
           </T>
         </Box>
       )}
@@ -141,8 +139,8 @@ export default function MemoryTaxonomy(ctx) {
             Long-Term Splits Three Ways
           </T>
           <T color={SOFT.yellow} center size={16} style={{ marginTop: 10 }}>
-            Long-term memory is not one thing. It separates by what kind of information it holds.
-            Three sub-types - episodic, semantic, procedural - each answer a different question.
+            Long-term memory is not one thing. It separates by what kind of information it holds. Three sub-types -
+            episodic, semantic, procedural - each answer a different question.
           </T>
 
           <div
@@ -174,8 +172,8 @@ export default function MemoryTaxonomy(ctx) {
           </div>
 
           <T color={SOFT.yellow} center size={15} style={{ marginTop: 14 }}>
-            The next chapters give each of these their own zoom. Here we just see the shape: events
-            (when), facts (what), skills (how).
+            The next chapters give each of these their own zoom. Here we just see the shape: events (when), facts
+            (what), skills (how).
           </T>
         </Box>
       </Reveal>
@@ -186,18 +184,15 @@ export default function MemoryTaxonomy(ctx) {
             The Agent Memory Taxonomy
           </T>
           <T color={SOFT.orange} center size={16} style={{ marginTop: 10 }}>
-            One root, two branches, four leaves. Each leaf is a separate chapter. The tree is the
-            map for the rest of the memory chapters.
+            One root, two branches, four leaves. Each leaf is a separate chapter. The tree is the map for the rest of
+            the memory chapters.
           </T>
 
           <div style={{ ...tintedCard(C.orange), padding: 14, marginTop: 14 }}>
-            <svg
-              viewBox="0 0 560 320"
-              style={{ width: "100%", maxWidth: 640, display: "block", margin: "0 auto" }}
-            >
+            <svg viewBox="0 0 560 320" style={{ width: "100%", maxWidth: 640, display: "block", margin: "0 auto" }}>
               <desc>
-                Memory taxonomy tree with Agent Memory as root, branching into Short-Term Working
-                Memory and Long-Term, then Long-Term splits into Episodic, Semantic, and Procedural.
+                Memory taxonomy tree with Agent Memory as root, branching into Short-Term Working Memory and Long-Term,
+                then Long-Term splits into Episodic, Semantic, and Procedural.
               </desc>
               {/* Root: Agent Memory at top center (280) */}
               <rect
@@ -305,8 +300,8 @@ export default function MemoryTaxonomy(ctx) {
           </div>
 
           <T color={SOFT.orange} center size={15} style={{ marginTop: 12 }}>
-            Each leaf becomes its own chapter. Working memory is 13.25; episodic, semantic,
-            procedural are 13.26 through 13.28. Summary and context-management close out at 13.29.
+            Each leaf becomes its own chapter. Working memory is 13.25; episodic, semantic, procedural are 13.26 through
+            13.28. Summary and context-management close out at 13.29.
           </T>
         </Box>
       </Reveal>
@@ -317,8 +312,8 @@ export default function MemoryTaxonomy(ctx) {
             Memory Snapshot: Ticket T2
           </T>
           <T color={SOFT.red} center size={16} style={{ marginTop: 10 }}>
-            Concrete example for ticket T2 (password reset + email change for Alice). Each memory
-            layer holds something different. Together they let the agent reason with full context.
+            Concrete example for ticket T2 (password reset + email change for Alice). Each memory layer holds something
+            different. Together they let the agent reason with full context.
           </T>
 
           <div
@@ -347,8 +342,8 @@ export default function MemoryTaxonomy(ctx) {
           </div>
 
           <T color={SOFT.red} center size={15} style={{ marginTop: 14 }}>
-            Notice the customer ID c-9924 and the refund cap $200 - those reappear across the
-            memory chapters. The agent does not re-derive these each turn; it loads them from memory.
+            Notice the customer ID c-9924 and the refund cap $200 - those reappear across the memory chapters. The agent
+            does not re-derive these each turn; it loads them from memory.
           </T>
         </Box>
       </Reveal>
@@ -359,8 +354,8 @@ export default function MemoryTaxonomy(ctx) {
             Each Layer Solves A Different Problem
           </T>
           <T color={SOFT.purple} center size={16} style={{ marginTop: 10 }}>
-            Why have four layers and not one? Because each holds a different shape of information,
-            with different retrieval patterns, different update rules, and different lifespans.
+            Why have four layers and not one? Because each holds a different shape of information, with different
+            retrieval patterns, different update rules, and different lifespans.
           </T>
 
           <div
@@ -389,16 +384,14 @@ export default function MemoryTaxonomy(ctx) {
           </div>
 
           <T color={SOFT.purple} center size={15} style={{ marginTop: 14 }}>
-            Working memory tracks the current task state. Episodic memory recalls specific past
-            events. Semantic memory stores stable facts. Procedural memory caches routines so the
-            agent does not re-derive them every time. Each layer earns its place.
+            Working memory tracks the current task state. Episodic memory recalls specific past events. Semantic memory
+            stores stable facts. Procedural memory caches routines so the agent does not re-derive them every time. Each
+            layer earns its place.
           </T>
         </Box>
       </Reveal>
 
-      {sub < 4 && (
-        <SubBtn onClick={onContinue} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />
-      )}
+      {sub < 4 && <SubBtn onClick={onContinue} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
     </div>
   );
 }

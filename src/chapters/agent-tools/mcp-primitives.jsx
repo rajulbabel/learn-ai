@@ -82,9 +82,9 @@ export default function McpPrimitives(ctx) {
             Tools, Resources, Prompts
           </T>
           <T color={SOFT.purple} center size={16} style={{ marginTop: 10 }}>
-            An MCP server exposes three kinds of capabilities. Tools are callable actions the model
-            can invoke. Resources are readable data the host can pull in. Prompts are parameterized
-            templates the host can surface to the user. Each one solves a different need.
+            An MCP server exposes three kinds of capabilities. Tools are callable actions the model can invoke.
+            Resources are readable data the host can pull in. Prompts are parameterized templates the host can surface
+            to the user. Each one solves a different need.
           </T>
 
           <div
@@ -96,10 +96,7 @@ export default function McpPrimitives(ctx) {
             }}
           >
             {MCP_PRIMITIVES.map((p) => (
-              <div
-                key={p.label}
-                style={{ ...tintedCard(p.color), padding: 14, textAlign: "center" }}
-              >
+              <div key={p.label} style={{ ...tintedCard(p.color), padding: 14, textAlign: "center" }}>
                 <span style={pill(p.color)}>{p.label.toUpperCase()}</span>
                 <T color={p.color} bold center size={18} style={{ marginTop: 10 }}>
                   {p.label}
@@ -130,9 +127,8 @@ export default function McpPrimitives(ctx) {
           </div>
 
           <T color={SOFT.purple} center size={15} style={{ marginTop: 12 }}>
-            The split matters because each primitive has a different access pattern. The model
-            decides when to call a tool. The host decides when to read a resource. The user picks
-            which prompt to invoke.
+            The split matters because each primitive has a different access pattern. The model decides when to call a
+            tool. The host decides when to read a resource. The user picks which prompt to invoke.
           </T>
         </Box>
       )}
@@ -143,9 +139,9 @@ export default function McpPrimitives(ctx) {
             Tool: process_refund
           </T>
           <T color={SOFT.indigo} center size={16} style={{ marginTop: 10 }}>
-            A Tool is a named action with a typed input schema. It usually has side effects: it
-            mutates state, calls an external API, or spends money. The model picks one from the
-            tool list and emits a tool call with the required arguments.
+            A Tool is a named action with a typed input schema. It usually has side effects: it mutates state, calls an
+            external API, or spends money. The model picks one from the tool list and emits a tool call with the
+            required arguments.
           </T>
 
           <div style={{ ...tintedCard(C.indigo), padding: 16, marginTop: 14 }}>
@@ -180,9 +176,8 @@ export default function McpPrimitives(ctx) {
           </div>
 
           <T color={SOFT.indigo} center size={15} style={{ marginTop: 12 }}>
-            Tools always go through validation before the server actually runs the action. The
-            inputSchema is how the host (and the model) know what arguments are required and what
-            type each one must be.
+            Tools always go through validation before the server actually runs the action. The inputSchema is how the
+            host (and the model) know what arguments are required and what type each one must be.
           </T>
         </Box>
       </Reveal>
@@ -193,9 +188,9 @@ export default function McpPrimitives(ctx) {
             Resource: kb://articles/password-reset
           </T>
           <T color={SOFT.blue} center size={16} style={{ marginTop: 10 }}>
-            A Resource is read-only data the server exposes under a URI. The host fetches it on
-            demand and feeds the content into the model&apos;s context, the same way you might
-            attach a PDF in a chat. The model never calls a resource itself.
+            A Resource is read-only data the server exposes under a URI. The host fetches it on demand and feeds the
+            content into the model&apos;s context, the same way you might attach a PDF in a chat. The model never calls
+            a resource itself.
           </T>
 
           <div style={{ ...tintedCard(C.blue), padding: 16, marginTop: 14 }}>
@@ -244,9 +239,8 @@ export default function McpPrimitives(ctx) {
           </div>
 
           <T color={SOFT.blue} center size={15} style={{ marginTop: 12 }}>
-            The URI scheme is server-defined: it could be kb://, file://, github://, postgres://,
-            or anything else the server exposes. The host treats it as an opaque identifier and
-            asks the server to resolve it when needed.
+            The URI scheme is server-defined: it could be kb://, file://, github://, postgres://, or anything else the
+            server exposes. The host treats it as an opaque identifier and asks the server to resolve it when needed.
           </T>
         </Box>
       </Reveal>
@@ -257,10 +251,9 @@ export default function McpPrimitives(ctx) {
             Prompt: summarize_ticket
           </T>
           <T color={SOFT.cyan} center size={16} style={{ marginTop: 10 }}>
-            A Prompt is a parameterized template the server publishes. The host surfaces these as
-            slash-commands or quick actions for the user. When the user picks one, the host
-            collects the arguments, fills the template, and sends the resulting message to the
-            model.
+            A Prompt is a parameterized template the server publishes. The host surfaces these as slash-commands or
+            quick actions for the user. When the user picks one, the host collects the arguments, fills the template,
+            and sends the resulting message to the model.
           </T>
 
           <div
@@ -299,9 +292,9 @@ export default function McpPrimitives(ctx) {
           </T>
 
           <T color={SOFT.cyan} center size={15} style={{ marginTop: 10 }}>
-            The arguments array lists each parameter the template needs, with a required flag.
-            ticket_id is required, max_words is optional. The host can either prompt the user for
-            missing values or fill defaults before invoking.
+            The arguments array lists each parameter the template needs, with a required flag. ticket_id is required,
+            max_words is optional. The host can either prompt the user for missing values or fill defaults before
+            invoking.
           </T>
         </Box>
       </Reveal>
@@ -312,9 +305,8 @@ export default function McpPrimitives(ctx) {
             Action vs Data vs Template
           </T>
           <T color={SOFT.teal} center size={16} style={{ marginTop: 10 }}>
-            When you design an MCP server, every capability falls into exactly one bucket. Ask
-            what the model or host needs to DO, READ, or REUSE, and the right primitive is
-            obvious.
+            When you design an MCP server, every capability falls into exactly one bucket. Ask what the model or host
+            needs to DO, READ, or REUSE, and the right primitive is obvious.
           </T>
 
           <div style={{ display: "flex", flexDirection: "column", gap: 10, marginTop: 14 }}>
@@ -350,15 +342,14 @@ export default function McpPrimitives(ctx) {
             }}
           >
             <T color={SOFT.teal} center size={15}>
-              Decision rule: tool if side-effecting; resource if read-only data; prompt if
-              template the user picks.
+              Decision rule: tool if side-effecting; resource if read-only data; prompt if template the user picks.
             </T>
           </div>
 
           <T color={SOFT.teal} center size={15} style={{ marginTop: 12 }}>
-            Putting a read-only doc behind a tool wastes a model turn. Putting an action behind a
-            resource hides it from the model entirely. Putting a one-shot question behind a
-            prompt hides it from end users. The split is the contract.
+            Putting a read-only doc behind a tool wastes a model turn. Putting an action behind a resource hides it from
+            the model entirely. Putting a one-shot question behind a prompt hides it from end users. The split is the
+            contract.
           </T>
         </Box>
       </Reveal>

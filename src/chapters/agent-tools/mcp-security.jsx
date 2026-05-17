@@ -55,7 +55,7 @@ const AUDIT_ROWS = [
   {
     time: "14:02:11",
     tool: "lookup_customer",
-    input: "{ id: \"C-104\" }",
+    input: '{ id: "C-104" }',
     result: "OK",
     user: "alice@co",
     decision: "Auto",
@@ -63,7 +63,7 @@ const AUDIT_ROWS = [
   {
     time: "14:02:34",
     tool: "process_refund",
-    input: "{ invoice: \"INV-9924\" }",
+    input: '{ invoice: "INV-9924" }',
     result: "OK",
     user: "alice@co",
     decision: "Approved",
@@ -71,7 +71,7 @@ const AUDIT_ROWS = [
   {
     time: "14:03:02",
     tool: "send_email",
-    input: "{ to: \"cust@x\" }",
+    input: '{ to: "cust@x" }',
     result: "OK",
     user: "alice@co",
     decision: "Approved",
@@ -79,7 +79,7 @@ const AUDIT_ROWS = [
   {
     time: "14:05:50",
     tool: "delete_account",
-    input: "{ id: \"C-104\" }",
+    input: '{ id: "C-104" }',
     result: "Blocked",
     user: "alice@co",
     decision: "Denied",
@@ -102,10 +102,10 @@ export default function McpSecurity(ctx) {
             Server Code Is Untrusted By Default
           </T>
           <T color={SOFT.purple} center size={16} style={{ marginTop: 10 }}>
-            An MCP server is third-party code. It might be open source, vendor-supplied, or written
-            by a teammate, but the host never assumes it is safe. The host holds the user data, the
-            model, and every mutation worth caring about. The server holds the tool implementation.
-            The boundary between them is what makes the whole architecture safe.
+            An MCP server is third-party code. It might be open source, vendor-supplied, or written by a teammate, but
+            the host never assumes it is safe. The host holds the user data, the model, and every mutation worth caring
+            about. The server holds the tool implementation. The boundary between them is what makes the whole
+            architecture safe.
           </T>
 
           <div style={{ ...tintedCard(C.purple), padding: 14, marginTop: 14 }}>
@@ -117,19 +117,11 @@ export default function McpSecurity(ctx) {
               style={{ width: "100%", maxWidth: 620, display: "block", margin: "12px auto 0" }}
             >
               <desc>
-                Trust boundary diagram showing outer host with user data and model trusted ring
-                surrounding inner untrusted third party server code with protocol arrows crossing
-                the boundary.
+                Trust boundary diagram showing outer host with user data and model trusted ring surrounding inner
+                untrusted third party server code with protocol arrows crossing the boundary.
               </desc>
               {/* Outer ring - Host (Trusted) */}
-              <circle
-                cx="280"
-                cy="160"
-                r="140"
-                fill={`${C.purple}0a`}
-                stroke={C.purple}
-                strokeWidth="2"
-              />
+              <circle cx="280" cy="160" r="140" fill={`${C.purple}0a`} stroke={C.purple} strokeWidth="2" />
               {/* Inner ring - Server (Untrusted) */}
               <circle
                 cx="280"
@@ -142,14 +134,7 @@ export default function McpSecurity(ctx) {
               />
 
               {/* Outer label */}
-              <text
-                x="280"
-                y="35"
-                fill={SOFT.purple}
-                fontSize="14"
-                fontWeight="700"
-                textAnchor="middle"
-              >
+              <text x="280" y="35" fill={SOFT.purple} fontSize="14" fontWeight="700" textAnchor="middle">
                 Host (Trusted)
               </text>
               <text x="280" y="55" fill={SOFT.purple} fontSize="11" textAnchor="middle">
@@ -157,14 +142,7 @@ export default function McpSecurity(ctx) {
               </text>
 
               {/* Inner label */}
-              <text
-                x="280"
-                y="155"
-                fill={SOFT.red}
-                fontSize="13"
-                fontWeight="700"
-                textAnchor="middle"
-              >
+              <text x="280" y="155" fill={SOFT.red} fontSize="13" fontWeight="700" textAnchor="middle">
                 Server
               </text>
               <text x="280" y="172" fill={SOFT.red} fontSize="11" textAnchor="middle">
@@ -175,58 +153,36 @@ export default function McpSecurity(ctx) {
               </text>
 
               {/* Arrow crossing - List (server -> host) */}
-              <path
-                d="M 240 130 Q 200 110 165 90"
-                fill="none"
-                stroke={C.cyan}
-                strokeWidth="1.5"
-              />
+              <path d="M 240 130 Q 200 110 165 90" fill="none" stroke={C.cyan} strokeWidth="1.5" />
               <polygon points="165,90 173,93 170,99" fill={C.cyan} />
               <text x="120" y="80" fill={SOFT.cyan} fontSize="11" fontWeight="700">
                 List
               </text>
 
               {/* Arrow crossing - Call (host -> server) */}
-              <path
-                d="M 395 90 Q 360 110 320 130"
-                fill="none"
-                stroke={C.blue}
-                strokeWidth="1.5"
-              />
+              <path d="M 395 90 Q 360 110 320 130" fill="none" stroke={C.blue} strokeWidth="1.5" />
               <polygon points="320,130 328,127 326,135" fill={C.blue} />
               <text x="400" y="80" fill={SOFT.blue} fontSize="11" fontWeight="700">
                 Call
               </text>
 
               {/* Arrow crossing - Result (server -> host) */}
-              <path
-                d="M 320 200 Q 360 230 400 250"
-                fill="none"
-                stroke={C.green}
-                strokeWidth="1.5"
-              />
+              <path d="M 320 200 Q 360 230 400 250" fill="none" stroke={C.green} strokeWidth="1.5" />
               <polygon points="400,250 392,247 395,255" fill={C.green} />
               <text x="400" y="270" fill={SOFT.green} fontSize="11" fontWeight="700">
                 Result
               </text>
 
               {/* Boundary caption */}
-              <text
-                x="280"
-                y="300"
-                fill={SOFT.purple}
-                fontSize="11"
-                fontStyle="italic"
-                textAnchor="middle"
-              >
+              <text x="280" y="300" fill={SOFT.purple} fontSize="11" fontStyle="italic" textAnchor="middle">
                 The MCP transport is the only legal crossing
               </text>
             </svg>
           </div>
 
           <T color={SOFT.purple} center size={15} style={{ marginTop: 12 }}>
-            The host owns the user data and the model. The server runs third-party tool code. The
-            protocol crossing the boundary is the only thing the host has to police.
+            The host owns the user data and the model. The server runs third-party tool code. The protocol crossing the
+            boundary is the only thing the host has to police.
           </T>
         </Box>
       )}
@@ -237,9 +193,9 @@ export default function McpSecurity(ctx) {
             Sandbox: Process Isolation
           </T>
           <T color={SOFT.indigo} center size={16} style={{ marginTop: 10 }}>
-            The host launches the server in its own OS process. The host can spawn it, kill it, and
-            shape what it sees, but it never shares memory with it. Whatever capability the server
-            wants, it has to ask for over the transport.
+            The host launches the server in its own OS process. The host can spawn it, kill it, and shape what it sees,
+            but it never shares memory with it. Whatever capability the server wants, it has to ask for over the
+            transport.
           </T>
 
           <div style={{ ...tintedCard(C.indigo), padding: 14, marginTop: 14 }}>
@@ -251,9 +207,8 @@ export default function McpSecurity(ctx) {
               style={{ width: "100%", maxWidth: 620, display: "block", margin: "12px auto 0" }}
             >
               <desc>
-                Host process box on top spawns a server process box on the bottom inside a sandbox
-                container, with a labeled spawn arrow and an MCP transport arrow as the only legal
-                channel between them.
+                Host process box on top spawns a server process box on the bottom inside a sandbox container, with a
+                labeled spawn arrow and an MCP transport arrow as the only legal channel between them.
               </desc>
               {/* Host process box */}
               <rect
@@ -266,14 +221,7 @@ export default function McpSecurity(ctx) {
                 stroke={C.indigo}
                 strokeWidth="2"
               />
-              <text
-                x="280"
-                y="48"
-                fill={SOFT.indigo}
-                fontSize="14"
-                fontWeight="700"
-                textAnchor="middle"
-              >
+              <text x="280" y="48" fill={SOFT.indigo} fontSize="14" fontWeight="700" textAnchor="middle">
                 Host Process
               </text>
               <text x="280" y="66" fill={SOFT.indigo} fontSize="11" textAnchor="middle">
@@ -281,24 +229,9 @@ export default function McpSecurity(ctx) {
               </text>
 
               {/* Spawn arrow */}
-              <line
-                x1="280"
-                y1="80"
-                x2="280"
-                y2="135"
-                stroke={C.purple}
-                strokeWidth="2"
-                strokeDasharray="4 3"
-              />
+              <line x1="280" y1="80" x2="280" y2="135" stroke={C.purple} strokeWidth="2" strokeDasharray="4 3" />
               <polygon points="280,140 274,128 286,128" fill={C.purple} />
-              <text
-                x="295"
-                y="115"
-                fill={SOFT.purple}
-                fontSize="11"
-                fontWeight="700"
-                textAnchor="start"
-              >
+              <text x="295" y="115" fill={SOFT.purple} fontSize="11" fontWeight="700" textAnchor="start">
                 Spawn
               </text>
 
@@ -314,36 +247,13 @@ export default function McpSecurity(ctx) {
                 strokeWidth="1.5"
                 strokeDasharray="6 4"
               />
-              <text
-                x="280"
-                y="163"
-                fill={SOFT.red}
-                fontSize="11"
-                fontWeight="700"
-                textAnchor="middle"
-              >
+              <text x="280" y="163" fill={SOFT.red} fontSize="11" fontWeight="700" textAnchor="middle">
                 Sandbox
               </text>
 
               {/* Server process box */}
-              <rect
-                x="190"
-                y="170"
-                width="180"
-                height="46"
-                rx="8"
-                fill={`${C.red}24`}
-                stroke={C.red}
-                strokeWidth="2"
-              />
-              <text
-                x="280"
-                y="190"
-                fill={SOFT.red}
-                fontSize="13"
-                fontWeight="700"
-                textAnchor="middle"
-              >
+              <rect x="190" y="170" width="180" height="46" rx="8" fill={`${C.red}24`} stroke={C.red} strokeWidth="2" />
+              <text x="280" y="190" fill={SOFT.red} fontSize="13" fontWeight="700" textAnchor="middle">
                 Server Process
               </text>
               <text x="280" y="207" fill={SOFT.red} fontSize="11" textAnchor="middle">
@@ -354,10 +264,7 @@ export default function McpSecurity(ctx) {
 
           <div style={{ display: "flex", flexDirection: "column", gap: 10, marginTop: 14 }}>
             {SANDBOX_RULES.map((r) => (
-              <div
-                key={r.title}
-                style={{ ...tintedCard(C.indigo), padding: 12, textAlign: "center" }}
-              >
+              <div key={r.title} style={{ ...tintedCard(C.indigo), padding: 12, textAlign: "center" }}>
                 <T color={C.indigo} bold center size={16}>
                   {r.title}
                 </T>
@@ -369,8 +276,8 @@ export default function McpSecurity(ctx) {
           </div>
 
           <T color={SOFT.indigo} center size={15} style={{ marginTop: 12 }}>
-            The sandbox is the OS-level fence. Even if the tool code is buggy or hostile, it cannot
-            reach beyond the resources the host hands it.
+            The sandbox is the OS-level fence. Even if the tool code is buggy or hostile, it cannot reach beyond the
+            resources the host hands it.
           </T>
         </Box>
       </Reveal>
@@ -381,17 +288,13 @@ export default function McpSecurity(ctx) {
             Capability Scope Per Host
           </T>
           <T color={SOFT.blue} center size={16} style={{ marginTop: 10 }}>
-            Even when a server declares ten tools and a hundred resources, the host can narrow what
-            this particular agent is allowed to touch. Scope is a subset of what the server
-            advertises, configured per host.
+            Even when a server declares ten tools and a hundred resources, the host can narrow what this particular
+            agent is allowed to touch. Scope is a subset of what the server advertises, configured per host.
           </T>
 
           <div style={{ display: "flex", flexDirection: "column", gap: 10, marginTop: 14 }}>
             {SCOPE_DIMENSIONS.map((d) => (
-              <div
-                key={d.pill}
-                style={{ ...tintedCard(C.blue), padding: 14, textAlign: "center" }}
-              >
+              <div key={d.pill} style={{ ...tintedCard(C.blue), padding: 14, textAlign: "center" }}>
                 <span style={pill(C.blue)}>{d.pill}</span>
                 <T color={C.blue} bold center size={17} style={{ marginTop: 10 }}>
                   {d.title}
@@ -429,8 +332,8 @@ export default function McpSecurity(ctx) {
             }}
           >
             <T color={SOFT.blue} center size={14}>
-              Capability scope is allow/deny lists at three levels: tool names, resource URI
-              prefixes, and a global read-only flag.
+              Capability scope is allow/deny lists at three levels: tool names, resource URI prefixes, and a global
+              read-only flag.
             </T>
           </div>
         </Box>
@@ -442,9 +345,9 @@ export default function McpSecurity(ctx) {
             OAuth: Who Granted What
           </T>
           <T color={SOFT.cyan} center size={16} style={{ marginTop: 10 }}>
-            When the server lives over HTTP, the host has to prove the user authorized it. OAuth is
-            the standard answer: the user grants scopes once, the host exchanges that grant for an
-            Access Token, and that token rides along on every server request.
+            When the server lives over HTTP, the host has to prove the user authorized it. OAuth is the standard answer:
+            the user grants scopes once, the host exchanges that grant for an Access Token, and that token rides along
+            on every server request.
           </T>
 
           <div style={{ ...tintedCard(C.cyan), padding: 14, marginTop: 14 }}>
@@ -456,8 +359,8 @@ export default function McpSecurity(ctx) {
               style={{ width: "100%", maxWidth: 620, display: "block", margin: "12px auto 0" }}
             >
               <desc>
-                OAuth flow showing user authorizes then host gets access token then token passes to
-                server in each request then server checks scope.
+                OAuth flow showing user authorizes then host gets access token then token passes to server in each
+                request then server checks scope.
               </desc>
               {/* Compute symmetric layout: 4 boxes 110 wide, 3 gaps of 25 = 515. Padding (560-515)/2 = 22.5 */}
               {OAUTH_STEPS.map((s, i) => {
@@ -474,59 +377,21 @@ export default function McpSecurity(ctx) {
                       stroke={C.cyan}
                       strokeWidth="2"
                     />
-                    <circle
-                      cx={x + 18}
-                      cy="68"
-                      r="11"
-                      fill={`${C.cyan}40`}
-                      stroke={C.cyan}
-                      strokeWidth="1.5"
-                    />
-                    <text
-                      x={x + 18}
-                      y="72"
-                      fill={SOFT.cyan}
-                      fontSize="12"
-                      fontWeight="700"
-                      textAnchor="middle"
-                    >
+                    <circle cx={x + 18} cy="68" r="11" fill={`${C.cyan}40`} stroke={C.cyan} strokeWidth="1.5" />
+                    <text x={x + 18} y="72" fill={SOFT.cyan} fontSize="12" fontWeight="700" textAnchor="middle">
                       {s.n}
                     </text>
-                    <text
-                      x={x + 55}
-                      y="100"
-                      fill={SOFT.cyan}
-                      fontSize="11"
-                      fontWeight="700"
-                      textAnchor="middle"
-                    >
+                    <text x={x + 55} y="100" fill={SOFT.cyan} fontSize="11" fontWeight="700" textAnchor="middle">
                       {s.label.split(" ").slice(0, 2).join(" ")}
                     </text>
-                    <text
-                      x={x + 55}
-                      y="116"
-                      fill={SOFT.cyan}
-                      fontSize="11"
-                      fontWeight="700"
-                      textAnchor="middle"
-                    >
+                    <text x={x + 55} y="116" fill={SOFT.cyan} fontSize="11" fontWeight="700" textAnchor="middle">
                       {s.label.split(" ").slice(2).join(" ")}
                     </text>
                     {/* Arrow to next box */}
                     {i < OAUTH_STEPS.length - 1 && (
                       <g>
-                        <line
-                          x1={x + 110}
-                          y1="90"
-                          x2={x + 130}
-                          y2="90"
-                          stroke={C.purple}
-                          strokeWidth="2"
-                        />
-                        <polygon
-                          points={`${x + 135},90 ${x + 128},86 ${x + 128},94`}
-                          fill={C.purple}
-                        />
+                        <line x1={x + 110} y1="90" x2={x + 130} y2="90" stroke={C.purple} strokeWidth="2" />
+                        <polygon points={`${x + 135},90 ${x + 128},86 ${x + 128},94`} fill={C.purple} />
                       </g>
                     )}
                   </g>
@@ -534,26 +399,12 @@ export default function McpSecurity(ctx) {
               })}
 
               {/* Title row */}
-              <text
-                x="280"
-                y="30"
-                fill={SOFT.cyan}
-                fontSize="12"
-                fontWeight="700"
-                textAnchor="middle"
-              >
+              <text x="280" y="30" fill={SOFT.cyan} fontSize="12" fontWeight="700" textAnchor="middle">
                 Grant -&gt; Token -&gt; Request -&gt; Check
               </text>
 
               {/* Footer */}
-              <text
-                x="280"
-                y="165"
-                fill={SOFT.cyan}
-                fontSize="11"
-                fontStyle="italic"
-                textAnchor="middle"
-              >
+              <text x="280" y="165" fill={SOFT.cyan} fontSize="11" fontStyle="italic" textAnchor="middle">
                 The Access Token is the proof the server demands on every call
               </text>
             </svg>
@@ -570,8 +421,8 @@ export default function McpSecurity(ctx) {
             }}
           >
             <T color={SOFT.cyan} center size={14}>
-              Stdio servers skip OAuth because they run under local trust. HTTP servers require it
-              so the host can prove which user authorized the call.
+              Stdio servers skip OAuth because they run under local trust. HTTP servers require it so the host can prove
+              which user authorized the call.
             </T>
           </div>
         </Box>
@@ -583,9 +434,8 @@ export default function McpSecurity(ctx) {
             Consent + Audit: User Sees Everything
           </T>
           <T color={SOFT.teal} center size={16} style={{ marginTop: 10 }}>
-            Sandbox, scope, and OAuth handle the machine side. Consent and audit handle the human
-            side. The host asks the user before any side-effecting call, and writes every call to a
-            log the user can review later.
+            Sandbox, scope, and OAuth handle the machine side. Consent and audit handle the human side. The host asks
+            the user before any side-effecting call, and writes every call to a log the user can review later.
           </T>
 
           <div style={{ ...tintedCard(C.teal), padding: 14, marginTop: 14, textAlign: "center" }}>
@@ -611,12 +461,7 @@ export default function McpSecurity(ctx) {
             >
               {`About to call process_refund\nFor invoice INV-9924\nReason: "Customer Requested"\n\nAllow?  [Approve]  [Deny]`}
             </div>
-            <T
-              color={SOFT.teal}
-              center
-              size={13}
-              style={{ marginTop: 10, fontStyle: "italic" }}
-            >
+            <T color={SOFT.teal} center size={13} style={{ marginTop: 10, fontStyle: "italic" }}>
               Required for side-effecting tools.
             </T>
           </div>
@@ -633,8 +478,7 @@ export default function McpSecurity(ctx) {
               Audit Log
             </T>
             <T color={SOFT.teal} center size={14} style={{ marginTop: 4 }}>
-              Every call is recorded: timestamp, tool, input, result, user, and the consent
-              decision.
+              Every call is recorded: timestamp, tool, input, result, user, and the consent decision.
             </T>
             <div
               style={{
@@ -676,27 +520,19 @@ export default function McpSecurity(ctx) {
                 ))}
               </div>
             </div>
-            <T
-              color={SOFT.teal}
-              center
-              size={13}
-              style={{ marginTop: 10, fontStyle: "italic" }}
-            >
+            <T color={SOFT.teal} center size={13} style={{ marginTop: 10, fontStyle: "italic" }}>
               The audit log makes every action traceable to a user, a tool, and a decision.
             </T>
           </div>
 
           <T color={SOFT.teal} center size={15} style={{ marginTop: 12 }}>
-            Sandbox keeps the server from reaching outside; scope keeps it from doing more than
-            allowed; OAuth proves the user granted access; consent and audit keep the user in
-            control of every effect.
+            Sandbox keeps the server from reaching outside; scope keeps it from doing more than allowed; OAuth proves
+            the user granted access; consent and audit keep the user in control of every effect.
           </T>
         </Box>
       </Reveal>
 
-      {sub < 4 && (
-        <SubBtn onClick={onContinue} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />
-      )}
+      {sub < 4 && <SubBtn onClick={onContinue} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
     </div>
   );
 }

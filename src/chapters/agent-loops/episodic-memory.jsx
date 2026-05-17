@@ -71,18 +71,15 @@ export default function EpisodicMemory(ctx) {
             Episodes: Time-Stamped Events
           </T>
           <T color={SOFT.amber} center size={16} style={{ marginTop: 10 }}>
-            Episodic memory holds specific past events. Each event has a timestamp and a short
-            description of what happened. Below: four episodes the agent has on file for Alice.
+            Episodic memory holds specific past events. Each event has a timestamp and a short description of what
+            happened. Below: four episodes the agent has on file for Alice.
           </T>
 
           <div style={{ ...tintedCard(C.amber), padding: 14, marginTop: 14 }}>
-            <svg
-              viewBox="0 0 560 280"
-              style={{ width: "100%", maxWidth: 640, display: "block", margin: "0 auto" }}
-            >
+            <svg viewBox="0 0 560 280" style={{ width: "100%", maxWidth: 640, display: "block", margin: "0 auto" }}>
               <desc>
-                Vertical timeline of four past events for Alice the customer, each with a date and a
-                short summary, with the current ticket marked at the bottom.
+                Vertical timeline of four past events for Alice the customer, each with a date and a short summary, with
+                the current ticket marked at the bottom.
               </desc>
               {/* Vertical line center at x=70 */}
               <line x1={70} y1={20} x2={70} y2={260} stroke={C.amber} strokeWidth={1.6} />
@@ -99,13 +96,7 @@ export default function EpisodicMemory(ctx) {
                       stroke={C.amber}
                       strokeWidth={2}
                     />
-                    <text
-                      x={100}
-                      y={cy - 4}
-                      fill={SOFT.amber}
-                      fontSize="13"
-                      fontWeight="700"
-                    >
+                    <text x={100} y={cy - 4} fill={SOFT.amber} fontSize="13" fontWeight="700">
                       {ep.date}
                     </text>
                     <text x={100} y={cy + 12} fill={SOFT.amber} fontSize="12">
@@ -121,8 +112,8 @@ export default function EpisodicMemory(ctx) {
           </div>
 
           <T color={SOFT.amber} center size={15} style={{ marginTop: 12 }}>
-            Episodes answer "what happened, when?". They are NOT the customer&apos;s stable facts
-            (that is semantic memory) and they are NOT how-to recipes (that is procedural memory).
+            Episodes answer "what happened, when?". They are NOT the customer&apos;s stable facts (that is semantic
+            memory) and they are NOT how-to recipes (that is procedural memory).
           </T>
         </Box>
       )}
@@ -133,19 +124,15 @@ export default function EpisodicMemory(ctx) {
             Stored As Vectors For Retrieval
           </T>
           <T color={SOFT.yellow} center size={16} style={{ marginTop: 10 }}>
-            Episodic memory lives in a vector database. Each event becomes an embedding; a search
-            query becomes an embedding; an ANN index returns the most similar past events.
+            Episodic memory lives in a vector database. Each event becomes an embedding; a search query becomes an
+            embedding; an ANN index returns the most similar past events.
           </T>
 
           <div style={{ ...tintedCard(C.yellow), padding: 14, marginTop: 14 }}>
-            <svg
-              viewBox="0 0 560 200"
-              style={{ width: "100%", maxWidth: 640, display: "block", margin: "0 auto" }}
-            >
+            <svg viewBox="0 0 560 200" style={{ width: "100%", maxWidth: 640, display: "block", margin: "0 auto" }}>
               <desc>
-                Two stage flow: stage one embeds each event and stores it in the vector database;
-                stage two embeds a query and runs ANN search to retrieve the top-k matching past
-                events.
+                Two stage flow: stage one embeds each event and stores it in the vector database; stage two embeds a
+                query and runs ANN search to retrieve the top-k matching past events.
               </desc>
               {/* Stage 1 row top */}
               <rect
@@ -266,8 +253,8 @@ export default function EpisodicMemory(ctx) {
           </div>
 
           <T color={SOFT.yellow} center size={15} style={{ marginTop: 12 }}>
-            Vector storage substrate covered in Section 11.6 (IVF) / 11.7 (HNSW). Here we use it as
-            the layer below episodic memory: write once, search by similarity from then on.
+            Vector storage substrate covered in Section 11.6 (IVF) / 11.7 (HNSW). Here we use it as the layer below
+            episodic memory: write once, search by similarity from then on.
           </T>
         </Box>
       </Reveal>
@@ -278,9 +265,8 @@ export default function EpisodicMemory(ctx) {
             Recall Before Reasoning
           </T>
           <T color={SOFT.orange} center size={16} style={{ marginTop: 10 }}>
-            When a new conversation starts, the agent retrieves relevant past episodes BEFORE
-            reasoning about the current ticket. The host system fetches the top-3 events and
-            injects them into the system prompt as context.
+            When a new conversation starts, the agent retrieves relevant past episodes BEFORE reasoning about the
+            current ticket. The host system fetches the top-3 events and injects them into the system prompt as context.
           </T>
 
           <div
@@ -296,7 +282,11 @@ export default function EpisodicMemory(ctx) {
               { step: 2, label: "Build Recall Query", detail: 'Query = "current ticket summary + customer_id c-9924"' },
               { step: 3, label: "Retrieve Top-3 Episodes", detail: "ANN search returns 3 most similar past events." },
               { step: 4, label: "Inject Into System Prompt", detail: "Episodes added to the prompt as context block." },
-              { step: 5, label: "Agent Reasons With Past Context", detail: "Past MFA-bug episode informs current approach." },
+              {
+                step: 5,
+                label: "Agent Reasons With Past Context",
+                detail: "Past MFA-bug episode informs current approach.",
+              },
             ].map((s) => (
               <div key={`step-${s.step}`} style={{ ...tintedCard(C.orange), padding: 12 }}>
                 <span style={pill(C.orange)}>{`STEP ${s.step}`}</span>
@@ -311,9 +301,9 @@ export default function EpisodicMemory(ctx) {
           </div>
 
           <T color={SOFT.orange} center size={15} style={{ marginTop: 12 }}>
-            ChatGPT Memory works similarly: the host fetches relevant facts on each new
-            conversation and injects them. The model does not "remember" - the host system gives it
-            the appearance of memory through retrieval-and-inject.
+            ChatGPT Memory works similarly: the host fetches relevant facts on each new conversation and injects them.
+            The model does not "remember" - the host system gives it the appearance of memory through
+            retrieval-and-inject.
           </T>
         </Box>
       </Reveal>
@@ -324,8 +314,8 @@ export default function EpisodicMemory(ctx) {
             Event Log Entry (Shape)
           </T>
           <T color={SOFT.red} center size={16} style={{ marginTop: 10 }}>
-            Each episode entry is a structured record. The agent does not store raw transcripts -
-            it stores summaries + the tools used + the outcome + the embedding for retrieval.
+            Each episode entry is a structured record. The agent does not store raw transcripts - it stores summaries +
+            the tools used + the outcome + the embedding for retrieval.
           </T>
 
           <div style={{ ...tintedCard(C.red), padding: 14, marginTop: 14 }}>
@@ -353,8 +343,8 @@ export default function EpisodicMemory(ctx) {
           </div>
 
           <T color={SOFT.red} center size={15} style={{ marginTop: 12 }}>
-            `summary` is what the model reads. `embedding` is what ANN search uses. `tools_used`
-            and `outcome` let analytics ask "which past escalations involved MFA bugs?".
+            `summary` is what the model reads. `embedding` is what ANN search uses. `tools_used` and `outcome` let
+            analytics ask "which past escalations involved MFA bugs?".
           </T>
         </Box>
       </Reveal>
@@ -365,8 +355,8 @@ export default function EpisodicMemory(ctx) {
             Memory Has To Forget
           </T>
           <T color={SOFT.purple} center size={16} style={{ marginTop: 10 }}>
-            Unbounded growth wrecks retrieval quality. Pruning policy decides what to keep and what
-            to drop. Four rules cover most cases.
+            Unbounded growth wrecks retrieval quality. Pruning policy decides what to keep and what to drop. Four rules
+            cover most cases.
           </T>
 
           <div
@@ -390,16 +380,13 @@ export default function EpisodicMemory(ctx) {
           </div>
 
           <T color={SOFT.purple} center size={15} style={{ marginTop: 14 }}>
-            Compliance-driven deletion is non-negotiable. A customer can request their entire
-            episodic log be wiped, and the agent must honor it within whatever window the
-            regulation requires.
+            Compliance-driven deletion is non-negotiable. A customer can request their entire episodic log be wiped, and
+            the agent must honor it within whatever window the regulation requires.
           </T>
         </Box>
       </Reveal>
 
-      {sub < 4 && (
-        <SubBtn onClick={onContinue} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />
-      )}
+      {sub < 4 && <SubBtn onClick={onContinue} rippleKey={subBtnRipple} registerSubBtn={registerSubBtn} />}
     </div>
   );
 }

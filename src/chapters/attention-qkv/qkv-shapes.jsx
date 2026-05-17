@@ -1,7 +1,7 @@
 import { C } from "../../config.js";
 import { Box, T, Reveal, SubBtn } from "../../components.jsx";
 
-const Bar = ({ n, color, cellW = 22, cellH = 26, filled = true, label, nums }) => (
+const Bar = ({ n, color, cellW = 22, cellH = 26, label, nums }) => (
   <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4 }}>
     {label && (
       <T color={color} bold center size={12}>
@@ -15,7 +15,7 @@ const Bar = ({ n, color, cellW = 22, cellH = 26, filled = true, label, nums }) =
           style={{
             width: cellW,
             height: cellH,
-            background: filled ? `${color}22` : "transparent",
+            background: `${color}22`,
             border: `1px solid ${color}55`,
             borderRadius: 3,
             display: "flex",
@@ -26,14 +26,14 @@ const Bar = ({ n, color, cellW = 22, cellH = 26, filled = true, label, nums }) =
             color: color,
           }}
         >
-          {nums && nums[i] !== undefined ? nums[i] : ""}
+          {nums[i]}
         </div>
       ))}
     </div>
   </div>
 );
 
-const Matrix = ({ rows, cols, color, cellW = 22, cellH = 22, label, nums }) => (
+const Matrix = ({ rows, cols, color, cellW = 22, cellH = 22, label }) => (
   <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4 }}>
     {label && (
       <T color={color} bold center size={12}>
@@ -56,16 +56,8 @@ const Matrix = ({ rows, cols, color, cellW = 22, cellH = 22, label, nums }) => (
             background: `${color}18`,
             border: `1px solid ${color}40`,
             borderRadius: 3,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            fontSize: 10,
-            fontFamily: "monospace",
-            color: color,
           }}
-        >
-          {nums && nums[i] !== undefined ? nums[i] : ""}
-        </div>
+        />
       ))}
     </div>
   </div>

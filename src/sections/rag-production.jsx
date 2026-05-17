@@ -1972,10 +1972,13 @@ export const HallucinationDrift = (ctx) => {
               })}
               {/* Lines */}
               {HD_TIME_SERIES.map((line, lineIdx) => {
-                // Normalize each line to its own scale for visibility
+                // Normalize each line to its own scale for visibility.
+                // The data arrays above guarantee min !== max (series spans a real range
+                // and threshold sits inside or just outside it), so no zero-range guard
+                // is needed.
                 const min = Math.min(...line.series, line.threshold);
                 const max = Math.max(...line.series, line.threshold);
-                const range = max - min || 1;
+                const range = max - min;
                 const points = line.series
                   .map((v, i) => {
                     const x = 80 + (i / (line.series.length - 1)) * 580;

@@ -256,7 +256,7 @@ Only config.js IDs change.
 | 11.35 | WeaviateMilvusChroma | Weaviate / Milvus / Chroma |
 | 11.36 | DecisionFramework | The Decision Framework |
 
-**Section 12: Retrieval-Augmented Generation** (`rag-foundations.jsx` + `rag-ingestion.jsx` + `rag-retrieval.jsx` + `rag-generation.jsx` + `rag-evaluation.jsx` - Milestones 1-5 of 6 complete; Acts 1-8 implemented, Acts 9-10 pending in Milestone 6)
+**Section 12: Retrieval-Augmented Generation** (`rag-foundations.jsx` + `rag-ingestion.jsx` + `rag-retrieval.jsx` + `rag-generation.jsx` + `rag-evaluation.jsx` + `rag-production.jsx` - all 6 milestones complete; 41 chapters across Acts 1-10)
 
 | Chapter | Component | Title |
 |---------|-----------|-------|
@@ -295,8 +295,12 @@ Only config.js IDs change.
 | 12.33 | RAGASMetrics | RAGAS Metrics |
 | 12.34 | GoldenDatasets | Golden Datasets |
 | 12.35 | OnlineEvalABTesting | Online Eval & A/B Testing |
-
-(M6 will extend this table with chapters 12.36-12.41 for Acts 9+10.)
+| 12.36 | Caching | Caching - Prompt + Semantic |
+| 12.37 | CostModels | Cost Models |
+| 12.38 | ObservabilityTracing | Observability & Tracing |
+| 12.39 | HallucinationDrift | Hallucination Detection & Drift |
+| 12.40 | FrameworkChoice | Framework Choice |
+| 12.41 | RAGDecisionFrameworkCapstone | The Complete RAG Decision Framework + Capstone |
 
 ## Project Structure
 
@@ -340,7 +344,8 @@ learn-ai/
 │       ├── rag-ingestion.jsx             # Section 12 Act 2: Ingestion, 12.4-12.6
 │       ├── rag-retrieval.jsx             # Section 12 Acts 4+5: Embed/Index + Query Transformation, 12.14-12.21
 │       ├── rag-generation.jsx            # Section 12 Acts 6+7: Context+Generation + Advanced Patterns, 12.22-12.30
-│       └── rag-evaluation.jsx            # Section 12 Act 8: Evaluation, 12.31-12.35
+│       ├── rag-evaluation.jsx            # Section 12 Act 8: Evaluation, 12.31-12.35
+│       └── rag-production.jsx            # Section 12 Acts 9+10: Production Ops + Decision Framework, 12.36-12.41
 ├── .github/workflows/deploy.yml
 └── CLAUDE.md
 ```

@@ -1,9 +1,10 @@
 ---
 paths:
-  - "src/sections/**/*.jsx"
+  - "src/chapters/**/*.jsx"
+  - "src/shared/**/*.jsx"
 ---
 
-# Visual Design Rules for Section Files
+# Visual Design Rules for Chapter Files
 
 Every chapter, sub-step, and visual MUST follow these rules.
 

@@ -1,18 +1,18 @@
 #!/bin/bash
 # Stop hook: runs once at end of each Claude turn.
-# Scans only section files changed in working tree (via git diff). If none
+# Scans chapter + shared files changed in working tree (via git diff). If none
 # changed, exits silently. Otherwise greps each for visual-rule violations and
 # emits a single systemMessage summarizing all issues at once.
 
 set -u
 cd "$(git rev-parse --show-toplevel 2>/dev/null)" || exit 0
 
-# Find changed/untracked section files
+# Find changed/untracked chapter + shared files
 changed=$(
   {
-    git diff --name-only -- 'src/sections/*.jsx' 2>/dev/null
-    git diff --cached --name-only -- 'src/sections/*.jsx' 2>/dev/null
-    git ls-files --others --exclude-standard 'src/sections/*.jsx' 2>/dev/null
+    git diff --name-only -- 'src/chapters/**/*.jsx' 'src/shared/**/*.jsx' 2>/dev/null
+    git diff --cached --name-only -- 'src/chapters/**/*.jsx' 'src/shared/**/*.jsx' 2>/dev/null
+    git ls-files --others --exclude-standard 'src/chapters/**/*.jsx' 'src/shared/**/*.jsx' 2>/dev/null
   } | sort -u | grep -v '^$'
 )
 
@@ -58,7 +58,7 @@ ${per_file}"
 done <<< "$changed"
 
 if [ -n "$issues" ]; then
-  jq -nRs --arg msg "check-visuals warnings (${file_count} section files changed):
+  jq -nRs --arg msg "check-visuals warnings (${file_count} chapter files changed):
 ${issues}
 See .claude/rules/sections.md for the full rule list." '{systemMessage: $msg}'
 fi

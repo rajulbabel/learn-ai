@@ -28,18 +28,31 @@ describe("RefreshSync (12.6)", () => {
 
   it("renders webhook timeline label inside foreignObject so it wraps", () => {
     const { container } = render(RefreshSync(makeCtx({ sub: 2 })));
-    const labelDiv = Array.from(container.querySelectorAll("foreignObject div")).find(
-      (d) => d.textContent === "Re-Parse + Re-Chunk + Re-Embed",
+    const labelFO = Array.from(container.querySelectorAll("foreignObject")).find((fo) =>
+      fo.textContent.includes("Re-Parse + Re-Chunk + Re-Embed"),
     );
-    expect(labelDiv).toBeTruthy();
+    expect(labelFO).toBeTruthy();
   });
 
   it("gives webhook timeline rows enough height for body text to not clip", () => {
     const { container } = render(RefreshSync(makeCtx({ sub: 2 })));
-    const bodyDiv = Array.from(container.querySelectorAll("foreignObject")).find((fo) =>
+    const bodyFO = Array.from(container.querySelectorAll("foreignObject")).find((fo) =>
       fo.textContent.includes("Parser, chunker, and embedder run end-to-end"),
     );
-    expect(bodyDiv).toBeTruthy();
-    expect(Number(bodyDiv.getAttribute("height"))).toBeGreaterThanOrEqual(50);
+    expect(bodyFO).toBeTruthy();
+    expect(Number(bodyFO.getAttribute("height"))).toBeGreaterThanOrEqual(50);
+  });
+
+  it("centers webhook timeline box content vertically and horizontally via flex", () => {
+    const { container } = render(RefreshSync(makeCtx({ sub: 2 })));
+    const fos = Array.from(container.querySelectorAll("foreignObject"));
+    expect(fos.length).toBeGreaterThan(0);
+    fos.forEach((fo) => {
+      const inner = fo.firstElementChild;
+      expect(inner).toBeTruthy();
+      expect(inner.style.display).toBe("flex");
+      expect(inner.style.justifyContent).toBe("center");
+      expect(inner.style.alignItems).toBe("center");
+    });
   });
 });

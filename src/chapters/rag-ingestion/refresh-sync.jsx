@@ -407,22 +407,26 @@ export default function RefreshSync(ctx) {
                       stroke={C.purple}
                       strokeWidth={1.2}
                     />
-                    <text x={125} y={y + 20} textAnchor="middle" fill={C.purple} fontSize={12} fontWeight="bold">
-                      {step.t}
-                    </text>
-                    <foreignObject x={44} y={y + 24} width={162} height={30}>
+                    <foreignObject x={42} y={y + 1} width={166} height={54}>
                       <div
                         xmlns="http://www.w3.org/1999/xhtml"
                         style={{
+                          height: "100%",
+                          display: "flex",
+                          flexDirection: "column",
+                          justifyContent: "center",
+                          alignItems: "center",
                           fontFamily: "ui-sans-serif, system-ui, sans-serif",
-                          fontSize: 11,
-                          fontWeight: "bold",
-                          color: "#b8a9ff",
                           textAlign: "center",
                           lineHeight: 1.25,
+                          padding: "2px 6px",
+                          boxSizing: "border-box",
                         }}
                       >
-                        {step.label}
+                        <div style={{ color: C.purple, fontSize: 12, fontWeight: "bold" }}>{step.t}</div>
+                        <div style={{ color: "#b8a9ff", fontSize: 11, fontWeight: "bold", marginTop: 2 }}>
+                          {step.label}
+                        </div>
                       </div>
                     </foreignObject>
                     <rect
@@ -435,16 +439,21 @@ export default function RefreshSync(ctx) {
                       stroke={`${C.purple}40`}
                       strokeWidth={1}
                     />
-                    <foreignObject x={314} y={y + 2} width={162} height={52}>
+                    <foreignObject x={312} y={y + 1} width={166} height={54}>
                       <div
                         xmlns="http://www.w3.org/1999/xhtml"
                         style={{
+                          height: "100%",
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
                           fontFamily: "ui-sans-serif, system-ui, sans-serif",
                           fontSize: 10,
                           color: "#b8a9ff",
                           textAlign: "center",
                           lineHeight: 1.3,
-                          padding: "2px 4px",
+                          padding: "2px 6px",
+                          boxSizing: "border-box",
                         }}
                       >
                         {step.body}

@@ -1478,7 +1478,7 @@ export const sectionColors = {
   10: "#26a69a",
   11: "#f06292",
   12: "#00e676",
-  13: "#ff6b6b",
+  13: "#00b8d4",
 };
 
 // Colors

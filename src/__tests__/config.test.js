@@ -451,7 +451,11 @@ describe("Section 13 registration", () => {
   });
 
   it("has section 13 in sectionColors", () => {
-    expect(sectionColors[13]).toBe("#ff6b6b");
+    expect(sectionColors[13]).toBe("#00b8d4");
+  });
+
+  it("section 13 color matches section 2 color", () => {
+    expect(sectionColors[13]).toBe(sectionColors[2]);
   });
 });
 

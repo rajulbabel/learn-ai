@@ -68,7 +68,7 @@ export default function TOC(ctx) {
     {
       num: 13,
       name: "Agents - Tools, MCP, Loops & Memory",
-      color: "#ff6b6b",
+      color: "#00b8d4",
       desc: "Prompting foundations, tool calling, MCP/A2A protocols, agent loops, memory, multi-agent, evals, production",
     },
   ];

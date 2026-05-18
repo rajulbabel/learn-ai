@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, afterEach } from "vitest";
 import { render, fireEvent, cleanup } from "@testing-library/react";
-import { chapters, sectionNames } from "../../../config.js";
+import { chapters, sectionNames, sectionColors } from "../../../config.js";
 import { makeCtx } from "../../chapter-test-helpers.js";
 import TOC from "../../../chapters/table-of-contents/toc.jsx";
 
@@ -78,6 +78,25 @@ describe("TOC (0)", () => {
       const { container } = render(TOC(makeCtx({ expanded: secNum })));
       expect(container.innerHTML).toBeTruthy();
       expect(container.textContent).toContain(sectionNames[secNum]);
+    });
+  });
+
+  // Every TOC section's color must match the canonical sectionColors map in config.js.
+  // Catches drift between TOC's local color array and config.
+  function hexToRgb(hex) {
+    const h = hex.replace("#", "");
+    const r = parseInt(h.slice(0, 2), 16);
+    const g = parseInt(h.slice(2, 4), 16);
+    const b = parseInt(h.slice(4, 6), 16);
+    return `rgb(${r}, ${g}, ${b})`;
+  }
+  sectionNumbers.forEach((secNum) => {
+    it(`section ${secNum} TOC color matches sectionColors[${secNum}]`, () => {
+      const { container } = render(TOC(makeCtx({ expanded: null })));
+      const expected = sectionColors[secNum];
+      expect(expected).toBeTruthy();
+      const html = container.innerHTML.toLowerCase();
+      expect(html).toContain(hexToRgb(expected));
     });
   });
 });

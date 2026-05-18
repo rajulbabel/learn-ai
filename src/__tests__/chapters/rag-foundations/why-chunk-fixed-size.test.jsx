@@ -73,4 +73,11 @@ describe("WhyChunkFixedSize (12.7)", () => {
     expect(container.textContent).toMatch(/homogeneous|heterogeneous/i);
     expect(container.textContent).toMatch(/structural|semantic/i);
   });
+
+  it("sub=5 right column marker mirrors OK and never uses ->", () => {
+    const { container } = render(WhyChunkFixedSize(makeCtx({ sub: 5 })));
+    expect(container.textContent).toMatch(/OK/);
+    expect(container.textContent).toMatch(/GO/);
+    expect(container.textContent).not.toMatch(/->/);
+  });
 });

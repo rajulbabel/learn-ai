@@ -773,7 +773,7 @@ export default function WhyChunkFixedSize(ctx) {
                       gap: 8,
                     }}
                   >
-                    <span style={{ color: C.purple, fontWeight: 700, fontSize: 14 }}>{"->"}</span>
+                    <span style={{ color: C.purple, fontWeight: 700, fontSize: 14 }}>GO</span>
                     <T color="#b8a9ff" size={13}>
                       {row}
                     </T>

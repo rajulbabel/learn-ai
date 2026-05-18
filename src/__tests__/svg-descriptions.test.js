@@ -27,26 +27,26 @@ describe("svg-descriptions.json", () => {
   });
 
   it("Section 11 keys align with current chapter content after renumber", () => {
-    // 11.19 = CompressionDecision flowchart
-    expect(svgDescriptions["11.19"][0]).toMatch(/compression-technique decision flowchart|decision flowchart/i);
-    // 11.20 = Filtering (three-stage funnel) - was at 11.19 before renumber
-    expect(svgDescriptions["11.20"][0]).toMatch(/filter funnel|pre-filter|three-stage/i);
-    // 11.21 = UpdatesDeletes (graph with hub node D) - was at 11.20 before renumber
-    expect(svgDescriptions["11.21"][0]).toMatch(/hub node|central hub|node D/i);
-    // 11.22 = Sharding (random sharding diagram)
-    expect(svgDescriptions["11.22"][0]).toMatch(/sharding|fan-out|shards/i);
-    // 11.23 = Replication (read-replica topology)
-    expect(svgDescriptions["11.23"][0]).toMatch(/replica|topology/i);
-    // 11.24 = HybridSearch (hybrid-search flow)
-    expect(svgDescriptions["11.24"][0]).toMatch(/hybrid-search|hybrid search/i);
-    // 11.25 = Rerankers (cross-encoder)
-    expect(svgDescriptions["11.25"][0]).toMatch(/cross-encoder|reranker/i);
-    // 11.36 = DecisionFramework (four-branch decision flowchart for vector DB)
-    expect(svgDescriptions["11.36"][0]).toMatch(
+    // 11.20 = CompressionDecision flowchart (was 11.19 before SparseVsDense insert)
+    expect(svgDescriptions["11.20"][0]).toMatch(/compression-technique decision flowchart|decision flowchart/i);
+    // 11.21 = Filtering (three-stage funnel)
+    expect(svgDescriptions["11.21"][0]).toMatch(/filter funnel|pre-filter|three-stage/i);
+    // 11.22 = UpdatesDeletes (graph with hub node D)
+    expect(svgDescriptions["11.22"][0]).toMatch(/hub node|central hub|node D/i);
+    // 11.23 = Sharding (random sharding diagram)
+    expect(svgDescriptions["11.23"][0]).toMatch(/sharding|fan-out|shards/i);
+    // 11.24 = Replication (read-replica topology)
+    expect(svgDescriptions["11.24"][0]).toMatch(/replica|topology/i);
+    // 11.25 = HybridSearch (hybrid-search flow)
+    expect(svgDescriptions["11.25"][0]).toMatch(/hybrid-search|hybrid search/i);
+    // 11.26 = Rerankers (cross-encoder)
+    expect(svgDescriptions["11.26"][0]).toMatch(/cross-encoder|reranker/i);
+    // 11.37 = DecisionFramework (four-branch decision flowchart for vector DB)
+    expect(svgDescriptions["11.37"][0]).toMatch(
       /decision flowchart.*vector database|vector database.*decision flowchart/i,
     );
-    // 11.35 should NOT exist anymore
-    expect(svgDescriptions["11.35"]).toBeUndefined();
+    // 11.5 = SparseVsDense - no SVGs, entry intentionally absent
+    expect(svgDescriptions["11.5"]).toBeUndefined();
   });
 
   it("covers all chapters known to have SVGs", () => {
@@ -86,14 +86,13 @@ describe("svg-descriptions.json", () => {
       "11.2",
       "11.3",
       "11.4",
-      "11.5",
       "11.6",
       "11.7",
       "11.8",
       "11.9",
       "11.10",
       "11.11",
-      "11.13",
+      "11.12",
       "11.14",
       "11.15",
       "11.16",
@@ -106,7 +105,8 @@ describe("svg-descriptions.json", () => {
       "11.23",
       "11.24",
       "11.25",
-      "11.36",
+      "11.26",
+      "11.37",
       "12.22",
       "12.23",
       "12.25",

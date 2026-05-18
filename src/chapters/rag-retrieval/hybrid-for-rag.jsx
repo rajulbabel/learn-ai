@@ -179,7 +179,7 @@ export default function HybridForRAG(ctx) {
             Dense Misses Exact Terms; BM25 Misses Synonyms
           </T>
           <T color="#f5b7f8" center size={16} style={{ marginTop: 10 }}>
-            Hybrid search (covered in Section 11.24) ships dense vectors and BM25 side by side and fuses their rankings.
+            Hybrid search (covered in Section 11.25) ships dense vectors and BM25 side by side and fuses their rankings.
             Here we focus on RAG-specific tuning. Watch what each retriever misses on the support corpus.
           </T>
 

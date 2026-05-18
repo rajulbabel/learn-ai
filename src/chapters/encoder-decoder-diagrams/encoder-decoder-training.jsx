@@ -114,7 +114,7 @@ function B(svg) {
   };
 }
 
-function TrainingDiagram({ sub, setSub, subBtnRipple, setSubBtnRipple, registerSubBtn }) {
+function TrainingDiagram({ sub, setSub, subBtnRipple, setSubBtnRipple: _setSubBtnRipple, registerSubBtn }) {
   const ref = useRef(null);
   useEffect(() => {
     const svg = ref.current;

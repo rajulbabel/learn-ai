@@ -32,7 +32,7 @@ const RESEARCH_QUERY_STEPS = [
     step: 2,
     actor: "Search Top-5",
     color: "cyan",
-    detail: "Vector Search Returns 5 KB Articles.",
+    detail: "Vector Search Returns 5 Knowledge Base Articles.",
   },
   {
     step: 3,

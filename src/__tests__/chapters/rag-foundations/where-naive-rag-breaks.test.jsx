@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, afterEach } from "vitest";
+import { describe, it, expect, afterEach } from "vitest";
 import { render, cleanup } from "@testing-library/react";
 import { makeCtx } from "../../chapter-test-helpers.js";
 import WhereNaiveRAGBreaks from "../../../chapters/rag-foundations/where-naive-rag-breaks.jsx";
@@ -78,10 +78,10 @@ describe("WhereNaiveRAGBreaks (12.3)", () => {
     expect(container.textContent).toMatch(/Pro|Enterprise/);
   });
 
-  it("sub=6 shows stale index + cost/latency with Section 11.27 + chapter 12.36-12.40 references", () => {
+  it("sub=6 shows stale index + cost/latency with Section 11.28 + chapter 12.36-12.40 references", () => {
     const { container } = render(WhereNaiveRAGBreaks(makeCtx({ sub: 6 })));
     expect(container.textContent).toMatch(/stale/i);
-    expect(container.textContent).toMatch(/Section 11\.27|11\.27/);
+    expect(container.textContent).toMatch(/Section 11\.28|11\.28/);
     expect(container.textContent).toMatch(/cost|latency/i);
     expect(container.textContent).toMatch(/12\.36-12\.40|caching|observability/i);
   });

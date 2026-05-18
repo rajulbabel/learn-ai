@@ -182,27 +182,30 @@ describe("config.js", () => {
     }
   });
 
-  it("Section 11 chapters are renumbered with CompressionDecision at 11.19", () => {
+  it("Section 11 chapters are renumbered with SparseVsDense at 11.5 and CompressionDecision at 11.20", () => {
     const byId = Object.fromEntries(chapters.map((c) => [c.id, c]));
-    expect(byId["11.19"]?.component).toBe("CompressionDecision");
-    expect(byId["11.19"]?.title).toBe("The Compression Decision");
-    expect(byId["11.20"]?.component).toBe("Filtering");
-    expect(byId["11.21"]?.component).toBe("UpdatesDeletes");
-    expect(byId["11.22"]?.component).toBe("Sharding");
-    expect(byId["11.23"]?.component).toBe("Replication");
-    expect(byId["11.24"]?.component).toBe("HybridSearch");
-    expect(byId["11.25"]?.component).toBe("Rerankers");
-    expect(byId["11.26"]?.component).toBe("MultiVectorRetrieval");
-    expect(byId["11.27"]?.component).toBe("EmbeddingLifecycle");
-    expect(byId["11.28"]?.component).toBe("Observability");
-    expect(byId["11.29"]?.component).toBe("CapacityPlanning");
-    expect(byId["11.30"]?.component).toBe("FAISS");
-    expect(byId["11.31"]?.component).toBe("Pgvector");
-    expect(byId["11.32"]?.component).toBe("Qdrant");
-    expect(byId["11.33"]?.component).toBe("Pinecone");
-    expect(byId["11.34"]?.component).toBe("QdrantVsPinecone");
-    expect(byId["11.35"]?.component).toBe("WeaviateMilvusChroma");
-    expect(byId["11.36"]?.component).toBe("DecisionFramework");
+    expect(byId["11.5"]?.component).toBe("SparseVsDense");
+    expect(byId["11.5"]?.title).toBe("Sparse vs Dense Vectors");
+    expect(byId["11.6"]?.component).toBe("ANNFamilyTree");
+    expect(byId["11.20"]?.component).toBe("CompressionDecision");
+    expect(byId["11.20"]?.title).toBe("The Compression Decision");
+    expect(byId["11.21"]?.component).toBe("Filtering");
+    expect(byId["11.22"]?.component).toBe("UpdatesDeletes");
+    expect(byId["11.23"]?.component).toBe("Sharding");
+    expect(byId["11.24"]?.component).toBe("Replication");
+    expect(byId["11.25"]?.component).toBe("HybridSearch");
+    expect(byId["11.26"]?.component).toBe("Rerankers");
+    expect(byId["11.27"]?.component).toBe("MultiVectorRetrieval");
+    expect(byId["11.28"]?.component).toBe("EmbeddingLifecycle");
+    expect(byId["11.29"]?.component).toBe("Observability");
+    expect(byId["11.30"]?.component).toBe("CapacityPlanning");
+    expect(byId["11.31"]?.component).toBe("FAISS");
+    expect(byId["11.32"]?.component).toBe("Pgvector");
+    expect(byId["11.33"]?.component).toBe("Qdrant");
+    expect(byId["11.34"]?.component).toBe("Pinecone");
+    expect(byId["11.35"]?.component).toBe("QdrantVsPinecone");
+    expect(byId["11.36"]?.component).toBe("WeaviateMilvusChroma");
+    expect(byId["11.37"]?.component).toBe("DecisionFramework");
   });
 });
 
@@ -227,45 +230,46 @@ describe("Section 12 registration", () => {
 });
 
 describe("Section 11 chapters", () => {
-  it("has chapters 11.1 through 11.36 in order", () => {
+  it("has chapters 11.1 through 11.37 in order", () => {
     const section11 = chapters.filter((ch) => ch.section === 11);
     const expected = [
       { id: "11.1", component: "RetrievalProblem", title: "The Retrieval Problem" },
       { id: "11.2", component: "BruteForceKNN", title: "Brute-Force kNN" },
       { id: "11.3", component: "ThreeWayTradeoff", title: "The Three-Way Tradeoff" },
       { id: "11.4", component: "DistanceMetrics", title: "Distance Metrics" },
-      { id: "11.5", component: "ANNFamilyTree", title: "The ANN Family Tree" },
-      { id: "11.6", component: "IVF", title: "IVF (Inverted File Index)" },
-      { id: "11.7", component: "HNSWIntuition", title: "HNSW - The Small-World Intuition" },
-      { id: "11.8", component: "HNSWConstruction", title: "HNSW Construction" },
-      { id: "11.9", component: "HNSWSearch", title: "HNSW Search" },
-      { id: "11.10", component: "HNSWParameters", title: "HNSW Parameters" },
-      { id: "11.11", component: "Vamana", title: "Vamana / DiskANN" },
-      { id: "11.12", component: "MemoryWall", title: "The Memory Wall" },
-      { id: "11.13", component: "ScalarQuantization", title: "Scalar Quantization" },
-      { id: "11.14", component: "ProductQuantization", title: "Product Quantization (+ OPQ)" },
-      { id: "11.15", component: "BinaryQuantization", title: "Binary Quantization" },
-      { id: "11.16", component: "Matryoshka", title: "Matryoshka Embeddings" },
-      { id: "11.17", component: "IVFPQ", title: "IVF-PQ" },
-      { id: "11.18", component: "HNSWPQ", title: "HNSW + PQ" },
-      { id: "11.19", component: "CompressionDecision", title: "The Compression Decision" },
-      { id: "11.20", component: "Filtering", title: "Filtering" },
-      { id: "11.21", component: "UpdatesDeletes", title: "Updates & Deletes" },
-      { id: "11.22", component: "Sharding", title: "Sharding & Partitioning" },
-      { id: "11.23", component: "Replication", title: "Replication & High Availability" },
-      { id: "11.24", component: "HybridSearch", title: "Hybrid Search" },
-      { id: "11.25", component: "Rerankers", title: "Rerankers" },
-      { id: "11.26", component: "MultiVectorRetrieval", title: "Multi-vector Retrieval (ColBERT-style)" },
-      { id: "11.27", component: "EmbeddingLifecycle", title: "Embedding Lifecycle & Re-embedding" },
-      { id: "11.28", component: "Observability", title: "Observability" },
-      { id: "11.29", component: "CapacityPlanning", title: "Capacity Planning & Cost Models" },
-      { id: "11.30", component: "FAISS", title: "FAISS" },
-      { id: "11.31", component: "Pgvector", title: "pgvector" },
-      { id: "11.32", component: "Qdrant", title: "Qdrant" },
-      { id: "11.33", component: "Pinecone", title: "Pinecone" },
-      { id: "11.34", component: "QdrantVsPinecone", title: "Qdrant vs Pinecone" },
-      { id: "11.35", component: "WeaviateMilvusChroma", title: "Weaviate / Milvus / Chroma" },
-      { id: "11.36", component: "DecisionFramework", title: "The Decision Framework" },
+      { id: "11.5", component: "SparseVsDense", title: "Sparse vs Dense Vectors" },
+      { id: "11.6", component: "ANNFamilyTree", title: "The ANN Family Tree" },
+      { id: "11.7", component: "IVF", title: "IVF (Inverted File Index)" },
+      { id: "11.8", component: "HNSWIntuition", title: "HNSW - The Small-World Intuition" },
+      { id: "11.9", component: "HNSWConstruction", title: "HNSW Construction" },
+      { id: "11.10", component: "HNSWSearch", title: "HNSW Search" },
+      { id: "11.11", component: "HNSWParameters", title: "HNSW Parameters" },
+      { id: "11.12", component: "Vamana", title: "Vamana / DiskANN" },
+      { id: "11.13", component: "MemoryWall", title: "The Memory Wall" },
+      { id: "11.14", component: "ScalarQuantization", title: "Scalar Quantization" },
+      { id: "11.15", component: "ProductQuantization", title: "Product Quantization (+ OPQ)" },
+      { id: "11.16", component: "BinaryQuantization", title: "Binary Quantization" },
+      { id: "11.17", component: "Matryoshka", title: "Matryoshka Embeddings" },
+      { id: "11.18", component: "IVFPQ", title: "IVF-PQ" },
+      { id: "11.19", component: "HNSWPQ", title: "HNSW + PQ" },
+      { id: "11.20", component: "CompressionDecision", title: "The Compression Decision" },
+      { id: "11.21", component: "Filtering", title: "Filtering" },
+      { id: "11.22", component: "UpdatesDeletes", title: "Updates & Deletes" },
+      { id: "11.23", component: "Sharding", title: "Sharding & Partitioning" },
+      { id: "11.24", component: "Replication", title: "Replication & High Availability" },
+      { id: "11.25", component: "HybridSearch", title: "Hybrid Search" },
+      { id: "11.26", component: "Rerankers", title: "Rerankers" },
+      { id: "11.27", component: "MultiVectorRetrieval", title: "Multi-vector Retrieval (ColBERT-style)" },
+      { id: "11.28", component: "EmbeddingLifecycle", title: "Embedding Lifecycle & Re-embedding" },
+      { id: "11.29", component: "Observability", title: "Observability" },
+      { id: "11.30", component: "CapacityPlanning", title: "Capacity Planning & Cost Models" },
+      { id: "11.31", component: "FAISS", title: "FAISS" },
+      { id: "11.32", component: "Pgvector", title: "pgvector" },
+      { id: "11.33", component: "Qdrant", title: "Qdrant" },
+      { id: "11.34", component: "Pinecone", title: "Pinecone" },
+      { id: "11.35", component: "QdrantVsPinecone", title: "Qdrant vs Pinecone" },
+      { id: "11.36", component: "WeaviateMilvusChroma", title: "Weaviate / Milvus / Chroma" },
+      { id: "11.37", component: "DecisionFramework", title: "The Decision Framework" },
     ];
     expect(section11.length).toBe(expected.length);
     expected.forEach((exp, i) => {

@@ -1,5 +1,5 @@
 import { C } from "../../config.js";
-import { Box, T, Reveal, SubBtn, Tag } from "../../components.jsx";
+import { Box, T, Reveal, SubBtn } from "../../components.jsx";
 
 export default function AttentionShapes(ctx) {
   const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx;
@@ -238,10 +238,10 @@ export default function AttentionShapes(ctx) {
             {/* Row 1: X (single, centered) */}
             <Mat rows={3} cols={4} name="X" color={C.blue} rowLabels={WORDS} />
 
-            {/* Split into three weight matrices — tips align with the 3-col grid below */}
+            {/* Split into three weight matrices - tips align with the 3-col grid below */}
             <SplitDown n={3} width={560} label="copy X, multiply by three different weight matrices" />
 
-            {/* Row 2: W_Q, W_K, W_V — 3 equal-width columns */}
+            {/* Row 2: W_Q, W_K, W_V - 3 equal-width columns */}
             <div style={{ width: "100%" }}>
               <GridRow n={3}>
                 <Mat rows={4} cols={2} name="W_Q" color={C.purple} />
@@ -250,7 +250,7 @@ export default function AttentionShapes(ctx) {
               </GridRow>
             </div>
 
-            {/* Three parallel down arrows — same 3-col grid so they land under
+            {/* Three parallel down arrows - same 3-col grid so they land under
                 the matrices above and above the matrices below. */}
             <div style={{ width: "100%", marginTop: 6 }}>
               <GridRow n={3}>
@@ -260,7 +260,7 @@ export default function AttentionShapes(ctx) {
               </GridRow>
             </div>
 
-            {/* Row 3: Q, K, V — same 3-col grid */}
+            {/* Row 3: Q, K, V - same 3-col grid */}
             <div style={{ width: "100%" }}>
               <GridRow n={3}>
                 <Mat rows={3} cols={2} name="Q" color={C.purple} rowLabels={WORDS} />

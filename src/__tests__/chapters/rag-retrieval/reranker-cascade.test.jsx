@@ -22,9 +22,9 @@ describe("RerankerCascade (12.17)", () => {
     expect(() => render(RerankerCascade(makeCtx({ sub: 4 })))).not.toThrow();
   });
 
-  it("sub=0 recaps Section 11.25 cross-encoder", () => {
+  it("sub=0 recaps Section 11.26 cross-encoder", () => {
     const { container } = render(RerankerCascade(makeCtx({ sub: 0 })));
-    expect(container.textContent).toMatch(/Section 11\.25|11\.25/);
+    expect(container.textContent).toMatch(/Section 11\.26|11\.26/);
     expect(container.textContent).toMatch(/cross-?encoder|reranker/i);
     expect(container.textContent).toMatch(/cascade|stage/i);
   });

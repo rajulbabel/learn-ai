@@ -116,7 +116,7 @@ const GRAG_WORTH_CARDS = [
     color: C.red,
     accent: "#ef9a9a",
     bullets: [
-      "Mostly self-contained docs (FAQ, support KB - like our primary corpus)",
+      "Mostly self-contained docs (FAQ, support knowledge base - like our primary corpus)",
       "Only local / factoid queries",
       "Schema churn (entities change weekly)",
     ],

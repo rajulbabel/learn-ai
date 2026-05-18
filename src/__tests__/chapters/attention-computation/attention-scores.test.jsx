@@ -1,5 +1,5 @@
-import { describe, it, expect, vi, afterEach } from "vitest";
-import { render, fireEvent, cleanup } from "@testing-library/react";
+import { describe, it, expect, afterEach } from "vitest";
+import { render, cleanup } from "@testing-library/react";
 import { makeCtx } from "../../chapter-test-helpers.js";
 import AttentionScores from "../../../chapters/attention-computation/attention-scores.jsx";
 

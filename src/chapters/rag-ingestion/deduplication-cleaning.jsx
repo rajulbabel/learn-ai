@@ -452,152 +452,38 @@ export default function DeduplicationCleaning(ctx) {
             MinHash + LSH: Catching Near-Duplicates
           </T>
           <T color="#b8a9ff" center size={16} style={{ marginTop: 10 }}>
-            One typo fix, one re-worded sentence, one renamed term and the SHA-256 digest changes completely. MinHash
-            estimates Jaccard set overlap between shingle sets cheaply, and locality-sensitive hashing (LSH) groups
-            near-duplicates into the same bucket without an O(N^2) pairwise scan.
-          </T>
-          <T color={C.purple} bold center size={16} style={{ marginTop: 14 }}>
-            Two Near-Duplicates That Exact Hash Misses
+            One typo flips SHA-256. Need "almost the same" without comparing every pair of N docs. Standard library
+            (datasketch, text-dedup) does the work. You just need to know what it does.
           </T>
           <div
             style={{
-              marginTop: 10,
-              display: "grid",
-              gridTemplateColumns: "1fr 1fr",
-              gap: 12,
-            }}
-          >
-            <div
-              style={{
-                padding: "10px 12px",
-                borderRadius: 8,
-                background: `${C.purple}06`,
-                border: `1px solid ${C.purple}12`,
-                textAlign: "center",
-              }}
-            >
-              <T color={C.purple} bold center size={14}>
-                Doc A (Zendesk)
-              </T>
-              <T color="#b8a9ff" center size={13} style={{ marginTop: 6, fontStyle: "italic" }}>
-                "Reset your password by clicking the link in your email within 24 hours."
-              </T>
-              <T color="#b8a9ff" center size={12} style={{ marginTop: 6 }}>
-                SHA-256: a3f2b9...
-              </T>
-            </div>
-            <div
-              style={{
-                padding: "10px 12px",
-                borderRadius: 8,
-                background: `${C.purple}06`,
-                border: `1px solid ${C.purple}12`,
-                textAlign: "center",
-              }}
-            >
-              <T color={C.purple} bold center size={14}>
-                Doc B (Confluence)
-              </T>
-              <T color="#b8a9ff" center size={13} style={{ marginTop: 6, fontStyle: "italic" }}>
-                "Reset the password by clicking the link in your email within 24 hours."
-              </T>
-              <T color="#b8a9ff" center size={12} style={{ marginTop: 6 }}>
-                SHA-256: 9e1cd4... (different)
-              </T>
-            </div>
-          </div>
-          <T color="#b8a9ff" center size={14} style={{ marginTop: 8, fontStyle: "italic" }}>
-            One word change ("your" to "the") flips the hash. Exact dedup misses. MinHash + LSH catches both.
-          </T>
-          <T color={C.purple} bold center size={16} style={{ marginTop: 14 }}>
-            MinHash + LSH Pipeline
-          </T>
-          <div
-            style={{
-              marginTop: 10,
-              padding: 12,
+              marginTop: 12,
+              padding: "10px 14px",
               borderRadius: 8,
               background: `${C.purple}06`,
               border: `1px solid ${C.purple}12`,
+              textAlign: "center",
             }}
           >
-            <svg viewBox="0 0 520 280" style={{ width: "100%", height: "auto", display: "block" }}>
-              <desc>
-                MinHash plus LSH flow showing two near-duplicate docs being tokenized into 3-gram shingle sets,
-                processed through a 128-hash MinHash signature so the Jaccard estimate lands around 0.97, and bucketed
-                by LSH banding with 16 bands of 8 rows so both signatures land in the same candidate-pair bucket.
-              </desc>
-              {/* Step 1: Shingling */}
-              <rect
-                x={20}
-                y={20}
-                width={480}
-                height={60}
-                rx={6}
-                fill={`${C.purple}20`}
-                stroke={C.purple}
-                strokeWidth={1.2}
-              />
-              <text x={260} y={42} textAnchor="middle" fill={C.purple} fontSize={14} fontWeight="bold">
-                Step 1: 3-Gram Shingles
-              </text>
-              <text x={260} y={62} textAnchor="middle" fill="#b8a9ff" fontSize={12} fontStyle="italic">
-                {"{reset your password, your password by, password by clicking, ...}"}
-              </text>
-              <text x={260} y={76} textAnchor="middle" fill="#b8a9ff" fontSize={11}>
-                Doc A and Doc B share most 3-gram shingles. One differs.
-              </text>
-              {/* Arrow down */}
-              <line x1={260} y1={84} x2={260} y2={102} stroke="rgba(255,255,255,0.4)" strokeWidth={1.4} />
-              <polygon points="256,98 264,98 260,106" fill="rgba(255,255,255,0.4)" />
-              {/* Step 2: MinHash signature */}
-              <rect
-                x={20}
-                y={110}
-                width={480}
-                height={60}
-                rx={6}
-                fill={`${C.purple}20`}
-                stroke={C.purple}
-                strokeWidth={1.2}
-              />
-              <text x={260} y={132} textAnchor="middle" fill={C.purple} fontSize={14} fontWeight="bold">
-                Step 2: MinHash Signature (K = 128 Hash Functions)
-              </text>
-              <text x={260} y={152} textAnchor="middle" fill="#b8a9ff" fontSize={12}>
-                125 of 128 positions match equals Jaccard estimate around 0.97
-              </text>
-              <text x={260} y={166} textAnchor="middle" fill="#b8a9ff" fontSize={11}>
-                Cheap fixed-size signature replaces full shingle-set comparison.
-              </text>
-              {/* Arrow down */}
-              <line x1={260} y1={174} x2={260} y2={192} stroke="rgba(255,255,255,0.4)" strokeWidth={1.4} />
-              <polygon points="256,188 264,188 260,196" fill="rgba(255,255,255,0.4)" />
-              {/* Step 3: LSH banding */}
-              <rect
-                x={20}
-                y={200}
-                width={480}
-                height={60}
-                rx={6}
-                fill={`${C.green}20`}
-                stroke={C.green}
-                strokeWidth={1.2}
-              />
-              <text x={260} y={222} textAnchor="middle" fill={C.green} fontSize={14} fontWeight="bold">
-                Step 3: LSH Banding (16 Bands x 8 Rows)
-              </text>
-              <text x={260} y={242} textAnchor="middle" fill="#a5d6a7" fontSize={12}>
-                Doc A and Doc B hash into the SAME bucket - candidate near-duplicate pair found
-              </text>
-              <text x={260} y={256} textAnchor="middle" fill="#a5d6a7" fontSize={11}>
-                Sub-linear scan: no O(N^2) all-pairs check needed.
-              </text>
-            </svg>
+            <T color={C.purple} bold center size={15}>
+              Three-step pipeline
+            </T>
+            <T color="#b8a9ff" center size={14} style={{ marginTop: 8 }}>
+              <strong style={{ color: C.purple }}>1. Shingle:</strong> cut each doc into overlapping 3-word windows.
+              Doc becomes a set of shingles.
+            </T>
+            <T color="#b8a9ff" center size={14} style={{ marginTop: 6 }}>
+              <strong style={{ color: C.purple }}>2. MinHash:</strong> compress each set into a fixed 128-number
+              fingerprint where matching positions estimate Jaccard overlap (shared / union).
+            </T>
+            <T color="#b8a9ff" center size={14} style={{ marginTop: 6 }}>
+              <strong style={{ color: C.purple }}>3. LSH bucket:</strong> split fingerprint into bands, hash each band.
+              Docs landing in the same bucket are candidate near-duplicates. Skips the O(N^2) compare-everything scan.
+            </T>
           </div>
           <div
             style={{
-              marginTop: 14,
+              marginTop: 12,
               padding: "10px 14px",
               borderRadius: 8,
               background: `${C.purple}10`,
@@ -606,8 +492,8 @@ export default function DeduplicationCleaning(ctx) {
             }}
           >
             <T color={C.purple} bold center size={15}>
-              MinHash + LSH equals sub-linear near-duplicate detection at scale (1B docs feasible). Jaccard threshold is
-              tunable (typically 0.85). Catches typo-fixes, re-words, and copy-paste edits that exact hashing cannot.
+              Tunable: Jaccard threshold (default 0.85). Catches typo-fixes, re-words, copy-paste edits that exact
+              hashing misses. Scales to billion-doc corpora.
             </T>
           </div>
         </Box>
@@ -643,7 +529,7 @@ export default function DeduplicationCleaning(ctx) {
               }}
             >
               <T color={C.orange} bold center size={14}>
-                KB Article (Formal)
+                Support Doc (Formal Tone)
               </T>
               <T color="#ffcc80" center size={13} style={{ marginTop: 6, fontStyle: "italic" }}>
                 "To reset your password, click the password reset link delivered to your registered email address."
@@ -662,7 +548,7 @@ export default function DeduplicationCleaning(ctx) {
               }}
             >
               <T color={C.orange} bold center size={14}>
-                Forum Post (Casual)
+                Forum Post (Casual Tone)
               </T>
               <T color="#ffcc80" center size={13} style={{ marginTop: 6, fontStyle: "italic" }}>
                 "Yo if you forgot your password just hit the reset thing they sent to your email."
@@ -743,7 +629,7 @@ export default function DeduplicationCleaning(ctx) {
             }}
           >
             <T color={C.orange} bold center size={15}>
-              Use embedding dedup when the corpus has paraphrases (KB + forum posts, multi-author docs, translations).
+              Use embedding dedup when the corpus has paraphrases (support docs + forum posts, multi-author docs, translations).
               Skip it when content is byte-stable (PDFs from authoritative sources) and exact hashing + MinHash already
               cover the threshold.
             </T>
@@ -754,7 +640,7 @@ export default function DeduplicationCleaning(ctx) {
       <Reveal when={sub >= 4}>
         <Box color={C.green} style={{ width: "100%" }}>
           <T color={C.green} bold center size={22}>
-            Cleaning: The Unsexy 30% That Decides Whether Eval Stabilizes
+            Cleaning: The Unglamorous 30% That Decides Whether Eval Stabilizes
           </T>
           <T color="#a5d6a7" center size={16} style={{ marginTop: 10 }}>
             Dedup catches duplicates. Cleaning fixes the bytes themselves. Four steps - Unicode normalization, encoding

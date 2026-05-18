@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, afterEach } from "vitest";
+import { describe, it, expect, afterEach } from "vitest";
 import { render, cleanup } from "@testing-library/react";
 import { makeCtx } from "../../chapter-test-helpers.js";
 import WhyLLMsNeedRetrieval from "../../../chapters/rag-foundations/why-llms-need-retrieval.jsx";

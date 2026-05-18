@@ -5,7 +5,7 @@ import DecisionFramework from "../../../chapters/vector-systems/decision-framewo
 
 afterEach(() => cleanup());
 
-describe("DecisionFramework (11.36)", () => {
+describe("DecisionFramework (11.37)", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(DecisionFramework(makeCtx({ sub: 0 })))).not.toThrow();
   });

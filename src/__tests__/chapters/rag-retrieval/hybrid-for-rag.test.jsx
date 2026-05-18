@@ -25,13 +25,13 @@ describe("HybridForRAG (12.16)", () => {
     expect(() => render(HybridForRAG(makeCtx({ sub: 5 })))).not.toThrow();
   });
 
-  it("sub=0 shows API key + cancel examples and references Section 11.24", () => {
+  it("sub=0 shows API key + cancel examples and references Section 11.25", () => {
     const { container } = render(HybridForRAG(makeCtx({ sub: 0 })));
     expect(container.textContent).toMatch(/BM25/);
     expect(container.textContent).toMatch(/dense/i);
     expect(container.textContent).toMatch(/API key/i);
     expect(container.textContent).toMatch(/cancel|subscription/i);
-    expect(container.textContent).toMatch(/Section 11\.24|11\.24/);
+    expect(container.textContent).toMatch(/Section 11\.25|11\.25/);
   });
 
   it("sub=1 shows RRF and weighted-fusion formulas with k = 60 and alpha", () => {

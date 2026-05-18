@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, afterEach } from "vitest";
+import { describe, it, expect, afterEach } from "vitest";
 import { render, cleanup } from "@testing-library/react";
 import { makeCtx } from "../../chapter-test-helpers.js";
 import ContextualRetrieval from "../../../chapters/rag-foundations/contextual-retrieval.jsx";
@@ -78,8 +78,8 @@ describe("ContextualRetrieval (12.12)", () => {
 
   it("sub=6 stacks contextual + hybrid + reranker with Section 11 refs", () => {
     const { container } = render(ContextualRetrieval(makeCtx({ sub: 6 })));
-    expect(container.textContent).toMatch(/Section 11\.24|11\.24/);
     expect(container.textContent).toMatch(/Section 11\.25|11\.25/);
+    expect(container.textContent).toMatch(/Section 11\.26|11\.26/);
     expect(container.textContent).toMatch(/67%|combined/);
   });
 });

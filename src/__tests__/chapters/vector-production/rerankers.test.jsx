@@ -5,7 +5,7 @@ import Rerankers from "../../../chapters/vector-production/rerankers.jsx";
 
 afterEach(() => cleanup());
 
-describe("Rerankers (11.25)", () => {
+describe("Rerankers (11.26)", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(Rerankers(makeCtx({ sub: 0 })))).not.toThrow();
   });

@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, afterEach } from "vitest";
+import { describe, it, expect, afterEach } from "vitest";
 import { render, cleanup } from "@testing-library/react";
 import { makeCtx } from "../../chapter-test-helpers.js";
 import A2AProtocol from "../../../chapters/agent-tools/a2a-protocol.jsx";

@@ -5,7 +5,7 @@ import HybridSearch from "../../../chapters/vector-production/hybrid-search.jsx"
 
 afterEach(() => cleanup());
 
-describe("HybridSearch (11.24)", () => {
+describe("HybridSearch (11.25)", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(HybridSearch(makeCtx({ sub: 0 })))).not.toThrow();
   });

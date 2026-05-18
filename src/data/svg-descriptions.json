@@ -152,14 +152,14 @@
     "Two vectors drawn from the origin - a cyan query vector q and a green document vector d - with a small yellow angle theta between them, illustrating that cosine similarity measures the angle between vectors and that a tight angle means cos(theta) is close to 1.0",
     "Right triangle with two points q and d in 2D, a horizontal dashed leg labeled as the x-axis difference and a vertical dashed leg labeled as the y-axis difference, and the blue hypotenuse highlighted as the L2 distance equal to the square root of the sum of squared differences (Pythagoras in d dimensions)"
   ],
-  "11.5": [
+  "11.6": [
     "KD-tree recursive partition of a 2D point cloud - vertical split down the middle, horizontal splits in each half, one more vertical split in a quadrant - showing clean logarithmic partitioning at low dimensions",
     "Two-dimensional space with three random hyperplane lines slicing it; vectors in the same intersection share a 3-bit LSH hash code like 011 or 100",
     "Small IVF recap scatter - three Voronoi cells with the query probing the nearest one",
     "Proximity graph of the 10 cat-corpus documents with edges connecting each node to its two or three nearest neighbors, and a highlighted green path from the lower-right birds/fish doc across several hops to the cat cluster",
     "Illustrative recall vs queries-per-second scatter inspired by ann-benchmarks: HNSW and Vamana sit on the upper-right Pareto frontier, while IVF+PQ, LSH, and KD-tree fall below and to the left"
   ],
-  "11.6": [
+  "11.7": [
     "Scatter plot of the 10 cat-corpus documents with the query vector at the center and faint red lines fanning out to every dot, showing that brute-force kNN compares the query to every vector",
     "Same 10 docs colored by k-means cluster after running with nlist = 3: purple centroid A among the cat docs, yellow centroid B around the dog docs, cyan centroid C around the other docs",
     "Same scatter with dashed colored rectangles behind the dots approximating Voronoi cells, showing each doc belongs to exactly one cell",
@@ -168,13 +168,13 @@
     "Small IVF scatter with nprobe = 2: the two nearest clusters are probed",
     "Small IVF scatter with nprobe = 3: all three clusters are probed, equivalent to a full scan"
   ],
-  "11.7": [
+  "11.8": [
     "Flat proximity graph of the 10 cat-corpus documents with each node connected by cyan edges to its two or three nearest neighbors - the starting point before any hierarchy is added",
     "Same flat graph with a dashed red greedy-search path meandering across many nodes before reaching the cat cluster, illustrating that random-start greedy search on a flat graph is slow",
     "Two-layer HNSW illustration - bottom cyan layer is the flat proximity graph of all 10 docs, top yellow layer holds three hub nodes (docs 1, 6, 10) with yellow long-range edges between them",
     "Three-layer HNSW illustration - bottom cyan all-nodes layer, middle yellow hub layer with long-range edges, top red hub-of-hubs layer with a single global entry-point node"
   ],
-  "11.8": [
+  "11.9": [
     "First vector inserted into an empty HNSW graph - a single cyan dot labeled doc 1 marked as the entry point, with no edges or neighbors yet",
     "Greedy descent during insertion shows the entry-point chain dropping from L2 doc 1 to L1 doc 1 to L0 doc 1 along green vertical edges, with one candidate per layer above L",
     "Layer-0 beam search during insertion: the new doc sits as a green star at (260, 110) and dashed orange lines connect it to its top-4 ef_construction candidates docs 7, 4, 3, 2",
@@ -186,7 +186,7 @@
     "Ring of 8 nodes with each node connected to its M = 8 nearest neighbors, showing balanced edge density that approaches a complete graph",
     "Ring of 8 nodes with each node connected to its M = 16 nearest neighbors (capped at N - 1 = 7); a fully meshed graph at this small N"
   ],
-  "11.9": [
+  "11.10": [
     "Layer-0 scatter of the 10 cat-corpus docs with cyan flat-graph edges drawn faintly; the yellow query star sits in the cat cluster near docs 1, 3, 7",
     "Three-tier HNSW hierarchy with a yellow query arrow landing at the top-layer entry node (doc 1 at L2) drawn in green; lower layers untouched",
     "Greedy descent at L2 has no neighbors, so the current node drops vertically along a green edge from L2 doc 1 to L1 doc 1",
@@ -197,20 +197,20 @@
     "Frame C of beam expansion - doc 7 popped; neighbors 1, 2, 3, 4 evaluated; none beat the queue worst, beam top unchanged so search converges",
     "Final HNSW search result on layer-0 scatter - docs 1, 3, 7 highlighted in green with their distance dashes from the query, marking the converged top-3"
   ],
-  "11.10": [
+  "11.11": [
     "Line chart plotting recall@10 against ef_search on a log horizontal axis, with three curves for M = 8 (cyan), M = 16 (yellow), and M = 32 (green); higher M curves converge closer to 1.0 but require more memory"
   ],
-  "11.11": [
+  "11.12": [
     "HNSW hierarchical graph with three stacked layers: top layer has a single hub node, middle layer has three hub nodes connected by long orange arcs, and bottom layer has eight nodes connected by short green edges, with dashed vertical lines linking the same node across layers",
     "Single flat Vamana graph with eight nodes on one plane connected by a mix of short green edges for local precision and long orange edges stretching across the plane for cross-space jumps, doing the work HNSW's upper layers used to do",
     "Focal Vamana node p at the center surrounded by a mix of short green edges fanning to close neighbors and long orange edges shooting across the plane to distant nodes, showing how one node's 64 edges do double duty as both local-precision and long-range hub edges",
     "Storage hierarchy diagram - top layer shows a RAM cache with a small subset of high-degree entry nodes, bottom layer shows the SSD storing every graph node as 4 KB blocks aligned to NVMe pages"
   ],
-  "11.13": [
+  "11.14": [
     "Number line with calibrated cyan band from -1.2 to 1.4 and a 0 to 255 bucket scale; green training point at 0.5 maps to bucket 167, red new-vector point at 1.8 sits outside the band with a bent arrow clipping it back to 1.4 = bucket 255, a red gap bar labeled error = 0.4, and a faded tombstone marker for a deleted entry whose int8 row still lives",
     "Two stacked number lines comparing min/max calibration to p1/p99 plus 10 percent headroom; the top band spans -1.2 to 1.4 and the new value 1.8 clips with a red error bar of 0.4, while the bottom band spans -1.4 to 1.7 and the same new value clips with a red error bar of only 0.1"
   ],
-  "11.14": [
+  "11.15": [
     "A 768-dim vector banded into 96 slot segments, with three stacked document rows aligned at the same slot boundaries to show that slot 0 covers the same dim range across every document",
     "A 2-D scatter projection of slot-0 sub-vectors with 16 highlighted k-means centroid markers labeled c0 to c255, representing the 256 codebook entries that snap each sub-vector to its nearest prototype",
     "Encoding step diagram showing one query sub-vector snapping to its nearest centroid c17, then a row of four sub-vector bars snapping to four byte boxes containing centroid ids that assemble into a 96-byte PQ code",
@@ -223,49 +223,49 @@
     "Slot-0 2D scatter showing a tight cluster of 32 representative gray X centroids (of 256 trained per slot) around the origin with gray training dots inside, plus a red new-vector dot at (2.1, 1.9) far outside the cluster connected to the nearest centroid by a dashed line labeled distance = 1.8, alongside an inset label training avg distance = 0.3 and faded strikethrough dots indicating deleted training entries",
     "Line chart of 95th-percentile PQ reconstruction error over time from 0 to 50M vectors with a flat baseline rising into a spike between 10M and 20M, a horizontal dashed retrain threshold crossed at 15M, a vertical dashed line marking retrain triggered at 20M then a return to baseline, plus colored ticks below the x-axis marking inserts, updates, and deletes"
   ],
-  "11.15": [
+  "11.16": [
     "Curve showing binary quantization recall rising sharply with embedding dimension - near zero at d=64, rising past 0.9 around d=512, plateauing around 0.96 at d=1024 and higher, illustrating why binary works for high-dim BERT-style embeddings but collapses at low dimensions",
     "Side-by-side histograms for dim 5: a green training distribution centered at 0 with split 51/49 and a red drifted distribution centered at 0.4 with split 78/22, both cut by a dashed sign threshold at x = 0; below are two 8-cell bit-grid rows showing training mostly mixed bits versus drifted mostly 1s plus a small tombstone cell",
     "Bit-balance bar grid sampling 64 representative dims (of 1024) where each bar height equals the absolute deviation from a 50/50 split; most bars are short and green while a handful are tall and red flagged with small alert badges above, with a horizontal yellow dashed 70 percent imbalance alert line"
   ],
-  "11.16": [
+  "11.17": [
     "Long horizontal vector bar divided into colored prefix regions at 256, 512, 1024, and 3072 dimensions, each prefix labeled as a valid Matryoshka truncation so early-dimension subsets are usable embeddings",
     "Four concentric circles representing Matryoshka embedding prefixes - innermost red 256 dims, then orange 512, yellow 1024, and green 3072 - resembling nested Russian dolls where each ring is itself a complete embedding",
     "Two-axis area chart with x-axis showing dimension count from 0 to 3072 and y-axis showing bits per dimension from 0 to 32. Total vector bytes equals the area of each rectangle. Four nested rectangles show progressive compression: full float32 baseline at 3072 by 32 equals 12,288 bytes, MRL truncated at 1024 by 32 equals 4,096 bytes, MRL plus SQ at 1024 by 8 equals 1,024 bytes, and MRL plus BQ at 1024 by 1 equals 128 bytes. Demonstrates that MRL shrinks width while quantization shrinks height and the two effects multiply geometrically when stacked.",
     "Four horizontal cell-rows showing the same embedding vector progressing through each compression stage. Row 1 is the float32 baseline with 24 tall cells representing 3072 dims at 32 bits totaling 12,288 bytes. Row 2 shows MRL truncation keeping the first 8 cells solid and fading the remaining 16 cells as dashed outlines, totaling 4,096 bytes. Row 3 shows MRL plus SQ where the same 8 cells remain but each cell is one-quarter the height for 8-bit storage, totaling 1,024 bytes. Row 4 shows MRL plus BQ where the same 8 cells become tiny 1-bit slivers totaling 128 bytes. Illustrates that MRL throws away cells from the right while quantization shrinks the height of each remaining cell."
   ],
-  "11.17": [
+  "11.18": [
     "Cat-corpus 2D scatter partitioned into three IVF clusters after k-means with nlist = 3, arranged as a balanced inverted triangle: five cat docs form cluster A around the purple centroid square C_A in the upper-left, two dog docs form cluster B around the yellow centroid C_B in the upper-right, and three other docs form cluster C around the cyan centroid C_C in the lower-center, illustrating step 1 of IVF-PQ which clusters the space first",
     "IVF-PQ search trajectory on the 10-doc cat corpus arranged as an inverted triangle: the query vector sits in the upper-left, an orange arrow points toward the closest centroid C_A, the two nearest cells A and B in the top row are highlighted as probed while cluster C at the bottom is dimmed as skipped, illustrating nprobe = 2 where only the two nearest clusters get their PQ codes scanned"
   ],
-  "11.18": [
+  "11.19": [
     "Three-layer HNSW graph with each node labeled by a compact PQ code like [c17, c203, c89, ...] instead of a float vector. The bottom cyan layer holds all eight docs with dense edges, the middle yellow layer holds three hub nodes with long-range edges, and the top red layer has a single global entry-point node. Green dashed vertical lines are layer-to-layer links, illustrating that HNSW + PQ keeps the graph structure and only changes the node payload from float32 vectors to PQ codes"
   ],
-  "11.19": [
+  "11.20": [
     "Compression-technique decision flowchart with top input box listing N, d, DB and recall tolerance, an orthogonal MRL pre-step on the left for truncating Matryoshka-trained embeddings at the API, a main decision flow branching on N into four size buckets (under 1M skip, 1M to 10M scalar quantization, 10M to 100M binary quantization with rescore gated on d at least 768 and DB support, 100M or more HNSW plus product quantization), plus a fallback rule and a recall-tolerance override note."
   ],
-  "11.20": [
+  "11.21": [
     "Three-stage filter funnel for the pre-filter strategy. Wide yellow trapezoid represents 1 million vectors in the corpus, middle narrowing trapezoid represents the approximately 1,000 docs that pass the tenant_id and published_year predicates, and the rightmost green trapezoid represents the final top-3 returned after brute-force similarity search over the survivors.",
     "Small HNSW-style graph with 10 nodes where the four that pass the predicate are filled in orange and the six that fail are dimmed. Gray edges connect near neighbors and an orange traversal path with arrows visits only the passing nodes 1, 3, 5, and 7, illustrating the Qdrant inline filtered-HNSW approach that evaluates the predicate during graph traversal instead of pre- or post-filtering."
   ],
-  "11.21": [
+  "11.22": [
     "Small graph with 8 nodes where central hub node D has edges to A, B, C, E, F, G, and H. Node D is struck through in red to indicate deletion, and every edge touching D is drawn with a dashed red line to indicate a broken route. The remaining edges between the outer-ring nodes are dimmed, showing that removing a hub shatters multiple routing paths at once.",
     "Line chart plotting recall at 10 on the vertical axis (0.80 to 1.00) against delete percentage on the horizontal axis (0 to 50 percent). The orange curve starts at 0.97 at 0 deletes, dips gently to 0.965 at 10%, then drops through 0.92 at 30% deletes and falls to 0.85 at 50% deletes. A dashed red line at 30% marks the typical rebuild trigger."
   ],
-  "11.22": [
+  "11.23": [
     "Random sharding diagram with a query icon q at the top center sending fan-out lines straight down to four shard rectangles arranged in a horizontal row. Each shard holds a mixed scatter of colored dots and is labeled Shard 0 through Shard 3 underneath the box. Illustrates that random sharding forces every query to hit every shard because any shard may contain the nearest neighbor.",
     "Semantic sharding diagram with a query icon q at the top center sending routing lines straight down to only two of four shards arranged in a horizontal row. The cats and animals shards are highlighted; the dogs and misc shards are dimmed. Each box shows its cluster letter inside and the region label underneath. Illustrates that when shards align with IVF clusters the query can skip the unrelated regions of the embedding space and touch only the shards likely to contain matches."
   ],
-  "11.23": [
+  "11.24": [
     "Read-replica topology diagram with five green client circles on the left feeding into a yellow load-balancer box labeled LB, which distributes traffic across four cyan replica boxes labeled R1 through R4 on the right. Illustrates how read replicas hold identical copies of the index and share query load while writes go elsewhere."
   ],
-  "11.24": [
+  "11.25": [
     "Hybrid-search flow diagram with a green query icon on the left that splits into two parallel lanes. The upper cyan lane flows to a Vector ANN box emitting a top-N ranked list; the lower yellow lane flows to a BM25 box emitting another top-N list. Both lists arrive at a green merge node labeled RRF on the right. Illustrates the parallel-ranker architecture of hybrid search."
   ],
-  "11.25": [
+  "11.26": [
     "Cross-encoder architecture diagram. A row of input token boxes labeled CLS, query, query, SEP, doc, doc, doc, doc, SEP sits at the bottom connected by arrows up into a single wide yellow transformer rectangle spanning all tokens. A green circle labeled score sits at the top. Illustrates that cross-encoder rerankers run full attention over the concatenated query and doc tokens in one forward pass."
   ],
-  "11.36": [
+  "11.37": [
     "Four-branch decision flowchart for picking a vector database. A cyan root node labeled 'New vector-search feature' sits at the top; axis one (data size) splits the flow into four buckets - green under 1M, yellow 1M-100M, orange 100M-1B, red over 1B - with each bucket showing recommended systems below (pgvector/Chroma at small scale, Qdrant/Pinecone/pgvector in the middle band, Qdrant multi-node or Milvus at large scale, Milvus/Vespa at billion-plus). Axis 2 ops capacity, axis 3 filter complexity, and axis 4 cost band are listed as follow-on constraints that narrow the shortlist to a single pick."
   ],
   "12.2": [
@@ -278,8 +278,7 @@
     "Stylized web page mockup with four labeled zones: a top nav bar tinted red marked DROP, a left sidebar tinted red marked DROP, a central main article zone tinted green marked KEEP, and a bottom footer with newsletter signup tinted red marked DROP. Shows which DOM regions a boilerplate-stripping parser keeps versus discards."
   ],
   "12.5": [
-    "Three source systems (Zendesk, Confluence, Notion) each containing the same Reset-Your-Password article flow into a single ingestion pipeline that produces three nearly-identical duplicate chunks in the vector database. Below them, a context-window bar of 4,096 tokens shows the first 1,536 tokens consumed by three duplicate chunks tinted red while only 2,560 tokens remain green for distinct answers.",
-    "MinHash plus LSH pipeline diagram with three stacked stages. Stage 1 tokenizes two near-duplicate docs into 3-gram shingle sets. Stage 2 reduces each shingle set to a 128-position MinHash signature so the Jaccard estimate lands around 0.97. Stage 3 hashes the signatures through LSH banding with 16 bands of 8 rows so both docs land in the same candidate-pair bucket without an O(N squared) pairwise scan."
+    "Three source systems (Zendesk, Confluence, Notion) each containing the same Reset-Your-Password article flow into a single ingestion pipeline that produces three nearly-identical duplicate chunks in the vector database. Below them, a context-window bar of 4,096 tokens shows the first 1,536 tokens consumed by three duplicate chunks tinted red while only 2,560 tokens remain green for distinct answers."
   ],
   "12.6": [
     "Timeline showing a password-reset article version v1 published on 2026-04-12, edited to v2 on 2026-05-01 adding an MFA-preservation note, and a stale-index v1 chunk being retrieved on 2026-05-10 causing the LLM to give the wrong answer because the index never re-ingested v2",

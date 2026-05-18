@@ -101,14 +101,14 @@ const CONTEXTUAL_STACK_STEPS = [
     title: "Step 2: Hybrid Retrieval (Query Time)",
     body: "Dense embedding search and BM25 lexical search run in parallel over the augmented chunks. Their top-20 results are merged into a single candidate list.",
     accent: "#80deea",
-    recap: "Hybrid - covered in Section 11.24 - merges semantic and lexical recall.",
+    recap: "Hybrid - covered in Section 11.25 - merges semantic and lexical recall.",
   },
   {
     color: C.orange,
     title: "Step 3: Reranker (Top-20 To Top-3)",
     body: "A cross-encoder scores each query-chunk pair jointly and reorders the candidates. The top 3 go into the LLM prompt.",
     accent: "#ffcc80",
-    recap: "Rerankers - covered in Section 11.25 - cross-encoder scores each query-chunk pair.",
+    recap: "Rerankers - covered in Section 11.26 - cross-encoder scores each query-chunk pair.",
   },
 ];
 

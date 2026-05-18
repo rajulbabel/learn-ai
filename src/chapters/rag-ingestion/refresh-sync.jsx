@@ -34,7 +34,7 @@ const WEBHOOK_TIMELINE = [
   {
     t: "T=0:08",
     label: "Upsert In Vector DB",
-    body: "Same doc_id, new chunks. Old chunks dropped, new chunks inserted (Section 11.21 deletes-updates pattern).",
+    body: "Same doc_id, new chunks. Old chunks dropped, new chunks inserted (Section 11.22 deletes-updates pattern).",
   },
   {
     t: "T=0:10",
@@ -383,47 +383,59 @@ export default function RefreshSync(ctx) {
               border: `1px solid ${C.purple}12`,
             }}
           >
-            <svg viewBox="0 0 520 360" style={{ width: "100%", height: "auto", display: "block" }}>
+            <svg viewBox="0 0 520 450" style={{ width: "100%", height: "auto", display: "block" }}>
               <desc>
                 Webhook-driven incremental sync sequence diagram with time markers T=0:00 through T=0:10 showing user
                 edit, Confluence webhook fire, ingestion service fetch, re-parse and re-chunk and re-embed, upsert into
-                vector DB referencing Section 11.21 deletes-updates, and final queryable state with about ten-second
+                vector DB referencing Section 11.22 deletes-updates, and final queryable state with about ten-second
                 propagation lag.
               </desc>
               {/* Vertical timeline */}
-              <line x1={260} y1={20} x2={260} y2={340} stroke="rgba(255,255,255,0.25)" strokeWidth={1.4} />
+              <line x1={260} y1={20} x2={260} y2={436} stroke="rgba(255,255,255,0.25)" strokeWidth={1.4} />
               {WEBHOOK_TIMELINE.map((step, i) => {
-                const y = 30 + i * 54;
+                const y = 30 + i * 70;
                 return (
                   <g key={step.t}>
-                    <circle cx={260} cy={y + 18} r={6} fill={C.purple} stroke="#08080d" strokeWidth={1.4} />
+                    <circle cx={260} cy={y + 28} r={6} fill={C.purple} stroke="#08080d" strokeWidth={1.4} />
                     <rect
                       x={40}
                       y={y}
                       width={170}
-                      height={42}
+                      height={56}
                       rx={6}
                       fill={`${C.purple}20`}
                       stroke={C.purple}
                       strokeWidth={1.2}
                     />
-                    <text x={125} y={y + 18} textAnchor="middle" fill={C.purple} fontSize={12} fontWeight="bold">
+                    <text x={125} y={y + 20} textAnchor="middle" fill={C.purple} fontSize={12} fontWeight="bold">
                       {step.t}
                     </text>
-                    <text x={125} y={y + 34} textAnchor="middle" fill="#b8a9ff" fontSize={11} fontWeight="bold">
-                      {step.label}
-                    </text>
+                    <foreignObject x={44} y={y + 24} width={162} height={30}>
+                      <div
+                        xmlns="http://www.w3.org/1999/xhtml"
+                        style={{
+                          fontFamily: "ui-sans-serif, system-ui, sans-serif",
+                          fontSize: 11,
+                          fontWeight: "bold",
+                          color: "#b8a9ff",
+                          textAlign: "center",
+                          lineHeight: 1.25,
+                        }}
+                      >
+                        {step.label}
+                      </div>
+                    </foreignObject>
                     <rect
                       x={310}
                       y={y}
                       width={170}
-                      height={42}
+                      height={56}
                       rx={6}
                       fill={`${C.purple}10`}
                       stroke={`${C.purple}40`}
                       strokeWidth={1}
                     />
-                    <foreignObject x={314} y={y + 2} width={162} height={38}>
+                    <foreignObject x={314} y={y + 2} width={162} height={52}>
                       <div
                         xmlns="http://www.w3.org/1999/xhtml"
                         style={{
@@ -465,7 +477,7 @@ export default function RefreshSync(ctx) {
               </T>
               <T color="#a5d6a7" center size={14} style={{ marginTop: 6 }}>
                 Real-time freshness (~10 seconds). No wasted re-embedding on unchanged docs. Upsert pattern lines up
-                with Section 11.21 deletes-and-updates so the vector DB stays consistent. Linear cost scales with edit
+                with Section 11.22 deletes-and-updates so the vector DB stays consistent. Linear cost scales with edit
                 volume, not corpus size.
               </T>
             </div>
@@ -703,7 +715,7 @@ export default function RefreshSync(ctx) {
               </T>
               <T color="#ffe082" center size={14} style={{ marginTop: 6 }}>
                 Source removes doc-1. Webhook fires event: "page.deleted". Ingestion service writes a tombstone in the
-                vector DB. Tombstone propagates to all replicas. All chunks for doc-1 are removed. Section 11.21 covers
+                vector DB. Tombstone propagates to all replicas. All chunks for doc-1 are removed. Section 11.22 covers
                 the multi-replica deletes-and-updates pattern in depth.
               </T>
               <T color="#ffe082" center size={14} style={{ marginTop: 6 }}>

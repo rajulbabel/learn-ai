@@ -1,5 +1,5 @@
 import { C } from "../../config.js";
-import { Box, T, Reveal, SubBtn, Tag } from "../../components.jsx";
+import { T, Reveal, SubBtn } from "../../components.jsx";
 
 export default function FullFormula(ctx) {
   const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx;

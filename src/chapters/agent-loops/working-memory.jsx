@@ -1,6 +1,6 @@
 import { Box, T, Reveal, SubBtn } from "../../components.jsx";
 import { C } from "../../config.js";
-import { SOFT, tintedCard, pill, DIM_BG, DIM_BORDER } from "../../shared/agent-styles.jsx";
+import { SOFT, tintedCard, pill } from "../../shared/agent-styles.jsx";
 
 // Canonical working memory scratchpad shape used in 13.25 and referenced by 13.42 (Observability tracing).
 const WORKING_MEMORY_SHAPE = `{

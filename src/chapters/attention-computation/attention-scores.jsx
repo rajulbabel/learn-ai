@@ -1,5 +1,5 @@
 import { C } from "../../config.js";
-import { Box, T, Reveal, SubBtn, Tag } from "../../components.jsx";
+import { Box, T, Reveal, SubBtn } from "../../components.jsx";
 
 export default function AttentionScores(ctx) {
   const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx;
@@ -42,7 +42,7 @@ export default function AttentionScores(ctx) {
                 },
                 2: {
                   color: C.orange,
-                  label: "medium",
+                  label: "Medium",
                   bg: "06",
                   border: "15",
                   barBg: `linear-gradient(90deg, ${C.cyan}80, ${C.orange})`,

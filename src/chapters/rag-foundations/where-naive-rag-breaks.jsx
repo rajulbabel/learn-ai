@@ -658,7 +658,7 @@ export default function WhereNaiveRAGBreaks(ctx) {
                 </T>
               </div>
               <T color="#f8bbd0" center size={13} style={{ marginTop: 10 }}>
-                Embedding lifecycle - covered in Section 11.27 - and chapters 12.36-12.40 (drift detection) fix this.
+                Embedding lifecycle - covered in Section 11.28 - and chapters 12.36-12.40 (drift detection) fix this.
               </T>
             </div>
 

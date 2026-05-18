@@ -322,7 +322,7 @@ export default function DecisionFramework(ctx) {
           <T color="#ffb74d" style={{ marginTop: 8 }}>
             Filtering is where products separate most. Simple filters (tenant_id = 42) work on everything. Complex
             compound filters (tenant + geo + date + ACL) exercise the vendor; Qdrant&apos;s inline filtered-HNSW
-            (chapter 11.20) wins. When the query involves SQL-shaped joins to rows in other tables, pgvector is the
+            (chapter 11.21) wins. When the query involves SQL-shaped joins to rows in other tables, pgvector is the
             right answer because Postgres has always been good at that.
           </T>
           <div
@@ -389,7 +389,7 @@ export default function DecisionFramework(ctx) {
           >
             Mismatched filter complexity is <span style={{ color: C.orange }}>the #1 post-launch surprise</span>
             <br />
-            Read 11.20 carefully before committing
+            Read 11.21 carefully before committing
           </div>
           <T color="#ffb74d" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
             Teams often underestimate filter complexity until the product is in flight. The first selectivity-edge-case
@@ -418,42 +418,42 @@ export default function DecisionFramework(ctx) {
             {[
               {
                 q: "Data size",
-                ref: "chapters 11.2, 11.12, 11.29",
+                ref: "chapters 11.2, 11.13, 11.30",
                 what: "N now, N in 18 months; d of the embedding model",
               },
               {
                 q: "Update frequency",
-                ref: "chapter 11.21",
+                ref: "chapter 11.22",
                 what: "Inserts/sec, deletes/sec; tombstone tolerance; rebuild cadence",
               },
               {
                 q: "Filter selectivity",
-                ref: "chapter 11.20",
+                ref: "chapter 11.21",
                 what: "Tight (0.1%) vs loose (50%); compound predicates",
               },
               {
                 q: "QPS budget",
-                ref: "chapter 11.29",
+                ref: "chapter 11.30",
                 what: "Peak QPS, sustained QPS, ratio, seasonal spikes",
               },
               {
                 q: "P99 target",
-                ref: "chapter 11.28",
+                ref: "chapter 11.29",
                 what: "Latency budget, tail behavior, cold-start tolerance",
               },
               {
                 q: "Availability target",
-                ref: "chapters 11.23, 11.28",
+                ref: "chapters 11.24, 11.29",
                 what: "SLA (99.9% vs 99.99%); failover story; multi-region",
               },
               {
                 q: "Embedding model stability",
-                ref: "chapter 11.27",
+                ref: "chapter 11.28",
                 what: "Drift plan; re-embedding cost; migration path",
               },
               {
                 q: "Ops capacity",
-                ref: "chapters 11.31 - 11.35",
+                ref: "chapters 11.32 - 11.36",
                 what: "SRE hours, on-call rotation, K8s familiarity",
               },
             ].map((r) => (

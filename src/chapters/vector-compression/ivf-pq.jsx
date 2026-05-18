@@ -47,7 +47,7 @@ export default function IVFPQ(ctx) {
             IVF splits space, PQ shrinks each vector
           </T>
           <T color="#80deea" style={{ marginTop: 8 }}>
-            IVF (chapter 11.5) and PQ (chapter 11.14) are the two workhorse compression tools of production vector
+            IVF (chapter 11.7) and PQ (chapter 11.15) are the two workhorse compression tools of production vector
             search. IVF partitions the corpus into clusters so a query only scans a handful of cells instead of all N
             vectors. PQ replaces each float32 vector with a short byte-code, shrinking memory by 32x. Individually each
             tool is useful; combined as IVF-PQ they become the dominant index for static billion-scale corpora - the

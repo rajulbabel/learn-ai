@@ -1,6 +1,6 @@
 import { Box, T, Reveal, SubBtn } from "../../components.jsx";
 import { C } from "../../config.js";
-import { SOFT, tintedCard, pill, DIM_BG, DIM_BORDER } from "../../shared/agent-styles.jsx";
+import { SOFT, tintedCard, pill } from "../../shared/agent-styles.jsx";
 
 // Four past events for Alice used in the sub=0 timeline and referenced through the rest of 13.26.
 const ALICE_EPISODES = [
@@ -189,7 +189,7 @@ export default function EpisodicMemory(ctx) {
                 Vector DB
               </text>
               <text x={460} y={58} fill={SOFT.purple} fontSize="11" textAnchor="middle">
-                Section 11.6 / 11.7
+                Section 11.7 / 11.8
               </text>
 
               {/* Stage 2 row bottom */}
@@ -253,7 +253,7 @@ export default function EpisodicMemory(ctx) {
           </div>
 
           <T color={SOFT.yellow} center size={15} style={{ marginTop: 12 }}>
-            Vector storage substrate covered in Section 11.6 (IVF) / 11.7 (HNSW). Here we use it as the layer below
+            Vector storage substrate covered in Section 11.7 (IVF) / 11.8 (HNSW). Here we use it as the layer below
             episodic memory: write once, search by similarity from then on.
           </T>
         </Box>

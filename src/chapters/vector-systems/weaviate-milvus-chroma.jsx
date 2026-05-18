@@ -393,7 +393,7 @@ export default function WeaviateMilvusChroma(ctx) {
           >
             No single winner - <span style={{ color: C.purple }}>context picks the product</span>
             <br />
-            The decision framework in 11.36 pulls all seven systems together
+            The decision framework in 11.37 pulls all seven systems together
           </div>
           <T color="#b8a9ff" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
             One chapter can only skim each of these. Each has enough nuance for a deep dive of its own; the goal here

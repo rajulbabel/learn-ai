@@ -27,7 +27,7 @@ const LLM_VS_TOOLS = [
     flow: [
       "User asks T5",
       "LLM calls search_kb('Pro vs Enterprise')",
-      "KB returns current doc",
+      "Knowledge base returns current doc",
       "LLM answers from doc",
     ],
     answer: "Pro: 10 seats, $49/mo, email support. Enterprise: unlimited seats, SSO, dedicated CSM.",

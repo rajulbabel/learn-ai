@@ -153,7 +153,7 @@ function B(svg) {
   };
 }
 
-function InferenceDiagram({ sub, setSub, subBtnRipple, setSubBtnRipple, registerSubBtn }) {
+function InferenceDiagram({ sub, setSub, subBtnRipple, setSubBtnRipple: _setSubBtnRipple, registerSubBtn }) {
   const ref = useRef(null);
   useEffect(() => {
     const svg = ref.current;

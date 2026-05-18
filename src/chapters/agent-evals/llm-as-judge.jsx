@@ -26,7 +26,7 @@ const JUDGE_RUBRIC = [
   {
     name: "Correctness",
     range: "0-3",
-    detail: "Answer Matches The Policy / KB. 3 = Exact, 0 = Contradicts Policy.",
+    detail: "Answer Matches The Policy / Knowledge Base. 3 = Exact, 0 = Contradicts Policy.",
   },
   {
     name: "Completeness",
@@ -394,7 +394,7 @@ export default function LlmAsJudge(ctx) {
             >
               {`System: You Are An Evaluator For A Customer-Support Agent.
 Score The Agent's Response On This Rubric (Total 10):
-  - Correctness (0-3): Answer Matches Policy / KB.
+  - Correctness (0-3): Answer Matches Policy / Knowledge Base.
   - Completeness (0-2): Answer Addresses Every Part Of The Question.
   - Tone (0-2): Friendly + Professional, No Condescension.
   - Citations (0-2): Policy References Included When Applicable.

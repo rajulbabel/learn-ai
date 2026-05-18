@@ -5,7 +5,7 @@ import EmbeddingLifecycle from "../../../chapters/vector-production/embedding-li
 
 afterEach(() => cleanup());
 
-describe("EmbeddingLifecycle (11.27)", () => {
+describe("EmbeddingLifecycle (11.28)", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(EmbeddingLifecycle(makeCtx({ sub: 0 })))).not.toThrow();
   });

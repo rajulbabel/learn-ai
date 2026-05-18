@@ -77,7 +77,7 @@ const METADATA_HIGHLIGHTED = new Set(['"source_url"', '"updated_at"', '"permissi
 const METADATA_USE_CASES = [
   {
     label: "Filtering",
-    body: "Section 11.20 filtering uses fields like updated_at > 2026-01-01 to exclude stale docs at query time.",
+    body: "Section 11.21 filtering uses fields like updated_at > 2026-01-01 to exclude stale docs at query time.",
   },
   {
     label: "Citations",

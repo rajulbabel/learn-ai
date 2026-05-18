@@ -97,31 +97,31 @@ const SUPPORT_WORKFLOW_STEPS = [
     n: 1,
     label: "Ticket Arrives",
     detail: "User Message Hits The Inbound Queue.",
-    kind: "chain",
+    kind: "Chain",
   },
   {
     n: 2,
     label: "Classifier (Intent Classification)",
     detail: "Routes To Billing / Troubleshooting / Escalation.",
-    kind: "route",
+    kind: "Route",
   },
   {
     n: 3,
     label: "Billing Branch",
     detail: "Chain lookup_customer -> lookup_subscription -> Respond.",
-    kind: "chain",
+    kind: "Chain",
   },
   {
     n: 4,
     label: "Troubleshooting Branch",
     detail: "Parallel (search_kb For Top-3 Hypotheses) -> Chain To Response.",
-    kind: "parallel",
+    kind: "Parallel",
   },
   {
     n: 5,
     label: "Escalation Branch",
     detail: "escalate_human Directly.",
-    kind: "chain",
+    kind: "Chain",
   },
 ];
 
@@ -1113,8 +1113,8 @@ export default function WorkflowPrimitives(ctx) {
             </T>
             <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 8 }}>
               {SUPPORT_WORKFLOW_STEPS.map((s) => {
-                const kindColor = s.kind === "route" ? C.red : s.kind === "parallel" ? C.amber : C.yellow;
-                const kindSoft = s.kind === "route" ? SOFT.red : s.kind === "parallel" ? SOFT.amber : SOFT.yellow;
+                const kindColor = s.kind === "Route" ? C.red : s.kind === "Parallel" ? C.amber : C.yellow;
+                const kindSoft = s.kind === "Route" ? SOFT.red : s.kind === "Parallel" ? SOFT.amber : SOFT.yellow;
                 return (
                   <div
                     key={s.n}

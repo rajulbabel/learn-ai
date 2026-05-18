@@ -19,10 +19,10 @@ const LATENCY_CACHE_TARGETS = [
     why: "Profile Rarely Changes Mid-Session",
   },
   {
-    name: "KB Article Body",
+    name: "Knowledge Base Article Body",
     color: "orange",
     ttl: "TTL: 1 Hour",
-    why: "KB Updates Are Infrequent",
+    why: "Knowledge Base Updates Are Infrequent",
   },
   {
     name: "Routing / Classification",
@@ -392,7 +392,7 @@ export default function LatencyOptimization(ctx) {
           </div>
 
           <T color={SOFT.purple} center size={15} style={{ marginTop: 14 }}>
-            Cache invalidation is the hard part. Pick conservative TTLs (5 minutes for profile, 1 hour for KB) and
+            Cache invalidation is the hard part. Pick conservative TTLs (5 minutes for profile, 1 hour for the knowledge base) and
             invalidate on mutation events (profile-updated, kb-doc-edited). Better to miss the cache than to serve a
             stale answer.
           </T>

@@ -1,6 +1,6 @@
 import { Box, T, Reveal, SubBtn } from "../../components.jsx";
 import { C } from "../../config.js";
-import { SOFT, tintedCard, pill, DIM_BG, DIM_BORDER } from "../../shared/agent-styles.jsx";
+import { SOFT, tintedCard, pill } from "../../shared/agent-styles.jsx";
 
 const PROFILE_CARD_SHAPE = `{
   "customer_id": "c-9924",

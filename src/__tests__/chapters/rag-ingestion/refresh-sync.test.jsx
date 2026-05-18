@@ -25,4 +25,21 @@ describe("RefreshSync (12.6)", () => {
   it("renders at sub=4 without throwing", () => {
     expect(() => render(RefreshSync(makeCtx({ sub: 4 })))).not.toThrow();
   });
+
+  it("renders webhook timeline label inside foreignObject so it wraps", () => {
+    const { container } = render(RefreshSync(makeCtx({ sub: 2 })));
+    const labelDiv = Array.from(container.querySelectorAll("foreignObject div")).find(
+      (d) => d.textContent === "Re-Parse + Re-Chunk + Re-Embed",
+    );
+    expect(labelDiv).toBeTruthy();
+  });
+
+  it("gives webhook timeline rows enough height for body text to not clip", () => {
+    const { container } = render(RefreshSync(makeCtx({ sub: 2 })));
+    const bodyDiv = Array.from(container.querySelectorAll("foreignObject")).find((fo) =>
+      fo.textContent.includes("Parser, chunker, and embedder run end-to-end"),
+    );
+    expect(bodyDiv).toBeTruthy();
+    expect(Number(bodyDiv.getAttribute("height"))).toBeGreaterThanOrEqual(50);
+  });
 });

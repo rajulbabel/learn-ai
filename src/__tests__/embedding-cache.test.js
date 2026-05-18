@@ -25,10 +25,10 @@ function createMockIDB() {
 
 describe("embedding-cache (byte-array)", () => {
   let cache;
-  let mockDB, data;
+  let mockDB;
 
   beforeEach(async () => {
-    ({ mockDB, data } = createMockIDB());
+    ({ mockDB } = createMockIDB());
     globalThis.indexedDB = {
       open: vi.fn(() => {
         const req = {};

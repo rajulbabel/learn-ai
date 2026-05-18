@@ -1,5 +1,5 @@
 import { C } from "../../config.js";
-import { Box, T, Reveal, SubBtn, Tag } from "../../components.jsx";
+import { Box, T, Reveal, SubBtn } from "../../components.jsx";
 
 export default function InsideEachHead(ctx) {
   const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx;
@@ -48,7 +48,7 @@ export default function InsideEachHead(ctx) {
             {[
               {
                 head: 1,
-                label: "subject-verb",
+                label: "Subject to Verb",
                 c: C.cyan,
                 bars: [
                   { w: "cat", p: 70 },
@@ -59,7 +59,7 @@ export default function InsideEachHead(ctx) {
               },
               {
                 head: 2,
-                label: "verb-location",
+                label: "Verb to Location",
                 c: C.orange,
                 bars: [
                   { w: "cat", p: 10 },
@@ -70,7 +70,7 @@ export default function InsideEachHead(ctx) {
               },
               {
                 head: 3,
-                label: "temporal",
+                label: "Temporal",
                 c: C.purple,
                 bars: [
                   { w: "cat", p: 8 },

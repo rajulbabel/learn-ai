@@ -36,8 +36,15 @@ ${emdash}
 ${invisible}
 "
 
+  # Lowercase cell text. Three exemption layers:
+  #   1) Known terms (pgvector, numpy, etc.)
+  #   2) snake_case identifiers (any value containing underscore — tool names, var names)
+  #   3) Math subscripts (h₁, h₂, w_o1, b_o, nDCG)
   lowcell=$(grep -nE '^[[:space:]]+(name|t|tech|kind|pain|year|cost|trade|metric|threshold|bucket|posture|phase|latency|loss|layer|axis|q|p|stage|label|title|header|side|tier):[[:space:]]+"[a-z]' "$file" 2>/dev/null \
     | grep -vE '"[[:space:]]*(pgvector|numpy|iPhone|none|cosine|ada-002|tenant_id|http|the |gpt-|text-embedding|q_vec|d_vec|k = |m = |ef_|sqrt|fast |slow )' \
+    | grep -vE '"[a-zA-Z0-9]*_[a-zA-Z0-9_]+' \
+    | grep -vE '"h[₀-₉]|"nDCG|"gradient"|"old_weight|"learning_rate|"new_weight' \
+    | grep -vE '"(reason|urgency|transcript|triage)"' \
     | head -10)
   [ -n "$lowcell" ] && per_file="${per_file}  LOWERCASE CELL TEXT:
 ${lowcell}

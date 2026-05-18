@@ -1,6 +1,5 @@
 import { Box, T, Reveal, SubBtn } from "../../components.jsx";
 import { C } from "../../config.js";
-import { fmtVec } from "../../shared/vector-graphs.jsx";
 
 const CAT_CORPUS = [
   { id: 1, text: "Cats are small domesticated carnivores", vec: [0.81, 0.12, 0.45, 0.22], catLike: true },

@@ -29,8 +29,8 @@ const T3_ORCHESTRATOR_TRACE = [
     detail:
       'Receives T3 ("Dashboard Slow + 500 Errors"). Plans 3 Sub-Tasks: A) search_kb For "Dashboard Slow"; B) search_kb For "500 Errors"; C) lookup_customer For Usage Tier.',
   },
-  { step: 2, actor: "Worker A", color: "cyan", detail: "Returns Top-3 KB Articles On Dashboard Performance." },
-  { step: 3, actor: "Worker B", color: "cyan", detail: "Returns Top-3 KB Articles On 500 Errors." },
+  { step: 2, actor: "Worker A", color: "cyan", detail: "Returns Top-3 Knowledge Base Articles On Dashboard Performance." },
+  { step: 3, actor: "Worker B", color: "cyan", detail: "Returns Top-3 Knowledge Base Articles On 500 Errors." },
   {
     step: 4,
     actor: "Worker C",
@@ -42,7 +42,7 @@ const T3_ORCHESTRATOR_TRACE = [
     actor: "Orchestrator",
     color: "teal",
     detail:
-      "Aggregates: Composes A Single Answer Combining KB Hits + Customer Context. Recommends Dashboard Optimization And Escalates 500 Errors To Engineering.",
+      "Aggregates: Composes A Single Answer Combining Knowledge Base Hits + Customer Context. Recommends Dashboard Optimization And Escalates 500 Errors To Engineering.",
   },
 ];
 

@@ -49,13 +49,13 @@ const CAPABILITY_TOOLS = [
 const CONSTRAINTS = [
   "Never Promise Refunds Over $200 Without Escalation",
   "Never Share Another Customer's Data",
-  "Never Claim Policies Not In The KB",
+  "Never Claim Policies Not In The Knowledge Base",
   "Never Call Tools Without First Looking Up The Customer",
 ];
 
 const OUTPUT_RULES = [
   "Always Greet The Customer By Name",
-  "Cite The KB Doc When Quoting Policy",
+  "Cite The Knowledge Base Doc When Quoting Policy",
   "Wrap Tool Calls In <thinking> Tags First",
   "End With A Follow-Up Question Or Escalation Offer",
 ];
@@ -70,9 +70,9 @@ Always call lookup_customer (e.g. c-9924) before any other tool.
 
 Never promise refunds over $200 without escalating to a human.
 Never share another customer's data. Never claim a policy that
-is not in the KB.
+is not in the knowledge base.
 
-Always greet the customer by name. Cite the KB doc when quoting
+Always greet the customer by name. Cite the knowledge base doc when quoting
 policy. Wrap any tool call in a <thinking> block first. End every
 reply with a follow-up question or an escalation offer.`;
 

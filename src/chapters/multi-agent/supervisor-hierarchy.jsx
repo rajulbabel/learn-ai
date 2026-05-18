@@ -8,7 +8,7 @@ const HIERARCHY_DECISION = [
     pick: "Orchestrator-Worker",
     color: "teal",
     when: "Workers Are Peer Specialists At One Level.",
-    example: "3 KB Search Workers Run In Parallel.",
+    example: "3 Knowledge Base Search Workers Run In Parallel.",
   },
   {
     pick: "Hierarchical",

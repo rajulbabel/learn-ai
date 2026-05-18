@@ -205,7 +205,7 @@ export default function RerankerCascade(ctx) {
             Each Stage Cuts The Candidate Set And Pays For Better Quality
           </T>
           <T color="#90caf9" center size={16} style={{ marginTop: 10 }}>
-            Rerankers - covered in Section 11.25 - re-score a candidate list using a cross-encoder that reads the query
+            Rerankers - covered in Section 11.26 - re-score a candidate list using a cross-encoder that reads the query
             and the doc together. Here we apply that idea in a 3-stage RAG cascade.
           </T>
 

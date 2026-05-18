@@ -214,7 +214,7 @@ export default function WhereNaiveRAGBreaks(ctx) {
             </div>
           </div>
           <T color="#ef9a9a" center size={15} style={{ marginTop: 12 }}>
-            Wrong. The 24-hour limit IS in the doc, but bad chunking hid it.
+            Wrong. The 24-hour limit is in the doc, but bad chunking hid it.
           </T>
           <T color="#ffcc80" center size={15} style={{ marginTop: 12 }}>
             Chapters 12.7-12.13 (chunking strategies) fix this.
@@ -324,7 +324,7 @@ export default function WhereNaiveRAGBreaks(ctx) {
             Failure 3: Lost In The Middle
           </T>
           <T color="#a5d6a7" center size={16} style={{ marginTop: 10 }}>
-            Even when the answer IS in the retrieved context, long-context models attend more to the start and end than
+            Even when the answer is in the retrieved context, long-context models attend more to the start and end than
             to the middle. A chunk buried at position 5 of 10 can be ignored entirely.
           </T>
           <T color={C.green} bold center size={16} style={{ marginTop: 14 }}>

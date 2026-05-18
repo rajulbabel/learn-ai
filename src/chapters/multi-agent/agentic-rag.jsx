@@ -180,8 +180,8 @@ export default function AgenticRag(ctx) {
 
           <T color={SOFT.green} center size={15} style={{ marginTop: 12 }}>
             Naive RAG is a pipeline; agentic RAG is a loop with retrieval inside. Section 12.2 covers the naive
-            pipeline; Section 12.29 covers the loop mechanics. Here we close the multi-agent chapters by framing
-            agentic RAG as a multi-agent pattern.
+            pipeline; Section 12.29 covers the loop mechanics. Here we close the multi-agent chapters by framing agentic
+            RAG as a multi-agent pattern.
           </T>
         </Box>
       )}

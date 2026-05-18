@@ -743,7 +743,7 @@ function InferenceDiagram({ sub, setSub, subBtnRipple, setSubBtnRipple, register
       [
         ["WHY ONLY THE LAST POSITION?", "rgba(255,152,0,0.8)", 16, "700"],
         [
-          "During generation, there IS only one position flowing through - the new token.",
+          "During generation, there is only one position flowing through - the new token.",
           "rgba(255,255,255,0.5)",
           12,
           "400",

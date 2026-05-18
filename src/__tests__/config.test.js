@@ -146,6 +146,20 @@ describe("config.js", () => {
     });
   });
 
+  it("no chapter prose contains standalone uppercase IS as auxiliary verb", () => {
+    const offenders = [
+      { file: "rag-foundations/where-naive-rag-breaks.jsx", text: "limit IS in the doc" },
+      { file: "rag-foundations/where-naive-rag-breaks.jsx", text: "answer IS in the retrieved context" },
+      { file: "rag-retrieval/domain-adaptation.jsx", text: "training data IS the model" },
+      { file: "rag-production/rag-decision-framework-capstone.jsx", text: "Case citation IS a graph" },
+      { file: "encoder-decoder-diagrams/encoder-decoder-inference.jsx", text: "there IS only one position" },
+    ];
+    offenders.forEach(({ file, text }) => {
+      const content = fs.readFileSync(path.join(SRC_DIR, "chapters", file), "utf8");
+      expect(content, `${file} still contains "${text}"`).not.toContain(text);
+    });
+  });
+
   it("no JSX content references the old chapter IDs 11.19-11.35 after renumber", () => {
     const chapterTopics = ["vector-systems", "vector-production", "vector-compression"];
     const chapterFiles = chapters

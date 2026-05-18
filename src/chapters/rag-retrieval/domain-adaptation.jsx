@@ -486,7 +486,7 @@ export default function DomainAdaptation(ctx) {
             Pair Construction Decides Quality
           </T>
           <T color="#90caf9" center size={16} style={{ marginTop: 10 }}>
-            The training data IS the model. Each row is one triple: an anchor (real user query), a positive (the chunk
+            The training data is the model. Each row is one triple: an anchor (real user query), a positive (the chunk
             that should match), and a negative (a chunk that should not). For our support corpus that means turning real
             tickets and FAQs into thousands of these rows.
           </T>

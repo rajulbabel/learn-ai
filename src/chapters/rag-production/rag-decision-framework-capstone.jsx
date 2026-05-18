@@ -320,7 +320,7 @@ Answer:`}
             Decision 5: Advanced Retrieval Patterns (Chapters 12.25, 12.27, 12.28, 12.30)
           </T>
           <T color="#90caf9" center size={16} style={{ marginTop: 10, marginBottom: 14 }}>
-            Case citation IS a graph; GraphRAG indexes the relationships. Multi-hop chains the steps for complex
+            Case citation is a graph; GraphRAG indexes the relationships. Multi-hop chains the steps for complex
             precedent queries. Long-context is skipped - 200k cases &gt; any context window so RAG is mandatory.
           </T>
           <CapstoneDecisionCard

@@ -17,6 +17,7 @@
     "search:build": "npm run search:index && npm run search:embed",
     "search:check": "node scripts/check-embeddings.mjs",
     "og": "node scripts/generate-og.mjs",
+    "favicons": "node scripts/generate-favicons.mjs",
     "prepare": "git config core.hooksPath .githooks"
   },
   "dependencies": {

@@ -44,7 +44,7 @@ export default function WhyChunkFixedSize(ctx) {
       {sub >= 0 && (
         <Box color={C.red} style={{ width: "100%" }}>
           <T color={C.red} bold center size={22}>
-            Why Can&apos;t We Just Embed The Whole Document?
+            Why not embed the whole document?
           </T>
           <T color="#ef9a9a" center size={16} style={{ marginTop: 10 }}>
             The intuitive first idea: take the full 500-page product manual, embed it as one vector, and search. That

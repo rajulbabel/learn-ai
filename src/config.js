@@ -1539,6 +1539,15 @@ export const C = {
   amber: "#ffc107",
 };
 
+export const superSections = [
+  { id: "A", name: "Foundations of Deep Learning",         color: "#ff6b6b", sections: [1, 2, 3, 4] },
+  { id: "B", name: "The Rise of LLMs",                     color: "#00b8d4", sections: [5, 6] },
+  { id: "C", name: "The Transformer Era",                  color: "#a78bfa", sections: [7, 8, 9, 10, 11, 12, 13, 14] },
+  { id: "D", name: "Vector Databases at Depth",            color: "#f06292", sections: [15, 16, 17, 18] },
+  { id: "E", name: "Retrieval-Augmented Generation (RAG)", color: "#9ccc65", sections: [19, 20, 21, 22, 23] },
+  { id: "F", name: "Agentic AI",                           color: "#4fc3f7", sections: [24, 25, 26, 27, 28] },
+];
+
 // Validate config - extracted for testability
 export function validateConfig(chapterList) {
   const errors = [];

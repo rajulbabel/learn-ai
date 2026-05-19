@@ -2,7 +2,14 @@ import { describe, it, expect } from "vitest";
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { chapters, sectionNames, sectionColors, C, validateConfig } from "../config.js";
+import {
+  chapters,
+  sectionNames,
+  sectionColors,
+  superSections,
+  C,
+  validateConfig,
+} from "../config.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const SRC_DIR = path.resolve(__dirname, "..");
@@ -157,6 +164,53 @@ describe("config.js", () => {
     offenders.forEach(({ file, text }) => {
       const content = fs.readFileSync(path.join(SRC_DIR, "chapters", file), "utf8");
       expect(content, `${file} still contains "${text}"`).not.toContain(text);
+    });
+  });
+
+  describe("superSections", () => {
+    it("exports exactly 6 super-sections with ids A..F", () => {
+      expect(superSections).toHaveLength(6);
+      expect(superSections.map((s) => s.id)).toEqual(["A", "B", "C", "D", "E", "F"]);
+    });
+
+    it("every super-section has required fields", () => {
+      superSections.forEach((s) => {
+        expect(typeof s.id).toBe("string");
+        expect(typeof s.name).toBe("string");
+        expect(Array.isArray(s.sections)).toBe(true);
+        expect(typeof s.color).toBe("string");
+        expect(s.color).toMatch(/^#[0-9a-fA-F]{6}$/);
+      });
+    });
+
+    it("super-section names match the agreed spec", () => {
+      const names = Object.fromEntries(superSections.map((s) => [s.id, s.name]));
+      expect(names).toEqual({
+        A: "Foundations of Deep Learning",
+        B: "The Rise of LLMs",
+        C: "The Transformer Era",
+        D: "Vector Databases at Depth",
+        E: "Retrieval-Augmented Generation (RAG)",
+        F: "Agentic AI",
+      });
+    });
+
+    it("super-section section lists cover sections 1..28 exactly once", () => {
+      const flat = superSections.flatMap((s) => s.sections);
+      const sorted = [...flat].sort((a, b) => a - b);
+      expect(sorted).toEqual(Array.from({ length: 28 }, (_, i) => i + 1));
+    });
+
+    it("super-section section lists match the agreed spec", () => {
+      const groups = Object.fromEntries(superSections.map((s) => [s.id, s.sections]));
+      expect(groups).toEqual({
+        A: [1, 2, 3, 4],
+        B: [5, 6],
+        C: [7, 8, 9, 10, 11, 12, 13, 14],
+        D: [15, 16, 17, 18],
+        E: [19, 20, 21, 22, 23],
+        F: [24, 25, 26, 27, 28],
+      });
     });
   });
 });

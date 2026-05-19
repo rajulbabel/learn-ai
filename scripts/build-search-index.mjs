@@ -39,8 +39,8 @@ function contentHash(source) {
   return sha256_16(source.replace(/\s+/g, " ").trim());
 }
 
-function chunkId(chapterId, sub, kind, text) {
-  return sha256_16(`${chapterId}|${sub}|${kind}|${sha256_16(text)}`);
+function chunkId(chapterSlug, sub, kind, text) {
+  return sha256_16(`${chapterSlug}|${sub}|${kind}|${sha256_16(text)}`);
 }
 
 function chapterCmp(a, b) {
@@ -144,11 +144,9 @@ export async function runBuild({ rootDir = process.cwd(), chapters, sectionNames
     const { ch, chunks } = entry;
     for (const c of chunks) {
       all.push({
-        id: chunkId(ch.id, c.sub, c.kind, c.text),
-        chapterId: ch.id,
+        id: chunkId(ch.slug, c.sub, c.kind, c.text),
+        chapterSlug: ch.slug,
         chapterTitle: ch.title,
-        section: ch.section,
-        sectionName: sectionNames[ch.section] || "",
         sub: c.sub,
         kind: c.kind,
         text: c.text,

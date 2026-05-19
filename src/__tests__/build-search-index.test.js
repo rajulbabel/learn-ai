@@ -49,7 +49,7 @@ describe("build-search-index", () => {
     });
 
     const chapters = [
-      { id: "1.1", title: "What is a Neural Network?", section: 1, file: "neural-foundations/what-is-nn" },
+      { id: "1.1", title: "What is a Neural Network?", section: 1, file: "neural-foundations/what-is-nn", slug: "neural-foundations/what-is-nn" },
     ];
     const sectionNames = { 1: "Neural Network Foundations" };
 
@@ -95,23 +95,21 @@ describe("build-search-index", () => {
 
     await runBuild({
       rootDir: workDir,
-      chapters: [{ id: "1.1", title: "T", section: 1, file: "neural-foundations/what-is-nn" }],
+      chapters: [{ id: "1.1", title: "T", section: 1, file: "neural-foundations/what-is-nn", slug: "neural-foundations/what-is-nn" }],
       sectionNames: { 1: "S1" },
     });
 
     const chunksJson = JSON.parse(readFileSync(join(workDir, "src", "data", "chunks.json"), "utf-8"));
     expect(chunksJson).toHaveLength(2);
-    expect(chunksJson[0].chapterId).toBe("1.1");
     expect(chunksJson[0].sub).toBe(0);
     expect(chunksJson[1].sub).toBe(1);
     expect(chunksJson[0].id).toMatch(/^[a-f0-9]{16}$/);
     expect(chunksJson[0].chapterTitle).toBe("T");
-    expect(chunksJson[0].sectionName).toBe("S1");
     // Stable: same input → same id
     const id1 = chunksJson[0].id;
     return runBuild({
       rootDir: workDir,
-      chapters: [{ id: "1.1", title: "T", section: 1, file: "neural-foundations/what-is-nn" }],
+      chapters: [{ id: "1.1", title: "T", section: 1, file: "neural-foundations/what-is-nn", slug: "neural-foundations/what-is-nn" }],
       sectionNames: { 1: "S1" },
     }).then(() => {
       const again = JSON.parse(readFileSync(join(workDir, "src", "data", "chunks.json"), "utf-8"));
@@ -135,7 +133,7 @@ describe("build-search-index", () => {
 
     await runBuild({
       rootDir: workDir,
-      chapters: [{ id: "1.1", title: "T", section: 1, file: "neural-foundations/what-is-nn" }],
+      chapters: [{ id: "1.1", title: "T", section: 1, file: "neural-foundations/what-is-nn", slug: "neural-foundations/what-is-nn" }],
       sectionNames: { 1: "S1" },
     });
 
@@ -164,12 +162,78 @@ describe("build-search-index", () => {
     });
     await runBuild({
       rootDir: workDir,
-      chapters: [{ id: "1.1", title: "T", section: 1, file: "neural-foundations/what-is-nn" }],
+      chapters: [{ id: "1.1", title: "T", section: 1, file: "neural-foundations/what-is-nn", slug: "neural-foundations/what-is-nn" }],
       sectionNames: { 1: "S1" },
       log: () => {},
     });
     const chunksJson = JSON.parse(readFileSync(join(workDir, "src", "data", "chunks.json"), "utf-8"));
     expect(chunksJson).toHaveLength(1);
     expect(mockChunk).toHaveBeenCalledOnce();
+  });
+
+  it("writes chunks with chapterSlug field, drops chapterId/section/sectionName from each chunk", async () => {
+    mockChunk.mockResolvedValue({
+      1.1: [
+        {
+          sub: 0,
+          kind: "concept",
+          text: "T",
+          summary: "S",
+          queries: ["q1", "q2", "q3", "q4", "q5"],
+          terms: ["t"],
+        },
+      ],
+    });
+
+    await runBuild({
+      rootDir: workDir,
+      chapters: [{ id: "1.1", title: "T", section: 1, file: "neural-foundations/what-is-nn", slug: "neural-foundations/what-is-nn" }],
+      sectionNames: { 1: "S1" },
+    });
+
+    const out = JSON.parse(readFileSync(join(workDir, "src", "data", "chunks.json"), "utf-8"));
+    expect(out).toHaveLength(1);
+    expect(out[0].chapterSlug).toBe("neural-foundations/what-is-nn");
+    expect(out[0]).not.toHaveProperty("chapterId");
+    expect(out[0]).not.toHaveProperty("section");
+    expect(out[0]).not.toHaveProperty("sectionName");
+    expect(out[0]).toHaveProperty("chapterTitle", "T");
+    expect(out[0]).toHaveProperty("sub", 0);
+    expect(out[0]).toHaveProperty("kind", "concept");
+  });
+
+  it("chunkId is stable across chapter renumber (uses slug, not id)", async () => {
+    mockChunk.mockResolvedValue({
+      1.1: [
+        { sub: 0, kind: "concept", text: "T", summary: "S", queries: ["q1","q2","q3","q4","q5"], terms: ["t"] },
+      ],
+    });
+
+    await runBuild({
+      rootDir: workDir,
+      chapters: [{ id: "1.1", title: "T", section: 1, file: "neural-foundations/what-is-nn", slug: "neural-foundations/what-is-nn" }],
+      sectionNames: { 1: "S1" },
+    });
+    const firstId = JSON.parse(readFileSync(join(workDir, "src", "data", "chunks.json"), "utf-8"))[0].id;
+
+    // Same content, renumbered ID + different section, same slug.
+    mockChunk.mockResolvedValue({
+      9.7: [
+        { sub: 0, kind: "concept", text: "T", summary: "S", queries: ["q1","q2","q3","q4","q5"], terms: ["t"] },
+      ],
+    });
+    // Edit source to force cache miss (chunkSection re-called).
+    writeFileSync(
+      join(workDir, "src", "chapters", "neural-foundations", "what-is-nn.jsx"),
+      "export const WhatIsNN = () => <div>SAME CONTENT V2</div>;",
+    );
+    await runBuild({
+      rootDir: workDir,
+      chapters: [{ id: "9.7", title: "T", section: 9, file: "neural-foundations/what-is-nn", slug: "neural-foundations/what-is-nn" }],
+      sectionNames: { 9: "S9" },
+    });
+    const secondId = JSON.parse(readFileSync(join(workDir, "src", "data", "chunks.json"), "utf-8"))[0].id;
+
+    expect(secondId).toBe(firstId);
   });
 });

@@ -80,9 +80,18 @@ export async function prefetchSearch() {
     modelMeta = await metaRes.json();
     dim = modelMeta.dim;
 
-    // 2. Load embeddings (cache hit by modelChecksum, else download)
+    // 2. Load embeddings (cache hit by modelChecksum, else download).
+    //    Validate cache integrity: the first vector's chunkId must exist in
+    //    the current chunks.json. If not, the cached embeddings are stale
+    //    (e.g. chunks regenerated since last visit) - drop them and refetch.
     const cached = await getCachedSearchAssets(modelMeta.checksum);
-    if (cached) {
+    const cacheValid =
+      cached &&
+      cached.manifest &&
+      Array.isArray(cached.manifest.vectors) &&
+      cached.manifest.vectors.length > 0 &&
+      chunkById.has(cached.manifest.vectors[0].chunkId);
+    if (cacheValid) {
       manifest = cached.manifest;
       bin = cached.bin;
     } else {
@@ -157,7 +166,12 @@ function vectorSearchMaxSim(qFloat, topK = 30) {
     .map(([chunkId, score]) => ({ chunkId, score }))
     .sort((a, b) => b.score - a.score)
     .slice(0, topK);
-  return ranked.map((r) => ({ ...chunkById.get(r.chunkId), vectorScore: r.score }));
+  return ranked
+    .map((r) => {
+      const c = chunkById.get(r.chunkId);
+      return c ? { ...c, vectorScore: r.score } : null;
+    })
+    .filter(Boolean);
 }
 
 function textSearchInternal(query, topK = 30) {

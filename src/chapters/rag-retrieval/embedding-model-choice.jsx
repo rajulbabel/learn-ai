@@ -106,7 +106,7 @@ const COST_ROWS = [
 // 4-step decision flow used in sub=5 (rendered as SVG).
 const DECISION_STEPS = [
   { question: "Need Multilingual?", yes: "Use Cohere V3 / Voyage / OpenAI 3-Large", no: "Go On" },
-  { question: "Specialized Domain?", yes: "Domain-Tuned BGE Or Fine-Tune (See 12.15)", no: "Go On" },
+  { question: "Specialized Domain?", yes: "Domain-Tuned BGE Or Fine-Tune (See 21.2)", no: "Go On" },
   { question: "Budget Sensitive?", yes: "Self-Host BGE", no: "Go On" },
   { question: "Default", yes: "OpenAI text-embedding-3-large Or Cohere embed-v3", no: null },
 ];
@@ -219,7 +219,7 @@ export default function EmbeddingModelChoice(ctx) {
           </T>
           <T color="#b8a9ff" center size={16} style={{ marginTop: 10 }}>
             Chunking decides how text is split. The embedding model decides what those chunks mean as vectors (recap
-            from Section 5.2). Two systems on the same corpus, with the same chunks and the same vector DB, can have
+            from Section 8.2). Two systems on the same corpus, with the same chunks and the same vector DB, can have
             wildly different recall just because one uses a stronger embedding model. The chosen model sets a hard
             ceiling: no reranker or hybrid trick can recover documents your embedder failed to bring close enough in the
             first place.
@@ -469,7 +469,7 @@ export default function EmbeddingModelChoice(ctx) {
           >
             <T color="#90caf9" center size={14}>
               If your corpus is medical, legal, or code, off-the-shelf general models often underperform a domain-tuned
-              model. Domain adaptation and fine-tuning are covered in chapter 12.15.
+              model. Domain adaptation and fine-tuning are covered in chapter 21.2.
             </T>
           </div>
         </Box>

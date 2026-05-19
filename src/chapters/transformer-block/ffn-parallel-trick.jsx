@@ -71,8 +71,8 @@ export default function FFNParallelTrick(ctx) {
             Recap: FFN With Just One Word
           </T>
           <T color="#80deea" size={16} style={{ marginTop: 6 }}>
-            In chapter 8.3 we traced one word ("cats") through FFN. Let's make the matrix shapes explicit. Say "cats" is
-            a 3-dimensional vector:
+            In chapter 12.3 we traced one word ("cats") through FFN. Let's make the matrix shapes explicit. Say "cats"
+            is a 3-dimensional vector:
           </T>
 
           <div

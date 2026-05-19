@@ -78,8 +78,8 @@ export default function Qdrant(ctx) {
             HNSW graph + inline filter during traversal
           </T>
           <T color="#ffe082" style={{ marginTop: 8 }}>
-            Qdrant&apos;s core index is HNSW, same as chapter 11.10. What makes it distinctive is the filter story.
-            Recall from 11.21: the three strategies are pre-filter, post-filter, and inline. Qdrant implements inline
+            Qdrant&apos;s core index is HNSW, same as chapter 15.10. What makes it distinctive is the filter story.
+            Recall from 17.1: the three strategies are pre-filter, post-filter, and inline. Qdrant implements inline
             filtered-HNSW natively - predicates evaluate as the graph traversal visits each candidate, so tight filters
             never degenerate into brute-force or return empty results.
           </T>
@@ -182,7 +182,7 @@ export default function Qdrant(ctx) {
           </div>
           <T color="#ffe082" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
             Qdrant built a dedicated payload index (inverted index over metadata) so filter evaluation is essentially
-            free during traversal. This is why Qdrant wins chapter 11.21&apos;s filter-heavy scenarios.
+            free during traversal. This is why Qdrant wins chapter 17.1&apos;s filter-heavy scenarios.
           </T>
         </Box>
       </Reveal>
@@ -252,7 +252,7 @@ export default function Qdrant(ctx) {
             {[
               {
                 t: "Multi-vector support",
-                d: "One point can store several named vectors (title, body, image) in the same record - native support since v1.10 (chapter 11.27)",
+                d: "One point can store several named vectors (title, body, image) in the same record - native support since v1.10 (chapter 17.7)",
                 color: C.green,
               },
               {
@@ -293,7 +293,7 @@ export default function Qdrant(ctx) {
           <T color="#ffb74d" style={{ marginTop: 8 }}>
             Qdrant ships the main compression schemes as configurable flags on a collection. You turn on scalar
             quantization (SQ), product quantization (PQ), or binary quantization (BQ) at collection create time; the
-            HNSW index below it adapts. Hybrid search (BM25 + vector, RRF fusion from 11.25) is also first-class.
+            HNSW index below it adapts. Hybrid search (BM25 + vector, RRF fusion from 17.5) is also first-class.
           </T>
           <div
             style={{

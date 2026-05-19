@@ -1216,7 +1216,7 @@ export default function CrossAttention(ctx) {
                 ))}
               </div>
               <T color={C.dim} size={14} center style={{ marginTop: 6 }}>
-                This is exactly what the architecture diagram in chapter 5.1 shows - the green arrow "K, V from encoder"
+                This is exactly what the architecture diagram in chapter 8.1 shows - the green arrow "K, V from encoder"
                 connects to this cross-attention layer.
               </T>
             </div>

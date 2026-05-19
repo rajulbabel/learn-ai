@@ -527,7 +527,7 @@ export default function MultiQueryExpansion(ctx) {
       <Reveal when={sub >= 3}>
         <Box color={C.purple} style={{ width: "100%" }}>
           <T color={C.purple} bold center size={22}>
-            Fuse With RRF (Same Formula As Chapter 12.16)
+            Fuse With RRF (Same Formula As Chapter 21.3)
           </T>
           <T color="#b8a9ff" center size={16} style={{ marginTop: 10 }}>
             Reciprocal Rank Fusion takes N rankings and produces one. Each doc&apos;s score is the sum of 1 / (k + its
@@ -564,7 +564,7 @@ export default function MultiQueryExpansion(ctx) {
             }}
           >
             <T color="#b8a9ff" center size={14}>
-              Same fusion math as hybrid search (covered in chapter 12.16). Different inputs - here the rankings come
+              Same fusion math as hybrid search (covered in chapter 21.3). Different inputs - here the rankings come
               from N variants of the same query rather than from BM25 + dense.
             </T>
           </div>

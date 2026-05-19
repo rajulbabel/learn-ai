@@ -2,7 +2,7 @@ import { Box, T, Reveal, SubBtn } from "../../components.jsx";
 import { C } from "../../config.js";
 import { SOFT, tintedCard, pill } from "../../shared/agent-styles.jsx";
 
-// Module-private helpers used by ChainOfThoughtSelfConsistency (13.4)
+// Module-private helpers used by ChainOfThoughtSelfConsistency (24.4)
 
 const COT_VS_DIRECT = {
   question:
@@ -681,7 +681,7 @@ export default function ChainOfThoughtSelfConsistency(ctx) {
               Reasoning Models Change The Calculus
             </T>
             <T color={SOFT.indigo} center size={14} style={{ marginTop: 6 }}>
-              Reasoning models like the ones from Section 10.4 Thinking do CoT internally before replying. You no longer
+              Reasoning models like the ones from Section 14.4 Thinking do CoT internally before replying. You no longer
               prompt for &quot;step by step&quot; - the model thinks first, then emits the answer. CoT prompts still
               help on non-reasoning models, but with a reasoning model the technique often becomes redundant.
             </T>

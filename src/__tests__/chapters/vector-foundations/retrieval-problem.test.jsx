@@ -5,7 +5,7 @@ import RetrievalProblem from "../../../chapters/vector-foundations/retrieval-pro
 
 afterEach(() => cleanup());
 
-describe("RetrievalProblem (11.1)", () => {
+describe("RetrievalProblem (15.1)", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(RetrievalProblem(makeCtx({ sub: 0 })))).not.toThrow();
   });

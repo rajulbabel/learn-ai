@@ -5,7 +5,7 @@ import SelfRAG from "../../../chapters/rag-generation/self-rag.jsx";
 
 afterEach(() => cleanup());
 
-describe("SelfRAG (12.26)", () => {
+describe("SelfRAG (22.5)", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(SelfRAG(makeCtx({ sub: 0 })))).not.toThrow();
   });

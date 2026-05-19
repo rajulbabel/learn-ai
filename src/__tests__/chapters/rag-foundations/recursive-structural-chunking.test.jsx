@@ -5,7 +5,7 @@ import RecursiveStructuralChunking from "../../../chapters/rag-foundations/recur
 
 afterEach(() => cleanup());
 
-describe("RecursiveStructuralChunking (12.8)", () => {
+describe("RecursiveStructuralChunking (20.5)", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(RecursiveStructuralChunking(makeCtx({ sub: 0 })))).not.toThrow();
   });

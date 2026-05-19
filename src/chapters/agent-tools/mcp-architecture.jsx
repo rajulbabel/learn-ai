@@ -2,7 +2,7 @@ import { Box, T, Reveal, SubBtn } from "../../components.jsx";
 import { C } from "../../config.js";
 import { SOFT, tintedCard, pill, DIM_BG, DIM_BORDER } from "../../shared/agent-styles.jsx";
 
-// --- Chapter 13.13 McpArchitecture data ---
+// --- Chapter 25.7 McpArchitecture data ---
 
 // Three MCP roles shown in sub=0. Each one is a vertically stacked card with its own color.
 const MCP_ROLES = [
@@ -61,7 +61,7 @@ const TRANSPORTS = [
   },
 ];
 
-// Five lifecycle steps shown in sub=3 of 13.13.
+// Five lifecycle steps shown in sub=3 of 25.7.
 const MCP_LIFECYCLE_STEPS = [
   {
     label: "Host Launches Client",

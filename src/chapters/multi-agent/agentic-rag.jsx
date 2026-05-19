@@ -89,7 +89,7 @@ export default function AgenticRag(ctx) {
           <T color={SOFT.green} center size={16} style={{ marginTop: 10 }}>
             Naive RAG retrieves once and generates an answer. Agentic RAG puts retrieval inside an agent loop: search,
             judge the results, refine the query, search again. Iterative instead of one-shot. Mechanics covered in
-            Section 12.29; here we frame it as a multi- agent pattern.
+            Section 22.8; here we frame it as a multi- agent pattern.
           </T>
 
           <div style={{ ...tintedCard(C.green), padding: 14, marginTop: 14 }}>
@@ -179,8 +179,8 @@ export default function AgenticRag(ctx) {
           </div>
 
           <T color={SOFT.green} center size={15} style={{ marginTop: 12 }}>
-            Naive RAG is a pipeline; agentic RAG is a loop with retrieval inside. Section 12.2 covers the naive
-            pipeline; Section 12.29 covers the loop mechanics. Here we close the multi-agent chapters by framing agentic
+            Naive RAG is a pipeline; agentic RAG is a loop with retrieval inside. Section 19.2 covers the naive
+            pipeline; Section 22.8 covers the loop mechanics. Here we close the multi-agent chapters by framing agentic
             RAG as a multi-agent pattern.
           </T>
         </Box>
@@ -328,7 +328,7 @@ export default function AgenticRag(ctx) {
           </T>
           <T color={SOFT.indigo} center size={16} style={{ marginTop: 10 }}>
             Agentic RAG costs 3-10x more than naive RAG. Use it when the answer quality matters more than the latency.
-            Otherwise stick with the naive pipeline (Section 12.2).
+            Otherwise stick with the naive pipeline (Section 19.2).
           </T>
 
           <div
@@ -363,8 +363,8 @@ export default function AgenticRag(ctx) {
           </div>
 
           <T color={SOFT.indigo} center size={15} style={{ marginTop: 14 }}>
-            Naive RAG pipeline - covered in Section 12.2 - here we contrast with the iterative loop. Agentic RAG
-            mechanics covered in Section 12.29 - here we frame it as a multi- agent pattern that closes out the
+            Naive RAG pipeline - covered in Section 19.2 - here we contrast with the iterative loop. Agentic RAG
+            mechanics covered in Section 22.8 - here we frame it as a multi- agent pattern that closes out the
             multi-agent chapters.
           </T>
         </Box>

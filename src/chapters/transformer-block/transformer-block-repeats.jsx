@@ -153,10 +153,10 @@ export default function TransformerBlockRepeats(ctx) {
               </T>
               <div style={{ marginTop: 8, display: "flex", flexWrap: "wrap", gap: 6 }}>
                 {[
-                  { name: "W_Q", role: 'Creates Queries - "what am I looking for?"', ref: "ch 6.9" },
-                  { name: "W_K", role: 'Creates Keys - "what do I contain?"', ref: "ch 6.9" },
-                  { name: "W_V", role: 'Creates Values - "what info do I pass along?"', ref: "ch 6.9" },
-                  { name: "W_O", role: "Blends all 8 heads back together", ref: "ch 7.12" },
+                  { name: "W_Q", role: 'Creates Queries - "what am I looking for?"', ref: "ch 9.9" },
+                  { name: "W_K", role: 'Creates Keys - "what do I contain?"', ref: "ch 9.9" },
+                  { name: "W_V", role: 'Creates Values - "what info do I pass along?"', ref: "ch 9.9" },
+                  { name: "W_O", role: "Blends all 8 heads back together", ref: "ch 11.4" },
                 ].map(({ name, role, ref }) => (
                   <div
                     key={name}
@@ -190,12 +190,12 @@ export default function TransformerBlockRepeats(ctx) {
                   {
                     name: "γ₁ (gamma)",
                     role: "Learnable scale per dimension - stretches or shrinks normalized values",
-                    ref: "ch 8.2",
+                    ref: "ch 12.2",
                   },
                   {
                     name: "β₁ (beta)",
                     role: "Learnable shift per dimension - moves the center up or down",
-                    ref: "ch 8.2",
+                    ref: "ch 12.2",
                   },
                 ].map(({ name, role, ref }) => (
                   <div
@@ -232,12 +232,12 @@ export default function TransformerBlockRepeats(ctx) {
                   {
                     name: "W₁, b₁",
                     role: "First layer - expands from 512 to 2048 dims (the thinking space)",
-                    ref: "ch 8.3",
+                    ref: "ch 12.3",
                   },
                   {
                     name: "W₂, b₂",
                     role: "Second layer - compresses from 2048 back to 512 dims",
-                    ref: "ch 8.3",
+                    ref: "ch 12.3",
                   },
                 ].map(({ name, role, ref }) => (
                   <div
@@ -272,12 +272,12 @@ export default function TransformerBlockRepeats(ctx) {
                   {
                     name: "γ₂ (gamma)",
                     role: "Same role as gamma above, but a separate copy learned independently",
-                    ref: "ch 8.5",
+                    ref: "ch 12.5",
                   },
                   {
                     name: "β₂ (beta)",
                     role: "Same role as beta above, but a separate copy learned independently",
-                    ref: "ch 8.5",
+                    ref: "ch 12.5",
                   },
                 ].map(({ name, role, ref }) => (
                   <div
@@ -437,7 +437,7 @@ export default function TransformerBlockRepeats(ctx) {
 
           <T color="#a5d6a7" size={14} center style={{ marginTop: 10 }}>
             This is why depth matters - you need many blocks to build from grammar all the way up to meaning and
-            reasoning. It's the same principle as "deep" networks from chapter 1.21, but now each block has both
+            reasoning. It's the same principle as "deep" networks from chapter 4.1, but now each block has both
             attention (for context) and FFN (for knowledge).
           </T>
         </Box>
@@ -564,7 +564,7 @@ export default function TransformerBlockRepeats(ctx) {
                   Token Embedding + Positional Encoding
                 </text>
                 <text x={cx} y={embedTop + 37} fill={C.dim} fontSize={10} textAnchor="middle">
-                  (Sections 5.2-5.7)
+                  (Sections 8.2-8.7)
                 </text>
 
                 {/* Arrows */}

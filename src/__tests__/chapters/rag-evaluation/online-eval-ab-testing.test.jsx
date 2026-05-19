@@ -5,7 +5,7 @@ import OnlineEvalABTesting from "../../../chapters/rag-evaluation/online-eval-ab
 
 afterEach(() => cleanup());
 
-describe("OnlineEvalABTesting (12.35)", () => {
+describe("OnlineEvalABTesting (23.5)", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(OnlineEvalABTesting(makeCtx({ sub: 0 })))).not.toThrow();
   });

@@ -13,7 +13,7 @@ export default function PreNormVsPostNorm(ctx) {
           </T>
           <T color="#90caf9" size={16} style={{ marginTop: 6 }}>
             In the original "Attention Is All You Need" paper, LayerNorm comes <strong>after</strong> the residual Add.
-            This is what we covered in chapter 8.2. Here is the exact order:
+            This is what we covered in chapter 12.2. Here is the exact order:
           </T>
 
           <div style={{ marginTop: 14, display: "flex", flexDirection: "column", alignItems: "center", gap: 0 }}>

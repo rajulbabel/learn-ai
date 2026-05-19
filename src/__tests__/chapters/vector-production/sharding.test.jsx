@@ -5,7 +5,7 @@ import Sharding from "../../../chapters/vector-production/sharding.jsx";
 
 afterEach(() => cleanup());
 
-describe("Sharding (11.22)", () => {
+describe("Sharding (17.2)", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(Sharding(makeCtx({ sub: 0 })))).not.toThrow();
   });

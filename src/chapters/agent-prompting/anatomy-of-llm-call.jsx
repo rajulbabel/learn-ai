@@ -1,7 +1,7 @@
 import { Box, T, Reveal, SubBtn } from "../../components.jsx";
 import { C } from "../../config.js";
 
-// Module-private helpers used by AnatomyOfLlmCall (13.1)
+// Module-private helpers used by AnatomyOfLlmCall (24.1)
 
 const MESSAGE_ROLES = [
   {

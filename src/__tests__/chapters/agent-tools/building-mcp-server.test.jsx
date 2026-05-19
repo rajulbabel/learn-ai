@@ -5,7 +5,7 @@ import BuildingMcpServer from "../../../chapters/agent-tools/building-mcp-server
 
 afterEach(() => cleanup());
 
-describe("BuildingMcpServer (13.15)", () => {
+describe("BuildingMcpServer (25.9)", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(BuildingMcpServer(makeCtx({ sub: 0 })))).not.toThrow();
   });

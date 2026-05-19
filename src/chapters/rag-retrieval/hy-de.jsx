@@ -562,7 +562,7 @@ export default function HyDE(ctx) {
               +1 LLM call per user query (~$0.0005 + ~250ms). Cache the hypothetical answer by query hash to amortize.
             </T>
             <T color="#f5b7f8" center size={13} style={{ marginTop: 6 }}>
-              Caching - covered in chapter 12.36.
+              Caching - covered in chapter 23.6.
             </T>
           </div>
         </Box>

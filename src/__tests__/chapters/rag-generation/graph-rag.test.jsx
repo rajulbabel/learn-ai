@@ -5,7 +5,7 @@ import GraphRAG from "../../../chapters/rag-generation/graph-rag.jsx";
 
 afterEach(() => cleanup());
 
-describe("GraphRAG (12.28)", () => {
+describe("GraphRAG (22.7)", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(GraphRAG(makeCtx({ sub: 0 })))).not.toThrow();
   });

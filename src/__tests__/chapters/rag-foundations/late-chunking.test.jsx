@@ -5,7 +5,7 @@ import LateChunking from "../../../chapters/rag-foundations/late-chunking.jsx";
 
 afterEach(() => cleanup());
 
-describe("LateChunking (12.10)", () => {
+describe("LateChunking (20.7)", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(LateChunking(makeCtx({ sub: 0 })))).not.toThrow();
   });

@@ -5,7 +5,7 @@ import AnatomyOfLlmCall from "../../../chapters/agent-prompting/anatomy-of-llm-c
 
 afterEach(() => cleanup());
 
-describe("AnatomyOfLlmCall (13.1)", () => {
+describe("AnatomyOfLlmCall (24.1)", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(AnatomyOfLlmCall(makeCtx({ sub: 0 })))).not.toThrow();
   });

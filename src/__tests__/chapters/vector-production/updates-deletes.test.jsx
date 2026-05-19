@@ -5,7 +5,7 @@ import UpdatesDeletes from "../../../chapters/vector-production/updates-deletes.
 
 afterEach(() => cleanup());
 
-describe("UpdatesDeletes (11.21)", () => {
+describe("UpdatesDeletes (17.1)", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(UpdatesDeletes(makeCtx({ sub: 0 })))).not.toThrow();
   });

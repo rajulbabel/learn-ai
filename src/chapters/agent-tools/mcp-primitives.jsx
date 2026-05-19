@@ -2,7 +2,7 @@ import { Box, T, Reveal, SubBtn } from "../../components.jsx";
 import { C } from "../../config.js";
 import { SOFT, tintedCard, pill, DIM_BG, DIM_BORDER } from "../../shared/agent-styles.jsx";
 
-// --- Chapter 13.14 McpPrimitives data ---
+// --- Chapter 25.8 McpPrimitives data ---
 
 // Three MCP primitives shown side-by-side in sub=0.
 const MCP_PRIMITIVES = [

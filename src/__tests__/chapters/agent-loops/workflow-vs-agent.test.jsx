@@ -5,7 +5,7 @@ import WorkflowVsAgent from "../../../chapters/agent-loops/workflow-vs-agent.jsx
 
 afterEach(() => cleanup());
 
-describe("WorkflowVsAgent (13.18)", () => {
+describe("WorkflowVsAgent (26.1)", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(WorkflowVsAgent(makeCtx({ sub: 0 })))).not.toThrow();
   });

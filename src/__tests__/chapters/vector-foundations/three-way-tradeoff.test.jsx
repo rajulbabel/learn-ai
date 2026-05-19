@@ -5,7 +5,7 @@ import ThreeWayTradeoff from "../../../chapters/vector-foundations/three-way-tra
 
 afterEach(() => cleanup());
 
-describe("ThreeWayTradeoff (11.3)", () => {
+describe("ThreeWayTradeoff (15.3)", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(ThreeWayTradeoff(makeCtx({ sub: 0 })))).not.toThrow();
   });

@@ -253,7 +253,7 @@ export default function GraphRAG(ctx) {
           </div>
 
           <T color="#90caf9" center size={14} style={{ marginTop: 12 }}>
-            The customer-support corpus returns in chapter 12.29. This chapter only uses the legal-citation secondary
+            The customer-support corpus returns in chapter 22.8. This chapter only uses the legal-citation secondary
             corpus.
           </T>
         </Box>

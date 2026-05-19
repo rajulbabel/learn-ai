@@ -5,7 +5,7 @@ import WorkflowPrimitives from "../../../chapters/agent-loops/workflow-primitive
 
 afterEach(() => cleanup());
 
-describe("WorkflowPrimitives (13.19)", () => {
+describe("WorkflowPrimitives (26.2)", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(WorkflowPrimitives(makeCtx({ sub: 0 })))).not.toThrow();
   });
@@ -29,8 +29,8 @@ describe("WorkflowPrimitives (13.19)", () => {
     const { container } = render(WorkflowPrimitives(makeCtx({ sub: 2 })));
     expect(container.textContent).toMatch(/rout/i);
     expect(container.textContent).toMatch(/intent|classif/i);
-    expect(container.textContent).toMatch(/13\.3|few.?shot/i);
-    expect(container.textContent).toMatch(/Section 13\.3|13\.3/);
+    expect(container.textContent).toMatch(/24\.3|few.?shot/i);
+    expect(container.textContent).toMatch(/Section 24\.3|24\.3/);
   });
 
   it("sub=3 shows parallelization fan-out", () => {

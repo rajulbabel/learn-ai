@@ -5,7 +5,7 @@ import AgentHandoffs from "../../../chapters/multi-agent/agent-handoffs.jsx";
 
 afterEach(() => cleanup());
 
-describe("AgentHandoffs (13.33)", () => {
+describe("AgentHandoffs (27.4)", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(AgentHandoffs(makeCtx({ sub: 0 })))).not.toThrow();
   });

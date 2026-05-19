@@ -83,7 +83,7 @@ const OBS_ALERTS = [
   {
     metric: "Quality Drift",
     color: "purple",
-    threshold: "Composite Score < Baseline - 0.05 (See 13.41)",
+    threshold: "Composite Score < Baseline - 0.05 (See 28.5)",
     action: "Slack Notify, Trigger Eval Sweep",
   },
 ];
@@ -513,7 +513,7 @@ export default function AgentObservabilityTracing(ctx) {
           </div>
 
           <T color={SOFT.pink} center size={15} style={{ marginTop: 14 }}>
-            The drift rule chains back to 13.41: when the composite eval score drops past a threshold, alerting kicks in
+            The drift rule chains back to 28.5: when the composite eval score drops past a threshold, alerting kicks in
             BEFORE end-users notice. Tracing + eval together close the production loop.
           </T>
         </Box>

@@ -5,7 +5,7 @@ import HierarchicalChunking from "../../../chapters/rag-foundations/hierarchical
 
 afterEach(() => cleanup());
 
-describe("HierarchicalChunking (12.11)", () => {
+describe("HierarchicalChunking (20.8)", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(HierarchicalChunking(makeCtx({ sub: 0 })))).not.toThrow();
   });

@@ -11,7 +11,7 @@ export default function TokenizerDeepDive(ctx) {
             Recap: BPE (Byte-Pair Encoding)
           </T>
           <T color={C.blue} style={{ marginTop: 6 }}>
-            In chapter 2.1, we learned BPE: start with characters, merge the most frequent pair, repeat. Let's trace
+            In chapter 5.1, we learned BPE: start with characters, merge the most frequent pair, repeat. Let's trace
             "low" through BPE from scratch:
           </T>
           <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 8 }}>

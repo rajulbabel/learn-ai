@@ -5,7 +5,7 @@ import HNSWSearch from "../../../chapters/vector-foundations/hnsw-search.jsx";
 
 afterEach(() => cleanup());
 
-describe("HNSWSearch (11.9)", () => {
+describe("HNSWSearch (15.9)", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(HNSWSearch(makeCtx({ sub: 0 })))).not.toThrow();
   });

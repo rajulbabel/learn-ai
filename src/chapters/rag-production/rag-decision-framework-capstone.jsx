@@ -4,20 +4,20 @@ import { CapstoneDecisionCard } from "../../shared/rag-helpers.jsx";
 
 // Module-private helpers used by THIS chapter:
 const CAP_FRAMEWORK_ROWS = [
-  { decision: "Should I Use RAG At All?", refs: "12.1 + 12.30", color: C.red, accent: "#ef9a9a" },
-  { decision: "How Do I Chunk? (Chunking)", refs: "12.4 - 12.13", color: C.cyan, accent: "#80deea" },
+  { decision: "Should I Use RAG At All?", refs: "19.1 + 22.9", color: C.red, accent: "#ef9a9a" },
+  { decision: "How Do I Chunk? (Chunking)", refs: "20.1 - 20.10", color: C.cyan, accent: "#80deea" },
   {
     decision: "Which Embedding + How Do I Index?",
-    refs: "12.14, 12.15, 12.16, 12.17",
+    refs: "21.1, 21.2, 21.3, 21.4",
     color: C.purple,
     accent: "#b8a9ff",
   },
-  { decision: "Do I Transform The Query?", refs: "12.18 - 12.21", color: C.orange, accent: "#ffcc80" },
-  { decision: "How Do I Pack Context + Generate?", refs: "12.22, 12.23, 12.24", color: C.yellow, accent: "#fff59d" },
-  { decision: "Do I Need Advanced Retrieval?", refs: "12.25 - 12.30", color: C.blue, accent: "#90caf9" },
-  { decision: "How Do I Evaluate?", refs: "12.31 - 12.35", color: C.green, accent: "#80e9b1" },
-  { decision: "How Do I Run Production?", refs: "12.36 - 12.39", color: C.pink, accent: "#f8bbd0" },
-  { decision: "Which Framework?", refs: "12.40", color: C.purple, accent: "#b8a9ff" },
+  { decision: "Do I Transform The Query?", refs: "21.5 - 21.8", color: C.orange, accent: "#ffcc80" },
+  { decision: "How Do I Pack Context + Generate?", refs: "22.1, 22.2, 22.3", color: C.yellow, accent: "#fff59d" },
+  { decision: "Do I Need Advanced Retrieval?", refs: "22.4 - 22.9", color: C.blue, accent: "#90caf9" },
+  { decision: "How Do I Evaluate?", refs: "23.1 - 23.5", color: C.green, accent: "#80e9b1" },
+  { decision: "How Do I Run Production?", refs: "23.6 - 23.9", color: C.pink, accent: "#f8bbd0" },
+  { decision: "Which Framework?", refs: "23.10", color: C.purple, accent: "#b8a9ff" },
 ];
 
 const CAP_USE_CASE_QUERIES = [
@@ -196,7 +196,7 @@ export default function RAGDecisionFrameworkCapstone(ctx) {
       <Reveal when={sub >= 2}>
         <Box color={C.cyan} style={{ width: "100%" }}>
           <T color={C.cyan} bold center size={22}>
-            Decision 1: Chunking Strategy (Chapters 12.8, 12.9)
+            Decision 1: Chunking Strategy (Chapters 20.5, 20.6)
           </T>
           <T color="#80deea" center size={16} style={{ marginTop: 10, marginBottom: 14 }}>
             Case opinions have natural hierarchy. Hierarchical + contextual chunking preserves the structure and the
@@ -205,7 +205,7 @@ export default function RAGDecisionFrameworkCapstone(ctx) {
           <CapstoneDecisionCard
             color={C.cyan}
             accent="#80deea"
-            choice="Hierarchical Chunking (12.8) + Contextual Retrieval (12.9) - Per-Paragraph Chunks With Parent (Case-Level) Metadata And LLM-Injected 'This Paragraph Is From Case X About Y' Preamble."
+            choice="Hierarchical Chunking (20.5) + Contextual Retrieval (20.6) - Per-Paragraph Chunks With Parent (Case-Level) Metadata And LLM-Injected 'This Paragraph Is From Case X About Y' Preamble."
             why="Case Opinions Have Natural Hierarchy (Intro, Facts, Reasoning, Holding). Hierarchical Preserves Parent-Child Relationships. Contextual Retrieval Injects The Per-Chunk Preamble That Disambiguates Citation-Level Retrieval. Plain Fixed-Size Chunking Would Mid-Sentence-Split A Court's Analysis."
             tradeoff="More Storage (Each Chunk Now Has Parent Metadata). Higher Index Build Cost (Contextual Augmentation Is An LLM Call Per Chunk). Worth It Because Case-Law Precision Demands Citation-Level Retrieval."
           />
@@ -216,7 +216,7 @@ export default function RAGDecisionFrameworkCapstone(ctx) {
       <Reveal when={sub >= 3}>
         <Box color={C.purple} style={{ width: "100%" }}>
           <T color={C.purple} bold center size={22}>
-            Decision 2: Embedding + Index (Chapters 12.15, 12.16, 12.17)
+            Decision 2: Embedding + Index (Chapters 21.2, 21.3, 21.4)
           </T>
           <T color="#b8a9ff" center size={16} style={{ marginTop: 10, marginBottom: 14 }}>
             Legal language needs domain adaptation. Hybrid retrieval catches both citation lookups and semantic queries.
@@ -225,7 +225,7 @@ export default function RAGDecisionFrameworkCapstone(ctx) {
           <CapstoneDecisionCard
             color={C.purple}
             accent="#b8a9ff"
-            choice="Domain-Adapted Embedding (12.15) On Top Of A Base Legal-BERT Or Cohere Embed Multilingual. HNSW Index With Hybrid (BM25 + Dense, 12.16). Jurisdiction Stored As Filter Metadata. Cross-Encoder Cascade Rerank (12.17)."
+            choice="Domain-Adapted Embedding (21.2) On Top Of A Base Legal-BERT Or Cohere Embed Multilingual. HNSW Index With Hybrid (BM25 + Dense, 21.3). Jurisdiction Stored As Filter Metadata. Cross-Encoder Cascade Rerank (21.4)."
             why="General-Purpose Embeddings Underweight Legal Jargon ('Tortious', 'Qualified Immunity'). Hybrid Catches Both Exact-Citation Lookups ('Smith V Jones') And Semantic Queries ('Medical Negligence Cases'). Jurisdiction Filter Eliminates 96% Of Irrelevant Cases Before Reranking. Cross-Encoder Lifts Precision On Legal-Language Matching."
             tradeoff="Domain-Adapt Requires Labeled Training Pairs (Expensive But One-Time). Cross-Encoder Adds 50-100ms Per Query. Latency Budget Allows It."
           />
@@ -236,7 +236,7 @@ export default function RAGDecisionFrameworkCapstone(ctx) {
       <Reveal when={sub >= 4}>
         <Box color={C.orange} style={{ width: "100%" }}>
           <T color={C.orange} bold center size={22}>
-            Decision 3: Query Transformation (Chapters 12.18, 12.19, 12.20, 12.21)
+            Decision 3: Query Transformation (Chapters 21.5, 21.6, 21.7, 21.8)
           </T>
           <T color="#ffcc80" center size={16} style={{ marginTop: 10, marginBottom: 14 }}>
             Multi-query expansion improves recall on lexically narrow legal language. Decomposition splits complex
@@ -245,7 +245,7 @@ export default function RAGDecisionFrameworkCapstone(ctx) {
           <CapstoneDecisionCard
             color={C.orange}
             accent="#ffcc80"
-            choice="Multi-Query Expansion (12.20) + Decomposition For Complex Multi-Hop Queries (12.21). HyDE (12.19) SKIPPED."
+            choice="Multi-Query Expansion (21.7) + Decomposition For Complex Multi-Hop Queries (21.8). HyDE (21.6) SKIPPED."
             why="A Query Like 'Cases Citing X About Y' Naturally Decomposes Into 'Find X' -> 'Find Cases Citing X' -> 'Filter For Cases About Y'. Multi-Query Rewriting (Legal Synonyms: 'Negligence' / 'Duty Of Care' / 'Breach Of Duty') Improves Recall On Lexically-Narrow Legal Language."
             tradeoff="More Retrievals Per Query (3-5x). Cost Goes Up Linearly. Mitigated By Aggressive Deduplication After RRF Merge."
           />
@@ -256,7 +256,7 @@ export default function RAGDecisionFrameworkCapstone(ctx) {
       <Reveal when={sub >= 5}>
         <Box color={C.yellow} style={{ width: "100%" }}>
           <T color={C.yellow} bold center size={22}>
-            Decision 4: Context Packing And Generation (Chapters 12.22, 12.23, 12.24)
+            Decision 4: Context Packing And Generation (Chapters 22.1, 22.2, 22.3)
           </T>
           <T color="#fff59d" center size={16} style={{ marginTop: 10, marginBottom: 14 }}>
             High token budget. Sandwich packing fights lost-in-middle. Mandatory citations for audit. Refusal preferred
@@ -265,7 +265,7 @@ export default function RAGDecisionFrameworkCapstone(ctx) {
           <CapstoneDecisionCard
             color={C.yellow}
             accent="#fff59d"
-            choice="High Token Budget (16-30k Tokens Of Retrieved Context Per Query). Relevance-First Ordering With Sandwich Pattern (12.22) To Fight Lost-In-Middle (12.23). Mandatory Inline Citations Via Prompt Template (12.24). I-Don't-Know Clause If No Jurisdiction-Matching Cases."
+            choice="High Token Budget (16-30k Tokens Of Retrieved Context Per Query). Relevance-First Ordering With Sandwich Pattern (22.1) To Fight Lost-In-Middle (22.2). Mandatory Inline Citations Via Prompt Template (22.3). I-Don't-Know Clause If No Jurisdiction-Matching Cases."
             why="Legal Work Needs Many Cases To Reason Across. Token Budget High Because Cost Budget Is High. Sandwich (Place Top Hits At Start AND End) Anchors Model Attention. Citation Mandatory For Audit. Refusal Preferable To Fabrication."
             tradeoff="Higher Per-Query LLM Cost. Accepted Given $0.05 Budget."
           />
@@ -317,7 +317,7 @@ Answer:`}
       <Reveal when={sub >= 6}>
         <Box color={C.blue} style={{ width: "100%" }}>
           <T color={C.blue} bold center size={22}>
-            Decision 5: Advanced Retrieval Patterns (Chapters 12.25, 12.27, 12.28, 12.30)
+            Decision 5: Advanced Retrieval Patterns (Chapters 22.4, 22.6, 22.7, 22.9)
           </T>
           <T color="#90caf9" center size={16} style={{ marginTop: 10, marginBottom: 14 }}>
             Case citation is a graph; GraphRAG indexes the relationships. Multi-hop chains the steps for complex
@@ -326,7 +326,7 @@ Answer:`}
           <CapstoneDecisionCard
             color={C.blue}
             accent="#90caf9"
-            choice="GraphRAG (12.28) For The Case-Citation Graph (Cases Citing X / Cases Cited By X). Multi-Hop Retrieval (12.25) For 'Cases Citing X About Y' Decomposition. Long-Context (12.30) SKIPPED."
+            choice="GraphRAG (22.7) For The Case-Citation Graph (Cases Citing X / Cases Cited By X). Multi-Hop Retrieval (22.4) For 'Cases Citing X About Y' Decomposition. Long-Context (22.9) SKIPPED."
             why="Legal Citation Is A Graph; GraphRAG Indexes The Relationships. Without It, 'Cases Citing X' Requires Querying Every Case In The Corpus. With It, Follow The Citation Edges. Multi-Hop Chains The Steps For Complex Precedent Queries."
             tradeoff="GraphRAG Indexing Is 10x Slower Than Vector-Only. Re-Indexing The Citation Graph On Corpus Update Is A Nightly Batch. Multi-Hop Is Slower Per Query But Precision Gain On Multi-Hop Queries Is Large."
           />
@@ -337,7 +337,7 @@ Answer:`}
       <Reveal when={sub >= 7}>
         <Box color={C.green} style={{ width: "100%" }}>
           <T color={C.green} bold center size={22}>
-            Decision 6: Evaluation (Chapters 12.32, 12.33, 12.34, 12.35)
+            Decision 6: Evaluation (Chapters 23.2, 23.3, 23.4, 23.5)
           </T>
           <T color="#80e9b1" center size={16} style={{ marginTop: 10, marginBottom: 14 }}>
             Partner-curated golden set is the ground truth. LLM-as-judge with legal rubric. RAGAS faithfulness +
@@ -346,7 +346,7 @@ Answer:`}
           <CapstoneDecisionCard
             color={C.green}
             accent="#80e9b1"
-            choice="LLM-As-Judge (12.32) With A Legal-Specific Rubric. Golden Dataset (12.34) Of 500 Partner-Curated Query/Expected-Answer Pairs. RAGAS Metrics (12.33): Faithfulness, Citation Precision, Jurisdiction Match. Online A/B (12.35) On Partner-Rated 4/5 Score."
+            choice="LLM-As-Judge (23.2) With A Legal-Specific Rubric. Golden Dataset (23.4) Of 500 Partner-Curated Query/Expected-Answer Pairs. RAGAS Metrics (23.3): Faithfulness, Citation Precision, Jurisdiction Match. Online A/B (23.5) On Partner-Rated 4/5 Score."
             why="General-Purpose RAG Eval Misses Legal Correctness. Partner-Curated Golden Set Is The Ground Truth Because No Automated Metric Reaches Partner-Quality. RAGAS Faithfulness Catches Hallucinations. Citation Precision (% Of Cited Cases That Are Real And On-Point) Is Critical."
             tradeoff="Golden Dataset Is Expensive To Build (Partner Hours). 500 Examples Covers ~80% Of Query Distribution; Remaining 20% Caught By Online Feedback. Rerun Golden Eval Weekly On Prod."
           />
@@ -357,7 +357,7 @@ Answer:`}
       <Reveal when={sub >= 8}>
         <Box color={C.pink} style={{ width: "100%" }}>
           <T color={C.pink} bold center size={22}>
-            Decision 7: Production Operations (Chapters 12.36, 12.38, 12.39)
+            Decision 7: Production Operations (Chapters 23.6, 23.8, 23.9)
           </T>
           <T color="#f8bbd0" center size={16} style={{ marginTop: 10, marginBottom: 14 }}>
             Semantic cache DISABLED (legal queries too unique; false-hit risk too high). Prompt cache ENABLED for stable
@@ -366,7 +366,7 @@ Answer:`}
           <CapstoneDecisionCard
             color={C.pink}
             accent="#f8bbd0"
-            choice="Semantic Cache DISABLED. Prompt Cache ENABLED For System Prompt + Few-Shot Examples (12.36). Full Tracing Per Query (12.38). Hallucination Detection With Legal-Fact-Check Post-Process (12.39). Drift Monitoring On Case-Law Updates."
+            choice="Semantic Cache DISABLED. Prompt Cache ENABLED For System Prompt + Few-Shot Examples (23.6). Full Tracing Per Query (23.8). Hallucination Detection With Legal-Fact-Check Post-Process (23.9). Drift Monitoring On Case-Law Updates."
             why="Semantic Cache Fails When 'Negligence In CA' And 'Negligence In NY' Cosine To 0.96 - The Answers Differ Entirely. Prompt Cache Safe Because System + Few-Shot Are Constant. Tracing Every Query Is Non-Negotiable For Audit."
             tradeoff="No Semantic Cache = Higher Per-Query Cost. Mitigated By Prompt Cache. Drift Monitoring Catches When Judicial Reasoning Shifts (Rare But High-Impact)."
           />
@@ -380,7 +380,7 @@ Answer:`}
             Putting It All Together: The Capstone Stack
           </T>
           <T color="#b8a9ff" center size={16} style={{ marginTop: 10 }}>
-            Five layers in the stack. Framework choice: No Framework + LlamaIndex retriever for the RAG core (12.40);
+            Five layers in the stack. Framework choice: No Framework + LlamaIndex retriever for the RAG core (23.10);
             raw Anthropic SDK for generation. Cost: ~$0.04 / query. Latency: ~6s. Audit: every answer carries [Case
             Name, Year] citations.
           </T>
@@ -431,7 +431,7 @@ Answer:`}
               }}
             >
               <T color={C.purple} bold center size={14}>
-                Framework Choice (12.40): No Framework + LlamaIndex Retriever For RAG Core + Raw Anthropic SDK
+                Framework Choice (23.10): No Framework + LlamaIndex Retriever For RAG Core + Raw Anthropic SDK
               </T>
               <T color="#b8a9ff" center size={13} style={{ marginTop: 8 }}>
                 Cost ~$0.04 / Query (Under Budget). Latency ~6 Seconds. Every Answer Carries [Case Name, Year]

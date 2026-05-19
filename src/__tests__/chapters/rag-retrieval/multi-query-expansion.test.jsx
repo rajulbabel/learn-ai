@@ -5,7 +5,7 @@ import MultiQueryExpansion from "../../../chapters/rag-retrieval/multi-query-exp
 
 afterEach(() => cleanup());
 
-describe("MultiQueryExpansion (12.20)", () => {
+describe("MultiQueryExpansion (21.7)", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(MultiQueryExpansion(makeCtx({ sub: 0 })))).not.toThrow();
   });
@@ -46,11 +46,11 @@ describe("MultiQueryExpansion (12.20)", () => {
     expect(container.textContent).toMatch(/doc-?4/i);
   });
 
-  it("sub=3 shows RRF formula and links to chapter 12.16", () => {
+  it("sub=3 shows RRF formula and links to chapter 21.3", () => {
     const { container } = render(MultiQueryExpansion(makeCtx({ sub: 3 })));
     expect(container.textContent).toMatch(/RRF|Reciprocal Rank Fusion/i);
     expect(container.textContent).toMatch(/k\s*=\s*60|60/);
-    expect(container.textContent).toMatch(/12\.16/);
+    expect(container.textContent).toMatch(/21\.3/);
   });
 
   it("sub=4 covers step-back prompting variant", () => {

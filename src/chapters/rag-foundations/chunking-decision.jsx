@@ -5,7 +5,7 @@ import { C } from "../../config.js";
 const CHUNKING_STRATEGIES = [
   {
     name: "Fixed-Size",
-    chapter: "12.7",
+    chapter: "20.4",
     summary: "Sliding window, no structure awareness.",
     quality: 1,
     cost: 1,
@@ -13,7 +13,7 @@ const CHUNKING_STRATEGIES = [
   },
   {
     name: "Recursive Structural",
-    chapter: "12.8",
+    chapter: "20.5",
     summary: "Tries paragraph then line then sentence then word.",
     quality: 2,
     cost: 1,
@@ -21,7 +21,7 @@ const CHUNKING_STRATEGIES = [
   },
   {
     name: "Semantic",
-    chapter: "12.9",
+    chapter: "20.6",
     summary: "Embed sentences, split where cosine dips.",
     quality: 3,
     cost: 2,
@@ -29,7 +29,7 @@ const CHUNKING_STRATEGIES = [
   },
   {
     name: "Late",
-    chapter: "12.10",
+    chapter: "20.7",
     summary: "One whole-doc attention pass, then pool per chunk.",
     quality: 3,
     cost: 2,
@@ -37,7 +37,7 @@ const CHUNKING_STRATEGIES = [
   },
   {
     name: "Hierarchical",
-    chapter: "12.11",
+    chapter: "20.8",
     summary: "Small chunks retrieve; parents go to LLM.",
     quality: 3,
     cost: 2,
@@ -45,7 +45,7 @@ const CHUNKING_STRATEGIES = [
   },
   {
     name: "Contextual Retrieval",
-    chapter: "12.12",
+    chapter: "20.9",
     summary: "LLM-generated context prefixed to each chunk.",
     quality: 4,
     cost: 3,
@@ -93,7 +93,7 @@ const QUERY_TYPE_ROWS = [
     query: "Comparative",
     example: "Compare X and Y.",
     advice:
-      "Multi-hop retrieval (covered in chapter 12.28) on top of any chunking. Bigger chunks help. Hierarchical preferred.",
+      "Multi-hop retrieval (covered in chapter 22.7) on top of any chunking. Bigger chunks help. Hierarchical preferred.",
   },
 ];
 
@@ -206,7 +206,7 @@ export default function ChunkingDecision(ctx) {
             Six Strategies, One Page
           </T>
           <T color="#80deea" center size={16} style={{ marginTop: 10 }}>
-            Chapters 12.7 to 12.12 each introduced one chunking strategy. Lined up side by side, each one has its own
+            Chapters 20.4 to 20.9 each introduced one chunking strategy. Lined up side by side, each one has its own
             quality, cost, and implementation profile. The first meter is retrieval quality (higher is better), the
             second is embedding cost at chunk time, the third is implementation difficulty.
           </T>
@@ -445,7 +445,7 @@ export default function ChunkingDecision(ctx) {
             <T color="#b8a9ff" center size={14}>
               Hierarchical is the safest middle bet: it serves factual queries through its leaves and relational queries
               through its parents. Comparative queries on top of any chunking still need multi-hop retrieval (chapter
-              12.28).
+              22.7).
             </T>
           </div>
         </Box>
@@ -681,7 +681,7 @@ export default function ChunkingDecision(ctx) {
             }}
           >
             <T color={C.cyan} bold center size={14}>
-              Chapters 12.14 - 12.17 move to embedding model choice and how chunking interacts with embedding quality.
+              Chapters 21.1 - 21.4 move to embedding model choice and how chunking interacts with embedding quality.
             </T>
           </div>
         </Box>

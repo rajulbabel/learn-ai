@@ -5,7 +5,7 @@ import JsonSchemaForTools from "../../../chapters/agent-tools/json-schema-for-to
 
 afterEach(() => cleanup());
 
-describe("JsonSchemaForTools (13.8)", () => {
+describe("JsonSchemaForTools (25.2)", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(JsonSchemaForTools(makeCtx({ sub: 0 })))).not.toThrow();
   });

@@ -5,7 +5,7 @@ import AgenticRAG from "../../../chapters/rag-generation/agentic-rag.jsx";
 
 afterEach(() => cleanup());
 
-describe("AgenticRAG (12.29)", () => {
+describe("AgenticRAG (22.8)", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(AgenticRAG(makeCtx({ sub: 0 })))).not.toThrow();
   });
@@ -65,10 +65,10 @@ describe("AgenticRAG (12.29)", () => {
     expect(container.textContent).toMatch(/cost|budget/i);
   });
 
-  it("sub=5 mentions LangGraph as one orchestration option and chapters 12.36-12.40", () => {
+  it("sub=5 mentions LangGraph as one orchestration option and chapters 23.6-23.10", () => {
     const { container } = render(AgenticRAG(makeCtx({ sub: 5 })));
     expect(container.textContent).toMatch(/LangGraph|orchestration/i);
     expect(container.textContent).toMatch(/framework/i);
-    expect(container.textContent).toMatch(/12\.36-12\.40|framework choice/i);
+    expect(container.textContent).toMatch(/23\.6-23\.10|framework choice/i);
   });
 });

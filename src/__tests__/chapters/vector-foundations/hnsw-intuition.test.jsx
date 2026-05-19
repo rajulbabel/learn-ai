@@ -5,7 +5,7 @@ import HNSWIntuition from "../../../chapters/vector-foundations/hnsw-intuition.j
 
 afterEach(() => cleanup());
 
-describe("HNSWIntuition (11.7)", () => {
+describe("HNSWIntuition (15.7)", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(HNSWIntuition(makeCtx({ sub: 0 })))).not.toThrow();
   });

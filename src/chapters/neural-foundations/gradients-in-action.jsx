@@ -13,7 +13,7 @@ export default function GradientsInAction(ctx) {
           </T>
           <T color="#80deea" size={16} style={{ marginTop: 12 }}>
             Backprop gave us a gradient for every parameter. Now we apply gradient descent to ALL of them
-            simultaneously. Same formula from chapter 1.12:
+            simultaneously. Same formula from chapter 2.5:
           </T>
           <div
             style={{

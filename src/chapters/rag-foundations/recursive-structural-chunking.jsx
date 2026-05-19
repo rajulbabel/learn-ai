@@ -773,7 +773,7 @@ export default function RecursiveStructuralChunking(ctx) {
             }}
           >
             <T color="#ef9a9a" center size={14}>
-              Chapter 12.9 fixes the semantic-boundary gap. Chapter 12.11 fixes the parent-child gap.
+              Chapter 20.6 fixes the semantic-boundary gap. Chapter 20.8 fixes the parent-child gap.
             </T>
           </div>
         </Box>

@@ -5,7 +5,7 @@ import CrewAiAutoGen from "../../../chapters/agent-production/crew-ai-auto-gen.j
 
 afterEach(() => cleanup());
 
-describe("CrewAiAutoGen (13.49)", () => {
+describe("CrewAiAutoGen (28.13)", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(CrewAiAutoGen(makeCtx({ sub: 0 })))).not.toThrow();
   });

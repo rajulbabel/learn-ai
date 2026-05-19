@@ -5,7 +5,7 @@ import EvalDimensions from "../../../chapters/agent-evals/eval-dimensions.jsx";
 
 afterEach(() => cleanup());
 
-describe("EvalDimensions (13.38)", () => {
+describe("EvalDimensions (28.2)", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(EvalDimensions(makeCtx({ sub: 0 })))).not.toThrow();
   });

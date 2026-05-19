@@ -179,7 +179,7 @@ Hardened Agent: <recognizes injection pattern>
 
           <T color={SOFT.red} center size={15} style={{ marginTop: 14 }}>
             Hardened agents apply policy regardless of what the user wrote. The $200 cap is enforced by the runtime gate
-            (Section 13.45), not by the model&apos;s judgment.
+            (Section 28.9), not by the model&apos;s judgment.
           </T>
         </Box>
       </Reveal>
@@ -353,7 +353,7 @@ Step 3 - Naive agent reads the chunk as authoritative.
 
           <T color={SOFT.purple} center size={15} style={{ marginTop: 14 }}>
             The whitelist scope is the single highest-leverage defense. Most production agent incidents are amplified by
-            giving the agent too many capabilities at once. Tool security details follow in 13.47.
+            giving the agent too many capabilities at once. Tool security details follow in 28.11.
           </T>
         </Box>
       </Reveal>

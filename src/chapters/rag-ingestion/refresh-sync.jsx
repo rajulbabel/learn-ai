@@ -34,7 +34,7 @@ const WEBHOOK_TIMELINE = [
   {
     t: "T=0:08",
     label: "Upsert In Vector DB",
-    body: "Same doc_id, new chunks. Old chunks dropped, new chunks inserted (Section 11.22 deletes-updates pattern).",
+    body: "Same doc_id, new chunks. Old chunks dropped, new chunks inserted (Section 17.2 deletes-updates pattern).",
   },
   {
     t: "T=0:10",
@@ -387,7 +387,7 @@ export default function RefreshSync(ctx) {
               <desc>
                 Webhook-driven incremental sync sequence diagram with time markers T=0:00 through T=0:10 showing user
                 edit, Confluence webhook fire, ingestion service fetch, re-parse and re-chunk and re-embed, upsert into
-                vector DB referencing Section 11.22 deletes-updates, and final queryable state with about ten-second
+                vector DB referencing Section 17.2 deletes-updates, and final queryable state with about ten-second
                 propagation lag.
               </desc>
               {/* Vertical timeline */}
@@ -486,7 +486,7 @@ export default function RefreshSync(ctx) {
               </T>
               <T color="#a5d6a7" center size={14} style={{ marginTop: 6 }}>
                 Real-time freshness (~10 seconds). No wasted re-embedding on unchanged docs. Upsert pattern lines up
-                with Section 11.22 deletes-and-updates so the vector DB stays consistent. Linear cost scales with edit
+                with Section 17.2 deletes-and-updates so the vector DB stays consistent. Linear cost scales with edit
                 volume, not corpus size.
               </T>
             </div>
@@ -724,7 +724,7 @@ export default function RefreshSync(ctx) {
               </T>
               <T color="#ffe082" center size={14} style={{ marginTop: 6 }}>
                 Source removes doc-1. Webhook fires event: "page.deleted". Ingestion service writes a tombstone in the
-                vector DB. Tombstone propagates to all replicas. All chunks for doc-1 are removed. Section 11.22 covers
+                vector DB. Tombstone propagates to all replicas. All chunks for doc-1 are removed. Section 17.2 covers
                 the multi-replica deletes-and-updates pattern in depth.
               </T>
               <T color="#ffe082" center size={14} style={{ marginTop: 6 }}>

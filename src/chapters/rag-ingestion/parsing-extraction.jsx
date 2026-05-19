@@ -77,11 +77,11 @@ const METADATA_HIGHLIGHTED = new Set(['"source_url"', '"updated_at"', '"permissi
 const METADATA_USE_CASES = [
   {
     label: "Filtering",
-    body: "Section 11.21 filtering uses fields like updated_at > 2026-01-01 to exclude stale docs at query time.",
+    body: "Section 17.1 filtering uses fields like updated_at > 2026-01-01 to exclude stale docs at query time.",
   },
   {
     label: "Citations",
-    body: "Chapter 12.24 uses the source_url so the LLM can cite where the answer came from.",
+    body: "Chapter 22.3 uses the source_url so the LLM can cite where the answer came from.",
   },
   {
     label: "Permission Gating",

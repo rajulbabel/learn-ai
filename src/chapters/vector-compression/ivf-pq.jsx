@@ -1,7 +1,7 @@
 import { Box, T, Reveal, SubBtn } from "../../components.jsx";
 import { C } from "../../config.js";
 
-// 2D scatter positions for the 10-doc cat corpus, re-declared locally so 11.17 stays
+// 2D scatter positions for the 10-doc cat corpus, re-declared locally so 16.5 stays
 // self-contained (vector-foundations.jsx is a sibling module, not an import here).
 // Inverted-triangle layout: A (cats) top-left, B (dogs) top-right,
 // C (other) bottom-center. Each cluster sits inside a 60-radius halo, with
@@ -47,7 +47,7 @@ export default function IVFPQ(ctx) {
             IVF splits space, PQ shrinks each vector
           </T>
           <T color="#80deea" style={{ marginTop: 8 }}>
-            IVF (chapter 11.7) and PQ (chapter 11.15) are the two workhorse compression tools of production vector
+            IVF (chapter 15.7) and PQ (chapter 16.3) are the two workhorse compression tools of production vector
             search. IVF partitions the corpus into clusters so a query only scans a handful of cells instead of all N
             vectors. PQ replaces each float32 vector with a short byte-code, shrinking memory by 32x. Individually each
             tool is useful; combined as IVF-PQ they become the dominant index for static billion-scale corpora - the
@@ -363,11 +363,11 @@ export default function IVFPQ(ctx) {
             Step 3: run PQ on the residuals
           </T>
           <T color="#ffcc80" style={{ marginTop: 8 }}>
-            Now apply product quantization, but to the residuals - not the raw vectors. Same PQ recipe from chapter
-            11.14 (m = 96 subvectors, 256 centroids per slot, 8-bit codes), just fit to the narrower residual
-            distribution. Because every residual lives in a tiny ball around zero, the per-slot k-means clusters are
-            smaller and quantization error drops. The recall lift over plain PQ is modest on paper but decisive in
-            practice: more of the true nearest neighbors survive the compression.
+            Now apply product quantization, but to the residuals - not the raw vectors. Same PQ recipe from chapter 16.2
+            (m = 96 subvectors, 256 centroids per slot, 8-bit codes), just fit to the narrower residual distribution.
+            Because every residual lives in a tiny ball around zero, the per-slot k-means clusters are smaller and
+            quantization error drops. The recall lift over plain PQ is modest on paper but decisive in practice: more of
+            the true nearest neighbors survive the compression.
           </T>
           <div
             style={{

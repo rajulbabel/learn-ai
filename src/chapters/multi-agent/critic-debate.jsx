@@ -70,7 +70,7 @@ export default function CriticDebate(ctx) {
             A Second Agent Checks The First
           </T>
           <T color={SOFT.green} center size={16} style={{ marginTop: 10 }}>
-            Critic is reflection-as-multi-agent: instead of one agent self-critiquing (13.22), a separate critic agent
+            Critic is reflection-as-multi-agent: instead of one agent self-critiquing (26.5), a separate critic agent
             reviews the worker&apos;s draft. Same idea, more isolation - the critic does not share working memory with
             the worker.
           </T>
@@ -191,7 +191,7 @@ export default function CriticDebate(ctx) {
 
           <T color={SOFT.teal} center size={15} style={{ marginTop: 12 }}>
             The retry cap matters. Without it, a worker that can&apos;t please the critic loops forever - one of the
-            cost-runaway failure modes covered in 13.35.
+            cost-runaway failure modes covered in 27.6.
           </T>
         </Box>
       </Reveal>

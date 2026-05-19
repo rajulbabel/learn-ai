@@ -213,7 +213,7 @@ export default function RoPE(ctx) {
             The problem with sinusoidal position encoding
           </T>
           <T color="#b8a9ff" style={{ marginTop: 6 }}>
-            Recall chapters 5.3-5.7: we compute a position vector using sin/cos and <strong>ADD</strong> it to each
+            Recall chapters 8.3-8.7: we compute a position vector using sin/cos and <strong>ADD</strong> it to each
             embedding. This gives every token a unique position signal.
           </T>
           <T color="#b8a9ff" style={{ marginTop: 8 }}>

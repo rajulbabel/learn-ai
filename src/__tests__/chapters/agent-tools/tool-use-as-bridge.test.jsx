@@ -5,7 +5,7 @@ import ToolUseAsBridge from "../../../chapters/agent-tools/tool-use-as-bridge.js
 
 afterEach(() => cleanup());
 
-describe("ToolUseAsBridge (13.7)", () => {
+describe("ToolUseAsBridge (25.1)", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(ToolUseAsBridge(makeCtx({ sub: 0 })))).not.toThrow();
   });
@@ -35,10 +35,10 @@ describe("ToolUseAsBridge (13.7)", () => {
     expect(container.textContent).toMatch(/runtime|execute/i);
   });
 
-  it("sub=4 sketches the loop and references 13.20", () => {
+  it("sub=4 sketches the loop and references 26.3", () => {
     const { container } = render(ToolUseAsBridge(makeCtx({ sub: 4 })));
     expect(container.textContent).toMatch(/loop|reason.?act.?observe/i);
-    expect(container.textContent).toMatch(/13\.20/);
+    expect(container.textContent).toMatch(/26\.3/);
   });
 
   it("sub=5 enumerates the 8 canonical tools", () => {

@@ -5,7 +5,7 @@ import WhyProtocols from "../../../chapters/agent-tools/why-protocols.jsx";
 
 afterEach(() => cleanup());
 
-describe("WhyProtocols (13.12)", () => {
+describe("WhyProtocols (25.6)", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(WhyProtocols(makeCtx({ sub: 0 })))).not.toThrow();
   });

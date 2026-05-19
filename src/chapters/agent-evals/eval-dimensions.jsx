@@ -374,7 +374,7 @@ export default function EvalDimensions(ctx) {
           </div>
 
           <T color={SOFT.amber} center size={14} style={{ marginTop: 12 }}>
-            Cap max iterations (10-20 per loop termination policy from 13.23) and you cap the worst-case cost. Without
+            Cap max iterations (10-20 per loop termination policy from 26.6) and you cap the worst-case cost. Without
             the cap, a 100-step runaway can hit $5 on a single trace.
           </T>
         </Box>

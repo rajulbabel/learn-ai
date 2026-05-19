@@ -12,7 +12,7 @@ export default function AdamOptimizer(ctx) {
             The Problem with Plain SGD
           </T>
           <T color="#ef9a9a" size={17} style={{ marginTop: 12 }}>
-            In gradient descent (chapter 1.12), every parameter gets the same learning rate. But a neural network has
+            In gradient descent (chapter 2.5), every parameter gets the same learning rate. But a neural network has
             millions of parameters, and they are not all equal. Some get massive gradients. Others get tiny ones. One
             learning rate cannot fit both.
           </T>

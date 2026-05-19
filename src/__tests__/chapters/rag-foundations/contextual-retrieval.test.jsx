@@ -5,7 +5,7 @@ import ContextualRetrieval from "../../../chapters/rag-foundations/contextual-re
 
 afterEach(() => cleanup());
 
-describe("ContextualRetrieval (12.12)", () => {
+describe("ContextualRetrieval (20.9)", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(ContextualRetrieval(makeCtx({ sub: 0 })))).not.toThrow();
   });
@@ -78,8 +78,8 @@ describe("ContextualRetrieval (12.12)", () => {
 
   it("sub=6 stacks contextual + hybrid + reranker with Section 11 refs", () => {
     const { container } = render(ContextualRetrieval(makeCtx({ sub: 6 })));
-    expect(container.textContent).toMatch(/Section 11\.25|11\.25/);
-    expect(container.textContent).toMatch(/Section 11\.26|11\.26/);
+    expect(container.textContent).toMatch(/Section 17\.5|17\.5/);
+    expect(container.textContent).toMatch(/Section 17\.6|17\.6/);
     expect(container.textContent).toMatch(/67%|combined/);
   });
 });

@@ -5,7 +5,7 @@ import QueryRoutingDecomposition from "../../../chapters/rag-retrieval/query-rou
 
 afterEach(() => cleanup());
 
-describe("QueryRoutingDecomposition (12.21)", () => {
+describe("QueryRoutingDecomposition (21.8)", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(QueryRoutingDecomposition(makeCtx({ sub: 0 })))).not.toThrow();
   });

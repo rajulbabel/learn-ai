@@ -795,7 +795,7 @@ export default function WhyChunkFixedSize(ctx) {
           >
             <T color="#b8a9ff" center size={14}>
               Fixed-size is the baseline. Every chunking strategy in production is measured against it. Chapters
-              12.8-12.12 each fix one weakness of fixed-size.
+              20.5-20.9 each fix one weakness of fixed-size.
             </T>
           </div>
         </Box>

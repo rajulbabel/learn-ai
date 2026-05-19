@@ -539,7 +539,7 @@ export default function WorkflowPrimitives(ctx) {
           </div>
 
           <T color={SOFT.yellow} center size={15} style={{ marginTop: 12 }}>
-            Because each step returns a typed object (the JSON schema from chapter 13.8), the next step can read fields
+            Because each step returns a typed object (the JSON schema from chapter 25.2), the next step can read fields
             like ticket.category by name. Chaining is just normal function composition with LLM calls as the functions.
           </T>
         </Box>
@@ -662,7 +662,7 @@ export default function WorkflowPrimitives(ctx) {
 
           <div style={{ ...tintedCard(C.purple), padding: 12, marginTop: 12 }}>
             <T color={SOFT.purple} center size={14}>
-              The Classifier Is Itself An LLM Call With Few-Shot Examples (See Section 13.3).
+              The Classifier Is Itself An LLM Call With Few-Shot Examples (See Section 24.3).
             </T>
           </div>
 

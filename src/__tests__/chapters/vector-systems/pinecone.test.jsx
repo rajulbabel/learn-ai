@@ -5,7 +5,7 @@ import Pinecone from "../../../chapters/vector-systems/pinecone.jsx";
 
 afterEach(() => cleanup());
 
-describe("Pinecone (11.33)", () => {
+describe("Pinecone (18.3)", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(Pinecone(makeCtx({ sub: 0 })))).not.toThrow();
   });

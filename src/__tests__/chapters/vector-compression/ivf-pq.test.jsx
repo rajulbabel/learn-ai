@@ -5,7 +5,7 @@ import IVFPQ from "../../../chapters/vector-compression/ivf-pq.jsx";
 
 afterEach(() => cleanup());
 
-describe("IVFPQ (11.17)", () => {
+describe("IVFPQ (16.5)", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(IVFPQ(makeCtx({ sub: 0 })))).not.toThrow();
   });

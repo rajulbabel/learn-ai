@@ -12,7 +12,7 @@ export default function AddNormTwo(ctx) {
             The Second Add & Norm
           </T>
           <T color="#90caf9" size={16} center style={{ marginTop: 4 }}>
-            The FFN just transformed each token's representation. But remember the problem from chapter 8.2 - values
+            The FFN just transformed each token's representation. But remember the problem from chapter 12.2 - values
             drift in deep networks. We need to stabilize again.
           </T>
           <div style={{ marginTop: 16, display: "flex", flexDirection: "column", alignItems: "center", gap: 0 }}>
@@ -68,7 +68,7 @@ export default function AddNormTwo(ctx) {
             The Add - Residual Around FFN
           </T>
           <T color="#a5d6a7" size={16} style={{ marginTop: 6 }}>
-            Same idea as chapter 8.2: keep the original input by adding it back. The input to FFN was the first Add &
+            Same idea as chapter 12.2: keep the original input by adding it back. The input to FFN was the first Add &
             Norm's output.
           </T>
 
@@ -89,7 +89,7 @@ export default function AddNormTwo(ctx) {
                 <Tag color={C.purple}>FFN input</Tag>
                 <code style={{ color: C.purple, fontSize: 15 }}>[-1.36, -0.55, 0.86, 1.06]</code>
               </div>
-              <div style={{ textAlign: "center", color: C.dim, fontSize: 14 }}>↓ goes through FFN (chapter 8.3) ↓</div>
+              <div style={{ textAlign: "center", color: C.dim, fontSize: 14 }}>↓ goes through FFN (chapter 12.3) ↓</div>
               <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
                 <Tag color={C.orange}>FFN output</Tag>
                 <code style={{ color: C.orange, fontSize: 15 }}>[0.51, -0.73, 1.14, 0.22]</code>
@@ -143,7 +143,7 @@ export default function AddNormTwo(ctx) {
             The Norm - Stabilize Again
           </T>
           <T color="#b8a9ff" size={16} style={{ marginTop: 6 }}>
-            Same Layer Normalization formula from chapter 8.2 - compute mean, subtract, divide by standard deviation,
+            Same Layer Normalization formula from chapter 12.2 - compute mean, subtract, divide by standard deviation,
             scale by gamma, shift by beta.
           </T>
 

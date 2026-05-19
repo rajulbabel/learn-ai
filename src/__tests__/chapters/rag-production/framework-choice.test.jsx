@@ -5,7 +5,7 @@ import FrameworkChoice from "../../../chapters/rag-production/framework-choice.j
 
 afterEach(() => cleanup());
 
-describe("FrameworkChoice (12.40)", () => {
+describe("FrameworkChoice (23.10)", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(FrameworkChoice(makeCtx({ sub: 0 })))).not.toThrow();
   });

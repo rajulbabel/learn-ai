@@ -5,7 +5,7 @@ import CustomNoFramework from "../../../chapters/agent-production/custom-no-fram
 
 afterEach(() => cleanup());
 
-describe("CustomNoFramework (13.51)", () => {
+describe("CustomNoFramework (28.15)", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(CustomNoFramework(makeCtx({ sub: 0 })))).not.toThrow();
   });

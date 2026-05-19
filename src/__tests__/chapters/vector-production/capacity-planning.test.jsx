@@ -5,7 +5,7 @@ import CapacityPlanning from "../../../chapters/vector-production/capacity-plann
 
 afterEach(() => cleanup());
 
-describe("CapacityPlanning (11.29)", () => {
+describe("CapacityPlanning (17.9)", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(CapacityPlanning(makeCtx({ sub: 0 })))).not.toThrow();
   });

@@ -5,7 +5,7 @@ import HyDE from "../../../chapters/rag-retrieval/hy-de.jsx";
 
 afterEach(() => cleanup());
 
-describe("HyDE (12.19)", () => {
+describe("HyDE (21.6)", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(HyDE(makeCtx({ sub: 0 })))).not.toThrow();
   });
@@ -63,6 +63,6 @@ describe("HyDE (12.19)", () => {
     const { container } = render(HyDE(makeCtx({ sub: 5 })));
     expect(container.textContent).toMatch(/prompt template/i);
     expect(container.textContent).toMatch(/\{query\}/);
-    expect(container.textContent).toMatch(/12\.36|cache|caching/i);
+    expect(container.textContent).toMatch(/23\.6|cache|caching/i);
   });
 });

@@ -5,7 +5,7 @@ import DomainAdaptation from "../../../chapters/rag-retrieval/domain-adaptation.
 
 afterEach(() => cleanup());
 
-describe("DomainAdaptation (12.15)", () => {
+describe("DomainAdaptation (21.2)", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(DomainAdaptation(makeCtx({ sub: 0 })))).not.toThrow();
   });

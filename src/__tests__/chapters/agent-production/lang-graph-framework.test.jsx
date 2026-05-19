@@ -5,7 +5,7 @@ import LangGraphFramework from "../../../chapters/agent-production/lang-graph-fr
 
 afterEach(() => cleanup());
 
-describe("LangGraphFramework (13.48)", () => {
+describe("LangGraphFramework (28.12)", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(LangGraphFramework(makeCtx({ sub: 0 })))).not.toThrow();
   });

@@ -5,7 +5,7 @@ import ANNFamilyTree from "../../../chapters/vector-foundations/ann-family-tree.
 
 afterEach(() => cleanup());
 
-describe("ANNFamilyTree (11.5)", () => {
+describe("ANNFamilyTree (15.5)", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(ANNFamilyTree(makeCtx({ sub: 0 })))).not.toThrow();
   });

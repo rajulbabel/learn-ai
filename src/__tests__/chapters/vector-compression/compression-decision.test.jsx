@@ -5,7 +5,7 @@ import CompressionDecision from "../../../chapters/vector-compression/compressio
 
 afterEach(() => cleanup());
 
-describe("CompressionDecision (11.19)", () => {
+describe("CompressionDecision (16.7)", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(CompressionDecision(makeCtx({ sub: 0 })))).not.toThrow();
   });

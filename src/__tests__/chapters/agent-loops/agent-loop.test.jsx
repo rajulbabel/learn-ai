@@ -5,7 +5,7 @@ import AgentLoop from "../../../chapters/agent-loops/agent-loop.jsx";
 
 afterEach(() => cleanup());
 
-describe("AgentLoop (13.20)", () => {
+describe("AgentLoop (26.3)", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(AgentLoop(makeCtx({ sub: 0 })))).not.toThrow();
   });
@@ -29,7 +29,7 @@ describe("AgentLoop (13.20)", () => {
     const { container } = render(AgentLoop(makeCtx({ sub: 2 })));
     expect(container.textContent).toMatch(/terminat|stop/i);
     expect(container.textContent).toMatch(/max iter|budget/i);
-    expect(container.textContent).toMatch(/13\.23/);
+    expect(container.textContent).toMatch(/26\.6/);
   });
 
   it("sub=3 shows per-iteration cost", () => {

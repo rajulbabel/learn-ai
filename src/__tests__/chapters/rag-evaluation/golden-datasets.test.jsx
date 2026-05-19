@@ -5,7 +5,7 @@ import GoldenDatasets from "../../../chapters/rag-evaluation/golden-datasets.jsx
 
 afterEach(() => cleanup());
 
-describe("GoldenDatasets (12.34)", () => {
+describe("GoldenDatasets (23.4)", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(GoldenDatasets(makeCtx({ sub: 0 })))).not.toThrow();
   });

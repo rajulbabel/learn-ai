@@ -447,7 +447,7 @@ export default function AgenticRAG(ctx) {
           </T>
           <T color="#f48fb1" center size={16} style={{ marginTop: 10 }}>
             Pick orchestration last. The patterns above work without any framework. Frameworks are a productivity
-            choice, not a correctness one. Chapters 12.36-12.40 cover framework choice in depth.
+            choice, not a correctness one. Chapters 23.6-23.10 cover framework choice in depth.
           </T>
 
           <div style={{ marginTop: 14, display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>

@@ -5,7 +5,7 @@ import NaiveRAGPipeline from "../../../chapters/rag-foundations/naive-rag-pipeli
 
 afterEach(() => cleanup());
 
-describe("NaiveRAGPipeline (12.2)", () => {
+describe("NaiveRAGPipeline (19.2)", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(NaiveRAGPipeline(makeCtx({ sub: 0 })))).not.toThrow();
   });
@@ -49,9 +49,9 @@ describe("NaiveRAGPipeline (12.2)", () => {
     expect(container.textContent).toMatch(/chunk/i);
   });
 
-  it("sub=2 references Section 5.2 for embeddings", () => {
+  it("sub=2 references Section 8.2 for embeddings", () => {
     const { container } = render(NaiveRAGPipeline(makeCtx({ sub: 2 })));
-    expect(container.textContent).toMatch(/section 5\.2|5\.2/i);
+    expect(container.textContent).toMatch(/section 8\.2|8\.2/i);
     expect(container.textContent).toMatch(/embed|vector/i);
   });
 

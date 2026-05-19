@@ -5,7 +5,7 @@ import SupervisorHierarchy from "../../../chapters/multi-agent/supervisor-hierar
 
 afterEach(() => cleanup());
 
-describe("SupervisorHierarchy (13.32)", () => {
+describe("SupervisorHierarchy (27.3)", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(SupervisorHierarchy(makeCtx({ sub: 0 })))).not.toThrow();
   });

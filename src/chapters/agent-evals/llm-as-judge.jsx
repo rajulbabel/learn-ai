@@ -3,7 +3,7 @@ import { Box, T, Reveal, SubBtn } from "../../components.jsx";
 import { C } from "../../config.js";
 import { SOFT, tintedCard, pill } from "../../shared/agent-styles.jsx";
 
-// Pairwise vs scalar comparison (sub=0 of 13.39)
+// Pairwise vs scalar comparison (sub=0 of 28.3)
 const PAIRWISE_VS_SCALAR = [
   {
     name: "Pairwise",
@@ -21,7 +21,7 @@ const PAIRWISE_VS_SCALAR = [
   },
 ];
 
-// Rubric (sub=1 of 13.39)
+// Rubric (sub=1 of 28.3)
 const JUDGE_RUBRIC = [
   {
     name: "Correctness",
@@ -50,7 +50,7 @@ const JUDGE_RUBRIC = [
   },
 ];
 
-// Three biases (sub=2 of 13.39)
+// Three biases (sub=2 of 28.3)
 const JUDGE_BIASES = [
   {
     name: "Length Bias",
@@ -363,7 +363,7 @@ export default function LlmAsJudge(ctx) {
           </T>
           <T color={SOFT.purple} center size={16} style={{ marginTop: 10 }}>
             The rubric from sub=1 baked into a runnable judge prompt. Output is forced into machine-readable JSON so a
-            dashboard can parse it and graph the per-criterion scores. This is the canonical artifact reused in 13.40
+            dashboard can parse it and graph the per-criterion scores. This is the canonical artifact reused in 28.4
             trace evals.
           </T>
 
@@ -418,7 +418,7 @@ Output ONLY This JSON (No Other Text):
 
           <T color={SOFT.purple} center size={14} style={{ marginTop: 12 }}>
             JSON output is non-negotiable. Free-form prose from the judge cannot land in a dashboard. Lock the field
-            names. Every later eval (13.40 trace, 13.41 online) re-uses this same shape.
+            names. Every later eval (28.4 trace, 28.5 online) re-uses this same shape.
           </T>
         </Box>
       </Reveal>
@@ -429,7 +429,7 @@ Output ONLY This JSON (No Other Text):
             Same Technique, Agent Scope
           </T>
           <T color={SOFT.red} center size={16} style={{ marginTop: 10 }}>
-            Section 12.32 used LLM-as-Judge for RAG generation quality - faithfulness and answer-relevance against
+            Section 23.2 used LLM-as-Judge for RAG generation quality - faithfulness and answer-relevance against
             retrieved chunks. Here we extend the same technique to agent-level evals: full task completion, multi-step
             trace correctness, safety refusals.
           </T>
@@ -443,7 +443,7 @@ Output ONLY This JSON (No Other Text):
             }}
           >
             <div style={{ ...tintedCard(C.cyan), padding: 14 }}>
-              <span style={pill(C.cyan)}>SECTION 12.32 (RAG)</span>
+              <span style={pill(C.cyan)}>SECTION 23.2 (RAG)</span>
               <T color={C.cyan} bold center size={15} style={{ marginTop: 8 }}>
                 What Section 12 Judged
               </T>
@@ -476,7 +476,7 @@ Output ONLY This JSON (No Other Text):
 
           <T color={SOFT.red} center size={15} style={{ marginTop: 14 }}>
             Mechanics are identical: rubric + JSON output + calibration. Only the rubric content changes. A team running
-            12.32 already has 80% of the agent eval infrastructure in place.
+            23.2 already has 80% of the agent eval infrastructure in place.
           </T>
         </Box>
       </Reveal>

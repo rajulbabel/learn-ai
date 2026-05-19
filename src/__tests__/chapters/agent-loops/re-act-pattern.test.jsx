@@ -5,7 +5,7 @@ import ReActPattern from "../../../chapters/agent-loops/re-act-pattern.jsx";
 
 afterEach(() => cleanup());
 
-describe("ReActPattern (13.21)", () => {
+describe("ReActPattern (26.4)", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(ReActPattern(makeCtx({ sub: 0 })))).not.toThrow();
   });

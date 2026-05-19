@@ -5,7 +5,7 @@ import ProductQuantization from "../../../chapters/vector-compression/product-qu
 
 afterEach(() => cleanup());
 
-describe("ProductQuantization (11.14)", () => {
+describe("ProductQuantization (16.2)", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(ProductQuantization(makeCtx({ sub: 0 })))).not.toThrow();
   });

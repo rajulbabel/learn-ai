@@ -5,7 +5,7 @@ import ChunkingDecision from "../../../chapters/rag-foundations/chunking-decisio
 
 afterEach(() => cleanup());
 
-describe("ChunkingDecision (12.13)", () => {
+describe("ChunkingDecision (20.10)", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(ChunkingDecision(makeCtx({ sub: 0 })))).not.toThrow();
   });

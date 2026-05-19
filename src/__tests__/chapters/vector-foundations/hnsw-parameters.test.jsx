@@ -5,7 +5,7 @@ import HNSWParameters from "../../../chapters/vector-foundations/hnsw-parameters
 
 afterEach(() => cleanup());
 
-describe("HNSWParameters (11.10)", () => {
+describe("HNSWParameters (15.10)", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(HNSWParameters(makeCtx({ sub: 0 })))).not.toThrow();
   });

@@ -3,7 +3,7 @@ import { C } from "../../config.js";
 import { SOFT, tintedCard, pill } from "../../shared/agent-styles.jsx";
 
 // Section 13 Act 5: Agent Memory
-// Chapters 13.24 - 13.29
+// Chapters 26.7 - 26.12
 
 // Three long-term memory sub-types - used in sub=1 and sub=2 trees of MemoryTaxonomy.
 const LONG_TERM_TYPES = [
@@ -259,7 +259,7 @@ export default function MemoryTaxonomy(ctx) {
                 Working
               </text>
               <text x={140} y={250} fill={SOFT.amber} fontSize="11" textAnchor="middle">
-                Scratchpad (13.25)
+                Scratchpad (26.8)
               </text>
 
               {/* 3 long-term leaves: episodic, semantic, procedural */}
@@ -300,8 +300,8 @@ export default function MemoryTaxonomy(ctx) {
           </div>
 
           <T color={SOFT.orange} center size={15} style={{ marginTop: 12 }}>
-            Each leaf becomes its own chapter. Working memory is 13.25; episodic, semantic, procedural are 13.26 through
-            13.28. Summary and context-management close out at 13.29.
+            Each leaf becomes its own chapter. Working memory is 26.8; episodic, semantic, procedural are 26.9 through
+            26.11. Summary and context-management close out at 26.12.
           </T>
         </Box>
       </Reveal>

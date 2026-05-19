@@ -2,7 +2,7 @@ import { Box, T, Reveal, SubBtn } from "../../components.jsx";
 import { C } from "../../config.js";
 import { SOFT, tintedCard, pill, DIM_BG, DIM_BORDER } from "../../shared/agent-styles.jsx";
 
-// 13.10 - Parallel Tools + Tool Choice
+// 25.4 - Parallel Tools + Tool Choice
 // Ticket T2: "Reset my password but my email also changed to new@example.com"
 // Two independent lookups can run in parallel; the mutations that follow must serialize.
 const T2_SERIAL_STEPS = [

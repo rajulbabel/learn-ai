@@ -5,7 +5,7 @@ import ObservabilityTracing from "../../../chapters/rag-production/observability
 
 afterEach(() => cleanup());
 
-describe("ObservabilityTracing (12.38)", () => {
+describe("ObservabilityTracing (23.8)", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(ObservabilityTracing(makeCtx({ sub: 0 })))).not.toThrow();
   });

@@ -515,7 +515,7 @@ export default function RAGASMetrics(ctx) {
           </T>
           <T color="#ffe082" center size={16} style={{ marginTop: 10 }}>
             One query, four scores. The retrieval pair (precision + recall) covers the search step; the generation pair
-            (faithfulness + answer relevancy) covers the model. The triangle in 12.31 splits the same way.
+            (faithfulness + answer relevancy) covers the model. The triangle in 23.1 splits the same way.
           </T>
 
           <div
@@ -638,7 +638,7 @@ export default function RAGASMetrics(ctx) {
               low; a hallucinated answer that recycles reference words scores high.
             </T>
             <T color="#f48fb1" center size={15} style={{ marginTop: 8 }}>
-              Use RAGAS or LLM-as-judge instead (see chapters 12.31 and 12.32).
+              Use RAGAS or LLM-as-judge instead (see chapters 23.1 and 23.2).
             </T>
           </div>
         </Box>

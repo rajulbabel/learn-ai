@@ -5,7 +5,7 @@ import ParsingExtraction from "../../../chapters/rag-ingestion/parsing-extractio
 
 afterEach(() => cleanup());
 
-describe("ParsingExtraction (12.4)", () => {
+describe("ParsingExtraction (20.1)", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(ParsingExtraction(makeCtx({ sub: 0 })))).not.toThrow();
   });

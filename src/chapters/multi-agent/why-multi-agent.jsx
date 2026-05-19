@@ -39,7 +39,7 @@ const MULTI_AGENT_ANTI_PATTERNS = [
   },
   {
     name: "Small Dev Teams",
-    detail: "Multi-Agent Failures (13.35) Are Hard To Debug; A 2-Person Team Will Drown.",
+    detail: "Multi-Agent Failures (27.6) Are Hard To Debug; A 2-Person Team Will Drown.",
   },
 ];
 
@@ -345,7 +345,7 @@ export default function WhyMultiAgent(ctx) {
             </T>
             <T color={SOFT.indigo} center size={14} style={{ marginTop: 8 }}>
               Multi-Agent IF Specialization OR Parallelism OR Planner / Worker Fits The Workload. Otherwise Single
-              Agent. Cost Of Multi-Agent Failure Modes Covered In 13.35.
+              Agent. Cost Of Multi-Agent Failure Modes Covered In 27.6.
             </T>
           </div>
         </Box>

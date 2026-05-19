@@ -5,7 +5,7 @@ import ContextEngineering from "../../../chapters/agent-prompting/context-engine
 
 afterEach(() => cleanup());
 
-describe("ContextEngineering (13.6)", () => {
+describe("ContextEngineering (24.6)", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(ContextEngineering(makeCtx({ sub: 0 })))).not.toThrow();
   });

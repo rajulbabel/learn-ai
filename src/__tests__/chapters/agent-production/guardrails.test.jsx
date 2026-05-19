@@ -5,7 +5,7 @@ import Guardrails from "../../../chapters/agent-production/guardrails.jsx";
 
 afterEach(() => cleanup());
 
-describe("Guardrails (13.45)", () => {
+describe("Guardrails (28.9)", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(Guardrails(makeCtx({ sub: 0 })))).not.toThrow();
   });
@@ -35,7 +35,7 @@ describe("Guardrails (13.45)", () => {
   it("sub=3 shows response validation", () => {
     const { container } = render(Guardrails(makeCtx({ sub: 3 })));
     expect(container.textContent).toMatch(/validat|schema/i);
-    expect(container.textContent).toMatch(/13\.3|structured output/i);
+    expect(container.textContent).toMatch(/24\.3|structured output/i);
     expect(container.textContent).toMatch(/Reject Outputs That Fail Schema/i);
   });
 

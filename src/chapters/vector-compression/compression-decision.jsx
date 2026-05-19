@@ -38,7 +38,7 @@ export default function CompressionDecision(ctx) {
                 {
                   axis: "Embedding dim (d)",
                   role: "Gates binary quantization",
-                  detail: "Binary quantization needs d >= 768 to stay production-safe (from 11.15's recall table).",
+                  detail: "Binary quantization needs d >= 768 to stay production-safe (from 16.3's recall table).",
                 },
                 {
                   axis: "Database capability",
@@ -329,7 +329,7 @@ export default function CompressionDecision(ctx) {
                 stack: "Qdrant + OpenAI-3-small (d: 1536 -> 1024 via MRL) + N=200M",
                 path: "MRL reduces d; N >= 100M gate hits immediately",
                 result: "HNSW + PQ (m=96).",
-                math: "Fp32 = 820 GB. Final = 200M x 96 B = ~19 GB. ~40x smaller. The scale default per 11.18.",
+                math: "Fp32 = 820 GB. Final = 200M x 96 B = ~19 GB. ~40x smaller. The scale default per 16.6.",
               },
             ].map((s) => (
               <div
@@ -473,7 +473,7 @@ export default function CompressionDecision(ctx) {
                 {[
                   {
                     trap: "BQ at d <= 256",
-                    why: "Recall collapses to ~0.82 or worse per 11.15's measured table. The binary code loses too much information at low dimensions.",
+                    why: "Recall collapses to ~0.82 or worse per 16.3's measured table. The binary code loses too much information at low dimensions.",
                   },
                   {
                     trap: "Skipping MRL when available",

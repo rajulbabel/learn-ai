@@ -5,7 +5,7 @@ import EvalSetsContinuous from "../../../chapters/agent-evals/eval-sets-continuo
 
 afterEach(() => cleanup());
 
-describe("EvalSetsContinuous (13.41)", () => {
+describe("EvalSetsContinuous (28.5)", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(EvalSetsContinuous(makeCtx({ sub: 0 })))).not.toThrow();
   });

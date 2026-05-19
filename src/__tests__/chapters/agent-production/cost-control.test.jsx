@@ -5,7 +5,7 @@ import CostControl from "../../../chapters/agent-production/cost-control.jsx";
 
 afterEach(() => cleanup());
 
-describe("CostControl (13.43)", () => {
+describe("CostControl (28.7)", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(CostControl(makeCtx({ sub: 0 })))).not.toThrow();
   });
@@ -17,10 +17,10 @@ describe("CostControl (13.43)", () => {
     expect(container.textContent).toMatch(/Where The Dollars Go/i);
   });
 
-  it("sub=1 explains prompt caching with Section 12.36", () => {
+  it("sub=1 explains prompt caching with Section 23.6", () => {
     const { container } = render(CostControl(makeCtx({ sub: 1 })));
     expect(container.textContent).toMatch(/cach/i);
-    expect(container.textContent).toMatch(/12\.36|section 12/i);
+    expect(container.textContent).toMatch(/23\.6|section 12/i);
     expect(container.textContent).toMatch(/80%|prefix/i);
     expect(container.textContent).toMatch(/Cache The Prefix/i);
   });
@@ -35,7 +35,7 @@ describe("CostControl (13.43)", () => {
   it("sub=3 shows per-request budget cap", () => {
     const { container } = render(CostControl(makeCtx({ sub: 3 })));
     expect(container.textContent).toMatch(/budget|cap/i);
-    expect(container.textContent).toMatch(/13\.23|max.?iter/i);
+    expect(container.textContent).toMatch(/26\.6|max.?iter/i);
     expect(container.textContent).toMatch(/Hard Cap Per Ticket/i);
   });
 
@@ -43,7 +43,7 @@ describe("CostControl (13.43)", () => {
     const { container } = render(CostControl(makeCtx({ sub: 4 })));
     expect(container.textContent).toMatch(/retry/i);
     expect(container.textContent).toMatch(/transient|permanent|business.?rule/i);
-    expect(container.textContent).toMatch(/13\.11/);
+    expect(container.textContent).toMatch(/25\.5/);
     expect(container.textContent).toMatch(/Don't Retry Expensive Failures/i);
   });
 });

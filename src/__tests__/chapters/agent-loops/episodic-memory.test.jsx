@@ -5,7 +5,7 @@ import EpisodicMemory from "../../../chapters/agent-loops/episodic-memory.jsx";
 
 afterEach(() => cleanup());
 
-describe("EpisodicMemory (13.26)", () => {
+describe("EpisodicMemory (26.9)", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(EpisodicMemory(makeCtx({ sub: 0 })))).not.toThrow();
   });
@@ -21,7 +21,7 @@ describe("EpisodicMemory (13.26)", () => {
   it("sub=1 back-references Section 11 vector storage", () => {
     const { container } = render(EpisodicMemory(makeCtx({ sub: 1 })));
     expect(container.textContent).toMatch(/vector|embedding/i);
-    expect(container.textContent).toMatch(/section 11|11\.6|11\.7|HNSW/i);
+    expect(container.textContent).toMatch(/section 11|15\.6|15\.7|HNSW/i);
     expect(container.textContent).toMatch(/Stored As Vectors/i);
   });
 

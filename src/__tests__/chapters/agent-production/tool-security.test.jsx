@@ -5,7 +5,7 @@ import ToolSecurity from "../../../chapters/agent-production/tool-security.jsx";
 
 afterEach(() => cleanup());
 
-describe("ToolSecurity (13.47)", () => {
+describe("ToolSecurity (28.11)", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(ToolSecurity(makeCtx({ sub: 0 })))).not.toThrow();
   });

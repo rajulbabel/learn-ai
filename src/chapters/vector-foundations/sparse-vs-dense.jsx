@@ -241,9 +241,9 @@ export default function SparseVsDense(ctx) {
             </T>
           </div>
           <T color="#ffcc99" style={{ marginTop: 12 }}>
-            Now take a longer sentence: &quot;The cat sat on the mat last week&quot;. Eight words, but
-            &quot;the&quot; appears twice and is common, so its IDF is near zero. Rare terms like &quot;mat&quot; and
-            &quot;cat&quot; get larger weights.
+            Now take a longer sentence: &quot;The cat sat on the mat last week&quot;. Eight words, but &quot;the&quot;
+            appears twice and is common, so its IDF is near zero. Rare terms like &quot;mat&quot; and &quot;cat&quot;
+            get larger weights.
           </T>
           <div
             style={{
@@ -291,8 +291,8 @@ export default function SparseVsDense(ctx) {
               ))}
             </div>
             <T color="#ffcc99" size={13} style={{ marginTop: 8, fontStyle: "italic" }} center>
-              &quot;Cat&quot; and &quot;mat&quot; carry the search signal. &quot;The&quot; and &quot;on&quot; are
-              almost ignored.
+              &quot;Cat&quot; and &quot;mat&quot; carry the search signal. &quot;The&quot; and &quot;on&quot; are almost
+              ignored.
             </T>
           </div>
           <div style={{ marginTop: 14, display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
@@ -340,8 +340,8 @@ export default function SparseVsDense(ctx) {
             Storage: dense array vs inverted index
           </T>
           <T color="#ffe066" style={{ marginTop: 8 }}>
-            Both representations compute the same dot product, but you do not store them the same way. A dense vector
-            is a flat array of float32s - one entry per dimension, every entry written down. A sparse vector would be
+            Both representations compute the same dot product, but you do not store them the same way. A dense vector is
+            a flat array of float32s - one entry per dimension, every entry written down. A sparse vector would be
             insane to store as a 30,000-slot array of mostly zeros, so it lives as a list of (index, value) pairs - and
             at corpus scale, it is flipped into an inverted index: for each term, the list of docs that contain it.
           </T>
@@ -430,9 +430,9 @@ export default function SparseVsDense(ctx) {
               The inverted index trick
             </T>
             <T color="#ffe066" size={14} style={{ marginTop: 6 }}>
-              At corpus scale you never store sparse vectors as rows. You store the column view: for each term, the
-              list of (doc_id, weight) pairs. A query with three terms touches three short lists, multiplies, sums.
-              Lucene, Elasticsearch, and OpenSearch have done this for two decades.
+              At corpus scale you never store sparse vectors as rows. You store the column view: for each term, the list
+              of (doc_id, weight) pairs. A query with three terms touches three short lists, multiplies, sums. Lucene,
+              Elasticsearch, and OpenSearch have done this for two decades.
             </T>
             <div
               style={{
@@ -554,15 +554,15 @@ export default function SparseVsDense(ctx) {
                 Trained with a sparsity regularizer
               </T>
               <T color={C.bright} size={14} style={{ marginTop: 6 }} center>
-                The loss has an L1 penalty on the vector, pushing most entries to zero. Without it, the model would
-                fill every dimension and you would just have a slow dense vector.
+                The loss has an L1 penalty on the vector, pushing most entries to zero. Without it, the model would fill
+                every dimension and you would just have a slow dense vector.
               </T>
             </div>
           </div>
           <T color="#b8a9ff" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
             SPLADE is what people mean by &quot;learned sparse&quot;. It runs on the same engines that already serve
-            BM25 - Elasticsearch, OpenSearch, Pinecone sparse - so production teams can ship it without a new
-            datastore. Pinecone and Qdrant both offer it as a first-class vector type.
+            BM25 - Elasticsearch, OpenSearch, Pinecone sparse - so production teams can ship it without a new datastore.
+            Pinecone and Qdrant both offer it as a first-class vector type.
           </T>
         </Box>
       </Reveal>
@@ -574,8 +574,8 @@ export default function SparseVsDense(ctx) {
           </T>
           <T color="#7cc4ff" style={{ marginTop: 8 }}>
             Dense and sparse fail on opposite queries. Dense handles paraphrase but misses exact tokens. Sparse handles
-            exact tokens but misses synonyms. The query type tells you which is in trouble. In practice you run both
-            and fuse the results - that is the hybrid retrieval setup in 11.25 and 12.16.
+            exact tokens but misses synonyms. The query type tells you which is in trouble. In practice you run both and
+            fuse the results - that is the hybrid retrieval setup in 17.5 and 21.3.
           </T>
           <div
             style={{
@@ -683,7 +683,7 @@ export default function SparseVsDense(ctx) {
             <T color="#80e8a5" size={15} style={{ marginTop: 6 }} center>
               Run a dense ANN index and a sparse inverted index in parallel. Each returns its top-k. Combine the two
               ranked lists with reciprocal rank fusion. The failures are largely uncorrelated, so recall jumps by
-              roughly +10 points over either retriever alone. That is hybrid search - the setup we will build in 11.25.
+              roughly +10 points over either retriever alone. That is hybrid search - the setup we will build in 17.5.
             </T>
           </div>
           <T color="#7cc4ff" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>

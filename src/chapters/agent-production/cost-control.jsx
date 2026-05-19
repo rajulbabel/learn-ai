@@ -278,7 +278,7 @@ export default function CostControl(ctx) {
           </div>
 
           <T color={SOFT.red} center size={15} style={{ marginTop: 14 }}>
-            Section 12.36 covers prompt + semantic caching for RAG; the mechanism is identical for agents. The big
+            Section 23.6 covers prompt + semantic caching for RAG; the mechanism is identical for agents. The big
             difference: agents send a near-identical prefix on EVERY tool iteration, so the cache hit rate is even
             higher than RAG.
           </T>
@@ -396,7 +396,7 @@ export default function CostControl(ctx) {
           </div>
 
           <T color={SOFT.yellow} center size={15} style={{ marginTop: 14 }}>
-            Combine the cost cap with the iteration cap (Section 13.23 max-iter) for belt-and-suspenders. One protects
+            Combine the cost cap with the iteration cap (Section 26.6 max-iter) for belt-and-suspenders. One protects
             against expensive loops; the other protects against infinite loops with cheap models. You need both.
           </T>
         </Box>
@@ -445,9 +445,8 @@ export default function CostControl(ctx) {
           </div>
 
           <T color={SOFT.purple} center size={15} style={{ marginTop: 14 }}>
-            Section 13.11 covers the full error taxonomy and retry policies. The cost angle is the same lesson with
-            money attached: a busy-retry on a permanent error can double the cost of a failed ticket without ever
-            succeeding.
+            Section 25.5 covers the full error taxonomy and retry policies. The cost angle is the same lesson with money
+            attached: a busy-retry on a permanent error can double the cost of a failed ticket without ever succeeding.
           </T>
         </Box>
       </Reveal>

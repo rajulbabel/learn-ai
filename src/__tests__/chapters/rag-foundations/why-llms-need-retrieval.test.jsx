@@ -5,7 +5,7 @@ import WhyLLMsNeedRetrieval from "../../../chapters/rag-foundations/why-llms-nee
 
 afterEach(() => cleanup());
 
-describe("WhyLLMsNeedRetrieval (12.1)", () => {
+describe("WhyLLMsNeedRetrieval (19.1)", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(WhyLLMsNeedRetrieval(makeCtx({ sub: 0 })))).not.toThrow();
   });

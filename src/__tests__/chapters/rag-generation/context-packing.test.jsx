@@ -5,7 +5,7 @@ import ContextPacking from "../../../chapters/rag-generation/context-packing.jsx
 
 afterEach(() => cleanup());
 
-describe("ContextPacking (12.22)", () => {
+describe("ContextPacking (22.1)", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(ContextPacking(makeCtx({ sub: 0 })))).not.toThrow();
   });

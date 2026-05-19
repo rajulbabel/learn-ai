@@ -5,7 +5,7 @@ import BinaryQuantization from "../../../chapters/vector-compression/binary-quan
 
 afterEach(() => cleanup());
 
-describe("BinaryQuantization (11.15)", () => {
+describe("BinaryQuantization (16.3)", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(BinaryQuantization(makeCtx({ sub: 0 })))).not.toThrow();
   });

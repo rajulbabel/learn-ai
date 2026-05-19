@@ -3,7 +3,7 @@ import { Box, T, Reveal, SubBtn } from "../../components.jsx";
 import { C } from "../../config.js";
 import { SOFT, tintedCard, pill } from "../../shared/agent-styles.jsx";
 
-// Three reasons agent eval is harder than LLM eval (sub=0 of 13.37)
+// Three reasons agent eval is harder than LLM eval (sub=0 of 28.1)
 const WHY_AGENTS_HARDER = [
   {
     name: "Non-Determinism",
@@ -23,7 +23,7 @@ const WHY_AGENTS_HARDER = [
   },
 ];
 
-// Production incident stories (sub=1 of 13.37)
+// Production incident stories (sub=1 of 28.1)
 const PRODUCTION_INCIDENTS = [
   {
     title: "Unauthorized Refunds",
@@ -43,7 +43,7 @@ const PRODUCTION_INCIDENTS = [
   },
 ];
 
-// Offline vs online comparison rows (sub=2 of 13.37)
+// Offline vs online comparison rows (sub=2 of 28.1)
 const OFFLINE_VS_ONLINE = [
   {
     aspect: "Input",
@@ -67,7 +67,7 @@ const OFFLINE_VS_ONLINE = [
   },
 ];
 
-// Failure modes that need humans (sub=3 of 13.37)
+// Failure modes that need humans (sub=3 of 28.1)
 const HUMAN_REVIEW_MODES = [
   {
     name: "Tone Failures",
@@ -88,12 +88,12 @@ const HUMAN_REVIEW_MODES = [
   },
 ];
 
-// Pipeline stages (sub=4 of 13.37). Each maps to a later chapter.
+// Pipeline stages (sub=4 of 28.1). Each maps to a later chapter.
 const PIPELINE_STAGES = [
-  { num: 1, name: "Eval Set", detail: "Golden + Adversarial + Regression Cases", ref: "13.41" },
-  { num: 2, name: "Per-Trace Step Grading", detail: "Score Each Tool Call", ref: "13.40" },
-  { num: 3, name: "End-To-End Judge", detail: "Score Final Answer With LLM-As-Judge", ref: "13.39" },
-  { num: 4, name: "Online Sampling", detail: "Grade 1-5% Of Production Traffic + Drift Signal", ref: "13.41" },
+  { num: 1, name: "Eval Set", detail: "Golden + Adversarial + Regression Cases", ref: "28.5" },
+  { num: 2, name: "Per-Trace Step Grading", detail: "Score Each Tool Call", ref: "28.4" },
+  { num: 3, name: "End-To-End Judge", detail: "Score Final Answer With LLM-As-Judge", ref: "28.3" },
+  { num: 4, name: "Online Sampling", detail: "Grade 1-5% Of Production Traffic + Drift Signal", ref: "28.5" },
   { num: 5, name: "Alerting + Rollback", detail: "Page Engineer When Quality Drops", ref: "Ops" },
 ];
 
@@ -143,7 +143,7 @@ export default function WhyEvalAgents(ctx) {
           </div>
 
           <T color={SOFT.red} center size={15} style={{ marginTop: 14 }}>
-            Every Section 13 production failure mode (13.35) maps to at least one of these axes. Eval design has to
+            Every Section 13 production failure mode (27.6) maps to at least one of these axes. Eval design has to
             address all three or production incidents slip through.
           </T>
         </Box>
@@ -400,7 +400,7 @@ export default function WhyEvalAgents(ctx) {
                 </marker>
               </defs>
               <text x={360} y={210} fill={SOFT.cyan} fontSize="13" fontWeight="700" textAnchor="middle">
-                Stage 2 = 13.40 - Stage 3 = 13.39 - Stage 1 + Stage 4 = 13.41
+                Stage 2 = 28.4 - Stage 3 = 28.3 - Stage 1 + Stage 4 = 28.5
               </text>
             </svg>
           </div>

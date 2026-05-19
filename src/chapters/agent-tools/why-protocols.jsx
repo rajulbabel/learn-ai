@@ -2,9 +2,9 @@ import { Box, T, Reveal, SubBtn } from "../../components.jsx";
 import { C } from "../../config.js";
 import { SOFT, tintedCard, pill, DIM_BG, DIM_BORDER } from "../../shared/agent-styles.jsx";
 
-// Chapters 13.12 - 13.17
+// Chapters 25.6 - 25.11
 
-// --- Chapter 13.12 WhyProtocols data ---
+// --- Chapter 25.6 WhyProtocols data ---
 
 // Agent nodes on the top row of the sprawl + hub diagrams (sub=0, sub=1).
 const SPRAWL_AGENTS = [

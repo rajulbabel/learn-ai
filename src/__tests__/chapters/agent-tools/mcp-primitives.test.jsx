@@ -5,7 +5,7 @@ import McpPrimitives from "../../../chapters/agent-tools/mcp-primitives.jsx";
 
 afterEach(() => cleanup());
 
-describe("McpPrimitives (13.14)", () => {
+describe("McpPrimitives (25.8)", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(McpPrimitives(makeCtx({ sub: 0 })))).not.toThrow();
   });

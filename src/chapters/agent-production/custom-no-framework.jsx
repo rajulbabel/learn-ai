@@ -49,7 +49,7 @@ const CUSTOM_MISSING_ROWS = [
   {
     piece: "Eval Harness Integration",
     status: "MUST BUILD",
-    why: "Without Evals You Ship Regressions. See 13.39 LLM-As-Judge And 13.40 Trace Evals.",
+    why: "Without Evals You Ship Regressions. See 28.3 LLM-As-Judge And 28.4 Trace Evals.",
   },
 ];
 

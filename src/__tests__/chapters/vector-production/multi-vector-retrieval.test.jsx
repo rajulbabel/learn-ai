@@ -5,7 +5,7 @@ import MultiVectorRetrieval from "../../../chapters/vector-production/multi-vect
 
 afterEach(() => cleanup());
 
-describe("MultiVectorRetrieval (11.26)", () => {
+describe("MultiVectorRetrieval (17.6)", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(MultiVectorRetrieval(makeCtx({ sub: 0 })))).not.toThrow();
   });

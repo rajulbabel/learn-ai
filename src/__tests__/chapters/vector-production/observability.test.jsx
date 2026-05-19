@@ -5,7 +5,7 @@ import Observability from "../../../chapters/vector-production/observability.jsx
 
 afterEach(() => cleanup());
 
-describe("Observability (11.28)", () => {
+describe("Observability (17.8)", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(Observability(makeCtx({ sub: 0 })))).not.toThrow();
   });

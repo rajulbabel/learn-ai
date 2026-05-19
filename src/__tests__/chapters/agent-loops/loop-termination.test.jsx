@@ -5,7 +5,7 @@ import LoopTermination from "../../../chapters/agent-loops/loop-termination.jsx"
 
 afterEach(() => cleanup());
 
-describe("LoopTermination (13.23)", () => {
+describe("LoopTermination (26.6)", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(LoopTermination(makeCtx({ sub: 0 })))).not.toThrow();
   });

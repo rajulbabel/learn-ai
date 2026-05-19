@@ -5,7 +5,7 @@ import LostInTheMiddle from "../../../chapters/rag-generation/lost-in-the-middle
 
 afterEach(() => cleanup());
 
-describe("LostInTheMiddle (12.23)", () => {
+describe("LostInTheMiddle (22.2)", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(LostInTheMiddle(makeCtx({ sub: 0 })))).not.toThrow();
   });
@@ -51,10 +51,10 @@ describe("LostInTheMiddle (12.23)", () => {
     expect(container.textContent).toMatch(/start and end|front and back/i);
   });
 
-  it("sub=4 covers failure modes including reference to multi-hop 12.25", () => {
+  it("sub=4 covers failure modes including reference to multi-hop 22.4", () => {
     const { container } = render(LostInTheMiddle(makeCtx({ sub: 4 })));
     expect(container.textContent).toMatch(/multi-?fact|multi-?hop|long/i);
     expect(container.textContent).toMatch(/rerank|fetch|benchmark/i);
-    expect(container.textContent).toMatch(/12\.25|multi-hop/i);
+    expect(container.textContent).toMatch(/22\.4|multi-hop/i);
   });
 });

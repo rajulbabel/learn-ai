@@ -5,7 +5,7 @@ import SparseVsDense from "../../../chapters/vector-foundations/sparse-vs-dense.
 
 afterEach(() => cleanup());
 
-describe("SparseVsDense (11.5)", () => {
+describe("SparseVsDense (15.5)", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(SparseVsDense(makeCtx({ sub: 0 })))).not.toThrow();
   });

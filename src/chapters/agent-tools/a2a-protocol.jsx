@@ -2,7 +2,7 @@ import { Box, T, Reveal, SubBtn } from "../../components.jsx";
 import { C } from "../../config.js";
 import { SOFT, tintedCard, pill, DIM_BG, DIM_BORDER } from "../../shared/agent-styles.jsx";
 
-// ---------- 13.17 A2AProtocol ----------
+// ---------- 25.11 A2AProtocol ----------
 
 const A2A_AGENT_JSON_LINES = [
   "{",

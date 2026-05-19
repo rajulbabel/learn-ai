@@ -5,7 +5,7 @@ import PlanExecuteReflect from "../../../chapters/agent-loops/plan-execute-refle
 
 afterEach(() => cleanup());
 
-describe("PlanExecuteReflect (13.22)", () => {
+describe("PlanExecuteReflect (26.5)", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(PlanExecuteReflect(makeCtx({ sub: 0 })))).not.toThrow();
   });

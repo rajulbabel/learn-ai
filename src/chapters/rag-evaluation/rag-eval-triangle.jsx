@@ -88,7 +88,7 @@ const TRI_FAILURE_SCENARIOS = [
     layerColor: C.cyan,
     layerAccent: "#80deea",
     body: "Top-k returns doc-4 (refunds) for a password-reset query; doc-1 never surfaces. Recall@10 drops from 0.95 to 0.30.",
-    cause: "Root cause: retrieval. Fix in the retriever (12.14-12.21).",
+    cause: "Root cause: retrieval. Fix in the retriever (21.1-21.8).",
   },
   {
     label: "Scenario B - Generation Fault",
@@ -96,7 +96,7 @@ const TRI_FAILURE_SCENARIOS = [
     layerColor: C.purple,
     layerAccent: "#b8a9ff",
     body: "Retrieval returns doc-1 + doc-7 correctly. The model ignores them and hallucinates a phone-support step. Faithfulness drops to 0.50.",
-    cause: "Root cause: generation. Fix the prompt / model / refusal logic (12.24).",
+    cause: "Root cause: generation. Fix the prompt / model / refusal logic (22.3).",
   },
   {
     label: "Scenario C - Product Fault",
@@ -104,7 +104,7 @@ const TRI_FAILURE_SCENARIOS = [
     layerColor: C.orange,
     layerAccent: "#ffcc80",
     body: "Retrieval and generation both score above 0.9. Yet user reports 'this did not help'. Helpfulness drops to 2/5.",
-    cause: "Root cause: product / prompting / answer style. Fix online via 12.35.",
+    cause: "Root cause: product / prompting / answer style. Fix online via 23.5.",
   },
 ];
 
@@ -454,7 +454,7 @@ export default function RAGEvalTriangle(ctx) {
               scores 0; a hallucinated answer that recycles reference words scores high.
             </T>
             <T color="#ffe082" center size={15} style={{ marginTop: 8 }}>
-              Use RAGAS (chapter 12.33) and LLM-as-judge (chapter 12.32) instead.
+              Use RAGAS (chapter 23.3) and LLM-as-judge (chapter 23.2) instead.
             </T>
           </div>
         </Box>

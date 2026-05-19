@@ -5,7 +5,7 @@ import FAISS from "../../../chapters/vector-systems/faiss.jsx";
 
 afterEach(() => cleanup());
 
-describe("FAISS (11.30)", () => {
+describe("FAISS (17.10)", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(FAISS(makeCtx({ sub: 0 })))).not.toThrow();
   });

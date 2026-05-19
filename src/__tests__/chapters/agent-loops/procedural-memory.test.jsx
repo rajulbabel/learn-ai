@@ -5,7 +5,7 @@ import ProceduralMemory from "../../../chapters/agent-loops/procedural-memory.js
 
 afterEach(() => cleanup());
 
-describe("ProceduralMemory (13.28)", () => {
+describe("ProceduralMemory (26.11)", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(ProceduralMemory(makeCtx({ sub: 0 })))).not.toThrow();
   });

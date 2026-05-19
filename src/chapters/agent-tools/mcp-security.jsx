@@ -2,7 +2,7 @@ import { Box, T, Reveal, SubBtn } from "../../components.jsx";
 import { C } from "../../config.js";
 import { SOFT, tintedCard, pill, DIM_BG, DIM_BORDER } from "../../shared/agent-styles.jsx";
 
-// --- Chapter 13.16 McpSecurity data ---
+// --- Chapter 25.10 McpSecurity data ---
 
 // Sandbox restrictions rendered as sub-cards in sub=1.
 const SANDBOX_RULES = [

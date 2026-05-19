@@ -205,7 +205,7 @@ export default function RerankerCascade(ctx) {
             Each Stage Cuts The Candidate Set And Pays For Better Quality
           </T>
           <T color="#90caf9" center size={16} style={{ marginTop: 10 }}>
-            Rerankers - covered in Section 11.26 - re-score a candidate list using a cross-encoder that reads the query
+            Rerankers - covered in Section 17.6 - re-score a candidate list using a cross-encoder that reads the query
             and the doc together. Here we apply that idea in a 3-stage RAG cascade.
           </T>
 
@@ -478,7 +478,7 @@ export default function RerankerCascade(ctx) {
           >
             <T color="#a5d6a7" center size={14}>
               LLM generation dominates. Optimizing reranker speed alone gives small wins. Caching the LLM call (covered
-              in chapter 12.36) gives the biggest latency win.
+              in chapter 23.6) gives the biggest latency win.
             </T>
           </div>
         </Box>

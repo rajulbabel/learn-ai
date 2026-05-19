@@ -5,7 +5,7 @@ import WorkingMemory from "../../../chapters/agent-loops/working-memory.jsx";
 
 afterEach(() => cleanup());
 
-describe("WorkingMemory (13.25)", () => {
+describe("WorkingMemory (26.8)", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(WorkingMemory(makeCtx({ sub: 0 })))).not.toThrow();
   });

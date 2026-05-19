@@ -5,7 +5,7 @@ import WeaviateMilvusChroma from "../../../chapters/vector-systems/weaviate-milv
 
 afterEach(() => cleanup());
 
-describe("WeaviateMilvusChroma (11.35)", () => {
+describe("WeaviateMilvusChroma (18.5)", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(WeaviateMilvusChroma(makeCtx({ sub: 0 })))).not.toThrow();
   });

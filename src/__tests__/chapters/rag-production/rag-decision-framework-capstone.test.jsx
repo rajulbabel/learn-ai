@@ -5,7 +5,7 @@ import RAGDecisionFrameworkCapstone from "../../../chapters/rag-production/rag-d
 
 afterEach(() => cleanup());
 
-describe("RAGDecisionFrameworkCapstone (12.41)", () => {
+describe("RAGDecisionFrameworkCapstone (23.11)", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(RAGDecisionFrameworkCapstone(makeCtx({ sub: 0 })))).not.toThrow();
   });
@@ -67,7 +67,7 @@ describe("RAGDecisionFrameworkCapstone (12.41)", () => {
     const { container } = render(RAGDecisionFrameworkCapstone(makeCtx({ sub: 2 })));
     expect(container.textContent).toMatch(/hierarchical|contextual/i);
     expect(container.textContent).toMatch(/chunk/i);
-    expect(container.textContent).toMatch(/12\.[89]/);
+    expect(container.textContent).toMatch(/20\.[56]/);
   });
 
   it("sub=3 chooses domain-adapted embedding + hybrid + jurisdiction filter + cross-encoder rerank", () => {
@@ -82,7 +82,7 @@ describe("RAGDecisionFrameworkCapstone (12.41)", () => {
     const { container } = render(RAGDecisionFrameworkCapstone(makeCtx({ sub: 4 })));
     expect(container.textContent).toMatch(/multi-query|decomposition/i);
     expect(container.textContent).toMatch(/HyDE/);
-    expect(container.textContent).toMatch(/12\.1[78]/);
+    expect(container.textContent).toMatch(/21\.[45]/);
   });
 
   it("sub=5 chooses high-token-budget sandwich pack + mandatory citations + refusal", () => {
@@ -96,7 +96,7 @@ describe("RAGDecisionFrameworkCapstone (12.41)", () => {
     const { container } = render(RAGDecisionFrameworkCapstone(makeCtx({ sub: 6 })));
     expect(container.textContent).toMatch(/GraphRAG/);
     expect(container.textContent).toMatch(/multi-hop/i);
-    expect(container.textContent).toMatch(/long[- ]context|12\.27/i);
+    expect(container.textContent).toMatch(/long[- ]context|22\.6/i);
   });
 
   it("sub=7 chooses LLM-as-judge + golden dataset + RAGAS + online A/B", () => {
@@ -117,7 +117,7 @@ describe("RAGDecisionFrameworkCapstone (12.41)", () => {
   it("sub=9 closes with the complete capstone stack and framework choice", () => {
     const { container } = render(RAGDecisionFrameworkCapstone(makeCtx({ sub: 9 })));
     expect(container.textContent).toMatch(/stack|capstone|putting it all together/i);
-    expect(container.textContent).toMatch(/no framework|LlamaIndex|12\.37/i);
+    expect(container.textContent).toMatch(/no framework|LlamaIndex|23\.7/i);
     expect(container.textContent).toMatch(/chunking|embedding|retrieval|rerank|generate|eval/i);
   });
 });

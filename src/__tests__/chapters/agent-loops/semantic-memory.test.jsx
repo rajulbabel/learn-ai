@@ -5,7 +5,7 @@ import SemanticMemory from "../../../chapters/agent-loops/semantic-memory.jsx";
 
 afterEach(() => cleanup());
 
-describe("SemanticMemory (13.27)", () => {
+describe("SemanticMemory (26.10)", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(SemanticMemory(makeCtx({ sub: 0 })))).not.toThrow();
   });

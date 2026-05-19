@@ -243,7 +243,7 @@ export default function Guardrails(ctx) {
           <T color={SOFT.yellow} center size={16} style={{ marginTop: 10 }}>
             The output guardrail validates every structured response against its schema. Bad JSON, missing fields, wrong
             types - all blocked. If the response fails, retry once with a fix instruction. If it still fails, fall back
-            to a deterministic error reply. This is the runtime version of Section 13.3 structured output.
+            to a deterministic error reply. This is the runtime version of Section 24.3 structured output.
           </T>
 
           <div style={{ ...tintedCard(C.yellow), padding: 14, marginTop: 14 }}>

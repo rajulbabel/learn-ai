@@ -5,7 +5,7 @@ import HNSWConstruction from "../../../chapters/vector-foundations/hnsw-construc
 
 afterEach(() => cleanup());
 
-describe("HNSWConstruction (11.8)", () => {
+describe("HNSWConstruction (15.8)", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(HNSWConstruction(makeCtx({ sub: 0 })))).not.toThrow();
   });

@@ -5,7 +5,7 @@ import PromptVsTuneVsRagVsAgent from "../../../chapters/agent-prompting/prompt-v
 
 afterEach(() => cleanup());
 
-describe("PromptVsTuneVsRagVsAgent (13.5)", () => {
+describe("PromptVsTuneVsRagVsAgent (24.5)", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(PromptVsTuneVsRagVsAgent(makeCtx({ sub: 0 })))).not.toThrow();
   });

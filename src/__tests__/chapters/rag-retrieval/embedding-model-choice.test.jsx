@@ -5,7 +5,7 @@ import EmbeddingModelChoice from "../../../chapters/rag-retrieval/embedding-mode
 
 afterEach(() => cleanup());
 
-describe("EmbeddingModelChoice (12.14)", () => {
+describe("EmbeddingModelChoice (21.1)", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(EmbeddingModelChoice(makeCtx({ sub: 0 })))).not.toThrow();
   });
@@ -25,10 +25,10 @@ describe("EmbeddingModelChoice (12.14)", () => {
     expect(() => render(EmbeddingModelChoice(makeCtx({ sub: 5 })))).not.toThrow();
   });
 
-  it("sub=0 frames embedding model as recall ceiling and references Section 5.2", () => {
+  it("sub=0 frames embedding model as recall ceiling and references Section 8.2", () => {
     const { container } = render(EmbeddingModelChoice(makeCtx({ sub: 0 })));
     expect(container.textContent).toMatch(/embedding model/i);
-    expect(container.textContent).toMatch(/section 5\.2|5\.2/i);
+    expect(container.textContent).toMatch(/section 8\.2|8\.2/i);
     expect(container.textContent).toMatch(/recall/i);
   });
 
@@ -52,11 +52,11 @@ describe("EmbeddingModelChoice (12.14)", () => {
     expect(container.textContent).toMatch(/diminish|marginal/i);
   });
 
-  it("sub=3 contrasts multilingual vs English-only and mentions 12.15 for domain", () => {
+  it("sub=3 contrasts multilingual vs English-only and mentions 21.2 for domain", () => {
     const { container } = render(EmbeddingModelChoice(makeCtx({ sub: 3 })));
     expect(container.textContent).toMatch(/multilingual/i);
     expect(container.textContent).toMatch(/english/i);
-    expect(container.textContent).toMatch(/12\.15/);
+    expect(container.textContent).toMatch(/21\.2/);
   });
 
   it("sub=4 shows cost math at 100M tokens with a self-host comparison", () => {

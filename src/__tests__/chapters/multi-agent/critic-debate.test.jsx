@@ -5,7 +5,7 @@ import CriticDebate from "../../../chapters/multi-agent/critic-debate.jsx";
 
 afterEach(() => cleanup());
 
-describe("CriticDebate (13.34)", () => {
+describe("CriticDebate (27.5)", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(CriticDebate(makeCtx({ sub: 0 })))).not.toThrow();
   });
@@ -29,7 +29,7 @@ describe("CriticDebate (13.34)", () => {
   it("sub=0 introduces critic role", () => {
     const { container } = render(CriticDebate(makeCtx({ sub: 0 })));
     expect(container.textContent).toMatch(/critic/i);
-    expect(container.textContent).toMatch(/13\.22|reflection/i);
+    expect(container.textContent).toMatch(/26\.5|reflection/i);
     expect(container.textContent).toMatch(/A Second Agent Checks The First/i);
   });
 

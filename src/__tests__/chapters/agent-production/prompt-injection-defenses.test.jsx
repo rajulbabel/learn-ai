@@ -5,7 +5,7 @@ import PromptInjectionDefenses from "../../../chapters/agent-production/prompt-i
 
 afterEach(() => cleanup());
 
-describe("PromptInjectionDefenses (13.46)", () => {
+describe("PromptInjectionDefenses (28.10)", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(PromptInjectionDefenses(makeCtx({ sub: 0 })))).not.toThrow();
   });

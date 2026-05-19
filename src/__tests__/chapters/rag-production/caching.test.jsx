@@ -5,7 +5,7 @@ import Caching from "../../../chapters/rag-production/caching.jsx";
 
 afterEach(() => cleanup());
 
-describe("Caching (12.36)", () => {
+describe("Caching (23.6)", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(Caching(makeCtx({ sub: 0 })))).not.toThrow();
   });

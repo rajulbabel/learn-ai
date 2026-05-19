@@ -5,7 +5,7 @@ import ToolCallLifecycle from "../../../chapters/agent-tools/tool-call-lifecycle
 
 afterEach(() => cleanup());
 
-describe("ToolCallLifecycle (13.9)", () => {
+describe("ToolCallLifecycle (25.3)", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(ToolCallLifecycle(makeCtx({ sub: 0 })))).not.toThrow();
   });

@@ -2,7 +2,7 @@ import { Box, T, Reveal, SubBtn } from "../../components.jsx";
 import { C } from "../../config.js";
 import { SOFT, tintedCard } from "../../shared/agent-styles.jsx";
 
-// Module-private helpers used by SystemPromptContract (13.2)
+// Module-private helpers used by SystemPromptContract (24.2)
 
 const CONTRACT_PARTS = [
   {
@@ -306,7 +306,7 @@ export default function SystemPromptContract(ctx) {
             Tools available to you: search_kb, lookup_customer, process_refund, escalate_human.
           </div>
           <T color={SOFT.purple} center size={15} style={{ marginTop: 10 }}>
-            The system prompt declares the tools. The API schema (chapter 13.8) is what actually wires them up. Both
+            The system prompt declares the tools. The API schema (chapter 25.2) is what actually wires them up. Both
             sides have to agree.
           </T>
         </Box>

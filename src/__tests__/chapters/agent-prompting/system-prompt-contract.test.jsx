@@ -5,7 +5,7 @@ import SystemPromptContract from "../../../chapters/agent-prompting/system-promp
 
 afterEach(() => cleanup());
 
-describe("SystemPromptContract (13.2)", () => {
+describe("SystemPromptContract (24.2)", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(SystemPromptContract(makeCtx({ sub: 0 })))).not.toThrow();
   });

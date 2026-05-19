@@ -5,7 +5,7 @@ import Vamana from "../../../chapters/vector-foundations/vamana.jsx";
 
 afterEach(() => cleanup());
 
-describe("Vamana (11.11)", () => {
+describe("Vamana (15.11)", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(Vamana(makeCtx({ sub: 0 })))).not.toThrow();
   });

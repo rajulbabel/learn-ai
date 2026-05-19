@@ -5,7 +5,7 @@ import MultiAgentFailures from "../../../chapters/multi-agent/multi-agent-failur
 
 afterEach(() => cleanup());
 
-describe("MultiAgentFailures (13.35)", () => {
+describe("MultiAgentFailures (27.6)", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(MultiAgentFailures(makeCtx({ sub: 0 })))).not.toThrow();
   });

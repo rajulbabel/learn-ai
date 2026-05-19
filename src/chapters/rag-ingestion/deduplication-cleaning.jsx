@@ -469,8 +469,8 @@ export default function DeduplicationCleaning(ctx) {
               Three-step pipeline
             </T>
             <T color="#b8a9ff" center size={14} style={{ marginTop: 8 }}>
-              <strong style={{ color: C.purple }}>1. Shingle:</strong> cut each doc into overlapping 3-word windows.
-              Doc becomes a set of shingles.
+              <strong style={{ color: C.purple }}>1. Shingle:</strong> cut each doc into overlapping 3-word windows. Doc
+              becomes a set of shingles.
             </T>
             <T color="#b8a9ff" center size={14} style={{ marginTop: 6 }}>
               <strong style={{ color: C.purple }}>2. MinHash:</strong> compress each set into a fixed 128-number
@@ -629,9 +629,9 @@ export default function DeduplicationCleaning(ctx) {
             }}
           >
             <T color={C.orange} bold center size={15}>
-              Use embedding dedup when the corpus has paraphrases (support docs + forum posts, multi-author docs, translations).
-              Skip it when content is byte-stable (PDFs from authoritative sources) and exact hashing + MinHash already
-              cover the threshold.
+              Use embedding dedup when the corpus has paraphrases (support docs + forum posts, multi-author docs,
+              translations). Skip it when content is byte-stable (PDFs from authoritative sources) and exact hashing +
+              MinHash already cover the threshold.
             </T>
           </div>
         </Box>

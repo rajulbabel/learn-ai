@@ -5,7 +5,7 @@ import IVF from "../../../chapters/vector-foundations/ivf.jsx";
 
 afterEach(() => cleanup());
 
-describe("IVF (11.6)", () => {
+describe("IVF (15.6)", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(IVF(makeCtx({ sub: 0 })))).not.toThrow();
   });

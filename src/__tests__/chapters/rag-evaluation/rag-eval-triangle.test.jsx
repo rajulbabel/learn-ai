@@ -5,7 +5,7 @@ import RAGEvalTriangle from "../../../chapters/rag-evaluation/rag-eval-triangle.
 
 afterEach(() => cleanup());
 
-describe("RAGEvalTriangle (12.31)", () => {
+describe("RAGEvalTriangle (23.1)", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(RAGEvalTriangle(makeCtx({ sub: 0 })))).not.toThrow();
   });

@@ -5,7 +5,7 @@ import LLMAsJudge from "../../../chapters/rag-evaluation/llm-as-judge.jsx";
 
 afterEach(() => cleanup());
 
-describe("LLMAsJudge (12.32)", () => {
+describe("LLMAsJudge (23.2)", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(LLMAsJudge(makeCtx({ sub: 0 })))).not.toThrow();
   });

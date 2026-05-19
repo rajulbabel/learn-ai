@@ -5,7 +5,7 @@ import SemanticChunking from "../../../chapters/rag-foundations/semantic-chunkin
 
 afterEach(() => cleanup());
 
-describe("SemanticChunking (12.9)", () => {
+describe("SemanticChunking (20.6)", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(SemanticChunking(makeCtx({ sub: 0 })))).not.toThrow();
   });

@@ -29,7 +29,12 @@ const T3_ORCHESTRATOR_TRACE = [
     detail:
       'Receives T3 ("Dashboard Slow + 500 Errors"). Plans 3 Sub-Tasks: A) search_kb For "Dashboard Slow"; B) search_kb For "500 Errors"; C) lookup_customer For Usage Tier.',
   },
-  { step: 2, actor: "Worker A", color: "cyan", detail: "Returns Top-3 Knowledge Base Articles On Dashboard Performance." },
+  {
+    step: 2,
+    actor: "Worker A",
+    color: "cyan",
+    detail: "Returns Top-3 Knowledge Base Articles On Dashboard Performance.",
+  },
   { step: 3, actor: "Worker B", color: "cyan", detail: "Returns Top-3 Knowledge Base Articles On 500 Errors." },
   {
     step: 4,

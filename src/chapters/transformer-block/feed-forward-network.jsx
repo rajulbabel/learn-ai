@@ -12,7 +12,7 @@ export default function FeedForwardNetwork(ctx) {
             Where Does the Feed-Forward Network Sit?
           </T>
           <T color="#ffcc80" size={16} center style={{ marginTop: 4 }}>
-            In chapter 8.2 we covered Add & Norm after Attention. Now let's zoom into the next step.
+            In chapter 12.2 we covered Add & Norm after Attention. Now let's zoom into the next step.
           </T>
           <div style={{ marginTop: 16, display: "flex", flexDirection: "column", alignItems: "center", gap: 0 }}>
             {[
@@ -69,8 +69,8 @@ export default function FeedForwardNetwork(ctx) {
             FFN = Two Linear Layers with Activation
           </T>
           <T color="#80deea" size={16} style={{ marginTop: 6 }}>
-            You already know what a layer does (chapter 1.19): multiply by a weight matrix W, add bias b. The FFN is
-            just <strong>two</strong> of those layers stacked, with an activation function in between.
+            You already know what a layer does (chapter 3.4): multiply by a weight matrix W, add bias b. The FFN is just{" "}
+            <strong>two</strong> of those layers stacked, with an activation function in between.
           </T>
 
           {/* The formula */}
@@ -365,7 +365,7 @@ export default function FeedForwardNetwork(ctx) {
             Step-by-Step: FFN on "cats"
           </T>
           <T color="#a5d6a7" size={16} style={{ marginTop: 6 }}>
-            Let's trace "cats" through the FFN. In chapter 8.2, Add & Norm output [-1.36, -0.55, 0.86, 1.06] for "cats".
+            Let's trace "cats" through the FFN. In chapter 12.2, Add & Norm output [-1.36, -0.55, 0.86, 1.06] for "cats".
             We'll use a tiny 4-dim version to show the real math (real models use 512 dims but the process is
             identical).
           </T>
@@ -399,7 +399,7 @@ export default function FeedForwardNetwork(ctx) {
               </div>
               <T color={C.dim} size={13}>
                 Each of the 8 output values is a dot product of the input with one column of W<sub>1</sub>, plus a bias
-                - exactly like chapter 1.19.
+                - exactly like chapter 3.4.
               </T>
               <div style={{ marginTop: 4, padding: 8, borderRadius: 6, background: `${C.pink}06`, width: "100%" }}>
                 <T color={C.pink} bold center size={14}>
@@ -549,7 +549,7 @@ export default function FeedForwardNetwork(ctx) {
             Linear Unit). Here is the real formula:
           </T>
 
-          {/* The GELU formula - styled like the attention formula in 7.8 */}
+          {/* The GELU formula - styled like the attention formula in 10.8 */}
           <div
             style={{
               margin: "14px 0",
@@ -988,8 +988,8 @@ export default function FeedForwardNetwork(ctx) {
           </div>
 
           <T color="#fff176" size={14} style={{ marginTop: 10 }}>
-            Why does the smooth curve matter? During backpropagation (chapter 1.15), ReLU's gradient is exactly 0 for
-            all negative inputs - the neuron is "dead" and can never recover. GELU's smooth curve means even slightly
+            Why does the smooth curve matter? During backpropagation (chapter 2.8), ReLU's gradient is exactly 0 for all
+            negative inputs - the neuron is "dead" and can never recover. GELU's smooth curve means even slightly
             negative values get a small gradient, so neurons can recover. GPT-2 and GPT-3 both use GELU.
           </T>
         </Box>
@@ -1505,10 +1505,10 @@ export default function FeedForwardNetwork(ctx) {
                   Attention: ~1.05M
                 </T>
                 <T color={C.dim} size={11} style={{ marginTop: 4 }}>
-                  W_Q, W_K, W_V = 3 matrices that create the Queries, Keys, and Values (chapter 6.9)
+                  W_Q, W_K, W_V = 3 matrices that create the Queries, Keys, and Values (chapter 9.9)
                 </T>
                 <T color={C.dim} size={11} style={{ marginTop: 2 }}>
-                  W_O = the matrix that blends multi-head outputs (chapter 7.12)
+                  W_O = the matrix that blends multi-head outputs (chapter 11.4)
                 </T>
                 <T color={C.pink} size={11} style={{ marginTop: 4 }}>
                   These learn <strong>how to find relationships</strong> between words

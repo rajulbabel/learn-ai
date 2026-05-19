@@ -5,7 +5,7 @@ import Filtering from "../../../chapters/vector-production/filtering.jsx";
 
 afterEach(() => cleanup());
 
-describe("Filtering (11.20)", () => {
+describe("Filtering (16.8)", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(Filtering(makeCtx({ sub: 0 })))).not.toThrow();
   });

@@ -2,7 +2,7 @@ import { Box, T, Reveal, SubBtn } from "../../components.jsx";
 import { C } from "../../config.js";
 import { SOFT, tintedCard, pill } from "../../shared/agent-styles.jsx";
 
-// Module-private helpers used by PromptVsTuneVsRagVsAgent (13.5)
+// Module-private helpers used by PromptVsTuneVsRagVsAgent (24.5)
 
 const FOUR_APPROACHES = [
   {

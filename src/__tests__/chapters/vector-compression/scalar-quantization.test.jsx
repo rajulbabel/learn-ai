@@ -5,7 +5,7 @@ import ScalarQuantization from "../../../chapters/vector-compression/scalar-quan
 
 afterEach(() => cleanup());
 
-describe("ScalarQuantization (11.13)", () => {
+describe("ScalarQuantization (16.1)", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(ScalarQuantization(makeCtx({ sub: 0 })))).not.toThrow();
   });

@@ -5,7 +5,7 @@ import McpSecurity from "../../../chapters/agent-tools/mcp-security.jsx";
 
 afterEach(() => cleanup());
 
-describe("McpSecurity (13.16)", () => {
+describe("McpSecurity (25.10)", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(McpSecurity(makeCtx({ sub: 0 })))).not.toThrow();
   });

@@ -5,7 +5,7 @@ import RefreshSync from "../../../chapters/rag-ingestion/refresh-sync.jsx";
 
 afterEach(() => cleanup());
 
-describe("RefreshSync (12.6)", () => {
+describe("RefreshSync (20.3)", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(RefreshSync(makeCtx({ sub: 0 })))).not.toThrow();
   });

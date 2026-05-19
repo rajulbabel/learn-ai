@@ -5,7 +5,7 @@ import WhyTransformQueries from "../../../chapters/rag-retrieval/why-transform-q
 
 afterEach(() => cleanup());
 
-describe("WhyTransformQueries (12.18)", () => {
+describe("WhyTransformQueries (21.5)", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(WhyTransformQueries(makeCtx({ sub: 0 })))).not.toThrow();
   });
@@ -29,19 +29,19 @@ describe("WhyTransformQueries (12.18)", () => {
     expect(container.textContent).toMatch(/0\.\d+/);
   });
 
-  it("sub=1 shows lexical mismatch examples and routes to 12.19 and 12.20", () => {
+  it("sub=1 shows lexical mismatch examples and routes to 21.6 and 21.7", () => {
     const { container } = render(WhyTransformQueries(makeCtx({ sub: 1 })));
     expect(container.textContent).toMatch(/lexical|mismatch/i);
     expect(container.textContent).toMatch(/sign in|log in|cancel|delete/i);
-    expect(container.textContent).toMatch(/12\.19/);
-    expect(container.textContent).toMatch(/12\.20/);
+    expect(container.textContent).toMatch(/21\.6/);
+    expect(container.textContent).toMatch(/21\.7/);
   });
 
   it("sub=2 shows ambiguity with multiple interpretations", () => {
     const { container } = render(WhyTransformQueries(makeCtx({ sub: 2 })));
     expect(container.textContent).toMatch(/ambigu/i);
     expect(container.textContent).toMatch(/export/i);
-    expect(container.textContent).toMatch(/12\.20|12\.21/);
+    expect(container.textContent).toMatch(/21\.7|21\.8/);
   });
 
   it("sub=3 shows multi-intent on the cancel-and-refund query", () => {
@@ -49,10 +49,10 @@ describe("WhyTransformQueries (12.18)", () => {
     expect(container.textContent).toMatch(/multi-?intent|two intents/i);
     expect(container.textContent).toMatch(/cancel/i);
     expect(container.textContent).toMatch(/refund/i);
-    expect(container.textContent).toMatch(/12\.21/);
+    expect(container.textContent).toMatch(/21\.8/);
   });
 
-  it("sub=4 previews the four strategies and maps to 12.19-12.21", () => {
+  it("sub=4 previews the four strategies and maps to 21.6-21.8", () => {
     const { container } = render(WhyTransformQueries(makeCtx({ sub: 4 })));
     expect(container.textContent).toMatch(/HyDE|hypothetical/i);
     expect(container.textContent).toMatch(/multi-?query/i);

@@ -176,7 +176,7 @@ export default function NaiveRAGPipeline(ctx) {
           </div>
           <T color="#a5d6a7" size={16} style={{ marginTop: 12 }}>
             Chunking strategies (fixed-size, sentence-aware, semantic, hierarchical) covered in detail in chapters
-            12.7-12.13.
+            20.4-20.10.
           </T>
         </Box>
       </Reveal>
@@ -229,8 +229,8 @@ export default function NaiveRAGPipeline(ctx) {
             ))}
           </div>
           <T color="#b8a9ff" size={16} style={{ marginTop: 14 }}>
-            Embeddings - covered in Section 5.2 - turn text into dense vectors. RAG uses retrieval-tuned embeddings
-            (more in chapter 12.14). Production typically uses 1024-dim vectors; we show 8 here for visibility.
+            Embeddings - covered in Section 8.2 - turn text into dense vectors. RAG uses retrieval-tuned embeddings
+            (more in chapter 21.1). Production typically uses 1024-dim vectors; we show 8 here for visibility.
           </T>
         </Box>
       </Reveal>

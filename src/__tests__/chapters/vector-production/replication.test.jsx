@@ -5,7 +5,7 @@ import Replication from "../../../chapters/vector-production/replication.jsx";
 
 afterEach(() => cleanup());
 
-describe("Replication (11.23)", () => {
+describe("Replication (17.3)", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(Replication(makeCtx({ sub: 0 })))).not.toThrow();
   });

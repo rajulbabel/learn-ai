@@ -5,7 +5,7 @@ import BruteForceKNN from "../../../chapters/vector-foundations/brute-force-knn.
 
 afterEach(() => cleanup());
 
-describe("BruteForceKNN (11.2)", () => {
+describe("BruteForceKNN (15.2)", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(BruteForceKNN(makeCtx({ sub: 0 })))).not.toThrow();
   });
@@ -24,7 +24,7 @@ describe("BruteForceKNN (11.2)", () => {
     expect(container.textContent).toMatch(/exact/i);
   });
 
-  it("sub=1 top-3 matches 11.1's highlighted docs (1, 3, 7)", () => {
+  it("sub=1 top-3 matches 15.1's highlighted docs (1, 3, 7)", () => {
     const { container } = render(BruteForceKNN(makeCtx({ sub: 1 })));
     const text = container.textContent;
     expect(text).toMatch(/1.*3.*7|docs? 1.*3.*7|top.*1.*3.*7/is);

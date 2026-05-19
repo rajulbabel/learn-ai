@@ -158,7 +158,7 @@ export default function AddNorm(ctx) {
 
           <T color="#ef9a9a" bold center size={16} style={{ marginTop: 12 }}>
             Both are <Tag color={C.red}>broken</Tag>. Whether the value goes to 0.00003 or 4,838 - it's no longer a
-            useful embedding. And gradients during backpropagation (chapter 1.9) drift the same way, so the model can't
+            useful embedding. And gradients during backpropagation (chapter 2.2) drift the same way, so the model can't
             learn either.
           </T>
         </Box>
@@ -239,7 +239,7 @@ export default function AddNorm(ctx) {
 
           <T color="#a5d6a7" size={16} style={{ marginTop: 12 }}>
             Think of it as a <strong>highway</strong>: even if the attention layer learns nothing useful, the original
-            embedding still passes through untouched. During backpropagation (chapter 1.9), the error can travel
+            embedding still passes through untouched. During backpropagation (chapter 2.2), the error can travel
             backward along this highway without shrinking to zero.
           </T>
 

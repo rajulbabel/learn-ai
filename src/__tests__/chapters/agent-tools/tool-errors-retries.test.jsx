@@ -5,7 +5,7 @@ import ToolErrorsRetries from "../../../chapters/agent-tools/tool-errors-retries
 
 afterEach(() => cleanup());
 
-describe("ToolErrorsRetries (13.11)", () => {
+describe("ToolErrorsRetries (25.5)", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(ToolErrorsRetries(makeCtx({ sub: 0 })))).not.toThrow();
   });

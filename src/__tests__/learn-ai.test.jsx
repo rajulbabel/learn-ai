@@ -412,10 +412,10 @@ describe("LearnAI tap-anywhere navigation", () => {
 });
 
 describe("LearnAI chapter loading", () => {
-  it("loads chapter 3.3 from the combined section 3 modules instead of reusing chapter 3.2", async () => {
+  it("loads chapter 6.3 from the combined section 6 modules instead of reusing chapter 6.2", async () => {
     const navMod = await import("../nav-persistence.js");
-    const chapter32 = chapters.findIndex((c) => c.id === "3.2");
-    navMod.loadNav.mockReturnValue({ ch: chapter32, sub: 0 });
+    const chapter62 = chapters.findIndex((c) => c.id === "6.2");
+    navMod.loadNav.mockReturnValue({ ch: chapter62, sub: 0 });
 
     await renderLearnAI();
     expect(screen.getByTestId("parameters-at-scale")).toBeTruthy();

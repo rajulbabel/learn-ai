@@ -2,7 +2,7 @@ import { Box, T, Reveal, SubBtn } from "../../components.jsx";
 import { C } from "../../config.js";
 import { SOFT, DIM_BG, DIM_BORDER, tintedCard, pill } from "../../shared/agent-styles.jsx";
 
-// Module-private helpers used by FewShotStructuredOutput (13.3)
+// Module-private helpers used by FewShotStructuredOutput (24.3)
 
 const FEW_SHOT_EXAMPLES = [
   {

@@ -5,7 +5,7 @@ import MultiHopRetrieval from "../../../chapters/rag-generation/multi-hop-retrie
 
 afterEach(() => cleanup());
 
-describe("MultiHopRetrieval (12.25)", () => {
+describe("MultiHopRetrieval (22.4)", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(MultiHopRetrieval(makeCtx({ sub: 0 })))).not.toThrow();
   });

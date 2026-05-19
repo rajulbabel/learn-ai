@@ -5,7 +5,7 @@ import VendorSdks from "../../../chapters/agent-production/vendor-sdks.jsx";
 
 afterEach(() => cleanup());
 
-describe("VendorSdks (13.50)", () => {
+describe("VendorSdks (28.14)", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(VendorSdks(makeCtx({ sub: 0 })))).not.toThrow();
   });

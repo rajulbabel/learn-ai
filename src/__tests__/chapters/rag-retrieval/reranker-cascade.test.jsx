@@ -5,7 +5,7 @@ import RerankerCascade from "../../../chapters/rag-retrieval/reranker-cascade.js
 
 afterEach(() => cleanup());
 
-describe("RerankerCascade (12.17)", () => {
+describe("RerankerCascade (21.4)", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(RerankerCascade(makeCtx({ sub: 0 })))).not.toThrow();
   });
@@ -22,9 +22,9 @@ describe("RerankerCascade (12.17)", () => {
     expect(() => render(RerankerCascade(makeCtx({ sub: 4 })))).not.toThrow();
   });
 
-  it("sub=0 recaps Section 11.26 cross-encoder", () => {
+  it("sub=0 recaps Section 17.6 cross-encoder", () => {
     const { container } = render(RerankerCascade(makeCtx({ sub: 0 })));
-    expect(container.textContent).toMatch(/Section 11\.26|11\.26/);
+    expect(container.textContent).toMatch(/Section 17\.6|17\.6/);
     expect(container.textContent).toMatch(/cross-?encoder|reranker/i);
     expect(container.textContent).toMatch(/cascade|stage/i);
   });

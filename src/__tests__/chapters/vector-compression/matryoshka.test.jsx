@@ -5,7 +5,7 @@ import Matryoshka from "../../../chapters/vector-compression/matryoshka.jsx";
 
 afterEach(() => cleanup());
 
-describe("Matryoshka (11.16)", () => {
+describe("Matryoshka (16.4)", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(Matryoshka(makeCtx({ sub: 0 })))).not.toThrow();
   });

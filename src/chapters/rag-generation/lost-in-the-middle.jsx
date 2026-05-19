@@ -53,7 +53,7 @@ const LITM_SANDWICH_SLOTS = [
 const LITM_FAILURE_CARDS = [
   {
     title: "Truly Long Multi-Fact Queries",
-    body: "30 chunks all needed; even sandwich leaves middle facts ignored. Fix: hierarchical summarization or multi-hop retrieval (chapter 12.25).",
+    body: "30 chunks all needed; even sandwich leaves middle facts ignored. Fix: hierarchical summarization or multi-hop retrieval (chapter 22.4).",
     color: C.red,
     accent: "#ef9a9a",
   },

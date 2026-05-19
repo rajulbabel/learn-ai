@@ -105,12 +105,12 @@ const FC_WHEN_TABLE = [
 ];
 
 const FC_AGNOSTIC_BULLETS = [
-  "Chunking Strategy (12.7 - 12.13) Is A Data-Pipeline Decision, Not A Framework Decision.",
-  "Embedding Model Choice (12.14) Is A Data-Pipeline Decision.",
-  "Hybrid + Reranker Cascade (12.16, 12.17) Is A Retrieval-Quality Decision.",
-  "Prompt Template + Context Packing (12.22) Is A Generation Decision.",
-  "Eval (12.31 - 12.35) Is A Measurement Decision.",
-  "Tracing (12.38) Is An Ops Decision.",
+  "Chunking Strategy (20.4 - 20.10) Is A Data-Pipeline Decision, Not A Framework Decision.",
+  "Embedding Model Choice (21.1) Is A Data-Pipeline Decision.",
+  "Hybrid + Reranker Cascade (21.3, 21.4) Is A Retrieval-Quality Decision.",
+  "Prompt Template + Context Packing (22.1) Is A Generation Decision.",
+  "Eval (23.1 - 23.5) Is A Measurement Decision.",
+  "Tracing (23.8) Is An Ops Decision.",
 ];
 
 export default function FrameworkChoice(ctx) {
@@ -518,7 +518,7 @@ export default function FrameworkChoice(ctx) {
             </div>
           </div>
           <T color="#80e9b1" center size={14} style={{ marginTop: 12 }}>
-            Frameworks are wrappers. The decisions in 12.7-12.35 are agnostic to which one you pick. Make those right
+            Frameworks are wrappers. The decisions in 20.4-23.5 are agnostic to which one you pick. Make those right
             first; the framework choice becomes a 2-day swap, not a 2-month rewrite.
           </T>
         </Box>

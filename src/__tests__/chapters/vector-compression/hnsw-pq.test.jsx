@@ -5,7 +5,7 @@ import HNSWPQ from "../../../chapters/vector-compression/hnsw-pq.jsx";
 
 afterEach(() => cleanup());
 
-describe("HNSWPQ (11.18)", () => {
+describe("HNSWPQ (16.6)", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(HNSWPQ(makeCtx({ sub: 0 })))).not.toThrow();
   });

@@ -5,7 +5,7 @@ import ParallelToolsAndChoice from "../../../chapters/agent-tools/parallel-tools
 
 afterEach(() => cleanup());
 
-describe("ParallelToolsAndChoice (13.10)", () => {
+describe("ParallelToolsAndChoice (25.4)", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(ParallelToolsAndChoice(makeCtx({ sub: 0 })))).not.toThrow();
   });

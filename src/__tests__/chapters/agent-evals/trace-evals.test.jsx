@@ -5,7 +5,7 @@ import TraceEvals from "../../../chapters/agent-evals/trace-evals.jsx";
 
 afterEach(() => cleanup());
 
-describe("TraceEvals (13.40)", () => {
+describe("TraceEvals (28.4)", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(TraceEvals(makeCtx({ sub: 0 })))).not.toThrow();
   });

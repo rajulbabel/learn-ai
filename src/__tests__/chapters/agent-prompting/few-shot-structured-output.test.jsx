@@ -5,7 +5,7 @@ import FewShotStructuredOutput from "../../../chapters/agent-prompting/few-shot-
 
 afterEach(() => cleanup());
 
-describe("FewShotStructuredOutput (13.3)", () => {
+describe("FewShotStructuredOutput (24.3)", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(FewShotStructuredOutput(makeCtx({ sub: 0 })))).not.toThrow();
   });

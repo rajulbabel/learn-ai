@@ -322,8 +322,8 @@ export default function DecisionFramework(ctx) {
           <T color="#ffb74d" style={{ marginTop: 8 }}>
             Filtering is where products separate most. Simple filters (tenant_id = 42) work on everything. Complex
             compound filters (tenant + geo + date + ACL) exercise the vendor; Qdrant&apos;s inline filtered-HNSW
-            (chapter 11.21) wins. When the query involves SQL-shaped joins to rows in other tables, pgvector is the
-            right answer because Postgres has always been good at that.
+            (chapter 17.1) wins. When the query involves SQL-shaped joins to rows in other tables, pgvector is the right
+            answer because Postgres has always been good at that.
           </T>
           <div
             style={{
@@ -389,7 +389,7 @@ export default function DecisionFramework(ctx) {
           >
             Mismatched filter complexity is <span style={{ color: C.orange }}>the #1 post-launch surprise</span>
             <br />
-            Read 11.21 carefully before committing
+            Read 17.1 carefully before committing
           </div>
           <T color="#ffb74d" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
             Teams often underestimate filter complexity until the product is in flight. The first selectivity-edge-case
@@ -418,42 +418,42 @@ export default function DecisionFramework(ctx) {
             {[
               {
                 q: "Data size",
-                ref: "chapters 11.2, 11.13, 11.30",
+                ref: "chapters 15.2, 16.1, 17.10",
                 what: "N now, N in 18 months; d of the embedding model",
               },
               {
                 q: "Update frequency",
-                ref: "chapter 11.22",
+                ref: "chapter 17.2",
                 what: "Inserts/sec, deletes/sec; tombstone tolerance; rebuild cadence",
               },
               {
                 q: "Filter selectivity",
-                ref: "chapter 11.21",
+                ref: "chapter 17.1",
                 what: "Tight (0.1%) vs loose (50%); compound predicates",
               },
               {
                 q: "QPS budget",
-                ref: "chapter 11.30",
+                ref: "chapter 17.10",
                 what: "Peak QPS, sustained QPS, ratio, seasonal spikes",
               },
               {
                 q: "P99 target",
-                ref: "chapter 11.29",
+                ref: "chapter 17.9",
                 what: "Latency budget, tail behavior, cold-start tolerance",
               },
               {
                 q: "Availability target",
-                ref: "chapters 11.24, 11.29",
+                ref: "chapters 17.4, 17.9",
                 what: "SLA (99.9% vs 99.99%); failover story; multi-region",
               },
               {
                 q: "Embedding model stability",
-                ref: "chapter 11.28",
+                ref: "chapter 17.8",
                 what: "Drift plan; re-embedding cost; migration path",
               },
               {
                 q: "Ops capacity",
-                ref: "chapters 11.32 - 11.36",
+                ref: "chapters 18.2 - 18.6",
                 what: "SRE hours, on-call rotation, K8s familiarity",
               },
             ].map((r) => (
@@ -507,11 +507,10 @@ export default function DecisionFramework(ctx) {
             Recap: Section 11 master class - Qdrant vs Pinecone from first principles
           </T>
           <T color="#b8a9ff" style={{ marginTop: 8 }}>
-            Section 11 has covered the full vector database landscape. From the retrieval problem (11.1) through
-            brute-force kNN (11.2), the ANN family (11.5-11.11), compression (11.12-11.16), combined indexes
-            (11.17-11.18), the compression decision (11.19), production realities (11.20-11.29), and the system
-            comparison (11.30-11.35). You can now answer Qdrant vs Pinecone - and every related question - from first
-            principles.
+            Section 11 has covered the full vector database landscape. From the retrieval problem (15.1) through
+            brute-force kNN (15.2), the ANN family (15.5-15.11), compression (15.12-16.4), combined indexes (16.5-16.6),
+            the compression decision (16.7), production realities (16.8-17.9), and the system comparison (17.10-18.5).
+            You can now answer Qdrant vs Pinecone - and every related question - from first principles.
           </T>
           <div
             style={{

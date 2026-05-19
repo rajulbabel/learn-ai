@@ -442,7 +442,7 @@ export default function Pinecone(ctx) {
               },
               {
                 t: "Cost at scale",
-                d: "~$30K/month for 500M vectors x 200 QPS (chapter 11.30); 4x-6x self-host Qdrant",
+                d: "~$30K/month for 500M vectors x 200 QPS (chapter 17.10); 4x-6x self-host Qdrant",
               },
               {
                 t: "Opinionated scaling",

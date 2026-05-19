@@ -5,7 +5,7 @@ import McpArchitecture from "../../../chapters/agent-tools/mcp-architecture.jsx"
 
 afterEach(() => cleanup());
 
-describe("McpArchitecture (13.13)", () => {
+describe("McpArchitecture (25.7)", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(McpArchitecture(makeCtx({ sub: 0 })))).not.toThrow();
   });

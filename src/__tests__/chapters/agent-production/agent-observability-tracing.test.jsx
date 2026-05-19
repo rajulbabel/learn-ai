@@ -5,7 +5,7 @@ import AgentObservabilityTracing from "../../../chapters/agent-production/agent-
 
 afterEach(() => cleanup());
 
-describe("AgentObservabilityTracing (13.42)", () => {
+describe("AgentObservabilityTracing (28.6)", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(AgentObservabilityTracing(makeCtx({ sub: 0 })))).not.toThrow();
   });
@@ -50,7 +50,7 @@ describe("AgentObservabilityTracing (13.42)", () => {
   it("sub=5 shows alerting from traces", () => {
     const { container } = render(AgentObservabilityTracing(makeCtx({ sub: 5 })));
     expect(container.textContent).toMatch(/alert|threshold/i);
-    expect(container.textContent).toMatch(/13\.41|drift/);
+    expect(container.textContent).toMatch(/28\.5|drift/);
     expect(container.textContent).toMatch(/Turn Traces Into Alerts/i);
   });
 });

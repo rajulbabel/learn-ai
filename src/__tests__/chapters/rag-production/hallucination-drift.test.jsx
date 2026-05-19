@@ -5,7 +5,7 @@ import HallucinationDrift from "../../../chapters/rag-production/hallucination-d
 
 afterEach(() => cleanup());
 
-describe("HallucinationDrift (12.39)", () => {
+describe("HallucinationDrift (23.9)", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(HallucinationDrift(makeCtx({ sub: 0 })))).not.toThrow();
   });

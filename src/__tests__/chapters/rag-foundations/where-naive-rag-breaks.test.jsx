@@ -5,7 +5,7 @@ import WhereNaiveRAGBreaks from "../../../chapters/rag-foundations/where-naive-r
 
 afterEach(() => cleanup());
 
-describe("WhereNaiveRAGBreaks (12.3)", () => {
+describe("WhereNaiveRAGBreaks (19.3)", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(WhereNaiveRAGBreaks(makeCtx({ sub: 0 })))).not.toThrow();
   });
@@ -47,28 +47,28 @@ describe("WhereNaiveRAGBreaks (12.3)", () => {
     const { container } = render(WhereNaiveRAGBreaks(makeCtx({ sub: 1 })));
     expect(container.textContent).toMatch(/chunking|chunk/i);
     expect(container.textContent).toMatch(/mid-?sentence|split/i);
-    expect(container.textContent).toMatch(/12\.7-12\.13|chunking/i);
+    expect(container.textContent).toMatch(/20\.4-20\.10|chunking/i);
   });
 
   it("sub=2 shows low recall on sign-in vs log-in lexical mismatch", () => {
     const { container } = render(WhereNaiveRAGBreaks(makeCtx({ sub: 2 })));
     expect(container.textContent).toMatch(/recall/i);
     expect(container.textContent).toMatch(/sign.?in/i);
-    expect(container.textContent).toMatch(/12\.14-12\.21|hybrid|reranker|query.{0,20}transform/i);
+    expect(container.textContent).toMatch(/21\.1-21\.8|hybrid|reranker|query.{0,20}transform/i);
   });
 
   it("sub=3 shows lost-in-the-middle attention U-curve", () => {
     const { container } = render(WhereNaiveRAGBreaks(makeCtx({ sub: 3 })));
     expect(container.textContent).toMatch(/middle/i);
     expect(container.textContent).toMatch(/attention/i);
-    expect(container.textContent).toMatch(/12\.22-12\.24|context packing|lost.?in.?middle/i);
+    expect(container.textContent).toMatch(/22\.1-22\.3|context packing|lost.?in.?middle/i);
   });
 
   it("sub=4 shows missing citation on suspended account query", () => {
     const { container } = render(WhereNaiveRAGBreaks(makeCtx({ sub: 4 })));
     expect(container.textContent).toMatch(/citation/i);
     expect(container.textContent).toMatch(/verify|verifiable/i);
-    expect(container.textContent).toMatch(/12\.22-12\.24|citations|groundedness/i);
+    expect(container.textContent).toMatch(/22\.1-22\.3|citations|groundedness/i);
   });
 
   it("sub=5 shows hallucination on Pro vs Enterprise SSO", () => {
@@ -78,11 +78,11 @@ describe("WhereNaiveRAGBreaks (12.3)", () => {
     expect(container.textContent).toMatch(/Pro|Enterprise/);
   });
 
-  it("sub=6 shows stale index + cost/latency with Section 11.28 + chapter 12.36-12.40 references", () => {
+  it("sub=6 shows stale index + cost/latency with Section 17.8 + chapter 23.6-23.10 references", () => {
     const { container } = render(WhereNaiveRAGBreaks(makeCtx({ sub: 6 })));
     expect(container.textContent).toMatch(/stale/i);
-    expect(container.textContent).toMatch(/Section 11\.28|11\.28/);
+    expect(container.textContent).toMatch(/Section 17\.8|17\.8/);
     expect(container.textContent).toMatch(/cost|latency/i);
-    expect(container.textContent).toMatch(/12\.36-12\.40|caching|observability/i);
+    expect(container.textContent).toMatch(/23\.6-23\.10|caching|observability/i);
   });
 });

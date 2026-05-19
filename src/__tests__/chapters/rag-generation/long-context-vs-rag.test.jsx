@@ -5,7 +5,7 @@ import LongContextVsRAG from "../../../chapters/rag-generation/long-context-vs-r
 
 afterEach(() => cleanup());
 
-describe("LongContextVsRAG (12.30)", () => {
+describe("LongContextVsRAG (22.9)", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(LongContextVsRAG(makeCtx({ sub: 0 })))).not.toThrow();
   });
@@ -41,7 +41,7 @@ describe("LongContextVsRAG (12.30)", () => {
     const { container } = render(LongContextVsRAG(makeCtx({ sub: 1 })));
     expect(container.textContent).toMatch(/stuff|everything/i);
     expect(container.textContent).toMatch(/120k|200k|long-?context/i);
-    expect(container.textContent).toMatch(/lost in the middle|12\.23/i);
+    expect(container.textContent).toMatch(/lost in the middle|22\.2/i);
     expect(container.textContent).toMatch(/cost|\$0\.36|latency/i);
   });
 
@@ -56,7 +56,7 @@ describe("LongContextVsRAG (12.30)", () => {
     const { container } = render(LongContextVsRAG(makeCtx({ sub: 3 })));
     expect(container.textContent).toMatch(/hybrid/i);
     expect(container.textContent).toMatch(/top-?30|broadly|50k/i);
-    expect(container.textContent).toMatch(/front-?load|sandwich|12\.23/i);
+    expect(container.textContent).toMatch(/front-?load|sandwich|22\.2/i);
   });
 
   it("sub=4 shows the cost / latency / accuracy comparison chart", () => {

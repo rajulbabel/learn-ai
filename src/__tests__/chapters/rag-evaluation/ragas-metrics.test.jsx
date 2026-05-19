@@ -5,7 +5,7 @@ import RAGASMetrics from "../../../chapters/rag-evaluation/ragas-metrics.jsx";
 
 afterEach(() => cleanup());
 
-describe("RAGASMetrics (12.33)", () => {
+describe("RAGASMetrics (23.3)", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(RAGASMetrics(makeCtx({ sub: 0 })))).not.toThrow();
   });

@@ -2,7 +2,7 @@ import { Box, T, Reveal, SubBtn } from "../../components.jsx";
 import { C } from "../../config.js";
 import { SOFT, tintedCard, pill } from "../../shared/agent-styles.jsx";
 
-// Canonical working memory scratchpad shape used in 13.25 and referenced by 13.42 (Observability tracing).
+// Canonical working memory scratchpad shape used in 26.8 and referenced by 28.6 (Observability tracing).
 const WORKING_MEMORY_SHAPE = `{
   "customer_context": "alice@example.com, c-9924, Pro",
   "current_goal": "Reset password (email also changed)",
@@ -144,7 +144,7 @@ export default function WorkingMemory(ctx) {
           <T color={SOFT.yellow} center size={15} style={{ marginTop: 12 }}>
             `customer_context` answers "who", `current_goal` answers "what", `completed_steps` answers "what so far",
             `next_step` answers "what next", and `constraints` keep the agent within policy. Same five fields appear in
-            13.42 observability traces.
+            28.6 observability traces.
           </T>
         </Box>
       </Reveal>
@@ -192,7 +192,7 @@ next_step       : ${it.next_step}`}
 
           <T color={SOFT.orange} center size={15} style={{ marginTop: 12 }}>
             By iteration 4, `next_step` is null and the task is done. The scratchpad terminated cleanly, which is how
-            loop termination (13.23) detects success.
+            loop termination (26.6) detects success.
           </T>
         </Box>
       </Reveal>

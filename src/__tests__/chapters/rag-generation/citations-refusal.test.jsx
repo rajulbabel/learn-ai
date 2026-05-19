@@ -5,7 +5,7 @@ import CitationsRefusal from "../../../chapters/rag-generation/citations-refusal
 
 afterEach(() => cleanup());
 
-describe("CitationsRefusal (12.24)", () => {
+describe("CitationsRefusal (22.3)", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(CitationsRefusal(makeCtx({ sub: 0 })))).not.toThrow();
   });
@@ -65,7 +65,7 @@ describe("CitationsRefusal (12.24)", () => {
     const { container } = render(CitationsRefusal(makeCtx({ sub: 4 })));
     expect(container.textContent).toMatch(/faithfulness/i);
     expect(container.textContent).toMatch(/claim|trace|cited/i);
-    expect(container.textContent).toMatch(/12\.31-12\.35|RAGAS/i);
+    expect(container.textContent).toMatch(/23\.1-23\.5|RAGAS/i);
   });
 
   it("sub=5 explains parsing [doc-N] markers back to chunks", () => {

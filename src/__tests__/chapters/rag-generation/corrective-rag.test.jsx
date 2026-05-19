@@ -5,7 +5,7 @@ import CorrectiveRAG from "../../../chapters/rag-generation/corrective-rag.jsx";
 
 afterEach(() => cleanup());
 
-describe("CorrectiveRAG (12.27)", () => {
+describe("CorrectiveRAG (22.6)", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(CorrectiveRAG(makeCtx({ sub: 0 })))).not.toThrow();
   });

@@ -2,7 +2,7 @@ import { Box, T, Reveal, SubBtn } from "../../components.jsx";
 import { C } from "../../config.js";
 import { SOFT, tintedCard, DIM_BG, DIM_BORDER } from "../../shared/agent-styles.jsx";
 
-// --- Chapter 13.15 BuildingMcpServer data ---
+// --- Chapter 25.9 BuildingMcpServer data ---
 
 // Five phases of an MCP server skeleton, shown as a numbered checklist in sub=0.
 const SERVER_PHASES = [

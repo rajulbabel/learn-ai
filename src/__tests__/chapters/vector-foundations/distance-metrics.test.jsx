@@ -5,7 +5,7 @@ import DistanceMetrics from "../../../chapters/vector-foundations/distance-metri
 
 afterEach(() => cleanup());
 
-describe("DistanceMetrics (11.4)", () => {
+describe("DistanceMetrics (15.4)", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(DistanceMetrics(makeCtx({ sub: 0 })))).not.toThrow();
   });
@@ -23,7 +23,7 @@ describe("DistanceMetrics (11.4)", () => {
     expect(container.textContent).toMatch(/angle|\[-1, 1\]/);
   });
 
-  it("sub=1 cosine table uses doc 7 (Kittens) as #2 cat exemplar - matches 11.2 top-3", () => {
+  it("sub=1 cosine table uses doc 7 (Kittens) as #2 cat exemplar - matches 15.2 top-3", () => {
     const { container } = render(DistanceMetrics(makeCtx({ sub: 1 })));
     expect(container.textContent).toMatch(/doc 7/i);
     expect(container.textContent).toContain("Kittens");
@@ -38,7 +38,7 @@ describe("DistanceMetrics (11.4)", () => {
     expect(container.textContent).toMatch(/magnitude|smaller|distance/i);
   });
 
-  it("sub=2 L2 table uses doc 7 (Kittens) as #2 cat exemplar - matches 11.2 top-3", () => {
+  it("sub=2 L2 table uses doc 7 (Kittens) as #2 cat exemplar - matches 15.2 top-3", () => {
     const { container } = render(DistanceMetrics(makeCtx({ sub: 2 })));
     expect(container.textContent).toMatch(/doc 7/i);
     expect(container.textContent).toContain("Kittens");

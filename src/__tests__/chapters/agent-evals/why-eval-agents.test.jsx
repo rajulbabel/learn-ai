@@ -5,7 +5,7 @@ import WhyEvalAgents from "../../../chapters/agent-evals/why-eval-agents.jsx";
 
 afterEach(() => cleanup());
 
-describe("WhyEvalAgents (13.37)", () => {
+describe("WhyEvalAgents (28.1)", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(WhyEvalAgents(makeCtx({ sub: 0 })))).not.toThrow();
   });
@@ -43,7 +43,7 @@ describe("WhyEvalAgents (13.37)", () => {
   it("sub=4 previews the eval pipeline", () => {
     const { container } = render(WhyEvalAgents(makeCtx({ sub: 4 })));
     expect(container.textContent).toMatch(/pipeline|stages/i);
-    expect(container.textContent).toMatch(/13\.(39|40|41)/);
+    expect(container.textContent).toMatch(/28\.[345]/);
     expect(container.textContent).toMatch(/What A Full Pipeline Looks Like/i);
   });
 });

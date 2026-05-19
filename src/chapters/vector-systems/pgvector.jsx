@@ -170,7 +170,7 @@ export default function Pgvector(ctx) {
           </div>
           <T color="#ffe082" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
             Cosine is the default because SBERT-family embeddings are direction-carriers, not magnitude-carriers. See
-            chapter 11.4 for the cosine / L2 / inner-product discussion.
+            chapter 15.4 for the cosine / L2 / inner-product discussion.
           </T>
         </Box>
       </Reveal>

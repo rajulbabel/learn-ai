@@ -2,7 +2,7 @@ import { Box, T, Reveal, SubBtn } from "../../components.jsx";
 import { C } from "../../config.js";
 import { SOFT, tintedCard, pill, DIM_BG, DIM_BORDER } from "../../shared/agent-styles.jsx";
 
-// 13.11 - Tool Errors, Retries, Validation
+// 25.5 - Tool Errors, Retries, Validation
 // Four-class error taxonomy used throughout the chapter. Each class has a color
 // and is reused in the retry-policy table (sub=2) and the trace (sub=5).
 const ERROR_CLASSES = [

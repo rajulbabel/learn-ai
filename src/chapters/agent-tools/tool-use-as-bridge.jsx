@@ -724,7 +724,7 @@ export default function ToolUseAsBridge(ctx) {
               color: SOFT.purple,
             }}
           >
-            A single tool call is the atom. An agent loop is the molecule. We formalize the loop in 13.20.
+            A single tool call is the atom. An agent loop is the molecule. We formalize the loop in 26.3.
           </div>
           <T color={SOFT.purple} center size={15} style={{ marginTop: 12 }}>
             One ticket might be a single search_kb call and done. Another might need lookup_customer, then

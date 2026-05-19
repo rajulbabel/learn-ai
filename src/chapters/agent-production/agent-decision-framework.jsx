@@ -9,63 +9,63 @@ const DECISION_STACK = [
     n: 1,
     label: "Approach",
     question: "Prompt / Tune / RAG / Agent?",
-    chapters: "13.5",
+    chapters: "24.5",
     accent: "cyan",
   },
   {
     n: 2,
     label: "Loop Pattern",
     question: "Workflow / ReAct / Plan-Execute / Reflection?",
-    chapters: "13.18 - 13.22",
+    chapters: "26.1 - 26.5",
     accent: "blue",
   },
   {
     n: 3,
     label: "Memory Layers",
     question: "Working + Which Long-Term?",
-    chapters: "13.24 - 13.29",
+    chapters: "26.7 - 26.12",
     accent: "purple",
   },
   {
     n: 4,
     label: "Multi-Agent",
     question: "Single / Orchestrator / Supervisor / Hand-Off?",
-    chapters: "13.30 - 13.34",
+    chapters: "27.1 - 27.5",
     accent: "indigo",
   },
   {
     n: 5,
     label: "Tools",
     question: "Which Tools? What Scope?",
-    chapters: "13.7 - 13.11",
+    chapters: "25.1 - 25.5",
     accent: "green",
   },
   {
     n: 6,
     label: "Protocols",
     question: "MCP / A2A / Bespoke?",
-    chapters: "13.12 - 13.17",
+    chapters: "25.6 - 25.11",
     accent: "teal",
   },
   {
     n: 7,
     label: "Eval",
     question: "Dimensions + Judge + Traces?",
-    chapters: "13.37 - 13.41",
+    chapters: "28.1 - 28.5",
     accent: "amber",
   },
   {
     n: 8,
     label: "Production",
     question: "Observability + Cost + Guardrails + Injection + Security?",
-    chapters: "13.42 - 13.47",
+    chapters: "28.6 - 28.11",
     accent: "orange",
   },
   {
     n: 9,
     label: "Framework",
     question: "LangGraph / CrewAI / Vendor SDK / Custom?",
-    chapters: "13.48 - 13.51",
+    chapters: "28.12 - 28.15",
     accent: "red",
   },
 ];
@@ -118,7 +118,7 @@ const IT_LAYERS_89 = [
   {
     layer: "8. Production Hardening",
     pick: "OTel + LangSmith + Prompt Cache + Guardrails + Injection Defense",
-    why: "OTel + LangSmith For Observability. Prompt Cache On The Long System Prompt. Latency Target P95 < 5s. Hardware-Order Guardrail Enforces The $500 Cap. Input Layer Runs Prompt-Injection Defense Per 13.46.",
+    why: "OTel + LangSmith For Observability. Prompt Cache On The Long System Prompt. Latency Target P95 < 5s. Hardware-Order Guardrail Enforces The $500 Cap. Input Layer Runs Prompt-Injection Defense Per 28.10.",
   },
   {
     layer: "9. Framework",
@@ -169,10 +169,10 @@ export default function AgentDecisionFramework(ctx) {
           <div style={{ ...tintedCard(C.teal), padding: 14, marginTop: 14 }}>
             <svg viewBox="0 0 720 510" style={{ width: "100%", maxWidth: 720, display: "block", margin: "0 auto" }}>
               <desc>
-                Nine-layer agent decision stack. From top (strategy) to bottom (operations): Approach (13.5), Loop
-                Pattern (13.18 to 13.22), Memory Layers (13.24 to 13.29), Multi-Agent (13.30 to 13.34), Tools (13.7 to
-                13.11), Protocols (13.12 to 13.17), Eval (13.37 to 13.41), Production (13.42 to 13.47), Framework (13.48
-                to 13.51). Each layer references its source chapters.
+                Nine-layer agent decision stack. From top (strategy) to bottom (operations): Approach (24.5), Loop
+                Pattern (26.1 to 26.5), Memory Layers (26.7 to 26.12), Multi-Agent (27.1 to 27.5), Tools (25.1 to 25.5),
+                Protocols (25.6 to 25.11), Eval (28.1 to 28.5), Production (28.6 to 28.11), Framework (28.12 to 28.15).
+                Each layer references its source chapters.
               </desc>
               <text x={360} y={22} fill={SOFT.teal} fontSize="13" fontWeight="700" textAnchor="middle">
                 The Full Decision Stack

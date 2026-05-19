@@ -3,7 +3,7 @@ import { Box, T, Reveal, SubBtn } from "../../components.jsx";
 import { C } from "../../config.js";
 import { SOFT, tintedCard, pill } from "../../shared/agent-styles.jsx";
 
-// T2 successful trace (sub=0 of 13.40)
+// T2 successful trace (sub=0 of 28.4)
 const T2_TRACE_STEPS = [
   { step: 1, tool: "classify_intent", result: "Intent: Password Reset + Email Change", status: "pass" },
   { step: 2, tool: "lookup_customer", result: "Customer c-9924 (Alice) Found, Pro Tier", status: "pass" },
@@ -12,7 +12,7 @@ const T2_TRACE_STEPS = [
   { step: 5, tool: "respond", result: "Polite Confirmation, Mentions Both Effects", status: "pass" },
 ];
 
-// T4 failure trace (sub=1 of 13.40)
+// T4 failure trace (sub=1 of 28.4)
 const T4_TRACE_STEPS = [
   {
     step: 1,

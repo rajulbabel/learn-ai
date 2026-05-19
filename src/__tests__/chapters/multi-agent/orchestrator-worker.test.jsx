@@ -5,7 +5,7 @@ import OrchestratorWorker from "../../../chapters/multi-agent/orchestrator-worke
 
 afterEach(() => cleanup());
 
-describe("OrchestratorWorker (13.31)", () => {
+describe("OrchestratorWorker (27.2)", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(OrchestratorWorker(makeCtx({ sub: 0 })))).not.toThrow();
   });

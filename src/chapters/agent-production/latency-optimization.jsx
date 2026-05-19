@@ -197,7 +197,7 @@ export default function LatencyOptimization(ctx) {
           </T>
           <T color={SOFT.orange} center size={16} style={{ marginTop: 10 }}>
             Ticket T4 (cancel + refund) needs two lookups before deciding. Serial: 400ms total tool latency. Parallel:
-            200ms total. Same outputs. Half the time. Section 13.10 covers the tool_choice setting that lets the model
+            200ms total. Same outputs. Half the time. Section 25.4 covers the tool_choice setting that lets the model
             emit multiple tool calls in one response.
           </T>
 
@@ -278,7 +278,7 @@ export default function LatencyOptimization(ctx) {
           </div>
 
           <T color={SOFT.orange} center size={15} style={{ marginTop: 14 }}>
-            Section 13.10 (Parallel Tools + Tool Choice) is the API-level mechanism. The latency payoff: 200ms saved per
+            Section 25.4 (Parallel Tools + Tool Choice) is the API-level mechanism. The latency payoff: 200ms saved per
             applicable turn. In multi-tool tickets like T4 this adds up fast.
           </T>
         </Box>
@@ -392,9 +392,9 @@ export default function LatencyOptimization(ctx) {
           </div>
 
           <T color={SOFT.purple} center size={15} style={{ marginTop: 14 }}>
-            Cache invalidation is the hard part. Pick conservative TTLs (5 minutes for profile, 1 hour for the knowledge base) and
-            invalidate on mutation events (profile-updated, kb-doc-edited). Better to miss the cache than to serve a
-            stale answer.
+            Cache invalidation is the hard part. Pick conservative TTLs (5 minutes for profile, 1 hour for the knowledge
+            base) and invalidate on mutation events (profile-updated, kb-doc-edited). Better to miss the cache than to
+            serve a stale answer.
           </T>
         </Box>
       </Reveal>

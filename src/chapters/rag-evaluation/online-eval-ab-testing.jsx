@@ -89,7 +89,7 @@ const OE_LOOP_NODES = [
   {
     n: 2,
     label: "Capture To Golden Regression Set",
-    detail: "Tie the failing case into chapter 12.34.",
+    detail: "Tie the failing case into chapter 23.4.",
     color: C.cyan,
     accent: "#80deea",
   },

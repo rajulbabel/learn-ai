@@ -5,7 +5,7 @@ import LlmAsJudge from "../../../chapters/agent-evals/llm-as-judge.jsx";
 
 afterEach(() => cleanup());
 
-describe("LlmAsJudge (13.39)", () => {
+describe("LlmAsJudge (28.3)", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(LlmAsJudge(makeCtx({ sub: 0 })))).not.toThrow();
   });
@@ -48,9 +48,9 @@ describe("LlmAsJudge (13.39)", () => {
     expect(container.textContent).toMatch(/Canonical Judge Prompt/i);
   });
 
-  it("sub=5 back-references Section 12.32", () => {
+  it("sub=5 back-references Section 23.2", () => {
     const { container } = render(LlmAsJudge(makeCtx({ sub: 5 })));
-    expect(container.textContent).toMatch(/12\.32|section 12/i);
+    expect(container.textContent).toMatch(/23\.2|section 12/i);
     expect(container.textContent).toMatch(/RAG|faithfulness|answer.relevance/i);
     expect(container.textContent).toMatch(/Same Technique, Agent Scope/i);
   });

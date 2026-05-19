@@ -2,7 +2,7 @@ import { Box, T, Reveal, SubBtn } from "../../components.jsx";
 import { C } from "../../config.js";
 import { SOFT, tintedCard, pill } from "../../shared/agent-styles.jsx";
 
-// Module-private helpers used by ContextEngineering (13.6)
+// Module-private helpers used by ContextEngineering (24.6)
 
 const CONTEXT_BUDGET_ZONES = [
   { name: "System Prompt", tokens: 4, color: C.cyan, soft: SOFT.cyan, role: "Rules + persona. Always present." },

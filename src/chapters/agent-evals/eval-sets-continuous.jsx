@@ -3,7 +3,7 @@ import { Box, T, Reveal, SubBtn } from "../../components.jsx";
 import { C } from "../../config.js";
 import { SOFT, tintedCard, pill } from "../../shared/agent-styles.jsx";
 
-// Three eval set decks (sub=0 of 13.41)
+// Three eval set decks (sub=0 of 28.5)
 const EVAL_SET_DECKS = [
   {
     name: "Golden",

@@ -5,7 +5,7 @@ import CostModels from "../../../chapters/rag-production/cost-models.jsx";
 
 afterEach(() => cleanup());
 
-describe("CostModels (12.37)", () => {
+describe("CostModels (23.7)", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(CostModels(makeCtx({ sub: 0 })))).not.toThrow();
   });

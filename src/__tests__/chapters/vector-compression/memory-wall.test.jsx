@@ -5,7 +5,7 @@ import MemoryWall from "../../../chapters/vector-compression/memory-wall.jsx";
 
 afterEach(() => cleanup());
 
-describe("MemoryWall (11.12)", () => {
+describe("MemoryWall (15.12)", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(MemoryWall(makeCtx({ sub: 0 })))).not.toThrow();
   });

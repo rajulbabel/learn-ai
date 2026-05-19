@@ -5,7 +5,7 @@ import MemoryTaxonomy from "../../../chapters/agent-loops/memory-taxonomy.jsx";
 
 afterEach(() => cleanup());
 
-describe("MemoryTaxonomy (13.24)", () => {
+describe("MemoryTaxonomy (26.7)", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(MemoryTaxonomy(makeCtx({ sub: 0 })))).not.toThrow();
   });

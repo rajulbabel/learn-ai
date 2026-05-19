@@ -5,7 +5,7 @@ import WhyChunkFixedSize from "../../../chapters/rag-foundations/why-chunk-fixed
 
 afterEach(() => cleanup());
 
-describe("WhyChunkFixedSize (12.7)", () => {
+describe("WhyChunkFixedSize (20.4)", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(WhyChunkFixedSize(makeCtx({ sub: 0 })))).not.toThrow();
   });

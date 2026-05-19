@@ -5,7 +5,7 @@ import LatencyOptimization from "../../../chapters/agent-production/latency-opti
 
 afterEach(() => cleanup());
 
-describe("LatencyOptimization (13.44)", () => {
+describe("LatencyOptimization (28.8)", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(LatencyOptimization(makeCtx({ sub: 0 })))).not.toThrow();
   });
@@ -24,10 +24,10 @@ describe("LatencyOptimization (13.44)", () => {
     expect(container.textContent).toMatch(/Show Progress Token By Token/i);
   });
 
-  it("sub=2 references parallel tools (13.10)", () => {
+  it("sub=2 references parallel tools (25.4)", () => {
     const { container } = render(LatencyOptimization(makeCtx({ sub: 2 })));
     expect(container.textContent).toMatch(/parallel|concurrent/i);
-    expect(container.textContent).toMatch(/13\.10/);
+    expect(container.textContent).toMatch(/25\.4/);
     expect(container.textContent).toMatch(/Run Independent Tools Concurrently/i);
   });
 

@@ -5,7 +5,7 @@ import AgenticRag from "../../../chapters/multi-agent/agentic-rag.jsx";
 
 afterEach(() => cleanup());
 
-describe("AgenticRag (13.36)", () => {
+describe("AgenticRag (27.7)", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(AgenticRag(makeCtx({ sub: 0 })))).not.toThrow();
   });
@@ -29,7 +29,7 @@ describe("AgenticRag (13.36)", () => {
   it("sub=0 contrasts naive and agentic RAG", () => {
     const { container } = render(AgenticRag(makeCtx({ sub: 0 })));
     expect(container.textContent).toMatch(/naive|agentic/i);
-    expect(container.textContent).toMatch(/12\.29|section 12/i);
+    expect(container.textContent).toMatch(/22\.8|section 12/i);
     expect(container.textContent).toMatch(/iterative|loop|one.?shot/i);
     expect(container.textContent).toMatch(/Retrieve Once vs Retrieve In A Loop/i);
   });
@@ -58,7 +58,7 @@ describe("AgenticRag (13.36)", () => {
 
   it("sub=4 decides when agentic vs naive", () => {
     const { container } = render(AgenticRag(makeCtx({ sub: 4 })));
-    expect(container.textContent).toMatch(/naive|12\.2/);
+    expect(container.textContent).toMatch(/naive|19\.2/);
     expect(container.textContent).toMatch(/agentic|research|multi.?hop/i);
     expect(container.textContent).toMatch(/cost|latency/i);
     expect(container.textContent).toMatch(/When To Iterate Retrieval/i);

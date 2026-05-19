@@ -5,7 +5,7 @@ import WhyMultiAgent from "../../../chapters/multi-agent/why-multi-agent.jsx";
 
 afterEach(() => cleanup());
 
-describe("WhyMultiAgent (13.30)", () => {
+describe("WhyMultiAgent (27.1)", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(WhyMultiAgent(makeCtx({ sub: 0 })))).not.toThrow();
   });
@@ -56,7 +56,7 @@ describe("WhyMultiAgent (13.30)", () => {
   it("sub=4 lists when multi-agent hurts", () => {
     const { container } = render(WhyMultiAgent(makeCtx({ sub: 4 })));
     expect(container.textContent).toMatch(/hurt|anti.?pattern|not/i);
-    expect(container.textContent).toMatch(/13\.35|failure/);
+    expect(container.textContent).toMatch(/27\.6|failure/);
     expect(container.textContent).toMatch(/Don.t Multi-Agent A Small Problem/i);
   });
 });

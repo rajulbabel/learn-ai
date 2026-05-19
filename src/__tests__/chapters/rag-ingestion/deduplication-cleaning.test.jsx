@@ -5,7 +5,7 @@ import DeduplicationCleaning from "../../../chapters/rag-ingestion/deduplication
 
 afterEach(() => cleanup());
 
-describe("DeduplicationCleaning (12.5)", () => {
+describe("DeduplicationCleaning (20.2)", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(DeduplicationCleaning(makeCtx({ sub: 0 })))).not.toThrow();
   });

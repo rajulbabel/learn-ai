@@ -5,7 +5,7 @@ import SummaryAndContextMgmt from "../../../chapters/agent-loops/summary-and-con
 
 afterEach(() => cleanup());
 
-describe("SummaryAndContextMgmt (13.29)", () => {
+describe("SummaryAndContextMgmt (26.12)", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(SummaryAndContextMgmt(makeCtx({ sub: 0 })))).not.toThrow();
   });
@@ -46,9 +46,9 @@ describe("SummaryAndContextMgmt (13.29)", () => {
     expect(container.textContent).toMatch(/Summarize At 50% Capacity/i);
   });
 
-  it("sub=5 ties to 13.6 context engineering", () => {
+  it("sub=5 ties to 24.6 context engineering", () => {
     const { container } = render(SummaryAndContextMgmt(makeCtx({ sub: 5 })));
-    expect(container.textContent).toMatch(/13\.6|context engineering/i);
+    expect(container.textContent).toMatch(/24\.6|context engineering/i);
     expect(container.textContent).toMatch(/Context Is Where Real Work Happens/i);
   });
 });

@@ -6,7 +6,7 @@ import { FormulaBox } from "../../shared/rag-helpers.jsx";
 const HD_SIGNALS = [
   {
     title: "Faithfulness Score",
-    body: "Per-Generation Faithfulness From LLM-As-Judge (12.32). Alert If Rolling 7-Day Median Drops Below 0.85.",
+    body: "Per-Generation Faithfulness From LLM-As-Judge (23.2). Alert If Rolling 7-Day Median Drops Below 0.85.",
   },
   {
     title: "Citation Coverage",

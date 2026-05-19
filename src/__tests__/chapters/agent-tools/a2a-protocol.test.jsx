@@ -5,7 +5,7 @@ import A2AProtocol from "../../../chapters/agent-tools/a2a-protocol.jsx";
 
 afterEach(() => cleanup());
 
-describe("A2AProtocol (13.17)", () => {
+describe("A2AProtocol (25.11)", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(A2AProtocol(makeCtx({ sub: 0 })))).not.toThrow();
   });

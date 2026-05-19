@@ -61,28 +61,28 @@ const MULTI_INTENT_SUBS = [
 // Sub=4 strategy preview grid.
 const TRANSFORM_STRATEGIES = [
   {
-    name: "HyDE (12.19)",
+    name: "HyDE (21.6)",
     fixes: "Fixes Lexical Mismatch",
     detail: "Ask an LLM to draft a hypothetical answer, then embed the answer instead of the question.",
     color: C.red,
     accent: "#ef9a9a",
   },
   {
-    name: "Multi-Query Expansion (12.20)",
+    name: "Multi-Query Expansion (21.7)",
     fixes: "Fixes Ambiguity",
     detail: "Generate N paraphrases of the query, retrieve for each, then merge results.",
     color: C.yellow,
     accent: "#ffe082",
   },
   {
-    name: "Query Decomposition (12.21)",
+    name: "Query Decomposition (21.8)",
     fixes: "Fixes Multi-Intent",
     detail: "Split a compound query into independent sub-queries, retrieve for each, then combine.",
     color: C.green,
     accent: "#a5d6a7",
   },
   {
-    name: "Query Routing (12.21)",
+    name: "Query Routing (21.8)",
     fixes: "Picks The Right Index",
     detail: "Classify the query and send it to the index, tool, or filter that best matches.",
     color: C.blue,
@@ -283,9 +283,8 @@ export default function WhyTransformQueries(ctx) {
             }}
           >
             <T color="#ef9a9a" center size={14}>
-              Dense embeddings help a bit (sign-in and log-in sit close in vector space) but only partially. HyDE
-              (12.19) and multi-query (12.20) close the gap by rewriting the user query into wording that matches the
-              doc.
+              Dense embeddings help a bit (sign-in and log-in sit close in vector space) but only partially. HyDE (21.6)
+              and multi-query (21.7) close the gap by rewriting the user query into wording that matches the doc.
             </T>
           </div>
         </Box>
@@ -400,8 +399,8 @@ export default function WhyTransformQueries(ctx) {
             }}
           >
             <T color="#ffe082" center size={14}>
-              A naive retriever picks one and misses the other two. Multi-query (12.20) generates paraphrases that cover
-              each branch, and routing (12.21) sends each branch to the index that fits best.
+              A naive retriever picks one and misses the other two. Multi-query (21.7) generates paraphrases that cover
+              each branch, and routing (21.8) sends each branch to the index that fits best.
             </T>
           </div>
         </Box>
@@ -481,8 +480,8 @@ export default function WhyTransformQueries(ctx) {
             }}
           >
             <T color="#a5d6a7" center size={14}>
-              Naive retrieval finds docs for one intent and misses the other. Decomposition (12.21) splits the query
-              into two sub-queries, retrieves for each, then combines the results.
+              Naive retrieval finds docs for one intent and misses the other. Decomposition (21.8) splits the query into
+              two sub-queries, retrieves for each, then combines the results.
             </T>
           </div>
         </Box>
@@ -495,7 +494,7 @@ export default function WhyTransformQueries(ctx) {
             Four Strategies Map To Three Failures
           </T>
           <T color="#90caf9" center size={16} style={{ marginTop: 10 }}>
-            Each transformation tackles a different failure shape. The next three chapters (12.19, 12.20, 12.21) unpack
+            Each transformation tackles a different failure shape. The next three chapters (21.6, 21.7, 21.8) unpack
             them one by one.
           </T>
 

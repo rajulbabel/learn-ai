@@ -5,7 +5,7 @@ import Qdrant from "../../../chapters/vector-systems/qdrant.jsx";
 
 afterEach(() => cleanup());
 
-describe("Qdrant (11.32)", () => {
+describe("Qdrant (18.2)", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(Qdrant(makeCtx({ sub: 0 })))).not.toThrow();
   });

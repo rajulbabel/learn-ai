@@ -5,7 +5,7 @@ import AgentDecisionFramework from "../../../chapters/agent-production/agent-dec
 
 afterEach(() => cleanup());
 
-describe("AgentDecisionFramework (13.52) - CAPSTONE", () => {
+describe("AgentDecisionFramework (28.16) - CAPSTONE", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(AgentDecisionFramework(makeCtx({ sub: 0 })))).not.toThrow();
   });
@@ -13,7 +13,7 @@ describe("AgentDecisionFramework (13.52) - CAPSTONE", () => {
   it("sub=0 shows the full decision stack", () => {
     const { container } = render(AgentDecisionFramework(makeCtx({ sub: 0 })));
     expect(container.textContent).toMatch(/decision|stack/i);
-    expect(container.textContent).toMatch(/13\.5|13\.18|13\.30/);
+    expect(container.textContent).toMatch(/24\.5|26\.1|27\.1/);
     expect(container.textContent).toMatch(/Every Choice Section 13 Taught You/i);
   });
 

@@ -5,7 +5,7 @@ import QdrantVsPinecone from "../../../chapters/vector-systems/qdrant-vs-pinecon
 
 afterEach(() => cleanup());
 
-describe("QdrantVsPinecone (11.34)", () => {
+describe("QdrantVsPinecone (18.4)", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(QdrantVsPinecone(makeCtx({ sub: 0 })))).not.toThrow();
   });

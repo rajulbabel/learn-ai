@@ -417,7 +417,7 @@ export default function SummaryAndContextMgmt(ctx) {
             Context Is Where Real Work Happens
           </T>
           <T color={SOFT.amber} center size={16} style={{ marginTop: 10 }}>
-            Memory plus context-engineering decide what the model sees on EVERY turn. Chapter 13.6 covered the
+            Memory plus context-engineering decide what the model sees on EVERY turn. Chapter 24.6 covered the
             prompt-assembly stack. This chapter closes out by tying the memory layers into that stack.
           </T>
 
@@ -452,7 +452,7 @@ export default function SummaryAndContextMgmt(ctx) {
           </div>
 
           <T color={SOFT.amber} center size={15} style={{ marginTop: 12 }}>
-            Every layer comes from somewhere. Memory chapters 13.24-13.28 supplied the sources; 13.6&apos;s assembly
+            Every layer comes from somewhere. Memory chapters 26.7-26.11 supplied the sources; 24.6&apos;s assembly
             stack joins them into a single prompt; this chapter closes the loop with summarization that keeps it all
             under the token budget.
           </T>

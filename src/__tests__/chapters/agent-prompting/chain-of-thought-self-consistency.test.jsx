@@ -5,7 +5,7 @@ import ChainOfThoughtSelfConsistency from "../../../chapters/agent-prompting/cha
 
 afterEach(() => cleanup());
 
-describe("ChainOfThoughtSelfConsistency (13.4)", () => {
+describe("ChainOfThoughtSelfConsistency (24.4)", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(ChainOfThoughtSelfConsistency(makeCtx({ sub: 0 })))).not.toThrow();
   });
@@ -40,7 +40,7 @@ describe("ChainOfThoughtSelfConsistency (13.4)", () => {
     expect(container.textContent).toMatch(/accuracy/i);
   });
 
-  it("sub=5 indicates when to skip CoT and references Section 10.4", () => {
+  it("sub=5 indicates when to skip CoT and references Section 14.4", () => {
     const { container } = render(ChainOfThoughtSelfConsistency(makeCtx({ sub: 5 })));
     expect(container.textContent).toMatch(/skip|classif|lookup/i);
     expect(container.textContent).toMatch(/10\.4|thinking|reasoning model/i);

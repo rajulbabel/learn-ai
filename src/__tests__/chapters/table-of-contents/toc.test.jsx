@@ -13,7 +13,7 @@ describe("TOC (0)", () => {
 
   it("renders section list", () => {
     const { container } = render(TOC(makeCtx()));
-    expect(container.textContent).toContain("Neural Network Foundations");
+    expect(container.textContent).toContain("Neural Networks - The Mechanics");
   });
 
   it("expands a section", () => {
@@ -55,7 +55,7 @@ describe("TOC (0)", () => {
   it("clicking the description in an expanded section does not bubble to the window tap-anywhere handler", () => {
     const { container } = render(TOC(makeCtx({ expanded: 1 })));
     const desc = Array.from(container.querySelectorAll("div")).find(
-      (d) => d.textContent === "How neural networks actually work" && d.children.length === 0,
+      (d) => d.textContent === "Neuron, layer, weights/biases, linear, ReLU, forward pass" && d.children.length === 0,
     );
     expect(desc).toBeTruthy();
     let bubbledToWindow = false;

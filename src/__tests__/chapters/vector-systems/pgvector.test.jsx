@@ -5,7 +5,7 @@ import Pgvector from "../../../chapters/vector-systems/pgvector.jsx";
 
 afterEach(() => cleanup());
 
-describe("Pgvector (11.31)", () => {
+describe("Pgvector (18.1)", () => {
   it("renders at sub=0 without throwing", () => {
     expect(() => render(Pgvector(makeCtx({ sub: 0 })))).not.toThrow();
   });

@@ -46,10 +46,11 @@ const CP_MMR_AFTER = [
 export default function ContextPacking(ctx) {
   const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx;
 
-  // Sub=0 stacked-bar geometry. ViewBox 800x180; the bar is centered with
+  // Sub=0 stacked-bar geometry. ViewBox 800x130; the bar is centered with
   // symmetric left/right padding so segment proportions add up to bar_w.
+  // Legend rendered as HTML below the SVG so labels never overlap.
   const CP_BAR_VB_W = 800;
-  const CP_BAR_VB_H = 180;
+  const CP_BAR_VB_H = 130;
   const CP_BAR_W = 720;
   const CP_BAR_H = 64;
   const CP_BAR_X = (CP_BAR_VB_W - CP_BAR_W) / 2;
@@ -125,33 +126,42 @@ export default function ContextPacking(ctx) {
                 8000-Token Context Window
               </text>
 
-              {/* Legend row below */}
-              {(() => {
-                const legendY = CP_BAR_Y + CP_BAR_H + 28;
-                const swatchW = 14;
-                const colW = CP_BAR_W / CP_BUDGET_SEGMENTS.length;
-                return CP_BUDGET_SEGMENTS.map((seg, i) => {
-                  const cx = CP_BAR_X + colW * i + colW / 2;
-                  return (
-                    <g key={`legend-${seg.label}`}>
-                      <rect
-                        x={cx - swatchW / 2 - 60}
-                        y={legendY - 11}
-                        width={swatchW}
-                        height={swatchW}
-                        fill={seg.color}
-                        fillOpacity="0.28"
-                        stroke={seg.color}
-                        strokeOpacity="0.7"
-                      />
-                      <text x={cx - 40} y={legendY} fill={seg.accent} fontSize="12" textAnchor="start">
-                        {seg.label}
-                      </text>
-                    </g>
-                  );
-                });
-              })()}
             </svg>
+          </div>
+
+          {/* Legend rendered as HTML so labels wrap and never overlap. */}
+          <div
+            data-testid="cp-budget-legend"
+            style={{
+              marginTop: 12,
+              display: "flex",
+              flexWrap: "wrap",
+              justifyContent: "center",
+              gap: "10px 20px",
+            }}
+          >
+            {CP_BUDGET_SEGMENTS.map((seg) => (
+              <div
+                key={`legend-${seg.label}`}
+                data-testid="cp-legend-item"
+                style={{ display: "flex", alignItems: "center", gap: 8 }}
+              >
+                <span
+                  style={{
+                    display: "inline-block",
+                    width: 14,
+                    height: 14,
+                    background: `${seg.color}47`,
+                    border: `1px solid ${seg.color}b3`,
+                    borderRadius: 3,
+                    flexShrink: 0,
+                  }}
+                />
+                <T color={seg.accent} size={13}>
+                  {seg.label}
+                </T>
+              </div>
+            ))}
           </div>
 
           {/* Numeric breakdown table */}

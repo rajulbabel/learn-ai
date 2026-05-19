@@ -38,6 +38,23 @@ describe("ContextPacking (22.1)", () => {
     expect(container.textContent).toMatch(/8000|8k|8,000/i);
   });
 
+  it("sub=0 renders legend as HTML (not SVG text) with all 5 labels in a flex container", () => {
+    const { container } = render(ContextPacking(makeCtx({ sub: 0 })));
+    const legend = container.querySelector('[data-testid="cp-budget-legend"]');
+    expect(legend).not.toBeNull();
+    expect(legend.tagName.toLowerCase()).toBe("div");
+    const items = legend.querySelectorAll('[data-testid="cp-legend-item"]');
+    expect(items).toHaveLength(5);
+    const labels = Array.from(items).map((n) => n.textContent.trim());
+    expect(labels).toEqual([
+      "System Prompt",
+      "Retrieved Context",
+      "User Question",
+      "Reserved Completion",
+      "Headroom",
+    ]);
+  });
+
   it("sub=1 shows top-3 chunks for the password reset query with scores", () => {
     const { container } = render(ContextPacking(makeCtx({ sub: 1 })));
     expect(container.textContent).toMatch(/how do i reset my password|password reset/i);

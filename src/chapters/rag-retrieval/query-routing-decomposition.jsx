@@ -307,7 +307,7 @@ export default function QueryRoutingDecomposition(ctx) {
                     />
                     <text
                       x={leafCx}
-                      y={TREE_LEAF_Y + 18}
+                      y={TREE_LEAF_Y + 22}
                       fill={leaf.accent}
                       fontSize="12"
                       fontWeight="700"
@@ -315,12 +315,12 @@ export default function QueryRoutingDecomposition(ctx) {
                     >
                       {leaf.branch}
                     </text>
-                    <text x={leafCx} y={TREE_LEAF_Y + 38} fill={leaf.accent} fontSize="11" textAnchor="middle">
+                    <text x={leafCx} y={TREE_LEAF_Y + 42} fill={leaf.accent} fontSize="11" textAnchor="middle">
                       {leaf.target}
                     </text>
                     <text
                       x={leafCx}
-                      y={TREE_LEAF_Y + 56}
+                      y={TREE_LEAF_Y + 60}
                       fill={leaf.accent}
                       fontSize="11"
                       fontWeight="700"

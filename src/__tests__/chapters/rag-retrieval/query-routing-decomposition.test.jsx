@@ -40,6 +40,33 @@ describe("QueryRoutingDecomposition (21.8)", () => {
     expect(container.textContent).toMatch(/chitchat|skip retrieval|skip/i);
   });
 
+  it("sub=1 leaf text rows are vertically centered in their 76px card", () => {
+    const { container } = render(QueryRoutingDecomposition(makeCtx({ sub: 1 })));
+    const TREE_LEAF_Y = 180;
+    const TREE_LEAF_H = 76;
+    const texts = [...container.querySelectorAll("svg text")];
+    const branch = texts.find((t) => t.textContent === "Account & Billing");
+    const target = texts.find((t) => t.textContent === "Account-Billing Index");
+    const topK = texts.find((t) => {
+      if (t.textContent !== "Top-K = 5") return false;
+      const x = Number(t.getAttribute("x"));
+      return x < 250;
+    });
+    expect(branch).toBeTruthy();
+    expect(target).toBeTruthy();
+    expect(topK).toBeTruthy();
+    const y1 = Number(branch.getAttribute("y"));
+    const y2 = Number(target.getAttribute("y"));
+    const y3 = Number(topK.getAttribute("y"));
+    expect(y1 - TREE_LEAF_Y).toBe(22);
+    expect(y2 - TREE_LEAF_Y).toBe(42);
+    expect(y3 - TREE_LEAF_Y).toBe(60);
+    // Visual centering: text extends ~9px above baseline, ~3px below.
+    // Visual midpoint = ((y1 - 9) + (y3 + 3)) / 2 should equal card center.
+    const cardCenter = TREE_LEAF_Y + TREE_LEAF_H / 2;
+    expect((y1 - 9 + (y3 + 3)) / 2).toBe(cardCenter);
+  });
+
   it("sub=2 contrasts semantic router vs LLM classifier with cost/latency", () => {
     const { container } = render(QueryRoutingDecomposition(makeCtx({ sub: 2 })));
     expect(container.textContent).toMatch(/semantic router|embedding/i);

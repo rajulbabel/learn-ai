@@ -136,8 +136,8 @@ export default function SearchOverlay({ open, onClose, onGoTo }) {
     debounceRef.current = setTimeout(() => doSearch(val), 200);
   };
 
-  const handleSelect = (chapterId, sub) => {
-    const idx = chapters.findIndex((c) => c.id === chapterId);
+  const handleSelect = (slug, sub) => {
+    const idx = chapters.findIndex((c) => c.slug === slug);
     if (idx >= 0) {
       onGoTo(idx, sub > 0 ? sub : 0);
       onClose();
@@ -168,7 +168,7 @@ export default function SearchOverlay({ open, onClose, onGoTo }) {
       e.preventDefault();
       if (activeIdx >= 0 && activeIdx < filteredResults.length) {
         const r = filteredResults[activeIdx];
-        handleSelect(r.chapterId, r.sub);
+        handleSelect(r.chapterSlug, r.sub);
       }
     }
   };
@@ -406,6 +406,8 @@ export default function SearchOverlay({ open, onClose, onGoTo }) {
         }}
       >
         {filteredResults.map((r, i) => {
+          if (!r.chapterSlug) return null; // defensive: missing slug
+          if (r.chapterId == null) return null; // chapter removed since index built
           const secColor = sectionColors[r.section] || C.purple;
           const isActive = i === activeIdx;
           const rawSnippet = r.text.length > 180 ? r.text.slice(0, 180) + "..." : r.text;
@@ -423,13 +425,13 @@ export default function SearchOverlay({ open, onClose, onGoTo }) {
 
           return (
             <button
-              key={`${r.chapterId}-${i}`}
+              key={`${r.chapterSlug}-${i}`}
               ref={(el) => {
                 resultRefs.current[i] = el;
               }}
               data-result={i}
               data-active={isActive ? "true" : "false"}
-              onClick={() => handleSelect(r.chapterId, r.sub)}
+              onClick={() => handleSelect(r.chapterSlug, r.sub)}
               onMouseEnter={() => setActiveIdx(i)}
               style={{
                 display: "flex",

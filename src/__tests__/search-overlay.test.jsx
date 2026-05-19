@@ -1,6 +1,7 @@
 import { describe, it, expect, vi, afterEach, beforeAll } from "vitest";
 import { render, screen, fireEvent, cleanup, act } from "@testing-library/react";
 import SearchOverlay from "../search-overlay.jsx";
+import { chapters, sectionNames } from "../config.js";
 
 // Mock search.js
 vi.mock("../search.js", () => ({
@@ -20,82 +21,40 @@ beforeAll(() => {
 
 afterEach(() => cleanup());
 
+// Pick real chapters from the live config (slug-based) so tests survive renumbering.
+// We need three distinct chapters with stable real slugs.
+const pick = (section) => chapters.find((c) => c.section === section) || chapters.find((c) => c.id !== "0");
+const ch5 = pick(5);
+const ch7 = chapters.filter((c) => c.section === 7)[0] || pick(7);
+const ch7b = chapters.filter((c) => c.section === 7)[1] || ch7;
+const ch1 = pick(1);
+const ch2 = pick(2);
+
+const makeResult = (ch, { sub = 0, text = "Sample text.", score = 20, source = "text", overrideTitle } = {}) => ({
+  chapterSlug: ch.slug,
+  chapterId: ch.id,
+  section: ch.section,
+  sectionName: sectionNames[ch.section] || "",
+  title: overrideTitle || ch.title,
+  sub,
+  text,
+  source,
+  score,
+});
+
 // Standard multi-result set for keyboard navigation tests
 const threeResults = [
-  {
-    chapterId: "5.1",
-    title: "The Full Architecture",
-    section: 5,
-    sectionName: "Transformer Input Pipeline",
-    sub: 0,
-    text: "The complete Transformer diagram.",
-    source: "text",
-    score: 25.0,
-  },
-  {
-    chapterId: "7.8",
-    title: "The Full Formula",
-    section: 7,
-    sectionName: "Attention - The Full Computation",
-    sub: 0,
-    text: "Attention full formula.",
-    source: "text",
-    score: 18.5,
-  },
-  {
-    chapterId: "7.17",
-    title: "The Complete Picture",
-    section: 7,
-    sectionName: "Attention - The Full Computation",
-    sub: 0,
-    text: "The complete picture in plain English.",
-    source: "text",
-    score: 12.0,
-  },
+  makeResult(ch5, { text: "First sample text for full architecture.", score: 25.0, overrideTitle: "The Full Architecture" }),
+  makeResult(ch7, { text: "Second sample text for full formula.", score: 18.5, overrideTitle: "The Full Formula" }),
+  makeResult(ch7b, { text: "Third sample text complete picture.", score: 12.0, overrideTitle: "The Complete Picture" }),
 ];
 
 // Results with some below threshold (< 20% of max)
 const mixedScoreResults = [
-  {
-    chapterId: "5.1",
-    title: "The Full Architecture",
-    section: 5,
-    sectionName: "Transformer Input Pipeline",
-    sub: 0,
-    text: "The complete Transformer diagram.",
-    source: "text",
-    score: 30.0,
-  },
-  {
-    chapterId: "7.8",
-    title: "The Full Formula",
-    section: 7,
-    sectionName: "Attention - The Full Computation",
-    sub: 0,
-    text: "Attention full formula.",
-    source: "text",
-    score: 10.0,
-  },
-  {
-    chapterId: "1.1",
-    title: "What is a Neural Network?",
-    section: 1,
-    sectionName: "Neural Network Foundations",
-    sub: 0,
-    text: "An introduction to neural networks.",
-    source: "text",
-    score: 3.0, // 10% of max - below threshold
-  },
-  {
-    chapterId: "2.1",
-    title: "Tokenization",
-    section: 2,
-    sectionName: "How LLMs Actually Train",
-    sub: 0,
-    text: "Breaking words into tokens.",
-    source: "text",
-    score: 1.0, // 3.3% of max - well below threshold
-  },
+  makeResult(ch5, { text: "Top result.", score: 30.0, overrideTitle: "The Full Architecture" }),
+  makeResult(ch7, { text: "Second result.", score: 10.0, overrideTitle: "The Full Formula" }),
+  makeResult(ch1, { text: "Below threshold one.", score: 3.0, overrideTitle: "What is a Neural Network?" }),
+  makeResult(ch2, { text: "Well below threshold.", score: 1.0, overrideTitle: "Tokenization" }),
 ];
 
 // Helper to set up search mocks with given results (array or single)
@@ -122,16 +81,7 @@ describe("SearchOverlay handleSelect", () => {
     const onGoTo = vi.fn();
     const onClose = vi.fn();
 
-    await setupSearchMock({
-      chapterId: "5.1",
-      title: "The Full Architecture",
-      section: 5,
-      sectionName: "Transformer Input Pipeline",
-      sub: -1,
-      text: "Transformer Input Pipeline: The Full Architecture.",
-      source: "text",
-      score: 20,
-    });
+    await setupSearchMock(makeResult(ch5, { sub: -1, text: "Transformer Input Pipeline: The Full Architecture.", score: 20, overrideTitle: "The Full Architecture" }));
 
     render(<SearchOverlay open={true} onClose={onClose} onGoTo={onGoTo} />);
     const input = screen.getByPlaceholderText("Search chapters, concepts, formulas...");
@@ -151,16 +101,7 @@ describe("SearchOverlay handleSelect", () => {
     const onGoTo = vi.fn();
     const onClose = vi.fn();
 
-    await setupSearchMock({
-      chapterId: "5.1",
-      title: "The Full Architecture",
-      section: 5,
-      sectionName: "Transformer Input Pipeline",
-      sub: 3,
-      text: "Some content at sub 3.",
-      source: "text",
-      score: 20,
-    });
+    await setupSearchMock(makeResult(ch5, { sub: 3, text: "Some content at sub 3.", score: 20, overrideTitle: "The Full Architecture" }));
 
     render(<SearchOverlay open={true} onClose={onClose} onGoTo={onGoTo} />);
     const input = screen.getByPlaceholderText("Search chapters, concepts, formulas...");
@@ -180,16 +121,7 @@ describe("SearchOverlay handleSelect", () => {
     const onGoTo = vi.fn();
     const onClose = vi.fn();
 
-    await setupSearchMock({
-      chapterId: "5.1",
-      title: "The Full Architecture",
-      section: 5,
-      sectionName: "Transformer Input Pipeline",
-      sub: undefined,
-      text: "Some content.",
-      source: "text",
-      score: 20,
-    });
+    await setupSearchMock(makeResult(ch5, { sub: undefined, text: "Some content.", score: 20, overrideTitle: "The Full Architecture" }));
 
     render(<SearchOverlay open={true} onClose={onClose} onGoTo={onGoTo} />);
     const input = screen.getByPlaceholderText("Search chapters, concepts, formulas...");
@@ -203,6 +135,62 @@ describe("SearchOverlay handleSelect", () => {
     expect(onGoTo).toHaveBeenCalledTimes(1);
     const [, sub] = onGoTo.mock.calls[0];
     expect(sub).toBe(0);
+  });
+
+  it("clicks a search result and navigates by slug", async () => {
+    const realCh = chapters.find((c) => c.section === 1);
+    const onGoTo = vi.fn();
+    const onClose = vi.fn();
+
+    await setupSearchMock({
+      chapterSlug: realCh.slug,
+      chapterId: realCh.id,
+      section: realCh.section,
+      sectionName: sectionNames[realCh.section],
+      title: realCh.title,
+      sub: 0,
+      text: "match",
+      score: 0.9,
+      source: "text",
+    });
+
+    render(<SearchOverlay open={true} onClose={onClose} onGoTo={onGoTo} />);
+    const input = screen.getByPlaceholderText("Search chapters, concepts, formulas...");
+    await typeAndWait(input, "match");
+
+    const button = document.querySelector('button[data-result="0"]');
+    expect(button).toBeTruthy();
+    await act(async () => {
+      fireEvent.click(button);
+    });
+
+    const expectedIdx = chapters.findIndex((c) => c.slug === realCh.slug);
+    expect(onGoTo).toHaveBeenCalledWith(expectedIdx, 0);
+    expect(onClose).toHaveBeenCalled();
+  });
+
+  it("skips rows whose chapterSlug no longer exists in config", async () => {
+    const onGoTo = vi.fn();
+    const onClose = vi.fn();
+
+    await setupSearchMock({
+      chapterSlug: "nonexistent/removed-chapter",
+      chapterId: null,
+      section: null,
+      sectionName: null,
+      title: "Removed",
+      sub: 0,
+      text: "stale",
+      score: 0.9,
+      source: "text",
+    });
+
+    render(<SearchOverlay open={true} onClose={onClose} onGoTo={onGoTo} />);
+    const input = screen.getByPlaceholderText("Search chapters, concepts, formulas...");
+    await typeAndWait(input, "stale");
+
+    const buttons = document.querySelectorAll('button[data-result]');
+    expect(buttons.length).toBe(0);
   });
 });
 
@@ -474,18 +462,7 @@ describe("SearchOverlay score display and filtering", () => {
   });
 
   it("always shows at least 1 result even if scores are low", async () => {
-    await setupSearchMock([
-      {
-        chapterId: "1.1",
-        title: "What is a Neural Network?",
-        section: 1,
-        sectionName: "Neural Network Foundations",
-        sub: 0,
-        text: "An introduction.",
-        source: "text",
-        score: 0.5,
-      },
-    ]);
+    await setupSearchMock([makeResult(ch1, { text: "An introduction.", score: 0.5, overrideTitle: "What is a Neural Network?" })]);
 
     render(<SearchOverlay open={true} onClose={vi.fn()} onGoTo={vi.fn()} />);
     const input = screen.getByPlaceholderText("Search chapters, concepts, formulas...");
@@ -496,18 +473,9 @@ describe("SearchOverlay score display and filtering", () => {
   });
 
   it("handles results with missing score gracefully", async () => {
-    await setupSearchMock([
-      {
-        chapterId: "5.1",
-        title: "The Full Architecture",
-        section: 5,
-        sectionName: "Transformer Input Pipeline",
-        sub: 0,
-        text: "The complete Transformer.",
-        source: "text",
-        // no score field
-      },
-    ]);
+    const r = makeResult(ch5, { text: "The complete Transformer.", overrideTitle: "The Full Architecture" });
+    delete r.score;
+    await setupSearchMock([r]);
 
     render(<SearchOverlay open={true} onClose={vi.fn()} onGoTo={vi.fn()} />);
     const input = screen.getByPlaceholderText("Search chapters, concepts, formulas...");

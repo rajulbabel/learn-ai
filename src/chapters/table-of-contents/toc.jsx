@@ -5,8 +5,7 @@ export default function TOC(ctx) {
   const { goTo, expanded, setExpanded, currentChapter } = ctx;
 
   if (expanded == null && currentChapter && currentChapter.section > 0) {
-    const sup = sectionSuper[currentChapter.section];
-    if (sup) setExpanded({ super: sup, section: currentChapter.section });
+    setExpanded({ super: sectionSuper[currentChapter.section], section: currentChapter.section });
   }
 
   const chaptersBySection = {};
@@ -24,7 +23,7 @@ export default function TOC(ctx) {
   const superCounts = superSections.map((sg) => ({
     id: sg.id,
     sectionCount: sg.sections.length,
-    chapterCount: sg.sections.reduce((sum, s) => sum + (sectionCounts[s] || 0), 0),
+    chapterCount: sg.sections.reduce((sum, s) => sum + sectionCounts[s], 0),
   }));
 
   const openSuper = expanded && typeof expanded === "object" ? expanded.super : null;
@@ -148,7 +147,7 @@ export default function TOC(ctx) {
                   {sg.sections.map((secNum) => {
                     const secColor = sectionColors[secNum];
                     const isSecOpen = openSection === secNum;
-                    const secChapters = chaptersBySection[secNum] || [];
+                    const secChapters = chaptersBySection[secNum];
                     return (
                       <div
                         key={secNum}
@@ -199,7 +198,7 @@ export default function TOC(ctx) {
                               <T color={secColor} bold size={16}>
                                 {sectionNames[secNum]}
                               </T>
-                              {!isSecOpen && sections[secNum - 1]?.desc && (
+                              {!isSecOpen && sections[secNum - 1].desc && (
                                 <T color={C.dim} size={12} style={{ marginTop: 2, lineHeight: 1.35 }}>
                                   {sections[secNum - 1].desc}
                                 </T>
@@ -239,7 +238,7 @@ export default function TOC(ctx) {
                             onClick={(e) => e.stopPropagation()}
                             style={{ padding: "0 12px 10px", display: "flex", flexDirection: "column", gap: 2 }}
                           >
-                            {sections[secNum - 1]?.desc && (
+                            {sections[secNum - 1].desc && (
                               <T color={C.dim} size={12} style={{ paddingLeft: 34, marginBottom: 4, lineHeight: 1.4 }}>
                                 {sections[secNum - 1].desc}
                               </T>

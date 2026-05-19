@@ -176,4 +176,51 @@ describe("TOC (two-level)", () => {
     render(TOC(makeCtx({ expanded: null, setExpanded, currentChapter: null })));
     expect(setExpanded).not.toHaveBeenCalled();
   });
+
+  it("click inside open super-section body does not toggle the super-section closed", () => {
+    const setExpanded = vi.fn();
+    const { container } = render(TOC(makeCtx({ expanded: { super: "C", section: null }, setExpanded })));
+    // The expanded super-section body is the sibling div under the [data-toc-super] header.
+    // Find it by walking from the description text node.
+    const descText = "Architecture deep dive";
+    const descEl = Array.from(container.querySelectorAll("div")).find(
+      (d) => d.textContent.startsWith(descText) && d.children.length === 0,
+    );
+    expect(descEl).toBeTruthy();
+    fireEvent.click(descEl);
+    // setExpanded was NOT called with null (would mean super-section closed).
+    expect(setExpanded).not.toHaveBeenCalled();
+  });
+
+  it("click inside drilled-in section body does not collapse the section", () => {
+    const setExpanded = vi.fn();
+    const sec7 = sections[6];
+    const { container } = render(TOC(makeCtx({ expanded: { super: "C", section: 7 }, setExpanded })));
+    // The drilled-in section body renders the section desc as a non-interactive T.
+    // Click on it: the section body's onClick has stopPropagation, so the section
+    // header (which would toggle setExpanded) must NOT fire.
+    const descEl = Array.from(container.querySelectorAll("div")).find(
+      (d) => d.textContent === sec7.desc && d.children.length === 0,
+    );
+    expect(descEl).toBeTruthy();
+    fireEvent.click(descEl);
+    expect(setExpanded).not.toHaveBeenCalledWith({ super: "C", section: null });
+  });
+
+  it("collapses a drilled-in section when its header is clicked again", () => {
+    const setExpanded = vi.fn();
+    const { container } = render(TOC(makeCtx({ setExpanded, expanded: { super: "C", section: 7 } })));
+    const sectionHeaders = container.querySelectorAll("[data-toc-section]");
+    expect(sectionHeaders.length).toBeGreaterThan(0);
+    fireEvent.click(sectionHeaders[0]); // section 7 (already open)
+    expect(setExpanded).toHaveBeenCalledWith({ super: "C", section: null });
+  });
+
+  it("chapter row hover handlers fire without throwing", () => {
+    const { container } = render(TOC(makeCtx({ expanded: { super: "C", section: 7 } })));
+    const chapterLinks = container.querySelectorAll("[data-toc-chapter]");
+    expect(chapterLinks.length).toBeGreaterThan(0);
+    fireEvent.mouseEnter(chapterLinks[0]);
+    fireEvent.mouseLeave(chapterLinks[0]);
+  });
 });

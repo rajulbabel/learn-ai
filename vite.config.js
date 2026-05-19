@@ -16,6 +16,7 @@ export default defineConfig({
   test: {
     environment: "jsdom",
     globals: true,
+    env: { BASE_URL: "/learn-ai/" },
     setupFiles: ["./src/__tests__/setup.js"],
     exclude: ["**/node_modules/**", "**/dist/**", ".claude/**", ".worktrees/**"],
     coverage: {

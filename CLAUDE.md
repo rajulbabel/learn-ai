@@ -172,6 +172,24 @@ reordering does not require re-embedding. Run `npm run search:build` once
 after the reorder to refresh `chunks.json`'s sort order (cache-only,
 zero LLM cost).
 
+## How To: Cross-Reference Another Chapter
+
+When chapter code, shared helpers, or deep links need to point at another
+chapter (a "see X" jump, a prefetch, a programmatic `goTo`), look the
+chapter up by its **slug** - never by chapter ID (`"7.4"`) or array index.
+
+```js
+const idx = chapters.findIndex((c) => c.slug === "attention-computation/why-softmax");
+if (idx >= 0) goTo(idx);
+```
+
+Slugs equal the file path (`"<topic>/<chapter-kebab>"`) and are stable
+across reorders, insertions, deletions, and section renumbering. IDs and
+indices shift whenever chapters move; URLs or hard-coded indices break
+silently. The search overlay already follows this rule
+(`src/search-overlay.jsx`). Apply it anywhere a chapter is referenced
+from outside its own file.
+
 ## How To: Add a New Super-Section
 
 Super-sections group related sections in the TOC. The 6 default groups are

@@ -252,6 +252,70 @@ describe("LearnAI author footer (SEO)", () => {
   });
 });
 
+describe("LearnAI fullscreen toggle", () => {
+  function installFullscreenMocks({ active = false } = {}) {
+    document.documentElement.requestFullscreen = vi.fn(() => Promise.resolve());
+    document.exitFullscreen = vi.fn(() => Promise.resolve());
+    Object.defineProperty(document, "fullscreenElement", {
+      value: active ? document.documentElement : null,
+      configurable: true,
+      writable: true,
+    });
+  }
+
+  it("pressing F requests fullscreen on the document element when not fullscreen", async () => {
+    installFullscreenMocks({ active: false });
+    await renderLearnAI();
+    await act(async () => {
+      fireEvent.keyDown(window, { key: "f" });
+    });
+    expect(document.documentElement.requestFullscreen).toHaveBeenCalled();
+    expect(document.exitFullscreen).not.toHaveBeenCalled();
+  });
+
+  it("pressing F exits fullscreen when already fullscreen", async () => {
+    installFullscreenMocks({ active: true });
+    await renderLearnAI();
+    await act(async () => {
+      fireEvent.keyDown(window, { key: "F" });
+    });
+    expect(document.exitFullscreen).toHaveBeenCalled();
+    expect(document.documentElement.requestFullscreen).not.toHaveBeenCalled();
+  });
+
+  it("pressing Escape while in fullscreen exits fullscreen", async () => {
+    installFullscreenMocks({ active: true });
+    await renderLearnAI();
+    await act(async () => {
+      fireEvent.keyDown(window, { key: "Escape" });
+    });
+    expect(document.exitFullscreen).toHaveBeenCalled();
+  });
+
+  it("pressing Escape while NOT in fullscreen does not call exitFullscreen via this handler", async () => {
+    installFullscreenMocks({ active: false });
+    await renderLearnAI();
+    await act(async () => {
+      fireEvent.keyDown(window, { key: "Escape" });
+    });
+    expect(document.exitFullscreen).not.toHaveBeenCalled();
+  });
+
+  it("Escape while the search overlay is open does not exit fullscreen (search handles it first)", async () => {
+    installFullscreenMocks({ active: true });
+    await renderLearnAI();
+    await act(async () => {
+      fireEvent.keyDown(window, { key: "k", ctrlKey: true });
+      await new Promise((r) => setTimeout(r, 50));
+    });
+    expect(screen.getByTestId("search-overlay")).toBeTruthy();
+    await act(async () => {
+      fireEvent.keyDown(window, { key: "Escape" });
+    });
+    expect(document.exitFullscreen).not.toHaveBeenCalled();
+  });
+});
+
 describe("LearnAI auto-scroll on Continue", () => {
   it("scrolls to the midpoint between the previous box's bottom and the new box's top", async () => {
     const scrollTo = vi.fn();

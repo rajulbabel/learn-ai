@@ -177,6 +177,35 @@ export default function LearnAI() {
     subBtnRef.current = present;
   }, []);
 
+  const toggleFullscreen = useCallback(() => {
+    if (typeof document === "undefined") return;
+    const docEl = document.documentElement;
+    const isFs = document.fullscreenElement || document.webkitFullscreenElement;
+    if (!isFs) {
+      const req = docEl.requestFullscreen || docEl.webkitRequestFullscreen;
+      if (req) {
+        const p = req.call(docEl);
+        const lockEsc = () => {
+          try {
+            navigator.keyboard?.lock?.(["Escape"]);
+          } catch {
+            /* unsupported */
+          }
+        };
+        if (p && p.then) p.then(lockEsc).catch(() => {});
+        else lockEsc();
+      }
+    } else {
+      try {
+        navigator.keyboard?.unlock?.();
+      } catch {
+        /* unsupported */
+      }
+      const exit = document.exitFullscreen || document.webkitExitFullscreen;
+      if (exit) exit.call(document);
+    }
+  }, []);
+
   // Ref to the <main> element so the click-to-navigate handler can skip
   // clicks that land inside the content column.
   const mainRef = useRef(null);
@@ -341,6 +370,18 @@ export default function LearnAI() {
   useEffect(() => {
     const handleKey = (e) => {
       if (searchOpen) return; // Don't navigate while search is open
+      if (e.key === "Escape") {
+        const isFs = document.fullscreenElement || document.webkitFullscreenElement;
+        if (isFs) {
+          e.preventDefault();
+          toggleFullscreen();
+        }
+        return;
+      }
+      if (e.key === "f" || e.key === "F") {
+        toggleFullscreen();
+        return;
+      }
       if (e.key === "ArrowRight" || e.key === "ArrowDown" || e.key === " ") {
         if (e.key === " ") e.preventDefault();
         if (subBtnRef.current) {
@@ -369,7 +410,7 @@ export default function LearnAI() {
     };
     window.addEventListener("keydown", handleKey);
     return () => window.removeEventListener("keydown", handleKey);
-  }, [navigate, ch, sub]);
+  }, [navigate, ch, sub, searchOpen, toggleFullscreen]);
 
   // Tap-to-navigate: a click in the side band to the left of <main> mirrors
   // ArrowLeft/Up, and a click to the right of <main> mirrors ArrowRight/Down/
@@ -512,6 +553,7 @@ export default function LearnAI() {
     setTimeout(() => setRipple(null), 500);
     goTo(side === "left" ? ch - 1 : ch + 1);
   };
+
 
   return (
     <>

@@ -184,24 +184,18 @@ function textSearchInternal(query, topK = 30) {
   }));
 }
 
-// 80% vector / 20% BM25. LLM-authored chunks favor semantic match; keyword
-// path retained for exact-term queries (HNSW, RoPE, FAISS, etc.).
-const W_TEXT = 0.2;
-const W_VEC = 0.8;
-
+// Pure Reciprocal Rank Fusion (Cormack, Clarke & Buettcher, 2009): equal
+// weight, rank-only, k=60. Scale-free across heterogeneous scorers.
 function rrfMerge(textResults, vectorResults, k = 60) {
   const score = new Map();
   const data = new Map();
-  textResults.forEach((r, i) => {
+  const add = (r, i) => {
     const key = r.id;
-    score.set(key, (score.get(key) || 0) + W_TEXT / (k + i + 1));
+    score.set(key, (score.get(key) || 0) + 1 / (k + i + 1));
     if (!data.has(key)) data.set(key, r);
-  });
-  vectorResults.forEach((r, i) => {
-    const key = r.id;
-    score.set(key, (score.get(key) || 0) + W_VEC / (k + i + 1));
-    if (!data.has(key)) data.set(key, r);
-  });
+  };
+  textResults.forEach(add);
+  vectorResults.forEach(add);
   return [...score.entries()]
     .map(([id, s]) => ({ ...data.get(id), fusedScore: s }))
     .sort((a, b) => b.fusedScore - a.fusedScore);

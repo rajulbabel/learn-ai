@@ -17,7 +17,7 @@ export default defineConfig({
     environment: "jsdom",
     globals: true,
     setupFiles: ["./src/__tests__/setup.js"],
-    exclude: ["**/node_modules/**", "**/dist/**", ".claude/**"],
+    exclude: ["**/node_modules/**", "**/dist/**", ".claude/**", ".worktrees/**"],
     coverage: {
       provider: "v8",
       include: [

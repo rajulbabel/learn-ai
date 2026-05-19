@@ -26,6 +26,7 @@ export default defineConfig({
         "src/components.jsx",
         "src/nav-persistence.js",
         "src/url-routing.js",
+        "src/url-sync.js",
         "src/chapters/**/*.jsx",
         "src/shared/**/*.jsx",
       ],

@@ -2,14 +2,7 @@ import { describe, it, expect } from "vitest";
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import {
-  chapters,
-  sectionNames,
-  sectionColors,
-  superSections,
-  C,
-  validateConfig,
-} from "../config.js";
+import { chapters, sectionNames, sectionColors, superSections, C, validateConfig } from "../config.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const SRC_DIR = path.resolve(__dirname, "..");
@@ -149,7 +142,7 @@ describe("config.js", () => {
 
   it("every chapter has a slug equal to its file path", () => {
     chapters.forEach((c) => {
-      if (c.section === 0) return;          // section 0 (TOC) is special
+      if (c.section === 0) return; // section 0 (TOC) is special
       expect(typeof c.slug).toBe("string");
       expect(c.slug).toBe(c.file);
     });
@@ -190,6 +183,8 @@ describe("config.js", () => {
       superSections.forEach((s) => {
         expect(typeof s.id).toBe("string");
         expect(typeof s.name).toBe("string");
+        expect(typeof s.desc).toBe("string");
+        expect(s.desc.length).toBeGreaterThan(10);
         expect(Array.isArray(s.sections)).toBe(true);
         expect(typeof s.color).toBe("string");
         expect(s.color).toMatch(/^#[0-9a-fA-F]{6}$/);
@@ -203,7 +198,7 @@ describe("config.js", () => {
         B: "The Rise of LLMs",
         C: "The Transformer Era",
         D: "Vector Databases at Depth",
-        E: "Retrieval-Augmented Generation (RAG)",
+        E: "Retrieval Augmented Generation (RAG)",
         F: "Agentic AI",
       });
     });

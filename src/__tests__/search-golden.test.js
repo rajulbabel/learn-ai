@@ -16,9 +16,7 @@ describe("search index basics", () => {
   it("section 15 has 12 unique chapters (Vector Search Algorithms)", async () => {
     const { chapters } = await import("../config.js");
     const sec15Slugs = new Set(chapters.filter((c) => c.section === 15).map((c) => c.slug));
-    const s15 = new Set(
-      chunks.filter((c) => sec15Slugs.has(c.chapterSlug)).map((c) => c.chapterSlug),
-    );
+    const s15 = new Set(chunks.filter((c) => sec15Slugs.has(c.chapterSlug)).map((c) => c.chapterSlug));
     expect(s15.size).toBe(12);
   });
 

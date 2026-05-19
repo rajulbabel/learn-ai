@@ -49,7 +49,13 @@ describe("build-search-index", () => {
     });
 
     const chapters = [
-      { id: "1.1", title: "What is a Neural Network?", section: 1, file: "neural-foundations/what-is-nn", slug: "neural-foundations/what-is-nn" },
+      {
+        id: "1.1",
+        title: "What is a Neural Network?",
+        section: 1,
+        file: "neural-foundations/what-is-nn",
+        slug: "neural-foundations/what-is-nn",
+      },
     ];
     const sectionNames = { 1: "Neural Network Foundations" };
 
@@ -95,7 +101,15 @@ describe("build-search-index", () => {
 
     await runBuild({
       rootDir: workDir,
-      chapters: [{ id: "1.1", title: "T", section: 1, file: "neural-foundations/what-is-nn", slug: "neural-foundations/what-is-nn" }],
+      chapters: [
+        {
+          id: "1.1",
+          title: "T",
+          section: 1,
+          file: "neural-foundations/what-is-nn",
+          slug: "neural-foundations/what-is-nn",
+        },
+      ],
       sectionNames: { 1: "S1" },
     });
 
@@ -109,7 +123,15 @@ describe("build-search-index", () => {
     const id1 = chunksJson[0].id;
     return runBuild({
       rootDir: workDir,
-      chapters: [{ id: "1.1", title: "T", section: 1, file: "neural-foundations/what-is-nn", slug: "neural-foundations/what-is-nn" }],
+      chapters: [
+        {
+          id: "1.1",
+          title: "T",
+          section: 1,
+          file: "neural-foundations/what-is-nn",
+          slug: "neural-foundations/what-is-nn",
+        },
+      ],
       sectionNames: { 1: "S1" },
     }).then(() => {
       const again = JSON.parse(readFileSync(join(workDir, "src", "data", "chunks.json"), "utf-8"));
@@ -133,7 +155,15 @@ describe("build-search-index", () => {
 
     await runBuild({
       rootDir: workDir,
-      chapters: [{ id: "1.1", title: "T", section: 1, file: "neural-foundations/what-is-nn", slug: "neural-foundations/what-is-nn" }],
+      chapters: [
+        {
+          id: "1.1",
+          title: "T",
+          section: 1,
+          file: "neural-foundations/what-is-nn",
+          slug: "neural-foundations/what-is-nn",
+        },
+      ],
       sectionNames: { 1: "S1" },
     });
 
@@ -162,7 +192,15 @@ describe("build-search-index", () => {
     });
     await runBuild({
       rootDir: workDir,
-      chapters: [{ id: "1.1", title: "T", section: 1, file: "neural-foundations/what-is-nn", slug: "neural-foundations/what-is-nn" }],
+      chapters: [
+        {
+          id: "1.1",
+          title: "T",
+          section: 1,
+          file: "neural-foundations/what-is-nn",
+          slug: "neural-foundations/what-is-nn",
+        },
+      ],
       sectionNames: { 1: "S1" },
       log: () => {},
     });
@@ -187,7 +225,15 @@ describe("build-search-index", () => {
 
     await runBuild({
       rootDir: workDir,
-      chapters: [{ id: "1.1", title: "T", section: 1, file: "neural-foundations/what-is-nn", slug: "neural-foundations/what-is-nn" }],
+      chapters: [
+        {
+          id: "1.1",
+          title: "T",
+          section: 1,
+          file: "neural-foundations/what-is-nn",
+          slug: "neural-foundations/what-is-nn",
+        },
+      ],
       sectionNames: { 1: "S1" },
     });
 
@@ -205,13 +251,21 @@ describe("build-search-index", () => {
   it("chunkId is stable across chapter renumber (uses slug, not id)", async () => {
     mockChunk.mockResolvedValue({
       1.1: [
-        { sub: 0, kind: "concept", text: "T", summary: "S", queries: ["q1","q2","q3","q4","q5"], terms: ["t"] },
+        { sub: 0, kind: "concept", text: "T", summary: "S", queries: ["q1", "q2", "q3", "q4", "q5"], terms: ["t"] },
       ],
     });
 
     await runBuild({
       rootDir: workDir,
-      chapters: [{ id: "1.1", title: "T", section: 1, file: "neural-foundations/what-is-nn", slug: "neural-foundations/what-is-nn" }],
+      chapters: [
+        {
+          id: "1.1",
+          title: "T",
+          section: 1,
+          file: "neural-foundations/what-is-nn",
+          slug: "neural-foundations/what-is-nn",
+        },
+      ],
       sectionNames: { 1: "S1" },
     });
     const firstId = JSON.parse(readFileSync(join(workDir, "src", "data", "chunks.json"), "utf-8"))[0].id;
@@ -219,7 +273,7 @@ describe("build-search-index", () => {
     // Same content, renumbered ID + different section, same slug.
     mockChunk.mockResolvedValue({
       9.7: [
-        { sub: 0, kind: "concept", text: "T", summary: "S", queries: ["q1","q2","q3","q4","q5"], terms: ["t"] },
+        { sub: 0, kind: "concept", text: "T", summary: "S", queries: ["q1", "q2", "q3", "q4", "q5"], terms: ["t"] },
       ],
     });
     // Edit source to force cache miss (chunkSection re-called).
@@ -229,7 +283,15 @@ describe("build-search-index", () => {
     );
     await runBuild({
       rootDir: workDir,
-      chapters: [{ id: "9.7", title: "T", section: 9, file: "neural-foundations/what-is-nn", slug: "neural-foundations/what-is-nn" }],
+      chapters: [
+        {
+          id: "9.7",
+          title: "T",
+          section: 9,
+          file: "neural-foundations/what-is-nn",
+          slug: "neural-foundations/what-is-nn",
+        },
+      ],
       sectionNames: { 9: "S9" },
     });
     const secondId = JSON.parse(readFileSync(join(workDir, "src", "data", "chunks.json"), "utf-8"))[0].id;
@@ -240,12 +302,12 @@ describe("build-search-index", () => {
   it("chunks output is ordered by (section, position_in_section, sub)", async () => {
     mockChunk
       .mockResolvedValueOnce({
-        2.1: [{ sub: 0, kind: "concept", text: "C2", summary: "", queries: ["a","b","c","d","e"], terms: ["t"] }],
+        2.1: [{ sub: 0, kind: "concept", text: "C2", summary: "", queries: ["a", "b", "c", "d", "e"], terms: ["t"] }],
       })
       .mockResolvedValueOnce({
         1.2: [
-          { sub: 1, kind: "concept", text: "C1B", summary: "", queries: ["a","b","c","d","e"], terms: ["t"] },
-          { sub: 0, kind: "concept", text: "C1A", summary: "", queries: ["a","b","c","d","e"], terms: ["t"] },
+          { sub: 1, kind: "concept", text: "C1B", summary: "", queries: ["a", "b", "c", "d", "e"], terms: ["t"] },
+          { sub: 0, kind: "concept", text: "C1A", summary: "", queries: ["a", "b", "c", "d", "e"], terms: ["t"] },
         ],
       });
 

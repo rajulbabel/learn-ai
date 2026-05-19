@@ -44,7 +44,11 @@ const makeResult = (ch, { sub = 0, text = "Sample text.", score = 20, source = "
 
 // Standard multi-result set for keyboard navigation tests
 const threeResults = [
-  makeResult(ch5, { text: "First sample text for full architecture.", score: 25.0, overrideTitle: "The Full Architecture" }),
+  makeResult(ch5, {
+    text: "First sample text for full architecture.",
+    score: 25.0,
+    overrideTitle: "The Full Architecture",
+  }),
   makeResult(ch7, { text: "Second sample text for full formula.", score: 18.5, overrideTitle: "The Full Formula" }),
   makeResult(ch7b, { text: "Third sample text complete picture.", score: 12.0, overrideTitle: "The Complete Picture" }),
 ];
@@ -81,7 +85,14 @@ describe("SearchOverlay handleSelect", () => {
     const onGoTo = vi.fn();
     const onClose = vi.fn();
 
-    await setupSearchMock(makeResult(ch5, { sub: -1, text: "Transformer Input Pipeline: The Full Architecture.", score: 20, overrideTitle: "The Full Architecture" }));
+    await setupSearchMock(
+      makeResult(ch5, {
+        sub: -1,
+        text: "Transformer Input Pipeline: The Full Architecture.",
+        score: 20,
+        overrideTitle: "The Full Architecture",
+      }),
+    );
 
     render(<SearchOverlay open={true} onClose={onClose} onGoTo={onGoTo} />);
     const input = screen.getByPlaceholderText("Search chapters, concepts, formulas...");
@@ -101,7 +112,9 @@ describe("SearchOverlay handleSelect", () => {
     const onGoTo = vi.fn();
     const onClose = vi.fn();
 
-    await setupSearchMock(makeResult(ch5, { sub: 3, text: "Some content at sub 3.", score: 20, overrideTitle: "The Full Architecture" }));
+    await setupSearchMock(
+      makeResult(ch5, { sub: 3, text: "Some content at sub 3.", score: 20, overrideTitle: "The Full Architecture" }),
+    );
 
     render(<SearchOverlay open={true} onClose={onClose} onGoTo={onGoTo} />);
     const input = screen.getByPlaceholderText("Search chapters, concepts, formulas...");
@@ -121,7 +134,9 @@ describe("SearchOverlay handleSelect", () => {
     const onGoTo = vi.fn();
     const onClose = vi.fn();
 
-    await setupSearchMock(makeResult(ch5, { sub: undefined, text: "Some content.", score: 20, overrideTitle: "The Full Architecture" }));
+    await setupSearchMock(
+      makeResult(ch5, { sub: undefined, text: "Some content.", score: 20, overrideTitle: "The Full Architecture" }),
+    );
 
     render(<SearchOverlay open={true} onClose={onClose} onGoTo={onGoTo} />);
     const input = screen.getByPlaceholderText("Search chapters, concepts, formulas...");
@@ -189,7 +204,7 @@ describe("SearchOverlay handleSelect", () => {
     const input = screen.getByPlaceholderText("Search chapters, concepts, formulas...");
     await typeAndWait(input, "stale");
 
-    const buttons = document.querySelectorAll('button[data-result]');
+    const buttons = document.querySelectorAll("button[data-result]");
     expect(buttons.length).toBe(0);
   });
 });
@@ -462,7 +477,9 @@ describe("SearchOverlay score display and filtering", () => {
   });
 
   it("always shows at least 1 result even if scores are low", async () => {
-    await setupSearchMock([makeResult(ch1, { text: "An introduction.", score: 0.5, overrideTitle: "What is a Neural Network?" })]);
+    await setupSearchMock([
+      makeResult(ch1, { text: "An introduction.", score: 0.5, overrideTitle: "What is a Neural Network?" }),
+    ]);
 
     render(<SearchOverlay open={true} onClose={vi.fn()} onGoTo={vi.fn()} />);
     const input = screen.getByPlaceholderText("Search chapters, concepts, formulas...");

@@ -1,4 +1,4 @@
-import { C, chapters, sectionNames, sectionColors, superSections, sectionSuper } from "../../config.js";
+import { C, chapters, sectionNames, sectionColors, sections, superSections, sectionSuper } from "../../config.js";
 import { Box, T } from "../../components.jsx";
 
 export default function TOC(ctx) {
@@ -58,11 +58,12 @@ export default function TOC(ctx) {
             <div
               key={sg.id}
               style={{
-                borderRadius: 10,
-                background: `${sg.color}06`,
-                border: `1px solid ${isSuperOpen ? `${sg.color}35` : `${sg.color}15`}`,
+                borderRadius: 14,
+                background: `linear-gradient(180deg, ${sg.color}12, ${sg.color}03)`,
+                border: `1px solid ${isSuperOpen ? `${sg.color}40` : `${sg.color}1f`}`,
+                boxShadow: isSuperOpen ? `0 8px 24px -12px ${sg.color}40` : "none",
                 overflow: "hidden",
-                transition: "all 0.3s",
+                transition: "all 0.25s",
               }}
             >
               <div
@@ -76,32 +77,51 @@ export default function TOC(ctx) {
                   justifyContent: "space-between",
                 }}
               >
-                <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 10, minWidth: 0 }}>
                   <span
                     style={{
-                      background: `${sg.color}20`,
+                      background: `linear-gradient(135deg, ${sg.color}55, ${sg.color}1a)`,
                       color: sg.color,
-                      fontWeight: 800,
-                      fontSize: 21,
-                      width: 30,
-                      height: 30,
-                      borderRadius: 7,
+                      fontWeight: 900,
+                      fontSize: 22,
+                      width: 38,
+                      height: 38,
+                      borderRadius: 10,
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
                       flexShrink: 0,
+                      boxShadow: `0 4px 14px -6px ${sg.color}80`,
                     }}
                   >
                     {sg.id}
                   </span>
-                  <T color={sg.color} bold size={18}>
-                    {sg.name}
-                  </T>
+                  <div style={{ minWidth: 0 }}>
+                    <T color={sg.color} bold size={18}>
+                      {sg.name}
+                    </T>
+                    {!isSuperOpen && sg.desc && (
+                      <T color={C.dim} size={12} style={{ marginTop: 2, lineHeight: 1.35 }}>
+                        {sg.desc}
+                      </T>
+                    )}
+                  </div>
                 </div>
-                <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                  <T color={C.dim} size={12}>
+                <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                  <span
+                    style={{
+                      fontSize: 12,
+                      fontWeight: 600,
+                      color: sg.color,
+                      background: `${sg.color}14`,
+                      border: `1px solid ${sg.color}30`,
+                      padding: "5px 10px",
+                      borderRadius: 999,
+                      whiteSpace: "nowrap",
+                    }}
+                  >
                     {counts.sectionCount} Sections · {counts.chapterCount} Chapters
-                  </T>
+                  </span>
                   <span
                     style={{
                       color: C.dim,
@@ -118,8 +138,13 @@ export default function TOC(ctx) {
               {isSuperOpen && (
                 <div
                   onClick={(e) => e.stopPropagation()}
-                  style={{ padding: "0 14px 12px", display: "flex", flexDirection: "column", gap: 4 }}
+                  style={{ padding: "0 14px 12px", display: "flex", flexDirection: "column", gap: 6 }}
                 >
+                  {sg.desc && (
+                    <T color={C.dim} size={13} style={{ paddingLeft: 40, marginBottom: 4, lineHeight: 1.4 }}>
+                      {sg.desc}
+                    </T>
+                  )}
                   {sg.sections.map((secNum) => {
                     const secColor = sectionColors[secNum];
                     const isSecOpen = openSection === secNum;
@@ -128,11 +153,13 @@ export default function TOC(ctx) {
                       <div
                         key={secNum}
                         style={{
-                          borderRadius: 8,
-                          background: `${secColor}06`,
-                          border: `1px solid ${isSecOpen ? `${secColor}35` : `${secColor}15`}`,
+                          borderRadius: 10,
+                          background: `linear-gradient(180deg, ${secColor}10, ${secColor}03)`,
+                          border: `1px solid ${isSecOpen ? `${secColor}40` : `${secColor}1c`}`,
+                          boxShadow: isSecOpen ? `0 4px 14px -8px ${secColor}45` : "none",
                           overflow: "hidden",
                           marginLeft: 30,
+                          transition: "all 0.2s",
                         }}
                       >
                         <div
@@ -149,32 +176,51 @@ export default function TOC(ctx) {
                             justifyContent: "space-between",
                           }}
                         >
-                          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                          <div style={{ display: "flex", alignItems: "center", gap: 8, minWidth: 0 }}>
                             <span
                               style={{
-                                background: `${secColor}20`,
+                                background: `linear-gradient(135deg, ${secColor}55, ${secColor}1a)`,
                                 color: secColor,
-                                fontWeight: 700,
+                                fontWeight: 800,
                                 fontSize: 14,
-                                width: 26,
-                                height: 26,
-                                borderRadius: 6,
+                                width: 28,
+                                height: 28,
+                                borderRadius: 8,
                                 display: "flex",
                                 alignItems: "center",
                                 justifyContent: "center",
                                 flexShrink: 0,
+                                boxShadow: `0 3px 10px -5px ${secColor}80`,
                               }}
                             >
                               {secNum}
                             </span>
-                            <T color={secColor} bold size={16}>
-                              {sectionNames[secNum]}
-                            </T>
+                            <div style={{ minWidth: 0 }}>
+                              <T color={secColor} bold size={16}>
+                                {sectionNames[secNum]}
+                              </T>
+                              {!isSecOpen && sections[secNum - 1]?.desc && (
+                                <T color={C.dim} size={12} style={{ marginTop: 2, lineHeight: 1.35 }}>
+                                  {sections[secNum - 1].desc}
+                                </T>
+                              )}
+                            </div>
                           </div>
-                          <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                            <T color={C.dim} size={12}>
+                          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                            <span
+                              style={{
+                                fontSize: 11,
+                                fontWeight: 600,
+                                color: secColor,
+                                background: `${secColor}14`,
+                                border: `1px solid ${secColor}30`,
+                                padding: "4px 9px",
+                                borderRadius: 999,
+                                whiteSpace: "nowrap",
+                              }}
+                            >
                               {secChapters.length} Chapters
-                            </T>
+                            </span>
                             <span
                               style={{
                                 color: C.dim,
@@ -193,6 +239,11 @@ export default function TOC(ctx) {
                             onClick={(e) => e.stopPropagation()}
                             style={{ padding: "0 12px 10px", display: "flex", flexDirection: "column", gap: 2 }}
                           >
+                            {sections[secNum - 1]?.desc && (
+                              <T color={C.dim} size={12} style={{ paddingLeft: 34, marginBottom: 4, lineHeight: 1.4 }}>
+                                {sections[secNum - 1].desc}
+                              </T>
+                            )}
                             {secChapters.map((c) => (
                               <div
                                 key={c.id}

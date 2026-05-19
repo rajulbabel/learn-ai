@@ -73,16 +73,28 @@ describe("loadNav", () => {
   });
 
   it("fingerprint changes when slug list changes (and is independent of ID)", () => {
-    const a = [{ id: "1.1", slug: "x/a" }, { id: "1.2", slug: "x/b" }];
-    const b = [{ id: "9.9", slug: "x/a" }, { id: "9.8", slug: "x/b" }]; // ID-renumbered, slugs same
+    const a = [
+      { id: "1.1", slug: "x/a" },
+      { id: "1.2", slug: "x/b" },
+    ];
+    const b = [
+      { id: "9.9", slug: "x/a" },
+      { id: "9.8", slug: "x/b" },
+    ]; // ID-renumbered, slugs same
     saveNav(0, 0, a);
     // Loading with renumbered IDs but identical slugs should succeed.
     expect(loadNav(b)).toEqual({ ch: 0, sub: 0 });
   });
 
   it("fingerprint is invalidated when slugs differ", () => {
-    const a = [{ id: "1.1", slug: "x/a" }, { id: "1.2", slug: "x/b" }];
-    const c = [{ id: "1.1", slug: "x/a" }, { id: "1.2", slug: "x/c" }]; // slug changed
+    const a = [
+      { id: "1.1", slug: "x/a" },
+      { id: "1.2", slug: "x/b" },
+    ];
+    const c = [
+      { id: "1.1", slug: "x/a" },
+      { id: "1.2", slug: "x/c" },
+    ]; // slug changed
     saveNav(0, 0, a);
     expect(loadNav(c)).toBeNull();
   });

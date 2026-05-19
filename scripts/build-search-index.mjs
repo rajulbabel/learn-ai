@@ -111,9 +111,7 @@ export async function runBuild({ rootDir = process.cwd(), chapters, sectionNames
         log(`  [cache hit] ${ch.id} ${ch.title}`);
       } else {
         log(`  [LLM] ${ch.id} ${ch.title}`);
-        const svgForChapter = svgDescriptionsAll[ch.id]
-          ? { [ch.id]: svgDescriptionsAll[ch.id] }
-          : {};
+        const svgForChapter = svgDescriptionsAll[ch.id] ? { [ch.id]: svgDescriptionsAll[ch.id] } : {};
         const result = await chunkSection({
           filePath: `${CHAPTERS_DIR}/${ch.file}.jsx`,
           source,

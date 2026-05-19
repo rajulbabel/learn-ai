@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, afterEach } from "vitest";
 import { render, fireEvent, cleanup } from "@testing-library/react";
-import { chapters, sectionNames, sectionColors, superSections, sectionSuper } from "../../../config.js";
+import { chapters, sectionNames, sectionColors, sections, superSections, sectionSuper } from "../../../config.js";
 import { makeCtx } from "../../chapter-test-helpers.js";
 import TOC from "../../../chapters/table-of-contents/toc.jsx";
 
@@ -51,9 +51,7 @@ describe("TOC (two-level)", () => {
 
   it("renders chapters when a section is drilled into and navigates on click", () => {
     const goTo = vi.fn();
-    const { container } = render(
-      TOC(makeCtx({ expanded: { super: "C", section: 7 }, goTo })),
-    );
+    const { container } = render(TOC(makeCtx({ expanded: { super: "C", section: 7 }, goTo })));
     const chaptersInSec7 = chapters.filter((c) => c.section === 7);
     expect(chaptersInSec7.length).toBeGreaterThan(0);
     expect(container.textContent).toContain(chaptersInSec7[0].title);
@@ -83,9 +81,7 @@ describe("TOC (two-level)", () => {
   superSections.forEach((sg) => {
     sg.sections.forEach((secNum) => {
       it(`super-section ${sg.id} expands to section ${secNum}'s chapters`, () => {
-        const { container } = render(
-          TOC(makeCtx({ expanded: { super: sg.id, section: secNum } })),
-        );
+        const { container } = render(TOC(makeCtx({ expanded: { super: sg.id, section: secNum } })));
         expect(container.textContent).toContain(sectionNames[secNum]);
         const chs = chapters.filter((c) => c.section === secNum);
         if (chs.length > 0) {
@@ -120,6 +116,34 @@ describe("TOC (two-level)", () => {
         expect(container.innerHTML.toLowerCase()).toContain(rgb);
       });
     });
+  });
+
+  it("shows super-section description on each collapsed super-section row", () => {
+    const { container } = render(TOC(makeCtx({ expanded: null })));
+    superSections.forEach((sg) => {
+      expect(container.textContent).toContain(sg.desc);
+    });
+  });
+
+  it("shows super-section description inside the expanded super-section", () => {
+    const sgC = superSections.find((s) => s.id === "C");
+    const { container } = render(TOC(makeCtx({ expanded: { super: "C", section: null } })));
+    expect(container.textContent).toContain(sgC.desc);
+  });
+
+  it("shows section description on each collapsed section row inside an expanded super-section", () => {
+    const sgC = superSections.find((s) => s.id === "C");
+    const { container } = render(TOC(makeCtx({ expanded: { super: "C", section: null } })));
+    sgC.sections.forEach((secNum) => {
+      const sec = sections[secNum - 1];
+      expect(container.textContent).toContain(sec.desc);
+    });
+  });
+
+  it("shows section description inside a drilled-in section", () => {
+    const sec7 = sections[6];
+    const { container } = render(TOC(makeCtx({ expanded: { super: "C", section: 7 } })));
+    expect(container.textContent).toContain(sec7.desc);
   });
 
   it("auto-opens the super-section and section of the current chapter when expanded is null and currentChapter is given", () => {

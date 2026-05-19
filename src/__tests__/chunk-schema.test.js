@@ -7,17 +7,7 @@ describe("chunks.json schema", () => {
   });
 
   it("every chunk has the required fields with correct types", () => {
-    const required = [
-      "id",
-      "chapterSlug",
-      "chapterTitle",
-      "sub",
-      "kind",
-      "text",
-      "summary",
-      "queries",
-      "terms",
-    ];
+    const required = ["id", "chapterSlug", "chapterTitle", "sub", "kind", "text", "summary", "queries", "terms"];
     for (const c of chunks) {
       for (const f of required) {
         expect(c[f] !== undefined, `chunk ${c.id} missing ${f}`).toBe(true);

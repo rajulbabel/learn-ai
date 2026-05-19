@@ -365,8 +365,8 @@ export default function FeedForwardNetwork(ctx) {
             Step-by-Step: FFN on "cats"
           </T>
           <T color="#a5d6a7" size={16} style={{ marginTop: 6 }}>
-            Let's trace "cats" through the FFN. In chapter 12.2, Add & Norm output [-1.36, -0.55, 0.86, 1.06] for "cats".
-            We'll use a tiny 4-dim version to show the real math (real models use 512 dims but the process is
+            Let's trace "cats" through the FFN. In chapter 12.2, Add & Norm output [-1.36, -0.55, 0.86, 1.06] for
+            "cats". We'll use a tiny 4-dim version to show the real math (real models use 512 dims but the process is
             identical).
           </T>
 

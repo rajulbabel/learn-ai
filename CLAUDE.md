@@ -118,12 +118,24 @@ Example: insert a new chapter "Score Normalization" between 7.2 and 7.3.
    const ScoreNormalization = (ctx) => { ... };
    export default ScoreNormalization;
    ```
-2. **Add one entry to `chapters` in `config.js`** and renumber the IDs that follow:
+2. **Add one entry to the section's `chapters` array in `config.js`** - no ID
+   renumbering, no manual ID at all. Drop a new `{ slug, file, title, component }`
+   object into the array at the desired position; IDs are derived from position.
    ```js
-   { id: "7.2", ..., component: "AttentionScores", file: "attention-computation/attention-scores" },
-   { id: "7.3", title: "Score Normalization", section: 7,
-     component: "ScoreNormalization", file: "attention-computation/score-normalization" },  // NEW
-   { id: "7.4", ..., component: "KTranspose", file: "attention-computation/k-transpose" },  // was 7.3
+   sections = [
+     ...
+     {
+       num: 7,
+       name: "Computing Attention",
+       chapters: [
+         { slug: "attention-computation/why-attention",       file: "attention-computation/why-attention",       title: "Why Attention",  component: "WhyAttention" },
+         { slug: "attention-computation/qkv-concepts",        file: "attention-computation/qkv-concepts",        title: "Q, K, V",        component: "QKVConcepts" },
+         { slug: "attention-computation/score-normalization", file: "attention-computation/score-normalization", title: "Score Normalization", component: "ScoreNormalization" },  // NEW
+         { slug: "attention-computation/k-transpose",         file: "attention-computation/k-transpose",         title: "K Transpose",    component: "KTranspose" },
+         ...
+       ],
+     },
+   ]
    ```
 3. **Add a per-chapter test file** at
    `src/__tests__/chapters/attention-computation/score-normalization.test.jsx`
@@ -150,9 +162,31 @@ Example: insert a new Section 5 "Layer Normalization" between current Sections 4
 
 ## How To: Reorder Chapters
 
-Just reorder the entries in the `chapters` array in config.js (and update IDs
-to match the new order). Chapter files and test files stay where they are -
-nothing else changes.
+Reorder entries inside a section's `chapters` array in config.js. IDs are
+derived from position, so no renumbering is needed anywhere. Chapter files
+and test files do not move - their content is identity-free. Moving a
+chapter between sections is just cutting/pasting between two arrays.
+
+The search index identifies chapters by stable slug (= file path), so
+reordering does not require re-embedding. Run `npm run search:build` once
+after the reorder to refresh `chunks.json`'s sort order (cache-only,
+zero LLM cost).
+
+## How To: Add a New Super-Section
+
+Super-sections group related sections in the TOC. The 6 default groups are
+defined in `superSections` in `config.js`.
+
+To add a new super-section:
+
+1. Insert a new entry into `superSections` with `id`, `name`, `color`, and
+   the `sections: [...]` list it owns. Pick an id letter not already used.
+2. Remove those section numbers from whichever super-section previously
+   owned them.
+3. Run `npm run test` - validation will catch any section that is now
+   orphaned or double-claimed.
+
+No chunk regeneration is required. Super-sections are a pure TOC overlay.
 
 ## Development
 

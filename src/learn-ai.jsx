@@ -147,10 +147,10 @@ function NavZone({ side, hint, ripple, chapter, onClick, onHover }) {
 }
 
 export default function LearnAI() {
-  const initial = (() => {
+  const [initial] = useState(() => {
     if (typeof window === "undefined") return { ch: 0, sub: 0, expanded: null };
     return resolveInitialState(window.location.pathname, loadNav(chapters), { chapters, sections, superSections });
-  })();
+  });
 
   const [ch, setCh] = useState(initial.ch);
   const [fade, setFade] = useState(true);

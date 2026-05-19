@@ -5,8 +5,8 @@
  *   3. On cache miss: ask Claude (via llm-chunk.mjs) for chunks for that chapter only.
  *      One LLM call per chapter keeps each call's output well within the 16K token
  *      budget, so dense chapters never overflow.
- *   4. Stamping every chunk with stable id, chapterTitle, sectionName, and writing the
- *      merged array sorted by (chapterId, sub).
+ *   4. Stamping every chunk with stable id, chapterTitle, chapterSlug, and writing the
+ *      merged array sorted by (input chapter order, sub, kind).
  *
  * Cache shape: { "<chapterFileHash>": Chunk[] }
  *   Editing a chapter file changes its hash, invalidating only that chapter.
@@ -43,21 +43,6 @@ function chunkId(chapterSlug, sub, kind, text) {
   return sha256_16(`${chapterSlug}|${sub}|${kind}|${sha256_16(text)}`);
 }
 
-function chapterCmp(a, b) {
-  // Numeric chapter sort: "1.2" < "1.10" < "2.1". Defensive against undefined/NaN.
-  const parse = (id) => {
-    const [s, c] = String(id).split(".").map((p) => Number(p));
-    return [Number.isFinite(s) ? s : 0, Number.isFinite(c) ? c : 0];
-  };
-  const [as, ac] = parse(a.chapterId);
-  const [bs, bc] = parse(b.chapterId);
-  if (as !== bs) return as - bs;
-  if (ac !== bc) return ac - bc;
-  const sa = Number.isFinite(a.sub) ? a.sub : 0;
-  const sb = Number.isFinite(b.sub) ? b.sub : 0;
-  return sa - sb;
-}
-
 export async function runBuild({ rootDir = process.cwd(), chapters, sectionNames, log = console.log }) {
   const cachePath = join(rootDir, CACHE_PATH);
   const chunksPath = join(rootDir, CHUNKS_PATH);
@@ -87,6 +72,20 @@ export async function runBuild({ rootDir = process.cwd(), chapters, sectionNames
     const chapterHash = contentHash(source);
     tasks.push({ ch, source, chapterHash });
   }
+
+  // Build a map slug → reading-order index. Reading order is section-major:
+  // chapters from section 1 come first (in their input order within that
+  // section), then section 2, etc. This keeps chunks.json output stable in
+  // section order regardless of how chapters are listed in config.
+  const orderedTasks = tasks
+    .map((t, i) => ({ t, i }))
+    .sort((a, b) => {
+      const sa = a.t.ch.section;
+      const sb = b.t.ch.section;
+      if (sa !== sb) return sa - sb;
+      return a.i - b.i;
+    });
+  const slugOrder = new Map(orderedTasks.map(({ t }, i) => [t.ch.slug, i]));
 
   // Serialize cache writes via a single-slot promise chain.
   let cacheWriteChain = Promise.resolve();
@@ -157,7 +156,14 @@ export async function runBuild({ rootDir = process.cwd(), chapters, sectionNames
     }
   }
 
-  all.sort(chapterCmp);
+  const KIND_ORDER = { concept: 0, formula: 1, example: 2, diagram: 3, summary: 4 };
+  all.sort((a, b) => {
+    const ia = slugOrder.get(a.chapterSlug);
+    const ib = slugOrder.get(b.chapterSlug);
+    if (ia !== ib) return ia - ib;
+    if (a.sub !== b.sub) return a.sub - b.sub;
+    return (KIND_ORDER[a.kind] ?? 99) - (KIND_ORDER[b.kind] ?? 99);
+  });
 
   mkdirSync(join(rootDir, "src/data"), { recursive: true });
   atomicWrite(chunksPath, JSON.stringify(all, null, 2));

@@ -236,4 +236,34 @@ describe("build-search-index", () => {
 
     expect(secondId).toBe(firstId);
   });
+
+  it("chunks output is ordered by (section, position_in_section, sub)", async () => {
+    mockChunk
+      .mockResolvedValueOnce({
+        2.1: [{ sub: 0, kind: "concept", text: "C2", summary: "", queries: ["a","b","c","d","e"], terms: ["t"] }],
+      })
+      .mockResolvedValueOnce({
+        1.2: [
+          { sub: 1, kind: "concept", text: "C1B", summary: "", queries: ["a","b","c","d","e"], terms: ["t"] },
+          { sub: 0, kind: "concept", text: "C1A", summary: "", queries: ["a","b","c","d","e"], terms: ["t"] },
+        ],
+      });
+
+    mkdirSync(join(workDir, "src", "chapters", "x"), { recursive: true });
+    writeFileSync(join(workDir, "src", "chapters", "x", "a.jsx"), "x");
+    writeFileSync(join(workDir, "src", "chapters", "x", "b.jsx"), "y");
+
+    await runBuild({
+      rootDir: workDir,
+      chapters: [
+        { id: "2.1", title: "X21", section: 2, file: "x/a", slug: "x/a" },
+        { id: "1.2", title: "X12", section: 1, file: "x/b", slug: "x/b" },
+      ],
+      sectionNames: { 1: "S1", 2: "S2" },
+    });
+
+    const out = JSON.parse(readFileSync(join(workDir, "src", "data", "chunks.json"), "utf-8"));
+    // After sort: section 1 (chapter 1.2) comes first, then its subs in order, then 2.1.
+    expect(out.map((c) => c.text)).toEqual(["C1A", "C1B", "C2"]);
+  });
 });

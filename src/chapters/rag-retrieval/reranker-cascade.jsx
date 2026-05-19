@@ -142,9 +142,9 @@ export default function RerankerCascade(ctx) {
   // Funnel geometry (sub=1).
   const FUNNEL_W = 560;
   const FUNNEL_H = 360;
-  const FUNNEL_TOP_W = 460;
-  const FUNNEL_MID_W = 340;
-  const FUNNEL_BOT_W = 220;
+  const FUNNEL_TOP_W = 520;
+  const FUNNEL_MID_W = 420;
+  const FUNNEL_BOT_W = 320;
   const FUNNEL_NARROW = 60;
   const STAGE_H = 90;
   const STAGE_GAP = 20;

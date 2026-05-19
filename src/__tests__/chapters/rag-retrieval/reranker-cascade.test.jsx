@@ -38,6 +38,23 @@ describe("RerankerCascade (21.4)", () => {
     expect(container.textContent).toMatch(/10/);
   });
 
+  it("sub=1 bottom funnel stage is wide enough for the 'LLM Reads Top-3 + Generates' title", () => {
+    const { container } = render(RerankerCascade(makeCtx({ sub: 1 })));
+    const polys = container.querySelectorAll("svg polygon");
+    expect(polys.length).toBeGreaterThanOrEqual(3);
+    const trapezoids = Array.from(polys).filter((p) => p.getAttribute("points").split(" ").length === 4);
+    expect(trapezoids.length).toBe(3);
+    const stage3 = trapezoids[2];
+    const pts = stage3
+      .getAttribute("points")
+      .trim()
+      .split(/\s+/)
+      .map((pair) => pair.split(",").map(Number));
+    const [topLeft, topRight] = [pts[0], pts[1]];
+    const topWidth = topRight[0] - topLeft[0];
+    expect(topWidth).toBeGreaterThanOrEqual(300);
+  });
+
   it("sub=2 shows the latency budget 30 + 80 + 800 = ~910ms", () => {
     const { container } = render(RerankerCascade(makeCtx({ sub: 2 })));
     expect(container.textContent).toMatch(/30/);

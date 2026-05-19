@@ -103,8 +103,8 @@ describe("config.js", () => {
 
   it("validateConfig detects duplicate IDs", () => {
     const badConfig = [
-      { id: "1.1", title: "A", section: 1, component: "CompA" },
-      { id: "1.1", title: "B", section: 1, component: "CompB" },
+      { id: "1.1", title: "A", section: 1, component: "CompA", slug: "x/a" },
+      { id: "1.1", title: "B", section: 1, component: "CompB", slug: "x/b" },
     ];
     const errors = validateConfig(badConfig);
     expect(errors.length).toBe(1);
@@ -112,14 +112,14 @@ describe("config.js", () => {
   });
 
   it("validateConfig detects missing id when component present", () => {
-    const badConfig = [{ id: "", title: "A", section: 1, component: "CompA" }];
+    const badConfig = [{ id: "", title: "A", section: 1, component: "CompA", slug: "x/a" }];
     const errors = validateConfig(badConfig);
     expect(errors.length).toBe(1);
     expect(errors[0]).toContain("missing id");
   });
 
   it("validateConfig detects missing component", () => {
-    const badConfig = [{ id: "1.1", title: "A", section: 1, component: "" }];
+    const badConfig = [{ id: "1.1", title: "A", section: 1, component: "", slug: "x/a" }];
     const errors = validateConfig(badConfig);
     expect(errors.length).toBe(1);
     expect(errors[0]).toContain("missing component");
@@ -238,6 +238,26 @@ describe("config.js", () => {
           expect(mod.sectionSuper[sNum]).toBe(sg.id);
         });
       });
+    });
+  });
+
+  describe("validateConfig (extended)", () => {
+    it("flags duplicate slugs", () => {
+      const errs = validateConfig([
+        { id: "1.1", component: "A", file: "x/a", slug: "dup" },
+        { id: "1.2", component: "B", file: "x/b", slug: "dup" },
+      ]);
+      expect(errs.some((e) => /Duplicate.*slug/i.test(e))).toBe(true);
+    });
+
+    it("flags chapters missing slug", () => {
+      const errs = validateConfig([{ id: "1.1", component: "A", file: "x/a" }]);
+      expect(errs.some((e) => /missing.*slug/i.test(e))).toBe(true);
+    });
+
+    it("returns no errors for current config", () => {
+      const errs = validateConfig(chapters.filter((c) => c.section > 0));
+      expect(errs).toEqual([]);
     });
   });
 });

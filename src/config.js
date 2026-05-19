@@ -1763,9 +1763,15 @@ export function validateConfig(chapterList) {
   const ids = chapterList.map((c) => c.id);
   const dupes = ids.filter((id, i) => ids.indexOf(id) !== i);
   if (dupes.length) errors.push(`Duplicate chapter IDs: ${dupes.join(", ")}`);
+
+  const slugs = chapterList.filter((c) => c.slug).map((c) => c.slug);
+  const dupeSlugs = slugs.filter((s, i) => slugs.indexOf(s) !== i);
+  if (dupeSlugs.length) errors.push(`Duplicate slugs: ${dupeSlugs.join(", ")}`);
+
   chapterList.forEach((c) => {
     if (c.component && !c.id) errors.push(`Chapter missing id: ${c.component}`);
     if (!c.component) errors.push(`Chapter missing component: id=${c.id}`);
+    if (!c.slug) errors.push(`Chapter missing slug: id=${c.id}`);
   });
   return errors;
 }

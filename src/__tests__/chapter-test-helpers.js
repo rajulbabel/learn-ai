@@ -16,6 +16,7 @@ export function makeCtx(overrides = {}) {
     setHovered: vi.fn(),
     expanded: null,
     setExpanded: vi.fn(),
+    currentChapter: null,
     registerSubBtn: vi.fn(),
     ...overrides,
   };

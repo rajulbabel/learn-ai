@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { render } from "@testing-library/react";
 import { useUrlSync } from "../url-sync.js";
 import { chapters } from "../config.js";
@@ -19,11 +19,15 @@ describe("useUrlSync", () => {
     replaceSpy.mockClear();
   });
 
+  afterEach(() => {
+    expect(pushSpy).not.toHaveBeenCalled();
+    vi.restoreAllMocks();
+  });
+
   it("sets URL to chapter path on mount when ch>0", () => {
     const idx = chapters.findIndex((c) => c.slug === "neural-foundations/what-is-nn");
     render(<Probe ch={idx} sub={0} expanded={null} />);
     expect(replaceSpy).toHaveBeenCalledWith(null, "", "/learn-ai/neural-foundations/what-is-nn");
-    expect(pushSpy).not.toHaveBeenCalled();
   });
 
   it("includes sub when sub>0", () => {

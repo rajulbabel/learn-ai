@@ -18,5 +18,5 @@ export function useUrlSync({ ch, sub, expanded }) {
     if (window.location.pathname !== target) {
       window.history.replaceState(null, "", target);
     }
-  }, [ch, sub, expanded]);
+  }, [ch, sub, expanded?.super, expanded?.section]);
 }

@@ -15,6 +15,16 @@ import { chapters, sectionNames } from "./config.js";
 
 const chapterBySlug = new Map(chapters.map((c) => [c.slug, c]));
 
+// Short content fingerprint of an embeddings manifest. Combined with the model
+// checksum it forms the IndexedDB cache key for embeddings.bin so the cache
+// invalidates automatically whenever the embedding set changes between deploys.
+function manifestFingerprint(m) {
+  const vs = m.vectors;
+  const first = vs[0].chunkId;
+  const last = vs[vs.length - 1].chunkId;
+  return `${m.count}-${first}-${last}`;
+}
+
 let miniSearch = null;
 let chunks = [];
 let chunkById = new Map();
@@ -80,29 +90,21 @@ export async function prefetchSearch() {
     modelMeta = await metaRes.json();
     dim = modelMeta.dim;
 
-    // 2. Load embeddings (cache hit by modelChecksum, else download).
-    //    Validate cache integrity: the first vector's chunkId must exist in
-    //    the current chunks.json. If not, the cached embeddings are stale
-    //    (e.g. chunks regenerated since last visit) - drop them and refetch.
-    const cached = await getCachedSearchAssets(modelMeta.checksum);
-    const cacheValid =
-      cached &&
-      cached.manifest &&
-      Array.isArray(cached.manifest.vectors) &&
-      cached.manifest.vectors.length > 0 &&
-      chunkById.has(cached.manifest.vectors[0].chunkId);
-    if (cacheValid) {
-      manifest = cached.manifest;
+    // 2. Always load manifest fresh from disk (cheap, ~1 MB gzipped, ships with
+    //    the JS bundle). The manifest's content fingerprint is part of the cache
+    //    key so the cached embeddings.bin auto-invalidates whenever chunks or
+    //    embeddings change in a new deploy.
+    manifest = await import("./data/embeddings-manifest.json").then((m) => m.default || m);
+    const cacheKey = `${modelMeta.checksum}:${manifestFingerprint(manifest)}`;
+
+    // 3. Try the embeddings cache under the compound key.
+    const cached = await getCachedSearchAssets(cacheKey);
+    if (cached && cached.bin instanceof Uint8Array) {
       bin = cached.bin;
     } else {
-      const [manifestMod, binBuf] = await Promise.all([
-        import("./data/embeddings-manifest.json").then((m) => m.default || m),
-        // Vite serves src/data/* as static assets via the bundler; fetch via the runtime URL.
-        fetch(new URL("./data/embeddings.bin", import.meta.url).href).then((r) => r.arrayBuffer()),
-      ]);
-      manifest = manifestMod;
+      const binBuf = await fetch(new URL("./data/embeddings.bin", import.meta.url).href).then((r) => r.arrayBuffer());
       bin = new Uint8Array(binBuf);
-      cacheSearchAssets(modelMeta.checksum, { bin, manifest }).catch(() => {});
+      cacheSearchAssets(cacheKey, { bin, manifest }).catch(() => {});
     }
     loadProgress = 30;
 

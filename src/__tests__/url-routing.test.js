@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { BASE_PATH, parsePath } from "../url-routing.js";
+import { BASE_PATH, parsePath, buildPath } from "../url-routing.js";
 import { chapters, sections, superSections } from "../config.js";
 
 const cfg = { chapters, sections, superSections };
@@ -101,5 +101,68 @@ describe("parsePath - chapter", () => {
 
   it("four or more segments are invalid", () => {
     expect(parsePath("/learn-ai/a/b/c/d", cfg).kind).toBe("invalid");
+  });
+});
+
+describe("buildPath", () => {
+  it("TOC with no super returns bare base", () => {
+    expect(buildPath({ kind: "toc", super: null, section: null }, cfg)).toBe("/learn-ai/");
+  });
+
+  it("TOC super-only returns base + super slug", () => {
+    expect(buildPath({ kind: "toc", super: "C", section: null }, cfg)).toBe("/learn-ai/transformers");
+  });
+
+  it("TOC super + section returns base + super + section slug", () => {
+    expect(buildPath({ kind: "toc", super: "C", section: 10 }, cfg)).toBe("/learn-ai/transformers/attention");
+  });
+
+  it("chapter with sub=0 omits sub segment", () => {
+    const idx = chapters.findIndex((c) => c.slug === "neural-foundations/what-is-nn");
+    expect(buildPath({ kind: "chapter", ch: idx, sub: 0 }, cfg)).toBe("/learn-ai/neural-foundations/what-is-nn");
+  });
+
+  it("chapter with sub>0 includes sub segment", () => {
+    const idx = chapters.findIndex((c) => c.slug === "attention-computation/compute-qkv");
+    expect(buildPath({ kind: "chapter", ch: idx, sub: 3 }, cfg)).toBe(
+      "/learn-ai/attention-computation/compute-qkv/3",
+    );
+  });
+
+  it("TOC chapter (ch=0) builds bare base regardless of sub", () => {
+    expect(buildPath({ kind: "chapter", ch: 0, sub: 0 }, cfg)).toBe("/learn-ai/");
+    expect(buildPath({ kind: "chapter", ch: 0, sub: 5 }, cfg)).toBe("/learn-ai/");
+  });
+
+  it("round-trip chapter parses back to the same state", () => {
+    const idx = chapters.findIndex((c) => c.slug === "attention-computation/compute-qkv");
+    const state = { kind: "chapter", ch: idx, sub: 2 };
+    expect(parsePath(buildPath(state, cfg), cfg)).toEqual(state);
+  });
+
+  it("round-trip TOC super+section parses back to the same state", () => {
+    const state = { kind: "toc", super: "D", section: 17 };
+    expect(parsePath(buildPath(state, cfg), cfg)).toEqual(state);
+  });
+
+  it("chapter index out of range returns bare base", () => {
+    expect(buildPath({ kind: "chapter", ch: 9999, sub: 0 }, cfg)).toBe("/learn-ai/");
+  });
+
+  it("TOC with unknown super-id returns bare base", () => {
+    expect(buildPath({ kind: "toc", super: "ZZ", section: null }, cfg)).toBe("/learn-ai/");
+  });
+
+  it("TOC with section not belonging to the named super returns super-only path", () => {
+    // section 10 ("attention") belongs to super C, not D - falls back to super-only
+    expect(buildPath({ kind: "toc", super: "D", section: 10 }, cfg)).toBe("/learn-ai/vector-databases");
+  });
+
+  it("TOC with unknown section number returns super-only path", () => {
+    expect(buildPath({ kind: "toc", super: "C", section: 9999 }, cfg)).toBe("/learn-ai/transformers");
+  });
+
+  it("unknown state.kind returns bare base", () => {
+    expect(buildPath({ kind: "invalid" }, cfg)).toBe("/learn-ai/");
   });
 });

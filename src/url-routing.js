@@ -49,3 +49,23 @@ export function parsePath(pathname, { chapters, sections, superSections }) {
 
   return { kind: "invalid" };
 }
+
+export function buildPath(state, { chapters, sections, superSections }) {
+  if (state.kind === "chapter") {
+    const ch = chapters[state.ch];
+    if (!ch || ch.section === 0) return BASE_PATH;
+    const sub = state.sub;
+    if (sub > 0) return `${BASE_PATH}${ch.slug}/${sub}`;
+    return `${BASE_PATH}${ch.slug}`;
+  }
+  if (state.kind === "toc") {
+    if (!state.super) return BASE_PATH;
+    const sg = superSections.find((s) => s.id === state.super);
+    if (!sg) return BASE_PATH;
+    if (state.section == null) return `${BASE_PATH}${sg.slug}`;
+    const sec = sections.find((x) => x.num === state.section);
+    if (!sec || !sg.sections.includes(sec.num)) return `${BASE_PATH}${sg.slug}`;
+    return `${BASE_PATH}${sg.slug}/${sec.slug}`;
+  }
+  return BASE_PATH;
+}

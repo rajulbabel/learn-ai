@@ -1,5 +1,5 @@
 export const chapters = [
-  { id: "0", title: "Table of Contents", section: 0, component: "TOC", file: "table-of-contents/toc" },
+  { id: "0", title: "Table of Contents", section: 0, component: "TOC", file: "table-of-contents/toc", slug: "table-of-contents/toc" },
   // Section 1: Neural Network Foundations
   {
     id: "1.1",
@@ -7,6 +7,7 @@ export const chapters = [
     section: 1,
     component: "WhatIsNN",
     file: "neural-foundations/what-is-nn",
+    slug: "neural-foundations/what-is-nn",
   },
   {
     id: "1.2",
@@ -14,6 +15,7 @@ export const chapters = [
     section: 1,
     component: "InsideNeuron",
     file: "neural-foundations/inside-neuron",
+    slug: "neural-foundations/inside-neuron",
   },
   {
     id: "1.3",
@@ -21,6 +23,7 @@ export const chapters = [
     section: 1,
     component: "WhatIsLayer",
     file: "neural-foundations/what-is-layer",
+    slug: "neural-foundations/what-is-layer",
   },
   {
     id: "1.4",
@@ -28,6 +31,7 @@ export const chapters = [
     section: 1,
     component: "WeightsBiases",
     file: "neural-foundations/weights-biases",
+    slug: "neural-foundations/weights-biases",
   },
   {
     id: "1.5",
@@ -35,6 +39,7 @@ export const chapters = [
     section: 1,
     component: "WhyLinear",
     file: "neural-foundations/why-linear",
+    slug: "neural-foundations/why-linear",
   },
   {
     id: "1.6",
@@ -42,6 +47,7 @@ export const chapters = [
     section: 1,
     component: "ReLU",
     file: "neural-foundations/re-lu",
+    slug: "neural-foundations/re-lu",
   },
   {
     id: "1.7",
@@ -49,6 +55,7 @@ export const chapters = [
     section: 1,
     component: "ForwardPass",
     file: "neural-foundations/forward-pass",
+    slug: "neural-foundations/forward-pass",
   },
   {
     id: "2.1",
@@ -56,6 +63,7 @@ export const chapters = [
     section: 2,
     component: "LossFunction",
     file: "neural-foundations/loss-function",
+    slug: "neural-foundations/loss-function",
   },
   {
     id: "2.2",
@@ -63,6 +71,7 @@ export const chapters = [
     section: 2,
     component: "WhatIsLearning",
     file: "neural-foundations/what-is-learning",
+    slug: "neural-foundations/what-is-learning",
   },
   {
     id: "2.3",
@@ -70,6 +79,7 @@ export const chapters = [
     section: 2,
     component: "Derivatives",
     file: "neural-foundations/derivatives",
+    slug: "neural-foundations/derivatives",
   },
   {
     id: "2.4",
@@ -77,6 +87,7 @@ export const chapters = [
     section: 2,
     component: "BackwardPass",
     file: "neural-foundations/backward-pass",
+    slug: "neural-foundations/backward-pass",
   },
   {
     id: "2.5",
@@ -84,6 +95,7 @@ export const chapters = [
     section: 2,
     component: "GradientDescent",
     file: "neural-foundations/gradient-descent",
+    slug: "neural-foundations/gradient-descent",
   },
   {
     id: "2.6",
@@ -91,6 +103,7 @@ export const chapters = [
     section: 2,
     component: "BackpropRealNetwork",
     file: "neural-foundations/backprop-real-network",
+    slug: "neural-foundations/backprop-real-network",
   },
   {
     id: "2.7",
@@ -98,6 +111,7 @@ export const chapters = [
     section: 2,
     component: "GradientsInAction",
     file: "neural-foundations/gradients-in-action",
+    slug: "neural-foundations/gradients-in-action",
   },
   {
     id: "2.8",
@@ -105,6 +119,7 @@ export const chapters = [
     section: 2,
     component: "WhyBackpropHard",
     file: "neural-foundations/why-backprop-hard",
+    slug: "neural-foundations/why-backprop-hard",
   },
   {
     id: "3.1",
@@ -112,6 +127,7 @@ export const chapters = [
     section: 3,
     component: "Vectors",
     file: "neural-foundations/vectors",
+    slug: "neural-foundations/vectors",
   },
   {
     id: "3.2",
@@ -119,6 +135,7 @@ export const chapters = [
     section: 3,
     component: "DotProductIntro",
     file: "neural-foundations/dot-product-intro",
+    slug: "neural-foundations/dot-product-intro",
   },
   {
     id: "3.3",
@@ -126,6 +143,7 @@ export const chapters = [
     section: 3,
     component: "Matrices",
     file: "neural-foundations/matrices",
+    slug: "neural-foundations/matrices",
   },
   {
     id: "3.4",
@@ -133,6 +151,7 @@ export const chapters = [
     section: 3,
     component: "LayerIsMatMul",
     file: "neural-foundations/layer-is-mat-mul",
+    slug: "neural-foundations/layer-is-mat-mul",
   },
   {
     id: "3.5",
@@ -140,6 +159,7 @@ export const chapters = [
     section: 3,
     component: "ActivationFunctions",
     file: "neural-foundations/activation-functions",
+    slug: "neural-foundations/activation-functions",
   },
   {
     id: "4.1",
@@ -147,6 +167,7 @@ export const chapters = [
     section: 4,
     component: "WhatDeepMeans",
     file: "neural-foundations/what-deep-means",
+    slug: "neural-foundations/what-deep-means",
   },
   {
     id: "4.2",
@@ -154,6 +175,7 @@ export const chapters = [
     section: 4,
     component: "SameBuildingBlocks",
     file: "neural-foundations/same-building-blocks",
+    slug: "neural-foundations/same-building-blocks",
   },
   {
     id: "4.3",
@@ -161,6 +183,7 @@ export const chapters = [
     section: 4,
     component: "Dropout",
     file: "neural-foundations/dropout",
+    slug: "neural-foundations/dropout",
   },
   {
     id: "4.4",
@@ -168,6 +191,7 @@ export const chapters = [
     section: 4,
     component: "AdamOptimizer",
     file: "neural-foundations/adam-optimizer",
+    slug: "neural-foundations/adam-optimizer",
   },
   {
     id: "4.5",
@@ -175,6 +199,7 @@ export const chapters = [
     section: 4,
     component: "LRWarmupDecay",
     file: "neural-foundations/lr-warmup-decay",
+    slug: "neural-foundations/lr-warmup-decay",
   },
   {
     id: "4.6",
@@ -182,6 +207,7 @@ export const chapters = [
     section: 4,
     component: "WeightInit",
     file: "neural-foundations/weight-init",
+    slug: "neural-foundations/weight-init",
   },
   // Section 2: How LLMs Actually Train (reordered: output/generation before fine-tuning)
   {
@@ -190,6 +216,7 @@ export const chapters = [
     section: 5,
     component: "Tokenization",
     file: "llm-training/tokenization",
+    slug: "llm-training/tokenization",
   },
   {
     id: "5.2",
@@ -197,6 +224,7 @@ export const chapters = [
     section: 5,
     component: "SelfSupervised",
     file: "llm-training/self-supervised",
+    slug: "llm-training/self-supervised",
   },
   {
     id: "5.3",
@@ -204,6 +232,7 @@ export const chapters = [
     section: 5,
     component: "CrossEntropy",
     file: "llm-training/cross-entropy",
+    slug: "llm-training/cross-entropy",
   },
   {
     id: "5.4",
@@ -211,6 +240,7 @@ export const chapters = [
     section: 5,
     component: "NNInAction",
     file: "llm-training/nn-in-action",
+    slug: "llm-training/nn-in-action",
   },
   {
     id: "5.5",
@@ -218,6 +248,7 @@ export const chapters = [
     section: 5,
     component: "OutputLayer",
     file: "llm-training/output-layer",
+    slug: "llm-training/output-layer",
   },
   {
     id: "5.6",
@@ -225,16 +256,18 @@ export const chapters = [
     section: 5,
     component: "AutoregressiveGeneration",
     file: "llm-training/autoregressive-generation",
+    slug: "llm-training/autoregressive-generation",
   },
-  { id: "5.7", title: "Supervised Fine-Tuning (SFT)", section: 5, component: "SFT", file: "llm-training/sft" },
-  { id: "5.8", title: "RLHF - Making AI Helpful & Safe", section: 5, component: "RLHF", file: "llm-training/rlhf" },
-  { id: "5.9", title: "DPO - Simpler Alignment", section: 5, component: "DPO", file: "llm-training/dpo" },
+  { id: "5.7", title: "Supervised Fine-Tuning (SFT)", section: 5, component: "SFT", file: "llm-training/sft", slug: "llm-training/sft" },
+  { id: "5.8", title: "RLHF - Making AI Helpful & Safe", section: 5, component: "RLHF", file: "llm-training/rlhf", slug: "llm-training/rlhf" },
+  { id: "5.9", title: "DPO - Simpler Alignment", section: 5, component: "DPO", file: "llm-training/dpo", slug: "llm-training/dpo" },
   {
     id: "5.10",
     title: "Tokenizer Deep Dive - BPE, WordPiece, SentencePiece",
     section: 5,
     component: "TokenizerDeepDive",
     file: "llm-training/tokenizer-deep-dive",
+    slug: "llm-training/tokenizer-deep-dive",
   },
   // Section 3: Scaling & Modern Techniques (BatchTraining added)
   {
@@ -243,6 +276,7 @@ export const chapters = [
     section: 6,
     component: "ScalingLaws",
     file: "scaling/scaling-laws",
+    slug: "scaling/scaling-laws",
   },
   {
     id: "6.2",
@@ -250,6 +284,7 @@ export const chapters = [
     section: 6,
     component: "ParametersAtScale",
     file: "scaling/parameters-at-scale",
+    slug: "scaling/parameters-at-scale",
   },
   {
     id: "6.3",
@@ -257,6 +292,7 @@ export const chapters = [
     section: 6,
     component: "BatchTraining",
     file: "llm-training/batch-training",
+    slug: "llm-training/batch-training",
   },
   {
     id: "6.4",
@@ -264,25 +300,28 @@ export const chapters = [
     section: 6,
     component: "Distillation",
     file: "scaling/distillation",
+    slug: "scaling/distillation",
   },
-  { id: "6.5", title: "CLIP - Teaching AI to See & Read", section: 6, component: "CLIP", file: "scaling/clip" },
+  { id: "6.5", title: "CLIP - Teaching AI to See & Read", section: 6, component: "CLIP", file: "scaling/clip", slug: "scaling/clip" },
   {
     id: "6.6",
     title: "The Complete Training Pipeline",
     section: 6,
     component: "TrainingPipeline",
     file: "scaling/training-pipeline",
+    slug: "scaling/training-pipeline",
   },
   // Section 4: The Road to Transformers (trimmed: encoder/decoder moved to Sections 8-9)
-  { id: "7.1", title: "CNN", section: 7, component: "CNN", file: "road-to-transformers/cnn" },
-  { id: "7.2", title: "RNN", section: 7, component: "RNN", file: "road-to-transformers/rnn" },
-  { id: "7.3", title: "RNN's Fatal Flaws", section: 7, component: "RNNFlaws", file: "road-to-transformers/rnn-flaws" },
+  { id: "7.1", title: "CNN", section: 7, component: "CNN", file: "road-to-transformers/cnn", slug: "road-to-transformers/cnn" },
+  { id: "7.2", title: "RNN", section: 7, component: "RNN", file: "road-to-transformers/rnn", slug: "road-to-transformers/rnn" },
+  { id: "7.3", title: "RNN's Fatal Flaws", section: 7, component: "RNNFlaws", file: "road-to-transformers/rnn-flaws", slug: "road-to-transformers/rnn-flaws" },
   {
     id: "7.4",
     title: "The Transformer Arrives",
     section: 7,
     component: "TransformerArrives",
     file: "road-to-transformers/transformer-arrives",
+    slug: "road-to-transformers/transformer-arrives",
   },
   // Section 5: Transformer Input Pipeline (trimmed: WhatTransformerDoes moved to Section 9)
   {
@@ -291,14 +330,16 @@ export const chapters = [
     section: 8,
     component: "FullArchitecture",
     file: "transformer-input/full-architecture",
+    slug: "transformer-input/full-architecture",
   },
-  { id: "8.2", title: "Zoom: Embeddings", section: 8, component: "Embeddings", file: "transformer-input/embeddings" },
+  { id: "8.2", title: "Zoom: Embeddings", section: 8, component: "Embeddings", file: "transformer-input/embeddings", slug: "transformer-input/embeddings" },
   {
     id: "8.3",
     title: "Positional Encoding - The Problem",
     section: 8,
     component: "PosEncodingProblem",
     file: "transformer-input/pos-encoding-problem",
+    slug: "transformer-input/pos-encoding-problem",
   },
   {
     id: "8.4",
@@ -306,6 +347,7 @@ export const chapters = [
     section: 8,
     component: "PosEncodingFormula",
     file: "transformer-input/pos-encoding-formula",
+    slug: "transformer-input/pos-encoding-formula",
   },
   {
     id: "8.5",
@@ -313,6 +355,7 @@ export const chapters = [
     section: 8,
     component: "PosEncodingCompute",
     file: "transformer-input/pos-encoding-compute",
+    slug: "transformer-input/pos-encoding-compute",
   },
   {
     id: "8.6",
@@ -320,6 +363,7 @@ export const chapters = [
     section: 8,
     component: "PosEncodingFastSlow",
     file: "transformer-input/pos-encoding-fast-slow",
+    slug: "transformer-input/pos-encoding-fast-slow",
   },
   {
     id: "8.7",
@@ -327,6 +371,7 @@ export const chapters = [
     section: 8,
     component: "PosEncodingFinal",
     file: "transformer-input/pos-encoding-final",
+    slug: "transformer-input/pos-encoding-final",
   },
   {
     id: "8.8",
@@ -334,6 +379,7 @@ export const chapters = [
     section: 8,
     component: "PosEncodingHeatmap",
     file: "transformer-input/pos-encoding-heatmap",
+    slug: "transformer-input/pos-encoding-heatmap",
   },
   {
     id: "8.9",
@@ -341,6 +387,7 @@ export const chapters = [
     section: 8,
     component: "RoPE",
     file: "transformer-input/ro-pe",
+    slug: "transformer-input/ro-pe",
   },
   // Section 6: Attention - Understanding Q, K, V
   {
@@ -349,6 +396,7 @@ export const chapters = [
     section: 9,
     component: "ContextProblem",
     file: "attention-qkv/context-problem",
+    slug: "attention-qkv/context-problem",
   },
   {
     id: "9.2",
@@ -356,6 +404,7 @@ export const chapters = [
     section: 9,
     component: "WordLookup",
     file: "attention-qkv/word-lookup",
+    slug: "attention-qkv/word-lookup",
   },
   {
     id: "9.3",
@@ -363,6 +412,7 @@ export const chapters = [
     section: 9,
     component: "DotProduct",
     file: "attention-qkv/dot-product",
+    slug: "attention-qkv/dot-product",
   },
   {
     id: "9.4",
@@ -370,6 +420,7 @@ export const chapters = [
     section: 9,
     component: "WhyNotDirectDot",
     file: "attention-qkv/why-not-direct-dot",
+    slug: "attention-qkv/why-not-direct-dot",
   },
   {
     id: "9.5",
@@ -377,6 +428,7 @@ export const chapters = [
     section: 9,
     component: "QKVClassroom",
     file: "attention-qkv/qkv-classroom",
+    slug: "attention-qkv/qkv-classroom",
   },
   {
     id: "9.6",
@@ -384,6 +436,7 @@ export const chapters = [
     section: 9,
     component: "AskerAnswerer",
     file: "attention-qkv/asker-answerer",
+    slug: "attention-qkv/asker-answerer",
   },
   {
     id: "9.7",
@@ -391,6 +444,7 @@ export const chapters = [
     section: 9,
     component: "WhyKVDifferent",
     file: "attention-qkv/why-kv-different",
+    slug: "attention-qkv/why-kv-different",
   },
   {
     id: "9.8",
@@ -398,6 +452,7 @@ export const chapters = [
     section: 9,
     component: "GoogleAnalogy",
     file: "attention-qkv/google-analogy",
+    slug: "attention-qkv/google-analogy",
   },
   {
     id: "9.9",
@@ -405,6 +460,7 @@ export const chapters = [
     section: 9,
     component: "HowQKVCreated",
     file: "attention-qkv/how-qkv-created",
+    slug: "attention-qkv/how-qkv-created",
   },
   {
     id: "9.10",
@@ -412,6 +468,7 @@ export const chapters = [
     section: 9,
     component: "QKVShapes",
     file: "attention-qkv/qkv-shapes",
+    slug: "attention-qkv/qkv-shapes",
   },
   {
     id: "9.11",
@@ -419,6 +476,7 @@ export const chapters = [
     section: 9,
     component: "WMatrices",
     file: "attention-qkv/w-matrices",
+    slug: "attention-qkv/w-matrices",
   },
   {
     id: "9.12",
@@ -426,6 +484,7 @@ export const chapters = [
     section: 9,
     component: "TracingExample",
     file: "attention-qkv/tracing-example",
+    slug: "attention-qkv/tracing-example",
   },
   // Section 7: Attention - The Full Computation (CausalMask/CrossAttention moved to Section 9)
   {
@@ -434,6 +493,7 @@ export const chapters = [
     section: 10,
     component: "ComputeQKV",
     file: "attention-computation/compute-qkv",
+    slug: "attention-computation/compute-qkv",
   },
   {
     id: "10.2",
@@ -441,6 +501,7 @@ export const chapters = [
     section: 10,
     component: "AttentionScores",
     file: "attention-computation/attention-scores",
+    slug: "attention-computation/attention-scores",
   },
   {
     id: "10.3",
@@ -448,6 +509,7 @@ export const chapters = [
     section: 10,
     component: "KTranspose",
     file: "attention-computation/k-transpose",
+    slug: "attention-computation/k-transpose",
   },
   {
     id: "10.4",
@@ -455,6 +517,7 @@ export const chapters = [
     section: 10,
     component: "WhySoftmax",
     file: "attention-computation/why-softmax",
+    slug: "attention-computation/why-softmax",
   },
   {
     id: "10.5",
@@ -462,6 +525,7 @@ export const chapters = [
     section: 10,
     component: "ScaleByRootDk",
     file: "attention-computation/scale-by-root-dk",
+    slug: "attention-computation/scale-by-root-dk",
   },
   {
     id: "10.6",
@@ -469,6 +533,7 @@ export const chapters = [
     section: 10,
     component: "SoftmaxProbs",
     file: "attention-computation/softmax-probs",
+    slug: "attention-computation/softmax-probs",
   },
   {
     id: "10.7",
@@ -476,6 +541,7 @@ export const chapters = [
     section: 10,
     component: "WeightedSum",
     file: "attention-computation/weighted-sum",
+    slug: "attention-computation/weighted-sum",
   },
   {
     id: "10.8",
@@ -483,6 +549,7 @@ export const chapters = [
     section: 10,
     component: "FullFormula",
     file: "attention-computation/full-formula",
+    slug: "attention-computation/full-formula",
   },
   {
     id: "11.1",
@@ -490,6 +557,7 @@ export const chapters = [
     section: 11,
     component: "WhyMultiHead",
     file: "attention-computation/why-multi-head",
+    slug: "attention-computation/why-multi-head",
   },
   {
     id: "11.2",
@@ -497,6 +565,7 @@ export const chapters = [
     section: 11,
     component: "HeadSplit",
     file: "attention-computation/head-split",
+    slug: "attention-computation/head-split",
   },
   {
     id: "11.3",
@@ -504,6 +573,7 @@ export const chapters = [
     section: 11,
     component: "InsideEachHead",
     file: "attention-computation/inside-each-head",
+    slug: "attention-computation/inside-each-head",
   },
   {
     id: "11.4",
@@ -511,6 +581,7 @@ export const chapters = [
     section: 11,
     component: "ConcatWO",
     file: "attention-computation/concat-wo",
+    slug: "attention-computation/concat-wo",
   },
   {
     id: "11.5",
@@ -518,6 +589,7 @@ export const chapters = [
     section: 11,
     component: "WhyEightHeads",
     file: "attention-computation/why-eight-heads",
+    slug: "attention-computation/why-eight-heads",
   },
   {
     id: "11.6",
@@ -525,6 +597,7 @@ export const chapters = [
     section: 11,
     component: "IsWOConstant",
     file: "attention-computation/is-wo-constant",
+    slug: "attention-computation/is-wo-constant",
   },
   {
     id: "11.7",
@@ -532,6 +605,7 @@ export const chapters = [
     section: 11,
     component: "AttentionShapes",
     file: "attention-computation/attention-shapes",
+    slug: "attention-computation/attention-shapes",
   },
   {
     id: "11.8",
@@ -539,6 +613,7 @@ export const chapters = [
     section: 11,
     component: "CompletePicture",
     file: "attention-computation/complete-picture",
+    slug: "attention-computation/complete-picture",
   },
   // Section 8: The Encoder (EncoderDecoder opens, then Add&Norm/FFN/block repeats)
   {
@@ -547,6 +622,7 @@ export const chapters = [
     section: 12,
     component: "EncoderDecoder",
     file: "road-to-transformers/encoder-decoder",
+    slug: "road-to-transformers/encoder-decoder",
   },
   {
     id: "12.2",
@@ -554,6 +630,7 @@ export const chapters = [
     section: 12,
     component: "AddNorm",
     file: "transformer-block/add-norm",
+    slug: "transformer-block/add-norm",
   },
   {
     id: "12.3",
@@ -561,6 +638,7 @@ export const chapters = [
     section: 12,
     component: "FeedForwardNetwork",
     file: "transformer-block/feed-forward-network",
+    slug: "transformer-block/feed-forward-network",
   },
   {
     id: "12.4",
@@ -568,6 +646,7 @@ export const chapters = [
     section: 12,
     component: "FFNParallelTrick",
     file: "transformer-block/ffn-parallel-trick",
+    slug: "transformer-block/ffn-parallel-trick",
   },
   {
     id: "12.5",
@@ -575,6 +654,7 @@ export const chapters = [
     section: 12,
     component: "AddNormTwo",
     file: "transformer-block/add-norm-two",
+    slug: "transformer-block/add-norm-two",
   },
   {
     id: "12.6",
@@ -582,6 +662,7 @@ export const chapters = [
     section: 12,
     component: "TransformerBlockRepeats",
     file: "transformer-block/transformer-block-repeats",
+    slug: "transformer-block/transformer-block-repeats",
   },
   {
     id: "12.7",
@@ -589,6 +670,7 @@ export const chapters = [
     section: 12,
     component: "ResidualHighway",
     file: "transformer-block/residual-highway",
+    slug: "transformer-block/residual-highway",
   },
   {
     id: "12.8",
@@ -596,6 +678,7 @@ export const chapters = [
     section: 12,
     component: "PreNormVsPostNorm",
     file: "transformer-block/pre-norm-vs-post-norm",
+    slug: "transformer-block/pre-norm-vs-post-norm",
   },
   {
     id: "12.9",
@@ -603,6 +686,7 @@ export const chapters = [
     section: 12,
     component: "BatchNormVsLayerNorm",
     file: "transformer-block/batch-norm-vs-layer-norm",
+    slug: "transformer-block/batch-norm-vs-layer-norm",
   },
   // Section 9: The Decoder (decoder-only, causal masking, cross-attention, capstone)
   {
@@ -611,6 +695,7 @@ export const chapters = [
     section: 13,
     component: "DecoderOnly",
     file: "road-to-transformers/decoder-only",
+    slug: "road-to-transformers/decoder-only",
   },
   {
     id: "13.2",
@@ -618,6 +703,7 @@ export const chapters = [
     section: 13,
     component: "CausalMask",
     file: "attention-computation/causal-mask",
+    slug: "attention-computation/causal-mask",
   },
   {
     id: "13.3",
@@ -625,6 +711,7 @@ export const chapters = [
     section: 13,
     component: "CrossAttention",
     file: "attention-computation/cross-attention",
+    slug: "attention-computation/cross-attention",
   },
   {
     id: "13.4",
@@ -632,6 +719,7 @@ export const chapters = [
     section: 13,
     component: "OutputHead",
     file: "transformer-input/output-head",
+    slug: "transformer-input/output-head",
   },
   {
     id: "13.5",
@@ -639,6 +727,7 @@ export const chapters = [
     section: 13,
     component: "WhatTransformerDoes",
     file: "transformer-input/what-transformer-does",
+    slug: "transformer-input/what-transformer-does",
   },
   {
     id: "13.6",
@@ -646,6 +735,7 @@ export const chapters = [
     section: 13,
     component: "EncoderDecoderTraining",
     file: "encoder-decoder-diagrams/encoder-decoder-training",
+    slug: "encoder-decoder-diagrams/encoder-decoder-training",
   },
   {
     id: "13.7",
@@ -653,6 +743,7 @@ export const chapters = [
     section: 13,
     component: "EncoderDecoderInference",
     file: "encoder-decoder-diagrams/encoder-decoder-inference",
+    slug: "encoder-decoder-diagrams/encoder-decoder-inference",
   },
   // Section 10: Modern LLM Techniques
   {
@@ -661,6 +752,7 @@ export const chapters = [
     section: 14,
     component: "KVCache",
     file: "attention-computation/kv-cache",
+    slug: "attention-computation/kv-cache",
   },
   {
     id: "14.2",
@@ -668,6 +760,7 @@ export const chapters = [
     section: 14,
     component: "GroupedQueryAttention",
     file: "attention-computation/grouped-query-attention",
+    slug: "attention-computation/grouped-query-attention",
   },
   {
     id: "14.3",
@@ -675,6 +768,7 @@ export const chapters = [
     section: 14,
     component: "MixtureOfExperts",
     file: "modern-llm-techniques/mixture-of-experts",
+    slug: "modern-llm-techniques/mixture-of-experts",
   },
   {
     id: "14.4",
@@ -682,6 +776,7 @@ export const chapters = [
     section: 14,
     component: "Thinking",
     file: "modern-llm-techniques/thinking",
+    slug: "modern-llm-techniques/thinking",
   },
   // Section 11: Vector Databases
   {
@@ -690,6 +785,7 @@ export const chapters = [
     section: 15,
     component: "RetrievalProblem",
     file: "vector-foundations/retrieval-problem",
+    slug: "vector-foundations/retrieval-problem",
   },
   {
     id: "15.2",
@@ -697,6 +793,7 @@ export const chapters = [
     section: 15,
     component: "BruteForceKNN",
     file: "vector-foundations/brute-force-knn",
+    slug: "vector-foundations/brute-force-knn",
   },
   {
     id: "15.3",
@@ -704,6 +801,7 @@ export const chapters = [
     section: 15,
     component: "ThreeWayTradeoff",
     file: "vector-foundations/three-way-tradeoff",
+    slug: "vector-foundations/three-way-tradeoff",
   },
   {
     id: "15.4",
@@ -711,6 +809,7 @@ export const chapters = [
     section: 15,
     component: "DistanceMetrics",
     file: "vector-foundations/distance-metrics",
+    slug: "vector-foundations/distance-metrics",
   },
   {
     id: "15.5",
@@ -718,6 +817,7 @@ export const chapters = [
     section: 15,
     component: "SparseVsDense",
     file: "vector-foundations/sparse-vs-dense",
+    slug: "vector-foundations/sparse-vs-dense",
   },
   {
     id: "15.6",
@@ -725,14 +825,16 @@ export const chapters = [
     section: 15,
     component: "ANNFamilyTree",
     file: "vector-foundations/ann-family-tree",
+    slug: "vector-foundations/ann-family-tree",
   },
-  { id: "15.7", title: "IVF (Inverted File Index)", section: 15, component: "IVF", file: "vector-foundations/ivf" },
+  { id: "15.7", title: "IVF (Inverted File Index)", section: 15, component: "IVF", file: "vector-foundations/ivf", slug: "vector-foundations/ivf" },
   {
     id: "15.8",
     title: "HNSW - The Small-World Intuition",
     section: 15,
     component: "HNSWIntuition",
     file: "vector-foundations/hnsw-intuition",
+    slug: "vector-foundations/hnsw-intuition",
   },
   {
     id: "15.9",
@@ -740,22 +842,25 @@ export const chapters = [
     section: 15,
     component: "HNSWConstruction",
     file: "vector-foundations/hnsw-construction",
+    slug: "vector-foundations/hnsw-construction",
   },
-  { id: "15.10", title: "HNSW Search", section: 15, component: "HNSWSearch", file: "vector-foundations/hnsw-search" },
+  { id: "15.10", title: "HNSW Search", section: 15, component: "HNSWSearch", file: "vector-foundations/hnsw-search", slug: "vector-foundations/hnsw-search" },
   {
     id: "15.11",
     title: "HNSW Parameters",
     section: 15,
     component: "HNSWParameters",
     file: "vector-foundations/hnsw-parameters",
+    slug: "vector-foundations/hnsw-parameters",
   },
-  { id: "15.12", title: "Vamana / DiskANN", section: 15, component: "Vamana", file: "vector-foundations/vamana" },
+  { id: "15.12", title: "Vamana / DiskANN", section: 15, component: "Vamana", file: "vector-foundations/vamana", slug: "vector-foundations/vamana" },
   {
     id: "16.1",
     title: "The Memory Wall",
     section: 16,
     component: "MemoryWall",
     file: "vector-compression/memory-wall",
+    slug: "vector-compression/memory-wall",
   },
   {
     id: "16.2",
@@ -763,6 +868,7 @@ export const chapters = [
     section: 16,
     component: "ScalarQuantization",
     file: "vector-compression/scalar-quantization",
+    slug: "vector-compression/scalar-quantization",
   },
   {
     id: "16.3",
@@ -770,6 +876,7 @@ export const chapters = [
     section: 16,
     component: "ProductQuantization",
     file: "vector-compression/product-quantization",
+    slug: "vector-compression/product-quantization",
   },
   {
     id: "16.4",
@@ -777,6 +884,7 @@ export const chapters = [
     section: 16,
     component: "BinaryQuantization",
     file: "vector-compression/binary-quantization",
+    slug: "vector-compression/binary-quantization",
   },
   {
     id: "16.5",
@@ -784,23 +892,26 @@ export const chapters = [
     section: 16,
     component: "Matryoshka",
     file: "vector-compression/matryoshka",
+    slug: "vector-compression/matryoshka",
   },
-  { id: "16.6", title: "IVF-PQ", section: 16, component: "IVFPQ", file: "vector-compression/ivf-pq" },
-  { id: "16.7", title: "HNSW + PQ", section: 16, component: "HNSWPQ", file: "vector-compression/hnsw-pq" },
+  { id: "16.6", title: "IVF-PQ", section: 16, component: "IVFPQ", file: "vector-compression/ivf-pq", slug: "vector-compression/ivf-pq" },
+  { id: "16.7", title: "HNSW + PQ", section: 16, component: "HNSWPQ", file: "vector-compression/hnsw-pq", slug: "vector-compression/hnsw-pq" },
   {
     id: "16.8",
     title: "The Compression Decision",
     section: 16,
     component: "CompressionDecision",
     file: "vector-compression/compression-decision",
+    slug: "vector-compression/compression-decision",
   },
-  { id: "17.1", title: "Filtering", section: 17, component: "Filtering", file: "vector-production/filtering" },
+  { id: "17.1", title: "Filtering", section: 17, component: "Filtering", file: "vector-production/filtering", slug: "vector-production/filtering" },
   {
     id: "17.2",
     title: "Updates & Deletes",
     section: 17,
     component: "UpdatesDeletes",
     file: "vector-production/updates-deletes",
+    slug: "vector-production/updates-deletes",
   },
   {
     id: "17.3",
@@ -808,6 +919,7 @@ export const chapters = [
     section: 17,
     component: "Sharding",
     file: "vector-production/sharding",
+    slug: "vector-production/sharding",
   },
   {
     id: "17.4",
@@ -815,6 +927,7 @@ export const chapters = [
     section: 17,
     component: "Replication",
     file: "vector-production/replication",
+    slug: "vector-production/replication",
   },
   {
     id: "17.5",
@@ -822,14 +935,16 @@ export const chapters = [
     section: 17,
     component: "HybridSearch",
     file: "vector-production/hybrid-search",
+    slug: "vector-production/hybrid-search",
   },
-  { id: "17.6", title: "Rerankers", section: 17, component: "Rerankers", file: "vector-production/rerankers" },
+  { id: "17.6", title: "Rerankers", section: 17, component: "Rerankers", file: "vector-production/rerankers", slug: "vector-production/rerankers" },
   {
     id: "17.7",
     title: "Multi-vector Retrieval (ColBERT-style)",
     section: 17,
     component: "MultiVectorRetrieval",
     file: "vector-production/multi-vector-retrieval",
+    slug: "vector-production/multi-vector-retrieval",
   },
   {
     id: "17.8",
@@ -837,6 +952,7 @@ export const chapters = [
     section: 17,
     component: "EmbeddingLifecycle",
     file: "vector-production/embedding-lifecycle",
+    slug: "vector-production/embedding-lifecycle",
   },
   {
     id: "17.9",
@@ -844,6 +960,7 @@ export const chapters = [
     section: 17,
     component: "Observability",
     file: "vector-production/observability",
+    slug: "vector-production/observability",
   },
   {
     id: "17.10",
@@ -851,17 +968,19 @@ export const chapters = [
     section: 17,
     component: "CapacityPlanning",
     file: "vector-production/capacity-planning",
+    slug: "vector-production/capacity-planning",
   },
-  { id: "18.1", title: "FAISS", section: 18, component: "FAISS", file: "vector-systems/faiss" },
-  { id: "18.2", title: "pgvector", section: 18, component: "Pgvector", file: "vector-systems/pgvector" },
-  { id: "18.3", title: "Qdrant", section: 18, component: "Qdrant", file: "vector-systems/qdrant" },
-  { id: "18.4", title: "Pinecone", section: 18, component: "Pinecone", file: "vector-systems/pinecone" },
+  { id: "18.1", title: "FAISS", section: 18, component: "FAISS", file: "vector-systems/faiss", slug: "vector-systems/faiss" },
+  { id: "18.2", title: "pgvector", section: 18, component: "Pgvector", file: "vector-systems/pgvector", slug: "vector-systems/pgvector" },
+  { id: "18.3", title: "Qdrant", section: 18, component: "Qdrant", file: "vector-systems/qdrant", slug: "vector-systems/qdrant" },
+  { id: "18.4", title: "Pinecone", section: 18, component: "Pinecone", file: "vector-systems/pinecone", slug: "vector-systems/pinecone" },
   {
     id: "18.5",
     title: "Qdrant vs Pinecone",
     section: 18,
     component: "QdrantVsPinecone",
     file: "vector-systems/qdrant-vs-pinecone",
+    slug: "vector-systems/qdrant-vs-pinecone",
   },
   {
     id: "18.6",
@@ -869,6 +988,7 @@ export const chapters = [
     section: 18,
     component: "WeaviateMilvusChroma",
     file: "vector-systems/weaviate-milvus-chroma",
+    slug: "vector-systems/weaviate-milvus-chroma",
   },
   {
     id: "18.7",
@@ -876,6 +996,7 @@ export const chapters = [
     section: 18,
     component: "DecisionFramework",
     file: "vector-systems/decision-framework",
+    slug: "vector-systems/decision-framework",
   },
   // Section 12: Retrieval-Augmented Generation
   {
@@ -884,6 +1005,7 @@ export const chapters = [
     section: 19,
     component: "WhyLLMsNeedRetrieval",
     file: "rag-foundations/why-llms-need-retrieval",
+    slug: "rag-foundations/why-llms-need-retrieval",
   },
   {
     id: "19.2",
@@ -891,6 +1013,7 @@ export const chapters = [
     section: 19,
     component: "NaiveRAGPipeline",
     file: "rag-foundations/naive-rag-pipeline",
+    slug: "rag-foundations/naive-rag-pipeline",
   },
   {
     id: "19.3",
@@ -898,6 +1021,7 @@ export const chapters = [
     section: 19,
     component: "WhereNaiveRAGBreaks",
     file: "rag-foundations/where-naive-rag-breaks",
+    slug: "rag-foundations/where-naive-rag-breaks",
   },
   {
     id: "20.1",
@@ -905,6 +1029,7 @@ export const chapters = [
     section: 20,
     component: "ParsingExtraction",
     file: "rag-ingestion/parsing-extraction",
+    slug: "rag-ingestion/parsing-extraction",
   },
   {
     id: "20.2",
@@ -912,6 +1037,7 @@ export const chapters = [
     section: 20,
     component: "DeduplicationCleaning",
     file: "rag-ingestion/deduplication-cleaning",
+    slug: "rag-ingestion/deduplication-cleaning",
   },
   {
     id: "20.3",
@@ -919,6 +1045,7 @@ export const chapters = [
     section: 20,
     component: "RefreshSync",
     file: "rag-ingestion/refresh-sync",
+    slug: "rag-ingestion/refresh-sync",
   },
   {
     id: "20.4",
@@ -926,6 +1053,7 @@ export const chapters = [
     section: 20,
     component: "WhyChunkFixedSize",
     file: "rag-foundations/why-chunk-fixed-size",
+    slug: "rag-foundations/why-chunk-fixed-size",
   },
   {
     id: "20.5",
@@ -933,6 +1061,7 @@ export const chapters = [
     section: 20,
     component: "RecursiveStructuralChunking",
     file: "rag-foundations/recursive-structural-chunking",
+    slug: "rag-foundations/recursive-structural-chunking",
   },
   {
     id: "20.6",
@@ -940,6 +1069,7 @@ export const chapters = [
     section: 20,
     component: "SemanticChunking",
     file: "rag-foundations/semantic-chunking",
+    slug: "rag-foundations/semantic-chunking",
   },
   {
     id: "20.7",
@@ -947,6 +1077,7 @@ export const chapters = [
     section: 20,
     component: "LateChunking",
     file: "rag-foundations/late-chunking",
+    slug: "rag-foundations/late-chunking",
   },
   {
     id: "20.8",
@@ -954,6 +1085,7 @@ export const chapters = [
     section: 20,
     component: "HierarchicalChunking",
     file: "rag-foundations/hierarchical-chunking",
+    slug: "rag-foundations/hierarchical-chunking",
   },
   {
     id: "20.9",
@@ -961,6 +1093,7 @@ export const chapters = [
     section: 20,
     component: "ContextualRetrieval",
     file: "rag-foundations/contextual-retrieval",
+    slug: "rag-foundations/contextual-retrieval",
   },
   {
     id: "20.10",
@@ -968,6 +1101,7 @@ export const chapters = [
     section: 20,
     component: "ChunkingDecision",
     file: "rag-foundations/chunking-decision",
+    slug: "rag-foundations/chunking-decision",
   },
   // Section 12 Act 4: Embed & Index Choices for RAG
   {
@@ -976,6 +1110,7 @@ export const chapters = [
     section: 21,
     component: "EmbeddingModelChoice",
     file: "rag-retrieval/embedding-model-choice",
+    slug: "rag-retrieval/embedding-model-choice",
   },
   {
     id: "21.2",
@@ -983,6 +1118,7 @@ export const chapters = [
     section: 21,
     component: "DomainAdaptation",
     file: "rag-retrieval/domain-adaptation",
+    slug: "rag-retrieval/domain-adaptation",
   },
   {
     id: "21.3",
@@ -990,6 +1126,7 @@ export const chapters = [
     section: 21,
     component: "HybridForRAG",
     file: "rag-retrieval/hybrid-for-rag",
+    slug: "rag-retrieval/hybrid-for-rag",
   },
   {
     id: "21.4",
@@ -997,6 +1134,7 @@ export const chapters = [
     section: 21,
     component: "RerankerCascade",
     file: "rag-retrieval/reranker-cascade",
+    slug: "rag-retrieval/reranker-cascade",
   },
   // Section 12 Act 5: Query Transformation
   {
@@ -1005,6 +1143,7 @@ export const chapters = [
     section: 21,
     component: "WhyTransformQueries",
     file: "rag-retrieval/why-transform-queries",
+    slug: "rag-retrieval/why-transform-queries",
   },
   {
     id: "21.6",
@@ -1012,6 +1151,7 @@ export const chapters = [
     section: 21,
     component: "HyDE",
     file: "rag-retrieval/hy-de",
+    slug: "rag-retrieval/hy-de",
   },
   {
     id: "21.7",
@@ -1019,6 +1159,7 @@ export const chapters = [
     section: 21,
     component: "MultiQueryExpansion",
     file: "rag-retrieval/multi-query-expansion",
+    slug: "rag-retrieval/multi-query-expansion",
   },
   {
     id: "21.8",
@@ -1026,6 +1167,7 @@ export const chapters = [
     section: 21,
     component: "QueryRoutingDecomposition",
     file: "rag-retrieval/query-routing-decomposition",
+    slug: "rag-retrieval/query-routing-decomposition",
   },
   // Section 12 Acts 6+7: Context & Generation, Advanced Retrieval Patterns
   {
@@ -1034,6 +1176,7 @@ export const chapters = [
     section: 22,
     component: "ContextPacking",
     file: "rag-generation/context-packing",
+    slug: "rag-generation/context-packing",
   },
   {
     id: "22.2",
@@ -1041,6 +1184,7 @@ export const chapters = [
     section: 22,
     component: "LostInTheMiddle",
     file: "rag-generation/lost-in-the-middle",
+    slug: "rag-generation/lost-in-the-middle",
   },
   {
     id: "22.3",
@@ -1048,6 +1192,7 @@ export const chapters = [
     section: 22,
     component: "CitationsRefusal",
     file: "rag-generation/citations-refusal",
+    slug: "rag-generation/citations-refusal",
   },
   {
     id: "22.4",
@@ -1055,14 +1200,16 @@ export const chapters = [
     section: 22,
     component: "MultiHopRetrieval",
     file: "rag-generation/multi-hop-retrieval",
+    slug: "rag-generation/multi-hop-retrieval",
   },
-  { id: "22.5", title: "Self-RAG", section: 22, component: "SelfRAG", file: "rag-generation/self-rag" },
+  { id: "22.5", title: "Self-RAG", section: 22, component: "SelfRAG", file: "rag-generation/self-rag", slug: "rag-generation/self-rag" },
   {
     id: "22.6",
     title: "CRAG - Corrective RAG",
     section: 22,
     component: "CorrectiveRAG",
     file: "rag-generation/corrective-rag",
+    slug: "rag-generation/corrective-rag",
   },
   {
     id: "22.7",
@@ -1070,6 +1217,7 @@ export const chapters = [
     section: 22,
     component: "GraphRAG",
     file: "rag-generation/graph-rag",
+    slug: "rag-generation/graph-rag",
   },
   {
     id: "22.8",
@@ -1077,6 +1225,7 @@ export const chapters = [
     section: 22,
     component: "AgenticRAG",
     file: "rag-generation/agentic-rag",
+    slug: "rag-generation/agentic-rag",
   },
   {
     id: "22.9",
@@ -1084,6 +1233,7 @@ export const chapters = [
     section: 22,
     component: "LongContextVsRAG",
     file: "rag-generation/long-context-vs-rag",
+    slug: "rag-generation/long-context-vs-rag",
   },
   // Section 12 Act 8: Evaluation
   {
@@ -1092,15 +1242,17 @@ export const chapters = [
     section: 23,
     component: "RAGEvalTriangle",
     file: "rag-evaluation/rag-eval-triangle",
+    slug: "rag-evaluation/rag-eval-triangle",
   },
-  { id: "23.2", title: "LLM-as-Judge", section: 23, component: "LLMAsJudge", file: "rag-evaluation/llm-as-judge" },
-  { id: "23.3", title: "RAGAS Metrics", section: 23, component: "RAGASMetrics", file: "rag-evaluation/ragas-metrics" },
+  { id: "23.2", title: "LLM-as-Judge", section: 23, component: "LLMAsJudge", file: "rag-evaluation/llm-as-judge", slug: "rag-evaluation/llm-as-judge" },
+  { id: "23.3", title: "RAGAS Metrics", section: 23, component: "RAGASMetrics", file: "rag-evaluation/ragas-metrics", slug: "rag-evaluation/ragas-metrics" },
   {
     id: "23.4",
     title: "Golden Datasets",
     section: 23,
     component: "GoldenDatasets",
     file: "rag-evaluation/golden-datasets",
+    slug: "rag-evaluation/golden-datasets",
   },
   {
     id: "23.5",
@@ -1108,6 +1260,7 @@ export const chapters = [
     section: 23,
     component: "OnlineEvalABTesting",
     file: "rag-evaluation/online-eval-ab-testing",
+    slug: "rag-evaluation/online-eval-ab-testing",
   },
   // Section 12 Act 9: Production Operations
   {
@@ -1116,14 +1269,16 @@ export const chapters = [
     section: 23,
     component: "Caching",
     file: "rag-production/caching",
+    slug: "rag-production/caching",
   },
-  { id: "23.7", title: "Cost Models", section: 23, component: "CostModels", file: "rag-production/cost-models" },
+  { id: "23.7", title: "Cost Models", section: 23, component: "CostModels", file: "rag-production/cost-models", slug: "rag-production/cost-models" },
   {
     id: "23.8",
     title: "Observability & Tracing",
     section: 23,
     component: "ObservabilityTracing",
     file: "rag-production/observability-tracing",
+    slug: "rag-production/observability-tracing",
   },
   {
     id: "23.9",
@@ -1131,6 +1286,7 @@ export const chapters = [
     section: 23,
     component: "HallucinationDrift",
     file: "rag-production/hallucination-drift",
+    slug: "rag-production/hallucination-drift",
   },
   {
     id: "23.10",
@@ -1138,6 +1294,7 @@ export const chapters = [
     section: 23,
     component: "FrameworkChoice",
     file: "rag-production/framework-choice",
+    slug: "rag-production/framework-choice",
   },
   // Section 12 Act 10: Decision Framework + Capstone
   {
@@ -1146,6 +1303,7 @@ export const chapters = [
     section: 23,
     component: "RAGDecisionFrameworkCapstone",
     file: "rag-production/rag-decision-framework-capstone",
+    slug: "rag-production/rag-decision-framework-capstone",
   },
   // Section 13: AI Agents
   {
@@ -1154,6 +1312,7 @@ export const chapters = [
     section: 24,
     component: "AnatomyOfLlmCall",
     file: "agent-prompting/anatomy-of-llm-call",
+    slug: "agent-prompting/anatomy-of-llm-call",
   },
   {
     id: "24.2",
@@ -1161,6 +1320,7 @@ export const chapters = [
     section: 24,
     component: "SystemPromptContract",
     file: "agent-prompting/system-prompt-contract",
+    slug: "agent-prompting/system-prompt-contract",
   },
   {
     id: "24.3",
@@ -1168,6 +1328,7 @@ export const chapters = [
     section: 24,
     component: "FewShotStructuredOutput",
     file: "agent-prompting/few-shot-structured-output",
+    slug: "agent-prompting/few-shot-structured-output",
   },
   {
     id: "24.4",
@@ -1175,6 +1336,7 @@ export const chapters = [
     section: 24,
     component: "ChainOfThoughtSelfConsistency",
     file: "agent-prompting/chain-of-thought-self-consistency",
+    slug: "agent-prompting/chain-of-thought-self-consistency",
   },
   {
     id: "24.5",
@@ -1182,6 +1344,7 @@ export const chapters = [
     section: 24,
     component: "PromptVsTuneVsRagVsAgent",
     file: "agent-prompting/prompt-vs-tune-vs-rag-vs-agent",
+    slug: "agent-prompting/prompt-vs-tune-vs-rag-vs-agent",
   },
   {
     id: "24.6",
@@ -1189,6 +1352,7 @@ export const chapters = [
     section: 24,
     component: "ContextEngineering",
     file: "agent-prompting/context-engineering",
+    slug: "agent-prompting/context-engineering",
   },
   {
     id: "25.1",
@@ -1196,6 +1360,7 @@ export const chapters = [
     section: 25,
     component: "ToolUseAsBridge",
     file: "agent-tools/tool-use-as-bridge",
+    slug: "agent-tools/tool-use-as-bridge",
   },
   {
     id: "25.2",
@@ -1203,6 +1368,7 @@ export const chapters = [
     section: 25,
     component: "JsonSchemaForTools",
     file: "agent-tools/json-schema-for-tools",
+    slug: "agent-tools/json-schema-for-tools",
   },
   {
     id: "25.3",
@@ -1210,6 +1376,7 @@ export const chapters = [
     section: 25,
     component: "ToolCallLifecycle",
     file: "agent-tools/tool-call-lifecycle",
+    slug: "agent-tools/tool-call-lifecycle",
   },
   {
     id: "25.4",
@@ -1217,6 +1384,7 @@ export const chapters = [
     section: 25,
     component: "ParallelToolsAndChoice",
     file: "agent-tools/parallel-tools-and-choice",
+    slug: "agent-tools/parallel-tools-and-choice",
   },
   {
     id: "25.5",
@@ -1224,14 +1392,16 @@ export const chapters = [
     section: 25,
     component: "ToolErrorsRetries",
     file: "agent-tools/tool-errors-retries",
+    slug: "agent-tools/tool-errors-retries",
   },
-  { id: "25.6", title: "Why Protocols?", section: 25, component: "WhyProtocols", file: "agent-tools/why-protocols" },
+  { id: "25.6", title: "Why Protocols?", section: 25, component: "WhyProtocols", file: "agent-tools/why-protocols", slug: "agent-tools/why-protocols" },
   {
     id: "25.7",
     title: "MCP Architecture",
     section: 25,
     component: "McpArchitecture",
     file: "agent-tools/mcp-architecture",
+    slug: "agent-tools/mcp-architecture",
   },
   {
     id: "25.8",
@@ -1239,6 +1409,7 @@ export const chapters = [
     section: 25,
     component: "McpPrimitives",
     file: "agent-tools/mcp-primitives",
+    slug: "agent-tools/mcp-primitives",
   },
   {
     id: "25.9",
@@ -1246,14 +1417,16 @@ export const chapters = [
     section: 25,
     component: "BuildingMcpServer",
     file: "agent-tools/building-mcp-server",
+    slug: "agent-tools/building-mcp-server",
   },
-  { id: "25.10", title: "MCP Security", section: 25, component: "McpSecurity", file: "agent-tools/mcp-security" },
+  { id: "25.10", title: "MCP Security", section: 25, component: "McpSecurity", file: "agent-tools/mcp-security", slug: "agent-tools/mcp-security" },
   {
     id: "25.11",
     title: "A2A - Agent-to-Agent Protocol",
     section: 25,
     component: "A2AProtocol",
     file: "agent-tools/a2a-protocol",
+    slug: "agent-tools/a2a-protocol",
   },
   {
     id: "26.1",
@@ -1261,6 +1434,7 @@ export const chapters = [
     section: 26,
     component: "WorkflowVsAgent",
     file: "agent-loops/workflow-vs-agent",
+    slug: "agent-loops/workflow-vs-agent",
   },
   {
     id: "26.2",
@@ -1268,15 +1442,17 @@ export const chapters = [
     section: 26,
     component: "WorkflowPrimitives",
     file: "agent-loops/workflow-primitives",
+    slug: "agent-loops/workflow-primitives",
   },
-  { id: "26.3", title: "The Agent Loop", section: 26, component: "AgentLoop", file: "agent-loops/agent-loop" },
-  { id: "26.4", title: "ReAct Pattern", section: 26, component: "ReActPattern", file: "agent-loops/re-act-pattern" },
+  { id: "26.3", title: "The Agent Loop", section: 26, component: "AgentLoop", file: "agent-loops/agent-loop", slug: "agent-loops/agent-loop" },
+  { id: "26.4", title: "ReAct Pattern", section: 26, component: "ReActPattern", file: "agent-loops/re-act-pattern", slug: "agent-loops/re-act-pattern" },
   {
     id: "26.5",
     title: "Plan-Execute + Reflection",
     section: 26,
     component: "PlanExecuteReflect",
     file: "agent-loops/plan-execute-reflect",
+    slug: "agent-loops/plan-execute-reflect",
   },
   {
     id: "26.6",
@@ -1284,6 +1460,7 @@ export const chapters = [
     section: 26,
     component: "LoopTermination",
     file: "agent-loops/loop-termination",
+    slug: "agent-loops/loop-termination",
   },
   {
     id: "26.7",
@@ -1291,6 +1468,7 @@ export const chapters = [
     section: 26,
     component: "MemoryTaxonomy",
     file: "agent-loops/memory-taxonomy",
+    slug: "agent-loops/memory-taxonomy",
   },
   {
     id: "26.8",
@@ -1298,6 +1476,7 @@ export const chapters = [
     section: 26,
     component: "WorkingMemory",
     file: "agent-loops/working-memory",
+    slug: "agent-loops/working-memory",
   },
   {
     id: "26.9",
@@ -1305,6 +1484,7 @@ export const chapters = [
     section: 26,
     component: "EpisodicMemory",
     file: "agent-loops/episodic-memory",
+    slug: "agent-loops/episodic-memory",
   },
   {
     id: "26.10",
@@ -1312,6 +1492,7 @@ export const chapters = [
     section: 26,
     component: "SemanticMemory",
     file: "agent-loops/semantic-memory",
+    slug: "agent-loops/semantic-memory",
   },
   {
     id: "26.11",
@@ -1319,6 +1500,7 @@ export const chapters = [
     section: 26,
     component: "ProceduralMemory",
     file: "agent-loops/procedural-memory",
+    slug: "agent-loops/procedural-memory",
   },
   {
     id: "26.12",
@@ -1326,6 +1508,7 @@ export const chapters = [
     section: 26,
     component: "SummaryAndContextMgmt",
     file: "agent-loops/summary-and-context-mgmt",
+    slug: "agent-loops/summary-and-context-mgmt",
   },
   {
     id: "27.1",
@@ -1333,6 +1516,7 @@ export const chapters = [
     section: 27,
     component: "WhyMultiAgent",
     file: "multi-agent/why-multi-agent",
+    slug: "multi-agent/why-multi-agent",
   },
   {
     id: "27.2",
@@ -1340,6 +1524,7 @@ export const chapters = [
     section: 27,
     component: "OrchestratorWorker",
     file: "multi-agent/orchestrator-worker",
+    slug: "multi-agent/orchestrator-worker",
   },
   {
     id: "27.3",
@@ -1347,14 +1532,16 @@ export const chapters = [
     section: 27,
     component: "SupervisorHierarchy",
     file: "multi-agent/supervisor-hierarchy",
+    slug: "multi-agent/supervisor-hierarchy",
   },
-  { id: "27.4", title: "Hand-Offs", section: 27, component: "AgentHandoffs", file: "multi-agent/agent-handoffs" },
+  { id: "27.4", title: "Hand-Offs", section: 27, component: "AgentHandoffs", file: "multi-agent/agent-handoffs", slug: "multi-agent/agent-handoffs" },
   {
     id: "27.5",
     title: "Critic / Debate / Reflection-as-Multi-Agent",
     section: 27,
     component: "CriticDebate",
     file: "multi-agent/critic-debate",
+    slug: "multi-agent/critic-debate",
   },
   {
     id: "27.6",
@@ -1362,14 +1549,16 @@ export const chapters = [
     section: 27,
     component: "MultiAgentFailures",
     file: "multi-agent/multi-agent-failures",
+    slug: "multi-agent/multi-agent-failures",
   },
-  { id: "27.7", title: "Agentic RAG", section: 27, component: "AgenticRag", file: "multi-agent/agentic-rag" },
+  { id: "27.7", title: "Agentic RAG", section: 27, component: "AgenticRag", file: "multi-agent/agentic-rag", slug: "multi-agent/agentic-rag" },
   {
     id: "28.1",
     title: "Why Eval Agents Differently",
     section: 28,
     component: "WhyEvalAgents",
     file: "agent-evals/why-eval-agents",
+    slug: "agent-evals/why-eval-agents",
   },
   {
     id: "28.2",
@@ -1377,15 +1566,17 @@ export const chapters = [
     section: 28,
     component: "EvalDimensions",
     file: "agent-evals/eval-dimensions",
+    slug: "agent-evals/eval-dimensions",
   },
-  { id: "28.3", title: "LLM-as-Judge", section: 28, component: "LlmAsJudge", file: "agent-evals/llm-as-judge" },
-  { id: "28.4", title: "Trace Evals", section: 28, component: "TraceEvals", file: "agent-evals/trace-evals" },
+  { id: "28.3", title: "LLM-as-Judge", section: 28, component: "LlmAsJudge", file: "agent-evals/llm-as-judge", slug: "agent-evals/llm-as-judge" },
+  { id: "28.4", title: "Trace Evals", section: 28, component: "TraceEvals", file: "agent-evals/trace-evals", slug: "agent-evals/trace-evals" },
   {
     id: "28.5",
     title: "Eval Sets + Continuous Eval",
     section: 28,
     component: "EvalSetsContinuous",
     file: "agent-evals/eval-sets-continuous",
+    slug: "agent-evals/eval-sets-continuous",
   },
   {
     id: "28.6",
@@ -1393,22 +1584,25 @@ export const chapters = [
     section: 28,
     component: "AgentObservabilityTracing",
     file: "agent-production/agent-observability-tracing",
+    slug: "agent-production/agent-observability-tracing",
   },
-  { id: "28.7", title: "Cost Control", section: 28, component: "CostControl", file: "agent-production/cost-control" },
+  { id: "28.7", title: "Cost Control", section: 28, component: "CostControl", file: "agent-production/cost-control", slug: "agent-production/cost-control" },
   {
     id: "28.8",
     title: "Latency Optimization",
     section: 28,
     component: "LatencyOptimization",
     file: "agent-production/latency-optimization",
+    slug: "agent-production/latency-optimization",
   },
-  { id: "28.9", title: "Guardrails", section: 28, component: "Guardrails", file: "agent-production/guardrails" },
+  { id: "28.9", title: "Guardrails", section: 28, component: "Guardrails", file: "agent-production/guardrails", slug: "agent-production/guardrails" },
   {
     id: "28.10",
     title: "Prompt Injection Defenses",
     section: 28,
     component: "PromptInjectionDefenses",
     file: "agent-production/prompt-injection-defenses",
+    slug: "agent-production/prompt-injection-defenses",
   },
   {
     id: "28.11",
@@ -1416,6 +1610,7 @@ export const chapters = [
     section: 28,
     component: "ToolSecurity",
     file: "agent-production/tool-security",
+    slug: "agent-production/tool-security",
   },
   {
     id: "28.12",
@@ -1423,6 +1618,7 @@ export const chapters = [
     section: 28,
     component: "LangGraphFramework",
     file: "agent-production/lang-graph-framework",
+    slug: "agent-production/lang-graph-framework",
   },
   {
     id: "28.13",
@@ -1430,6 +1626,7 @@ export const chapters = [
     section: 28,
     component: "CrewAiAutoGen",
     file: "agent-production/crew-ai-auto-gen",
+    slug: "agent-production/crew-ai-auto-gen",
   },
   {
     id: "28.14",
@@ -1437,6 +1634,7 @@ export const chapters = [
     section: 28,
     component: "VendorSdks",
     file: "agent-production/vendor-sdks",
+    slug: "agent-production/vendor-sdks",
   },
   {
     id: "28.15",
@@ -1444,6 +1642,7 @@ export const chapters = [
     section: 28,
     component: "CustomNoFramework",
     file: "agent-production/custom-no-framework",
+    slug: "agent-production/custom-no-framework",
   },
   {
     id: "28.16",
@@ -1451,6 +1650,7 @@ export const chapters = [
     section: 28,
     component: "AgentDecisionFramework",
     file: "agent-production/agent-decision-framework",
+    slug: "agent-production/agent-decision-framework",
   },
 ];
 

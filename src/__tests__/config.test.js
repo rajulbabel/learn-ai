@@ -147,6 +147,19 @@ describe("config.js", () => {
     });
   });
 
+  it("every chapter has a slug equal to its file path", () => {
+    chapters.forEach((c) => {
+      if (c.section === 0) return;          // section 0 (TOC) is special
+      expect(typeof c.slug).toBe("string");
+      expect(c.slug).toBe(c.file);
+    });
+  });
+
+  it("no duplicate slugs across chapters", () => {
+    const slugs = chapters.filter((c) => c.section > 0).map((c) => c.slug);
+    expect(new Set(slugs).size).toBe(slugs.length);
+  });
+
   it("no chapter title contains standalone uppercase IS", () => {
     chapters.forEach((c) => {
       expect(c.title).not.toMatch(/\bIS\b/);

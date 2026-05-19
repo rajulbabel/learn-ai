@@ -236,6 +236,27 @@ describe("config.js", () => {
     });
   });
 
+  describe("super-section slugs", () => {
+    it("every super-section has a non-empty kebab-case slug", () => {
+      superSections.forEach((sg) => {
+        expect(sg.slug, `super ${sg.id} missing slug`).toBeTruthy();
+        expect(sg.slug).toMatch(/^[a-z][a-z0-9-]*$/);
+      });
+    });
+
+    it("super-section slugs are unique", () => {
+      const slugs = superSections.map((sg) => sg.slug);
+      expect(new Set(slugs).size).toBe(slugs.length);
+    });
+
+    it("super-section slugs do not collide with any chapter topic", () => {
+      const topics = new Set(chapters.filter((c) => c.section > 0).map((c) => c.slug.split("/")[0]));
+      superSections.forEach((sg) => {
+        expect(topics.has(sg.slug), `super slug "${sg.slug}" collides with chapter topic`).toBe(false);
+      });
+    });
+  });
+
   describe("sections (source of truth)", () => {
     it("exports a sections array with 28 entries, num 1..28", async () => {
       const mod = await import("../config.js");

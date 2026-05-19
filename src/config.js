@@ -1617,6 +1617,7 @@ export const sections = [
 export const superSections = [
   {
     id: "A",
+    slug: "deep-learning",
     name: "Foundations of Deep Learning",
     color: "#d9a04a",
     desc: "Neural networks from a single neuron to deep training: backprop, linear algebra, depth.",
@@ -1624,6 +1625,7 @@ export const superSections = [
   },
   {
     id: "B",
+    slug: "llm-rise",
     name: "The Rise of LLMs",
     color: "#d6759a",
     desc: "How language models are trained at scale: self-supervised learning, fine-tuning, RLHF, scaling laws.",
@@ -1631,6 +1633,7 @@ export const superSections = [
   },
   {
     id: "C",
+    slug: "transformers",
     name: "The Transformer Era",
     color: "#7e9eb0",
     desc: "Architecture deep dive: attention, encoder, decoder, plus modern tricks (KV cache, MoE).",
@@ -1638,6 +1641,7 @@ export const superSections = [
   },
   {
     id: "D",
+    slug: "vector-databases",
     name: "Vector Databases at Depth",
     color: "#a1b54a",
     desc: "ANN algorithms, vector compression, production storage, and choosing the right vector DB.",
@@ -1645,6 +1649,7 @@ export const superSections = [
   },
   {
     id: "E",
+    slug: "rag",
     name: "Retrieval Augmented Generation (RAG)",
     color: "#c66951",
     desc: "End-to-end RAG: ingestion, chunking, retrieval tricks, generation patterns, eval, and shipping.",
@@ -1652,6 +1657,7 @@ export const superSections = [
   },
   {
     id: "F",
+    slug: "agents",
     name: "Agentic AI",
     color: "#9c8cc2",
     desc: "From prompting basics to tools/MCP, agent loops, multi-agent systems, and production agents.",

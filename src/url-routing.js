@@ -69,3 +69,18 @@ export function buildPath(state, { chapters, sections, superSections }) {
   }
   return BASE_PATH;
 }
+
+export function resolveInitialState(pathname, savedNav, cfg) {
+  const parsed = parsePath(pathname, cfg);
+  if (parsed.kind === "chapter") {
+    return { ch: parsed.ch, sub: parsed.sub, expanded: null };
+  }
+  if (parsed.kind === "toc") {
+    if (parsed.super) return { ch: 0, sub: 0, expanded: { super: parsed.super, section: parsed.section } };
+    // Bare URL: redirect to saved nav if present
+    if (savedNav) return { ch: savedNav.ch, sub: savedNav.sub, expanded: null };
+    return { ch: 0, sub: 0, expanded: null };
+  }
+  // Invalid URL: TOC, ignore localStorage so a bad shared link does not jump elsewhere
+  return { ch: 0, sub: 0, expanded: null };
+}

@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { BASE_PATH, parsePath, buildPath } from "../url-routing.js";
+import { BASE_PATH, parsePath, buildPath, resolveInitialState } from "../url-routing.js";
 import { chapters, sections, superSections } from "../config.js";
 
 const cfg = { chapters, sections, superSections };
@@ -124,9 +124,7 @@ describe("buildPath", () => {
 
   it("chapter with sub>0 includes sub segment", () => {
     const idx = chapters.findIndex((c) => c.slug === "attention-computation/compute-qkv");
-    expect(buildPath({ kind: "chapter", ch: idx, sub: 3 }, cfg)).toBe(
-      "/learn-ai/attention-computation/compute-qkv/3",
-    );
+    expect(buildPath({ kind: "chapter", ch: idx, sub: 3 }, cfg)).toBe("/learn-ai/attention-computation/compute-qkv/3");
   });
 
   it("TOC chapter (ch=0) builds bare base regardless of sub", () => {
@@ -164,5 +162,41 @@ describe("buildPath", () => {
 
   it("unknown state.kind returns bare base", () => {
     expect(buildPath({ kind: "invalid" }, cfg)).toBe("/learn-ai/");
+  });
+});
+
+describe("resolveInitialState", () => {
+  it("chapter URL resolves to chapter state", () => {
+    const idx = chapters.findIndex((c) => c.slug === "attention-computation/compute-qkv");
+    const state = resolveInitialState("/learn-ai/attention-computation/compute-qkv/2", null, cfg);
+    expect(state).toEqual({ ch: idx, sub: 2, expanded: null });
+  });
+
+  it("TOC super URL resolves to expanded state", () => {
+    const state = resolveInitialState("/learn-ai/transformers", null, cfg);
+    expect(state).toEqual({ ch: 0, sub: 0, expanded: { super: "C", section: null } });
+  });
+
+  it("TOC super+section URL resolves to expanded state", () => {
+    const state = resolveInitialState("/learn-ai/transformers/attention", null, cfg);
+    expect(state).toEqual({ ch: 0, sub: 0, expanded: { super: "C", section: 10 } });
+  });
+
+  it("bare URL with saved nav resolves to saved chapter", () => {
+    const idx = chapters.findIndex((c) => c.slug === "neural-foundations/what-is-nn");
+    const state = resolveInitialState("/learn-ai/", { ch: idx, sub: 1 }, cfg);
+    expect(state).toEqual({ ch: idx, sub: 1, expanded: null });
+  });
+
+  it("bare URL with no saved nav resolves to TOC", () => {
+    expect(resolveInitialState("/learn-ai/", null, cfg)).toEqual({ ch: 0, sub: 0, expanded: null });
+  });
+
+  it("invalid URL falls back to TOC (ignores localStorage on invalid URL)", () => {
+    expect(resolveInitialState("/learn-ai/no/such/chapter", { ch: 5, sub: 2 }, cfg)).toEqual({
+      ch: 0,
+      sub: 0,
+      expanded: null,
+    });
   });
 });

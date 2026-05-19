@@ -1,7 +1,9 @@
 import { useState, useEffect, useRef, useCallback, lazy, Suspense } from "react";
-import { chapters, sectionNames, sectionColors, C } from "./config.js";
+import { chapters, sectionNames, sectionColors, sections, superSections, C } from "./config.js";
 import { T, ErrorBoundary } from "./components.jsx";
 import { saveNav, loadNav } from "./nav-persistence.js";
+import { resolveInitialState } from "./url-routing.js";
+import { useUrlSync } from "./url-sync.js";
 
 // ── Lazy-loaded search: not loaded until search is opened ──
 const SearchOverlay = lazy(() => import("./search-overlay.jsx"));
@@ -145,28 +147,30 @@ function NavZone({ side, hint, ripple, chapter, onClick, onHover }) {
 }
 
 export default function LearnAI() {
-  const [ch, setCh] = useState(() => {
-    const s = loadNav(chapters);
-    return s ? s.ch : 0;
-  });
+  const initial = (() => {
+    if (typeof window === "undefined") return { ch: 0, sub: 0, expanded: null };
+    return resolveInitialState(window.location.pathname, loadNav(chapters), { chapters, sections, superSections });
+  })();
+
+  const [ch, setCh] = useState(initial.ch);
   const [fade, setFade] = useState(true);
-  const [sub, setSub] = useState(() => {
-    const s = loadNav(chapters);
-    return s ? s.sub : 0;
-  });
+  const [sub, setSub] = useState(initial.sub);
   const [maxSubs, setMaxSubs] = useState({});
   const [transitioning, setTransitioning] = useState(false);
 
   // Lifted state from chapters (so chapter functions have no hooks - can be called as plain functions)
   const [bankIdx, setBankIdx] = useState(0);
   const [hovered, setHovered] = useState(4);
-  const [expanded, setExpanded] = useState(null);
+  const [expanded, setExpanded] = useState(initial.expanded);
   const [navHint, setNavHint] = useState(null);
   const [ripple, setRipple] = useState(null);
   const [subBtnRipple, setSubBtnRipple] = useState(0);
   const [searchOpen, setSearchOpen] = useState(false);
   const [_semanticProgress, setSemanticProgress] = useState(0);
   const [semanticMode, setSemanticMode] = useState("off");
+
+  // Keep the URL in sync with navigation state.
+  useUrlSync({ ch, sub, expanded });
 
   // Lazy-loaded chapter render function
   const [renderChapter, setRenderChapter] = useState(null);

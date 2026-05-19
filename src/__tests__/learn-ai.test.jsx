@@ -1,10 +1,10 @@
-import { describe, it, expect, vi, afterEach } from "vitest";
+import { describe, it, expect, vi, afterEach, beforeEach } from "vitest";
 import { render, screen, fireEvent, cleanup, act } from "@testing-library/react";
 import { chapters } from "../config.js";
 
 // Mock all dynamic imports so the component renders synchronously in tests
 vi.mock("../chapters/table-of-contents/toc.jsx", () => ({
-  default: () => <div data-testid="toc">TOC</div>,
+  default: () => <div data-testid="toc">Table of Contents</div>,
 }));
 vi.mock("../chapters/neural-foundations/what-is-nn.jsx", () => ({
   default: (ctx) => (
@@ -25,6 +25,9 @@ vi.mock("../chapters/neural-foundations/what-is-nn.jsx", () => ({
       </button>
     </div>
   ),
+}));
+vi.mock("../chapters/neural-foundations/inside-neuron.jsx", () => ({
+  default: () => <div data-testid="inside-neuron">InsideNeuron</div>,
 }));
 vi.mock("../chapters/llm-training/batch-training.jsx", () => ({
   default: () => <div data-testid="batch-training">BatchTraining</div>,
@@ -54,6 +57,9 @@ afterEach(async () => {
   navMod.loadNav.mockReturnValue(null);
   const searchMod = await import("../search.js");
   searchMod.getSearchStatus.mockReturnValue({ mode: "off", progress: 0 });
+  // useUrlSync mutates window.location.pathname; reset so each test starts fresh.
+  window.history.replaceState(null, "", "/learn-ai/");
+  localStorage.clear();
 });
 
 // Helper: render LearnAI and wait for async chapter load. Mocks the <main>
@@ -499,5 +505,40 @@ describe("chapterLoaders glob", () => {
     const loaders = import.meta.glob("../chapters/**/*.jsx");
     expect(typeof loaders).toBe("object");
     expect(Object.keys(loaders).length).toBe(chapters.length);
+  });
+});
+
+describe("URL routing - boot", () => {
+  beforeEach(async () => {
+    localStorage.clear();
+    window.history.replaceState(null, "", "/learn-ai/");
+    const navMod = await import("../nav-persistence.js");
+    navMod.loadNav.mockReturnValue(null);
+  });
+
+  it("opens at chapter URL", async () => {
+    window.history.replaceState(null, "", "/learn-ai/neural-foundations/what-is-nn");
+    await renderLearnAI();
+    expect(await screen.findByText(/What is a Neural Network/i)).toBeTruthy();
+  });
+
+  it("opens TOC at bare URL", async () => {
+    await renderLearnAI();
+    expect(await screen.findByText(/Table of Contents/i)).toBeTruthy();
+  });
+
+  it("redirects bare URL to saved chapter when localStorage present", async () => {
+    const idx = chapters.findIndex((c) => c.slug === "neural-foundations/inside-neuron");
+    const navMod = await import("../nav-persistence.js");
+    navMod.loadNav.mockReturnValue({ ch: idx, sub: 0 });
+    await renderLearnAI();
+    await screen.findByText(/Inside a Single Neuron/i);
+    expect(window.location.pathname).toBe("/learn-ai/neural-foundations/inside-neuron");
+  });
+
+  it("falls back to TOC for invalid URL", async () => {
+    window.history.replaceState(null, "", "/learn-ai/no/such/chapter");
+    await renderLearnAI();
+    expect(await screen.findByText(/Table of Contents/i)).toBeTruthy();
   });
 });

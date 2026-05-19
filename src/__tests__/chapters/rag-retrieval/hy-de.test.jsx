@@ -40,6 +40,17 @@ describe("HyDE (21.6)", () => {
     expect(container.textContent).toMatch(/retriev/i);
   });
 
+  it("sub=1 flow boxes are wide enough to contain their two-line labels", () => {
+    const { container } = render(HyDE(makeCtx({ sub: 1 })));
+    const rects = Array.from(container.querySelectorAll("svg rect")).filter(
+      (r) => r.getAttribute("width") && Number(r.getAttribute("width")) > 50,
+    );
+    expect(rects.length).toBeGreaterThanOrEqual(5);
+    rects.slice(0, 5).forEach((r) => {
+      expect(Number(r.getAttribute("width"))).toBeGreaterThanOrEqual(135);
+    });
+  });
+
   it("sub=2 walks the dashboard-slow worked example with retrieved doc-22", () => {
     const { container } = render(HyDE(makeCtx({ sub: 2 })));
     expect(container.textContent).toMatch(/dashboard.*slow|slow.*dashboard/i);

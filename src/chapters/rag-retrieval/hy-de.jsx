@@ -51,13 +51,13 @@ export default function HyDE(ctx) {
   const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx;
 
   // Sub=1 flow diagram geometry.
-  const FLOW_VB_W = 720;
+  const FLOW_VB_W = 800;
   const FLOW_VB_H = 130;
-  const FLOW_BOX_W = 120;
+  const FLOW_BOX_W = 140;
   const FLOW_BOX_H = 70;
   const FLOW_GAP = 18;
-  const FLOW_SPAN = 5 * FLOW_BOX_W + 4 * FLOW_GAP; // 5*120 + 4*18 = 672
-  const FLOW_X_START = (FLOW_VB_W - FLOW_SPAN) / 2; // (720-672)/2 = 24
+  const FLOW_SPAN = 5 * FLOW_BOX_W + 4 * FLOW_GAP; // 5*140 + 4*18 = 772
+  const FLOW_X_START = (FLOW_VB_W - FLOW_SPAN) / 2; // (800-772)/2 = 14
   const FLOW_Y = (FLOW_VB_H - FLOW_BOX_H) / 2; // 30
 
   return (
@@ -145,7 +145,7 @@ export default function HyDE(ctx) {
           </T>
 
           <div style={{ marginTop: 14, display: "flex", justifyContent: "center" }}>
-            <svg viewBox={`0 0 ${FLOW_VB_W} ${FLOW_VB_H}`} width="100%" style={{ maxWidth: 720, height: "auto" }}>
+            <svg viewBox={`0 0 ${FLOW_VB_W} ${FLOW_VB_H}`} width="100%" style={{ maxWidth: 800, height: "auto" }}>
               <desc>
                 Five-box horizontal flow diagram showing the HyDE pipeline: user query, LLM generates hypothetical
                 answer, embed hypothetical answer, vector retrieval, top-K real docs.

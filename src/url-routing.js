@@ -23,15 +23,28 @@ export function parsePath(pathname, { chapters, sections, superSections }) {
     return { kind: "invalid" };
   }
 
-  // 2 segments: chapter or super+section
+  // 2 segments: chapter first, then super+section
   if (segs.length === 2) {
-    // (chapter lookup is added in the next task)
+    const slug = `${segs[0]}/${segs[1]}`;
+    const chIdx = chapters.findIndex((c) => c.slug === slug);
+    if (chIdx >= 0) return { kind: "chapter", ch: chIdx, sub: 0 };
+
     const sg = superSections.find((s) => s.slug === segs[0]);
     if (sg) {
       const sec = sections.find((x) => x.slug === segs[1] && sg.sections.includes(x.num));
       if (sec) return { kind: "toc", super: sg.id, section: sec.num };
     }
     return { kind: "invalid" };
+  }
+
+  // 3 segments: chapter + sub
+  if (segs.length === 3) {
+    const slug = `${segs[0]}/${segs[1]}`;
+    const chIdx = chapters.findIndex((c) => c.slug === slug);
+    if (chIdx < 0) return { kind: "invalid" };
+    const sub = Number(segs[2]);
+    if (!Number.isFinite(sub) || sub < 0 || !Number.isInteger(sub)) return { kind: "invalid" };
+    return { kind: "chapter", ch: chIdx, sub };
   }
 
   return { kind: "invalid" };

@@ -9,10 +9,8 @@ describe("chunks.json schema", () => {
   it("every chunk has the required fields with correct types", () => {
     const required = [
       "id",
-      "chapterId",
+      "chapterSlug",
       "chapterTitle",
-      "section",
-      "sectionName",
       "sub",
       "kind",
       "text",
@@ -26,8 +24,7 @@ describe("chunks.json schema", () => {
       }
       expect(typeof c.id).toBe("string");
       expect(c.id.length).toBe(16);
-      expect(typeof c.chapterId).toBe("string");
-      expect(typeof c.section).toBe("number");
+      expect(typeof c.chapterSlug).toBe("string");
       expect(typeof c.sub).toBe("number");
       expect(["concept", "formula", "example", "diagram", "summary"]).toContain(c.kind);
       expect(c.text.length).toBeGreaterThan(10);

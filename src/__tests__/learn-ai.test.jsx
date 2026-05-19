@@ -248,7 +248,7 @@ describe("LearnAI author footer (SEO)", () => {
     expect(spacer).toBeTruthy();
     expect(spacer.getAttribute("data-footer-spacer")).toBe("true");
     expect(spacer.style.flexGrow).toBe("1");
-    expect(spacer.style.minHeight).toBe("48px");
+    expect(spacer.style.minHeight).toBe("16px");
   });
 });
 

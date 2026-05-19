@@ -410,8 +410,8 @@ describe("SearchOverlay search bar styling", () => {
 
     const resultsContainer = document.querySelector("[data-search-results]");
     expect(resultsContainer).toBeTruthy();
-    // maxWidth should match the search bar wrapper (600px)
-    expect(resultsContainer.style.maxWidth).toBe("600px");
+    // maxWidth should match the search bar wrapper (900px)
+    expect(resultsContainer.style.maxWidth).toBe("900px");
     // No horizontal padding that would make cards narrower than the bar
     expect(resultsContainer.style.paddingLeft).toBe("0px");
     expect(resultsContainer.style.paddingRight).toBe("0px");

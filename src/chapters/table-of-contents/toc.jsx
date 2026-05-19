@@ -40,11 +40,11 @@ export default function TOC(ctx) {
 
   return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
-      <Box color={C.purple} style={{ width: "100%" }}>
-        <T color="#b8a9ff" bold size={21} center>
+      <Box color={C.purple} style={{ width: "100%", padding: "10px 22px" }}>
+        <T color="#b8a9ff" bold size={21} center style={{ lineHeight: 1.3 }}>
           Your roadmap to understanding AI from scratch.
         </T>
-        <T color="#b8a9ff" center style={{ marginTop: 6 }}>
+        <T color="#b8a9ff" center style={{ marginTop: 4, lineHeight: 1.4 }}>
           {chapters.length - 1} chapters. Zero prerequisites. Every concept built on the one before it.
         </T>
       </Box>
@@ -283,9 +283,6 @@ export default function TOC(ctx) {
           );
         })}
       </div>
-      <T color={C.dim} size={16} center style={{ marginTop: 4 }}>
-        Tap a part to expand, tap a section to drill in, tap a chapter to jump.
-      </T>
     </div>
   );
 }

@@ -223,4 +223,17 @@ describe("TOC (two-level)", () => {
     fireEvent.mouseEnter(chapterLinks[0]);
     fireEvent.mouseLeave(chapterLinks[0]);
   });
+
+  it("does not render the tap-instructions hint", () => {
+    const { container } = render(TOC(makeCtx({ expanded: null })));
+    expect(container.textContent).not.toContain("Tap a part to expand");
+    expect(container.textContent).not.toContain("tap a chapter to jump");
+  });
+
+  it("roadmap box uses compact vertical padding", () => {
+    const { container } = render(TOC(makeCtx({ expanded: null })));
+    const roadmapBox = container.firstChild.children[0];
+    expect(roadmapBox.style.padding).toBe("10px 22px");
+  });
+
 });

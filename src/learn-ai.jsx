@@ -548,7 +548,7 @@ export default function LearnAI() {
           >
             Learn AI
           </h1>
-          <T color={C.dim} size={14} center>
+          <T color={C.dim} size={14} center style={{ lineHeight: 1.3 }}>
             The complete visual guide to understanding AI - from scratch
           </T>
           {/* Search bar - rainbow fades in when semantic ready, stays permanently */}
@@ -727,7 +727,7 @@ export default function LearnAI() {
             </h2>
           </>
         ) : (
-          <T color={C.dim} size={14} center style={{ margin: "6px 0 10px" }}>
+          <T color={C.dim} size={14} center style={{ margin: "12px 0 12px", lineHeight: 1.3 }}>
             {Object.keys(sectionNames).length - 1} Sections · {chapters.length - 1} Chapters
           </T>
         )}
@@ -767,7 +767,7 @@ export default function LearnAI() {
           />
         )}
 
-        <div data-footer-spacer="true" aria-hidden="true" style={{ flex: 1, minHeight: 48, alignSelf: "stretch" }} />
+        <div data-footer-spacer="true" aria-hidden="true" style={{ flex: 1, minHeight: 16, alignSelf: "stretch" }} />
 
         <footer
           style={{
@@ -775,7 +775,7 @@ export default function LearnAI() {
             marginLeft: "-8%",
             marginRight: "-8%",
             marginBottom: -30,
-            minHeight: 58,
+            minHeight: 50,
             paddingLeft: "8%",
             paddingRight: "8%",
             borderTop: "1px solid transparent",

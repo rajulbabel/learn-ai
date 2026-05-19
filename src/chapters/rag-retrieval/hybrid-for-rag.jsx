@@ -413,11 +413,13 @@ export default function HybridForRAG(ctx) {
                 BM25 Top-3
               </T>
               <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 6 }}>
-                {RRF_EXAMPLE.bm25Ranks.map((r) => (
-                  <T key={r.doc} color="#a5d6a7" center size={14}>
-                    {r.rank}. {r.doc}
-                  </T>
-                ))}
+                {[...RRF_EXAMPLE.bm25Ranks]
+                  .sort((a, b) => a.rank - b.rank)
+                  .map((r) => (
+                    <T key={r.doc} color="#a5d6a7" center size={14}>
+                      {r.rank}. {r.doc}
+                    </T>
+                  ))}
               </div>
             </div>
 
@@ -434,11 +436,13 @@ export default function HybridForRAG(ctx) {
                 Dense Top-3
               </T>
               <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 6 }}>
-                {RRF_EXAMPLE.denseRanks.map((r) => (
-                  <T key={r.doc} color="#80deea" center size={14}>
-                    {r.rank}. {r.doc}
-                  </T>
-                ))}
+                {[...RRF_EXAMPLE.denseRanks]
+                  .sort((a, b) => a.rank - b.rank)
+                  .map((r) => (
+                    <T key={r.doc} color="#80deea" center size={14}>
+                      {r.rank}. {r.doc}
+                    </T>
+                  ))}
               </div>
             </div>
           </div>

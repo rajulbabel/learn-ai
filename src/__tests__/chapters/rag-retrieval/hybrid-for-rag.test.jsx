@@ -47,6 +47,23 @@ describe("HybridForRAG (21.3)", () => {
     expect(container.textContent).toMatch(/0\.0\d+/);
   });
 
+  it("sub=2 renders BM25 and Dense top-3 lists sorted ascending by rank", () => {
+    const { container } = render(HybridForRAG(makeCtx({ sub: 2 })));
+    const text = container.textContent.replace(/\s+/g, " ");
+    const rrfIdx = text.indexOf("RRF Worked Example");
+    expect(rrfIdx).toBeGreaterThan(-1);
+    const after = text.slice(rrfIdx);
+    const bm25Idx = after.indexOf("BM25 Top-3");
+    const denseIdx = after.indexOf("Dense Top-3");
+    expect(bm25Idx).toBeGreaterThan(-1);
+    expect(denseIdx).toBeGreaterThan(bm25Idx);
+    const bm25Block = after.slice(bm25Idx, denseIdx);
+    const denseBlock = after.slice(denseIdx, denseIdx + 200);
+    const ranksIn = (s) => Array.from(s.matchAll(/([123])\.\s+doc-/g)).map((m) => Number(m[1]));
+    expect(ranksIn(bm25Block)).toEqual([1, 2, 3]);
+    expect(ranksIn(denseBlock)).toEqual([1, 2, 3]);
+  });
+
   it("sub=3 shows complementary recall numbers for BM25, dense, hybrid", () => {
     const { container } = render(HybridForRAG(makeCtx({ sub: 3 })));
     expect(container.textContent).toMatch(/hybrid/i);

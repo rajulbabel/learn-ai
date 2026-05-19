@@ -241,6 +241,68 @@ describe("config.js", () => {
     });
   });
 
+  describe("sections (source of truth)", () => {
+    it("exports a sections array with 28 entries, num 1..28", async () => {
+      const mod = await import("../config.js");
+      expect(mod.sections).toBeDefined();
+      expect(mod.sections).toHaveLength(28);
+      mod.sections.forEach((s, i) => expect(s.num).toBe(i + 1));
+    });
+
+    it("every section has name, color, desc, super, chapters[]", async () => {
+      const mod = await import("../config.js");
+      mod.sections.forEach((s) => {
+        expect(typeof s.name).toBe("string");
+        expect(typeof s.color).toBe("string");
+        expect(typeof s.desc).toBe("string");
+        expect(typeof s.super).toBe("string");
+        expect(s.super).toMatch(/^[A-F]$/);
+        expect(Array.isArray(s.chapters)).toBe(true);
+        s.chapters.forEach((c) => {
+          expect(typeof c.slug).toBe("string");
+          expect(typeof c.file).toBe("string");
+          expect(typeof c.title).toBe("string");
+          expect(typeof c.component).toBe("string");
+        });
+      });
+    });
+
+    it("derived chapters export matches the equivalent of the old flat array", async () => {
+      const mod = await import("../config.js");
+      expect(mod.chapters[0].id).toBe("0");
+      expect(mod.chapters[0].component).toBe("TOC");
+
+      let cursor = 1;
+      mod.sections.forEach((s) => {
+        s.chapters.forEach((c, i) => {
+          const derived = mod.chapters[cursor++];
+          expect(derived.id).toBe(`${s.num}.${i + 1}`);
+          expect(derived.slug).toBe(c.slug);
+          expect(derived.file).toBe(c.file);
+          expect(derived.title).toBe(c.title);
+          expect(derived.component).toBe(c.component);
+          expect(derived.section).toBe(s.num);
+        });
+      });
+      expect(cursor).toBe(mod.chapters.length);
+    });
+
+    it("derived sectionNames and sectionColors match the original objects", async () => {
+      const mod = await import("../config.js");
+      mod.sections.forEach((s) => {
+        expect(mod.sectionNames[s.num]).toBe(s.name);
+        expect(mod.sectionColors[s.num]).toBe(s.color);
+      });
+    });
+
+    it("every section's super field points to the correct super-section", async () => {
+      const mod = await import("../config.js");
+      mod.sections.forEach((s) => {
+        expect(mod.sectionSuper[s.num]).toBe(s.super);
+      });
+    });
+  });
+
   describe("validateConfig (extended)", () => {
     it("flags duplicate slugs", () => {
       const errs = validateConfig([

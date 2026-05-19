@@ -126,6 +126,22 @@
   </head>
   <body>
     <div id="root"></div>
+    <script>
+      (function () {
+        var basePath = "/learn-ai/";
+        var l = window.location;
+        if (l.pathname !== basePath && l.pathname !== basePath.slice(0, -1)) return;
+        try {
+          var saved = sessionStorage.getItem("spa-redirect");
+          if (!saved) return;
+          sessionStorage.removeItem("spa-redirect");
+          if (saved.indexOf(basePath) !== 0) return;
+          window.history.replaceState(null, "", saved);
+        } catch (_) {
+          /* ignore */
+        }
+      })();
+    </script>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>

@@ -11,6 +11,8 @@ set -e
 
 remote="$1"
 
+npm run test || exit 1
+
 NEEDS_BUILD=0
 ZERO=0000000000000000000000000000000000000000
 

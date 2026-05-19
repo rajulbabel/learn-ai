@@ -1748,6 +1748,15 @@ export const superSections = [
   { id: "F", name: "Agentic AI",                           color: "#4fc3f7", sections: [24, 25, 26, 27, 28] },
 ];
 
+// Reverse index: section number → super-section id. Derived from superSections.
+export const sectionSuper = (() => {
+  const out = {};
+  for (const sg of superSections) {
+    for (const s of sg.sections) out[s] = sg.id;
+  }
+  return out;
+})();
+
 // Validate config - extracted for testability
 export function validateConfig(chapterList) {
   const errors = [];

@@ -225,6 +225,20 @@ describe("config.js", () => {
         F: [24, 25, 26, 27, 28],
       });
     });
+
+    it("every section 1..28 maps to exactly one super-section via sectionSuper", async () => {
+      const mod = await import("../config.js");
+      expect(mod.sectionSuper).toBeDefined();
+      for (let s = 1; s <= 28; s++) {
+        expect(mod.sectionSuper[s]).toMatch(/^[A-F]$/);
+      }
+      // Coverage matches superSections.sections
+      superSections.forEach((sg) => {
+        sg.sections.forEach((sNum) => {
+          expect(mod.sectionSuper[sNum]).toBe(sg.id);
+        });
+      });
+    });
   });
 });
 

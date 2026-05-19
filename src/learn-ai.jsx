@@ -503,6 +503,7 @@ export default function LearnAI() {
     setHovered,
     expanded,
     setExpanded,
+    currentChapter: chapters[ch] || null,
     registerSubBtn,
   };
 

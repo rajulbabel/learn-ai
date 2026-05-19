@@ -9,8 +9,8 @@ describe("BASE_PATH", () => {
     expect(BASE_PATH.endsWith("/")).toBe(true);
   });
 
-  it("is the Vite base URL", () => {
-    expect(BASE_PATH).toBe(import.meta.env.BASE_URL);
+  it("matches the configured base path", () => {
+    expect(BASE_PATH).toBe("/learn-ai/");
   });
 });
 
@@ -42,5 +42,21 @@ describe("parsePath - TOC", () => {
   it("section that does not belong to the named super is invalid", () => {
     // section "attention" (slug = attention) belongs to super C, not D
     expect(parsePath("/learn-ai/vector-databases/attention", cfg).kind).toBe("invalid");
+  });
+
+  it("parses a slug without the base prefix", () => {
+    expect(parsePath("transformers", cfg)).toEqual({ kind: "toc", super: "C", section: null });
+  });
+
+  it("paths with more than two segments are invalid", () => {
+    expect(parsePath("/learn-ai/a/b/c", cfg).kind).toBe("invalid");
+  });
+
+  it("root path resolves to TOC collapsed", () => {
+    expect(parsePath("/", cfg)).toEqual({ kind: "toc", super: null, section: null });
+  });
+
+  it("two-segment path with unknown super is invalid", () => {
+    expect(parsePath("/learn-ai/nope/whatever", cfg).kind).toBe("invalid");
   });
 });

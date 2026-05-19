@@ -230,7 +230,7 @@ export default function SearchOverlay({ open, onClose, onGoTo }) {
         }}
       >
         {/* Search input - gradient border wrapper */}
-        <div style={{ width: "100%", maxWidth: 600 }}>
+        <div style={{ width: "100%", maxWidth: 900 }}>
           <div
             data-search-bar="true"
             style={{
@@ -322,7 +322,7 @@ export default function SearchOverlay({ open, onClose, onGoTo }) {
         {/* ── Single status line: count (left) | shortcuts (center) | mode (right) ── */}
         <div
           style={{
-            maxWidth: 600,
+            maxWidth: 900,
             width: "100%",
             marginTop: 8,
             display: "flex",
@@ -397,7 +397,7 @@ export default function SearchOverlay({ open, onClose, onGoTo }) {
       <div
         data-search-results="true"
         style={{
-          maxWidth: 600,
+          maxWidth: 900,
           width: "100%",
           padding: "2px 0 30px",
           display: "flex",

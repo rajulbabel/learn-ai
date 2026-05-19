@@ -2,7 +2,7 @@ import { describe, it, expect } from "vitest";
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { chapters, sectionNames, sectionColors, superSections, C, validateConfig } from "../config.js";
+import { chapters, sectionNames, sectionColors, sections, superSections, C, validateConfig } from "../config.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const SRC_DIR = path.resolve(__dirname, "..");
@@ -253,6 +253,22 @@ describe("config.js", () => {
       const topics = new Set(chapters.filter((c) => c.section > 0).map((c) => c.slug.split("/")[0]));
       superSections.forEach((sg) => {
         expect(topics.has(sg.slug), `super slug "${sg.slug}" collides with chapter topic`).toBe(false);
+      });
+    });
+  });
+
+  describe("section slugs", () => {
+    it("every section has a non-empty kebab-case slug", () => {
+      sections.forEach((s) => {
+        expect(s.slug, `section ${s.num} missing slug`).toBeTruthy();
+        expect(s.slug).toMatch(/^[a-z][a-z0-9-]*$/);
+      });
+    });
+
+    it("section slugs are unique within their super-section", () => {
+      superSections.forEach((sg) => {
+        const slugs = sg.sections.map((num) => sections.find((s) => s.num === num).slug);
+        expect(new Set(slugs).size, `super ${sg.id} has duplicate section slugs`).toBe(slugs.length);
       });
     });
   });

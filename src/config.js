@@ -18,6 +18,7 @@ const OVERVIEW_CHAPTER = {
 export const sections = [
   {
     num: 1,
+    slug: "neural-networks",
     name: "Neural Networks - The Mechanics",
     color: "#ef5350",
     desc: "Neuron, layer, weights/biases, linear, ReLU, forward pass",
@@ -69,6 +70,7 @@ export const sections = [
   },
   {
     num: 2,
+    slug: "backprop",
     name: "Learning & Backprop",
     color: "#42a5f5",
     desc: "Loss, derivatives, backward pass, gradient descent, why deep backprop is hard",
@@ -126,6 +128,7 @@ export const sections = [
   },
   {
     num: 3,
+    slug: "linear-algebra",
     name: "Linear Algebra for Deep Learning",
     color: "#ab47bc",
     desc: "Vectors, dot product, matrices, layer = matmul, activation functions",
@@ -165,6 +168,7 @@ export const sections = [
   },
   {
     num: 4,
+    slug: "training",
     name: "Training Deep Networks",
     color: "#66bb6a",
     desc: "What deep means, building blocks, dropout, Adam, LR warmup, weight init",
@@ -210,6 +214,7 @@ export const sections = [
   },
   {
     num: 5,
+    slug: "pretraining",
     name: "How LLMs Actually Train",
     color: "#00b8d4",
     desc: "Tokenization, self-supervised learning, cross-entropy, SFT, RLHF, batches",
@@ -269,6 +274,7 @@ export const sections = [
   },
   {
     num: 6,
+    slug: "scaling",
     name: "Scaling & Modern Techniques",
     color: "#ffd740",
     desc: "Scaling laws, parameters at scale, distillation, contrastive learning",
@@ -309,6 +315,7 @@ export const sections = [
   },
   {
     num: 7,
+    slug: "road-to-transformers",
     name: "The Road to Transformers",
     color: "#ba68c8",
     desc: "CNN → RNN → why RNN fails → the Transformer arrives",
@@ -332,6 +339,7 @@ export const sections = [
   },
   {
     num: 8,
+    slug: "input-pipeline",
     name: "Transformer Input Pipeline",
     color: "#ff9800",
     desc: "Architecture overview, embeddings, positional encoding",
@@ -395,6 +403,7 @@ export const sections = [
   },
   {
     num: 9,
+    slug: "qkv",
     name: "Attention - Understanding Q, K, V",
     color: "#66bb6a",
     desc: "Why attention works, Query/Key/Value concepts, analogies",
@@ -476,6 +485,7 @@ export const sections = [
   },
   {
     num: 10,
+    slug: "attention",
     name: "Computing Attention",
     color: "#29b6f6",
     desc: "Step-by-step math: Q-K-V dot products, scaling, softmax, weighted sum, full formula",
@@ -533,6 +543,7 @@ export const sections = [
   },
   {
     num: 11,
+    slug: "multi-head",
     name: "Multi-Head Attention",
     color: "#ffee58",
     desc: "Why multi-head, head split, inside each head, concat + W_O, shapes, complete picture",
@@ -590,6 +601,7 @@ export const sections = [
   },
   {
     num: 12,
+    slug: "encoder",
     name: "The Encoder",
     color: "#5c6bc0",
     desc: "Encoder architecture, Add & Norm, FFN, layer stacking",
@@ -653,6 +665,7 @@ export const sections = [
   },
   {
     num: 13,
+    slug: "decoder",
     name: "The Decoder",
     color: "#ef5350",
     desc: "Decoder-only, causal masking, cross-attention, full walkthrough",
@@ -704,6 +717,7 @@ export const sections = [
   },
   {
     num: 14,
+    slug: "modern-techniques",
     name: "Modern LLM Techniques",
     color: "#26a69a",
     desc: "KV cache, grouped-query attention, mixture of experts, reasoning models",
@@ -737,6 +751,7 @@ export const sections = [
   },
   {
     num: 15,
+    slug: "vector-search",
     name: "Vector Search - From Brute Force to ANN",
     color: "#ec407a",
     desc: "Retrieval problem, distance metrics, IVF, HNSW, Vamana",
@@ -818,6 +833,7 @@ export const sections = [
   },
   {
     num: 16,
+    slug: "compression",
     name: "Vector Compression - Quantization & Matryoshka",
     color: "#5c6bc0",
     desc: "Memory wall, scalar/product/binary quantization, Matryoshka, IVF-PQ, HNSW+PQ",
@@ -870,6 +886,7 @@ export const sections = [
   },
   {
     num: 17,
+    slug: "production",
     name: "Vector DBs in Production",
     color: "#26c6da",
     desc: "Filtering, updates, sharding, replication, hybrid search, rerankers, lifecycle",
@@ -939,6 +956,7 @@ export const sections = [
   },
   {
     num: 18,
+    slug: "picking-db",
     name: "Picking a Vector Database",
     color: "#ab47bc",
     desc: "FAISS, pgvector, Qdrant, Pinecone, Weaviate/Milvus/Chroma, decision framework",
@@ -970,6 +988,7 @@ export const sections = [
   },
   {
     num: 19,
+    slug: "pipeline",
     name: "The RAG Pipeline - Why & How It Breaks",
     color: "#66bb6a",
     desc: "Why LLMs need retrieval, naive RAG pipeline, where it breaks",
@@ -997,6 +1016,7 @@ export const sections = [
   },
   {
     num: 20,
+    slug: "ingestion",
     name: "RAG Data Prep - Ingestion & Chunking",
     color: "#42a5f5",
     desc: "Parsing, deduplication, refresh, all chunking strategies, decision matrix",
@@ -1066,6 +1086,7 @@ export const sections = [
   },
   {
     num: 21,
+    slug: "retrieval",
     name: "RAG Retrieval - Embeddings, Hybrid & Query Tricks",
     color: "#ab47bc",
     desc: "Embedding model picking, domain adaptation, hybrid, reranker cascade, HyDE, multi-query, routing",
@@ -1123,6 +1144,7 @@ export const sections = [
   },
   {
     num: 22,
+    slug: "generation",
     name: "RAG Generation - Naive to Advanced Patterns",
     color: "#ffd54f",
     desc: "Context packing, citations, multi-hop, Self-RAG, CRAG, GraphRAG, agentic RAG, long-context",
@@ -1181,6 +1203,7 @@ export const sections = [
   },
   {
     num: 23,
+    slug: "shipping",
     name: "RAG in Production - Eval, Cost & Shipping",
     color: "#26c6da",
     desc: "Eval triangle, RAGAS, golden datasets, caching, cost, observability, hallucination, framework choice",
@@ -1256,6 +1279,7 @@ export const sections = [
   },
   {
     num: 24,
+    slug: "prompting",
     name: "Prompting LLMs - The Foundation",
     color: "#29b6f6",
     desc: "Anatomy of LLM call, system prompts, few-shot, CoT, prompt vs tune vs RAG vs agent, context engineering",
@@ -1301,6 +1325,7 @@ export const sections = [
   },
   {
     num: 25,
+    slug: "tools",
     name: "Tools & Protocols - MCP, A2A",
     color: "#ef5350",
     desc: "Tool use, JSON schemas, lifecycle, parallel tools, errors, MCP architecture/primitives/security, A2A",
@@ -1376,6 +1401,7 @@ export const sections = [
   },
   {
     num: 26,
+    slug: "mechanics",
     name: "Agent Mechanics - Loops & Memory",
     color: "#66bb6a",
     desc: "Workflow vs agent, agent loop, ReAct, plan-execute, termination, memory types, context management",
@@ -1457,6 +1483,7 @@ export const sections = [
   },
   {
     num: 27,
+    slug: "multi-agent",
     name: "Multi-Agent Systems",
     color: "#ff9800",
     desc: "Orchestrator-worker, supervisor, handoffs, critic/debate, failure modes, agentic RAG",
@@ -1508,6 +1535,7 @@ export const sections = [
   },
   {
     num: 28,
+    slug: "shipping",
     name: "Shipping Agents - Eval, Safety, Frameworks",
     color: "#f06292",
     desc: "Evals, observability, cost/latency, guardrails, injection defenses, framework picks",

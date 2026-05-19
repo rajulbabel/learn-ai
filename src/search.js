@@ -11,6 +11,9 @@
  */
 import MiniSearch from "minisearch";
 import { getCachedSearchAssets, cacheSearchAssets } from "./embedding-cache.js";
+import { chapters, sectionNames } from "./config.js";
+
+const chapterBySlug = new Map(chapters.map((c) => [c.slug, c]));
 
 let miniSearch = null;
 let chunks = [];
@@ -48,8 +51,8 @@ export async function initSearch() {
   chunkById = new Map(chunks.map((c) => [c.id, c]));
 
   miniSearch = new MiniSearch({
-    fields: ["text", "summary", "terms_joined", "chapterTitle", "sectionName"],
-    storeFields: ["chapterId", "chapterTitle", "section", "sectionName", "sub", "text", "summary"],
+    fields: ["text", "summary", "terms_joined", "chapterTitle"],
+    storeFields: ["chapterSlug", "chapterTitle", "sub", "text", "summary"],
     idField: "id",
     extractField: (doc, field) => (field === "terms_joined" ? (doc.terms || []).join(" ") : doc[field]),
     searchOptions: {
@@ -192,7 +195,7 @@ function dedupeByChapter(items) {
   const seen = new Set();
   const out = [];
   for (const r of items) {
-    const key = `${r.chapterId}:${r.sub}`;
+    const key = `${r.chapterSlug}:${r.sub}`;
     if (!seen.has(key)) {
       seen.add(key);
       out.push(r);
@@ -202,11 +205,13 @@ function dedupeByChapter(items) {
 }
 
 function shape(r) {
+  const ch = chapterBySlug.get(r.chapterSlug);
   return {
-    chapterId: r.chapterId,
+    chapterSlug: r.chapterSlug,
+    chapterId: ch ? ch.id : null,
     title: r.chapterTitle,
-    section: r.section,
-    sectionName: r.sectionName,
+    section: ch ? ch.section : null,
+    sectionName: ch ? sectionNames[ch.section] : null,
     sub: r.sub,
     text: r.text || r.summary || "",
     score: r.fusedScore || r.vectorScore || r.textScore || 0,

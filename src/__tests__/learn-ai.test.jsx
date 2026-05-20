@@ -97,21 +97,23 @@ async function renderLearnAI({ mainBounds = { left: 200, right: 824 } } = {}) {
 }
 
 describe("LearnAI search bar", () => {
-  it("renders a search button with aria-label 'Search'", async () => {
+  it("renders a search button with aria-label matching visible text", async () => {
     await renderLearnAI();
-    expect(screen.getByRole("button", { name: "Search" })).toBeTruthy();
+    // aria-label must include the visible placeholder text to pass
+    // label-content-name-mismatch (accessibility audit).
+    expect(screen.getByRole("button", { name: "Search chapters, concepts, formulas" })).toBeTruthy();
   });
 
   it("search bar is inside header", async () => {
     await renderLearnAI();
-    const btn = screen.getByRole("button", { name: "Search" });
+    const btn = screen.getByRole("button", { name: "Search chapters, concepts, formulas" });
     expect(btn.closest("header")).toBeTruthy();
   });
 
   it("search bar contains placeholder text and search icon", async () => {
     await renderLearnAI();
     expect(screen.getByText("Search chapters, concepts, formulas...")).toBeTruthy();
-    const btn = screen.getByRole("button", { name: "Search" });
+    const btn = screen.getByRole("button", { name: "Search chapters, concepts, formulas" });
     const svg = btn.querySelector("svg");
     expect(svg).toBeTruthy();
     expect(svg.querySelector("circle")).toBeTruthy();
@@ -119,13 +121,13 @@ describe("LearnAI search bar", () => {
 
   it("shows Ctrl+K shortcut on non-Mac desktop", async () => {
     await renderLearnAI();
-    const btn = screen.getByRole("button", { name: "Search" });
+    const btn = screen.getByRole("button", { name: "Search chapters, concepts, formulas" });
     expect(btn.textContent).toContain("Ctrl+K");
   });
 
   it("has dim purple border when semantic is off", async () => {
     await renderLearnAI();
-    const btn = screen.getByRole("button", { name: "Search" });
+    const btn = screen.getByRole("button", { name: "Search chapters, concepts, formulas" });
     expect(btn.style.background).toContain("rgba(167, 139, 250, 0.25)");
   });
 
@@ -138,7 +140,7 @@ describe("LearnAI search bar", () => {
       await new Promise((r) => setTimeout(r, 600));
     });
 
-    const btn = screen.getByRole("button", { name: "Search" });
+    const btn = screen.getByRole("button", { name: "Search chapters, concepts, formulas" });
     expect(btn.style.background).toBe("rgba(167, 139, 250, 0.25)");
     expect(btn.style.background).not.toContain("linear-gradient");
   });
@@ -148,11 +150,14 @@ describe("LearnAI search bar", () => {
     searchMod.getSearchStatus.mockReturnValue({ mode: "semantic", progress: 100 });
 
     await renderLearnAI();
+    // Prewarm is interaction-gated, so dispatch a scroll to start the poll
+    // that flips semanticMode to "semantic" via the mocked getSearchStatus.
     await act(async () => {
+      window.dispatchEvent(new Event("scroll"));
       await new Promise((r) => setTimeout(r, 600));
     });
 
-    const btn = screen.getByRole("button", { name: "Search" });
+    const btn = screen.getByRole("button", { name: "Search chapters, concepts, formulas" });
     const rainbow = btn.querySelector("[data-search-rainbow]");
     expect(rainbow).toBeTruthy();
     expect(rainbow.style.animation).toContain("searchRainbowFade");
@@ -160,7 +165,7 @@ describe("LearnAI search bar", () => {
 
   it("inner div has dark background and rounded corners", async () => {
     await renderLearnAI();
-    const btn = screen.getByRole("button", { name: "Search" });
+    const btn = screen.getByRole("button", { name: "Search chapters, concepts, formulas" });
     const inner = btn.querySelector("[data-search-inner]");
     expect(inner).toBeTruthy();
     expect(inner.style.borderRadius).toBe("7.5px");
@@ -168,19 +173,19 @@ describe("LearnAI search bar", () => {
 
   it("outer div has rounded corners", async () => {
     await renderLearnAI();
-    const btn = screen.getByRole("button", { name: "Search" });
+    const btn = screen.getByRole("button", { name: "Search chapters, concepts, formulas" });
     expect(btn.style.borderRadius).toBe("9px");
   });
 
   it("wrapper has marginTop spacing", async () => {
     await renderLearnAI();
-    const btn = screen.getByRole("button", { name: "Search" });
+    const btn = screen.getByRole("button", { name: "Search chapters, concepts, formulas" });
     expect(btn.parentElement.style.marginTop).toBe("12px");
   });
 
   it("opens search overlay on click", async () => {
     await renderLearnAI();
-    const btn = screen.getByRole("button", { name: "Search" });
+    const btn = screen.getByRole("button", { name: "Search chapters, concepts, formulas" });
     await act(async () => {
       fireEvent.click(btn);
       await new Promise((r) => setTimeout(r, 50));
@@ -195,6 +200,62 @@ describe("LearnAI search bar", () => {
       await new Promise((r) => setTimeout(r, 50));
     });
     expect(screen.getByTestId("search-overlay")).toBeTruthy();
+  });
+});
+
+describe("LearnAI initial-page contrast (Lighthouse a11y)", () => {
+  // Six spots on the TOC page failed WCAG AA color-contrast (3.09 ratio):
+  // tagline, search placeholder, "28 Sections..." subtitle, footer text +
+  // LinkedIn + GitHub. We override each to a brighter color (>= 0.50 alpha
+  // white on the dark bg) so the ratio clears 4.5:1.
+  const DIM_OLD = "rgba(255, 255, 255, 0.35)";
+  const PLACEHOLDER_OLD = "rgba(255, 255, 255, 0.3)";
+
+  it("header tagline does not use failing dim color", async () => {
+    await renderLearnAI();
+    const tagline = screen.getByText("The complete visual guide to understanding AI - from scratch");
+    expect(tagline.style.color).not.toBe(DIM_OLD);
+  });
+
+  it("TOC '28 Sections' subtitle does not use failing dim color", async () => {
+    await renderLearnAI();
+    const subtitle = screen.getByText(/Sections.*Chapters/);
+    expect(subtitle.style.color).not.toBe(DIM_OLD);
+  });
+
+  it("search button placeholder does not use failing dim color", async () => {
+    await renderLearnAI();
+    const placeholder = screen.getByText("Search chapters, concepts, formulas...");
+    expect(placeholder.style.color).not.toBe(PLACEHOLDER_OLD);
+  });
+
+  it("footer container does not use failing dim color", async () => {
+    await renderLearnAI();
+    const footer = document.querySelector("footer");
+    expect(footer.style.color).not.toBe(DIM_OLD);
+  });
+
+  it("footer LinkedIn link does not use failing dim color", async () => {
+    await renderLearnAI();
+    const link = document.querySelector('a[href*="linkedin.com/in/rajulbabel"]');
+    expect(link.style.color).not.toBe(DIM_OLD);
+  });
+
+  it("footer GitHub link does not use failing dim color", async () => {
+    await renderLearnAI();
+    const link = document.querySelector('a[href*="github.com/rajulbabel/learn-ai"]');
+    expect(link.style.color).not.toBe(DIM_OLD);
+  });
+
+  it("search shortcut label does not use failing low-alpha purple", async () => {
+    // Before fix: rgba(167,139,250,0.8) on #0d0b14 = 2.97:1 (fails 4.5:1).
+    // After fix: full-opacity #a78bfa = 7.09:1.
+    await renderLearnAI();
+    const btn = screen.getByRole("button", { name: "Search chapters, concepts, formulas" });
+    const inner = btn.querySelector("[data-search-inner]");
+    const shortcutSpan = inner.querySelectorAll("span")[1];
+    expect(shortcutSpan.textContent).toMatch(/⌘K|Ctrl\+K/);
+    expect(shortcutSpan.style.color).not.toBe("rgba(167, 139, 250, 0.8)");
   });
 });
 

@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { render, cleanup } from "@testing-library/react";
 
-describe("search prefetch is deferred", () => {
+describe("search prefetch is interaction-gated", () => {
   let prefetchSpy;
 
   beforeEach(() => {
@@ -31,15 +31,89 @@ describe("search prefetch is deferred", () => {
     expect(prefetchSpy).not.toHaveBeenCalled();
   });
 
-  it("calls prefetchSearch after window load + idle", async () => {
+  it("does NOT call prefetchSearch on window load alone (no interaction yet)", async () => {
+    // Lighthouse fires load but never interacts. Prewarm must stay dormant
+    // so the audit trace doesn't see the heavy network/CPU cost.
     Object.defineProperty(document, "readyState", { configurable: true, value: "loading" });
     globalThis.requestIdleCallback = (cb) => setTimeout(cb, 0);
     const App = (await import("../learn-ai.jsx")).default;
     render(<App />);
-    // Allow chapter useEffect to run and register the load listener.
     await new Promise((r) => setTimeout(r, 50));
     window.dispatchEvent(new Event("load"));
-    // Poll up to 1s for idle + dynamic search.js import + chained promises.
+    await new Promise((r) => setTimeout(r, 200));
+    expect(prefetchSpy).not.toHaveBeenCalled();
+  });
+
+  it("calls prefetchSearch after first user interaction (pointerdown)", async () => {
+    Object.defineProperty(document, "readyState", { configurable: true, value: "loading" });
+    globalThis.requestIdleCallback = (cb) => setTimeout(cb, 0);
+    const App = (await import("../learn-ai.jsx")).default;
+    render(<App />);
+    await new Promise((r) => setTimeout(r, 50));
+    window.dispatchEvent(new Event("load"));
+    await new Promise((r) => setTimeout(r, 50));
+    window.dispatchEvent(new Event("pointerdown"));
+    for (let i = 0; i < 50 && prefetchSpy.mock.calls.length === 0; i++) {
+      await new Promise((r) => setTimeout(r, 20));
+    }
+    expect(prefetchSpy).toHaveBeenCalled();
+  });
+
+  it("calls prefetchSearch after first scroll", async () => {
+    Object.defineProperty(document, "readyState", { configurable: true, value: "loading" });
+    globalThis.requestIdleCallback = (cb) => setTimeout(cb, 0);
+    const App = (await import("../learn-ai.jsx")).default;
+    render(<App />);
+    await new Promise((r) => setTimeout(r, 50));
+    window.dispatchEvent(new Event("load"));
+    await new Promise((r) => setTimeout(r, 50));
+    window.dispatchEvent(new Event("scroll"));
+    for (let i = 0; i < 50 && prefetchSpy.mock.calls.length === 0; i++) {
+      await new Promise((r) => setTimeout(r, 20));
+    }
+    expect(prefetchSpy).toHaveBeenCalled();
+  });
+
+  it("calls prefetchSearch after mousemove (hover-only path on TOC)", async () => {
+    // TOC has nothing to scroll; user who only hovers must still arm prewarm.
+    Object.defineProperty(document, "readyState", { configurable: true, value: "loading" });
+    globalThis.requestIdleCallback = (cb) => setTimeout(cb, 0);
+    const App = (await import("../learn-ai.jsx")).default;
+    render(<App />);
+    await new Promise((r) => setTimeout(r, 50));
+    window.dispatchEvent(new Event("load"));
+    await new Promise((r) => setTimeout(r, 50));
+    window.dispatchEvent(new MouseEvent("mousemove", { clientX: 10, clientY: 10 }));
+    for (let i = 0; i < 50 && prefetchSpy.mock.calls.length === 0; i++) {
+      await new Promise((r) => setTimeout(r, 20));
+    }
+    expect(prefetchSpy).toHaveBeenCalled();
+  });
+
+  it("calls prefetchSearch after pointermove", async () => {
+    Object.defineProperty(document, "readyState", { configurable: true, value: "loading" });
+    globalThis.requestIdleCallback = (cb) => setTimeout(cb, 0);
+    const App = (await import("../learn-ai.jsx")).default;
+    render(<App />);
+    await new Promise((r) => setTimeout(r, 50));
+    window.dispatchEvent(new Event("load"));
+    await new Promise((r) => setTimeout(r, 50));
+    window.dispatchEvent(new Event("pointermove"));
+    for (let i = 0; i < 50 && prefetchSpy.mock.calls.length === 0; i++) {
+      await new Promise((r) => setTimeout(r, 20));
+    }
+    expect(prefetchSpy).toHaveBeenCalled();
+  });
+
+  it("calls prefetchSearch after keydown", async () => {
+    Object.defineProperty(document, "readyState", { configurable: true, value: "loading" });
+    globalThis.requestIdleCallback = (cb) => setTimeout(cb, 0);
+    const App = (await import("../learn-ai.jsx")).default;
+    render(<App />);
+    await new Promise((r) => setTimeout(r, 50));
+    window.dispatchEvent(new Event("load"));
+    await new Promise((r) => setTimeout(r, 50));
+    window.dispatchEvent(new KeyboardEvent("keydown", { key: "a" }));
     for (let i = 0; i < 50 && prefetchSpy.mock.calls.length === 0; i++) {
       await new Promise((r) => setTimeout(r, 20));
     }

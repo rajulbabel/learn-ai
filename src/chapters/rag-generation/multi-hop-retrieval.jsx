@@ -131,7 +131,10 @@ export default function MultiHopRetrieval(ctx) {
   const LOOP_VB_W = 720;
   const LOOP_VB_H = 460;
   const BOX_W = 220;
-  const BOX_H = 48;
+  const BOX_H = 64;
+  const SIDE_BOX_W = 140;
+  const SIDE_BOX_H = 48;
+  const REFUSE_W = 300;
   const CENTER_X = LOOP_VB_W / 2;
 
   return (
@@ -311,15 +314,11 @@ export default function MultiHopRetrieval(ctx) {
                 stroke={C.cyan}
                 strokeOpacity="0.7"
               />
-              <text
-                x={CENTER_X}
-                y={100 + BOX_H / 2 + 5}
-                fill="#80deea"
-                fontSize="14"
-                fontWeight="700"
-                textAnchor="middle"
-              >
-                Retrieve Top-K For Current Query
+              <text x={CENTER_X} y={126} fill="#80deea" fontSize="14" fontWeight="700" textAnchor="middle">
+                Retrieve Top-K
+              </text>
+              <text x={CENTER_X} y={150} fill="#80deea" fontSize="14" fontWeight="700" textAnchor="middle">
+                For Current Query
               </text>
 
               {/* Diamond: Sufficient? */}
@@ -327,86 +326,89 @@ export default function MultiHopRetrieval(ctx) {
                 x1={CENTER_X}
                 y1={100 + BOX_H}
                 x2={CENTER_X}
-                y2={190}
+                y2={184}
                 stroke="#b8a9ff"
                 strokeOpacity="0.5"
                 strokeWidth="1.5"
                 markerEnd="url(#mh-arrow)"
               />
               <polygon
-                points={`${CENTER_X},190 ${CENTER_X + 100},250 ${CENTER_X},310 ${CENTER_X - 100},250`}
+                points={`${CENTER_X},184 ${CENTER_X + 100},244 ${CENTER_X},304 ${CENTER_X - 100},244`}
                 fill={C.yellow}
                 fillOpacity="0.2"
                 stroke={C.yellow}
                 strokeOpacity="0.7"
               />
-              <text x={CENTER_X} y={245} fill="#ffe082" fontSize="13" fontWeight="700" textAnchor="middle">
+              <text x={CENTER_X} y={240} fill="#ffe082" fontSize="13" fontWeight="700" textAnchor="middle">
                 Does Context
               </text>
-              <text x={CENTER_X} y={262} fill="#ffe082" fontSize="13" fontWeight="700" textAnchor="middle">
+              <text x={CENTER_X} y={258} fill="#ffe082" fontSize="13" fontWeight="700" textAnchor="middle">
                 Answer The Question?
               </text>
 
               {/* YES branch -> Generate answer */}
               <line
                 x1={CENTER_X + 100}
-                y1={250}
+                y1={244}
                 x2={CENTER_X + 220}
-                y2={250}
+                y2={244}
                 stroke={C.green}
                 strokeOpacity="0.7"
                 strokeWidth="1.5"
                 markerEnd="url(#mh-arrow-green)"
               />
-              <text x={CENTER_X + 105} y={240} fill="#a5d6a7" fontSize="12" fontWeight="700" textAnchor="start">
+              <text x={CENTER_X + 160} y={234} fill="#a5d6a7" fontSize="12" fontWeight="700" textAnchor="middle">
                 YES
               </text>
               <rect
                 x={CENTER_X + 220}
-                y={250 - BOX_H / 2}
-                width={140}
-                height={BOX_H}
+                y={244 - SIDE_BOX_H / 2}
+                width={SIDE_BOX_W}
+                height={SIDE_BOX_H}
                 rx="8"
                 fill={C.green}
                 fillOpacity="0.2"
                 stroke={C.green}
                 strokeOpacity="0.7"
               />
-              <text x={CENTER_X + 290} y={250 + 5} fill="#a5d6a7" fontSize="13" fontWeight="700" textAnchor="middle">
+              <text x={CENTER_X + 290} y={244 + 5} fill="#a5d6a7" fontSize="13" fontWeight="700" textAnchor="middle">
                 Generate Answer
               </text>
 
               {/* NO + hops < max -> Reformulate -> loop back to Retrieve */}
               <line
                 x1={CENTER_X - 100}
-                y1={250}
+                y1={244}
                 x2={CENTER_X - 220}
-                y2={250}
+                y2={244}
                 stroke={C.orange}
                 strokeOpacity="0.7"
                 strokeWidth="1.5"
                 markerEnd="url(#mh-arrow-orange)"
               />
-              <text x={CENTER_X - 105} y={240} fill="#ffcc80" fontSize="12" fontWeight="700" textAnchor="end">
-                NO + Hops &lt; max_hops
+              <text x={CENTER_X - 160} y={222} fill="#ffcc80" fontSize="12" fontWeight="700" textAnchor="middle">
+                NO
+              </text>
+              <text x={CENTER_X - 160} y={236} fill="#ffcc80" fontSize="11" fontWeight="700" textAnchor="middle">
+                Hops &lt; max_hops
               </text>
               <rect
                 x={CENTER_X - 360}
-                y={250 - BOX_H / 2}
-                width={140}
-                height={BOX_H}
+                y={244 - SIDE_BOX_H / 2}
+                width={SIDE_BOX_W}
+                height={SIDE_BOX_H}
                 rx="8"
                 fill={C.orange}
                 fillOpacity="0.2"
                 stroke={C.orange}
                 strokeOpacity="0.7"
               />
-              <text x={CENTER_X - 290} y={250 + 5} fill="#ffcc80" fontSize="13" fontWeight="700" textAnchor="middle">
+              <text x={CENTER_X - 290} y={244 + 5} fill="#ffcc80" fontSize="13" fontWeight="700" textAnchor="middle">
                 Reformulate Query
               </text>
               {/* Loop back arrow */}
               <path
-                d={`M ${CENTER_X - 290} ${250 - BOX_H / 2} L ${CENTER_X - 290} 124 L ${CENTER_X - BOX_W / 2} 124`}
+                d={`M ${CENTER_X - 290} ${244 - SIDE_BOX_H / 2} L ${CENTER_X - 290} 132 L ${CENTER_X - BOX_W / 2} 132`}
                 stroke={C.orange}
                 strokeOpacity="0.7"
                 strokeWidth="1.5"
@@ -417,21 +419,24 @@ export default function MultiHopRetrieval(ctx) {
               {/* NO + hops >= max -> Refuse */}
               <line
                 x1={CENTER_X}
-                y1={310}
+                y1={304}
                 x2={CENTER_X}
-                y2={370}
+                y2={378}
                 stroke={C.red}
                 strokeOpacity="0.7"
                 strokeWidth="1.5"
                 markerEnd="url(#mh-arrow-red)"
               />
-              <text x={CENTER_X + 8} y={345} fill="#ef9a9a" fontSize="12" fontWeight="700" textAnchor="start">
-                NO + Hops &gt;= max_hops
+              <text x={CENTER_X + 12} y={328} fill="#ef9a9a" fontSize="12" fontWeight="700" textAnchor="start">
+                NO
+              </text>
+              <text x={CENTER_X + 12} y={344} fill="#ef9a9a" fontSize="11" fontWeight="700" textAnchor="start">
+                Hops &gt;= max_hops
               </text>
               <rect
-                x={CENTER_X - BOX_W / 2}
-                y={370}
-                width={BOX_W}
+                x={CENTER_X - REFUSE_W / 2}
+                y={378}
+                width={REFUSE_W}
                 height={BOX_H}
                 rx="8"
                 fill={C.red}
@@ -439,15 +444,11 @@ export default function MultiHopRetrieval(ctx) {
                 stroke={C.red}
                 strokeOpacity="0.7"
               />
-              <text
-                x={CENTER_X}
-                y={370 + BOX_H / 2 + 5}
-                fill="#ef9a9a"
-                fontSize="14"
-                fontWeight="700"
-                textAnchor="middle"
-              >
-                Refuse: "I Don't Have Enough Information"
+              <text x={CENTER_X} y={404} fill="#ef9a9a" fontSize="14" fontWeight="700" textAnchor="middle">
+                Refuse:
+              </text>
+              <text x={CENTER_X} y={428} fill="#ef9a9a" fontSize="14" fontWeight="700" textAnchor="middle">
+                "I Don't Have Enough Information"
               </text>
 
               {/* Arrow marker defs */}
@@ -455,7 +456,7 @@ export default function MultiHopRetrieval(ctx) {
                 <marker
                   id="mh-arrow"
                   viewBox="0 0 10 10"
-                  refX="8"
+                  refX="10"
                   refY="5"
                   markerWidth="6"
                   markerHeight="6"
@@ -466,7 +467,7 @@ export default function MultiHopRetrieval(ctx) {
                 <marker
                   id="mh-arrow-green"
                   viewBox="0 0 10 10"
-                  refX="8"
+                  refX="10"
                   refY="5"
                   markerWidth="6"
                   markerHeight="6"
@@ -477,7 +478,7 @@ export default function MultiHopRetrieval(ctx) {
                 <marker
                   id="mh-arrow-orange"
                   viewBox="0 0 10 10"
-                  refX="8"
+                  refX="10"
                   refY="5"
                   markerWidth="6"
                   markerHeight="6"
@@ -488,7 +489,7 @@ export default function MultiHopRetrieval(ctx) {
                 <marker
                   id="mh-arrow-red"
                   viewBox="0 0 10 10"
-                  refX="8"
+                  refX="10"
                   refY="5"
                   markerWidth="6"
                   markerHeight="6"

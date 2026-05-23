@@ -43,6 +43,19 @@ function chunkId(chapterSlug, sub, kind, text) {
   return sha256_16(`${chapterSlug}|${sub}|${kind}|${sha256_16(text)}`);
 }
 
+// Strip hardcoded chapter IDs (e.g. "Chapter 5.5") from cached LLM-authored
+// prose. Chapter IDs change when content is reordered; the cache key is the
+// chapter source-file hash, so reorders don't invalidate cached text and stale
+// IDs would otherwise surface in search results. Applied at output time so the
+// raw cache stays intact for debugging while chunks.json is always clean.
+export function scrubChapterIds(s) {
+  if (typeof s !== "string") return s;
+  return s
+    .replace(/\b[Cc]hapter\s+\d+\.\d+\b/g, "this chapter")
+    .replace(/^this chapter/, "This chapter")
+    .replace(/([.!?]\s+)this chapter/g, "$1This chapter");
+}
+
 export async function runBuild({ rootDir = process.cwd(), chapters, sectionNames, log = console.log }) {
   const cachePath = join(rootDir, CACHE_PATH);
   const chunksPath = join(rootDir, CHUNKS_PATH);
@@ -85,7 +98,7 @@ export async function runBuild({ rootDir = process.cwd(), chapters, sectionNames
       if (sa !== sb) return sa - sb;
       return a.i - b.i;
     });
-  const slugOrder = new Map(orderedTasks.map(({ t }, i) => [t.ch.slug, i]));
+  const slugOrder = new Map(orderedTasks.map(({ t }, i) => [t.ch.file, i]));
 
   // Serialize cache writes via a single-slot promise chain.
   let cacheWriteChain = Promise.resolve();
@@ -140,14 +153,15 @@ export async function runBuild({ rootDir = process.cwd(), chapters, sectionNames
     if (!entry) continue;
     const { ch, chunks } = entry;
     for (const c of chunks) {
+      const text = scrubChapterIds(c.text);
       all.push({
-        id: chunkId(ch.slug, c.sub, c.kind, c.text),
-        chapterSlug: ch.slug,
+        id: chunkId(ch.file, c.sub, c.kind, text),
+        chapterSlug: ch.file,
         chapterTitle: ch.title,
         sub: c.sub,
         kind: c.kind,
-        text: c.text,
-        summary: c.summary,
+        text,
+        summary: scrubChapterIds(c.summary),
         queries: c.queries,
         terms: c.terms,
       });

@@ -169,4 +169,11 @@ describe("llm-chunk (claude CLI subprocess)", () => {
     ).rejects.toThrow(/reported error/);
     expect(mockSpawn).toHaveBeenCalledTimes(5); // initial + 4 retries
   }, 15000);
+
+  it("SYSTEM_PROMPT forbids hardcoded chapter IDs in text and summary", async () => {
+    const mod = await import("../../scripts/llm-chunk.mjs");
+    expect(typeof mod.SYSTEM_PROMPT).toBe("string");
+    expect(mod.SYSTEM_PROMPT).toMatch(/never write chapter ids/i);
+    expect(mod.SYSTEM_PROMPT).toMatch(/Chapter \d+\.\d+|N\.M/);
+  });
 });

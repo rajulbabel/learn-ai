@@ -299,6 +299,44 @@ describe("build-search-index", () => {
     expect(secondId).toBe(firstId);
   });
 
+  it("strips hardcoded 'Chapter N.M' references from text and summary in chunks.json", async () => {
+    mockChunk.mockResolvedValue({
+      "8.5": [
+        {
+          sub: 0,
+          kind: "concept",
+          text: "Chapter 5.5 makes positional encoding concrete. As shown in chapter 5.5, position 0 produces [0,1,0,1].",
+          summary: "Chapter 5.5 explains positional encoding.",
+          queries: ["q1", "q2", "q3", "q4", "q5", "q6", "q7", "q8", "q9", "q10"],
+          terms: ["positional encoding"],
+        },
+      ],
+    });
+
+    await runBuild({
+      rootDir: workDir,
+      chapters: [
+        {
+          id: "8.5",
+          title: "Positional Encoding",
+          section: 8,
+          file: "neural-foundations/what-is-nn",
+          slug: "neural-foundations/what-is-nn",
+        },
+      ],
+      sectionNames: { 8: "Transformer Input Pipeline" },
+    });
+
+    const out = JSON.parse(readFileSync(join(workDir, "src", "data", "chunks.json"), "utf-8"));
+    expect(out).toHaveLength(1);
+    expect(out[0].text).not.toMatch(/[Cc]hapter \d+\.\d+/);
+    expect(out[0].summary).not.toMatch(/[Cc]hapter \d+\.\d+/);
+    // Sentence-start references become "This chapter", mid-sentence become "this chapter".
+    expect(out[0].text).toMatch(/^This chapter makes positional encoding concrete\./);
+    expect(out[0].text).toMatch(/As shown in this chapter,/);
+    expect(out[0].summary).toBe("This chapter explains positional encoding.");
+  });
+
   it("chunks output is ordered by (section, position_in_section, sub)", async () => {
     mockChunk
       .mockResolvedValueOnce({

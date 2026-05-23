@@ -337,6 +337,90 @@ describe("build-search-index", () => {
     expect(out[0].summary).toBe("This chapter explains positional encoding.");
   });
 
+  it("strips hardcoded 'Chapter N.M' references from queries array", async () => {
+    mockChunk.mockResolvedValue({
+      "8.5": [
+        {
+          sub: 0,
+          kind: "concept",
+          text: "Positional encoding intro.",
+          summary: "Intro to positional encoding.",
+          queries: [
+            "what does chapter 5.5 cover",
+            "Chapter 5.5 summary",
+            "positional encoding chapter 5.6",
+            "q4",
+            "q5",
+            "q6",
+            "q7",
+            "q8",
+            "q9",
+            "q10",
+          ],
+          terms: ["positional encoding"],
+        },
+      ],
+    });
+
+    await runBuild({
+      rootDir: workDir,
+      chapters: [
+        {
+          id: "8.5",
+          title: "Positional Encoding",
+          section: 8,
+          file: "neural-foundations/what-is-nn",
+          slug: "neural-foundations/what-is-nn",
+        },
+      ],
+      sectionNames: { 8: "Transformer Input Pipeline" },
+    });
+
+    const out = JSON.parse(readFileSync(join(workDir, "src", "data", "chunks.json"), "utf-8"));
+    for (const q of out[0].queries) {
+      expect(q).not.toMatch(/[Cc]hapter \d+\.\d+/);
+    }
+    expect(out[0].queries).toContain("what does this chapter cover");
+    expect(out[0].queries).toContain("This chapter summary");
+    expect(out[0].queries).toContain("positional encoding this chapter");
+  });
+
+  it("strips hardcoded 'Chapter N.M' references from terms array", async () => {
+    mockChunk.mockResolvedValue({
+      "8.5": [
+        {
+          sub: 0,
+          kind: "concept",
+          text: "T",
+          summary: "S",
+          queries: ["q1", "q2", "q3", "q4", "q5", "q6", "q7", "q8", "q9", "q10"],
+          terms: ["chapter 6.6", "asker and answerer", "Chapter 28.1"],
+        },
+      ],
+    });
+
+    await runBuild({
+      rootDir: workDir,
+      chapters: [
+        {
+          id: "8.5",
+          title: "T",
+          section: 8,
+          file: "neural-foundations/what-is-nn",
+          slug: "neural-foundations/what-is-nn",
+        },
+      ],
+      sectionNames: { 8: "S" },
+    });
+
+    const out = JSON.parse(readFileSync(join(workDir, "src", "data", "chunks.json"), "utf-8"));
+    for (const t of out[0].terms) {
+      expect(t).not.toMatch(/[Cc]hapter \d+\.\d+/);
+    }
+    expect(out[0].terms).toContain("This chapter");
+    expect(out[0].terms).toContain("asker and answerer");
+  });
+
   it("chunks output is ordered by (section, position_in_section, sub)", async () => {
     mockChunk
       .mockResolvedValueOnce({

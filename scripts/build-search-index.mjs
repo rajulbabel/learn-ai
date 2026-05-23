@@ -162,8 +162,8 @@ export async function runBuild({ rootDir = process.cwd(), chapters, sectionNames
         kind: c.kind,
         text,
         summary: scrubChapterIds(c.summary),
-        queries: c.queries,
-        terms: c.terms,
+        queries: Array.isArray(c.queries) ? c.queries.map(scrubChapterIds) : c.queries,
+        terms: Array.isArray(c.terms) ? c.terms.map(scrubChapterIds) : c.terms,
       });
     }
   }

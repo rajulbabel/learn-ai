@@ -541,7 +541,7 @@
     "queries": [
       "Summary of what a layer is",
       "Neural network layer overview",
-      "What does chapter 1.3 teach?",
+      "What does this chapter teach?",
       "Layer in one paragraph",
       "Quick recap of neural network layers",
       "Key ideas about layers",
@@ -1061,7 +1061,7 @@
     "queries": [
       "summary of why linear isn't enough",
       "why neural networks need nonlinearity",
-      "main idea of chapter 1.5",
+      "main idea of this chapter",
       "why activation functions are necessary",
       "linear limitation neural network",
       "stacking linear layers collapses",
@@ -1778,7 +1778,7 @@
     "text": "This chapter introduces the loss function. Loss is a single number measuring how wrong a prediction was, computed as (actual - predicted)². For our example with predicted 807 and actual 900, loss = 93² = 8,649. Loss depends on weights through the prediction, so training searches for weights that minimize loss. Squaring is used because it punishes big errors more, gives smooth derivatives needed for backpropagation, and creates a parabolic shape with one clear minimum.",
     "summary": "Loss is the squared error between actual and predicted values - a single number that drives weight updates during training.",
     "queries": [
-      "What is chapter 1.8 about?",
+      "What is this chapter about?",
       "Summary of loss function chapter",
       "What does the loss chapter cover?",
       "Loss function key ideas",
@@ -1954,7 +1954,7 @@
     "summary": "Learning is iteratively adjusting random weights via the forward-loss-backward-update loop until the model converges.",
     "queries": [
       "what does learning mean for a neural network",
-      "summary of chapter 1.9 learning",
+      "summary of this chapter learning",
       "how do neural networks learn from data",
       "high-level overview of training",
       "why is training called learning",
@@ -2130,7 +2130,7 @@
       "neuron flow input weight bias output",
       "diagram for derivative computation",
       "input 1500 weight 0.5 bias 50 output 800 diagram",
-      "neuron schematic for chapter 1.10",
+      "neuron schematic for this chapter",
       "derivative example neuron picture",
       "visual of one neuron computation",
       "weight 0.5 bias 50 neuron diagram",
@@ -2189,7 +2189,7 @@
     "text": "This chapter builds intuition for derivatives in neural networks. A derivative answers: how much does loss change when we nudge a weight? Demonstrated with a concrete example (weight 0.5 → 0.6, loss 10,000 → 2,500), giving ratio ∂Loss/∂weight = -7,500 / 0.1 = -75,000. The sign tells which direction to update (negative = increase weight), the magnitude tells sensitivity. 'Partial' means changing one weight while holding others constant. The derivative is the compass that points toward minimum loss.",
     "summary": "Chapter-level overview: derivatives measure loss sensitivity to weight nudges and serve as the compass for gradient descent.",
     "queries": [
-      "chapter 1.10 derivatives summary",
+      "This chapter derivatives summary",
       "derivative core intuition overview",
       "what is a derivative summary neural network",
       "loss sensitivity to weight changes",
@@ -2431,7 +2431,7 @@
       "key takeaways from backward pass chapter",
       "how does chain rule produce gradients",
       "backprop summary for weight and bias",
-      "chapter 1.11 summary",
+      "This chapter summary",
       "gradient computation overview",
       "local derivatives multiplied along chain",
       "sign and magnitude of gradient meaning",
@@ -2639,7 +2639,7 @@
     "text": "This chapter Gradient Descent - Fixing the Weights. Covers the update rule new_weight = old_weight - learning_rate × gradient, why we move opposite the gradient, learning rate scaling with a -300,000 gradient becoming a 0.03 step, verification that loss drops from 10,000 to 3,025 after one step, the hilly landscape analogy with learning rate trade-offs, and the full four-step training loop (forward, loss, backward, update).",
     "summary": "Chapter-level summary of gradient descent: update rule, learning rate scaling, loss verification, landscape analogy, and full training loop.",
     "queries": [
-      "What does chapter 1.12 cover?",
+      "What does this chapter cover?",
       "Summary of gradient descent chapter",
       "How are weights fixed by gradient descent?",
       "Gradient descent overview",
@@ -3657,7 +3657,7 @@
     "text": "A vector is a list of numbers. Neural networks pass vectors between layers. Words become vectors of numbers (e.g. 512 dimensions), and similar meanings yield similar vectors after training. Vectors are how AI represents data, hidden states, and meaning.",
     "summary": "Chapter summary: vectors are the universal data format inside neural networks and embeddings.",
     "queries": [
-      "chapter 1.16 summary",
+      "This chapter summary",
       "vectors in neural networks overview",
       "why vectors matter in AI",
       "key idea of vectors",
@@ -4400,7 +4400,7 @@
       "how activations break linearity",
       "purpose of activation function in deep learning",
       "menu of activation functions",
-      "chapter 1.20 summary",
+      "This chapter summary",
       "neural network activation overview",
       "what activations are used in transformers"
     ],
@@ -6340,7 +6340,7 @@
       "tokenization in one paragraph",
       "BPE versus other tokenizers",
       "tokenization to embedding pipeline summary",
-      "what does chapter 2.1 cover",
+      "what does this chapter cover",
       "tokenization recap",
       "how do LLMs convert words to numbers overview",
       "tokenization strategies summary",
@@ -6814,7 +6814,7 @@
     "summary": "Chapter recap of the cross-entropy loss formula, its shape, why it beats MSE, and how batch averaging plugs into training.",
     "queries": [
       "summary of cross-entropy loss chapter",
-      "what does chapter 2.3 cover",
+      "what does this chapter cover",
       "key takeaways about cross-entropy",
       "recap of LLM loss function",
       "overall idea of -log P",
@@ -7083,7 +7083,7 @@
     "text": "This chapter walks through a full neural network forward pass on a 20-word toy vocabulary. Steps: (1) tiny vocab grid, (2) input 'The cat sat on' predicts word 5, (3) network diagram input→2 hidden→20 outputs, (4) one output circle does dot product of incoming values and its own weights to produce a logit (e.g. 'mat'=4.40), (5) all 20 raw logits shown, (6) softmax exponentiates and normalizes them into probabilities, (7) top prediction is 'the' at 46% with cross-entropy loss 0.78, (8) the entire process reduces to multiply-and-add with learned weights.",
     "summary": "Chapter-level overview of how a neural network goes from input tokens to softmax probabilities for next-word prediction.",
     "queries": [
-      "chapter 2.4 summary",
+      "This chapter summary",
       "neural network in action overview",
       "how does a neural network predict the next word",
       "forward pass walkthrough",
@@ -10437,7 +10437,7 @@
     "summary": "Chapter overview of CNNs - how convolution works, the layer hierarchy and pooling, and why the local-window flaw blocks language tasks.",
     "queries": [
       "Summary of CNN chapter",
-      "What does chapter 4.1 cover?",
+      "What does this chapter cover?",
       "Overview of convolutional neural networks",
       "CNN strengths and weaknesses summary",
       "Why move from CNN to attention?",
@@ -10892,7 +10892,7 @@
       "RNN limitations overview",
       "LSTM partial fix and remaining issues",
       "what motivated attention mechanism",
-      "chapter 4.3 key takeaways",
+      "This chapter key takeaways",
       "RNN versus transformer motivation",
       "why RNN dies for long sequences",
       "GPU parallelism RNN problem",
@@ -11672,7 +11672,7 @@
     "queries": [
       "overview of positional encoding problem chapter",
       "summary of why transformers need positional encoding",
-      "what does chapter 5.3 cover",
+      "what does this chapter cover",
       "positional encoding motivation summary",
       "why do we need positional encoding at all",
       "transformer order problem and solution direction",
@@ -11952,7 +11952,7 @@
     "text": "This chapter makes the positional encoding formula concrete by computing actual values for 'I love cats' across 8 dimensions. Each position generates a unique vector built from alternating sin and cos values at different frequencies. Position 0 produces the clean baseline [0,1,0,1,...]. Early dimensions (d0, d1) change rapidly between positions while late dimensions (d6, d7) barely move, producing a distinct fingerprint for each position.",
     "summary": "Concrete sin/cos computation for positions 0, 1, 2 reveals each position's unique fast-and-slow fingerprint.",
     "queries": [
-      "chapter 5.5 summary positional encoding compute",
+      "This chapter summary positional encoding compute",
       "computing positions positional encoding overview",
       "what is chapter on computing pe values about",
       "positional encoding numerical demonstration summary",
@@ -12105,7 +12105,7 @@
       "ones tens hundreds positional encoding",
       "unique fingerprint per position transformer",
       "why high and low frequency dimensions",
-      "positional encoding fast slow chapter 5.6",
+      "positional encoding fast slow this chapter",
       "why multiple frequencies positional encoding",
       "positional encoding uniqueness explanation"
     ],
@@ -12302,7 +12302,7 @@
     "summary": "Chapter-level summary of how embedding plus positional encoding produces the final transformer input and why the design works.",
     "queries": [
       "summary of positional encoding final addition",
-      "what does chapter 5.7 cover",
+      "what does this chapter cover",
       "how is the transformer input vector built",
       "embedding plus positional encoding overview",
       "why does sinusoidal positional encoding work",
@@ -13853,7 +13853,7 @@
     "text": "This chapter - Every Word is Both Asker and Answerer. Core idea: in self-attention, every token produces a Query, a Key, and a Value simultaneously. Using the classroom analogy, Riya, Aman, and Priya each have their own question (Query), their own label of what they offer (Key), and their own actual information (Value). The same is true for words in a Transformer: in \"The cat sat because it was tired\", \"cat\" asks its own question while also advertising itself as a noun-subject and carrying its own semantic content. This dual role is what makes self-attention symmetric across tokens, and motivates the next chapter's question of why Key and Value must remain separate.",
     "summary": "Chapter-level summary: in self-attention every token simultaneously plays asker (Q), advertiser (K), and information-carrier (V).",
     "queries": [
-      "What is chapter 6.6 about?",
+      "What is this chapter about?",
       "Why is every word both an asker and answerer?",
       "Self-attention symmetry across tokens",
       "How do Riya Aman and Priya illustrate Q K V?",
@@ -13870,7 +13870,7 @@
       "Why self-attention treats every word equally"
     ],
     "terms": [
-      "chapter 6.6",
+      "This chapter",
       "asker and answerer",
       "self-attention symmetry",
       "simultaneous Q K V",
@@ -15748,7 +15748,7 @@
       "softmax formula image",
       "visual softmax equation",
       "Σ e^z_j denominator diagram",
-      "softmax math diagram chapter 7.4",
+      "softmax math diagram this chapter",
       "exponential normalization formula diagram"
     ],
     "terms": [
@@ -15772,7 +15772,7 @@
     "queries": [
       "why does attention use softmax",
       "purpose of softmax in transformer attention",
-      "summary chapter 7.4 why softmax",
+      "summary this chapter why softmax",
       "softmax in attention mechanism",
       "converting attention scores to probabilities",
       "why exponential before normalization",
@@ -16679,7 +16679,7 @@
     "summary": "Chapter overview: one attention head must compromise across many relations, so the model uses multiple heads with separate W_Q, W_K, W_V to specialize.",
     "queries": [
       "why does the transformer use multi-head attention",
-      "summary of chapter 7.9 multi-head motivation",
+      "summary of this chapter multi-head motivation",
       "what is the compromise problem in attention",
       "why split attention into many heads",
       "one head vs many heads tradeoff",
@@ -17423,7 +17423,7 @@
     "text": "This chapter explains the choice of 8 attention heads as a tradeoff between head count and per-head dimensions, computes the parameter count of ~1 million per attention layer across W_Q, W_K, W_V, and W_O, shows multi-head uses the same budget as single-head but reorganized, and scales this view from the original 6-layer Transformer through GPT-2 (48 layers) to GPT-3 (96 layers, 175B params).",
     "summary": "Chapter summary: why 8 heads, ~1M params per layer, multi-head reorganizes single-head budget, and scales to GPT-3.",
     "queries": [
-      "chapter 7.13 summary",
+      "This chapter summary",
       "why 8 heads parameter count big picture",
       "multi-head parameter count overview",
       "attention layer parameter budget",
@@ -25176,7 +25176,7 @@
     "text": "This chapter Brute-Force kNN: introduces the baseline exact nearest neighbor algorithm - compute similarity between query and every stored vector, sort, return top k. Walks through scaling: at N=10 the search is instant (sub-millisecond, 10 dot products); at N=1M with 768-dim embeddings it costs ~770M multiply-adds and ~500ms (slow but possible); at N=1B it requires reading 3.072 TB per query, which at 50 GB/sec DDR5 bandwidth takes ~60 seconds - infeasible. Key insight: memory bandwidth, not FLOPS, is the bottleneck (chef-and-warehouse analogy: chip can chop in 1 second but warehouse takes 10 minutes to deliver). The solution is Approximate Nearest Neighbor (ANN), measured by Recall@k = |approx_topk intersect true_topk| / k. Production ANN hits 0.99 recall at ~10ms (6000x faster than brute force at 1B scale). The chapter motivates why exact search is impossible at production scale and why all real vector databases use approximate methods.",
     "summary": "Brute-force kNN is exact but memory-bandwidth-bound; at billion scale it takes 60 seconds per query, motivating Approximate Nearest Neighbor (ANN) methods.",
     "queries": [
-      "chapter 11.2 brute force knn overview",
+      "This chapter brute force knn overview",
       "why exact vector search does not scale",
       "summary of brute force nearest neighbors",
       "memory bandwidth vs FLOPS in vector search",
@@ -32243,7 +32243,7 @@
     "text": "This chapter folds the seven previous compression chapters into a single decision framework. Four inputs (corpus size N, embedding dimension d, database capability, recall tolerance) drive a decision tree with an optional Matryoshka truncation pre-step. The main tree branches on N: < 1M skip, 1M-10M scalar quantization, 10M-100M binary quantization with rescore (gated on d >= 768 and DB support), >= 100M HNSW + PQ. Fallback to scalar Q if BQ gate fails; downgrade one step if recall must exceed 99%. Four worked scenarios (500K, 5M, 50M, 200M) walk the tree with concrete memory math. Five rules of thumb and four traps complete the design-review checklist.",
     "summary": "This chapter builds a four-input decision tree for picking among the five vector compression techniques and validates it with worked scenarios, rules, and traps.",
     "queries": [
-      "what does chapter 16.8 cover",
+      "what does this chapter cover",
       "summary of compression decision chapter",
       "how to pick a vector compression technique end to end",
       "vector compression decision framework",
@@ -32833,7 +32833,7 @@
     "text": "Updates and deletes in vector indexes: inserts are cheap (O(log N), append node with M=16 edges) but deletes are hard. Physical deletion breaks routing paths through hub nodes, silently dropping recall. The standard workaround is the tombstone - mark deleted, leave the node and edges, filter at query time. Tombstones bloat the graph; recall@10 drops from 0.97 at 0% deletes to 0.92 at 30% and 0.85 at 50%. Rebuild triggers fire at 20-30% tombstoned. Three rebuild strategies trade off: full (downtime), segment rotation (memory overhead, the industry default above 100M), incremental repair (continuous, partial recovery). Index family matters: IVF rebuilds one cell, HNSW needs full rebuild, HNSW+PQ also retrains codebooks, pgvector relies on VACUUM + REINDEX. Capacity planning must include delete pressure, not just insert rate.",
     "summary": "Chapter overview: HNSW inserts are O(log N), deletes break paths so use tombstones, rebuild at 20-30% bloat using full/segment/incremental strategies tuned to the index family.",
     "queries": [
-      "chapter 11.21 updates and deletes summary",
+      "This chapter updates and deletes summary",
       "vector index update delete overview",
       "HNSW delete strategies summary",
       "tombstone rebuild summary",
@@ -37068,7 +37068,7 @@
     "summary": "Chapter overview — bare LLMs have five hard limits, fine-tuning can't fix them, RAG grounds answers in retrieved docs and keeps refresh cheap.",
     "queries": [
       "Summary of why LLMs need retrieval",
-      "Chapter 12.1 overview",
+      "This chapter overview",
       "What is the case for RAG?",
       "Why retrieval matters for LLMs",
       "Bare LLM problems and the RAG solution",
@@ -38579,7 +38579,7 @@
       "why does sync matter for RAG accuracy",
       "delete propagation versioning summary",
       "watermark polling vs webhook event",
-      "chapter 20.3 summary refresh sync",
+      "This chapter summary refresh sync",
       "RAG data prep sync overview"
     ],
     "terms": [
@@ -39786,7 +39786,7 @@
     "text": "This chapter Late Chunking (Jina 2024): chunk-then-embed strips cross-chunk references like pronouns ('she' in chunk 3 doesn't know it means Sarah from chunk 1). Late chunking reverses the order - run one embedding pass over the whole doc so attention links every token to every other token, then mean-pool token hidden states at chunk boundaries. v_chunk_i = mean-pool(H[chunk_i.start : chunk_i.end]). Result: chunk 3's vector still encodes Sarah, flipping a 0.34 retrieval miss into a 0.81 Top-1 hit on the same query. Same compute as chunk-then-embed. Requires a model that exposes token-level hidden states (jina-embeddings-v2) and a doc that fits one embedding pass (8K-32K). Doesn't work with OpenAI/Cohere APIs that only return pooled vectors. Use on anaphora-heavy corpora (support, legal, narrative); otherwise stick with chunk-then-embed plus hybrid/rerank.",
     "summary": "Late chunking embeds the whole doc first then pools by chunk so cross-chunk references survive, boosting recall on anaphora-heavy docs without extra compute.",
     "queries": [
-      "chapter 12.10 summary",
+      "This chapter summary",
       "late chunking overview",
       "what is Jina late chunking 2024",
       "late chunking in one sentence",
@@ -41589,7 +41589,7 @@
       "alpha tuning summary",
       "hybrid retrieval decision rule",
       "complete overview hybrid RAG",
-      "what does chapter 21.3 cover",
+      "what does this chapter cover",
       "RAG retrieval combining BM25 and embeddings",
       "hybrid search fusion overview",
       "RRF formula and example summary",
@@ -42179,7 +42179,7 @@
     "text": "This chapter explains why raw user queries are rarely optimal retrieval queries and previews four transformation strategies. Three failure modes: lexical mismatch (user and doc use different words like sign-in vs log-in), ambiguity (one query has multiple plausible intents like \"How do I export?\"), and multi-intent (one query asks two questions like cancel + refund). Four fixes: HyDE (21.6) for lexical mismatch, Multi-Query Expansion (21.7) for ambiguity, Query Decomposition (21.8) for multi-intent, and Query Routing (21.8) for picking the right index. Concrete failure: Cosine(user, best_doc) = 0.61, correct doc at rank 7.",
     "summary": "Chapter overview - three retrieval failure modes (lexical mismatch, ambiguity, multi-intent) and four query-transformation fixes (HyDE, multi-query, decomposition, routing).",
     "queries": [
-      "chapter 21.5 summary",
+      "This chapter summary",
       "why transform queries overview",
       "three retrieval failure modes",
       "four query transformation strategies summary",
@@ -43295,7 +43295,7 @@
       "what is in a packed prompt",
       "context packing best practices",
       "RAG generation context strategy",
-      "chapter 22.1 summary",
+      "This chapter summary",
       "naive to advanced RAG patterns context packing",
       "RAG prompt construction summary"
     ],
@@ -47802,7 +47802,7 @@
       "How to think about RAG economics",
       "Cost levers and Pareto frontier RAG",
       "Overview RAG production cost",
-      "Key takeaways cost models chapter 12.37",
+      "Key takeaways cost models this chapter",
       "How much can RAG cost be reduced",
       "RAG cost decision framework",
       "All cost optimizations RAG summary",
@@ -48471,7 +48471,7 @@
     "summary": "Chapter-level summary - signals, drift types, the 5-step detection pipeline, time-series alerting, alert payload design, and the unified dashboard.",
     "queries": [
       "summary of hallucination detection and drift",
-      "chapter 23.9 overview",
+      "This chapter overview",
       "production RAG monitoring summary",
       "how to detect and alert on RAG hallucinations",
       "four signals plus four drift types",
@@ -49953,13 +49953,13 @@
     "text": "This chapter covers few-shot prompting plus structured output for reliable LLM classification. Few-shot replaces English instructions with 3 to 5 worked input-output examples so the model pattern-matches the format. JSON schemas with enums, required fields, and numeric ranges lock the response shape so the API rejects anything malformed. The two techniques complement each other: examples teach values and style, schemas enforce structure. Production rules: 3-5 examples, diverse not similar, include edge cases, span all enum values, put the hardest case last. The chapter ends with a complete reusable ticket-classifier template (system line + three examples + schema + ticket slot) returning JSON like { \"category\": \"billing\", \"urgency\": \"high\", \"confidence\": 0.85 }.",
     "summary": "Combining few-shot examples with JSON schema constraints produces reliable, drift-free structured LLM output suited for production classification.",
     "queries": [
-      "chapter 24.3 summary",
+      "This chapter summary",
       "few-shot and structured output overview",
       "how to build reliable LLM classifier",
       "prompting best practices summary",
       "JSON schema with few-shot",
       "production LLM classification techniques",
-      "what is in chapter 24.3",
+      "what is in this chapter",
       "reliable structured output prompt",
       "ticket triage with LLM",
       "drift-free LLM responses",
@@ -51190,7 +51190,7 @@
     "summary": "Tool use connects LLMs to real systems via declared functions, with the model deciding and the runtime executing inside a Reason-Act-Observe loop.",
     "queries": [
       "overview of tool use as bridge",
-      "what is chapter 25.1 about",
+      "what is this chapter about",
       "summary of LLM tool use",
       "how do LLMs become agents",
       "decide execute return pattern",
@@ -52348,7 +52348,7 @@
       "high level summary of tool error taxonomy",
       "errors as data exponential backoff idempotency overview",
       "complete picture of agent tool error handling",
-      "chapter 25.5 overview",
+      "This chapter overview",
       "tools and protocols error handling section",
       "summary of MCP tool error handling",
       "what makes agent tool retries safe"
@@ -52670,7 +52670,7 @@
     "text": "This chapter Why Protocols? motivates protocols for agent-tool systems. Ad-hoc connectors scale as O(M x N) - 5 agents and 6 tools already cost 30 integrations. A protocol acts as a hub-and-spoke contract that turns that into O(M + N) - same components, 11 connectors. Three protocols dominate: MCP (agent host to tool servers, Anthropic-led, production today), A2A (agent to agent delegation, Google-driven, newer), and HTTP+OpenAPI (legacy transport, not agent-specific). A 2x2 decision grid says protocols pay off once you cross 3 tools and 3 agents - below that, ad-hoc is fine; above, full mesh is required. Beyond wiring, a protocol enforces a sandbox contract: it is the only legal crossing between the trusted host (user data, model) and untrusted tool servers, governing capabilities listing, tool call authorization, and result return.",
     "summary": "Protocols collapse O(M x N) connector sprawl into O(M + N), give the agent stack a shared contract (MCP, A2A, OpenAPI), and act as a sandbox boundary between trusted host and untrusted tool servers.",
     "queries": [
-      "summary of chapter 25.6 why protocols",
+      "summary of this chapter why protocols",
       "why do we need protocols for AI agents",
       "MCP A2A OpenAPI overview",
       "what does a protocol do for agent tools",
@@ -52987,7 +52987,7 @@
       "How does an agent gain tools through MCP?",
       "Recap of MCP host client server transports",
       "What does MCP do?",
-      "MCP architecture summary chapter 25.7",
+      "MCP architecture summary this chapter",
       "Key concepts in MCP",
       "Big picture of MCP protocol",
       "Why is MCP useful for agents?",
@@ -54147,7 +54147,7 @@
       "Summary of A2A protocol chapter",
       "Overview of agent to agent communication",
       "Recap A2A vs MCP",
-      "Key ideas of chapter 25.11",
+      "Key ideas of this chapter",
       "What does A2A solve",
       "Discovery streaming and decision in A2A",
       "Agent.json plus delegation flow plus streaming",
@@ -54463,7 +54463,7 @@
       "production agent shape",
       "model picks next step or developer wires it",
       "bounded vs unbounded LLM systems",
-      "agents chapter 13.18 summary",
+      "agents this chapter summary",
       "what should I learn about workflow vs agent",
       "workflow agent hybrid recap",
       "control flow LLM design summary",
@@ -56162,7 +56162,7 @@
       "how to end an agent loop safely",
       "summary of loop termination",
       "key rules for stopping agents",
-      "chapter 13.23 overview",
+      "This chapter overview",
       "agent loop end conditions",
       "stop reason for agents",
       "loop exit strategy",
@@ -57187,7 +57187,7 @@
     "text": "This chapter Semantic Memory - Learned Facts. Covers: (1) semantic memory holds stable 'currently true' facts, distinct from time-stamped episodic events; (2) the customer profile card shape with typed fields like customer_id, tier, preferred_contact, billing_currency, and a nested preferences bag; (3) two storage substrates - key-value/Postgres for typed exact-match fields and vector store for free-text similarity facts, used together in production; (4) profile growth from Day 1 to Day 30 to Day 90 via confirmed observations only, never single-message guesses; (5) the 6-months test for what counts as a fact: stable preferences, identity, constraints go in; transient mood, one-time requests, and guesses stay out.",
     "summary": "Chapter overview: semantic memory stores long-lived facts in structured plus vector stores, growing via confirmed observations and gated by the 6-months test.",
     "queries": [
-      "chapter 13.27 summary",
+      "This chapter summary",
       "semantic memory chapter overview",
       "agent learned facts summary",
       "semantic memory full picture",
@@ -58407,7 +58407,7 @@
     "summary": "Chapter-level summary of the orchestrator-worker multi-agent pattern, its phases, worker isolation, parallel latency, and aggregation choices.",
     "queries": [
       "Summarize orchestrator-worker chapter?",
-      "What does chapter 27.2 cover?",
+      "What does this chapter cover?",
       "Overview of orchestrator-worker pattern?",
       "Key takeaways from orchestrator-worker?",
       "What multi-agent pattern is taught in 27.2?",
@@ -59247,7 +59247,7 @@
       "Isolation between worker and critic agents",
       "Why critic has its own system prompt",
       "Two-agent worker-critic architecture",
-      "Reflection multi-agent vs chapter 26.5"
+      "Reflection multi-agent vs this chapter"
     ],
     "terms": [
       "critic agent",
@@ -59895,7 +59895,7 @@
     "summary": "Chapter overview: agentic RAG turns one-shot retrieval into a Search-Judge-Refine loop, costing 3-10x naive RAG but unlocking research-style queries.",
     "queries": [
       "Summarize agentic RAG",
-      "Overview of chapter 27.7",
+      "Overview of this chapter",
       "What is the agentic RAG pattern?",
       "Key takeaways agentic RAG",
       "Naive vs agentic RAG summary",
@@ -60143,10 +60143,10 @@
     "text": "This chapter - Why Eval Agents Differently. Agents need different eval than pure LLMs along three axes: non-determinism, multi-step traces, and silent failures. Real production incidents ($50K unauthorized refunds, hallucinated policies, chitchat drift, cross-tenant leaks) show what happens without eval. Production needs both offline eval (frozen golden set, before every deploy, catches regressions) and online eval (1-5% live traffic sampling, continuous, catches drift). Three failure modes still need humans: tone, hidden hallucinations, cross-session drift - budget 20-50 human-reviewed traces per week per agent. The full pipeline has five stages: eval set, per-trace step grading, end-to-end LLM-as-judge, online sampling + drift signal, alerting + rollback.",
     "summary": "Chapter overview: why agent eval differs from LLM eval, real incidents, offline vs online loops, human review categories, and the five-stage eval pipeline.",
     "queries": [
-      "summary of chapter 28.1",
+      "summary of this chapter",
       "why eval agents differently overview",
       "key takeaways agent eval introduction",
-      "what does chapter 28.1 teach",
+      "what does this chapter teach",
       "agent eval intro recap",
       "three axes of agent eval",
       "production incidents and eval pipeline summary",
@@ -60168,7 +60168,7 @@
       "online eval",
       "human review",
       "eval pipeline",
-      "chapter 28.1"
+      "This chapter"
     ]
   },
   {
@@ -62944,7 +62944,7 @@
       "Best practices for prompt injection safety",
       "How do production teams secure agents?",
       "End to end injection defense stack",
-      "Chapter 28.10 summary",
+      "This chapter summary",
       "Layered agent security overview",
       "How to ship a safe public-facing agent",
       "Why combine runtime gate and tool whitelist",
@@ -64528,7 +64528,7 @@
     "text": "This chapter The Complete Agent Decision Framework. Synthesizes the entire section into a nine-layer top-down decision stack: 1 Approach, 2 Loop Pattern, 3 Memory Layers, 4 Multi-Agent, 5 Tools, 6 Protocols, 7 Eval, 8 Production, 9 Framework. Each layer references its source chapters. Walks the stack end to end on a fresh use case (Internal IT-Support Agent, 500-person company, password/software/VPN/hardware tickets, $500 escalation, SSO + ticketing integration). Picks: Agent + Workflow-with-agent-step + Working/Episodic/Semantic memory + Orchestrator-Worker + 8 scoped tools + MCP (no A2A) + 4-axis eval with LLM-as-judge + OTel/LangSmith/prompt cache/guardrails/injection defense + LangGraph. Closes with three capabilities: Decide, Diagnose, Defend.",
     "summary": "Chapter-level summary covering the nine-layer agent decision stack applied to an internal IT-support agent use case with concrete picks for every layer.",
     "queries": [
-      "What is chapter 28.16 about?",
+      "What is this chapter about?",
       "Summary of the complete agent decision framework",
       "Nine-layer agent decision stack end to end example",
       "How to walk the agent design stack on a new use case",

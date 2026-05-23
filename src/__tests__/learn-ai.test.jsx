@@ -589,7 +589,7 @@ describe("URL routing - boot", () => {
   });
 
   it("redirects bare URL to saved chapter when localStorage present", async () => {
-    const idx = chapters.findIndex((c) => c.slug === "neural-foundations/inside-neuron");
+    const idx = chapters.findIndex((c) => c.file === "neural-foundations/inside-neuron");
     const navMod = await import("../nav-persistence.js");
     navMod.loadNav.mockReturnValue({ ch: idx, sub: 0 });
     await renderLearnAI();

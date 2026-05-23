@@ -1,5 +1,5 @@
 import { C } from "../../config.js";
-import { Box, T, Reveal, SubBtn } from "../../components.jsx";
+import { Box, T, Reveal, SubBtn, ChapterLink } from "../../components.jsx";
 
 export default function TokenizerDeepDive(ctx) {
   const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx;
@@ -11,7 +11,7 @@ export default function TokenizerDeepDive(ctx) {
             Recap: BPE (Byte-Pair Encoding)
           </T>
           <T color={C.blue} style={{ marginTop: 6 }}>
-            In chapter 5.1, we learned BPE: start with characters, merge the most frequent pair, repeat. Let's trace
+            In <ChapterLink to="5.1">chapter 5.1</ChapterLink>, we learned BPE: start with characters, merge the most frequent pair, repeat. Let's trace
             "low" through BPE from scratch:
           </T>
           <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 8 }}>

@@ -1,5 +1,5 @@
 import { C } from "../../config.js";
-import { Box, T, Reveal, SubBtn } from "../../components.jsx";
+import { Box, T, Reveal, SubBtn, ChapterLink } from "../../components.jsx";
 
 export default function BackpropRealNetwork(ctx) {
   const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx;
@@ -12,7 +12,7 @@ export default function BackpropRealNetwork(ctx) {
             Our Network Got It Wrong - Now Fix It
           </T>
           <T color="#ef9a9a" size={16} style={{ marginTop: 12 }}>
-            In chapter 1.7, we traced a forward pass. The network predicted a house price:
+            In <ChapterLink to="1.7">chapter 1.7</ChapterLink>, we traced a forward pass. The network predicted a house price:
           </T>
           <div style={{ marginTop: 14, display: "flex", flexDirection: "column", gap: 10, alignItems: "center" }}>
             <div style={{ display: "flex", gap: 10, justifyContent: "center" }}>
@@ -92,7 +92,7 @@ export default function BackpropRealNetwork(ctx) {
             The Network - Now We Trace Backwards
           </T>
           <T color="#b8a9ff" size={16} style={{ marginTop: 10 }}>
-            This is the same network from chapter 1.7. Every weight is labeled on its edge. The backward pass will
+            This is the same network from <ChapterLink to="1.7">chapter 1.7</ChapterLink>. Every weight is labeled on its edge. The backward pass will
             compute a gradient for each one.
           </T>
           <div style={{ display: "flex", justifyContent: "center", marginTop: 14 }}>

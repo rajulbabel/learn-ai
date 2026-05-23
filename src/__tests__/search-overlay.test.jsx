@@ -31,7 +31,7 @@ const ch1 = pick(1);
 const ch2 = pick(2);
 
 const makeResult = (ch, { sub = 0, text = "Sample text.", score = 20, source = "text", overrideTitle } = {}) => ({
-  chapterSlug: ch.slug,
+  chapterSlug: ch.file,
   chapterId: ch.id,
   section: ch.section,
   sectionName: sectionNames[ch.section] || "",
@@ -158,7 +158,7 @@ describe("SearchOverlay handleSelect", () => {
     const onClose = vi.fn();
 
     await setupSearchMock({
-      chapterSlug: realCh.slug,
+      chapterSlug: realCh.file,
       chapterId: realCh.id,
       section: realCh.section,
       sectionName: sectionNames[realCh.section],
@@ -179,7 +179,7 @@ describe("SearchOverlay handleSelect", () => {
       fireEvent.click(button);
     });
 
-    const expectedIdx = chapters.findIndex((c) => c.slug === realCh.slug);
+    const expectedIdx = chapters.findIndex((c) => c.file === realCh.file);
     expect(onGoTo).toHaveBeenCalledWith(expectedIdx, 0);
     expect(onClose).toHaveBeenCalled();
   });

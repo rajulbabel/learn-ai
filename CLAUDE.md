@@ -119,7 +119,7 @@ Example: insert a new chapter "Score Normalization" between 7.2 and 7.3.
    export default ScoreNormalization;
    ```
 2. **Add one entry to the section's `chapters` array in `config.js`** - no ID
-   renumbering, no manual ID at all. Drop a new `{ slug, file, title, component }`
+   renumbering, no manual ID at all. Drop a new `{ file, title, component }`
    object into the array at the desired position; IDs are derived from position.
    ```js
    sections = [
@@ -128,10 +128,10 @@ Example: insert a new chapter "Score Normalization" between 7.2 and 7.3.
        num: 7,
        name: "Computing Attention",
        chapters: [
-         { slug: "attention-computation/why-attention",       file: "attention-computation/why-attention",       title: "Why Attention",  component: "WhyAttention" },
-         { slug: "attention-computation/qkv-concepts",        file: "attention-computation/qkv-concepts",        title: "Q, K, V",        component: "QKVConcepts" },
-         { slug: "attention-computation/score-normalization", file: "attention-computation/score-normalization", title: "Score Normalization", component: "ScoreNormalization" },  // NEW
-         { slug: "attention-computation/k-transpose",         file: "attention-computation/k-transpose",         title: "K Transpose",    component: "KTranspose" },
+         { file: "attention-computation/why-attention",       title: "Why Attention",  component: "WhyAttention" },
+         { file: "attention-computation/qkv-concepts",        title: "Q, K, V",        component: "QKVConcepts" },
+         { file: "attention-computation/score-normalization", title: "Score Normalization", component: "ScoreNormalization" },  // NEW
+         { file: "attention-computation/k-transpose",         title: "K Transpose",    component: "KTranspose" },
          ...
        ],
      },
@@ -167,24 +167,38 @@ derived from position, so no renumbering is needed anywhere. Chapter files
 and test files do not move - their content is identity-free. Moving a
 chapter between sections is just cutting/pasting between two arrays.
 
-The search index identifies chapters by stable slug (= file path), so
+The search index identifies chapters by stable file path, so
 reordering does not require re-embedding. Run `npm run search:build` once
 after the reorder to refresh `chunks.json`'s sort order (cache-only,
 zero LLM cost).
 
 ## How To: Cross-Reference Another Chapter
 
-When chapter code, shared helpers, or deep links need to point at another
-chapter (a "see X" jump, a prefetch, a programmatic `goTo`), look the
-chapter up by its **slug** - never by chapter ID (`"7.4"`) or array index.
+For in-content references (anything the reader sees), use the
+`ChapterLink` component from `src/components.jsx`:
+
+```jsx
+import { ChapterLink } from "../../components.jsx";
+
+<ChapterLink to="7.4">chapter 7.4</ChapterLink>
+```
+
+`to` is the destination chapter's ID. `ChapterLink` reads `goTo` from
+`NavContext` (provided by `learn-ai.jsx`) and renders a styled clickable
+span. Plain "chapter X.Y" text strings should be converted to
+`ChapterLink` whenever they refer to a real chapter.
+
+For programmatic navigation in code, shared helpers, or deep links, look
+the chapter up by its **file path** - never by chapter ID (`"7.4"`) or
+array index:
 
 ```js
-const idx = chapters.findIndex((c) => c.slug === "attention-computation/why-softmax");
+const idx = chapters.findIndex((c) => c.file === "attention-computation/why-softmax");
 if (idx >= 0) goTo(idx);
 ```
 
-Slugs equal the file path (`"<topic>/<chapter-kebab>"`) and are stable
-across reorders, insertions, deletions, and section renumbering. IDs and
+File paths equal `"<topic>/<chapter-kebab>"` and are stable across
+reorders, insertions, deletions, and section renumbering. IDs and
 indices shift whenever chapters move; URLs or hard-coded indices break
 silently. The search overlay already follows this rule
 (`src/search-overlay.jsx`). Apply it anywhere a chapter is referenced

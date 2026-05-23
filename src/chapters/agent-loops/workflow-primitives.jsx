@@ -1,4 +1,4 @@
-import { Box, T, Reveal, SubBtn } from "../../components.jsx";
+import { Box, T, Reveal, SubBtn, ChapterLink } from "../../components.jsx";
 import { C } from "../../config.js";
 import { SOFT, tintedCard, pill, DIM_BG, DIM_BORDER } from "../../shared/agent-styles.jsx";
 
@@ -539,8 +539,9 @@ export default function WorkflowPrimitives(ctx) {
           </div>
 
           <T color={SOFT.yellow} center size={15} style={{ marginTop: 12 }}>
-            Because each step returns a typed object (the JSON schema from chapter 25.2), the next step can read fields
-            like ticket.category by name. Chaining is just normal function composition with LLM calls as the functions.
+            Because each step returns a typed object (the JSON schema from{" "}
+            <ChapterLink to="25.2">chapter 25.2</ChapterLink>), the next step can read fields like ticket.category by
+            name. Chaining is just normal function composition with LLM calls as the functions.
           </T>
         </Box>
       </Reveal>

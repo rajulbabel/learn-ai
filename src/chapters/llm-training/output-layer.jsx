@@ -1,5 +1,5 @@
 import { C } from "../../config.js";
-import { Box, T, Reveal, SubBtn } from "../../components.jsx";
+import { Box, T, Reveal, SubBtn, ChapterLink } from "../../components.jsx";
 
 export default function OutputLayer(ctx) {
   const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx;
@@ -42,7 +42,7 @@ export default function OutputLayer(ctx) {
                 ))}
               </div>
               <T color={C.dim} size={14} style={{ marginTop: 6 }}>
-                Each word gets converted to a vector of 768 numbers (the embedding from chapter 5.1). So "the" becomes
+                Each word gets converted to a vector of 768 numbers (the embedding from <ChapterLink to="5.1">chapter 5.1</ChapterLink>). So "the" becomes
                 [-0.14, 0.62, -0.38, ...]
               </T>
             </div>
@@ -759,7 +759,7 @@ export default function OutputLayer(ctx) {
             The clever trick: weight tying
           </T>
           <T color="#5eb3ff" style={{ marginTop: 6 }}>
-            Remember the embedding layer from chapter 5.1? It converts tokens to vectors. The embedding matrix has shape
+            Remember the embedding layer from <ChapterLink to="5.1">chapter 5.1</ChapterLink>? It converts tokens to vectors. The embedding matrix has shape
             50,000 x 768 - one 768-dim row per word.
           </T>
 

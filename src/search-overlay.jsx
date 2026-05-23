@@ -137,7 +137,7 @@ export default function SearchOverlay({ open, onClose, onGoTo }) {
   };
 
   const handleSelect = (slug, sub) => {
-    const idx = chapters.findIndex((c) => c.slug === slug);
+    const idx = chapters.findIndex((c) => c.file === slug);
     if (idx >= 0) {
       onGoTo(idx, sub > 0 ? sub : 0);
       onClose();

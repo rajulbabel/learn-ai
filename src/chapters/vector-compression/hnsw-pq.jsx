@@ -1,4 +1,4 @@
-import { Box, T, Reveal, SubBtn } from "../../components.jsx";
+import { Box, T, Reveal, SubBtn, ChapterLink } from "../../components.jsx";
 import { C } from "../../config.js";
 
 // Graph node positions for the 3-layer HNSW illustration in 16.6 sub=1. Eight bottom
@@ -66,10 +66,11 @@ export default function HNSWPQ(ctx) {
           </T>
           <T color="#80deea" style={{ marginTop: 8 }}>
             IVF-PQ shines on static billion-scale corpora, but many production systems want graph-navigation speed AND
-            compressed vectors. HNSW (chapters 15.8-15.11) gives logarithmic-hop search over a multi-layer small-world
-            graph. PQ (chapter 16.3) gives 32x compression per vector. HNSW + PQ keeps the HNSW graph structure
-            unchanged and swaps out the float32 payload at each node for a PQ code - small memory, fast graph, one index
-            to tune.
+            compressed vectors. HNSW (chapters <ChapterLink to="15.8">15.8</ChapterLink>-
+            <ChapterLink to="15.11">15.11</ChapterLink>) gives logarithmic-hop search over a multi-layer small-world
+            graph. PQ (<ChapterLink to="16.3">chapter 16.3</ChapterLink>) gives 32x compression per vector. HNSW + PQ
+            keeps the HNSW graph structure unchanged and swaps out the float32 payload at each node for a PQ code -
+            small memory, fast graph, one index to tune.
           </T>
           <div
             style={{
@@ -146,10 +147,11 @@ export default function HNSWPQ(ctx) {
             Every node stores a PQ code instead of a float32 vector
           </T>
           <T color="#ffe082" style={{ marginTop: 8 }}>
-            Picture the 3-layer HNSW graph from chapter 15.8. In HNSW + PQ, every node label changes from a float32
-            vector to a 96-byte PQ code. Edges, layer assignments, entry points - all untouched. The memory math shifts
-            dramatically: the graph costs stay near 100 bytes per vector (M = 16 edges at layer 0 plus sparse upper
-            layers), and the payload drops from 3,072 to 96 bytes. Total per-vector footprint: about 196 bytes.
+            Picture the 3-layer HNSW graph from <ChapterLink to="15.8">chapter 15.8</ChapterLink>. In HNSW + PQ, every
+            node label changes from a float32 vector to a 96-byte PQ code. Edges, layer assignments, entry points -
+            all untouched. The memory math shifts dramatically: the graph costs stay near 100 bytes per vector (M = 16
+            edges at layer 0 plus sparse upper layers), and the payload drops from 3,072 to 96 bytes. Total
+            per-vector footprint: about 196 bytes.
           </T>
           <div
             style={{
@@ -318,9 +320,10 @@ export default function HNSWPQ(ctx) {
           <T color="#80e8a5" style={{ marginTop: 8 }}>
             HNSW walks the graph exactly as before. At every step it has to score a candidate against the query - that
             distance call is the only piece that changes. Instead of a float32 dot product or L2 over d dimensions, it
-            looks up m values in the per-query asymmetric-distance table (built once per query in chapter 16.3) and sums
-            them. At d = 768, m = 96 that is 96 table reads + 96 adds per distance, about ten times cheaper than the
-            float32 equivalent. Graph hop count is identical, per-hop cost drops.
+            looks up m values in the per-query asymmetric-distance table (built once per query in{" "}
+            <ChapterLink to="16.3">chapter 16.3</ChapterLink>) and sums them. At d = 768, m = 96 that is 96 table reads
+            + 96 adds per distance, about ten times cheaper than the float32 equivalent. Graph hop count is identical,
+            per-hop cost drops.
           </T>
           <div
             style={{

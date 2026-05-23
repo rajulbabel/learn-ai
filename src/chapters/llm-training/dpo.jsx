@@ -1,5 +1,5 @@
 import { C } from "../../config.js";
-import { Box, T, Reveal, SubBtn } from "../../components.jsx";
+import { Box, T, Reveal, SubBtn, ChapterLink } from "../../components.jsx";
 
 export default function DPO(ctx) {
   const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx;
@@ -12,7 +12,7 @@ export default function DPO(ctx) {
             RLHF Works - But It Needs 4 Models
           </T>
           <T color="#b8a9ff" style={{ marginTop: 8 }}>
-            In chapter 5.8 we learned the RLHF pipeline. It aligns the model with human values - but look at what it
+            In <ChapterLink to="5.8">chapter 5.8</ChapterLink> we learned the RLHF pipeline. It aligns the model with human values - but look at what it
             takes:
           </T>
           <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 6 }}>

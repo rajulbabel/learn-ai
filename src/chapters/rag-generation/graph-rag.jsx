@@ -1,4 +1,4 @@
-import { Box, T, Reveal, SubBtn } from "../../components.jsx";
+import { Box, T, Reveal, SubBtn, ChapterLink } from "../../components.jsx";
 import { C } from "../../config.js";
 
 // Module-private helpers used by THIS chapter (copied verbatim from section file):
@@ -253,8 +253,8 @@ export default function GraphRAG(ctx) {
           </div>
 
           <T color="#90caf9" center size={14} style={{ marginTop: 12 }}>
-            The customer-support corpus returns in chapter 22.8. This chapter only uses the legal-citation secondary
-            corpus.
+            The customer-support corpus returns in <ChapterLink to="22.8">chapter 22.8</ChapterLink>. This chapter only
+            uses the legal-citation secondary corpus.
           </T>
         </Box>
       )}

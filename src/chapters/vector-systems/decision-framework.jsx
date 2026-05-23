@@ -1,4 +1,4 @@
-import { Box, T, Reveal, SubBtn } from "../../components.jsx";
+import { Box, T, Reveal, SubBtn, ChapterLink } from "../../components.jsx";
 import { C } from "../../config.js";
 
 export default function DecisionFramework(ctx) {
@@ -321,9 +321,9 @@ export default function DecisionFramework(ctx) {
           </T>
           <T color="#ffb74d" style={{ marginTop: 8 }}>
             Filtering is where products separate most. Simple filters (tenant_id = 42) work on everything. Complex
-            compound filters (tenant + geo + date + ACL) exercise the vendor; Qdrant&apos;s inline filtered-HNSW
-            (chapter 17.1) wins. When the query involves SQL-shaped joins to rows in other tables, pgvector is the right
-            answer because Postgres has always been good at that.
+            compound filters (tenant + geo + date + ACL) exercise the vendor; Qdrant&apos;s inline filtered-HNSW (
+            <ChapterLink to="17.1">chapter 17.1</ChapterLink>) wins. When the query involves SQL-shaped joins to rows
+            in other tables, pgvector is the right answer because Postgres has always been good at that.
           </T>
           <div
             style={{
@@ -418,42 +418,55 @@ export default function DecisionFramework(ctx) {
             {[
               {
                 q: "Data size",
-                ref: "chapters 15.2, 16.1, 17.10",
+                ref: (
+                  <>
+                    chapters <ChapterLink to="15.2">15.2</ChapterLink>, <ChapterLink to="16.1">16.1</ChapterLink>,{" "}
+                    <ChapterLink to="17.10">17.10</ChapterLink>
+                  </>
+                ),
                 what: "N now, N in 18 months; d of the embedding model",
               },
               {
                 q: "Update frequency",
-                ref: "chapter 17.2",
+                ref: <ChapterLink to="17.2">chapter 17.2</ChapterLink>,
                 what: "Inserts/sec, deletes/sec; tombstone tolerance; rebuild cadence",
               },
               {
                 q: "Filter selectivity",
-                ref: "chapter 17.1",
+                ref: <ChapterLink to="17.1">chapter 17.1</ChapterLink>,
                 what: "Tight (0.1%) vs loose (50%); compound predicates",
               },
               {
                 q: "QPS budget",
-                ref: "chapter 17.10",
+                ref: <ChapterLink to="17.10">chapter 17.10</ChapterLink>,
                 what: "Peak QPS, sustained QPS, ratio, seasonal spikes",
               },
               {
                 q: "P99 target",
-                ref: "chapter 17.9",
+                ref: <ChapterLink to="17.9">chapter 17.9</ChapterLink>,
                 what: "Latency budget, tail behavior, cold-start tolerance",
               },
               {
                 q: "Availability target",
-                ref: "chapters 17.4, 17.9",
+                ref: (
+                  <>
+                    chapters <ChapterLink to="17.4">17.4</ChapterLink>, <ChapterLink to="17.9">17.9</ChapterLink>
+                  </>
+                ),
                 what: "SLA (99.9% vs 99.99%); failover story; multi-region",
               },
               {
                 q: "Embedding model stability",
-                ref: "chapter 17.8",
+                ref: <ChapterLink to="17.8">chapter 17.8</ChapterLink>,
                 what: "Drift plan; re-embedding cost; migration path",
               },
               {
                 q: "Ops capacity",
-                ref: "chapters 18.2 - 18.6",
+                ref: (
+                  <>
+                    chapters <ChapterLink to="18.2">18.2</ChapterLink> - <ChapterLink to="18.6">18.6</ChapterLink>
+                  </>
+                ),
                 what: "SRE hours, on-call rotation, K8s familiarity",
               },
             ].map((r) => (

@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback, lazy, Suspense } from "react";
 import { chapters, sectionNames, sectionColors, sections, superSections, C } from "./config.js";
-import { T, ErrorBoundary } from "./components.jsx";
+import { T, ErrorBoundary, NavContext } from "./components.jsx";
 import { saveNav, loadNav } from "./nav-persistence.js";
 import { resolveInitialState } from "./url-routing.js";
 import { useUrlSync } from "./url-sync.js";
@@ -811,7 +811,9 @@ export default function LearnAI() {
             transition: "opacity 0.05s ease-out, transform 0.06s ease-out",
           }}
         >
-          <ErrorBoundary resetKey={ch}>{renderChapter ? renderChapter(ctx) : null}</ErrorBoundary>
+          <NavContext.Provider value={{ goTo, chapters }}>
+            <ErrorBoundary resetKey={ch}>{renderChapter ? renderChapter(ctx) : null}</ErrorBoundary>
+          </NavContext.Provider>
         </main>
 
         {/* Tap-to-navigate zones */}

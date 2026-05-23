@@ -1,4 +1,4 @@
-import { Box, T, Reveal, SubBtn } from "../../components.jsx";
+import { Box, T, Reveal, SubBtn, ChapterLink } from "../../components.jsx";
 import { C } from "../../config.js";
 
 // Module-private helpers used by THIS chapter (copied verbatim from section file):
@@ -92,8 +92,12 @@ const QUERY_TYPE_ROWS = [
   {
     query: "Comparative",
     example: "Compare X and Y.",
-    advice:
-      "Multi-hop retrieval (covered in chapter 22.7) on top of any chunking. Bigger chunks help. Hierarchical preferred.",
+    advice: (
+      <>
+        Multi-hop retrieval (covered in <ChapterLink to="22.7">chapter 22.7</ChapterLink>) on top of any chunking. Bigger
+        chunks help. Hierarchical preferred.
+      </>
+    ),
   },
 ];
 
@@ -206,7 +210,8 @@ export default function ChunkingDecision(ctx) {
             Six Strategies, One Page
           </T>
           <T color="#80deea" center size={16} style={{ marginTop: 10 }}>
-            Chapters 20.4 to 20.9 each introduced one chunking strategy. Lined up side by side, each one has its own
+            Chapters <ChapterLink to="20.4">20.4</ChapterLink> to <ChapterLink to="20.9">20.9</ChapterLink> each
+            introduced one chunking strategy. Lined up side by side, each one has its own
             quality, cost, and implementation profile. The first meter is retrieval quality (higher is better), the
             second is embedding cost at chunk time, the third is implementation difficulty.
           </T>
@@ -681,7 +686,8 @@ export default function ChunkingDecision(ctx) {
             }}
           >
             <T color={C.cyan} bold center size={14}>
-              Chapters 21.1 - 21.4 move to embedding model choice and how chunking interacts with embedding quality.
+              Chapters <ChapterLink to="21.1">21.1</ChapterLink> - <ChapterLink to="21.4">21.4</ChapterLink> move to
+              embedding model choice and how chunking interacts with embedding quality.
             </T>
           </div>
         </Box>

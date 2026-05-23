@@ -1,4 +1,4 @@
-import { Box, T, Reveal, SubBtn } from "../../components.jsx";
+import { Box, T, Reveal, SubBtn, ChapterLink } from "../../components.jsx";
 import { C } from "../../config.js";
 
 // Module-private helpers used by THIS chapter (copied verbatim from section file):
@@ -454,7 +454,8 @@ export default function RAGEvalTriangle(ctx) {
               scores 0; a hallucinated answer that recycles reference words scores high.
             </T>
             <T color="#ffe082" center size={15} style={{ marginTop: 8 }}>
-              Use RAGAS (chapter 23.3) and LLM-as-judge (chapter 23.2) instead.
+              Use RAGAS (<ChapterLink to="23.3">chapter 23.3</ChapterLink>) and LLM-as-judge (
+              <ChapterLink to="23.2">chapter 23.2</ChapterLink>) instead.
             </T>
           </div>
         </Box>

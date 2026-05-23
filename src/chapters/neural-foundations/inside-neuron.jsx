@@ -1,5 +1,5 @@
 import { C } from "../../config.js";
-import { Box, T, Reveal, SubBtn } from "../../components.jsx";
+import { Box, T, Reveal, SubBtn, ChapterLink } from "../../components.jsx";
 
 export default function InsideNeuron(ctx) {
   const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx;
@@ -310,7 +310,8 @@ export default function InsideNeuron(ctx) {
                   </span>
                 </div>
                 <T color="rgba(255,255,255,0.5)" size={13} style={{ marginTop: 4 }}>
-                  The bias shifts the result up or down - you will learn more about it in chapter 1.4
+                  The bias shifts the result up or down - you will learn more about it in{" "}
+                  <ChapterLink to="1.4">chapter 1.4</ChapterLink>
                 </T>
               </div>
               <div
@@ -347,7 +348,8 @@ export default function InsideNeuron(ctx) {
                   </span>
                 </div>
                 <T color="rgba(255,255,255,0.5)" size={13} style={{ marginTop: 4 }}>
-                  This rule has a name (activation function) - you'll meet it in chapter 1.6
+                  This rule has a name (activation function) - you'll meet it in{" "}
+                  <ChapterLink to="1.6">chapter 1.6</ChapterLink>
                 </T>
               </div>
             </div>
@@ -472,7 +474,7 @@ export default function InsideNeuron(ctx) {
                   activation
                 </div>
                 <T color="#ffe082" size={16}>
-                  a simple rule applied at the end (explained in chapter 1.6)
+                  a simple rule applied at the end (explained in <ChapterLink to="1.6">chapter 1.6</ChapterLink>)
                 </T>
               </div>
               <div style={{ display: "flex", gap: 10, alignItems: "center" }}>

@@ -1,5 +1,5 @@
 import { C } from "../../config.js";
-import { Box, T, Reveal, SubBtn } from "../../components.jsx";
+import { Box, T, Reveal, SubBtn, ChapterLink } from "../../components.jsx";
 
 export default function LayerIsMatMul(ctx) {
   const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx;
@@ -167,7 +167,7 @@ export default function LayerIsMatMul(ctx) {
       <Reveal when={sub >= 2}>
         <Box color={C.purple} style={{ width: "100%" }}>
           <T color="#b8a9ff" bold center size={19}>
-            From Chapter 1.2: A Neuron Sums Weighted Inputs
+            From <ChapterLink to="1.2">Chapter 1.2</ChapterLink>: A Neuron Sums Weighted Inputs
           </T>
           <div
             style={{

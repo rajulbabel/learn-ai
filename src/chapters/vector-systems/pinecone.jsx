@@ -1,4 +1,4 @@
-import { Box, T, Reveal, SubBtn } from "../../components.jsx";
+import { Box, T, Reveal, SubBtn, ChapterLink } from "../../components.jsx";
 import { C } from "../../config.js";
 
 export default function Pinecone(ctx) {
@@ -442,7 +442,12 @@ export default function Pinecone(ctx) {
               },
               {
                 t: "Cost at scale",
-                d: "~$30K/month for 500M vectors x 200 QPS (chapter 17.10); 4x-6x self-host Qdrant",
+                d: (
+                  <>
+                    ~$30K/month for 500M vectors x 200 QPS (<ChapterLink to="17.10">chapter 17.10</ChapterLink>);
+                    4x-6x self-host Qdrant
+                  </>
+                ),
               },
               {
                 t: "Opinionated scaling",

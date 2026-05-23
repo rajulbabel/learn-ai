@@ -1,4 +1,4 @@
-import { Box, T, Reveal, SubBtn } from "../../components.jsx";
+import { Box, T, Reveal, SubBtn, ChapterLink } from "../../components.jsx";
 import { C } from "../../config.js";
 
 // Recall ceiling on the running customer-support corpus.
@@ -469,7 +469,7 @@ export default function EmbeddingModelChoice(ctx) {
           >
             <T color="#90caf9" center size={14}>
               If your corpus is medical, legal, or code, off-the-shelf general models often underperform a domain-tuned
-              model. Domain adaptation and fine-tuning are covered in chapter 21.2.
+              model. Domain adaptation and fine-tuning are covered in <ChapterLink to="21.2">chapter 21.2</ChapterLink>.
             </T>
           </div>
         </Box>

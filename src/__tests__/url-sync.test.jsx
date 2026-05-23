@@ -25,13 +25,13 @@ describe("useUrlSync", () => {
   });
 
   it("sets URL to chapter path on mount when ch>0", () => {
-    const idx = chapters.findIndex((c) => c.slug === "neural-foundations/what-is-nn");
+    const idx = chapters.findIndex((c) => c.file === "neural-foundations/what-is-nn");
     render(<Probe ch={idx} sub={0} expanded={null} />);
     expect(replaceSpy).toHaveBeenCalledWith(null, "", "/learn-ai/neural-foundations/what-is-nn");
   });
 
   it("includes sub when sub>0", () => {
-    const idx = chapters.findIndex((c) => c.slug === "attention-computation/compute-qkv");
+    const idx = chapters.findIndex((c) => c.file === "attention-computation/compute-qkv");
     render(<Probe ch={idx} sub={3} expanded={null} />);
     expect(replaceSpy).toHaveBeenCalledWith(
       null,

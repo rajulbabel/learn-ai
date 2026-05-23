@@ -1,4 +1,4 @@
-import { Box, T, Reveal, SubBtn } from "../../components.jsx";
+import { Box, T, Reveal, SubBtn, ChapterLink } from "../../components.jsx";
 import { C } from "../../config.js";
 import { SOFT, tintedCard } from "../../shared/agent-styles.jsx";
 
@@ -306,8 +306,8 @@ export default function SystemPromptContract(ctx) {
             Tools available to you: search_kb, lookup_customer, process_refund, escalate_human.
           </div>
           <T color={SOFT.purple} center size={15} style={{ marginTop: 10 }}>
-            The system prompt declares the tools. The API schema (chapter 25.2) is what actually wires them up. Both
-            sides have to agree.
+            The system prompt declares the tools. The API schema (<ChapterLink to="25.2">chapter 25.2</ChapterLink>)
+            is what actually wires them up. Both sides have to agree.
           </T>
         </Box>
       </Reveal>

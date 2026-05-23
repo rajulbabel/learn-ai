@@ -2,9 +2,9 @@ import { describe, it, expect, beforeEach } from "vitest";
 import { saveNav, loadNav } from "../nav-persistence.js";
 
 const chapters = [
-  { id: "1.1", title: "A", section: 1, component: "A", slug: "topic/a" },
-  { id: "1.2", title: "B", section: 1, component: "B", slug: "topic/b" },
-  { id: "2.1", title: "C", section: 2, component: "C", slug: "topic/c" },
+  { id: "1.1", title: "A", section: 1, component: "A", file: "topic/a" },
+  { id: "1.2", title: "B", section: 1, component: "B", file: "topic/b" },
+  { id: "2.1", title: "C", section: 2, component: "C", file: "topic/c" },
 ];
 
 beforeEach(() => {
@@ -23,7 +23,7 @@ describe("loadNav", () => {
 
   it("returns null when config has changed (chapter added)", () => {
     saveNav(1, 0, chapters);
-    const newChapters = [...chapters, { id: "2.2", title: "D", section: 2, component: "D", slug: "topic/d" }];
+    const newChapters = [...chapters, { id: "2.2", title: "D", section: 2, component: "D", file: "topic/d" }];
     expect(loadNav(newChapters)).toBeNull();
   });
 
@@ -72,28 +72,28 @@ describe("loadNav", () => {
     expect(loadNav(chapters)).toBeNull();
   });
 
-  it("fingerprint changes when slug list changes (and is independent of ID)", () => {
+  it("fingerprint changes when file list changes (and is independent of ID)", () => {
     const a = [
-      { id: "1.1", slug: "x/a" },
-      { id: "1.2", slug: "x/b" },
+      { id: "1.1", file: "x/a" },
+      { id: "1.2", file: "x/b" },
     ];
     const b = [
-      { id: "9.9", slug: "x/a" },
-      { id: "9.8", slug: "x/b" },
+      { id: "9.9", file: "x/a" },
+      { id: "9.8", file: "x/b" },
     ]; // ID-renumbered, slugs same
     saveNav(0, 0, a);
     // Loading with renumbered IDs but identical slugs should succeed.
     expect(loadNav(b)).toEqual({ ch: 0, sub: 0 });
   });
 
-  it("fingerprint is invalidated when slugs differ", () => {
+  it("fingerprint is invalidated when files differ", () => {
     const a = [
-      { id: "1.1", slug: "x/a" },
-      { id: "1.2", slug: "x/b" },
+      { id: "1.1", file: "x/a" },
+      { id: "1.2", file: "x/b" },
     ];
     const c = [
-      { id: "1.1", slug: "x/a" },
-      { id: "1.2", slug: "x/c" },
+      { id: "1.1", file: "x/a" },
+      { id: "1.2", file: "x/c" },
     ]; // slug changed
     saveNav(0, 0, a);
     expect(loadNav(c)).toBeNull();

@@ -1,4 +1,4 @@
-import { Box, T, Reveal, SubBtn } from "../../components.jsx";
+import { Box, T, Reveal, SubBtn, ChapterLink } from "../../components.jsx";
 import { C } from "../../config.js";
 
 // Sub=1 funnel stages.
@@ -478,7 +478,7 @@ export default function RerankerCascade(ctx) {
           >
             <T color="#a5d6a7" center size={14}>
               LLM generation dominates. Optimizing reranker speed alone gives small wins. Caching the LLM call (covered
-              in chapter 23.6) gives the biggest latency win.
+              in <ChapterLink to="23.6">chapter 23.6</ChapterLink>) gives the biggest latency win.
             </T>
           </div>
         </Box>

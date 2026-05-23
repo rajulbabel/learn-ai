@@ -1,4 +1,4 @@
-import { Box, T, Reveal, SubBtn } from "../../components.jsx";
+import { Box, T, Reveal, SubBtn, ChapterLink } from "../../components.jsx";
 import { C } from "../../config.js";
 import { SOFT, tintedCard, pill } from "../../shared/agent-styles.jsx";
 
@@ -417,8 +417,9 @@ export default function SummaryAndContextMgmt(ctx) {
             Context Is Where Real Work Happens
           </T>
           <T color={SOFT.amber} center size={16} style={{ marginTop: 10 }}>
-            Memory plus context-engineering decide what the model sees on EVERY turn. Chapter 24.6 covered the
-            prompt-assembly stack. This chapter closes out by tying the memory layers into that stack.
+            Memory plus context-engineering decide what the model sees on EVERY turn.{" "}
+            <ChapterLink to="24.6">Chapter 24.6</ChapterLink> covered the prompt-assembly stack. This chapter closes
+            out by tying the memory layers into that stack.
           </T>
 
           <div style={{ ...tintedCard(C.amber), padding: 14, marginTop: 14 }}>
@@ -452,7 +453,8 @@ export default function SummaryAndContextMgmt(ctx) {
           </div>
 
           <T color={SOFT.amber} center size={15} style={{ marginTop: 12 }}>
-            Every layer comes from somewhere. Memory chapters 26.7-26.11 supplied the sources; 24.6&apos;s assembly
+            Every layer comes from somewhere. Memory chapters <ChapterLink to="26.7">26.7</ChapterLink>-
+            <ChapterLink to="26.11">26.11</ChapterLink> supplied the sources; 24.6&apos;s assembly
             stack joins them into a single prompt; this chapter closes the loop with summarization that keeps it all
             under the token budget.
           </T>

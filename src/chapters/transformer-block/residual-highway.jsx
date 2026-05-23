@@ -1,5 +1,5 @@
 import { C } from "../../config.js";
-import { Box, T, Reveal, SubBtn, Tag } from "../../components.jsx";
+import { Box, T, Reveal, SubBtn, Tag, ChapterLink } from "../../components.jsx";
 
 export default function ResidualHighway(ctx) {
   const { sub, subBtnRipple, registerSubBtn, navigate } = ctx;
@@ -12,7 +12,7 @@ export default function ResidualHighway(ctx) {
             The Problem: Gradients Vanish in Deep Networks
           </T>
           <T color="#ef9a9a" size={16} style={{ marginTop: 6 }}>
-            In chapter 2.8, we learned that gradients shrink as they travel backward through layers. During
+            In <ChapterLink to="2.8">chapter 2.8</ChapterLink>, we learned that gradients shrink as they travel backward through layers. During
             backpropagation, each layer multiplies the gradient by its derivative. If that derivative is even slightly
             below 1.0, the gradient shrinks exponentially.
           </T>
@@ -549,7 +549,7 @@ export default function ResidualHighway(ctx) {
             </T>
             <T color="#b8a9ff" size={15} style={{ marginTop: 6 }}>
               Every transformer block has two sub-layers: Attention and FFN. Each gets its own residual connection
-              (chapter 12.2). That means GPT-3's 96 blocks have <strong>192 gradient highways</strong> - one around
+              (<ChapterLink to="12.2">chapter 12.2</ChapterLink>). That means GPT-3's 96 blocks have <strong>192 gradient highways</strong> - one around
               every Attention layer and one around every FFN layer.
             </T>
 

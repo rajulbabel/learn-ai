@@ -1,5 +1,5 @@
 import { C } from "../../config.js";
-import { Box, T, Reveal, SubBtn } from "../../components.jsx";
+import { Box, T, Reveal, SubBtn, ChapterLink } from "../../components.jsx";
 
 export default function CLIP(ctx) {
   const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx;
@@ -307,7 +307,7 @@ export default function CLIP(ctx) {
             </T>
             <div style={{ marginTop: 8, display: "flex", flexWrap: "wrap", gap: 8, justifyContent: "center" }}>
               {[
-                { sym: "A · B", desc: "dot product (chapter 2.7)", color: C.blue },
+                { sym: "A · B", desc: <>dot product (<ChapterLink to="2.7">chapter 2.7</ChapterLink>)</>, color: C.blue },
                 { sym: "||A||", desc: "magnitude of A = sqrt(sum of a_i squared)", color: C.cyan },
                 { sym: "||B||", desc: "magnitude of B = sqrt(sum of b_i squared)", color: C.purple },
               ].map((p, i) => (

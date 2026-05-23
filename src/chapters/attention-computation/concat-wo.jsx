@@ -1,5 +1,5 @@
 import { C } from "../../config.js";
-import { Box, T, Reveal, SubBtn } from "../../components.jsx";
+import { Box, T, Reveal, SubBtn, ChapterLink } from "../../components.jsx";
 
 export default function ConcatWO(ctx) {
   const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx;
@@ -352,7 +352,8 @@ export default function ConcatWO(ctx) {
           </div>
           <T color="#80deea" size={18} style={{ marginTop: 8 }}>
             Nobody programs what to combine. W_O's 512×512 = 262,144 weights are all learned through backpropagation -
-            the same process from chapters 1.3–1.9.
+            the same process from chapters <ChapterLink to="1.3">1.3</ChapterLink>–
+            <ChapterLink to="1.9">1.9</ChapterLink>.
           </T>
         </Box>
       </Reveal>

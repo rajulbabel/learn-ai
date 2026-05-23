@@ -1,4 +1,4 @@
-import { Box, T, Reveal, SubBtn } from "../../components.jsx";
+import { Box, T, Reveal, SubBtn, ChapterLink } from "../../components.jsx";
 import { C } from "../../config.js";
 import { CapstoneDecisionCard } from "../../shared/rag-helpers.jsx";
 
@@ -196,7 +196,8 @@ export default function RAGDecisionFrameworkCapstone(ctx) {
       <Reveal when={sub >= 2}>
         <Box color={C.cyan} style={{ width: "100%" }}>
           <T color={C.cyan} bold center size={22}>
-            Decision 1: Chunking Strategy (Chapters 20.5, 20.6)
+            Decision 1: Chunking Strategy (Chapters <ChapterLink to="20.5">20.5</ChapterLink>,{" "}
+            <ChapterLink to="20.6">20.6</ChapterLink>)
           </T>
           <T color="#80deea" center size={16} style={{ marginTop: 10, marginBottom: 14 }}>
             Case opinions have natural hierarchy. Hierarchical + contextual chunking preserves the structure and the
@@ -216,7 +217,8 @@ export default function RAGDecisionFrameworkCapstone(ctx) {
       <Reveal when={sub >= 3}>
         <Box color={C.purple} style={{ width: "100%" }}>
           <T color={C.purple} bold center size={22}>
-            Decision 2: Embedding + Index (Chapters 21.2, 21.3, 21.4)
+            Decision 2: Embedding + Index (Chapters <ChapterLink to="21.2">21.2</ChapterLink>,{" "}
+            <ChapterLink to="21.3">21.3</ChapterLink>, <ChapterLink to="21.4">21.4</ChapterLink>)
           </T>
           <T color="#b8a9ff" center size={16} style={{ marginTop: 10, marginBottom: 14 }}>
             Legal language needs domain adaptation. Hybrid retrieval catches both citation lookups and semantic queries.
@@ -236,7 +238,9 @@ export default function RAGDecisionFrameworkCapstone(ctx) {
       <Reveal when={sub >= 4}>
         <Box color={C.orange} style={{ width: "100%" }}>
           <T color={C.orange} bold center size={22}>
-            Decision 3: Query Transformation (Chapters 21.5, 21.6, 21.7, 21.8)
+            Decision 3: Query Transformation (Chapters <ChapterLink to="21.5">21.5</ChapterLink>,{" "}
+            <ChapterLink to="21.6">21.6</ChapterLink>, <ChapterLink to="21.7">21.7</ChapterLink>,{" "}
+            <ChapterLink to="21.8">21.8</ChapterLink>)
           </T>
           <T color="#ffcc80" center size={16} style={{ marginTop: 10, marginBottom: 14 }}>
             Multi-query expansion improves recall on lexically narrow legal language. Decomposition splits complex
@@ -256,7 +260,8 @@ export default function RAGDecisionFrameworkCapstone(ctx) {
       <Reveal when={sub >= 5}>
         <Box color={C.yellow} style={{ width: "100%" }}>
           <T color={C.yellow} bold center size={22}>
-            Decision 4: Context Packing And Generation (Chapters 22.1, 22.2, 22.3)
+            Decision 4: Context Packing And Generation (Chapters <ChapterLink to="22.1">22.1</ChapterLink>,{" "}
+            <ChapterLink to="22.2">22.2</ChapterLink>, <ChapterLink to="22.3">22.3</ChapterLink>)
           </T>
           <T color="#fff59d" center size={16} style={{ marginTop: 10, marginBottom: 14 }}>
             High token budget. Sandwich packing fights lost-in-middle. Mandatory citations for audit. Refusal preferred
@@ -317,7 +322,9 @@ Answer:`}
       <Reveal when={sub >= 6}>
         <Box color={C.blue} style={{ width: "100%" }}>
           <T color={C.blue} bold center size={22}>
-            Decision 5: Advanced Retrieval Patterns (Chapters 22.4, 22.6, 22.7, 22.9)
+            Decision 5: Advanced Retrieval Patterns (Chapters <ChapterLink to="22.4">22.4</ChapterLink>,{" "}
+            <ChapterLink to="22.6">22.6</ChapterLink>, <ChapterLink to="22.7">22.7</ChapterLink>,{" "}
+            <ChapterLink to="22.9">22.9</ChapterLink>)
           </T>
           <T color="#90caf9" center size={16} style={{ marginTop: 10, marginBottom: 14 }}>
             Case citation is a graph; GraphRAG indexes the relationships. Multi-hop chains the steps for complex
@@ -337,7 +344,9 @@ Answer:`}
       <Reveal when={sub >= 7}>
         <Box color={C.green} style={{ width: "100%" }}>
           <T color={C.green} bold center size={22}>
-            Decision 6: Evaluation (Chapters 23.2, 23.3, 23.4, 23.5)
+            Decision 6: Evaluation (Chapters <ChapterLink to="23.2">23.2</ChapterLink>,{" "}
+            <ChapterLink to="23.3">23.3</ChapterLink>, <ChapterLink to="23.4">23.4</ChapterLink>,{" "}
+            <ChapterLink to="23.5">23.5</ChapterLink>)
           </T>
           <T color="#80e9b1" center size={16} style={{ marginTop: 10, marginBottom: 14 }}>
             Partner-curated golden set is the ground truth. LLM-as-judge with legal rubric. RAGAS faithfulness +
@@ -357,7 +366,8 @@ Answer:`}
       <Reveal when={sub >= 8}>
         <Box color={C.pink} style={{ width: "100%" }}>
           <T color={C.pink} bold center size={22}>
-            Decision 7: Production Operations (Chapters 23.6, 23.8, 23.9)
+            Decision 7: Production Operations (Chapters <ChapterLink to="23.6">23.6</ChapterLink>,{" "}
+            <ChapterLink to="23.8">23.8</ChapterLink>, <ChapterLink to="23.9">23.9</ChapterLink>)
           </T>
           <T color="#f8bbd0" center size={16} style={{ marginTop: 10, marginBottom: 14 }}>
             Semantic cache DISABLED (legal queries too unique; false-hit risk too high). Prompt cache ENABLED for stable

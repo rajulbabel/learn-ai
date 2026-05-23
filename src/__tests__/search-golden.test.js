@@ -8,14 +8,14 @@ describe("search index basics", () => {
     const missing = [];
     for (const ch of chapters) {
       if (ch.id === "0" || !ch.component) continue;
-      if (!indexed.has(ch.slug)) missing.push(ch.id);
+      if (!indexed.has(ch.file)) missing.push(ch.id);
     }
     expect(missing, `missing chapters: ${missing.join(", ")}`).toEqual([]);
   });
 
   it("section 15 has 12 unique chapters (Vector Search Algorithms)", async () => {
     const { chapters } = await import("../config.js");
-    const sec15Slugs = new Set(chapters.filter((c) => c.section === 15).map((c) => c.slug));
+    const sec15Slugs = new Set(chapters.filter((c) => c.section === 15).map((c) => c.file));
     const s15 = new Set(chunks.filter((c) => sec15Slugs.has(c.chapterSlug)).map((c) => c.chapterSlug));
     expect(s15.size).toBe(12);
   });

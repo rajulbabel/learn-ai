@@ -1,5 +1,5 @@
 import { C } from "../../config.js";
-import { Box, T, Reveal, SubBtn } from "../../components.jsx";
+import { Box, T, Reveal, SubBtn, ChapterLink } from "../../components.jsx";
 
 export default function PreNormVsPostNorm(ctx) {
   const { sub, subBtnRipple, registerSubBtn, navigate } = ctx;
@@ -13,7 +13,7 @@ export default function PreNormVsPostNorm(ctx) {
           </T>
           <T color="#90caf9" size={16} style={{ marginTop: 6 }}>
             In the original "Attention Is All You Need" paper, LayerNorm comes <strong>after</strong> the residual Add.
-            This is what we covered in chapter 12.2. Here is the exact order:
+            This is what we covered in <ChapterLink to="12.2">chapter 12.2</ChapterLink>. Here is the exact order:
           </T>
 
           <div style={{ marginTop: 14, display: "flex", flexDirection: "column", alignItems: "center", gap: 0 }}>

@@ -1,4 +1,4 @@
-import { Box, T, Reveal, SubBtn } from "../../components.jsx";
+import { Box, T, Reveal, SubBtn, ChapterLink } from "../../components.jsx";
 import { C } from "../../config.js";
 
 export default function EmbeddingLifecycle(ctx) {
@@ -142,8 +142,8 @@ export default function EmbeddingLifecycle(ctx) {
             Any migration starts with creating a new collection
           </div>
           <T color="#ffe082" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
-            Matryoshka embeddings (chapter 16.5) partly ease this: truncating a 3072-dim Matryoshka to 1536 is still a
-            sensible embedding, though not from the older model.
+            Matryoshka embeddings (<ChapterLink to="16.5">chapter 16.5</ChapterLink>) partly ease this: truncating a
+            3072-dim Matryoshka to 1536 is still a sensible embedding, though not from the older model.
           </T>
         </Box>
       </Reveal>

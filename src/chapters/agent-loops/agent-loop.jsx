@@ -1,4 +1,4 @@
-import { Box, T, Reveal, SubBtn } from "../../components.jsx";
+import { Box, T, Reveal, SubBtn, ChapterLink } from "../../components.jsx";
 import { C } from "../../config.js";
 import { SOFT, tintedCard, pill, DIM_BG, DIM_BORDER } from "../../shared/agent-styles.jsx";
 
@@ -558,7 +558,7 @@ export default function AgentLoop(ctx) {
           <div style={{ ...tintedCard(C.amber), padding: 12, marginTop: 12 }}>
             <span style={pill(C.amber)}>NOTE</span>
             <T color={SOFT.amber} center size={14} style={{ marginTop: 8 }}>
-              We Formalize Each Condition In Chapter 26.6 (Loop Termination).
+              We Formalize Each Condition In <ChapterLink to="26.6">Chapter 26.6</ChapterLink> (Loop Termination).
             </T>
           </div>
 

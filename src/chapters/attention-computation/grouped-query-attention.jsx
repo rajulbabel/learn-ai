@@ -1,5 +1,5 @@
 import { C } from "../../config.js";
-import { Box, T, Reveal, SubBtn } from "../../components.jsx";
+import { Box, T, Reveal, SubBtn, ChapterLink } from "../../components.jsx";
 
 export default function GroupedQueryAttention(ctx) {
   const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx;
@@ -11,7 +11,8 @@ export default function GroupedQueryAttention(ctx) {
             Recall: Multi-Head Attention
           </T>
           <T color={C.blue} style={{ marginTop: 6 }}>
-            In chapters 11.1-11.6, we learned standard MHA. With 8 heads, the model maintains 8 independent sets of Q,
+            In chapters <ChapterLink to="11.1">11.1</ChapterLink>-<ChapterLink to="11.6">11.6</ChapterLink>, we learned
+            standard MHA. With 8 heads, the model maintains 8 independent sets of Q,
             K, V weight matrices:
           </T>
           <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 6 }}>

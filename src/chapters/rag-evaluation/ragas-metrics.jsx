@@ -1,4 +1,4 @@
-import { Box, T, Reveal, SubBtn } from "../../components.jsx";
+import { Box, T, Reveal, SubBtn, ChapterLink } from "../../components.jsx";
 import { C } from "../../config.js";
 import { FormulaBox } from "../../shared/rag-helpers.jsx";
 
@@ -638,7 +638,8 @@ export default function RAGASMetrics(ctx) {
               low; a hallucinated answer that recycles reference words scores high.
             </T>
             <T color="#f48fb1" center size={15} style={{ marginTop: 8 }}>
-              Use RAGAS or LLM-as-judge instead (see chapters 23.1 and 23.2).
+              Use RAGAS or LLM-as-judge instead (see chapters <ChapterLink to="23.1">23.1</ChapterLink> and{" "}
+              <ChapterLink to="23.2">23.2</ChapterLink>).
             </T>
           </div>
         </Box>

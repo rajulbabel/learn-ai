@@ -1,5 +1,5 @@
 import { C } from "../../config.js";
-import { Box, T, Reveal, SubBtn } from "../../components.jsx";
+import { Box, T, Reveal, SubBtn, ChapterLink } from "../../components.jsx";
 
 // Module-private helper: render a matrix as a colored grid
 const MatrixGrid = ({ rows, label, color, dimLabel }) => (
@@ -71,7 +71,7 @@ export default function FFNParallelTrick(ctx) {
             Recap: FFN With Just One Word
           </T>
           <T color="#80deea" size={16} style={{ marginTop: 6 }}>
-            In chapter 12.3 we traced one word ("cats") through FFN. Let's make the matrix shapes explicit. Say "cats"
+            In <ChapterLink to="12.3">chapter 12.3</ChapterLink> we traced one word ("cats") through FFN. Let's make the matrix shapes explicit. Say "cats"
             is a 3-dimensional vector:
           </T>
 

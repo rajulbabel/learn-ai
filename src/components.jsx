@@ -1,5 +1,7 @@
-import { Component, useEffect } from "react";
-import { C } from "./config.js";
+import { Component, createContext, useContext, useEffect } from "react";
+import { C, chapters as defaultChapters } from "./config.js";
+
+export const NavContext = createContext(null);
 
 // Error boundary - catches chapter render crashes
 export class ErrorBoundary extends Component {
@@ -133,6 +135,40 @@ export const SubBtn = ({ onClick, rippleKey, registerSubBtn }) => {
       )}
       Continue
     </button>
+  );
+};
+
+export const ChapterLink = ({ to, children, color = C.purple }) => {
+  const nav = useContext(NavContext);
+  const list = nav?.chapters || defaultChapters;
+  const idx = list.findIndex((c) => c.id === to);
+  const target = idx >= 0 ? list[idx] : null;
+  const canNavigate = target && nav && typeof nav.goTo === "function";
+
+  if (!canNavigate) {
+    return <span>{children}</span>;
+  }
+
+  const onActivate = () => nav.goTo(idx);
+  return (
+    <span
+      role="link"
+      tabIndex={0}
+      aria-label={`Go to ${target.title}`}
+      onClick={onActivate}
+      onKeyDown={(e) => {
+        if (e.key === "Enter") onActivate();
+      }}
+      style={{
+        color,
+        cursor: "pointer",
+        textDecoration: "underline",
+        textDecorationColor: `${color}66`,
+        textUnderlineOffset: 3,
+      }}
+    >
+      {children}
+    </span>
   );
 };
 

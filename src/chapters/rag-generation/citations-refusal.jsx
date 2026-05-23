@@ -1,4 +1,4 @@
-import { Box, T, Reveal, SubBtn } from "../../components.jsx";
+import { Box, T, Reveal, SubBtn, ChapterLink } from "../../components.jsx";
 import { C } from "../../config.js";
 
 // Module-private helpers used by THIS chapter (copied verbatim from section file):
@@ -336,7 +336,8 @@ export default function CitationsRefusal(ctx) {
           </T>
           <T color="#a5d6a7" center size={16} style={{ marginTop: 10 }}>
             Faithfulness is the share of claims in an answer that are supported by the retrieved chunks. A 3-step audit
-            converts citations into a measurable score. Chapters 23.1-23.5 cover RAGAS faithfulness in depth.
+            converts citations into a measurable score. Chapters <ChapterLink to="23.1">23.1</ChapterLink>-
+            <ChapterLink to="23.5">23.5</ChapterLink> cover RAGAS faithfulness in depth.
           </T>
 
           <div style={{ marginTop: 14, display: "flex", flexDirection: "column", gap: 10 }}>

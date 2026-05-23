@@ -1,4 +1,4 @@
-import { Box, T, Reveal, SubBtn } from "../../components.jsx";
+import { Box, T, Reveal, SubBtn, ChapterLink } from "../../components.jsx";
 import { C } from "../../config.js";
 
 // Module-private helpers used by THIS chapter (copied verbatim from section file):
@@ -217,7 +217,8 @@ export default function WhereNaiveRAGBreaks(ctx) {
             Wrong. The 24-hour limit is in the doc, but bad chunking hid it.
           </T>
           <T color="#ffcc80" center size={15} style={{ marginTop: 12 }}>
-            Chapters 20.4-20.10 (chunking strategies) fix this.
+            Chapters <ChapterLink to="20.4">20.4</ChapterLink>-<ChapterLink to="20.10">20.10</ChapterLink> (chunking
+            strategies) fix this.
           </T>
         </Box>
       </Reveal>
@@ -313,7 +314,9 @@ export default function WhereNaiveRAGBreaks(ctx) {
             cluster tightly enough. The right doc is missed entirely from top-3.
           </T>
           <T color="#ffe082" center size={15} style={{ marginTop: 12 }}>
-            Chapters 21.3-21.4 (hybrid retrieval + rerankers) and 21.5-21.8 (query transformation) fix this.
+            Chapters <ChapterLink to="21.3">21.3</ChapterLink>-<ChapterLink to="21.4">21.4</ChapterLink> (hybrid
+            retrieval + rerankers) and <ChapterLink to="21.5">21.5</ChapterLink>-
+            <ChapterLink to="21.8">21.8</ChapterLink> (query transformation) fix this.
           </T>
         </Box>
       </Reveal>
@@ -447,7 +450,8 @@ export default function WhereNaiveRAGBreaks(ctx) {
             relevant chunk at position 5 is in context, but the model skips it.
           </T>
           <T color="#a5d6a7" center size={15} style={{ marginTop: 12 }}>
-            Chapters 22.1-22.3 (context packing + lost-in-middle remedies) fix this.
+            Chapters <ChapterLink to="22.1">22.1</ChapterLink>-<ChapterLink to="22.3">22.3</ChapterLink> (context
+            packing + lost-in-middle remedies) fix this.
           </T>
         </Box>
       </Reveal>
@@ -504,7 +508,8 @@ export default function WhereNaiveRAGBreaks(ctx) {
             it, no one can tell.
           </T>
           <T color="#80deea" center size={15} style={{ marginTop: 12 }}>
-            Chapters 22.1-22.3 (citations + groundedness) fix this.
+            Chapters <ChapterLink to="22.1">22.1</ChapterLink>-<ChapterLink to="22.3">22.3</ChapterLink> (citations +
+            groundedness) fix this.
           </T>
         </Box>
       </Reveal>
@@ -585,7 +590,9 @@ export default function WhereNaiveRAGBreaks(ctx) {
             </div>
           </div>
           <T color="#b8a9ff" center size={15} style={{ marginTop: 12 }}>
-            Chapters 22.1-22.3 (refusal + groundedness instruction) and 23.1-23.5 (faithfulness eval) fix this.
+            Chapters <ChapterLink to="22.1">22.1</ChapterLink>-<ChapterLink to="22.3">22.3</ChapterLink> (refusal +
+            groundedness instruction) and <ChapterLink to="23.1">23.1</ChapterLink>-
+            <ChapterLink to="23.5">23.5</ChapterLink> (faithfulness eval) fix this.
           </T>
         </Box>
       </Reveal>
@@ -658,7 +665,9 @@ export default function WhereNaiveRAGBreaks(ctx) {
                 </T>
               </div>
               <T color="#f8bbd0" center size={13} style={{ marginTop: 10 }}>
-                Embedding lifecycle - covered in Section 17.8 - and chapters 23.6-23.10 (drift detection) fix this.
+                Embedding lifecycle - covered in Section 17.8 - and chapters{" "}
+                <ChapterLink to="23.6">23.6</ChapterLink>-<ChapterLink to="23.10">23.10</ChapterLink> (drift detection)
+                fix this.
               </T>
             </div>
 
@@ -742,7 +751,8 @@ export default function WhereNaiveRAGBreaks(ctx) {
                 At 1000 QPS, costs $12,300/day.
               </T>
               <T color="#f8bbd0" center size={13} style={{ marginTop: 10 }}>
-                Chapters 23.6-23.10 (caching, cost models, observability) fix this.
+                Chapters <ChapterLink to="23.6">23.6</ChapterLink>-<ChapterLink to="23.10">23.10</ChapterLink>{" "}
+                (caching, cost models, observability) fix this.
               </T>
             </div>
           </div>

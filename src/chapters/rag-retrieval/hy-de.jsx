@@ -1,4 +1,4 @@
-import { Box, T, Reveal, SubBtn } from "../../components.jsx";
+import { Box, T, Reveal, SubBtn, ChapterLink } from "../../components.jsx";
 import { C } from "../../config.js";
 
 // Sub=1 flow stages.
@@ -562,7 +562,7 @@ export default function HyDE(ctx) {
               +1 LLM call per user query (~$0.0005 + ~250ms). Cache the hypothetical answer by query hash to amortize.
             </T>
             <T color="#f5b7f8" center size={13} style={{ marginTop: 6 }}>
-              Caching - covered in chapter 23.6.
+              Caching - covered in <ChapterLink to="23.6">chapter 23.6</ChapterLink>.
             </T>
           </div>
         </Box>

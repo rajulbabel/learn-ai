@@ -1,5 +1,5 @@
 import { C } from "../../config.js";
-import { Box, T, Reveal, SubBtn, Tag } from "../../components.jsx";
+import { Box, T, Reveal, SubBtn, Tag, ChapterLink } from "../../components.jsx";
 
 export default function TransformerBlockRepeats(ctx) {
   const { sub, subBtnRipple, registerSubBtn, navigate } = ctx;
@@ -437,7 +437,7 @@ export default function TransformerBlockRepeats(ctx) {
 
           <T color="#a5d6a7" size={14} center style={{ marginTop: 10 }}>
             This is why depth matters - you need many blocks to build from grammar all the way up to meaning and
-            reasoning. It's the same principle as "deep" networks from chapter 4.1, but now each block has both
+            reasoning. It's the same principle as "deep" networks from <ChapterLink to="4.1">chapter 4.1</ChapterLink>, but now each block has both
             attention (for context) and FFN (for knowledge).
           </T>
         </Box>

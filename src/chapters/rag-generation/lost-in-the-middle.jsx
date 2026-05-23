@@ -1,4 +1,4 @@
-import { Box, T, Reveal, SubBtn } from "../../components.jsx";
+import { Box, T, Reveal, SubBtn, ChapterLink } from "../../components.jsx";
 import { C } from "../../config.js";
 
 // Module-private helpers used by THIS chapter (copied verbatim from section file):
@@ -53,7 +53,12 @@ const LITM_SANDWICH_SLOTS = [
 const LITM_FAILURE_CARDS = [
   {
     title: "Truly Long Multi-Fact Queries",
-    body: "30 chunks all needed; even sandwich leaves middle facts ignored. Fix: hierarchical summarization or multi-hop retrieval (chapter 22.4).",
+    body: (
+      <>
+        30 chunks all needed; even sandwich leaves middle facts ignored. Fix: hierarchical summarization or multi-hop
+        retrieval (<ChapterLink to="22.4">chapter 22.4</ChapterLink>).
+      </>
+    ),
     color: C.red,
     accent: "#ef9a9a",
   },

@@ -1,5 +1,5 @@
 import { C } from "../../config.js";
-import { Box, T, Reveal, SubBtn } from "../../components.jsx";
+import { Box, T, Reveal, SubBtn, ChapterLink } from "../../components.jsx";
 
 export default function GradientsInAction(ctx) {
   const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx;
@@ -13,7 +13,7 @@ export default function GradientsInAction(ctx) {
           </T>
           <T color="#80deea" size={16} style={{ marginTop: 12 }}>
             Backprop gave us a gradient for every parameter. Now we apply gradient descent to ALL of them
-            simultaneously. Same formula from chapter 2.5:
+            simultaneously. Same formula from <ChapterLink to="2.5">chapter 2.5</ChapterLink>:
           </T>
           <div
             style={{

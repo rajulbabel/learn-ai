@@ -1,4 +1,4 @@
-import { Box, T, Reveal, SubBtn } from "../../components.jsx";
+import { Box, T, Reveal, SubBtn, ChapterLink } from "../../components.jsx";
 import { C } from "../../config.js";
 import { fmtVec } from "../../shared/vector-graphs.jsx";
 
@@ -28,9 +28,10 @@ export default function RetrievalProblem(ctx) {
             From embeddings to a retrieval problem
           </T>
           <T color="#b8a9ff" style={{ marginTop: 8 }}>
-            Back in chapter 8.2, the transformer turned every word into an embedding - a dense vector of numbers that
-            captures meaning. Now picture an entire library: 10 documents, each pre-encoded into its own vector. A user
-            types a query. How do we find the documents whose meaning matches it?
+            Back in <ChapterLink to="8.2">chapter 8.2</ChapterLink>, the transformer turned every word into an
+            embedding - a dense vector of numbers that captures meaning. Now picture an entire library: 10 documents,
+            each pre-encoded into its own vector. A user types a query. How do we find the documents whose meaning
+            matches it?
           </T>
           <div
             style={{

@@ -13,7 +13,7 @@ import MiniSearch from "minisearch";
 import { getCachedSearchAssets, cacheSearchAssets } from "./embedding-cache.js";
 import { chapters, sectionNames } from "./config.js";
 
-const chapterBySlug = new Map(chapters.map((c) => [c.slug, c]));
+const chapterBySlug = new Map(chapters.map((c) => [c.file, c]));
 
 // Short content fingerprint of an embeddings manifest. Combined with the model
 // checksum it forms the IndexedDB cache key for embeddings.bin so the cache

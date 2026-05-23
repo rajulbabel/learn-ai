@@ -1,5 +1,5 @@
 import { C } from "../../config.js";
-import { Box, T, Reveal, SubBtn } from "../../components.jsx";
+import { Box, T, Reveal, SubBtn, ChapterLink } from "../../components.jsx";
 
 export default function FeedForwardNetwork(ctx) {
   const { sub, subBtnRipple, registerSubBtn, navigate } = ctx;
@@ -12,7 +12,7 @@ export default function FeedForwardNetwork(ctx) {
             Where Does the Feed-Forward Network Sit?
           </T>
           <T color="#ffcc80" size={16} center style={{ marginTop: 4 }}>
-            In chapter 12.2 we covered Add & Norm after Attention. Now let's zoom into the next step.
+            In <ChapterLink to="12.2">chapter 12.2</ChapterLink> we covered Add & Norm after Attention. Now let's zoom into the next step.
           </T>
           <div style={{ marginTop: 16, display: "flex", flexDirection: "column", alignItems: "center", gap: 0 }}>
             {[
@@ -69,7 +69,7 @@ export default function FeedForwardNetwork(ctx) {
             FFN = Two Linear Layers with Activation
           </T>
           <T color="#80deea" size={16} style={{ marginTop: 6 }}>
-            You already know what a layer does (chapter 3.4): multiply by a weight matrix W, add bias b. The FFN is just{" "}
+            You already know what a layer does (<ChapterLink to="3.4">chapter 3.4</ChapterLink>): multiply by a weight matrix W, add bias b. The FFN is just{" "}
             <strong>two</strong> of those layers stacked, with an activation function in between.
           </T>
 
@@ -365,7 +365,7 @@ export default function FeedForwardNetwork(ctx) {
             Step-by-Step: FFN on "cats"
           </T>
           <T color="#a5d6a7" size={16} style={{ marginTop: 6 }}>
-            Let's trace "cats" through the FFN. In chapter 12.2, Add & Norm output [-1.36, -0.55, 0.86, 1.06] for
+            Let's trace "cats" through the FFN. In <ChapterLink to="12.2">chapter 12.2</ChapterLink>, Add & Norm output [-1.36, -0.55, 0.86, 1.06] for
             "cats". We'll use a tiny 4-dim version to show the real math (real models use 512 dims but the process is
             identical).
           </T>
@@ -399,7 +399,7 @@ export default function FeedForwardNetwork(ctx) {
               </div>
               <T color={C.dim} size={13}>
                 Each of the 8 output values is a dot product of the input with one column of W<sub>1</sub>, plus a bias
-                - exactly like chapter 3.4.
+                - exactly like <ChapterLink to="3.4">chapter 3.4</ChapterLink>.
               </T>
               <div style={{ marginTop: 4, padding: 8, borderRadius: 6, background: `${C.pink}06`, width: "100%" }}>
                 <T color={C.pink} bold center size={14}>
@@ -438,7 +438,7 @@ export default function FeedForwardNetwork(ctx) {
               Step 2: Apply GELU activation
             </T>
             <T color={C.dim} size={13} style={{ marginTop: 4 }}>
-              GELU applies to each value independently - similar to ReLU (chapter 1.6) but smoother.
+              GELU applies to each value independently - similar to ReLU (<ChapterLink to="1.6">chapter 1.6</ChapterLink>) but smoother.
             </T>
             <div style={{ marginTop: 8, display: "flex", flexWrap: "wrap", gap: 4, justifyContent: "center" }}>
               {[
@@ -545,7 +545,7 @@ export default function FeedForwardNetwork(ctx) {
             GELU - The Activation Function
           </T>
           <T color="#fff176" size={16} style={{ marginTop: 6 }}>
-            In chapter 1.6 we learned ReLU. Modern Transformers use a smoother alternative called GELU (Gaussian Error
+            In <ChapterLink to="1.6">chapter 1.6</ChapterLink> we learned ReLU. Modern Transformers use a smoother alternative called GELU (Gaussian Error
             Linear Unit). Here is the real formula:
           </T>
 
@@ -745,7 +745,7 @@ export default function FeedForwardNetwork(ctx) {
               }}
             >
               <T color={C.red} bold center size={15}>
-                ReLU (chapter 1.6)
+                ReLU (<ChapterLink to="1.6">chapter 1.6</ChapterLink>)
               </T>
               <div style={{ marginTop: 6, fontFamily: "monospace", fontSize: 13, textAlign: "center" }}>
                 <div style={{ color: C.dim }}>
@@ -988,7 +988,7 @@ export default function FeedForwardNetwork(ctx) {
           </div>
 
           <T color="#fff176" size={14} style={{ marginTop: 10 }}>
-            Why does the smooth curve matter? During backpropagation (chapter 2.8), ReLU's gradient is exactly 0 for all
+            Why does the smooth curve matter? During backpropagation (<ChapterLink to="2.8">chapter 2.8</ChapterLink>), ReLU's gradient is exactly 0 for all
             negative inputs - the neuron is "dead" and can never recover. GELU's smooth curve means even slightly
             negative values get a small gradient, so neurons can recover. GPT-2 and GPT-3 both use GELU.
           </T>
@@ -1450,7 +1450,7 @@ export default function FeedForwardNetwork(ctx) {
           </T>
           <T color="#b8a9ff" size={16} style={{ marginTop: 6 }}>
             Parameters are all the learnable numbers in the model - every weight and bias that got tuned during training
-            (chapter 1.4). They are the model's "memory." More parameters = more capacity to store knowledge.
+            (<ChapterLink to="1.4">chapter 1.4</ChapterLink>). They are the model's "memory." More parameters = more capacity to store knowledge.
           </T>
 
           <T color="#b8a9ff" size={15} style={{ marginTop: 10 }}>
@@ -1505,10 +1505,10 @@ export default function FeedForwardNetwork(ctx) {
                   Attention: ~1.05M
                 </T>
                 <T color={C.dim} size={11} style={{ marginTop: 4 }}>
-                  W_Q, W_K, W_V = 3 matrices that create the Queries, Keys, and Values (chapter 9.9)
+                  W_Q, W_K, W_V = 3 matrices that create the Queries, Keys, and Values (<ChapterLink to="9.9">chapter 9.9</ChapterLink>)
                 </T>
                 <T color={C.dim} size={11} style={{ marginTop: 2 }}>
-                  W_O = the matrix that blends multi-head outputs (chapter 11.4)
+                  W_O = the matrix that blends multi-head outputs (<ChapterLink to="11.4">chapter 11.4</ChapterLink>)
                 </T>
                 <T color={C.pink} size={11} style={{ marginTop: 4 }}>
                   These learn <strong>how to find relationships</strong> between words

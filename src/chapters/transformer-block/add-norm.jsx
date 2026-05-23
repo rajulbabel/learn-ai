@@ -1,5 +1,5 @@
 import { C } from "../../config.js";
-import { Box, T, Reveal, SubBtn, Tag } from "../../components.jsx";
+import { Box, T, Reveal, SubBtn, Tag, ChapterLink } from "../../components.jsx";
 
 export default function AddNorm(ctx) {
   const { sub, subBtnRipple, registerSubBtn, navigate } = ctx;
@@ -69,7 +69,8 @@ export default function AddNorm(ctx) {
             The Problem: Values Drift in Deep Networks
           </T>
           <T color="#ef9a9a" size={16} style={{ marginTop: 6 }}>
-            GPT-3 has 96 layers. Each layer multiplies values by weights (we learned this in chapters 1.4-1.6). The
+            GPT-3 has 96 layers. Each layer multiplies values by weights (we learned this in chapters{" "}
+            <ChapterLink to="1.4">1.4</ChapterLink>-<ChapterLink to="1.6">1.6</ChapterLink>). The
             result depends on the weights - if they're slightly below 1.0, values shrink. If slightly above, values
             explode. Keeping them perfectly balanced across 96 layers is nearly impossible.
           </T>
@@ -158,7 +159,7 @@ export default function AddNorm(ctx) {
 
           <T color="#ef9a9a" bold center size={16} style={{ marginTop: 12 }}>
             Both are <Tag color={C.red}>broken</Tag>. Whether the value goes to 0.00003 or 4,838 - it's no longer a
-            useful embedding. And gradients during backpropagation (chapter 2.2) drift the same way, so the model can't
+            useful embedding. And gradients during backpropagation (<ChapterLink to="2.2">chapter 2.2</ChapterLink>) drift the same way, so the model can't
             learn either.
           </T>
         </Box>
@@ -239,7 +240,7 @@ export default function AddNorm(ctx) {
 
           <T color="#a5d6a7" size={16} style={{ marginTop: 12 }}>
             Think of it as a <strong>highway</strong>: even if the attention layer learns nothing useful, the original
-            embedding still passes through untouched. During backpropagation (chapter 2.2), the error can travel
+            embedding still passes through untouched. During backpropagation (<ChapterLink to="2.2">chapter 2.2</ChapterLink>), the error can travel
             backward along this highway without shrinking to zero.
           </T>
 

@@ -1,5 +1,5 @@
 import { C } from "../../config.js";
-import { Box, T, Reveal, SubBtn } from "../../components.jsx";
+import { Box, T, Reveal, SubBtn, ChapterLink } from "../../components.jsx";
 
 export default function Matrices(ctx) {
   const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx;
@@ -641,7 +641,7 @@ export default function Matrices(ctx) {
             This is What a Layer Does!
           </T>
           <T color="#ffe082" size={15} style={{ marginTop: 10 }}>
-            In chapter 1.3, a layer with weights [[0.6, 0.3, 0.1], [0.1, 0.5, 0.2], [0.0, 0.2, 0.7]] transforming input
+            In <ChapterLink to="1.3">chapter 1.3</ChapterLink>, a layer with weights [[0.6, 0.3, 0.1], [0.1, 0.5, 0.2], [0.0, 0.2, 0.7]] transforming input
             [38.5, 1.0, 0.8] is matrix multiplication.
           </T>
           <div

@@ -96,8 +96,8 @@ describe("config.js", () => {
 
   it("validateConfig detects duplicate IDs", () => {
     const badConfig = [
-      { id: "1.1", title: "A", section: 1, component: "CompA", slug: "x/a" },
-      { id: "1.1", title: "B", section: 1, component: "CompB", slug: "x/b" },
+      { id: "1.1", title: "A", section: 1, component: "CompA", file: "x/a" },
+      { id: "1.1", title: "B", section: 1, component: "CompB", file: "x/b" },
     ];
     const errors = validateConfig(badConfig);
     expect(errors.length).toBe(1);
@@ -105,14 +105,14 @@ describe("config.js", () => {
   });
 
   it("validateConfig detects missing id when component present", () => {
-    const badConfig = [{ id: "", title: "A", section: 1, component: "CompA", slug: "x/a" }];
+    const badConfig = [{ id: "", title: "A", section: 1, component: "CompA", file: "x/a" }];
     const errors = validateConfig(badConfig);
     expect(errors.length).toBe(1);
     expect(errors[0]).toContain("missing id");
   });
 
   it("validateConfig detects missing component", () => {
-    const badConfig = [{ id: "1.1", title: "A", section: 1, component: "", slug: "x/a" }];
+    const badConfig = [{ id: "1.1", title: "A", section: 1, component: "", file: "x/a" }];
     const errors = validateConfig(badConfig);
     expect(errors.length).toBe(1);
     expect(errors[0]).toContain("missing component");
@@ -140,17 +140,22 @@ describe("config.js", () => {
     });
   });
 
-  it("every chapter has a slug equal to its file path", () => {
+  it("every chapter has a file path", () => {
     chapters.forEach((c) => {
       if (c.section === 0) return; // section 0 (TOC) is special
-      expect(typeof c.slug).toBe("string");
-      expect(c.slug).toBe(c.file);
+      expect(typeof c.file).toBe("string");
     });
   });
 
-  it("no duplicate slugs across chapters", () => {
-    const slugs = chapters.filter((c) => c.section > 0).map((c) => c.slug);
-    expect(new Set(slugs).size).toBe(slugs.length);
+  it("no duplicate file paths across chapters", () => {
+    const files = chapters.filter((c) => c.section > 0).map((c) => c.file);
+    expect(new Set(files).size).toBe(files.length);
+  });
+
+  it("no chapter has a leftover slug field", () => {
+    chapters.forEach((c) => {
+      expect(c).not.toHaveProperty("slug");
+    });
   });
 
   it("no chapter title contains standalone uppercase IS", () => {
@@ -250,7 +255,7 @@ describe("config.js", () => {
     });
 
     it("super-section slugs do not collide with any chapter topic", () => {
-      const topics = new Set(chapters.filter((c) => c.section > 0).map((c) => c.slug.split("/")[0]));
+      const topics = new Set(chapters.filter((c) => c.section > 0).map((c) => c.file.split("/")[0]));
       superSections.forEach((sg) => {
         expect(topics.has(sg.slug), `super slug "${sg.slug}" collides with chapter topic`).toBe(false);
       });
@@ -291,7 +296,6 @@ describe("config.js", () => {
         expect(s.super).toMatch(/^[A-F]$/);
         expect(Array.isArray(s.chapters)).toBe(true);
         s.chapters.forEach((c) => {
-          expect(typeof c.slug).toBe("string");
           expect(typeof c.file).toBe("string");
           expect(typeof c.title).toBe("string");
           expect(typeof c.component).toBe("string");
@@ -309,7 +313,6 @@ describe("config.js", () => {
         s.chapters.forEach((c, i) => {
           const derived = mod.chapters[cursor++];
           expect(derived.id).toBe(`${s.num}.${i + 1}`);
-          expect(derived.slug).toBe(c.slug);
           expect(derived.file).toBe(c.file);
           expect(derived.title).toBe(c.title);
           expect(derived.component).toBe(c.component);
@@ -336,17 +339,17 @@ describe("config.js", () => {
   });
 
   describe("validateConfig (extended)", () => {
-    it("flags duplicate slugs", () => {
+    it("flags duplicate files", () => {
       const errs = validateConfig([
-        { id: "1.1", component: "A", file: "x/a", slug: "dup" },
-        { id: "1.2", component: "B", file: "x/b", slug: "dup" },
+        { id: "1.1", component: "A", file: "x/dup" },
+        { id: "1.2", component: "B", file: "x/dup" },
       ]);
-      expect(errs.some((e) => /Duplicate.*slug/i.test(e))).toBe(true);
+      expect(errs.some((e) => /Duplicate.*file/i.test(e))).toBe(true);
     });
 
-    it("flags chapters missing slug", () => {
-      const errs = validateConfig([{ id: "1.1", component: "A", file: "x/a" }]);
-      expect(errs.some((e) => /missing.*slug/i.test(e))).toBe(true);
+    it("flags chapters missing file", () => {
+      const errs = validateConfig([{ id: "1.1", component: "A" }]);
+      expect(errs.some((e) => /missing.*file/i.test(e))).toBe(true);
     });
 
     it("returns no errors for current config", () => {

@@ -1,4 +1,4 @@
-import { Box, T, Reveal, SubBtn } from "../../components.jsx";
+import { Box, T, Reveal, SubBtn, ChapterLink } from "../../components.jsx";
 import { C } from "../../config.js";
 
 // Module-private helpers used by THIS chapter (copied verbatim from section file):
@@ -773,7 +773,8 @@ export default function RecursiveStructuralChunking(ctx) {
             }}
           >
             <T color="#ef9a9a" center size={14}>
-              Chapter 20.6 fixes the semantic-boundary gap. Chapter 20.8 fixes the parent-child gap.
+              <ChapterLink to="20.6">Chapter 20.6</ChapterLink> fixes the semantic-boundary gap.{" "}
+              <ChapterLink to="20.8">Chapter 20.8</ChapterLink> fixes the parent-child gap.
             </T>
           </div>
         </Box>

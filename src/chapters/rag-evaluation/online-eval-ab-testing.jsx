@@ -1,4 +1,4 @@
-import { Box, T, Reveal, SubBtn } from "../../components.jsx";
+import { Box, T, Reveal, SubBtn, ChapterLink } from "../../components.jsx";
 import { C } from "../../config.js";
 
 // Module-private helpers used by THIS chapter (copied verbatim from section file):
@@ -89,7 +89,11 @@ const OE_LOOP_NODES = [
   {
     n: 2,
     label: "Capture To Golden Regression Set",
-    detail: "Tie the failing case into chapter 23.4.",
+    detail: (
+      <>
+        Tie the failing case into <ChapterLink to="23.4">chapter 23.4</ChapterLink>.
+      </>
+    ),
     color: C.cyan,
     accent: "#80deea",
   },

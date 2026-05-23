@@ -1,4 +1,4 @@
-import { Box, T, Reveal, SubBtn } from "../../components.jsx";
+import { Box, T, Reveal, SubBtn, ChapterLink } from "../../components.jsx";
 import { C } from "../../config.js";
 
 // Module-private helpers used by THIS chapter (copied verbatim from section file):
@@ -81,7 +81,12 @@ const METADATA_USE_CASES = [
   },
   {
     label: "Citations",
-    body: "Chapter 22.3 uses the source_url so the LLM can cite where the answer came from.",
+    body: (
+      <>
+        <ChapterLink to="22.3">Chapter 22.3</ChapterLink> uses the source_url so the LLM can cite where the answer came
+        from.
+      </>
+    ),
   },
   {
     label: "Permission Gating",

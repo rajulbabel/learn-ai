@@ -1,4 +1,4 @@
-import { Box, T, Reveal, SubBtn } from "../../components.jsx";
+import { Box, T, Reveal, SubBtn, ChapterLink } from "../../components.jsx";
 import { C } from "../../config.js";
 
 // Module-private helpers used by THIS chapter (copied verbatim from section file):
@@ -230,7 +230,8 @@ export default function NaiveRAGPipeline(ctx) {
           </div>
           <T color="#b8a9ff" size={16} style={{ marginTop: 14 }}>
             Embeddings - covered in Section 8.2 - turn text into dense vectors. RAG uses retrieval-tuned embeddings
-            (more in chapter 21.1). Production typically uses 1024-dim vectors; we show 8 here for visibility.
+            (more in <ChapterLink to="21.1">chapter 21.1</ChapterLink>). Production typically uses 1024-dim vectors; we
+            show 8 here for visibility.
           </T>
         </Box>
       </Reveal>

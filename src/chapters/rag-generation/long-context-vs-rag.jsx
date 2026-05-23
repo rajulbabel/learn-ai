@@ -1,4 +1,4 @@
-import { Box, T, Reveal, SubBtn } from "../../components.jsx";
+import { Box, T, Reveal, SubBtn, ChapterLink } from "../../components.jsx";
 import { C } from "../../config.js";
 
 // Module-private helpers used by THIS chapter (copied verbatim from section file):
@@ -161,7 +161,8 @@ export default function LongContextVsRAG(ctx) {
           </T>
           <T color="#ef9a9a" center size={16} style={{ marginTop: 10 }}>
             Pack ALL 120k tokens of the manual into the prompt. The LLM reads everything and answers. Simple. Expensive.
-            Slow. And subject to lost-in-the-middle (chapter 22.2) for facts buried in the middle pages.
+            Slow. And subject to lost-in-the-middle (<ChapterLink to="22.2">chapter 22.2</ChapterLink>) for facts buried
+            in the middle pages.
           </T>
 
           <div
@@ -308,8 +309,9 @@ export default function LongContextVsRAG(ctx) {
           </T>
           <T color="#b8a9ff" center size={16} style={{ marginTop: 10 }}>
             The pragmatic middle. Retrieve top-30 chunks (15,000 tokens), optionally rerank, then pack 50k tokens into
-            the prompt. Reorder using lost-in-middle strategies (front-load or sandwich, from chapter 22.2). Cost and
-            latency sit between the extremes; accuracy is highest because more candidate chunks lowers miss rate.
+            the prompt. Reorder using lost-in-middle strategies (front-load or sandwich, from{" "}
+            <ChapterLink to="22.2">chapter 22.2</ChapterLink>). Cost and latency sit between the extremes; accuracy is
+            highest because more candidate chunks lowers miss rate.
           </T>
 
           <div

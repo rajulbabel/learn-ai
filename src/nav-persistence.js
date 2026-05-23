@@ -1,7 +1,7 @@
 const KEY = "learn-ai-nav";
 
 function fingerprint(chapters) {
-  return chapters.map((c) => c.slug).join(",");
+  return chapters.map((c) => c.file).join(",");
 }
 
 export function saveNav(ch, sub, chapters) {

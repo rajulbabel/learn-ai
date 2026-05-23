@@ -1,4 +1,4 @@
-import { Box, T, Reveal, SubBtn } from "../../components.jsx";
+import { Box, T, Reveal, SubBtn, ChapterLink } from "../../components.jsx";
 import { C } from "../../config.js";
 
 // Module-private helpers used by THIS chapter (copied verbatim from section file):
@@ -447,7 +447,8 @@ export default function AgenticRAG(ctx) {
           </T>
           <T color="#f48fb1" center size={16} style={{ marginTop: 10 }}>
             Pick orchestration last. The patterns above work without any framework. Frameworks are a productivity
-            choice, not a correctness one. Chapters 23.6-23.10 cover framework choice in depth.
+            choice, not a correctness one. Chapters <ChapterLink to="23.6">23.6</ChapterLink>-
+            <ChapterLink to="23.10">23.10</ChapterLink> cover framework choice in depth.
           </T>
 
           <div style={{ marginTop: 14, display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>

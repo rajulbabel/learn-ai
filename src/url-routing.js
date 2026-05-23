@@ -26,7 +26,7 @@ export function parsePath(pathname, { chapters, sections, superSections }) {
   // 2 segments: chapter first, then super+section
   if (segs.length === 2) {
     const slug = `${segs[0]}/${segs[1]}`;
-    const chIdx = chapters.findIndex((c) => c.slug === slug);
+    const chIdx = chapters.findIndex((c) => c.file === slug);
     if (chIdx >= 0) return { kind: "chapter", ch: chIdx, sub: 0 };
 
     const sg = superSections.find((s) => s.slug === segs[0]);
@@ -40,7 +40,7 @@ export function parsePath(pathname, { chapters, sections, superSections }) {
   // 3 segments: chapter + sub
   if (segs.length === 3) {
     const slug = `${segs[0]}/${segs[1]}`;
-    const chIdx = chapters.findIndex((c) => c.slug === slug);
+    const chIdx = chapters.findIndex((c) => c.file === slug);
     if (chIdx < 0) return { kind: "invalid" };
     const sub = Number(segs[2]);
     if (!Number.isFinite(sub) || sub < 0 || !Number.isInteger(sub)) return { kind: "invalid" };
@@ -55,8 +55,8 @@ export function buildPath(state, { chapters, sections, superSections }) {
     const ch = chapters[state.ch];
     if (!ch || ch.section === 0) return BASE_PATH;
     const sub = state.sub;
-    if (sub > 0) return `${BASE_PATH}${ch.slug}/${sub}`;
-    return `${BASE_PATH}${ch.slug}`;
+    if (sub > 0) return `${BASE_PATH}${ch.file}/${sub}`;
+    return `${BASE_PATH}${ch.file}`;
   }
   if (state.kind === "toc") {
     if (!state.super) return BASE_PATH;

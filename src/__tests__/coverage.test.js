@@ -7,7 +7,7 @@ describe("search coverage", () => {
     const indexed = new Set(chunks.map((c) => c.chapterSlug));
     const missing = chapters
       .filter((c) => c.id !== "0" && c.component)
-      .filter((c) => !indexed.has(c.slug))
+      .filter((c) => !indexed.has(c.file))
       .map((c) => c.id);
     expect(missing, `missing chapters: ${missing.join(", ")}`).toEqual([]);
   });

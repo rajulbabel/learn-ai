@@ -63,7 +63,7 @@ describe("parsePath - TOC", () => {
 
 describe("parsePath - chapter", () => {
   it("known chapter slug returns chapter sub=0", () => {
-    const idx = chapters.findIndex((c) => c.slug === "neural-foundations/what-is-nn");
+    const idx = chapters.findIndex((c) => c.file === "neural-foundations/what-is-nn");
     expect(parsePath("/learn-ai/neural-foundations/what-is-nn", cfg)).toEqual({
       kind: "chapter",
       ch: idx,
@@ -72,7 +72,7 @@ describe("parsePath - chapter", () => {
   });
 
   it("known chapter slug with sub returns chapter at that sub", () => {
-    const idx = chapters.findIndex((c) => c.slug === "attention-computation/compute-qkv");
+    const idx = chapters.findIndex((c) => c.file === "attention-computation/compute-qkv");
     expect(parsePath("/learn-ai/attention-computation/compute-qkv/3", cfg)).toEqual({
       kind: "chapter",
       ch: idx,
@@ -82,7 +82,7 @@ describe("parsePath - chapter", () => {
 
   it("chapter slug takes precedence over super+section if both shapes match (only chapter exists here)", () => {
     // No collisions in current data, but verify lookup order
-    const idx = chapters.findIndex((c) => c.slug === "neural-foundations/what-is-nn");
+    const idx = chapters.findIndex((c) => c.file === "neural-foundations/what-is-nn");
     expect(parsePath("/learn-ai/neural-foundations/what-is-nn", cfg).kind).toBe("chapter");
     expect(parsePath("/learn-ai/neural-foundations/what-is-nn", cfg).ch).toBe(idx);
   });
@@ -118,12 +118,12 @@ describe("buildPath", () => {
   });
 
   it("chapter with sub=0 omits sub segment", () => {
-    const idx = chapters.findIndex((c) => c.slug === "neural-foundations/what-is-nn");
+    const idx = chapters.findIndex((c) => c.file === "neural-foundations/what-is-nn");
     expect(buildPath({ kind: "chapter", ch: idx, sub: 0 }, cfg)).toBe("/learn-ai/neural-foundations/what-is-nn");
   });
 
   it("chapter with sub>0 includes sub segment", () => {
-    const idx = chapters.findIndex((c) => c.slug === "attention-computation/compute-qkv");
+    const idx = chapters.findIndex((c) => c.file === "attention-computation/compute-qkv");
     expect(buildPath({ kind: "chapter", ch: idx, sub: 3 }, cfg)).toBe("/learn-ai/attention-computation/compute-qkv/3");
   });
 
@@ -133,7 +133,7 @@ describe("buildPath", () => {
   });
 
   it("round-trip chapter parses back to the same state", () => {
-    const idx = chapters.findIndex((c) => c.slug === "attention-computation/compute-qkv");
+    const idx = chapters.findIndex((c) => c.file === "attention-computation/compute-qkv");
     const state = { kind: "chapter", ch: idx, sub: 2 };
     expect(parsePath(buildPath(state, cfg), cfg)).toEqual(state);
   });
@@ -167,7 +167,7 @@ describe("buildPath", () => {
 
 describe("resolveInitialState", () => {
   it("chapter URL resolves to chapter state", () => {
-    const idx = chapters.findIndex((c) => c.slug === "attention-computation/compute-qkv");
+    const idx = chapters.findIndex((c) => c.file === "attention-computation/compute-qkv");
     const state = resolveInitialState("/learn-ai/attention-computation/compute-qkv/2", null, cfg);
     expect(state).toEqual({ ch: idx, sub: 2, expanded: null });
   });
@@ -183,7 +183,7 @@ describe("resolveInitialState", () => {
   });
 
   it("bare URL with saved nav resolves to saved chapter", () => {
-    const idx = chapters.findIndex((c) => c.slug === "neural-foundations/what-is-nn");
+    const idx = chapters.findIndex((c) => c.file === "neural-foundations/what-is-nn");
     const state = resolveInitialState("/learn-ai/", { ch: idx, sub: 1 }, cfg);
     expect(state).toEqual({ ch: idx, sub: 1, expanded: null });
   });

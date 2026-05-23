@@ -1,4 +1,4 @@
-import { Box, T, Reveal, SubBtn } from "../../components.jsx";
+import { Box, T, Reveal, SubBtn, ChapterLink } from "../../components.jsx";
 import { C } from "../../config.js";
 
 export default function Qdrant(ctx) {
@@ -78,10 +78,10 @@ export default function Qdrant(ctx) {
             HNSW graph + inline filter during traversal
           </T>
           <T color="#ffe082" style={{ marginTop: 8 }}>
-            Qdrant&apos;s core index is HNSW, same as chapter 15.10. What makes it distinctive is the filter story.
-            Recall from 17.1: the three strategies are pre-filter, post-filter, and inline. Qdrant implements inline
-            filtered-HNSW natively - predicates evaluate as the graph traversal visits each candidate, so tight filters
-            never degenerate into brute-force or return empty results.
+            Qdrant&apos;s core index is HNSW, same as <ChapterLink to="15.10">chapter 15.10</ChapterLink>. What makes
+            it distinctive is the filter story. Recall from 17.1: the three strategies are pre-filter, post-filter,
+            and inline. Qdrant implements inline filtered-HNSW natively - predicates evaluate as the graph traversal
+            visits each candidate, so tight filters never degenerate into brute-force or return empty results.
           </T>
           <div
             style={{
@@ -182,7 +182,8 @@ export default function Qdrant(ctx) {
           </div>
           <T color="#ffe082" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
             Qdrant built a dedicated payload index (inverted index over metadata) so filter evaluation is essentially
-            free during traversal. This is why Qdrant wins chapter 17.1&apos;s filter-heavy scenarios.
+            free during traversal. This is why Qdrant wins{" "}
+            <ChapterLink to="17.1">chapter 17.1</ChapterLink>&apos;s filter-heavy scenarios.
           </T>
         </Box>
       </Reveal>
@@ -252,7 +253,12 @@ export default function Qdrant(ctx) {
             {[
               {
                 t: "Multi-vector support",
-                d: "One point can store several named vectors (title, body, image) in the same record - native support since v1.10 (chapter 17.7)",
+                d: (
+                  <>
+                    One point can store several named vectors (title, body, image) in the same record - native
+                    support since v1.10 (<ChapterLink to="17.7">chapter 17.7</ChapterLink>)
+                  </>
+                ),
                 color: C.green,
               },
               {

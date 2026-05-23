@@ -1,4 +1,4 @@
-import { Box, T, Reveal, SubBtn } from "../../components.jsx";
+import { Box, T, Reveal, SubBtn, ChapterLink } from "../../components.jsx";
 import { C } from "../../config.js";
 
 export default function Pgvector(ctx) {
@@ -169,8 +169,8 @@ export default function Pgvector(ctx) {
             ))}
           </div>
           <T color="#ffe082" size={16} style={{ marginTop: 10, fontStyle: "italic" }}>
-            Cosine is the default because SBERT-family embeddings are direction-carriers, not magnitude-carriers. See
-            chapter 15.4 for the cosine / L2 / inner-product discussion.
+            Cosine is the default because SBERT-family embeddings are direction-carriers, not magnitude-carriers. See{" "}
+            <ChapterLink to="15.4">chapter 15.4</ChapterLink> for the cosine / L2 / inner-product discussion.
           </T>
         </Box>
       </Reveal>

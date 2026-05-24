@@ -49,10 +49,11 @@ if ! command -v claude >/dev/null 2>&1; then
   exit 1
 fi
 
-if [ -z "$EMBED_API_URL" ]; then
-  printf "\033[31m[pre-push] EMBED_API_URL not set. Rebuild needs the Cloudflare Worker URL.\n  Run: EMBED_API_URL=https://<your-worker>.workers.dev git push\033[0m\n"
-  exit 1
-fi
+# Default to the deployed CF Worker so plain `git push` triggers a rebuild
+# without needing the env var inline. URL is public (it's the production
+# embedding endpoint baked into the site build via VITE_EMBED_API_URL).
+EMBED_API_URL="${EMBED_API_URL:-https://learn-ai-embed.rajul-babel.workers.dev}"
+export EMBED_API_URL
 
 ARTIFACTS="src/data/chunks.json src/data/chunk-cache.json src/data/embeddings.bin src/data/embeddings-manifest.json"
 

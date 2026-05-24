@@ -7,6 +7,13 @@ import { initSearch, search, searchText, getSearchStatus, prefetchSearch } from 
 const RELEVANCE_THRESHOLD = 0.15;
 
 /**
+ * Debounce window (ms) between the last keypress and firing the hybrid
+ * search. Text results still update synchronously per keystroke; this only
+ * gates the async remote-embed call. Tune for cost vs latency.
+ */
+const SEARCH_DEBOUNCE_MS = 400;
+
+/**
  * Filter results by relative score and compute a normalized 0-10 score.
  * Top result = 10.0, others scaled proportionally.
  * Results below RELEVANCE_THRESHOLD (as fraction of 10) are filtered out.
@@ -133,7 +140,7 @@ export default function SearchOverlay({ open, onClose, onGoTo }) {
     setLoading(true);
     setActiveIdx(-1);
     clearTimeout(debounceRef.current);
-    debounceRef.current = setTimeout(() => doSearch(val), 200);
+    debounceRef.current = setTimeout(() => doSearch(val), SEARCH_DEBOUNCE_MS);
   };
 
   const handleSelect = (slug, sub) => {

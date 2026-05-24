@@ -70,11 +70,12 @@ async function setupSearchMock(resultOrArray) {
   return mod;
 }
 
-// Helper: type a query and wait for debounced results
+// Helper: type a query and wait for debounced results. Wait must exceed
+// SEARCH_DEBOUNCE_MS in search-overlay.jsx (currently 400 ms).
 async function typeAndWait(input, query) {
   await act(async () => {
     fireEvent.change(input, { target: { value: query } });
-    await new Promise((r) => setTimeout(r, 300));
+    await new Promise((r) => setTimeout(r, 550));
   });
 }
 

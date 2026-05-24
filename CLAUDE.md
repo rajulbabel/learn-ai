@@ -407,25 +407,79 @@ comparison, or a step-by-step calculation - it is not done yet. Always ask:
 "Can I SHOW this instead of just TELLING it?" and "Is this the REAL formula
 or a dumbed-down version?"
 
-## Discoverability Sync Rules - MANDATORY
+## Discoverability Sync Rules - MANDATORY (SEO + AEO)
 
-The site's discoverability (Google, Bing, ChatGPT search, Claude web, Gemini,
-Perplexity) depends on metadata staying in sync with content. Whenever a code
-change touches any trigger below, update the listed companion files in the SAME
-commit. Apply automatically without asking the user.
+The site's discoverability across both **SEO** (Google, Bing, DuckDuckGo) and
+**AEO / Answer Engine Optimization** (ChatGPT search, Claude web, Gemini,
+Perplexity, and other LLM crawlers) depends on metadata and static text staying
+in sync with content. Because the app is a client-rendered SPA, the `<body>`
+served by GitHub Pages is **the only content crawlers see without executing
+JS**. Treat the static body inside `#root`, the `<noscript>` block, and
+`public/llms.txt` as **authoritative** for crawlers - if they fall out of sync
+with config / content, the site loses ranking.
+
+Whenever a code change touches any trigger below, update the listed companion
+files in the SAME commit. Apply automatically without asking the user.
 
 | If you change... | You MUST also update... |
 |---|---|
-| `src/config.js` chapters or sectionNames (add / rename / remove / reorder) | `public/llms.txt` "What it covers" topic list, `index.html` JSON-LD `teaches` array |
-| Site title, meta description, author name, or tagline (anywhere) | `index.html` (`<title>`, `<meta name="description">`, `og:title`, `og:description`, `twitter:title`, `twitter:description`, JSON-LD `name` / `description`), `public/llms.txt` heading + summary line, footer in `src/learn-ai.jsx` |
+| `src/config.js` chapters or sectionNames (add / rename / remove / reorder) | `public/llms.txt` "What it covers" topic list, `index.html` JSON-LD `teaches` array, the `.seo-fallback` curriculum topic list inside `#root` in `index.html`, and bump `<lastmod>` in `public/sitemap.xml` |
+| Site title, meta description, author name, or tagline (anywhere) | `index.html` (`<title>`, `<meta name="description">`, `og:title`, `og:description`, `twitter:title`, `twitter:description`, JSON-LD `name` / `description`), the static `<h1>` + intro inside `#root` in `index.html`, the `<noscript>` block in `index.html`, `public/llms.txt` heading + summary line, footer in `src/learn-ai.jsx`, and bump `<lastmod>` in `public/sitemap.xml` |
 | Visual identity (logo, hero gradient, primary colors, favicon) | Regenerate `public/og.png` so social shares look right |
-| Site goes from SPA to multi-page routing | `public/sitemap.xml` to list each new URL |
-| Author social links (LinkedIn, GitHub, Twitter, etc.) | `index.html` JSON-LD `sameAs` array, `public/llms.txt` Author section, footer in `src/learn-ai.jsx` |
+| Site goes from SPA to multi-page routing | `public/sitemap.xml` to list each new URL (one `<url>` block per route, each with its own `<lastmod>`) |
+| Author social links (LinkedIn, GitHub, Twitter, etc.) | `index.html` JSON-LD `sameAs` array, the static About / author section inside `#root` in `index.html`, the `<noscript>` block, `public/llms.txt` Author section, footer in `src/learn-ai.jsx` |
+| Any change to the static body content inside `#root` or `<noscript>` in `index.html` | Bump `<lastmod>` in `public/sitemap.xml` to today's date (YYYY-MM-DD) so Google recrawls |
+| Any push to `main` that changes user-visible content, chapter set, or site identity | Bump `<lastmod>` in `public/sitemap.xml` to today's date (YYYY-MM-DD) |
+
+### Why the static `#root` fallback matters
+
+`index.html` ships an `.seo-fallback` block inside `<div id="root">` containing
+a real `<h1>`, an intro paragraph, the full curriculum topic list, and an
+author section. React's `createRoot(...).render(...)` replaces this content on
+first paint, so users never see it - but crawlers that don't execute JS (and
+even those that do, since JS-rendered content is deprioritized) see real text.
+A second `<noscript>` block backs this up for strictly-no-JS clients. **Never
+revert `<div id="root">` to empty** - that's what previously dropped the site
+out of Google for the "rajul babel" query. If you add/rename/remove chapters
+or sections, the topic list inside `.seo-fallback` must be updated to match
+`src/config.js`. Same for the `<noscript>` summary.
+
+### AEO files - LLM-readable surfaces
+
+- `public/llms.txt` - the canonical machine-readable site map for LLM
+  crawlers (Anthropic, OpenAI, Google-Extended, Perplexity, Common Crawl).
+  Must mirror `src/config.js` sections/chapters in its "What it covers" list
+  and stay aligned with site title/description and author social links.
+- `public/robots.txt` - explicitly allow LLM crawlers (`GPTBot`,
+  `ChatGPT-User`, `OAI-SearchBot`, `ClaudeBot`, `Claude-Web`, `anthropic-ai`,
+  `Google-Extended`, `PerplexityBot`, `CCBot`). Do not regress these allow
+  lines.
+- JSON-LD in `index.html` (Person, WebSite, LearningResource graph) - the
+  schema.org payload LLMs and Google use for entity recognition. The
+  `teaches` array MUST match `sectionNames` in `src/config.js`.
+
+### TDD coverage for SEO/AEO rules
+
+Per the mandatory TDD policy, the following test files lock these rules in
+place. When you change any of the above files, the relevant test must be
+updated in the same commit so that drift is caught at CI:
+
+- `src/__tests__/index-seo.test.js` - asserts `<h1>`, `.seo-fallback` content,
+  `<noscript>` block, and curriculum topic mentions inside `index.html`.
+- `src/__tests__/sitemap.test.js` - asserts canonical URL and well-formed
+  ISO `<lastmod>` in `public/sitemap.xml`.
+- `src/__tests__/claudemd-seo-rules.test.js` - asserts that this section of
+  CLAUDE.md continues to document the SEO + AEO sync rules.
+- `src/__tests__/llm-chunk.test.js`, `src/__tests__/manifest.test.js`,
+  `src/__tests__/svg-descriptions.test.js` - existing tests covering
+  llms.txt-adjacent search artifacts and SVG `<desc>` metadata.
 
 After any of these changes are pushed, remind the user (one sentence, end of
 turn) to:
 - Request re-indexing in Google Search Console (URL Inspection → Request indexing).
 - Submit URL in Bing Webmaster Tools (URL Submission).
+- For major curriculum changes, optionally re-share on LinkedIn / GitHub
+  profile so LLM crawlers and AEO surfaces re-fetch.
 
 ## Deployment
 

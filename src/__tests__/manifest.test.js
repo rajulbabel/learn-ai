@@ -10,7 +10,10 @@ describe("embeddings manifest", () => {
     manifest = JSON.parse(readFileSync("src/data/embeddings-manifest.json", "utf-8"));
     binSize = statSync("src/data/embeddings.bin").size;
     expect(manifest.dim).toBe(768);
-    expect(manifest.modelChecksum.length).toBe(16);
+    // checksum format: 16 hex chars for the local quantized build, or
+    // "cf:<16 hex>" for the Workers AI build. Both stay short enough to
+    // fit in the IndexedDB cache key.
+    expect(manifest.modelChecksum).toMatch(/^(cf:)?[0-9a-f]{16}$/);
   });
 
   it("count matches vector array length and bin size", () => {

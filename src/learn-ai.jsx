@@ -263,13 +263,10 @@ export default function LearnAI() {
       } else if (import.meta.env.DEV) {
         console.error(`[lookup] Failed to resolve chapter "${entry.id}" file "${entry.file}".`);
       }
-      // After the first chapter loads, arm semantic-search prewarm. We do not
-      // fire it on load - we wait for the first user interaction (scroll,
-      // click, key, touch). Real users always interact within seconds, so the
-      // warm cache is ready by the time they need it. Audit tools (Lighthouse,
-      // PSI) never interact, so their trace never captures the heavy network
-      // and CPU cost of loading the embedding model. A long fallback timer
-      // guarantees genuinely-idle users still get a warm search eventually.
+      // After the first chapter loads, kick off semantic search prewarm. The
+      // remote embed endpoint (or text-only fallback) is cheap to warm now -
+      // no 99 MB model fetch, no main-thread parse - so we fire on `load`
+      // inside requestIdleCallback instead of gating on user interaction.
       if (!firstLoadDone.current) {
         firstLoadDone.current = true;
         const prewarm = () => {
@@ -285,21 +282,8 @@ export default function LearnAI() {
             });
           });
         };
-        const armPrewarm = () => {
-          let fired = false;
-          const events = ["pointermove", "pointerdown", "mousemove", "keydown", "scroll", "touchstart"];
-          const fire = () => {
-            if (fired) return;
-            fired = true;
-            events.forEach((e) => window.removeEventListener(e, fire));
-            clearTimeout(fallbackId);
-            prewarm();
-          };
-          events.forEach((e) => window.addEventListener(e, fire, { passive: true }));
-          const fallbackId = setTimeout(fire, 60000);
-        };
-        if (document.readyState === "complete") armPrewarm();
-        else window.addEventListener("load", armPrewarm, { once: true });
+        if (document.readyState === "complete") prewarm();
+        else window.addEventListener("load", prewarm, { once: true });
       }
     });
     return () => {

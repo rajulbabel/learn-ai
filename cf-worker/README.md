@@ -49,3 +49,25 @@ exceeds this even at peak.
 wrangler dev
 # POST http://localhost:8787 with body {"text":"how does attention work"}
 ```
+
+## Re-embed the corpus with the remote model (recommended)
+
+The bundled `embeddings.bin` was built with the local q4-quantized BGE.
+Switching the query side to full-precision Workers AI causes a small
+ranking drift (~95-99% cosine correlation preserved, top-K mostly
+stable). For exact parity, re-embed every chunk through the same
+endpoint:
+
+```bash
+EMBED_API_URL=https://learn-ai-embed.<acct>.workers.dev \
+  npm run search:embed:remote
+```
+
+Outputs (commit alongside the worker URL change):
+- `src/data/embeddings.bin`
+- `src/data/embeddings-manifest.json`
+- `public/models/bge-base-en-v1.5-q4/model-meta.json` (checksum stamped
+  `cf:*` so the browser cache invalidates)
+
+After this, query and corpus sit on the identical Workers AI model -
+ranking is bit-for-bit consistent.

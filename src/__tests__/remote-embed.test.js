@@ -26,22 +26,21 @@ describe("Cloudflare Workers AI embed proxy", () => {
   });
 });
 
-describe("search.js routes embedQuery to the remote endpoint when configured", () => {
+describe("search.js routes embedQuery to the remote endpoint", () => {
   it("reads VITE_EMBED_API_URL from import.meta.env", () => {
     const src = readFileSync("src/search.js", "utf-8");
     expect(src).toMatch(/VITE_EMBED_API_URL/);
   });
 
-  it("falls back to the local worker when VITE_EMBED_API_URL is unset", () => {
-    // The Worker code path (new Worker(...)) must still exist for offline /
-    // dev / unconfigured deploys.
+  it("uses fetch() against the remote URL inside embedQuery", () => {
     const src = readFileSync("src/search.js", "utf-8");
-    expect(src).toMatch(/new\s+Worker\(\s*new\s+URL\(\s*["']\.\/search-worker\.js["']/);
+    expect(src).toMatch(/fetch\(\s*REMOTE_EMBED_URL/);
   });
 
-  it("uses fetch() against the remote URL inside embedQuery when configured", () => {
+  it("no longer ships a local search-worker.js or transformers.js path", () => {
     const src = readFileSync("src/search.js", "utf-8");
-    // The remote branch posts JSON {text} to the remote URL.
-    expect(src).toMatch(/fetch\(\s*REMOTE_EMBED_URL/);
+    expect(src).not.toMatch(/new\s+Worker\(/);
+    expect(src).not.toMatch(/@huggingface\/transformers/);
+    expect(existsSync("src/search-worker.js")).toBe(false);
   });
 });

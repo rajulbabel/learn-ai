@@ -46,3 +46,10 @@ if (typeof window !== "undefined") {
     configurable: true,
   });
 }
+
+// jsdom doesn't implement Element.scrollIntoView. Several chapters call it
+// inside a useEffect when sub > 0 to keep the viewport pinned to the latest
+// step. Stub it so the branch that invokes it gets executed under coverage.
+if (typeof Element !== "undefined" && !Element.prototype.scrollIntoView) {
+  Element.prototype.scrollIntoView = function scrollIntoView() {};
+}

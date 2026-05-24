@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, afterEach, beforeEach } from "vitest";
 import { render, screen, fireEvent, cleanup } from "@testing-library/react";
-import { ErrorBoundary, Box, T, Reveal, SubBtn, Tag } from "../components.jsx";
-import { C } from "../config.js";
+import { ErrorBoundary, Box, T, Reveal, SubBtn, Tag, ChapterLink, NavContext } from "../components.jsx";
+import { C, chapters } from "../config.js";
 
 afterEach(() => cleanup());
 
@@ -128,6 +128,63 @@ describe("Tag", () => {
     expect(span.textContent).toBe("label");
     expect(span.style.display).toBe("inline-block");
     expect(span.style.fontWeight).toBe("600");
+  });
+});
+
+describe("ChapterLink", () => {
+  const realCh = chapters.find((c) => c.id === "1.1");
+
+  const withNav = (goTo, ui) => render(<NavContext.Provider value={{ goTo, chapters }}>{ui}</NavContext.Provider>);
+
+  it("renders children as text", () => {
+    const { container } = withNav(vi.fn(), <ChapterLink to="1.1">chapter 1.1</ChapterLink>);
+    expect(container.textContent).toBe("chapter 1.1");
+  });
+
+  it("navigates to the chapter index on click", () => {
+    const goTo = vi.fn();
+    const expectedIdx = chapters.findIndex((c) => c.id === realCh.id);
+    const { container } = withNav(goTo, <ChapterLink to="1.1">go</ChapterLink>);
+    fireEvent.click(container.firstChild);
+    expect(goTo).toHaveBeenCalledWith(expectedIdx);
+  });
+
+  it("renders as a clickable role=link with the chapter title as aria-label", () => {
+    const { container } = withNav(vi.fn(), <ChapterLink to="1.1">go</ChapterLink>);
+    const el = container.firstChild;
+    expect(el.getAttribute("role")).toBe("link");
+    expect(el.getAttribute("aria-label")).toContain(realCh.title);
+  });
+
+  it("navigates on Enter key", () => {
+    const goTo = vi.fn();
+    const expectedIdx = chapters.findIndex((c) => c.id === realCh.id);
+    const { container } = withNav(goTo, <ChapterLink to="1.1">go</ChapterLink>);
+    fireEvent.keyDown(container.firstChild, { key: "Enter" });
+    expect(goTo).toHaveBeenCalledWith(expectedIdx);
+  });
+
+  it("ignores non-Enter keys", () => {
+    const goTo = vi.fn();
+    const { container } = withNav(goTo, <ChapterLink to="1.1">go</ChapterLink>);
+    fireEvent.keyDown(container.firstChild, { key: "a" });
+    expect(goTo).not.toHaveBeenCalled();
+  });
+
+  it("falls back to plain text when chapter id is unknown", () => {
+    const goTo = vi.fn();
+    const { container } = withNav(goTo, <ChapterLink to="999.999">missing</ChapterLink>);
+    expect(container.textContent).toBe("missing");
+    // No role=link, no click handler
+    expect(container.firstChild.getAttribute("role")).not.toBe("link");
+    fireEvent.click(container.firstChild);
+    expect(goTo).not.toHaveBeenCalled();
+  });
+
+  it("falls back to plain text when no NavContext is provided", () => {
+    const { container } = render(<ChapterLink to="1.1">chapter 1.1</ChapterLink>);
+    expect(container.textContent).toBe("chapter 1.1");
+    expect(container.firstChild.getAttribute("role")).not.toBe("link");
   });
 });
 

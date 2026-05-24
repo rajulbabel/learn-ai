@@ -1,13 +1,13 @@
-import { describe, it, expect, vi, afterEach } from "vitest";
+import { describe, it, expect, vi, afterEach, beforeEach } from "vitest";
 import { render, screen, fireEvent, cleanup, act } from "@testing-library/react";
 import { chapters } from "../config.js";
 
 // Mock all dynamic imports so the component renders synchronously in tests
-vi.mock("../sections/toc.jsx", () => ({
-  TOC: () => <div data-testid="toc">TOC</div>,
+vi.mock("../chapters/table-of-contents/toc.jsx", () => ({
+  default: () => <div data-testid="toc">Table of Contents</div>,
 }));
-vi.mock("../sections/neural-foundations.jsx", () => ({
-  WhatIsNN: (ctx) => (
+vi.mock("../chapters/neural-foundations/what-is-nn.jsx", () => ({
+  default: (ctx) => (
     <div>
       <div>WhatIsNN</div>
       {ctx.sub >= 1 && (
@@ -26,17 +26,15 @@ vi.mock("../sections/neural-foundations.jsx", () => ({
     </div>
   ),
 }));
-vi.mock("../sections/llm-training.jsx", () => ({
-  BatchTraining: () => <div data-testid="batch-training">BatchTraining</div>,
+vi.mock("../chapters/neural-foundations/inside-neuron.jsx", () => ({
+  default: () => <div data-testid="inside-neuron">InsideNeuron</div>,
 }));
-vi.mock("../sections/scaling.jsx", () => ({
-  ParametersAtScale: () => <div data-testid="parameters-at-scale">ParametersAtScale</div>,
+vi.mock("../chapters/llm-training/batch-training.jsx", () => ({
+  default: () => <div data-testid="batch-training">BatchTraining</div>,
 }));
-vi.mock("../sections/road-to-transformers.jsx", () => ({}));
-vi.mock("../sections/transformer-input.jsx", () => ({}));
-vi.mock("../sections/attention-qkv.jsx", () => ({}));
-vi.mock("../sections/attention-computation.jsx", () => ({}));
-vi.mock("../sections/transformer-block.jsx", () => ({}));
+vi.mock("../chapters/scaling/parameters-at-scale.jsx", () => ({
+  default: () => <div data-testid="parameters-at-scale">ParametersAtScale</div>,
+}));
 vi.mock("../search-overlay.jsx", () => ({
   default: () => <div data-testid="search-overlay">Search Overlay</div>,
 }));
@@ -59,6 +57,9 @@ afterEach(async () => {
   navMod.loadNav.mockReturnValue(null);
   const searchMod = await import("../search.js");
   searchMod.getSearchStatus.mockReturnValue({ mode: "off", progress: 0 });
+  // useUrlSync mutates window.location.pathname; reset so each test starts fresh.
+  window.history.replaceState(null, "", "/learn-ai/");
+  localStorage.clear();
 });
 
 // Helper: render LearnAI and wait for async chapter load. Mocks the <main>
@@ -96,21 +97,23 @@ async function renderLearnAI({ mainBounds = { left: 200, right: 824 } } = {}) {
 }
 
 describe("LearnAI search bar", () => {
-  it("renders a search button with aria-label 'Search'", async () => {
+  it("renders a search button with aria-label matching visible text", async () => {
     await renderLearnAI();
-    expect(screen.getByRole("button", { name: "Search" })).toBeTruthy();
+    // aria-label must include the visible placeholder text to pass
+    // label-content-name-mismatch (accessibility audit).
+    expect(screen.getByRole("button", { name: "Search chapters, concepts, formulas" })).toBeTruthy();
   });
 
   it("search bar is inside header", async () => {
     await renderLearnAI();
-    const btn = screen.getByRole("button", { name: "Search" });
+    const btn = screen.getByRole("button", { name: "Search chapters, concepts, formulas" });
     expect(btn.closest("header")).toBeTruthy();
   });
 
   it("search bar contains placeholder text and search icon", async () => {
     await renderLearnAI();
     expect(screen.getByText("Search chapters, concepts, formulas...")).toBeTruthy();
-    const btn = screen.getByRole("button", { name: "Search" });
+    const btn = screen.getByRole("button", { name: "Search chapters, concepts, formulas" });
     const svg = btn.querySelector("svg");
     expect(svg).toBeTruthy();
     expect(svg.querySelector("circle")).toBeTruthy();
@@ -118,13 +121,13 @@ describe("LearnAI search bar", () => {
 
   it("shows Ctrl+K shortcut on non-Mac desktop", async () => {
     await renderLearnAI();
-    const btn = screen.getByRole("button", { name: "Search" });
+    const btn = screen.getByRole("button", { name: "Search chapters, concepts, formulas" });
     expect(btn.textContent).toContain("Ctrl+K");
   });
 
   it("has dim purple border when semantic is off", async () => {
     await renderLearnAI();
-    const btn = screen.getByRole("button", { name: "Search" });
+    const btn = screen.getByRole("button", { name: "Search chapters, concepts, formulas" });
     expect(btn.style.background).toContain("rgba(167, 139, 250, 0.25)");
   });
 
@@ -137,7 +140,7 @@ describe("LearnAI search bar", () => {
       await new Promise((r) => setTimeout(r, 600));
     });
 
-    const btn = screen.getByRole("button", { name: "Search" });
+    const btn = screen.getByRole("button", { name: "Search chapters, concepts, formulas" });
     expect(btn.style.background).toBe("rgba(167, 139, 250, 0.25)");
     expect(btn.style.background).not.toContain("linear-gradient");
   });
@@ -147,11 +150,14 @@ describe("LearnAI search bar", () => {
     searchMod.getSearchStatus.mockReturnValue({ mode: "semantic", progress: 100 });
 
     await renderLearnAI();
+    // Prewarm is interaction-gated, so dispatch a scroll to start the poll
+    // that flips semanticMode to "semantic" via the mocked getSearchStatus.
     await act(async () => {
+      window.dispatchEvent(new Event("scroll"));
       await new Promise((r) => setTimeout(r, 600));
     });
 
-    const btn = screen.getByRole("button", { name: "Search" });
+    const btn = screen.getByRole("button", { name: "Search chapters, concepts, formulas" });
     const rainbow = btn.querySelector("[data-search-rainbow]");
     expect(rainbow).toBeTruthy();
     expect(rainbow.style.animation).toContain("searchRainbowFade");
@@ -159,7 +165,7 @@ describe("LearnAI search bar", () => {
 
   it("inner div has dark background and rounded corners", async () => {
     await renderLearnAI();
-    const btn = screen.getByRole("button", { name: "Search" });
+    const btn = screen.getByRole("button", { name: "Search chapters, concepts, formulas" });
     const inner = btn.querySelector("[data-search-inner]");
     expect(inner).toBeTruthy();
     expect(inner.style.borderRadius).toBe("7.5px");
@@ -167,19 +173,19 @@ describe("LearnAI search bar", () => {
 
   it("outer div has rounded corners", async () => {
     await renderLearnAI();
-    const btn = screen.getByRole("button", { name: "Search" });
+    const btn = screen.getByRole("button", { name: "Search chapters, concepts, formulas" });
     expect(btn.style.borderRadius).toBe("9px");
   });
 
   it("wrapper has marginTop spacing", async () => {
     await renderLearnAI();
-    const btn = screen.getByRole("button", { name: "Search" });
+    const btn = screen.getByRole("button", { name: "Search chapters, concepts, formulas" });
     expect(btn.parentElement.style.marginTop).toBe("12px");
   });
 
   it("opens search overlay on click", async () => {
     await renderLearnAI();
-    const btn = screen.getByRole("button", { name: "Search" });
+    const btn = screen.getByRole("button", { name: "Search chapters, concepts, formulas" });
     await act(async () => {
       fireEvent.click(btn);
       await new Promise((r) => setTimeout(r, 50));
@@ -194,6 +200,62 @@ describe("LearnAI search bar", () => {
       await new Promise((r) => setTimeout(r, 50));
     });
     expect(screen.getByTestId("search-overlay")).toBeTruthy();
+  });
+});
+
+describe("LearnAI initial-page contrast (Lighthouse a11y)", () => {
+  // Six spots on the TOC page failed WCAG AA color-contrast (3.09 ratio):
+  // tagline, search placeholder, "28 Sections..." subtitle, footer text +
+  // LinkedIn + GitHub. We override each to a brighter color (>= 0.50 alpha
+  // white on the dark bg) so the ratio clears 4.5:1.
+  const DIM_OLD = "rgba(255, 255, 255, 0.35)";
+  const PLACEHOLDER_OLD = "rgba(255, 255, 255, 0.3)";
+
+  it("header tagline does not use failing dim color", async () => {
+    await renderLearnAI();
+    const tagline = screen.getByText("The complete visual guide to understanding AI - from scratch");
+    expect(tagline.style.color).not.toBe(DIM_OLD);
+  });
+
+  it("TOC '28 Sections' subtitle does not use failing dim color", async () => {
+    await renderLearnAI();
+    const subtitle = screen.getByText(/Sections.*Chapters/);
+    expect(subtitle.style.color).not.toBe(DIM_OLD);
+  });
+
+  it("search button placeholder does not use failing dim color", async () => {
+    await renderLearnAI();
+    const placeholder = screen.getByText("Search chapters, concepts, formulas...");
+    expect(placeholder.style.color).not.toBe(PLACEHOLDER_OLD);
+  });
+
+  it("footer container does not use failing dim color", async () => {
+    await renderLearnAI();
+    const footer = document.querySelector("footer");
+    expect(footer.style.color).not.toBe(DIM_OLD);
+  });
+
+  it("footer LinkedIn link does not use failing dim color", async () => {
+    await renderLearnAI();
+    const link = document.querySelector('a[href*="linkedin.com/in/rajulbabel"]');
+    expect(link.style.color).not.toBe(DIM_OLD);
+  });
+
+  it("footer GitHub link does not use failing dim color", async () => {
+    await renderLearnAI();
+    const link = document.querySelector('a[href*="github.com/rajulbabel/learn-ai"]');
+    expect(link.style.color).not.toBe(DIM_OLD);
+  });
+
+  it("search shortcut label does not use failing low-alpha purple", async () => {
+    // Before fix: rgba(167,139,250,0.8) on #0d0b14 = 2.97:1 (fails 4.5:1).
+    // After fix: full-opacity #a78bfa = 7.09:1.
+    await renderLearnAI();
+    const btn = screen.getByRole("button", { name: "Search chapters, concepts, formulas" });
+    const inner = btn.querySelector("[data-search-inner]");
+    const shortcutSpan = inner.querySelectorAll("span")[1];
+    expect(shortcutSpan.textContent).toMatch(/⌘K|Ctrl\+K/);
+    expect(shortcutSpan.style.color).not.toBe("rgba(167, 139, 250, 0.8)");
   });
 });
 
@@ -253,7 +315,71 @@ describe("LearnAI author footer (SEO)", () => {
     expect(spacer).toBeTruthy();
     expect(spacer.getAttribute("data-footer-spacer")).toBe("true");
     expect(spacer.style.flexGrow).toBe("1");
-    expect(spacer.style.minHeight).toBe("48px");
+    expect(spacer.style.minHeight).toBe("16px");
+  });
+});
+
+describe("LearnAI fullscreen toggle", () => {
+  function installFullscreenMocks({ active = false } = {}) {
+    document.documentElement.requestFullscreen = vi.fn(() => Promise.resolve());
+    document.exitFullscreen = vi.fn(() => Promise.resolve());
+    Object.defineProperty(document, "fullscreenElement", {
+      value: active ? document.documentElement : null,
+      configurable: true,
+      writable: true,
+    });
+  }
+
+  it("pressing F requests fullscreen on the document element when not fullscreen", async () => {
+    installFullscreenMocks({ active: false });
+    await renderLearnAI();
+    await act(async () => {
+      fireEvent.keyDown(window, { key: "f" });
+    });
+    expect(document.documentElement.requestFullscreen).toHaveBeenCalled();
+    expect(document.exitFullscreen).not.toHaveBeenCalled();
+  });
+
+  it("pressing F exits fullscreen when already fullscreen", async () => {
+    installFullscreenMocks({ active: true });
+    await renderLearnAI();
+    await act(async () => {
+      fireEvent.keyDown(window, { key: "F" });
+    });
+    expect(document.exitFullscreen).toHaveBeenCalled();
+    expect(document.documentElement.requestFullscreen).not.toHaveBeenCalled();
+  });
+
+  it("pressing Escape while in fullscreen exits fullscreen", async () => {
+    installFullscreenMocks({ active: true });
+    await renderLearnAI();
+    await act(async () => {
+      fireEvent.keyDown(window, { key: "Escape" });
+    });
+    expect(document.exitFullscreen).toHaveBeenCalled();
+  });
+
+  it("pressing Escape while NOT in fullscreen does not call exitFullscreen via this handler", async () => {
+    installFullscreenMocks({ active: false });
+    await renderLearnAI();
+    await act(async () => {
+      fireEvent.keyDown(window, { key: "Escape" });
+    });
+    expect(document.exitFullscreen).not.toHaveBeenCalled();
+  });
+
+  it("Escape while the search overlay is open does not exit fullscreen (search handles it first)", async () => {
+    installFullscreenMocks({ active: true });
+    await renderLearnAI();
+    await act(async () => {
+      fireEvent.keyDown(window, { key: "k", ctrlKey: true });
+      await new Promise((r) => setTimeout(r, 50));
+    });
+    expect(screen.getByTestId("search-overlay")).toBeTruthy();
+    await act(async () => {
+      fireEvent.keyDown(window, { key: "Escape" });
+    });
+    expect(document.exitFullscreen).not.toHaveBeenCalled();
   });
 });
 
@@ -417,10 +543,10 @@ describe("LearnAI tap-anywhere navigation", () => {
 });
 
 describe("LearnAI chapter loading", () => {
-  it("loads chapter 3.3 from the combined section 3 modules instead of reusing chapter 3.2", async () => {
+  it("loads chapter 6.3 from the combined section 6 modules instead of reusing chapter 6.2", async () => {
     const navMod = await import("../nav-persistence.js");
-    const chapter32 = chapters.findIndex((c) => c.id === "3.2");
-    navMod.loadNav.mockReturnValue({ ch: chapter32, sub: 0 });
+    const chapter62 = chapters.findIndex((c) => c.id === "6.2");
+    navMod.loadNav.mockReturnValue({ ch: chapter62, sub: 0 });
 
     await renderLearnAI();
     expect(screen.getByTestId("parameters-at-scale")).toBeTruthy();
@@ -432,5 +558,48 @@ describe("LearnAI chapter loading", () => {
 
     expect(screen.getByTestId("batch-training")).toBeTruthy();
     expect(screen.queryByTestId("parameters-at-scale")).toBeNull();
+  });
+});
+
+describe("chapterLoaders glob", () => {
+  it("import.meta.glob resolves one loader per configured chapter", async () => {
+    const loaders = import.meta.glob("../chapters/**/*.jsx");
+    expect(typeof loaders).toBe("object");
+    expect(Object.keys(loaders).length).toBe(chapters.length);
+  });
+});
+
+describe("URL routing - boot", () => {
+  beforeEach(async () => {
+    localStorage.clear();
+    window.history.replaceState(null, "", "/learn-ai/");
+    const navMod = await import("../nav-persistence.js");
+    navMod.loadNav.mockReturnValue(null);
+  });
+
+  it("opens at chapter URL", async () => {
+    window.history.replaceState(null, "", "/learn-ai/neural-foundations/what-is-nn");
+    await renderLearnAI();
+    expect(await screen.findByText(/What is a Neural Network/i)).toBeTruthy();
+  });
+
+  it("opens TOC at bare URL", async () => {
+    await renderLearnAI();
+    expect(await screen.findByText(/Table of Contents/i)).toBeTruthy();
+  });
+
+  it("redirects bare URL to saved chapter when localStorage present", async () => {
+    const idx = chapters.findIndex((c) => c.file === "neural-foundations/inside-neuron");
+    const navMod = await import("../nav-persistence.js");
+    navMod.loadNav.mockReturnValue({ ch: idx, sub: 0 });
+    await renderLearnAI();
+    await screen.findByText(/Inside a Single Neuron/i);
+    expect(window.location.pathname).toBe("/learn-ai/neural-foundations/inside-neuron");
+  });
+
+  it("falls back to TOC for invalid URL", async () => {
+    window.history.replaceState(null, "", "/learn-ai/no/such/chapter");
+    await renderLearnAI();
+    expect(await screen.findByText(/Table of Contents/i)).toBeTruthy();
   });
 });

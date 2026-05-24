@@ -2,7 +2,7 @@ import { describe, it, expect } from "vitest";
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { chapters, sectionNames, sectionColors, C, validateConfig } from "../config.js";
+import { chapters, sectionNames, sectionColors, sections, superSections, C, validateConfig } from "../config.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const SRC_DIR = path.resolve(__dirname, "..");
@@ -96,8 +96,8 @@ describe("config.js", () => {
 
   it("validateConfig detects duplicate IDs", () => {
     const badConfig = [
-      { id: "1.1", title: "A", section: 1, component: "CompA" },
-      { id: "1.1", title: "B", section: 1, component: "CompB" },
+      { id: "1.1", title: "A", section: 1, component: "CompA", file: "x/a" },
+      { id: "1.1", title: "B", section: 1, component: "CompB", file: "x/b" },
     ];
     const errors = validateConfig(badConfig);
     expect(errors.length).toBe(1);
@@ -105,14 +105,14 @@ describe("config.js", () => {
   });
 
   it("validateConfig detects missing id when component present", () => {
-    const badConfig = [{ id: "", title: "A", section: 1, component: "CompA" }];
+    const badConfig = [{ id: "", title: "A", section: 1, component: "CompA", file: "x/a" }];
     const errors = validateConfig(badConfig);
     expect(errors.length).toBe(1);
     expect(errors[0]).toContain("missing id");
   });
 
   it("validateConfig detects missing component", () => {
-    const badConfig = [{ id: "1.1", title: "A", section: 1, component: "" }];
+    const badConfig = [{ id: "1.1", title: "A", section: 1, component: "", file: "x/a" }];
     const errors = validateConfig(badConfig);
     expect(errors.length).toBe(1);
     expect(errors[0]).toContain("missing component");
@@ -140,115 +140,221 @@ describe("config.js", () => {
     });
   });
 
+  it("every chapter has a file path", () => {
+    chapters.forEach((c) => {
+      if (c.section === 0) return; // section 0 (TOC) is special
+      expect(typeof c.file).toBe("string");
+    });
+  });
+
+  it("no duplicate file paths across chapters", () => {
+    const files = chapters.filter((c) => c.section > 0).map((c) => c.file);
+    expect(new Set(files).size).toBe(files.length);
+  });
+
+  it("no chapter has a leftover slug field", () => {
+    chapters.forEach((c) => {
+      expect(c).not.toHaveProperty("slug");
+    });
+  });
+
   it("no chapter title contains standalone uppercase IS", () => {
     chapters.forEach((c) => {
       expect(c.title).not.toMatch(/\bIS\b/);
     });
   });
 
-  it("no JSX content references the old chapter IDs 11.19-11.35 after renumber", () => {
-    const sectionFiles = [
-      path.join(SRC_DIR, "sections/vector-systems.jsx"),
-      path.join(SRC_DIR, "sections/vector-production.jsx"),
-      path.join(SRC_DIR, "sections/vector-compression.jsx"),
+  it("no chapter prose contains standalone uppercase IS as auxiliary verb", () => {
+    const offenders = [
+      { file: "rag-foundations/where-naive-rag-breaks.jsx", text: "limit IS in the doc" },
+      { file: "rag-foundations/where-naive-rag-breaks.jsx", text: "answer IS in the retrieved context" },
+      { file: "rag-retrieval/domain-adaptation.jsx", text: "training data IS the model" },
+      { file: "rag-production/rag-decision-framework-capstone.jsx", text: "Case citation IS a graph" },
+      { file: "encoder-decoder-diagrams/encoder-decoder-inference.jsx", text: "there IS only one position" },
     ];
-    const stalePatterns = [
-      /Recall from 11\.19/,
-      /chapter 11\.19[^0-9]/,
-      /read 11\.19 carefully/,
-      /decision framework in 11\.35/,
-      /production realities \(11\.19-11\.28\)/,
-      /chapters 11\.30 - 11\.34/,
-      /the system comparison \(11\.29-11\.34\)/,
-    ];
-    for (const file of sectionFiles) {
-      const content = fs.readFileSync(file, "utf8");
-      for (const pattern of stalePatterns) {
-        expect(content, `${file} still contains ${pattern}`).not.toMatch(pattern);
+    offenders.forEach(({ file, text }) => {
+      const content = fs.readFileSync(path.join(SRC_DIR, "chapters", file), "utf8");
+      expect(content, `${file} still contains "${text}"`).not.toContain(text);
+    });
+  });
+
+  describe("superSections", () => {
+    it("exports exactly 6 super-sections with ids A..F", () => {
+      expect(superSections).toHaveLength(6);
+      expect(superSections.map((s) => s.id)).toEqual(["A", "B", "C", "D", "E", "F"]);
+    });
+
+    it("every super-section has required fields", () => {
+      superSections.forEach((s) => {
+        expect(typeof s.id).toBe("string");
+        expect(typeof s.name).toBe("string");
+        expect(typeof s.desc).toBe("string");
+        expect(s.desc.length).toBeGreaterThan(10);
+        expect(Array.isArray(s.sections)).toBe(true);
+        expect(typeof s.color).toBe("string");
+        expect(s.color).toMatch(/^#[0-9a-fA-F]{6}$/);
+      });
+    });
+
+    it("super-section names match the agreed spec", () => {
+      const names = Object.fromEntries(superSections.map((s) => [s.id, s.name]));
+      expect(names).toEqual({
+        A: "Foundations of Deep Learning",
+        B: "The Rise of LLMs",
+        C: "The Transformer Era",
+        D: "Vector Databases at Depth",
+        E: "Retrieval Augmented Generation (RAG)",
+        F: "Agentic AI",
+      });
+    });
+
+    it("super-section section lists cover sections 1..28 exactly once", () => {
+      const flat = superSections.flatMap((s) => s.sections);
+      const sorted = [...flat].sort((a, b) => a - b);
+      expect(sorted).toEqual(Array.from({ length: 28 }, (_, i) => i + 1));
+    });
+
+    it("super-section section lists match the agreed spec", () => {
+      const groups = Object.fromEntries(superSections.map((s) => [s.id, s.sections]));
+      expect(groups).toEqual({
+        A: [1, 2, 3, 4],
+        B: [5, 6],
+        C: [7, 8, 9, 10, 11, 12, 13, 14],
+        D: [15, 16, 17, 18],
+        E: [19, 20, 21, 22, 23],
+        F: [24, 25, 26, 27, 28],
+      });
+    });
+
+    it("every section 1..28 maps to exactly one super-section via sectionSuper", async () => {
+      const mod = await import("../config.js");
+      expect(mod.sectionSuper).toBeDefined();
+      for (let s = 1; s <= 28; s++) {
+        expect(mod.sectionSuper[s]).toMatch(/^[A-F]$/);
       }
-    }
+      // Coverage matches superSections.sections
+      superSections.forEach((sg) => {
+        sg.sections.forEach((sNum) => {
+          expect(mod.sectionSuper[sNum]).toBe(sg.id);
+        });
+      });
+    });
   });
 
-  it("Section 11 chapters are renumbered with CompressionDecision at 11.19", () => {
-    const byId = Object.fromEntries(chapters.map((c) => [c.id, c]));
-    expect(byId["11.19"]?.component).toBe("CompressionDecision");
-    expect(byId["11.19"]?.title).toBe("The Compression Decision");
-    expect(byId["11.20"]?.component).toBe("Filtering");
-    expect(byId["11.21"]?.component).toBe("UpdatesDeletes");
-    expect(byId["11.22"]?.component).toBe("Sharding");
-    expect(byId["11.23"]?.component).toBe("Replication");
-    expect(byId["11.24"]?.component).toBe("HybridSearch");
-    expect(byId["11.25"]?.component).toBe("Rerankers");
-    expect(byId["11.26"]?.component).toBe("MultiVectorRetrieval");
-    expect(byId["11.27"]?.component).toBe("EmbeddingLifecycle");
-    expect(byId["11.28"]?.component).toBe("Observability");
-    expect(byId["11.29"]?.component).toBe("CapacityPlanning");
-    expect(byId["11.30"]?.component).toBe("FAISS");
-    expect(byId["11.31"]?.component).toBe("Pgvector");
-    expect(byId["11.32"]?.component).toBe("Qdrant");
-    expect(byId["11.33"]?.component).toBe("Pinecone");
-    expect(byId["11.34"]?.component).toBe("QdrantVsPinecone");
-    expect(byId["11.35"]?.component).toBe("WeaviateMilvusChroma");
-    expect(byId["11.36"]?.component).toBe("DecisionFramework");
-  });
-});
+  describe("super-section slugs", () => {
+    it("every super-section has a non-empty kebab-case slug", () => {
+      superSections.forEach((sg) => {
+        expect(sg.slug, `super ${sg.id} missing slug`).toBeTruthy();
+        expect(sg.slug).toMatch(/^[a-z][a-z0-9-]*$/);
+      });
+    });
 
-describe("Section 11 registration", () => {
-  it("has section 11 in sectionNames", () => {
-    expect(sectionNames[11]).toBe("Vector Databases");
+    it("super-section slugs are unique", () => {
+      const slugs = superSections.map((sg) => sg.slug);
+      expect(new Set(slugs).size).toBe(slugs.length);
+    });
+
+    it("super-section slugs do not collide with any chapter topic", () => {
+      const topics = new Set(chapters.filter((c) => c.section > 0).map((c) => c.file.split("/")[0]));
+      superSections.forEach((sg) => {
+        expect(topics.has(sg.slug), `super slug "${sg.slug}" collides with chapter topic`).toBe(false);
+      });
+    });
   });
 
-  it("has section 11 in sectionColors", () => {
-    expect(sectionColors[11]).toBe("#f06292");
-  });
-});
+  describe("section slugs", () => {
+    it("every section has a non-empty kebab-case slug", () => {
+      sections.forEach((s) => {
+        expect(s.slug, `section ${s.num} missing slug`).toBeTruthy();
+        expect(s.slug).toMatch(/^[a-z][a-z0-9-]*$/);
+      });
+    });
 
-describe("Section 11 chapters", () => {
-  it("has chapters 11.1 through 11.36 in order", () => {
-    const section11 = chapters.filter((ch) => ch.section === 11);
-    const expected = [
-      { id: "11.1", component: "RetrievalProblem", title: "The Retrieval Problem" },
-      { id: "11.2", component: "BruteForceKNN", title: "Brute-Force kNN" },
-      { id: "11.3", component: "ThreeWayTradeoff", title: "The Three-Way Tradeoff" },
-      { id: "11.4", component: "DistanceMetrics", title: "Distance Metrics" },
-      { id: "11.5", component: "ANNFamilyTree", title: "The ANN Family Tree" },
-      { id: "11.6", component: "IVF", title: "IVF (Inverted File Index)" },
-      { id: "11.7", component: "HNSWIntuition", title: "HNSW - The Small-World Intuition" },
-      { id: "11.8", component: "HNSWConstruction", title: "HNSW Construction" },
-      { id: "11.9", component: "HNSWSearch", title: "HNSW Search" },
-      { id: "11.10", component: "HNSWParameters", title: "HNSW Parameters" },
-      { id: "11.11", component: "Vamana", title: "Vamana / DiskANN" },
-      { id: "11.12", component: "MemoryWall", title: "The Memory Wall" },
-      { id: "11.13", component: "ScalarQuantization", title: "Scalar Quantization" },
-      { id: "11.14", component: "ProductQuantization", title: "Product Quantization (+ OPQ)" },
-      { id: "11.15", component: "BinaryQuantization", title: "Binary Quantization" },
-      { id: "11.16", component: "Matryoshka", title: "Matryoshka Embeddings" },
-      { id: "11.17", component: "IVFPQ", title: "IVF-PQ" },
-      { id: "11.18", component: "HNSWPQ", title: "HNSW + PQ" },
-      { id: "11.19", component: "CompressionDecision", title: "The Compression Decision" },
-      { id: "11.20", component: "Filtering", title: "Filtering" },
-      { id: "11.21", component: "UpdatesDeletes", title: "Updates & Deletes" },
-      { id: "11.22", component: "Sharding", title: "Sharding & Partitioning" },
-      { id: "11.23", component: "Replication", title: "Replication & High Availability" },
-      { id: "11.24", component: "HybridSearch", title: "Hybrid Search" },
-      { id: "11.25", component: "Rerankers", title: "Rerankers" },
-      { id: "11.26", component: "MultiVectorRetrieval", title: "Multi-vector Retrieval (ColBERT-style)" },
-      { id: "11.27", component: "EmbeddingLifecycle", title: "Embedding Lifecycle & Re-embedding" },
-      { id: "11.28", component: "Observability", title: "Observability" },
-      { id: "11.29", component: "CapacityPlanning", title: "Capacity Planning & Cost Models" },
-      { id: "11.30", component: "FAISS", title: "FAISS" },
-      { id: "11.31", component: "Pgvector", title: "pgvector" },
-      { id: "11.32", component: "Qdrant", title: "Qdrant" },
-      { id: "11.33", component: "Pinecone", title: "Pinecone" },
-      { id: "11.34", component: "QdrantVsPinecone", title: "Qdrant vs Pinecone" },
-      { id: "11.35", component: "WeaviateMilvusChroma", title: "Weaviate / Milvus / Chroma" },
-      { id: "11.36", component: "DecisionFramework", title: "The Decision Framework" },
-    ];
-    expect(section11.length).toBe(expected.length);
-    expected.forEach((exp, i) => {
-      expect(section11[i].id).toBe(exp.id);
-      expect(section11[i].component).toBe(exp.component);
-      expect(section11[i].title).toBe(exp.title);
+    it("section slugs are unique within their super-section", () => {
+      superSections.forEach((sg) => {
+        const slugs = sg.sections.map((num) => sections.find((s) => s.num === num).slug);
+        expect(new Set(slugs).size, `super ${sg.id} has duplicate section slugs`).toBe(slugs.length);
+      });
+    });
+  });
+
+  describe("sections (source of truth)", () => {
+    it("exports a sections array with 28 entries, num 1..28", async () => {
+      const mod = await import("../config.js");
+      expect(mod.sections).toBeDefined();
+      expect(mod.sections).toHaveLength(28);
+      mod.sections.forEach((s, i) => expect(s.num).toBe(i + 1));
+    });
+
+    it("every section has name, color, desc, super, chapters[]", async () => {
+      const mod = await import("../config.js");
+      mod.sections.forEach((s) => {
+        expect(typeof s.name).toBe("string");
+        expect(typeof s.color).toBe("string");
+        expect(typeof s.desc).toBe("string");
+        expect(typeof s.super).toBe("string");
+        expect(s.super).toMatch(/^[A-F]$/);
+        expect(Array.isArray(s.chapters)).toBe(true);
+        s.chapters.forEach((c) => {
+          expect(typeof c.file).toBe("string");
+          expect(typeof c.title).toBe("string");
+          expect(typeof c.component).toBe("string");
+        });
+      });
+    });
+
+    it("derived chapters export matches the equivalent of the old flat array", async () => {
+      const mod = await import("../config.js");
+      expect(mod.chapters[0].id).toBe("0");
+      expect(mod.chapters[0].component).toBe("TOC");
+
+      let cursor = 1;
+      mod.sections.forEach((s) => {
+        s.chapters.forEach((c, i) => {
+          const derived = mod.chapters[cursor++];
+          expect(derived.id).toBe(`${s.num}.${i + 1}`);
+          expect(derived.file).toBe(c.file);
+          expect(derived.title).toBe(c.title);
+          expect(derived.component).toBe(c.component);
+          expect(derived.section).toBe(s.num);
+        });
+      });
+      expect(cursor).toBe(mod.chapters.length);
+    });
+
+    it("derived sectionNames and sectionColors match the original objects", async () => {
+      const mod = await import("../config.js");
+      mod.sections.forEach((s) => {
+        expect(mod.sectionNames[s.num]).toBe(s.name);
+        expect(mod.sectionColors[s.num]).toBe(s.color);
+      });
+    });
+
+    it("every section's super field points to the correct super-section", async () => {
+      const mod = await import("../config.js");
+      mod.sections.forEach((s) => {
+        expect(mod.sectionSuper[s.num]).toBe(s.super);
+      });
+    });
+  });
+
+  describe("validateConfig (extended)", () => {
+    it("flags duplicate files", () => {
+      const errs = validateConfig([
+        { id: "1.1", component: "A", file: "x/dup" },
+        { id: "1.2", component: "B", file: "x/dup" },
+      ]);
+      expect(errs.some((e) => /Duplicate.*file/i.test(e))).toBe(true);
+    });
+
+    it("flags chapters missing file", () => {
+      const errs = validateConfig([{ id: "1.1", component: "A" }]);
+      expect(errs.some((e) => /missing.*file/i.test(e))).toBe(true);
+    });
+
+    it("returns no errors for current config", () => {
+      const errs = validateConfig(chapters.filter((c) => c.section > 0));
+      expect(errs).toEqual([]);
     });
   });
 });
@@ -281,5 +387,162 @@ describe("Act references do not leak into user-visible content", () => {
       });
     }
     expect(offenders).toEqual([]);
+  });
+});
+
+describe("split mega-sections 11/12/13 into 14 focused sections", () => {
+  it("has 28 distinct sections (excluding 0)", () => {
+    const sections = new Set(chapters.filter((c) => c.section > 0).map((c) => c.section));
+    expect(sections.size).toBe(28);
+  });
+
+  it.each([
+    ["1.1", 1, "What is a Neural Network?"],
+    ["1.7", 1, "The Forward Pass - Full Example"],
+    ["2.1", 2, "Loss - How Wrong Were We?"],
+    ["2.8", 2, "Why Deep Backprop Gets Hard"],
+    ["3.1", 3, "Vectors - Numbers That Travel Together"],
+    ["3.5", 3, "Activation Functions - The Full Picture"],
+    ["4.1", 4, 'What "Deep" Really Means'],
+    ["4.6", 4, "Weight Initialization - How Random?"],
+    ["5.1", 5, "Tokenization - From Words to Numbers"],
+    ["10.1", 10, "Step 1 - Compute Q, K, V for Every Word"],
+    ["10.8", 10, "The Full Formula"],
+    ["11.1", 11, "Why Multi-Head? - The Compromise Problem"],
+    ["11.8", 11, "The Complete Picture - In Plain English"],
+    ["15.12", 15, "Vamana / DiskANN"],
+    ["16.1", 16, "The Memory Wall"],
+    ["17.1", 17, "Filtering"],
+    ["18.1", 18, "FAISS"],
+    ["19.1", 19, "Why LLMs Need Retrieval"],
+    ["20.1", 20, "Parsing - Raw Sources to Clean Text"],
+    ["21.1", 21, "Picking an Embedding Model"],
+    ["22.1", 22, "Context Packing"],
+    ["23.1", 23, "The RAG Eval Triangle"],
+    ["24.1", 24, "Anatomy of an LLM Call"],
+    ["25.1", 25, "Tool Use - LLM as Orchestrator"],
+    ["26.1", 26, "Workflow vs Agent"],
+    ["27.1", 27, "Why Multi-Agent?"],
+    ["28.1", 28, "Why Eval Agents Differently"],
+    ["28.16", 28, "The Complete Agent Decision Framework"],
+  ])("chapter %s lives in section %i with title %s", (id, section, title) => {
+    const ch = chapters.find((c) => c.id === id);
+    expect(ch, `chapter ${id} should exist`).toBeDefined();
+    expect(ch.section).toBe(section);
+    expect(ch.title).toBe(title);
+  });
+
+  it.each([
+    [1, "Neural Networks - The Mechanics"],
+    [2, "Learning & Backprop"],
+    [3, "Linear Algebra for Deep Learning"],
+    [4, "Training Deep Networks"],
+    [5, "How LLMs Actually Train"],
+    [6, "Scaling & Modern Techniques"],
+    [7, "The Road to Transformers"],
+    [8, "Transformer Input Pipeline"],
+    [9, "Attention - Understanding Q, K, V"],
+    [10, "Computing Attention"],
+    [11, "Multi-Head Attention"],
+    [12, "The Encoder"],
+    [13, "The Decoder"],
+    [14, "Modern LLM Techniques"],
+    [15, "Vector Search - From Brute Force to ANN"],
+    [16, "Vector Compression - Quantization & Matryoshka"],
+    [17, "Vector DBs in Production"],
+    [18, "Picking a Vector Database"],
+    [19, "The RAG Pipeline - Why & How It Breaks"],
+    [20, "RAG Data Prep - Ingestion & Chunking"],
+    [21, "RAG Retrieval - Embeddings, Hybrid & Query Tricks"],
+    [22, "RAG Generation - Naive to Advanced Patterns"],
+    [23, "RAG in Production - Eval, Cost & Shipping"],
+    [24, "Prompting LLMs - The Foundation"],
+    [25, "Tools & Protocols - MCP, A2A"],
+    [26, "Agent Mechanics - Loops & Memory"],
+    [27, "Multi-Agent Systems"],
+    [28, "Shipping Agents - Eval, Safety, Frameworks"],
+  ])("section %i has name %s", (num, name) => {
+    expect(sectionNames[num]).toBe(name);
+  });
+
+  it("has a color for every section 1-28", () => {
+    for (let n = 1; n <= 28; n++) {
+      expect(sectionColors[n], `section ${n} missing color`).toMatch(/^#[0-9a-fA-F]{6}$/);
+    }
+  });
+
+  it("expected chapter count per section", () => {
+    const counts = {};
+    chapters.filter((c) => c.section > 0).forEach((c) => (counts[c.section] = (counts[c.section] || 0) + 1));
+    const expected = {
+      1: 7,
+      2: 8,
+      3: 5,
+      4: 6,
+      5: 10,
+      6: 6,
+      7: 4,
+      8: 9,
+      9: 12,
+      10: 8,
+      11: 8,
+      12: 9,
+      13: 7,
+      14: 4,
+      15: 12,
+      16: 8,
+      17: 10,
+      18: 7,
+      19: 3,
+      20: 10,
+      21: 8,
+      22: 9,
+      23: 11,
+      24: 6,
+      25: 11,
+      26: 12,
+      27: 7,
+      28: 16,
+    };
+    Object.entries(expected).forEach(([sec, count]) => {
+      expect(counts[Number(sec)], `section ${sec} should have ${count} chapters`).toBe(count);
+    });
+  });
+});
+
+describe("chapter.file field", () => {
+  it("every chapter has a non-empty string file field", () => {
+    for (const ch of chapters) {
+      expect(typeof ch.file).toBe("string");
+      expect(ch.file.length).toBeGreaterThan(0);
+    }
+  });
+
+  it("file values are kebab-case path of form 'topic/chapter' (no .jsx, no leading slash)", () => {
+    const pattern = /^[a-z0-9]+(-[a-z0-9]+)*\/[a-z0-9]+(-[a-z0-9]+)*$/;
+    for (const ch of chapters) {
+      expect(ch.file).toMatch(pattern);
+    }
+  });
+
+  it("file values are unique per chapter (no two chapters point at the same file)", () => {
+    const seen = new Set();
+    for (const ch of chapters) {
+      expect(seen.has(ch.file)).toBe(false);
+      seen.add(ch.file);
+    }
+  });
+
+  it("every chapter file exists at src/chapters/<file>.jsx and default-exports the configured component", async () => {
+    const { readFileSync, existsSync } = await import("node:fs");
+    const { join } = await import("node:path");
+    const chaptersDir = join(process.cwd(), "src/chapters");
+    for (const ch of chapters) {
+      const filePath = join(chaptersDir, `${ch.file}.jsx`);
+      expect(existsSync(filePath), `chapter file missing for ${ch.id}: ${filePath}`).toBe(true);
+      const src = readFileSync(filePath, "utf-8");
+      const defaultExportPattern = new RegExp(`export default function ${ch.component}\\b`);
+      expect(defaultExportPattern.test(src), `${filePath} does not default-export function ${ch.component}`).toBe(true);
+    }
   });
 });

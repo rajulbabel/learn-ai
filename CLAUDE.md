@@ -25,21 +25,34 @@ The app uses a **section/chapter** hierarchy:
 ### How It Works
 
 **config.js is the single source of truth** for chapter ordering, numbering, and
-section assignments. Each entry has a `component` field that maps to a named export
-in the corresponding section file.
+section assignments. Each entry has a `component` field (the function name, used
+for debugging) and a `file` field that points to the chapter file path under
+`src/chapters/`.
 
 ```js
 // config.js
-{ id: "7.4", title: "Why Do We Need Softmax?", section: 7, component: "WhySoftmax" }
+{ id: "7.4", title: "Why Do We Need Softmax?", section: 7,
+  component: "WhySoftmax", file: "attention-computation/why-softmax" }
 ```
 
-**learn-ai.jsx** builds a lookup object from all section imports and resolves the
-active chapter at render time - there is no manually maintained chapter array.
+**Each chapter lives in its own file** at
+`src/chapters/<topic>/<chapter-kebab>.jsx` and is the file's default export.
+This gives every chapter its own Vite chunk (lazy-loaded on demand) and isolates
+edits to a single small file.
+
+**learn-ai.jsx** uses `import.meta.glob` to register all chapter files and
+loads the active chapter at render time via its `file` path. There is no
+manually maintained chapter array or sections lookup.
 
 ```jsx
-const lookup = { TOC, ...NeuralFoundations, ...LLMTraining, ... };
-const renderChapter = lookup[chapters[ch].component];
-// render: {renderChapter(ctx)}
+// learn-ai.jsx
+const chapterLoaders = import.meta.glob("./chapters/**/*.jsx");
+
+async function loadChapterByFile(file) {
+  const loader = chapterLoaders[`./chapters/${file}.jsx`];
+  const mod = await loader();
+  return mod.default || null;
+}
 ```
 
 ### Naming Convention
@@ -48,8 +61,10 @@ const renderChapter = lookup[chapters[ch].component];
 |---------|-------|-------------|---------|
 | Component file (default export) | `src/` | kebab-case | `learn-ai.jsx` |
 | Multi-export module file | `src/` | lowercase | `components.jsx`, `config.js` |
-| Section file | `src/sections/` | kebab-case, topic name | `attention-computation.jsx` |
-| Chapter function | named export in section file | PascalCase, topic name | `WhySoftmax` |
+| Chapter folder | `src/chapters/` | kebab-case, topic name | `attention-computation/` |
+| Chapter file | `src/chapters/<topic>/` | kebab-case, content name | `why-softmax.jsx` |
+| Chapter function | default export in chapter file | PascalCase, topic name | `WhySoftmax` |
+| Shared helper file | `src/shared/` | kebab-case, topic name | `vector-graphs.jsx` |
 | Chapter ID | `chapters` array in config.js | `section.chapter` number | `"7.4"` |
 | Entry point | `src/` | lowercase | `main.jsx` |
 
@@ -62,290 +77,148 @@ Only config.js IDs change.
 
 ### Complete Mapping
 
-**Section 1: Neural Network Foundations** (`neural-foundations.jsx`)
-
-| Chapter | Component | Title |
-|---------|-----------|-------|
-| 1.1 | WhatIsNN | What is a Neural Network? |
-| 1.2 | InsideNeuron | Inside a Single Neuron |
-| 1.3 | WhatIsLayer | What is a Layer? |
-| 1.4 | WeightsBiases | Weights & Biases - The Knobs |
-| 1.5 | WhyLinear | Why Linear Isn't Enough |
-| 1.6 | ReLU | Activation (ReLU) - Why Layers Need a Bend |
-| 1.7 | ForwardPass | The Forward Pass - Full Example |
-| 1.8 | LossFunction | Loss - How Wrong Were We? |
-| 1.9 | WhatIsLearning | Learning - What Does It Mean? |
-| 1.10 | Derivatives | Derivatives - The Core Intuition |
-| 1.11 | BackwardPass | The Backward Pass - The Chain Rule |
-| 1.12 | GradientDescent | Gradient Descent - Fixing the Weights |
-| 1.13 | BackpropRealNetwork | Backprop Through the Real Network |
-| 1.14 | GradientsInAction | Gradients in Action - The Full Training Loop |
-| 1.15 | WhyBackpropHard | Why Deep Backprop Gets Hard |
-| 1.16 | Vectors | Vectors - Numbers That Travel Together |
-| 1.17 | DotProductIntro | The Dot Product - How Vectors Compare |
-| 1.18 | Matrices | Matrices - Grids That Transform Vectors |
-| 1.19 | LayerIsMatMul | A Layer is Matrix Multiplication |
-| 1.20 | ActivationFunctions | Activation Functions - The Full Picture |
-| 1.21 | WhatDeepMeans | What "Deep" Really Means |
-| 1.22 | SameBuildingBlocks | Same Building Blocks, Different Shapes |
-| 1.23 | Dropout | Dropout - The Regularization Trick |
-| 1.24 | AdamOptimizer | Adam - The Real Optimizer |
-| 1.25 | LRWarmupDecay | Learning Rate Warmup & Decay |
-| 1.26 | WeightInit | Weight Initialization - How Random? |
-
-**Section 2: How LLMs Actually Train** (`llm-training.jsx`)
-
-| Chapter | Component | Title |
-|---------|-----------|-------|
-| 2.1 | Tokenization | Tokenization - From Words to Numbers |
-| 2.2 | SelfSupervised | Self-Supervised Learning - How GPT Trains |
-| 2.3 | CrossEntropy | Cross-Entropy Loss - The LLM Score |
-| 2.4 | NNInAction | The Neural Network in Action |
-| 2.5 | OutputLayer | The Output Layer - From Hidden State to Words |
-| 2.6 | AutoregressiveGeneration | Autoregressive Generation - One Token at a Time |
-| 2.7 | SFT | Supervised Fine-Tuning (SFT) |
-| 2.8 | RLHF | RLHF - Making AI Helpful & Safe |
-| 2.9 | DPO | DPO - Simpler Alignment |
-| 2.10 | TokenizerDeepDive | Tokenizer Deep Dive - BPE, WordPiece, SentencePiece |
-
-**Section 3: Scaling & Modern Techniques** (`scaling.jsx` + `llm-training.jsx`)
-
-| Chapter | Component | Title |
-|---------|-----------|-------|
-| 3.1 | ScalingLaws | Scaling Laws - Why Bigger Models Win |
-| 3.2 | ParametersAtScale | Parameters at Scale |
-| 3.3 | BatchTraining | Batch Training - Why Not One Example at a Time? |
-| 3.4 | Distillation | Knowledge Distillation - Teacher to Student |
-| 3.5 | CLIP | CLIP - Teaching AI to See & Read |
-| 3.6 | TrainingPipeline | The Complete Training Pipeline |
-
-**Section 4: The Road to Transformers** (`road-to-transformers.jsx`)
-
-| Chapter | Component | Title |
-|---------|-----------|-------|
-| 4.1 | CNN | CNN |
-| 4.2 | RNN | RNN |
-| 4.3 | RNNFlaws | RNN's Fatal Flaws |
-| 4.4 | TransformerArrives | The Transformer Arrives |
-
-**Section 5: Transformer Input Pipeline** (`transformer-input.jsx`)
-
-| Chapter | Component | Title |
-|---------|-----------|-------|
-| 5.1 | FullArchitecture | The Full Architecture |
-| 5.2 | Embeddings | Zoom: Embeddings |
-| 5.3 | PosEncodingProblem | Positional Encoding - The Problem |
-| 5.4 | PosEncodingFormula | Positional Encoding - The Formula |
-| 5.5 | PosEncodingCompute | Positional Encoding - Computing Positions |
-| 5.6 | PosEncodingFastSlow | Positional Encoding - Fast vs Slow |
-| 5.7 | PosEncodingFinal | Positional Encoding - Final Addition |
-| 5.8 | PosEncodingHeatmap | Positional Encoding - The Heatmap |
-| 5.9 | RoPE | RoPE - Rotary Position Embeddings |
-
-**Section 6: Attention - Understanding Q, K, V** (`attention-qkv.jsx`)
-
-| Chapter | Component | Title |
-|---------|-----------|-------|
-| 6.1 | ContextProblem | The Problem - Context is Everything |
-| 6.2 | WordLookup | How Does a Word Look At Others? |
-| 6.3 | DotProduct | The Dot Product - Measuring Similarity |
-| 6.4 | WhyNotDirectDot | Why Not Dot Product Embeddings Directly? |
-| 6.5 | QKVClassroom | Q, K, V - The Classroom Analogy |
-| 6.6 | AskerAnswerer | Every Word is BOTH Asker and Answerer |
-| 6.7 | WhyKVDifferent | Why Can't Key and Value Be the Same? |
-| 6.8 | GoogleAnalogy | The Google Search Analogy |
-| 6.9 | HowQKVCreated | How Are Q, K, V Created? |
-| 6.10 | QKVShapes | Shapes - Why Q is Smaller Than the Embedding |
-| 6.11 | WMatrices | W Matrices - Learned During Training |
-| 6.12 | TracingExample | Tracing a Complete Example |
-
-**Section 7: Attention - The Full Computation** (`attention-computation.jsx`)
-
-| Chapter | Component | Title |
-|---------|-----------|-------|
-| 7.1 | ComputeQKV | Step 1 - Compute Q, K, V for Every Word |
-| 7.2 | AttentionScores | Step 2 - Attention Scores (Dot Products) |
-| 7.3 | KTranspose | Why K Transpose? - Making the Shapes Fit |
-| 7.4 | WhySoftmax | Why Do We Need Softmax? |
-| 7.5 | ScaleByRootDk | Step 3 - Scale by sqrt(d_k) |
-| 7.6 | SoftmaxProbs | Step 4 - Softmax to Probabilities |
-| 7.7 | WeightedSum | Step 5 - Weighted Sum of Values |
-| 7.8 | FullFormula | The Full Formula |
-| 7.9 | WhyMultiHead | Why Multi-Head? - The Compromise Problem |
-| 7.10 | HeadSplit | The Split - How 8 Heads Work |
-| 7.11 | InsideEachHead | Inside Each Head - Full Attention in 64 Dims |
-| 7.12 | ConcatWO | Concat + W_O - Blending All Heads |
-| 7.13 | WhyEightHeads | Why 8 Heads? Parameter Count & Big Picture |
-| 7.14 | IsWOConstant | Is W_O Constant? Does It Change? |
-| 7.15 | AttentionShapes | Attention Flow - Shapes at Every Step |
-| 7.16 | CompletePicture | The Complete Picture - In Plain English |
-
-**Section 8: The Encoder** (`road-to-transformers.jsx` + `transformer-block.jsx`)
-
-| Chapter | Component | Title |
-|---------|-----------|-------|
-| 8.1 | EncoderDecoder | Encoder & Decoder - The Two Halves |
-| 8.2 | AddNorm | Add & Norm - The Stabilizer |
-| 8.3 | FeedForwardNetwork | FFN - The Feed-Forward Network |
-| 8.4 | FFNParallelTrick | FFN - Why Word Count Doesn't Matter |
-| 8.5 | AddNormTwo | Add & Norm (Again) - The Second Stabilizer |
-| 8.6 | TransformerBlockRepeats | Nx - The Transformer Block Repeats |
-| 8.7 | ResidualHighway | Residual Connections - The Gradient Highway |
-| 8.8 | PreNormVsPostNorm | Pre-Norm vs Post-Norm |
-| 8.9 | BatchNormVsLayerNorm | Batch Norm vs Layer Norm |
-
-**Section 9: The Decoder** (`road-to-transformers.jsx` + `attention-computation.jsx` + `transformer-input.jsx` + `encoder-decoder-diagrams.jsx`)
-
-| Chapter | Component | Title |
-|---------|-----------|-------|
-| 9.1 | DecoderOnly | Decoder-Only - How Modern LLMs Work |
-| 9.2 | CausalMask | Causal Masking - Hiding the Future |
-| 9.3 | CrossAttention | Cross-Attention - The Encoder-Decoder Bridge |
-| 9.4 | OutputHead | The Output Head - Linear + Softmax |
-| 9.5 | WhatTransformerDoes | What is a Transformer Actually Doing? |
-| 9.6 | EncoderDecoderTraining | Encoder-Decoder: The Training Flow |
-| 9.7 | EncoderDecoderInference | Encoder-Decoder: The Inference Flow |
-
-**Section 10: Modern LLM Techniques** (`attention-computation.jsx` + `modern-llm-techniques.jsx`)
-
-| Chapter | Component | Title |
-|---------|-----------|-------|
-| 10.1 | KVCache | KV Cache - Why Inference is Fast |
-| 10.2 | GroupedQueryAttention | Grouped-Query Attention - Shrinking the KV Cache |
-| 10.3 | MixtureOfExperts | Mixture of Experts - Bigger Model, Same Compute |
-| 10.4 | Thinking | Thinking - How Reasoning Models Work |
-
-**Section 11: Vector Databases** (`vector-foundations.jsx` + `vector-compression.jsx` + `vector-production.jsx` + `vector-systems.jsx` - Milestones 1-6 of 6 complete)
-
-| Chapter | Component | Title |
-|---------|-----------|-------|
-| 11.1 | RetrievalProblem | The Retrieval Problem |
-| 11.2 | BruteForceKNN | Brute-Force kNN |
-| 11.3 | ThreeWayTradeoff | The Three-Way Tradeoff |
-| 11.4 | DistanceMetrics | Distance Metrics |
-| 11.5 | ANNFamilyTree | The ANN Family Tree |
-| 11.6 | IVF | IVF (Inverted File Index) |
-| 11.7 | HNSWIntuition | HNSW - The Small-World Intuition |
-| 11.8 | HNSWConstruction | HNSW Construction |
-| 11.9 | HNSWSearch | HNSW Search |
-| 11.10 | HNSWParameters | HNSW Parameters |
-| 11.11 | Vamana | Vamana / DiskANN |
-| 11.12 | MemoryWall | The Memory Wall |
-| 11.13 | ScalarQuantization | Scalar Quantization |
-| 11.14 | ProductQuantization | Product Quantization (+ OPQ) |
-| 11.15 | BinaryQuantization | Binary Quantization |
-| 11.16 | Matryoshka | Matryoshka Embeddings |
-| 11.17 | IVFPQ | IVF-PQ |
-| 11.18 | HNSWPQ | HNSW + PQ |
-| 11.19 | CompressionDecision | The Compression Decision |
-| 11.20 | Filtering | Filtering |
-| 11.21 | UpdatesDeletes | Updates & Deletes |
-| 11.22 | Sharding | Sharding & Partitioning |
-| 11.23 | Replication | Replication & High Availability |
-| 11.24 | HybridSearch | Hybrid Search |
-| 11.25 | Rerankers | Rerankers |
-| 11.26 | MultiVectorRetrieval | Multi-vector Retrieval (ColBERT-style) |
-| 11.27 | EmbeddingLifecycle | Embedding Lifecycle & Re-embedding |
-| 11.28 | Observability | Observability |
-| 11.29 | CapacityPlanning | Capacity Planning & Cost Models |
-| 11.30 | FAISS | FAISS |
-| 11.31 | Pgvector | pgvector |
-| 11.32 | Qdrant | Qdrant |
-| 11.33 | Pinecone | Pinecone |
-| 11.34 | QdrantVsPinecone | Qdrant vs Pinecone |
-| 11.35 | WeaviateMilvusChroma | Weaviate / Milvus / Chroma |
-| 11.36 | DecisionFramework | The Decision Framework |
+The full chapter list (ID, title, section, component, file) lives in
+`src/config.js` (the `chapters` array). It is the single source of truth.
+Grep there for any chapter ID, component name, file path, or title. Section
+names and colors live in `sectionNames` and `sectionColors` in the same
+file. Do not duplicate the mapping here.
 
 ## Project Structure
 
-```
-learn-ai/
-├── index.html
-├── vite.config.js
-├── eslint.config.js
-├── .prettierrc
-├── package.json
-├── src/
-│   ├── main.jsx                          # React entry point
-│   ├── learn-ai.jsx                       # Shell: state, navigation, layout
-│   ├── components.jsx                    # Shared components (Box, T, Reveal, SubBtn, Tag, ErrorBoundary)
-│   ├── config.js                         # chapters array, sectionNames, sectionColors, colors (C)
-│   ├── nav-persistence.js               # saveNav/loadNav - localStorage persistence with config fingerprint
-│   ├── __tests__/                        # Unit tests (vitest)
-│   │   ├── config.test.js               # Config validation tests
-│   │   ├── lookup.test.js               # Component lookup tests
-│   │   ├── components.test.jsx          # Shared component tests
-│   │   ├── nav-persistence.test.js      # Nav persistence tests (save, load, edge cases)
-│   │   ├── sections.test.jsx             # All chapter function tests
-│   │   └── svg-descriptions.test.js     # SVG description manifest validation
-│   └── sections/
-│       ├── toc.jsx                       # Table of Contents
-│       ├── neural-foundations.jsx         # Section 1
-│       ├── llm-training.jsx              # Section 2 (+ BatchTraining used in Section 3)
-│       ├── scaling.jsx                   # Section 3
-│       ├── road-to-transformers.jsx      # Section 4 (+ EncoderDecoder in 8, DecoderOnly in 9)
-│       ├── transformer-input.jsx         # Section 5 (+ WhatTransformerDoes in 9)
-│       ├── attention-qkv.jsx             # Section 6
-│       ├── attention-computation.jsx     # Section 7 (+ CausalMask/CrossAttention in 9)
-│       ├── transformer-block.jsx        # Section 8 (Add&Norm, FFN, block repeats)
-│       ├── encoder-decoder-diagrams.jsx # Section 9 (Training/Inference flow diagrams)
-│       ├── modern-llm-techniques.jsx    # Section 10 (MoE, Thinking)
-│       ├── vector-foundations.jsx        # Section 11 (Acts 1+2, chapters 11.1-11.11)
-│       ├── vector-compression.jsx        # Section 11 (Acts 3+4, chapters 11.12-11.18)
-│       ├── vector-production.jsx         # Section 11 (Act 5, chapters 11.19-11.28)
-│       └── vector-systems.jsx            # Section 11 (Act 6, chapters 11.29-11.35)
-├── .github/workflows/deploy.yml
-└── CLAUDE.md
-```
+Each chapter lives at `src/chapters/<topic>/<chapter>.jsx` (one
+default-export function per file). Cross-chapter helpers live in
+`src/shared/`. Tests mirror that layout under `src/__tests__/chapters/` and
+`src/__tests__/shared/`. Run `find src -type d` to see current folders.
+
+Key entry points:
+- `src/learn-ai.jsx` - shell: state, navigation, chapter loader via `import.meta.glob`
+- `src/config.js` - `chapters` array (single source of truth), `sectionNames`, `sectionColors`, color palette `C`
+- `src/components.jsx` - shared components: `Box`, `T`, `Reveal`, `SubBtn`, `Tag`, `ErrorBoundary`
+- `src/nav-persistence.js` - `saveNav` / `loadNav` (localStorage with config fingerprint)
+- `src/search-overlay.jsx`, `src/search.js`, `src/embedding-cache.js` - search
+- `src/data/` - `chunks.json`, `embeddings.bin`, `chunk-cache.json`, `svg-descriptions.json`
+- `src/__tests__/chapter-test-helpers.js` - `makeCtx` factory (used by every per-chapter test)
+
+Shared helpers (`src/shared/`) and what they export:
+- `plot.jsx` - `Graph`
+- `agent-styles.jsx` - `SOFT`, `tintedCard`, `pill`, `DIM_BG`, `DIM_BORDER`
+- `agent-helpers.jsx` - `HighlightedJson`, `monoArtifact`
+- `vector-graphs.jsx` - `Triangle`, `IVFScatter`, `HNSWLayeredGraph`, `fmtVec`, `docCluster`, `computeFlatEdges`, `IVF_CLUSTERS`, `HNSW_CORPUS_XY`, `FLAT_GRAPH_EDGES`, `HNSW_LAYER_1`, `HNSW_LAYER_2`
+- `rag-helpers.jsx` - `FormulaBox`, `CapstoneDecisionCard`
+- `llm-training-helpers.jsx` - `SCORES`, `EXP_SCORES`, `EXP_SUM`, `SORTED_SCORES`, `SORTED_PROBS`
 
 ## How To: Add a New Chapter
 
-Example: insert a new chapter between 7.2 and 7.3.
+Example: insert a new chapter "Score Normalization" between 7.2 and 7.3.
 
-1. **Write the function** in `attention-computation.jsx`:
+1. **Create the chapter file** at
+   `src/chapters/attention-computation/score-normalization.jsx` with a default
+   export:
    ```jsx
-   export const ScoreNormalization = (ctx) => { ... };
+   const ScoreNormalization = (ctx) => { ... };
+   export default ScoreNormalization;
    ```
-2. **Add one line to config.js** and renumber the IDs that follow:
+2. **Add one entry to the section's `chapters` array in `config.js`** - no ID
+   renumbering, no manual ID at all. Drop a new `{ file, title, component }`
+   object into the array at the desired position; IDs are derived from position.
    ```js
-   { id: "7.2", ..., component: "AttentionScores" },
-   { id: "7.3", title: "Score Normalization", section: 7, component: "ScoreNormalization" },  // NEW
-   { id: "7.4", ..., component: "KTranspose" },  // was 7.3
+   sections = [
+     ...
+     {
+       num: 7,
+       name: "Computing Attention",
+       chapters: [
+         { file: "attention-computation/why-attention",       title: "Why Attention",  component: "WhyAttention" },
+         { file: "attention-computation/qkv-concepts",        title: "Q, K, V",        component: "QKVConcepts" },
+         { file: "attention-computation/score-normalization", title: "Score Normalization", component: "ScoreNormalization" },  // NEW
+         { file: "attention-computation/k-transpose",         title: "K Transpose",    component: "KTranspose" },
+         ...
+       ],
+     },
+   ]
    ```
-3. **Update the mapping table in this file** (CLAUDE.md) for the affected section.
-4. **No other files change.** learn-ai.jsx auto-resolves from config.
+3. **Add a per-chapter test file** at
+   `src/__tests__/chapters/attention-computation/score-normalization.test.jsx`
+   covering every sub-step and interaction. Use the `makeCtx` factory in
+   `src/__tests__/chapter-test-helpers.js`.
+4. **No other files change.** learn-ai.jsx auto-resolves the chapter via
+   `import.meta.glob` using the `file` field.
 
 ## How To: Add a New Section
 
-Example: insert a new Section 5 between current Sections 4 and 5.
+Example: insert a new Section 5 "Layer Normalization" between current Sections 4 and 5.
 
-1. **Create the file** (e.g., `src/sections/layer-norm.jsx`) with exported functions.
-2. **Add one import + spread** in learn-ai.jsx's lookup object:
-   ```jsx
-   import * as LayerNorm from "./sections/layer-norm.jsx";
-   const lookup = { ..., ...LayerNorm, ... };
-   ```
-3. **Add entries to config.js**, renumber section numbers and chapter IDs for
-   all sections that shifted.
-4. **Update the mapping tables and project structure in this file** (CLAUDE.md).
-5. **No existing section files are renamed or modified.**
+1. **Create the folder** `src/chapters/layer-norm/` and add one file per chapter
+   inside (each with a default-export function).
+2. **Add chapter entries to `chapters` in `config.js`** with `section: 5` and
+   `file: "layer-norm/<chapter-kebab>"`. Renumber the IDs and `section`
+   numbers for chapters in later sections.
+3. **Update `sectionNames` and `sectionColors`** in `config.js` with the new
+   section number and any renumbered higher sections.
+4. **Add per-chapter test files** under `src/__tests__/chapters/layer-norm/`.
+5. **Update the project structure tree in this file** (CLAUDE.md).
+6. **No other source files change.** learn-ai.jsx picks up the new chapter
+   folder automatically via `import.meta.glob`.
 
 ## How To: Reorder Chapters
 
-Just reorder the entries in the `chapters` array in config.js. Update the mapping
-table in this file (CLAUDE.md) to reflect the new order. Nothing else changes.
+Reorder entries inside a section's `chapters` array in config.js. IDs are
+derived from position, so no renumbering is needed anywhere. Chapter files
+and test files do not move - their content is identity-free. Moving a
+chapter between sections is just cutting/pasting between two arrays.
 
-## Keeping CLAUDE.md in Sync
+The search index identifies chapters by stable file path, so
+reordering does not require re-embedding. Run `npm run search:build` once
+after the reorder to refresh `chunks.json`'s sort order (cache-only,
+zero LLM cost).
 
-**Any change to section/chapter structure MUST be reflected in this file.** This includes:
+## How To: Cross-Reference Another Chapter
 
-- Adding, removing, or reordering chapters - update the mapping table for that section
-- Adding or removing a section - update the mapping table AND the project structure tree
-- Renaming a component function - update the mapping table entry
-- Changing a chapter title - update the mapping table entry
+For in-content references (anything the reader sees), use the
+`ChapterLink` component from `src/components.jsx`:
 
-This ensures any future Claude session has the correct mapping and can find the
-right code immediately.
+```jsx
+import { ChapterLink } from "../../components.jsx";
+
+<ChapterLink to="7.4">chapter 7.4</ChapterLink>
+```
+
+`to` is the destination chapter's ID. `ChapterLink` reads `goTo` from
+`NavContext` (provided by `learn-ai.jsx`) and renders a styled clickable
+span. Plain "chapter X.Y" text strings should be converted to
+`ChapterLink` whenever they refer to a real chapter.
+
+For programmatic navigation in code, shared helpers, or deep links, look
+the chapter up by its **file path** - never by chapter ID (`"7.4"`) or
+array index:
+
+```js
+const idx = chapters.findIndex((c) => c.file === "attention-computation/why-softmax");
+if (idx >= 0) goTo(idx);
+```
+
+File paths equal `"<topic>/<chapter-kebab>"` and are stable across
+reorders, insertions, deletions, and section renumbering. IDs and
+indices shift whenever chapters move; URLs or hard-coded indices break
+silently. The search overlay already follows this rule
+(`src/search-overlay.jsx`). Apply it anywhere a chapter is referenced
+from outside its own file.
+
+## How To: Add a New Super-Section
+
+Super-sections group related sections in the TOC. The 6 default groups are
+defined in `superSections` in `config.js`.
+
+To add a new super-section:
+
+1. Insert a new entry into `superSections` with `id`, `name`, `color`, and
+   the `sections: [...]` list it owns. Pick an id letter not already used.
+2. Remove those section numbers from whichever super-section previously
+   owned them.
+3. Run `npm run test` - validation will catch any section that is now
+   orphaned or double-claimed.
+
+No chunk regeneration is required. Super-sections are a pure TOC overlay.
 
 ## Development
 
@@ -381,23 +254,19 @@ character change. ALWAYS: test first, code second. No exceptions.**
 
 ### Coverage targets
 
-Current real coverage (no v8 ignore exclusions):
-- **Lines: 100%** across all files
-- **Branches: 97.7%** (remaining 2.3% are structurally unreachable defensive
-  branches in config validation, Graph helper, and demo data ternaries)
+Coverage thresholds (enforced by `vite.config.js`) over `src/config.js`,
+`src/components.jsx`, `src/nav-persistence.js`, `src/chapters/**/*.jsx`, and
+`src/shared/**/*.jsx` (excluding `src/main.jsx` and `src/learn-ai.jsx`):
 
-Coverage must not decrease. Any new code must have corresponding tests.
+- **Lines: 100%**
+- **Branches: 100%**
+- **Functions: 100%**
+- **Statements: 100%**
 
-### Test file organization
-
-| Test file | What it covers |
-|-----------|---------------|
-| `config.test.js` | Config data integrity (unique IDs, required fields, section names) |
-| `lookup.test.js` | Every config component exists as an exported function |
-| `components.test.jsx` | ErrorBoundary, Box, T, Reveal, SubBtn, Tag |
-| `nav-persistence.test.js` | saveNav/loadNav: config match, config change, corrupted data, localStorage errors |
-| `sections.test.jsx` | All chapter functions at every sub level with interaction coverage |
-| `svg-descriptions.test.js` | SVG description manifest: valid IDs, non-empty descriptions, full coverage |
+Coverage must not drop below these thresholds. Any new code must have
+corresponding tests. The per-chapter file layout means each chapter file has
+its own focused test file under `src/__tests__/chapters/<topic>/`, which keeps
+coverage local and easy to reason about.
 
 ## Key Design Decisions
 
@@ -476,6 +345,22 @@ user to remind you.
   parameter syntax (`m = 16`, `ef_search = 40`), tokens like `[CLS]` / `[SEP]`.
   When unsure, capitalize. The first letter of a LINE is what counts -
   everything after a colon or first word does not need re-capitalization.
+- **Title-case for diagram box text** - inside any diagram box, decision-tree
+  node, flow-chart node, matrix cell, or named card, EVERY WORD has its first
+  letter capitalized, not just the first word of the line. Example: a diagram
+  box labeled "Retrieve Top K Documents" not "Retrieve top k documents".
+  Examples that MUST be title-case: "Cache Hits", "Vector Search", "Prompt
+  Cache Only", "Lock-In Risk", "Smaller Embedding", "User Question", "Cosine
+  Search In Cache Store", "Eviction", "False-Hit Risk". This rule is stricter
+  than the previous "first letter of line" rule and supersedes it specifically
+  inside diagram boxes. Exceptions: officially lowercase brand names
+  (pgvector, numpy, iPhone, LlamaIndex/LangChain/LangGraph use their official
+  capitalizations), variable identifiers in formulas (`q_vec`,
+  `embedding_model_version`), parameter syntax (`m = 16`, `ef_search = 40`),
+  tokens like `[CLS]` / `[SEP]`. The "first letter of line" rule still
+  applies outside diagram boxes (monospace formula lines, bullet text,
+  paragraph fragments). When unsure: in a diagram box, capitalize every word;
+  outside a diagram box, capitalize only the first word.
 - **SVG diagrams must be horizontally centered in their viewBox** - never
   hardcode `x = 40` for elements in a `viewBox 0 0 520 ...`. Compute symmetric
   padding: `x_start = (viewBox_width - element_span) / 2`. Token rows,
@@ -522,25 +407,79 @@ comparison, or a step-by-step calculation - it is not done yet. Always ask:
 "Can I SHOW this instead of just TELLING it?" and "Is this the REAL formula
 or a dumbed-down version?"
 
-## Discoverability Sync Rules - MANDATORY
+## Discoverability Sync Rules - MANDATORY (SEO + AEO)
 
-The site's discoverability (Google, Bing, ChatGPT search, Claude web, Gemini,
-Perplexity) depends on metadata staying in sync with content. Whenever a code
-change touches any trigger below, update the listed companion files in the SAME
-commit. Apply automatically without asking the user.
+The site's discoverability across both **SEO** (Google, Bing, DuckDuckGo) and
+**AEO / Answer Engine Optimization** (ChatGPT search, Claude web, Gemini,
+Perplexity, and other LLM crawlers) depends on metadata and static text staying
+in sync with content. Because the app is a client-rendered SPA, the `<body>`
+served by GitHub Pages is **the only content crawlers see without executing
+JS**. Treat the static body inside `#root`, the `<noscript>` block, and
+`public/llms.txt` as **authoritative** for crawlers - if they fall out of sync
+with config / content, the site loses ranking.
+
+Whenever a code change touches any trigger below, update the listed companion
+files in the SAME commit. Apply automatically without asking the user.
 
 | If you change... | You MUST also update... |
 |---|---|
-| `src/config.js` chapters or sectionNames (add / rename / remove / reorder) | `public/llms.txt` "What it covers" topic list, `index.html` JSON-LD `teaches` array, `CLAUDE.md` mapping table |
-| Site title, meta description, author name, or tagline (anywhere) | `index.html` (`<title>`, `<meta name="description">`, `og:title`, `og:description`, `twitter:title`, `twitter:description`, JSON-LD `name` / `description`), `public/llms.txt` heading + summary line, footer in `src/learn-ai.jsx` |
+| `src/config.js` chapters or sectionNames (add / rename / remove / reorder) | `public/llms.txt` "What it covers" topic list, `index.html` JSON-LD `teaches` array, the `.seo-fallback` curriculum topic list inside `#root` in `index.html`, and bump `<lastmod>` in `public/sitemap.xml` |
+| Site title, meta description, author name, or tagline (anywhere) | `index.html` (`<title>`, `<meta name="description">`, `og:title`, `og:description`, `twitter:title`, `twitter:description`, JSON-LD `name` / `description`), the static `<h1>` + intro inside `#root` in `index.html`, the `<noscript>` block in `index.html`, `public/llms.txt` heading + summary line, footer in `src/learn-ai.jsx`, and bump `<lastmod>` in `public/sitemap.xml` |
 | Visual identity (logo, hero gradient, primary colors, favicon) | Regenerate `public/og.png` so social shares look right |
-| Site goes from SPA to multi-page routing | `public/sitemap.xml` to list each new URL |
-| Author social links (LinkedIn, GitHub, Twitter, etc.) | `index.html` JSON-LD `sameAs` array, `public/llms.txt` Author section, footer in `src/learn-ai.jsx` |
+| Site goes from SPA to multi-page routing | `public/sitemap.xml` to list each new URL (one `<url>` block per route, each with its own `<lastmod>`) |
+| Author social links (LinkedIn, GitHub, Twitter, etc.) | `index.html` JSON-LD `sameAs` array, the static About / author section inside `#root` in `index.html`, the `<noscript>` block, `public/llms.txt` Author section, footer in `src/learn-ai.jsx` |
+| Any change to the static body content inside `#root` or `<noscript>` in `index.html` | Bump `<lastmod>` in `public/sitemap.xml` to today's date (YYYY-MM-DD) so Google recrawls |
+| Any push to `main` that changes user-visible content, chapter set, or site identity | Bump `<lastmod>` in `public/sitemap.xml` to today's date (YYYY-MM-DD) |
+
+### Why the static `#root` fallback matters
+
+`index.html` ships an `.seo-fallback` block inside `<div id="root">` containing
+a real `<h1>`, an intro paragraph, the full curriculum topic list, and an
+author section. React's `createRoot(...).render(...)` replaces this content on
+first paint, so users never see it - but crawlers that don't execute JS (and
+even those that do, since JS-rendered content is deprioritized) see real text.
+A second `<noscript>` block backs this up for strictly-no-JS clients. **Never
+revert `<div id="root">` to empty** - that's what previously dropped the site
+out of Google for the "rajul babel" query. If you add/rename/remove chapters
+or sections, the topic list inside `.seo-fallback` must be updated to match
+`src/config.js`. Same for the `<noscript>` summary.
+
+### AEO files - LLM-readable surfaces
+
+- `public/llms.txt` - the canonical machine-readable site map for LLM
+  crawlers (Anthropic, OpenAI, Google-Extended, Perplexity, Common Crawl).
+  Must mirror `src/config.js` sections/chapters in its "What it covers" list
+  and stay aligned with site title/description and author social links.
+- `public/robots.txt` - explicitly allow LLM crawlers (`GPTBot`,
+  `ChatGPT-User`, `OAI-SearchBot`, `ClaudeBot`, `Claude-Web`, `anthropic-ai`,
+  `Google-Extended`, `PerplexityBot`, `CCBot`). Do not regress these allow
+  lines.
+- JSON-LD in `index.html` (Person, WebSite, LearningResource graph) - the
+  schema.org payload LLMs and Google use for entity recognition. The
+  `teaches` array MUST match `sectionNames` in `src/config.js`.
+
+### TDD coverage for SEO/AEO rules
+
+Per the mandatory TDD policy, the following test files lock these rules in
+place. When you change any of the above files, the relevant test must be
+updated in the same commit so that drift is caught at CI:
+
+- `src/__tests__/index-seo.test.js` - asserts `<h1>`, `.seo-fallback` content,
+  `<noscript>` block, and curriculum topic mentions inside `index.html`.
+- `src/__tests__/sitemap.test.js` - asserts canonical URL and well-formed
+  ISO `<lastmod>` in `public/sitemap.xml`.
+- `src/__tests__/claudemd-seo-rules.test.js` - asserts that this section of
+  CLAUDE.md continues to document the SEO + AEO sync rules.
+- `src/__tests__/llm-chunk.test.js`, `src/__tests__/manifest.test.js`,
+  `src/__tests__/svg-descriptions.test.js` - existing tests covering
+  llms.txt-adjacent search artifacts and SVG `<desc>` metadata.
 
 After any of these changes are pushed, remind the user (one sentence, end of
 turn) to:
 - Request re-indexing in Google Search Console (URL Inspection → Request indexing).
 - Submit URL in Bing Webmaster Tools (URL Submission).
+- For major curriculum changes, optionally re-share on LinkedIn / GitHub
+  profile so LLM crawlers and AEO surfaces re-fetch.
 
 ## Deployment
 

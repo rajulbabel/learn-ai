@@ -1,24 +1,19 @@
 # Learn AI
 
-> Free, visual, interactive guide to AI - covers Model Internals, the Transformer, RAG, Vector Databases, and Agent Frameworks. By Rajul Babel.
+> Free, visual, interactive guide to AI - covers Deep Learning, LLMs, the Transformer, Vector Databases, RAG, and Agents. By Rajul Babel.
 
 **[Read it live →](https://rajulbabel.github.io/learn-ai/)**
 
 ## What's inside
 
-Each chapter uses animations, interactive diagrams, and step-by-step breakdowns to build intuition before showing the math.
+28 sections grouped into 6 super-sections. Each chapter uses animations, interactive diagrams, and step-by-step breakdowns to build intuition before showing the math.
 
-1. **Neural Network Foundations** - neurons, weights, biases, activations, forward/backward pass, gradient descent, dropout, Adam, weight init.
-2. **How LLMs Train** - tokenization, self-supervised learning, cross-entropy, SFT, RLHF, DPO.
-3. **Scaling & Modern Techniques** - scaling laws, batch training, distillation, CLIP, the full pipeline.
-4. **Road to Transformers** - CNN, RNN, RNN's flaws, the Transformer.
-5. **Transformer Input Pipeline** - embeddings, positional encoding (sinusoidal & RoPE).
-6. **Attention - Q, K, V** - intuition behind queries, keys, values.
-7. **Attention - Full Computation** - dot products, scaling, softmax, multi-head, the complete formula.
-8. **The Encoder** - Add & Norm, FFN, residuals, pre-norm vs post-norm, batch norm vs layer norm.
-9. **The Decoder** - decoder-only LLMs, causal masking, cross-attention.
-10. **Modern LLM Techniques** - KV cache, grouped-query attention, mixture of experts, reasoning models.
-11. **Vector Databases** - HNSW, IVF, Vamana, scalar / product / binary quantization, IVF-PQ, HNSW+PQ, hybrid search, rerankers, FAISS, pgvector, Qdrant, Pinecone, Weaviate, Milvus, Chroma. Includes RAG and Agent Frameworks (LangGraph).
+1. **Foundations of Deep Learning** - neuron, layer, weights/biases, activations, forward/backward pass, gradient descent, dropout, Adam, weight init, linear algebra, training deep networks.
+2. **The Rise of LLMs** - tokenization, self-supervised learning, cross-entropy, SFT, RLHF, scaling laws, distillation, contrastive learning.
+3. **The Transformer Era** - CNN/RNN motivation, embeddings, positional encoding (sinusoidal & RoPE), Q/K/V intuition, scaled dot-product attention, multi-head, encoder (Add & Norm, FFN), decoder (causal masking, cross-attention), KV cache, grouped-query attention, mixture of experts, reasoning models.
+4. **Vector Databases at Depth** - distance metrics, IVF, HNSW, Vamana, scalar/product/binary quantization, Matryoshka, IVF-PQ, HNSW+PQ, filtering, sharding, hybrid search, rerankers, FAISS, pgvector, Qdrant, Pinecone, Weaviate, Milvus, Chroma.
+5. **Retrieval Augmented Generation (RAG)** - naive pipeline and failure modes, ingestion + chunking, embedding choice and domain adaptation, hybrid retrieval, reranker cascade, HyDE, multi-query, query routing, context packing, citations, multi-hop, Self-RAG, CRAG, GraphRAG, agentic RAG, eval (RAGAS, golden datasets), caching, cost, observability.
+6. **Agentic AI** - prompt anatomy, system prompts, few-shot, CoT, tool use, JSON schemas, MCP architecture and primitives, A2A, agent loops (ReAct, plan-execute), memory types, multi-agent (orchestrator-worker, supervisor, critic/debate), evals, guardrails, injection defenses, framework picks.
 
 ## Tech Stack
 

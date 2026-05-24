@@ -25,26 +25,26 @@
   "1.7": [
     "Two-layer neural network with labeled weights and biases on every edge, used for tracing a complete forward pass computation step by step"
   ],
-  "1.8": [
+  "2.1": [
     "Bar chart comparing predicted value against actual value with an annotated gap, plus a causal chain showing weights leading to prediction leading to loss"
   ],
-  "1.10": [
+  "2.3": [
     "Simple neuron flow diagram showing input connected by weight to a neuron with bias, producing output, used to demonstrate derivative computation",
     "Parabolic loss curve (loss vs weight) with a marked current point, tangent line labeled slope equals derivative, and an arrow toward the minimum"
   ],
-  "1.11": [
+  "2.4": [
     "Chain rule formula rendered as partial derivatives: dLoss/dweight decomposed into three colored fractions showing the three backward pass steps"
   ],
-  "1.12": [
+  "2.5": [
     "Gradient descent visualization showing a U-shaped loss curve with labeled steps and curved arrows rolling downhill toward the minimum through successive weight updates"
   ],
-  "1.13": [
+  "2.6": [
     "Two-layer neural network annotated with all weights, biases, intermediate outputs, target value, loss value, and backward gradient flow arrow for backpropagation tracing"
   ],
-  "1.19": [
+  "3.4": [
     "Neural network layer with 3 medical inputs fully connected to 3 neurons with 9 labeled weights and output scores, demonstrating that a layer is matrix multiplication"
   ],
-  "1.23": [
+  "4.3": [
     "Dataset split bar showing 80% training data in green and 20% validation data in orange, with labeled counts",
     "Icon showing an open eye with a checkmark, representing data the model sees during training",
     "Icon showing a closed eye with a lock, representing held-out data the model never sees during training",
@@ -53,69 +53,69 @@
     "Six-neuron layer at inference showing all neurons active, illustrating that dropout is turned off during prediction",
     "Vertical transformer block diagram showing where dropout is applied: after attention and after FFN, each with p=0.1"
   ],
-  "1.24": [
+  "4.4": [
     "Momentum formula: m_t equals beta_1 times m_(t-1) plus (1 minus beta_1) times g_t, showing exponential moving average of gradients",
     "Adaptive learning rate formula: v_t equals beta_2 times v_(t-1) plus (1 minus beta_2) times g_t squared, tracking average squared gradient magnitude per parameter",
     "Bias correction formulas: m-hat_t equals m_t divided by (1 minus beta_1 to the power t), and v-hat_t equals v_t divided by (1 minus beta_2 to the power t), correcting for zero initialization",
     "Full Adam update rule: theta_(t+1) equals theta_t minus alpha times m-hat_t divided by (square root of v-hat_t plus epsilon), combining momentum, adaptive rates, and bias correction",
     "AdamW update rule: theta_(t+1) equals theta_t minus alpha times (m-hat_t divided by (square root of v-hat_t plus epsilon) plus lambda times theta_t), with decoupled weight decay applied directly"
   ],
-  "1.25": [
+  "4.5": [
     "Line graph showing learning rate increasing linearly from zero during warmup phase over 2000 training steps",
     "Line graph showing learning rate with linear warmup to a peak then smooth cosine decay to zero, illustrating the complete LR schedule"
   ],
-  "1.26": [
+  "4.6": [
     "Diagram showing the symmetry problem when all weights are zero: three neurons all produce identical output, the network is stuck forever"
   ],
-  "2.3": [
+  "5.3": [
     "Cross-entropy loss formula rendered as mathematical notation: Loss = -log(P_correct), with annotations explaining each term",
     "Plotted negative log probability curve showing loss vs probability with annotated points from confident-and-right to very-wrong, demonstrating exponential penalty for low confidence"
   ],
-  "2.5": [
+  "5.5": [
     "Deep neural network output layer diagram showing hidden state neurons connected through an unembedding weight matrix to vocabulary output neurons, illustrating how hidden states become word predictions"
   ],
-  "5.1": [
+  "8.1": [
     "Complete Transformer architecture diagram showing encoder and decoder halves with multi-head attention, add and norm, FFN layers, positional encoding, embeddings, residual skip connections, and linear plus softmax output head"
   ],
-  "5.8": [
+  "8.8": [
     "Full positional-encoding heatmap with rows as positions (0 to 39) and columns as embedding dimensions (0 to 127). Each cell is colored by the sin or cos value at that position and dimension, ranging from dark red at negative one to white at zero to dark blue at positive one. The left side shows a fast checkerboard pattern while the right side shows slow vertical stripes.",
     "Binary counting table showing positions 0 through 11 with 4-bit binary representations. Each bit is colored: bit 0 (rightmost, fast) flips every step, bit 1 flips every 2 steps, bit 2 flips every 4 steps, bit 3 (leftmost, slow) flips every 8 steps. Side-by-side arrangement emphasizes that each position gets a unique bit pattern, analogous to how each position in the heatmap gets a unique sin/cos signature."
   ],
-  "5.9": [
+  "8.9": [
     "Clock-face diagram showing a 2D query vector Q = [0.8, 0.6] rotated by position times frequency. Four labeled arrows spread counter-clockwise across the upper quadrant of a dashed unit circle, representing the same vector at positions 0, 1, 2, and 3.",
     "Two side-by-side clock faces comparing near versus far scenarios in RoPE. The left clock shows Query at position 3 and Key at position 0; the right clock shows Query at position 10 and Key at position 7. In both cases the angular gap between the Q and K hands is the same 0.9 radians, illustrating that RoPE gives the same attention score whenever the relative distance is the same, regardless of absolute positions.",
     "Three mini clock faces side by side showing pair 0 rotating fast, pair 10 rotating medium, and pair 60 rotating slow. Each face has a vector at position 0 and position 10 to illustrate that early pairs rotate through large angles while late pairs barely move across the same 10 positions."
   ],
-  "7.4": [
+  "10.4": [
     "Softmax formula rendered as mathematical notation showing e to the power of each score divided by sum of all e scores, converting raw attention scores to probabilities"
   ],
-  "7.15": [
+  "11.7": [
     "Matrix tile visualization used throughout the attention-shapes chapter: a colored rectangle divided into rows-by-columns grid lines, optionally decorated with row labels 'I', 'love', 'cats' to the left and column labels above. Each tile represents one matrix in the attention pipeline (X, Q, K, V, scores, softmax, output) and shows its shape at a glance."
   ],
-  "8.3": [
+  "12.3": [
     "Feed-forward network architecture diagram showing expand-then-compress structure: 512-dim input through W1 to 2048-dim hidden with GELU activation, then W2 back to 512-dim output",
     "Line graph of the ReLU activation function over x from -3 to 3. The curve is flat at y equals zero for all negative x, forming a horizontal line along the x-axis, then rises with a hard kink at the origin and continues linearly as y equals x for all positive x. Dead region for negatives where the gradient is exactly zero.",
     "Line graph of the GELU activation function over x from -3 to 3. The curve is a smooth S-shape: nearly zero for large negative x, dips slightly below zero around x equals minus one forming a small leak region, passes smoothly through the origin with a continuous derivative, and asymptotically matches y equals x for large positive x. Smooth shape keeps gradients alive for negative inputs."
   ],
-  "8.6": [
+  "12.6": [
     "Vertical Transformer encoder block stack diagram showing token embedding plus positional encoding feeding through repeated blocks (each with self-attention, add and norm, FFN, add and norm) annotated with Nx bracket"
   ],
-  "9.3": [
+  "13.3": [
     "Cross-attention architecture diagram showing encoder stack producing K and V projections cached and fanned out to decoder layers, where Q comes from decoder while K and V come from encoder output"
   ],
-  "9.6": [
+  "13.6": [
     "Progressive encoder-decoder training flow diagram showing complete pipeline: tokenization, embedding, positional encoding, encoder self-attention with Q K V projections, FFN, decoder with causal masking and cross-attention, and output head producing predictions at every position"
   ],
-  "9.7": [
+  "13.7": [
     "Progressive encoder-decoder inference flow diagram showing autoregressive generation: encoder runs once, K V output is cached, decoder runs in a loop processing one new token at a time using KV cache for previously computed keys and values"
   ],
-  "10.1": [
+  "14.1": [
     "Three stacked work rows showing naive generation redoing history: step 1 with 1 green new block, step 2 with 1 red redundant block and 1 green new block, step 3 with 2 red redundant blocks and 1 green new block, illustrating how computation piles up quadratically when the KV cache is not used",
     "Side by side attention matrix multiplications at generation step 3: Q times K transpose equals Scores (3 by 3) with rows for I and love dimmed because they were already computed at earlier steps and only the last row for cats glows, and Scores times V equals Output with only the last row highlighted as the new result",
     "Three frame growing notebook diagram showing the K cache and V cache tables appending one row per generation step: after I has 1 row, after love has 2 rows with the older row dimmed, after cats has 3 rows with only the newest row highlighted",
     "Horizontal memory meter filling with gradient showing KV cache memory cost scaling with sequence length, with tick marks at 1024 4096 and 32768 tokens and GB values 2.7 10.7 and 86 for LLaMA 70B sized models"
   ],
-  "10.3": [
+  "14.3": [
     "Side-by-side comparison of a dense 47B model versus a MoE model with 47B total parameters but only 13B active per token",
     "Before and after transformer block diagrams showing the FFN replaced by a router that picks top-k experts and computes a weighted sum",
     "Top-k routing walkthrough with softmax scores over 8 experts selecting experts 3 and 6 for the token cat and normalizing their weights",
@@ -125,7 +125,7 @@
     "Production MoE model comparison table covering Mixtral 8x7B, Mixtral 8x22B, DeepSeek-V3, and Qwen3-Next with total parameters active parameters expert counts and routing policy",
     "Honest tradeoff cards listing MoE wins (data-center training, high throughput serving) and struggles (edge deployment, single-user low-latency)"
   ],
-  "10.4": [
+  "14.4": [
     "Before and after cards for the prompt What is 23 times 47 showing a regular LLM emitting just 1081 and a reasoning LLM emitting a think block with step-by-step calculation before the final answer",
     "Grid checklist of every transformer component (tokenizer, embeddings, positional encoding, attention, FFN, layer norms, residuals, KV cache, output head, softmax, autoregressive loop) each marked unchanged",
     "Side-by-side vertical chains of forward-pass boxes comparing a regular LLM with 3 iterations to a reasoning LLM with 120 iterations",
@@ -137,29 +137,29 @@
     "Annotated reasoning trace demonstrating emergent self-correction, verification, and confidence-calibration patterns that arose purely from the reward signal",
     "Two-column honest scope table listing domains where reasoning helps (math, code, logic) and domains where it does not lift quality (creative writing, empathy, casual conversation)"
   ],
-  "11.1": [
+  "15.1": [
     "Retrieval diagram with a yellow query box on the left for the phrase about cats pointing an arrow into a cloud of ten numbered document dots, where the three dots closest to the query (documents 1, 3, and 7 - all cat-related sentences) are highlighted green as the top-3 nearest neighbors and the remaining seven dots are dimmed"
   ],
-  "11.2": [
+  "15.2": [
     "A super-fast chef on the left (labeled chef equals chip) stands next to a cutting board with chopping marks, connected by a long dashed red arrow labeled slow delivery to a distant warehouse on the right (labeled warehouse equals memory). The illustration shows that the chef can chop in one second but has to wait ten minutes for each delivery, so fetching the ingredients is the real bottleneck, not chopping speed. This is the analogy for why memory bandwidth, not FLOPS, limits brute-force search at billion-vector scale.",
     "Rightward purple arrow labeled production uses this, pointing from the exact brute-force card on the left to the approximate nearest neighbor (ANN) card on the right, illustrating the tradeoff from exact slow search to approximate fast search"
   ],
-  "11.3": [
+  "15.3": [
     "Equilateral tradeoff triangle with Recall at the top vertex in cyan, Latency at the bottom-left vertex in orange, and Memory at the bottom-right vertex in yellow, introducing the three axes every vector-database decision must balance",
     "Equilateral tradeoff triangle with Recall, Latency, and Memory at the vertices and interior labels mapping each family of techniques to its direction of movement - Indexing trades latency for memory, Quantization trades memory for recall, Filtering and sharding push on all three corners"
   ],
-  "11.4": [
+  "15.4": [
     "Two vectors drawn from the origin - a cyan query vector q and a green document vector d - with a small yellow angle theta between them, illustrating that cosine similarity measures the angle between vectors and that a tight angle means cos(theta) is close to 1.0",
     "Right triangle with two points q and d in 2D, a horizontal dashed leg labeled as the x-axis difference and a vertical dashed leg labeled as the y-axis difference, and the blue hypotenuse highlighted as the L2 distance equal to the square root of the sum of squared differences (Pythagoras in d dimensions)"
   ],
-  "11.5": [
+  "15.6": [
     "KD-tree recursive partition of a 2D point cloud - vertical split down the middle, horizontal splits in each half, one more vertical split in a quadrant - showing clean logarithmic partitioning at low dimensions",
     "Two-dimensional space with three random hyperplane lines slicing it; vectors in the same intersection share a 3-bit LSH hash code like 011 or 100",
     "Small IVF recap scatter - three Voronoi cells with the query probing the nearest one",
     "Proximity graph of the 10 cat-corpus documents with edges connecting each node to its two or three nearest neighbors, and a highlighted green path from the lower-right birds/fish doc across several hops to the cat cluster",
     "Illustrative recall vs queries-per-second scatter inspired by ann-benchmarks: HNSW and Vamana sit on the upper-right Pareto frontier, while IVF+PQ, LSH, and KD-tree fall below and to the left"
   ],
-  "11.6": [
+  "15.7": [
     "Scatter plot of the 10 cat-corpus documents with the query vector at the center and faint red lines fanning out to every dot, showing that brute-force kNN compares the query to every vector",
     "Same 10 docs colored by k-means cluster after running with nlist = 3: purple centroid A among the cat docs, yellow centroid B around the dog docs, cyan centroid C around the other docs",
     "Same scatter with dashed colored rectangles behind the dots approximating Voronoi cells, showing each doc belongs to exactly one cell",
@@ -168,13 +168,13 @@
     "Small IVF scatter with nprobe = 2: the two nearest clusters are probed",
     "Small IVF scatter with nprobe = 3: all three clusters are probed, equivalent to a full scan"
   ],
-  "11.7": [
+  "15.8": [
     "Flat proximity graph of the 10 cat-corpus documents with each node connected by cyan edges to its two or three nearest neighbors - the starting point before any hierarchy is added",
     "Same flat graph with a dashed red greedy-search path meandering across many nodes before reaching the cat cluster, illustrating that random-start greedy search on a flat graph is slow",
     "Two-layer HNSW illustration - bottom cyan layer is the flat proximity graph of all 10 docs, top yellow layer holds three hub nodes (docs 1, 6, 10) with yellow long-range edges between them",
     "Three-layer HNSW illustration - bottom cyan all-nodes layer, middle yellow hub layer with long-range edges, top red hub-of-hubs layer with a single global entry-point node"
   ],
-  "11.8": [
+  "15.9": [
     "First vector inserted into an empty HNSW graph - a single cyan dot labeled doc 1 marked as the entry point, with no edges or neighbors yet",
     "Greedy descent during insertion shows the entry-point chain dropping from L2 doc 1 to L1 doc 1 to L0 doc 1 along green vertical edges, with one candidate per layer above L",
     "Layer-0 beam search during insertion: the new doc sits as a green star at (260, 110) and dashed orange lines connect it to its top-4 ef_construction candidates docs 7, 4, 3, 2",
@@ -186,7 +186,7 @@
     "Ring of 8 nodes with each node connected to its M = 8 nearest neighbors, showing balanced edge density that approaches a complete graph",
     "Ring of 8 nodes with each node connected to its M = 16 nearest neighbors (capped at N - 1 = 7); a fully meshed graph at this small N"
   ],
-  "11.9": [
+  "15.10": [
     "Layer-0 scatter of the 10 cat-corpus docs with cyan flat-graph edges drawn faintly; the yellow query star sits in the cat cluster near docs 1, 3, 7",
     "Three-tier HNSW hierarchy with a yellow query arrow landing at the top-layer entry node (doc 1 at L2) drawn in green; lower layers untouched",
     "Greedy descent at L2 has no neighbors, so the current node drops vertically along a green edge from L2 doc 1 to L1 doc 1",
@@ -197,20 +197,20 @@
     "Frame C of beam expansion - doc 7 popped; neighbors 1, 2, 3, 4 evaluated; none beat the queue worst, beam top unchanged so search converges",
     "Final HNSW search result on layer-0 scatter - docs 1, 3, 7 highlighted in green with their distance dashes from the query, marking the converged top-3"
   ],
-  "11.10": [
+  "15.11": [
     "Line chart plotting recall@10 against ef_search on a log horizontal axis, with three curves for M = 8 (cyan), M = 16 (yellow), and M = 32 (green); higher M curves converge closer to 1.0 but require more memory"
   ],
-  "11.11": [
+  "15.12": [
     "HNSW hierarchical graph with three stacked layers: top layer has a single hub node, middle layer has three hub nodes connected by long orange arcs, and bottom layer has eight nodes connected by short green edges, with dashed vertical lines linking the same node across layers",
     "Single flat Vamana graph with eight nodes on one plane connected by a mix of short green edges for local precision and long orange edges stretching across the plane for cross-space jumps, doing the work HNSW's upper layers used to do",
     "Focal Vamana node p at the center surrounded by a mix of short green edges fanning to close neighbors and long orange edges shooting across the plane to distant nodes, showing how one node's 64 edges do double duty as both local-precision and long-range hub edges",
     "Storage hierarchy diagram - top layer shows a RAM cache with a small subset of high-degree entry nodes, bottom layer shows the SSD storing every graph node as 4 KB blocks aligned to NVMe pages"
   ],
-  "11.13": [
+  "16.2": [
     "Number line with calibrated cyan band from -1.2 to 1.4 and a 0 to 255 bucket scale; green training point at 0.5 maps to bucket 167, red new-vector point at 1.8 sits outside the band with a bent arrow clipping it back to 1.4 = bucket 255, a red gap bar labeled error = 0.4, and a faded tombstone marker for a deleted entry whose int8 row still lives",
     "Two stacked number lines comparing min/max calibration to p1/p99 plus 10 percent headroom; the top band spans -1.2 to 1.4 and the new value 1.8 clips with a red error bar of 0.4, while the bottom band spans -1.4 to 1.7 and the same new value clips with a red error bar of only 0.1"
   ],
-  "11.14": [
+  "16.3": [
     "A 768-dim vector banded into 96 slot segments, with three stacked document rows aligned at the same slot boundaries to show that slot 0 covers the same dim range across every document",
     "A 2-D scatter projection of slot-0 sub-vectors with 16 highlighted k-means centroid markers labeled c0 to c255, representing the 256 codebook entries that snap each sub-vector to its nearest prototype",
     "Encoding step diagram showing one query sub-vector snapping to its nearest centroid c17, then a row of four sub-vector bars snapping to four byte boxes containing centroid ids that assemble into a 96-byte PQ code",
@@ -223,49 +223,372 @@
     "Slot-0 2D scatter showing a tight cluster of 32 representative gray X centroids (of 256 trained per slot) around the origin with gray training dots inside, plus a red new-vector dot at (2.1, 1.9) far outside the cluster connected to the nearest centroid by a dashed line labeled distance = 1.8, alongside an inset label training avg distance = 0.3 and faded strikethrough dots indicating deleted training entries",
     "Line chart of 95th-percentile PQ reconstruction error over time from 0 to 50M vectors with a flat baseline rising into a spike between 10M and 20M, a horizontal dashed retrain threshold crossed at 15M, a vertical dashed line marking retrain triggered at 20M then a return to baseline, plus colored ticks below the x-axis marking inserts, updates, and deletes"
   ],
-  "11.15": [
+  "16.4": [
     "Curve showing binary quantization recall rising sharply with embedding dimension - near zero at d=64, rising past 0.9 around d=512, plateauing around 0.96 at d=1024 and higher, illustrating why binary works for high-dim BERT-style embeddings but collapses at low dimensions",
     "Side-by-side histograms for dim 5: a green training distribution centered at 0 with split 51/49 and a red drifted distribution centered at 0.4 with split 78/22, both cut by a dashed sign threshold at x = 0; below are two 8-cell bit-grid rows showing training mostly mixed bits versus drifted mostly 1s plus a small tombstone cell",
     "Bit-balance bar grid sampling 64 representative dims (of 1024) where each bar height equals the absolute deviation from a 50/50 split; most bars are short and green while a handful are tall and red flagged with small alert badges above, with a horizontal yellow dashed 70 percent imbalance alert line"
   ],
-  "11.16": [
+  "16.5": [
     "Long horizontal vector bar divided into colored prefix regions at 256, 512, 1024, and 3072 dimensions, each prefix labeled as a valid Matryoshka truncation so early-dimension subsets are usable embeddings",
     "Four concentric circles representing Matryoshka embedding prefixes - innermost red 256 dims, then orange 512, yellow 1024, and green 3072 - resembling nested Russian dolls where each ring is itself a complete embedding",
     "Two-axis area chart with x-axis showing dimension count from 0 to 3072 and y-axis showing bits per dimension from 0 to 32. Total vector bytes equals the area of each rectangle. Four nested rectangles show progressive compression: full float32 baseline at 3072 by 32 equals 12,288 bytes, MRL truncated at 1024 by 32 equals 4,096 bytes, MRL plus SQ at 1024 by 8 equals 1,024 bytes, and MRL plus BQ at 1024 by 1 equals 128 bytes. Demonstrates that MRL shrinks width while quantization shrinks height and the two effects multiply geometrically when stacked.",
     "Four horizontal cell-rows showing the same embedding vector progressing through each compression stage. Row 1 is the float32 baseline with 24 tall cells representing 3072 dims at 32 bits totaling 12,288 bytes. Row 2 shows MRL truncation keeping the first 8 cells solid and fading the remaining 16 cells as dashed outlines, totaling 4,096 bytes. Row 3 shows MRL plus SQ where the same 8 cells remain but each cell is one-quarter the height for 8-bit storage, totaling 1,024 bytes. Row 4 shows MRL plus BQ where the same 8 cells become tiny 1-bit slivers totaling 128 bytes. Illustrates that MRL throws away cells from the right while quantization shrinks the height of each remaining cell."
   ],
-  "11.17": [
+  "16.6": [
     "Cat-corpus 2D scatter partitioned into three IVF clusters after k-means with nlist = 3, arranged as a balanced inverted triangle: five cat docs form cluster A around the purple centroid square C_A in the upper-left, two dog docs form cluster B around the yellow centroid C_B in the upper-right, and three other docs form cluster C around the cyan centroid C_C in the lower-center, illustrating step 1 of IVF-PQ which clusters the space first",
     "IVF-PQ search trajectory on the 10-doc cat corpus arranged as an inverted triangle: the query vector sits in the upper-left, an orange arrow points toward the closest centroid C_A, the two nearest cells A and B in the top row are highlighted as probed while cluster C at the bottom is dimmed as skipped, illustrating nprobe = 2 where only the two nearest clusters get their PQ codes scanned"
   ],
-  "11.18": [
+  "16.7": [
     "Three-layer HNSW graph with each node labeled by a compact PQ code like [c17, c203, c89, ...] instead of a float vector. The bottom cyan layer holds all eight docs with dense edges, the middle yellow layer holds three hub nodes with long-range edges, and the top red layer has a single global entry-point node. Green dashed vertical lines are layer-to-layer links, illustrating that HNSW + PQ keeps the graph structure and only changes the node payload from float32 vectors to PQ codes"
   ],
-  "11.19": [
+  "16.8": [
     "Compression-technique decision flowchart with top input box listing N, d, DB and recall tolerance, an orthogonal MRL pre-step on the left for truncating Matryoshka-trained embeddings at the API, a main decision flow branching on N into four size buckets (under 1M skip, 1M to 10M scalar quantization, 10M to 100M binary quantization with rescore gated on d at least 768 and DB support, 100M or more HNSW plus product quantization), plus a fallback rule and a recall-tolerance override note."
   ],
-  "11.20": [
+  "17.1": [
     "Three-stage filter funnel for the pre-filter strategy. Wide yellow trapezoid represents 1 million vectors in the corpus, middle narrowing trapezoid represents the approximately 1,000 docs that pass the tenant_id and published_year predicates, and the rightmost green trapezoid represents the final top-3 returned after brute-force similarity search over the survivors.",
     "Small HNSW-style graph with 10 nodes where the four that pass the predicate are filled in orange and the six that fail are dimmed. Gray edges connect near neighbors and an orange traversal path with arrows visits only the passing nodes 1, 3, 5, and 7, illustrating the Qdrant inline filtered-HNSW approach that evaluates the predicate during graph traversal instead of pre- or post-filtering."
   ],
-  "11.21": [
+  "17.2": [
     "Small graph with 8 nodes where central hub node D has edges to A, B, C, E, F, G, and H. Node D is struck through in red to indicate deletion, and every edge touching D is drawn with a dashed red line to indicate a broken route. The remaining edges between the outer-ring nodes are dimmed, showing that removing a hub shatters multiple routing paths at once.",
     "Line chart plotting recall at 10 on the vertical axis (0.80 to 1.00) against delete percentage on the horizontal axis (0 to 50 percent). The orange curve starts at 0.97 at 0 deletes, dips gently to 0.965 at 10%, then drops through 0.92 at 30% deletes and falls to 0.85 at 50% deletes. A dashed red line at 30% marks the typical rebuild trigger."
   ],
-  "11.22": [
+  "17.3": [
     "Random sharding diagram with a query icon q at the top center sending fan-out lines straight down to four shard rectangles arranged in a horizontal row. Each shard holds a mixed scatter of colored dots and is labeled Shard 0 through Shard 3 underneath the box. Illustrates that random sharding forces every query to hit every shard because any shard may contain the nearest neighbor.",
     "Semantic sharding diagram with a query icon q at the top center sending routing lines straight down to only two of four shards arranged in a horizontal row. The cats and animals shards are highlighted; the dogs and misc shards are dimmed. Each box shows its cluster letter inside and the region label underneath. Illustrates that when shards align with IVF clusters the query can skip the unrelated regions of the embedding space and touch only the shards likely to contain matches."
   ],
-  "11.23": [
+  "17.4": [
     "Read-replica topology diagram with five green client circles on the left feeding into a yellow load-balancer box labeled LB, which distributes traffic across four cyan replica boxes labeled R1 through R4 on the right. Illustrates how read replicas hold identical copies of the index and share query load while writes go elsewhere."
   ],
-  "11.24": [
+  "17.5": [
     "Hybrid-search flow diagram with a green query icon on the left that splits into two parallel lanes. The upper cyan lane flows to a Vector ANN box emitting a top-N ranked list; the lower yellow lane flows to a BM25 box emitting another top-N list. Both lists arrive at a green merge node labeled RRF on the right. Illustrates the parallel-ranker architecture of hybrid search."
   ],
-  "11.25": [
+  "17.6": [
     "Cross-encoder architecture diagram. A row of input token boxes labeled CLS, query, query, SEP, doc, doc, doc, doc, SEP sits at the bottom connected by arrows up into a single wide yellow transformer rectangle spanning all tokens. A green circle labeled score sits at the top. Illustrates that cross-encoder rerankers run full attention over the concatenated query and doc tokens in one forward pass."
   ],
-  "11.36": [
+  "18.7": [
     "Four-branch decision flowchart for picking a vector database. A cyan root node labeled 'New vector-search feature' sits at the top; axis one (data size) splits the flow into four buckets - green under 1M, yellow 1M-100M, orange 100M-1B, red over 1B - with each bucket showing recommended systems below (pgvector/Chroma at small scale, Qdrant/Pinecone/pgvector in the middle band, Qdrant multi-node or Milvus at large scale, Milvus/Vespa at billion-plus). Axis 2 ops capacity, axis 3 filter complexity, and axis 4 cost band are listed as follow-on constraints that narrow the shortlist to a single pick."
+  ],
+  "19.2": [
+    "Horizontal flow diagram of the 5-stage RAG pipeline: Chunk, Embed, Store, Retrieve, Generate. First 3 stages tinted cyan (offline ingest), last 2 stages tinted yellow (online query). Arrows connect adjacent stages."
+  ],
+  "19.3": [
+    "U-shaped attention curve plotting attention weight against chunk position 1-10. High attention at start (positions 1-2) and end (positions 9-10), dipping in the middle (positions 4-7). Position 5 is highlighted as the relevant chunk that gets missed."
+  ],
+  "20.1": [
+    "Stylized web page mockup with four labeled zones: a top nav bar tinted red marked DROP, a left sidebar tinted red marked DROP, a central main article zone tinted green marked KEEP, and a bottom footer with newsletter signup tinted red marked DROP. Shows which DOM regions a boilerplate-stripping parser keeps versus discards."
+  ],
+  "20.2": [
+    "Three source systems (Zendesk, Confluence, Notion) each containing the same Reset-Your-Password article flow into a single ingestion pipeline that produces three nearly-identical duplicate chunks in the vector database. Below them, a context-window bar of 4,096 tokens shows the first 1,536 tokens consumed by three duplicate chunks tinted red while only 2,560 tokens remain green for distinct answers."
+  ],
+  "20.3": [
+    "Timeline showing a password-reset article version v1 published on 2026-04-12, edited to v2 on 2026-05-01 adding an MFA-preservation note, and a stale-index v1 chunk being retrieved on 2026-05-10 causing the LLM to give the wrong answer because the index never re-ingested v2",
+    "Webhook-driven incremental sync sequence diagram with time markers T=0:00 through T=0:10 showing user edit, Confluence webhook fire, ingestion service fetch, re-parse and re-chunk and re-embed, upsert into vector DB referencing Section 11.21 deletes-updates, and final queryable state with about ten-second propagation lag",
+    "Three-row versioning timeline showing doc-1 v1 chunks active at t=0, both v1 (deprecated) and v2 (active) chunks present during the t=+1min re-embed window for retrieval-gap avoidance, and only v2 chunks active at t=+15min after the grace period drops v1"
+  ],
+  "20.4": [
+    "Horizontal token-count bar showing a 500-page product manual at 250,000 tokens overflowing the 8,192-token embedding model ceiling. Green portion marks the 8,192 tokens that fit while the rest of the bar is tinted red as overflow. A second smaller bar below visualizes the ceiling itself, and a callout shows that even if the whole doc fit, a single vector for 500 pages would carry no specific signal.",
+    "Sliding window chunk diagram across doc-1 (the password-reset article) showing four colored 128-token chunk bars stacked vertically along a 0-464 token axis. Each chunk is labeled with its token range (0-128, 112-240, 224-352, 336-464) and the 16-token overlap zones between adjacent chunks are shaded a darker green band.",
+    "Two clean rectangle chunks side by side with no overlap, with a red dashed vertical line at the boundary marking the mid-sentence hard cut between chunk 1 and chunk 2.",
+    "Two chunk rectangles with a darker yellow overlap band shared between them, labeled as the shared 16-token region where the cut sentence appears whole in both adjacent chunks."
+  ],
+  "20.5": [
+    "Vertical priority tree of structural separators starting with paragraph break (double newline), falling back through line break (single newline), sentence break (period space), to word break (space), with each downward arrow labeled If chunk too big to mark the fallback condition.",
+    "Recursion trace tree showing the doc-12 Authentication Header Format section at 300 tokens being split by paragraph break into three sub-chunks of 100, 110, and 90 tokens that each fit the 128-token target. The top node marks the oversized section in red, the middle row shows the three paragraph splits in green, and the bottom row shows the three emitted chunks in cyan."
+  ],
+  "20.6": [
+    "Line chart of cosine similarity between adjacent sentences along a 12-sentence document. Similarity stays around 0.85-0.92 within the creating cluster (boundaries 1-2 through 5-6) then drops sharply to 0.41 at boundary 6-7 (the shift to revoking) before climbing back to 0.83-0.91 for the revoking cluster (boundaries 7-8 through 11-12). A red dashed horizontal threshold line at 0.7 marks the chunk-break cutoff."
+  ],
+  "20.7": [
+    "Side-by-side comparison: left shows chunk-then-embed with three independent embedding passes per chunk, right shows late chunking with one whole-doc attention pass followed by chunk-boundary mean pooling",
+    "Token-attention sweep diagram over doc-1 password reset showing a single attention arc covering all tokens, with mean-pool boundaries at token positions 128 and 256 producing three chunk vectors, with annotation that chunk 3's vector still encodes 'Sarah' from chunk 1"
+  ],
+  "20.8": [
+    "Tree hierarchy diagram with doc-4 refunds policy as the root node, three section nodes below for eligibility, process, and edge cases, and four to six leaf chunk nodes below each section, with leaves colored cyan, sections purple, and root green",
+    "Leaf-to-parent swap flow diagram showing retrieved leaf L7 with the 'no refunds after 30 days' sentence on the left, a parent-lookup arrow in the middle, and the full 300-token edge-cases section on the right being sent to the LLM",
+    "Tree hierarchy diagram extending the doc-4 refunds tree with a small summary card placed beside each section node colored yellow with one-sentence LLM-generated summaries; index now stores summary vectors and retrieval finds a summary then swaps to the full parent section"
+  ],
+  "20.9": [
+    "Horizontal bar chart showing four bars of retrieval failure rate from Anthropic's September 2024 Contextual Retrieval benchmark: naive embedding 5.7%, plus contextual embedding 3.7%, plus contextual BM25 2.9%, plus reranking 1.9%, with title-case axis labels"
+  ],
+  "20.10": [
+    "Horizontal cost-budget scale with three tier markers labeled lab, startup, and enterprise, each with a recommended chunking stack listed underneath"
+  ],
+  "21.1": [
+    "Four-step decision flowchart for picking an embedding model: ask whether multilingual is needed, whether the corpus is specialized, whether budget is sensitive, then default to OpenAI text-embedding-3-large or Cohere embed-v3."
+  ],
+  "21.2": [
+    "Triplet-loss diagram showing an anchor point in the center with arrows pulling a positive sample close and pushing a negative sample away.",
+    "Before-versus-after bar chart comparing recall, MRR, and latency for off-the-shelf vs fine-tuned embeddings on the support corpus.",
+    "Training loss curve showing triplet loss dropping from 0.5 at epoch 0 to 0.05 at epoch 3 over a fine-tuning run on 50k support-corpus triples."
+  ],
+  "21.3": [
+    "Three-bar chart of recall at five comparing BM25-only at 0.68, dense-only at 0.74, and hybrid RRF at 0.86 on a 50-query held-out set from the support corpus."
+  ],
+  "21.4": [
+    "Three-stage RAG cascade funnel showing vector retrieval narrowing 1M chunks to top-50, a cross-encoder reranker narrowing 50 to top-10, and an LLM reading the top-3 to generate the final answer.",
+    "Horizontal stacked-bar chart showing the latency budget for a 3-stage RAG cascade: 30 ms for vector retrieval, 80 ms for the cross-encoder reranker, and 800 ms for LLM generation, totalling 910 ms p50.",
+    "Horizontal stacked-bar chart of the per-query cost breakdown for a 3-stage RAG cascade: $0.0001 for vector retrieval, $0.0003 for the cross-encoder reranker, and $0.0120 for LLM generation, totalling $0.0124."
+  ],
+  "21.5": [
+    "Three-branch interpretation diagram showing the ambiguous query 'How do I export?' fanning out to three doc destinations: export formats, bulk operations, and export failures."
+  ],
+  "21.6": [
+    "Five-box horizontal flow diagram showing the HyDE pipeline: user query, LLM generates hypothetical answer, embed hypothetical answer, vector retrieval, top-K real docs."
+  ],
+  "21.7": [
+    "Fan-out diagram showing a single user query expanding into 3 LLM-generated variants, each retrieving its own top-K, then converging into a single fused ranking via RRF.",
+    "Three-box horizontal pipeline diagram for multi-query expansion: an LLM generates 3-5 query variants, vector retrieval runs for each variant, and the rankings are fused with RRF into one final list."
+  ],
+  "21.8": [
+    "Router decision tree with four leaves: account/billing, product features, troubleshooting, and chitchat (skip retrieval). The root labels classify-query-type."
+  ],
+  "22.1": [
+    "Stacked horizontal bar visualizing how an 8000-token LLM context budget splits across system prompt, retrieved chunks, user question, and reserved completion tokens."
+  ],
+  "22.2": [
+    "U-shaped accuracy curve plotting answer correctness against the position of the relevant chunk within a 20-chunk context, showing high accuracy at the start and end and a dip in the middle from the Liu et al. 2023 lost-in-the-middle finding.",
+    "Front-load strategy strip showing 10 chunk slots with the top-3 scored chunks highlighted in green at positions 1-3 and the lowest scores filling positions 4-10.",
+    "Sandwich strategy strip showing 10 chunk slots with the top-2 chunks at positions 1-2, the next-best 2 chunks at positions 9-10, and lower scores filling the middle dip region."
+  ],
+  "22.4": [
+    "Multi-hop retrieval control-loop flowchart: retrieve, check sufficiency, either generate the answer or reformulate the query and loop again until max_hops is reached."
+  ],
+  "22.5": [
+    "Self-RAG token-emission timeline showing the model alternating between special control tokens like <retrieve>, <isrel>, and <issup> across the generation sequence.",
+    "Retrieve / no-retrieve decision diamond that gates whether the Self-RAG model fetches external context for a given query."
+  ],
+  "22.6": [
+    "CRAG three-branch decision tree: an evaluator score routes retrieved docs to a CORRECT path (use directly), an AMBIGUOUS path (combine internal + web), or an INCORRECT path (web-search fallback), all converging into knowledge refinement before generation."
+  ],
+  "22.7": [
+    "Fifteen-node legal citation graph used as the GraphRAG running corpus, with cases as nodes and directed citation edges between them.",
+    "Subgraph retrieval highlight on the 15-node citation graph showing how a query selects a 5-node connected component (a precedent chain) as the retrieved context.",
+    "Same 15-node citation graph re-colored into three communities (Civil Rights, Contract Law, IP Law) for global-query summarization."
+  ],
+  "22.8": [
+    "Tool-call loop flowchart for agentic RAG: model emits a tool_call, the runtime executes the tool and feeds the response back, looping until the model emits a final answer or hits max_iterations."
+  ],
+  "22.9": [
+    "Grouped bar chart comparing cost, latency, and accuracy across three strategies for the 200-page product manual: RAG-only, hybrid retrieve-broadly, and long-context-only stuffing of the full document."
+  ],
+  "23.1": [
+    "Three-layer RAG evaluation triangle: retrieval at top (recall, MRR, precision, nDCG), generation lower-left (faithfulness, answer relevancy), end-to-end lower-right (correctness, helpfulness). Each vertex is labeled with a one-line description so a learner sees what each layer measures and why three layers are needed."
+  ],
+  "23.2": [
+    "Judge calibration before-and-after line chart. The x-axis is the judge score percentile and the y-axis is agreement with human labels. The before curve sits around 60% agreement with a long divergence tail; the after curve (rubric refined plus position and verbosity mitigations applied) rises to 92% agreement, showing how calibration narrows the gap to human judgement."
+  ],
+  "23.4": [
+    "Two-lane LLM-bootstrapped golden-dataset pipeline. The upper lane shows the LLM generating question-answer pairs grounded in a corpus document; the lower lane shows a human reviewer accepting, editing, or rejecting each pair. Used to illustrate how a small hand-built seed scales into a 500-2000 reviewed set without losing human oversight."
+  ],
+  "23.5": [
+    "Shadow-eval pipeline diagram. A user query splits into an old pipeline whose answer is served and a new pipeline whose answer is logged but not served. Both answers feed into an LLM-judge that scores them, producing an aggregate comparison without exposing users to the candidate pipeline.",
+    "Closing-the-loop cycle diagram with four nodes connected by arrows: online finds a regression, capture failing cases into the golden regression set, offline reproduces and fixes, shadow plus A/B verify in production. The cycle returns to online detection, illustrating the offline-online feedback loop that production-grade RAG eval relies on."
+  ],
+  "23.6": [
+    "Semantic cache decision flow: an incoming query is embedded, compared by cosine similarity to cached queries, and either returns the cached answer when the score is at or above 0.93 or runs the full RAG pipeline and stores the new answer.",
+    "Horizontal bar chart comparing per-query cost across four cache configurations: no cache versus prompt cache only versus semantic cache only versus both stacked. Both stacked delivers the lowest cost at three tenths of a cent per query with 83 percent savings."
+  ],
+  "23.7": [
+    "Horizontal stacked bar chart of per-query cost showing the five cost lines proportionally. LLM tokens (input and output combined) dominate at 94 percent of the bill; embedding, vector search, and reranker make up the rest.",
+    "Downward waterfall chart showing per-query cost reducing as five levers are stacked: prompt cache, semantic cache, fewer chunks, and switching to Haiku. Final cost is one tenth of a cent per query from a starting two cents.",
+    "Scatter plot of cost per query versus faithfulness score with six RAG configurations labeled A through F. A dashed Pareto frontier passes through the cost-efficient points; configuration F sits below the frontier as a dominated choice."
+  ],
+  "23.8": [
+    "Parent/child span tree for a single RAG query: embed query, vector search, rerank, pack prompt, and generate. Each child span is rendered with width proportional to its latency in milliseconds, making the rerank stage visibly the dominant time cost."
+  ],
+  "23.9": [
+    "Hallucination detection flow: extract claims from the answer, check each against retrieved chunks, compute faithfulness score, log to trace, and alert when the rolling median drops below the threshold.",
+    "Time-series chart over 30 days showing faithfulness, recall, and refusal rate lines crossing their alert thresholds at different days. Each metric is in a distinct color with its threshold shown as a dashed line.",
+    "Faithfulness trend thumbnail panel for the dashboard mock; shows a steady decline from 0.92 to 0.84 crossing the 0.85 alert threshold.",
+    "Refusal rate trend thumbnail panel for the dashboard mock; rises from 8 percent to 18 percent crossing the 15 percent alert threshold."
+  ],
+  "23.10": [
+    "Decision tree for choosing a RAG framework: starts with whether RAG is the primary feature, branches on team size, agent complexity, and provider lock-in tolerance to recommend one of six options - No Framework, LlamaIndex, LangChain, LangGraph, Vendor SDK, or Haystack."
+  ],
+  "23.11": [
+    "Nine-row decision tree spanning every act of Section 12: should I use RAG, how to chunk, embedding and index, query transformation, context and generation, advanced patterns, evaluation, production operations, and framework choice. Each row maps to the chapters that taught it."
+  ],
+  "24.5": [
+    "Horizontal data-freshness axis from Never on the left to Daily on the right with four colored markers placing Fine-Tuning, Prompting, RAG, and Agent by how often each approach can refresh its data.",
+    "Vertical capability-gap axis from Already In Base Model at the bottom to Specialized Skill Never Seen at the top, with markers showing where Prompting, RAG, Agent, and Fine-Tuning each unlock new model behavior."
+  ],
+  "24.6": [
+    "Horizontal stacked bar showing how 128k tokens of context window are split across system prompt, conversation history, retrieved docs, user input, and reserved output zones with their respective token counts.",
+    "U-shaped recall-accuracy curve plotted against position in a long context. The curve peaks near 100% at position 0 and at position 128k, and dips to roughly 45% in the middle - the lost-in-the-middle effect."
+  ],
+  "25.1": [
+    "Three-box flow diagram for a tool call: the Model on the left decides to call the function, the Runtime in the middle executes the real function, and the Result returns to the model on the right.",
+    "Triangular agent-loop diagram with three labeled nodes - Reason at the top, Act at the bottom-right, Observe at the bottom-left - with arrows forming a clockwise cycle until the model decides it is done."
+  ],
+  "25.3": [
+    "Six-row swim-lane for the tool-call lifecycle showing the message kinds exchanged between User, Model, Runtime, and Tool actors from user message through tool_use, function call, function return, tool_result, and final assistant message.",
+    "Horizontal timeline showing how tool calls interleave with a streaming assistant response: stream begin, partial text streaming, stream pause, tool_use block emitted whole, runtime execute, tool_result delivered, stream resumes."
+  ],
+  "25.4": [
+    "Serial timeline for ticket T2: LLM call then lookup_customer at 200ms, then a second LLM call then lookup_subscription at 200ms. Total 400ms of tool work plus 2 sequential LLM calls.",
+    "Parallel timeline for ticket T2: one LLM call followed by lookup_customer and lookup_subscription running concurrently (both 200ms). Total 200ms of tool work plus 1 LLM call - half the latency."
+  ],
+  "25.5": [
+    "Validation-layer flow for a tool call: the model emits a tool_use block, the runtime validates the arguments against the schema, and then branches - invalid arguments return a malformed error immediately while valid arguments proceed to execute the real function."
+  ],
+  "25.6": [
+    "Five agents top row, six tools bottom row, every agent connects to every tool producing thirty crossed lines that visualize the M times N ad-hoc tool sprawl problem.",
+    "Five agents on top connect to six tools on bottom via a single protocol hub in the middle, reducing thirty crossed lines to eleven clean lines and demonstrating M plus N scaling.",
+    "Concentric ring diagram showing a trusted host containing user data and the model surrounding an untrusted server tool, with protocol arrows crossing the boundary for capability listing and tool authorization that enforces the sandbox contract."
+  ],
+  "25.7": [
+    "Three vertically stacked role boxes showing MCP host application on top hosting a client connection in the middle that speaks to a tool server at the bottom.",
+    "One host application contains three internal client connections each linked downward to a separate MCP server providing different tools.",
+    "Five step horizontal flow diagram showing host launches client, client connects to server, initialize handshake, list available tools and resources and prompts, then call a tool and get a result."
+  ],
+  "25.9": [
+    "Four-stage server lifecycle diagram showing registered then listening then active handling requests then closed shutdown, with transition arrows labeled connect, initialize, and shutdown."
+  ],
+  "25.10": [
+    "Trust boundary diagram showing outer host with user data and model trusted ring surrounding inner untrusted third party server code with protocol arrows crossing the boundary.",
+    "Host process box on top spawns a server process box on the bottom inside a sandbox container, with a labeled spawn arrow and an MCP transport arrow as the only legal channel between them.",
+    "OAuth flow showing user authorizes then host gets access token then token passes to server in each request then server checks scope."
+  ],
+  "25.11": [
+    "Two row comparison diagram showing MCP on top where one agent box connects to four separate tool boxes, and A2A on the bottom where one agent box delegates to another agent box that itself contains tool boxes inside its boundary.",
+    "Five step delegation flow where triage agent classifies ticket T4 as billing, finds an agent with billing skill, delegates the full ticket context, the billing agent works the ticket and returns result.",
+    "Vertical timeline showing triage agent delegates to billing agent which then streams intermediate updates lookup processing approval and final result back to triage."
+  ],
+  "26.1": [
+    "Four node directed acyclic graph showing fixed deterministic workflow with predictable edges.",
+    "Central decision node with multiple branching options showing an open loop where the model picks different paths each run.",
+    "Hybrid workflow showing a four node DAG where the second node is replaced by an agent loop with a question mark indicating the model decides while the other three nodes remain deterministic."
+  ],
+  "26.2": [
+    "Three node chain showing step A flowing to step B flowing to step C as sequential arrows in a horizontal pipeline.",
+    "Routing topology showing an input flowing to a classifier node which then branches out to three different downstream paths based on intent.",
+    "Parallelization topology showing an input fanning out to three concurrent worker nodes that all feed into a single aggregator node.",
+    "Three node chain with JSON output labels above each arrow showing how the structured output of one step becomes the structured input of the next step in a billing ticket example.",
+    "Routing diagram showing a ticket flowing to an intent classifier that branches to billing, product, troubleshooting, and chitchat handler boxes based on classified intent.",
+    "Fan-out diagram showing one query branching to three concurrent workers running in parallel then merging into a single aggregator node with timing bars showing that total latency equals the slowest worker time.",
+    "Composed workflow topology stacking all three primitives where a ticket chains into a classifier that routes to one of three branches, one branch fans out to three parallel retrieval calls that merge before chaining into a final answer node."
+  ],
+  "26.3": [
+    "Three node circular flow showing reason then act then observe cycle of the agent loop.",
+    "State machine diagram with waiting reasoning acting observing primary states and done failed escalated terminal states.",
+    "Three node cycle of reason act observe with a diamond decision node labeled terminate between observe and reason, branching to done escalate or abort."
+  ],
+  "26.5": [
+    "Linear ReAct chain showing four reactive steps connected by question-mark arrows representing the model choosing the next action on the fly each iteration.",
+    "Plan tree topology where a single root node fans out to four leaf nodes representing the full plan written up front before any leaf is executed.",
+    "Four-leaf plan tree for ticket T4 cancel and refund showing lookup_customer, lookup_subscription, cancel, process_refund leaves with refund leaf marked for escalation.",
+    "Plan execution sweep showing four leaves running with their results next to them, the fourth leaf failing with a business_rule error, and a fifth escalate_human leaf appended by the executor to adapt to the error."
+  ],
+  "26.6": [
+    "Horizontal counter from one to ten showing iteration count with the tenth iteration highlighted as the forced termination point.",
+    "Horizontal budget bar filling from zero to one hundred percent with markers at thirty sixty and one hundred percent showing iteration cost consumption stopping at budget exhaustion.",
+    "Fail-safe escalation flow from any non-success termination to user message and escalate_human call with partial transcript."
+  ],
+  "26.7": [
+    "Memory taxonomy tree with Agent Memory as root, branching into Short-Term Working Memory and Long-Term, then Long-Term splits into Episodic, Semantic, and Procedural."
+  ],
+  "26.8": [
+    "Timeline of working memory: created at task start, updated through N iterations, discarded when task ends, with a promotion arrow pointing to long-term store before discard."
+  ],
+  "26.9": [
+    "Vertical timeline of four past events for Alice the customer, each with a date and a short summary, with the current ticket marked at the bottom.",
+    "Two stage flow: stage one embeds each event and stores it in the vector database; stage two embeds a query and runs ANN search to retrieve the top-k matching past events."
+  ],
+  "26.11": [
+    "Recipe retrieval flow: new ticket text is embedded, ANN search runs against the recipe library trigger embeddings, and the top-one match is surfaced for the agent to use as scaffolding."
+  ],
+  "26.12": [
+    "Horizontal context window bar at 8k tokens with turn-by-turn message stacking; by turn thirty the bar is full and the rest of the conversation cannot fit.",
+    "Rolling summary technique in three stages: conversation at fifty percent capacity, oldest half summarized into a small summary block, capacity drops back to twenty five percent so the conversation can continue.",
+    "Hierarchical summary tree: raw turn batches at the bottom layer become per-batch summaries at the middle layer, which combine into a single meta-summary at the top covering the whole conversation.",
+    "Four threshold bands across a context window utilization bar: twenty five percent do nothing, fifty percent compress half, seventy five percent aggressive summarize, ninety percent panic drop with summary plus last five turns."
+  ],
+  "27.1": [
+    "Single agent loaded with five different jobs, labeled retrieve, classify, refund, troubleshoot, and escalate, visualizing the crowded role assignment that creates a performance ceiling for one agent.",
+    "Three independent sub-tasks lookup_customer, lookup_subscription, and search_kb running in parallel on three separate agents with wall-clock time equal to the slowest one rather than the sum of all three.",
+    "Two-layer planner and worker architecture: a planner agent at the top decomposes a task and dispatches sub-tasks to two worker agents at the bottom that each execute one sub-task and return results to the planner."
+  ],
+  "27.2": [
+    "Hub and spoke topology: an orchestrator agent at the top center has bidirectional arrows to three worker agents at the bottom, with no edges between workers.",
+    "Single worker card showing the input sub-task description on the left, an internal agent loop in the middle, and the structured result returned to the orchestrator on the right."
+  ],
+  "27.3": [
+    "Three-level agent hierarchy: top supervisor delegates to three middle-level supervisors which each delegate to two leaf specialists, with planar parent-child edges and no crossings."
+  ],
+  "27.4": [
+    "Hand-off ring topology with four agents arranged in a circle, each connected by bidirectional arrows to its neighbors and one diagonal cross-edge, showing peer-to-peer transfer with no central parent."
+  ],
+  "27.5": [
+    "Two-agent pair where the worker agent on the left produces a draft answer and the critic agent on the right reads the draft and the original question, then scores or rewrites it.",
+    "Circular flow with four stations: worker drafts, critic scores zero through ten, conditional revise if below seven, then critic re-scores, with a loop arrow back to the worker until score is high enough or retry cap is reached.",
+    "Three-agent debate setup: agent Pro on the left and agent Con on the right both argue toward a Judge agent in the bottom center, which reads both arguments and picks one."
+  ],
+  "27.6": [
+    "Two-by-two grid of four multi-agent failure modes: drift in top left, infinite loop in top right, deadlock in bottom left, and cost runaway in bottom right, each tinted with its own color.",
+    "Three agents working on the same ticket pulling in three different directions: one interprets it as cancel subscription, another as refund invoice, a third as save the customer, with diverging arrows showing incoherent outcomes.",
+    "Two agents triage and billing hand off to each other back and forth in an infinite ping pong with arrows curving in both directions and a counter showing the hand-off rate not decreasing.",
+    "Two agents A and B locked in a deadlock: A waits on B's result, B waits on A's result, with circular waiting arrows and both agents marked in a WAITING state.",
+    "Cost vs iteration chart with normal multi-agent run at fifty cents on a slow flat curve and a runaway scenario climbing exponentially to fifty dollars by iteration twenty."
+  ],
+  "27.7": [
+    "Top row shows naive RAG as a one-shot pipeline from query to retrieve to generate; bottom row shows agentic RAG as a loop from query to retrieve to judge with a conditional rewrite arrow back to retrieve until the judge says done.",
+    "Circular four-station loop: search, judge with a question of whether enough evidence has been collected, refine which rewrites the query, then search again, until judge says done or max iterations is hit."
+  ],
+  "28.1": [
+    "Five-stage production eval pipeline with eval set feeding per-trace step grading and end-to-end LLM-as-Judge in parallel, then online sampling and a drift signal that triggers alerting and rollback. Each stage labeled with the Section 13 chapter that covers it."
+  ],
+  "28.2": [
+    "Four-axis radar chart with correctness on top, latency on the right, cost on the bottom, and safety on the left. A green target zone shows the acceptable region and a red polygon shows a single agent run scoring 0.92, 0.78, 0.84, and 0.97.",
+    "Latency histogram showing trace duration distribution with P50 at 3.2 seconds, P95 at 7.5 seconds (just inside the 8 second target line), and P99 at 14 seconds in the long tail.",
+    "Cost breakdown bar for a typical support trace showing input tokens at six cents, output tokens at twenty cents, and tool calls at twelve cents adding up to roughly thirty-eight cents per ticket against a fifty cent target."
+  ],
+  "28.3": [
+    "Calibration scatter plot of judge scores on the x-axis against human scores on the y-axis with a perfect-agreement diagonal and points clustered close to the diagonal, illustrating a judge calibrated to roughly 0.78 correlation against human annotators."
+  ],
+  "28.4": [
+    "Cost comparison bar chart with end-to-end LLM-as-Judge at one times the unit cost and trace eval growing linearly with steps, reaching eight times for an eight-step trace, plus the production rule to run trace eval on five percent of traffic and end-to-end on the rest."
+  ],
+  "28.5": [
+    "Freshness timeline showing eval set score holding steady near 0.9 at month zero while real production distribution drifts away over time, causing the gap between eval-set predicted quality and actual production quality to widen by month three.",
+    "Online sampling flow showing production traffic being sampled at a one to five percent rate into an async LLM-as-Judge grading stage, with results stored back to the trace store and rendered on the eval quality dashboard.",
+    "Time series of composite trace scores plotted over fourteen days, hovering around 0.85 until day ten where the moving average drops to 0.78, crossing the 0.05 drift threshold below the 0.85 baseline and firing an alert that engineers must investigate."
+  ],
+  "28.6": [
+    "Span tree for ticket T2: root agent run with three loop iterations. Iter 1 calls lookup_customer, iter 2 calls change_email, iter 3 emits the final answer. Each span row shows its label and duration in milliseconds.",
+    "Same span tree as sub=0 for ticket T2, with cost values overlaid on each LLM call span. LLM call 1 cost $0.025, call 2 cost $0.03, call 3 cost $0.04. Total trace cost shown at bottom."
+  ],
+  "28.7": [
+    "Stacked horizontal cost bar showing a typical agent run: input tokens 40 percent, output tokens 35 percent, retries 20 percent, tool calls 5 percent. Total cost annotated as 30 cents per ticket. Output tokens are the dominant slice because output is priced 5 times input.",
+    "Before-and-after diagram for prompt caching: before, every iteration is billed for the full 15k token context. After, the 12k prefix is cached and only the 3k new turn is billed fresh, yielding about 80 percent savings on input tokens.",
+    "Budget bar diagram showing a ticket consuming spend across iterations. At 80 percent the bar is yellow. At 100 percent ($1 cap) the bar turns red and the loop terminates with an escalation."
+  ],
+  "28.8": [
+    "Gantt-style latency waterfall for ticket T2 with 5 spans summing to 3400 milliseconds: LLM call 1 1200ms, lookup_customer tool 200ms, LLM call 2 1100ms, reset_password tool 200ms, LLM call 3 700ms. LLM calls dominate the timeline.",
+    "Two side-by-side timelines comparing perceived latency. Without streaming, the user sees nothing for 1500 milliseconds then the full response. With streaming, the user sees the first token at 200 milliseconds with text scrolling in until 1500 milliseconds. Same total time, very different perception.",
+    "Serial vs parallel tool call timelines for ticket T4. Serial timeline: 200ms lookup_customer followed by 200ms lookup_subscription, 400ms total. Parallel timeline: both tool calls run concurrently in 200ms total. Half the time for identical results.",
+    "Speculative execution timeline showing the LLM generating its decision in 1.2 seconds while a speculative lookup_customer tool call runs in parallel and completes at 200 milliseconds. When the LLM finishes, the tool result is already available with zero added wait."
+  ],
+  "28.9": [
+    "Horizontal guardrail pipeline diagram: user input flows into the input guardrail box (content filter, PII detect, injection check), then to the model, then to the output guardrail box (response validation, PII redaction, tool action gate), and finally to the user or tool. Guardrails on both sides of the model.",
+    "Output validation flow diagram. Model emits a response, the schema validator checks it. If valid, the response is sent. If invalid, the runtime retries once with a fix prompt. If retry still fails, it falls back to a deterministic error response.",
+    "Action gate diagram for process_refund. Agent requests refund of $350. Gate inspects, sees amount exceeds the $200 auto-approve threshold, blocks the tool call and requests human approval. Approved or denied response feeds back to the agent."
+  ],
+  "28.10": [
+    "Four-tier trust pyramid showing instruction hierarchy. Top to bottom: system prompt (most trusted, rules the model never violates), tool definitions (authoritative, signed by host), user input (untrusted by default), retrieved content (least trusted, treat as data never as instructions)."
+  ],
+  "28.11": [
+    "Sandbox boundary diagram. The inner cage contains the tool process, its allowed filesystem reads, and its allowed outbound network destinations. Outside the cage are the agent itself, the host OS, and customer data unrelated to this session. If a tool is compromised, the cage limits damage."
+  ],
+  "28.12": [
+    "LangGraph state machine for a customer-support agent. Four nodes (Classify, Lookup, Refund, Respond) connected by directed edges. A shared state object flows along every edge: each node reads it and writes it.",
+    "Conditional edges from the classify node. After classify writes state.intent, the router branches into billing_handler when intent is billing, troubleshooting_handler when intent is troubleshooting, or escalation_handler when intent is escalation.",
+    "Checkpoint and resume sequence. Step 1: agent runs to a long-running tool call. Step 2: state is checkpointed and the graph pauses. Step 3: when the tool result arrives async, the graph resumes from the checkpoint."
+  ],
+  "28.15": [
+    "Decision tree for staying custom. Five leaves: three say YES (high-volume traffic over 10K per second, tight latency budget P95 under 2 seconds, multi-vendor strategy required) and two say NO (one-off prototype shipping this week, team of fewer than 3 engineers).",
+    "Hybrid layer diagram. Stack of four layers showing what teams typically buy from a framework (scaffolding, schema validation, basic retries) and what they build custom (LLM adapter for vendor swap, observability that integrates with the monitoring stack, domain-specific tool gating)."
+  ],
+  "28.16": [
+    "Nine-layer agent decision stack. From top (strategy) to bottom (operations): Approach (13.5), Loop Pattern (13.18 to 13.22), Memory Layers (13.24 to 13.29), Multi-Agent (13.30 to 13.34), Tools (13.7 to 13.11), Protocols (13.12 to 13.17), Eval (13.37 to 13.41), Production (13.42 to 13.47), Framework (13.48 to 13.51). Each layer references its source chapters."
   ]
 }

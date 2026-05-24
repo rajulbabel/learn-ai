@@ -11,6 +11,19 @@
  */
 import MiniSearch from "minisearch";
 import { getCachedSearchAssets, cacheSearchAssets } from "./embedding-cache.js";
+import { chapters, sectionNames } from "./config.js";
+
+const chapterBySlug = new Map(chapters.map((c) => [c.file, c]));
+
+// Short content fingerprint of an embeddings manifest. Combined with the model
+// checksum it forms the IndexedDB cache key for embeddings.bin so the cache
+// invalidates automatically whenever the embedding set changes between deploys.
+function manifestFingerprint(m) {
+  const vs = m.vectors;
+  const first = vs[0].chunkId;
+  const last = vs[vs.length - 1].chunkId;
+  return `${m.count}-${first}-${last}`;
+}
 
 let miniSearch = null;
 let chunks = [];
@@ -48,8 +61,8 @@ export async function initSearch() {
   chunkById = new Map(chunks.map((c) => [c.id, c]));
 
   miniSearch = new MiniSearch({
-    fields: ["text", "summary", "terms_joined", "chapterTitle", "sectionName"],
-    storeFields: ["chapterId", "chapterTitle", "section", "sectionName", "sub", "text", "summary"],
+    fields: ["text", "summary", "terms_joined", "chapterTitle"],
+    storeFields: ["chapterSlug", "chapterTitle", "sub", "text", "summary"],
     idField: "id",
     extractField: (doc, field) => (field === "terms_joined" ? (doc.terms || []).join(" ") : doc[field]),
     searchOptions: {
@@ -77,20 +90,21 @@ export async function prefetchSearch() {
     modelMeta = await metaRes.json();
     dim = modelMeta.dim;
 
-    // 2. Load embeddings (cache hit by modelChecksum, else download)
-    const cached = await getCachedSearchAssets(modelMeta.checksum);
-    if (cached) {
-      manifest = cached.manifest;
+    // 2. Always load manifest fresh from disk (cheap, ~1 MB gzipped, ships with
+    //    the JS bundle). The manifest's content fingerprint is part of the cache
+    //    key so the cached embeddings.bin auto-invalidates whenever chunks or
+    //    embeddings change in a new deploy.
+    manifest = await import("./data/embeddings-manifest.json").then((m) => m.default || m);
+    const cacheKey = `${modelMeta.checksum}:${manifestFingerprint(manifest)}`;
+
+    // 3. Try the embeddings cache under the compound key.
+    const cached = await getCachedSearchAssets(cacheKey);
+    if (cached && cached.bin instanceof Uint8Array) {
       bin = cached.bin;
     } else {
-      const [manifestMod, binBuf] = await Promise.all([
-        import("./data/embeddings-manifest.json").then((m) => m.default || m),
-        // Vite serves src/data/* as static assets via the bundler; fetch via the runtime URL.
-        fetch(new URL("./data/embeddings.bin", import.meta.url).href).then((r) => r.arrayBuffer()),
-      ]);
-      manifest = manifestMod;
+      const binBuf = await fetch(new URL("./data/embeddings.bin", import.meta.url).href).then((r) => r.arrayBuffer());
       bin = new Uint8Array(binBuf);
-      cacheSearchAssets(modelMeta.checksum, { bin, manifest }).catch(() => {});
+      cacheSearchAssets(cacheKey, { bin, manifest }).catch(() => {});
     }
     loadProgress = 30;
 
@@ -154,7 +168,12 @@ function vectorSearchMaxSim(qFloat, topK = 30) {
     .map(([chunkId, score]) => ({ chunkId, score }))
     .sort((a, b) => b.score - a.score)
     .slice(0, topK);
-  return ranked.map((r) => ({ ...chunkById.get(r.chunkId), vectorScore: r.score }));
+  return ranked
+    .map((r) => {
+      const c = chunkById.get(r.chunkId);
+      return c ? { ...c, vectorScore: r.score } : null;
+    })
+    .filter(Boolean);
 }
 
 function textSearchInternal(query, topK = 30) {
@@ -165,24 +184,18 @@ function textSearchInternal(query, topK = 30) {
   }));
 }
 
-// 80% vector / 20% BM25. LLM-authored chunks favor semantic match; keyword
-// path retained for exact-term queries (HNSW, RoPE, FAISS, etc.).
-const W_TEXT = 0.2;
-const W_VEC = 0.8;
-
+// Pure Reciprocal Rank Fusion (Cormack, Clarke & Buettcher, 2009): equal
+// weight, rank-only, k=60. Scale-free across heterogeneous scorers.
 function rrfMerge(textResults, vectorResults, k = 60) {
   const score = new Map();
   const data = new Map();
-  textResults.forEach((r, i) => {
+  const add = (r, i) => {
     const key = r.id;
-    score.set(key, (score.get(key) || 0) + W_TEXT / (k + i + 1));
+    score.set(key, (score.get(key) || 0) + 1 / (k + i + 1));
     if (!data.has(key)) data.set(key, r);
-  });
-  vectorResults.forEach((r, i) => {
-    const key = r.id;
-    score.set(key, (score.get(key) || 0) + W_VEC / (k + i + 1));
-    if (!data.has(key)) data.set(key, r);
-  });
+  };
+  textResults.forEach(add);
+  vectorResults.forEach(add);
   return [...score.entries()]
     .map(([id, s]) => ({ ...data.get(id), fusedScore: s }))
     .sort((a, b) => b.fusedScore - a.fusedScore);
@@ -192,7 +205,7 @@ function dedupeByChapter(items) {
   const seen = new Set();
   const out = [];
   for (const r of items) {
-    const key = `${r.chapterId}:${r.sub}`;
+    const key = `${r.chapterSlug}:${r.sub}`;
     if (!seen.has(key)) {
       seen.add(key);
       out.push(r);
@@ -202,11 +215,13 @@ function dedupeByChapter(items) {
 }
 
 function shape(r) {
+  const ch = chapterBySlug.get(r.chapterSlug);
   return {
-    chapterId: r.chapterId,
+    chapterSlug: r.chapterSlug,
+    chapterId: ch ? ch.id : null,
     title: r.chapterTitle,
-    section: r.section,
-    sectionName: r.sectionName,
+    section: ch ? ch.section : null,
+    sectionName: ch ? sectionNames[ch.section] : null,
     sub: r.sub,
     text: r.text || r.summary || "",
     score: r.fusedScore || r.vectorScore || r.textScore || 0,

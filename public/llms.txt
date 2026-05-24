@@ -12,15 +12,34 @@ An interactive, visual, free guide to AI built by Rajul Babel. The site teaches 
 
 ## What it covers
 
-- **Neural Network Foundations** - neurons, layers, weights, biases, activations, forward/backward pass, gradient descent, dropout, Adam, weight init.
-- **How LLMs Train** - tokenization, self-supervised learning, cross-entropy loss, autoregressive generation, SFT, RLHF, DPO.
-- **Scaling & Modern Techniques** - scaling laws, batch training, distillation, CLIP, the full training pipeline.
-- **Road to Transformers** - CNN, RNN, RNN's flaws, the Transformer.
-- **Transformer Input Pipeline** - embeddings, positional encoding (sinusoidal & RoPE).
-- **Attention** - Q, K, V intuition; full attention computation; multi-head attention; masking; cross-attention.
-- **Encoder & Decoder** - Add & Norm, FFN, residuals, pre-norm vs post-norm, batch norm vs layer norm.
-- **Modern LLM Techniques** - KV cache, grouped-query attention, mixture of experts, reasoning models.
-- **Vector Databases** - kNN, ANN, HNSW, IVF, Vamana, scalar/product/binary quantization, Matryoshka, IVF-PQ, HNSW+PQ, hybrid search, rerankers, ColBERT-style multi-vector retrieval, observability, capacity planning, FAISS, pgvector, Qdrant, Pinecone, Weaviate, Milvus, Chroma.
+- **Neural Networks - The Mechanics** - 7 chapters covering neural network fundamentals: what a neural network is, inside a single neuron, what a layer is, weights and biases, why linear isn't enough, ReLU activation, the forward pass.
+- **Learning & Backprop** - 8 chapters on how networks learn: loss functions, what learning means, derivatives intuition, the backward pass, gradient descent, backprop through real networks, gradients in action, why deep backprop gets hard.
+- **Linear Algebra for Deep Learning** - 5 chapters on the math foundation: vectors, dot products, matrices, layer = matrix multiplication, activation functions in full.
+- **Training Deep Networks** - 6 chapters on practical training: what "deep" means, same building blocks across architectures, dropout, Adam optimizer, learning rate warmup and decay, weight initialization.
+- **How LLMs Actually Train** - 10 chapters: tokenization, self-supervised learning, cross-entropy loss, NN in action, output layer, autoregressive generation, SFT, RLHF, DPO, tokenizer deep dive (BPE / WordPiece / SentencePiece).
+- **Scaling & Modern Techniques** - 6 chapters: scaling laws, parameters at scale, batch training, knowledge distillation, CLIP, the complete training pipeline.
+- **The Road to Transformers** - 4 chapters: CNN, RNN, RNN's fatal flaws, the Transformer arrives.
+- **Transformer Input Pipeline** - 9 chapters: full architecture, embeddings, positional encoding (problem, formula, computing positions, fast vs slow, final addition, heatmap), RoPE.
+- **Attention - Understanding Q, K, V** - 12 chapters: context problem, word lookup, dot product, why not dot-product embeddings directly, Q/K/V classroom analogy, asker/answerer, why K and V differ, Google search analogy, how Q/K/V are created, shapes, W matrices, complete worked example.
+- **Computing Attention** - 8 chapters: compute Q/K/V, attention scores, why K transpose, why softmax, scale by sqrt(d_k), softmax to probabilities, weighted sum of values, the full formula.
+- **Multi-Head Attention** - 8 chapters: why multi-head, the split (8 heads), inside each head, concat + W_O, why 8 heads (parameter count), is W_O constant, attention shapes at every step, the complete picture in plain English.
+- **The Encoder** - 9 chapters: encoder + decoder overview, Add & Norm, FFN, FFN parallel trick, second Add & Norm, Nx block repeats, residual highway, pre-norm vs post-norm, batch norm vs layer norm.
+- **The Decoder** - 7 chapters: decoder-only architecture, causal masking, cross-attention, output head (linear + softmax), what a Transformer is actually doing, encoder-decoder training flow, encoder-decoder inference flow.
+- **Modern LLM Techniques** - 4 chapters: KV cache, grouped-query attention, mixture of experts, thinking / reasoning models.
+- **Vector Search - From Brute Force to ANN** - 12 chapters covering vector retrieval fundamentals: the retrieval problem, brute-force kNN, the three-way tradeoff, distance metrics, sparse vs dense vectors, the ANN family tree, IVF, HNSW (intuition, construction, search, parameters), Vamana / DiskANN.
+- **Vector Compression - Quantization & Matryoshka** - 8 chapters on shrinking vectors without losing recall: the memory wall, scalar quantization, product quantization (and OPQ), binary quantization, Matryoshka embeddings, IVF-PQ, HNSW+PQ, the compression decision framework.
+- **Vector DBs in Production** - 10 chapters on running a vector DB at scale: filtering, updates and deletes, sharding and partitioning, replication and high availability, hybrid search (dense + lexical), rerankers, multi-vector retrieval (ColBERT-style), embedding lifecycle and re-embedding, observability, capacity planning and cost models.
+- **Picking a Vector Database** - 7 chapters comparing concrete systems: FAISS, pgvector, Qdrant, Pinecone, Qdrant vs Pinecone, Weaviate / Milvus / Chroma, and a decision framework.
+- **The RAG Pipeline - Why & How It Breaks** - 3 chapters introducing RAG: why LLMs need retrieval, the naive RAG pipeline, and where naive RAG breaks.
+- **RAG Data Prep - Ingestion & Chunking** - 10 chapters on preparing data for RAG: parsing raw sources, deduplication and cleaning, refresh and sync schedules, fixed-size baseline, recursive structural, semantic, late, hierarchical, contextual retrieval, the chunking decision matrix.
+- **RAG Retrieval - Embeddings, Hybrid & Query Tricks** - 8 chapters on finding the right chunks: picking an embedding model, domain adaptation, hybrid retrieval, reranker cascade, why transform queries, HyDE, multi-query expansion, query routing and decomposition.
+- **RAG Generation - Naive to Advanced Patterns** - 9 chapters on using retrieved chunks: context packing, the lost-in-the-middle problem, citations + refusal + groundedness, multi-hop retrieval, Self-RAG, CRAG (corrective RAG), GraphRAG, tool-augmented / agentic RAG, long-context vs RAG.
+- **RAG in Production - Eval, Cost & Shipping** - 11 chapters on shipping RAG: the eval triangle, LLM-as-judge, RAGAS metrics, golden datasets, online eval and A/B testing, prompt + semantic caching, cost models, observability and tracing, hallucination detection and drift, framework choice (no-framework / LlamaIndex / LangChain / LangGraph / Haystack / vendor SDK), and the complete RAG decision framework + capstone.
+- **Prompting LLMs - The Foundation** - 6 chapters on talking to LLMs: anatomy of an LLM call, system prompts as a role contract, few-shot and structured output, chain-of-thought and self-consistency, prompt vs fine-tune vs RAG vs agent, context engineering.
+- **Tools & Protocols - MCP, A2A** - 11 chapters on giving LLMs hands: tool use as bridge, JSON schemas + tool descriptions, tool call lifecycle, parallel tools and tool choice, tool errors / retries / validation, why protocols matter, MCP architecture, MCP primitives (tools / resources / prompts), building an MCP server, MCP security, A2A (agent-to-agent) protocol.
+- **Agent Mechanics - Loops & Memory** - 12 chapters on agent internals: workflow vs agent, workflow primitives (chaining / routing / parallelization), the agent loop, ReAct, plan-execute + reflection, loop termination, memory taxonomy (short vs long), working memory, episodic memory, semantic memory, procedural memory, summary memory + context window management.
+- **Multi-Agent Systems** - 7 chapters on agents working together: why multi-agent, orchestrator-worker, supervisor / hierarchical, hand-offs, critic / debate / reflection-as-multi-agent, multi-agent failure modes, agentic RAG.
+- **Shipping Agents - Eval, Safety, Frameworks** - 16 chapters on production agents: why eval agents differently, eval dimensions, LLM-as-judge, trace evals, eval sets + continuous eval, observability and tracing, cost control, latency optimization, guardrails, prompt injection defenses, tool security, LangGraph, CrewAI / AutoGen, Claude Agent SDK + OpenAI Agents, custom / no-framework, and the complete agent decision framework.
 - **Building with AI** - RAG, Vector DB selection, Agent Frameworks (LangGraph), embedding lifecycle, production deployment.
 
 ## Author

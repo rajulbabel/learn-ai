@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Learn AI</title>
+    <script>
+      // SPA fallback for GitHub Pages: stash the requested path and redirect to base.
+      // The base index.html reads sessionStorage and replaceStates the original path.
+      (function () {
+        var basePath = "/learn-ai/";
+        var l = window.location;
+        var requested = l.pathname + l.search + l.hash;
+        try {
+          sessionStorage.setItem("spa-redirect", requested);
+        } catch (_) {
+          /* private mode - fall through */
+        }
+        l.replace(l.origin + basePath);
+      })();
+    </script>
+  </head>
+  <body></body>
+</html>

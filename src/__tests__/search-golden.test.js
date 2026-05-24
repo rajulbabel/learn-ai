@@ -4,18 +4,20 @@ import chunks from "../data/chunks.json";
 describe("search index basics", () => {
   it("includes every chapter ID from config (except TOC)", async () => {
     const { chapters } = await import("../config.js");
-    const indexed = new Set(chunks.map((c) => c.chapterId));
+    const indexed = new Set(chunks.map((c) => c.chapterSlug));
     const missing = [];
     for (const ch of chapters) {
       if (ch.id === "0" || !ch.component) continue;
-      if (!indexed.has(ch.id)) missing.push(ch.id);
+      if (!indexed.has(ch.file)) missing.push(ch.id);
     }
     expect(missing, `missing chapters: ${missing.join(", ")}`).toEqual([]);
   });
 
-  it("section 11 has 36 unique chapters", () => {
-    const s11 = new Set(chunks.filter((c) => c.section === 11).map((c) => c.chapterId));
-    expect(s11.size).toBe(36);
+  it("section 15 has 12 unique chapters (Vector Search Algorithms)", async () => {
+    const { chapters } = await import("../config.js");
+    const sec15Slugs = new Set(chapters.filter((c) => c.section === 15).map((c) => c.file));
+    const s15 = new Set(chunks.filter((c) => sec15Slugs.has(c.chapterSlug)).map((c) => c.chapterSlug));
+    expect(s15.size).toBe(12);
   });
 
   it("every chunk has at least 10 queries and required fields", () => {
@@ -32,14 +34,14 @@ describe("search index basics", () => {
     const { searchText, initSearch } = await import("../search.js");
     await initSearch();
     const golden = [
-      { q: "HNSW", expectChapter: /^11\.[789]|11\.10|11\.18/ },
-      { q: "product quantization", expectChapter: /^11\.(14|17|18|19)/ },
-      { q: "RoPE", expectChapter: /^5\.9$/ },
-      { q: "softmax temperature", expectChapter: /^(2\.6|3\.4|7\.[46]|9\.4)/ },
-      { q: "vanishing gradient", expectChapter: /^(1\.15|4\.3)/ },
-      { q: "scaling laws", expectChapter: /^3\.1$/ },
-      { q: "binary quantization", expectChapter: /^11\.(15|19)/ },
-      { q: "cross attention", expectChapter: /^9\.3$/ },
+      { q: "HNSW", expectChapter: /^15\.[789]|15\.10|15\.12/ },
+      { q: "product quantization", expectChapter: /^16\.(2|3|5|6|7)/ },
+      { q: "RoPE", expectChapter: /^8\.9$/ },
+      { q: "softmax temperature", expectChapter: /^(5\.6|6\.4|10\.[46]|13\.4)/ },
+      { q: "vanishing gradient", expectChapter: /^(2\.8|7\.3)/ },
+      { q: "scaling laws", expectChapter: /^6\.1$/ },
+      { q: "binary quantization", expectChapter: /^16\.(3|4|7)/ },
+      { q: "cross attention", expectChapter: /^13\.3$/ },
     ];
     for (const { q, expectChapter } of golden) {
       const results = searchText(q, 5);

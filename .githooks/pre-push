@@ -1,0 +1,74 @@
+#!/bin/sh
+# Auto-rebuild semantic search index + embeddings when commits being pushed
+# touch source files that affect the index. Auto-commits regenerated artifacts.
+#
+# Git limitation: a hook cannot add commits to the in-flight push. So when a
+# rebuild is needed, this hook auto-commits the artifacts on the current branch
+# and aborts the push with a clear message. Run `git push` once more to ship
+# both your commits and the artifact commit together.
+
+set -e
+
+remote="$1"
+
+npm run test
+
+NEEDS_BUILD=0
+ZERO=0000000000000000000000000000000000000000
+
+# Pathspecs are plain directories or files so git matches recursively. Adding
+# "**" globs is a footgun: POSIX sh leaves them literal and git pathspec does
+# not expand "**" as recursive without ":(glob)" magic, so nested files
+# silently slip past the filter.
+PATHS="src/chapters src/shared src/config.js src/data/svg-descriptions.json public/models scripts/build-search-index.mjs scripts/embed-chunks.mjs scripts/llm-chunk.mjs"
+
+TRIGGER_SHAS=""
+
+while read local_ref local_sha remote_ref remote_sha; do
+  [ "$local_sha" = "$ZERO" ] && continue
+  if [ "$remote_sha" = "$ZERO" ]; then
+    RELEVANT=$(git log --name-only --pretty=format: "$local_sha" --not --remotes="$remote" -- $PATHS | sort -u)
+    SHAS=$(git log --pretty=format:%h "$local_sha" --not --remotes="$remote" -- $PATHS)
+  else
+    RELEVANT=$(git diff --name-only "$remote_sha".."$local_sha" -- $PATHS)
+    SHAS=$(git log --pretty=format:%h "$remote_sha".."$local_sha" -- $PATHS)
+  fi
+  if [ -n "$RELEVANT" ]; then
+    NEEDS_BUILD=1
+    TRIGGER_SHAS="$TRIGGER_SHAS $SHAS"
+  fi
+done
+
+if [ "$NEEDS_BUILD" = "0" ]; then
+  node scripts/check-embeddings.mjs
+  exit 0
+fi
+
+if ! command -v claude >/dev/null 2>&1; then
+  printf "\033[31m[pre-push] claude CLI not found in PATH. Source changed; cannot rebuild search index.\033[0m\n"
+  exit 1
+fi
+
+ARTIFACTS="src/data/chunks.json src/data/chunk-cache.json src/data/embeddings.bin src/data/embeddings-manifest.json"
+
+if ! git diff --quiet -- $ARTIFACTS || ! git diff --cached --quiet -- $ARTIFACTS; then
+  printf "\033[31m[pre-push] Uncommitted or staged changes in search artifact files. Commit or stash them first.\033[0m\n"
+  exit 1
+fi
+
+printf "\033[33m[pre-push] Source changed in push range. Rebuilding search index + embeddings...\033[0m\n"
+npm run search:build
+
+if git diff --quiet -- $ARTIFACTS; then
+  printf "\033[32m[pre-push] Rebuild produced no artifact changes.\033[0m\n"
+  node scripts/check-embeddings.mjs
+  exit 0
+fi
+
+git add $ARTIFACTS
+TRIGGER_LIST=$(printf "%s" "$TRIGGER_SHAS" | tr ' ' '\n' | sort -u | grep -v '^$' | tr '\n' ' ' | sed 's/ $//')
+git commit -m "Rebuild search index + embeddings (sources: $TRIGGER_LIST)"
+node scripts/check-embeddings.mjs
+
+printf "\033[33m[pre-push] Auto-committed rebuilt artifacts. Run 'git push' again to ship them.\033[0m\n"
+exit 1

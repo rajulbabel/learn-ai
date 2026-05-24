@@ -14,7 +14,7 @@ const MIN_QUERIES = 10;
 const MAX_RETRIES = 4;
 const PER_CALL_BUDGET_USD = "5";
 
-const SYSTEM_PROMPT = `You are a search-index authoring assistant for an interactive learning app about AI.
+export const SYSTEM_PROMPT = `You are a search-index authoring assistant for an interactive learning app about AI.
 
 Your job: read the JSX source of one section file and produce semantic-search chunks for every chapter in it.
 
@@ -32,6 +32,7 @@ CRITICAL RULES:
    - "diagram": describes a visual / SVG
    - "summary": chapter-level summary (use only for sub: -1)
 6. sub: integer matching the chapter sub-step. Use -1 for chapter-level summary, -2 for diagram-only chunks.
+7. Never write chapter IDs (e.g., "Chapter 5.5" or "Chapter N.M") in the text or summary fields. Chapter IDs change when content is reordered, so cached prose with embedded IDs goes stale. Refer to the chapter by its topic name or with phrases like "this chapter" instead.
 
 Output ONLY a JSON object matching the provided schema. No markdown fences, no commentary.`;
 

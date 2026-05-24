@@ -2,9 +2,9 @@ import { describe, it, expect, beforeEach } from "vitest";
 import { saveNav, loadNav } from "../nav-persistence.js";
 
 const chapters = [
-  { id: "1.1", title: "A", section: 1, component: "A" },
-  { id: "1.2", title: "B", section: 1, component: "B" },
-  { id: "2.1", title: "C", section: 2, component: "C" },
+  { id: "1.1", title: "A", section: 1, component: "A", file: "topic/a" },
+  { id: "1.2", title: "B", section: 1, component: "B", file: "topic/b" },
+  { id: "2.1", title: "C", section: 2, component: "C", file: "topic/c" },
 ];
 
 beforeEach(() => {
@@ -23,7 +23,7 @@ describe("loadNav", () => {
 
   it("returns null when config has changed (chapter added)", () => {
     saveNav(1, 0, chapters);
-    const newChapters = [...chapters, { id: "2.2", title: "D", section: 2, component: "D" }];
+    const newChapters = [...chapters, { id: "2.2", title: "D", section: 2, component: "D", file: "topic/d" }];
     expect(loadNav(newChapters)).toBeNull();
   });
 
@@ -58,18 +58,45 @@ describe("loadNav", () => {
   });
 
   it("returns null when saved ch is NaN", () => {
-    localStorage.setItem("learn-ai-nav", JSON.stringify({ ch: "abc", sub: 0, fingerprint: "1.1,1.2,2.1" }));
+    localStorage.setItem("learn-ai-nav", JSON.stringify({ ch: "abc", sub: 0, fingerprint: "topic/a,topic/b,topic/c" }));
     expect(loadNav(chapters)).toBeNull();
   });
 
   it("returns null when saved sub is negative", () => {
-    localStorage.setItem("learn-ai-nav", JSON.stringify({ ch: 0, sub: -1, fingerprint: "1.1,1.2,2.1" }));
+    localStorage.setItem("learn-ai-nav", JSON.stringify({ ch: 0, sub: -1, fingerprint: "topic/a,topic/b,topic/c" }));
     expect(loadNav(chapters)).toBeNull();
   });
 
   it("returns null when saved ch is negative", () => {
-    localStorage.setItem("learn-ai-nav", JSON.stringify({ ch: -3, sub: 0, fingerprint: "1.1,1.2,2.1" }));
+    localStorage.setItem("learn-ai-nav", JSON.stringify({ ch: -3, sub: 0, fingerprint: "topic/a,topic/b,topic/c" }));
     expect(loadNav(chapters)).toBeNull();
+  });
+
+  it("fingerprint changes when file list changes (and is independent of ID)", () => {
+    const a = [
+      { id: "1.1", file: "x/a" },
+      { id: "1.2", file: "x/b" },
+    ];
+    const b = [
+      { id: "9.9", file: "x/a" },
+      { id: "9.8", file: "x/b" },
+    ]; // ID-renumbered, slugs same
+    saveNav(0, 0, a);
+    // Loading with renumbered IDs but identical slugs should succeed.
+    expect(loadNav(b)).toEqual({ ch: 0, sub: 0 });
+  });
+
+  it("fingerprint is invalidated when files differ", () => {
+    const a = [
+      { id: "1.1", file: "x/a" },
+      { id: "1.2", file: "x/b" },
+    ];
+    const c = [
+      { id: "1.1", file: "x/a" },
+      { id: "1.2", file: "x/c" },
+    ]; // slug changed
+    saveNav(0, 0, a);
+    expect(loadNav(c)).toBeNull();
   });
 });
 
@@ -79,7 +106,7 @@ describe("saveNav", () => {
     const stored = JSON.parse(localStorage.getItem("learn-ai-nav"));
     expect(stored.ch).toBe(5);
     expect(stored.sub).toBe(2);
-    expect(stored.fingerprint).toBe("1.1,1.2,2.1");
+    expect(stored.fingerprint).toBe("topic/a,topic/b,topic/c");
   });
 
   it("does not throw when localStorage throws", () => {

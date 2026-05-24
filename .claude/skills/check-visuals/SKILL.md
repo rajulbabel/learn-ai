@@ -11,7 +11,7 @@ Validate the visual correctness of chapter content. Run this after creating or m
 
 ## Arguments
 
-$ARGUMENTS optionally specifies a file or chapter to check. If omitted, check all section files.
+$ARGUMENTS optionally specifies a file or chapter to check. If omitted, check all chapter files.
 
 ## Static checks miss real-world overlap
 
@@ -92,7 +92,7 @@ When changes touch coordinates, dimensions, container bounds, or graph edges:
 ### 2. Box Color Validation
 
 ```bash
-grep -n "Box color={C.card}" src/sections/*.jsx
+grep -n "Box color={C.card}" src/chapters/**/*.jsx
 ```
 Any matches are errors - C.card makes boxes invisible against the dark background.
 
@@ -107,7 +107,7 @@ Look for patterns like:
 
 Find all text mentioning "chapter X.Y" or "Ch X.Y" or "chapter X.Y" (case-insensitive):
 ```bash
-grep -niE "(chapter|ch\.?)\s*[0-9]+\.[0-9]+" src/sections/*.jsx
+grep -niE "(chapter|ch\.?)\s*[0-9]+\.[0-9]+" src/chapters/**/*.jsx
 ```
 For each reference found, verify the chapter ID exists in src/config.js chapters array.
 Report any references to non-existent chapters.
@@ -120,7 +120,7 @@ Flag any content text with fontSize above 24.
 ### 6. Em-dash Check
 
 ```bash
-grep -n "\u2014" src/sections/*.jsx
+grep -n "\u2014" src/chapters/**/*.jsx
 ```
 Em-dashes are forbidden per style rules. Report any found.
 
@@ -130,18 +130,18 @@ Every visible text fragment must start with a capital letter. Run these greps an
 
 ```bash
 # Object-literal cell fields with lowercase first char in the value
-grep -nE '(name|t|d|tech|size|kind|note|pain|what|when|why|trade|cost|threshold|metric|ref|bucket|posture|side|axis|q|p|n|side|phase|latency|year|loss|ex|side|layer|op|stage|side|item|side):\s*"[a-z]' src/sections/*.jsx \
+grep -nE '(name|t|d|tech|size|kind|note|pain|what|when|why|trade|cost|threshold|metric|ref|bucket|posture|side|axis|q|p|n|side|phase|latency|year|loss|ex|side|layer|op|stage|side|item|side):\s*"[a-z]' src/chapters/**/*.jsx \
   | grep -vE '"\s*(pgvector|numpy|iPhone|none|http|https|cosine|ada-002|tenant_id|np\.|fp\.|db\.|q_vec|d_vec|score\(|the\s)' \
   | head -50
 
 # Multi-line monospace boxes - lines starting with lowercase right after <br />
-grep -nE '<br\s*/?>\s*$' src/sections/*.jsx -A 1 | grep -E '^\s+[a-z]' | head -30
+grep -nE '<br\s*/?>\s*$' src/chapters/**/*.jsx -A 1 | grep -E '^\s+[a-z]' | head -30
 
 # Array entries that display as cells/bullets
-grep -nE '(items|results|picks|defaults|params|pros|cons):\s*\[\s*"[a-z]' src/sections/*.jsx | head -30
+grep -nE '(items|results|picks|defaults|params|pros|cons):\s*\[\s*"[a-z]' src/chapters/**/*.jsx | head -30
 
 # SVG text labels with lowercase
-grep -nE '<text[^>]*>\s*[a-z]' src/sections/*.jsx | grep -vE '\[CLS\]|\[SEP\]' | head -30
+grep -nE '<text[^>]*>\s*[a-z]' src/chapters/**/*.jsx | grep -vE '\[CLS\]|\[SEP\]' | head -30
 ```
 
 For each match, decide:
@@ -158,7 +158,7 @@ Inside grid/flex card layouts, the title T must have `center` and parent div mus
 
 ```bash
 # Pattern: a card div followed by T without `center`
-grep -nB 2 '<T color={[^}]*} bold size={1[0-9]}' src/sections/*.jsx | grep -B 2 -A 0 'bold size={1[0-9]}>' | head -60
+grep -nB 2 '<T color={[^}]*} bold size={1[0-9]}' src/chapters/**/*.jsx | grep -B 2 -A 0 'bold size={1[0-9]}>' | head -60
 ```
 
 Manually verify any T inside a `.map()` over an array of cards has the `center` prop. Inner card descriptions (the second/third T) should also have `center` for visual consistency.

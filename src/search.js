@@ -31,8 +31,38 @@ let chunkById = new Map();
 let manifest = null;
 let bin = null; // Uint8Array
 let dim = 0;
-let embedPipeline = null;
 let modelMeta = null;
+
+// Web Worker that owns transformers.js + the embedding pipeline. Embedding
+// (model load + inference) runs off-main-thread so the page stays responsive
+// during the ~100 MB BGE-base load.
+let worker = null;
+let workerReady = false;
+let nextEmbedId = 1;
+const pendingEmbeds = new Map(); // id -> { resolve, reject }
+
+function ensureWorker() {
+  if (worker) return worker;
+  worker = new Worker(new URL("./search-worker.js", import.meta.url), { type: "module" });
+  worker.onmessage = (e) => {
+    const msg = e.data || {};
+    if (msg.type === "progress") {
+      loadProgress = 30 + Math.round((msg.value || 0) * 0.65);
+    } else if (msg.type === "ready") {
+      workerReady = true;
+    } else if (msg.type === "init-error") {
+      workerReady = false;
+      console.warn("[search] worker init failed:", msg.message);
+    } else if (msg.type === "embed-result") {
+      const p = pendingEmbeds.get(msg.id);
+      if (!p) return;
+      pendingEmbeds.delete(msg.id);
+      if (msg.error) p.reject(new Error(msg.error));
+      else p.resolve(msg.vector);
+    }
+  };
+  return worker;
+}
 
 let textReady = false;
 let semanticReady = false;
@@ -108,18 +138,30 @@ export async function prefetchSearch() {
     }
     loadProgress = 30;
 
-    // 3. Lazy-load transformers.js + load model from local path
-    const { pipeline, env } = await import("@huggingface/transformers");
-    env.allowRemoteModels = false;
-    env.allowLocalModels = true;
-    env.localModelPath = `${BASE}models/`;
-    embedPipeline = await pipeline("feature-extraction", "bge-base-en-v1.5-q4", {
-      dtype: modelMeta.dtype,
-      progress_callback: (p) => {
-        if (p.status === "progress" && typeof p.progress === "number") {
-          loadProgress = 30 + Math.round(p.progress * 0.65);
+    // 3. Spawn the embedding Worker and wait for it to load the ONNX model.
+    //    All heavy work (transformers.js import, ONNX runtime init, model
+    //    parse, inference) happens in the worker so the main thread keeps
+    //    painting and handling input.
+    await new Promise((resolve, reject) => {
+      const w = ensureWorker();
+      const onMsg = (e) => {
+        const msg = e.data || {};
+        if (msg.type === "ready") {
+          w.removeEventListener("message", onMsg);
+          resolve();
+        } else if (msg.type === "init-error") {
+          w.removeEventListener("message", onMsg);
+          reject(new Error(msg.message));
         }
-      },
+      };
+      w.addEventListener("message", onMsg);
+      w.postMessage({
+        type: "init",
+        modelName: "bge-base-en-v1.5-q4",
+        dtype: modelMeta.dtype,
+        basePath: `${BASE}models/`,
+        queryInstruction: modelMeta.queryInstruction || "",
+      });
     });
     loadProgress = 100;
     semanticReady = true;
@@ -146,10 +188,12 @@ function int8Cosine(qFloat, qNorm, vecOffset, vecScale) {
 }
 
 async function embedQuery(text) {
-  if (!embedPipeline) return null;
-  const prefixed = (modelMeta?.queryInstruction || "") + text;
-  const res = await embedPipeline(prefixed, { pooling: "mean", normalize: true });
-  return res.tolist()[0];
+  if (!worker || !workerReady) return null;
+  const id = nextEmbedId++;
+  return new Promise((resolve, reject) => {
+    pendingEmbeds.set(id, { resolve, reject });
+    worker.postMessage({ type: "embed", id, text });
+  });
 }
 
 // Multi-vector retrieval: per chunk, take MAX similarity across all reprs. Top-K chunks.

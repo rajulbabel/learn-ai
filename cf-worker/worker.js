@@ -7,8 +7,9 @@
 //   cd cf-worker
 //   npx wrangler deploy
 //
-// Then set VITE_EMBED_API_URL in the GitHub Actions deploy workflow to the
-// worker URL (https://learn-ai-embed.<account>.workers.dev) and rebuild.
+// The deployed URL is already hardcoded as REMOTE_EMBED_URL in
+// src/search.js and DEFAULT_EMBED_API_URL in scripts/embed-chunks-remote.mjs.
+// If you fork to a different Cloudflare account, update those constants.
 export default {
   async fetch(request, env) {
     if (request.method === "OPTIONS") {

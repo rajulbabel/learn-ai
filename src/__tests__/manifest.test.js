@@ -9,16 +9,15 @@ describe("embeddings manifest", () => {
   it("loads", () => {
     manifest = JSON.parse(readFileSync("src/data/embeddings-manifest.json", "utf-8"));
     binSize = statSync("src/data/embeddings.bin").size;
-    expect(manifest.dim).toBe(768);
-    // checksum format: 16 hex chars for the local quantized build, or
-    // "cf:<16 hex>" for the Workers AI build. Both stay short enough to
-    // fit in the IndexedDB cache key.
-    expect(manifest.modelChecksum).toMatch(/^(cf:)?[0-9a-f]{16}$/);
+    expect(typeof manifest.dim).toBe("number");
+    // Checksum prefix encodes the embedding pipeline: cf256:* = Workers AI
+    // BGE-base truncated to Matryoshka 256 with packed-scale bin.
+    expect(manifest.modelChecksum).toMatch(/^cf256:[0-9a-f]{16}$/);
   });
 
-  it("count matches vector array length and bin size", () => {
+  it("count matches vector array length and bin size (dim + 4 per row)", () => {
     expect(manifest.count).toBe(manifest.vectors.length);
-    expect(binSize).toBe(manifest.count * manifest.dim);
+    expect(binSize).toBe(manifest.count * (manifest.dim + 4));
   });
 
   it("every chunk id has at least one vector", () => {

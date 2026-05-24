@@ -1,7 +1,8 @@
 /**
  * Pre-push guard: verifies embeddings.bin + embeddings-manifest.json are
  * consistent with chunks.json (every chunk id covered by ≥1 vector; bin
- * size matches count × dim).
+ * size matches count × (dim + 4) since each row stores an int8 vector
+ * followed by a float32 scale).
  *
  * Exits 0 if in sync, exits 1 (blocking push) if out of sync.
  */
@@ -27,8 +28,9 @@ try {
   if (typeof manifest.count !== "number") fail(`${MANIFEST_PATH} missing 'count'.`);
   if (manifest.count !== manifest.vectors.length)
     fail(`Manifest count (${manifest.count}) != vectors length (${manifest.vectors.length}).`);
-  if (binSize !== manifest.count * manifest.dim)
-    fail(`Bin size (${binSize}) != count × dim (${manifest.count * manifest.dim}).`);
+  const expectedBinSize = manifest.count * (manifest.dim + 4);
+  if (binSize !== expectedBinSize)
+    fail(`Bin size (${binSize}) != count × (dim + 4) (${expectedBinSize}).`);
 
   const chunkIds = new Set(chunks.map((c) => c.id));
   const covered = new Set(manifest.vectors.map((v) => v.chunkId));

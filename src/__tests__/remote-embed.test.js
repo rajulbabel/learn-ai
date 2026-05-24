@@ -27,9 +27,11 @@ describe("Cloudflare Workers AI embed proxy", () => {
 });
 
 describe("search.js routes embedQuery to the remote endpoint", () => {
-  it("reads VITE_EMBED_API_URL from import.meta.env", () => {
+  it("hardcodes the deployed Cloudflare Worker URL (no env wiring)", () => {
     const src = readFileSync("src/search.js", "utf-8");
-    expect(src).toMatch(/VITE_EMBED_API_URL/);
+    // URL is public; keeping it as a string constant means the production
+    // build needs zero env vars and the bundle is self-contained.
+    expect(src).toMatch(/REMOTE_EMBED_URL\s*=\s*["']https:\/\/learn-ai-embed\.rajul-babel\.workers\.dev["']/);
   });
 
   it("uses fetch() against the remote URL inside embedQuery", () => {

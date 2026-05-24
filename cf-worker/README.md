@@ -12,30 +12,12 @@ wrangler login               # opens browser, links your Cloudflare account
 wrangler deploy              # publishes the worker
 ```
 
-The deploy output prints a URL like
-`https://learn-ai-embed.<account-subdomain>.workers.dev`. Copy it.
-
-## Wire it into the site build
-
-Set the env var at build time:
-
-```bash
-VITE_EMBED_API_URL=https://learn-ai-embed.<account-subdomain>.workers.dev npm run build
-```
-
-For the GitHub Pages workflow, add a repo variable `VITE_EMBED_API_URL`
-under Settings → Secrets and variables → Actions → Variables, and pass it
-to the build step in `.github/workflows/<deploy>.yml`:
-
-```yaml
-- run: npm run build
-  env:
-    VITE_EMBED_API_URL: ${{ vars.VITE_EMBED_API_URL }}
-```
-
-When the variable is set, the site skips the in-browser ONNX worker
-entirely - no transformers.js, no 99 MB model download. Search semantic
-readiness becomes "as soon as embeddings.bin loads".
+The deploy output prints the URL (e.g.
+`https://learn-ai-embed.rajul-babel.workers.dev`). This URL is already
+hardcoded as `REMOTE_EMBED_URL` in `src/search.js` and as
+`DEFAULT_EMBED_API_URL` in `scripts/embed-chunks-remote.mjs`, so no env
+wiring is needed for builds. If you fork to a different Cloudflare
+account, update those two constants.
 
 ## Quotas / cost
 
@@ -48,26 +30,26 @@ exceeds this even at peak.
 ```bash
 wrangler dev
 # POST http://localhost:8787 with body {"text":"how does attention work"}
+# To run scripts against the local worker:
+EMBED_API_URL=http://localhost:8787 npm run search:embed
 ```
 
-## Re-embed the corpus with the remote model (recommended)
+## Re-embed the corpus
 
-The bundled `embeddings.bin` was built with the local q4-quantized BGE.
-Switching the query side to full-precision Workers AI causes a small
-ranking drift (~95-99% cosine correlation preserved, top-K mostly
-stable). For exact parity, re-embed every chunk through the same
-endpoint:
+Whenever chapter content changes, the embedding bin must be rebuilt:
 
 ```bash
-EMBED_API_URL=https://learn-ai-embed.<acct>.workers.dev \
-  npm run search:embed:remote
+npm run search:embed
 ```
 
-Outputs (commit alongside the worker URL change):
-- `src/data/embeddings.bin`
-- `src/data/embeddings-manifest.json`
-- `public/models/bge-base-en-v1.5-q4/model-meta.json` (checksum stamped
-  `cf:*` so the browser cache invalidates)
+This pulls the deployed worker URL from the script's hardcoded constant
+(override with `EMBED_API_URL` to point elsewhere). Outputs:
 
-After this, query and corpus sit on the identical Workers AI model -
-ranking is bit-for-bit consistent.
+- `src/data/embeddings.bin` (int8 Matryoshka 256-dim, packed scale per row)
+- `src/data/embeddings-manifest.json` (chunkId index per vector)
+- `public/models/bge-base-en-v1.5-q4/model-meta.json` (checksum stamped
+  `cf256:*` so the browser IndexedDB cache invalidates)
+
+After running this, the query side (browser → Worker) and the corpus
+side (this script → Worker) hit the identical model, so cosine
+similarity is consistent across both paths.

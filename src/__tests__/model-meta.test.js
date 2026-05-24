@@ -10,7 +10,7 @@ describe("model-meta.json (written by embed-chunks-remote.mjs)", () => {
       return;
     }
     const meta = JSON.parse(readFileSync(path, "utf-8"));
-    expect(meta.dim).toBe(768);
+    expect(meta.dim).toBe(256); // Matryoshka cut of BGE-base 768
     expect(typeof meta.checksum).toBe("string");
     expect(meta.queryInstruction).toMatch(/^Represent /);
   });

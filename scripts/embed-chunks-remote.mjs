@@ -6,8 +6,11 @@
  * exact same model so cosine similarity is consistent.
  *
  * Usage:
- *   EMBED_API_URL=https://learn-ai-embed.<acct>.workers.dev \
- *     node scripts/embed-chunks-remote.mjs
+ *   node scripts/embed-chunks-remote.mjs
+ *
+ * Uses the production Cloudflare Worker URL (DEFAULT_EMBED_API_URL below)
+ * by default. Override with `EMBED_API_URL=http://localhost:8787` when
+ * pointing at a `wrangler dev` instance for testing.
  *
  * Output (same paths as embed-chunks.mjs, so build/preview just works):
  *   src/data/embeddings.bin             (Int8Array, count * dim bytes)
@@ -26,8 +29,19 @@ const BIN_PATH = "src/data/embeddings.bin";
 const MANIFEST_PATH = "src/data/embeddings-manifest.json";
 const META_PATH = "public/models/bge-base-en-v1.5-q4/model-meta.json";
 
-const DIM = 768;
-const REMOTE_MODEL_ID = "cf-workers-ai-bge-base-en-v1.5";
+// Deployed Cloudflare Worker that proxies Workers AI BGE-base. Hardcoded so
+// `node scripts/embed-chunks-remote.mjs` works with zero env / argv setup;
+// EMBED_API_URL env or CLI arg can still override for local CF Worker testing.
+const DEFAULT_EMBED_API_URL = "https://learn-ai-embed.rajul-babel.workers.dev";
+
+// BGE-base produces 768-dim vectors; we keep the first 256 (Matryoshka cut).
+// Re-normalize after truncation so cosine over the prefix matches the model's
+// intended similarity space. Storage savings: 768 -> 256 = 3x smaller bin.
+const FULL_DIM = 768;
+const DIM = 256;
+const SCALE_BYTES = 4; // float32 scale appended after each int8 row
+const VEC_STRIDE = DIM + SCALE_BYTES; // bytes per vector row in the bin
+const REMOTE_MODEL_ID = "cf-workers-ai-bge-base-en-v1.5-mrl256";
 // BGE-base recommends prefixing queries (not passages) with this instruction.
 // We embed passages here so we DO NOT prefix; the browser side prefixes
 // queries before sending to the worker.
@@ -75,7 +89,7 @@ function l2Normalize(vec) {
   return vec.map((x) => x / n);
 }
 
-async function embedOne(url, text) {
+async function embedOnce(url, text) {
   const res = await fetch(url, {
     method: "POST",
     headers: { "content-type": "application/json" },
@@ -83,12 +97,32 @@ async function embedOne(url, text) {
   });
   if (!res.ok) throw new Error(`${res.status} ${await res.text()}`);
   const data = await res.json();
-  if (!Array.isArray(data?.vector) || data.vector.length !== DIM) {
-    throw new Error(`bad vector shape: got ${data?.vector?.length}, want ${DIM}`);
+  if (!Array.isArray(data?.vector) || data.vector.length !== FULL_DIM) {
+    throw new Error(`bad vector shape: got ${data?.vector?.length}, want ${FULL_DIM}`);
   }
-  // Workers AI may return un-normalized vectors. Force unit length so the
-  // int8 quantization step preserves cosine similarity.
-  return l2Normalize(data.vector);
+  // Matryoshka: keep the first DIM dims, then L2-renormalize so cosine over
+  // the truncated prefix is unit-length consistent. Workers AI may return
+  // un-normalized vectors either way, so the renormalize doubles as the
+  // standard unit-length step.
+  return l2Normalize(data.vector.slice(0, DIM));
+}
+
+// Wrap embedOnce with exponential backoff. Workers AI and the network can
+// drop the occasional request; without retries a single failure aborts the
+// whole ~30 k embed run.
+async function embedOne(url, text) {
+  const delays = [500, 1500, 3000, 6000];
+  let lastErr;
+  for (let attempt = 0; attempt <= delays.length; attempt++) {
+    try {
+      return await embedOnce(url, text);
+    } catch (err) {
+      lastErr = err;
+      if (attempt === delays.length) break;
+      await new Promise((r) => setTimeout(r, delays[attempt]));
+    }
+  }
+  throw lastErr;
 }
 
 async function embedAll(url, items, log) {
@@ -112,8 +146,7 @@ async function embedAll(url, items, log) {
   return out;
 }
 
-export async function runRemoteEmbed({ rootDir = process.cwd(), url, log = console.log } = {}) {
-  if (!url) throw new Error("EMBED_API_URL not set");
+export async function runRemoteEmbed({ rootDir = process.cwd(), url = DEFAULT_EMBED_API_URL, log = console.log } = {}) {
   const chunks = JSON.parse(readFileSync(join(rootDir, CHUNKS_PATH), "utf-8"));
 
   const desired = [];
@@ -132,22 +165,25 @@ export async function runRemoteEmbed({ rootDir = process.cwd(), url, log = conso
 
   const vectors = await embedAll(url, desired, log);
 
-  const bin = Buffer.alloc(desired.length * DIM);
+  // Bin layout (per vector row, repeats `count` times):
+  //   [int8 × DIM bytes][float32 scale, little-endian, 4 bytes]
+  // Total row stride = VEC_STRIDE = DIM + 4. Storing the scale inline lets
+  // the manifest drop the per-vector scale field, shrinking the JSON from
+  // ~4.8 MB to ~700 KB. cosine() reads the scale directly from the bin.
+  const bin = Buffer.alloc(desired.length * VEC_STRIDE);
   const newVectors = [];
   for (let i = 0; i < desired.length; i++) {
     const { bytes, scale } = quantizeInt8(vectors[i]);
-    Buffer.from(bytes.buffer, bytes.byteOffset, bytes.byteLength).copy(bin, i * DIM);
+    const rowBase = i * VEC_STRIDE;
+    Buffer.from(bytes.buffer, bytes.byteOffset, bytes.byteLength).copy(bin, rowBase);
+    bin.writeFloatLE(scale, rowBase + DIM);
     newVectors.push({
       chunkId: desired[i].chunkId,
-      reprKind: desired[i].reprKind,
-      reprIndex: desired[i].reprIndex,
-      contentHash: desired[i].contentHash,
       vectorIndex: i,
-      scale,
     });
   }
 
-  const checksum = `cf:${sha256_16(REMOTE_MODEL_ID + ":" + DIM)}`;
+  const checksum = `cf256:${sha256_16(REMOTE_MODEL_ID + ":" + DIM)}`;
   const newManifest = {
     modelChecksum: checksum,
     dim: DIM,
@@ -172,7 +208,7 @@ export async function runRemoteEmbed({ rootDir = process.cwd(), url, log = conso
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) {
-  const url = process.env.EMBED_API_URL || process.argv[2];
+  const url = process.env.EMBED_API_URL || process.argv[2] || DEFAULT_EMBED_API_URL;
   runRemoteEmbed({ url }).catch((e) => {
     console.error("Fatal:", e);
     process.exit(1);

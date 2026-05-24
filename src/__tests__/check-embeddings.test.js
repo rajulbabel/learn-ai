@@ -45,7 +45,7 @@ describe("check-embeddings (new format)", () => {
             scale: 0.1,
           })),
       },
-      bin: Buffer.alloc(8 * 4),
+      bin: Buffer.alloc(8 * (4 + 4)),
     });
     expect(() => execSync(`node scripts/check-embeddings.mjs`, { cwd: dir })).not.toThrow();
     rmSync(dir, { recursive: true, force: true });
@@ -80,7 +80,7 @@ describe("check-embeddings (new format)", () => {
             scale: 0.1,
           })),
       },
-      bin: Buffer.alloc(8 * 4 - 1),
+      bin: Buffer.alloc(8 * (4 + 4) - 1),
     });
     expect(() => execSync(`node scripts/check-embeddings.mjs`, { cwd: dir })).toThrow();
     rmSync(dir, { recursive: true, force: true });
@@ -116,7 +116,7 @@ describe("check-embeddings (new format)", () => {
         count: 1,
         vectors: [{ chunkId: "a", reprKind: "text", reprIndex: 0, contentHash: "h", vectorIndex: 0, scale: 0.1 }],
       },
-      bin: Buffer.alloc(1 * 4),
+      bin: Buffer.alloc(1 * (4 + 4)),
     });
     expect(() => execSync(`node scripts/check-embeddings.mjs`, { cwd: dir })).toThrow();
     rmSync(dir, { recursive: true, force: true });

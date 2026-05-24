@@ -1,7 +1,7 @@
 {
-  "name": "cf-workers-ai-bge-base-en-v1.5",
-  "dim": 768,
-  "checksum": "cf:50988da29a453b8b",
+  "name": "cf-workers-ai-bge-base-en-v1.5-mrl256",
+  "dim": 256,
+  "checksum": "cf256:f8d797f7821febc6",
   "dtype": "fp32",
   "queryInstruction": "Represent this sentence for searching relevant passages: "
 }

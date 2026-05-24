@@ -49,11 +49,9 @@ if ! command -v claude >/dev/null 2>&1; then
   exit 1
 fi
 
-# Default to the deployed CF Worker so plain `git push` triggers a rebuild
-# without needing the env var inline. URL is public (it's the production
-# embedding endpoint baked into the site build via VITE_EMBED_API_URL).
-EMBED_API_URL="${EMBED_API_URL:-https://learn-ai-embed.rajul-babel.workers.dev}"
-export EMBED_API_URL
+# Embed script (scripts/embed-chunks-remote.mjs) hardcodes the production
+# Worker URL and works with no env. Override via EMBED_API_URL only when
+# pointing at a local `wrangler dev` instance for testing.
 
 ARTIFACTS="src/data/chunks.json src/data/chunk-cache.json src/data/embeddings.bin src/data/embeddings-manifest.json"
 

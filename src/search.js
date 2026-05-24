@@ -7,8 +7,8 @@
  *   src/data/embeddings-manifest.json     - per-vector entries + modelChecksum + dim
  *
  * Query-time embedding: Cloudflare Workers AI (@cf/baai/bge-base-en-v1.5)
- * reached through the cf-worker/ proxy. URL injected at build time via
- * VITE_EMBED_API_URL. When unset, the site runs text-only search.
+ * reached through the cf-worker/ proxy. Worker URL is hardcoded in this
+ * file (REMOTE_EMBED_URL) so the build needs zero env wiring.
  */
 import MiniSearch from "minisearch";
 import { getCachedSearchAssets, cacheSearchAssets } from "./embedding-cache.js";
@@ -31,7 +31,9 @@ let chunks = [];
 let chunkById = new Map();
 let manifest = null;
 let bin = null; // Uint8Array
+let binView = null; // DataView over bin for reading the packed float32 scale
 let dim = 0;
+let vecStride = 0; // bytes per vector row in the bin: dim + 4 (float32 scale)
 let modelMeta = null;
 
 let textReady = false;
@@ -77,11 +79,10 @@ export async function initSearch() {
 
 const BASE = (typeof import.meta !== "undefined" && import.meta.env && import.meta.env.BASE_URL) || "/learn-ai/";
 
-// Cloudflare Worker that hosts BGE-base via Workers AI. When unset (dev
-// without VITE_EMBED_API_URL), semantic init is skipped and the site falls
-// back to text-only search.
-const REMOTE_EMBED_URL =
-  typeof import.meta !== "undefined" && import.meta.env ? import.meta.env.VITE_EMBED_API_URL || "" : "";
+// Deployed Cloudflare Worker that hosts BGE-base via Workers AI. Hardcoded
+// so the production build needs zero env wiring; the URL is a public worker
+// endpoint and the same constant lives in scripts/embed-chunks-remote.mjs.
+const REMOTE_EMBED_URL = "https://learn-ai-embed.rajul-babel.workers.dev";
 
 /** Semantic pre-fetch: warm the corpus bin + meta in parallel. */
 export async function prefetchSearch() {
@@ -103,6 +104,7 @@ export async function prefetchSearch() {
     const setMetaPromise = metaPromise.then((meta) => {
       modelMeta = meta;
       dim = meta.dim;
+      vecStride = dim + 4; // int8 vec + float32 scale per row
     });
     const binPromise = Promise.all([metaPromise, manifestPromise]).then(async ([meta, mf]) => {
       manifest = mf;
@@ -110,11 +112,16 @@ export async function prefetchSearch() {
       const cached = await getCachedSearchAssets(cacheKey);
       if (cached && cached.bin instanceof Uint8Array) {
         bin = cached.bin;
-        return;
+      } else {
+        const binBuf = await fetch(new URL("./data/embeddings.bin", import.meta.url).href).then((r) =>
+          r.arrayBuffer(),
+        );
+        bin = new Uint8Array(binBuf);
+        cacheSearchAssets(cacheKey, { bin, manifest }).catch(() => {});
       }
-      const binBuf = await fetch(new URL("./data/embeddings.bin", import.meta.url).href).then((r) => r.arrayBuffer());
-      bin = new Uint8Array(binBuf);
-      cacheSearchAssets(cacheKey, { bin, manifest }).catch(() => {});
+      // DataView lets us read the little-endian float32 scale that sits
+      // right after the int8 vector in each row.
+      binView = new DataView(bin.buffer, bin.byteOffset, bin.byteLength);
     });
 
     await Promise.all([textPromise, setMetaPromise, binPromise]);
@@ -128,13 +135,14 @@ export async function prefetchSearch() {
   }
 }
 
-// ── int8 cosine over the flat bin ──
-function int8Cosine(qFloat, qNorm, vecOffset, vecScale) {
+// ── int8 cosine over the packed bin. Each row is [int8 × dim][float32 scale].
+function int8Cosine(qFloat, qNorm, rowOffset) {
+  const scale = binView.getFloat32(rowOffset + dim, true);
   let dot = 0;
   let vNormSq = 0;
   for (let i = 0; i < dim; i++) {
-    const v8 = (bin[vecOffset + i] << 24) >> 24; // sign-extend int8
-    const v = v8 * vecScale;
+    const v8 = (bin[rowOffset + i] << 24) >> 24; // sign-extend int8
+    const v = v8 * scale;
     dot += qFloat[i] * v;
     vNormSq += v * v;
   }
@@ -152,7 +160,15 @@ async function embedQuery(text) {
   });
   if (!res.ok) return null;
   const data = await res.json();
-  return Array.isArray(data?.vector) ? data.vector : null;
+  const full = Array.isArray(data?.vector) ? data.vector : null;
+  if (!full) return null;
+  // Matryoshka: take the first `dim` entries (BGE returns the full 768), then
+  // L2-renormalize so cosine over the prefix matches the truncated corpus.
+  const truncated = full.slice(0, dim);
+  let s = 0;
+  for (const x of truncated) s += x * x;
+  const n = Math.sqrt(s) || 1;
+  return truncated.map((x) => x / n);
 }
 
 // Multi-vector retrieval: per chunk, take MAX similarity across all reprs. Top-K chunks.
@@ -162,8 +178,8 @@ function vectorSearchMaxSim(qFloat, topK = 30) {
   qNorm = Math.sqrt(qNorm);
   const best = new Map();
   for (const v of manifest.vectors) {
-    const offset = v.vectorIndex * dim;
-    const s = int8Cosine(qFloat, qNorm, offset, v.scale);
+    const offset = v.vectorIndex * vecStride;
+    const s = int8Cosine(qFloat, qNorm, offset);
     const cur = best.get(v.chunkId);
     if (cur === undefined || s > cur) best.set(v.chunkId, s);
   }

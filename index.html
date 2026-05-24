@@ -122,10 +122,78 @@
         from { opacity: 0; transform: translateY(12px); }
         to   { opacity: 1; transform: translateY(0); }
       }
+      .seo-fallback {
+        max-width: 760px;
+        margin: 0 auto;
+        padding: 48px 24px 80px;
+        color: #d8d8e0;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        line-height: 1.55;
+      }
+      .seo-fallback h1 { font-size: 28px; margin-bottom: 12px; color: #fff; }
+      .seo-fallback h2 { font-size: 18px; margin: 24px 0 8px; color: #b8a9ff; }
+      .seo-fallback p { margin-bottom: 12px; font-size: 16px; }
+      .seo-fallback ul { padding-left: 20px; margin-bottom: 12px; }
+      .seo-fallback li { margin-bottom: 4px; font-size: 15px; }
+      .seo-fallback a { color: #80deea; }
+      .seo-fallback .loading { color: #888; font-size: 13px; margin-top: 24px; }
     </style>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root"><div class="seo-fallback">
+      <h1>Learn AI by Rajul Babel - Visual Interactive Guide to AI Internals</h1>
+      <p><strong>Learn AI</strong> is a free interactive guide by <strong>Rajul Babel</strong>
+      that teaches Artificial Intelligence from first principles to production systems. Every
+      concept is shown with real numbers, real formulas, and progressive visual diagrams - no
+      watered-down explanations.</p>
+      <h2>What you will learn</h2>
+      <ul>
+        <li>Neural Networks - mechanics, neurons, layers, weights, activation, the forward pass.</li>
+        <li>Learning &amp; Backprop - loss functions, gradients, gradient descent, deep backprop.</li>
+        <li>Linear Algebra for Deep Learning - vectors, dot products, matrices, activation.</li>
+        <li>Training Deep Networks - dropout, Adam, learning-rate schedules, initialization.</li>
+        <li>How LLMs Actually Train - tokenization, cross-entropy, SFT, RLHF, DPO, BPE.</li>
+        <li>Scaling &amp; Modern Techniques - scaling laws, batching, distillation, CLIP.</li>
+        <li>The Road to Transformers - CNN, RNN, the Transformer arrives.</li>
+        <li>Transformer Input Pipeline - embeddings, positional encoding, RoPE.</li>
+        <li>Attention - Q/K/V, dot products, classroom and Google-search analogies.</li>
+        <li>Computing Attention - scores, K transpose, softmax, scaling, weighted sums.</li>
+        <li>Multi-Head Attention - the split, per-head computation, concat, W_O.</li>
+        <li>The Encoder - Add &amp; Norm, FFN, residual highway, pre-norm vs post-norm.</li>
+        <li>The Decoder - causal masking, cross-attention, output head.</li>
+        <li>Modern LLM Techniques - KV cache, grouped-query attention, MoE, reasoning models.</li>
+        <li>Vector Search - brute-force kNN, distance metrics, IVF, HNSW, DiskANN.</li>
+        <li>Vector Compression - scalar / product / binary quantization, Matryoshka, IVF-PQ.</li>
+        <li>Vector DBs in Production - filtering, sharding, replication, hybrid search, rerankers.</li>
+        <li>Picking a Vector Database - FAISS, pgvector, Qdrant, Pinecone, Weaviate, Milvus, Chroma.</li>
+        <li>The RAG Pipeline - why retrieval, naive RAG, where it breaks.</li>
+        <li>RAG Data Prep - parsing, dedup, chunking strategies, contextual retrieval.</li>
+        <li>RAG Retrieval - embedding models, hybrid retrieval, rerankers, HyDE, query routing.</li>
+        <li>RAG Generation - context packing, lost-in-the-middle, Self-RAG, CRAG, GraphRAG.</li>
+        <li>RAG in Production - eval triangle, LLM-as-judge, RAGAS, caching, observability.</li>
+        <li>Prompting LLMs - system prompts, few-shot, chain-of-thought, context engineering.</li>
+        <li>Tools &amp; Protocols - tool use, MCP architecture, MCP security, A2A protocol.</li>
+        <li>Agent Mechanics - agent loop, ReAct, plan-execute, memory taxonomy.</li>
+        <li>Multi-Agent Systems - orchestrator-worker, supervisor, hand-offs, critic / debate.</li>
+        <li>Shipping Agents - eval, guardrails, prompt-injection defense, LangGraph, CrewAI.</li>
+      </ul>
+      <h2>About the author</h2>
+      <p><strong>Rajul Babel</strong> built Learn AI as a free, open educational resource.
+      Find more at <a href="https://github.com/rajulbabel">github.com/rajulbabel</a> and
+      <a href="https://www.linkedin.com/in/rajulbabel">linkedin.com/in/rajulbabel</a>.</p>
+      <p class="loading">Loading interactive app...</p>
+    </div></div>
+    <noscript>
+      <div class="seo-fallback">
+        <h1>Learn AI by Rajul Babel</h1>
+        <p>This site is an interactive guide built with React. To use the full app, please enable
+        JavaScript. A static summary is below.</p>
+        <p><strong>Learn AI</strong> is a free interactive guide by <strong>Rajul Babel</strong>
+        covering Neural Networks, Transformers, Attention, RAG, Vector Databases, and Agent Frameworks
+        - taught with real numbers, real formulas, and progressive diagrams.</p>
+        <p>Source: <a href="https://github.com/rajulbabel/learn-ai">github.com/rajulbabel/learn-ai</a></p>
+      </div>
+    </noscript>
     <script>
       (function () {
         var basePath = "/learn-ai/";

@@ -107,62 +107,72 @@ export async function initSearch() {
 
 const BASE = (typeof import.meta !== "undefined" && import.meta.env && import.meta.env.BASE_URL) || "/learn-ai/";
 
-/** Idle-time semantic pre-fetch. Silent. */
+/** Idle-time semantic pre-fetch. Fires every fetch in parallel. */
 export async function prefetchSearch() {
-  if (!textReady) await initSearch();
   if (semanticReady || semanticLoading) return;
   semanticLoading = true;
   loadProgress = 0;
   try {
-    // 1. Model meta
-    const metaRes = await fetch(`${BASE}models/bge-base-en-v1.5-q4/model-meta.json`);
-    if (!metaRes.ok) throw new Error("model-meta.json missing");
-    modelMeta = await metaRes.json();
-    dim = modelMeta.dim;
+    // Kick off every independent fetch at the same tick so the network does
+    // them in parallel instead of waterfalling. Previous code awaited
+    // model-meta -> manifest -> embeddings.bin -> worker init (which then
+    // fetched the 99 MB ONNX). Now all five start together; only the steps
+    // with real data dependencies wait on their inputs.
+    const textPromise = initSearch();
+    const metaPromise = fetch(`${BASE}models/bge-base-en-v1.5-q4/model-meta.json`).then((r) => {
+      if (!r.ok) throw new Error("model-meta.json missing");
+      return r.json();
+    });
+    const manifestPromise = import("./data/embeddings-manifest.json").then((m) => m.default || m);
 
-    // 2. Always load manifest fresh from disk (cheap, ~1 MB gzipped, ships with
-    //    the JS bundle). The manifest's content fingerprint is part of the cache
-    //    key so the cached embeddings.bin auto-invalidates whenever chunks or
-    //    embeddings change in a new deploy.
-    manifest = await import("./data/embeddings-manifest.json").then((m) => m.default || m);
-    const cacheKey = `${modelMeta.checksum}:${manifestFingerprint(manifest)}`;
+    // Worker init only needs model-meta (for dtype). Start it the moment
+    // meta lands so the worker's ONNX model fetch runs in parallel with the
+    // main-thread bin fetch.
+    const workerReadyPromise = metaPromise.then(
+      (meta) =>
+        new Promise((resolve, reject) => {
+          modelMeta = meta;
+          dim = meta.dim;
+          const w = ensureWorker();
+          const onMsg = (e) => {
+            const msg = e.data || {};
+            if (msg.type === "ready") {
+              w.removeEventListener("message", onMsg);
+              resolve();
+            } else if (msg.type === "init-error") {
+              w.removeEventListener("message", onMsg);
+              reject(new Error(msg.message));
+            }
+          };
+          w.addEventListener("message", onMsg);
+          w.postMessage({
+            type: "init",
+            modelName: "bge-base-en-v1.5-q4",
+            dtype: meta.dtype,
+            basePath: `${BASE}models/`,
+            queryInstruction: meta.queryInstruction || "",
+          });
+        }),
+    );
 
-    // 3. Try the embeddings cache under the compound key.
-    const cached = await getCachedSearchAssets(cacheKey);
-    if (cached && cached.bin instanceof Uint8Array) {
-      bin = cached.bin;
-    } else {
+    // Bin needs meta (for cache-key checksum) and manifest (for fingerprint).
+    // Both promises are already in flight; this just joins them, then either
+    // returns the cached bin or fetches embeddings.bin in parallel with the
+    // worker's ONNX model fetch.
+    const binPromise = Promise.all([metaPromise, manifestPromise]).then(async ([meta, mf]) => {
+      manifest = mf;
+      const cacheKey = `${meta.checksum}:${manifestFingerprint(mf)}`;
+      const cached = await getCachedSearchAssets(cacheKey);
+      if (cached && cached.bin instanceof Uint8Array) {
+        bin = cached.bin;
+        return;
+      }
       const binBuf = await fetch(new URL("./data/embeddings.bin", import.meta.url).href).then((r) => r.arrayBuffer());
       bin = new Uint8Array(binBuf);
       cacheSearchAssets(cacheKey, { bin, manifest }).catch(() => {});
-    }
-    loadProgress = 30;
-
-    // 3. Spawn the embedding Worker and wait for it to load the ONNX model.
-    //    All heavy work (transformers.js import, ONNX runtime init, model
-    //    parse, inference) happens in the worker so the main thread keeps
-    //    painting and handling input.
-    await new Promise((resolve, reject) => {
-      const w = ensureWorker();
-      const onMsg = (e) => {
-        const msg = e.data || {};
-        if (msg.type === "ready") {
-          w.removeEventListener("message", onMsg);
-          resolve();
-        } else if (msg.type === "init-error") {
-          w.removeEventListener("message", onMsg);
-          reject(new Error(msg.message));
-        }
-      };
-      w.addEventListener("message", onMsg);
-      w.postMessage({
-        type: "init",
-        modelName: "bge-base-en-v1.5-q4",
-        dtype: modelMeta.dtype,
-        basePath: `${BASE}models/`,
-        queryInstruction: modelMeta.queryInstruction || "",
-      });
     });
+
+    await Promise.all([textPromise, workerReadyPromise, binPromise]);
     loadProgress = 100;
     semanticReady = true;
     semanticLoading = false;

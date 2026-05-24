@@ -4,9 +4,14 @@ import { T, ErrorBoundary, NavContext } from "./components.jsx";
 import { saveNav, loadNav } from "./nav-persistence.js";
 import { resolveInitialState } from "./url-routing.js";
 import { useUrlSync } from "./url-sync.js";
+import TOC from "./chapters/table-of-contents/toc.jsx";
 
 // ── Lazy-loaded search: not loaded until search is opened ──
 const SearchOverlay = lazy(() => import("./search-overlay.jsx"));
+
+// Home (ch=0) is bundled with the shell so the first paint is the TOC -
+// no flash of an empty <main> waiting for a lazy chunk.
+const TOC_FILE = "table-of-contents/toc";
 
 // WCAG AA color-contrast (4.5:1) on the #08080d background needs >= 0.50 white
 // alpha. C.dim (0.35) fails on the initial page. These constants override only
@@ -19,6 +24,7 @@ const chapterLoaders = import.meta.glob("./chapters/**/*.jsx");
 
 async function loadChapterByFile(file) {
   if (!file) return null;
+  if (file === TOC_FILE) return TOC;
   const key = `./chapters/${file}.jsx`;
   const loader = chapterLoaders[key];
   if (!loader) return null;
@@ -178,8 +184,9 @@ export default function LearnAI() {
   // Keep the URL in sync with navigation state.
   useUrlSync({ ch, sub, expanded });
 
-  // Lazy-loaded chapter render function
-  const [renderChapter, setRenderChapter] = useState(null);
+  // Lazy-loaded chapter render function. TOC is eager-imported, so the home
+  // view paints in the same tick as the shell instead of after a chunk fetch.
+  const [renderChapter, setRenderChapter] = useState(() => (initial.ch === 0 ? TOC : null));
 
   // Ref to track whether a SubBtn is currently rendered (avoids DOM queries)
   const subBtnRef = useRef(false);
@@ -591,6 +598,10 @@ export default function LearnAI() {
         0% { opacity: 0; }
         100% { opacity: 1; }
       }
+      @keyframes skeletonPulse {
+        0%, 100% { opacity: 0.55; }
+        50% { opacity: 0.95; }
+      }
     `}</style>
       <div
         style={{
@@ -812,7 +823,30 @@ export default function LearnAI() {
           }}
         >
           <NavContext.Provider value={{ goTo, chapters }}>
-            <ErrorBoundary resetKey={ch}>{renderChapter ? renderChapter(ctx) : null}</ErrorBoundary>
+            <ErrorBoundary resetKey={ch}>
+              {renderChapter ? (
+                renderChapter(ctx)
+              ) : (
+                <div
+                  data-chapter-skeleton="true"
+                  aria-hidden="true"
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: 14,
+                    padding: "8px 0",
+                    animation: "skeletonPulse 1.1s ease-in-out infinite",
+                  }}
+                >
+                  <div style={{ height: 18, width: "70%", background: "rgba(255,255,255,0.05)", borderRadius: 6 }} />
+                  <div style={{ height: 14, width: "90%", background: "rgba(255,255,255,0.04)", borderRadius: 6 }} />
+                  <div style={{ height: 14, width: "85%", background: "rgba(255,255,255,0.04)", borderRadius: 6 }} />
+                  <div style={{ height: 120, width: "100%", background: "rgba(167,139,250,0.04)", borderRadius: 10, marginTop: 6 }} />
+                  <div style={{ height: 14, width: "80%", background: "rgba(255,255,255,0.04)", borderRadius: 6 }} />
+                  <div style={{ height: 14, width: "75%", background: "rgba(255,255,255,0.04)", borderRadius: 6 }} />
+                </div>
+              )}
+            </ErrorBoundary>
           </NavContext.Provider>
         </main>
 

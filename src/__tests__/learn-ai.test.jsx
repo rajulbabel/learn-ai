@@ -96,6 +96,24 @@ async function renderLearnAI({ mainBounds = { left: 200, right: 824 } } = {}) {
   return result;
 }
 
+describe("LearnAI initial paint", () => {
+  it("eager-imports the TOC chapter so ch=0 renders without an async chunk fetch", async () => {
+    const { readFileSync } = await import("fs");
+    const src = readFileSync("src/learn-ai.jsx", "utf-8");
+    // Static import of TOC means the home view paints in the same tick as the
+    // shell - no second paint waiting for a lazy chunk.
+    expect(src).toMatch(/import\s+TOC\s+from\s+["']\.\/chapters\/table-of-contents\/toc\.jsx["']/);
+  });
+
+  it("renders a skeleton inside <main> while the chapter chunk is loading", async () => {
+    const { readFileSync } = await import("fs");
+    const src = readFileSync("src/learn-ai.jsx", "utf-8");
+    // Deep links to lazy chapters need a placeholder so users don't see an
+    // empty <main> between shell mount and chunk arrival.
+    expect(src).toMatch(/data-chapter-skeleton/);
+  });
+});
+
 describe("LearnAI search bar", () => {
   it("renders a search button with aria-label matching visible text", async () => {
     await renderLearnAI();

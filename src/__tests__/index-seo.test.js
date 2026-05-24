@@ -42,4 +42,17 @@ describe("index.html static SEO body content", () => {
       expect(body, `body must mention "${t}"`).toMatch(new RegExp(t));
     }
   });
+
+  it("hides .seo-fallback visually so humans never see the pre-JS flash", () => {
+    // Fallback stays in DOM for crawlers (still asserted above). For human
+    // browsers we move it off-screen so the React shell paints first - no
+    // flash of unstyled SEO text before the app mounts.
+    const styleMatch = html.match(/<style>([\s\S]*?)<\/style>/);
+    expect(styleMatch, "<style> block required").toBeTruthy();
+    const css = styleMatch[1];
+    const rule = css.match(/\.seo-fallback\s*\{[^}]*\}/);
+    expect(rule, ".seo-fallback rule required").toBeTruthy();
+    expect(rule[0]).toMatch(/position:\s*absolute/);
+    expect(rule[0]).toMatch(/left:\s*-?\d{4,}px/);
+  });
 });

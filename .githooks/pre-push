@@ -20,7 +20,7 @@ ZERO=0000000000000000000000000000000000000000
 # "**" globs is a footgun: POSIX sh leaves them literal and git pathspec does
 # not expand "**" as recursive without ":(glob)" magic, so nested files
 # silently slip past the filter.
-PATHS="src/chapters src/shared src/config.js src/data/svg-descriptions.json public/models scripts/build-search-index.mjs scripts/embed-chunks.mjs scripts/llm-chunk.mjs"
+PATHS="src/chapters src/shared src/config.js src/data/svg-descriptions.json scripts/build-search-index.mjs scripts/llm-chunk.mjs"
 
 TRIGGER_SHAS=""
 
@@ -46,6 +46,11 @@ fi
 
 if ! command -v claude >/dev/null 2>&1; then
   printf "\033[31m[pre-push] claude CLI not found in PATH. Source changed; cannot rebuild search index.\033[0m\n"
+  exit 1
+fi
+
+if [ -z "$EMBED_API_URL" ]; then
+  printf "\033[31m[pre-push] EMBED_API_URL not set. Rebuild needs the Cloudflare Worker URL.\n  Run: EMBED_API_URL=https://<your-worker>.workers.dev git push\033[0m\n"
   exit 1
 fi
 

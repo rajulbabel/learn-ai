@@ -1,0 +1,7 @@
+name = "learn-ai-embed"
+main = "worker.js"
+compatibility_date = "2025-01-01"
+
+# Binds env.AI to Cloudflare Workers AI. Free tier covers ~10k requests/day.
+[ai]
+binding = "AI"

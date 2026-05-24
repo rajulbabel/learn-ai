@@ -107,6 +107,13 @@ export async function initSearch() {
 
 const BASE = (typeof import.meta !== "undefined" && import.meta.env && import.meta.env.BASE_URL) || "/learn-ai/";
 
+// Optional Cloudflare Worker that hosts BGE-base via Workers AI. When this is
+// set, the browser skips the in-page ONNX worker entirely (no 99 MB model
+// download, no transformers.js bundle) and embeds queries over the network
+// instead. Falls back to the local worker when unset.
+const REMOTE_EMBED_URL =
+  typeof import.meta !== "undefined" && import.meta.env ? import.meta.env.VITE_EMBED_API_URL || "" : "";
+
 /** Idle-time semantic pre-fetch. Fires every fetch in parallel. */
 export async function prefetchSearch() {
   if (semanticReady || semanticLoading) return;
@@ -116,8 +123,8 @@ export async function prefetchSearch() {
     // Kick off every independent fetch at the same tick so the network does
     // them in parallel instead of waterfalling. Previous code awaited
     // model-meta -> manifest -> embeddings.bin -> worker init (which then
-    // fetched the 99 MB ONNX). Now all five start together; only the steps
-    // with real data dependencies wait on their inputs.
+    // fetched the 99 MB ONNX). Now everything starts together; only the
+    // steps with real data dependencies wait on their inputs.
     const textPromise = initSearch();
     const metaPromise = fetch(`${BASE}models/bge-base-en-v1.5-q4/model-meta.json`).then((r) => {
       if (!r.ok) throw new Error("model-meta.json missing");
@@ -125,40 +132,48 @@ export async function prefetchSearch() {
     });
     const manifestPromise = import("./data/embeddings-manifest.json").then((m) => m.default || m);
 
-    // Worker init only needs model-meta (for dtype). Start it the moment
-    // meta lands so the worker's ONNX model fetch runs in parallel with the
-    // main-thread bin fetch.
-    const workerReadyPromise = metaPromise.then(
-      (meta) =>
-        new Promise((resolve, reject) => {
+    // Embedding source: remote Cloudflare Worker when VITE_EMBED_API_URL is
+    // set (no 99 MB model download, no transformers.js bundle), otherwise
+    // the in-page Web Worker that owns the local ONNX model.
+    const embedderReadyPromise = REMOTE_EMBED_URL
+      ? metaPromise.then((meta) => {
           modelMeta = meta;
           dim = meta.dim;
-          const w = ensureWorker();
-          const onMsg = (e) => {
-            const msg = e.data || {};
-            if (msg.type === "ready") {
-              w.removeEventListener("message", onMsg);
-              resolve();
-            } else if (msg.type === "init-error") {
-              w.removeEventListener("message", onMsg);
-              reject(new Error(msg.message));
-            }
-          };
-          w.addEventListener("message", onMsg);
-          w.postMessage({
-            type: "init",
-            modelName: "bge-base-en-v1.5-q4",
-            dtype: meta.dtype,
-            basePath: `${BASE}models/`,
-            queryInstruction: meta.queryInstruction || "",
-          });
-        }),
-    );
+          // No model to load; the remote endpoint is always "ready". Skip the
+          // worker init entirely so transformers.js stays out of the bundle
+          // path.
+        })
+      : metaPromise.then(
+          (meta) =>
+            new Promise((resolve, reject) => {
+              modelMeta = meta;
+              dim = meta.dim;
+              const w = ensureWorker();
+              const onMsg = (e) => {
+                const msg = e.data || {};
+                if (msg.type === "ready") {
+                  w.removeEventListener("message", onMsg);
+                  resolve();
+                } else if (msg.type === "init-error") {
+                  w.removeEventListener("message", onMsg);
+                  reject(new Error(msg.message));
+                }
+              };
+              w.addEventListener("message", onMsg);
+              w.postMessage({
+                type: "init",
+                modelName: "bge-base-en-v1.5-q4",
+                dtype: meta.dtype,
+                basePath: `${BASE}models/`,
+                queryInstruction: meta.queryInstruction || "",
+              });
+            }),
+        );
 
     // Bin needs meta (for cache-key checksum) and manifest (for fingerprint).
     // Both promises are already in flight; this just joins them, then either
     // returns the cached bin or fetches embeddings.bin in parallel with the
-    // worker's ONNX model fetch.
+    // model load (or the remote endpoint warmup, when configured).
     const binPromise = Promise.all([metaPromise, manifestPromise]).then(async ([meta, mf]) => {
       manifest = mf;
       const cacheKey = `${meta.checksum}:${manifestFingerprint(mf)}`;
@@ -172,7 +187,7 @@ export async function prefetchSearch() {
       cacheSearchAssets(cacheKey, { bin, manifest }).catch(() => {});
     });
 
-    await Promise.all([textPromise, workerReadyPromise, binPromise]);
+    await Promise.all([textPromise, embedderReadyPromise, binPromise]);
     loadProgress = 100;
     semanticReady = true;
     semanticLoading = false;
@@ -198,10 +213,22 @@ function int8Cosine(qFloat, qNorm, vecOffset, vecScale) {
 }
 
 async function embedQuery(text) {
+  const prefixed = (modelMeta?.queryInstruction || "") + text;
+  if (REMOTE_EMBED_URL) {
+    const res = await fetch(REMOTE_EMBED_URL, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ text: prefixed }),
+    });
+    if (!res.ok) return null;
+    const data = await res.json();
+    return Array.isArray(data?.vector) ? data.vector : null;
+  }
   if (!worker || !workerReady) return null;
   const id = nextEmbedId++;
   return new Promise((resolve, reject) => {
     pendingEmbeds.set(id, { resolve, reject });
+    // The worker prefixes the queryInstruction itself; send the raw text.
     worker.postMessage({ type: "embed", id, text });
   });
 }

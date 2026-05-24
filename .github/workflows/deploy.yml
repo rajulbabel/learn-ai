@@ -41,6 +41,12 @@ jobs:
 
       - name: Build
         run: npm run build
+        env:
+          # Repo Variable VITE_EMBED_API_URL = the deployed Cloudflare Worker
+          # URL (e.g. https://learn-ai-embed.<acct>.workers.dev). When set,
+          # the site skips the in-page ONNX worker entirely and routes embed
+          # calls through Workers AI. Unset = keep the local fallback.
+          VITE_EMBED_API_URL: ${{ vars.VITE_EMBED_API_URL }}
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v5

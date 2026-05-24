@@ -1,9 +1,26 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 
+const BASE = "/learn-ai/";
+
+const baseRedirect = {
+  name: "base-trailing-slash-redirect",
+  configurePreviewServer(server) {
+    const bare = BASE.replace(/\/$/, "");
+    server.middlewares.use((req, res, next) => {
+      if (req.url === bare) {
+        res.writeHead(301, { Location: BASE });
+        res.end();
+        return;
+      }
+      next();
+    });
+  },
+};
+
 export default defineConfig({
-  plugins: [react()],
-  base: "/learn-ai/",
+  plugins: [react(), baseRedirect],
+  base: BASE,
   build: {
     rollupOptions: {
       output: {

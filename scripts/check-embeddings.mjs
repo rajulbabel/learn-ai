@@ -23,24 +23,21 @@ try {
   const binSize = statSync(BIN_PATH).size;
 
   if (!Array.isArray(chunks) || chunks.length === 0) fail(`${CHUNKS_PATH} has 0 chunks.`);
-  if (!Array.isArray(manifest.vectors)) fail(`${MANIFEST_PATH} missing 'vectors'.`);
+  if (!Array.isArray(manifest.chunkIds)) fail(`${MANIFEST_PATH} missing 'chunkIds'.`);
   if (typeof manifest.dim !== "number") fail(`${MANIFEST_PATH} missing 'dim'.`);
   if (typeof manifest.count !== "number") fail(`${MANIFEST_PATH} missing 'count'.`);
-  if (manifest.count !== manifest.vectors.length)
-    fail(`Manifest count (${manifest.count}) != vectors length (${manifest.vectors.length}).`);
-  const expectedBinSize = manifest.count * (manifest.dim + 4);
+
+  // Bin = [count × (dim + 4) vec rows][count × 2 Uint16 chunkIdx].
+  const expectedBinSize = manifest.count * (manifest.dim + 4) + manifest.count * 2;
   if (binSize !== expectedBinSize)
-    fail(`Bin size (${binSize}) != count × (dim + 4) (${expectedBinSize}).`);
+    fail(`Bin size (${binSize}) != count × (dim + 4) + count × 2 (${expectedBinSize}).`);
 
   const chunkIds = new Set(chunks.map((c) => c.id));
-  const covered = new Set(manifest.vectors.map((v) => v.chunkId));
   for (const id of chunkIds) {
-    if (!covered.has(id)) fail(`Chunk id ${id} has no vectors in manifest.`);
+    if (!manifest.chunkIds.includes(id)) fail(`Chunk id ${id} has no vectors in manifest.`);
   }
-  for (const v of manifest.vectors) {
-    if (!chunkIds.has(v.chunkId)) fail(`Manifest vector references unknown chunk id ${v.chunkId}.`);
-    if (v.vectorIndex < 0 || v.vectorIndex >= manifest.count)
-      fail(`Vector index ${v.vectorIndex} out of bounds.`);
+  for (const id of manifest.chunkIds) {
+    if (!chunkIds.has(id)) fail(`Manifest references unknown chunk id ${id}.`);
   }
 
   console.log(

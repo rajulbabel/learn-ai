@@ -24,7 +24,7 @@ import { readFileSync, writeFileSync, mkdirSync, renameSync } from "fs";
 import { createHash } from "crypto";
 import { join } from "path";
 
-const CHUNKS_PATH = "src/data/chunks.json";
+const CHUNKS_PATH = "src/data/chunks-full.json";
 const BIN_PATH = "src/data/embeddings.bin";
 const MANIFEST_PATH = "src/data/embeddings-manifest.json";
 const META_PATH = "public/models/bge-base-en-v1.5-q4/model-meta.json";
@@ -165,22 +165,31 @@ export async function runRemoteEmbed({ rootDir = process.cwd(), url = DEFAULT_EM
 
   const vectors = await embedAll(url, desired, log);
 
-  // Bin layout (per vector row, repeats `count` times):
-  //   [int8 × DIM bytes][float32 scale, little-endian, 4 bytes]
-  // Total row stride = VEC_STRIDE = DIM + 4. Storing the scale inline lets
-  // the manifest drop the per-vector scale field, shrinking the JSON from
-  // ~4.8 MB to ~700 KB. cosine() reads the scale directly from the bin.
-  const bin = Buffer.alloc(desired.length * VEC_STRIDE);
-  const newVectors = [];
+  // Unique chunk ids in stable encounter order (smaller than per-vector array).
+  // 1844 strings ≈ 35 KB vs ~1.6 MB previously.
+  const chunkIds = [];
+  const chunkIdToIdx = new Map();
+  for (const d of desired) {
+    if (!chunkIdToIdx.has(d.chunkId)) {
+      chunkIdToIdx.set(d.chunkId, chunkIds.length);
+      chunkIds.push(d.chunkId);
+    }
+  }
+
+  // Bin layout:
+  //   [vector rows]  → `count` rows of [int8 × DIM][float32 scale]
+  //   [chunkIdx]     → Uint16 × count, little-endian, mapping vectorIndex → chunkIds[i]
+  // Packing the chunkIdx into the bin lets the manifest collapse to a header
+  // plus the unique chunkIds list (~35 KB), down from ~1.6 MB.
+  const vecBytes = desired.length * VEC_STRIDE;
+  const idxBytes = desired.length * 2;
+  const bin = Buffer.alloc(vecBytes + idxBytes);
   for (let i = 0; i < desired.length; i++) {
     const { bytes, scale } = quantizeInt8(vectors[i]);
     const rowBase = i * VEC_STRIDE;
     Buffer.from(bytes.buffer, bytes.byteOffset, bytes.byteLength).copy(bin, rowBase);
     bin.writeFloatLE(scale, rowBase + DIM);
-    newVectors.push({
-      chunkId: desired[i].chunkId,
-      vectorIndex: i,
-    });
+    bin.writeUInt16LE(chunkIdToIdx.get(desired[i].chunkId), vecBytes + i * 2);
   }
 
   const checksum = `cf256:${sha256_16(REMOTE_MODEL_ID + ":" + DIM)}`;
@@ -188,7 +197,7 @@ export async function runRemoteEmbed({ rootDir = process.cwd(), url = DEFAULT_EM
     modelChecksum: checksum,
     dim: DIM,
     count: desired.length,
-    vectors: newVectors,
+    chunkIds,
   };
 
   const newMeta = {
@@ -204,7 +213,7 @@ export async function runRemoteEmbed({ rootDir = process.cwd(), url = DEFAULT_EM
   atomicWrite(join(rootDir, BIN_PATH), bin);
   atomicWrite(join(rootDir, MANIFEST_PATH), JSON.stringify(newManifest));
   atomicWrite(join(rootDir, META_PATH), JSON.stringify(newMeta, null, 2));
-  log(`Wrote ${BIN_PATH} (${bin.byteLength} bytes), ${MANIFEST_PATH} (${newVectors.length} vectors), ${META_PATH}.`);
+  log(`Wrote ${BIN_PATH} (${bin.byteLength} bytes), ${MANIFEST_PATH} (${desired.length} vectors), ${META_PATH}.`);
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) {

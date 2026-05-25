@@ -34,18 +34,9 @@ describe("check-embeddings (new format)", () => {
         modelChecksum: "abc",
         dim: 4,
         count: 8,
-        vectors: Array(8)
-          .fill(0)
-          .map((_, i) => ({
-            chunkId: "a",
-            reprKind: i === 0 ? "text" : "query",
-            reprIndex: i,
-            contentHash: "h",
-            vectorIndex: i,
-            scale: 0.1,
-          })),
+        chunkIds: ["a"],
       },
-      bin: Buffer.alloc(8 * (4 + 4)),
+      bin: Buffer.alloc(8 * (4 + 4) + 8 * 2),
     });
     expect(() => execSync(`node scripts/check-embeddings.mjs`, { cwd: dir })).not.toThrow();
     rmSync(dir, { recursive: true, force: true });
@@ -69,18 +60,9 @@ describe("check-embeddings (new format)", () => {
         modelChecksum: "abc",
         dim: 4,
         count: 8,
-        vectors: Array(8)
-          .fill(0)
-          .map((_, i) => ({
-            chunkId: "a",
-            reprKind: "query",
-            reprIndex: i,
-            contentHash: "h",
-            vectorIndex: i,
-            scale: 0.1,
-          })),
+        chunkIds: ["a"],
       },
-      bin: Buffer.alloc(8 * (4 + 4) - 1),
+      bin: Buffer.alloc(8 * (4 + 4) + 8 * 2 - 1),
     });
     expect(() => execSync(`node scripts/check-embeddings.mjs`, { cwd: dir })).toThrow();
     rmSync(dir, { recursive: true, force: true });
@@ -114,9 +96,9 @@ describe("check-embeddings (new format)", () => {
         modelChecksum: "abc",
         dim: 4,
         count: 1,
-        vectors: [{ chunkId: "a", reprKind: "text", reprIndex: 0, contentHash: "h", vectorIndex: 0, scale: 0.1 }],
+        chunkIds: ["a"],
       },
-      bin: Buffer.alloc(1 * (4 + 4)),
+      bin: Buffer.alloc(1 * (4 + 4) + 1 * 2),
     });
     expect(() => execSync(`node scripts/check-embeddings.mjs`, { cwd: dir })).toThrow();
     rmSync(dir, { recursive: true, force: true });

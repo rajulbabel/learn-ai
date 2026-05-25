@@ -1,13 +1,18 @@
 import { describe, it, expect } from "vitest";
-import chunks from "../data/chunks.json";
+import { readFileSync } from "fs";
 
-describe("chunks.json schema", () => {
+// chunks.json = runtime-trimmed shape (no queries, no chapterTitle).
+// chunks-full.json = build-time source with everything, used by embed-chunks-remote.
+const chunks = JSON.parse(readFileSync("src/data/chunks.json", "utf-8"));
+const full = JSON.parse(readFileSync("src/data/chunks-full.json", "utf-8"));
+
+describe("chunks.json (runtime) schema", () => {
   it("has at least 500 chunks (sanity)", () => {
     expect(chunks.length).toBeGreaterThan(500);
   });
 
-  it("every chunk has the required fields with correct types", () => {
-    const required = ["id", "chapterSlug", "chapterTitle", "sub", "kind", "text", "summary", "queries", "terms"];
+  it("every chunk has the runtime fields, none of the build-only ones", () => {
+    const required = ["id", "chapterSlug", "sub", "kind", "text", "summary", "terms"];
     for (const c of chunks) {
       for (const f of required) {
         expect(c[f] !== undefined, `chunk ${c.id} missing ${f}`).toBe(true);
@@ -19,15 +24,27 @@ describe("chunks.json schema", () => {
       expect(["concept", "formula", "example", "diagram", "summary"]).toContain(c.kind);
       expect(c.text.length).toBeGreaterThan(10);
       expect(c.summary.length).toBeGreaterThan(5);
-      expect(Array.isArray(c.queries)).toBe(true);
-      expect(c.queries.length).toBeGreaterThanOrEqual(10);
       expect(Array.isArray(c.terms)).toBe(true);
       expect(c.terms.length).toBeGreaterThanOrEqual(1);
+      // Build-only fields stripped at runtime
+      expect(c.queries).toBeUndefined();
+      expect(c.chapterTitle).toBeUndefined();
     }
   });
 
   it("ids are unique", () => {
     const ids = chunks.map((c) => c.id);
     expect(new Set(ids).size).toBe(ids.length);
+  });
+});
+
+describe("chunks-full.json (build-time) schema", () => {
+  it("includes queries + chapterTitle for every chunk", () => {
+    expect(full.length).toBe(chunks.length);
+    for (const c of full) {
+      expect(typeof c.chapterTitle).toBe("string");
+      expect(Array.isArray(c.queries)).toBe(true);
+      expect(c.queries.length).toBeGreaterThanOrEqual(10);
+    }
   });
 });

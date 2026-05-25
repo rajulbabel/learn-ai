@@ -11,7 +11,7 @@ const RELEVANCE_THRESHOLD = 0.15;
  * search. Text results still update synchronously per keystroke; this only
  * gates the async remote-embed call. Tune for cost vs latency.
  */
-const SEARCH_DEBOUNCE_MS = 400;
+const SEARCH_DEBOUNCE_MS = 300;
 
 /**
  * Filter results by relative score and compute a normalized 0-10 score.

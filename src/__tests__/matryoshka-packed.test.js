@@ -8,21 +8,17 @@ describe("Matryoshka 256-dim corpus with packed scales", () => {
     expect(meta.checksum).toMatch(/^cf256:/);
   });
 
-  it("manifest is small (no per-vector scale field)", () => {
+  it("manifest collapses to a header + unique chunkIds (no per-vector array)", () => {
     const manifest = JSON.parse(readFileSync("src/data/embeddings-manifest.json", "utf-8"));
     expect(manifest.dim).toBe(256);
-    // After moving scales into the bin, the manifest stores only
-    // (chunkId, vectorIndex) per vector. No scale, no contentHash.
-    for (const v of manifest.vectors) {
-      expect(v).not.toHaveProperty("scale");
-      expect(v).not.toHaveProperty("contentHash");
-    }
+    expect(manifest).not.toHaveProperty("vectors");
+    expect(Array.isArray(manifest.chunkIds)).toBe(true);
   });
 
-  it("bin size = count × (dim + 4)  (int8 vec + float32 scale per row)", () => {
+  it("bin size = count × (dim + 4) + count × 2  (vec rows + trailing chunkIdx)", () => {
     const manifest = JSON.parse(readFileSync("src/data/embeddings-manifest.json", "utf-8"));
     const binSize = statSync("src/data/embeddings.bin").size;
-    expect(binSize).toBe(manifest.count * (manifest.dim + 4));
+    expect(binSize).toBe(manifest.count * (manifest.dim + 4) + manifest.count * 2);
   });
 });
 
@@ -47,9 +43,10 @@ describe("search.js handles packed bin + matryoshka", () => {
 });
 
 describe("check-embeddings guard matches packed bin layout", () => {
-  it("uses (dim + 4) when computing expected bin size", () => {
+  it("uses (dim + 4) + 2 when computing expected bin size", () => {
     if (!existsSync("scripts/check-embeddings.mjs")) return;
     const src = readFileSync("scripts/check-embeddings.mjs", "utf-8");
     expect(src).toMatch(/dim\s*\+\s*4/);
+    expect(src).toMatch(/count\s*\*\s*2/);
   });
 });

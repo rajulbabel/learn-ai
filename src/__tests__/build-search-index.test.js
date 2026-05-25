@@ -113,7 +113,7 @@ describe("build-search-index", () => {
       sectionNames: { 1: "S1" },
     });
 
-    const chunksJson = JSON.parse(readFileSync(join(workDir, "src", "data", "chunks.json"), "utf-8"));
+    const chunksJson = JSON.parse(readFileSync(join(workDir, "src", "data", "chunks-full.json"), "utf-8"));
     expect(chunksJson).toHaveLength(2);
     expect(chunksJson[0].sub).toBe(0);
     expect(chunksJson[1].sub).toBe(1);
@@ -134,7 +134,7 @@ describe("build-search-index", () => {
       ],
       sectionNames: { 1: "S1" },
     }).then(() => {
-      const again = JSON.parse(readFileSync(join(workDir, "src", "data", "chunks.json"), "utf-8"));
+      const again = JSON.parse(readFileSync(join(workDir, "src", "data", "chunks-full.json"), "utf-8"));
       expect(again[0].id).toBe(id1);
     });
   });
@@ -204,7 +204,7 @@ describe("build-search-index", () => {
       sectionNames: { 1: "S1" },
       log: () => {},
     });
-    const chunksJson = JSON.parse(readFileSync(join(workDir, "src", "data", "chunks.json"), "utf-8"));
+    const chunksJson = JSON.parse(readFileSync(join(workDir, "src", "data", "chunks-full.json"), "utf-8"));
     expect(chunksJson).toHaveLength(1);
     expect(mockChunk).toHaveBeenCalledOnce();
   });
@@ -237,7 +237,7 @@ describe("build-search-index", () => {
       sectionNames: { 1: "S1" },
     });
 
-    const out = JSON.parse(readFileSync(join(workDir, "src", "data", "chunks.json"), "utf-8"));
+    const out = JSON.parse(readFileSync(join(workDir, "src", "data", "chunks-full.json"), "utf-8"));
     expect(out).toHaveLength(1);
     expect(out[0].chapterSlug).toBe("neural-foundations/what-is-nn");
     expect(out[0]).not.toHaveProperty("chapterId");
@@ -268,7 +268,7 @@ describe("build-search-index", () => {
       ],
       sectionNames: { 1: "S1" },
     });
-    const firstId = JSON.parse(readFileSync(join(workDir, "src", "data", "chunks.json"), "utf-8"))[0].id;
+    const firstId = JSON.parse(readFileSync(join(workDir, "src", "data", "chunks-full.json"), "utf-8"))[0].id;
 
     // Same content, renumbered ID + different section, same slug.
     mockChunk.mockResolvedValue({
@@ -294,7 +294,7 @@ describe("build-search-index", () => {
       ],
       sectionNames: { 9: "S9" },
     });
-    const secondId = JSON.parse(readFileSync(join(workDir, "src", "data", "chunks.json"), "utf-8"))[0].id;
+    const secondId = JSON.parse(readFileSync(join(workDir, "src", "data", "chunks-full.json"), "utf-8"))[0].id;
 
     expect(secondId).toBe(firstId);
   });
@@ -327,7 +327,7 @@ describe("build-search-index", () => {
       sectionNames: { 8: "Transformer Input Pipeline" },
     });
 
-    const out = JSON.parse(readFileSync(join(workDir, "src", "data", "chunks.json"), "utf-8"));
+    const out = JSON.parse(readFileSync(join(workDir, "src", "data", "chunks-full.json"), "utf-8"));
     expect(out).toHaveLength(1);
     expect(out[0].text).not.toMatch(/[Cc]hapter \d+\.\d+/);
     expect(out[0].summary).not.toMatch(/[Cc]hapter \d+\.\d+/);
@@ -376,7 +376,7 @@ describe("build-search-index", () => {
       sectionNames: { 8: "Transformer Input Pipeline" },
     });
 
-    const out = JSON.parse(readFileSync(join(workDir, "src", "data", "chunks.json"), "utf-8"));
+    const out = JSON.parse(readFileSync(join(workDir, "src", "data", "chunks-full.json"), "utf-8"));
     for (const q of out[0].queries) {
       expect(q).not.toMatch(/[Cc]hapter \d+\.\d+/);
     }
@@ -413,7 +413,7 @@ describe("build-search-index", () => {
       sectionNames: { 8: "S" },
     });
 
-    const out = JSON.parse(readFileSync(join(workDir, "src", "data", "chunks.json"), "utf-8"));
+    const out = JSON.parse(readFileSync(join(workDir, "src", "data", "chunks-full.json"), "utf-8"));
     for (const t of out[0].terms) {
       expect(t).not.toMatch(/[Cc]hapter \d+\.\d+/);
     }
@@ -446,7 +446,7 @@ describe("build-search-index", () => {
       sectionNames: { 1: "S1", 2: "S2" },
     });
 
-    const out = JSON.parse(readFileSync(join(workDir, "src", "data", "chunks.json"), "utf-8"));
+    const out = JSON.parse(readFileSync(join(workDir, "src", "data", "chunks-full.json"), "utf-8"));
     // After sort: section 1 (chapter 1.2) comes first, then its subs in order, then 2.1.
     expect(out.map((c) => c.text)).toEqual(["C1A", "C1B", "C2"]);
   });

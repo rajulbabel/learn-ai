@@ -19,6 +19,7 @@ import { join } from "path";
 import { chunkSection } from "./llm-chunk.mjs";
 
 const CHUNKS_PATH = "src/data/chunks.json";
+const CHUNKS_FULL_PATH = "src/data/chunks-full.json";
 const CACHE_PATH = "src/data/chunk-cache.json";
 const SVG_PATH = "src/data/svg-descriptions.json";
 const CHAPTERS_DIR = "src/chapters";
@@ -178,9 +179,17 @@ export async function runBuild({ rootDir = process.cwd(), chapters, sectionNames
   });
 
   mkdirSync(join(rootDir, "src/data"), { recursive: true });
-  atomicWrite(chunksPath, JSON.stringify(all, null, 2));
+  // chunks-full.json: complete shape including queries + chapterTitle, used
+  // by the embed script and as the cache-friendly source of truth.
+  const fullPath = join(rootDir, CHUNKS_FULL_PATH);
+  atomicWrite(fullPath, JSON.stringify(all, null, 2));
+  // chunks.json (deployed): drop build-only fields. `queries` are already
+  // baked into the embeddings; `chapterTitle` is derivable from chapterSlug
+  // via src/config.js at runtime.
+  const runtime = all.map(({ queries, chapterTitle, ...rest }) => rest);
+  atomicWrite(chunksPath, JSON.stringify(runtime, null, 2));
   atomicWrite(cachePath, JSON.stringify(cache, null, 2));
-  log(`Wrote ${chunksPath} (${all.length} chunks)`);
+  log(`Wrote ${chunksPath} (${runtime.length} chunks, runtime shape) + ${CHUNKS_FULL_PATH}`);
   return all;
 }
 

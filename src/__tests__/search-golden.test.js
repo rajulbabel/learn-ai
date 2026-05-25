@@ -1,5 +1,9 @@
 import { describe, it, expect } from "vitest";
-import chunks from "../data/chunks.json";
+import { readFileSync } from "fs";
+
+// chunks.json is the runtime-trimmed shape; queries live in chunks-full.json
+// (used by the embed script). Read both so the schema test covers both.
+const chunks = JSON.parse(readFileSync("src/data/chunks-full.json", "utf-8"));
 
 describe("search index basics", () => {
   it("includes every chapter ID from config (except TOC)", async () => {

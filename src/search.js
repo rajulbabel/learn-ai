@@ -20,10 +20,8 @@ const chapterBySlug = new Map(chapters.map((c) => [c.file, c]));
 // checksum it forms the IndexedDB cache key for embeddings.bin so the cache
 // invalidates automatically whenever the embedding set changes between deploys.
 function manifestFingerprint(m) {
-  const vs = m.vectors;
-  const first = vs[0].chunkId;
-  const last = vs[vs.length - 1].chunkId;
-  return `${m.count}-${first}-${last}`;
+  const ids = m.chunkIds;
+  return `${m.count}-${ids[0]}-${ids[ids.length - 1]}`;
 }
 
 let miniSearch = null;
@@ -32,6 +30,7 @@ let chunkById = new Map();
 let manifest = null;
 let bin = null; // Uint8Array
 let binView = null; // DataView over bin for reading the packed float32 scale
+let chunkIdxView = null; // Uint16Array view over the bin's trailing chunkIdx region
 let dim = 0;
 let vecStride = 0; // bytes per vector row in the bin: dim + 4 (float32 scale)
 let modelMeta = null;
@@ -59,7 +58,13 @@ export async function initSearch() {
     console.warn("[search] chunks.json missing - run npm run search:build");
     return;
   }
-  chunks = Array.isArray(chunkData) ? chunkData : [];
+  // Runtime chunks.json no longer ships chapterTitle (derivable from
+  // chapterSlug). Inject it from config so MiniSearch can still index +
+  // boost the title field, and so result shaping has a title to display.
+  chunks = (Array.isArray(chunkData) ? chunkData : []).map((c) => ({
+    ...c,
+    chapterTitle: chapterBySlug.get(c.chapterSlug)?.title || "",
+  }));
   chunkById = new Map(chunks.map((c) => [c.id, c]));
 
   miniSearch = new MiniSearch({
@@ -120,8 +125,11 @@ export async function prefetchSearch() {
         cacheSearchAssets(cacheKey, { bin, manifest }).catch(() => {});
       }
       // DataView lets us read the little-endian float32 scale that sits
-      // right after the int8 vector in each row.
+      // right after the int8 vector in each row. The trailing Uint16
+      // chunkIdx region maps vectorIndex -> manifest.chunkIds[i].
       binView = new DataView(bin.buffer, bin.byteOffset, bin.byteLength);
+      const vecBytes = manifest.count * vecStride;
+      chunkIdxView = new Uint16Array(bin.buffer, bin.byteOffset + vecBytes, manifest.count);
     });
 
     await Promise.all([textPromise, setMetaPromise, binPromise]);
@@ -177,11 +185,13 @@ function vectorSearchMaxSim(qFloat, topK = 30) {
   for (const x of qFloat) qNorm += x * x;
   qNorm = Math.sqrt(qNorm);
   const best = new Map();
-  for (const v of manifest.vectors) {
-    const offset = v.vectorIndex * vecStride;
+  const { count, chunkIds } = manifest;
+  for (let i = 0; i < count; i++) {
+    const offset = i * vecStride;
     const s = int8Cosine(qFloat, qNorm, offset);
-    const cur = best.get(v.chunkId);
-    if (cur === undefined || s > cur) best.set(v.chunkId, s);
+    const chunkId = chunkIds[chunkIdxView[i]];
+    const cur = best.get(chunkId);
+    if (cur === undefined || s > cur) best.set(chunkId, s);
   }
   const ranked = [...best.entries()]
     .map(([chunkId, score]) => ({ chunkId, score }))

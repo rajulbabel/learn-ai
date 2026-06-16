@@ -313,6 +313,7 @@ export default function LearnAI() {
       prevChRef.current = parsed.ch;
       setCh(parsed.ch);
       setSub(parsed.sub);
+      // The reset effect is suppressed above, so clear any stale TOC expansion here.
       setExpanded(null);
       window.scrollTo({ top: 0 });
     } else {

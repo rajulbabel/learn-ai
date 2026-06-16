@@ -20,7 +20,6 @@ describe("useUrlSync", () => {
   });
 
   afterEach(() => {
-    expect(pushSpy).not.toHaveBeenCalled();
     vi.restoreAllMocks();
   });
 
@@ -55,5 +54,23 @@ describe("useUrlSync", () => {
     replaceSpy.mockClear();
     render(<Probe ch={0} sub={0} expanded={null} />);
     expect(replaceSpy).not.toHaveBeenCalled();
+  });
+
+  it("uses pushState for navigations after the first sync", () => {
+    const idx = chapters.findIndex((c) => c.file === "neural-foundations/what-is-nn");
+    const { rerender } = render(<Probe ch={0} sub={0} expanded={null} />);
+    // First sync at bare URL matches -> no write, but firstSync flips to false.
+    replaceSpy.mockClear();
+    pushSpy.mockClear();
+    rerender(<Probe ch={idx} sub={0} expanded={null} />);
+    expect(pushSpy).toHaveBeenCalledWith(null, "", "/learn-ai/neural-foundations/what-is-nn");
+    expect(replaceSpy).not.toHaveBeenCalled();
+  });
+
+  it("uses replaceState (not pushState) for the very first sync", () => {
+    const idx = chapters.findIndex((c) => c.file === "neural-foundations/what-is-nn");
+    render(<Probe ch={idx} sub={0} expanded={null} />);
+    expect(replaceSpy).toHaveBeenCalledWith(null, "", "/learn-ai/neural-foundations/what-is-nn");
+    expect(pushSpy).not.toHaveBeenCalled();
   });
 });

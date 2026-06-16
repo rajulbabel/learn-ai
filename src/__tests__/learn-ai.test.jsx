@@ -655,4 +655,29 @@ describe("URL routing - back/forward (popstate)", () => {
     // bare URL. The path staying put proves expansion survived and no loop fired.
     await waitFor(() => expect(window.location.pathname).toBe("/learn-ai/transformers/attention"));
   });
+
+  it("popstate from one chapter to another renders the destination chapter", async () => {
+    window.history.replaceState(null, "", "/learn-ai/neural-foundations/what-is-nn");
+    await renderLearnAI();
+    await screen.findByText("WhatIsNN");
+    act(() => {
+      window.history.replaceState(null, "", "/learn-ai/neural-foundations/inside-neuron");
+      window.dispatchEvent(new PopStateEvent("popstate"));
+    });
+    // Chapter -> chapter via popstate: destination renders and the URL is not
+    // overwritten (prevChRef pre-sync keeps the reset effect a no-op).
+    expect(await screen.findByTestId("inside-neuron")).toBeTruthy();
+    await waitFor(() => expect(window.location.pathname).toBe("/learn-ai/neural-foundations/inside-neuron"));
+  });
+
+  it("popstate to an invalid URL falls back to the TOC", async () => {
+    window.history.replaceState(null, "", "/learn-ai/neural-foundations/what-is-nn");
+    await renderLearnAI();
+    await screen.findByText("WhatIsNN");
+    act(() => {
+      window.history.replaceState(null, "", "/learn-ai/no/such/chapter");
+      window.dispatchEvent(new PopStateEvent("popstate"));
+    });
+    expect(await screen.findByText(/Table of Contents/i)).toBeTruthy();
+  });
 });

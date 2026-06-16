@@ -637,7 +637,9 @@ describe("URL routing - back/forward (popstate)", () => {
       window.history.replaceState(null, "", "/learn-ai/neural-foundations/what-is-nn");
       window.dispatchEvent(new PopStateEvent("popstate"));
     });
-    expect(await screen.findByText(/What is a Neural Network/i)).toBeTruthy();
+    // Assert on the active chapter's mock content ("WhatIsNN" is only rendered
+    // when what-is-nn is the active loaded chapter, not as a nav preview).
+    expect(await screen.findByText("WhatIsNN")).toBeTruthy();
   });
 
   it("popstate to a TOC section URL preserves expansion (no overwrite back to bare)", async () => {

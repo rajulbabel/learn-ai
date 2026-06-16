@@ -1,10 +1,15 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { render } from "@testing-library/react";
-import { useUrlSync } from "../url-sync.js";
+import { useUrlSync, usePopStateNav } from "../url-sync.js";
 import { chapters } from "../config.js";
 
 function Probe({ ch, sub, expanded }) {
   useUrlSync({ ch, sub, expanded });
+  return null;
+}
+
+function PopProbe({ onApply }) {
+  usePopStateNav(onApply);
   return null;
 }
 
@@ -72,5 +77,52 @@ describe("useUrlSync", () => {
     render(<Probe ch={idx} sub={0} expanded={null} />);
     expect(replaceSpy).toHaveBeenCalledWith(null, "", "/learn-ai/neural-foundations/what-is-nn");
     expect(pushSpy).not.toHaveBeenCalled();
+  });
+});
+
+describe("usePopStateNav", () => {
+  afterEach(() => {
+    window.history.replaceState(null, "", "/learn-ai/");
+    vi.restoreAllMocks();
+  });
+
+  function popAt(pathname) {
+    const apply = vi.fn();
+    window.history.replaceState(null, "", pathname);
+    render(<PopProbe onApply={apply} />);
+    window.dispatchEvent(new PopStateEvent("popstate"));
+    return apply;
+  }
+
+  it("parses a chapter URL on popstate", () => {
+    const idx = chapters.findIndex((c) => c.file === "neural-foundations/what-is-nn");
+    const apply = popAt("/learn-ai/neural-foundations/what-is-nn");
+    expect(apply).toHaveBeenCalledWith({ kind: "chapter", ch: idx, sub: 0 });
+  });
+
+  it("parses a chapter+sub URL on popstate", () => {
+    const idx = chapters.findIndex((c) => c.file === "neural-foundations/what-is-nn");
+    const apply = popAt("/learn-ai/neural-foundations/what-is-nn/2");
+    expect(apply).toHaveBeenCalledWith({ kind: "chapter", ch: idx, sub: 2 });
+  });
+
+  it("parses a TOC super URL on popstate", () => {
+    const apply = popAt("/learn-ai/transformers");
+    expect(apply).toHaveBeenCalledWith({ kind: "toc", super: "C", section: null });
+  });
+
+  it("parses a TOC super+section URL on popstate", () => {
+    const apply = popAt("/learn-ai/transformers/attention");
+    expect(apply).toHaveBeenCalledWith({ kind: "toc", super: "C", section: 10 });
+  });
+
+  it("parses the bare URL on popstate", () => {
+    const apply = popAt("/learn-ai/");
+    expect(apply).toHaveBeenCalledWith({ kind: "toc", super: null, section: null });
+  });
+
+  it("reports invalid for an unknown URL on popstate", () => {
+    const apply = popAt("/learn-ai/no/such/chapter");
+    expect(apply).toHaveBeenCalledWith({ kind: "invalid" });
   });
 });

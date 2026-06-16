@@ -26,4 +26,13 @@ describe("CLAUDE.md SEO / AEO sync rules", () => {
   it("keeps the Discoverability Sync Rules section header", () => {
     expect(md).toMatch(/Discoverability Sync Rules/);
   });
+
+  it("documents the freshness-date bump rule for both SEO and AEO", () => {
+    // Every shipped change must bump the SEO date (sitemap lastmod) AND the AEO
+    // dates (llms.txt "Last updated" + JSON-LD dateModified) to today.
+    expect(md).toMatch(/dateModified/);
+    expect(md.toLowerCase()).toMatch(/last updated/);
+    expect(md).toMatch(/llms\.txt/);
+    expect(md.toLowerCase()).toMatch(/every (change|push|shipped)|each (change|push)|on every/);
+  });
 });

@@ -429,7 +429,24 @@ files in the SAME commit. Apply automatically without asking the user.
 | Site goes from SPA to multi-page routing | `public/sitemap.xml` to list each new URL (one `<url>` block per route, each with its own `<lastmod>`) |
 | Author social links (LinkedIn, GitHub, Twitter, etc.) | `index.html` JSON-LD `sameAs` array, the static About / author section inside `#root` in `index.html`, the `<noscript>` block, `public/llms.txt` Author section, footer in `src/learn-ai.jsx` |
 | Any change to the static body content inside `#root` or `<noscript>` in `index.html` | Bump `<lastmod>` in `public/sitemap.xml` to today's date (YYYY-MM-DD) so Google recrawls |
-| Any push to `main` that changes user-visible content, chapter set, or site identity | Bump `<lastmod>` in `public/sitemap.xml` to today's date (YYYY-MM-DD) |
+| Any push to `main` that changes user-visible content, chapter set, or site identity | Bump ALL THREE freshness dates to today (see "Freshness dates" below): `<lastmod>` in `public/sitemap.xml`, `**Last updated:**` in `public/llms.txt`, and `dateModified` in the `index.html` JSON-LD |
+| ANY shipped change at all (content, code, config, fix, docs) | Bump ALL THREE freshness dates to today's date (YYYY-MM-DD) in `public/sitemap.xml` (`<lastmod>`), `public/llms.txt` (`**Last updated:**`), and `index.html` JSON-LD (`dateModified`) - SEO and AEO both reward freshness |
+
+### Freshness dates - bump on EVERY change (SEO + AEO)
+
+The site advertises freshness through three date fields. They MUST be kept in
+sync and bumped to today's date (`YYYY-MM-DD`) on **every** shipped change, no
+exceptions - apply automatically without asking the user:
+
+- **SEO:** `<lastmod>` in `public/sitemap.xml` - tells Google/Bing to recrawl.
+- **AEO:** `**Last updated:**` line in `public/llms.txt` - the freshness signal
+  LLM crawlers (ChatGPT, Claude, Gemini, Perplexity) read.
+- **SEO + AEO:** `"dateModified"` in the `LearningResource` JSON-LD block in
+  `index.html` - the schema.org freshness field both Google and LLMs consume.
+
+All three carry the SAME date. `src/__tests__/seo-freshness.test.js` asserts each
+field holds a valid ISO `YYYY-MM-DD` date, and
+`src/__tests__/claudemd-seo-rules.test.js` locks this rule in CLAUDE.md.
 
 ### Why the static `#root` fallback matters
 

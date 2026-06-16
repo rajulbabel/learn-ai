@@ -3,7 +3,7 @@ import { chapters, sectionNames, sectionColors, sections, superSections, C } fro
 import { T, ErrorBoundary, NavContext } from "./components.jsx";
 import { saveNav, loadNav } from "./nav-persistence.js";
 import { resolveInitialState } from "./url-routing.js";
-import { useUrlSync } from "./url-sync.js";
+import { useUrlSync, usePopStateNav } from "./url-sync.js";
 import TOC from "./chapters/table-of-contents/toc.jsx";
 
 // ── Lazy-loaded search: not loaded until search is opened ──
@@ -305,6 +305,28 @@ export default function LearnAI() {
       prevChRef.current = ch;
     }
   }, [ch]);
+
+  // Back/Forward: re-parse the URL into React state. Set prevChRef.current first so
+  // the chapter-change reset effect above no-ops and restored TOC expansion survives.
+  const applyHistoryState = useCallback((parsed) => {
+    if (parsed.kind === "chapter") {
+      prevChRef.current = parsed.ch;
+      setCh(parsed.ch);
+      setSub(parsed.sub);
+      setExpanded(null);
+      window.scrollTo({ top: 0 });
+    } else {
+      prevChRef.current = 0;
+      setCh(0);
+      setSub(0);
+      setExpanded(
+        parsed.kind === "toc" && parsed.super
+          ? { super: parsed.super, section: parsed.section }
+          : null,
+      );
+    }
+  }, []);
+  usePopStateNav(applyHistoryState);
 
   // Auto-scroll so the learner lands just above the newly revealed box.
   // We aim for the midpoint between the previous box's bottom and the new box's top to sit at

@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, afterEach, beforeEach } from "vitest";
-import { render, screen, fireEvent, cleanup, act } from "@testing-library/react";
+import { render, screen, fireEvent, cleanup, act, waitFor } from "@testing-library/react";
 import { chapters } from "../config.js";
 
 // Mock all dynamic imports so the component renders synchronously in tests
@@ -619,5 +619,38 @@ describe("URL routing - boot", () => {
     window.history.replaceState(null, "", "/learn-ai/no/such/chapter");
     await renderLearnAI();
     expect(await screen.findByText(/Table of Contents/i)).toBeTruthy();
+  });
+});
+
+describe("URL routing - back/forward (popstate)", () => {
+  beforeEach(async () => {
+    localStorage.clear();
+    window.history.replaceState(null, "", "/learn-ai/");
+    const navMod = await import("../nav-persistence.js");
+    navMod.loadNav.mockReturnValue(null);
+  });
+
+  it("popstate to a chapter URL renders that chapter", async () => {
+    await renderLearnAI();
+    await screen.findByText(/Table of Contents/i);
+    act(() => {
+      window.history.replaceState(null, "", "/learn-ai/neural-foundations/what-is-nn");
+      window.dispatchEvent(new PopStateEvent("popstate"));
+    });
+    expect(await screen.findByText(/What is a Neural Network/i)).toBeTruthy();
+  });
+
+  it("popstate to a TOC section URL preserves expansion (no overwrite back to bare)", async () => {
+    window.history.replaceState(null, "", "/learn-ai/neural-foundations/what-is-nn");
+    await renderLearnAI();
+    await screen.findByText(/What is a Neural Network/i);
+    act(() => {
+      window.history.replaceState(null, "", "/learn-ai/transformers/attention");
+      window.dispatchEvent(new PopStateEvent("popstate"));
+    });
+    await screen.findByText(/Table of Contents/i);
+    // If the chapter-change effect had wiped `expanded`, useUrlSync would push the
+    // bare URL. The path staying put proves expansion survived and no loop fired.
+    await waitFor(() => expect(window.location.pathname).toBe("/learn-ai/transformers/attention"));
   });
 });

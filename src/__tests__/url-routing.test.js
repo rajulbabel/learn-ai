@@ -200,3 +200,18 @@ describe("resolveInitialState", () => {
     });
   });
 });
+
+describe("round-trip invariant", () => {
+  it("buildPath(parsePath(url)) === url for every URL shape", () => {
+    const urls = [
+      BASE_PATH,
+      `${BASE_PATH}neural-foundations/what-is-nn`,
+      `${BASE_PATH}neural-foundations/what-is-nn/2`,
+      `${BASE_PATH}transformers`,
+      `${BASE_PATH}transformers/attention`,
+    ];
+    for (const url of urls) {
+      expect(buildPath(parsePath(url, cfg), cfg)).toBe(url);
+    }
+  });
+});

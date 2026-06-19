@@ -189,14 +189,14 @@ export default function MemoryTaxonomy(ctx) {
           </T>
 
           <div style={{ ...tintedCard(C.orange), padding: 14, marginTop: 14 }}>
-            <svg viewBox="0 0 560 320" style={{ width: "100%", maxWidth: 640, display: "block", margin: "0 auto" }}>
+            <svg viewBox="0 0 600 320" style={{ width: "100%", maxWidth: 660, display: "block", margin: "0 auto" }}>
               <desc>
                 Memory taxonomy tree with Agent Memory as root, branching into Short-Term Working Memory and Long-Term,
                 then Long-Term splits into Episodic, Semantic, and Procedural.
               </desc>
-              {/* Root: Agent Memory at top center (280) */}
+              {/* Root: Agent Memory at top center (270), midpoint of the two branch targets */}
               <rect
-                x={210}
+                x={200}
                 y={10}
                 width={140}
                 height={40}
@@ -205,13 +205,13 @@ export default function MemoryTaxonomy(ctx) {
                 stroke={C.orange}
                 strokeWidth={2}
               />
-              <text x={280} y={36} fill={SOFT.orange} fontSize="15" fontWeight="700" textAnchor="middle">
+              <text x={270} y={36} fill={SOFT.orange} fontSize="15" fontWeight="700" textAnchor="middle">
                 Agent Memory
               </text>
 
-              {/* Branch lines: root center (280, 50) to short-term (140, 100) and long-term (420, 100) */}
-              <line x1={280} y1={50} x2={140} y2={100} stroke={C.orange} strokeWidth={1.6} />
-              <line x1={280} y1={50} x2={420} y2={100} stroke={C.orange} strokeWidth={1.6} />
+              {/* Branch lines: root center (270, 50) to short-term (140, 100) and long-term (400, 100) */}
+              <line x1={270} y1={50} x2={140} y2={100} stroke={C.orange} strokeWidth={1.6} />
+              <line x1={270} y1={50} x2={400} y2={100} stroke={C.orange} strokeWidth={1.6} />
 
               {/* Short-Term node */}
               <rect
@@ -228,9 +228,9 @@ export default function MemoryTaxonomy(ctx) {
                 Short-Term
               </text>
 
-              {/* Long-Term node */}
+              {/* Long-Term node centered at 400 over its three leaves */}
               <rect
-                x={350}
+                x={330}
                 y={100}
                 width={140}
                 height={40}
@@ -239,7 +239,7 @@ export default function MemoryTaxonomy(ctx) {
                 stroke={C.purple}
                 strokeWidth={1.8}
               />
-              <text x={420} y={126} fill={SOFT.purple} fontSize="14" fontWeight="700" textAnchor="middle">
+              <text x={400} y={126} fill={SOFT.purple} fontSize="14" fontWeight="700" textAnchor="middle">
                 Long-Term
               </text>
 
@@ -263,13 +263,13 @@ export default function MemoryTaxonomy(ctx) {
               </text>
 
               {/* 3 long-term leaves: episodic, semantic, procedural */}
-              {/* Long-term parent at x=420. 3 children at x=310, 420, 530. */}
-              <line x1={420} y1={140} x2={310} y2={200} stroke={C.purple} strokeWidth={1.4} />
-              <line x1={420} y1={140} x2={420} y2={200} stroke={C.purple} strokeWidth={1.4} />
-              <line x1={420} y1={140} x2={530} y2={200} stroke={C.purple} strokeWidth={1.4} />
+              {/* Long-term parent at x=400. 3 children at x=300, 400, 500 (rects 250-350, 350-450, 450-550). */}
+              <line x1={400} y1={140} x2={300} y2={200} stroke={C.purple} strokeWidth={1.4} />
+              <line x1={400} y1={140} x2={400} y2={200} stroke={C.purple} strokeWidth={1.4} />
+              <line x1={400} y1={140} x2={500} y2={200} stroke={C.purple} strokeWidth={1.4} />
 
               {LONG_TERM_TYPES.map((t, i) => {
-                const x = 310 + i * 110;
+                const x = 300 + i * 100;
                 const accent = C[t.color];
                 const soft = SOFT[t.color];
                 return (

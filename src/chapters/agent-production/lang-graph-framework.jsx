@@ -247,7 +247,7 @@ state = { ticket: ..., customer: ..., resolution: ... }`}
               <line
                 x1={375}
                 y1={64}
-                x2={560}
+                x2={540}
                 y2={140}
                 stroke={C.purple}
                 strokeWidth={1.4}
@@ -268,9 +268,9 @@ state = { ticket: ..., customer: ..., resolution: ... }`}
               </defs>
               {/* branch nodes */}
               <rect
-                x={100}
+                x={96}
                 y={150}
-                width={160}
+                width={168}
                 height={50}
                 rx={8}
                 fill={`${C.purple}18`}
@@ -284,25 +284,25 @@ state = { ticket: ..., customer: ..., resolution: ... }`}
                 Refund, Invoice Tools
               </text>
               <rect
-                x={280}
+                x={276}
                 y={150}
-                width={160}
+                width={168}
                 height={50}
                 rx={8}
                 fill={`${C.purple}18`}
                 stroke={C.purple}
                 strokeWidth={1.4}
               />
-              <text x={360} y={175} fill={SOFT.purple} fontSize="13" fontWeight="700" textAnchor="middle">
+              <text x={360} y={175} fill={SOFT.purple} fontSize="12" fontWeight="700" textAnchor="middle">
                 Troubleshooting_Handler
               </text>
               <text x={360} y={192} fill={SOFT.purple} fontSize="11" textAnchor="middle">
                 Knowledge-Base Tools
               </text>
               <rect
-                x={460}
+                x={456}
                 y={150}
-                width={160}
+                width={168}
                 height={50}
                 rx={8}
                 fill={`${C.purple}18`}
@@ -317,9 +317,9 @@ state = { ticket: ..., customer: ..., resolution: ... }`}
               </text>
               {/* router pill */}
               <rect
-                x={290}
+                x={268}
                 y={220}
-                width={140}
+                width={184}
                 height={28}
                 rx={14}
                 fill={`${C.cyan}18`}

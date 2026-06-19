@@ -28,7 +28,7 @@ const ROUTE_MINI_NODES = {
 // Input -> 3 workers -> aggregator.
 // Input at (16, 80), workers at (88, 32), (88, 80), (88, 128), aggregator at (160, 80).
 const PARALLEL_MINI_NODES = {
-  input: { x: 16, y: 80, label: "In" },
+  input: { x: 30, y: 80, label: "In" },
   workers: [
     { x: 84, y: 32, label: "W1" },
     { x: 84, y: 80, label: "W2" },
@@ -48,7 +48,7 @@ const CHAIN_DETAIL_NODES = [
 // Routing detailed branches for sub=2 (viewBox 0 0 560 280).
 // Input at left, classifier in center, 4 branches on right.
 const ROUTE_DETAIL = {
-  input: { x: 24, y: 130, label: "Ticket" },
+  input: { x: 56, y: 130, label: "Ticket" },
   classifier: { x: 180, y: 130, label: "Intent Classifier" },
   branches: [
     { x: 380, y: 38, label: "Billing" },
@@ -61,7 +61,7 @@ const ROUTE_DETAIL = {
 // Parallel fan-out for sub=3 (viewBox 0 0 600 240).
 // Input -> 3 workers -> aggregator.
 const PARALLEL_DETAIL = {
-  input: { x: 24, y: 100, label: "Query" },
+  input: { x: 56, y: 100, label: "Query" },
   workers: [
     { x: 220, y: 32, label: "Worker 1", time: "180ms" },
     { x: 220, y: 100, label: "Worker 2", time: "140ms" },
@@ -76,7 +76,7 @@ const PARALLEL_DETAIL = {
 // Stage 3: One branch parallelizes 3 retrievals.
 // Stage 4: Merged -> Answer (chain).
 const COMPOSED_TOPO = {
-  input: { x: 18, y: 152, label: "Ticket" },
+  input: { x: 44, y: 152, label: "Ticket" },
   classifier: { x: 124, y: 152, label: "Classifier" },
   branches: [
     { x: 268, y: 48, label: "Billing" },

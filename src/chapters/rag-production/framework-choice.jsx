@@ -384,8 +384,8 @@ export default function FrameworkChoice(ctx) {
               <text x="90" y="225" fill="#80e9b1" fontSize="11" fontWeight="700">
                 YES
               </text>
-              <line x1="280" y1="200" x2="320" y2="240" stroke={C.cyan} strokeWidth="2" markerEnd="url(#fc-arrow)" />
-              <text x="305" y="225" fill="#ef9a9a" fontSize="11" fontWeight="700">
+              <line x1="280" y1="200" x2="290" y2="240" stroke={C.cyan} strokeWidth="2" markerEnd="url(#fc-arrow)" />
+              <text x="300" y="225" fill="#ef9a9a" fontSize="11" fontWeight="700">
                 NO
               </text>
               {/* Leaf: No Framework + LlamaIndex retriever */}
@@ -397,8 +397,8 @@ export default function FrameworkChoice(ctx) {
                 LlamaIndex Retriever
               </text>
               {/* Leaf: LlamaIndex */}
-              <rect x="240" y="245" width="160" height="60" rx="8" fill={`${C.green}1a`} stroke={C.green} />
-              <text x="320" y="278" textAnchor="middle" fill="#80e9b1" fontSize="13" fontWeight="700">
+              <rect x="190" y="245" width="160" height="60" rx="8" fill={`${C.green}1a`} stroke={C.green} />
+              <text x="270" y="278" textAnchor="middle" fill="#80e9b1" fontSize="13" fontWeight="700">
                 LlamaIndex
               </text>
               {/* Right branch: multi-step agent? */}

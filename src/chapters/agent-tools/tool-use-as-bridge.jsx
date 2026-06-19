@@ -772,6 +772,7 @@ export default function ToolUseAsBridge(ctx) {
                     fontSize: 13,
                     color: tool.soft,
                     textAlign: "center",
+                    overflowWrap: "anywhere",
                   }}
                 >
                   {tool.sig}

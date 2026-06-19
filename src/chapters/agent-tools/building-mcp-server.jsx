@@ -79,7 +79,7 @@ const PROMPT_REG_LINES = [
 const LIFECYCLE_STATES = [
   { label: "REGISTERED", note: "Definitions Declared", color: C.purple, soft: SOFT.purple },
   { label: "LISTENING", note: "Transport Open", color: C.indigo, soft: SOFT.indigo },
-  { label: "ACTIVE", note: "Handling list / call Requests", color: C.blue, soft: SOFT.blue },
+  { label: "ACTIVE", note: ["Handling List /", "Call Requests"], color: C.blue, soft: SOFT.blue },
   { label: "CLOSED", note: "Shutdown", color: C.red, soft: SOFT.red },
 ];
 
@@ -393,9 +393,19 @@ export default function BuildingMcpServer(ctx) {
                     <text x={x + 75} y="92" fill={s.color} fontSize="15" fontWeight="700" textAnchor="middle">
                       {s.label}
                     </text>
-                    <text x={x + 75} y="116" fill={s.soft} fontSize="12" textAnchor="middle">
-                      {s.note}
-                    </text>
+                    {Array.isArray(s.note) ? (
+                      <text x={x + 75} y="110" fill={s.soft} fontSize="12" textAnchor="middle">
+                        {s.note.map((line, li) => (
+                          <tspan key={li} x={x + 75} dy={li === 0 ? 0 : 16}>
+                            {line}
+                          </tspan>
+                        ))}
+                      </text>
+                    ) : (
+                      <text x={x + 75} y="116" fill={s.soft} fontSize="12" textAnchor="middle">
+                        {s.note}
+                      </text>
+                    )}
                   </g>
                 );
               })}
@@ -410,7 +420,7 @@ export default function BuildingMcpServer(ctx) {
                   <g key={label}>
                     <line x1={x1} y1="100" x2={x2 - 6} y2="100" stroke={SOFT.teal} strokeWidth="1.5" />
                     <polygon points={`${x2},100 ${x2 - 6},96 ${x2 - 6},104`} fill={SOFT.teal} />
-                    <text x={mid} y="88" fill={SOFT.teal} fontSize="11" fontFamily="monospace" textAnchor="middle">
+                    <text x={mid} y="50" fill={SOFT.teal} fontSize="11" fontFamily="monospace" textAnchor="middle">
                       {label}
                     </text>
                   </g>

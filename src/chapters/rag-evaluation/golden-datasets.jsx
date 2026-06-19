@@ -463,8 +463,9 @@ export default function GoldenDatasets(ctx) {
               >
                 LLM Lane: Generate
               </text>
-              {["Corpus Doc", "LLM Generates Q-A Pair", "Pair Candidate"].map((label, i) => {
+              {[["Corpus Doc"], ["LLM Generates", "Q-A Pair"], ["Pair Candidate"]].map((lines, i) => {
                 const x = BP_LANE_X + 12 + i * segW;
+                const cy = BP_LANE_A_Y + BP_LANE_H / 2;
                 return (
                   <g key={`a${i}`}>
                     <rect
@@ -477,17 +478,20 @@ export default function GoldenDatasets(ctx) {
                       stroke={`${C.cyan}aa`}
                       strokeWidth="1.5"
                     />
-                    <text
-                      x={x + segBoxW / 2}
-                      y={BP_LANE_A_Y + BP_LANE_H / 2 + 4}
-                      fill="#80deea"
-                      fontSize="12"
-                      textAnchor="middle"
-                    >
-                      {label}
-                    </text>
+                    {lines.map((line, li) => (
+                      <text
+                        key={li}
+                        x={x + segBoxW / 2}
+                        y={cy + 4 + (li - (lines.length - 1) / 2) * 15}
+                        fill="#80deea"
+                        fontSize="12"
+                        textAnchor="middle"
+                      >
+                        {line}
+                      </text>
+                    ))}
                     {i < 2 && (
-                      <text x={x + segBoxW + 4} y={BP_LANE_A_Y + BP_LANE_H / 2 + 4} fill="#80deea" fontSize="14">
+                      <text x={x + segBoxW + segGap / 2} y={cy + 5} fill="#80deea" fontSize="14" textAnchor="middle">
                         →
                       </text>
                     )}
@@ -517,8 +521,9 @@ export default function GoldenDatasets(ctx) {
               >
                 Human Lane: Review
               </text>
-              {["Pair Candidate", "Reviewer Accept / Edit / Reject", "Golden Record"].map((label, i) => {
+              {[["Pair Candidate"], ["Reviewer Accept /", "Edit / Reject"], ["Golden Record"]].map((lines, i) => {
                 const x = BP_LANE_X + 12 + i * segW;
+                const cy = BP_LANE_B_Y + BP_LANE_H / 2;
                 return (
                   <g key={`b${i}`}>
                     <rect
@@ -531,17 +536,20 @@ export default function GoldenDatasets(ctx) {
                       stroke={`${C.green}aa`}
                       strokeWidth="1.5"
                     />
-                    <text
-                      x={x + segBoxW / 2}
-                      y={BP_LANE_B_Y + BP_LANE_H / 2 + 4}
-                      fill="#a5d6a7"
-                      fontSize="12"
-                      textAnchor="middle"
-                    >
-                      {label}
-                    </text>
+                    {lines.map((line, li) => (
+                      <text
+                        key={li}
+                        x={x + segBoxW / 2}
+                        y={cy + 4 + (li - (lines.length - 1) / 2) * 15}
+                        fill="#a5d6a7"
+                        fontSize="12"
+                        textAnchor="middle"
+                      >
+                        {line}
+                      </text>
+                    ))}
                     {i < 2 && (
-                      <text x={x + segBoxW + 4} y={BP_LANE_B_Y + BP_LANE_H / 2 + 4} fill="#a5d6a7" fontSize="14">
+                      <text x={x + segBoxW + segGap / 2} y={cy + 5} fill="#a5d6a7" fontSize="14" textAnchor="middle">
                         →
                       </text>
                     )}

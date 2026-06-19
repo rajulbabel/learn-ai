@@ -179,18 +179,20 @@ export default function ProceduralMemory(ctx) {
           </T>
 
           <div style={{ ...tintedCard(C.orange), padding: 14, marginTop: 14 }}>
-            <svg viewBox="0 0 560 160" style={{ width: "100%", maxWidth: 640, display: "block", margin: "0 auto" }}>
+            <svg viewBox="0 0 660 160" style={{ width: "100%", maxWidth: 660, display: "block", margin: "0 auto" }}>
               <desc>
                 Recipe retrieval flow: new ticket text is embedded, ANN search runs against the recipe library trigger
                 embeddings, and the top-one match is surfaced for the agent to use as scaffolding.
               </desc>
-              {/* 5-stage horizontal pipeline */}
+              {/* 5-stage horizontal pipeline. Box width 100, gap 30 (step 130) so each connecting
+                  arrow lands on the next box's left edge instead of being buried inside it.
+                  Span = 5*100 + 4*30 = 620. Pad = (660-620)/2 = 20. */}
               {[
-                { x: 30, label: "New Ticket", note: "Free Text" },
-                { x: 130, label: "Embed", note: "1024 Floats" },
-                { x: 230, label: "ANN Search", note: "vs Library" },
-                { x: 330, label: "Top-1", note: "Or No Match" },
-                { x: 430, label: "Use Recipe", note: "Scaffolding" },
+                { x: 20, label: "New Ticket", note: "Free Text" },
+                { x: 150, label: "Embed", note: "1024 Floats" },
+                { x: 280, label: "ANN Search", note: "vs Library" },
+                { x: 410, label: "Top-1", note: "Or No Match" },
+                { x: 540, label: "Use Recipe", note: "Scaffolding" },
               ].map((s, i) => (
                 <g key={`stage-${i}`}>
                   <rect

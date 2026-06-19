@@ -332,9 +332,11 @@ export default function LlmAsJudge(ctx) {
                   strokeWidth={1.4}
                 />
               ))}
-              {/* Correlation badge */}
+              {/* Correlation badge - placed in the empty upper-left region
+                  (low judge / high human) so it never overlaps the data
+                  points, which cluster along the diagonal toward upper-right. */}
               <rect
-                x={350}
+                x={66}
                 y={50}
                 width={110}
                 height={36}
@@ -343,7 +345,7 @@ export default function LlmAsJudge(ctx) {
                 stroke={C.green}
                 strokeWidth={1.4}
               />
-              <text x={405} y={73} fill={SOFT.green} fontSize="13" fontWeight="700" textAnchor="middle">
+              <text x={121} y={73} fill={SOFT.green} fontSize="13" fontWeight="700" textAnchor="middle">
                 r = 0.78 (Pass)
               </text>
             </svg>

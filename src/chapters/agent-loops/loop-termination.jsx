@@ -300,14 +300,15 @@ export default function LoopTermination(ctx) {
               {/* Bar outline on top */}
               <rect x={60} y={60} width={440} height={28} rx={6} fill="none" stroke={C.amber} strokeWidth="1.5" />
 
-              {/* Stop markers at 30%, 60%, 100% */}
+              {/* Stop markers at 30%, 60%, 100%. Short dollar labels below each marker so they
+                  never collide; the full "Iter 1-2 Consumed ..." breakdown is in the card list below. */}
               {[
-                { pct: 30, x: 60 + 0.3 * 440, label: "Iter 1-2 Consumed $0.15", color: "amber" },
-                { pct: 60, x: 60 + 0.6 * 440, label: "Iter 3-4 Consumed $0.30", color: "amber" },
+                { pct: 30, x: 60 + 0.3 * 440, label: "$0.15", color: "amber" },
+                { pct: 60, x: 60 + 0.6 * 440, label: "$0.30", color: "amber" },
                 {
                   pct: 100,
                   x: 60 + 1.0 * 440,
-                  label: "Budget Exhausted - STOP At $0.50",
+                  label: "$0.50 - STOP",
                   color: "red",
                 },
               ].map((m, i) => {
@@ -334,12 +335,9 @@ export default function LoopTermination(ctx) {
                 );
               })}
 
-              {/* Y-axis label */}
+              {/* Left axis origin label ($0). The right end ($0.50) is carried by the 100% marker. */}
               <text x={60} y={46} fill={SOFT.amber} fontSize="11" fontWeight="700" textAnchor="start">
                 $0
-              </text>
-              <text x={500} y={46} fill={SOFT.red} fontSize="11" fontWeight="700" textAnchor="end">
-                $0.50
               </text>
 
               <text x={280} y={148} fill={SOFT.amber} fontSize="12" fontWeight="700" textAnchor="middle">

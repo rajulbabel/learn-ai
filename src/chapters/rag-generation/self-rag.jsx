@@ -84,11 +84,11 @@ export default function SelfRAG(ctx) {
   const { sub, subBtnRipple, setSubBtnRipple, registerSubBtn, navigate } = ctx;
 
   // Sub=2 timeline geometry.
-  const TL_VB_W = 720;
+  const TL_VB_W = 760;
   const TL_VB_H = 220;
   const TL_LINE_Y = 90;
-  const TL_LEFT = 60;
-  const TL_RIGHT = 660;
+  const TL_LEFT = 90;
+  const TL_RIGHT = 670;
   const TL_STEP = (TL_RIGHT - TL_LEFT) / (SR_TIMELINE.length - 1);
 
   // Sub=3 gate geometry.
@@ -195,7 +195,7 @@ export default function SelfRAG(ctx) {
           </T>
 
           <div style={{ marginTop: 14, display: "flex", justifyContent: "center" }}>
-            <svg viewBox={`0 0 ${TL_VB_W} ${TL_VB_H}`} width="100%" style={{ maxWidth: 720, height: "auto" }}>
+            <svg viewBox={`0 0 ${TL_VB_W} ${TL_VB_H}`} width="100%" style={{ maxWidth: 760, height: "auto" }}>
               <desc>
                 Self-RAG token-emission timeline showing the model alternating between special control tokens like
                 {" <retrieve>, <isrel>, and <issup>"} across the generation sequence.
@@ -297,15 +297,15 @@ export default function SelfRAG(ctx) {
                 Knowledge?
               </text>
 
-              <line x1={480} y1={140} x2={555} y2={140} stroke={C.green} strokeOpacity="0.7" strokeWidth="1.5" />
-              <text x={520} y={132} fill="#a5d6a7" fontSize="12" fontWeight="700" textAnchor="middle">
+              <line x1={480} y1={140} x2={545} y2={140} stroke={C.green} strokeOpacity="0.7" strokeWidth="1.5" />
+              <text x={512} y={132} fill="#a5d6a7" fontSize="12" fontWeight="700" textAnchor="middle">
                 YES
               </text>
               <rect
-                x={555}
-                y={120}
-                width={155}
-                height={42}
+                x={545}
+                y={116}
+                width={165}
+                height={50}
                 rx="8"
                 fill={C.green}
                 fillOpacity="0.2"
@@ -313,26 +313,37 @@ export default function SelfRAG(ctx) {
                 strokeOpacity="0.7"
               />
               <text
-                x={632}
-                y={146}
+                x={627}
+                y={136}
                 fill="#a5d6a7"
                 fontSize="12"
                 fontWeight="700"
                 textAnchor="middle"
                 fontFamily="ui-monospace, monospace"
               >
-                {"<retrieve> -> <isrel> -> <issup>"}
+                {"<retrieve> -> <isrel>"}
+              </text>
+              <text
+                x={627}
+                y={153}
+                fill="#a5d6a7"
+                fontSize="12"
+                fontWeight="700"
+                textAnchor="middle"
+                fontFamily="ui-monospace, monospace"
+              >
+                {"-> <issup>"}
               </text>
 
-              <line x1={240} y1={140} x2={165} y2={140} stroke={C.red} strokeOpacity="0.7" strokeWidth="1.5" />
-              <text x={200} y={132} fill="#ef9a9a" fontSize="12" fontWeight="700" textAnchor="middle">
+              <line x1={240} y1={140} x2={175} y2={140} stroke={C.red} strokeOpacity="0.7" strokeWidth="1.5" />
+              <text x={208} y={132} fill="#ef9a9a" fontSize="12" fontWeight="700" textAnchor="middle">
                 NO
               </text>
               <rect
                 x={10}
-                y={120}
-                width={155}
-                height={42}
+                y={116}
+                width={165}
+                height={50}
                 rx="8"
                 fill={C.red}
                 fillOpacity="0.2"
@@ -340,15 +351,26 @@ export default function SelfRAG(ctx) {
                 strokeOpacity="0.7"
               />
               <text
-                x={88}
-                y={146}
+                x={92}
+                y={136}
                 fill="#ef9a9a"
                 fontSize="12"
                 fontWeight="700"
                 textAnchor="middle"
                 fontFamily="ui-monospace, monospace"
               >
-                {"<no-retrieve> -> Answer"}
+                {"<no-retrieve>"}
+              </text>
+              <text
+                x={92}
+                y={153}
+                fill="#ef9a9a"
+                fontSize="12"
+                fontWeight="700"
+                textAnchor="middle"
+                fontFamily="ui-monospace, monospace"
+              >
+                {"-> Answer"}
               </text>
 
               <text x={360} y={240} fill="#a5d6a7" fontSize="13" fontWeight="700" textAnchor="middle">

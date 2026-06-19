@@ -350,7 +350,7 @@ export default function SummaryAndContextMgmt(ctx) {
           </T>
 
           <div style={{ ...tintedCard(C.purple), padding: 14, marginTop: 14 }}>
-            <svg viewBox="0 0 560 160" style={{ width: "100%", maxWidth: 640, display: "block", margin: "0 auto" }}>
+            <svg viewBox="0 0 560 188" style={{ width: "100%", maxWidth: 640, display: "block", margin: "0 auto" }}>
               <desc>
                 Four threshold bands across a context window utilization bar: twenty five percent do nothing, fifty
                 percent compress half, seventy five percent aggressive summarize, ninety percent panic drop with summary
@@ -367,11 +367,26 @@ export default function SummaryAndContextMgmt(ctx) {
                 stroke={C.purple}
                 strokeWidth={1.4}
               />
-              {/* Bands - each band 25% of 480 = 120px */}
+              {/* Bands - each band 25% of 480 = 120px. Action text wraps to multiple
+                  lines so each long description stays under its own band. */}
               {CONTEXT_THRESHOLDS.map((b, i) => {
                 const accent = C[b.color];
-                const w = i === 0 ? 120 : 120;
+                const w = 120;
                 const xStart = 40 + i * 120;
+                // Greedy word-wrap of the action text into lines that fit the 120px band (~22 chars).
+                const words = b.action.split(" ");
+                const lines = [];
+                let cur = "";
+                words.forEach((word) => {
+                  const next = cur ? `${cur} ${word}` : word;
+                  if (next.length > 22 && cur) {
+                    lines.push(cur);
+                    cur = word;
+                  } else {
+                    cur = next;
+                  }
+                });
+                lines.push(cur);
                 return (
                   <g key={`band-${i}`}>
                     <rect x={xStart} y={50} width={w} height={40} fill={`${accent}40`} />
@@ -395,9 +410,18 @@ export default function SummaryAndContextMgmt(ctx) {
                     >
                       {b.label}
                     </text>
-                    <text x={xStart + w / 2} y={124} fill={SOFT[b.color]} fontSize="10" textAnchor="middle">
-                      {b.action}
-                    </text>
+                    {lines.map((line, j) => (
+                      <text
+                        key={`action-${i}-${j}`}
+                        x={xStart + w / 2}
+                        y={124 + j * 13}
+                        fill={SOFT[b.color]}
+                        fontSize="10"
+                        textAnchor="middle"
+                      >
+                        {line}
+                      </text>
+                    ))}
                   </g>
                 );
               })}

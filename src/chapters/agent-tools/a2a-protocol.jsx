@@ -244,7 +244,8 @@ export default function A2AProtocol(ctx) {
                 whiteSpace: "pre",
                 textAlign: "left",
                 overflowX: "auto",
-                display: "inline-block",
+                display: "block",
+                maxWidth: "100%",
               }}
             >
               {A2A_AGENT_JSON_LINES.join("\n")}

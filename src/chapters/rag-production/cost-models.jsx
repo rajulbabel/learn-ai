@@ -196,7 +196,7 @@ export default function CostModels(ctx) {
             total bill - so that is where every cost optimization starts.
           </T>
           <div style={{ marginTop: 14, textAlign: "center" }}>
-            <svg viewBox="0 0 720 180" width="100%" style={{ maxWidth: 720 }} role="img">
+            <svg viewBox="0 0 720 130" width="100%" style={{ maxWidth: 720 }} role="img">
               <desc>
                 Horizontal stacked bar chart of per-query cost showing LLM tokens dominate at 94 percent while
                 embedding, vector search, and reranker make up the remainder.
@@ -213,24 +213,11 @@ export default function CostModels(ctx) {
                     <g key={line.title}>
                       <rect x={cursor} y="60" width={w} height="40" fill={line.color} opacity="0.7" />
                       <rect x={cursor} y="60" width={w} height="40" fill="none" stroke={line.accent} strokeWidth="1" />
-                      {w >= 30 ? (
-                        <text x={cx} y="86" textAnchor="middle" fill="#0b0b14" fontSize="13" fontWeight="700">
+                      {w >= 40 ? (
+                        <text x={cx} y="85" textAnchor="middle" fill="#0b0b14" fontSize="13" fontWeight="700">
                           {pct.toFixed(1)}%
                         </text>
                       ) : null}
-                      <text x={cx} y="120" textAnchor="middle" fill={line.accent} fontSize="12">
-                        {line.title}
-                      </text>
-                      <text
-                        x={cx}
-                        y="138"
-                        textAnchor="middle"
-                        fill={line.accent}
-                        fontSize="11"
-                        fontFamily="ui-monospace"
-                      >
-                        ${line.perQuery.toFixed(4)}
-                      </text>
                     </g>
                   );
                   cursor += w;
@@ -240,7 +227,44 @@ export default function CostModels(ctx) {
               <text x="360" y="35" textAnchor="middle" fill="#f8bbd0" fontSize="14" fontWeight="700">
                 Per-Query Total: ${stackTotal.toFixed(4)}
               </text>
+              <text x="360" y="124" textAnchor="middle" fill="#f8bbd0" fontSize="12">
+                Three Tiny Lines (Reranker, Vector Search, Embedding) Are The Sliver At The Right - Under 6% Combined.
+              </text>
             </svg>
+          </div>
+          <div
+            style={{
+              marginTop: 12,
+              display: "grid",
+              gridTemplateColumns: "repeat(5, 1fr)",
+              gap: 8,
+            }}
+          >
+            {CM_COST_LINES.map((line) => {
+              const pct = (line.perQuery / stackTotal) * 100;
+              return (
+                <div
+                  key={line.title}
+                  style={{
+                    padding: 8,
+                    borderRadius: 8,
+                    background: `${line.color}06`,
+                    border: `1px solid ${line.color}12`,
+                    textAlign: "center",
+                  }}
+                >
+                  <T color={line.accent} bold center size={13}>
+                    {line.title}
+                  </T>
+                  <T color={line.accent} bold center size={13} style={{ marginTop: 4, fontFamily: "ui-monospace, monospace" }}>
+                    {pct.toFixed(1)}%
+                  </T>
+                  <T color={line.accent} center size={12} style={{ marginTop: 2, fontFamily: "ui-monospace, monospace" }}>
+                    ${line.perQuery.toFixed(4)}
+                  </T>
+                </div>
+              );
+            })}
           </div>
           <FormulaBox color={C.pink}>
             <span style={{ color: "#f8bbd0" }}>

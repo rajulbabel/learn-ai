@@ -122,7 +122,7 @@ export default function WhyProtocols(ctx) {
               5 Agents x 6 Tools = 30 Connectors. Hand-wired sprawl.
             </T>
             <svg
-              viewBox="0 0 560 240"
+              viewBox="0 0 560 256"
               style={{ width: "100%", maxWidth: 620, display: "block", margin: "12px auto 0" }}
             >
               <desc>
@@ -483,57 +483,57 @@ export default function WhyProtocols(ctx) {
                 authorization that enforces the sandbox contract.
               </desc>
               {/* Outer ring - Host (Trusted) */}
-              <circle cx="280" cy="160" r="140" fill={`${C.teal}0a`} stroke={C.teal} strokeWidth="2" />
+              <circle cx="280" cy="178" r="118" fill={`${C.teal}0a`} stroke={C.teal} strokeWidth="2" />
               {/* Inner ring - Server (Untrusted) */}
               <circle
                 cx="280"
-                cy="160"
-                r="60"
+                cy="178"
+                r="56"
                 fill={`${C.red}12`}
                 stroke={C.red}
                 strokeWidth="2"
                 strokeDasharray="4 4"
               />
 
-              {/* Outer label */}
-              <text x="280" y="35" fill={SOFT.teal} fontSize="14" fontWeight="700" textAnchor="middle">
+              {/* Outer label (above the ring so the arc never cuts the text) */}
+              <text x="280" y="22" fill={SOFT.teal} fontSize="14" fontWeight="700" textAnchor="middle">
                 Host (Trusted)
               </text>
-              <text x="280" y="55" fill={SOFT.teal} fontSize="11" textAnchor="middle">
+              <text x="280" y="42" fill={SOFT.teal} fontSize="11" textAnchor="middle">
                 User data, model, allowed mutations
               </text>
 
               {/* Inner label */}
-              <text x="280" y="155" fill={SOFT.red} fontSize="13" fontWeight="700" textAnchor="middle">
+              <text x="280" y="173" fill={SOFT.red} fontSize="13" fontWeight="700" textAnchor="middle">
                 Server
               </text>
-              <text x="280" y="172" fill={SOFT.red} fontSize="11" textAnchor="middle">
+              <text x="280" y="190" fill={SOFT.red} fontSize="11" textAnchor="middle">
                 (Untrusted)
               </text>
 
               {/* Arrows crossing the boundary - capabilities listed (server -> host) */}
-              <path d="M 240 130 Q 200 110 170 90" fill="none" stroke={C.purple} strokeWidth="1.5" />
-              <polygon points="170,90 178,93 175,99" fill={C.purple} />
-              <text x="135" y="80" fill={SOFT.purple} fontSize="11" fontWeight="700">
+              <path d="M 240 148 Q 200 128 170 108" fill="none" stroke={C.purple} strokeWidth="1.5" />
+              <polygon points="170,108 178,111 175,117" fill={C.purple} />
+              <text x="135" y="98" fill={SOFT.purple} fontSize="11" fontWeight="700">
                 Capabilities Listed
               </text>
 
               {/* Arrows crossing the boundary - tool call authorized (host -> server) */}
-              <path d="M 390 90 Q 360 110 320 130" fill="none" stroke={C.cyan} strokeWidth="1.5" />
-              <polygon points="320,130 328,127 326,135" fill={C.cyan} />
-              <text x="380" y="80" fill={SOFT.cyan} fontSize="11" fontWeight="700">
+              <path d="M 390 108 Q 360 128 320 148" fill="none" stroke={C.cyan} strokeWidth="1.5" />
+              <polygon points="320,148 328,145 326,153" fill={C.cyan} />
+              <text x="380" y="98" fill={SOFT.cyan} fontSize="11" fontWeight="700">
                 Tool Calls Authorized
               </text>
 
               {/* Arrows crossing the boundary - results returned (server -> host) */}
-              <path d="M 320 200 Q 360 230 400 250" fill="none" stroke={C.green} strokeWidth="1.5" />
-              <polygon points="400,250 392,247 395,255" fill={C.green} />
-              <text x="380" y="270" fill={SOFT.green} fontSize="11" fontWeight="700">
+              <path d="M 320 218 Q 360 248 400 268" fill="none" stroke={C.green} strokeWidth="1.5" />
+              <polygon points="400,268 392,265 395,273" fill={C.green} />
+              <text x="380" y="288" fill={SOFT.green} fontSize="11" fontWeight="700">
                 Results Returned
               </text>
 
-              {/* Boundary label */}
-              <text x="280" y="300" fill={SOFT.teal} fontSize="11" fontStyle="italic" textAnchor="middle">
+              {/* Boundary label (below the ring so the arc never cuts the text) */}
+              <text x="280" y="314" fill={SOFT.teal} fontSize="11" fontStyle="italic" textAnchor="middle">
                 The protocol is the only legal crossing
               </text>
             </svg>

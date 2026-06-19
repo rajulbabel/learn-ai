@@ -135,7 +135,7 @@ export default function MultiAgentFailures(ctx) {
           </T>
 
           <div style={{ ...tintedCard(C.teal), padding: 14, marginTop: 14 }}>
-            <svg viewBox="0 0 560 200" style={{ width: "100%", maxWidth: 640, display: "block", margin: "0 auto" }}>
+            <svg viewBox="0 0 600 200" style={{ width: "100%", maxWidth: 640, display: "block", margin: "0 auto" }}>
               <desc>
                 Three agents working on the same ticket pulling in three different directions: one interprets it as
                 cancel subscription, another as refund invoice, a third as save the customer, with diverging arrows
@@ -143,7 +143,7 @@ export default function MultiAgentFailures(ctx) {
               </desc>
               {/* User ticket center */}
               <rect
-                x={210}
+                x={230}
                 y={20}
                 width={140}
                 height={36}
@@ -152,23 +152,23 @@ export default function MultiAgentFailures(ctx) {
                 stroke={C.teal}
                 strokeWidth={2}
               />
-              <text x={280} y={42} fill={SOFT.teal} fontSize="13" fontWeight="700" textAnchor="middle">
+              <text x={300} y={42} fill={SOFT.teal} fontSize="13" fontWeight="700" textAnchor="middle">
                 Ticket T4
               </text>
 
               {/* 3 diverging agents at bottom */}
               {DRIFT_INTERPRETATIONS.map((d, i) => {
-                const x = 90 + i * 180;
+                const x = 100 + i * 200;
                 const accent = C[d.color];
                 const soft = SOFT[d.color];
                 return (
                   <g key={`drift-${i}`}>
-                    <line x1={280} y1={56} x2={x} y2={120} stroke={accent} strokeWidth={1.6} />
+                    <line x1={300} y1={56} x2={x} y2={120} stroke={accent} strokeWidth={1.6} />
                     <polygon points={`${x - 4},116 ${x + 4},116 ${x},124`} fill={accent} />
                     <rect
-                      x={x - 80}
+                      x={x - 90}
                       y={130}
-                      width={160}
+                      width={180}
                       height={50}
                       rx={8}
                       fill={`${accent}1f`}

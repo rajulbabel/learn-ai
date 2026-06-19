@@ -164,48 +164,54 @@ export default function EvalSetsContinuous(ctx) {
           </T>
 
           <div style={{ ...tintedCard(C.yellow), padding: 14, marginTop: 14 }}>
-            <svg viewBox="0 0 720 200" style={{ width: "100%", maxWidth: 720, display: "block", margin: "0 auto" }}>
+            <svg viewBox="0 0 760 200" style={{ width: "100%", maxWidth: 760, display: "block", margin: "0 auto" }}>
               <desc>
                 Online sampling flow showing production traffic being sampled at a one to five percent rate into an
                 async LLM-as-Judge grading stage, with results stored back to the trace store and rendered on the eval
                 quality dashboard.
               </desc>
-              {/* Stations */}
+              {/* Stations - boxes 124 wide with 28 unit arrow gaps, centered in
+                  the 760 viewBox so titles like "Production Traffic" fit. */}
               {[
-                { x: 30, label: "Production Traffic", sub: "100% Of Tickets" },
-                { x: 180, label: "Sampler", sub: "1-5% Selection" },
-                { x: 330, label: "Async Judge", sub: "LLM-As-Judge" },
-                { x: 480, label: "Trace Store", sub: "Results + Scores" },
-                { x: 620, label: "Dashboard", sub: "Drift Signal" },
-              ].map((s, i) => (
-                <g key={`stn-${i}`}>
-                  <rect
-                    x={s.x}
-                    y={60}
-                    width={100}
-                    height={70}
-                    rx={8}
-                    fill={`${C.yellow}22`}
-                    stroke={C.yellow}
-                    strokeWidth={1.6}
-                  />
-                  <text x={s.x + 50} y={88} fill={SOFT.yellow} fontSize="13" fontWeight="700" textAnchor="middle">
-                    {s.label}
-                  </text>
-                  <text x={s.x + 50} y={108} fill={SOFT.yellow} fontSize="11" textAnchor="middle">
-                    {s.sub}
-                  </text>
-                  {i < 4 && (
-                    <path
-                      d={`M ${s.x + 100} 95 L ${s.x + 130} 95`}
-                      stroke={SOFT.yellow}
-                      strokeWidth={2}
-                      markerEnd="url(#flowArrow)"
-                      fill="none"
+                { label: "Production Traffic", sub: "100% Of Tickets" },
+                { label: "Sampler", sub: "1-5% Selection" },
+                { label: "Async Judge", sub: "LLM-As-Judge" },
+                { label: "Trace Store", sub: "Results + Scores" },
+                { label: "Dashboard", sub: "Drift Signal" },
+              ].map((s, i) => {
+                const boxW = 124;
+                const arrowGap = 28;
+                const x = 14 + i * (boxW + arrowGap);
+                return (
+                  <g key={`stn-${i}`}>
+                    <rect
+                      x={x}
+                      y={60}
+                      width={boxW}
+                      height={70}
+                      rx={8}
+                      fill={`${C.yellow}22`}
+                      stroke={C.yellow}
+                      strokeWidth={1.6}
                     />
-                  )}
-                </g>
-              ))}
+                    <text x={x + boxW / 2} y={88} fill={SOFT.yellow} fontSize="13" fontWeight="700" textAnchor="middle">
+                      {s.label}
+                    </text>
+                    <text x={x + boxW / 2} y={108} fill={SOFT.yellow} fontSize="11" textAnchor="middle">
+                      {s.sub}
+                    </text>
+                    {i < 4 && (
+                      <path
+                        d={`M ${x + boxW} 95 L ${x + boxW + arrowGap} 95`}
+                        stroke={SOFT.yellow}
+                        strokeWidth={2}
+                        markerEnd="url(#flowArrow)"
+                        fill="none"
+                      />
+                    )}
+                  </g>
+                );
+              })}
               <defs>
                 <marker
                   id="flowArrow"
@@ -219,7 +225,7 @@ export default function EvalSetsContinuous(ctx) {
                   <path d="M 0 0 L 10 5 L 0 10 z" fill={SOFT.yellow} />
                 </marker>
               </defs>
-              <text x={360} y={170} fill={SOFT.green} fontSize="13" fontWeight="700" textAnchor="middle">
+              <text x={380} y={170} fill={SOFT.green} fontSize="13" fontWeight="700" textAnchor="middle">
                 1% Sample = Cheap But Slow. 5% Sample = Catches Issues In Hours But 5x Cost.
               </text>
             </svg>

@@ -93,7 +93,7 @@ const PIPELINE_STAGES = [
   { num: 1, name: "Eval Set", detail: "Golden + Adversarial + Regression Cases", ref: "28.5" },
   { num: 2, name: "Per-Trace Step Grading", detail: "Score Each Tool Call", ref: "28.4" },
   { num: 3, name: "End-To-End Judge", detail: "Score Final Answer With LLM-As-Judge", ref: "28.3" },
-  { num: 4, name: "Online Sampling", detail: "Grade 1-5% Of Production Traffic + Drift Signal", ref: "28.5" },
+  { num: 4, name: "Online Sampling", detail: "Grade 1-5% Of Traffic + Drift Signal", ref: "28.5" },
   { num: 5, name: "Alerting + Rollback", detail: "Page Engineer When Quality Drops", ref: "Ops" },
 ];
 
@@ -331,7 +331,7 @@ export default function WhyEvalAgents(ctx) {
                     />
                     <text
                       x={x + w / 2}
-                      y={y + 22}
+                      y={y + 18}
                       fill={SOFT.purple}
                       fontSize="13"
                       fontWeight="700"
@@ -339,23 +339,26 @@ export default function WhyEvalAgents(ctx) {
                     >
                       Stage {s.num}
                     </text>
-                    <text
-                      x={x + w / 2}
-                      y={y + 44}
-                      fill={SOFT.purple}
-                      fontSize="14"
-                      fontWeight="700"
-                      textAnchor="middle"
-                    >
-                      {s.name}
-                    </text>
-                    <foreignObject x={x + 4} y={y + 52} width={w - 8} height={42}>
+                    <foreignObject x={x + 4} y={y + 24} width={w - 8} height={34}>
+                      <div
+                        style={{
+                          color: SOFT.purple,
+                          fontSize: 13,
+                          fontWeight: 700,
+                          textAlign: "center",
+                          lineHeight: 1.2,
+                        }}
+                      >
+                        {s.name}
+                      </div>
+                    </foreignObject>
+                    <foreignObject x={x + 4} y={y + 58} width={w - 8} height={34}>
                       <div
                         style={{
                           color: SOFT.purple,
                           fontSize: 11,
                           textAlign: "center",
-                          lineHeight: 1.3,
+                          lineHeight: 1.25,
                         }}
                       >
                         {s.detail}

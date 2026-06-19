@@ -79,7 +79,7 @@ export default function EvalDimensions(ctx) {
           </T>
 
           <div style={{ ...tintedCard(C.red), padding: 14, marginTop: 14 }}>
-            <svg viewBox="0 0 560 360" style={{ width: "100%", maxWidth: 640, display: "block", margin: "0 auto" }}>
+            <svg viewBox="0 0 560 380" style={{ width: "100%", maxWidth: 640, display: "block", margin: "0 auto" }}>
               <desc>
                 Four-axis radar chart with correctness on top, latency on the right, cost on the bottom, and safety on
                 the left. A green target zone shows the acceptable region and a red polygon shows a single agent run
@@ -116,10 +116,14 @@ export default function EvalDimensions(ctx) {
               })}
               {/* Sample run polygon */}
               <polygon points={samplePoints} fill={`${C.red}20`} stroke={C.red} strokeWidth={2} />
-              {/* Axis labels */}
+              {/* Axis labels - horizontal labels (left/right) anchor outward so
+                  they never sit on top of their near-edge data points */}
               {axesGeom.map((a) => {
-                const labelOffset = 18;
+                const isRight = a.angle === 0;
+                const isLeft = a.angle === Math.PI;
+                const labelOffset = isLeft || isRight ? 26 : 18;
                 const lp = axisPoint(a.angle, rOuter + labelOffset);
+                const anchor = isRight ? "start" : isLeft ? "end" : "middle";
                 return (
                   <text
                     key={`lab-${a.label}`}
@@ -128,32 +132,35 @@ export default function EvalDimensions(ctx) {
                     fill={SOFT.red}
                     fontSize="14"
                     fontWeight="700"
-                    textAnchor="middle"
+                    textAnchor={anchor}
                   >
                     {a.label}
                   </text>
                 );
               })}
-              {/* Sample run score labels */}
+              {/* Sample run score labels - placed on the inner side of each
+                  data point so they never collide with the outer axis labels */}
               {axesGeom.map((a) => {
                 const sp = axisPoint(a.angle, rOuter * a.score);
+                // Label position pulled toward the center along the axis.
+                const lp = axisPoint(a.angle, rOuter * a.score - 24);
                 return (
                   <g key={`score-${a.label}`}>
                     <circle cx={sp.x} cy={sp.y} r={4} fill={C.red} />
                     <text
-                      x={sp.x + (a.angle === 0 ? 10 : a.angle === Math.PI ? -10 : 0)}
-                      y={sp.y - 8}
+                      x={lp.x}
+                      y={lp.y + (a.angle === -Math.PI / 2 ? 14 : a.angle === Math.PI / 2 ? -6 : 4)}
                       fill={SOFT.red}
                       fontSize="11"
                       fontWeight="700"
-                      textAnchor={a.angle === 0 ? "start" : a.angle === Math.PI ? "end" : "middle"}
+                      textAnchor="middle"
                     >
                       {a.score.toFixed(2)}
                     </text>
                   </g>
                 );
               })}
-              <text x={280} y={335} fill={SOFT.green} fontSize="13" fontWeight="700" textAnchor="middle">
+              <text x={280} y={360} fill={SOFT.green} fontSize="13" fontWeight="700" textAnchor="middle">
                 Green Ring = Target Zone (Score &gt; 0.85)
               </text>
             </svg>

@@ -20,21 +20,24 @@ const CYCLE_NODES = [
 ];
 
 // State machine boxes (sub=1).
-// viewBox 0 0 600 320. 4 primary boxes width 100, gap 30 at y=70.
-// Total span = 4*100 + 3*30 = 490. Pad = (600 - 490)/2 = 55.
+// viewBox 0 0 760 320. Box width BOX_W. Wide gaps so the transition labels
+// (e.g. "LLM Response" ~73u) sit cleanly between boxes without overlapping,
+// and wide boxes so the longest note (~103u) stays inside its box.
+const BOX_W = 112;
+// 4 primary boxes, gap 76 at y=70. Span = 4*112 + 3*76 = 676. Pad = (760-676)/2 = 42.
 const STATE_PRIMARY = [
-  { x: 55, label: "WAITING", note: "Idle, Awaiting Input" },
-  { x: 185, label: "REASONING", note: "Model Call In Flight" },
-  { x: 315, label: "ACTING", note: "Tool Call In Flight" },
-  { x: 445, label: "OBSERVING", note: "Got Tool Result" },
+  { x: 42, label: "WAITING", note: "Idle, Awaiting Input" },
+  { x: 230, label: "REASONING", note: "Model Call In Flight" },
+  { x: 418, label: "ACTING", note: "Tool Call In Flight" },
+  { x: 606, label: "OBSERVING", note: "Got Tool Result" },
 ];
 
-// Terminal states (sub=1). Same 100-wide boxes, gap 30 at y=250.
-// 3 boxes: total span = 300 + 2*30 = 360. Pad = (600 - 360)/2 = 120.
+// Terminal states (sub=1). Same BOX_W boxes, gap 76 at y=250.
+// 3 boxes: span = 3*112 + 2*76 = 488. Pad = (760 - 488)/2 = 136.
 const STATE_TERMINAL = [
-  { x: 120, label: "DONE", note: "Final Answer Emitted" },
-  { x: 250, label: "FAILED", note: "Unrecoverable Error" },
-  { x: 380, label: "ESCALATED", note: "Budget / Max Iter Hit" },
+  { x: 136, label: "DONE", note: "Final Answer Emitted" },
+  { x: 324, label: "FAILED", note: "Unrecoverable Error" },
+  { x: 512, label: "ESCALATED", note: "Budget / Max Iter Hit" },
 ];
 
 // Termination branches (sub=2). 3 outcomes from a diamond decision.
@@ -230,7 +233,7 @@ export default function AgentLoop(ctx) {
           </T>
 
           <div style={{ ...tintedCard(C.yellow), padding: 14, marginTop: 14 }}>
-            <svg viewBox="0 0 600 320" style={{ width: "100%", maxWidth: 640, display: "block", margin: "0 auto" }}>
+            <svg viewBox="0 0 760 320" style={{ width: "100%", maxWidth: 720, display: "block", margin: "0 auto" }}>
               <desc>
                 State machine diagram with waiting reasoning acting observing primary states and done failed escalated
                 terminal states.
@@ -239,7 +242,7 @@ export default function AgentLoop(ctx) {
               {/* Forward arrows between primary states */}
               {STATE_PRIMARY.slice(0, -1).map((s, i) => {
                 const next = STATE_PRIMARY[i + 1];
-                const x1 = s.x + 100;
+                const x1 = s.x + BOX_W;
                 const x2 = next.x;
                 const triggers = ["User Input", "LLM Response", "Tool Result"];
                 return (
@@ -262,17 +265,17 @@ export default function AgentLoop(ctx) {
 
               {/* Loop arrow from OBSERVING back to REASONING */}
               <path
-                d={`M ${STATE_PRIMARY[3].x + 50} 70 C ${STATE_PRIMARY[3].x + 50} 25, ${STATE_PRIMARY[1].x + 50} 25, ${STATE_PRIMARY[1].x + 50} 70`}
+                d={`M ${STATE_PRIMARY[3].x + BOX_W / 2} 70 C ${STATE_PRIMARY[3].x + BOX_W / 2} 25, ${STATE_PRIMARY[1].x + BOX_W / 2} 25, ${STATE_PRIMARY[1].x + BOX_W / 2} 70`}
                 fill="none"
                 stroke={SOFT.yellow}
                 strokeWidth="1.5"
               />
               <polygon
-                points={`${STATE_PRIMARY[1].x + 50},70 ${STATE_PRIMARY[1].x + 46},64 ${STATE_PRIMARY[1].x + 54},64`}
+                points={`${STATE_PRIMARY[1].x + BOX_W / 2},70 ${STATE_PRIMARY[1].x + BOX_W / 2 - 4},64 ${STATE_PRIMARY[1].x + BOX_W / 2 + 4},64`}
                 fill={SOFT.yellow}
               />
               <text
-                x={(STATE_PRIMARY[1].x + STATE_PRIMARY[3].x + 100) / 2}
+                x={(STATE_PRIMARY[1].x + STATE_PRIMARY[3].x + BOX_W) / 2}
                 y={20}
                 fill={SOFT.yellow}
                 fontSize="10"
@@ -288,24 +291,24 @@ export default function AgentLoop(ctx) {
                   <rect
                     x={s.x}
                     y={70}
-                    width={100}
+                    width={BOX_W}
                     height={44}
                     rx={6}
                     fill={`${C.yellow}28`}
                     stroke={C.yellow}
                     strokeWidth="1.5"
                   />
-                  <text x={s.x + 50} y={88} fill={C.yellow} fontSize="12" fontWeight="700" textAnchor="middle">
+                  <text x={s.x + BOX_W / 2} y={88} fill={C.yellow} fontSize="12" fontWeight="700" textAnchor="middle">
                     {s.label}
                   </text>
-                  <text x={s.x + 50} y={104} fill={SOFT.yellow} fontSize="10" fontWeight="500" textAnchor="middle">
+                  <text x={s.x + BOX_W / 2} y={104} fill={SOFT.yellow} fontSize="10" fontWeight="500" textAnchor="middle">
                     {s.note}
                   </text>
                 </g>
               ))}
 
               {/* Vertical separators down to terminal row */}
-              <text x={300} y={170} fill={SOFT.yellow} fontSize="11" fontWeight="600" textAnchor="middle">
+              <text x={380} y={170} fill={SOFT.yellow} fontSize="11" fontWeight="600" textAnchor="middle">
                 On Termination Check (See Sub 3) Move To One Of:
               </text>
 
@@ -318,29 +321,32 @@ export default function AgentLoop(ctx) {
                 return (
                   <g key={`term-${t.label}`}>
                     <line
-                      x1={t.x + 50}
+                      x1={t.x + BOX_W / 2}
                       y1={185}
-                      x2={t.x + 50}
+                      x2={t.x + BOX_W / 2}
                       y2={232}
                       stroke={softVal}
                       strokeWidth="1.5"
                       strokeDasharray="3 3"
                     />
-                    <polygon points={`${t.x + 50},232 ${t.x + 46},226 ${t.x + 54},226`} fill={softVal} />
+                    <polygon
+                      points={`${t.x + BOX_W / 2},232 ${t.x + BOX_W / 2 - 4},226 ${t.x + BOX_W / 2 + 4},226`}
+                      fill={softVal}
+                    />
                     <rect
                       x={t.x}
                       y={232}
-                      width={100}
+                      width={BOX_W}
                       height={44}
                       rx={6}
                       fill={`${colorVal}28`}
                       stroke={colorVal}
                       strokeWidth="1.5"
                     />
-                    <text x={t.x + 50} y={250} fill={colorVal} fontSize="12" fontWeight="700" textAnchor="middle">
+                    <text x={t.x + BOX_W / 2} y={250} fill={colorVal} fontSize="12" fontWeight="700" textAnchor="middle">
                       {t.label}
                     </text>
-                    <text x={t.x + 50} y={266} fill={softVal} fontSize="10" fontWeight="500" textAnchor="middle">
+                    <text x={t.x + BOX_W / 2} y={266} fill={softVal} fontSize="10" fontWeight="500" textAnchor="middle">
                       {t.note}
                     </text>
                   </g>
@@ -374,7 +380,7 @@ export default function AgentLoop(ctx) {
           </T>
 
           <div style={{ ...tintedCard(C.red), padding: 14, marginTop: 14 }}>
-            <svg viewBox="0 0 500 320" style={{ width: "100%", maxWidth: 560, display: "block", margin: "0 auto" }}>
+            <svg viewBox="0 0 560 320" style={{ width: "100%", maxWidth: 600, display: "block", margin: "0 auto" }}>
               <desc>
                 Three node cycle of reason act observe with a diamond decision node labeled terminate between observe
                 and reason, branching to done escalate or abort.
@@ -448,69 +454,69 @@ export default function AgentLoop(ctx) {
               </text>
 
               {/* Three outgoing branches from the diamond */}
-              {/* Branch 1: top - DONE (green) */}
-              <line x1={400} y1={114} x2={450} y2={70} stroke={SOFT.green} strokeWidth="1.5" />
-              <polygon points={`450,70 444,72 446,78`} fill={SOFT.green} />
-              <text x={450} y={62} fill={SOFT.green} fontSize="10" fontWeight="600" textAnchor="middle">
-                Yes
-              </text>
+              {/* Branch 1: top - DONE (green). Line ends at the box left edge so the arrow touches the boundary. */}
+              <line x1={398} y1={112} x2={470} y2={70} stroke={SOFT.green} strokeWidth="1.5" />
+              <polygon points={`470,70 462,68 464,75`} fill={SOFT.green} />
               <rect
-                x={425}
-                y={70}
-                width={60}
+                x={470}
+                y={56}
+                width={62}
                 height={28}
                 rx={5}
                 fill={`${C.green}28`}
                 stroke={C.green}
                 strokeWidth="1.5"
               />
-              <text x={455} y={88} fill={C.green} fontSize="11" fontWeight="700" textAnchor="middle">
+              <text x={501} y={74} fill={C.green} fontSize="11" fontWeight="700" textAnchor="middle">
                 DONE
               </text>
-              <text x={400} y={115} fill={SOFT.red} fontSize="9" fontWeight="500" textAnchor="start">
+              <text x={432} y={84} fill={SOFT.green} fontSize="10" fontWeight="600" textAnchor="middle">
+                Yes
+              </text>
+              <text x={432} y={104} fill={SOFT.red} fontSize="9" fontWeight="500" textAnchor="middle">
                 Final Answer?
               </text>
 
-              {/* Branch 2: middle - ESCALATE (amber) */}
-              <line x1={410} y1={140} x2={425} y2={140} stroke={SOFT.amber} strokeWidth="1.5" />
-              <polygon points={`425,140 419,136 419,144`} fill={SOFT.amber} />
+              {/* Branch 2: middle - ESCALATE (amber). Line ends at the box left edge. */}
+              <line x1={410} y1={140} x2={470} y2={140} stroke={SOFT.amber} strokeWidth="1.5" />
+              <polygon points={`470,140 462,136 462,144`} fill={SOFT.amber} />
               <rect
-                x={425}
+                x={470}
                 y={126}
-                width={68}
+                width={72}
                 height={28}
                 rx={5}
                 fill={`${C.amber}28`}
                 stroke={C.amber}
                 strokeWidth="1.5"
               />
-              <text x={459} y={144} fill={C.amber} fontSize="11" fontWeight="700" textAnchor="middle">
+              <text x={506} y={144} fill={C.amber} fontSize="11" fontWeight="700" textAnchor="middle">
                 ESCALATE
               </text>
-              <text x={385} y={170} fill={SOFT.amber} fontSize="9" fontWeight="500" textAnchor="start">
+              <text x={440} y={132} fill={SOFT.amber} fontSize="9" fontWeight="500" textAnchor="middle">
                 Max Iter Hit?
               </text>
 
-              {/* Branch 3: bottom - ABORT (red) */}
-              <line x1={400} y1={166} x2={450} y2={210} stroke={SOFT.red} strokeWidth="1.5" />
-              <polygon points={`450,210 444,206 446,213`} fill={SOFT.red} />
-              <text x={450} y={228} fill={SOFT.red} fontSize="10" fontWeight="600" textAnchor="middle">
-                Yes
-              </text>
+              {/* Branch 3: bottom - ABORT (red). Line ends at the box left edge. */}
+              <line x1={398} y1={168} x2={470} y2={210} stroke={SOFT.red} strokeWidth="1.5" />
+              <polygon points={`470,210 462,205 464,212`} fill={SOFT.red} />
               <rect
-                x={425}
-                y={184}
-                width={60}
+                x={470}
+                y={196}
+                width={62}
                 height={28}
                 rx={5}
                 fill={`${C.red}38`}
                 stroke={C.red}
                 strokeWidth="1.5"
               />
-              <text x={455} y={202} fill={C.red} fontSize="11" fontWeight="700" textAnchor="middle">
+              <text x={501} y={214} fill={C.red} fontSize="11" fontWeight="700" textAnchor="middle">
                 ABORT
               </text>
-              <text x={395} y={190} fill={SOFT.red} fontSize="9" fontWeight="500" textAnchor="start">
+              <text x={432} y={228} fill={SOFT.red} fontSize="10" fontWeight="600" textAnchor="middle">
+                Yes
+              </text>
+              <text x={432} y={178} fill={SOFT.red} fontSize="9" fontWeight="500" textAnchor="middle">
                 Budget Out?
               </text>
 

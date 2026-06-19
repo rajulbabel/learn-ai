@@ -230,9 +230,11 @@ export default function ContextEngineering(ctx) {
                   return (
                     <g key={z.name}>
                       <rect x={x} y={30} width={w} height={40} fill={`${z.color}40`} stroke={z.color} strokeWidth="1" />
-                      <text x={x + w / 2} y={55} fill={z.soft} fontSize="11" textAnchor="middle" fontWeight="700">
-                        {z.tokens}k
-                      </text>
+                      {w >= 24 ? (
+                        <text x={x + w / 2} y={55} fill={z.soft} fontSize="11" textAnchor="middle" fontWeight="700">
+                          {z.tokens}k
+                        </text>
+                      ) : null}
                     </g>
                   );
                 });

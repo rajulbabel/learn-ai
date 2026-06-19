@@ -5,7 +5,10 @@ import { SOFT, tintedCard, pill } from "../../shared/agent-styles.jsx";
 // Module-private helpers used by THIS chapter:
 const HANDOFF_SHAPE = `Agent {
   name: "triage",
-  instructions: "Classify intent. Hand off to billing for refund/invoice, troubleshooting for errors.",
+  instructions:
+    "Classify intent. Hand off to billing
+     for refund/invoice, troubleshooting
+     for errors.",
   handoffs: [billing_agent, troubleshooting_agent]
 }`;
 

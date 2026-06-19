@@ -115,6 +115,24 @@ export default function RAGEvalTriangle(ctx) {
   const TRI_VB_W = 540;
   const TRI_VB_H = 360;
 
+  // Half-extents of each vertex box (rect is 220 wide x 72 tall, centered on cx/cy).
+  const TRI_HALF_W = 110;
+  const TRI_HALF_H = 36;
+
+  // Clip the segment from box A's center toward box B's center so it stops on
+  // box A's boundary (plus a small gap). Prevents edges from running through the
+  // boxes and crossing the label text.
+  const edgePoint = (a, b) => {
+    const dx = b.cx - a.cx;
+    const dy = b.cy - a.cy;
+    const gap = 4;
+    // Math.abs(0) division yields Infinity in JS, so no explicit zero-guard is needed.
+    const tx = (TRI_HALF_W + gap) / Math.abs(dx);
+    const ty = (TRI_HALF_H + gap) / Math.abs(dy);
+    const t = Math.min(tx, ty);
+    return { x: a.cx + dx * t, y: a.cy + dy * t };
+  };
+
   return (
     <div
       style={{
@@ -143,31 +161,26 @@ export default function RAGEvalTriangle(ctx) {
                 end-to-end (lower-right). Each vertex has a one-line caption describing what that layer measures.
               </desc>
 
-              {/* Edges */}
-              <line
-                x1={TRI_VERTICES[0].cx}
-                y1={TRI_VERTICES[0].cy}
-                x2={TRI_VERTICES[1].cx}
-                y2={TRI_VERTICES[1].cy}
-                stroke={`${C.green}66`}
-                strokeWidth="1.5"
-              />
-              <line
-                x1={TRI_VERTICES[1].cx}
-                y1={TRI_VERTICES[1].cy}
-                x2={TRI_VERTICES[2].cx}
-                y2={TRI_VERTICES[2].cy}
-                stroke={`${C.green}66`}
-                strokeWidth="1.5"
-              />
-              <line
-                x1={TRI_VERTICES[2].cx}
-                y1={TRI_VERTICES[2].cy}
-                x2={TRI_VERTICES[0].cx}
-                y2={TRI_VERTICES[0].cy}
-                stroke={`${C.green}66`}
-                strokeWidth="1.5"
-              />
+              {/* Edges - clipped to each box boundary so they never cross the label text */}
+              {[
+                [0, 1],
+                [1, 2],
+                [2, 0],
+              ].map(([i, j]) => {
+                const p = edgePoint(TRI_VERTICES[i], TRI_VERTICES[j]);
+                const q = edgePoint(TRI_VERTICES[j], TRI_VERTICES[i]);
+                return (
+                  <line
+                    key={`${i}-${j}`}
+                    x1={p.x}
+                    y1={p.y}
+                    x2={q.x}
+                    y2={q.y}
+                    stroke={`${C.green}66`}
+                    strokeWidth="1.5"
+                  />
+                );
+              })}
 
               {/* Vertex nodes */}
               {TRI_VERTICES.map((v) => (

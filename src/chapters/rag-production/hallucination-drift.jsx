@@ -271,8 +271,8 @@ export default function HallucinationDrift(ctx) {
               </desc>
               {/* Axes */}
               <line x1="80" y1="40" x2="80" y2="260" stroke="#f8bbd0" strokeWidth="1" />
-              <line x1="80" y1="260" x2="660" y2="260" stroke="#f8bbd0" strokeWidth="1" />
-              <text x="370" y="290" textAnchor="middle" fill="#f8bbd0" fontSize="13">
+              <line x1="80" y1="260" x2="560" y2="260" stroke="#f8bbd0" strokeWidth="1" />
+              <text x="320" y="290" textAnchor="middle" fill="#f8bbd0" fontSize="13">
                 Days (1 To 30)
               </text>
               <text x="40" y="150" textAnchor="middle" fill="#f8bbd0" fontSize="13" transform="rotate(-90, 40, 150)">
@@ -280,7 +280,7 @@ export default function HallucinationDrift(ctx) {
               </text>
               {/* X labels: 1, 10, 20, 30 */}
               {[1, 10, 20, 30].map((d) => {
-                const x = 80 + ((d - 1) / 29) * 580;
+                const x = 80 + ((d - 1) / 29) * 480;
                 return (
                   <g key={d}>
                     <line x1={x} y1="260" x2={x} y2="264" stroke="#f8bbd0" />
@@ -298,7 +298,7 @@ export default function HallucinationDrift(ctx) {
                 const range = max - min;
                 const points = line.series
                   .map((v, i) => {
-                    const x = 80 + (i / (line.series.length - 1)) * 580;
+                    const x = 80 + (i / (line.series.length - 1)) * 480;
                     const y = 250 - ((v - min) / range) * (180 - lineIdx * 30);
                     return `${x},${y}`;
                   })
@@ -310,18 +310,18 @@ export default function HallucinationDrift(ctx) {
                     <line
                       x1="80"
                       y1={thresholdY}
-                      x2="660"
+                      x2="560"
                       y2={thresholdY}
                       stroke={line.accent}
                       strokeWidth="1"
                       strokeDasharray="4 4"
                     />
-                    <text x="670" y={thresholdY + 4} fill={line.accent} fontSize="11">
+                    <text x="568" y={thresholdY + 4} fill={line.accent} fontSize="11">
                       {line.name}
                     </text>
                     {/* Alert marker */}
                     {(() => {
-                      const alertX = 80 + ((line.alertDay - 1) / 29) * 580;
+                      const alertX = 80 + ((line.alertDay - 1) / 29) * 480;
                       return (
                         <g>
                           <circle cx={alertX} cy={thresholdY} r="6" fill={C.red} stroke="#fff" strokeWidth="1.5" />
@@ -453,8 +453,8 @@ Recommended Action: Review Recent Corpus Updates And Re-Run Golden Eval.`}
                   strokeWidth="2"
                   fill="none"
                 />
-                <line x1="10" y1="25" x2="310" y2="25" stroke="#80e9b1" strokeDasharray="3 3" />
-                <text x="312" y="28" fill="#80e9b1" fontSize="10">
+                <line x1="10" y1="25" x2="288" y2="25" stroke="#80e9b1" strokeDasharray="3 3" />
+                <text x="314" y="22" textAnchor="end" fill="#80e9b1" fontSize="10">
                   0.85
                 </text>
               </svg>
@@ -485,8 +485,8 @@ Recommended Action: Review Recent Corpus Updates And Re-Run Golden Eval.`}
                   strokeWidth="2"
                   fill="none"
                 />
-                <line x1="10" y1="32" x2="310" y2="32" stroke="#ffcc80" strokeDasharray="3 3" />
-                <text x="312" y="35" fill="#ffcc80" fontSize="10">
+                <line x1="10" y1="32" x2="288" y2="32" stroke="#ffcc80" strokeDasharray="3 3" />
+                <text x="314" y="29" textAnchor="end" fill="#ffcc80" fontSize="10">
                   15%
                 </text>
               </svg>

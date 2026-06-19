@@ -342,27 +342,27 @@ export default function ParallelToolsAndChoice(ctx) {
                   LLM 1
                 </text>
                 {/* Row 1: lookup_customer (parallel, top) */}
-                <rect x="92" y="8" width="40" height="22" rx="4" fill={`${C.green}30`} stroke={C.green} />
-                <text x="112" y="22" fill={SOFT.green} fontSize="10" textAnchor="middle">
+                <rect x="92" y="14" width="40" height="22" rx="4" fill={`${C.green}30`} stroke={C.green} />
+                <text x="112" y="28" fill={SOFT.green} fontSize="10" textAnchor="middle">
                   200ms
                 </text>
-                <text x="92" y="-2" fill={SOFT.green} fontSize="10" textAnchor="start">
+                <text x="138" y="28" fill={SOFT.green} fontSize="10" textAnchor="start">
                   lookup_customer
                 </text>
                 {/* Row 1: lookup_subscription (parallel, bottom) */}
-                <rect x="92" y="34" width="40" height="22" rx="4" fill={`${C.green}30`} stroke={C.green} />
-                <text x="112" y="48" fill={SOFT.green} fontSize="10" textAnchor="middle">
+                <rect x="92" y="40" width="40" height="22" rx="4" fill={`${C.green}30`} stroke={C.green} />
+                <text x="112" y="54" fill={SOFT.green} fontSize="10" textAnchor="middle">
                   200ms
                 </text>
-                <text x="135" y="48" fill={SOFT.green} fontSize="10" textAnchor="start">
+                <text x="138" y="54" fill={SOFT.green} fontSize="10" textAnchor="start">
                   lookup_subscription
                 </text>
                 {/* Time axis */}
-                <line x1="10" y1="78" x2="135" y2="78" stroke="#666" strokeWidth="1" />
-                <text x="70" y="100" fill="#aaa" fontSize="12" textAnchor="middle" fontWeight="700">
+                <line x1="10" y1="78" x2="132" y2="78" stroke="#666" strokeWidth="1" />
+                <text x="160" y="100" fill="#aaa" fontSize="12" textAnchor="middle" fontWeight="700">
                   Total: 200ms tool work + 1 LLM call
                 </text>
-                <text x="70" y="120" fill={SOFT.green} fontSize="12" textAnchor="middle">
+                <text x="160" y="120" fill={SOFT.green} fontSize="12" textAnchor="middle">
                   Both tools fan out at once.
                 </text>
               </svg>

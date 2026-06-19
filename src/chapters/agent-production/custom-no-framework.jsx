@@ -302,7 +302,7 @@ return "Max iterations reached - escalating to human."`}
           </T>
 
           <div style={{ ...tintedCard(C.green), padding: 14, marginTop: 14 }}>
-            <svg viewBox="0 0 720 320" style={{ width: "100%", maxWidth: 720, display: "block", margin: "0 auto" }}>
+            <svg viewBox="0 0 720 344" style={{ width: "100%", maxWidth: 720, display: "block", margin: "0 auto" }}>
               <desc>
                 Decision tree for staying custom. Five leaves: three say YES (high-volume traffic over 10K per second,
                 tight latency budget P95 under 2 seconds, multi-vendor strategy required) and two say NO (one-off
@@ -333,38 +333,38 @@ return "Max iterations reached - escalating to human."`}
                 return (
                   <g key={leaf.label}>
                     <rect
-                      x={60}
+                      x={30}
                       y={y}
-                      width={360}
+                      width={250}
                       height={36}
                       rx={6}
                       fill={`${accent}10`}
                       stroke={accent}
                       strokeWidth={1.2}
                     />
-                    <text x={70} y={y + 22} fill={soft} fontSize="12">
+                    <text x={42} y={y + 22} fill={soft} fontSize="12">
                       {leaf.label}
                     </text>
                     <rect
-                      x={440}
+                      x={292}
                       y={y}
-                      width={130}
+                      width={150}
                       height={36}
                       rx={6}
                       fill={`${accent}22`}
                       stroke={accent}
                       strokeWidth={1.2}
                     />
-                    <text x={505} y={y + 22} fill={accent} fontSize="12" fontWeight="700" textAnchor="middle">
+                    <text x={367} y={y + 22} fill={accent} fontSize="12" fontWeight="700" textAnchor="middle">
                       {leaf.verdict}
                     </text>
-                    <text x={585} y={y + 22} fill={soft} fontSize="11">
+                    <text x={454} y={y + 22} fill={soft} fontSize="11">
                       {leaf.why.slice(0, 24)}
                     </text>
                   </g>
                 );
               })}
-              <text x={360} y={304} fill={SOFT.green} fontSize="12" textAnchor="middle">
+              <text x={360} y={332} fill={SOFT.green} fontSize="12" textAnchor="middle">
                 Default To Framework Unless A Specific Reason Pushes You Custom
               </text>
             </svg>

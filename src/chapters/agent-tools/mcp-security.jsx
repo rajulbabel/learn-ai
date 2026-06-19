@@ -121,11 +121,11 @@ export default function McpSecurity(ctx) {
                 untrusted third party server code with protocol arrows crossing the boundary.
               </desc>
               {/* Outer ring - Host (Trusted) */}
-              <circle cx="280" cy="160" r="140" fill={`${C.purple}0a`} stroke={C.purple} strokeWidth="2" />
+              <circle cx="280" cy="178" r="118" fill={`${C.purple}0a`} stroke={C.purple} strokeWidth="2" />
               {/* Inner ring - Server (Untrusted) */}
               <circle
                 cx="280"
-                cy="160"
+                cy="178"
                 r="60"
                 fill={`${C.red}12`}
                 stroke={C.red}
@@ -133,48 +133,48 @@ export default function McpSecurity(ctx) {
                 strokeDasharray="4 4"
               />
 
-              {/* Outer label */}
-              <text x="280" y="35" fill={SOFT.purple} fontSize="14" fontWeight="700" textAnchor="middle">
+              {/* Outer label (above the ring so the arc never cuts the text) */}
+              <text x="280" y="22" fill={SOFT.purple} fontSize="14" fontWeight="700" textAnchor="middle">
                 Host (Trusted)
               </text>
-              <text x="280" y="55" fill={SOFT.purple} fontSize="11" textAnchor="middle">
+              <text x="280" y="42" fill={SOFT.purple} fontSize="11" textAnchor="middle">
                 User Data, Model, Allowed Mutations
               </text>
 
               {/* Inner label */}
-              <text x="280" y="155" fill={SOFT.red} fontSize="13" fontWeight="700" textAnchor="middle">
+              <text x="280" y="172" fill={SOFT.red} fontSize="13" fontWeight="700" textAnchor="middle">
                 Server
               </text>
-              <text x="280" y="172" fill={SOFT.red} fontSize="11" textAnchor="middle">
+              <text x="280" y="189" fill={SOFT.red} fontSize="11" textAnchor="middle">
                 (Untrusted)
               </text>
-              <text x="280" y="188" fill={SOFT.red} fontSize="10" textAnchor="middle">
+              <text x="280" y="205" fill={SOFT.red} fontSize="10" textAnchor="middle">
                 Third-Party Tool Code
               </text>
 
               {/* Arrow crossing - List (server -> host) */}
-              <path d="M 240 130 Q 200 110 165 90" fill="none" stroke={C.cyan} strokeWidth="1.5" />
-              <polygon points="165,90 173,93 170,99" fill={C.cyan} />
-              <text x="120" y="80" fill={SOFT.cyan} fontSize="11" fontWeight="700">
+              <path d="M 240 148 Q 200 128 165 108" fill="none" stroke={C.cyan} strokeWidth="1.5" />
+              <polygon points="165,108 173,111 170,117" fill={C.cyan} />
+              <text x="120" y="98" fill={SOFT.cyan} fontSize="11" fontWeight="700">
                 List
               </text>
 
               {/* Arrow crossing - Call (host -> server) */}
-              <path d="M 395 90 Q 360 110 320 130" fill="none" stroke={C.blue} strokeWidth="1.5" />
-              <polygon points="320,130 328,127 326,135" fill={C.blue} />
-              <text x="400" y="80" fill={SOFT.blue} fontSize="11" fontWeight="700">
+              <path d="M 395 108 Q 360 128 320 148" fill="none" stroke={C.blue} strokeWidth="1.5" />
+              <polygon points="320,148 328,145 326,153" fill={C.blue} />
+              <text x="400" y="98" fill={SOFT.blue} fontSize="11" fontWeight="700">
                 Call
               </text>
 
               {/* Arrow crossing - Result (server -> host) */}
-              <path d="M 320 200 Q 360 230 400 250" fill="none" stroke={C.green} strokeWidth="1.5" />
-              <polygon points="400,250 392,247 395,255" fill={C.green} />
-              <text x="400" y="270" fill={SOFT.green} fontSize="11" fontWeight="700">
+              <path d="M 320 218 Q 360 248 400 268" fill="none" stroke={C.green} strokeWidth="1.5" />
+              <polygon points="400,268 392,265 395,273" fill={C.green} />
+              <text x="400" y="288" fill={SOFT.green} fontSize="11" fontWeight="700">
                 Result
               </text>
 
-              {/* Boundary caption */}
-              <text x="280" y="300" fill={SOFT.purple} fontSize="11" fontStyle="italic" textAnchor="middle">
+              {/* Boundary caption (below the ring so the arc never cuts the text) */}
+              <text x="280" y="314" fill={SOFT.purple} fontSize="11" fontStyle="italic" textAnchor="middle">
                 The MCP transport is the only legal crossing
               </text>
             </svg>

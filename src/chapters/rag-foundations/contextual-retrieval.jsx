@@ -115,7 +115,9 @@ const CONTEXTUAL_STACK_STEPS = [
 // Bar-chart geometry for the Anthropic benchmark in sub=4.
 const BENCH_VIEW_W = 640;
 const BENCH_LABEL_W = 230;
-const BENCH_PAD_RIGHT = 30;
+// Right padding reserves room for the value label that sits to the right of the
+// longest bar ("5.7% . Baseline"), so it never spills past the viewBox edge.
+const BENCH_PAD_RIGHT = 130;
 const BENCH_AXIS_Y = 220;
 const BENCH_PX_PER_PERCENT = (BENCH_VIEW_W - BENCH_LABEL_W - BENCH_PAD_RIGHT) / 6;
 const BENCH_BAR_X = BENCH_LABEL_W;

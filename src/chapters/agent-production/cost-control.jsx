@@ -93,7 +93,7 @@ export default function CostControl(ctx) {
 
           <div style={{ ...tintedCard(C.pink), padding: 14, marginTop: 14 }}>
             <svg
-              viewBox={`0 0 ${barViewW} 200`}
+              viewBox={`0 0 ${barViewW} 214`}
               style={{ width: "100%", maxWidth: barViewW, display: "block", margin: "0 auto" }}
             >
               <desc>

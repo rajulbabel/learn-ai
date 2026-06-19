@@ -603,7 +603,7 @@ export default function LLMAsJudge(ctx) {
                 strokeDasharray="4 4"
                 strokeWidth="1"
               />
-              <text x={CAL_PLOT_X + CAL_PLOT_W + 6} y={calY(0.85) + 4} fill="#a5d6a7" fontSize="11" textAnchor="start">
+              <text x={CAL_PLOT_X + CAL_PLOT_W - 6} y={calY(0.85) + 16} fill="#a5d6a7" fontSize="11" textAnchor="end">
                 0.85 Target
               </text>
 
@@ -628,8 +628,8 @@ export default function LLMAsJudge(ctx) {
                 <circle key={`a${i}`} cx={calX(p.x)} cy={calY(p.y)} r="3" fill={C.green} />
               ))}
               <text
-                x={calX(0.92)}
-                y={calY(LJ_CALIB_AFTER[LJ_CALIB_AFTER.length - 1].y) - 6}
+                x={CAL_PLOT_X + CAL_PLOT_W}
+                y={CAL_PLOT_Y - 12}
                 fill="#a5d6a7"
                 fontSize="12"
                 textAnchor="end"

@@ -1,4 +1,4 @@
-import { Box, T, Reveal, SubBtn, ChapterLink } from "../../components.jsx";
+import { Box, T, Reveal, SubBtn } from "../../components.jsx";
 import { C } from "../../config.js";
 
 // Module-private helpers used by THIS chapter (copied verbatim from section file):
@@ -89,11 +89,7 @@ const OE_LOOP_NODES = [
   {
     n: 2,
     label: "Capture To Golden Regression Set",
-    detail: (
-      <>
-        Tie the failing case into <ChapterLink to="23.4">chapter 23.4</ChapterLink>.
-      </>
-    ),
+    detail: "Tie the failing case into chapter 23.4.",
     color: C.cyan,
     accent: "#80deea",
   },
@@ -130,15 +126,33 @@ export default function OnlineEvalABTesting(ctx) {
 
   // Closing loop SVG layout.
   const LP_VB_W = 540;
-  const LP_VB_H = 320;
-  const LP_NODE_W = 180;
-  const LP_NODE_H = 60;
+  const LP_VB_H = 360;
+  const LP_NODE_W = 190;
+  const LP_NODE_H = 84;
   const LP_POSITIONS = [
-    { x: (LP_VB_W - LP_NODE_W) / 2, y: 14 }, // top
-    { x: LP_VB_W - LP_NODE_W - 20, y: 130 }, // right
-    { x: (LP_VB_W - LP_NODE_W) / 2, y: 246 }, // bottom
-    { x: 20, y: 130 }, // left
+    { x: (LP_VB_W - LP_NODE_W) / 2, y: 10 }, // top
+    { x: LP_VB_W - LP_NODE_W - 14, y: 138 }, // right
+    { x: (LP_VB_W - LP_NODE_W) / 2, y: 266 }, // bottom
+    { x: 14, y: 138 }, // left
   ];
+
+  // Word-wrap a string into lines of at most maxChars characters.
+  const wrapLabel = (str, maxChars) => {
+    const words = str.split(" ");
+    const lines = [];
+    let cur = "";
+    words.forEach((w) => {
+      const next = cur ? `${cur} ${w}` : w;
+      if (next.length > maxChars && cur) {
+        lines.push(cur);
+        cur = w;
+      } else {
+        cur = next;
+      }
+    });
+    lines.push(cur);
+    return lines;
+  };
 
   return (
     <div
@@ -655,6 +669,13 @@ export default function OnlineEvalABTesting(ctx) {
 
               {OE_LOOP_NODES.map((n, i) => {
                 const pos = LP_POSITIONS[i];
+                const titleLines = wrapLabel(`${n.n}. ${n.label}`, 24);
+                const detailLines = wrapLabel(n.detail, 30);
+                const cx = pos.x + LP_NODE_W / 2;
+                // Stack title (fs13, lineHeight 16) then a gap then detail (fs11, lineHeight 14),
+                // vertically centered in the box.
+                const blockH = titleLines.length * 16 + 4 + detailLines.length * 14;
+                let cursor = pos.y + LP_NODE_H / 2 - blockH / 2 + 12;
                 return (
                   <g key={i}>
                     <rect
@@ -667,19 +688,30 @@ export default function OnlineEvalABTesting(ctx) {
                       stroke={`${n.color}aa`}
                       strokeWidth="1.5"
                     />
-                    <text
-                      x={pos.x + LP_NODE_W / 2}
-                      y={pos.y + 22}
-                      fill={n.accent}
-                      fontSize="13"
-                      fontWeight="700"
-                      textAnchor="middle"
-                    >
-                      {n.n}. {n.label}
-                    </text>
-                    <text x={pos.x + LP_NODE_W / 2} y={pos.y + 42} fill={n.accent} fontSize="11" textAnchor="middle">
-                      {n.detail}
-                    </text>
+                    {titleLines.map((line, li) => {
+                      const y = cursor + li * 16;
+                      return (
+                        <text
+                          key={`t${li}`}
+                          x={cx}
+                          y={y}
+                          fill={n.accent}
+                          fontSize="13"
+                          fontWeight="700"
+                          textAnchor="middle"
+                        >
+                          {line}
+                        </text>
+                      );
+                    })}
+                    {detailLines.map((line, li) => {
+                      const y = cursor + titleLines.length * 16 + 4 + li * 14;
+                      return (
+                        <text key={`d${li}`} x={cx} y={y} fill={n.accent} fontSize="11" textAnchor="middle">
+                          {line}
+                        </text>
+                      );
+                    })}
                   </g>
                 );
               })}

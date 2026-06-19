@@ -70,11 +70,11 @@ export default function WhyMultiAgent(ctx) {
                 Single agent loaded with five different jobs, labeled retrieve, classify, refund, troubleshoot, and
                 escalate, visualizing the crowded role assignment that creates a performance ceiling for one agent.
               </desc>
-              {/* Single big agent in center */}
+              {/* Single big agent in center. Box width 180 so the long sub-label fits inside. */}
               <rect
-                x={210}
+                x={190}
                 y={70}
-                width={140}
+                width={180}
                 height={60}
                 rx={10}
                 fill={`${C.green}22`}
@@ -88,13 +88,14 @@ export default function WhyMultiAgent(ctx) {
                 5 Jobs On One System Prompt
               </text>
 
-              {/* 5 jobs around the agent */}
+              {/* 5 jobs around the agent. x values kept inside [50, 510] so the 100-wide
+                  boxes (x +/- 50) never spill past the 0-560 viewBox edges. */}
               {[
-                { x: 60, y: 35, label: "Retrieve" },
-                { x: 500, y: 35, label: "Classify" },
-                { x: 30, y: 165, label: "Refund" },
+                { x: 80, y: 35, label: "Retrieve" },
+                { x: 480, y: 35, label: "Classify" },
+                { x: 80, y: 165, label: "Refund" },
                 { x: 280, y: 175, label: "Troubleshoot" },
-                { x: 530, y: 165, label: "Escalate" },
+                { x: 480, y: 165, label: "Escalate" },
               ].map((j, i) => (
                 <g key={`job-${i}`}>
                   <rect

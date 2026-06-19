@@ -68,22 +68,21 @@ export default function LatencyOptimization(ctx) {
                 calls dominate the timeline.
               </desc>
               {(() => {
-                const innerW = wfViewW - 200;
-                let cursor = 0;
+                const barX = 185;
+                const maxW = 300; // width of the longest (1200ms) span
                 return LATENCY_T2_WATERFALL.map((s, i) => {
-                  const w = (s.ms / 3400) * innerW;
+                  const w = (s.ms / 1200) * maxW;
                   const y = 30 + i * 42;
-                  const x = 180 + cursor;
-                  cursor += w;
                   const accent = C[s.color];
+                  const msX = barX + w + 8;
                   return (
                     <g key={s.name}>
-                      <text x={170} y={y + 20} fill={SOFT[s.color]} fontSize="13" fontWeight="700" textAnchor="end">
+                      <text x={175} y={y + 22} fill={SOFT[s.color]} fontSize="13" fontWeight="700" textAnchor="end">
                         {s.name}
                       </text>
                       <rect
-                        x={x}
-                        y={y + 4}
+                        x={barX}
+                        y={y + 6}
                         width={w}
                         height={26}
                         fill={`${accent}55`}
@@ -91,17 +90,17 @@ export default function LatencyOptimization(ctx) {
                         strokeWidth={1.4}
                         rx={3}
                       />
-                      <text x={x + w + 6} y={y + 22} fill={SOFT[s.color]} fontSize="12">
+                      <text x={msX} y={y + 24} fill={accent} fontSize="12" fontWeight="700">
                         {s.ms}ms
                       </text>
-                      <text x={x + w / 2} y={y + 20} fill={SOFT[s.color]} fontSize="11" textAnchor="middle">
+                      <text x={msX + 48} y={y + 24} fill={SOFT[s.color]} fontSize="11">
                         {s.label}
                       </text>
                     </g>
                   );
                 });
               })()}
-              <text x={wfViewW / 2} y={250} fill={C.pink} fontSize="17" fontWeight="700" textAnchor="middle">
+              <text x={wfViewW / 2} y={252} fill={C.pink} fontSize="17" fontWeight="700" textAnchor="middle">
                 Total Latency: {totalMs}ms (3.4 Seconds)
               </text>
             </svg>
@@ -333,10 +332,10 @@ export default function LatencyOptimization(ctx) {
                 rx={3}
                 strokeDasharray="4 3"
               />
-              <text x={63} y={150} fill={SOFT.purple} fontSize="11" textAnchor="middle">
+              <text x={117} y={148} fill={SOFT.purple} fontSize="12">
                 lookup_customer (200ms)
               </text>
-              <text x={130} y={150} fill={SOFT.purple} fontSize="12">
+              <text x={117} y={166} fill={SOFT.purple} fontSize="12">
                 Result Cached, Waiting
               </text>
               <text x={320} y={195} fill={C.yellow} fontSize="13" fontWeight="700" textAnchor="middle">

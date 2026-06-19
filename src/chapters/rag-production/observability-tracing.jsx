@@ -195,7 +195,7 @@ export default function ObservabilityTracing(ctx) {
             latency so the bottleneck stage is visually obvious.
           </T>
           <div style={{ marginTop: 14, textAlign: "center" }}>
-            <svg viewBox="0 0 720 320" width="100%" style={{ maxWidth: 720 }} role="img">
+            <svg viewBox="0 0 720 380" width="100%" style={{ maxWidth: 720 }} role="img">
               <desc>
                 Parent/child span tree for a single RAG query: embed query, vector search, rerank, pack prompt, and
                 generate. Each child span is rendered with width proportional to its latency in milliseconds.
@@ -205,42 +205,51 @@ export default function ObservabilityTracing(ctx) {
               <text x="360" y="46" textAnchor="middle" fill="#f8bbd0" fontSize="14" fontWeight="700">
                 Query (Total {totalLatency}ms)
               </text>
-              {/* Children with proportional width */}
+              {/* Children: fixed name column, proportional bar in a fixed track, attrs below the bar */}
               {(() => {
-                const xStart = 80;
-                const totalWidth = 560;
-                let cursor = xStart;
+                const nameX = 70; // left-aligned name column
+                const trackStart = 210; // bars all start here
+                const trackWidth = 330; // max bar span; bar end never exceeds trackStart+trackWidth = 540
+                const rowH = 58;
                 return OT_SPAN_TREE.map((span, i) => {
-                  const w = (span.latency / totalLatency) * totalWidth;
-                  const y = 90 + i * 42;
-                  const result = (
+                  const w = (span.latency / totalLatency) * trackWidth;
+                  const y = 88 + i * rowH;
+                  return (
                     <g key={span.name}>
-                      {/* Connector */}
+                      {/* Connector from root down-left into this row */}
                       <line
-                        x1="80"
-                        y1={y + 20}
-                        x2={cursor}
-                        y2={y + 20}
+                        x1={trackStart}
+                        y1={y + 14}
+                        x2={trackStart}
+                        y2={y + 14}
                         stroke={span.accent}
                         strokeWidth="1"
-                        strokeDasharray="3 3"
                       />
-                      {/* Span bar */}
-                      <rect x={cursor} y={y} width={w} height="36" rx="4" fill={span.color} opacity="0.7" />
-                      <text x={cursor + 8} y={y + 22} fill="#0b0b14" fontSize="12" fontWeight="700">
+                      {/* Span name in its own left column */}
+                      <text x={nameX} y={y + 18} fill={span.accent} fontSize="13" fontWeight="700">
                         {span.name}
                       </text>
-                      {/* Latency label */}
-                      <text x={cursor + w + 8} y={y + 16} fill={span.accent} fontSize="12" fontFamily="ui-monospace">
+                      {/* Bar track baseline (faint full-width track) */}
+                      <rect x={trackStart} y={y} width={trackWidth} height="28" rx="4" fill={`${span.color}14`} />
+                      {/* Span bar */}
+                      <rect x={trackStart} y={y} width={w} height="28" rx="4" fill={span.color} opacity="0.7" />
+                      {/* Latency label just right of the bar end (stays within track) */}
+                      <text
+                        x={trackStart + w + 8}
+                        y={y + 19}
+                        fill={span.accent}
+                        fontSize="12"
+                        fontWeight="700"
+                        fontFamily="ui-monospace"
+                      >
                         {span.latency}ms
                       </text>
-                      <text x={cursor + w + 8} y={y + 30} fill={span.accent} fontSize="10">
+                      {/* Attributes on a second line, left-aligned under the track */}
+                      <text x={trackStart} y={y + 44} fill={span.accent} fontSize="11">
                         {span.attrs}
                       </text>
                     </g>
                   );
-                  cursor += w;
-                  return result;
                 });
               })()}
             </svg>

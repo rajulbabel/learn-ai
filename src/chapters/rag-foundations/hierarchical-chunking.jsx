@@ -682,7 +682,7 @@ export default function HierarchicalChunking(ctx) {
               {/* Summary cards sit between section row and leaf row */}
               {HIERARCHY_SECTIONS.map((sec, i) => {
                 const cx = TREE_SECTION_CENTERS[i];
-                const w = 150;
+                const w = 168;
                 const x = cx - w / 2;
                 return (
                   <g key={`sum-${i}`}>
@@ -709,7 +709,7 @@ export default function HierarchicalChunking(ctx) {
                     <text x={cx} y="202" textAnchor="middle" fill="#fff59d" fontSize="11" fontWeight="bold">
                       Summary (LLM-Made)
                     </text>
-                    <text x={cx} y="218" textAnchor="middle" fill="#fff59d" fontSize="10">
+                    <text x={cx} y="218" textAnchor="middle" fill="#fff59d" fontSize="9">
                       {sec.summary}
                     </text>
                     <text x={cx} y="231" textAnchor="middle" fill="#fff59d" fontSize="9">

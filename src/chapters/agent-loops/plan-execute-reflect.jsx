@@ -2,29 +2,31 @@ import { Box, T, Reveal, SubBtn } from "../../components.jsx";
 import { C } from "../../config.js";
 import { SOFT, tintedCard, pill, DIM_BG, DIM_BORDER } from "../../shared/agent-styles.jsx";
 
-// 4-leaf plan tree for ticket T4 (cancel + refund). Centered in viewBox 0 0 560 240.
-// Each leaf rect width = 116, gap = 16. 4 leaves => total = 4*116 + 3*16 = 512. Pad = (560-512)/2 = 24.
+// 4-leaf plan tree for ticket T4 (cancel + refund). Centered in viewBox 0 0 600 240.
+// Each leaf rect width = LEAF_W, gap = 10, so the longest label ("2. lookup_subscription")
+// fits inside its box. 4 leaves => total = 4*138 + 3*10 = 582. Pad = (600-582)/2 = 9.
+const LEAF_W = 138;
 const PLAN_T4_LEAVES = [
   {
-    x: 24,
+    x: 9,
     label: "1. lookup_customer",
     note: "To Get customer_id",
     color: "yellow",
   },
   {
-    x: 156,
+    x: 157,
     label: "2. lookup_subscription",
     note: "To Get invoice_id",
     color: "yellow",
   },
   {
-    x: 288,
+    x: 305,
     label: "3. cancel",
     note: "Subscription",
     color: "yellow",
   },
   {
-    x: 420,
+    x: 453,
     label: "4. process_refund",
     note: "business_rule Error -> Escalate",
     color: "red",
@@ -32,31 +34,33 @@ const PLAN_T4_LEAVES = [
 ];
 
 // Walk-the-leaves view (sub=2). Same 4 leaves plus an added Step 5 leaf below.
-// viewBox 0 0 600 320. Leaf width 110, gap 12. 4 leaves => 4*110 + 3*12 = 476. Pad = (600-476)/2 = 62.
+// viewBox 0 0 640 320. Leaf width WALK_W, gap 12 so the long tool-call labels fit.
+// 4 leaves => 4*138 + 3*12 = 588. Pad = (640-588)/2 = 26.
+const WALK_W = 138;
 const WALK_LEAVES = [
   {
-    x: 62,
+    x: 26,
     label: "1. lookup_customer",
     result: "customer_id: c-9924",
     color: "green",
     status: "Ok",
   },
   {
-    x: 184,
+    x: 176,
     label: "2. lookup_subscription",
     result: "invoice_id: inv-7741",
     color: "green",
     status: "Ok",
   },
   {
-    x: 306,
+    x: 326,
     label: "3. cancel",
     result: "status: cancelled",
     color: "green",
     status: "Ok",
   },
   {
-    x: 428,
+    x: 476,
     label: "4. process_refund",
     result: "Error: business_rule",
     color: "red",
@@ -305,17 +309,17 @@ export default function PlanExecuteReflect(ctx) {
               Plan Tree - Resolve T4: Cancel + Refund
             </T>
             <svg
-              viewBox="0 0 560 240"
-              style={{ width: "100%", maxWidth: 640, display: "block", margin: "12px auto 0" }}
+              viewBox="0 0 600 240"
+              style={{ width: "100%", maxWidth: 660, display: "block", margin: "12px auto 0" }}
             >
               <desc>
                 Four-leaf plan tree for ticket T4 cancel and refund showing lookup_customer, lookup_subscription,
                 cancel, process_refund leaves with refund leaf marked for escalation.
               </desc>
 
-              {/* Root node centered at x = 280 (560/2). Width 200. */}
+              {/* Root node centered at x = 300 (600/2). Width 200. */}
               <rect
-                x={180}
+                x={200}
                 y={16}
                 width={200}
                 height={44}
@@ -324,10 +328,10 @@ export default function PlanExecuteReflect(ctx) {
                 stroke={C.yellow}
                 strokeWidth="2"
               />
-              <text x={280} y={36} fill={C.yellow} fontSize="14" fontWeight="700" textAnchor="middle">
+              <text x={300} y={36} fill={C.yellow} fontSize="14" fontWeight="700" textAnchor="middle">
                 Resolve T4: Cancel + Refund
               </text>
-              <text x={280} y={52} fill={SOFT.yellow} fontSize="11" fontWeight="500" textAnchor="middle">
+              <text x={300} y={52} fill={SOFT.yellow} fontSize="11" fontWeight="500" textAnchor="middle">
                 Root Goal
               </text>
 
@@ -335,9 +339,9 @@ export default function PlanExecuteReflect(ctx) {
               {PLAN_T4_LEAVES.map((leaf, i) => (
                 <line
                   key={`conn-${i}`}
-                  x1={280}
+                  x1={300}
                   y1={60}
-                  x2={leaf.x + 58}
+                  x2={leaf.x + LEAF_W / 2}
                   y2={120}
                   stroke={`${SOFT.yellow}99`}
                   strokeWidth="1.4"
@@ -353,20 +357,27 @@ export default function PlanExecuteReflect(ctx) {
                     <rect
                       x={leaf.x}
                       y={120}
-                      width={116}
+                      width={LEAF_W}
                       height={88}
                       rx={6}
                       fill={`${accent}1f`}
                       stroke={accent}
                       strokeWidth="1.6"
                     />
-                    <text x={leaf.x + 58} y={142} fill={accent} fontSize="12" fontWeight="700" textAnchor="middle">
+                    <text
+                      x={leaf.x + LEAF_W / 2}
+                      y={142}
+                      fill={accent}
+                      fontSize="11"
+                      fontWeight="700"
+                      textAnchor="middle"
+                    >
                       {leaf.label}
                     </text>
                     {leaf.note.split(/ -> /).map((line, j, arr) => (
                       <text
                         key={`note-${i}-${j}`}
-                        x={leaf.x + 58}
+                        x={leaf.x + LEAF_W / 2}
                         y={162 + j * 14}
                         fill={soft}
                         fontSize="10"
@@ -381,7 +392,7 @@ export default function PlanExecuteReflect(ctx) {
               })}
 
               {/* Caption */}
-              <text x={280} y={228} fill={`${SOFT.yellow}b3`} fontSize="11" fontWeight="600" textAnchor="middle">
+              <text x={300} y={228} fill={`${SOFT.yellow}b3`} fontSize="11" fontWeight="600" textAnchor="middle">
                 Tree Drawn Before Any Tool Fires
               </text>
             </svg>
@@ -418,8 +429,8 @@ export default function PlanExecuteReflect(ctx) {
               Executor Walking Leaves 1 - 4 + Adapted Leaf 5
             </T>
             <svg
-              viewBox="0 0 600 320"
-              style={{ width: "100%", maxWidth: 680, display: "block", margin: "12px auto 0" }}
+              viewBox="0 0 640 320"
+              style={{ width: "100%", maxWidth: 720, display: "block", margin: "12px auto 0" }}
             >
               <desc>
                 Plan execution sweep showing four leaves running with their results next to them, the fourth leaf
@@ -436,22 +447,29 @@ export default function PlanExecuteReflect(ctx) {
                     <rect
                       x={leaf.x}
                       y={20}
-                      width={110}
+                      width={WALK_W}
                       height={72}
                       rx={6}
                       fill={`${accent}1f`}
                       stroke={accent}
                       strokeWidth="1.6"
                     />
-                    <text x={leaf.x + 55} y={42} fill={accent} fontSize="12" fontWeight="700" textAnchor="middle">
+                    <text
+                      x={leaf.x + WALK_W / 2}
+                      y={42}
+                      fill={accent}
+                      fontSize="11"
+                      fontWeight="700"
+                      textAnchor="middle"
+                    >
                       {leaf.label}
                     </text>
-                    <text x={leaf.x + 55} y={62} fill={soft} fontSize="10" fontWeight="500" textAnchor="middle">
+                    <text x={leaf.x + WALK_W / 2} y={62} fill={soft} fontSize="10" fontWeight="500" textAnchor="middle">
                       {leaf.result}
                     </text>
                     {/* Status badge */}
                     <rect
-                      x={leaf.x + 35}
+                      x={leaf.x + WALK_W / 2 - 20}
                       y={70}
                       width={40}
                       height={16}
@@ -460,7 +478,7 @@ export default function PlanExecuteReflect(ctx) {
                       stroke={accent}
                       strokeWidth="1"
                     />
-                    <text x={leaf.x + 55} y={82} fill={accent} fontSize="10" fontWeight="700" textAnchor="middle">
+                    <text x={leaf.x + WALK_W / 2} y={82} fill={accent} fontSize="10" fontWeight="700" textAnchor="middle">
                       {leaf.status}
                     </text>
                   </g>
@@ -469,7 +487,7 @@ export default function PlanExecuteReflect(ctx) {
 
               {/* Connector arrows between top-row leaves */}
               {[0, 1, 2].map((i) => {
-                const x1 = WALK_LEAVES[i].x + 110;
+                const x1 = WALK_LEAVES[i].x + WALK_W;
                 const x2 = WALK_LEAVES[i + 1].x;
                 return (
                   <g key={`arrow-top-${i}`}>
@@ -481,7 +499,7 @@ export default function PlanExecuteReflect(ctx) {
 
               {/* Error annotation under leaf 4 */}
               <text
-                x={WALK_LEAVES[3].x + 55}
+                x={WALK_LEAVES[3].x + WALK_W / 2}
                 y={112}
                 fill={SOFT.red}
                 fontSize="11"
@@ -491,38 +509,38 @@ export default function PlanExecuteReflect(ctx) {
                 business_rule Error
               </text>
 
-              {/* Bent arrow from leaf 4 down to leaf 5 */}
+              {/* Bent arrow from leaf 4 down to leaf 5 (canvas center x = 320) */}
               <path
-                d={`M ${WALK_LEAVES[3].x + 55} 120 L ${WALK_LEAVES[3].x + 55} 160 L 300 160 L 300 200`}
+                d={`M ${WALK_LEAVES[3].x + WALK_W / 2} 120 L ${WALK_LEAVES[3].x + WALK_W / 2} 160 L 320 160 L 320 200`}
                 fill="none"
                 stroke={SOFT.purple}
                 strokeWidth="1.6"
                 strokeDasharray="4 3"
               />
-              <polygon points={`300,200 296,194 304,194`} fill={SOFT.purple} />
-              <text x={400} y={150} fill={SOFT.purple} fontSize="11" fontWeight="600" textAnchor="middle">
+              <polygon points={`320,200 316,194 324,194`} fill={SOFT.purple} />
+              <text x={440} y={150} fill={SOFT.purple} fontSize="11" fontWeight="600" textAnchor="middle">
                 Executor Adapts -&gt; Adds A Leaf
               </text>
 
               {/* Step 5 leaf centered */}
               <rect
-                x={245}
+                x={251}
                 y={208}
-                width={110}
+                width={WALK_W}
                 height={72}
                 rx={6}
                 fill={`${C.purple}1f`}
                 stroke={C.purple}
                 strokeWidth="2"
               />
-              <text x={300} y={230} fill={C.purple} fontSize="12" fontWeight="700" textAnchor="middle">
+              <text x={320} y={230} fill={C.purple} fontSize="11" fontWeight="700" textAnchor="middle">
                 5. escalate_human
               </text>
-              <text x={300} y={250} fill={SOFT.purple} fontSize="10" fontWeight="500" textAnchor="middle">
+              <text x={320} y={250} fill={SOFT.purple} fontSize="10" fontWeight="500" textAnchor="middle">
                 Reason: business_rule
               </text>
               <rect
-                x={280}
+                x={300}
                 y={258}
                 width={40}
                 height={16}
@@ -531,11 +549,11 @@ export default function PlanExecuteReflect(ctx) {
                 stroke={C.purple}
                 strokeWidth="1"
               />
-              <text x={300} y={270} fill={C.purple} fontSize="10" fontWeight="700" textAnchor="middle">
+              <text x={320} y={270} fill={C.purple} fontSize="10" fontWeight="700" textAnchor="middle">
                 Done
               </text>
 
-              <text x={300} y={304} fill={`${SOFT.red}b3`} fontSize="11" fontWeight="600" textAnchor="middle">
+              <text x={320} y={304} fill={`${SOFT.red}b3`} fontSize="11" fontWeight="600" textAnchor="middle">
                 Adapted Plan Closes The Loop
               </text>
             </svg>

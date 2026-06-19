@@ -5,7 +5,7 @@
 **Author:** Rajul Babel
 **Site:** https://rajulbabel.github.io/learn-ai/
 **Source:** https://github.com/rajulbabel/learn-ai
-**Last updated:** 2026-06-16
+**Last updated:** 2026-06-19
 
 ## About
 

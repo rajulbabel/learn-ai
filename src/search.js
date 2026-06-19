@@ -24,6 +24,18 @@ function manifestFingerprint(m) {
   return `${m.count}-${ids[0]}-${ids[ids.length - 1]}`;
 }
 
+// Expected embeddings.bin byte length for a corpus of `count` vectors at the
+// given `dim`. Each row is `dim` int8 values + a float32 scale (dim + 4 bytes),
+// followed by a trailing Uint16 chunkIdx region (2 bytes per vector). A cached
+// bin whose length differs predates the current format (or is truncated) and
+// must be discarded: the cache key (checksum:count-firstId-lastId) does not
+// change when only the bin layout changes, so an older deploy could otherwise
+// poison the IndexedDB cache forever, throwing "Invalid typed array length"
+// and silently disabling semantic search for every returning visitor.
+export function expectedBinBytes(count, dim) {
+  return count * (dim + 4) + count * 2;
+}
+
 let miniSearch = null;
 let chunks = [];
 let chunkById = new Map();
@@ -114,8 +126,12 @@ export async function prefetchSearch() {
     const binPromise = Promise.all([metaPromise, manifestPromise]).then(async ([meta, mf]) => {
       manifest = mf;
       const cacheKey = `${meta.checksum}:${manifestFingerprint(mf)}`;
+      const wantBytes = expectedBinBytes(mf.count, meta.dim);
       const cached = await getCachedSearchAssets(cacheKey);
-      if (cached && cached.bin instanceof Uint8Array) {
+      // Only trust a cached bin whose byte length matches the current format.
+      // A wrong-size hit (older layout / truncated download) is dropped and
+      // refetched, overwriting the poisoned entry under the same key.
+      if (cached && cached.bin instanceof Uint8Array && cached.bin.byteLength === wantBytes) {
         bin = cached.bin;
       } else {
         const binBuf = await fetch(new URL("./data/embeddings.bin", import.meta.url).href).then((r) =>

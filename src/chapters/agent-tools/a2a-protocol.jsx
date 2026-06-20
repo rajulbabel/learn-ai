@@ -125,23 +125,26 @@ export default function A2AProtocol(ctx) {
                   </g>
                 );
               })}
-              {/* Lines from agent to each tool */}
+              {/* Connector comb: agent fans out to all 4 tools via a trunk BELOW the box row, so no
+                  line crosses a box interior (the old straight y=80 lines struck through the tool labels). */}
+              <line x1="85" y1="105" x2="85" y2="120" stroke={C.purple} strokeWidth="1.2" strokeDasharray="3 3" />
+              <line x1="85" y1="120" x2="485" y2="120" stroke={C.purple} strokeWidth="1.2" strokeDasharray="3 3" />
               {[0, 1, 2, 3].map((i) => {
-                const tx = 204 + i * 82;
+                const cx = 204 + i * 82 + 35;
                 return (
                   <line
-                    key={`mcp-line-${i}`}
-                    x1="130"
-                    y1="80"
-                    x2={tx}
-                    y2="80"
+                    key={`mcp-riser-${i}`}
+                    x1={cx}
+                    y1="120"
+                    x2={cx}
+                    y2="105"
                     stroke={C.purple}
                     strokeWidth="1.2"
                     strokeDasharray="3 3"
                   />
                 );
               })}
-              <text x="280" y="125" fill={SOFT.purple} fontSize="11" fontStyle="italic" textAnchor="middle">
+              <text x="280" y="138" fill={SOFT.purple} fontSize="11" fontStyle="italic" textAnchor="middle">
                 Agent calls function
               </text>
 

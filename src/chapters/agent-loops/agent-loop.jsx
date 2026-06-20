@@ -135,46 +135,39 @@ export default function AgentLoop(ctx) {
             <svg viewBox="0 0 360 260" style={{ width: "100%", maxWidth: 440, display: "block", margin: "0 auto" }}>
               <desc>Three node circular flow showing reason then act then observe cycle of the agent loop.</desc>
 
-              {/* Circular arrows between the 3 nodes (REASON -> ACT -> OBSERVE -> REASON) */}
-              {CYCLE_NODES.map((n, i) => {
-                const next = CYCLE_NODES[(i + 1) % CYCLE_NODES.length];
-                // Arc between two points along the cycle circle (radius 80, center CYCLE_CENTER).
-                // Use a slightly larger radius for the arc so it sits outside the nodes.
-                const r = 100;
+              {/* Loop arcs routed through the gaps BETWEEN the 3 node boxes. Endpoints sit on box edges
+                  and each arc bows outward, so the loop never crosses a box or its text. Arrowheads point
+                  into the destination node. (The old version anchored arcs at box centers, striking labels.) */}
+              {[
+                { s: [190, 72], c: [300, 118], e: [239, 178], nc: [249, 200] }, // REASON -> ACT (right side)
+                { s: [215, 222], c: [180, 260], e: [145, 222], nc: [111, 200] }, // ACT -> OBSERVE (bottom)
+                { s: [121, 178], c: [60, 118], e: [170, 72], nc: [180, 50] }, // OBSERVE -> REASON (left side)
+              ].map((a, i) => {
+                const [ex, ey] = a.e;
+                let dx = a.nc[0] - ex;
+                let dy = a.nc[1] - ey;
+                const len = Math.sqrt(dx * dx + dy * dy);
+                dx /= len;
+                dy /= len;
+                const px = -dy;
+                const py = dx;
+                const back = 12;
+                const half = 5.5;
+                const bx = ex - dx * back;
+                const by = ey - dy * back;
                 return (
                   <g key={`arc-${i}`}>
                     <path
-                      d={`M ${n.x} ${n.y} A ${r} ${r} 0 0 1 ${next.x} ${next.y}`}
+                      d={`M ${a.s[0]} ${a.s[1]} Q ${a.c[0]} ${a.c[1]} ${ex} ${ey}`}
                       fill="none"
                       stroke={SOFT.orange}
                       strokeWidth="1.5"
                     />
+                    <polygon
+                      points={`${ex},${ey} ${bx + px * half},${by + py * half} ${bx - px * half},${by - py * half}`}
+                      fill={SOFT.orange}
+                    />
                   </g>
-                );
-              })}
-
-              {/* Arrowheads pointing into each node, oriented along the radial outward direction */}
-              {CYCLE_NODES.map((n, i) => {
-                const dx = n.x - CYCLE_CENTER.cx;
-                const dy = n.y - CYCLE_CENTER.cy;
-                const len = Math.sqrt(dx * dx + dy * dy);
-                const ux = dx / len;
-                const uy = dy / len;
-                // Perpendicular for arrow base
-                const px = -uy;
-                const py = ux;
-                const tipX = n.x - ux * 22;
-                const tipY = n.y - uy * 22;
-                const baseX = tipX - px * 7;
-                const baseY = tipY - py * 7;
-                const base2X = tipX + px * 7;
-                const base2Y = tipY + py * 7;
-                return (
-                  <polygon
-                    key={`tip-${i}`}
-                    points={`${tipX},${tipY} ${baseX},${baseY} ${base2X},${base2Y}`}
-                    fill={SOFT.orange}
-                  />
                 );
               })}
 
@@ -301,7 +294,14 @@ export default function AgentLoop(ctx) {
                   <text x={s.x + BOX_W / 2} y={88} fill={C.yellow} fontSize="12" fontWeight="700" textAnchor="middle">
                     {s.label}
                   </text>
-                  <text x={s.x + BOX_W / 2} y={104} fill={SOFT.yellow} fontSize="10" fontWeight="500" textAnchor="middle">
+                  <text
+                    x={s.x + BOX_W / 2}
+                    y={104}
+                    fill={SOFT.yellow}
+                    fontSize="10"
+                    fontWeight="500"
+                    textAnchor="middle"
+                  >
                     {s.note}
                   </text>
                 </g>
@@ -343,7 +343,14 @@ export default function AgentLoop(ctx) {
                       stroke={colorVal}
                       strokeWidth="1.5"
                     />
-                    <text x={t.x + BOX_W / 2} y={250} fill={colorVal} fontSize="12" fontWeight="700" textAnchor="middle">
+                    <text
+                      x={t.x + BOX_W / 2}
+                      y={250}
+                      fill={colorVal}
+                      fontSize="12"
+                      fontWeight="700"
+                      textAnchor="middle"
+                    >
                       {t.label}
                     </text>
                     <text x={t.x + BOX_W / 2} y={266} fill={softVal} fontSize="10" fontWeight="500" textAnchor="middle">

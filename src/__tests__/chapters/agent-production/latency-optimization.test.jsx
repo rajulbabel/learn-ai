@@ -17,6 +17,19 @@ describe("LatencyOptimization (28.8)", () => {
     expect(container.textContent).toMatch(/Where The Seconds Go/i);
   });
 
+  it("waterfall label clears the ms value for 4-digit spans", () => {
+    const { container } = render(LatencyOptimization(makeCtx({ sub: 0 })));
+    const texts = [...container.querySelectorAll("svg text")];
+    const ms = texts.find((t) => t.textContent.trim() === "1200ms");
+    const label = texts.find((t) => /Decide: Call lookup_customer/.test(t.textContent));
+    expect(ms).toBeTruthy();
+    expect(label).toBeTruthy();
+    // 4-digit ms values render ~48px wide; the label must start far enough
+    // right that "1200ms" and the label do not butt against each other.
+    const gap = parseFloat(label.getAttribute("x")) - parseFloat(ms.getAttribute("x"));
+    expect(gap).toBeGreaterThanOrEqual(54);
+  });
+
   it("sub=1 explains streaming win", () => {
     const { container } = render(LatencyOptimization(makeCtx({ sub: 1 })));
     expect(container.textContent).toMatch(/stream/i);

@@ -93,7 +93,7 @@ export default function LatencyOptimization(ctx) {
                       <text x={msX} y={y + 24} fill={accent} fontSize="12" fontWeight="700">
                         {s.ms}ms
                       </text>
-                      <text x={msX + 48} y={y + 24} fill={SOFT[s.color]} fontSize="11">
+                      <text x={msX + 56} y={y + 24} fill={SOFT[s.color]} fontSize="11">
                         {s.label}
                       </text>
                     </g>

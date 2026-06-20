@@ -54,4 +54,15 @@ describe("PromptInjectionDefenses (28.10)", () => {
     expect(container.textContent).toMatch(/pattern|sequence|drift|spike/i);
     expect(container.textContent).toMatch(/What To Alert On/i);
   });
+
+  it("does not render raw HTML entities in any sub-step", () => {
+    // Entities placed inside JS string literals are NOT decoded by React when
+    // rendered as text nodes, so they leak as literal "&apos;" / "&quot;" on
+    // screen. The visible text must use real characters instead.
+    for (let sub = 0; sub <= 5; sub++) {
+      const { container } = render(PromptInjectionDefenses(makeCtx({ sub })));
+      expect(container.textContent).not.toMatch(/&apos;|&quot;|&amp;/);
+      cleanup();
+    }
+  });
 });

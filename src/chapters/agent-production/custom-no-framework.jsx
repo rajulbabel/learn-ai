@@ -69,19 +69,19 @@ const CUSTOM_DECISION_LEAVES = [
   {
     label: "Multi-Vendor Strategy Required",
     verdict: "YES - CUSTOM",
-    why: "Vendor-Agnostic Adapter Saves The Migration Later.",
+    why: "Vendor-Agnostic Adapter Eases Migration.",
     accent: "green",
   },
   {
     label: "One-Off Prototype, Ship This Week",
     verdict: "NO - USE FRAMEWORK",
-    why: "Ship Fast. You Can Rebuild Later If It Sticks.",
+    why: "Ship Fast. Rebuild Later If It Sticks.",
     accent: "red",
   },
   {
     label: "Team Of Fewer Than 3 Engineers",
     verdict: "NO - USE FRAMEWORK",
-    why: "You Cannot Maintain A Custom Harness AND Ship Features.",
+    why: "Cannot Maintain Custom Harness + Features.",
     accent: "red",
   },
 ];
@@ -359,7 +359,7 @@ return "Max iterations reached - escalating to human."`}
                       {leaf.verdict}
                     </text>
                     <text x={454} y={y + 22} fill={soft} fontSize="11">
-                      {leaf.why.slice(0, 24)}
+                      {leaf.why}
                     </text>
                   </g>
                 );

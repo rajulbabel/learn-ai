@@ -35,6 +35,15 @@ describe("MemoryTaxonomy (26.7)", () => {
     expect(container.textContent).toMatch(/Agent Memory Taxonomy/i);
   });
 
+  it("sub=2 tree labels long-term leaves with the correct chapter numbers", () => {
+    const { container } = render(MemoryTaxonomy(makeCtx({ sub: 2 })));
+    expect(container.textContent).toMatch(/26\.9/);
+    expect(container.textContent).toMatch(/26\.10/);
+    expect(container.textContent).toMatch(/26\.11/);
+    // Stale references to a non-existent Section 13 chapter must not appear.
+    expect(container.textContent).not.toMatch(/13\.2[678]/);
+  });
+
   it("sub=3 shows the T2 memory snapshot", () => {
     const { container } = render(MemoryTaxonomy(makeCtx({ sub: 3 })));
     expect(container.textContent).toMatch(/alice@example\.com|c-9924/i);

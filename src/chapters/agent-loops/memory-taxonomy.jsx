@@ -288,7 +288,7 @@ export default function MemoryTaxonomy(ctx) {
                       {t.name}
                     </text>
                     <text x={x} y={240} fill={soft} fontSize="10" textAnchor="middle">
-                      13.{26 + i}
+                      26.{9 + i}
                     </text>
                     <text x={x} y={258} fill={soft} fontSize="10" textAnchor="middle">
                       {["Events", "Facts", "Skills"][i]}

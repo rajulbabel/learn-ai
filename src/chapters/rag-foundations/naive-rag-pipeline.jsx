@@ -86,10 +86,20 @@ export default function NaiveRAGPipeline(ctx) {
               <text x="547.5" y="22" textAnchor="middle" fill={C.yellow} fontSize="12" fontWeight="bold">
                 Query Time (Online)
               </text>
-              {/* Phase divider */}
+              {/* Phase divider - split into two segments so the dashed line
+                  does not cross the Store -> Retrieve connector arrow at y=75 */}
               <line
                 x1="422.5"
                 y1="30"
+                x2="422.5"
+                y2="66"
+                stroke="rgba(255,255,255,0.12)"
+                strokeWidth="1"
+                strokeDasharray="3 3"
+              />
+              <line
+                x1="422.5"
+                y1="84"
                 x2="422.5"
                 y2="150"
                 stroke="rgba(255,255,255,0.12)"

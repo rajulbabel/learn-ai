@@ -482,7 +482,8 @@ export default function LoopTermination(ctx) {
                 partial transcript.
               </desc>
 
-              {/* 3 stacked boxes, width 400, x_start = (560-400)/2 = 80 */}
+              {/* 3 stacked boxes, width 440, x_start = (560-440)/2 = 60. Badge sits */}
+              {/* in the left margin; title + note are centered in the space to its right. */}
               {ESCALATION_STEPS.map((step, i) => {
                 const accent = C[step.color];
                 const soft = SOFT[step.color];
@@ -490,9 +491,9 @@ export default function LoopTermination(ctx) {
                 return (
                   <g key={`esc-${i}`}>
                     <rect
-                      x={80}
+                      x={60}
                       y={y}
-                      width={400}
+                      width={440}
                       height={60}
                       rx={8}
                       fill={`${accent}1f`}
@@ -500,14 +501,14 @@ export default function LoopTermination(ctx) {
                       strokeWidth="1.8"
                     />
                     {/* Step number badge */}
-                    <circle cx={108} cy={y + 30} r={14} fill={accent} />
-                    <text x={108} y={y + 35} fill="#08080d" fontSize="13" fontWeight="800" textAnchor="middle">
+                    <circle cx={86} cy={y + 30} r={14} fill={accent} />
+                    <text x={86} y={y + 35} fill="#08080d" fontSize="13" fontWeight="800" textAnchor="middle">
                       {i + 1}
                     </text>
-                    <text x={280} y={y + 24} fill={accent} fontSize="13" fontWeight="700" textAnchor="middle">
+                    <text x={290} y={y + 24} fill={accent} fontSize="13" fontWeight="700" textAnchor="middle">
                       {step.label}
                     </text>
-                    <text x={280} y={y + 46} fill={soft} fontSize="11" fontWeight="500" textAnchor="middle">
+                    <text x={290} y={y + 46} fill={soft} fontSize="11" fontWeight="500" textAnchor="middle">
                       {step.note}
                     </text>
                     {/* Down arrow connecting to next step */}

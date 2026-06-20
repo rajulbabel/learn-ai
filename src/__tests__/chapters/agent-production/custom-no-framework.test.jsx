@@ -38,6 +38,18 @@ describe("CustomNoFramework (28.15)", () => {
     expect(container.textContent).toMatch(/Stay Custom When/i);
   });
 
+  it("sub=3 decision-tree why labels render whole, not chopped mid-word", () => {
+    const { container } = render(CustomNoFramework(makeCtx({ sub: 3 })));
+    const text = container.textContent;
+    // Each "why" reason must read as a complete phrase ending in a period -
+    // not a mid-word slice like "Becom" / "Inl" / "Rebui" / "Cu".
+    expect(text).toMatch(/Framework Overhead Becomes The Bottleneck\./);
+    expect(text).toMatch(/Inline Hot Paths\./);
+    expect(text).toMatch(/Rebuild Later If It Sticks\./);
+    expect(text).not.toMatch(/Becom\b(?!es)/);
+    expect(text).not.toMatch(/Rebui\b/);
+  });
+
   it("sub=4 shows hybrid approach", () => {
     const { container } = render(CustomNoFramework(makeCtx({ sub: 4 })));
     expect(container.textContent).toMatch(/hybrid|build some|buy some/i);

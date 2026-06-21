@@ -52,7 +52,7 @@ const FRESHNESS_AXIS = [
     name: "Prompting",
     color: C.cyan,
     soft: SOFT.cyan,
-    pos: 0.05,
+    pos: 0.18,
     freshness: "Never",
     note: "Whatever you wrote into the prompt is frozen.",
   },
@@ -331,7 +331,7 @@ export default function PromptVsTuneVsRagVsAgent(ctx) {
               {/* Markers */}
               {FRESHNESS_AXIS.map((m, i) => {
                 const x = 40 + m.pos * 440;
-                const y = i % 2 === 0 ? 50 : 30;
+                const y = i % 2 === 0 ? 56 : 22;
                 return (
                   <g key={m.name}>
                     <line x1={x} y1="80" x2={x} y2={y + 10} stroke={m.color} strokeWidth="1.5" />

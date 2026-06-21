@@ -299,7 +299,7 @@ export default function CorrectiveRAG(ctx) {
 
               {/* Branches */}
               {/* CORRECT */}
-              <line x1={300} y1={195} x2={140} y2={250} stroke={C.green} strokeOpacity="0.7" strokeWidth="1.5" />
+              <line x1={360} y1={200} x2={140} y2={250} stroke={C.green} strokeOpacity="0.7" strokeWidth="1.5" />
               <rect
                 x={40}
                 y={250}
@@ -333,7 +333,7 @@ export default function CorrectiveRAG(ctx) {
               </text>
 
               {/* INCORRECT */}
-              <line x1={420} y1={195} x2={580} y2={250} stroke={C.red} strokeOpacity="0.7" strokeWidth="1.5" />
+              <line x1={360} y1={200} x2={580} y2={250} stroke={C.red} strokeOpacity="0.7" strokeWidth="1.5" />
               <rect
                 x={480}
                 y={250}

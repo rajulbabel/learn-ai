@@ -511,23 +511,23 @@ export default function WhyProtocols(ctx) {
                 (Untrusted)
               </text>
 
-              {/* Arrows crossing the boundary - capabilities listed (server -> host) */}
-              <path d="M 240 148 Q 200 128 170 108" fill="none" stroke={C.purple} strokeWidth="1.5" />
-              <polygon points="170,108 178,111 175,117" fill={C.purple} />
+              {/* Arrow - capabilities listed (server boundary -> host boundary, upper left) */}
+              <line x1="234" y1="146" x2="190" y2="115" stroke={C.purple} strokeWidth="1.5" />
+              <polygon points="183,110 193,112 188,119" fill={C.purple} />
               <text x="135" y="98" fill={SOFT.purple} fontSize="11" fontWeight="700">
                 Capabilities Listed
               </text>
 
-              {/* Arrows crossing the boundary - tool call authorized (host -> server) */}
-              <path d="M 390 108 Q 360 128 320 148" fill="none" stroke={C.cyan} strokeWidth="1.5" />
-              <polygon points="320,148 328,145 326,153" fill={C.cyan} />
+              {/* Arrow - tool call authorized (host boundary -> server boundary, upper right) */}
+              <line x1="377" y1="110" x2="333" y2="141" stroke={C.cyan} strokeWidth="1.5" />
+              <polygon points="326,146 331,137 336,145" fill={C.cyan} />
               <text x="380" y="98" fill={SOFT.cyan} fontSize="11" fontWeight="700">
                 Tool Calls Authorized
               </text>
 
-              {/* Arrows crossing the boundary - results returned (server -> host) */}
-              <path d="M 320 218 Q 360 248 400 268" fill="none" stroke={C.green} strokeWidth="1.5" />
-              <polygon points="400,268 392,265 395,273" fill={C.green} />
+              {/* Arrow - results returned (server boundary -> host boundary, lower right) */}
+              <line x1="326" y1="210" x2="370" y2="241" stroke={C.green} strokeWidth="1.5" />
+              <polygon points="377,246 367,245 372,237" fill={C.green} />
               <text x="380" y="288" fill={SOFT.green} fontSize="11" fontWeight="700">
                 Results Returned
               </text>

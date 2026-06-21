@@ -152,22 +152,22 @@ export default function McpSecurity(ctx) {
                 Third-Party Tool Code
               </text>
 
-              {/* Arrow crossing - List (server -> host). Tail anchored on the r=60 server boundary (center 280,178). */}
-              <path d="M 232 142 Q 200 128 165 108" fill="none" stroke={C.cyan} strokeWidth="1.5" />
+              {/* Arrow crossing - List (server -> host). Tail rests just outside the r=60 server boundary (center 280,178). */}
+              <path d="M 230.4 140.8 Q 199 127 165 108" fill="none" stroke={C.cyan} strokeWidth="1.5" />
               <polygon points="165,108 173,111 170,117" fill={C.cyan} />
               <text x="120" y="98" fill={SOFT.cyan} fontSize="11" fontWeight="700">
                 List
               </text>
 
-              {/* Arrow crossing - Call (host -> server). Tip anchored on the r=60 server boundary (center 280,178). */}
-              <path d="M 395 108 Q 360 128 328 142" fill="none" stroke={C.blue} strokeWidth="1.5" />
-              <polygon points="328,142 336,139 334,147" fill={C.blue} />
+              {/* Arrow crossing - Call (host -> server). Tip rests just outside the r=60 server boundary so it touches, never pokes through. */}
+              <path d="M 395 108 Q 365 124 337.6 134.8" fill="none" stroke={C.blue} strokeWidth="1.5" />
+              <polygon points="330.4,140.2 340.6,138.8 334.6,130.8" fill={C.blue} />
               <text x="400" y="98" fill={SOFT.blue} fontSize="11" fontWeight="700">
                 Call
               </text>
 
-              {/* Arrow crossing - Result (server -> host). Tail anchored on the r=60 server boundary (center 280,178). */}
-              <path d="M 322 220 Q 360 248 400 268" fill="none" stroke={C.green} strokeWidth="1.5" />
+              {/* Arrow crossing - Result (server -> host). Tail rests just outside the r=60 server boundary (center 280,178). */}
+              <path d="M 323.8 221.8 Q 362 248 400 268" fill="none" stroke={C.green} strokeWidth="1.5" />
               <polygon points="400,268 392,265 395,273" fill={C.green} />
               <text x="400" y="288" fill={SOFT.green} fontSize="11" fontWeight="700">
                 Result

@@ -139,20 +139,22 @@ export default function AgentLoop(ctx) {
                   and each arc bows outward, so the loop never crosses a box or its text. Arrowheads point
                   into the destination node. (The old version anchored arcs at box centers, striking labels.) */}
               {[
-                { s: [190, 72], c: [300, 118], e: [239, 178], nc: [249, 200] }, // REASON -> ACT (right side)
-                { s: [215, 222], c: [180, 260], e: [145, 222], nc: [111, 200] }, // ACT -> OBSERVE (bottom)
-                { s: [121, 178], c: [60, 118], e: [170, 72], nc: [180, 50] }, // OBSERVE -> REASON (left side)
+                { s: [190, 72], c: [300, 118], e: [239, 178] }, // REASON -> ACT (right side)
+                { s: [215, 222], c: [180, 260], e: [145, 222] }, // ACT -> OBSERVE (bottom)
+                { s: [121, 178], c: [60, 118], e: [170, 72] }, // OBSERVE -> REASON (left side)
               ].map((a, i) => {
                 const [ex, ey] = a.e;
-                let dx = a.nc[0] - ex;
-                let dy = a.nc[1] - ey;
+                // Orient the arrowhead along the curve's tangent at the endpoint (control -> end),
+                // so the head reads as a continuation of the arc instead of floating off at an angle.
+                let dx = ex - a.c[0];
+                let dy = ey - a.c[1];
                 const len = Math.sqrt(dx * dx + dy * dy);
                 dx /= len;
                 dy /= len;
                 const px = -dy;
                 const py = dx;
-                const back = 12;
-                const half = 5.5;
+                const back = 11;
+                const half = 5;
                 const bx = ex - dx * back;
                 const by = ey - dy * back;
                 return (
@@ -407,18 +409,39 @@ export default function AgentLoop(ctx) {
                 ];
                 return (
                   <>
-                    {edges.map((e, i) => (
-                      <g key={`ie-${i}`}>
-                        <line
-                          x1={innerNodes[e.from].x + 38}
-                          y1={innerNodes[e.from].y + 12}
-                          x2={innerNodes[e.to].x + 38}
-                          y2={innerNodes[e.to].y + 12}
-                          stroke={SOFT.red}
-                          strokeWidth="1.5"
-                        />
-                      </g>
-                    ))}
+                    {edges.map((e, i) => {
+                      // Clip each connector to the two box borders (half extents 38 x 14)
+                      // so the line never runs through a box interior or its label, and
+                      // point a small arrowhead into the destination edge.
+                      const ca = [innerNodes[e.from].x + 38, innerNodes[e.from].y + 14];
+                      const cb = [innerNodes[e.to].x + 38, innerNodes[e.to].y + 14];
+                      const dx = cb[0] - ca[0];
+                      const dy = cb[1] - ca[1];
+                      const len = Math.hypot(dx, dy);
+                      const ux = dx / len;
+                      const uy = dy / len;
+                      const tA = Math.min(38 / Math.abs(ux), 14 / Math.abs(uy));
+                      const tB = Math.min(38 / Math.abs(ux), 14 / Math.abs(uy));
+                      const sx = ca[0] + ux * tA;
+                      const sy = ca[1] + uy * tA;
+                      const ex = cb[0] - ux * tB;
+                      const ey = cb[1] - uy * tB;
+                      const px = -uy;
+                      const py = ux;
+                      const back = 9;
+                      const half = 4.5;
+                      const bx = ex - ux * back;
+                      const by = ey - uy * back;
+                      return (
+                        <g key={`ie-${i}`}>
+                          <line x1={sx} y1={sy} x2={ex} y2={ey} stroke={SOFT.red} strokeWidth="1.5" />
+                          <polygon
+                            points={`${ex},${ey} ${bx + px * half},${by + py * half} ${bx - px * half},${by - py * half}`}
+                            fill={SOFT.red}
+                          />
+                        </g>
+                      );
+                    })}
                     {innerNodes.map((n) => (
                       <g key={n.label}>
                         <rect

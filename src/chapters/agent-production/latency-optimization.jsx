@@ -332,10 +332,10 @@ export default function LatencyOptimization(ctx) {
                 rx={3}
                 strokeDasharray="4 3"
               />
-              <text x={117} y={148} fill={SOFT.purple} fontSize="12">
+              <text x={117} y={140} fill={SOFT.purple} fontSize="12">
                 lookup_customer (200ms)
               </text>
-              <text x={117} y={166} fill={SOFT.purple} fontSize="12">
+              <text x={117} y={158} fill={SOFT.purple} fontSize="12">
                 Result Cached, Waiting
               </text>
               <text x={320} y={195} fill={C.yellow} fontSize="13" fontWeight="700" textAnchor="middle">

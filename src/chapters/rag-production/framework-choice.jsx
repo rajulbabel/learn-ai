@@ -334,7 +334,7 @@ export default function FrameworkChoice(ctx) {
             framework choice in under a minute.
           </T>
           <div style={{ marginTop: 14, textAlign: "center" }}>
-            <svg viewBox="0 0 760 460" width="100%" style={{ maxWidth: 760 }} role="img">
+            <svg viewBox="0 0 870 470" width="100%" style={{ maxWidth: 870 }} role="img">
               <desc>
                 Decision tree for choosing a RAG framework: starts with whether RAG is the primary feature, branches on
                 team size and agent complexity, and recommends one of six options at the leaves.
@@ -343,123 +343,212 @@ export default function FrameworkChoice(ctx) {
                 <marker id="fc-arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
                   <polygon points="0 0, 8 4, 0 8" fill={C.pink} />
                 </marker>
+                <marker id="fc-arrow-cyan" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+                  <polygon points="0 0, 8 4, 0 8" fill={C.cyan} />
+                </marker>
+                <marker id="fc-arrow-purple" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+                  <polygon points="0 0, 8 4, 0 8" fill={C.purple} />
+                </marker>
+                <marker id="fc-arrow-orange" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+                  <polygon points="0 0, 8 4, 0 8" fill={C.orange} />
+                </marker>
+                <marker id="fc-arrow-yellow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+                  <polygon points="0 0, 8 4, 0 8" fill={C.yellow} />
+                </marker>
               </defs>
-              {/* Root */}
+
+              {/* ─── Level 0: Root ─── */}
               <rect
-                x="240"
+                x="270"
                 y="20"
-                width="280"
-                height="60"
+                width="300"
+                height="56"
                 rx="8"
                 fill={`${C.pink}1a`}
                 stroke={C.pink}
                 strokeWidth="2"
               />
-              <text x="380" y="48" textAnchor="middle" fill="#f8bbd0" fontSize="14" fontWeight="700">
+              <text x="420" y="46" textAnchor="middle" fill="#f8bbd0" fontSize="14" fontWeight="700">
                 Is RAG The Primary Product Feature?
               </text>
-              <text x="380" y="66" textAnchor="middle" fill="#f8bbd0" fontSize="12">
+              <text x="420" y="65" textAnchor="middle" fill="#f8bbd0" fontSize="12">
                 Start Here
               </text>
-              {/* YES branch -> left */}
-              <line x1="320" y1="80" x2="200" y2="130" stroke={C.pink} strokeWidth="2" markerEnd="url(#fc-arrow)" />
-              <text x="245" y="115" textAnchor="middle" fill="#80e9b1" fontSize="12" fontWeight="700">
+              {/* Root YES -> left question (center 215, top 130) */}
+              <line x1="370" y1="76" x2="227" y2="126" stroke={C.pink} strokeWidth="2" markerEnd="url(#fc-arrow)" />
+              <text x="312" y="100" textAnchor="middle" fill="#80e9b1" fontSize="12" fontWeight="700">
                 YES
               </text>
-              {/* NO branch -> right */}
-              <line x1="440" y1="80" x2="560" y2="130" stroke={C.pink} strokeWidth="2" markerEnd="url(#fc-arrow)" />
-              <text x="515" y="115" textAnchor="middle" fill="#ef9a9a" fontSize="12" fontWeight="700">
+              {/* Root NO -> right question (center 625, top 130) */}
+              <line x1="470" y1="76" x2="613" y2="126" stroke={C.pink} strokeWidth="2" markerEnd="url(#fc-arrow)" />
+              <text x="528" y="100" textAnchor="middle" fill="#ef9a9a" fontSize="12" fontWeight="700">
                 NO
               </text>
-              {/* Left branch: Mid-sized team? */}
-              <rect x="60" y="140" width="280" height="60" rx="8" fill={`${C.cyan}1a`} stroke={C.cyan} />
-              <text x="200" y="168" textAnchor="middle" fill="#80deea" fontSize="13" fontWeight="700">
+
+              {/* ─── Level 1 Left: Mid-sized team? (center 215) ─── */}
+              <rect x="70" y="130" width="290" height="56" rx="8" fill={`${C.cyan}1a`} stroke={C.cyan} />
+              <text x="215" y="156" textAnchor="middle" fill="#80deea" fontSize="13" fontWeight="700">
                 Mid-Sized Team With Full Control?
               </text>
-              <text x="200" y="186" textAnchor="middle" fill="#80deea" fontSize="11">
+              <text x="215" y="174" textAnchor="middle" fill="#80deea" fontSize="11">
                 3+ Engineers
               </text>
-              {/* Branches from Left */}
-              <line x1="120" y1="200" x2="80" y2="240" stroke={C.cyan} strokeWidth="2" markerEnd="url(#fc-arrow)" />
-              <text x="90" y="225" fill="#80e9b1" fontSize="11" fontWeight="700">
+              {/* Left YES -> leaf "No Framework + LlamaIndex Retriever" (center 112) */}
+              <line
+                x1="180"
+                y1="186"
+                x2="120"
+                y2="244"
+                stroke={C.cyan}
+                strokeWidth="2"
+                markerEnd="url(#fc-arrow-cyan)"
+              />
+              <text x="135" y="218" textAnchor="middle" fill="#80e9b1" fontSize="11" fontWeight="700">
                 YES
               </text>
-              <line x1="280" y1="200" x2="290" y2="240" stroke={C.cyan} strokeWidth="2" markerEnd="url(#fc-arrow)" />
-              <text x="300" y="225" fill="#ef9a9a" fontSize="11" fontWeight="700">
+              {/* Left NO -> leaf "LlamaIndex" (center 300) */}
+              <line
+                x1="250"
+                y1="186"
+                x2="298"
+                y2="244"
+                stroke={C.cyan}
+                strokeWidth="2"
+                markerEnd="url(#fc-arrow-cyan)"
+              />
+              <text x="293" y="218" textAnchor="middle" fill="#ef9a9a" fontSize="11" fontWeight="700">
                 NO
               </text>
-              {/* Leaf: No Framework + LlamaIndex retriever */}
-              <rect x="20" y="245" width="160" height="60" rx="8" fill={`${C.green}1a`} stroke={C.green} />
-              <text x="100" y="270" textAnchor="middle" fill="#80e9b1" fontSize="12" fontWeight="700">
+              {/* Leaf: No Framework + LlamaIndex retriever (center 112) */}
+              <rect x="22" y="250" width="180" height="60" rx="8" fill={`${C.green}1a`} stroke={C.green} />
+              <text x="112" y="275" textAnchor="middle" fill="#80e9b1" fontSize="12" fontWeight="700">
                 No Framework +
               </text>
-              <text x="100" y="290" textAnchor="middle" fill="#80e9b1" fontSize="12" fontWeight="700">
+              <text x="112" y="294" textAnchor="middle" fill="#80e9b1" fontSize="12" fontWeight="700">
                 LlamaIndex Retriever
               </text>
-              {/* Leaf: LlamaIndex */}
-              <rect x="190" y="245" width="160" height="60" rx="8" fill={`${C.green}1a`} stroke={C.green} />
-              <text x="270" y="278" textAnchor="middle" fill="#80e9b1" fontSize="13" fontWeight="700">
+              {/* Leaf: LlamaIndex (center 300) */}
+              <rect x="220" y="250" width="160" height="60" rx="8" fill={`${C.green}1a`} stroke={C.green} />
+              <text x="300" y="285" textAnchor="middle" fill="#80e9b1" fontSize="13" fontWeight="700">
                 LlamaIndex
               </text>
-              {/* Right branch: multi-step agent? */}
-              <rect x="420" y="140" width="280" height="60" rx="8" fill={`${C.purple}1a`} stroke={C.purple} />
-              <text x="560" y="168" textAnchor="middle" fill="#b8a9ff" fontSize="13" fontWeight="700">
+
+              {/* ─── Level 1 Right: Multi-step agent? (center 625) ─── */}
+              <rect x="480" y="130" width="290" height="56" rx="8" fill={`${C.purple}1a`} stroke={C.purple} />
+              <text x="625" y="156" textAnchor="middle" fill="#b8a9ff" fontSize="13" fontWeight="700">
                 Is It A Multi-Step Agent?
               </text>
-              <text x="560" y="186" textAnchor="middle" fill="#b8a9ff" fontSize="11">
+              <text x="625" y="174" textAnchor="middle" fill="#b8a9ff" fontSize="11">
                 Tool Use, Loops, Workflows
               </text>
-              <line x1="480" y1="200" x2="440" y2="240" stroke={C.purple} strokeWidth="2" markerEnd="url(#fc-arrow)" />
-              <text x="450" y="225" fill="#80e9b1" fontSize="11" fontWeight="700">
+              {/* Right YES -> sub-question "Want Explicit State?" (center 505) */}
+              <line
+                x1="585"
+                y1="186"
+                x2="517"
+                y2="244"
+                stroke={C.purple}
+                strokeWidth="2"
+                markerEnd="url(#fc-arrow-purple)"
+              />
+              <text x="533" y="218" textAnchor="middle" fill="#80e9b1" fontSize="11" fontWeight="700">
                 YES
               </text>
-              <line x1="640" y1="200" x2="680" y2="240" stroke={C.purple} strokeWidth="2" markerEnd="url(#fc-arrow)" />
-              <text x="665" y="225" fill="#ef9a9a" fontSize="11" fontWeight="700">
+              {/* Right NO -> sub-question "Single-Provider OK?" (center 745) */}
+              <line
+                x1="665"
+                y1="186"
+                x2="737"
+                y2="244"
+                stroke={C.purple}
+                strokeWidth="2"
+                markerEnd="url(#fc-arrow-purple)"
+              />
+              <text x="720" y="218" textAnchor="middle" fill="#ef9a9a" fontSize="11" fontWeight="700">
                 NO
               </text>
-              {/* Sub-question: explicit state? */}
-              <rect x="380" y="245" width="200" height="60" rx="8" fill={`${C.orange}1a`} stroke={C.orange} />
-              <text x="480" y="278" textAnchor="middle" fill="#ffcc80" fontSize="12" fontWeight="700">
+
+              {/* ─── Level 2 Right sub-questions ─── */}
+              {/* Want Explicit State? (center 505) */}
+              <rect x="405" y="250" width="200" height="56" rx="8" fill={`${C.orange}1a`} stroke={C.orange} />
+              <text x="505" y="283" textAnchor="middle" fill="#ffcc80" fontSize="13" fontWeight="700">
                 Want Explicit State?
               </text>
-              {/* Single-provider OK? */}
-              <rect x="600" y="245" width="160" height="60" rx="8" fill={`${C.yellow}1a`} stroke={C.yellow} />
-              <text x="680" y="278" textAnchor="middle" fill="#fff59d" fontSize="12" fontWeight="700">
+              {/* Single-Provider OK? (center 745) */}
+              <rect x="655" y="250" width="180" height="56" rx="8" fill={`${C.yellow}1a`} stroke={C.yellow} />
+              <text x="745" y="283" textAnchor="middle" fill="#fff59d" fontSize="13" fontWeight="700">
                 Single-Provider OK?
               </text>
-              {/* Sub-leaves: state */}
-              <line x1="420" y1="305" x2="380" y2="345" stroke={C.orange} strokeWidth="2" markerEnd="url(#fc-arrow)" />
-              <text x="390" y="330" fill="#80e9b1" fontSize="11" fontWeight="700">
+
+              {/* Want Explicit State? YES -> LangGraph (center 445) */}
+              <line
+                x1="475"
+                y1="306"
+                x2="447"
+                y2="364"
+                stroke={C.orange}
+                strokeWidth="2"
+                markerEnd="url(#fc-arrow-orange)"
+              />
+              <text x="445" y="338" textAnchor="middle" fill="#80e9b1" fontSize="11" fontWeight="700">
                 YES
               </text>
-              <line x1="540" y1="305" x2="580" y2="345" stroke={C.orange} strokeWidth="2" markerEnd="url(#fc-arrow)" />
-              <text x="565" y="330" fill="#ef9a9a" fontSize="11" fontWeight="700">
+              {/* Want Explicit State? NO -> LangChain (center 565) */}
+              <line
+                x1="535"
+                y1="306"
+                x2="563"
+                y2="364"
+                stroke={C.orange}
+                strokeWidth="2"
+                markerEnd="url(#fc-arrow-orange)"
+              />
+              <text x="565" y="338" textAnchor="middle" fill="#ef9a9a" fontSize="11" fontWeight="700">
                 NO
               </text>
-              <rect x="290" y="350" width="160" height="50" rx="8" fill={`${C.green}1a`} stroke={C.green} />
-              <text x="370" y="378" textAnchor="middle" fill="#80e9b1" fontSize="13" fontWeight="700">
+              {/* Single-Provider OK? YES -> Vendor SDK (center 685) */}
+              <line
+                x1="715"
+                y1="306"
+                x2="687"
+                y2="364"
+                stroke={C.yellow}
+                strokeWidth="2"
+                markerEnd="url(#fc-arrow-yellow)"
+              />
+              <text x="685" y="338" textAnchor="middle" fill="#80e9b1" fontSize="11" fontWeight="700">
+                YES
+              </text>
+              {/* Single-Provider OK? NO -> No Framework (center 805) */}
+              <line
+                x1="775"
+                y1="306"
+                x2="803"
+                y2="364"
+                stroke={C.yellow}
+                strokeWidth="2"
+                markerEnd="url(#fc-arrow-yellow)"
+              />
+              <text x="805" y="338" textAnchor="middle" fill="#ef9a9a" fontSize="11" fontWeight="700">
+                NO
+              </text>
+
+              {/* ─── Level 3 Right leaves (uniform 110 x 50) ─── */}
+              <rect x="390" y="370" width="110" height="50" rx="8" fill={`${C.green}1a`} stroke={C.green} />
+              <text x="445" y="399" textAnchor="middle" fill="#80e9b1" fontSize="13" fontWeight="700">
                 LangGraph
               </text>
-              <rect x="500" y="350" width="160" height="50" rx="8" fill={`${C.green}1a`} stroke={C.green} />
-              <text x="580" y="378" textAnchor="middle" fill="#80e9b1" fontSize="13" fontWeight="700">
+              <rect x="510" y="370" width="110" height="50" rx="8" fill={`${C.green}1a`} stroke={C.green} />
+              <text x="565" y="399" textAnchor="middle" fill="#80e9b1" fontSize="13" fontWeight="700">
                 LangChain
               </text>
-              {/* Single-provider sub-leaves */}
-              <line x1="640" y1="305" x2="600" y2="345" stroke={C.yellow} strokeWidth="2" markerEnd="url(#fc-arrow)" />
-              <text x="610" y="330" fill="#80e9b1" fontSize="11" fontWeight="700">
-                YES
-              </text>
-              <line x1="720" y1="305" x2="720" y2="345" stroke={C.yellow} strokeWidth="2" markerEnd="url(#fc-arrow)" />
-              <text x="730" y="330" fill="#ef9a9a" fontSize="11" fontWeight="700">
-                NO
-              </text>
-              <rect x="510" y="410" width="160" height="40" rx="8" fill={`${C.green}1a`} stroke={C.green} />
-              <text x="590" y="434" textAnchor="middle" fill="#80e9b1" fontSize="12" fontWeight="700">
+              <rect x="630" y="370" width="110" height="50" rx="8" fill={`${C.green}1a`} stroke={C.green} />
+              <text x="685" y="399" textAnchor="middle" fill="#80e9b1" fontSize="12" fontWeight="700">
                 Vendor SDK
               </text>
-              <rect x="680" y="410" width="60" height="40" rx="8" fill={`${C.green}1a`} stroke={C.green} />
-              <text x="710" y="434" textAnchor="middle" fill="#80e9b1" fontSize="11" fontWeight="700">
-                No FW
+              <rect x="750" y="370" width="110" height="50" rx="8" fill={`${C.green}1a`} stroke={C.green} />
+              <text x="805" y="399" textAnchor="middle" fill="#80e9b1" fontSize="12" fontWeight="700">
+                No Framework
               </text>
             </svg>
           </div>

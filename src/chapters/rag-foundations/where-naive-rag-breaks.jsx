@@ -436,11 +436,13 @@ export default function WhereNaiveRAGBreaks(ctx) {
                   />
                 );
               })}
-              {/* Label for position 5 */}
-              <text x={xFor(5)} y={yFor(0.18) + 22} textAnchor="middle" fill={C.red} fontSize="12" fontWeight="bold">
+              {/* Label for position 5 - placed above the dot, inside the open
+                  space of the U-curve so it does not collide with the x-axis
+                  line or the "5" tick label below */}
+              <text x={xFor(5)} y={yFor(0.18) - 26} textAnchor="middle" fill={C.red} fontSize="12" fontWeight="bold">
                 Position 5 (Relevant)
               </text>
-              <text x={xFor(5)} y={yFor(0.18) + 36} textAnchor="middle" fill="#ef9a9a" fontSize="11">
+              <text x={xFor(5)} y={yFor(0.18) - 12} textAnchor="middle" fill="#ef9a9a" fontSize="11">
                 Missed
               </text>
             </svg>
@@ -665,9 +667,8 @@ export default function WhereNaiveRAGBreaks(ctx) {
                 </T>
               </div>
               <T color="#f8bbd0" center size={13} style={{ marginTop: 10 }}>
-                Embedding lifecycle - covered in Section 17.8 - and chapters{" "}
-                <ChapterLink to="23.6">23.6</ChapterLink>-<ChapterLink to="23.10">23.10</ChapterLink> (drift detection)
-                fix this.
+                Embedding lifecycle - covered in Section 17.8 - and chapters <ChapterLink to="23.6">23.6</ChapterLink>-
+                <ChapterLink to="23.10">23.10</ChapterLink> (drift detection) fix this.
               </T>
             </div>
 
@@ -751,8 +752,8 @@ export default function WhereNaiveRAGBreaks(ctx) {
                 At 1000 QPS, costs $12,300/day.
               </T>
               <T color="#f8bbd0" center size={13} style={{ marginTop: 10 }}>
-                Chapters <ChapterLink to="23.6">23.6</ChapterLink>-<ChapterLink to="23.10">23.10</ChapterLink>{" "}
-                (caching, cost models, observability) fix this.
+                Chapters <ChapterLink to="23.6">23.6</ChapterLink>-<ChapterLink to="23.10">23.10</ChapterLink> (caching,
+                cost models, observability) fix this.
               </T>
             </div>
           </div>

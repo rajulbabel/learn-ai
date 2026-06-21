@@ -263,21 +263,21 @@ export default function MemoryTaxonomy(ctx) {
               </text>
 
               {/* 3 long-term leaves: episodic, semantic, procedural */}
-              {/* Long-term parent at x=400. 3 children at x=300, 400, 500 (rects 250-350, 350-450, 450-550). */}
-              <line x1={400} y1={140} x2={300} y2={200} stroke={C.purple} strokeWidth={1.4} />
+              {/* Long-term parent at x=400. 3 children centered at x=285, 400, 515, width 90 -> rects 240-330, 355-445, 470-560, 25px gaps. */}
+              <line x1={400} y1={140} x2={285} y2={200} stroke={C.purple} strokeWidth={1.4} />
               <line x1={400} y1={140} x2={400} y2={200} stroke={C.purple} strokeWidth={1.4} />
-              <line x1={400} y1={140} x2={500} y2={200} stroke={C.purple} strokeWidth={1.4} />
+              <line x1={400} y1={140} x2={515} y2={200} stroke={C.purple} strokeWidth={1.4} />
 
               {LONG_TERM_TYPES.map((t, i) => {
-                const x = 300 + i * 100;
+                const x = 285 + i * 115;
                 const accent = C[t.color];
                 const soft = SOFT[t.color];
                 return (
                   <g key={`leaf-${t.name}`}>
                     <rect
-                      x={x - 50}
+                      x={x - 45}
                       y={200}
-                      width={100}
+                      width={90}
                       height={70}
                       rx={8}
                       fill={`${accent}14`}

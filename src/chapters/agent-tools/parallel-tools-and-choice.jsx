@@ -337,28 +337,28 @@ export default function ParallelToolsAndChoice(ctx) {
                   stacked vertically to show they share the same time slot.
                 </desc>
                 {/* Row 1: LLM call 1 */}
-                <rect x="10" y="20" width="80" height="22" rx="4" fill={`${C.cyan}30`} stroke={C.cyan} />
-                <text x="50" y="35" fill={SOFT.cyan} fontSize="11" textAnchor="middle">
+                <rect x="50" y="20" width="80" height="22" rx="4" fill={`${C.cyan}30`} stroke={C.cyan} />
+                <text x="90" y="35" fill={SOFT.cyan} fontSize="11" textAnchor="middle">
                   LLM 1
                 </text>
                 {/* Row 1: lookup_customer (parallel, top) */}
-                <rect x="92" y="14" width="40" height="22" rx="4" fill={`${C.green}30`} stroke={C.green} />
-                <text x="112" y="28" fill={SOFT.green} fontSize="10" textAnchor="middle">
+                <rect x="132" y="14" width="40" height="22" rx="4" fill={`${C.green}30`} stroke={C.green} />
+                <text x="152" y="28" fill={SOFT.green} fontSize="10" textAnchor="middle">
                   200ms
                 </text>
-                <text x="138" y="28" fill={SOFT.green} fontSize="10" textAnchor="start">
+                <text x="178" y="28" fill={SOFT.green} fontSize="10" textAnchor="start">
                   lookup_customer
                 </text>
                 {/* Row 1: lookup_subscription (parallel, bottom) */}
-                <rect x="92" y="40" width="40" height="22" rx="4" fill={`${C.green}30`} stroke={C.green} />
-                <text x="112" y="54" fill={SOFT.green} fontSize="10" textAnchor="middle">
+                <rect x="132" y="40" width="40" height="22" rx="4" fill={`${C.green}30`} stroke={C.green} />
+                <text x="152" y="54" fill={SOFT.green} fontSize="10" textAnchor="middle">
                   200ms
                 </text>
-                <text x="138" y="54" fill={SOFT.green} fontSize="10" textAnchor="start">
+                <text x="178" y="54" fill={SOFT.green} fontSize="10" textAnchor="start">
                   lookup_subscription
                 </text>
                 {/* Time axis */}
-                <line x1="10" y1="78" x2="132" y2="78" stroke="#666" strokeWidth="1" />
+                <line x1="50" y1="78" x2="172" y2="78" stroke="#666" strokeWidth="1" />
                 <text x="160" y="100" fill="#aaa" fontSize="12" textAnchor="middle" fontWeight="700">
                   Total: 200ms tool work + 1 LLM call
                 </text>

@@ -676,8 +676,8 @@ export default function ToolUseAsBridge(ctx) {
                 Read result
               </text>
 
-              <path d="M 312 78 Q 380 105 405 138" fill="none" stroke={C.purple} strokeWidth="2" />
-              <polygon points="405,138 397,134 401,144" fill={C.purple} />
+              <path d="M 312 78 Q 380 105 404 135" fill="none" stroke={C.purple} strokeWidth="2" />
+              <polygon points="404,135 396,131 400,141" fill={C.purple} />
 
               <line x1="390" y1="165" x2="170" y2="165" stroke={C.green} strokeWidth="2" />
               <polygon points="170,165 178,161 178,169" fill={C.green} />

@@ -588,7 +588,7 @@ export default function ToolErrorsRetries(ctx) {
               <line x1="260" y1="54" x2="260" y2="84" stroke="#888" strokeWidth="1" />
               <polygon points="260,86 256,80 264,80" fill="#888" />
               {/* Step 2: Runtime validates */}
-              <rect x="160" y="88" width="200" height="44" rx="6" fill={`${C.green}24`} stroke={C.green} />
+              <rect x="150" y="88" width="220" height="44" rx="6" fill={`${C.green}24`} stroke={C.green} />
               <text x="260" y="106" fill={SOFT.green} fontSize="13" textAnchor="middle" fontWeight="700">
                 Runtime: Schema Validation
               </text>

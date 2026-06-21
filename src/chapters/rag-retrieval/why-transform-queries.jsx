@@ -23,19 +23,19 @@ const LEXICAL_MISMATCH_ROWS = [
 // Sub=2 ambiguity branches.
 const AMBIGUITY_BRANCHES = [
   {
-    intent: "Export data to CSV",
+    intent: "Export Data To CSV",
     doc: "doc-9 (Export Formats)",
     color: C.cyan,
     accent: "#80deea",
   },
   {
-    intent: "Export user list for admin",
+    intent: "Export User List For Admin",
     doc: "doc-26 (Bulk Operations)",
     color: C.purple,
     accent: "#b8a9ff",
   },
   {
-    intent: "Cancel an export job that failed",
+    intent: "Cancel An Export Job That Failed",
     doc: "doc-29 (Export Failures)",
     color: C.pink,
     accent: "#f5b7f8",

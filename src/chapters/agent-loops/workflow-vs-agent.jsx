@@ -127,18 +127,32 @@ export default function WorkflowVsAgent(ctx) {
                   Central decision node with multiple branching options showing an open loop where the model picks
                   different paths each run.
                 </desc>
-                {AGENT_OPTIONS_SUB0.map((o, i) => (
-                  <line
-                    key={`opt-${i}`}
-                    x1={140}
-                    y1={90}
-                    x2={o.x}
-                    y2={o.y}
-                    stroke={`${SOFT.red}99`}
-                    strokeWidth="1.5"
-                    strokeDasharray="4 3"
-                  />
-                ))}
+                {AGENT_OPTIONS_SUB0.map((o, i) => {
+                  // Stop each option line at the Decide circle edge (r=26) and the tool box edge,
+                  // so no line runs through a box interior or crosses its label.
+                  const dx = o.x - 140;
+                  const dy = o.y - 90;
+                  const len = Math.hypot(dx, dy);
+                  const ux = dx / len;
+                  const uy = dy / len;
+                  const sx = 140 + ux * 26;
+                  const sy = 90 + uy * 26;
+                  const tHit = Math.min(28 / Math.abs(ux), 12 / Math.abs(uy));
+                  const ex = o.x - ux * tHit;
+                  const ey = o.y - uy * tHit;
+                  return (
+                    <line
+                      key={`opt-${i}`}
+                      x1={sx}
+                      y1={sy}
+                      x2={ex}
+                      y2={ey}
+                      stroke={`${SOFT.red}99`}
+                      strokeWidth="1.5"
+                      strokeDasharray="4 3"
+                    />
+                  );
+                })}
 
                 <path d="M 140 60 A 26 26 0 1 1 139.5 60" fill="none" stroke={SOFT.red} strokeWidth="1.5" />
                 <polygon points="139.5,60 134,55 138,68" fill={SOFT.red} />

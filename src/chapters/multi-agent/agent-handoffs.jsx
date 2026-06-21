@@ -265,17 +265,17 @@ export default function AgentHandoffs(ctx) {
                   </text>
                 </g>
               ))}
-              {/* Ring edges */}
-              <line x1={330} y1={45} x2={420} y2={100} stroke={C.indigo} strokeWidth={1.5} />
-              <line x1={420} y1={120} x2={330} y2={175} stroke={C.indigo} strokeWidth={1.5} />
-              <line x1={230} y1={175} x2={140} y2={120} stroke={C.indigo} strokeWidth={1.5} />
-              <line x1={140} y1={100} x2={230} y2={45} stroke={C.indigo} strokeWidth={1.5} />
+              {/* Ring edges - corner to corner of the diamond */}
+              <line x1={330} y1={53} x2={410} y2={92} stroke={C.indigo} strokeWidth={1.5} />
+              <line x1={410} y1={128} x2={330} y2={167} stroke={C.indigo} strokeWidth={1.5} />
+              <line x1={230} y1={167} x2={150} y2={128} stroke={C.indigo} strokeWidth={1.5} />
+              <line x1={150} y1={92} x2={230} y2={53} stroke={C.indigo} strokeWidth={1.5} />
               {/* Cross-edge */}
               <line
                 x1={330}
                 y1={45}
-                x2={140}
-                y2={120}
+                x2={150}
+                y2={116}
                 stroke={`${C.indigo}80`}
                 strokeWidth={1.2}
                 strokeDasharray="4,4"

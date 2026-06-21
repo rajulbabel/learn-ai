@@ -77,7 +77,7 @@ const PARALLEL_DETAIL = {
 // Stage 4: Merged -> Answer (chain).
 const COMPOSED_TOPO = {
   input: { x: 44, y: 152, label: "Ticket" },
-  classifier: { x: 124, y: 152, label: "Classifier" },
+  classifier: { x: 152, y: 152, label: "Classifier" },
   branches: [
     { x: 268, y: 48, label: "Billing" },
     { x: 268, y: 152, label: "Troubleshoot" },

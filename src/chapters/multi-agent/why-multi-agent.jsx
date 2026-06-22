@@ -273,32 +273,60 @@ export default function WhyMultiAgent(ctx) {
                 Decomposes The Task
               </text>
 
-              {/* 2 workers */}
+              {/* 2 workers. The connector runs from the planner bottom (280,70) to the
+                  worker box top edge (y=130); the arrowhead TIP sits exactly on that edge
+                  and is oriented along the line so it points into the box. */}
               {[
                 { x: 130, label: "Worker 1", role: "Lookup Customer" },
                 { x: 430, label: "Worker 2", role: "Process Refund" },
-              ].map((w, i) => (
-                <g key={`wk-${i}`}>
-                  <line x1={280} y1={70} x2={w.x} y2={120} stroke={C.blue} strokeWidth={1.6} />
-                  <polygon points={`${w.x - 4},116 ${w.x + 4},116 ${w.x},124`} fill={C.blue} />
-                  <rect
-                    x={w.x - 70}
-                    y={130}
-                    width={140}
-                    height={50}
-                    rx={10}
-                    fill={`${C.blue}22`}
-                    stroke={C.blue}
-                    strokeWidth={1.8}
-                  />
-                  <text x={w.x} y={152} fill={SOFT.blue} fontSize="13" fontWeight="700" textAnchor="middle">
-                    {w.label}
-                  </text>
-                  <text x={w.x} y={168} fill={SOFT.blue} fontSize="11" textAnchor="middle">
-                    {w.role}
-                  </text>
-                </g>
-              ))}
+              ].map((w, i) => {
+                // Line trajectory from planner bottom-center to worker; tip lands where it crosses y=130.
+                const x0 = 280,
+                  y0 = 70;
+                const dx = w.x - x0,
+                  dy = 120 - y0;
+                const sTip = (130 - y0) / dy; // param where trajectory hits box top
+                const tipX = x0 + dx * sTip,
+                  tipY = 130;
+                const len = Math.hypot(dx, dy);
+                const ux = dx / len,
+                  uy = dy / len; // unit direction toward tip
+                const px = -uy,
+                  py = ux; // perpendicular
+                const head = 11,
+                  halfW = 5; // arrowhead size
+                const bx = tipX - ux * head,
+                  by = tipY - uy * head; // base center
+                const c1x = bx + px * halfW,
+                  c1y = by + py * halfW;
+                const c2x = bx - px * halfW,
+                  c2y = by - py * halfW;
+                return (
+                  <g key={`wk-${i}`}>
+                    <line x1={x0} y1={y0} x2={bx} y2={by} stroke={C.blue} strokeWidth={1.8} />
+                    <polygon
+                      points={`${c1x.toFixed(1)},${c1y.toFixed(1)} ${c2x.toFixed(1)},${c2y.toFixed(1)} ${tipX.toFixed(1)},${tipY.toFixed(1)}`}
+                      fill={C.blue}
+                    />
+                    <rect
+                      x={w.x - 70}
+                      y={130}
+                      width={140}
+                      height={50}
+                      rx={10}
+                      fill={`${C.blue}22`}
+                      stroke={C.blue}
+                      strokeWidth={1.8}
+                    />
+                    <text x={w.x} y={152} fill={SOFT.blue} fontSize="13" fontWeight="700" textAnchor="middle">
+                      {w.label}
+                    </text>
+                    <text x={w.x} y={168} fill={SOFT.blue} fontSize="11" textAnchor="middle">
+                      {w.role}
+                    </text>
+                  </g>
+                );
+              })}
             </svg>
           </div>
 

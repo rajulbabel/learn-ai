@@ -317,14 +317,14 @@ export default function AgenticRAG(ctx) {
                 tool_call(...)
               </text>
               <path
-                d={`M ${633} ${222} L ${633} ${320} L ${510} ${320} L ${510} ${101} L ${460} ${101}`}
+                d={`M ${633} ${180} L ${633} ${101} L ${460} ${101}`}
                 stroke={C.cyan}
                 strokeOpacity="0.6"
                 strokeWidth="1.5"
                 fill="none"
                 markerEnd="url(#ar-loop-arrow)"
               />
-              <text x={571} y={336} fill="#80deea" fontSize="11" textAnchor="middle">
+              <text x={546} y={94} fill="#80deea" fontSize="11" textAnchor="middle">
                 tool_response Fed Back
               </text>
               <defs>

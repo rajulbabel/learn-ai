@@ -127,7 +127,7 @@ export default function RecursiveStructuralChunking(ctx) {
                         x1={xMid}
                         y1={yStart}
                         x2={xMid}
-                        y2={yEnd - 6}
+                        y2={yEnd - 3}
                         stroke={C.cyan}
                         strokeWidth="1.5"
                         markerEnd="url(#recurseArrow)"

@@ -267,6 +267,32 @@ export default function SelfRAG(ctx) {
                 for a given query.
               </desc>
 
+              {/* Arrow marker defs */}
+              <defs>
+                <marker
+                  id="sr-arrow-green"
+                  viewBox="0 0 10 10"
+                  refX="9"
+                  refY="5"
+                  markerWidth="7"
+                  markerHeight="7"
+                  orient="auto"
+                >
+                  <path d="M 0 0 L 10 5 L 0 10 z" fill={C.green} opacity="0.85" />
+                </marker>
+                <marker
+                  id="sr-arrow-red"
+                  viewBox="0 0 10 10"
+                  refX="9"
+                  refY="5"
+                  markerWidth="7"
+                  markerHeight="7"
+                  orient="auto"
+                >
+                  <path d="M 0 0 L 10 5 L 0 10 z" fill={C.red} opacity="0.85" />
+                </marker>
+              </defs>
+
               <rect
                 x={260}
                 y={10}
@@ -282,7 +308,16 @@ export default function SelfRAG(ctx) {
                 User Query
               </text>
 
-              <line x1={360} y1={52} x2={360} y2={80} stroke="#a5d6a7" strokeOpacity="0.6" />
+              <line
+                x1={360}
+                y1={52}
+                x2={360}
+                y2={80}
+                stroke="#a5d6a7"
+                strokeOpacity="0.6"
+                strokeWidth="1.5"
+                markerEnd="url(#sr-arrow-green)"
+              />
               <polygon
                 points="360,80 480,140 360,200 240,140"
                 fill={C.yellow}
@@ -297,7 +332,16 @@ export default function SelfRAG(ctx) {
                 Knowledge?
               </text>
 
-              <line x1={480} y1={140} x2={545} y2={140} stroke={C.green} strokeOpacity="0.7" strokeWidth="1.5" />
+              <line
+                x1={480}
+                y1={140}
+                x2={545}
+                y2={140}
+                stroke={C.green}
+                strokeOpacity="0.7"
+                strokeWidth="1.5"
+                markerEnd="url(#sr-arrow-green)"
+              />
               <text x={512} y={132} fill="#a5d6a7" fontSize="12" fontWeight="700" textAnchor="middle">
                 YES
               </text>
@@ -335,7 +379,16 @@ export default function SelfRAG(ctx) {
                 {"-> <issup>"}
               </text>
 
-              <line x1={240} y1={140} x2={175} y2={140} stroke={C.red} strokeOpacity="0.7" strokeWidth="1.5" />
+              <line
+                x1={240}
+                y1={140}
+                x2={175}
+                y2={140}
+                stroke={C.red}
+                strokeOpacity="0.7"
+                strokeWidth="1.5"
+                markerEnd="url(#sr-arrow-red)"
+              />
               <text x={208} y={132} fill="#ef9a9a" fontSize="12" fontWeight="700" textAnchor="middle">
                 NO
               </text>

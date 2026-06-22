@@ -514,7 +514,7 @@ export default function WhyProtocols(ctx) {
               {/* Arrow - capabilities listed (server boundary -> host boundary, upper left) */}
               <line x1="234" y1="146" x2="190" y2="115" stroke={C.purple} strokeWidth="1.5" />
               <polygon points="183,110 193,112 188,119" fill={C.purple} />
-              <text x="135" y="98" fill={SOFT.purple} fontSize="11" fontWeight="700">
+              <text x="176" y="100" textAnchor="end" fill={SOFT.purple} fontSize="11" fontWeight="700">
                 Capabilities Listed
               </text>
 

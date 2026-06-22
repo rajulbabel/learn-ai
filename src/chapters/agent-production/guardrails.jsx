@@ -273,7 +273,7 @@ export default function Guardrails(ctx) {
                     <line
                       x1={160}
                       y1={110}
-                      x2={195}
+                      x2={198}
                       y2={110}
                       stroke={SOFT.yellow}
                       strokeWidth={1.6}
@@ -296,8 +296,8 @@ export default function Guardrails(ctx) {
                     <line
                       x1={340}
                       y1={110}
-                      x2={375}
-                      y2={50}
+                      x2={378}
+                      y2={45}
                       stroke={SOFT.green}
                       strokeWidth={1.6}
                       markerEnd="url(#arrow-g)"
@@ -318,7 +318,7 @@ export default function Guardrails(ctx) {
                     <line
                       x1={340}
                       y1={110}
-                      x2={375}
+                      x2={378}
                       y2={110}
                       stroke={SOFT.red}
                       strokeWidth={1.6}
@@ -340,8 +340,8 @@ export default function Guardrails(ctx) {
                     <line
                       x1={340}
                       y1={110}
-                      x2={375}
-                      y2={170}
+                      x2={378}
+                      y2={175}
                       stroke={SOFT.purple}
                       strokeWidth={1.6}
                       markerEnd="url(#arrow-p)"
@@ -426,7 +426,7 @@ export default function Guardrails(ctx) {
               <line
                 x1={170}
                 y1={65}
-                x2={195}
+                x2={218}
                 y2={65}
                 stroke={SOFT.purple}
                 strokeWidth={1.6}
@@ -448,7 +448,7 @@ export default function Guardrails(ctx) {
                 Threshold Exceeded
               </text>
               {/* Path: human approval */}
-              <line x1={380} y1={65} x2={420} y2={65} stroke={SOFT.red} strokeWidth={1.6} markerEnd="url(#arrow-gr)" />
+              <line x1={380} y1={65} x2={423} y2={65} stroke={SOFT.red} strokeWidth={1.6} markerEnd="url(#arrow-gr)" />
               <rect
                 x={425}
                 y={40}
@@ -468,7 +468,7 @@ export default function Guardrails(ctx) {
               <line
                 x1={595}
                 y1={65}
-                x2={630}
+                x2={633}
                 y2={65}
                 stroke={SOFT.orange}
                 strokeWidth={1.6}

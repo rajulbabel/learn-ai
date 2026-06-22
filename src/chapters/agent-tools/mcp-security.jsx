@@ -153,21 +153,21 @@ export default function McpSecurity(ctx) {
               </text>
 
               {/* Arrow crossing - List (server -> host). Tail rests just outside the r=60 server boundary (center 280,178). */}
-              <path d="M 230.4 140.8 Q 199 127 165 108" fill="none" stroke={C.cyan} strokeWidth="1.5" />
+              <line x1="230.4" y1="140.8" x2="165" y2="108" stroke={C.cyan} strokeWidth="1.5" />
               <polygon points="165,108 173,111 170,117" fill={C.cyan} />
               <text x="120" y="98" fill={SOFT.cyan} fontSize="11" fontWeight="700">
                 List
               </text>
 
               {/* Arrow crossing - Call (host -> server). Tip rests just outside the r=60 server boundary so it touches, never pokes through. */}
-              <path d="M 395 108 Q 365 124 337.6 134.8" fill="none" stroke={C.blue} strokeWidth="1.5" />
+              <line x1="395" y1="108" x2="337.6" y2="134.8" stroke={C.blue} strokeWidth="1.5" />
               <polygon points="330.4,140.2 340.6,138.8 334.6,130.8" fill={C.blue} />
               <text x="400" y="98" fill={SOFT.blue} fontSize="11" fontWeight="700">
                 Call
               </text>
 
               {/* Arrow crossing - Result (server -> host). Tail rests just outside the r=60 server boundary (center 280,178). */}
-              <path d="M 323.8 221.8 Q 362 248 400 268" fill="none" stroke={C.green} strokeWidth="1.5" />
+              <line x1="323.8" y1="221.8" x2="400" y2="268" stroke={C.green} strokeWidth="1.5" />
               <polygon points="400,268 392,265 395,273" fill={C.green} />
               <text x="400" y="288" fill={SOFT.green} fontSize="11" fontWeight="700">
                 Result

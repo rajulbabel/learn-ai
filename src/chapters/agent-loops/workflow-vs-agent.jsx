@@ -316,8 +316,12 @@ export default function WorkflowVsAgent(ctx) {
 
               {HYBRID_NODES.slice(0, -1).map((n, i) => {
                 const next = HYBRID_NODES[i + 1];
-                const x1 = n.x + 90;
-                const x2 = next.x;
+                // Agent node is a circle (cx = node.x + 45, r = 36); rect nodes are 90 wide.
+                // Start at the source's right edge, end the tip exactly on the target's left edge,
+                // so an arrow into/out of the circle touches its rim instead of leaving a gap.
+                const AGENT_R = 36;
+                const x1 = n.kind === "agent" ? n.x + 45 + AGENT_R : n.x + 90;
+                const x2 = next.kind === "agent" ? next.x + 45 - AGENT_R : next.x;
                 return (
                   <g key={`he-${i}`}>
                     <line x1={x1} y1={90} x2={x2} y2={90} stroke={SOFT.amber} strokeWidth="1.5" />

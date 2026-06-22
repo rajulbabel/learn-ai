@@ -181,10 +181,10 @@ export default function SummaryAndContextMgmt(ctx) {
               <rect x={414} y={35} width={21} height={30} fill={`${C.yellow}50`} />
 
               {/* Arrows between stages */}
-              <line x1={170} y1={50} x2={200} y2={50} stroke={C.yellow} strokeWidth={1.6} />
-              <polygon points="196,47 204,47 200,43 200,57 196,53" fill={C.yellow} />
-              <line x1={360} y1={50} x2={390} y2={50} stroke={C.yellow} strokeWidth={1.6} />
-              <polygon points="386,47 394,47 390,43 390,57 386,53" fill={C.yellow} />
+              <line x1={170} y1={50} x2={201} y2={50} stroke={C.yellow} strokeWidth={1.6} />
+              <polygon points="201,45 201,55 210,50" fill={C.yellow} />
+              <line x1={360} y1={50} x2={391} y2={50} stroke={C.yellow} strokeWidth={1.6} />
+              <polygon points="391,45 391,55 400,50" fill={C.yellow} />
 
               <text x={280} y={140} fill={SOFT.yellow} fontSize="13" textAnchor="middle">
                 Repeat Every Time The Window Hits 50%.
@@ -442,8 +442,8 @@ export default function SummaryAndContextMgmt(ctx) {
           </T>
           <T color={SOFT.amber} center size={16} style={{ marginTop: 10 }}>
             Memory plus context-engineering decide what the model sees on EVERY turn.{" "}
-            <ChapterLink to="24.6">Chapter 24.6</ChapterLink> covered the prompt-assembly stack. This chapter closes
-            out by tying the memory layers into that stack.
+            <ChapterLink to="24.6">Chapter 24.6</ChapterLink> covered the prompt-assembly stack. This chapter closes out
+            by tying the memory layers into that stack.
           </T>
 
           <div style={{ ...tintedCard(C.amber), padding: 14, marginTop: 14 }}>
@@ -478,9 +478,8 @@ export default function SummaryAndContextMgmt(ctx) {
 
           <T color={SOFT.amber} center size={15} style={{ marginTop: 12 }}>
             Every layer comes from somewhere. Memory chapters <ChapterLink to="26.7">26.7</ChapterLink>-
-            <ChapterLink to="26.11">26.11</ChapterLink> supplied the sources; 24.6&apos;s assembly
-            stack joins them into a single prompt; this chapter closes the loop with summarization that keeps it all
-            under the token budget.
+            <ChapterLink to="26.11">26.11</ChapterLink> supplied the sources; 24.6&apos;s assembly stack joins them into
+            a single prompt; this chapter closes the loop with summarization that keeps it all under the token budget.
           </T>
         </Box>
       </Reveal>

@@ -320,16 +320,16 @@ export default function MultiQueryExpansion(ctx) {
                         <line
                           x1={x + PIPE_BOX_W + 2}
                           y1={PIPE_Y + PIPE_BOX_H / 2}
-                          x2={x + PIPE_BOX_W + PIPE_GAP - 4}
+                          x2={x + PIPE_BOX_W + PIPE_GAP - 8}
                           y2={PIPE_Y + PIPE_BOX_H / 2}
                           stroke={C.orange}
-                          strokeOpacity="0.65"
-                          strokeWidth="1.6"
+                          strokeOpacity="0.9"
+                          strokeWidth="2"
                         />
                         <polygon
-                          points={`${x + PIPE_BOX_W + PIPE_GAP - 4},${PIPE_Y + PIPE_BOX_H / 2 - 4} ${x + PIPE_BOX_W + PIPE_GAP - 4},${PIPE_Y + PIPE_BOX_H / 2 + 4} ${x + PIPE_BOX_W + PIPE_GAP},${PIPE_Y + PIPE_BOX_H / 2}`}
+                          points={`${x + PIPE_BOX_W + PIPE_GAP - 8},${PIPE_Y + PIPE_BOX_H / 2 - 6} ${x + PIPE_BOX_W + PIPE_GAP - 8},${PIPE_Y + PIPE_BOX_H / 2 + 6} ${x + PIPE_BOX_W + PIPE_GAP},${PIPE_Y + PIPE_BOX_H / 2}`}
                           fill={C.orange}
-                          fillOpacity="0.65"
+                          fillOpacity="0.9"
                         />
                       </g>
                     )}

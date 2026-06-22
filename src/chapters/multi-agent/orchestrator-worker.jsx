@@ -117,44 +117,76 @@ export default function OrchestratorWorker(ctx) {
                 Plans + Aggregates
               </text>
 
-              {/* 3 workers */}
+              {/* 3 workers. Each spoke is a double-headed arrow between the orchestrator
+                  bottom edge (y=70) and the worker top edge (y=140). Both tips sit exactly
+                  on the respective box edges and are oriented along the line. */}
               {[
                 { x: 100, label: "Worker 1" },
                 { x: 280, label: "Worker 2" },
                 { x: 460, label: "Worker 3" },
-              ].map((w, i) => (
-                <g key={`w-${i}`}>
-                  {/* Two-way arrow */}
-                  <line x1={280} y1={70} x2={w.x} y2={130} stroke={C.green} strokeWidth={1.6} />
-                  <polygon points={`${w.x - 4},126 ${w.x + 4},126 ${w.x},134`} fill={C.green} />
-                  <line
-                    x1={w.x - 4}
-                    y1={134}
-                    x2={280 - 4}
-                    y2={74}
-                    stroke={`${C.green}80`}
-                    strokeWidth={1}
-                    strokeDasharray="3,3"
-                  />
+              ].map((w, i) => {
+                const ox = 280,
+                  oyEdge = 70; // orchestrator bottom-center
+                const wyEdge = 140; // worker top edge
+                const dx = w.x - ox,
+                  dy = wyEdge - oyEdge;
+                const len = Math.hypot(dx, dy);
+                const ux = dx / len,
+                  uy = dy / len; // unit toward worker
+                const px = -uy,
+                  py = ux; // perpendicular
+                const head = 11,
+                  halfW = 5;
+                // Tip on worker top edge, base toward orchestrator.
+                const wTipX = w.x,
+                  wTipY = wyEdge;
+                const wBaseX = wTipX - ux * head,
+                  wBaseY = wTipY - uy * head;
+                const wc1x = wBaseX + px * halfW,
+                  wc1y = wBaseY + py * halfW;
+                const wc2x = wBaseX - px * halfW,
+                  wc2y = wBaseY - py * halfW;
+                // Tip on orchestrator bottom edge, base toward worker.
+                const oTipX = ox,
+                  oTipY = oyEdge;
+                const oBaseX = oTipX + ux * head,
+                  oBaseY = oTipY + uy * head;
+                const oc1x = oBaseX + px * halfW,
+                  oc1y = oBaseY + py * halfW;
+                const oc2x = oBaseX - px * halfW,
+                  oc2y = oBaseY - py * halfW;
+                return (
+                  <g key={`w-${i}`}>
+                    {/* Two-way arrow: shaft between the two arrowhead bases */}
+                    <line x1={oBaseX} y1={oBaseY} x2={wBaseX} y2={wBaseY} stroke={C.green} strokeWidth={1.6} />
+                    <polygon
+                      points={`${wc1x.toFixed(1)},${wc1y.toFixed(1)} ${wc2x.toFixed(1)},${wc2y.toFixed(1)} ${wTipX.toFixed(1)},${wTipY.toFixed(1)}`}
+                      fill={C.green}
+                    />
+                    <polygon
+                      points={`${oc1x.toFixed(1)},${oc1y.toFixed(1)} ${oc2x.toFixed(1)},${oc2y.toFixed(1)} ${oTipX.toFixed(1)},${oTipY.toFixed(1)}`}
+                      fill={C.green}
+                    />
 
-                  <rect
-                    x={w.x - 60}
-                    y={140}
-                    width={120}
-                    height={50}
-                    rx={10}
-                    fill={`${C.green}1a`}
-                    stroke={C.green}
-                    strokeWidth={1.6}
-                  />
-                  <text x={w.x} y={162} fill={SOFT.green} fontSize="13" fontWeight="700" textAnchor="middle">
-                    {w.label}
-                  </text>
-                  <text x={w.x} y={178} fill={SOFT.green} fontSize="11" textAnchor="middle">
-                    One Sub-Task
-                  </text>
-                </g>
-              ))}
+                    <rect
+                      x={w.x - 60}
+                      y={140}
+                      width={120}
+                      height={50}
+                      rx={10}
+                      fill={`${C.green}1a`}
+                      stroke={C.green}
+                      strokeWidth={1.6}
+                    />
+                    <text x={w.x} y={162} fill={SOFT.green} fontSize="13" fontWeight="700" textAnchor="middle">
+                      {w.label}
+                    </text>
+                    <text x={w.x} y={178} fill={SOFT.green} fontSize="11" textAnchor="middle">
+                      One Sub-Task
+                    </text>
+                  </g>
+                );
+              })}
             </svg>
           </div>
 
@@ -244,9 +276,9 @@ export default function OrchestratorWorker(ctx) {
                 Tier For c-9924&quot;
               </text>
 
-              {/* Arrow */}
-              <line x1={160} y1={80} x2={200} y2={80} stroke={C.cyan} strokeWidth={1.6} />
-              <polygon points="196,77 204,77 200,73 200,87 196,83" fill={C.cyan} />
+              {/* Arrow: input box (right edge x=160) into worker box (left edge x=200) */}
+              <line x1={160} y1={80} x2={190} y2={80} stroke={C.cyan} strokeWidth={1.8} />
+              <polygon points="190,74 190,86 200,80" fill={C.cyan} />
 
               {/* Worker (agent loop) */}
               <rect
@@ -272,9 +304,9 @@ export default function OrchestratorWorker(ctx) {
                 Within Its Tool Set Only.
               </text>
 
-              {/* Arrow */}
-              <line x1={360} y1={80} x2={400} y2={80} stroke={C.cyan} strokeWidth={1.6} />
-              <polygon points="396,77 404,77 400,73 400,87 396,83" fill={C.cyan} />
+              {/* Arrow: worker box (right edge x=360) into output box (left edge x=400) */}
+              <line x1={360} y1={80} x2={390} y2={80} stroke={C.cyan} strokeWidth={1.8} />
+              <polygon points="390,74 390,86 400,80" fill={C.cyan} />
 
               {/* Output */}
               <rect

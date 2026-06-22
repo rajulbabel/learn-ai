@@ -160,9 +160,9 @@ export default function A2AProtocol(ctx) {
               <text x="85" y="225" fill={SOFT.cyan} fontSize="13" fontWeight="700" textAnchor="middle">
                 Agent
               </text>
-              {/* Delegation arrow */}
-              <line x1="130" y1="220" x2="225" y2="220" stroke={C.cyan} strokeWidth="2" />
-              <polygon points="230,220 222,216 222,224" fill={C.cyan} />
+              {/* Delegation arrow - tip lands exactly on the Other Agent box left edge (x=235) */}
+              <line x1="130" y1="220" x2="229" y2="220" stroke={C.cyan} strokeWidth="2" />
+              <polygon points="235,220 227,216 227,224" fill={C.cyan} />
               {/* Other agent box - bigger, contains tools */}
               <rect
                 x="235"
@@ -435,20 +435,22 @@ export default function A2AProtocol(ctx) {
                     <text x="280" y={y + 22} fill={soft} fontSize="13" fontWeight="600" textAnchor="middle">
                       {label}
                     </text>
-                    {/* Stream arrow back up to triage column (left side) */}
+                    {/* Stream arrow: emerges from the box left edge (x=110) and points left into
+                        the channel toward the triage column. Body sits OUTSIDE the box; tip lands at
+                        x=74 in open space so it never buries inside the box. */}
                     <line
-                      x1="155"
+                      x1="110"
                       y1={y + 17}
-                      x2="115"
+                      x2="82"
                       y2={y + 17}
                       stroke={stroke}
                       strokeWidth="1.5"
                       strokeDasharray="3 3"
                     />
-                    <polygon points={`110,${y + 17} 118,${y + 13} 118,${y + 21}`} fill={stroke} />
-                    {/* Label */}
+                    <polygon points={`74,${y + 17} 82,${y + 13} 82,${y + 21}`} fill={stroke} />
+                    {/* Label sits above the first arrow, centered over the channel */}
                     {i === 0 && (
-                      <text x="56" y={y + 21} fill={SOFT.cyan} fontSize="11" fontStyle="italic">
+                      <text x="76" y={y - 4} fill={SOFT.cyan} fontSize="11" fontStyle="italic" textAnchor="middle">
                         Stream
                       </text>
                     )}

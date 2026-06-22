@@ -311,17 +311,17 @@ export default function RerankerCascade(ctx) {
               ))}
 
               {/* Connector arrows between trapezoids */}
-              <g stroke="rgba(255,255,255,0.35)" strokeWidth="1.4" fill="none">
-                <path d={`M ${FUNNEL_W / 2} ${stage1Y + STAGE_H} L ${FUNNEL_W / 2} ${stage2Y - 4}`} />
+              <g stroke="rgba(255,255,255,0.6)" strokeWidth="1.8" fill="none">
+                <path d={`M ${FUNNEL_W / 2} ${stage1Y + STAGE_H} L ${FUNNEL_W / 2} ${stage2Y - 9}`} />
                 <polygon
-                  points={`${FUNNEL_W / 2 - 5},${stage2Y - 4} ${FUNNEL_W / 2 + 5},${stage2Y - 4} ${FUNNEL_W / 2},${stage2Y + 4}`}
-                  fill="rgba(255,255,255,0.35)"
+                  points={`${FUNNEL_W / 2 - 7},${stage2Y - 9} ${FUNNEL_W / 2 + 7},${stage2Y - 9} ${FUNNEL_W / 2},${stage2Y}`}
+                  fill="rgba(255,255,255,0.6)"
                   stroke="none"
                 />
-                <path d={`M ${FUNNEL_W / 2} ${stage2Y + STAGE_H} L ${FUNNEL_W / 2} ${stage3Y - 4}`} />
+                <path d={`M ${FUNNEL_W / 2} ${stage2Y + STAGE_H} L ${FUNNEL_W / 2} ${stage3Y - 9}`} />
                 <polygon
-                  points={`${FUNNEL_W / 2 - 5},${stage3Y - 4} ${FUNNEL_W / 2 + 5},${stage3Y - 4} ${FUNNEL_W / 2},${stage3Y + 4}`}
-                  fill="rgba(255,255,255,0.35)"
+                  points={`${FUNNEL_W / 2 - 7},${stage3Y - 9} ${FUNNEL_W / 2 + 7},${stage3Y - 9} ${FUNNEL_W / 2},${stage3Y}`}
+                  fill="rgba(255,255,255,0.6)"
                   stroke="none"
                 />
               </g>

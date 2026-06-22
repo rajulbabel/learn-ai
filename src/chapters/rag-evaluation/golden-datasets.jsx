@@ -117,9 +117,9 @@ export default function GoldenDatasets(ctx) {
 
   // Bootstrap pipeline SVG layout (sub=4) - symmetric padding.
   const BP_VB_W = 540;
-  const BP_VB_H = 220;
+  const BP_VB_H = 230;
   const BP_LANE_H = 70;
-  const BP_LANE_GAP = 16;
+  const BP_LANE_GAP = 40;
   const BP_LANE_W = 480;
   const BP_LANE_X = (BP_VB_W - BP_LANE_W) / 2;
   const BP_LANE_A_Y = 30;
@@ -513,7 +513,7 @@ export default function GoldenDatasets(ctx) {
               {/* Human lane */}
               <text
                 x={BP_VB_W / 2}
-                y={BP_LANE_B_Y - 6}
+                y={BP_LANE_B_Y - 12}
                 fill="#a5d6a7"
                 fontSize="12"
                 fontWeight="700"

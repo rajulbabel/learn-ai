@@ -404,14 +404,14 @@ export default function ToolUseAsBridge(ctx) {
                 the model
               </text>
 
-              <line x1="160" y1="100" x2="205" y2="100" stroke={C.teal} strokeWidth="2" />
-              <polygon points="205,100 197,96 197,104" fill={C.teal} />
-              <text x="182" y="92" fill={SOFT.teal} fontSize="11" textAnchor="middle">
+              <line x1="160" y1="100" x2="210" y2="100" stroke={C.teal} strokeWidth="2" />
+              <polygon points="210,100 200,95 200,105" fill={C.teal} />
+              <text x="185" y="92" fill={SOFT.teal} fontSize="11" textAnchor="middle">
                 Tool_use
               </text>
 
-              <line x1="350" y1="100" x2="395" y2="100" stroke={C.teal} strokeWidth="2" />
-              <polygon points="395,100 387,96 387,104" fill={C.teal} />
+              <line x1="350" y1="100" x2="400" y2="100" stroke={C.teal} strokeWidth="2" />
+              <polygon points="400,100 390,95 390,105" fill={C.teal} />
               <text x="372" y="92" fill={SOFT.teal} fontSize="11" textAnchor="middle">
                 Execute
               </text>

@@ -200,13 +200,13 @@ export default function PlanExecuteReflect(ctx) {
                       <line
                         x1={x1}
                         y1={90}
-                        x2={x2 - 4}
+                        x2={x2 - 6}
                         y2={90}
                         stroke={`${SOFT.red}99`}
                         strokeWidth="1.4"
                         strokeDasharray="4 3"
                       />
-                      <polygon points={`${x2 - 4},90 ${x2 - 10},86 ${x2 - 10},94`} fill={SOFT.red} />
+                      <polygon points={`${x2},90 ${x2 - 6},86 ${x2 - 6},94`} fill={SOFT.red} />
                       <text x={midX} y={78} fill={SOFT.red} fontSize="13" fontWeight="700" textAnchor="middle">
                         ?
                       </text>
@@ -478,7 +478,14 @@ export default function PlanExecuteReflect(ctx) {
                       stroke={accent}
                       strokeWidth="1"
                     />
-                    <text x={leaf.x + WALK_W / 2} y={82} fill={accent} fontSize="10" fontWeight="700" textAnchor="middle">
+                    <text
+                      x={leaf.x + WALK_W / 2}
+                      y={82}
+                      fill={accent}
+                      fontSize="10"
+                      fontWeight="700"
+                      textAnchor="middle"
+                    >
                       {leaf.status}
                     </text>
                   </g>
@@ -491,8 +498,8 @@ export default function PlanExecuteReflect(ctx) {
                 const x2 = WALK_LEAVES[i + 1].x;
                 return (
                   <g key={`arrow-top-${i}`}>
-                    <line x1={x1} y1={56} x2={x2 - 4} y2={56} stroke={`${SOFT.green}99`} strokeWidth="1.4" />
-                    <polygon points={`${x2 - 4},56 ${x2 - 10},52 ${x2 - 10},60`} fill={SOFT.green} />
+                    <line x1={x1} y1={56} x2={x2 - 6} y2={56} stroke={`${SOFT.green}99`} strokeWidth="1.4" />
+                    <polygon points={`${x2},56 ${x2 - 6},52 ${x2 - 6},60`} fill={SOFT.green} />
                   </g>
                 );
               })}
@@ -509,15 +516,16 @@ export default function PlanExecuteReflect(ctx) {
                 business_rule Error
               </text>
 
-              {/* Bent arrow from leaf 4 down to leaf 5 (canvas center x = 320) */}
+              {/* Bent arrow from leaf 4 down to leaf 5 (canvas center x = 320). Tip lands on the
+                  leaf-5 box top edge (y=208) so there is no gap. */}
               <path
-                d={`M ${WALK_LEAVES[3].x + WALK_W / 2} 120 L ${WALK_LEAVES[3].x + WALK_W / 2} 160 L 320 160 L 320 200`}
+                d={`M ${WALK_LEAVES[3].x + WALK_W / 2} 120 L ${WALK_LEAVES[3].x + WALK_W / 2} 164 L 320 164 L 320 202`}
                 fill="none"
                 stroke={SOFT.purple}
                 strokeWidth="1.6"
                 strokeDasharray="4 3"
               />
-              <polygon points={`320,200 316,194 324,194`} fill={SOFT.purple} />
+              <polygon points={`320,208 316,200 324,200`} fill={SOFT.purple} />
               <text x={440} y={150} fill={SOFT.purple} fontSize="11" fontWeight="600" textAnchor="middle">
                 Executor Adapts -&gt; Adds A Leaf
               </text>

@@ -725,23 +725,29 @@ export default function OnlineEvalABTesting(ctx) {
                 const cy1 = a.y + LP_NODE_H / 2;
                 const cx2 = b.x + LP_NODE_W / 2;
                 const cy2 = b.y + LP_NODE_H / 2;
-                // Shorten the line so it does not cross the node bodies.
+                // Shorten the line so it starts on the source box edge and the
+                // arrowhead tip lands exactly on the target box edge (no gap, no overlap).
                 const dx = cx2 - cx1;
                 const dy = cy2 - cy1;
                 const len = Math.sqrt(dx * dx + dy * dy);
                 const ux = dx / len;
                 const uy = dy / len;
-                const margin = 70;
-                const x1 = cx1 + ux * margin;
-                const y1 = cy1 + uy * margin;
-                const x2 = cx2 - ux * margin;
-                const y2 = cy2 - uy * margin;
+                const halfW = LP_NODE_W / 2;
+                const halfH = LP_NODE_H / 2;
+                // Distance from a box center to its rectangle boundary along (ux, uy).
+                const edgeDist = Math.min(halfW / Math.abs(ux), halfH / Math.abs(uy));
+                // Line body starts 6px outside the source box edge; arrow tip sits
+                // 1px off the target box edge so the solid triangle visibly touches it.
+                const x1 = cx1 + ux * (edgeDist + 6);
+                const y1 = cy1 + uy * (edgeDist + 6);
+                const x2 = cx2 - ux * (edgeDist + 1);
+                const y2 = cy2 - uy * (edgeDist + 1);
                 return (
                   <g key={`arrow-${i}`}>
                     <line x1={x1} y1={y1} x2={x2} y2={y2} stroke={`${C.red}aa`} strokeWidth="1.5" />
                     <polygon
-                      points={`${x2},${y2} ${x2 - ux * 8 - uy * 4},${y2 - uy * 8 + ux * 4} ${x2 - ux * 8 + uy * 4},${y2 - uy * 8 - ux * 4}`}
-                      fill={`${C.red}aa`}
+                      points={`${x2},${y2} ${x2 - ux * 12 - uy * 5},${y2 - uy * 12 + ux * 5} ${x2 - ux * 12 + uy * 5},${y2 - uy * 12 - ux * 5}`}
+                      fill={C.red}
                     />
                   </g>
                 );

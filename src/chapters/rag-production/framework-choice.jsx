@@ -375,12 +375,12 @@ export default function FrameworkChoice(ctx) {
                 Start Here
               </text>
               {/* Root YES -> left question (center 215, top 130) */}
-              <line x1="370" y1="76" x2="227" y2="126" stroke={C.pink} strokeWidth="2" markerEnd="url(#fc-arrow)" />
+              <line x1="370" y1="76" x2="216" y2="130" stroke={C.pink} strokeWidth="2" markerEnd="url(#fc-arrow)" />
               <text x="312" y="100" textAnchor="middle" fill="#80e9b1" fontSize="12" fontWeight="700">
                 YES
               </text>
               {/* Root NO -> right question (center 625, top 130) */}
-              <line x1="470" y1="76" x2="613" y2="126" stroke={C.pink} strokeWidth="2" markerEnd="url(#fc-arrow)" />
+              <line x1="470" y1="76" x2="624" y2="130" stroke={C.pink} strokeWidth="2" markerEnd="url(#fc-arrow)" />
               <text x="528" y="100" textAnchor="middle" fill="#ef9a9a" fontSize="12" fontWeight="700">
                 NO
               </text>
@@ -397,8 +397,8 @@ export default function FrameworkChoice(ctx) {
               <line
                 x1="180"
                 y1="186"
-                x2="120"
-                y2="244"
+                x2="114"
+                y2="250"
                 stroke={C.cyan}
                 strokeWidth="2"
                 markerEnd="url(#fc-arrow-cyan)"
@@ -410,8 +410,8 @@ export default function FrameworkChoice(ctx) {
               <line
                 x1="250"
                 y1="186"
-                x2="298"
-                y2="244"
+                x2="303"
+                y2="250"
                 stroke={C.cyan}
                 strokeWidth="2"
                 markerEnd="url(#fc-arrow-cyan)"
@@ -445,8 +445,8 @@ export default function FrameworkChoice(ctx) {
               <line
                 x1="585"
                 y1="186"
-                x2="517"
-                y2="244"
+                x2="510"
+                y2="250"
                 stroke={C.purple}
                 strokeWidth="2"
                 markerEnd="url(#fc-arrow-purple)"
@@ -458,8 +458,8 @@ export default function FrameworkChoice(ctx) {
               <line
                 x1="665"
                 y1="186"
-                x2="737"
-                y2="244"
+                x2="744"
+                y2="250"
                 stroke={C.purple}
                 strokeWidth="2"
                 markerEnd="url(#fc-arrow-purple)"
@@ -484,8 +484,8 @@ export default function FrameworkChoice(ctx) {
               <line
                 x1="475"
                 y1="306"
-                x2="447"
-                y2="364"
+                x2="444"
+                y2="370"
                 stroke={C.orange}
                 strokeWidth="2"
                 markerEnd="url(#fc-arrow-orange)"
@@ -497,8 +497,8 @@ export default function FrameworkChoice(ctx) {
               <line
                 x1="535"
                 y1="306"
-                x2="563"
-                y2="364"
+                x2="566"
+                y2="370"
                 stroke={C.orange}
                 strokeWidth="2"
                 markerEnd="url(#fc-arrow-orange)"
@@ -510,8 +510,8 @@ export default function FrameworkChoice(ctx) {
               <line
                 x1="715"
                 y1="306"
-                x2="687"
-                y2="364"
+                x2="684"
+                y2="370"
                 stroke={C.yellow}
                 strokeWidth="2"
                 markerEnd="url(#fc-arrow-yellow)"
@@ -523,8 +523,8 @@ export default function FrameworkChoice(ctx) {
               <line
                 x1="775"
                 y1="306"
-                x2="803"
-                y2="364"
+                x2="806"
+                y2="370"
                 stroke={C.yellow}
                 strokeWidth="2"
                 markerEnd="url(#fc-arrow-yellow)"

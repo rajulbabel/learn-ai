@@ -265,12 +265,45 @@ export default function AgentHandoffs(ctx) {
                   </text>
                 </g>
               ))}
-              {/* Ring edges - corner to corner of the diamond */}
-              <line x1={330} y1={53} x2={410} y2={92} stroke={C.indigo} strokeWidth={1.5} />
-              <line x1={410} y1={128} x2={330} y2={167} stroke={C.indigo} strokeWidth={1.5} />
-              <line x1={230} y1={167} x2={150} y2={128} stroke={C.indigo} strokeWidth={1.5} />
-              <line x1={150} y1={92} x2={230} y2={53} stroke={C.indigo} strokeWidth={1.5} />
-              {/* Cross-edge */}
+              {/* Ring edges - bidirectional hand-off arrows between neighboring corners.
+                  Each endpoint already sits on a box corner; we add an arrowhead at BOTH
+                  ends (tip on the corner) and run the shaft between the two arrowhead bases. */}
+              {[
+                [330, 53, 410, 92], // Triage -> Billing
+                [410, 128, 330, 167], // Billing -> Escalation
+                [230, 167, 150, 128], // Escalation -> Troubleshooting
+                [150, 92, 230, 53], // Troubleshooting -> Triage
+              ].map(([x1, y1, x2, y2], i) => {
+                const dx = x2 - x1,
+                  dy = y2 - y1;
+                const len = Math.hypot(dx, dy);
+                const ux = dx / len,
+                  uy = dy / len;
+                const px = -uy,
+                  py = ux;
+                const head = 10,
+                  halfW = 4.5;
+                // Arrowhead at end 2 (tip = x2,y2), base toward end 1.
+                const b2x = x2 - ux * head,
+                  b2y = y2 - uy * head;
+                // Arrowhead at end 1 (tip = x1,y1), base toward end 2.
+                const b1x = x1 + ux * head,
+                  b1y = y1 + uy * head;
+                return (
+                  <g key={`ring-${i}`}>
+                    <line x1={b1x} y1={b1y} x2={b2x} y2={b2y} stroke={C.indigo} strokeWidth={1.6} />
+                    <polygon
+                      points={`${(b2x + px * halfW).toFixed(1)},${(b2y + py * halfW).toFixed(1)} ${(b2x - px * halfW).toFixed(1)},${(b2y - py * halfW).toFixed(1)} ${x2},${y2}`}
+                      fill={C.indigo}
+                    />
+                    <polygon
+                      points={`${(b1x + px * halfW).toFixed(1)},${(b1y + py * halfW).toFixed(1)} ${(b1x - px * halfW).toFixed(1)},${(b1y - py * halfW).toFixed(1)} ${x1},${y1}`}
+                      fill={C.indigo}
+                    />
+                  </g>
+                );
+              })}
+              {/* Cross-edge: a secondary dashed transfer line between Triage and Troubleshooting. */}
               <line
                 x1={330}
                 y1={45}

@@ -152,8 +152,8 @@ export default function EpisodicMemory(ctx) {
                 &quot;Failed Password Reset&quot;
               </text>
 
-              <line x1={180} y1={45} x2={220} y2={45} stroke={C.yellow} strokeWidth={1.6} />
-              <polygon points="216,42 224,42 220,38 220,52 216,48" fill={C.yellow} />
+              <line x1={180} y1={45} x2={211} y2={45} stroke={C.yellow} strokeWidth={1.6} />
+              <polygon points="211,40 211,50 220,45" fill={C.yellow} />
 
               <rect
                 x={220}
@@ -172,8 +172,8 @@ export default function EpisodicMemory(ctx) {
                 [1024 Floats]
               </text>
 
-              <line x1={360} y1={45} x2={400} y2={45} stroke={C.yellow} strokeWidth={1.6} />
-              <polygon points="396,42 404,42 400,38 400,52 396,48" fill={C.yellow} />
+              <line x1={360} y1={45} x2={391} y2={45} stroke={C.yellow} strokeWidth={1.6} />
+              <polygon points="391,40 391,50 400,45" fill={C.yellow} />
 
               <rect
                 x={400}
@@ -210,8 +210,8 @@ export default function EpisodicMemory(ctx) {
                 &quot;What Past Issues?&quot;
               </text>
 
-              <line x1={180} y1={155} x2={220} y2={155} stroke={C.cyan} strokeWidth={1.6} />
-              <polygon points="216,152 224,152 220,148 220,162 216,158" fill={C.cyan} />
+              <line x1={180} y1={155} x2={211} y2={155} stroke={C.cyan} strokeWidth={1.6} />
+              <polygon points="211,150 211,160 220,155" fill={C.cyan} />
 
               <rect
                 x={220}
@@ -230,8 +230,8 @@ export default function EpisodicMemory(ctx) {
                 Same Encoder
               </text>
 
-              <line x1={360} y1={155} x2={400} y2={155} stroke={C.cyan} strokeWidth={1.6} />
-              <polygon points="396,152 404,152 400,148 400,162 396,158" fill={C.cyan} />
+              <line x1={360} y1={155} x2={391} y2={155} stroke={C.cyan} strokeWidth={1.6} />
+              <polygon points="391,150 391,160 400,155" fill={C.cyan} />
 
               <rect
                 x={400}

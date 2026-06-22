@@ -213,11 +213,8 @@ export default function ProceduralMemory(ctx) {
                   </text>
                   {i < 4 && (
                     <>
-                      <line x1={s.x + 100} y1={75} x2={s.x + 130} y2={75} stroke={C.orange} strokeWidth={1.6} />
-                      <polygon
-                        points={`${s.x + 126},72 ${s.x + 134},72 ${s.x + 130},68 ${s.x + 130},82 ${s.x + 126},78`}
-                        fill={C.orange}
-                      />
+                      <line x1={s.x + 100} y1={75} x2={s.x + 121} y2={75} stroke={C.orange} strokeWidth={1.6} />
+                      <polygon points={`${s.x + 121},70 ${s.x + 121},80 ${s.x + 130},75`} fill={C.orange} />
                     </>
                   )}
                 </g>

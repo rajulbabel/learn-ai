@@ -212,16 +212,16 @@ export default function HyDE(ctx) {
                         <line
                           x1={x + FLOW_BOX_W + 2}
                           y1={FLOW_Y + FLOW_BOX_H / 2}
-                          x2={x + FLOW_BOX_W + FLOW_GAP - 4}
+                          x2={x + FLOW_BOX_W + FLOW_GAP - 7}
                           y2={FLOW_Y + FLOW_BOX_H / 2}
                           stroke={C.orange}
-                          strokeOpacity="0.65"
-                          strokeWidth="1.6"
+                          strokeOpacity="0.9"
+                          strokeWidth="2"
                         />
                         <polygon
-                          points={`${x + FLOW_BOX_W + FLOW_GAP - 4},${FLOW_Y + FLOW_BOX_H / 2 - 4} ${x + FLOW_BOX_W + FLOW_GAP - 4},${FLOW_Y + FLOW_BOX_H / 2 + 4} ${x + FLOW_BOX_W + FLOW_GAP},${FLOW_Y + FLOW_BOX_H / 2}`}
+                          points={`${x + FLOW_BOX_W + FLOW_GAP - 7},${FLOW_Y + FLOW_BOX_H / 2 - 5} ${x + FLOW_BOX_W + FLOW_GAP - 7},${FLOW_Y + FLOW_BOX_H / 2 + 5} ${x + FLOW_BOX_W + FLOW_GAP},${FLOW_Y + FLOW_BOX_H / 2}`}
                           fill={C.orange}
-                          fillOpacity="0.65"
+                          fillOpacity="0.9"
                         />
                       </g>
                     )}

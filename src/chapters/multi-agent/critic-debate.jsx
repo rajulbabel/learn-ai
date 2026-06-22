@@ -101,8 +101,8 @@ export default function CriticDebate(ctx) {
                 For The Customer.
               </text>
 
-              <line x1={220} y1={90} x2={340} y2={90} stroke={C.green} strokeWidth={1.8} />
-              <polygon points="336,87 344,87 340,83 340,97 336,93" fill={C.green} />
+              <line x1={220} y1={90} x2={330} y2={90} stroke={C.green} strokeWidth={1.8} />
+              <polygon points="330,84 330,96 340,90" fill={C.green} />
               <text x={280} y={82} fill={SOFT.green} fontSize="11" fontWeight="700" textAnchor="middle">
                 Draft
               </text>

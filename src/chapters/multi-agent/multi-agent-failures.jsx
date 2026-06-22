@@ -163,8 +163,8 @@ export default function MultiAgentFailures(ctx) {
                 const soft = SOFT[d.color];
                 return (
                   <g key={`drift-${i}`}>
-                    <line x1={300} y1={56} x2={x} y2={120} stroke={accent} strokeWidth={1.6} />
-                    <polygon points={`${x - 4},116 ${x + 4},116 ${x},124`} fill={accent} />
+                    <line x1={300} y1={56} x2={x} y2={122} stroke={accent} strokeWidth={1.6} />
+                    <polygon points={`${x - 5},120 ${x + 5},120 ${x},130`} fill={accent} />
                     <rect
                       x={x - 90}
                       y={130}

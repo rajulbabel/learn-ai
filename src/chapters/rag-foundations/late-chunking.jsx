@@ -223,13 +223,13 @@ export default function LateChunking(ctx) {
                         x1={x + w / 2}
                         y1="80"
                         x2={x + w / 2}
-                        y2="106"
-                        stroke="rgba(255,255,255,0.55)"
+                        y2="108"
+                        stroke="rgba(255,255,255,0.7)"
                         strokeWidth="1.5"
                       />
                       <polygon
-                        points={`${x + w / 2 - 4},102 ${x + w / 2 + 4},102 ${x + w / 2},110`}
-                        fill="rgba(255,255,255,0.55)"
+                        points={`${x + w / 2 - 4.5},104 ${x + w / 2 + 4.5},104 ${x + w / 2},112`}
+                        fill="rgba(255,255,255,0.7)"
                       />
                       {/* Embedding model box (separate per chunk) */}
                       <rect
@@ -253,13 +253,13 @@ export default function LateChunking(ctx) {
                         x1={x + w / 2}
                         y1="150"
                         x2={x + w / 2}
-                        y2="176"
-                        stroke="rgba(255,255,255,0.55)"
+                        y2="178"
+                        stroke="rgba(255,255,255,0.7)"
                         strokeWidth="1.5"
                       />
                       <polygon
-                        points={`${x + w / 2 - 4},172 ${x + w / 2 + 4},172 ${x + w / 2},180`}
-                        fill="rgba(255,255,255,0.55)"
+                        points={`${x + w / 2 - 4.5},174 ${x + w / 2 + 4.5},174 ${x + w / 2},182`}
+                        fill="rgba(255,255,255,0.7)"
                       />
                       {/* Chunk vector */}
                       <rect
@@ -320,8 +320,8 @@ export default function LateChunking(ctx) {
                   doc-1 (384 tokens)
                 </text>
                 {/* Arrow to single embedding pass */}
-                <line x1="160" y1="40" x2="160" y2="56" stroke="rgba(255,255,255,0.55)" strokeWidth="1.5" />
-                <polygon points="156,52 164,52 160,60" fill="rgba(255,255,255,0.55)" />
+                <line x1="160" y1="40" x2="160" y2="58" stroke="rgba(255,255,255,0.7)" strokeWidth="1.5" />
+                <polygon points="155.5,54 164.5,54 160,62" fill="rgba(255,255,255,0.7)" />
                 {/* Single embedding model box */}
                 <rect
                   x="20"
@@ -340,8 +340,8 @@ export default function LateChunking(ctx) {
                   Attention Over All 384 Tokens
                 </text>
                 {/* Arrow down to token-hidden-state strip */}
-                <line x1="160" y1="104" x2="160" y2="120" stroke="rgba(255,255,255,0.55)" strokeWidth="1.5" />
-                <polygon points="156,116 164,116 160,124" fill="rgba(255,255,255,0.55)" />
+                <line x1="160" y1="104" x2="160" y2="122" stroke="rgba(255,255,255,0.7)" strokeWidth="1.5" />
+                <polygon points="155.5,118 164.5,118 160,126" fill="rgba(255,255,255,0.7)" />
                 {/* Token hidden-state strip - 12 small cells */}
                 {Array.from({ length: 12 }).map((_, i) => {
                   const w = 280 / 12;
@@ -382,12 +382,13 @@ export default function LateChunking(ctx) {
                   strokeWidth="1.5"
                   strokeDasharray="3 2"
                 />
-                {/* Arrow down to chunk vectors */}
-                <line x1="160" y1="166" x2="160" y2="180" stroke="rgba(255,255,255,0.55)" strokeWidth="1.5" />
-                <polygon points="156,176 164,176 160,184" fill="rgba(255,255,255,0.55)" />
-                <text x="160" y="172" textAnchor="middle" fill="#fff59d" fontSize="9" fontWeight="bold">
+                {/* Mean-pool label sits between the token strip and the arrow */}
+                <text x="160" y="170" textAnchor="middle" fill="#fff59d" fontSize="9" fontWeight="bold">
                   Mean-Pool At Boundaries
                 </text>
+                {/* Arrow down to chunk vectors */}
+                <line x1="160" y1="176" x2="160" y2="186" stroke="rgba(255,255,255,0.7)" strokeWidth="1.5" />
+                <polygon points="155.5,182 164.5,182 160,190" fill="rgba(255,255,255,0.7)" />
                 {/* 3 chunk vectors */}
                 {[0, 1, 2].map((i) => {
                   const x = 20 + i * (280 / 3) + 6;
@@ -480,8 +481,10 @@ export default function LateChunking(ctx) {
                 Single Attention Pass (Token 1 To Token N)
               </text>
               {/* Down arrows from the arc onto tokens 1 and N */}
-              <polygon points="41,78 49,78 45,86" fill={C.purple} />
-              <polygon points="591,78 599,78 595,86" fill={C.purple} />
+              <line x1="45" y1="80" x2="45" y2="88" stroke={C.purple} strokeWidth="2" />
+              <polygon points="40.5,86 49.5,86 45,94" fill={C.purple} />
+              <line x1="595" y1="80" x2="595" y2="88" stroke={C.purple} strokeWidth="2" />
+              <polygon points="590.5,86 599.5,86 595,94" fill={C.purple} />
               {/* 12 token cells, x_start=20, w=50 each, total 600 */}
               {Array.from({ length: 12 }).map((_, i) => {
                 const x = 20 + i * 50;

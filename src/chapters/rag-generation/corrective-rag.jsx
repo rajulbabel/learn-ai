@@ -265,6 +265,54 @@ export default function CorrectiveRAG(ctx) {
                 converging into knowledge refinement before generation.
               </desc>
 
+              {/* Arrow marker defs */}
+              <defs>
+                <marker
+                  id="crag-arrow-cyan"
+                  viewBox="0 0 10 10"
+                  refX="9"
+                  refY="5"
+                  markerWidth="7"
+                  markerHeight="7"
+                  orient="auto"
+                >
+                  <path d="M 0 0 L 10 5 L 0 10 z" fill="#80deea" opacity="0.85" />
+                </marker>
+                <marker
+                  id="crag-arrow-green"
+                  viewBox="0 0 10 10"
+                  refX="9"
+                  refY="5"
+                  markerWidth="7"
+                  markerHeight="7"
+                  orient="auto"
+                >
+                  <path d="M 0 0 L 10 5 L 0 10 z" fill={C.green} opacity="0.85" />
+                </marker>
+                <marker
+                  id="crag-arrow-yellow"
+                  viewBox="0 0 10 10"
+                  refX="9"
+                  refY="5"
+                  markerWidth="7"
+                  markerHeight="7"
+                  orient="auto"
+                >
+                  <path d="M 0 0 L 10 5 L 0 10 z" fill={C.yellow} opacity="0.85" />
+                </marker>
+                <marker
+                  id="crag-arrow-red"
+                  viewBox="0 0 10 10"
+                  refX="9"
+                  refY="5"
+                  markerWidth="7"
+                  markerHeight="7"
+                  orient="auto"
+                >
+                  <path d="M 0 0 L 10 5 L 0 10 z" fill={C.red} opacity="0.85" />
+                </marker>
+              </defs>
+
               {/* Root: Query + Docs */}
               <rect
                 x={260}
@@ -282,7 +330,16 @@ export default function CorrectiveRAG(ctx) {
               </text>
 
               {/* Diamond: Evaluator Score */}
-              <line x1={360} y1={52} x2={360} y2={80} stroke="#80deea" strokeOpacity="0.6" />
+              <line
+                x1={360}
+                y1={52}
+                x2={360}
+                y2={80}
+                stroke="#80deea"
+                strokeOpacity="0.6"
+                strokeWidth="1.5"
+                markerEnd="url(#crag-arrow-cyan)"
+              />
               <polygon
                 points="360,80 480,140 360,200 240,140"
                 fill={C.yellow}
@@ -299,7 +356,16 @@ export default function CorrectiveRAG(ctx) {
 
               {/* Branches */}
               {/* CORRECT */}
-              <line x1={360} y1={200} x2={140} y2={250} stroke={C.green} strokeOpacity="0.7" strokeWidth="1.5" />
+              <line
+                x1={360}
+                y1={200}
+                x2={140}
+                y2={250}
+                stroke={C.green}
+                strokeOpacity="0.7"
+                strokeWidth="1.5"
+                markerEnd="url(#crag-arrow-green)"
+              />
               <rect
                 x={40}
                 y={250}
@@ -316,7 +382,16 @@ export default function CorrectiveRAG(ctx) {
               </text>
 
               {/* AMBIGUOUS */}
-              <line x1={360} y1={200} x2={360} y2={250} stroke={C.yellow} strokeOpacity="0.7" strokeWidth="1.5" />
+              <line
+                x1={360}
+                y1={200}
+                x2={360}
+                y2={250}
+                stroke={C.yellow}
+                strokeOpacity="0.7"
+                strokeWidth="1.5"
+                markerEnd="url(#crag-arrow-yellow)"
+              />
               <rect
                 x={260}
                 y={250}
@@ -333,7 +408,16 @@ export default function CorrectiveRAG(ctx) {
               </text>
 
               {/* INCORRECT */}
-              <line x1={360} y1={200} x2={580} y2={250} stroke={C.red} strokeOpacity="0.7" strokeWidth="1.5" />
+              <line
+                x1={360}
+                y1={200}
+                x2={580}
+                y2={250}
+                stroke={C.red}
+                strokeOpacity="0.7"
+                strokeWidth="1.5"
+                markerEnd="url(#crag-arrow-red)"
+              />
               <rect
                 x={480}
                 y={250}
@@ -350,9 +434,36 @@ export default function CorrectiveRAG(ctx) {
               </text>
 
               {/* Converge into Knowledge Refinement */}
-              <line x1={140} y1={292} x2={360} y2={340} stroke="#80deea" strokeOpacity="0.5" strokeWidth="1" />
-              <line x1={360} y1={292} x2={360} y2={340} stroke="#80deea" strokeOpacity="0.5" strokeWidth="1" />
-              <line x1={580} y1={292} x2={360} y2={340} stroke="#80deea" strokeOpacity="0.5" strokeWidth="1" />
+              <line
+                x1={140}
+                y1={292}
+                x2={300}
+                y2={340}
+                stroke="#80deea"
+                strokeOpacity="0.6"
+                strokeWidth="1.5"
+                markerEnd="url(#crag-arrow-cyan)"
+              />
+              <line
+                x1={360}
+                y1={292}
+                x2={360}
+                y2={340}
+                stroke="#80deea"
+                strokeOpacity="0.6"
+                strokeWidth="1.5"
+                markerEnd="url(#crag-arrow-cyan)"
+              />
+              <line
+                x1={580}
+                y1={292}
+                x2={420}
+                y2={340}
+                stroke="#80deea"
+                strokeOpacity="0.6"
+                strokeWidth="1.5"
+                markerEnd="url(#crag-arrow-cyan)"
+              />
               <rect
                 x={240}
                 y={340}
@@ -369,7 +480,16 @@ export default function CorrectiveRAG(ctx) {
               </text>
 
               {/* Generate Answer */}
-              <line x1={360} y1={382} x2={360} y2={410} stroke="#80deea" strokeOpacity="0.5" strokeWidth="1.5" />
+              <line
+                x1={360}
+                y1={382}
+                x2={360}
+                y2={410}
+                stroke="#80deea"
+                strokeOpacity="0.6"
+                strokeWidth="1.5"
+                markerEnd="url(#crag-arrow-cyan)"
+              />
               <rect
                 x={260}
                 y={410}

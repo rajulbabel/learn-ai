@@ -584,9 +584,22 @@ export default function ToolErrorsRetries(ctx) {
               <text x="260" y="48" fill={SOFT.cyan} fontSize="11" textAnchor="middle">
                 Emits tool_use
               </text>
-              {/* Arrow down 1 */}
-              <line x1="260" y1="54" x2="260" y2="84" stroke="#888" strokeWidth="1" />
-              <polygon points="260,86 256,80 264,80" fill="#888" />
+              {/* Arrowhead marker - clearly visible, auto-oriented, tip lands on the target box edge */}
+              <defs>
+                <marker
+                  id="te-arrow"
+                  viewBox="0 0 10 10"
+                  refX="9"
+                  refY="5"
+                  markerWidth="7"
+                  markerHeight="7"
+                  orient="auto"
+                >
+                  <path d="M 0 0 L 10 5 L 0 10 z" fill="#cfcfcf" />
+                </marker>
+              </defs>
+              {/* Arrow down 1: Model -> Validation (tip on box top edge) */}
+              <line x1="260" y1="54" x2="260" y2="88" stroke="#cfcfcf" strokeWidth="1.6" markerEnd="url(#te-arrow)" />
               {/* Step 2: Runtime validates */}
               <rect x="150" y="88" width="220" height="44" rx="6" fill={`${C.green}24`} stroke={C.green} />
               <text x="260" y="106" fill={SOFT.green} fontSize="13" textAnchor="middle" fontWeight="700">
@@ -595,15 +608,13 @@ export default function ToolErrorsRetries(ctx) {
               <text x="260" y="124" fill={SOFT.green} fontSize="11" textAnchor="middle">
                 Check types, required, enums, formats
               </text>
-              {/* Branch arrows */}
-              <line x1="200" y1="132" x2="120" y2="172" stroke="#888" strokeWidth="1" />
-              <polygon points="118,174 124,170 122,178" fill="#888" />
-              <text x="135" y="158" fill={SOFT.purple} fontSize="11" textAnchor="middle">
+              {/* Branch arrows (tips land on the child box top edges) */}
+              <line x1="200" y1="132" x2="120" y2="176" stroke="#cfcfcf" strokeWidth="1.6" markerEnd="url(#te-arrow)" />
+              <text x="138" y="160" fill={SOFT.purple} fontSize="11" textAnchor="middle">
                 Invalid
               </text>
-              <line x1="320" y1="132" x2="400" y2="172" stroke="#888" strokeWidth="1" />
-              <polygon points="402,174 396,170 398,178" fill="#888" />
-              <text x="385" y="158" fill={SOFT.cyan} fontSize="11" textAnchor="middle">
+              <line x1="320" y1="132" x2="400" y2="176" stroke="#cfcfcf" strokeWidth="1.6" markerEnd="url(#te-arrow)" />
+              <text x="382" y="160" fill={SOFT.cyan} fontSize="11" textAnchor="middle">
                 Valid
               </text>
               {/* Step 3a: Malformed error (left branch) */}

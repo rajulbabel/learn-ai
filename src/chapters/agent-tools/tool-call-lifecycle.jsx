@@ -287,8 +287,8 @@ export default function ToolCallLifecycle(ctx) {
                       Step {i + 1}
                     </text>
 
-                    <line x1="180" y1={y + 22} x2="225" y2={y + 22} stroke={step.color} strokeWidth="2" />
-                    <polygon points={`225,${y + 22} 217,${y + 18} 217,${y + 26}`} fill={step.color} />
+                    <line x1="180" y1={y + 22} x2="230" y2={y + 22} stroke={step.color} strokeWidth="2" />
+                    <polygon points={`230,${y + 22} 220,${y + 17} 220,${y + 27}`} fill={step.color} />
 
                     <rect
                       x="230"

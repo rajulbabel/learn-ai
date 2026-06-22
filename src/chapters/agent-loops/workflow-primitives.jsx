@@ -932,6 +932,10 @@ export default function WorkflowPrimitives(ctx) {
                     strokeWidth="1.5"
                     strokeDasharray="4 3"
                   />
+                  <polygon
+                    points={`${r.x - 50},${r.y} ${r.x - 56},${r.y - 4} ${r.x - 56},${r.y + 4}`}
+                    fill={SOFT.cyan}
+                  />
                 </g>
               ))}
               {/* Stage 4: 3 retrievals -> merger */}
@@ -948,6 +952,10 @@ export default function WorkflowPrimitives(ctx) {
                   />
                 </g>
               ))}
+              <polygon
+                points={`${COMPOSED_TOPO.merger.x - 40},${COMPOSED_TOPO.merger.y} ${COMPOSED_TOPO.merger.x - 46},${COMPOSED_TOPO.merger.y - 4} ${COMPOSED_TOPO.merger.x - 46},${COMPOSED_TOPO.merger.y + 4}`}
+                fill={SOFT.cyan}
+              />
               {/* Stage 5: merger -> answer (chain) */}
               <line
                 x1={COMPOSED_TOPO.merger.x + 40}

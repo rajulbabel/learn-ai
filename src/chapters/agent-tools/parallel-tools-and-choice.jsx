@@ -336,9 +336,9 @@ export default function ParallelToolsAndChoice(ctx) {
                   running concurrently (both 200ms). Total 200ms of tool work plus 1 LLM call. The two tool bars are
                   stacked vertically to show they share the same time slot.
                 </desc>
-                {/* Row 1: LLM call 1 */}
-                <rect x="50" y="20" width="80" height="22" rx="4" fill={`${C.cyan}30`} stroke={C.cyan} />
-                <text x="90" y="35" fill={SOFT.cyan} fontSize="11" textAnchor="middle">
+                {/* Row 1: LLM call 1 (vertically centered between the two stacked 200ms tool bars) */}
+                <rect x="50" y="27" width="80" height="22" rx="4" fill={`${C.cyan}30`} stroke={C.cyan} />
+                <text x="90" y="42" fill={SOFT.cyan} fontSize="11" textAnchor="middle">
                   LLM 1
                 </text>
                 {/* Row 1: lookup_customer (parallel, top) */}

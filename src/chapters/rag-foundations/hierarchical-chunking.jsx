@@ -511,8 +511,8 @@ export default function HierarchicalChunking(ctx) {
                 Score: 0.89
               </text>
               {/* Middle: parent-lookup arrow */}
-              <line x1="226" y1="110" x2="408" y2="110" stroke={C.orange} strokeWidth="2.4" />
-              <polygon points="394,103 394,117 408,110" fill={C.orange} />
+              <line x1="226" y1="110" x2="404" y2="110" stroke={C.orange} strokeWidth="2.4" />
+              <polygon points="400,103 400,117 414,110" fill={C.orange} />
               <text x="320" y="92" textAnchor="middle" fill={C.orange} fontSize="13" fontWeight="bold">
                 Parent Lookup
               </text>
@@ -558,8 +558,8 @@ export default function HierarchicalChunking(ctx) {
                 ~4.7x More Context Than Leaf
               </text>
               {/* Bottom: arrow to LLM */}
-              <line x1="517" y1="196" x2="517" y2="226" stroke={C.orange} strokeWidth="2" />
-              <polygon points="510,222 524,222 517,236" fill={C.orange} />
+              <line x1="517" y1="196" x2="517" y2="230" stroke={C.orange} strokeWidth="2" />
+              <polygon points="510,226 524,226 517,240" fill={C.orange} />
               <rect
                 x="445"
                 y="240"

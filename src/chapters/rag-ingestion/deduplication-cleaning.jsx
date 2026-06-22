@@ -131,8 +131,8 @@ export default function DeduplicationCleaning(ctx) {
                 const x = 100 + i * 160;
                 return (
                   <g key={`arrow-${i}`}>
-                    <line x1={x} y1={76} x2={x} y2={114} stroke="rgba(255,255,255,0.4)" strokeWidth={1.4} />
-                    <polygon points={`${x - 4},110 ${x + 4},110 ${x},118`} fill="rgba(255,255,255,0.4)" />
+                    <line x1={x} y1={76} x2={x} y2={116} stroke="rgba(255,255,255,0.55)" strokeWidth={1.4} />
+                    <polygon points={`${x - 5},110 ${x + 5},110 ${x},120`} fill="rgba(255,255,255,0.55)" />
                   </g>
                 );
               })}
@@ -155,8 +155,8 @@ export default function DeduplicationCleaning(ctx) {
                 const x = 100 + i * 160;
                 return (
                   <g key={`arrow2-${i}`}>
-                    <line x1={x} y1={156} x2={x} y2={194} stroke="rgba(255,255,255,0.4)" strokeWidth={1.4} />
-                    <polygon points={`${x - 4},190 ${x + 4},190 ${x},198`} fill="rgba(255,255,255,0.4)" />
+                    <line x1={x} y1={156} x2={x} y2={196} stroke="rgba(255,255,255,0.55)" strokeWidth={1.4} />
+                    <polygon points={`${x - 5},190 ${x + 5},190 ${x},200`} fill="rgba(255,255,255,0.55)" />
                   </g>
                 );
               })}
